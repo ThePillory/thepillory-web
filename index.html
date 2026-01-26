@@ -1,21 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Pillory</title>
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background: #f9fafb;
+        color: #111827;
+      }
+
+      .container {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 4rem 1.5rem;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+      }
+
+      ul {
+        margin: 2rem 0;
+        padding-left: 1.25rem;
+      }
+
+      li {
+        margin-bottom: 0.75rem;
+        font-size: 1.05rem;
+      }
+
+      .muted {
+        color: #4b5563;
+        font-style: italic;
+        margin-top: 2.5rem;
+      }
+    </style>
   </head>
-<body>
-  <h1>The Pillory</h1>
 
-  <p><strong>A fact-based civic accountability platform.</strong></p>
+  <body>
+    <div class="container">
+      <h1>The Pillory</h1>
 
-  <ul>
-    <li><strong>Verified participation, protected identities</strong></li>
-    <li><strong>Evidence-first posts and corroboration</strong></li>
-    <li><strong>Private aggregation → public accountability</strong></li>
-  </ul>
+      <p><strong>A fact-based civic accountability platform.</strong></p>
 
-  <p><em>Private beta launching soon. Built for communities that value facts over noise.</em></p>
-</body>
+      <ul>
+        <li><strong>Verified participation, protected identities</strong></li>
+        <li><strong>Evidence-first posts and corroboration</strong></li>
+        <li><strong>Private aggregation → public accountability</strong></li>
+      </ul>
+
+      <p class="muted">
+        Private beta launching soon. Built for communities that value facts over noise.
+      </p>
+    </div>
+  </body>
 </html>
