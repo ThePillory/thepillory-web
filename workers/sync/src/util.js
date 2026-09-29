@@ -77,6 +77,25 @@ export class Budget {
     return res.text();
   }
 
+  // A polite source: a minimum gap between requests (kept across rounds and runs,
+  // e.g. a robots.txt Crawl-delay) and its own daily cap, both stored in sync_state.
+  async paced(db, key, { intervalMs, dailyLimit }, url, init, label) {
+    this.pacedUsed ||= {};
+    const countKey = `${key}_requests_${new Date().toISOString().slice(0, 10)}`;
+    if (this.pacedUsed[key] === undefined) this.pacedUsed[key] = parseInt((await getState(db, countKey)) || "0", 10);
+    if (this.pacedUsed[key] >= dailyLimit) throw new BudgetExhausted(`${key} daily limit (${dailyLimit}) reached`);
+    const last = parseInt((await getState(db, `${key}_last_request`)) || "0", 10);
+    const wait = last + intervalMs - Date.now();
+    if (wait > 0) {
+      if (this.timeLeft() < wait + 15000) throw new BudgetExhausted(`run time limit reached before ${label}`);
+      await new Promise((r) => setTimeout(r, wait));
+    }
+    this.pacedUsed[key] += 1;
+    await setState(db, countKey, String(this.pacedUsed[key]));
+    await setState(db, `${key}_last_request`, String(Date.now()));
+    return this.fetch(url, init, label);
+  }
+
   // Open States: daily cap (persisted) and pacing between calls.
   async openStates(db, url, init, label) {
     const day = new Date().toISOString().slice(0, 10);

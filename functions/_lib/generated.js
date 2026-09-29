@@ -117,22 +117,38 @@ export const ISSUES = {
  "public-comment-limit": {
   "title": "Public comment cut to one minute at Board of Supervisors meetings",
   "short": "Public comment limit",
-  "url": "/issues/public-comment-limit/"
+  "url": "/issues/public-comment-limit/",
+  "level": "county",
+  "body": "board-of-supervisors",
+  "category": "Public meetings",
+  "facts": "On [date], the Board changed the public comment limit from three minutes to one minute per speaker. The change applies to all agenda items, including budget hearings."
  },
  "broadband-scoring": {
   "title": "[Bill number]: how rural counties are scored for broadband funding",
   "short": "Broadband funding scoring",
-  "url": "/issues/broadband-scoring/"
+  "url": "/issues/broadband-scoring/",
+  "level": "state",
+  "body": "state-legislature",
+  "category": "Legislation",
+  "facts": "[Summary of what verified residents have documented about how the scoring formula treats rural counties.]"
  },
  "town-halls": {
   "title": "Promised quarterly town halls in the district: none held since [date]",
   "short": "District town halls",
-  "url": "/issues/town-halls/"
+  "url": "/issues/town-halls/",
+  "level": "federal",
+  "body": "us-house",
+  "category": "Official conduct",
+  "facts": "[Summary of the documented commitment and the public events record since [date].]"
  },
  "road-repaving": {
   "title": "Repaving of [County road] past its promised completion date",
   "short": "[County road] repaving",
-  "url": "/issues/road-repaving/"
+  "url": "/issues/road-repaving/",
+  "level": "county",
+  "body": "board-of-supervisors",
+  "category": "Public services",
+  "facts": "The county committed to finishing the [County road] repaving by [date]. As of [date], [#] of [#] miles are complete."
  }
 };
 export const SAMPLE_LAW_CARDS = [

@@ -6,14 +6,9 @@
 // a per-day cap (OPENSTATES_DAILY_LIMIT) and pacing (OPENSTATES_MIN_INTERVAL_MS).
 import { upsertOfficial, deactivateOthers, activeOfficials, upsertBill, saveVote } from "./db.js";
 import { classifyState, normalizePosition } from "./classify.js";
+import { API, headers } from "./openstates-api.js";
 import { getState, setState, isHttp, slugify, today, BudgetExhausted } from "./util.js";
 
-const API = "https://v3.openstates.org";
-
-function headers(env) {
-  if (!env.OPENSTATES_API_KEY) throw new Error("OPENSTATES_API_KEY secret is not set");
-  return { "X-API-KEY": env.OPENSTATES_API_KEY, Accept: "application/json" };
-}
 
 function daysSince(iso) {
   return iso ? (Date.now() - Date.parse(iso)) / 86400000 : Infinity;

@@ -18,6 +18,7 @@ import { verifyQuotes, verifyCitations, sameCase } from "./verify.js";
 import { makeLookup } from "./courtlistener.js";
 import { PROMPT_VERSION } from "./prompt.js";
 import { withD1Retry } from "../d1retry.js";
+import { runAgendaWatch } from "./agenda.js";
 
 const RETRY_AFTER_DAYS = 7; // a bill that couldn't be drafted waits this long before another try
 const MIN_TIME_PER_BILL_MS = 4 * 60 * 1000; // don't start a bill without this much time left in the round
@@ -233,5 +234,7 @@ export async function runAnalysis(rawEnv, { deadlineMs, runId, trigger }) {
         ? "more bills waiting; continuing"
         : "no bills waiting";
   await log(db, run, "analysis-round", "ok", budget.used, `${analyzed} drafted this round; ${used} of ${limit} today; ${summary}`, started);
-  return { status: "ok", analyzed, used, limit, more_now: waiting && stoppedEarly };
+  // Agenda watch: county agenda summaries, with their own daily cap.
+  const agendas = await runAgendaWatch(env, db, { run, deadline: budget.deadline });
+  return { status: "ok", analyzed, used, limit, agendas, more_now: (waiting && stoppedEarly) || agendas.more_now };
 }

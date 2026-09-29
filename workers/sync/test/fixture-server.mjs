@@ -5,6 +5,7 @@
 // Mimics the response shapes of Congress.gov v3, Open States v3, and the
 // senate.gov roll call XML closely enough to exercise the sync end to end.
 import http from "node:http";
+import { calendarHtml, rssHtml, meetingHtml, agendaLines, makePdf, dayFromToday } from "./iqm2-fixtures.mjs";
 
 const PORT = parseInt(process.env.FIXTURE_PORT || "8788", 10);
 const hits = {};
@@ -108,7 +109,38 @@ const osBill = (identifier, title, votes) => ({
   sources: [{ url: `https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260${identifier.replace(" ", "")}` }],
   votes,
 });
+const hearingDate = dayFromToday(3).toISOString().slice(0, 10);
 const openstates = {
+  // FAKE committees and hearings (state hearings step).
+  "/committees": {
+    results: [
+      { id: "ocd-organization/fake-cmte-1", name: "Assembly Committee on Test Matters", memberships: [{ person: { id: "ocd-person/fake-asm" }, role: "member" }], sources: [{ url: "https://example.org/committees/test-matters" }] },
+      { id: "ocd-organization/fake-cmte-2", name: "Senate Committee on Other Things", memberships: [{ person: { id: "ocd-person/someone-else" }, role: "member" }] },
+    ],
+    pagination: { page: 1, max_page: 1 },
+  },
+  "/events": {
+    results: [
+      {
+        id: "ocd-event/fake-hearing-1",
+        name: "Assembly Committee on Test Matters hearing",
+        start_date: `${hearingDate}T09:30:00-07:00`,
+        status: "tentative",
+        location: { name: "1021 O Street, Room 1100" },
+        participants: [{ name: "Assembly Committee on Test Matters", entity_type: "organization", organization: { id: "ocd-organization/fake-cmte-1", name: "Assembly Committee on Test Matters" } }],
+        links: [{ url: "https://example.org/watch/fake-hearing-1", note: "Watch live video" }],
+        sources: [{ url: "https://example.org/hearings/fake-hearing-1" }],
+      },
+      {
+        id: "ocd-event/fake-hearing-2",
+        name: "Senate Committee on Other Things hearing",
+        start_date: `${hearingDate}T13:30:00-07:00`,
+        participants: [{ name: "Senate Committee on Other Things", entity_type: "organization", organization: { id: "ocd-organization/fake-cmte-2" } }],
+        sources: [{ url: "https://example.org/hearings/fake-hearing-2" }],
+      },
+    ],
+    pagination: { page: 1, max_page: 1 },
+  },
   "/people.geo": { results: osPeople },
   "/people": {
     results: osPeople.slice(0, 2).map((p) => ({
@@ -299,8 +331,52 @@ function sse(res, events) {
   for (const e of events) res.write(`event: ${e.type}\ndata: ${JSON.stringify(e)}\n\n`);
   res.end();
 }
+// Canned agenda-watch drafts (FAKE). The Board one states a number the agenda
+// doesn't ("36 months"), which the number check must remove.
+const AGENDA_DRAFTS = {
+  "Board of Supervisors": {
+    items: [
+      { item_key: "1", summary: "The Board would meet in closed session with its lawyers about a pending case named on the agenda.", flags: [] },
+      { item_key: "2", summary: "The Board would approve a road repair contract with Example Paving Co. The contract may not exceed $250,000. It would run for 36 months.", flags: ["budget"] },
+      { item_key: "3", summary: "The Board would adopt a resolution setting fees for a permit program. The agenda doesn't list the new amounts.", flags: ["fees_taxes"] },
+      { item_key: "4", summary: "Staff would report on the budget for fiscal year 2026-27, and the Board would give direction.", flags: ["budget"] },
+      { item_key: "5", summary: "The Board would discuss changing the time limit for public comment at its meetings.", flags: ["public_access"] },
+    ],
+    issue_links: [{ item_key: "5", issue_slug: "public-comment-limit", reason: "Both concern the time limit for public comment at Board meetings." }],
+  },
+  "Planning Commission": {
+    items: [
+      { item_key: "1", summary: "The Commission would hold a public hearing on a permit for a gravel yard and decide whether it is exempt from CEQA review.", flags: ["land_use"] },
+      { item_key: "2", summary: "The Commission would consider changing zoning text for accessory dwellings.", flags: ["land_use"] },
+    ],
+    issue_links: [],
+  },
+};
+
+function agendaAnthropic(req, res, body) {
+  const problems = [];
+  if (req.headers["x-api-key"] !== "fake-anthropic-key") problems.push("x-api-key");
+  if (body.model !== "claude-sonnet-5-5") problems.push("model");
+  if (!body.stream || body.fallbacks !== "default") problems.push("stream/fallbacks");
+  if (!body.output_config || !body.output_config.format || body.output_config.format.type !== "json_schema") problems.push("output_config.format");
+  anthropicRequests.push({ kind: "agenda", problems });
+  if (problems.length) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: `fixture: bad ${problems.join(", ")}` } });
+  const msg = body.messages[0].content;
+  const body_ = Object.keys(AGENDA_DRAFTS).find((b) => msg.startsWith(b));
+  const text = JSON.stringify(AGENDA_DRAFTS[body_] || { items: [], issue_links: [] });
+  sse(res, [
+    { type: "message_start", message: { id: "msg_agenda", type: "message", role: "assistant", model: "claude-sonnet-5-5", content: [], stop_reason: null, stop_sequence: null, usage: { input_tokens: 2100, output_tokens: 1, cache_read_input_tokens: 0, cache_creation_input_tokens: 0 } } },
+    { type: "content_block_start", index: 0, content_block: { type: "text", text: "" } },
+    { type: "content_block_delta", index: 0, delta: { type: "text_delta", text } },
+    { type: "content_block_stop", index: 0 },
+    { type: "message_delta", delta: { stop_reason: "end_turn", stop_sequence: null }, usage: { output_tokens: 900 } },
+    { type: "message_stop" },
+  ]);
+}
+
 const anthropicRequests = [];
 function anthropic(req, res, body) {
+  if (/Agenda items, as \[item number\]/.test((body.messages && body.messages[0] && body.messages[0].content) || "")) return agendaAnthropic(req, res, body);
   const problems = [];
   if (req.headers["x-api-key"] !== "fake-anthropic-key") problems.push("x-api-key");
   if (!String(req.headers["anthropic-beta"] || "").includes("server-side-fallback-2026-07-01")) problems.push("anthropic-beta");
@@ -355,6 +431,22 @@ http
     if (u.pathname === "/__hits") return send(res, 200, hits);
     if (u.pathname === "/__anthropic") return send(res, 200, anthropicRequests);
     if (api === "anthropic" && path === "/v1/messages" && req.method === "POST") return anthropic(req, res, JSON.parse(await readBody(req)));
+    if (api === "iqm2") {
+      // FAKE county meeting portal.
+      if (path === "/Citizens/calendar.aspx") return send(res, 200, calendarHtml(), "text/html");
+      if (path === "/Services/RSS.aspx") return send(res, 200, rssHtml(), "text/html");
+      if (path === "/Citizens/Detail_Meeting.aspx") {
+        const html = meetingHtml(u.searchParams.get("ID"));
+        return html ? send(res, 200, html, "text/html") : send(res, 404, "not found", "text/plain");
+      }
+      if (path === "/Citizens/FileOpen.aspx") {
+        const lines = agendaLines(u.searchParams.get("ID"));
+        if (!lines) return send(res, 404, "not found", "text/plain");
+        res.writeHead(200, { "Content-Type": "application/pdf" });
+        return res.end(Buffer.from(makePdf(lines)));
+      }
+      return send(res, 404, "not found", "text/plain");
+    }
     if (api === "textfiles") return textfiles[path] ? send(res, 200, textfiles[path], "text/html") : send(res, 404, "not found", "text/plain");
     if (api === "leginfo") {
       const id = u.searchParams.get("bill_id");
