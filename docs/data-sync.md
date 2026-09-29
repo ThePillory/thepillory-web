@@ -72,6 +72,8 @@ Each step (county officials, state officials, federal officials, House votes, Se
 | Federal officials | Congress.gov `member/CA` and `member/{id}` | once per calendar day (UTC), at that day's first run (about 4 requests); if the U.S. Representative isn't found, every run tries again |
 | House votes | Congress.gov `house-vote/{congress}/{session}`, with detail, members and the bill title | only roll calls not already in D1 |
 | Senate votes | senate.gov `vote_menu_{congress}_{session}.xml`, then each vote's XML | only votes not already in D1 |
+| State hearings | Open States `committees` (with memberships) weekly, then `events` for upcoming dates | daily (1 to 3 requests; a few more once a week); runs before state votes so the daily cap can't starve it |
+| County meetings | The county's IQM2 portal: `calendar.aspx?View=List`, the agenda feed, each new agenda's web page, and its agenda PDF | calendar once a day; each new or re-posted agenda once. One request a minute (the portal's robots.txt `Crawl-delay: 60`), at most `IQM2_DAILY_LIMIT` (12) a day |
 | State votes | Open States `bills?include=votes&updated_since=…` for the current CA session | only bills updated since the last run; capped at `OPENSTATES_DAILY_LIMIT` (default 250/day), one call every 6.5 s |
 
 ## Entering county officials

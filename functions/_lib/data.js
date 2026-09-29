@@ -146,3 +146,31 @@ export async function approvedIssuesForOfficial(db, officialId) {
     .all();
   return results.map((r) => r.issue_slug);
 }
+
+// Most recent final-passage votes by any of our active officials, newest first,
+// each with our officials' positions. level: "federal" | "state" | null (all).
+export async function recentFinalVotes(db, { level = null, limit = 3, offset = 0 } = {}) {
+  const { results } = await db
+    .prepare(
+      `SELECT v.*, b.bill_number, b.title AS bill_title FROM votes v
+       LEFT JOIN bills b ON b.id = v.bill_id
+       WHERE v.vote_type = 'final_passage' AND (? IS NULL OR v.level = ?)
+         AND EXISTS (SELECT 1 FROM vote_positions p JOIN officials o ON o.id = p.official_id AND o.active = 1 WHERE p.vote_id = v.id)
+       ORDER BY v.vote_date DESC, v.id DESC LIMIT ? OFFSET ?`
+    )
+    .bind(level, level, limit + 1, offset)
+    .all();
+  const rows = results.slice(0, limit);
+  if (rows.length) {
+    const { results: pos } = await db
+      .prepare(
+        `SELECT p.vote_id, p.position, p.raw_position, o.name, o.slug, o.office, o.district FROM vote_positions p
+         JOIN officials o ON o.id = p.official_id AND o.active = 1
+         WHERE p.vote_id IN (${rows.map(() => "?").join(",")}) ORDER BY o.name`
+      )
+      .bind(...rows.map((r) => r.id))
+      .all();
+    for (const r of rows) r.positions = pos.filter((p) => p.vote_id === r.id);
+  }
+  return { rows, more: results.length > limit };
+}

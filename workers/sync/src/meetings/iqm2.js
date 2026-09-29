@@ -125,7 +125,7 @@ export function sectionKind(section) {
 /** One meeting's web agenda: numbered items with their sections and attachments. */
 export function parseMeeting(html, base = PORTAL) {
   const doc = String(html || "");
-  const table = /<table id='MeetingDetail'[\s\S]*?<\/table>/i.exec(doc);
+  const table = /<table id=['"]MeetingDetail['"][\s\S]*?(?:<\/table>|$)/i.exec(doc);
   const items = [];
   let section = null;
   let current = null;

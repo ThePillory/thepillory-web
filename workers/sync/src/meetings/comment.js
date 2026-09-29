@@ -33,12 +33,14 @@ const DEADLINE = /no later than|deadline|received by|prior to the (?:start|meeti
 
 /**
  * From the first pages of an agenda: {comment_text, comment_deadline_text, online_url}.
- * comment_text is up to 6 consecutive-order sentences about commenting; each one
- * is a verbatim sentence of the agenda.
+ * comment_text is up to 6 sentences about commenting from the first page, in
+ * order; each one is a verbatim sentence of the agenda.
  */
 export function commentInfo(pages) {
+  // Instructions are quoted from the first page (the agenda's header); the
+  // Zoom link is often on the second, under Call to Order.
   const flat = flatten((pages || []).slice(0, 2).join("\n"));
-  const all = sentences(flat);
+  const all = sentences(flatten((pages || [])[0] || ""));
   const about = all.filter((s) => ABOUT_COMMENT.test(s) && s.length < 600).slice(0, 6);
   const deadline = about.find((s) => DEADLINE.test(s)) || all.find((s) => DEADLINE.test(s) && ABOUT_COMMENT.test(s)) || null;
   const zoom = /https:\/\/[\w.-]*zoom\.us\/[^\s"<>)]+/i.exec(flat);

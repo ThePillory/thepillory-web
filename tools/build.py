@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # The full Constitution (National Archives transcription), shared with the sync
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
-ASSET_VERSION = "13"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "14"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. reps/ and bodies/ are NOT here: those pages are
 # rendered from D1 by Pages Functions (functions/), as are the laws/ index and
@@ -991,6 +991,17 @@ def build_methodology():
       </div>
     </li>
   </ol>
+</section>
+
+<section class="card stack" id="agenda-watch">
+  <h2>Meetings and agenda watch</h2>
+  <p>Meeting times, places, agendas, staff reports, minutes and video links come from Calaveras County's official meeting portal, for the Board of Supervisors and the Planning Commission. State committee hearings come from Open States and show when one of our two state legislators sits on the committee.</p>
+  <ul class="plain-list small">
+    <li><strong>How to weigh in:</strong> the comment instructions and deadline are copied word for word from the official agenda. When a short deadline is shown (for example "Written comments by Mon, Oct 12, 4:00 pm"), it is worked out only from the agenda's own plain wording, such as "no later than 4:00 pm on the day before the meeting".</li>
+    <li><strong>Agenda watch:</strong> an AI tool (Claude, made by Anthropic) writes two or three neutral sentences about each item, from the official agenda only, and flags items about the budget, land use, fees and taxes, public safety, or public access and meetings. These summaries are labeled "AI-drafted from the official agenda" and link to the source. A sentence that states a number, amount or date the agenda item doesn't contain is removed automatically. People review the summaries.</li>
+    <li><strong>Links to issues:</strong> the AI tool may suggest that an agenda item relates to an issue. A suggestion is shown only after a person approves it.</li>
+    <li><strong>Votes:</strong> how each supervisor voted will be added from the published minutes.</li>
+  </ul>
 </section>
 
 <section class="card stack-sm">
