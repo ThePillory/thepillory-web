@@ -67,3 +67,14 @@ All styling is in **`assets/pillory.css`**, with tokens on `:root`. Reuse the cl
 - **Controls:** pill-shaped chips and toggles, and every tap target at least 44px tall. Section labels (`.label`) are small, uppercase, letter-spaced and secondary-colored.
 - **Layout:** app screens are a centered column, max 480px. The public pages (Home, How it works, Principles) use a 680px reading column (`.site`).
 - **Checks:** before shipping, look at phone (360–390px) and desktop (1280px) widths, with no horizontal scroll.
+
+## Logo
+
+The logo is the **Seal P**: a serif "P" (Newsreader 600) inside a double ring, like an official stamp on a public record. It sits beside "The Pillory" in Newsreader 600. The "P" is stored as vector outlines, so the icons don't depend on the web font loading. Everything lives in `assets/logo/`:
+
+- `mark.svg`: the seal on its own. CSS draws it before every `.wordmark` through `.wordmark::before` (a mask filled with navy), so the wordmark HTML stays plain text. Bump the `?v=` on the mask URL in `pillory.css` if the file changes.
+- `icon.svg` and `favicon-32.png`: the browser-tab icon, a parchment seal on a rounded navy tile.
+- `icon-square.svg`: the source for the home-screen icons (`apple-touch-icon.png` at 180px, `icon-192.png`, `icon-512.png`). It's a full-bleed square, because phones round the corners themselves.
+- `og-image.png` (1200×630): the image shown when a link is shared.
+
+The PNGs were rendered from the SVGs in headless Chromium. If the SVGs change, re-render the PNGs to match. Every page's `<head>` carries the icon, manifest (`/site.webmanifest`) and Open Graph tags; generated pages get them from `head_tags()` in `tools/build.py`. Only navy and parchment are used for the logo; avoid red and blue together, which reads as partisan.
