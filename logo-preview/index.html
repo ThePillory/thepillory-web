@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Logo concepts – The Pillory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/pillory.css?v=5" />
+    <!-- Temporary concepts page: remove once a logo direction is chosen. -->
+    <style>
+      .concepts {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 16px 16px 56px;
+        display: grid;
+        gap: 20px;
+      }
+      @media (min-width: 760px) { .concepts { grid-template-columns: repeat(2, 1fr); } }
+      @media (min-width: 1100px) { .concepts { grid-template-columns: repeat(3, 1fr); } }
+      .intro { max-width: 1240px; margin: 0 auto; padding: 24px 16px 0; }
+      .group-title { grid-column: 1 / -1; margin-top: 12px; }
+
+      .concept { display: flex; flex-direction: column; gap: 12px; }
+      .stage {
+        display: grid;
+        place-items: center;
+        min-height: 128px;
+        padding: 20px 16px;
+        border-radius: 10px;
+        color: var(--text);
+        background: var(--page);
+        border: 1px solid var(--border);
+        overflow: hidden;
+      }
+      .stage--navy { background: var(--navy); border-color: var(--navy); color: #fff; }
+      .stage--navy .mark { color: #fff; }
+      .stage--navy .wm-the { color: #C9D5E6; }
+      .sizes { display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+      .sizes figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+      .sizes figcaption { font-size: 0.6875rem; color: var(--text-2); }
+
+      /* Marks use currentColor, so they recolor on light and navy stages */
+      .mark { color: var(--navy); display: block; }
+
+      /* Wordmarks */
+      .wm {
+        font-family: var(--serif);
+        font-weight: 600;
+        font-size: 2.5rem;
+        line-height: 1;
+        letter-spacing: -0.015em;
+        white-space: nowrap;
+      }
+      .wm-stack { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+      .wm-the {
+        font-family: var(--sans);
+        font-size: 0.8125rem;
+        font-weight: 600;
+        letter-spacing: 0.42em;
+        margin-right: -0.42em; /* balance the trailing letter-space */
+        color: var(--text-2);
+      }
+      .wm-col { display: inline-flex; align-items: baseline; }
+      .wm-col .mark { height: 0.72em; width: 0.22em; margin: 0 0.035em 0 0.05em; color: inherit; }
+      .lockup { display: inline-flex; align-items: center; gap: 12px; }
+      .lockup .mark { width: 48px; height: 48px; flex: none; }
+      .lockup .wm { font-size: 2.125rem; }
+      .small-wm { font-size: 1rem; }
+    </style>
+  </head>
+
+  <body>
+    <!-- Reusable marks -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <defs>
+        <!-- Classical column: abacus, capital, four flutes, base, plinth -->
+        <symbol id="column" viewBox="0 0 64 64">
+          <g fill="currentColor">
+            <rect x="12" y="7" width="40" height="6" rx="1.5" />
+            <rect x="16" y="14" width="32" height="4" rx="1" />
+            <rect x="19" y="20" width="5" height="29" />
+            <rect x="26" y="20" width="5" height="29" />
+            <rect x="33" y="20" width="5" height="29" />
+            <rect x="40" y="20" width="5" height="29" />
+            <rect x="16" y="50" width="32" height="4" rx="1" />
+            <rect x="12" y="55" width="40" height="6" rx="1.5" />
+          </g>
+        </symbol>
+        <!-- Narrow column sized to stand in for a lowercase "i"/"l" -->
+        <symbol id="column-i" viewBox="0 0 22 72">
+          <g fill="currentColor">
+            <rect x="0" y="0" width="22" height="6" rx="1.2" />
+            <rect x="3.5" y="8" width="6.5" height="56" />
+            <rect x="12" y="8" width="6.5" height="56" />
+            <rect x="0" y="66" width="22" height="6" rx="1.2" />
+          </g>
+        </symbol>
+        <!-- A "P" whose stem is a fluted column -->
+        <symbol id="column-p" viewBox="0 0 64 64">
+          <g fill="currentColor">
+            <rect x="9" y="6" width="26" height="5" rx="1.5" />
+            <rect x="13" y="12" width="4.5" height="40" />
+            <rect x="19.75" y="12" width="4.5" height="40" />
+            <rect x="26.5" y="12" width="4.5" height="40" />
+            <rect x="9" y="53" width="26" height="5" rx="1.5" />
+          </g>
+          <path d="M31 15.5 H41 a11.5 11.5 0 0 1 0 23 H31" fill="none" stroke="currentColor" stroke-width="7" />
+        </symbol>
+        <!-- Page with a folded corner and a check: verified evidence -->
+        <symbol id="doc-check" viewBox="0 0 64 64">
+          <g fill="none" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round">
+            <path d="M16 6 H38 L50 18 V58 H16 Z" stroke-width="4.5" />
+            <path d="M38 6 V18 H50" stroke-width="4.5" />
+            <path d="M23.5 37 L30 43.5 L42.5 29" stroke-width="5.5" />
+          </g>
+        </symbol>
+      </defs>
+    </svg>
+
+    <header class="intro page-head">
+      <h1>Logo concepts</h1>
+      <p class="subtitle">
+        Starting points, not finished logos. Each one is shown on the page background, reversed on navy,
+        and at small icon sizes. Pick any that feel right, or mix pieces from several.
+      </p>
+    </header>
+
+    <main class="concepts">
+      <h2 class="label group-title">Wordmarks</h2>
+
+      <!-- 1 -->
+      <article class="card concept">
+        <p class="label">1 · Wordmark</p>
+        <h3>Classic</h3>
+        <div class="stage"><span class="wm">The Pillory</span></div>
+        <div class="stage stage--navy"><span class="wm">The Pillory</span></div>
+        <p class="small secondary">Today's wordmark, with slightly tighter spacing. Quiet and trustworthy, and nothing new to learn. Pairs with monogram 4 or 5 for the app icon.</p>
+      </article>
+
+      <!-- 2 -->
+      <article class="card concept">
+        <p class="label">2 · Wordmark</p>
+        <h3>Stacked</h3>
+        <div class="stage">
+          <span class="wm-stack"><span class="wm-the">THE</span><span class="wm">Pillory</span></span>
+        </div>
+        <div class="stage stage--navy">
+          <span class="wm-stack"><span class="wm-the">THE</span><span class="wm">Pillory</span></span>
+        </div>
+        <p class="small secondary">A small, spaced-out "THE" over "Pillory", like a newspaper nameplate. More compact, so it fits square spaces better.</p>
+      </article>
+
+      <!-- 3 -->
+      <article class="card concept">
+        <p class="label">3 · Wordmark</p>
+        <h3>Column "i"</h3>
+        <div class="stage">
+          <span class="wm wm-col">The P<svg class="mark" viewBox="0 0 22 72" aria-hidden="true"><use href="#column-i" /></svg>llory</span>
+        </div>
+        <div class="stage stage--navy">
+          <span class="wm wm-col">The P<svg class="mark" viewBox="0 0 22 72" aria-hidden="true"><use href="#column-i" /></svg>llory</span>
+        </div>
+        <p class="small secondary">The "i" becomes a small column, a quiet nod to the <em>pillar</em> in Pillory. Playful. At very small sizes the column can blur into an "l", so it needs a plain version for icons.</p>
+      </article>
+
+      <h2 class="label group-title">Monograms (app and browser icon)</h2>
+
+      <!-- 4 -->
+      <article class="card concept">
+        <p class="label">4 · Monogram</p>
+        <h3>Serif P</h3>
+        <div class="stage">
+          <svg class="mark" width="96" height="96" viewBox="0 0 64 64" role="img" aria-label="Serif P monogram">
+            <rect width="64" height="64" rx="14" fill="#1E3A5F" />
+            <text x="32" y="47" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-weight="600" font-size="46" fill="#F3E8D3">P</text>
+          </svg>
+        </div>
+        <div class="sizes">
+          <figure>
+            <svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#1E3A5F" /><text x="32" y="47" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-weight="600" font-size="46" fill="#F3E8D3">P</text></svg>
+            <figcaption>64px</figcaption>
+          </figure>
+          <figure>
+            <svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#1E3A5F" /><text x="32" y="47" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-weight="600" font-size="46" fill="#F3E8D3">P</text></svg>
+            <figcaption>32px</figcaption>
+          </figure>
+          <figure>
+            <svg width="16" height="16" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#1E3A5F" /><text x="32" y="47" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-weight="600" font-size="46" fill="#F3E8D3">P</text></svg>
+            <figcaption>16px</figcaption>
+          </figure>
+        </div>
+        <p class="small secondary">Wordmark 1's "P" on a navy tile, with parchment lettering. Simple, and matches the wordmark exactly.</p>
+      </article>
+
+      <!-- 5 -->
+      <article class="card concept">
+        <p class="label">5 · Monogram</p>
+        <h3>Column P</h3>
+        <div class="stage">
+          <svg class="mark" width="96" height="96" viewBox="0 0 64 64" role="img" aria-label="Column P monogram"><use href="#column-p" /></svg>
+        </div>
+        <div class="stage stage--navy">
+          <svg class="mark" width="72" height="72" viewBox="0 0 64 64" aria-hidden="true"><use href="#column-p" /></svg>
+        </div>
+        <div class="sizes">
+          <figure>
+            <svg class="mark" width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><use href="#column-p" /></svg>
+            <figcaption>64px</figcaption>
+          </figure>
+          <figure>
+            <svg class="mark" width="32" height="32" viewBox="0 0 64 64" aria-hidden="true"><use href="#column-p" /></svg>
+            <figcaption>32px</figcaption>
+          </figure>
+          <figure>
+            <svg class="mark" width="16" height="16" viewBox="0 0 64 64" aria-hidden="true"><use href="#column-p" /></svg>
+            <figcaption>16px</figcaption>
+          </figure>
+        </div>
+        <p class="small secondary">A "P" built from a fluted column: civic and structural, and unique to The Pillory.</p>
+      </article>
+
+      <!-- 5b -->
+      <article class="card concept">
+        <p class="label">5b · Monogram</p>
+        <h3>Column tile</h3>
+        <div class="stage">
+          <svg width="96" height="96" viewBox="0 0 64 64" role="img" aria-label="Column on a navy tile"><rect width="64" height="64" rx="14" fill="#1E3A5F" /><svg x="12" y="11" width="40" height="40" viewBox="0 0 64 64" color="#F3E8D3"><use href="#column" /></svg></svg>
+        </div>
+        <div class="sizes">
+          <figure><svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#1E3A5F" /><svg x="12" y="11" width="40" height="40" viewBox="0 0 64 64" color="#F3E8D3"><use href="#column" /></svg></svg><figcaption>64px</figcaption></figure>
+          <figure><svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#1E3A5F" /><svg x="12" y="11" width="40" height="40" viewBox="0 0 64 64" color="#F3E8D3"><use href="#column" /></svg></svg><figcaption>32px</figcaption></figure>
+          <figure><svg width="16" height="16" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#1E3A5F" /><svg x="12" y="11" width="40" height="40" viewBox="0 0 64 64" color="#F3E8D3"><use href="#column" /></svg></svg><figcaption>16px</figcaption></figure>
+        </div>
+        <p class="small secondary">The column from concept 6 on a navy tile. The strongest at tiny sizes, so it's a natural browser-tab and home-screen icon for concepts 6 and 7.</p>
+      </article>
+
+      <h2 class="label group-title">Symbol + wordmark</h2>
+
+      <!-- 6 -->
+      <article class="card concept">
+        <p class="label">6 · Symbol + wordmark</p>
+        <h3>Column</h3>
+        <div class="stage">
+          <span class="lockup"><svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><use href="#column" /></svg><span class="wm">The Pillory</span></span>
+        </div>
+        <div class="stage stage--navy">
+          <span class="lockup"><svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><use href="#column" /></svg><span class="wm">The Pillory</span></span>
+        </div>
+        <div class="sizes">
+          <figure>
+            <svg class="mark" width="32" height="32" viewBox="0 0 64 64" aria-hidden="true"><use href="#column" /></svg>
+            <figcaption>32px</figcaption>
+          </figure>
+          <figure>
+            <svg class="mark" width="16" height="16" viewBox="0 0 64 64" aria-hidden="true"><use href="#column" /></svg>
+            <figcaption>16px</figcaption>
+          </figure>
+        </div>
+        <p class="small secondary">A classical column: steady, public, and the pun on <em>pillar</em> without the stocks. Also works alone as the icon.</p>
+      </article>
+
+      <!-- 7 -->
+      <article class="card concept">
+        <p class="label">7 · Symbol + wordmark</p>
+        <h3>Column seal</h3>
+        <div class="stage">
+          <span class="lockup">
+            <svg width="52" height="52" viewBox="0 0 64 64" aria-hidden="true">
+              <circle cx="32" cy="32" r="30" fill="#F3E8D3" stroke="#D9C39B" stroke-width="2" />
+              <svg x="15" y="14" width="34" height="34" viewBox="0 0 64 64" color="#6B4410"><use href="#column" /></svg>
+            </svg>
+            <span class="wm">The Pillory</span>
+          </span>
+        </div>
+        <div class="stage stage--navy">
+          <span class="lockup">
+            <svg width="52" height="52" viewBox="0 0 64 64" aria-hidden="true">
+              <circle cx="32" cy="32" r="30" fill="#F3E8D3" stroke="#D9C39B" stroke-width="2" />
+              <svg x="15" y="14" width="34" height="34" viewBox="0 0 64 64" color="#6B4410"><use href="#column" /></svg>
+            </svg>
+            <span class="wm">The Pillory</span>
+          </span>
+        </div>
+        <div class="sizes">
+          <figure>
+            <svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#F3E8D3" stroke="#D9C39B" stroke-width="2" /><svg x="15" y="14" width="34" height="34" viewBox="0 0 64 64" color="#6B4410"><use href="#column" /></svg></svg>
+            <figcaption>32px</figcaption>
+          </figure>
+          <figure>
+            <svg width="16" height="16" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#F3E8D3" stroke="#D9C39B" stroke-width="2" /><svg x="15" y="14" width="34" height="34" viewBox="0 0 64 64" color="#6B4410"><use href="#column" /></svg></svg>
+            <figcaption>16px</figcaption>
+          </figure>
+        </div>
+        <p class="small secondary">The column inside a parchment seal, borrowing the site's constitutional color. It reads as official, like a stamp on a record.</p>
+      </article>
+
+      <!-- 8 -->
+      <article class="card concept">
+        <p class="label">8 · Symbol + wordmark</p>
+        <h3>Verified record</h3>
+        <div class="stage">
+          <span class="lockup"><svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><use href="#doc-check" /></svg><span class="wm">The Pillory</span></span>
+        </div>
+        <div class="stage stage--navy">
+          <span class="lockup"><svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><use href="#doc-check" /></svg><span class="wm">The Pillory</span></span>
+        </div>
+        <div class="sizes">
+          <figure>
+            <svg class="mark" width="32" height="32" viewBox="0 0 64 64" aria-hidden="true"><use href="#doc-check" /></svg>
+            <figcaption>32px</figcaption>
+          </figure>
+          <figure>
+            <svg class="mark" width="16" height="16" viewBox="0 0 64 64" aria-hidden="true"><use href="#doc-check" /></svg>
+            <figcaption>16px</figcaption>
+          </figure>
+        </div>
+        <p class="small secondary">A document with a check: evidence first and verified. The clearest message, but also the most generic.</p>
+      </article>
+    </main>
+  </body>
+</html>
