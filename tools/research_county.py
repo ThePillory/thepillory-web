@@ -1,25 +1,22 @@
-"""TEMPORARY research script (removed before merge): can a cloud server reach the county meeting portal?"""
-import subprocess, time, re, html
-
-URLS = [
-    "https://calaverascountyca.iqm2.com/Citizens/Default.aspx",
-    "http://calaverascountyca.iqm2.com/Citizens/Default.aspx",
-    "https://calaverascountyca.iqm2.com/Services/RSS.aspx?Feed=Calendar",
-    "https://calaverascountyca.iqm2.com/Citizens/calendar.aspx?View=List",
-    "https://santacruzcountyca.iqm2.com/Citizens/Default.aspx",
-    "https://www.calaverasgov.us/Meeting-Calendar/category/planning-commission",
-    "https://www.calaverasgov.us/Meeting-Calendar",
-]
+"""TEMPORARY research script (removed before merge): what does a meeting's web agenda contain?"""
+import subprocess, re, html
 BROWSER = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Safari/537.36"
-for u in URLS:
-    t = time.time()
-    r = subprocess.run(["curl", "-sS", "-L", "-m", "120", "-A", BROWSER, "-o", "/tmp/out", "-w", "%{http_code} %{remote_ip} %{time_connect} %{time_starttransfer}", u], capture_output=True, text=True)
-    body = open("/tmp/out", errors="replace").read() if r.returncode == 0 else ""
-    print(f"\n########## {u}\n{r.stdout} rc={r.returncode} {r.stderr.strip()} {time.time()-t:.1f}s bytes={len(body)}")
-    if body:
-        ids = re.findall(r"Detail_Meeting\.aspx\?ID=(\d+)", body)
-        print("meeting ids:", ids[:20])
-        print("links:", sorted(set(m for m in re.findall(r'href="([^"]+)"', body) if re.search(r"rss|ical|\.ics|Detail_Meeting|FileOpen|agenda", m, re.I)))[:40])
-        txt = html.unescape(re.sub(r"(?s)<[^>]+>", " ", re.sub(r"(?is)<(script|style)\b.*?</\1>", " ", body)))
-        print("TEXT:", re.sub(r"\s+", " ", txt)[:3000])
-        if "RSS" in u: print("RAW:", body[:4000])
+def get(u):
+    r = subprocess.run(["curl", "-sS", "-L", "-m", "120", "-A", BROWSER, u], capture_output=True)
+    return r.stdout.decode("utf-8", "replace")
+def text(b):
+    b = re.sub(r"(?is)<(script|style)\b.*?</\1>", " ", b)
+    b = re.sub(r"(?i)<(br|/p|/div|/tr|/li|/h\d)\b[^>]*>", "\n", b)
+    return "\n".join(l for l in (re.sub(r"\s+", " ", x).strip() for x in html.unescape(re.sub(r"(?s)<[^>]+>", " ", b)).split("\n")) if l)
+cal = get("https://calaverascountyca.iqm2.com/Citizens/calendar.aspx?View=List")
+i = cal.find("Sep 22, 2026")
+print("CALENDAR RAW around Sep 22:\n", cal[max(0, i-3000):i+2500])
+bos = re.findall(r"Detail_Meeting\.aspx\?ID=(\d+)[^<]*</a>[\s\S]{0,1500}?Board of Supervisors - Regular", cal)
+print("BOS ids:", bos[-5:])
+for mid in ["2822", "2793"]:
+    b = get(f"https://calaverascountyca.iqm2.com/Citizens/Detail_Meeting.aspx?ID={mid}")
+    print(f"\n\n########## Detail_Meeting {mid}: {len(b)} bytes")
+    print("LINKS:", sorted(set(html.unescape(m) for m in re.findall(r'href="([^"]+)"', b) if re.search(r"FileOpen|Detail_LegiFile|youtube|zoom|SplitView|Video", m, re.I)))[:60])
+    print("TEXT:\n", text(b)[:9000])
+    j = b.find("MeetingDetail")
+    print("RAW:\n", b[j:j+9000] if j >= 0 else b[20000:29000])
