@@ -33,6 +33,8 @@ python3 tools/build.py   # standard library only; wipes and rewrites the generat
 
 Commit the regenerated files with your change. The build fails loudly if data references a slug that doesn't exist.
 
+One exception to "hand-written": the home page's sample issue cards sit between `<!-- build:home-issues … -->` markers in `index.html`, and the build refills them from `tools/data.py`. Edit the rest of `index.html` by hand, but not inside those markers.
+
 Bump `ASSET_VERSION` in `tools/build.py` **and** the `?v=` on the hand-written pages' stylesheet link whenever `pillory.css` or `app.js` changes, so browsers don't serve a stale copy.
 
 ## App structure

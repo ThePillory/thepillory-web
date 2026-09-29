@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import data as D  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
-ASSET_VERSION = "8"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "11"  # bump when assets/pillory.css or assets/app.js change
 
 GENERATED_DIRS = [
     "about", "agency", "bodies", "constitution", "evidence", "feed", "issue",
@@ -1202,6 +1202,24 @@ def search_index():
 
 # ---------------------------------------------------------------------------
 
+HOME_START = "<!-- build:home-issues (filled in by tools/build.py from tools/data.py; edits inside are overwritten) -->"
+HOME_END = "<!-- /build:home-issues -->"
+
+
+def fill_home_preview():
+    """Refresh the sample issue cards on the hand-written home page (one per level)."""
+    home = ROOT / "index.html"
+    s = home.read_text(encoding="utf-8")
+    if HOME_START not in s or HOME_END not in s:
+        sys.exit("build.py: index.html is missing the build:home-issues markers")
+    picks = [next(i for i in D.ISSUES if i["level"] == level) for level in D.LEVELS]
+    cards = "".join(issue_card(i) for i in picks)
+    indented = "\n".join("          " + line if line else "" for line in cards.strip("\n").splitlines())
+    before, rest = s.split(HOME_START, 1)
+    _, after = rest.split(HOME_END, 1)
+    home.write_text(f"{before}{HOME_START}\n{indented}\n          {HOME_END}{after}", encoding="utf-8")
+
+
 def main():
     validate()
     build_feed()
@@ -1240,6 +1258,7 @@ def main():
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(doc, encoding="utf-8")
     (ROOT / "assets" / "search-index.js").write_text(search_index(), encoding="utf-8")
+    fill_home_preview()
     print(f"Built {len(PAGES)} pages.")
 
 
