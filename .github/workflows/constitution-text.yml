@@ -1,0 +1,15 @@
+# Checks data/constitution.json word for word against the National Archives
+# transcriptions whenever the text or the checker changes.
+name: Constitution text
+on:
+  pull_request:
+    paths: ["data/constitution.json", "tools/check_constitution.py", ".github/workflows/constitution-text.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tools/check_constitution.py
