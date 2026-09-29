@@ -596,7 +596,15 @@ a.card:hover { border-color: var(--navy); }
 
 /* Home page */
 .hero { display: flex; flex-direction: column; gap: 12px; padding: 8px 0; }
-.hero h1 { font-size: 2.25rem; line-height: 1.15; }
+/* The logo is the largest thing on the page; the tagline supports it */
+.hero .hero-logo { font-size: 3rem; line-height: 1.05; letter-spacing: -0.015em; align-self: flex-start; }
+.hero-tagline {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 1.375rem;
+  line-height: 1.3;
+  color: var(--text);
+}
 .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
 
 .pillars { display: grid; gap: 12px; }
@@ -612,7 +620,8 @@ a.card:hover { border-color: var(--navy); }
 .pillar h2 { font-size: 1.125rem; }
 
 @media (min-width: 600px) {
-  .hero h1 { font-size: 2.75rem; }
+  .hero .hero-logo { font-size: 4rem; }
+  .hero-tagline { font-size: 1.625rem; }
   .pillars { grid-template-columns: repeat(3, 1fr); }
 }
 .card.numbered { padding: 20px; }

@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import data as D  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
-ASSET_VERSION = "9"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "10"  # bump when assets/pillory.css or assets/app.js change
 
 GENERATED_DIRS = [
     "about", "agency", "bodies", "constitution", "evidence", "feed", "issue",
