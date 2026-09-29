@@ -4,96 +4,98 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>How it works – The Pillory</title>
-
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont,
-          "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        background: #f9fafb;
-        color: #111827;
-      }
-
-      .container {
-        max-width: 720px;
-        margin: 0 auto;
-        padding: 4rem 1.5rem;
-      }
-
-      nav {
-        margin-bottom: 2.5rem;
-      }
-
-      nav a {
-        margin-right: 1.25rem;
-        text-decoration: none;
-        color: #111827;
-      }
-
-      h1 {
-        font-size: 2.2rem;
-        margin-bottom: 1.5rem;
-      }
-
-      ol {
-        padding-left: 1.25rem;
-      }
-
-      li {
-        margin-bottom: 1.5rem;
-        line-height: 1.6;
-      }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/pillory.css" />
   </head>
 
   <body>
-    <div class="container">
-      <nav>
-        <a href="/">Home</a>
-        <a href="/how-it-works.html">How it works</a>
-        <a href="/principles.html">Principles</a>
+    <div class="site">
+      <nav class="site-nav" aria-label="Site">
+        <a class="wordmark" href="/">The Pillory</a>
+        <div class="site-nav-links">
+          <a href="/">Home</a>
+          <a href="/how-it-works.html" aria-current="page">How it works</a>
+          <a href="/principles.html">Principles</a>
+          <a href="/feed/">Feed</a>
+          <a class="btn--primary" href="/join/">Join</a>
+        </div>
       </nav>
 
-      <h1>How it works</h1>
+      <main class="stack-lg">
+        <h1>How it works</h1>
 
-      <ol>
-        <li>
-          <strong>Join and verify</strong><br />
-          Participants verify uniqueness and residency. Real people, one voice
-          each. Identities are protected by default.
-        </li>
+        <ol class="numbered numbered-lg card prose">
+          <li>
+            <span class="step-num" aria-hidden="true">1</span>
+            <div class="stack-sm">
+              <h2>Join and verify</h2>
+              <p class="secondary">
+                Participants verify uniqueness and residency. Real people, one voice
+                each. Identities are protected by default.
+              </p>
+            </div>
+          </li>
 
-        <li>
-          <strong>Make a claim</strong><br />
-          Claims are tied to a place, category, and timeframe. No vague
-          accusations or drive-by posts.
-        </li>
+          <li>
+            <span class="step-num" aria-hidden="true">2</span>
+            <div class="stack-sm">
+              <h2>Make a claim</h2>
+              <p class="secondary">
+                Claims are tied to a place, category, and timeframe. No vague
+                accusations or drive-by posts.
+              </p>
+            </div>
+          </li>
 
-        <li>
-          <strong>Attach evidence</strong><br />
-          Documents, links, photos, records. Claims without evidence don’t
-          travel far.
-        </li>
+          <li>
+            <span class="step-num" aria-hidden="true">3</span>
+            <div class="stack-sm">
+              <h2>Attach evidence</h2>
+              <p class="secondary">
+                Documents, links, photos, records. Claims without evidence don’t
+                travel far.
+              </p>
+            </div>
+          </li>
 
-        <li>
-          <strong>Community actions</strong><br />
-          Others can corroborate with evidence, support with context, or
-          identify as affected — all without public pile-ons.
-        </li>
+          <li>
+            <span class="step-num" aria-hidden="true">4</span>
+            <div class="stack-sm">
+              <h2>Community actions</h2>
+              <p class="secondary">
+                Others can corroborate with evidence, support with context, or
+                identify as affected — all without public pile-ons.
+              </p>
+            </div>
+          </li>
 
-        <li>
-          <strong>Aggregate signal</strong><br />
-          Individual inputs stay private while patterns emerge: consistency,
-          volume, quality, confidence.
-        </li>
+          <li>
+            <span class="step-num" aria-hidden="true">5</span>
+            <div class="stack-sm">
+              <h2>Aggregate signal</h2>
+              <p class="secondary">
+                Individual inputs stay private while patterns emerge: consistency,
+                volume, quality, confidence.
+              </p>
+            </div>
+          </li>
 
-        <li>
-          <strong>Publish accountability</strong><br />
-          When thresholds are met, the output becomes a structured, shareable
-          record for media, officials, or institutions.
-        </li>
-      </ol>
+          <li>
+            <span class="step-num" aria-hidden="true">6</span>
+            <div class="stack-sm">
+              <h2>Publish accountability</h2>
+              <p class="secondary">
+                When thresholds are met, the output becomes a structured, shareable
+                record for media, officials, or institutions.
+              </p>
+            </div>
+          </li>
+        </ol>
+
+        <a class="btn btn--primary" href="/join/">Join The Pillory</a>
+      </main>
     </div>
   </body>
 </html>

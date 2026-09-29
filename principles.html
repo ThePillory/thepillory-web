@@ -4,84 +4,67 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Principles – The Pillory</title>
-
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont,
-          "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        background: #f9fafb;
-        color: #111827;
-      }
-
-      .container {
-        max-width: 720px;
-        margin: 0 auto;
-        padding: 4rem 1.5rem;
-      }
-
-      nav {
-        margin-bottom: 2.5rem;
-      }
-
-      nav a {
-        margin-right: 1.25rem;
-        text-decoration: none;
-        color: #111827;
-      }
-
-      h1 {
-        font-size: 2.2rem;
-        margin-bottom: 1.5rem;
-      }
-
-      h2 {
-        margin-top: 2.5rem;
-        font-size: 1.4rem;
-      }
-
-      p {
-        line-height: 1.6;
-        margin-top: 0.75rem;
-      }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/pillory.css" />
   </head>
 
   <body>
-    <div class="container">
-      <nav>
-        <a href="/">Home</a>
-        <a href="/how-it-works.html">How it works</a>
-        <a href="/principles.html">Principles</a>
+    <div class="site">
+      <nav class="site-nav" aria-label="Site">
+        <a class="wordmark" href="/">The Pillory</a>
+        <div class="site-nav-links">
+          <a href="/">Home</a>
+          <a href="/how-it-works.html">How it works</a>
+          <a href="/principles.html" aria-current="page">Principles</a>
+          <a href="/feed/">Feed</a>
+          <a class="btn--primary" href="/join/">Join</a>
+        </div>
       </nav>
 
-      <h1>Principles</h1>
+      <main class="stack-lg">
+        <h1>Principles</h1>
 
-      <h2>Evidence first</h2>
-      <p>
-        Claims without evidence do not amplify. The system is designed to reward
-        documentation, consistency, and verifiability over volume or emotion.
-      </p>
+        <div class="stack">
+          <section class="card stack-sm">
+            <h2>Evidence first</h2>
+            <p class="prose secondary">
+              Claims without evidence do not amplify. The system is designed to reward
+              documentation, consistency, and verifiability over volume or emotion.
+            </p>
+          </section>
 
-      <h2>Protected identities</h2>
-      <p>
-        Participants are verified for uniqueness and relevance, but identities
-        are protected by default. Safety enables honesty.
-      </p>
+          <section class="card stack-sm">
+            <h2>Protected identities</h2>
+            <p class="prose secondary">
+              Participants are verified for uniqueness and relevance, but identities
+              are protected by default. Safety enables honesty.
+            </p>
+          </section>
 
-      <h2>No public pile-ons</h2>
-      <p>
-        Individual actions remain private. Only aggregated signal becomes
-        public. The goal is accountability, not spectacle.
-      </p>
+          <section class="card stack-sm">
+            <h2>No public pile-ons</h2>
+            <p class="prose secondary">
+              Individual actions remain private. Only aggregated signal becomes
+              public. The goal is accountability, not spectacle.
+            </p>
+          </section>
 
-      <h2>Anti-manipulation by design</h2>
-      <p>
-        One person, one voice. Astroturfing, brigading, and impersonation are
-        structurally constrained rather than moderated after the fact.
-      </p>
+          <section class="card stack-sm">
+            <h2>Anti-manipulation by design</h2>
+            <p class="prose secondary">
+              One person, one voice. Astroturfing, brigading, and impersonation are
+              structurally constrained rather than moderated after the fact.
+            </p>
+          </section>
 
-      <h2>Outcome-oriented</h2>
-      <p>
-       
+          <section class="card stack-sm">
+            <h2>Outcome-oriented</h2>
+            <p class="prose secondary">[Outcome-oriented: text to come]</p>
+          </section>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
