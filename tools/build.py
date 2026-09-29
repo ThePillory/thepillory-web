@@ -24,7 +24,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import data as D  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
-ASSET_VERSION = "12"  # bump when assets/pillory.css or assets/app.js change
+# The full Constitution (National Archives transcription), shared with the sync
+# Worker and the analysis pipeline. See tools/check_constitution.py.
+CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
+ASSET_VERSION = "13"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. reps/ and bodies/ are NOT here: those pages are
 # rendered from D1 by Pages Functions (functions/), as are the laws/ index and
@@ -91,6 +94,12 @@ def validate():
     for _, _, link in D.MY_REPORTS:
         if link:
             check(link[0], link[1], "MY_REPORTS")
+    # Sample clause pages must quote the stored Constitution exactly.
+    stored = [" ".join(p["text"].split()) for p in CONSTITUTION if p["leaf"]]
+    for c in D.CLAUSES:
+        for para in c["text"]:
+            if not any(" ".join(para.split()) in t for t in stored):
+                sys.exit(f"build.py: clause {c['slug']} doesn't match data/constitution.json: {para[:80]}…")
 
 
 def where(items, pred):
@@ -714,7 +723,6 @@ def build_constitution():
 <section class="card stack">
   <div><h2 class="label">{e(title)}</h2><p class="list-meta">{e(sub)}</p></div>
   <div>{rows}</div>
-  <p class="hint">[More sections to come]</p>
 </section>""")
     main = f"""
 <header class="page-head">
@@ -733,6 +741,8 @@ def build_constitution():
 </section>
 
 {"".join(browse)}
+
+{full_constitution()}
 
 <section class="card stack">
   <h2 class="label">How the baseline works</h2>
@@ -764,6 +774,36 @@ def build_constitution():
   </ol>
 </section>"""
     render("laws/constitution", "The Constitution", main, tab="laws", back=("Laws", "/laws/"))
+
+
+def full_constitution():
+    """Every article and amendment, with an anchor for each provision ID."""
+    kids = {}
+    for p in CONSTITUTION:
+        kids.setdefault(p["parent"], []).append(p)
+
+    def body(p, depth):
+        if p["leaf"]:
+            label = "" if depth == 0 else f'<p class="label">{e(p["label"].split(", ", 1)[-1])}</p>'
+            return f'<div class="provision" id="{p["id"]}">{label}<p class="constitution-text">{e(p["text"])}</p></div>'
+        inner = "".join(body(k, depth + 1) for k in kids.get(p["id"], []))
+        if depth == 0:
+            return inner
+        return f'<div class="provision-group" id="{p["id"]}"><h4 class="label">{e(p["label"].split(", ", 1)[-1])}</h4>{inner}</div>'
+
+    tops = [p for p in CONSTITUTION if p["parent"] is None and p["id"] != "preamble"]
+    blocks = "".join(
+        f'<section class="parchment stack-sm" id="{p["id"]}" aria-labelledby="h-{p["id"]}">'
+        f'<h3 id="h-{p["id"]}">{e(p["label"])}</h3>{body(p, 0)}</section>'
+        for p in tops
+    )
+    return f"""<section class="stack" id="full-text">
+  <div class="stack-sm">
+    <h2 class="label">Full text</h2>
+    <p class="small secondary">As transcribed by the <a href="https://www.archives.gov/founding-docs/constitution">National Archives</a>, with its original spelling. Every quote on The Pillory comes from this text.</p>
+  </div>
+  {blocks}
+</section>"""
 
 
 def build_clause(c):
@@ -906,9 +946,7 @@ def build_you():
                 "Evidence-first, nonpartisan civic accountability, built by and for verified residents.",
                 back=("You", "/you/"), tab="you",
                 extra=f'<section class="card"><div>{about_links}</div></section>')
-    placeholder("about/methodology", "Methodology",
-                "How reports are reviewed, corroborated, given a confidence level, and mapped to the Constitution.",
-                back=("About", "/about/"), tab="you")
+    build_methodology()
     placeholder("about/funding", "Funding",
                 "Who funds The Pillory, and the rules that keep funders out of editorial decisions.",
                 back=("About", "/about/"), tab="you")
@@ -918,6 +956,74 @@ def build_you():
     placeholder("agency", "Agency portal",
                 "Private link for agencies and offices: verify your office, view an issue, and post an unedited response.",
                 app=False)
+
+
+def build_methodology():
+    main = """
+<header class="page-head">
+  <h1>Methodology</h1>
+  <p class="subtitle">How The Pillory maps laws and issues to the Constitution, and how reports are reviewed.</p>
+</header>
+
+<section class="card stack" id="analysis">
+  <h2>Constitutional analysis of bills</h2>
+  <p>The Pillory maps the Constitution; it doesn't rule on it. For bills that our officials have voted on, an AI tool writes a first draft showing which parts of the Constitution a bill touches. People review every draft. Nothing here is a verdict on whether a bill is constitutional, and nothing here is legal advice.</p>
+  <ol class="numbered">
+    <li>
+      <span class="step-num" aria-hidden="true">1</span>
+      <div class="stack-sm">
+        <h3>Start from the bill's own words</h3>
+        <p class="small secondary">We read the latest text on Congress.gov for federal bills, or on the California Legislature's site for state bills. If the text isn't available, we use the official summary and label the analysis "limited: based on summary only." Very long bills are cut at a set length, and the analysis says so.</p>
+      </div>
+    </li>
+    <li>
+      <span class="step-num" aria-hidden="true">2</span>
+      <div class="stack-sm">
+        <h3>An AI tool writes a draft</h3>
+        <p class="small secondary">The draft is written by Claude, an AI model made by Anthropic, from the bill text and the full text of the Constitution. Its instructions: give no verdicts on constitutionality, use no party labels or partisan language, present the strongest version of each view, and say "uncertain" rather than guess.</p>
+      </div>
+    </li>
+    <li>
+      <span class="step-num" aria-hidden="true">3</span>
+      <div class="stack-sm">
+        <h3>Automatic checks before anything is saved</h3>
+        <p class="small secondary">Every passage quoted from the Constitution is compared with the National Archives text. A quote that doesn't match word for word is replaced with the exact text. Every court case is looked up in CourtListener, a free public database of court opinions. Cases that can't be found under the same name are removed, along with every sentence that relies on them. Each change is logged.</p>
+      </div>
+    </li>
+    <li>
+      <span class="step-num" aria-hidden="true">4</span>
+      <div class="stack-sm">
+        <h3>People review it</h3>
+        <p class="small secondary">Until a person reviews it, an analysis is marked "AI-drafted, not yet reviewed." A reviewer can edit any part, approve it, reject it, or ask for a new draft. Approved analyses show "Reviewed by" with the reviewer's name and the date. Earlier versions and every edit are kept.</p>
+      </div>
+    </li>
+  </ol>
+</section>
+
+<section class="card stack-sm">
+  <h2>What each analysis contains</h2>
+  <ul class="plain-list small">
+    <li><strong>What the bill does:</strong> a short, plain summary without judgment words.</li>
+    <li><strong>Provisions it touches:</strong> each quoted from the Constitution, with one sentence on why.</li>
+    <li><strong>Where it aligns</strong> and <strong>where it may be in tension</strong> with that text, written as questions a careful reader could raise, not conclusions.</li>
+    <li><strong>Why this might still serve the public:</strong> where a policy departs from the baseline, the case for it, including whether it would need a constitutional amendment under Article V.</li>
+    <li><strong>How different approaches read it:</strong> for contested questions only, how a reading based on original meaning, one based on precedent, and one based on evolving interpretation would each see it, side by side.</li>
+    <li><strong>Cases cited:</strong> only cases verified in CourtListener, each linked to the opinion.</li>
+    <li><strong>What it can't tell you:</strong> the limits of the analysis.</li>
+  </ul>
+</section>
+
+<section class="card stack-sm">
+  <h2>The Constitution's text</h2>
+  <p class="small secondary">The Pillory quotes the Constitution and its 27 amendments only from one stored copy of the National Archives transcription, which keeps the original spelling (such as "chuse" and "Controul"). The <a href="/laws/constitution/#full-text">full text</a> is on the Constitution page, and an automatic check compares it with the Archives whenever it changes.</p>
+</section>
+
+<section class="card stack-sm">
+  <h2>Reports and issues</h2>
+  <p class="banner">Content to come</p>
+  <p class="small secondary">How reports are reviewed, corroborated, and given a confidence level.</p>
+</section>"""
+    render("about/methodology", "Methodology", main, tab="you", back=("About", "/about/"))
 
 
 def build_search():

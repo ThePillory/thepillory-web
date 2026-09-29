@@ -19,7 +19,8 @@ The information architecture lives in **[docs/sitemap.md](docs/sitemap.md)**. Ch
 - Pages live in folders (`/reps/index.html`), so URLs are clean (`/reps/`).
 - **Real officials and voting records** live in **Cloudflare D1** (database `pillory`, binding `DB`). See **[docs/data-sync.md](docs/data-sync.md)** for setup and operations.
   - `workers/sync/`: the sync Worker. A daily Cron Trigger plus a token-protected `/run` link pull from Congress.gov, senate.gov roll call XML, Open States, and `data/county-officials.json`. The schema is in `workers/sync/migrations/`. Every step logs to `sync_log`; errors are logged, never swallowed.
-  - `functions/`: Pages Functions that render the D1-backed pages: `/reps/`, `/reps/<slug>/`, `/bodies/<slug>/`, the `/laws/` index, `/laws/bills/<id>/`, and `/api/search-officials`. They reuse the static page shell through `functions/_lib/generated.js`. If D1 isn't bound or is empty, they show a "Not loaded yet" state.
+  - `functions/`: Pages Functions that render the D1-backed pages: `/reps/`, `/reps/<slug>/`, `/bodies/<slug>/`, the `/laws/` index, `/laws/bills/<id>/`, `/admin/review/` and `/api/search-officials`. They reuse the static page shell through `functions/_lib/generated.js`. If D1 isn't bound or is empty, they show a "Not loaded yet" state.
+- **AI-drafted constitutional analysis** of bills runs in the same Worker after each sync (`workers/sync/src/analysis/`). See **[docs/analysis.md](docs/analysis.md)**. Claude drafts, the checks fix or remove bad quotes and unverifiable cases, and a person reviews at `/admin/review/` (behind Cloudflare Access; `functions/_lib/access.js` fails closed).
 
 ### Hand-written vs generated
 
@@ -28,6 +29,7 @@ The information architecture lives in **[docs/sitemap.md](docs/sitemap.md)**. Ch
 | `index.html`, `how-it-works.html`, `principles.html`, `join/` | `feed/`, `issues/`, `meetings/`, `evidence/`, `laws/` (Constitution and sample laws only), `report/`, `you/`, `about/`, `agency/`, `record/`, `search/`, and the `constitution/` and `issue/` redirects |
 | `assets/pillory.css`, `assets/app.js` | `assets/search-index.js` |
 | `functions/**` (except `_lib/generated.js`), `workers/sync/**`, `data/county-officials.json` | `functions/_lib/generated.js` (page shell and sample-data snippets for the Functions) |
+| `data/constitution.json` (National Archives text; check with `tools/check_constitution.py`) | |
 
 The static app screens come from **`tools/data.py`** (all *sample* data) and **`tools/build.py`** (the page templates). After changing either one:
 
@@ -58,6 +60,14 @@ To test the sync and Functions locally with **fake** data: `workers/sync/test/ru
 - **Party is plain text**, styled the same for every party. No red and blue.
 - **No automatic issue-to-bill links.** Links start as `suggested` and appear only once `approved`, with `approved_by` recorded.
 - **Never attach sample content to real people.** Sample issues, meetings and laws point only at governing bodies, never at real officials, and every sample issue and law page says it is hypothetical.
+
+## Constitutional analysis rules
+
+- **The Pillory maps the Constitution; it doesn't rule on it.** No verdicts on constitutionality anywhere, from the AI or on the page. The three panels are *Where it aligns*, *Where it may be in tension*, *Why this might still serve the public*.
+- **Quote the Constitution only from `data/constitution.json`**, word for word. Its IDs are stable: never renumber or reuse them. The build fails if a sample clause page misquotes it.
+- **AI drafts are labeled** "AI-drafted, not yet reviewed" until a person approves them ("Reviewed by [name], [date]"). Every version and edit is kept.
+- **Only verified cases.** A case is shown only if CourtListener found it under the same name, linked to its opinion.
+- Bump `PROMPT_VERSION` in `workers/sync/src/analysis/prompt.js` when the prompt or the JSON shape changes.
 
 ## Sample data rules
 

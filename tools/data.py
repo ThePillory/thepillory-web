@@ -62,7 +62,7 @@ CLAUSES = [
             "The Vice President of the United States shall be President of the Senate, but shall have no Vote, unless they be equally divided.",
             "The Senate shall chuse their other Officers, and also a President pro tempore, in the Absence of the Vice President, or when he shall exercise the Office of President of the United States.",
             "The Senate shall have the sole Power to try all Impeachments. When sitting for that Purpose, they shall be on Oath or Affirmation. When the President of the United States is tried, the Chief Justice shall preside: And no Person shall be convicted without the Concurrence of two thirds of the Members present.",
-            "Judgment in Cases of Impeachment shall not extend further than to removal from Office, and disqualification to hold and enjoy any Office of honor, Trust or Profit under the United States: but the Party convicted shall nevertheless be liable and subject to Indictment, Trial and Judgment and Punishment, according to Law.",
+            "Judgment in Cases of Impeachment shall not extend further than to removal from Office, and disqualification to hold and enjoy any Office of honor, Trust or Profit under the United States: but the Party convicted shall nevertheless be liable and subject to Indictment, Trial, Judgment and Punishment, according to Law.",
         ],
         "note": "The first two paragraphs were changed by the Seventeenth Amendment, under which senators are elected directly by the people of each state.",
     },

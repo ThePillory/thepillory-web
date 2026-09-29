@@ -982,3 +982,71 @@ a.constitution-link:hover { border-color: var(--parch-text); }
 }
 .position-row:first-child { border-top: 0; }
 .position-row .position { margin-left: auto; }
+
+/* ---------- Constitutional analysis (bill pages, /admin/review) ---------- */
+
+.baseline-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.parchment h3 { font-family: var(--sans); font-size: 0.9375rem; font-weight: 600; color: var(--parch-text); }
+.parchment h4 { font-family: var(--sans); font-size: 0.9375rem; font-weight: 600; color: var(--text); }
+.parchment a { color: var(--parch-text); }
+
+/* The review state is always spelled out in words; color only reinforces it. */
+.review-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border: 1px solid var(--parch-border);
+  background: #fff;
+  color: var(--parch-text);
+}
+.review-badge--draft { border-style: dashed; border-color: var(--parch-text); }
+.review-badge--reviewed { background: var(--navy); border-color: var(--navy); color: #fff; }
+
+.limited-note {
+  border-left: 3px solid var(--parch-text);
+  padding: 4px 0 4px 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.provision-cite { display: flex; flex-direction: column; gap: 4px; padding: 10px 0; border-top: 1px solid var(--parch-border); }
+.provision-cite:first-of-type { border-top: 0; padding-top: 0; }
+.provision-cite a.label { text-decoration: none; }
+.provision-cite .quote { font-size: 1.0625rem; margin: 0; }
+
+.baseline-panels { display: grid; gap: 10px; }
+.panel { background: #fff; border: 1px solid var(--parch-border); border-radius: 10px; padding: 12px 14px; color: var(--text); display: flex; flex-direction: column; gap: 6px; }
+.panel--tension { border-left: 3px solid var(--tension); }
+.panel--tension .label { color: var(--tension); }
+.panel-list { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 6px; }
+
+.reading { padding-top: 6px; }
+.readings { display: grid; gap: 8px; }
+.reading-col { background: #fff; border: 1px solid var(--parch-border); border-radius: 10px; padding: 10px 12px; color: var(--text); }
+.reading-col .label { margin-bottom: 4px; }
+
+.baseline-foot { border-top: 1px solid var(--parch-border); padding-top: 10px; }
+
+/* On wide screens the baseline widens past the app column so the three panels
+   and the readings can sit side by side. */
+@media (min-width: 900px) {
+  .baseline-wide { width: min(800px, calc(100vw - 64px)); position: relative; left: 50%; transform: translateX(-50%); }
+  .baseline-panels { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .readings { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.provision-cite a.label, .baseline-foot .inline-link { display: inline-flex; align-items: center; min-height: var(--tap); }
+.panel-list a { display: inline-block; padding: 12px 0; }
+
+/* Full Constitution text on /laws/constitution/ */
+.provision { display: flex; flex-direction: column; gap: 2px; scroll-margin-top: 80px; }
+.provision + .provision, .provision-group + .provision-group { margin-top: 8px; }
+.provision-group { display: flex; flex-direction: column; gap: 6px; scroll-margin-top: 80px; }
+.provision:target .constitution-text, .provision-group:target { background: #fff; border-radius: 8px; outline: 2px solid var(--parch-border); outline-offset: 4px; }
+
+/* /admin/review */
+.chip-tab { min-height: var(--tap); padding: 0 16px; text-decoration: none; }
+.textarea--code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.8125rem; }
+.banner--error { background: #F6E3DA; color: var(--tension); }

@@ -28,6 +28,8 @@ Everything shown carries a source URL. The database refuses rows without one.
    | `CONGRESS_API_KEY` | your api.congress.gov key |
    | `OPENSTATES_API_KEY` | your v3.openstates.org key |
    | `SYNC_TOKEN` | any long random string (it's the password for the manual run link) |
+   | `ANTHROPIC_API_KEY` | Claude API key, for the AI-drafted constitutional analysis (see [analysis.md](analysis.md)) |
+   | `COURTLISTENER_API_TOKEN` | courtlistener.com API token, for checking case citations |
 5. **Give the website read access.** In the Pages project `thepillory-web` → Settings → **Bindings** → Add → **D1 database**:
    - Variable name: `DB`
    - Database: `pillory`
@@ -54,6 +56,8 @@ Everything shown carries a source URL. The database refuses rows without one.
   Under `run`, `status` reads `running` or `finished`. `round` counts the rounds so far, and `outcome` ends as `up to date` when everything is loaded. `counts` shows how many officials, bills, votes and positions are loaded, and `recent_log` lists each step's latest result.
 
 How background runs work: a run happens inside a Durable Object (`SyncRunner`, created automatically on deploy) in rounds of up to about 12 minutes each. When a round stops only because it reached its request or time budget, the next round starts on its own, up to 20 rounds per run. Anything held back by a daily limit (Open States) continues with the next daily sync. The daily Cron Trigger starts runs the same way.
+
+After the sync, the same run drafts constitutional analyses of new bills (step `analysis`; see [analysis.md](analysis.md)). `/analyze?token=<SYNC_TOKEN>` runs only that step.
 
 Each step (county officials, state officials, federal officials, House votes, Senate votes, state votes) logs `ok`, `partial` (stopped at a limit; resumes next run), `skipped` (nothing due) or `error`, with the message. One failing source never stops the others. Worker logs are also in the dashboard under `pillory-sync` → Logs.
 

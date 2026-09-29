@@ -1,4 +1,5 @@
-# Sync Worker: loads officials and voting records into D1 on a daily schedule.
+# Sync Worker: loads officials and voting records into D1 on a daily schedule,
+# then drafts constitutional analyses of new bills for people to review.
 # Deploy from this folder (Cloudflare dashboard → Workers → import this repo,
 # root directory "workers/sync"), or locally with `npx wrangler deploy`.
 # Setup steps: docs/data-sync.md
@@ -57,8 +58,17 @@ MAX_SUBREQUESTS = "900"
 # Open States free tier: stay well under the daily limit and ~10 requests/min.
 OPENSTATES_DAILY_LIMIT = "250"
 OPENSTATES_MIN_INTERVAL_MS = "6500"
+# AI-drafted constitutional analysis (src/analysis/). At most this many drafts a
+# day; each costs one Claude API call. Set to "0" to pause drafting.
+ANALYSIS_DAILY_LIMIT = "20"
+ANALYSIS_MODEL = "claude-sonnet-5-5"
+ANALYSIS_EFFORT = "high"
+# Longer bill texts are cut to this many characters and the draft is marked "limited".
+MAX_BILL_TEXT_CHARS = "400000"
 
 # Secrets (set with `npx wrangler secret put NAME` or in the dashboard):
 #   CONGRESS_API_KEY    api.congress.gov key
 #   OPENSTATES_API_KEY  v3.openstates.org key
 #   SYNC_TOKEN          any long random string; required to run the sync manually
+#   ANTHROPIC_API_KEY   Claude API key, for drafting analyses (without it that step is skipped)
+#   COURTLISTENER_API_TOKEN  courtlistener.com API token, for checking case citations
