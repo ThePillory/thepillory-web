@@ -4,7 +4,7 @@
 name: Research county pages
 on:
   push:
-    paths: [".github/workflows/research-county.yml", "tools/research_county.py"]
+    paths: [".github/workflows/research-county.yml", "tools/research_county.py", "tools/research_pdf.mjs"]
 permissions:
   contents: read
 jobs:
@@ -13,3 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: python3 tools/research_county.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-save unpdf && node tools/research_pdf.mjs
