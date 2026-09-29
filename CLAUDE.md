@@ -47,7 +47,7 @@ To test the sync and Functions locally with **fake** data: `workers/sync/test/ru
 
 ## App structure
 
-- **Five tabs** (`.tabbar`): Feed, Reps, **+ Report** (center, navy pill), Laws, You. The bar is fixed to the bottom on phones and becomes a top nav at 768px and wider.
+- **Five tabs** (`.tabbar`): Home, Reps, **+ Report** (center, navy pill), Laws, You. Home (`/home/`) is the briefing; `/feed/` redirects there. The bar is fixed to the bottom on phones and becomes a top nav at 768px and wider.
 - **Global search** sits at the top of every app page and searches reps, bodies, laws, issues, constitutional sections and meetings (`assets/search-index.js`). Enter opens `/search/?q=`.
 - **Back labels:** every page below a tab root has `← <parent name>`, for example `← [Supervisor, District 1]`. Pass `back=(label, href)` to `render()`.
 - **Two-way links:** for sample content, each connection is written once in `tools/data.py`, and `build.py` derives the reverse link (issue ↔ law, clause, body, meeting, evidence). Keep it that way. Don't hand-write one-way links. Real officials link to bills through votes in D1. Issues link to real bills only through `issue_bill_links` rows with `status = 'approved'`.
