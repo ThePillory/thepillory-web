@@ -2,10 +2,11 @@
 
     python3 tools/check_constitution.py            # fetches the three archives.gov pages
     python3 tools/check_constitution.py page.html  # or checks against saved copies (any number)
+    python3 tools/check_constitution.py --print    # prints the Archives pages as plain text
 
 Every quotable provision ("leaf" rows) must appear word for word in the
-Archives text. Only whitespace, curly vs. straight quotes, footnote asterisks
-and spacing around dashes are ignored. Exits 1 and prints the closest Archives
+Archives text. Only whitespace, curly vs. straight quotes, and the Archives'
+editorial marks (footnote stars, [brackets], "--" for a dash) are ignored. Exits 1 and prints the closest Archives
 wording for anything that doesn't match. Standard library only.
 """
 import html
@@ -61,7 +62,20 @@ def closest(needle, hay):
     return best[: len(needle) + 40], best_ratio
 
 
+def readable(raw):
+    """The page as plain text with one paragraph per line (for --print)."""
+    raw = re.sub(r"(?is)<(script|style|noscript)\b.*?</\1>", " ", raw)
+    raw = re.sub(r"(?i)<(br|/p|/div|/h\d|/li)\b[^>]*>", "\n", raw)
+    raw = html.unescape(re.sub(r"(?s)<[^>]+>", " ", raw))
+    lines = [re.sub(r"[ \t\u00a0]+", " ", l).strip() for l in raw.split("\n")]
+    return "\n".join(l for l in lines if l)
+
+
 def main(args):
+    if args and args[0] == "--print":
+        for u in PAGES:
+            print(f"===== {u}\n{readable(fetch(u))}")
+        return 0
     sources = [Path(a).read_text(encoding="utf-8") for a in args] if args else [fetch(u) for u in PAGES]
     hay = " ".join(page_text(s) for s in sources)
     data = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))
