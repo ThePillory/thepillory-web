@@ -674,7 +674,11 @@ a.card:hover { border-color: var(--navy); }
   .tabbar-inner { display: flex; gap: 6px; }
   .tabbar .tab { padding: 0 16px; font-size: 0.9375rem; }
   .action-bar { bottom: 0; }
-  .app-header .wordmark { visibility: hidden; }
+  /* The wordmark lives in the top nav here; show the residency line on its own, left-aligned */
+  .app-header .wordmark { display: none; }
+  .app-header .header-meta { display: flex; align-items: baseline; gap: 6px; text-align: left; }
+  .app-header .header-meta strong { display: inline; }
+  .app-header .header-meta span::before { content: "· "; }
 }
 
 /* Global search */
