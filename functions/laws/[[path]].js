@@ -5,6 +5,7 @@ import { SAMPLE_LAW_CARDS, ISSUE_CARDS } from "../_lib/generated.js";
 import { page, notFound, notLoaded, esc, safeUrl, section, sourceLink, card, fmtDate } from "../_lib/render.js";
 import { safe, recentBills, billById, votesOnBill, approvedIssuesForBill, CHAMBER_NAME } from "../_lib/data.js";
 import { billVote, billHref } from "../_lib/votes.js";
+import { currentAnalysis, parse, provisionsFor, baselineSection } from "../_lib/analysis.js";
 
 const LEVELS = { federal: "Federal", state: "State" };
 
@@ -61,15 +62,29 @@ ${real}
   return page("Laws", main, { tab: "laws", root: true });
 }
 
+// The current analysis, if any. Missing tables (before the analysis step's first
+// run) just mean there's no analysis yet.
+async function analysisFor(db, id) {
+  try {
+    const row = await currentAnalysis(db, id);
+    if (!row) return null;
+    const a = parse(row);
+    return { a, provisions: await provisionsFor(db, a.clauses.map((c) => c.id)) };
+  } catch (err) {
+    if (/no such table/i.test(String(err && err.message))) return null;
+    throw err;
+  }
+}
+
 async function bill(env, id) {
   const data = await safe(env, async (db) => {
     const b = await billById(db, id);
     if (!b) return { b: null };
-    const [votes, links] = await Promise.all([votesOnBill(db, id), approvedIssuesForBill(db, id)]);
-    return { b, votes, links };
+    const [votes, links, analysis] = await Promise.all([votesOnBill(db, id), approvedIssuesForBill(db, id), analysisFor(db, id)]);
+    return { b, votes, links, analysis };
   });
   if (!data) return notLoaded("Laws", "laws", false, ["Laws", "/laws/"]);
-  const { b, votes, links } = data;
+  const { b, votes, links, analysis } = data;
   if (!b) return notFound("No bill at this address.", "laws", ["Laws", "/laws/"]);
 
   const official = safeUrl(b.official_url);
@@ -88,10 +103,7 @@ async function bill(env, id) {
   ${summary}
   ${official ? sourceLink(official, "Official bill page") : sourceLink(b.source_url)}
 </section>
-<section class="parchment stack-sm">
-  <h2 class="label">Constitutional baseline</h2>
-  <p>Not yet mapped. Reviewers will add the parts of the Constitution this bill touches, with sources.</p>
-</section>
+${baselineSection(analysis && analysis.a, analysis ? analysis.provisions : new Map())}
 <section class="stack">
   <h2 class="label">How your reps voted</h2>
   <p class="hint">Every recorded vote on this bill by officials who represent Calaveras County, newest first. Each links to the official record.</p>

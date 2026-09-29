@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # The full Constitution (National Archives transcription), shared with the sync
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
-ASSET_VERSION = "12"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "13"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. reps/ and bodies/ are NOT here: those pages are
 # rendered from D1 by Pages Functions (functions/), as are the laws/ index and

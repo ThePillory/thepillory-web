@@ -163,18 +163,207 @@ const county = {
   },
 };
 
+// ---------------------------------------------------------------------------
+// Analysis step: FAKE bill texts, a FAKE CourtListener, and a FAKE Claude API
+// that returns canned drafts (two of them deliberately wrong, to check that the
+// quote and citation checks catch them).
+
+const BASE = `http://127.0.0.1:${PORT}`;
+const textVersion = (file, type = "Introduced in House") => ({
+  textVersions: [
+    { date: "2025-01-20T05:00:00Z", type: "Introduced in House", formats: [{ type: "Formatted Text", url: `${BASE}/textfiles/old-${file}` }] },
+    { date: null, type, formats: [{ type: "PDF", url: `${BASE}/textfiles/${file}.pdf` }, { type: "Formatted Text", url: `${BASE}/textfiles/${file}` }] },
+  ],
+});
+Object.assign(congress, {
+  "/bill/119/hr/10/text": textVersion("hr10.htm", "Engrossed in House"),
+  "/bill/119/hr/20/text": textVersion("hr20.htm"),
+  "/bill/119/s/30/text": textVersion("s30.htm", "Introduced in Senate"),
+  "/bill/119/hres/5/text": { textVersions: [] },
+  "/bill/119/hres/5/summaries": {
+    summaries: [
+      { actionDate: "2025-01-30", actionDesc: "Introduced in House", updateDate: "2025-02-01T00:00:00Z", text: "<p>This resolution sets the rules for considering the Test Bill Ten Act (H.R. 10) in the House.</p>" },
+    ],
+  },
+});
+const billHtml = (title, body) =>
+  `<html><head><title>${title}</title><style>p{}</style></head><body><pre>${title}\n\nSEC. 1. SHORT TITLE.\n\nThis Act may be cited as the "${title}".\n\n${body}\n\nSEC. 9. EFFECTIVE DATE.\n\nThis Act takes effect 180 days after the date of its enactment. [FAKE TEST TEXT, repeated to look like a bill.] [FAKE TEST TEXT, repeated to look like a bill.]</pre></body></html>`;
+const textfiles = {
+  "/hr10.htm": billHtml("Test Bill Ten Act", "SEC. 2. GRANTS.\n\nThe Secretary shall award grants to States for rural broadband, on the condition that each State publish its scoring rules."),
+  "/old-hr10.htm": billHtml("Test Bill Ten Act (old version)", "OLD TEXT THAT SHOULD NOT BE READ"),
+  "/hr20.htm": billHtml("Test Bill Twenty Act of 2026", "SEC. 2. PETITIONS.\n\nEach Federal agency shall accept petitions from the public by mail and online, and respond within 60 days."),
+  "/s30.htm": billHtml("Test Senate Bill Thirty", "SEC. 2. WATER GRANTS.\n\nThe Administrator may make grants to local water districts, subject to conditions on public meetings."),
+};
+const leginfo = {
+  "202520260AB101": `<html><body><div id="header">nav</div><span id="version_id">Amended in Assembly</span><div id="bill_all"><p>LEGISLATIVE COUNSEL'S DIGEST</p><p>AB 101, as amended, Test Member. Test Assembly Bill One Oh One. This bill would require counties to post meeting agendas 7 days in advance. [FAKE TEST TEXT]</p><p>The people of the State of California do enact as follows:</p><p>SECTION 1. Section 54954.2 of the Government Code is amended to read: A county shall post each agenda at least 7 days before the meeting, and make it available online. [FAKE TEST TEXT]</p></div><div id="footer">footer</div></body></html>`,
+  "202520260SB7": `<html><body><div id="header">nav</div><p>No text available for this version.</p></body></html>`,
+};
+
+// CourtListener knows these two real, public citations; everything else is "not found".
+const COURT = {
+  "514 U.S. 549": { id: 117927, case_name: "United States v. Lopez", absolute_url: "/opinion/117927/united-states-v-lopez/" },
+  "5 U.S. 137": { id: 84759, case_name: "Marbury v. Madison", absolute_url: "/opinion/84759/marbury-v-madison/" },
+};
+function citationLookup(text) {
+  const out = [];
+  for (const m of text.matchAll(/(\d+) U\.S\. (\d+)/g)) {
+    const cite = `${m[1]} U.S. ${m[2]}`;
+    const c = COURT[cite];
+    out.push({
+      citation: cite,
+      normalized_citations: [cite],
+      start_index: m.index,
+      end_index: m.index + m[0].length,
+      status: c ? 200 : 404,
+      error_message: c ? "" : "Citation not found.",
+      clusters: c ? [c] : [],
+    });
+  }
+  return out;
+}
+
+// Canned drafts, keyed by bill number. All content is FAKE test content.
+const base = {
+  aligns: [],
+  tension: [],
+  departure: [],
+  article_v: "Not indicated: nothing in the text changes the structure of government.",
+  readings: [],
+  citations: [],
+  uncertainty: "Uncertain how the grant conditions would be applied in practice; the text leaves that to later rules.",
+};
+const DRAFTS = {
+  "H.R. 10": {
+    ...base,
+    plain_summary: "The bill creates a federal grant program for rural broadband. States that receive grants must publish the rules they use to score applications. The program is run by a federal Secretary.",
+    clauses: [
+      { id: "art-1-sec-8-cl-1", quote: "provide for the common Defence and general Welfare of the United States", why: "Grant programs rest on the spending power." },
+      { id: "amend-10", quote: "The powers not delegated to the United States by the Constitution, nor prohibited by it to the States, are reserved to the States respectively, or to the people.", why: "Conditions on grants to States raise questions about federal and state roles." },
+    ],
+    aligns: ["The program spends money for a stated public purpose, which Article I describes as “the common Defence and general Welfare of the United States”."],
+    tension: ["Could the condition that States publish scoring rules be read as directing how States run their own programs?"],
+    departure: ["Publishing scoring rules may help residents see how funding decisions are made."],
+    readings: [
+      {
+        question: "May Congress attach conditions to grants to States?",
+        original_meaning: "This reading asks what the spending power was understood to cover when it was adopted, and whether conditions of this kind fit that understanding.",
+        precedent: "This reading looks at how courts have treated grant conditions before, including limits on federal power described in United States v. Lopez.",
+        evolving: "This reading asks how the federal and state roles in funding programs have changed over time, and how the condition fits current practice.",
+      },
+    ],
+    citations: [{ case_name: "United States v. Lopez", citation: "514 U.S. 549 (1995)", point: "Limits on federal power under Article I." }],
+  },
+  // WRONG QUOTES: the clause quote and a quote in the prose don't match the Constitution.
+  "H.R. 20": {
+    ...base,
+    plain_summary: "The bill requires federal agencies to accept petitions from the public by mail and online. Agencies must respond within 60 days.",
+    clauses: [{ id: "amend-1", quote: "Congress shall make no law abridging the right of the people to petition the Government", why: "The bill concerns petitions to the government." }],
+    aligns: ['The bill builds on the right "to peaceably assemble and to petition the government for a redress of their grievances".'],
+    tension: ["Could a fixed 60-day deadline conflict with how some agencies handle large volumes of petitions?"],
+  },
+  // MADE-UP CASE: "Harrington v. Calaveras Water District" doesn't exist, and
+  // "Smith v. Jones" is attached to a real citation that belongs to another case.
+  "S. 30": {
+    ...base,
+    plain_summary: "The bill allows grants to local water districts. Districts that accept grants must follow conditions on holding public meetings.",
+    clauses: [{ id: "art-1-sec-8-cl-1", quote: "To lay and collect Taxes, Duties, Imposts and Excises", why: "The spending power covers grants." }],
+    aligns: ["The grants fund a public service. The conditions concern open meetings."],
+    tension: [
+      "In Harrington v. Calaveras Water District, 612 U.S. 118 (2024), the Court upheld meeting conditions on water grants. Could the conditions reach beyond what the grant pays for?",
+      "Smith v. Jones is sometimes read to limit conditions of this kind.",
+    ],
+    citations: [
+      { case_name: "Harrington v. Calaveras Water District", citation: "612 U.S. 118 (2024)", point: "Grant conditions on water districts." },
+      { case_name: "Smith v. Jones", citation: "5 U.S. 137 (1803)", point: "Limits on conditions." },
+    ],
+  },
+  "H.Res. 5": {
+    ...base,
+    plain_summary: "The resolution sets the rules the House will use to consider the Test Bill Ten Act. It does not change the law itself.",
+    clauses: [{ id: "art-1-sec-5-cl-2", quote: "Each House may determine the Rules of its Proceedings", why: "The resolution is a House rule for one bill." }],
+    aligns: ["Each chamber sets its own procedural rules."],
+    uncertainty: "Uncertain: only the official summary was available, so the specific terms of the rule could not be reviewed.",
+  },
+  "AB 101": {
+    ...base,
+    plain_summary: "The bill requires counties to post meeting agendas 7 days in advance and to make them available online.",
+    clauses: [{ id: "amend-1", quote: "the right of the people peaceably to assemble, and to petition the Government for a redress of grievances", why: "Advance notice of meetings relates to the public's ability to take part." }],
+    aligns: ["Advance agendas give residents time to prepare comments."],
+    tension: ["Could a 7-day rule make it harder for counties to respond to urgent matters?"],
+    departure: [],
+  },
+};
+
+function sse(res, events) {
+  res.writeHead(200, { "Content-Type": "text/event-stream", "Cache-Control": "no-cache" });
+  for (const e of events) res.write(`event: ${e.type}\ndata: ${JSON.stringify(e)}\n\n`);
+  res.end();
+}
+const anthropicRequests = [];
+function anthropic(req, res, body) {
+  const problems = [];
+  if (req.headers["x-api-key"] !== "fake-anthropic-key") problems.push("x-api-key");
+  if (!String(req.headers["anthropic-beta"] || "").includes("server-side-fallback-2026-07-01")) problems.push("anthropic-beta");
+  if (body.model !== "claude-sonnet-5-5") problems.push("model");
+  if (!body.stream) problems.push("stream");
+  if (body.fallbacks !== "default") problems.push("fallbacks");
+  if (!body.output_config || !body.output_config.format || body.output_config.format.type !== "json_schema") problems.push("output_config.format");
+  if (!body.system || !body.system[1] || !body.system[1].cache_control) problems.push("system cache_control");
+  if (!/\[amend-27\]/.test(body.system && body.system[1] && body.system[1].text)) problems.push("constitution block");
+  anthropicRequests.push({ problems, model: body.model, effort: body.output_config && body.output_config.effort, bytes: JSON.stringify(body).length });
+  if (problems.length) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: `fixture: bad ${problems.join(", ")}` } });
+  const msg = body.messages[0].content;
+  const bill = (msg.match(/^Bill: (.+?) \(/m) || [])[1];
+  const draft = DRAFTS[bill];
+  if (!draft) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: `fixture: no draft for ${bill}` } });
+  if (bill === "H.R. 10" && /OLD TEXT/.test(msg)) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: "fixture: sent the old text version" } });
+  const text = JSON.stringify(draft);
+  const cacheRead = anthropicRequests.length > 1 ? 18000 : 0;
+  sse(res, [
+    { type: "message_start", message: { id: `msg_test_${anthropicRequests.length}`, type: "message", role: "assistant", model: "claude-sonnet-5-5", content: [], stop_reason: null, stop_sequence: null, usage: { input_tokens: 900 + Math.round(msg.length / 4), output_tokens: 1, cache_read_input_tokens: cacheRead, cache_creation_input_tokens: cacheRead ? 0 : 18000 } } },
+    { type: "content_block_start", index: 0, content_block: { type: "thinking", thinking: "", signature: "" } },
+    { type: "content_block_delta", index: 0, delta: { type: "signature_delta", signature: "fake-signature" } },
+    { type: "content_block_stop", index: 0 },
+    { type: "content_block_start", index: 1, content_block: { type: "text", text: "" } },
+    { type: "content_block_delta", index: 1, delta: { type: "text_delta", text: text.slice(0, 200) } },
+    { type: "content_block_delta", index: 1, delta: { type: "text_delta", text: text.slice(200) } },
+    { type: "content_block_stop", index: 1 },
+    { type: "message_delta", delta: { stop_reason: "end_turn", stop_sequence: null }, usage: { output_tokens: 1500 + Math.round(text.length / 4) } },
+    { type: "message_stop" },
+  ]);
+}
+
+function readBody(req) {
+  return new Promise((resolve) => {
+    let d = "";
+    req.on("data", (c) => (d += c));
+    req.on("end", () => resolve(d));
+  });
+}
+
 function send(res, status, body, type = "application/json") {
   res.writeHead(status, { "Content-Type": type });
   res.end(typeof body === "string" ? body : JSON.stringify(body));
 }
 
 http
-  .createServer((req, res) => {
+  .createServer(async (req, res) => {
     const u = new URL(req.url, `http://localhost:${PORT}`);
     const [, api, ...rest] = u.pathname.split("/");
     const path = "/" + rest.join("/");
     hits[api] = (hits[api] || 0) + 1;
     if (u.pathname === "/__hits") return send(res, 200, hits);
+    if (u.pathname === "/__anthropic") return send(res, 200, anthropicRequests);
+    if (api === "anthropic" && path === "/v1/messages" && req.method === "POST") return anthropic(req, res, JSON.parse(await readBody(req)));
+    if (api === "textfiles") return textfiles[path] ? send(res, 200, textfiles[path], "text/html") : send(res, 404, "not found", "text/plain");
+    if (api === "leginfo") {
+      const id = u.searchParams.get("bill_id");
+      return leginfo[id] ? send(res, 200, leginfo[id], "text/html") : send(res, 404, "not found", "text/plain");
+    }
+    if (api === "courtlistener" && path === "/api/rest/v4/citation-lookup/" && req.method === "POST") {
+      if (req.headers.authorization !== "Token fake-courtlistener-token") return send(res, 401, { detail: "no token" });
+      return send(res, 200, citationLookup(new URLSearchParams(await readBody(req)).get("text") || ""));
+    }
     if (api === "congress") {
       if (!u.searchParams.get("api_key")) return send(res, 403, { error: "no key" });
       return congress[path] ? send(res, 200, congress[path]) : send(res, 404, { error: `no fixture for ${path}` });

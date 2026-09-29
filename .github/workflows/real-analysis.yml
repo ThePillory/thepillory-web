@@ -1,0 +1,40 @@
+# Drafts analyses of the newest real bills with House final-passage votes and
+# shows them in the run summary. Nothing is saved. Runs only when the
+# "run-real-analysis" label is added to a pull request, or by hand. Each run
+# makes up to 3 Claude API calls.
+#
+# Needs repository secrets (Settings -> Secrets and variables -> Actions):
+#   ANTHROPIC_API_KEY, COURTLISTENER_API_TOKEN, CONGRESS_API_KEY
+name: Real-bill analysis
+on:
+  pull_request:
+    types: [labeled]
+  workflow_dispatch:
+    inputs:
+      bills:
+        description: 'Bill IDs (e.g. "us-119-hr-1 us-119-s-5"), or blank for the 3 newest passed in the House'
+        required: false
+permissions:
+  contents: read
+jobs:
+  draft:
+    if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'run-real-analysis'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: workers/sync
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Draft and check
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          COURTLISTENER_API_TOKEN: ${{ secrets.COURTLISTENER_API_TOKEN }}
+          CONGRESS_API_KEY: ${{ secrets.CONGRESS_API_KEY }}
+          BILLS: ${{ github.event.inputs.bills }}
+        run: |
+          if [ -n "$BILLS" ]; then node test/real-bills.mjs $BILLS; else node test/real-bills.mjs --latest 3; fi | tee drafts.md
+          cat drafts.md >> "$GITHUB_STEP_SUMMARY"

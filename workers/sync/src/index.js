@@ -2,6 +2,7 @@
 //
 //   scheduled                 the daily Cron Trigger (see wrangler.toml) starts a run.
 //   GET/POST /run?token=…     starts a run and answers immediately with "started".
+//   GET/POST /analyze?token=… starts only the constitutional-analysis step (see src/analysis/).
 //   GET      /status?token=…  progress of the current or last run, row counts, and recent log rows.
 //
 // The token is the SYNC_TOKEN secret. Both routes refuse to run without it.
@@ -10,6 +11,8 @@
 // Worker can only keep working ~30 seconds after it responds. The Durable Object
 // works in rounds (each up to ~12 minutes, via its alarm), keeps going on its own
 // while a round stops at the request/time budget, and never runs two syncs at once.
+// After the sync rounds, it drafts constitutional analyses for new bills, also
+// in rounds, capped per day (ANALYSIS_DAILY_LIMIT).
 import { DurableObject } from "cloudflare:workers";
 import { ensureSchema, log } from "./db.js";
 import { Budget, redact } from "./util.js";
@@ -17,6 +20,7 @@ import { syncCounty } from "./county.js";
 import { syncStateOfficials, syncStateVotes } from "./openstates.js";
 import { syncFederalOfficials, syncHouseVotes } from "./congress.js";
 import { syncSenateVotes } from "./senate.js";
+import { runAnalysis } from "./analysis/index.js";
 
 // Order matters: officials before votes; state officials first because the
 // Open States lookup also detects the U.S. House district.
@@ -31,6 +35,7 @@ const STEPS = [
 
 const ROUND_MS = 12 * 60 * 1000; // stop starting new requests after this; the alarm limit is 15 minutes
 const MAX_ROUNDS = 20; // safety cap on automatic continuation per run
+const MAX_ANALYSIS_ROUNDS = 10; // same, for the analysis step
 const STALE_MS = 20 * 60 * 1000; // a round that hasn't finished after this is treated as dead
 
 export async function runSync(env, { trigger, deadlineMs, runId }) {
@@ -86,6 +91,8 @@ export class SyncRunner extends DurableObject {
     const url = new URL(request.url);
     if (url.pathname === "/start") {
       const trigger = url.searchParams.get("trigger") || "manual";
+      // "analysis" skips the sync and only drafts analyses.
+      const phase = url.searchParams.get("only") === "analysis" ? "analysis" : "sync";
       const state = await this.getState();
       const since = Date.parse(state.round_started_at || state.started_at || 0);
       if (state.running && Date.now() - since < STALE_MS) {
@@ -95,9 +102,12 @@ export class SyncRunner extends DurableObject {
         running: true,
         run_id: crypto.randomUUID(),
         trigger,
+        phase,
         started_at: new Date().toISOString(),
         round: 0,
         rounds: [],
+        analysis_round: 0,
+        analysis: null,
         outcome: null,
         error: null,
       };
@@ -112,6 +122,7 @@ export class SyncRunner extends DurableObject {
   async alarm() {
     const state = await this.getState();
     if (!state.running) return;
+    if (state.phase === "analysis") return this.analysisRound(state);
     state.round += 1;
     state.round_started_at = new Date().toISOString();
     await this.ctx.storage.put("state", state);
@@ -134,6 +145,34 @@ export class SyncRunner extends DurableObject {
       state.error = redact(`${err.name}: ${err.message}`);
       state.outcome = "error";
       console.error(`[${state.run_id}] run failed: ${state.error}`);
+    }
+    // Sync done (or failed): draft analyses for whatever bills are in D1.
+    state.phase = "analysis";
+    await this.ctx.storage.put("state", state);
+    await this.ctx.storage.setAlarm(Date.now() + 1000);
+  }
+
+  async analysisRound(state) {
+    state.analysis_round = (state.analysis_round || 0) + 1;
+    state.round_started_at = new Date().toISOString();
+    await this.ctx.storage.put("state", state);
+    try {
+      const r = await runAnalysis(this.env, { deadlineMs: ROUND_MS, runId: state.run_id, trigger: state.trigger });
+      const prev = state.analysis || { drafted: 0 };
+      state.analysis = {
+        status: r.status,
+        rounds: state.analysis_round,
+        drafted: prev.drafted + r.analyzed,
+        today: r.used === undefined ? null : `${r.used} of ${r.limit}`,
+      };
+      if (r.more_now && state.analysis_round < MAX_ANALYSIS_ROUNDS) {
+        await this.ctx.storage.put("state", state);
+        await this.ctx.storage.setAlarm(Date.now() + 1000);
+        return;
+      }
+    } catch (err) {
+      state.analysis = { ...(state.analysis || {}), status: "error", error: redact(`${err.name}: ${err.message}`) };
+      console.error(`[${state.run_id}] analysis failed: ${state.analysis.error}`);
     }
     state.running = false;
     state.finished_at = new Date().toISOString();
@@ -174,8 +213,8 @@ export default {
 
   async fetch(request, env) {
     const url = new URL(request.url);
-    if (url.pathname !== "/run" && url.pathname !== "/status") {
-      return json({ ok: true, routes: ["/run?token=…", "/status?token=…"] });
+    if (!["/run", "/analyze", "/status"].includes(url.pathname)) {
+      return json({ ok: true, routes: ["/run?token=…", "/analyze?token=…", "/status?token=…"] });
     }
     if (!(await authorized(request, env))) return json({ error: "unauthorized: pass ?token= or Authorization: Bearer" }, 401);
 
@@ -189,6 +228,14 @@ export default {
         });
       }
 
+      if (url.pathname === "/analyze") {
+        const res = await runner(env).fetch("https://sync-runner/start?trigger=manual&only=analysis");
+        return json({
+          ...(await res.json()),
+          next: "Drafting analyses in the background. Open /status (with the same token) to follow progress.",
+        });
+      }
+
       // /status
       const run = await (await runner(env).fetch("https://sync-runner/state")).json();
       let counts = null;
@@ -197,7 +244,9 @@ export default {
         await ensureSchema(env.DB);
         counts = await env.DB.prepare(
           "SELECT (SELECT COUNT(*) FROM officials WHERE active = 1) AS officials, (SELECT COUNT(*) FROM bills) AS bills, " +
-            "(SELECT COUNT(*) FROM votes) AS votes, (SELECT COUNT(*) FROM vote_positions) AS positions"
+            "(SELECT COUNT(*) FROM votes) AS votes, (SELECT COUNT(*) FROM vote_positions) AS positions, " +
+            "(SELECT COUNT(*) FROM bill_analyses WHERE current = 1 AND status = 'ai_draft') AS analyses_awaiting_review, " +
+            "(SELECT COUNT(*) FROM bill_analyses WHERE current = 1 AND status = 'reviewed') AS analyses_reviewed"
         ).first();
         recent = (await env.DB.prepare("SELECT * FROM sync_log ORDER BY id DESC LIMIT 30").all()).results;
       }
@@ -208,8 +257,10 @@ export default {
           trigger: run.trigger || null,
           started_at: run.started_at || null,
           finished_at: run.finished_at || null,
+          phase: run.phase || null,
           round: run.round || 0,
           outcome: run.outcome || null,
+          analysis: run.analysis || null,
           error: run.error || null,
           rounds: run.rounds || [],
         },

@@ -1,8 +1,12 @@
 // Schema setup and the upserts every sync step shares.
 import init0001 from "../migrations/0001_init.sql";
+import init0002 from "../migrations/0002_analysis.sql";
 import { isHttp, today } from "./util.js";
 
-const MIGRATIONS = [["0001_init.sql", init0001]];
+const MIGRATIONS = [
+  ["0001_init.sql", init0001],
+  ["0002_analysis.sql", init0002],
+];
 
 function statements(sql) {
   return sql
