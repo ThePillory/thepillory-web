@@ -1,19 +1,8 @@
-"""TEMPORARY research script (removed before merge): agenda item markup, published links, agenda PDF text."""
-import subprocess, re, html
-BROWSER = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Safari/537.36"
-B = "https://calaverascountyca.iqm2.com"
-def get(u, out=None):
-    args = ["curl", "-sS", "-L", "-m", "120", "-A", BROWSER, u] + (["-o", out] if out else [])
-    r = subprocess.run(args, capture_output=True)
-    return r.stdout.decode("utf-8", "replace")
-print("ROBOTS:", get(B + "/robots.txt")[:800])
-d = get(B + "/Citizens/Detail_Meeting.aspx?ID=2822")
-i = d.find("Consent Agenda")
-print("\n##### ITEMS RAW 2822\n", d[i-6000:i+9000])
-print("\n##### ALL HREFS 2822\n", sorted(set(re.findall(r"href=['\"]([^'\"]+)['\"]", d)))[:120])
-cal = get(B + "/Citizens/calendar.aspx?View=List")
-for mid in ["2822", "2793"]:
-    j = cal.find(f"ID={mid}")
-    print(f"\n##### CALENDAR ROW {mid}\n", cal[j-600:j+2600])
-get(B + "/Citizens/FileOpen.aspx?Type=14&ID=2040&Inline=True", "/tmp/agenda.pdf")
-print("\nPDF bytes:", len(open("/tmp/agenda.pdf", "rb").read()), open("/tmp/agenda.pdf", "rb").read()[:8])
+"""TEMPORARY research script (removed before merge): does the portal answer the sync Worker's User-Agent?"""
+import subprocess, time
+B = "https://calaverascountyca.iqm2.com/Citizens/calendar.aspx?View=List"
+for ua in ["ThePilloryDataSync/1.0 (+https://thepillory.co)", "Python-urllib/3.12", "Mozilla/5.0 (compatible; thepillory-research; +https://thepillory.co)", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/140.0 Safari/537.36"]:
+    t = time.time()
+    r = subprocess.run(["curl", "-sS", "-m", "60", "-A", ua, "-o", "/dev/null", "-w", "%{http_code} %{size_download}", B], capture_output=True, text=True)
+    print(f"UA={ua!r}: {r.stdout} rc={r.returncode} {r.stderr.strip()} {time.time()-t:.1f}s")
+    time.sleep(5)
