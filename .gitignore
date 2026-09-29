@@ -1,0 +1,4 @@
+# Local Cloudflare dev state (wrangler dev / pages dev)
+.wrangler/
+.dev.vars
+node_modules/

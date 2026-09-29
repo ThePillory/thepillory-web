@@ -1,6 +1,9 @@
 """Sample data for The Pillory's app screens.
 
-Everything here is static sample content for layout only.
+Everything here is static sample content for layout only. Real officials,
+bills, and votes are NOT here: they live in Cloudflare D1, loaded by the sync
+Worker (workers/sync) and rendered by Pages Functions (functions/). Never attach
+sample issues, promises, or votes to real officials.
 
 Rules (see CLAUDE.md):
 - No real names. People are role placeholders like "[Supervisor, District 1]".
@@ -17,15 +20,6 @@ label shown on the parchment chip, e.g. ("amend-1", "Petition") renders as
 
 LEVELS = ["county", "state", "federal"]
 
-# The signed-in sample resident's own representatives.
-YOUR_REPS = [
-    "supervisor-d1",
-    "assembly-member",
-    "state-senator",
-    "us-representative",
-    "us-senator-1",
-    "us-senator-2",
-]
 
 # ---------------------------------------------------------------------------
 # Constitution
@@ -111,7 +105,7 @@ CLAUSES = [
 ]
 
 # ---------------------------------------------------------------------------
-# Bodies and reps
+# Bodies (members come from D1)
 # ---------------------------------------------------------------------------
 
 BODIES = [
@@ -145,65 +139,6 @@ BODIES = [
         "short": "U.S. Senate",
         "level": "federal",
         "about": "Two senators per state, elected to six-year terms. Shown here: California's senators.",
-        "clause": ("art-1-sec-3", "The Senate"),
-    },
-]
-
-REPS = [
-    {
-        "slug": f"supervisor-d{n}",
-        "title": f"[Supervisor, District {n}]",
-        "level": "county",
-        "office": "Board of Supervisors",
-        "district": f"County District {n}",
-        "body": "board-of-supervisors",
-        "clause": ("amend-10", "State powers"),
-    }
-    for n in range(1, 6)
-] + [
-    {
-        "slug": "assembly-member",
-        "title": "[State Assembly Member, District]",
-        "level": "state",
-        "office": "State Assembly",
-        "district": "Assembly District [#]",
-        "body": "state-legislature",
-        "clause": ("amend-10", "State powers"),
-    },
-    {
-        "slug": "state-senator",
-        "title": "[State Senator, District]",
-        "level": "state",
-        "office": "State Senate",
-        "district": "Senate District [#]",
-        "body": "state-legislature",
-        "clause": ("amend-10", "State powers"),
-    },
-    {
-        "slug": "us-representative",
-        "title": "[U.S. Representative, District]",
-        "level": "federal",
-        "office": "U.S. House",
-        "district": "Congressional District [#]",
-        "body": "us-house",
-        "clause": ("art-1-sec-2", "The House"),
-    },
-    {
-        "slug": "us-senator-1",
-        "title": "[U.S. Senator, Seat 1]",
-        "level": "federal",
-        "office": "U.S. Senate",
-        "district": "California",
-        "body": "us-senate",
-        "clause": ("art-1-sec-3", "The Senate"),
-    },
-    {
-        "slug": "us-senator-2",
-        "title": "[U.S. Senator, Seat 2]",
-        "level": "federal",
-        "office": "U.S. Senate",
-        "district": "California",
-        "body": "us-senate",
         "clause": ("art-1-sec-3", "The Senate"),
     },
 ]
@@ -290,14 +225,6 @@ LAWS = [
         "summary": "Changes the Board's rules of procedure so each speaker gets one minute of public comment per agenda item instead of three. The limit applies to every agenda item, including budget hearings.",
         "clauses": [("amend-1", "Petition")],
         "baseline": PUBLIC_COMMENT_BASELINE,
-        "votes": {
-            "supervisor-d1": "Yes",
-            "supervisor-d2": "No",
-            "supervisor-d3": "Yes",
-            "supervisor-d4": "Yes",
-            "supervisor-d5": "Absent",
-        },
-        "vote_date": "[date]",
     },
     {
         "slug": "bill-broadband",
@@ -309,11 +236,6 @@ LAWS = [
         "summary": "Sets how the state scores counties when it awards broadband infrastructure grants. [Plain-language summary to be reviewed.]",
         "clauses": [("amend-10", "State powers")],
         "baseline": PLACEHOLDER_BASELINE,
-        "votes": {
-            "assembly-member": "Yes (committee)",
-            "state-senator": "Not yet voted",
-        },
-        "vote_date": "[date]",
     },
     {
         "slug": "bill-constituent-access",
@@ -325,10 +247,6 @@ LAWS = [
         "summary": "Would require each House member's office to publish a schedule of public events held in the district. [Plain-language summary to be reviewed.]",
         "clauses": [("art-1-sec-2", "The House")],
         "baseline": PLACEHOLDER_BASELINE,
-        "votes": {
-            "us-representative": "Not yet voted",
-        },
-        "vote_date": "[date]",
     },
 ]
 
@@ -336,7 +254,7 @@ LAWS = [
 # Evidence
 # ---------------------------------------------------------------------------
 
-# "parent" is where the back label points: ("issue", slug) or ("promise", slug).
+# "parent" is the issue the back label points to: ("issue", slug).
 EVIDENCE = [
     {
         "slug": "board-minutes",
@@ -366,31 +284,13 @@ EVIDENCE = [
         "parent": ("issue", "public-comment-limit"),
     },
     {
-        "slug": "candidate-forum",
-        "title": "Candidate forum recording, [date]",
-        "source_type": "Video · public forum",
-        "verification": "Timestamp checked",
-        "submitted_by": "Uploaded by a verified county resident",
-        "preview": "[Video preview: forum recording at [mm:ss]]",
-        "parent": ("promise", "d1-comment-time"),
-    },
-    {
-        "slug": "agenda-posting-log",
-        "title": "Agenda posting log, [year]",
-        "source_type": "Public record",
-        "verification": "Official source",
-        "submitted_by": "Requested from the Clerk of the Board",
-        "preview": "[Document preview: agenda posting dates]",
-        "parent": ("promise", "d1-agenda-notice"),
-    },
-    {
         "slug": "paving-contract",
         "title": "Paving contract award",
         "source_type": "Public record",
         "verification": "Official source",
         "submitted_by": "Pulled from the official county website",
         "preview": "[Document preview: contract award, [County road]]",
-        "parent": ("promise", "d2-repave"),
+        "parent": ("issue", "road-repaving"),
     },
     {
         "slug": "road-photos",
@@ -417,7 +317,7 @@ EVIDENCE = [
         "verification": "Under review",
         "submitted_by": "Uploaded by a verified district resident",
         "preview": "[Document preview: newsletter, page 2]",
-        "parent": ("promise", "usrep-town-halls"),
+        "parent": ("issue", "town-halls"),
     },
     {
         "slug": "office-events-archive",
@@ -427,110 +327,6 @@ EVIDENCE = [
         "submitted_by": "Submitted by a verified district resident",
         "preview": "[Link preview: archived events page, [date]]",
         "parent": ("issue", "town-halls"),
-    },
-]
-
-# ---------------------------------------------------------------------------
-# Promises
-# ---------------------------------------------------------------------------
-
-# Status is one of: Kept, Broken, In progress, No action.
-PROMISES = [
-    {
-        "slug": "d1-comment-time",
-        "rep": "supervisor-d1",
-        "commitment": "Keep public comment at three minutes per speaker",
-        "source": "Candidate forum",
-        "source_date": "[date]",
-        "status": "Broken",
-        "history": [
-            ("[date]", "Commitment made at a candidate forum"),
-            ("[date]", "Voted yes on Resolution [number], setting a one-minute limit"),
-            ("[date]", "Status set to Broken after review"),
-        ],
-        "evidence": ["candidate-forum", "board-minutes"],
-        "issues": ["public-comment-limit"],
-        "laws": ["res-public-comment"],
-    },
-    {
-        "slug": "d1-agenda-notice",
-        "rep": "supervisor-d1",
-        "commitment": "Post full Board agendas at least seven days before each meeting",
-        "source": "Campaign website, archived",
-        "source_date": "[date]",
-        "status": "Kept",
-        "history": [
-            ("[date]", "Commitment published on campaign website"),
-            ("[date]", "Posting log shows agendas out seven or more days ahead"),
-            ("[date]", "Status set to Kept after review"),
-        ],
-        "evidence": ["agenda-posting-log"],
-        "issues": [],
-        "laws": [],
-    },
-    {
-        "slug": "d2-repave",
-        "rep": "supervisor-d2",
-        "commitment": "Complete repaving of [County road] by [date]",
-        "source": "District newsletter",
-        "source_date": "[date]",
-        "status": "In progress",
-        "history": [
-            ("[date]", "Commitment made in district newsletter"),
-            ("[date]", "Paving contract awarded"),
-            ("[date]", "Promised completion date passed"),
-            ("[date]", "Work resumed, per county road schedule"),
-        ],
-        "evidence": ["paving-contract", "road-photos"],
-        "issues": ["road-repaving"],
-        "laws": [],
-    },
-    {
-        "slug": "assembly-broadband",
-        "rep": "assembly-member",
-        "commitment": "Introduce a bill to change how rural broadband funding is scored",
-        "source": "Public statement",
-        "source_date": "[date]",
-        "status": "Kept",
-        "history": [
-            ("[date]", "Commitment made in a public statement"),
-            ("[date]", "[Bill number] introduced"),
-            ("[date]", "Status set to Kept after review"),
-        ],
-        "evidence": ["broadband-scoring-draft"],
-        "issues": ["broadband-scoring"],
-        "laws": ["bill-broadband"],
-    },
-    {
-        "slug": "senator-office-hours",
-        "rep": "state-senator",
-        "commitment": "Hold monthly office hours in Calaveras County",
-        "source": "Press release",
-        "source_date": "[date]",
-        "status": "In progress",
-        "history": [
-            ("[date]", "Commitment made in a press release"),
-            ("[date]", "[#] of [#] monthly sessions held so far"),
-        ],
-        "evidence": [],
-        "issues": [],
-        "laws": [],
-    },
-    {
-        "slug": "usrep-town-halls",
-        "rep": "us-representative",
-        "commitment": "Hold a public town hall in the district every quarter",
-        "source": "Campaign newsletter",
-        "source_date": "[date]",
-        "status": "No action",
-        "history": [
-            ("[date]", "Commitment made in a campaign newsletter"),
-            ("[date]", "No district town hall found on the office's public events page"),
-            ("[date]", "Status set to No action after review"),
-        ],
-        "evidence": ["campaign-newsletter", "office-events-archive"],
-        "issues": ["town-halls"],
-        "laws": [],
     },
 ]
 
@@ -546,8 +342,7 @@ ISSUES = [
         "category": "Public meetings",
         "title": "Public comment cut to one minute at Board of Supervisors meetings",
         "body": "board-of-supervisors",
-        "responsible": None,  # None: show the body's name
-        "reps": ["supervisor-d1", "supervisor-d2", "supervisor-d3", "supervisor-d4", "supervisor-d5"],
+        "responsible": None,  # None: show the body's name; otherwise display text
         "laws": ["res-public-comment"],
         "clauses": [("amend-1", "Petition")],
         "status": "Agency responded",
@@ -570,7 +365,6 @@ ISSUES = [
         "title": "[Bill number]: how rural counties are scored for broadband funding",
         "body": "state-legislature",
         "responsible": None,
-        "reps": ["assembly-member", "state-senator"],
         "laws": ["bill-broadband"],
         "clauses": [("amend-10", "State powers")],
         "status": "Aggregating reports",
@@ -591,8 +385,7 @@ ISSUES = [
         "category": "Official conduct",
         "title": "Promised quarterly town halls in the district: none held since [date]",
         "body": "us-house",
-        "responsible": ("us-representative", "Office of the U.S. Representative, [district]"),
-        "reps": ["us-representative"],
+        "responsible": "Office of the U.S. Representative, [district]",
         "laws": ["bill-constituent-access"],
         "clauses": [("art-1-sec-2", "The House")],
         "status": "Gathering evidence",
@@ -612,8 +405,7 @@ ISSUES = [
         "category": "Public services",
         "title": "Repaving of [County road] past its promised completion date",
         "body": "board-of-supervisors",
-        "responsible": ("supervisor-d2", "[Supervisor, District 2] and County Public Works"),
-        "reps": ["supervisor-d2"],
+        "responsible": "County Public Works",
         "laws": [],
         "clauses": [],
         "status": "Gathering evidence",
@@ -634,7 +426,6 @@ ISSUES = [
 # ---------------------------------------------------------------------------
 
 FOLLOWING = {
-    "reps": ["supervisor-d1", "us-representative"],
     "bodies": ["board-of-supervisors"],
     "issues": ["public-comment-limit", "road-repaving"],
     "laws": ["bill-broadband"],
@@ -643,7 +434,6 @@ FOLLOWING = {
 NOTIFICATIONS = [
     ("[date]", "Agency response added", ("issue", "public-comment-limit")),
     ("[date]", "New meeting posted: budget workshop", ("meeting", "bos-budget-workshop")),
-    ("[date]", "Promise status updated to In progress", ("promise", "d2-repave")),
 ]
 
 # (title, status, link) where link is None or (kind, slug)

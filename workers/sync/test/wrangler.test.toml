@@ -1,0 +1,27 @@
+# Local test config: same Worker, pointed at the FAKE fixture server.
+# Used by run-local.sh; never deployed.
+name = "pillory-sync-test"
+main = "../src/index.js"
+compatibility_date = "2025-09-01"
+rules = [{ type = "Text", globs = ["**/*.sql"], fallthrough = true }]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "pillory-local-test"
+database_id = "pillory-local-test"
+migrations_dir = "../migrations"
+
+[vars]
+SITE_URL = "http://127.0.0.1:8788/site"
+CONGRESS_API_BASE = "http://127.0.0.1:8788/congress"
+OPENSTATES_API_BASE = "http://127.0.0.1:8788/openstates"
+SENATE_BASE = "http://127.0.0.1:8788/senate"
+LOOKUP_LAT = "38.1960"
+LOOKUP_LNG = "-120.6805"
+CA_HOUSE_DISTRICT = ""
+MAX_SUBREQUESTS = "45"
+OPENSTATES_DAILY_LIMIT = "250"
+OPENSTATES_MIN_INTERVAL_MS = "0"
+CONGRESS_API_KEY = "fake-key"
+OPENSTATES_API_KEY = "fake-key"
+SYNC_TOKEN = "local-test-token"

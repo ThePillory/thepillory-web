@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/assets/pillory.css?v=11" />
+    <link rel="stylesheet" href="/assets/pillory.css?v=12" />
     <meta name="description" content="Evidence-first civic accountability. Verified residents, protected identities, nonpartisan." />
     <meta name="theme-color" content="#F5F2EA" />
     <link rel="icon" href="/assets/logo/icon.svg" type="image/svg+xml" />
@@ -43,6 +43,7 @@
   <div class="secondary"><a class="inline-link" href="/bodies/us-house/">U.S. House of Representatives</a></div>
   <div class="chips"><span class="chip chip--navy">Introduced [date]</span><a class="chip chip--parch" href="/laws/constitution/art-1-sec-2/">Article I, Sec. 2 · The House</a></div>
 </header>
+<p class="banner">Hypothetical sample law, for layout only. Real bills and votes are listed under <a href="/laws/">Laws</a>.</p>
 
 <section class="card stack-sm">
   <h2 class="label">Plain-language summary</h2>
@@ -76,13 +77,9 @@
   <button class="btn btn--block" type="button">Add a perspective</button>
 </section>
 
-<section class="card stack">
+<section class="card stack-sm">
   <h2 class="label">How your reps voted</h2>
-  <div>
-<a class="list-row link-row" href="/reps/us-representative/#votes">
-  <div><div class="list-title">[U.S. Representative, District]</div><div class="list-meta">Congressional District [#]</div></div>
-  <span class="row-end"><span class="chip chip--light">Yours</span><span class="chip chip--outline">Not yet voted</span><span class="chev" aria-hidden="true">›</span></span>
-</a></div><p class="hint">Vote recorded [date]. Tap a rep for their full voting record.</p>
+  <p class="secondary small">No recorded votes: this is a sample law. Real voting records appear on real bills under Laws.</p>
 </section>
 <section class="card stack">
   <h2 class="label">Verified district signal</h2>
@@ -93,7 +90,6 @@
   </div>
   <p class="hint center">Verified residents of your districts only. Individual responses stay private.</p>
 </section>
-
 
 <section class="stack">
   <h2 class="label">Related issues</h2>
@@ -116,7 +112,8 @@
     </div>
   </div>
 </nav>
-    <script src="/assets/search-index.js?v=11"></script>
-    <script src="/assets/app.js?v=11"></script>
+    <script src="/assets/search-index.js?v=12"></script>
+    <script src="/api/search-officials"></script>
+    <script src="/assets/app.js?v=12"></script>
   </body>
 </html>

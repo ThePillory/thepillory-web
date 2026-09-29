@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/assets/pillory.css?v=11" />
+    <link rel="stylesheet" href="/assets/pillory.css?v=12" />
     <meta name="description" content="Evidence-first civic accountability. Verified residents, protected identities, nonpartisan." />
     <meta name="theme-color" content="#F5F2EA" />
     <link rel="icon" href="/assets/logo/icon.svg" type="image/svg+xml" />
@@ -43,6 +43,7 @@
   <div class="secondary"><a class="inline-link" href="/bodies/state-legislature/">California State Legislature</a></div>
   <div class="chips"><span class="chip chip--navy">In committee</span><a class="chip chip--parch" href="/laws/constitution/amend-10/">Amendment X · State powers</a></div>
 </header>
+<p class="banner">Hypothetical sample law, for layout only. Real bills and votes are listed under <a href="/laws/">Laws</a>.</p>
 
 <section class="card stack-sm">
   <h2 class="label">Plain-language summary</h2>
@@ -76,17 +77,9 @@
   <button class="btn btn--block" type="button">Add a perspective</button>
 </section>
 
-<section class="card stack">
+<section class="card stack-sm">
   <h2 class="label">How your reps voted</h2>
-  <div>
-<a class="list-row link-row" href="/reps/assembly-member/#votes">
-  <div><div class="list-title">[State Assembly Member, District]</div><div class="list-meta">Assembly District [#]</div></div>
-  <span class="row-end"><span class="chip chip--light">Yours</span><span class="chip chip--outline">Yes (committee)</span><span class="chev" aria-hidden="true">›</span></span>
-</a>
-<a class="list-row link-row" href="/reps/state-senator/#votes">
-  <div><div class="list-title">[State Senator, District]</div><div class="list-meta">Senate District [#]</div></div>
-  <span class="row-end"><span class="chip chip--light">Yours</span><span class="chip chip--outline">Not yet voted</span><span class="chev" aria-hidden="true">›</span></span>
-</a></div><p class="hint">Vote recorded [date]. Tap a rep for their full voting record.</p>
+  <p class="secondary small">No recorded votes: this is a sample law. Real voting records appear on real bills under Laws.</p>
 </section>
 <section class="card stack">
   <h2 class="label">Verified district signal</h2>
@@ -96,17 +89,6 @@
     <div class="stat"><div class="stat-num">[#]</div><div class="stat-label">Affected</div></div>
   </div>
   <p class="hint center">Verified residents of your districts only. Individual responses stay private.</p>
-</section>
-
-<section class="stack">
-  <h2 class="label">Related promises</h2>
-  
-<a class="card issue-card" href="/reps/assembly-member/promises/assembly-broadband/">
-  <p class="label">Promise · State</p>
-  <h3>Introduce a bill to change how rural broadband funding is scored</h3>
-  <p class="secondary small">[State Assembly Member, District]</p>
-  <div class="chips"><span class="status status--kept">Kept</span></div>
-</a>
 </section>
 
 <section class="stack">
@@ -130,7 +112,8 @@
     </div>
   </div>
 </nav>
-    <script src="/assets/search-index.js?v=11"></script>
-    <script src="/assets/app.js?v=11"></script>
+    <script src="/assets/search-index.js?v=12"></script>
+    <script src="/api/search-officials"></script>
+    <script src="/assets/app.js?v=12"></script>
   </body>
 </html>
