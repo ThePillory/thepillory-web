@@ -6,8 +6,8 @@
 
 Every quotable provision ("leaf" rows) must appear word for word in the
 Archives text. Only whitespace, curly vs. straight quotes, and the Archives'
-editorial marks (footnote stars, [brackets], "--" for a dash) are ignored. Exits 1 and prints the closest Archives
-wording for anything that doesn't match. Standard library only.
+editorial marks (footnote stars, [brackets], "--" for a dash, a stray space
+before punctuation) are ignored. Exits 1 and prints the closest Archives wording for anything that doesn't match. Standard library only.
 """
 import html
 import json
@@ -27,10 +27,14 @@ PAGES = [
 
 def normalize(text):
     text = html.unescape(text)
-    text = text.replace("’", "'").replace("‘", "'").replace("“", '"').replace("”", '"')
-    text = text.replace(" ", " ").replace("*", "")
+    text = text.replace("\u2019", "'").replace("\u2018", "'").replace("\u201c", '"').replace("\u201d", '"')
+    # Editorial marks on the Archives pages: footnote stars, [brackets] around
+    # superseded text, "--" typed for a dash, and a stray space before a comma.
+    text = text.replace("\u00a0", " ").replace("*", "").replace("[", "").replace("]", "")
+    text = text.replace("--", "\u2014")
     text = re.sub(r"\s+", " ", text)
-    text = re.sub(r"\s*—\s*", "—", text)
+    text = re.sub(r"\s*\u2014\s*", "\u2014", text)
+    text = re.sub(r" ([,;:.])", r"\1", text)
     return text.strip()
 
 

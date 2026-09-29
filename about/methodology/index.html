@@ -39,10 +39,67 @@
 
 <header class="page-head">
   <h1>Methodology</h1>
-  <p class="subtitle">How reports are reviewed, corroborated, given a confidence level, and mapped to the Constitution.</p>
+  <p class="subtitle">How The Pillory maps laws and issues to the Constitution, and how reports are reviewed.</p>
 </header>
-<p class="banner">Placeholder page, content to come</p>
 
+<section class="card stack" id="analysis">
+  <h2>Constitutional analysis of bills</h2>
+  <p>The Pillory maps the Constitution; it doesn't rule on it. For bills that our officials have voted on, an AI tool writes a first draft showing which parts of the Constitution a bill touches. People review every draft. Nothing here is a verdict on whether a bill is constitutional, and nothing here is legal advice.</p>
+  <ol class="numbered">
+    <li>
+      <span class="step-num" aria-hidden="true">1</span>
+      <div class="stack-sm">
+        <h3>Start from the bill's own words</h3>
+        <p class="small secondary">We read the latest text on Congress.gov for federal bills, or on the California Legislature's site for state bills. If the text isn't available, we use the official summary and label the analysis "limited: based on summary only." Very long bills are cut at a set length, and the analysis says so.</p>
+      </div>
+    </li>
+    <li>
+      <span class="step-num" aria-hidden="true">2</span>
+      <div class="stack-sm">
+        <h3>An AI tool writes a draft</h3>
+        <p class="small secondary">The draft is written by Claude, an AI model made by Anthropic, from the bill text and the full text of the Constitution. Its instructions: give no verdicts on constitutionality, use no party labels or partisan language, present the strongest version of each view, and say "uncertain" rather than guess.</p>
+      </div>
+    </li>
+    <li>
+      <span class="step-num" aria-hidden="true">3</span>
+      <div class="stack-sm">
+        <h3>Automatic checks before anything is saved</h3>
+        <p class="small secondary">Every passage quoted from the Constitution is compared with the National Archives text. A quote that doesn't match word for word is replaced with the exact text. Every court case is looked up in CourtListener, a free public database of court opinions. Cases that can't be found under the same name are removed, along with every sentence that relies on them. Each change is logged.</p>
+      </div>
+    </li>
+    <li>
+      <span class="step-num" aria-hidden="true">4</span>
+      <div class="stack-sm">
+        <h3>People review it</h3>
+        <p class="small secondary">Until a person reviews it, an analysis is marked "AI-drafted, not yet reviewed." A reviewer can edit any part, approve it, reject it, or ask for a new draft. Approved analyses show "Reviewed by" with the reviewer's name and the date. Earlier versions and every edit are kept.</p>
+      </div>
+    </li>
+  </ol>
+</section>
+
+<section class="card stack-sm">
+  <h2>What each analysis contains</h2>
+  <ul class="plain-list small">
+    <li><strong>What the bill does:</strong> a short, plain summary without judgment words.</li>
+    <li><strong>Provisions it touches:</strong> each quoted from the Constitution, with one sentence on why.</li>
+    <li><strong>Where it aligns</strong> and <strong>where it may be in tension</strong> with that text, written as questions a careful reader could raise, not conclusions.</li>
+    <li><strong>Why this might still serve the public:</strong> where a policy departs from the baseline, the case for it, including whether it would need a constitutional amendment under Article V.</li>
+    <li><strong>How different approaches read it:</strong> for contested questions only, how a reading based on original meaning, one based on precedent, and one based on evolving interpretation would each see it, side by side.</li>
+    <li><strong>Cases cited:</strong> only cases verified in CourtListener, each linked to the opinion.</li>
+    <li><strong>What it can't tell you:</strong> the limits of the analysis.</li>
+  </ul>
+</section>
+
+<section class="card stack-sm">
+  <h2>The Constitution's text</h2>
+  <p class="small secondary">The Pillory quotes the Constitution and its 27 amendments only from one stored copy of the National Archives transcription, which keeps the original spelling (such as "chuse" and "Controul"). The <a href="/laws/constitution/#full-text">full text</a> is on the Constitution page, and an automatic check compares it with the Archives whenever it changes.</p>
+</section>
+
+<section class="card stack-sm">
+  <h2>Reports and issues</h2>
+  <p class="banner">Content to come</p>
+  <p class="small secondary">How reports are reviewed, corroborated, and given a confidence level.</p>
+</section>
     </main>
 
 <nav class="tabbar" aria-label="Main">
