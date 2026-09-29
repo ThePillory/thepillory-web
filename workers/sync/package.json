@@ -4,7 +4,7 @@
   "type": "module",
   "description": "Sync Worker: officials, votes, and AI-drafted constitutional analysis into D1.",
   "scripts": {
-    "test": "node test/verify.test.mjs && node test/access.test.mjs"
+    "test": "node test/verify.test.mjs && node test/access.test.mjs && node test/d1retry.test.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.129.0"

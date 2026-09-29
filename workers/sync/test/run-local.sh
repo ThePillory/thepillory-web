@@ -14,6 +14,7 @@ rm -rf "$STATE"
 echo "--- unit tests (quote and citation checks):"
 node verify.test.mjs | tail -1
 node access.test.mjs | tail -1
+node d1retry.test.mjs | tail -1
 
 node fixture-server.mjs & FIX=$!
 $WRANGLER dev -c wrangler.test.toml --port 8789 --persist-to "$STATE" --test-scheduled >/tmp/pillory-worker.log 2>&1 & WK=$!

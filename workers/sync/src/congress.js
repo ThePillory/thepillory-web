@@ -29,10 +29,6 @@ export function federalBill(congress, type, number, title) {
   };
 }
 
-function daysSince(iso) {
-  return iso ? (Date.now() - Date.parse(iso)) / 86400000 : Infinity;
-}
-
 function lastTerm(member) {
   const terms = (member.terms && (member.terms.item || member.terms)) || [];
   return terms.length ? terms[terms.length - 1] : {};
@@ -49,9 +45,16 @@ function currentParty(detail, fallback) {
   return hist.length ? hist[hist.length - 1].partyName : fallback || null;
 }
 
+// Refreshed once per calendar day (UTC), so each day's scheduled run refreshes
+// no matter what time the previous check happened. The day is recorded only
+// once the Representative has loaded, so a run that couldn't find the House
+// seat tries again next run. (This key replaced "federal_officials_checked",
+// which also forces one refresh on the first run after the change.)
+const FEDERAL_DAY_KEY = "federal_officials_day";
+
 export async function syncFederalOfficials(env, db, budget) {
-  const checked = await getState(db, "federal_officials_checked");
-  if (daysSince(checked) < 1) return { status: "skipped", message: `checked ${checked}; refreshes daily` };
+  const day = await getState(db, FEDERAL_DAY_KEY);
+  if (day === today()) return { status: "skipped", message: `already refreshed today (${day}); refreshes at each day's first run` };
   const district = String(env.CA_HOUSE_DISTRICT || (await getState(db, "house_district_detected")) || "").trim();
 
   const list = await budget.json(api(env, "/member/CA", { currentMember: "true", limit: "250" }), {}, "members CA");
@@ -94,12 +97,14 @@ export async function syncFederalOfficials(env, db, budget) {
   }
   if (loaded["us-senate"].length) await deactivateOthers(db, "us-senate", loaded["us-senate"]);
   if (loaded["us-house"].length) await deactivateOthers(db, "us-house", loaded["us-house"]);
-  await setState(db, "federal_officials_checked", new Date().toISOString());
+  if (rep) await setState(db, FEDERAL_DAY_KEY, today());
   const msg = `loaded ${loaded["us-senate"].length} senator(s), ${loaded["us-house"].length} representative(s)`;
   if (!rep) {
     return {
       status: "partial",
-      message: `${msg}. No House district known: set CA_HOUSE_DISTRICT or let the Open States lookup run first.`,
+      message: district
+        ? `${msg}. Congress.gov lists no current member for CA-${district}; trying again next run.`
+        : `${msg}. No House district known: set CA_HOUSE_DISTRICT or let the Open States lookup run first.`,
     };
   }
   return { status: "ok", message: `${msg} (district CA-${district})` };

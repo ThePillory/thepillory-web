@@ -21,6 +21,7 @@ import { syncStateOfficials, syncStateVotes } from "./openstates.js";
 import { syncFederalOfficials, syncHouseVotes } from "./congress.js";
 import { syncSenateVotes } from "./senate.js";
 import { runAnalysis } from "./analysis/index.js";
+import { withD1Retry } from "./d1retry.js";
 
 // Order matters: officials before votes; state officials first because the
 // Open States lookup also detects the U.S. House district.
@@ -38,8 +39,9 @@ const MAX_ROUNDS = 20; // safety cap on automatic continuation per run
 const MAX_ANALYSIS_ROUNDS = 10; // same, for the analysis step
 const STALE_MS = 20 * 60 * 1000; // a round that hasn't finished after this is treated as dead
 
-export async function runSync(env, { trigger, deadlineMs, runId }) {
-  if (!env.DB) throw new Error("D1 binding DB is missing (see wrangler.toml)");
+export async function runSync(rawEnv, { trigger, deadlineMs, runId }) {
+  if (!rawEnv.DB) throw new Error("D1 binding DB is missing (see wrangler.toml)");
+  const env = withD1Retry(rawEnv); // temporary D1 errors are retried (src/d1retry.js)
   await ensureSchema(env.DB);
   const run = { id: runId || crypto.randomUUID(), trigger };
   const budget = new Budget(env, deadlineMs);
@@ -211,7 +213,8 @@ export default {
     console.log(`cron: ${JSON.stringify(await res.json())}`);
   },
 
-  async fetch(request, env) {
+  async fetch(request, rawEnv) {
+    const env = withD1Retry(rawEnv);
     const url = new URL(request.url);
     if (!["/run", "/analyze", "/status"].includes(url.pathname)) {
       return json({ ok: true, routes: ["/run?token=…", "/analyze?token=…", "/status?token=…"] });

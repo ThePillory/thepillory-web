@@ -17,6 +17,7 @@ import { draftAnalysis, DraftRefused } from "./claude.js";
 import { verifyQuotes, verifyCitations, sameCase } from "./verify.js";
 import { makeLookup } from "./courtlistener.js";
 import { PROMPT_VERSION } from "./prompt.js";
+import { withD1Retry } from "../d1retry.js";
 
 const RETRY_AFTER_DAYS = 7; // a bill that couldn't be drafted waits this long before another try
 const MIN_TIME_PER_BILL_MS = 4 * 60 * 1000; // don't start a bill without this much time left in the round
@@ -117,7 +118,9 @@ async function save(db, bill, source, draft, meta) {
     );
   const stmts = [];
   if (prev) {
-    stmts.push(db.prepare("UPDATE bill_analyses SET current = 0 WHERE id = ?").bind(prev.id));
+    // Every current draft of this bill, not just prev.id, so that a batch
+    // repeated after a temporary D1 error still leaves exactly one current draft.
+    stmts.push(db.prepare("UPDATE bill_analyses SET current = 0 WHERE bill_id = ? AND current = 1").bind(bill.id));
     stmts.push(
       db
         .prepare("INSERT INTO bill_analysis_revisions (analysis_id, bill_id, action, actor, note, snapshot) VALUES (?, ?, 'superseded', 'pipeline', ?, ?)")
@@ -177,7 +180,8 @@ export async function analyzeBill(env, db, budget, bill) {
  * One round of analysis. Returns {status, analyzed, more_now}: more_now means
  * bills are waiting and today's cap isn't reached, but the round ran out of time.
  */
-export async function runAnalysis(env, { deadlineMs, runId, trigger }) {
+export async function runAnalysis(rawEnv, { deadlineMs, runId, trigger }) {
+  const env = withD1Retry(rawEnv); // temporary D1 errors are retried (src/d1retry.js)
   const db = env.DB;
   const run = { id: runId, trigger };
   const started = new Date().toISOString();

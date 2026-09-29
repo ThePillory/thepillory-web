@@ -34,7 +34,7 @@ export async function ensureSchema(db) {
     if (done.has(name)) continue;
     await db.batch([
       ...statements(sql).map((q) => db.prepare(q)),
-      db.prepare("INSERT INTO d1_migrations (name) VALUES (?)").bind(name),
+      db.prepare("INSERT OR IGNORE INTO d1_migrations (name) VALUES (?)").bind(name),
     ]);
   }
 }

@@ -59,6 +59,8 @@ How background runs work: a run happens inside a Durable Object (`SyncRunner`, c
 
 After the sync, the same run drafts constitutional analyses of new bills (step `analysis`; see [analysis.md](analysis.md)). `/analyze?token=<SYNC_TOKEN>` runs only that step.
 
+Temporary D1 errors ("Network connection lost", "… caused object to be reset" and the like) are retried automatically, up to 4 times with increasing waits (`workers/sync/src/d1retry.js`). Any other database error fails the step and is logged.
+
 Each step (county officials, state officials, federal officials, House votes, Senate votes, state votes) logs `ok`, `partial` (stopped at a limit; resumes next run), `skipped` (nothing due) or `error`, with the message. One failing source never stops the others. Worker logs are also in the dashboard under `pillory-sync` → Logs.
 
 ### What each step fetches, and how often
@@ -67,7 +69,7 @@ Each step (county officials, state officials, federal officials, House votes, Se
 |---|---|---|
 | County officials | `data/county-officials.json` on the live site | every run (1 request) |
 | State officials | Open States `people.geo` (a point in San Andreas), then `people` | weekly (2 requests); also detects the U.S. House district |
-| Federal officials | Congress.gov `member/CA` and `member/{id}` | daily (about 4 requests) |
+| Federal officials | Congress.gov `member/CA` and `member/{id}` | once per calendar day (UTC), at that day's first run (about 4 requests); if the U.S. Representative isn't found, every run tries again |
 | House votes | Congress.gov `house-vote/{congress}/{session}`, with detail, members and the bill title | only roll calls not already in D1 |
 | Senate votes | senate.gov `vote_menu_{congress}_{session}.xml`, then each vote's XML | only votes not already in D1 |
 | State votes | Open States `bills?include=votes&updated_since=…` for the current CA session | only bills updated since the last run; capped at `OPENSTATES_DAILY_LIMIT` (default 250/day), one call every 6.5 s |
