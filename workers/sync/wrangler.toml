@@ -6,6 +6,8 @@
 name = "pillory-sync"
 main = "src/index.js"
 compatibility_date = "2025-09-01"
+# Serve the Worker on its workers.dev URL, which the manual /run and /status links use.
+workers_dev = true
 
 # Import .sql migration files as text so the Worker can apply them itself.
 rules = [{ type = "Text", globs = ["**/*.sql"], fallthrough = true }]
@@ -30,13 +32,13 @@ LOOKUP_LAT = "38.1960"
 LOOKUP_LNG = "-120.6805"
 # Optional override for the U.S. House district number (e.g. "5"). Leave blank
 # to detect it from the Open States lookup above.
-CA_HOUSE_DISTRICT = ""
+CA_HOUSE_DISTRICT = "5"
 # Optional: California session identifier, e.g. "20252026". Leave blank to use
 # the current regular session (two-year sessions starting in odd years).
 CA_SESSION = ""
 # Outbound requests allowed per run. Workers Free allows 50 per invocation;
 # on Workers Paid you can raise this (e.g. to 900) to backfill much faster.
-MAX_SUBREQUESTS = "45"
+MAX_SUBREQUESTS = "900"
 # Open States free tier: stay well under the daily limit and ~10 requests/min.
 OPENSTATES_DAILY_LIMIT = "250"
 OPENSTATES_MIN_INTERVAL_MS = "6500"
