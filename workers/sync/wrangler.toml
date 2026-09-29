@@ -18,7 +18,7 @@ crons = ["0 11 * * *"]
 binding = "DB"
 database_name = "pillory"
 # Replace with the ID shown in Cloudflare → Storage & Databases → D1 → pillory.
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "b6afd5de-4804-4c2b-bb14-af4314190e9d"
 migrations_dir = "migrations"
 
 [vars]
