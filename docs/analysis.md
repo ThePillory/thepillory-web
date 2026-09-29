@@ -89,7 +89,7 @@ Access stops everyone else before the request reaches the site. The site also ve
 - **Automatically:** after every daily sync (11:00 UTC), the same background run drafts analyses of bills that have none yet.
 - **Now:** open `https://pillory-sync.<your-subdomain>.workers.dev/analyze?token=<SYNC_TOKEN>`. It answers `started` right away. `/status?token=…` shows `run.analysis`, and `recent_log` shows one `analysis` row per bill: tokens used, how many quotes were replaced, and how many citations were verified or removed.
 - **Order:** regeneration requests from `/admin/review` come first, then bills with the most recent votes.
-- **Daily cap:** `ANALYSIS_DAILY_LIMIT` in `workers/sync/wrangler.toml` (default `20`). Set it to `"0"` to pause drafting.
+- **Daily cap:** `ANALYSIS_DAILY_LIMIT` in `workers/sync/wrangler.toml` (currently `5`). Set it to `"0"` to pause drafting.
 - **Retries:** a bill that can't be drafted (no text or summary, a model refusal, an error) is retried after 7 days.
 - **Other settings in `wrangler.toml`:** `ANALYSIS_MODEL` (default `claude-sonnet-5-5`), `ANALYSIS_EFFORT` (default `high`), and `MAX_BILL_TEXT_CHARS` (default 400,000). Longer bill texts are cut and the draft is marked "limited".
 

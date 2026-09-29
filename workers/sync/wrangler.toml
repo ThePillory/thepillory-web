@@ -60,7 +60,7 @@ OPENSTATES_DAILY_LIMIT = "250"
 OPENSTATES_MIN_INTERVAL_MS = "6500"
 # AI-drafted constitutional analysis (src/analysis/). At most this many drafts a
 # day; each costs one Claude API call. Set to "0" to pause drafting.
-ANALYSIS_DAILY_LIMIT = "20"
+ANALYSIS_DAILY_LIMIT = "5"
 ANALYSIS_MODEL = "claude-sonnet-5-5"
 ANALYSIS_EFFORT = "high"
 # Longer bill texts are cut to this many characters and the draft is marked "limited".
