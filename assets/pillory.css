@@ -502,7 +502,7 @@ a.card:hover { border-color: var(--navy); }
   align-items: center;
   min-height: var(--tap);
 }
-/* The column mark sits before "The Pillory" wherever the wordmark appears */
+/* The seal mark sits before "The Pillory" wherever the wordmark appears */
 .wordmark::before {
   content: "";
   flex: none;
@@ -510,8 +510,8 @@ a.card:hover { border-color: var(--navy); }
   height: 1.05em;
   margin-right: 0.3em;
   background: var(--navy);
-  -webkit-mask: url("/assets/logo/mark.svg") center / contain no-repeat;
-  mask: url("/assets/logo/mark.svg") center / contain no-repeat;
+  -webkit-mask: url("/assets/logo/mark.svg?v=2") center / contain no-repeat;
+  mask: url("/assets/logo/mark.svg?v=2") center / contain no-repeat;
 }
 
 .header-meta { text-align: right; font-size: 0.875rem; line-height: 1.3; }

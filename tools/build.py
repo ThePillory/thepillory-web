@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import data as D  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
-ASSET_VERSION = "6"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "7"  # bump when assets/pillory.css or assets/app.js change
 
 GENERATED_DIRS = [
     "about", "agency", "bodies", "constitution", "evidence", "feed", "issue",
@@ -494,7 +494,7 @@ def head_tags(title):
     <meta property="og:image" content="{SITE_URL}/assets/logo/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="The Pillory: a column beside the wordmark, with the line Evidence-first civic accountability" />
+    <meta property="og:image:alt" content="The Pillory: a serif P in a seal beside the wordmark, with the line Evidence-first civic accountability" />
     <meta name="twitter:card" content="summary_large_image" />
 """
 

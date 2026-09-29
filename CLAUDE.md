@@ -70,10 +70,10 @@ All styling is in **`assets/pillory.css`**, with tokens on `:root`. Reuse the cl
 
 ## Logo
 
-The logo is a **classical column** (a pillar of accountability, not the punishment stocks) beside "The Pillory" in Newsreader 600. Everything lives in `assets/logo/`:
+The logo is the **Seal P**: a serif "P" (Newsreader 600) inside a double ring, like an official stamp on a public record. It sits beside "The Pillory" in Newsreader 600. The "P" is stored as vector outlines, so the icons don't depend on the web font loading. Everything lives in `assets/logo/`:
 
-- `mark.svg`: the column on its own. CSS draws it before every `.wordmark` through `.wordmark::before` (a mask filled with navy), so the wordmark HTML stays plain text.
-- `icon.svg` and `favicon-32.png`: the browser-tab icon, a parchment column on a rounded navy tile.
+- `mark.svg`: the seal on its own. CSS draws it before every `.wordmark` through `.wordmark::before` (a mask filled with navy), so the wordmark HTML stays plain text. Bump the `?v=` on the mask URL in `pillory.css` if the file changes.
+- `icon.svg` and `favicon-32.png`: the browser-tab icon, a parchment seal on a rounded navy tile.
 - `icon-square.svg`: the source for the home-screen icons (`apple-touch-icon.png` at 180px, `icon-192.png`, `icon-512.png`). It's a full-bleed square, because phones round the corners themselves.
 - `og-image.png` (1200×630): the image shown when a link is shared.
 
