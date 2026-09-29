@@ -2,8 +2,10 @@
 # transcriptions whenever the text or the checker changes.
 name: Constitution text
 on:
+  push:
+    paths: &paths ["data/constitution.json", "tools/check_constitution.py", ".github/workflows/constitution-text.yml"]
   pull_request:
-    paths: ["data/constitution.json", "tools/check_constitution.py", ".github/workflows/constitution-text.yml"]
+    paths: *paths
   workflow_dispatch:
 permissions:
   contents: read
