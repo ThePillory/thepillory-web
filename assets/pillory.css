@@ -596,9 +596,9 @@ a.card:hover { border-color: var(--navy); }
 
 /* Home page */
 .hero { display: flex; flex-direction: column; gap: 12px; padding: 8px 0; }
-/* The logo is the largest thing on the page; the tagline supports it */
-.hero .hero-logo { font-size: 3rem; line-height: 1.05; letter-spacing: -0.015em; align-self: flex-start; }
-.hero-tagline {
+/* Home: the nav logo is the largest thing on the page; the tagline heading supports it */
+.site-nav .wordmark--lg { font-size: 2rem; letter-spacing: -0.015em; }
+.hero .hero-tagline {
   font-family: var(--serif);
   font-weight: 600;
   font-size: 1.375rem;
@@ -619,13 +619,25 @@ a.card:hover { border-color: var(--navy); }
 }
 .pillar h2 { font-size: 1.125rem; }
 
+/* On wider screens the nav spans wider than the 680px reading column */
+@media (min-width: 760px) {
+  .site-nav { width: min(960px, calc(100vw - 32px)); align-self: center; }
+}
+
 @media (min-width: 600px) {
-  .hero .hero-logo { font-size: 4rem; }
-  .hero-tagline { font-size: 1.625rem; }
+  .site-nav .wordmark--lg { font-size: 2.5rem; }
+  .hero .hero-tagline { font-size: 1.75rem; }
   .pillars { grid-template-columns: repeat(3, 1fr); }
 }
 .card.numbered { padding: 20px; }
 .numbered-lg h2 { font-size: 1.1875rem; }
+
+/* Home's larger logo needs the two-row nav up to 900px wide */
+@media (max-width: 899px) {
+  .site-nav--home { row-gap: 8px; }
+  .site-nav--home .site-nav-join { order: 2; }
+  .site-nav--home .site-nav-links { order: 3; flex-basis: 100%; justify-content: flex-start; gap: 8px; }
+}
 
 @media (max-width: 479px) {
   /* Row 1: wordmark + Join. Row 2: the page links, with room between them. */
@@ -633,6 +645,7 @@ a.card:hover { border-color: var(--navy); }
   .site-nav-join { order: 2; }
   .site-nav-links { order: 3; flex-basis: 100%; justify-content: space-between; gap: 4px; }
   .site-nav-links a { padding: 0 10px; font-size: 0.875rem; }
+  .site-nav--home .site-nav-links { justify-content: space-between; gap: 4px; }
 }
 
 @media (max-width: 359px) {
