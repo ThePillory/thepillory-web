@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New report – The Pillory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/pillory.css" />
+  </head>
+
+  <body>
+    <main class="app">
+      <a class="back-link" href="/feed/">← Cancel</a>
+
+      <header class="page-head">
+        <h1>New report</h1>
+        <p class="subtitle">Facts first. Your perspective goes in its own section.</p>
+      </header>
+
+      <div class="stack">
+        <fieldset class="field bare">
+          <legend class="label">Level</legend>
+          <div class="segmented">
+            <label class="toggle"><input type="radio" name="level" value="county" checked /><span>County</span></label>
+            <label class="toggle"><input type="radio" name="level" value="state" /><span>State</span></label>
+            <label class="toggle"><input type="radio" name="level" value="federal" /><span>Federal</span></label>
+          </div>
+        </fieldset>
+
+        <div class="field">
+          <label class="field-label" for="responsible">Who is responsible?</label>
+          <input class="input" id="responsible" name="responsible" type="text"
+            placeholder="Agency, body, or official's office" aria-describedby="responsible-hint" />
+          <p class="hint" id="responsible-hint">Public roles only. No private individuals.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label class="field-label" for="category">Category</label>
+            <select class="select" id="category" name="category">
+              <option>Public meetings</option>
+              <option>Legislation</option>
+              <option>Spending</option>
+              <option>Official conduct</option>
+              <option>Public services</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field-label" for="when">When</label>
+            <input class="input" id="when" name="when" type="text" placeholder="Date or range" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="what">What happened</label>
+          <textarea class="textarea" id="what" name="what" placeholder="State only what you can document."></textarea>
+        </div>
+
+        <fieldset class="field bare">
+          <legend class="field-label">Evidence</legend>
+          <div class="grid-2">
+            <button class="btn-dashed" type="button">+ Document</button>
+            <button class="btn-dashed" type="button">+ Photo or video</button>
+            <button class="btn-dashed" type="button">+ Link</button>
+            <button class="btn-dashed" type="button">+ Public record</button>
+          </div>
+          <ul class="stack-sm plain-list" aria-label="Attached (sample)">
+            <li class="attachment">
+              <span class="attachment-name">minutes-[date].pdf</span>
+              <span class="list-status">Official source</span>
+            </li>
+            <li class="attachment">
+              <span class="attachment-name">meeting-clip.mp4</span>
+              <span class="list-status">Checking timestamp</span>
+            </li>
+          </ul>
+        </fieldset>
+
+        <div class="card field">
+          <label class="field-label" for="why">Why it matters (optional)</label>
+          <textarea class="textarea" id="why" name="why" placeholder="Your perspective. Shown separately from the facts."></textarea>
+        </div>
+
+        <fieldset class="parchment stack">
+          <legend class="visually-hidden">Constitutional link</legend>
+          <div class="stack-sm">
+            <h2>Which part of the Constitution does this touch?</h2>
+            <p class="small">Suggested from your category. Pick any that apply.</p>
+          </div>
+          <div class="chips">
+            <label class="toggle toggle--parch"><input type="checkbox" name="clause" value="amend-1-petition" checked /><span>Amendment I · Petition</span></label>
+            <label class="toggle toggle--parch"><input type="checkbox" name="clause" value="amend-14-due-process" /><span>Amendment XIV · Due process</span></label>
+            <label class="toggle toggle--parch"><input type="checkbox" name="clause" value="not-sure" /><span>Not sure, let reviewers suggest</span></label>
+          </div>
+        </fieldset>
+
+        <div class="stack-sm">
+          <a class="btn btn--primary btn--block" href="/feed/">Submit for review</a>
+          <p class="hint center">Reviewed reports join an issue. Your name is never attached.</p>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
