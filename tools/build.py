@@ -24,11 +24,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import data as D  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
-ASSET_VERSION = "11"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "12"  # bump when assets/pillory.css or assets/app.js change
 
+# Folders this script owns. reps/ and bodies/ are NOT here: those pages are
+# rendered from D1 by Pages Functions (functions/), as are the laws/ index and
+# laws/bills/. The static laws/constitution/ and sample-law pages are still built.
 GENERATED_DIRS = [
-    "about", "agency", "bodies", "constitution", "evidence", "feed", "issue",
-    "issues", "laws", "meetings", "record", "report", "reps", "search", "you",
+    "about", "agency", "constitution", "evidence", "feed", "issue",
+    "issues", "laws", "meetings", "record", "report", "search", "you",
 ]
 
 e = html.escape
@@ -41,15 +44,13 @@ LEVEL_NAME = {"county": "County", "state": "State", "federal": "Federal"}
 
 CLAUSES = {c["slug"]: c for c in D.CLAUSES}
 BODIES = {b["slug"]: b for b in D.BODIES}
-REPS = {r["slug"]: r for r in D.REPS}
 MEETINGS = {m["slug"]: m for m in D.MEETINGS}
 LAWS = {l["slug"]: l for l in D.LAWS}
 EVIDENCE = {v["slug"]: v for v in D.EVIDENCE}
-PROMISES = {p["slug"]: p for p in D.PROMISES}
 ISSUES = {i["slug"]: i for i in D.ISSUES}
 TABLES = {
-    "clause": CLAUSES, "body": BODIES, "rep": REPS, "meeting": MEETINGS,
-    "law": LAWS, "evidence": EVIDENCE, "promise": PROMISES, "issue": ISSUES,
+    "clause": CLAUSES, "body": BODIES, "meeting": MEETINGS,
+    "law": LAWS, "evidence": EVIDENCE, "issue": ISSUES,
 }
 
 
@@ -59,9 +60,6 @@ def check(kind, slug, where):
 
 
 def validate():
-    for r in D.REPS:
-        check("body", r["body"], r["slug"])
-        check("clause", r["clause"][0], r["slug"])
     for b in D.BODIES:
         check("clause", b["clause"][0], b["slug"])
     for m in D.MEETINGS:
@@ -75,32 +73,16 @@ def validate():
         check("body", l["body"], l["slug"])
         for c, _ in l["clauses"]:
             check("clause", c, l["slug"])
-        for s in l["votes"]:
-            check("rep", s, l["slug"])
     for v in D.EVIDENCE:
         check(v["parent"][0], v["parent"][1], v["slug"])
-    for p in D.PROMISES:
-        check("rep", p["rep"], p["slug"])
-        for s in p["evidence"]:
-            check("evidence", s, p["slug"])
-        for s in p["issues"]:
-            check("issue", s, p["slug"])
-        for s in p["laws"]:
-            check("law", s, p["slug"])
     for i in D.ISSUES:
         check("body", i["body"], i["slug"])
-        if i["responsible"]:
-            check("rep", i["responsible"][0], i["slug"])
-        for s in i["reps"]:
-            check("rep", s, i["slug"])
         for s in i["laws"]:
             check("law", s, i["slug"])
         for c, _ in i["clauses"]:
             check("clause", c, i["slug"])
         for s in i["evidence"]:
             check("evidence", s, i["slug"])
-    for s in D.YOUR_REPS:
-        check("rep", s, "YOUR_REPS")
     for kind, slugs in D.FOLLOWING.items():
         for s in slugs:
             check(kind[:-1] if kind != "bodies" else "body", s, "FOLLOWING")
@@ -113,10 +95,6 @@ def validate():
 
 def where(items, pred):
     return [x for x in items if pred(x)]
-
-
-def issues_for_rep(s):
-    return where(D.ISSUES, lambda i: s in i["reps"])
 
 
 def issues_for_law(s):
@@ -139,30 +117,12 @@ def meetings_for_issue(s):
     return where(D.MEETINGS, lambda m: s in m["issues"])
 
 
-def promises_for_issue(s):
-    return where(D.PROMISES, lambda p: s in p["issues"])
-
-
-def promises_for_law(s):
-    return where(D.PROMISES, lambda p: s in p["laws"])
-
-
 def laws_for_clause(s):
     return where(D.LAWS, lambda l: any(c == s for c, _ in l["clauses"]))
 
 
-def members(body):
-    return where(D.REPS, lambda r: r["body"] == body)
-
-
-def votes_for_rep(s):
-    return [(l, l["votes"][s]) for l in D.LAWS if s in l["votes"]]
-
-
 def evidence_used_in(s):
-    used = [("issue", i) for i in D.ISSUES if s in i["evidence"]]
-    used += [("promise", p) for p in D.PROMISES if s in p["evidence"]]
-    return used
+    return [("issue", i) for i in D.ISSUES if s in i["evidence"]]
 
 
 # ---------------------------------------------------------------------------
@@ -170,12 +130,8 @@ def evidence_used_in(s):
 # ---------------------------------------------------------------------------
 
 def url(kind, slug):
-    if kind == "promise":
-        p = PROMISES[slug]
-        return f"/reps/{p['rep']}/promises/{slug}/"
     return {
         "issue": "/issues/{}/",
-        "rep": "/reps/{}/",
         "body": "/bodies/{}/",
         "law": "/laws/{}/",
         "clause": "/laws/constitution/{}/",
@@ -189,23 +145,21 @@ def name(kind, slug):
     x = TABLES[kind][slug]
     return {
         "issue": lambda: x["short"],
-        "rep": lambda: x["title"],
         "body": lambda: x["short"],
         "law": lambda: x["title"],
         "clause": lambda: x["title"],
         "meeting": lambda: x["title"],
         "evidence": lambda: x["title"],
-        "promise": lambda: x["commitment"],
     }[kind]()
 
 
 def responsible(issue):
-    """(display text, url) for who is responsible for an issue."""
-    if issue["responsible"]:
-        rep, text = issue["responsible"]
-        return text, url("rep", rep)
+    """(display text, url) for who is responsible for a sample issue.
+
+    Sample issues never link to real officials; they point at the governing body.
+    """
     b = BODIES[issue["body"]]
-    return b["name"], url("body", b["slug"])
+    return issue["responsible"] or b["name"], url("body", b["slug"])
 
 
 def clause_chip(ref, link=False):
@@ -284,37 +238,12 @@ def law_card(l, h="h3"):
     )
 
 
-def promise_summary(rep_slug):
-    ps = where(D.PROMISES, lambda p: p["rep"] == rep_slug)
-    if not ps:
-        return "Promises: <strong>none tracked</strong>"
-    counts = {}
-    for p in ps:
-        counts[p["status"]] = counts.get(p["status"], 0) + 1
-    parts = [f"{n} {s.lower()}" for s, n in counts.items()]
-    return f"Promises: <strong>{e(' · '.join(parts))}</strong>"
-
-
-def rep_card(r, h="h3"):
-    who = f"{r['district']} · {BODIES[r['body']]['short']}"
-    return card(
-        url("rep", r["slug"]),
-        f"{LEVEL_NAME[r['level']]} · {r['office']}",
-        r["title"],
-        who,
-        clause_chip(r["clause"]),
-        promise_summary(r["slug"]),
-        f"Issues: <strong>{len(issues_for_rep(r['slug']))}</strong>",
-        level=r["level"], h=h,
-    )
-
-
 def body_card(b, h="h3"):
     return card(
         url("body", b["slug"]),
         f"{LEVEL_NAME[b['level']]} · Governing body",
         b["name"],
-        plural(len(members(b["slug"])), "member") + " shown",
+        b["about"],
         clause_chip(b["clause"]),
         f"Meetings: <strong>{len(where(D.MEETINGS, lambda m: m['body'] == b['slug']))}</strong>",
         f"Issues: <strong>{len(issues_for_body(b['slug']))}</strong>",
@@ -330,18 +259,6 @@ def meeting_card(m):
   <h3>{e(m['title'])}</h3>
   <p class="meeting-date">{e(m['date'])}</p>
   <p class="xsmall secondary">Comment by {e(m['comment_deadline'])}</p>
-</a>"""
-
-
-def promise_card(p, show_rep=False):
-    rep = REPS[p["rep"]]
-    who = rep["title"] if show_rep else f"{p['source']}, {p['source_date']}"
-    return f"""
-<a class="card issue-card" href="{url('promise', p['slug'])}">
-  <p class="label">Promise · {LEVEL_NAME[rep['level']]}</p>
-  <h3>{e(p['commitment'])}</h3>
-  <p class="secondary small">{e(who)}</p>
-  <div class="chips">{status_chip(p['status'])}</div>
 </a>"""
 
 
@@ -499,43 +416,39 @@ def head_tags(title):
 """
 
 
-def render(path, title, main, *, tab=None, root=False, back=None, top="",
-           app=True, after=""):
-    """Write <path>/index.html.
+def shell(title, main, *, nav="", back_html="", top="", app=True, after="",
+          title_is_html=False):
+    """The full HTML document around a page's main content.
 
-    tab:  which bottom tab this page belongs to ("feed", "reps", ...).
-    root: True for the tab's own landing page.
-    back: (label, href) for the back link on deeper pages.
-    app:  False for public/standalone pages (no tabs, no search).
+    Shared by the static pages (render) and, through functions/_lib/generated.js,
+    by the Pages Functions that render D1-backed pages, so both stay identical.
     """
+    t = title if title_is_html else e(title)
     body_cls = []
     if app:
         body_cls.append("has-tabbar")
     if after:
         body_cls.append("has-action-bar")
-    back_html = ""
-    if back:
-        back_html = f'<a class="back-link" href="{back[1]}">← {e(back[0])}</a>'
     search = SEARCH if app else ""
-    nav = tabbar(tab, root) if app else ""
     scripts = ""
     if app:
         scripts = (f'<script src="/assets/search-index.js?v={ASSET_VERSION}"></script>\n'
+                   '    <script src="/api/search-officials"></script>\n'
                    f'    <script src="/assets/app.js?v={ASSET_VERSION}"></script>')
-    doc = f"""<!DOCTYPE html>
+    head = head_tags(f"{t} – The Pillory") if title_is_html else head_tags(f"{title} – The Pillory")
+    return f"""<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{e(title)} – The Pillory</title>
+    <title>{t} – The Pillory</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/pillory.css?v={ASSET_VERSION}" />
-{head_tags(f"{title} – The Pillory")}  </head>
+{head}  </head>
 
   <body class="{' '.join(body_cls)}">
-    <!-- Generated by tools/build.py from tools/data.py. Edit those and rebuild; don't edit this file by hand. -->
     <main class="app">
 {top}{search}
 {back_html}
@@ -546,7 +459,23 @@ def render(path, title, main, *, tab=None, root=False, back=None, top="",
   </body>
 </html>
 """
-    PAGES[path] = doc
+
+
+def render(path, title, main, *, tab=None, root=False, back=None, top="",
+           app=True, after=""):
+    """Write <path>/index.html.
+
+    tab:  which bottom tab this page belongs to ("feed", "reps", ...).
+    root: True for the tab's own landing page.
+    back: (label, href) for the back link on deeper pages.
+    app:  False for public/standalone pages (no tabs, no search).
+    """
+    back_html = f'<a class="back-link" href="{back[1]}">← {e(back[0])}</a>' if back else ""
+    doc = shell(title, main, nav=tabbar(tab, root) if app else "", back_html=back_html,
+                top=top, app=app, after=after)
+    marker = "    <main class=\"app\">"
+    PAGES[path] = doc.replace(marker, "    <!-- Generated by tools/build.py from tools/data.py. Edit those and rebuild; "
+                                      "don't edit this file by hand. -->\n" + marker, 1)
 
 
 def redirect(path, to):
@@ -613,6 +542,12 @@ def build_feed():
     render("feed", "Feed", main, tab="feed", root=True, top=top)
 
 
+SAMPLE_ISSUE_NOTICE = (
+    '<p class="banner">Hypothetical sample issue, for layout only. '
+    "It is not a report about any real official or agency.</p>"
+)
+
+
 def build_issue(i):
     who, who_url = responsible(i)
     status_chips = (f'<span class="chip chip--navy">{e(i["status"])}</span>'
@@ -631,16 +566,11 @@ def build_issue(i):
     )
 
     related = []
-    for s in i["reps"]:
-        r = REPS[s]
-        related.append(link_row(url("rep", s), r["title"], f"{LEVEL_NAME[r['level']]} · {r['office']}"))
     related.append(link_row(url("body", i["body"]), BODIES[i["body"]]["name"], "Governing body"))
     for s in i["laws"]:
         related.append(link_row(url("law", s), LAWS[s]["title"], LAWS[s]["kind"]))
     for c, _ in i["clauses"]:
         related.append(link_row(url("clause", c), CLAUSES[c]["title"], "Constitution"))
-    for p in promises_for_issue(i["slug"]):
-        related.append(link_row(url("promise", p["slug"]), p["commitment"], f"Promise · {p['status']}"))
     for m in meetings_for_issue(i["slug"]):
         related.append(link_row(url("meeting", m["slug"]), m["title"], m["date"]))
 
@@ -651,6 +581,7 @@ def build_issue(i):
         response = '<p class="secondary">No response yet. The agency has been invited to respond through the agency portal.</p>'
 
     main = f"""{head}
+{SAMPLE_ISSUE_NOTICE}
 <div class="chips">{clause_chips(i['clauses'], link=True)}</div>
 
 <section class="card stack">
@@ -717,7 +648,7 @@ def build_meeting(m):
 def build_evidence(v):
     kind, slug = v["parent"]
     used = "".join(
-        link_row(url(k, x["slug"]), name(k, x["slug"]), "Issue" if k == "issue" else "Promise")
+        link_row(url(k, x["slug"]), name(k, x["slug"]), "Issue")
         for k, x in evidence_used_in(v["slug"])
     )
     checked = {
@@ -737,195 +668,27 @@ def build_evidence(v):
 </section>
 {section("How it was checked", f'<p class="small">{e(checked)}</p>', "card stack-sm")}
 {section("Used in", f'<div>{used}</div>')}"""
-    render(f"evidence/{v['slug']}", v["title"], main, tab="reps" if kind == "promise" else "feed",
+    render(f"evidence/{v['slug']}", v["title"], main, tab="feed",
            back=(name(kind, slug), url(kind, slug)))
 
 
 # ---------------------------------------------------------------------------
-# Tab 2: Reps, bodies, promises
+# Tab 2 (Reps, bodies) and the Laws index are rendered from D1 by Pages
+# Functions; see functions/ and export_for_functions() below.
+# Tab 4: sample laws and the Constitution
 # ---------------------------------------------------------------------------
-
-def build_reps():
-    groups = []
-    for level in D.LEVELS:
-        bodies = "".join(body_card(b) for b in D.BODIES if b["level"] == level)
-        reps = "".join(rep_card(r) for r in D.REPS if r["level"] == level)
-        groups.append(f"""
-<section class="stack">
-  <h2 class="label">{LEVEL_NAME[level]}</h2>
-  {bodies}{reps}
-</section>""")
-    main = f"""
-<header class="page-head">
-  <h1>Reps</h1>
-  <p class="subtitle">Who represents you, the bodies they serve on, and the record they keep.</p>
-</header>
-<p class="banner">Sample content, for layout only</p>
-{"".join(groups)}"""
-    render("reps", "Reps", main, tab="reps", root=True)
-
-
-def build_rep(r):
-    s = r["slug"]
-    b = BODIES[r["body"]]
-    promises = where(D.PROMISES, lambda p: p["rep"] == s)
-    votes = votes_for_rep(s)
-    issues = issues_for_rep(s)
-    yours = '<span class="chip chip--light">Your representative</span>' if s in D.YOUR_REPS else ""
-    head = page_head(
-        f"{LEVEL_NAME[r['level']]} · {r['office']}", r["title"],
-        f"{e(r['district'])}<br><a class=\"inline-link\" href=\"{url('body', b['slug'])}\">{e(b['name'])}</a>",
-        clause_chip(r["clause"], link=True) + yours,
-    )
-    counts = {"promises": len(promises), "votes": len(votes), "issues": len(issues)}
-    def tab(k, label):
-        count = f'<span class="count">{counts[k]}</span>' if k in counts else ""
-        return f'<a role="tab" id="tab-{k}" href="#{k}" aria-controls="{k}">{label}{count}</a>'
-
-    tabs = "".join(tab(k, label) for k, label in
-                   [("overview", "Overview"), ("promises", "Promises"), ("votes", "Votes"), ("issues", "Issues")])
-    upcoming = "".join(
-        link_row(url("meeting", m["slug"]), m["title"], m["date"])
-        for m in D.MEETINGS if m["body"] == b["slug"]
-    ) or '<p class="secondary small">No upcoming meetings posted.</p>'
-    overview = f"""
-<section class="card stack">
-  <h2 class="label">At a glance</h2>
-  <div class="grid-3">
-    <div class="stat"><div class="stat-num">{counts['promises']}</div><div class="stat-label">Promises tracked</div></div>
-    <div class="stat"><div class="stat-num">{counts['votes']}</div><div class="stat-label">Votes recorded</div></div>
-    <div class="stat"><div class="stat-num">{counts['issues']}</div><div class="stat-label">Issues</div></div>
-  </div>
-</section>
-<section class="card stack-sm">
-  <h2 class="label">Office</h2>
-  {kv([("Office", e(r['office'])), ("District", e(r['district'])), ("Term", "[Term start] to [term end]"),
-       ("Public contact", "[Office phone or email]")])}
-</section>
-{section("Body's upcoming meetings", f'<div>{upcoming}</div>')}"""
-    promise_html = "".join(promise_card(p) for p in promises) or \
-        '<p class="secondary small">No promises tracked yet.</p>'
-    vote_html = "".join(
-        link_row(url("law", l["slug"]), l["title"], f"{l['kind']} · {l['status']}",
-                 f'<span class="chip chip--outline">{e(v)}</span>')
-        for l, v in votes
-    )
-    vote_html = f'<section class="card"><div>{vote_html}</div></section>' if vote_html else \
-        '<p class="secondary small">No recorded votes in the sample.</p>'
-    issue_html = "".join(issue_card(i) for i in issues) or '<p class="secondary small">No issues yet.</p>'
-    main = f"""{head}
-<button class="btn" type="button">Follow</button>
-<div class="rep-tabs stack" data-tabs>
-  <nav class="tabs" role="tablist" aria-label="Rep sections">{tabs}</nav>
-  <div class="stack" role="tabpanel" id="overview" aria-labelledby="tab-overview">{overview}</div>
-  <div class="stack" role="tabpanel" id="promises" aria-labelledby="tab-promises">
-    <p class="small secondary">Statuses: <strong>Kept</strong>, <strong>Broken</strong>, <strong>In progress</strong>, <strong>No action</strong>. Each is set after review of the source and evidence.</p>
-    {promise_html}
-  </div>
-  <div class="stack" role="tabpanel" id="votes" aria-labelledby="tab-votes">{vote_html}</div>
-  <div class="stack" role="tabpanel" id="issues" aria-labelledby="tab-issues">{issue_html}</div>
-</div>"""
-    render(f"reps/{s}", r["title"], main, tab="reps", back=("Reps", "/reps/"))
-
-
-def build_promise(p):
-    r = REPS[p["rep"]]
-    evidence = "".join(
-        link_row(url("evidence", s), EVIDENCE[s]["title"], EVIDENCE[s]["source_type"],
-                 f'<span class="list-status">{e(EVIDENCE[s]["verification"])}</span>')
-        for s in p["evidence"]
-    ) or '<p class="secondary small">No evidence attached yet.</p>'
-    source_ev = p["evidence"][0] if p["evidence"] else None
-    source_link = (f'<a class="inline-link" href="{url("evidence", source_ev)}">View source: {e(EVIDENCE[source_ev]["title"])} →</a>'
-                   if source_ev else '<p class="small secondary">[Source document to be attached]</p>')
-    laws = "".join(link_row(url("law", s), LAWS[s]["title"], LAWS[s]["kind"]) for s in p["laws"])
-    issues = "".join(issue_card(ISSUES[s]) for s in p["issues"])
-    main = f"""{page_head(f"Promise · {LEVEL_NAME[r['level']]}", p['commitment'],
-                        f'Made by <a class="inline-link" href="{url("rep", r["slug"])}">{e(r["title"])}</a>',
-                        status_chip(p['status']))}
-<section class="card stack-sm">
-  <h2 class="label">The commitment</h2>
-  <p class="quote">“{e(p['commitment'])}.”</p>
-</section>
-<section class="card stack-sm">
-  <h2 class="label">Source</h2>
-  <p>{e(p['source'])}, {e(p['source_date'])}</p>
-  {source_link}
-</section>
-{section("Status history", timeline(p['history']))}
-{section("Evidence", f'<div>{evidence}</div>')}
-{section("Related laws", f'<div>{laws}</div>') if laws else ""}
-{cards_section("Related issues", issues, "No related issues yet.")}"""
-    render(f"reps/{r['slug']}/promises/{p['slug']}", p["commitment"], main, tab="reps",
-           back=(r["title"], url("rep", r["slug"]) + "#promises"))
-
-
-def build_body(b):
-    s = b["slug"]
-    member_rows = "".join(
-        link_row(url("rep", r["slug"]), r["title"], r["district"],
-                 '<span class="chip chip--light">Yours</span>' if r["slug"] in D.YOUR_REPS else "")
-        for r in members(s)
-    )
-    meeting_rows = "".join(
-        link_row(url("meeting", m["slug"]), m["title"], m["date"]) for m in D.MEETINGS if m["body"] == s
-    ) or '<p class="secondary small">No upcoming meetings posted.</p>'
-    law_rows = "".join(
-        link_row(url("law", l["slug"]), l["title"], f"{l['kind']} · {l['status']}") for l in D.LAWS if l["body"] == s
-    ) or '<p class="secondary small">No laws in the sample.</p>'
-    issues = "".join(issue_card(i) for i in issues_for_body(s))
-    main = f"""{page_head(f"{LEVEL_NAME[b['level']]} · Governing body", b['name'], e(b['about']),
-                        clause_chip(b['clause'], link=True))}
-<button class="btn" type="button">Follow</button>
-{section("Members", f'<div>{member_rows}</div>')}
-{section("Meetings", f'<div>{meeting_rows}</div>')}
-{section("Laws", f'<div>{law_rows}</div>')}
-{cards_section("Issues", issues, "No issues yet.")}"""
-    render(f"bodies/{s}", b["name"], main, tab="reps", back=("Reps", "/reps/"))
-
-
-# ---------------------------------------------------------------------------
-# Tab 4: Laws and the Constitution
-# ---------------------------------------------------------------------------
-
-def build_laws():
-    groups = "".join(f"""
-<section class="stack">
-  <h2 class="label">{LEVEL_NAME[level]}</h2>
-  {"".join(law_card(l) for l in D.LAWS if l['level'] == level) or '<p class="secondary small">None in the sample.</p>'}
-</section>""" for level in D.LEVELS)
-    main = f"""
-<header class="page-head">
-  <h1>Laws</h1>
-  <p class="subtitle">Bills, ordinances, and the Constitution they answer to.</p>
-</header>
-<a class="parchment stack-sm constitution-link" href="/laws/constitution/">
-  <p class="label">The Constitution</p>
-  <p class="quote">The starting point for every issue.</p>
-  <p class="small">Browse the articles and amendments, with the issues and laws that cite them →</p>
-</a>
-<p class="banner">Sample content, for layout only</p>
-{groups}"""
-    render("laws", "Laws", main, tab="laws", root=True)
-
 
 def build_law(l):
     s = l["slug"]
     b = BODIES[l["body"]]
-    vote_rows = "".join(
-        link_row(url("rep", r) + "#votes", REPS[r]["title"], REPS[r]["district"],
-                 ('<span class="chip chip--light">Yours</span>' if r in D.YOUR_REPS else "")
-                 + f'<span class="chip chip--outline">{e(v)}</span>')
-        for r, v in l["votes"].items()
-    )
     issues = "".join(issue_card(i) for i in issues_for_law(s))
-    promises = "".join(promise_card(p, show_rep=True) for p in promises_for_law(s))
     main = f"""{page_head(f"{LEVEL_NAME[l['level']]} · {l['kind']} · Sample", l['title'],
                         f'<a class="inline-link" href="{url("body", b["slug"])}">{e(b["name"])}</a>',
                         f'<span class="chip chip--navy">{e(l["status"])}</span>' + clause_chips(l['clauses'], link=True))}
+<p class="banner">Hypothetical sample law, for layout only. Real bills and votes are listed under <a href="/laws/">Laws</a>.</p>
 {section("Plain-language summary", f'<p>{e(l["summary"])}</p>', "card stack-sm")}
 {baseline(l['clauses'], l['baseline'])}
-{section("How your reps voted", f'<div>{vote_rows}</div><p class="hint">Vote recorded {e(l["vote_date"])}. Tap a rep for their full voting record.</p>')}
+{section("How your reps voted", '<p class="secondary small">No recorded votes: this is a sample law. Real voting records appear on real bills under Laws.</p>', "card stack-sm")}
 <section class="card stack">
   <h2 class="label">Verified district signal</h2>
   <div class="grid-3">
@@ -935,7 +698,6 @@ def build_law(l):
   </div>
   <p class="hint center">Verified residents of your districts only. Individual responses stay private.</p>
 </section>
-{cards_section("Related promises", promises, "") if promises else ""}
 {cards_section("Related issues", issues, "No related issues yet.")}"""
     render(f"laws/{s}", l["title"], main, tab="laws", back=("Laws", "/laws/"))
 
@@ -1084,14 +846,12 @@ def build_you():
         f'<div class="list-row"><div><div class="list-title">{e(title)}</div><div class="list-meta">{e(status)}</div></div></div>'
         for title, status, link in D.MY_REPORTS
     )
-    r = {s: REPS[s] for s in D.YOUR_REPS}
     districts = "".join([
-        link_row(url("body", "board-of-supervisors"), "County", "Calaveras"),
-        link_row(url("rep", "supervisor-d1"), "Supervisor district", "District 1"),
-        link_row(url("rep", "assembly-member"), "State Assembly", r["assembly-member"]["district"]),
-        link_row(url("rep", "state-senator"), "State Senate", r["state-senator"]["district"]),
-        link_row(url("rep", "us-representative"), "U.S. House", r["us-representative"]["district"]),
-        link_row(url("body", "us-senate"), "U.S. Senate", "California"),
+        link_row("/reps/", "County", "Calaveras · Board of Supervisors"),
+        link_row("/reps/", "State Assembly", "[District]"),
+        link_row("/reps/", "State Senate", "[District]"),
+        link_row("/reps/", "U.S. House", "[District]"),
+        link_row("/reps/", "U.S. Senate", "California"),
     ])
     about = "".join([
         link_row("/about/", "About The Pillory"),
@@ -1176,9 +936,6 @@ def tags(refs):
 
 def search_index():
     items = []
-    for r in D.REPS:
-        items.append({"type": "Rep", "title": r["title"], "sub": f"{r['district']} · {r['office']}",
-                      "url": url("rep", r["slug"]), "k": LEVEL_NAME[r["level"]]})
     for b in D.BODIES:
         items.append({"type": "Body", "title": b["name"], "sub": LEVEL_NAME[b["level"]] + " · Governing body",
                       "url": url("body", b["slug"]), "k": b["short"]})
@@ -1220,6 +977,53 @@ def fill_home_preview():
     home.write_text(f"{before}{HOME_START}\n{indented}\n          {HOME_END}{after}", encoding="utf-8")
 
 
+# ---------------------------------------------------------------------------
+# Shared pieces for the Pages Functions (functions/) that render D1 pages
+# ---------------------------------------------------------------------------
+
+FUNCTIONS_EXPORT = ROOT / "functions" / "_lib" / "generated.js"
+
+
+def export_for_functions():
+    """Write functions/_lib/generated.js: the page shell and sample-data snippets.
+
+    Pages Functions render the D1-backed pages (Reps, rep profiles, bodies, the
+    Laws index, real bills) in JavaScript. Rather than duplicate the templates,
+    they import the exact shell and card HTML produced here.
+    """
+    page = shell("%%TITLE%%", "%%MAIN%%", nav="%%NAV%%", back_html="%%BACK%%", title_is_html=True)
+    tabbars = {t: {"root": tabbar(t, True), "sub": tabbar(t, False)} for t, _, _ in TABS}
+    bodies = [{
+        "slug": b["slug"], "name": b["name"], "short": b["short"], "level": b["level"],
+        "about": b["about"], "chip": clause_chip(b["clause"], link=True),
+        "chip_span": clause_chip(b["clause"]), "card": body_card(b),
+    } for b in D.BODIES]
+    meetings_by_body = {b["slug"]: [link_row(url("meeting", m["slug"]), m["title"], m["date"])
+                                    for m in D.MEETINGS if m["body"] == b["slug"]] for b in D.BODIES}
+    laws_by_body = {b["slug"]: [link_row(url("law", l["slug"]), l["title"], f"Sample {l['kind'].lower()} · {l['status']}")
+                                for l in D.LAWS if l["body"] == b["slug"]] for b in D.BODIES}
+    issues_by_body = {b["slug"]: [i["slug"] for i in issues_for_body(b["slug"])] for b in D.BODIES}
+    data = {
+        "ASSET_VERSION": ASSET_VERSION,
+        "PAGE": page,
+        "TABBARS": tabbars,
+        "LEVEL_NAME": LEVEL_NAME,
+        "BODIES": bodies,
+        "MEETINGS_BY_BODY": meetings_by_body,
+        "LAWS_BY_BODY": laws_by_body,
+        "ISSUES_BY_BODY": issues_by_body,
+        "ISSUE_CARDS": {i["slug"]: issue_card(i) for i in D.ISSUES},
+        "ISSUES": {i["slug"]: {"title": i["title"], "short": i["short"], "url": url("issue", i["slug"])} for i in D.ISSUES},
+        "SAMPLE_LAW_CARDS": [law_card(l) for l in D.LAWS],
+    }
+    out = ["// Generated by tools/build.py. Don't edit by hand; change tools/build.py or tools/data.py and rebuild.",
+           "// Shared page shell and sample-data snippets for the Pages Functions."]
+    for k, v in data.items():
+        out.append(f"export const {k} = {json.dumps(v, ensure_ascii=False, indent=1)};")
+    FUNCTIONS_EXPORT.parent.mkdir(parents=True, exist_ok=True)
+    FUNCTIONS_EXPORT.write_text("\n".join(out) + "\n", encoding="utf-8")
+
+
 def main():
     validate()
     build_feed()
@@ -1229,14 +1033,6 @@ def main():
         build_meeting(m)
     for v in D.EVIDENCE:
         build_evidence(v)
-    build_reps()
-    for r in D.REPS:
-        build_rep(r)
-    for p in D.PROMISES:
-        build_promise(p)
-    for b in D.BODIES:
-        build_body(b)
-    build_laws()
     for l in D.LAWS:
         build_law(l)
     build_constitution()
@@ -1259,6 +1055,7 @@ def main():
         out.write_text(doc, encoding="utf-8")
     (ROOT / "assets" / "search-index.js").write_text(search_index(), encoding="utf-8")
     fill_home_preview()
+    export_for_functions()
     print(f"Built {len(PAGES)} pages.")
 
 

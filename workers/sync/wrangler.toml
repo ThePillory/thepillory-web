@@ -1,0 +1,47 @@
+# Sync Worker: loads officials and voting records into D1 on a daily schedule.
+# Deploy from this folder (Cloudflare dashboard → Workers → import this repo,
+# root directory "workers/sync"), or locally with `npx wrangler deploy`.
+# Setup steps: docs/data-sync.md
+
+name = "pillory-sync"
+main = "src/index.js"
+compatibility_date = "2025-09-01"
+
+# Import .sql migration files as text so the Worker can apply them itself.
+rules = [{ type = "Text", globs = ["**/*.sql"], fallthrough = true }]
+
+[triggers]
+# Daily at 11:00 UTC (4 a.m. Pacific daylight time).
+crons = ["0 11 * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "pillory"
+# Replace with the ID shown in Cloudflare → Storage & Databases → D1 → pillory.
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+migrations_dir = "migrations"
+
+[vars]
+# Where data/county-officials.json is published.
+SITE_URL = "https://thepillory.co"
+# A point inside Calaveras County (San Andreas, the county seat), used to look
+# up which state and federal districts cover the county.
+LOOKUP_LAT = "38.1960"
+LOOKUP_LNG = "-120.6805"
+# Optional override for the U.S. House district number (e.g. "5"). Leave blank
+# to detect it from the Open States lookup above.
+CA_HOUSE_DISTRICT = ""
+# Optional: California session identifier, e.g. "20252026". Leave blank to use
+# the current regular session (two-year sessions starting in odd years).
+CA_SESSION = ""
+# Outbound requests allowed per run. Workers Free allows 50 per invocation;
+# on Workers Paid you can raise this (e.g. to 900) to backfill much faster.
+MAX_SUBREQUESTS = "45"
+# Open States free tier: stay well under the daily limit and ~10 requests/min.
+OPENSTATES_DAILY_LIMIT = "250"
+OPENSTATES_MIN_INTERVAL_MS = "6500"
+
+# Secrets (set with `npx wrangler secret put NAME` or in the dashboard):
+#   CONGRESS_API_KEY    api.congress.gov key
+#   OPENSTATES_API_KEY  v3.openstates.org key
+#   SYNC_TOKEN          any long random string; required to run the sync manually

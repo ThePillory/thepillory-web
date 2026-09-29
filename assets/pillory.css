@@ -912,3 +912,73 @@ a.constitution-link:hover { border-color: var(--parch-text); }
 @media (max-width: 359px) {
   .tabbar .tab { font-size: 0.75rem; padding: 0 2px; }
 }
+
+/* ---------- Real officials and voting records (Pages Functions) ---------- */
+
+.rep-head { flex-direction: row; align-items: flex-start; gap: 14px; }
+.rep-photo {
+  flex: none;
+  width: 72px;
+  height: 88px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+
+/* Link toggles (no JS): same look as the radio toggles */
+.segmented a.toggle { text-decoration: none; text-align: center; }
+.toggle[aria-current="true"] { background: var(--navy); border-color: var(--navy); color: #fff; }
+
+.vote-list { padding: 4px 16px; }
+.vote-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+}
+.vote-row:first-child { border-top: 0; }
+.vote-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.vote-bill { font-weight: 600; align-self: flex-start; }
+.vote-bill-text { font-weight: 600; }
+.vote-question { font-weight: 500; }
+.vote-side { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+
+/* A position is a plain fact: one neutral style for Yes, No, Present, and Not voting */
+.position {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--text-2);
+  color: var(--text);
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.type-tag {
+  display: inline-flex;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--gray-chip);
+  color: var(--gray-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  vertical-align: middle;
+}
+.source-link { font-size: 0.875rem; }
+
+.positions { display: flex; flex-direction: column; }
+.position-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  padding: 4px 0;
+  border-top: 1px solid var(--border);
+}
+.position-row:first-child { border-top: 0; }
+.position-row .position { margin-left: auto; }
