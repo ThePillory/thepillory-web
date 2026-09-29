@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/assets/pillory.css?v=8" />
+    <link rel="stylesheet" href="/assets/pillory.css?v=9" />
     <meta name="description" content="Evidence-first civic accountability. Verified residents, protected identities, nonpartisan." />
     <meta name="theme-color" content="#F5F2EA" />
     <link rel="icon" href="/assets/logo/icon.svg" type="image/svg+xml" />
@@ -39,22 +39,30 @@
       </nav>
 
       <main class="stack-lg">
-        <header class="page-head">
-          <h1>The Pillory</h1>
-          <p class="lede"><strong>A fact-based civic accountability platform.</strong></p>
+        <header class="hero">
+          <p class="label">Private beta launching soon</p>
+          <h1>A fact-based civic accountability platform.</h1>
+          <p class="lede">Built for communities that value facts over noise.</p>
+          <div class="hero-actions">
+            <a class="btn btn--primary" href="/join/">Join the private beta</a>
+            <a class="btn" href="/feed/">See sample issues</a>
+          </div>
         </header>
 
-        <ul class="feature-list card">
-          <li><span class="step-done" aria-hidden="true">✓</span>Verified participation, protected identities</li>
-          <li><span class="step-done" aria-hidden="true">✓</span>Evidence-first posts and corroboration</li>
-          <li><span class="step-done" aria-hidden="true">✓</span>Private aggregation → public accountability</li>
-        </ul>
-
-        <p class="note">
-          Private beta launching soon. Built for communities that value facts over noise.
-        </p>
-
-        <hr class="divider" />
+        <section class="pillars" aria-label="What makes it different">
+          <div class="pillar">
+            <h2>Verified participation, protected identities</h2>
+            <p class="secondary">Real people, one voice each. Identities are protected by default.</p>
+          </div>
+          <div class="pillar">
+            <h2>Evidence-first posts and corroboration</h2>
+            <p class="secondary">Documents, links, photos, records. Claims without evidence don’t travel far.</p>
+          </div>
+          <div class="pillar">
+            <h2>Private aggregation → public accountability</h2>
+            <p class="secondary">Individual inputs stay private while patterns emerge.</p>
+          </div>
+        </section>
 
         <section class="stack">
           <div class="page-head">
@@ -63,57 +71,30 @@
               A preview of how issues will appear: structured, evidence-first, and aggregated.
             </p>
           </div>
-
-          <article class="card issue-card">
-            <p class="label">Sacramento, CA · Public Works</p>
-            <h3>Illegal dumping near trail access</h3>
-            <p class="secondary small">
-              Multiple reports with photos and timestamps. Requesting coordinated cleanup + enforcement.
-            </p>
-            <div class="chips">
-              <button class="btn btn--sm" type="button" disabled>Corroborate</button>
-              <button class="btn btn--sm" type="button" disabled>Support</button>
-              <button class="btn btn--sm" type="button" disabled>Affected</button>
-            </div>
-            <div class="issue-foot">
-              <span>Status: <strong>Gathering evidence</strong></span>
-              <span>Confidence: <strong>Medium</strong></span>
-            </div>
-          </article>
-
-          <article class="card issue-card">
-            <p class="label">Oakland, CA · Permitting</p>
-            <h3>Permit delays impacting small contractors</h3>
-            <p class="secondary small">
-              Documented timeline variance across similar permits. Looking for pattern + escalation path.
-            </p>
-            <div class="chips">
-              <button class="btn btn--sm" type="button" disabled>Corroborate</button>
-              <button class="btn btn--sm" type="button" disabled>Support</button>
-              <button class="btn btn--sm" type="button" disabled>Affected</button>
-            </div>
-            <div class="issue-foot">
-              <span>Status: <strong>Aggregating reports</strong></span>
-              <span>Confidence: <strong>Medium–High</strong></span>
-            </div>
-          </article>
-
-          <article class="card issue-card">
-            <p class="label">San Jose, CA · Traffic Safety</p>
-            <h3>Unsafe crosswalk timing near school</h3>
-            <p class="secondary small">
-              Videos + timing measurements show insufficient pedestrian clearance during peak hours.
-            </p>
-            <div class="chips">
-              <button class="btn btn--sm" type="button" disabled>Corroborate</button>
-              <button class="btn btn--sm" type="button" disabled>Support</button>
-              <button class="btn btn--sm" type="button" disabled>Affected</button>
-            </div>
-            <div class="issue-foot">
-              <span>Status: <strong>Ready to publish</strong></span>
-              <span>Confidence: <strong>High</strong></span>
-            </div>
-          </article>
+          <!-- build:home-issues (filled in by tools/build.py from tools/data.py; edits inside are overwritten) -->
+          <a class="card issue-card" href="/issues/public-comment-limit/" data-level="county">
+            <p class="label">County · Public meetings</p>
+            <h3>Public comment cut to one minute at Board of Supervisors meetings</h3>
+            <p class="secondary small">Calaveras County Board of Supervisors</p>
+            <div class="chips"><span class="chip chip--parch">Amendment I · Petition</span></div>
+            <div class="issue-foot"><span>Status: <strong>Agency responded</strong></span><span>Confidence: <strong>High</strong></span></div>
+          </a>
+          <a class="card issue-card" href="/issues/broadband-scoring/" data-level="state">
+            <p class="label">State · Legislation</p>
+            <h3>[Bill number]: how rural counties are scored for broadband funding</h3>
+            <p class="secondary small">California State Legislature</p>
+            <div class="chips"><span class="chip chip--parch">Amendment X · State powers</span></div>
+            <div class="issue-foot"><span>Status: <strong>Aggregating reports</strong></span><span>Confidence: <strong>Medium</strong></span></div>
+          </a>
+          <a class="card issue-card" href="/issues/town-halls/" data-level="federal">
+            <p class="label">Federal · Official conduct</p>
+            <h3>Promised quarterly town halls in the district: none held since [date]</h3>
+            <p class="secondary small">Office of the U.S. Representative, [district]</p>
+            <div class="chips"><span class="chip chip--parch">Article I, Sec. 2 · The House</span></div>
+            <div class="issue-foot"><span>Status: <strong>Gathering evidence</strong></span><span>Confidence: <strong>Low</strong></span></div>
+          </a>
+          <!-- /build:home-issues -->
+          <a class="inline-link" href="/feed/">See all sample issues →</a>
         </section>
       </main>
     </div>
