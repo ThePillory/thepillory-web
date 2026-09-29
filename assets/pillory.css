@@ -509,6 +509,7 @@ a.card:hover { border-color: var(--navy); }
   width: 1.05em;
   height: 1.05em;
   margin-right: 0.3em;
+  transform: translateY(-0.14em); /* center on the capitals, not the line box */
   background: var(--navy);
   -webkit-mask: url("/assets/logo/mark.svg?v=2") center / contain no-repeat;
   mask: url("/assets/logo/mark.svg?v=2") center / contain no-repeat;
