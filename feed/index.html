@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feed – The Pillory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/pillory.css" />
+  </head>
+
+  <body class="has-bottom-bar">
+    <main class="app">
+      <header class="app-header">
+        <a class="wordmark" href="/">The Pillory</a>
+        <div class="header-meta">
+          <strong>Calaveras County</strong>
+          <span>Verified resident</span>
+        </div>
+      </header>
+
+      <fieldset class="chips bare">
+        <legend class="visually-hidden">Scope</legend>
+        <label class="toggle"><input type="radio" name="scope" value="all" checked /><span>All</span></label>
+        <label class="toggle"><input type="radio" name="scope" value="county" /><span>County</span></label>
+        <label class="toggle"><input type="radio" name="scope" value="state" /><span>State</span></label>
+        <label class="toggle"><input type="radio" name="scope" value="federal" /><span>Federal</span></label>
+      </fieldset>
+
+      <p class="banner">Sample content, for layout only</p>
+
+      <div class="stack" id="issues">
+        <a class="card issue-card" href="/issue/" data-level="county">
+          <p class="label">County · Public meetings</p>
+          <h2>Public comment cut to one minute at Board of Supervisors meetings</h2>
+          <p class="secondary small">Calaveras County Board of Supervisors</p>
+          <div class="chips"><span class="chip chip--parch">Amendment I · Petition</span></div>
+          <div class="issue-foot">
+            <span>Status: <strong>Agency responded</strong></span>
+            <span>Confidence: <strong>High</strong></span>
+          </div>
+        </a>
+
+        <article class="card issue-card" data-level="state">
+          <p class="label">State · Legislation</p>
+          <h2>[Bill number]: how rural counties are scored for broadband funding</h2>
+          <p class="secondary small">California State Legislature</p>
+          <div class="chips"><span class="chip chip--parch">Amendment X · State powers</span></div>
+          <div class="issue-foot">
+            <span>Status: <strong>Aggregating reports</strong></span>
+            <span>Confidence: <strong>Medium</strong></span>
+          </div>
+        </article>
+
+        <article class="card issue-card" data-level="federal">
+          <p class="label">Federal · Official conduct</p>
+          <h2>Promised quarterly town halls in the district: none held since [date]</h2>
+          <p class="secondary small">Office of the U.S. Representative, [district]</p>
+          <div class="chips"><span class="chip chip--parch">Article I, Sec. 2 · The House</span></div>
+          <div class="issue-foot">
+            <span>Status: <strong>Gathering evidence</strong></span>
+            <span>Confidence: <strong>Low</strong></span>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <nav class="bottom-bar bottom-nav" aria-label="Main">
+      <div class="bottom-bar-inner">
+        <a href="/feed/" aria-current="page">Feed</a>
+        <a href="/constitution/">Constitution</a>
+        <a class="nav-report" href="/report/">+ Report</a>
+        <a href="/join/">Account</a>
+      </div>
+    </nav>
+
+    <script>
+      // Filter the sample cards by the selected scope.
+      document.querySelectorAll('input[name="scope"]').forEach(function (radio) {
+        radio.addEventListener("change", function () {
+          document.querySelectorAll("#issues [data-level]").forEach(function (card) {
+            card.hidden = radio.value !== "all" && card.dataset.level !== radio.value;
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
