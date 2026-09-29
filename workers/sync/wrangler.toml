@@ -16,6 +16,21 @@ rules = [{ type = "Text", globs = ["**/*.sql"], fallthrough = true }]
 # Daily at 11:00 UTC (4 a.m. Pacific daylight time).
 crons = ["0 11 * * *"]
 
+# Runs happen in the background inside this Durable Object (see src/index.js),
+# so /run can answer immediately. Created automatically on deploy.
+[[durable_objects.bindings]]
+name = "SYNC_RUNNER"
+class_name = "SyncRunner"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["SyncRunner"]
+
+# Workers Paid: allow up to 5 minutes of CPU per invocation (a run mostly waits
+# on the network, so this is headroom, not an expectation).
+[limits]
+cpu_ms = 300000
+
 [[d1_databases]]
 binding = "DB"
 database_name = "pillory"

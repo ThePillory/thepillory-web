@@ -5,6 +5,16 @@ main = "../src/index.js"
 compatibility_date = "2025-09-01"
 rules = [{ type = "Text", globs = ["**/*.sql"], fallthrough = true }]
 
+# Runs happen in the background inside this Durable Object (see src/index.js),
+# so /run can answer immediately. Created automatically on deploy.
+[[durable_objects.bindings]]
+name = "SYNC_RUNNER"
+class_name = "SyncRunner"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["SyncRunner"]
+
 [[d1_databases]]
 binding = "DB"
 database_name = "pillory-local-test"

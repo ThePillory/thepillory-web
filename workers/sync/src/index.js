@@ -1,10 +1,16 @@
 // Sync Worker entry point.
 //
-//   scheduled  — the daily Cron Trigger (see wrangler.toml) runs every step.
-//   GET/POST /run?token=…     run the sync now (same steps, shorter time limit).
-//   GET      /status?token=…  the latest log rows, as JSON.
+//   scheduled                 the daily Cron Trigger (see wrangler.toml) starts a run.
+//   GET/POST /run?token=…     starts a run and answers immediately with "started".
+//   GET      /status?token=…  progress of the current or last run, row counts, and recent log rows.
 //
 // The token is the SYNC_TOKEN secret. Both routes refuse to run without it.
+//
+// Runs happen in the background, inside a Durable Object (SyncRunner), because a
+// Worker can only keep working ~30 seconds after it responds. The Durable Object
+// works in rounds (each up to ~12 minutes, via its alarm), keeps going on its own
+// while a round stops at the request/time budget, and never runs two syncs at once.
+import { DurableObject } from "cloudflare:workers";
 import { ensureSchema, log } from "./db.js";
 import { Budget, redact } from "./util.js";
 import { syncCounty } from "./county.js";
@@ -23,10 +29,14 @@ const STEPS = [
   ["state-votes", syncStateVotes],
 ];
 
-export async function runSync(env, { trigger, deadlineMs }) {
+const ROUND_MS = 12 * 60 * 1000; // stop starting new requests after this; the alarm limit is 15 minutes
+const MAX_ROUNDS = 20; // safety cap on automatic continuation per run
+const STALE_MS = 20 * 60 * 1000; // a round that hasn't finished after this is treated as dead
+
+export async function runSync(env, { trigger, deadlineMs, runId }) {
   if (!env.DB) throw new Error("D1 binding DB is missing (see wrangler.toml)");
   await ensureSchema(env.DB);
-  const run = { id: crypto.randomUUID(), trigger };
+  const run = { id: runId || crypto.randomUUID(), trigger };
   const budget = new Budget(env, deadlineMs);
   const summary = [];
   for (const [step, fn] of STEPS) {
@@ -43,7 +53,97 @@ export async function runSync(env, { trigger, deadlineMs }) {
     await log(env.DB, run, step, result.status, budget.used - before, result.message, started);
     summary.push({ step, ...result, requests: budget.used - before });
   }
-  return { run_id: run.id, trigger, requests_used: budget.used, steps: summary };
+  const partialVotes = summary.filter((s) => s.step.endsWith("-votes") && s.status === "partial");
+  return {
+    run_id: run.id,
+    trigger,
+    requests_used: budget.used,
+    steps: summary,
+    more_to_do: partialVotes.length > 0,
+    // Worth another round now only if a step stopped at this round's request or time
+    // budget. A daily limit (Open States) resets tomorrow; the daily cron picks it up.
+    continue_now: partialVotes.some((s) => /request budget used up|run time limit reached/.test(s.message || "")),
+  };
+}
+
+function roundSummary(result, round, startedAt) {
+  return {
+    round,
+    started_at: startedAt,
+    finished_at: new Date().toISOString(),
+    requests: result.requests_used,
+    steps: result.steps.map((s) => ({ step: s.step, status: s.status, requests: s.requests, message: s.message })),
+  };
+}
+
+/** One instance ("main") owns all runs, so two syncs never overlap. */
+export class SyncRunner extends DurableObject {
+  async getState() {
+    return (await this.ctx.storage.get("state")) || { running: false };
+  }
+
+  async fetch(request) {
+    const url = new URL(request.url);
+    if (url.pathname === "/start") {
+      const trigger = url.searchParams.get("trigger") || "manual";
+      const state = await this.getState();
+      const since = Date.parse(state.round_started_at || state.started_at || 0);
+      if (state.running && Date.now() - since < STALE_MS) {
+        return Response.json({ status: "already running", run_id: state.run_id, started_at: state.started_at, round: state.round });
+      }
+      const next = {
+        running: true,
+        run_id: crypto.randomUUID(),
+        trigger,
+        started_at: new Date().toISOString(),
+        round: 0,
+        rounds: [],
+        outcome: null,
+        error: null,
+      };
+      await this.ctx.storage.put("state", next);
+      await this.ctx.storage.setAlarm(Date.now() + 50);
+      return Response.json({ status: "started", run_id: next.run_id, started_at: next.started_at });
+    }
+    if (url.pathname === "/state") return Response.json(await this.getState());
+    return new Response("not found", { status: 404 });
+  }
+
+  async alarm() {
+    const state = await this.getState();
+    if (!state.running) return;
+    state.round += 1;
+    state.round_started_at = new Date().toISOString();
+    await this.ctx.storage.put("state", state);
+    try {
+      const result = await runSync(this.env, { trigger: state.trigger, deadlineMs: ROUND_MS, runId: state.run_id });
+      state.rounds = [...state.rounds, roundSummary(result, state.round, state.round_started_at)].slice(-10);
+      if (result.continue_now && state.round < MAX_ROUNDS) {
+        // More to fetch and this round only stopped at its budget: keep going.
+        await this.ctx.storage.put("state", state);
+        await this.ctx.storage.setAlarm(Date.now() + 1000);
+        return;
+      }
+      state.outcome = result.more_to_do
+        ? state.round >= MAX_ROUNDS
+          ? `stopped after ${MAX_ROUNDS} rounds with work left; start another run to continue`
+          : "caught up except for sources at a daily limit; the daily sync continues them"
+        : "up to date";
+    } catch (err) {
+      // Caught so the alarm isn't retried in a loop; the error is visible in /status.
+      state.error = redact(`${err.name}: ${err.message}`);
+      state.outcome = "error";
+      console.error(`[${state.run_id}] run failed: ${state.error}`);
+    }
+    state.running = false;
+    state.finished_at = new Date().toISOString();
+    await this.ctx.storage.put("state", state);
+  }
+}
+
+function runner(env) {
+  if (!env.SYNC_RUNNER) throw new Error("Durable Object binding SYNC_RUNNER is missing (see wrangler.toml)");
+  return env.SYNC_RUNNER.get(env.SYNC_RUNNER.idFromName("main"));
 }
 
 async function authorized(request, env) {
@@ -67,35 +167,55 @@ function json(data, status = 200) {
 }
 
 export default {
-  async scheduled(event, env, ctx) {
-    // Cron runs may use up to ~15 minutes of wall time; stop cleanly before that.
-    const result = await runSync(env, { trigger: "cron", deadlineMs: 13 * 60 * 1000 });
-    console.log(JSON.stringify(result));
+  async scheduled(event, env) {
+    const res = await runner(env).fetch("https://sync-runner/start?trigger=cron");
+    console.log(`cron: ${JSON.stringify(await res.json())}`);
   },
 
   async fetch(request, env) {
-    const { pathname } = new URL(request.url);
-    if (pathname !== "/run" && pathname !== "/status") {
+    const url = new URL(request.url);
+    if (url.pathname !== "/run" && url.pathname !== "/status") {
       return json({ ok: true, routes: ["/run?token=…", "/status?token=…"] });
     }
     if (!(await authorized(request, env))) return json({ error: "unauthorized: pass ?token= or Authorization: Bearer" }, 401);
 
-    if (pathname === "/status") {
-      await ensureSchema(env.DB);
-      const { results } = await env.DB.prepare("SELECT * FROM sync_log ORDER BY id DESC LIMIT 30").all();
-      const counts = await env.DB.prepare(
-        "SELECT (SELECT COUNT(*) FROM officials WHERE active = 1) AS officials, (SELECT COUNT(*) FROM bills) AS bills, " +
-          "(SELECT COUNT(*) FROM votes) AS votes, (SELECT COUNT(*) FROM vote_positions) AS positions"
-      ).first();
-      return json({ counts, recent: results });
-    }
-
-    // Manual run: a shorter time limit, so the response comes back in time.
-    // Run it again to continue a backfill; each run picks up where the last stopped.
     try {
-      const result = await runSync(env, { trigger: "manual", deadlineMs: 80 * 1000 });
-      const more = result.steps.some((s) => s.step.endsWith("-votes") && s.status === "partial");
-      return json({ ...result, more_to_do: more, hint: more ? "Run again to continue." : "Up to date." });
+      if (url.pathname === "/run") {
+        const res = await runner(env).fetch("https://sync-runner/start?trigger=manual");
+        const started = await res.json();
+        return json({
+          ...started,
+          next: "Working in the background. Open /status (with the same token) to follow progress.",
+        });
+      }
+
+      // /status
+      const run = await (await runner(env).fetch("https://sync-runner/state")).json();
+      let counts = null;
+      let recent = [];
+      if (env.DB) {
+        await ensureSchema(env.DB);
+        counts = await env.DB.prepare(
+          "SELECT (SELECT COUNT(*) FROM officials WHERE active = 1) AS officials, (SELECT COUNT(*) FROM bills) AS bills, " +
+            "(SELECT COUNT(*) FROM votes) AS votes, (SELECT COUNT(*) FROM vote_positions) AS positions"
+        ).first();
+        recent = (await env.DB.prepare("SELECT * FROM sync_log ORDER BY id DESC LIMIT 30").all()).results;
+      }
+      return json({
+        run: {
+          status: run.running ? "running" : run.run_id ? "finished" : "never run",
+          run_id: run.run_id || null,
+          trigger: run.trigger || null,
+          started_at: run.started_at || null,
+          finished_at: run.finished_at || null,
+          round: run.round || 0,
+          outcome: run.outcome || null,
+          error: run.error || null,
+          rounds: run.rounds || [],
+        },
+        counts,
+        recent_log: recent,
+      });
     } catch (err) {
       return json({ error: redact(`${err.name}: ${err.message}`) }, 500);
     }

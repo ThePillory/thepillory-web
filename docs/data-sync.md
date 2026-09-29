@@ -20,7 +20,7 @@ Everything shown carries a source URL. The database refuses rows without one.
    - Root directory: `workers/sync`
    - Deploy command: leave the default (`npx wrangler deploy`)
 
-   It deploys as `pillory-sync`, with the daily Cron Trigger from `wrangler.toml` (11:00 UTC). The Worker creates the tables itself on its first run.
+   It deploys as `pillory-sync`, with the daily Cron Trigger from `wrangler.toml` (11:00 UTC) and its background-run Durable Object. The Worker creates the database tables itself on its first run.
 4. **Add the Worker's secrets.** In `pillory-sync` → Settings → **Variables and Secrets**, add each of these as type *Secret*:
 
    | Name | Value |
@@ -44,8 +44,16 @@ Everything shown carries a source URL. The database refuses rows without one.
   https://pillory-sync.<your-subdomain>.workers.dev/run?token=<SYNC_TOKEN>
   ```
 
-  Each run works for up to about 80 seconds and returns a JSON summary. If it says `"more_to_do": true`, open the link again. Each run continues where the last one stopped.
-- **Check status:** `https://pillory-sync.<your-subdomain>.workers.dev/status?token=<SYNC_TOKEN>` shows row counts and the last 30 log entries.
+  It answers right away with `"status": "started"` and does the work in the background. Opening it again while a run is going says `"already running"`, and never starts a second one.
+- **Check progress:** open the status link:
+
+  ```
+  https://pillory-sync.<your-subdomain>.workers.dev/status?token=<SYNC_TOKEN>
+  ```
+
+  Under `run`, `status` reads `running` or `finished`. `round` counts the rounds so far, and `outcome` ends as `up to date` when everything is loaded. `counts` shows how many officials, bills, votes and positions are loaded, and `recent_log` lists each step's latest result.
+
+How background runs work: a run happens inside a Durable Object (`SyncRunner`, created automatically on deploy) in rounds of up to about 12 minutes each. When a round stops only because it reached its request or time budget, the next round starts on its own, up to 20 rounds per run. Anything held back by a daily limit (Open States) continues with the next daily sync. The daily Cron Trigger starts runs the same way.
 
 Each step (county officials, state officials, federal officials, House votes, Senate votes, state votes) logs `ok`, `partial` (stopped at a limit; resumes next run), `skipped` (nothing due) or `error`, with the message. One failing source never stops the others. Worker logs are also in the dashboard under `pillory-sync` → Logs.
 

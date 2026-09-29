@@ -17,7 +17,7 @@ until curl -s localhost:8789/ >/dev/null 2>&1; do sleep 1; done
 echo "--- unauthorized run is refused:"
 curl -s -o /dev/null -w "%{http_code}\n" "localhost:8789/run"
 echo "--- manual run:"
-curl -s "localhost:8789/run?token=local-test-token"
+curl -s "localhost:8789/run?token=local-test-token"; sleep 8
 echo "--- second run (should fetch nothing new):"
 curl -s "localhost:8789/run?token=local-test-token" | grep -E '"(step|status|requests|message)"'
 echo "--- cron trigger:"
