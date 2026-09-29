@@ -19,7 +19,8 @@ The information architecture lives in **[docs/sitemap.md](docs/sitemap.md)**. Ch
 - Pages live in folders (`/reps/index.html`), so URLs are clean (`/reps/`).
 - **Real officials and voting records** live in **Cloudflare D1** (database `pillory`, binding `DB`). See **[docs/data-sync.md](docs/data-sync.md)** for setup and operations.
   - `workers/sync/`: the sync Worker. A daily Cron Trigger plus a token-protected `/run` link pull from Congress.gov, senate.gov roll call XML, Open States, and `data/county-officials.json`. The schema is in `workers/sync/migrations/`. Every step logs to `sync_log`; errors are logged, never swallowed.
-  - `functions/`: Pages Functions that render the D1-backed pages: `/reps/`, `/reps/<slug>/`, `/bodies/<slug>/`, the `/laws/` index, `/laws/bills/<id>/`, `/admin/review/` and `/api/search-officials`. They reuse the static page shell through `functions/_lib/generated.js`. If D1 isn't bound or is empty, they show a "Not loaded yet" state.
+  - `functions/`: Pages Functions that render the D1-backed pages: `/reps/`, `/reps/<slug>/`, `/bodies/<slug>/`, the `/laws/` index, `/laws/bills/<id>/`, `/home/` (the briefing), `/meetings/` and `/meetings/<id>/`, `/votes/`, `/admin/review/` and `/api/search-officials`. They reuse the static page shell through `functions/_lib/generated.js`. If D1 isn't bound or is empty, they show a "Not loaded yet" state.
+- **Meetings:** the sync Worker reads Board of Supervisors and Planning Commission agendas from the county's IQM2 portal (paced at its robots.txt crawl delay of 60 s) and state committee hearings from Open States. Comment instructions are copied verbatim from the agenda PDF. **Agenda watch** drafts per-item summaries and flags (AI, labeled "AI-drafted from the official agenda", `AGENDA_DAILY_LIMIT`); suggested issue links show only once approved.
 - **AI-drafted constitutional analysis** of bills runs in the same Worker after each sync (`workers/sync/src/analysis/`). See **[docs/analysis.md](docs/analysis.md)**. Claude drafts, the checks fix or remove bad quotes and unverifiable cases, and a person reviews at `/admin/review/` (behind Cloudflare Access; `functions/_lib/access.js` fails closed).
 
 ### Hand-written vs generated
@@ -47,7 +48,7 @@ To test the sync and Functions locally with **fake** data: `workers/sync/test/ru
 
 ## App structure
 
-- **Five tabs** (`.tabbar`): Feed, Reps, **+ Report** (center, navy pill), Laws, You. The bar is fixed to the bottom on phones and becomes a top nav at 768px and wider.
+- **Five tabs** (`.tabbar`): Home, Reps, **+ Report** (center, navy pill), Laws, You. Home (`/home/`) is the briefing; `/feed/` redirects there. The bar is fixed to the bottom on phones and becomes a top nav at 768px and wider.
 - **Global search** sits at the top of every app page and searches reps, bodies, laws, issues, constitutional sections and meetings (`assets/search-index.js`). Enter opens `/search/?q=`.
 - **Back labels:** every page below a tab root has `← <parent name>`, for example `← [Supervisor, District 1]`. Pass `back=(label, href)` to `render()`.
 - **Two-way links:** for sample content, each connection is written once in `tools/data.py`, and `build.py` derives the reverse link (issue ↔ law, clause, body, meeting, evidence). Keep it that way. Don't hand-write one-way links. Real officials link to bills through votes in D1. Issues link to real bills only through `issue_bill_links` rows with `status = 'approved'`.

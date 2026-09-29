@@ -1050,3 +1050,50 @@ a.constitution-link:hover { border-color: var(--parch-text); }
 .chip-tab { min-height: var(--tap); padding: 0 16px; text-decoration: none; }
 .textarea--code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.8125rem; }
 .banner--error { background: #F6E3DA; color: var(--tension); }
+
+/* ---------- Home briefing, meetings, agenda watch ---------- */
+
+.home-filter { margin-top: 4px; }
+.home-section + .home-section { margin-top: 8px; }
+.home-issues { gap: 16px; }
+.home-issues .issue-card { padding: 20px; }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.empty-note { padding: 4px 0; }
+
+.meeting-card { display: flex; flex-direction: column; gap: 6px; text-decoration: none; color: inherit; }
+.meeting-card h3 { font-size: 1.125rem; }
+.meeting-card:hover { border-color: var(--navy); }
+.meeting-when { font-size: 0.9375rem; }
+.deadline { font-size: 0.875rem; font-weight: 600; color: var(--navy); }
+.deadline--lg { font-size: 1rem; }
+
+.chip--flag { background: var(--navy-light); color: var(--navy); }
+.chip--agenda { background: var(--navy); color: #fff; align-self: flex-start; white-space: normal; }
+
+.meeting-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.weigh-list { display: flex; flex-direction: column; gap: 6px; font-size: 0.9375rem; }
+.agenda-quote {
+  margin: 0;
+  padding: 10px 12px;
+  border-left: 3px solid var(--border);
+  background: var(--page);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.watch-item { padding-top: 12px; border-top: 1px solid var(--border); }
+.watch-item h3 { font-family: var(--sans); font-size: 0.9375rem; font-weight: 600; line-height: 1.4; }
+.watch-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.agenda-section h3 { font-family: var(--sans); font-size: 0.9375rem; font-weight: 600; }
+.agenda-items { display: flex; flex-direction: column; gap: 12px; }
+.agenda-item { display: flex; flex-direction: column; gap: 4px; font-size: 0.9375rem; overflow-wrap: anywhere; }
+.item-docs { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
+.ai-label { font-weight: 600; }
+
+.pager { display: flex; gap: 8px; justify-content: center; }
+.caught-up { text-align: center; color: var(--text-2); font-size: 0.9375rem; padding: 16px 0 8px; }
+.caught-up::before { content: "✓ "; color: var(--navy); font-weight: 600; }

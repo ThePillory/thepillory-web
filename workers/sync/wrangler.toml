@@ -65,6 +65,14 @@ ANALYSIS_MODEL = "claude-sonnet-5-5"
 ANALYSIS_EFFORT = "high"
 # Longer bill texts are cut to this many characters and the draft is marked "limited".
 MAX_BILL_TEXT_CHARS = "400000"
+# Agenda watch: plain-language summaries of county agendas. Separate daily cap
+# from bill analyses (each agenda is one Claude API call).
+AGENDA_DAILY_LIMIT = "3"
+# County meetings (src/meetings/county.js): the county portal's robots.txt asks
+# for 60 seconds between requests, so requests are paced and capped per day.
+MEETING_BODIES = "Board of Supervisors|Planning Commission"
+IQM2_MIN_INTERVAL_MS = "60000"
+IQM2_DAILY_LIMIT = "12"
 
 # Secrets (set with `npx wrangler secret put NAME` or in the dashboard):
 #   CONGRESS_API_KEY    api.congress.gov key

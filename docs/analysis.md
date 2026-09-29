@@ -97,6 +97,18 @@ Access stops everyone else before the request reaches the site. The site also ve
 
 **Refusal fallback:** the request opts into the API's server-side fallback (`fallbacks: "default"`). If the model declines on certain safety categories, the API retries on another model in the same call. The model that actually wrote a draft is saved with it and shown on the page.
 
+## Agenda watch
+
+For each new county agenda (Board of Supervisors, Planning Commission), one Claude API call writes 2 to 3 neutral sentences per item and flags items in five areas: budget, land use, fees and taxes, public safety, public access and meetings. It also suggests links to existing issues.
+
+- **Source:** only the official agenda's items, their sections, and their attachment titles.
+- **Checks:** a sentence stating a number, amount or date that the item's own agenda text doesn't contain is removed and logged. Unknown item numbers are dropped. Flags and issue slugs are limited to fixed lists.
+- **Label:** "AI-drafted from the official agenda", with a link to the source, until a person approves it.
+- **Links:** issue links start as `suggested` and show only once approved at `/admin/review/`.
+- **Limits:** `AGENDA_DAILY_LIMIT` (default 3), separate from the bill limit. The prompt version is `AGENDA_PROMPT_VERSION` in `src/analysis/agenda.js`.
+
+Tables: `agenda_summaries` (every version kept), `agenda_summary_revisions`, `item_issue_links`, `agenda_requests` (migration `0003_meetings.sql`).
+
 ## Reviewing
 
 `/admin/review/` lists current drafts, newest first, with filters for reviewed and rejected. Each draft's page shows:

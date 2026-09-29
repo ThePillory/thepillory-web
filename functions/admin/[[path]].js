@@ -8,6 +8,9 @@ import { page, esc, fmtDate, safeUrl } from "../_lib/render.js";
 import { checkAccess } from "../_lib/access.js";
 import { parse, badge, baselineSection, provisionsFor } from "../_lib/analysis.js";
 import { verifyQuotes } from "../../workers/sync/src/analysis/verify.js";
+import { FLAGS, FLAG_LABELS } from "../../workers/sync/src/analysis/agenda-check.js";
+import { ISSUES } from "../_lib/generated.js";
+import { when, meetingHref } from "../_lib/meetings.js";
 
 const STATUS_NAMES = { ai_draft: "Drafts awaiting review", reviewed: "Reviewed", rejected: "Rejected", all: "All" };
 
@@ -84,12 +87,218 @@ async function list(db, url) {
     "Review drafts",
     `<header class="page-head">
   <h1>Review drafts</h1>
-  <p class="subtitle">AI-drafted constitutional analyses, newest first. Nothing is marked reviewed until you approve it.</p>
+  <p class="subtitle">AI drafts, newest first: constitutional analyses of bills, and agenda summaries. Nothing is marked reviewed until you approve it.</p>
 </header>
+<h2 class="label">Bill analyses</h2>
 <div class="chips" role="navigation" aria-label="Filter by status">${tabs}</div>
 ${pending && pending.n ? `<p class="hint">${pending.n} new draft${pending.n === 1 ? "" : "s"} requested; they're written on the sync Worker's next run.</p>` : ""}
-<section class="card">${rows || '<p class="secondary small">Nothing here.</p>'}</section>`
+<section class="card">${rows || '<p class="secondary small">Nothing here.</p>'}</section>
+${await agendaSection(db)}
+${await linkSection(db)}`
   );
+}
+
+// ---------------------------------------------------------------------------
+// Agenda watch: summaries and suggested issue links
+
+async function agendaSection(db) {
+  let rows = [];
+  try {
+    rows = (
+      await db
+        .prepare(
+          `SELECT s.id, s.status, s.created_at, s.reviewer, s.reviewed_at, s.items, s.check_log, m.body, m.starts_at, m.meeting_type
+           FROM agenda_summaries s JOIN meetings m ON m.id = s.meeting_id WHERE s.current = 1
+           ORDER BY s.created_at DESC, s.id DESC LIMIT 100`
+        )
+        .all()
+    ).results;
+  } catch (err) {
+    if (/no such table/i.test(String(err && err.message))) return "";
+    throw err;
+  }
+  const list = rows
+    .map((r) => {
+      const items = JSON.parse(r.items || "[]");
+      const flagged = items.filter((i) => (i.flags || []).length).length;
+      const removed = (JSON.parse(r.check_log || "{}").removed_sentences || []).length;
+      const meta = [`meeting ${when(r.starts_at).day}`, `drafted ${fmtDate(r.created_at)}`, `${flagged} of ${items.length} items flagged`, removed ? `${removed} sentence(s) removed by the number check` : null]
+        .filter(Boolean)
+        .join(" · ");
+      const b = r.status === "reviewed" ? badge(r) : r.status === "rejected" ? badge(r) : '<span class="review-badge review-badge--draft">AI-drafted from the official agenda</span>';
+      return `
+<a class="list-row link-row" href="/admin/review/agenda/${r.id}/">
+  <div class="stack-sm"><div class="list-title">${esc(r.body)}: ${esc(r.meeting_type || "Meeting")}</div><div class="list-meta">${esc(meta)}</div><div>${b}</div></div>
+  <span class="row-end"><span class="chev" aria-hidden="true">›</span></span>
+</a>`;
+    })
+    .join("");
+  return `<h2 class="label">Agenda summaries</h2>
+<section class="card">${list || '<p class="secondary small">No agenda summaries yet.</p>'}</section>`;
+}
+
+async function linkSection(db) {
+  let rows = [];
+  try {
+    rows = (
+      await db
+        .prepare(
+          `SELECT l.*, m.body, m.starts_at, i.number, i.title FROM item_issue_links l
+           JOIN meetings m ON m.id = l.meeting_id
+           LEFT JOIN meeting_items i ON i.meeting_id = l.meeting_id AND i.item_key = l.item_key
+           WHERE l.status = 'suggested' ORDER BY l.created_at DESC LIMIT 100`
+        )
+        .all()
+    ).results;
+  } catch (err) {
+    if (/no such table/i.test(String(err && err.message))) return "";
+    throw err;
+  }
+  const list = rows
+    .map((l) => {
+      const issue = ISSUES[l.issue_slug];
+      return `
+<div class="list-row stack-sm link-suggestion">
+  <p class="small"><strong>${esc(l.body)}, ${esc(when(l.starts_at).day)}, item ${esc(l.number || l.item_key)}:</strong> ${esc(l.title || "")}</p>
+  <p class="small">→ Issue: <a class="inline-link" href="${esc(issue ? issue.url : "#")}">${esc(issue ? issue.title : l.issue_slug)}</a></p>
+  ${l.reason ? `<p class="small secondary">Why (${esc(l.suggested_by)}): ${esc(l.reason)}</p>` : ""}
+  <div class="watch-actions">
+    <form method="post" action="/admin/review/link/${l.id}/"><input type="hidden" name="action" value="approve"><button class="btn btn--primary" type="submit">Approve link</button></form>
+    <form method="post" action="/admin/review/link/${l.id}/"><input type="hidden" name="action" value="reject"><button class="btn" type="submit">Reject</button></form>
+  </div>
+</div>`;
+    })
+    .join("");
+  return `<h2 class="label">Suggested issue links</h2>
+<p class="hint">Links between flagged agenda items and issues. None shows on the site until you approve it.</p>
+<section class="card">${list || '<p class="secondary small">No suggestions waiting.</p>'}</section>`;
+}
+
+async function linkChange(db, id, request, email) {
+  const form = await request.formData();
+  const action = form.get("action");
+  if (action === "approve") {
+    await db.prepare("UPDATE item_issue_links SET status = 'approved', approved_by = ?, approved_at = datetime('now') WHERE id = ?").bind(email, id).run();
+  } else if (action === "reject") {
+    await db.prepare("UPDATE item_issue_links SET status = 'rejected', approved_by = NULL, approved_at = NULL WHERE id = ?").bind(id).run();
+  }
+  return Response.redirect(`${new URL(request.url).origin}/admin/review/`, 303);
+}
+
+async function agendaDetail(db, env, id, { error = "", done = "", form = null } = {}) {
+  const row = await db.prepare("SELECT * FROM agenda_summaries WHERE id = ?").bind(id).first();
+  if (!row) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+  const m = await db.prepare("SELECT * FROM meetings WHERE id = ?").bind(row.meeting_id).first();
+  const items = (await db.prepare("SELECT * FROM meeting_items WHERE meeting_id = ? ORDER BY sort").bind(row.meeting_id).all()).results;
+  const summaries = JSON.parse(row.items || "[]");
+  const byKey = new Map(summaries.map((x) => [x.item_key, x]));
+  const log = JSON.parse(row.check_log || "{}");
+  const history = (
+    await db.prepare("SELECT action, actor, note, created_at, summary_id FROM agenda_summary_revisions WHERE meeting_id = ? ORDER BY id DESC LIMIT 50").bind(row.meeting_id).all()
+  ).results;
+  const pendingRegen = await db.prepare("SELECT id FROM agenda_requests WHERE meeting_id = ? AND status = 'pending'").bind(row.meeting_id).first();
+  const preview = items
+    .map((it) => {
+      const sm = byKey.get(it.item_key);
+      return `<li class="agenda-item"><p><strong>${esc(it.number)}.</strong> ${esc(it.title)}</p>
+  ${sm ? `<p class="small">${esc(sm.summary)}</p><div class="chips">${(sm.flags || []).map((f) => `<span class="chip chip--flag">${esc(FLAG_LABELS[f] || f)}</span>`).join("")}</div>` : '<p class="small secondary">No summary.</p>'}</li>`;
+    })
+    .join("");
+  const removed = (log.removed_sentences || []).map((r) => `<li>Item ${esc(r.item_key)}: “${esc(r.sentence)}” (${esc(r.because)})</li>`).join("");
+  const dropped = (log.dropped_items || []).map((r) => `<li>Item ${esc(r.item_key)}: ${esc(r.reason)}</li>`).join("");
+  const actions = row.current
+    ? `
+<section class="card stack-sm">
+  <h2 class="label">Decision</h2>
+  <form method="post" class="stack-sm"><input type="hidden" name="action" value="approve">
+    <label class="field"><span class="field-label">Your name, as shown on the page</span><input class="input" name="reviewer" required value="${esc(row.reviewer || env.REVIEWER_NAME || "")}"></label>
+    <button class="btn btn--primary" type="submit">Approve as reviewed</button></form>
+  <form method="post" class="stack-sm"><input type="hidden" name="action" value="reject">
+    <label class="field"><span class="field-label">Reason for rejecting (kept in the history)</span><input class="input" name="note"></label>
+    <button class="btn" type="submit">Reject</button></form>
+  ${row.status !== "ai_draft" ? '<form method="post"><input type="hidden" name="action" value="reopen"><button class="btn" type="submit">Return to draft</button></form>' : ""}
+  <form method="post"><input type="hidden" name="action" value="regenerate"><button class="btn" type="submit"${pendingRegen ? " disabled" : ""}>${pendingRegen ? "New draft requested" : "Ask for a new draft"}</button></form>
+</section>`
+    : '<p class="banner">This is an earlier version.</p>';
+  const main = `
+<header class="page-head">
+  <p class="label">Agenda summary ${row.id} · ${esc(row.status)}</p>
+  <h1>${esc(m ? m.body : row.meeting_id)}</h1>
+  <p class="secondary">${m ? esc(when(m.starts_at).long) : ""} · <a class="inline-link" href="${meetingHref(row.meeting_id)}">Public meeting page</a>${m && safeUrl(m.source_url) ? ` · <a class="inline-link" href="${esc(m.source_url)}" target="_blank" rel="noopener">Official agenda ↗</a>` : ""}</p>
+</header>
+${done ? `<p class="banner" role="status">${esc(done)}</p>` : ""}
+${error ? `<p class="banner banner--error" role="alert">${esc(error)}</p>` : ""}
+${actions}
+<section class="card stack-sm"><h2 class="label">Preview</h2><ol class="plain-list agenda-items">${preview}</ol></section>
+<section class="card stack-sm">
+  <h2 class="label">What the automatic checks did</h2>
+  ${removed ? `<p class="small">Sentences removed because they state a number the agenda item doesn't:</p><ul class="panel-list small">${removed}</ul>` : '<p class="small">No sentences removed.</p>'}
+  ${dropped ? `<ul class="panel-list small">${dropped}</ul>` : ""}
+  <p class="small secondary">Model ${esc(row.model)} · prompt ${esc(row.prompt_version)} · tokens in ${row.input_tokens ?? "?"}, out ${row.output_tokens ?? "?"}</p>
+</section>
+${
+  row.current
+    ? `<form method="post" class="card stack">
+  <h2 class="label">Edit</h2>
+  <input type="hidden" name="action" value="save">
+  ${field("items", "Summaries and flags (JSON)", form ? form.items : pretty(summaries), { rows: 16, hint: `A list of {"item_key", "summary", "flags"}; flags from: ${FLAGS.join(", ")}.` })}
+  <button class="btn btn--primary" type="submit">Save changes</button>
+</form>`
+    : ""
+}
+<section class="card stack-sm"><h2 class="label">History</h2><ul class="panel-list small">${history
+    .map((h) => `<li>${fmtDate(h.created_at)}: ${esc(h.action)} (summary ${h.summary_id}) by ${esc(h.actor)}${h.note ? `: ${esc(h.note)}` : ""}</li>`)
+    .join("")}</ul></section>`;
+  return adminPage(`Review: ${m ? m.body : "agenda"}`, main, error ? 400 : 200);
+}
+
+async function agendaChange(db, env, id, request, email) {
+  const row = await db.prepare("SELECT * FROM agenda_summaries WHERE id = ?").bind(id).first();
+  if (!row) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+  if (!row.current) return agendaDetail(db, env, id, { error: "Earlier versions can't be changed." });
+  const form = await request.formData();
+  const action = form.get("action");
+  const back = (msg) => Response.redirect(`${new URL(request.url).origin}/admin/review/agenda/${id}/?done=${encodeURIComponent(msg)}`, 303);
+  const snap = (act, note) =>
+    db.prepare("INSERT INTO agenda_summary_revisions (summary_id, meeting_id, action, actor, note, snapshot) VALUES (?, ?, ?, ?, ?, ?)").bind(row.id, row.meeting_id, act, email, note || null, JSON.stringify(row));
+  if (action === "approve") {
+    const reviewer = String(form.get("reviewer") || "").trim();
+    if (!reviewer) return agendaDetail(db, env, id, { error: "Enter your name to approve." });
+    await db.batch([snap("approved"), db.prepare("UPDATE agenda_summaries SET status = 'reviewed', reviewer = ?, reviewer_email = ?, reviewed_at = datetime('now') WHERE id = ?").bind(reviewer, email, id)]);
+    return back("Approved.");
+  }
+  if (action === "reject") {
+    await db.batch([snap("rejected", String(form.get("note") || "").trim()), db.prepare("UPDATE agenda_summaries SET status = 'rejected', reviewer = NULL, reviewed_at = datetime('now') WHERE id = ?").bind(id)]);
+    return back("Rejected. The meeting page no longer shows these summaries.");
+  }
+  if (action === "reopen") {
+    await db.batch([snap("reopened"), db.prepare("UPDATE agenda_summaries SET status = 'ai_draft', reviewer = NULL, reviewer_email = NULL, reviewed_at = NULL WHERE id = ?").bind(id)]);
+    return back("Returned to draft.");
+  }
+  if (action === "regenerate") {
+    const pending = await db.prepare("SELECT id FROM agenda_requests WHERE meeting_id = ? AND status = 'pending'").bind(row.meeting_id).first();
+    if (!pending) await db.prepare("INSERT INTO agenda_requests (meeting_id, requested_by) VALUES (?, ?)").bind(row.meeting_id, email).run();
+    return back("New draft requested. It's written on the sync Worker's next run; this version stays in the history.");
+  }
+  if (action !== "save") return agendaDetail(db, env, id, { error: "Unknown action." });
+  const text = String(form.get("items") || "");
+  const keys = new Set((await db.prepare("SELECT item_key FROM meeting_items WHERE meeting_id = ?").bind(row.meeting_id).all()).results.map((r) => r.item_key));
+  let items;
+  try {
+    items = JSON.parse(text);
+    if (!Array.isArray(items)) throw new Error("must be a list");
+    items = items.map((x, i) => {
+      if (!x || !keys.has(String(x.item_key))) throw new Error(`entry ${i + 1}: item_key must be an item number on this agenda`);
+      const flags = Array.isArray(x.flags) ? x.flags : [];
+      const bad = flags.filter((f) => !FLAGS.includes(f));
+      if (bad.length) throw new Error(`entry ${i + 1}: unknown flag ${bad.join(", ")}`);
+      return { item_key: String(x.item_key), summary: String(x.summary || "").trim(), flags: [...new Set(flags)] };
+    });
+  } catch (err) {
+    return agendaDetail(db, env, id, { error: `Summaries: ${err.message}`, form: { items: text } });
+  }
+  await db.batch([snap("edited"), db.prepare("UPDATE agenda_summaries SET items = ?, edited_by = ?, edited_at = datetime('now') WHERE id = ?").bind(JSON.stringify(items), email, id)]);
+  return back(`Saved.${row.status === "reviewed" ? " It's still marked reviewed; approve again to update the date." : ""}`);
 }
 
 // ---------------------------------------------------------------------------
@@ -366,6 +575,22 @@ async function handle(context) {
   if (parts[0] !== "review") return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
   if (!env.DB) return missingTables();
+  if (parts[1] === "agenda" || parts[1] === "link") {
+    const sub = parseInt(parts[2], 10);
+    if (parts.length !== 3 || !(sub > 0)) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+    try {
+      if (request.method === "POST") {
+        const origin = request.headers.get("Origin");
+        if (origin && origin !== url.origin) return adminPage("Refused", '<header class="page-head"><h1>Refused</h1></header>', 403);
+        return parts[1] === "agenda" ? await agendaChange(env.DB, env, sub, request, who.email) : await linkChange(env.DB, sub, request, who.email);
+      }
+      if (parts[1] === "link") return Response.redirect(`${url.origin}/admin/review/`, 302);
+      return await agendaDetail(env.DB, env, sub, { done: url.searchParams.get("done") || "" });
+    } catch (err) {
+      if (/no such table/i.test(String(err && err.message))) return missingTables();
+      throw err;
+    }
+  }
   const id = parts[1] ? parseInt(parts[1], 10) : null;
   if (parts.length > 2 || (parts[1] && !(id > 0))) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
   try {

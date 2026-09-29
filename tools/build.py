@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # The full Constitution (National Archives transcription), shared with the sync
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
-ASSET_VERSION = "13"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "14"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. reps/ and bodies/ are NOT here: those pages are
 # rendered from D1 by Pages Functions (functions/), as are the laws/ index and
@@ -363,7 +363,7 @@ def page_head(label, title, sub_html="", chips_html=""):
 # ---------------------------------------------------------------------------
 
 TABS = [
-    ("feed", "Feed", "/feed/"),
+    ("home", "Home", "/home/"),
     ("reps", "Reps", "/reps/"),
     ("report", "+ Report", "/report/"),
     ("laws", "Laws", "/laws/"),
@@ -474,7 +474,7 @@ def render(path, title, main, *, tab=None, root=False, back=None, top="",
            app=True, after=""):
     """Write <path>/index.html.
 
-    tab:  which bottom tab this page belongs to ("feed", "reps", ...).
+    tab:  which bottom tab this page belongs to ("home", "reps", ...).
     root: True for the tab's own landing page.
     back: (label, href) for the back link on deeper pages.
     app:  False for public/standalone pages (no tabs, no search).
@@ -516,18 +516,11 @@ def placeholder(path, title, desc, *, back=None, tab=None, app=True, extra=""):
 
 
 # ---------------------------------------------------------------------------
-# Tab 1: Feed, issues, meetings, evidence
+# Tab 1: Home (a Pages Function, functions/home/), issues, sample meetings, evidence
 # ---------------------------------------------------------------------------
 
-def build_feed():
-    top = """
-<header class="app-header">
-  <a class="wordmark" href="/">The Pillory</a>
-  <div class="header-meta">
-    <strong>Calaveras County</strong>
-    <span>Verified resident</span>
-  </div>
-</header>"""
+def build_issues_index():
+    """/issues/: every issue, with the County / State / Federal filter. Home shows the top three."""
     scope = """
 <fieldset class="chips bare">
   <legend class="visually-hidden">Scope</legend>
@@ -536,19 +529,19 @@ def build_feed():
   <label class="toggle"><input type="radio" name="scope" value="state" /><span>State</span></label>
   <label class="toggle"><input type="radio" name="scope" value="federal" /><span>Federal</span></label>
 </fieldset>
-<p class="banner">Sample content, for layout only</p>"""
-    strip = "".join(meeting_card(m) for m in D.MEETINGS)
+<p class="banner">Sample issues, for layout only</p>"""
     issues = "".join(issue_card(i, h="h2") for i in D.ISSUES)
-    main = f"""{scope}
-<section class="stack">
-  <h2 class="label">Upcoming meetings</h2>
-  <div class="strip">{strip}</div>
-</section>
+    main = f"""
+<header class="page-head">
+  <h1>Issues near you</h1>
+  <p class="subtitle">Reported by verified residents, with evidence.</p>
+</header>
+{scope}
 <section class="stack" id="issues">
-  <h2 class="label">Issues</h2>
+  <h2 class="visually-hidden">Issues</h2>
   {issues}
 </section>"""
-    render("feed", "Feed", main, tab="feed", root=True, top=top)
+    render("issues", "Issues near you", main, tab="home", back=("Home", "/home/"))
 
 
 SAMPLE_ISSUE_NOTICE = (
@@ -620,7 +613,7 @@ def build_issue(i):
     <button class="btn" type="button">I'm affected</button>
   </div>
 </div>"""
-    render(f"issues/{i['slug']}", i["short"], main, tab="feed", back=("Feed", "/feed/"), after=actions)
+    render(f"issues/{i['slug']}", i["short"], main, tab="home", back=("Issues near you", "/issues/"), after=actions)
 
     placeholder(
         f"record/{i['slug']}", "Published record",
@@ -651,7 +644,7 @@ def build_meeting(m):
 </section>
 {section("Agenda", f'<ol class="agenda">{"".join(agenda)}</ol>')}
 {cards_section("Related issues", issues, "No related issues yet.")}"""
-    render(f"meetings/{m['slug']}", m["title"], main, tab="feed", back=("Feed", "/feed/"))
+    render(f"meetings/{m['slug']}", m["title"], main, tab="home", back=("Meetings", "/meetings/"))
 
 
 def build_evidence(v):
@@ -677,7 +670,7 @@ def build_evidence(v):
 </section>
 {section("How it was checked", f'<p class="small">{e(checked)}</p>', "card stack-sm")}
 {section("Used in", f'<div>{used}</div>')}"""
-    render(f"evidence/{v['slug']}", v["title"], main, tab="feed",
+    render(f"evidence/{v['slug']}", v["title"], main, tab="home",
            back=(name(kind, slug), url(kind, slug)))
 
 
@@ -850,11 +843,11 @@ def build_report():
             label = "Submit for review" if nxt_slug == "submitted" else f"Next: {nxt_title}"
             action = f'<a class="btn btn--primary btn--block" href="/report/{nxt_slug}/">{e(label)}</a>'
         else:
-            action = '<a class="btn btn--primary btn--block" href="/feed/">Back to Feed</a>'
+            action = '<a class="btn btn--primary btn--block" href="/home/">Back to Home</a>'
         if idx == 0:
             back = None
         elif slug == "submitted":
-            back = ("Feed", "/feed/")
+            back = ("Home", "/home/")
         else:
             prev_slug, prev_title, _ = REPORT_STEPS[idx - 1]
             back = (prev_title, f"/report/{prev_slug}/" if prev_slug else "/report/")
@@ -1000,6 +993,17 @@ def build_methodology():
   </ol>
 </section>
 
+<section class="card stack" id="agenda-watch">
+  <h2>Meetings and agenda watch</h2>
+  <p>Meeting times, places, agendas, staff reports, minutes and video links come from Calaveras County's official meeting portal, for the Board of Supervisors and the Planning Commission. State committee hearings come from Open States and show when one of our two state legislators sits on the committee.</p>
+  <ul class="plain-list small">
+    <li><strong>How to weigh in:</strong> the comment instructions and deadline are copied word for word from the official agenda. When a short deadline is shown (for example "Written comments by Mon, Oct 12, 4:00 pm"), it is worked out only from the agenda's own plain wording, such as "no later than 4:00 pm on the day before the meeting".</li>
+    <li><strong>Agenda watch:</strong> an AI tool (Claude, made by Anthropic) writes two or three neutral sentences about each item, from the official agenda only, and flags items about the budget, land use, fees and taxes, public safety, or public access and meetings. These summaries are labeled "AI-drafted from the official agenda" and link to the source. A sentence that states a number, amount or date the agenda item doesn't contain is removed automatically. People review the summaries.</li>
+    <li><strong>Links to issues:</strong> the AI tool may suggest that an agenda item relates to an issue. A suggestion is shown only after a person approves it.</li>
+    <li><strong>Votes:</strong> how each supervisor voted will be added from the published minutes.</li>
+  </ul>
+</section>
+
 <section class="card stack-sm">
   <h2>What each analysis contains</h2>
   <ul class="plain-list small">
@@ -1119,7 +1123,9 @@ def export_for_functions():
         "LAWS_BY_BODY": laws_by_body,
         "ISSUES_BY_BODY": issues_by_body,
         "ISSUE_CARDS": {i["slug"]: issue_card(i) for i in D.ISSUES},
-        "ISSUES": {i["slug"]: {"title": i["title"], "short": i["short"], "url": url("issue", i["slug"])} for i in D.ISSUES},
+        "ISSUES": {i["slug"]: {"title": i["title"], "short": i["short"], "url": url("issue", i["slug"]),
+                               "level": i["level"], "body": i["body"], "category": i["category"],
+                               "facts": i["facts"]} for i in D.ISSUES},
         "SAMPLE_LAW_CARDS": [law_card(l) for l in D.LAWS],
     }
     out = ["// Generated by tools/build.py. Don't edit by hand; change tools/build.py or tools/data.py and rebuild.",
@@ -1132,7 +1138,7 @@ def export_for_functions():
 
 def main():
     validate()
-    build_feed()
+    build_issues_index()
     for i in D.ISSUES:
         build_issue(i)
     for m in D.MEETINGS:
@@ -1149,6 +1155,7 @@ def main():
     build_search()
     # Old URLs from the first round of screens.
     redirect("constitution", "/laws/constitution/")
+    redirect("feed", "/home/")  # the Feed tab became Home
     redirect("issue", url("issue", "public-comment-limit"))
 
     for d in GENERATED_DIRS:

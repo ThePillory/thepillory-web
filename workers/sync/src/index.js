@@ -21,17 +21,23 @@ import { syncStateOfficials, syncStateVotes } from "./openstates.js";
 import { syncFederalOfficials, syncHouseVotes } from "./congress.js";
 import { syncSenateVotes } from "./senate.js";
 import { runAnalysis } from "./analysis/index.js";
+import { syncCountyMeetings } from "./meetings/county.js";
+import { syncStateHearings } from "./meetings/state.js";
 import { withD1Retry } from "./d1retry.js";
 
 // Order matters: officials before votes; state officials first because the
-// Open States lookup also detects the U.S. House district.
+// Open States lookup also detects the U.S. House district. State hearings come
+// before state votes, which can use up the Open States daily cap. County
+// meetings come last: the county portal asks for a minute between requests.
 const STEPS = [
   ["county-officials", syncCounty],
   ["state-officials", syncStateOfficials],
   ["federal-officials", syncFederalOfficials],
+  ["state-hearings", syncStateHearings],
   ["house-votes", syncHouseVotes],
   ["senate-votes", syncSenateVotes],
   ["state-votes", syncStateVotes],
+  ["county-meetings", syncCountyMeetings],
 ];
 
 const ROUND_MS = 12 * 60 * 1000; // stop starting new requests after this; the alarm limit is 15 minutes
@@ -60,7 +66,7 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId }) {
     await log(env.DB, run, step, result.status, budget.used - before, result.message, started);
     summary.push({ step, ...result, requests: budget.used - before });
   }
-  const partialVotes = summary.filter((s) => s.step.endsWith("-votes") && s.status === "partial");
+  const partialVotes = summary.filter((s) => (s.step.endsWith("-votes") || s.step === "county-meetings") && s.status === "partial");
   return {
     run_id: run.id,
     trigger,
@@ -166,6 +172,7 @@ export class SyncRunner extends DurableObject {
         rounds: state.analysis_round,
         drafted: prev.drafted + r.analyzed,
         today: r.used === undefined ? null : `${r.used} of ${r.limit}`,
+        agendas: r.agendas ? { drafted: ((prev.agendas && prev.agendas.drafted) || 0) + r.agendas.drafted, today: r.agendas.limit ? `${r.agendas.used} of ${r.agendas.limit}` : null } : null,
       };
       if (r.more_now && state.analysis_round < MAX_ANALYSIS_ROUNDS) {
         await this.ctx.storage.put("state", state);

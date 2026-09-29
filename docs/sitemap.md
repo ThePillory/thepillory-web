@@ -7,8 +7,12 @@
 
 ## Join & verify (onboarding)
 
-## Tab 1: Feed
-- Upcoming meetings strip > Meeting
+## Tab 1: Home (briefing)
+- County / State / Federal filter (applies to every section)
+- This week: upcoming meetings and hearings > Meeting; See all meetings > Calendar
+  - Meeting: details, add to calendar, follow, how to weigh in, agenda watch, full agenda, after the meeting
+- Issues near you > All issues
+- Your reps' latest votes > All votes
 - Issue
   - Evidence item
   - Constitutional section (under Laws)
