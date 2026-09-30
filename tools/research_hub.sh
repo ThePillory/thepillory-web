@@ -1,35 +1,44 @@
 #!/usr/bin/env bash
-# TEMPORARY research script (see .github/workflows/research-hub.yml).
+# TEMPORARY research script (see .github/workflows/research-hub.yml). Round 2.
 set +e
 G="https://geocoding.geo.census.gov/geocoder"
-echo "=== geocoder: CORS preflight and headers"
-curl -s -D - -o /dev/null -H "Origin: https://thepillory.co" "$G/geographies/onelineaddress?address=891+Mountain+Ranch+Road,+San+Andreas,+CA+95249&benchmark=Public_AR_Current&vintage=Current_Current&format=json" | grep -i -E "^HTTP|access-control|content-type"
-curl -s -D - -o /dev/null -X OPTIONS -H "Origin: https://thepillory.co" -H "Access-Control-Request-Method: GET" "$G/geographies/onelineaddress" | grep -i -E "^HTTP|access-control"
-echo "=== geocoder: layers list"
-curl -s "$G/vintages?benchmark=Public_AR_Current&format=json" | head -c 1500; echo
-echo "=== geocoder: address, all layers (keys and relevant fields)"
-curl -s "$G/geographies/onelineaddress?address=891+Mountain+Ranch+Road,+San+Andreas,+CA+95249&benchmark=Public_AR_Current&vintage=Current_Current&layers=all&format=json" > /tmp/g.json
-python3 - <<'PY'
-import json
-d=json.load(open('/tmp/g.json'))
-r=d.get('result',{})
-ms=r.get('addressMatches',[])
-print('matches', len(ms))
-if ms:
-    m=ms[0]; print('matchedAddress', m.get('matchedAddress'))
-    for k,v in m.get('geographies',{}).items():
-        if any(w in k for w in ['Congress','Legislative','Count','State']) and v:
-            print(repr(k), {kk: v[0].get(kk) for kk in v[0] if kk in ('GEOID','NAME','BASENAME','CD119','CD118','SLDU','SLDL','STATE','COUNTY','CDSESSN','LSY','FUNCSTAT')})
-PY
-echo "=== geocoder: specific layers param names"
-curl -s "$G/geographies/onelineaddress?address=1600+Pennsylvania+Ave+NW,+Washington,+DC+20500&benchmark=Public_AR_Current&vintage=Current_Current&layers=54,56,58,82&format=json" | python3 -c "import json,sys;d=json.load(sys.stdin);m=d['result']['addressMatches'];print([ (k,[x.get('GEOID') for x in v]) for k,v in m[0]['geographies'].items()] if m else d)"
-echo "=== geocoder: ZIP only"
-curl -s "$G/geographies/onelineaddress?address=95249&benchmark=Public_AR_Current&vintage=Current_Current&format=json" | head -c 300; echo
-echo "=== census rel2020 listing"
-curl -s https://www2.census.gov/geo/docs/maps-data/data/rel2020/ | grep -o 'href="[^"]*"' | head -40
-echo "=== cd-sld listing"
-curl -s https://www2.census.gov/geo/docs/maps-data/data/rel2020/cd-sld/ | grep -o 'href="[^"]*"' | head -60
-echo "=== zcta520 listing"
-curl -s https://www2.census.gov/geo/docs/maps-data/data/rel2020/zcta520/ | grep -o 'href="[^"]*"' | head -40
-echo "=== explainer sources"
-for u in https://www.congress.gov/help/learn-about-the-legislative-process https://www.congress.gov/help/legislative-glossary https://www.house.gov/the-house-explained/the-legislative-process https://www.senate.gov/about/powers-procedures/filibusters-cloture.htm https://www.senate.gov/about/powers-procedures/nominations.htm https://www.senate.gov/legislative/votes_new.htm https://clerk.house.gov/Votes https://www.congress.gov/help/legislative-glossary#glossary_cloturemotion https://leginfo.legislature.ca.gov/faces/billSearchClient.xhtml https://www.assembly.ca.gov/about-assembly https://www.senate.ca.gov/legislative-process https://www.senate.ca.gov/ https://www.assembly.ca.gov/ https://leginfo.legislature.ca.gov/faces/codes.xhtml https://www.archives.gov/founding-docs/constitution https://www.regulations.gov/ https://www.usa.gov/elected-officials https://www.census.gov/programs-surveys/geography/technical-documentation/records-layout/2020-zcta-record-layout.html https://www.senate.gov/legislative/common/briefing/Senate_legislative_process.htm https://www.govinfo.gov/content/pkg/CDOC-110hdoc49/pdf/CDOC-110hdoc49.pdf; do printf "%s %s\n" "$(curl -s -o /dev/null -L -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64) Chrome/120' "$u")" "$u"; done
+A="address=891+Mountain+Ranch+Road,+San+Andreas,+CA+95249&benchmark=Public_AR_Current"
+echo "=== CORS headers, full"
+curl -s -D - -o /dev/null -H "Origin: https://thepillory.co" "$G/geographies/onelineaddress?$A&vintage=Current_Current&format=json"
+for v in Current_Current ACS2025_Current ACS2024_Current Census2020_Current; do
+  echo "=== vintage $v layer keys"
+  curl -s "$G/geographies/onelineaddress?$A&vintage=$v&layers=all&format=json" | python3 -c "
+import json,sys
+d=json.load(sys.stdin); m=d['result']['addressMatches']
+g=m[0]['geographies'] if m else {}
+for k,v in g.items():
+  if 'Congress' in k or 'Legislative' in k: print(repr(k), v[0].get('GEOID'), v[0].get('BASENAME'))
+"
+done
+echo "=== TIGERweb layer ids (Current)"
+curl -s "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Legislative/MapServer?f=json" | python3 -c "import json,sys;d=json.load(sys.stdin);print([(l['id'],l['name']) for l in d.get('layers',[])])"
+curl -s "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_Current/MapServer?f=json" | python3 -c "import json,sys;d=json.load(sys.stdin);print([(l['id'],l['name']) for l in d.get('layers',[]) if 'Congress' in l['name'] or 'Legislative' in l['name'] or 'Count' in l['name']])"
+curl -s "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_ACS2025/MapServer?f=json" | python3 -c "import json,sys;d=json.load(sys.stdin);print([(l['id'],l['name']) for l in d.get('layers',[]) if 'Congress' in l['name'] or 'Legislative' in l['name'] or 'Count' in l['name']])"
+echo "=== layers by number on Current_Current"
+for L in 50 52 54 56 58 60 62 64; do printf "%s: " $L; curl -s "$G/geographies/onelineaddress?$A&vintage=Current_Current&layers=$L&format=json" | python3 -c "import json,sys;d=json.load(sys.stdin);m=d['result']['addressMatches'];print(list(m[0]['geographies'].keys()) if m else d)"; done
+echo "=== TX address (mid-decade redistricting check), Current vs ACS2025"
+for v in Current_Current ACS2025_Current; do curl -s "$G/geographies/onelineaddress?address=1100+Congress+Ave,+Austin,+TX+78701&benchmark=Public_AR_Current&vintage=$v&layers=all&format=json" | python3 -c "
+import json,sys
+d=json.load(sys.stdin); m=d['result']['addressMatches']
+g=m[0]['geographies'] if m else {}
+print('$v', [(k, v[0].get('BASENAME')) for k,v in g.items() if 'Congress' in k])"; done
+echo "=== cd-sld files with zcta or 119/120"
+curl -s https://www2.census.gov/geo/docs/maps-data/data/rel2020/cd-sld/ | grep -o 'href="[^"]*"' | grep -i -E "zcta|cd119|cd120|natl" | head -60
+echo "=== zcta-county head"
+curl -s https://www2.census.gov/geo/docs/maps-data/data/rel2020/zcta520/tab20_zcta520_county20_natl.txt | head -3
+echo "=== congress.gov with DEMO_KEY"
+C="https://api.congress.gov/v3"
+curl -s "$C/member?currentMember=true&limit=3&format=json&api_key=DEMO_KEY" | head -c 2500; echo
+curl -s "$C/member/AK?currentMember=true&format=json&api_key=DEMO_KEY" | head -c 1500; echo
+curl -s "$C/member/DC?currentMember=true&format=json&api_key=DEMO_KEY" | head -c 1200; echo
+curl -s "$C/member?currentMember=true&limit=250&offset=500&format=json&api_key=DEMO_KEY" | python3 -c "import json,sys;d=json.load(sys.stdin);print(len(d.get('members',[])), d.get('pagination'))"
+curl -s "$C/house-vote/119/1/100?format=json&api_key=DEMO_KEY" | head -c 3000; echo
+echo "=== senate xml counts"
+curl -s -A 'Mozilla/5.0' https://www.senate.gov/legislative/LIS/roll_call_votes/vote1191/vote_119_1_00100.xml | grep -A8 "<count>"
+echo "=== CA process pages"
+for u in https://www.assembly.ca.gov/legislative-process https://www.assembly.ca.gov/about-assembly/legislative-process https://www.senate.ca.gov/legislative-process-overview https://www.senate.ca.gov/about-california-state-senate https://leginfo.legislature.ca.gov/faces/home.xhtml https://www.assembly.ca.gov/sites/assembly.ca.gov/files/Publications/guide_to_the_legislative_process.pdf https://clerk.assembly.ca.gov/content/guide-legislative-process https://www.congress.gov/help/learn-about-the-legislative-process https://www.house.gov/the-house-explained https://www.senate.gov/legislative/nominations.htm https://www.senate.gov/about/powers-procedures/voting.htm https://www.senate.gov/about/origins-foundations/senate-and-constitution/constitution.htm https://clerk.house.gov/Help https://www.govinfo.gov/app/details/CDOC-110hdoc49 https://www.senate.gov/reference/glossary_term/cloture.htm https://www.senate.gov/reference/glossary_term/motion_to_proceed.htm https://www.senate.gov/reference/glossary_term/roll_call_vote.htm https://www.senate.gov/reference/glossary_term/nomination.htm https://www.senate.gov/reference/glossary_term/motion_to_recommit.htm https://www.senate.gov/reference/glossary_term/table.htm; do printf "%s %s\n" "$(curl -s -o /dev/null -L -w '%{http_code}' -A 'Mozilla/5.0 (X11; Linux x86_64) Chrome/120' "$u")" "$u"; done
