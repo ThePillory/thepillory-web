@@ -1,12 +1,11 @@
-// /laws/                real bills your officials have voted on, sample laws, and the Constitution
-// /laws/bills/<id>/     one real bill: summary, constitutional analysis, how your reps voted, related issues
+// /laws/                real bills your officials have voted on, and the Constitution
+// /laws/bills/<id>/     one real bill: summary, constitutional analysis, how your reps voted
 //   POST /laws/bills/<id>/flag           "Something wrong?" on a published analysis
 //   POST /laws/bills/<id>/request-full   "Request full analysis"
 //   Both need Turnstile and are rate-limited per visitor (functions/_lib/turnstile.js).
-// Everything else under /laws/ (the Constitution, sample laws) is static and passed through.
-import { SAMPLE_LAW_CARDS, ISSUE_CARDS } from "../_lib/generated.js";
+// /laws/constitution/ is static and passed through. Old sample pages redirect (OLD_PAGES).
 import { page, notFound, notLoaded, esc, safeUrl, section, sourceLink, card, fmtDate } from "../_lib/render.js";
-import { safe, recentBills, billById, votesOnBill, approvedIssuesForBill, CHAMBER_NAME } from "../_lib/data.js";
+import { safe, recentBills, billById, votesOnBill, CHAMBER_NAME } from "../_lib/data.js";
 import { billVote, billHref } from "../_lib/votes.js";
 import { currentAnalysis, parse, provisionsFor, baselineSection, isPublic, openFlagCount, METHOD_URL } from "../_lib/analysis.js";
 import { turnstileReady, turnstileWidget, turnstileScript, verifyTurnstile, visitorHash, actionsToday, recordAction } from "../_lib/turnstile.js";
@@ -29,6 +28,19 @@ const CATEGORY_NAMES = {
 };
 
 const LEVELS = { federal: "Federal", state: "State" };
+
+// Sample pages that were removed, and where they go now: sample laws to the
+// Laws index, sample clause pages to the same provision in the full text.
+const OLD_PAGES = {
+  "bill-broadband": "/laws/",
+  "bill-constituent-access": "/laws/",
+  "res-public-comment": "/laws/",
+  "constitution/amend-1": "/laws/constitution/#amend-1",
+  "constitution/amend-10": "/laws/constitution/#amend-10",
+  "constitution/amend-14": "/laws/constitution/#amend-14-sec-1",
+  "constitution/art-1-sec-2": "/laws/constitution/#art-1-sec-2",
+  "constitution/art-1-sec-3": "/laws/constitution/#art-1-sec-3",
+};
 
 function ordinal(n) {
   const v = n % 100;
@@ -67,19 +79,15 @@ async function index(env, url) {
 </header>
 <a class="parchment stack-sm constitution-link" href="/laws/constitution/">
   <p class="label">The Constitution</p>
-  <p class="quote">The starting point for every issue.</p>
-  <p class="small">Browse the articles and amendments, with the issues and laws that cite them →</p>
+  <p class="quote">The starting point for every analysis.</p>
+  <p class="small">The full text, as the National Archives transcribes it →</p>
 </a>
 <nav class="segmented vote-filter" aria-label="Which bills to show">
   <a class="toggle" href="/laws/"${all ? "" : ' aria-current="true"'}>With final-passage votes</a>
   <a class="toggle" href="/laws/?votes=all"${all ? ' aria-current="true"' : ""}>All with recorded votes</a>
 </nav>
 ${real}
-<section class="stack">
-  <h2 class="label">Sample laws</h2>
-  <p class="hint">Hypothetical examples linked to the sample issues. They have no recorded votes.</p>
-  ${SAMPLE_LAW_CARDS.join("")}
-</section>`;
+`;
   return page("Laws", main, { tab: "laws", root: true });
 }
 
@@ -171,11 +179,11 @@ async function bill(env, id, url) {
   const data = await safe(env, async (db) => {
     const b = await billById(db, id);
     if (!b) return { b: null };
-    const [votes, links, analysis] = await Promise.all([votesOnBill(db, id), approvedIssuesForBill(db, id), analysisFor(db, id)]);
-    return { b, votes, links, analysis };
+    const [votes, analysis] = await Promise.all([votesOnBill(db, id), analysisFor(db, id)]);
+    return { b, votes, analysis };
   });
   if (!data) return notLoaded("Laws", "laws", false, ["Laws", "/laws/"]);
-  const { b, votes, links, analysis } = data;
+  const { b, votes, analysis } = data;
   if (!b) return notFound("No bill at this address.", "laws", ["Laws", "/laws/"]);
   const sent = MESSAGES[url.searchParams.get("sent")] || null;
   const error = MESSAGES[url.searchParams.get("error")] || null;
@@ -189,7 +197,6 @@ async function bill(env, id, url) {
   const summary = b.summary
     ? `<p>${esc(b.summary)}</p>`
     : '<p class="secondary small">A plain-language summary hasn\'t been written yet. Read the full text at the official source.</p>';
-  const issues = links.map((l) => ISSUE_CARDS[l.issue_slug]).filter(Boolean).join("");
   const main = `
 <header class="page-head">
   <p class="label">${LEVELS[b.level]} · ${esc(CHAMBER_NAME[b.chamber] || "Bill")} · ${esc(b.bill_number)}</p>
@@ -209,7 +216,7 @@ ${baselineSection(analysis.a, analysis.provisions, { underReview: analysis.flags
   <p class="hint">Every recorded vote on this bill by officials who represent Calaveras County, newest first. Each links to the official record.</p>
   ${votes.map(billVote).join("") || '<p class="secondary small">No recorded votes by your officials.</p>'}
 </section>
-${issues ? section("Related issues", issues, "stack") : ""}`;
+`;
   return page(`${b.bill_number}: ${b.title}`, main, { tab: "laws", back: ["Laws", "/laws/"] });
 }
 
@@ -217,11 +224,17 @@ export async function onRequestGet(context) {
   const url = new URL(context.request.url);
   const parts = (context.params.path || []).filter(Boolean);
   if (parts.length === 0) return index(context.env, url);
+  // The reader forms post to these; a plain visit goes back to the bill page.
+  if (parts[0] === "bills" && parts.length === 3 && ["flag", "request-full"].includes(parts[2])) {
+    return Response.redirect(`${url.origin}/laws/bills/${parts[1]}/`, 302);
+  }
   if (parts[0] === "bills" && parts.length === 2) {
     if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
     return bill(context.env, decodeURIComponent(parts[1]), url);
   }
-  // Static pages: /laws/constitution/…, sample laws.
+  const old = OLD_PAGES[parts.join("/")];
+  if (old) return Response.redirect(`${url.origin}${old}`, 301);
+  // Static pages: /laws/constitution/.
   return context.next();
 }
 

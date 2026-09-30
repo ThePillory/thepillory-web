@@ -12,7 +12,7 @@ import { page, esc, fmtDate, safeUrl } from "../_lib/render.js";
 import { checkAccess } from "../_lib/access.js";
 import { parse, badge, baselineSection, provisionsFor } from "../_lib/analysis.js";
 import { verifyQuotes } from "../../workers/sync/src/analysis/verify.js";
-import { CHECKS } from "../../workers/sync/src/analysis/review.js";
+import { CHECKS } from "../../workers/sync/src/analysis/review-checks.js";
 import { FLAGS, FLAG_LABELS } from "../../workers/sync/src/analysis/agenda-check.js";
 import { ISSUES } from "../_lib/generated.js";
 import { when, meetingHref } from "../_lib/meetings.js";
@@ -249,6 +249,8 @@ async function agendaSection(db) {
 }
 
 async function linkSection(db) {
+  // Links between agenda items and residents' issues. No issues exist until reporting opens.
+  if (!Object.keys(ISSUES).length) return "";
   let rows = [];
   try {
     rows = (

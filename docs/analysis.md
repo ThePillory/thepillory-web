@@ -89,7 +89,7 @@ A random `SPOT_CHECK_RATE` (default `0.1`) of passed drafts also go to the queue
 - The sync Worker loads it into the D1 table `constitution_provisions` whenever its `version` changes.
 - The analysis prompt includes it in full, and the checks compare quotes against it.
 - `/laws/constitution/` shows it in full, with an anchor for every ID (`/laws/constitution/#art-1-sec-8-cl-3`).
-- The **Constitution text** GitHub workflow runs `tools/check_constitution.py`, which checks every provision word for word against the three archives.gov transcription pages, whenever the file changes. `python3 tools/build.py` also fails if a sample clause page quotes it inexactly.
+- The **Constitution text** GitHub workflow runs `tools/check_constitution.py`, which checks every provision word for word against the three archives.gov transcription pages, whenever the file changes.
 
 Never renumber or reuse an ID.
 
@@ -166,7 +166,7 @@ For each new county agenda (Board of Supervisors, Planning Commission), one Clau
 - **Source:** only the official agenda's items, their sections, and their attachment titles.
 - **Checks:** a sentence stating a number, amount or date that the item's own agenda text doesn't contain is removed and logged. Unknown item numbers are dropped. Flags and issue slugs are limited to fixed lists.
 - **Label:** "AI-drafted from the official agenda", with a link to the source, until a person approves it.
-- **Links:** issue links start as `suggested` and show only once approved at `/admin/review/`.
+- **Links:** issue links start as `suggested` and show only once approved at `/admin/review/`. While no residents' issues exist (reporting opens with accounts), agenda watch doesn't suggest any.
 - **Order:** agendas someone asked to regenerate at `/admin/review/` first, then upcoming meetings (soonest first), then meetings from the last `MEETING_BACKFILL_DAYS` (30, latest first).
 - **Limits:** `AGENDA_DAILY_LIMIT` (default 3), separate from the bill limit. The prompt version is `AGENDA_PROMPT_VERSION` in `src/analysis/agenda.js`.
 

@@ -4,18 +4,12 @@
 // Flag: it stays off public pages and goes to the review queue with the reasons.
 import { structuredCall, constitution, DraftRefused } from "./claude.js";
 import { billContext } from "./prompt.js";
+import { CHECKS, CHECK_LABELS } from "./review-checks.js";
+
+export { CHECKS, CHECK_LABELS };
 
 export const REVIEW_MODEL = "claude-sonnet-5-5";
 export const REVIEW_PROMPT_VERSION = "2026-09-30.1";
-
-export const CHECKS = [
-  ["summary", "Is the summary accurate and complete for what the bill does?"],
-  ["balance", "Is any side's argument noticeably weaker or less charitable than the other's?"],
-  ["language", "Is opinion stated as fact, or is there loaded or partisan language?"],
-  ["provisions", "Are the chosen provisions relevant, with nothing obviously missing?"],
-  ["certainty", "Does anything claim more certainty than the sources support?"],
-];
-export const CHECK_LABELS = Object.fromEntries(CHECKS.map(([id, q]) => [id, q]));
 
 export const REVIEW_INSTRUCTIONS = `You are the independent reviewer for The Pillory, a nonpartisan civic accountability site. Another model drafted a constitutional analysis of a bill. You check the draft against the bill text before it is published. You don't rewrite it: you pass it or flag it for a person.
 

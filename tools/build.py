@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
-"""Build The Pillory's app screens from tools/data.py.
+"""Build The Pillory's static pages.
 
     python3 tools/build.py
 
-Writes static HTML into the generated folders listed in GENERATED_DIRS
-(each page is <folder>/index.html) plus assets/search-index.js. Those folders
-are wiped and rewritten on every run, so never hand-edit them: change
-tools/data.py or this file, rebuild, and commit the output.
+Writes static HTML into the folders listed in GENERATED_DIRS (each page is
+<folder>/index.html), assets/search-index.js, the _redirects file for old URLs,
+and functions/_lib/generated.js (the page shell the Pages Functions share).
+Those are wiped and rewritten on every run, so never hand-edit them: change
+this file or tools/data.py, rebuild, and commit the output.
 
-Hand-written pages (index.html, how-it-works.html, principles.html, join/)
-and the shared assets/pillory.css and assets/app.js are not touched.
+Everything shown is real: the Constitution (data/constitution.json), plain
+facts about the site and the governing bodies (tools/data.py), and honest
+empty states. Officials, bills, votes and meetings come from D1, rendered by
+the Pages Functions. The only example content is one labeled example issue
+on /about/how-it-works/.
 
 Standard library only; no install step.
 """
@@ -27,253 +31,104 @@ ROOT = Path(__file__).resolve().parent.parent
 # The full Constitution (National Archives transcription), shared with the sync
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
-ASSET_VERSION = "16"  # bump when assets/pillory.css or assets/app.js change
+PROVISION = {p["id"]: p for p in CONSTITUTION}
+ASSET_VERSION = "17"  # bump when assets/pillory.css or assets/app.js change
 
-# Folders this script owns. reps/ and bodies/ are NOT here: those pages are
-# rendered from D1 by Pages Functions (functions/), as are the laws/ index and
-# laws/bills/. The static laws/constitution/ and sample-law pages are still built.
-GENERATED_DIRS = [
-    "about", "agency", "constitution", "evidence", "feed", "issue",
-    "issues", "laws", "meetings", "record", "report", "search", "you",
+# Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
+# /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
+GENERATED_DIRS = ["about", "issues", "laws", "report", "search", "you"]
+
+# Old URLs (sample pages, the old landing and public pages) and where they go
+# now. Written to /_redirects as 301s. Old URLs under /laws/ and /meetings/
+# are redirected by their Pages Functions instead (functions/laws, functions/meetings).
+REDIRECTS = [
+    ("/index.html", "/"),
+    ("/home", "/"),
+    ("/feed", "/"),
+    ("/feed/", "/"),
+    ("/how-it-works.html", "/about/how-it-works/"),
+    ("/how-it-works", "/about/how-it-works/"),
+    ("/principles.html", "/about/principles/"),
+    ("/principles", "/about/principles/"),
+    ("/join", "/about/how-it-works/"),
+    ("/join/", "/about/how-it-works/"),
+    ("/issue", "/issues/"),
+    ("/issue/", "/issues/"),
+    ("/issues/public-comment-limit/", "/issues/"),
+    ("/issues/road-repaving/", "/issues/"),
+    ("/issues/broadband-scoring/", "/issues/"),
+    ("/issues/town-halls/", "/issues/"),
+    ("/record/*", "/issues/"),
+    ("/evidence/*", "/issues/"),
+    ("/report/evidence/", "/report/"),
+    ("/report/perspective/", "/report/"),
+    ("/report/constitution/", "/report/"),
+    ("/report/review/", "/report/"),
+    ("/report/submitted/", "/report/"),
+    ("/you/jury/", "/you/"),
+    ("/you/privacy/", "/you/"),
+    ("/about/funding/", "/about/"),
+    ("/about/advisory-group/", "/about/"),
+    ("/agency", "/about/"),
+    ("/agency/*", "/about/"),
+    ("/constitution", "/laws/constitution/"),
+    ("/constitution/", "/laws/constitution/"),
 ]
 
 e = html.escape
-
-# ---------------------------------------------------------------------------
-# Lookups and derived (reverse) links
-# ---------------------------------------------------------------------------
-
 LEVEL_NAME = {"county": "County", "state": "State", "federal": "Federal"}
 
-CLAUSES = {c["slug"]: c for c in D.CLAUSES}
-BODIES = {b["slug"]: b for b in D.BODIES}
-MEETINGS = {m["slug"]: m for m in D.MEETINGS}
-LAWS = {l["slug"]: l for l in D.LAWS}
-EVIDENCE = {v["slug"]: v for v in D.EVIDENCE}
-ISSUES = {i["slug"]: i for i in D.ISSUES}
-TABLES = {
-    "clause": CLAUSES, "body": BODIES, "meeting": MEETINGS,
-    "law": LAWS, "evidence": EVIDENCE, "issue": ISSUES,
-}
+# The empty state for reports and issues, everywhere they would appear.
+EMPTY_REPORTS = (
+    '<section class="card empty-state stack-sm">'
+    '<p>No reports yet. Reporting opens when accounts launch.</p>'
+    '<a class="inline-link" href="/about/how-it-works/">How it works</a>'
+    "</section>"
+)
 
-
-def check(kind, slug, where):
-    if slug not in TABLES[kind]:
-        sys.exit(f"build.py: unknown {kind} '{slug}' referenced from {where}")
-
-
-def validate():
-    for b in D.BODIES:
-        check("clause", b["clause"][0], b["slug"])
-    for m in D.MEETINGS:
-        check("body", m["body"], m["slug"])
-        for s in m["issues"]:
-            check("issue", s, m["slug"])
-        for _, link in m["agenda"]:
-            if link:
-                check(link[0], link[1], m["slug"])
-    for l in D.LAWS:
-        check("body", l["body"], l["slug"])
-        for c, _ in l["clauses"]:
-            check("clause", c, l["slug"])
-    for v in D.EVIDENCE:
-        check(v["parent"][0], v["parent"][1], v["slug"])
-    for i in D.ISSUES:
-        check("body", i["body"], i["slug"])
-        for s in i["laws"]:
-            check("law", s, i["slug"])
-        for c, _ in i["clauses"]:
-            check("clause", c, i["slug"])
-        for s in i["evidence"]:
-            check("evidence", s, i["slug"])
-    for kind, slugs in D.FOLLOWING.items():
-        for s in slugs:
-            check(kind[:-1] if kind != "bodies" else "body", s, "FOLLOWING")
-    for _, _, link in D.NOTIFICATIONS:
-        check(link[0], link[1], "NOTIFICATIONS")
-    for _, _, link in D.MY_REPORTS:
-        if link:
-            check(link[0], link[1], "MY_REPORTS")
-    # Sample clause pages must quote the stored Constitution exactly.
-    stored = [" ".join(p["text"].split()) for p in CONSTITUTION if p["leaf"]]
-    for c in D.CLAUSES:
-        for para in c["text"]:
-            if not any(" ".join(para.split()) in t for t in stored):
-                sys.exit(f"build.py: clause {c['slug']} doesn't match data/constitution.json: {para[:80]}…")
-
-
-def where(items, pred):
-    return [x for x in items if pred(x)]
-
-
-def issues_for_law(s):
-    return where(D.ISSUES, lambda i: s in i["laws"])
-
-
-def issues_for_clause(s):
-    return where(D.ISSUES, lambda i: any(c == s for c, _ in i["clauses"]))
-
-
-def issues_for_body(s):
-    return where(D.ISSUES, lambda i: i["body"] == s)
-
-
-def issues_for_meeting(s):
-    return [ISSUES[x] for x in MEETINGS[s]["issues"]]
-
-
-def meetings_for_issue(s):
-    return where(D.MEETINGS, lambda m: s in m["issues"])
-
-
-def laws_for_clause(s):
-    return where(D.LAWS, lambda l: any(c == s for c, _ in l["clauses"]))
-
-
-def evidence_used_in(s):
-    return [("issue", i) for i in D.ISSUES if s in i["evidence"]]
-
-
-# ---------------------------------------------------------------------------
-# URLs and names
-# ---------------------------------------------------------------------------
-
-def url(kind, slug):
-    return {
-        "issue": "/issues/{}/",
-        "body": "/bodies/{}/",
-        "law": "/laws/{}/",
-        "clause": "/laws/constitution/{}/",
-        "meeting": "/meetings/{}/",
-        "evidence": "/evidence/{}/",
-        "record": "/record/{}/",
-    }[kind].format(slug)
-
-
-def name(kind, slug):
-    x = TABLES[kind][slug]
-    return {
-        "issue": lambda: x["short"],
-        "body": lambda: x["short"],
-        "law": lambda: x["title"],
-        "clause": lambda: x["title"],
-        "meeting": lambda: x["title"],
-        "evidence": lambda: x["title"],
-    }[kind]()
-
-
-def responsible(issue):
-    """(display text, url) for who is responsible for a sample issue.
-
-    Sample issues never link to real officials; they point at the governing body.
-    """
-    b = BODIES[issue["body"]]
-    return issue["responsible"] or b["name"], url("body", b["slug"])
-
-
-def clause_chip(ref, link=False):
-    slug, aspect = ref
-    text = f"{CLAUSES[slug]['short']} · {aspect}"
-    if link:
-        return f'<a class="chip chip--parch" href="{url("clause", slug)}">{e(text)}</a>'
-    return f'<span class="chip chip--parch">{e(text)}</span>'
-
-
-def clause_chips(refs, link=False):
-    if not refs:
-        return '<span class="chip chip--parch">Clause not yet mapped</span>'
-    return "".join(clause_chip(r, link) for r in refs)
-
-
-STATUS_CLASS = {"Kept": "status--kept", "Broken": "status--broken"}
-
-
-def status_chip(status):
-    return f'<span class="status {STATUS_CLASS.get(status, "status--gray")}">{e(status)}</span>'
-
-
-VERIFIED = {"Official source", "Timestamp checked", "Location checked", "Link verified"}
-
-
-def verification_chip(v):
-    cls = "chip--navy" if v in VERIFIED else "chip--gray"
-    return f'<span class="chip {cls}">{e(v)}</span>'
-
-
-def plural(n, word, many=None):
-    return f"{n} {word if n == 1 else (many or word + 's')}"
+FOOTER = """<footer class="app-footer" aria-label="About The Pillory">
+  <a href="/about/">About</a>
+  <a href="/about/how-it-works/">How it works</a>
+  <a href="/about/principles/">Principles</a>
+  <a href="/about/methodology/">Methodology</a>
+</footer>"""
 
 
 # ---------------------------------------------------------------------------
 # Components
 # ---------------------------------------------------------------------------
 
-EXAMPLE_TAG = '<span class="example-tag">Example</span>'
+def provision_short(pid):
+    return PROVISION[pid]["label"].replace(", Section ", ", Sec. ")
 
 
-def card(href, label, title, who, chips, foot_left, foot_right, level=None, h="h3", example=False):
+def clause_chip(ref, link=False):
+    pid, aspect = ref
+    text = f"{provision_short(pid)} · {aspect}"
+    if link:
+        return f'<a class="chip chip--parch" href="/laws/constitution/#{pid}">{e(text)}</a>'
+    return f'<span class="chip chip--parch">{e(text)}</span>'
+
+
+def card(href, label, title, who, chips, foot_left="", foot_right="", level=None, h="h3", example=False):
     lvl = f' data-level="{level}"' if level else ""
-    top = (f'<div class="card-top"><p class="label">{e(label)}</p>{EXAMPLE_TAG}</div>' if example
+    top = (f'<div class="card-top"><p class="label">{e(label)}</p><span class="example-tag">Example</span></div>' if example
            else f'<p class="label">{e(label)}</p>')
+    foot = f'<div class="issue-foot"><span>{foot_left}</span><span>{foot_right}</span></div>' if (foot_left or foot_right) else ""
+    tag, attrs = ("a", f' class="card issue-card" href="{href}"') if href else ("div", ' class="card issue-card"')
     return f"""
-<a class="card issue-card" href="{href}"{lvl}>
+<{tag}{attrs}{lvl}>
   {top}
   <{h}>{e(title)}</{h}>
   <p class="secondary small">{e(who)}</p>
   <div class="chips">{chips}</div>
-  <div class="issue-foot"><span>{foot_left}</span><span>{foot_right}</span></div>
-</a>"""
-
-
-def issue_card(i, h="h3"):
-    return card(
-        url("issue", i["slug"]),
-        f"{LEVEL_NAME[i['level']]} · {i['category']}",
-        i["title"],
-        responsible(i)[0],
-        clause_chips(i["clauses"]),
-        f"Status: <strong>{e(i['status'])}</strong>",
-        f"Confidence: <strong>{e(i['confidence'])}</strong>",
-        level=i["level"], h=h, example=True,
-    )
-
-
-def law_card(l, h="h3"):
-    n = len(issues_for_law(l["slug"]))
-    return card(
-        url("law", l["slug"]),
-        f"{LEVEL_NAME[l['level']]} · {l['kind']}",
-        l["title"],
-        BODIES[l["body"]]["name"],
-        clause_chips(l["clauses"]),
-        f"Status: <strong>{e(l['status'])}</strong>",
-        f"Issues: <strong>{n}</strong>",
-        level=l["level"], h=h,
-    )
+  {foot}
+</{tag}>"""
 
 
 def body_card(b, h="h3"):
-    return card(
-        url("body", b["slug"]),
-        f"{LEVEL_NAME[b['level']]} · Governing body",
-        b["name"],
-        b["about"],
-        clause_chip(b["clause"]),
-        f"Meetings: <strong>{len(where(D.MEETINGS, lambda m: m['body'] == b['slug']))}</strong>",
-        f"Issues: <strong>{len(issues_for_body(b['slug']))}</strong>",
-        level=b["level"], h=h,
-    )
-
-
-def meeting_card(m):
-    b = BODIES[m["body"]]
-    return f"""
-<a class="card meeting-card" href="{url('meeting', m['slug'])}" data-level="{b['level']}">
-  <p class="label">{LEVEL_NAME[b['level']]} · Meeting</p>
-  <h3>{e(m['title'])}</h3>
-  <p class="meeting-date">{e(m['date'])}</p>
-  <p class="xsmall secondary">Comment by {e(m['comment_deadline'])}</p>
-</a>"""
+    return card(f"/bodies/{b['slug']}/", f"{LEVEL_NAME[b['level']]} · Governing body", b["name"], b["about"],
+                clause_chip(b["clause"]), level=b["level"], h=h)
 
 
 def link_row(href, title, meta="", right=""):
@@ -293,82 +148,12 @@ def section(label, inner, cls="card stack"):
 </section>"""
 
 
-def cards_section(label, cards_html, empty):
-    inner = cards_html if cards_html else f'<p class="secondary small">{e(empty)}</p>'
-    return f"""
-<section class="stack">
-  <h2 class="label">{e(label)}</h2>
-  {inner}
-</section>"""
-
-
-def timeline(entries):
-    items = "".join(f"<li>{e(d)} · {e(t)}</li>" for d, t in entries)
-    return f'<ol class="timeline small">{items}</ol>'
-
-
-def kv(rows):
-    out = "".join(f'<div class="kv-row"><dt>{e(k)}</dt><dd>{v}</dd></div>' for k, v in rows)
-    return f'<dl class="kv">{out}</dl>'
-
-
-def baseline(clause_refs, b):
-    """The parchment constitutional baseline block (issue and law pages)."""
-    if not clause_refs or not b:
-        return """
-<section class="parchment stack">
-  <h2 class="label">Constitutional baseline</h2>
-  <p>Not yet mapped. Reviewers will suggest the parts of the Constitution this touches.</p>
-  <button class="btn btn--block" type="button">Suggest a clause</button>
-</section>"""
-    c = CLAUSES[clause_refs[0][0]]
-    return f"""
-<section class="parchment stack">
-  <h2 class="label">Constitutional baseline</h2>
-  <h3>{e(c['title'])}</h3>
-  <blockquote class="quote bare">“{e(c['excerpt'])}”</blockquote>
-  <p class="small">{e(c['note'])}</p>
-  <a class="inline-link" href="{url('clause', c['slug'])}">Read the full text of {e(c['title'])} →</a>
-
-  <div class="perspective perspective--aligns">
-    <h3>Where it aligns</h3>
-    <p class="small">{e(b['aligns'])}</p>
-    <p class="source">{e(b['aligns_source'])}</p>
-  </div>
-  <div class="perspective perspective--tension">
-    <h3>Where it may be in tension</h3>
-    <p class="small">{e(b['tension'])}</p>
-    <p class="source">{e(b['tension_source'])}</p>
-  </div>
-  <div class="perspective perspective--neutral">
-    <h3>Why this might still serve the public</h3>
-    <p class="small">{e(b['serves'])}</p>
-    <p class="source">{e(b['serves_source'])}</p>
-  </div>
-
-  <p class="small center">The Pillory maps the Constitution. It doesn't rule on it.</p>
-  <button class="btn btn--block" type="button">Add a perspective</button>
-</section>"""
-
-
-def page_head(label, title, sub_html="", chips_html=""):
-    sub = f'<div class="secondary">{sub_html}</div>' if sub_html else ""
-    chips = f'<div class="chips">{chips_html}</div>' if chips_html else ""
-    return f"""
-<header class="page-head">
-  <p class="label">{e(label)}</p>
-  <h1>{e(title)}</h1>
-  {sub}
-  {chips}
-</header>"""
-
-
 # ---------------------------------------------------------------------------
 # Page shell
 # ---------------------------------------------------------------------------
 
 TABS = [
-    ("home", "Home", "/home/"),
+    ("home", "Home", "/"),
     ("reps", "Reps", "/reps/"),
     ("report", "+ Report", "/report/"),
     ("laws", "Laws", "/laws/"),
@@ -377,9 +162,9 @@ TABS = [
 
 SEARCH = """
 <form class="search" action="/search/" role="search" autocomplete="off">
-  <label class="visually-hidden" for="q">Search reps, bodies, laws, issues, the Constitution, and meetings</label>
+  <label class="visually-hidden" for="q">Search reps, governing bodies, bills, meetings, and the Constitution</label>
   <input class="input search-input" id="q" name="q" type="search"
-    placeholder="Search reps, laws, issues, meetings" aria-controls="search-results" aria-expanded="false" />
+    placeholder="Search reps, bills, meetings, the Constitution" aria-controls="search-results" aria-expanded="false" />
   <div class="search-results" id="search-results" hidden></div>
 </form>"""
 
@@ -467,6 +252,7 @@ def shell(title, main, *, nav="", back_html="", top="", app=True, after="",
 {top}{search}
 {back_html}
 {main}
+{FOOTER if app else ""}
     </main>
 {after}{nav}
     {scripts}
@@ -488,290 +274,8 @@ def render(path, title, main, *, tab=None, root=False, back=None, top="",
     doc = shell(title, main, nav=tabbar(tab, root) if app else "", back_html=back_html,
                 top=top, app=app, after=after)
     marker = "    <main class=\"app\">"
-    PAGES[path] = doc.replace(marker, "    <!-- Generated by tools/build.py from tools/data.py. Edit those and rebuild; "
+    PAGES[path] = doc.replace(marker, "    <!-- Generated by tools/build.py. Edit it and rebuild; "
                                       "don't edit this file by hand. -->\n" + marker, 1)
-
-
-def redirect(path, to):
-    PAGES[path] = f"""<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="refresh" content="0; url={to}" />
-    <link rel="canonical" href="{to}" />
-    <title>Moved – The Pillory</title>
-  </head>
-  <body>
-    <!-- Generated by tools/build.py. -->
-    <p>This page moved to <a href="{to}">{to}</a>.</p>
-  </body>
-</html>
-"""
-
-
-def placeholder(path, title, desc, *, back=None, tab=None, app=True, extra=""):
-    main = f"""
-<header class="page-head">
-  <h1>{e(title)}</h1>
-  <p class="subtitle">{e(desc)}</p>
-</header>
-<p class="banner">Placeholder page, content to come</p>
-{extra}"""
-    render(path, title, main, tab=tab, back=back, app=app)
-
-
-# ---------------------------------------------------------------------------
-# Tab 1: Home (a Pages Function, functions/home/), issues, sample meetings, evidence
-# ---------------------------------------------------------------------------
-
-def build_issues_index():
-    """/issues/: every issue, with the County / State / Federal filter. Home shows the top three."""
-    scope = """
-<fieldset class="chips bare">
-  <legend class="visually-hidden">Scope</legend>
-  <label class="toggle"><input type="radio" name="scope" value="all" checked /><span>All</span></label>
-  <label class="toggle"><input type="radio" name="scope" value="county" /><span>County</span></label>
-  <label class="toggle"><input type="radio" name="scope" value="state" /><span>State</span></label>
-  <label class="toggle"><input type="radio" name="scope" value="federal" /><span>Federal</span></label>
-</fieldset>
-<p class="banner">Every issue here is an example, until residents can file real reports.</p>"""
-    issues = "".join(issue_card(i, h="h2") for i in D.ISSUES)
-    main = f"""
-<header class="page-head">
-  <h1>Issues near you</h1>
-  <p class="subtitle">Reported by verified residents, with evidence.</p>
-</header>
-{scope}
-<section class="stack" id="issues">
-  <h2 class="visually-hidden">Issues</h2>
-  {issues}
-</section>"""
-    render("issues", "Issues near you", main, tab="home", back=("Home", "/home/"))
-
-
-SAMPLE_ISSUE_NOTICE = (
-    '<p class="banner"><strong>Example issue.</strong> It is hypothetical, shown for layout until residents '
-    "can file real reports, and it is not a report about any real official or agency.</p>"
-)
-
-
-def build_issue(i):
-    who, who_url = responsible(i)
-    status_chips = (EXAMPLE_TAG + f'<span class="chip chip--navy">{e(i["status"])}</span>'
-                    f'<span class="chip chip--outline">Confidence: {e(i["confidence"])}</span>')
-    head = page_head(
-        f"{LEVEL_NAME[i['level']]} · {i['category']}",
-        i["title"],
-        f'<a class="inline-link" href="{who_url}">{e(who)}</a>',
-        status_chips,
-    )
-
-    evidence_rows = "".join(
-        link_row(url("evidence", s), EVIDENCE[s]["title"], EVIDENCE[s]["source_type"],
-                 f'<span class="list-status">{e(EVIDENCE[s]["verification"])}</span>')
-        for s in i["evidence"]
-    )
-
-    related = []
-    related.append(link_row(url("body", i["body"]), BODIES[i["body"]]["name"], "Governing body"))
-    for s in i["laws"]:
-        related.append(link_row(url("law", s), LAWS[s]["title"], LAWS[s]["kind"]))
-    for c, _ in i["clauses"]:
-        related.append(link_row(url("clause", c), CLAUSES[c]["title"], "Constitution"))
-    for m in meetings_for_issue(i["slug"]):
-        related.append(link_row(url("meeting", m["slug"]), m["title"], m["date"]))
-
-    if i["response"]:
-        who_resp, text = i["response"]
-        response = f'<p class="small secondary">{e(who_resp)}</p><p>{e(text)}</p>'
-    else:
-        response = '<p class="secondary">No response yet. The agency has been invited to respond through the agency portal.</p>'
-
-    main = f"""{head}
-{SAMPLE_ISSUE_NOTICE}
-<div class="chips">{clause_chips(i['clauses'], link=True)}</div>
-
-<section class="card stack">
-  <h2 class="label">The facts</h2>
-  <p>{e(i['facts'])}</p>
-  <div class="grid-3">
-    <div class="stat"><div class="stat-num">[#]</div><div class="stat-label">Corroborated</div></div>
-    <div class="stat"><div class="stat-num">[#]</div><div class="stat-label">Support</div></div>
-    <div class="stat"><div class="stat-num">[#]</div><div class="stat-label">Affected</div></div>
-  </div>
-  <p class="hint center">Verified {'county' if i['level'] == 'county' else 'district'} residents only</p>
-</section>
-
-{section("Evidence", f'<div>{evidence_rows}</div>')}
-{baseline(i['clauses'], i['baseline'])}
-{section("Connected", f'<div>{"".join(related)}</div>')}
-{section("Agency response", response, "card stack-sm")}
-{section("Record history", timeline(i['history']))}
-
-<a class="btn btn--block" href="{url('record', i['slug'])}">Share as a published record</a>"""
-
-    actions = """
-<div class="bottom-bar action-bar" role="group" aria-label="Actions">
-  <div class="bottom-bar-inner">
-    <button class="btn btn--primary" type="button">Corroborate</button>
-    <button class="btn" type="button">Support</button>
-    <button class="btn" type="button">I'm affected</button>
-  </div>
-</div>"""
-    render(f"issues/{i['slug']}", i["short"], main, tab="home", back=("Issues near you", "/issues/"), after=actions)
-
-    placeholder(
-        f"record/{i['slug']}", "Published record",
-        "A read-only, shareable record of this issue for media, officials, and institutions.",
-        back=(i["short"], url("issue", i["slug"])), app=False,
-        extra=f'<p class="secondary small">Issue: {e(i["title"])}</p>',
-    )
-
-
-def build_meeting(m):
-    b = BODIES[m["body"]]
-    agenda = []
-    for text, link in m["agenda"]:
-        if link:
-            agenda.append(f'<li><a class="inline-link" href="{url(*link)}">{e(text)}</a></li>')
-        else:
-            agenda.append(f"<li>{e(text)}</li>")
-    issues = "".join(issue_card(i) for i in issues_for_meeting(m["slug"]))
-    main = f"""{page_head(f"{LEVEL_NAME[b['level']]} · Meeting", m['title'],
-                        f'<a class="inline-link" href="{url("body", b["slug"])}">{e(b["name"])}</a>')}
-<section class="card stack-sm">
-  {kv([("Date", e(m['date'])), ("Location", e(m['location']))])}
-</section>
-<section class="panel-navy stack-sm">
-  <h2 class="label">Public comment deadline</h2>
-  <p><strong>{e(m['comment_deadline'])}</strong></p>
-  <p class="small secondary">In-person comment may also be taken at the meeting.</p>
-</section>
-{section("Agenda", f'<ol class="agenda">{"".join(agenda)}</ol>')}
-{cards_section("Related issues", issues, "No related issues yet.")}"""
-    render(f"meetings/{m['slug']}", m["title"], main, tab="home", back=("Meetings", "/meetings/"))
-
-
-def build_evidence(v):
-    kind, slug = v["parent"]
-    used = "".join(
-        link_row(url(k, x["slug"]), name(k, x["slug"]), "Issue")
-        for k, x in evidence_used_in(v["slug"])
-    )
-    checked = {
-        "Official source": "Retrieved directly from the official publisher and matched to its public listing.",
-        "Timestamp checked": "Timestamps matched against the official meeting record.",
-        "Location checked": "Photo location matched to the reported place.",
-        "Link verified": "Link resolves and the archived copy matches the original.",
-        "Under review": "Reviewers are still checking this item. It does not count toward confidence yet.",
-    }.get(v["verification"], "")
-    main = f"""{page_head("Evidence", v['title'], "", verification_chip(v['verification']))}
-<div class="evidence-preview">{e(v['preview'])}</div>
-<section class="card stack-sm">
-  {kv([("Source type", e(v['source_type'])),
-       ("Verification", e(v['verification'])),
-       ("Submitted", "[date]"),
-       ("From", e(v['submitted_by']))])}
-</section>
-{section("How it was checked", f'<p class="small">{e(checked)}</p>', "card stack-sm")}
-{section("Used in", f'<div>{used}</div>')}"""
-    render(f"evidence/{v['slug']}", v["title"], main, tab="home",
-           back=(name(kind, slug), url(kind, slug)))
-
-
-# ---------------------------------------------------------------------------
-# Tab 2 (Reps, bodies) and the Laws index are rendered from D1 by Pages
-# Functions; see functions/ and export_for_functions() below.
-# Tab 4: sample laws and the Constitution
-# ---------------------------------------------------------------------------
-
-def build_law(l):
-    s = l["slug"]
-    b = BODIES[l["body"]]
-    issues = "".join(issue_card(i) for i in issues_for_law(s))
-    main = f"""{page_head(f"{LEVEL_NAME[l['level']]} · {l['kind']} · Sample", l['title'],
-                        f'<a class="inline-link" href="{url("body", b["slug"])}">{e(b["name"])}</a>',
-                        f'<span class="chip chip--navy">{e(l["status"])}</span>' + clause_chips(l['clauses'], link=True))}
-<p class="banner">Hypothetical sample law, for layout only. Real bills and votes are listed under <a href="/laws/">Laws</a>.</p>
-{section("Plain-language summary", f'<p>{e(l["summary"])}</p>', "card stack-sm")}
-{baseline(l['clauses'], l['baseline'])}
-{section("How your reps voted", '<p class="secondary small">No recorded votes: this is a sample law. Real voting records appear on real bills under Laws.</p>', "card stack-sm")}
-<section class="card stack">
-  <h2 class="label">Verified district signal</h2>
-  <div class="grid-3">
-    <div class="stat"><div class="stat-num">[#]</div><div class="stat-label">Support</div></div>
-    <div class="stat"><div class="stat-num">[#]</div><div class="stat-label">Oppose</div></div>
-    <div class="stat"><div class="stat-num">[#]</div><div class="stat-label">Affected</div></div>
-  </div>
-  <p class="hint center">Verified residents of your districts only. Individual responses stay private.</p>
-</section>
-{cards_section("Related issues", issues, "No related issues yet.")}"""
-    render(f"laws/{s}", l["title"], main, tab="laws", back=("Laws", "/laws/"))
-
-
-def build_constitution():
-    browse = []
-    for g, title, sub in D.CLAUSE_GROUPS:
-        rows = "".join(
-            link_row(url("clause", c["slug"]), c["title"], c["subtitle"],
-                     f'<span class="list-meta">{plural(len(issues_for_clause(c["slug"])), "issue")}</span>')
-            for c in D.CLAUSES if c["group"] == g
-        )
-        browse.append(f"""
-<section class="card stack">
-  <div><h2 class="label">{e(title)}</h2><p class="list-meta">{e(sub)}</p></div>
-  <div>{rows}</div>
-</section>""")
-    main = f"""
-<header class="page-head">
-  <h1>The Constitution</h1>
-  <p class="subtitle">The starting point for every issue.</p>
-</header>
-
-<section class="parchment stack-sm">
-  <h2 class="label">Preamble</h2>
-  <p class="quote">
-    We the People of the United States, in Order to form a more perfect Union, establish
-    Justice, insure domestic Tranquility, provide for the common defence, promote the
-    general Welfare, and secure the Blessings of Liberty to ourselves and our Posterity,
-    do ordain and establish this Constitution for the United States of America.
-  </p>
-</section>
-
-{"".join(browse)}
-
-{full_constitution()}
-
-<section class="card stack">
-  <h2 class="label">How the baseline works</h2>
-  <ol class="numbered">
-    <li>
-      <span class="step-num" aria-hidden="true">1</span>
-      <div class="stack-sm">
-        <h3>Every issue links to the text</h3>
-        <p class="small secondary">Each report is tied to the clauses it touches, quoted in full.</p>
-      </div>
-    </li>
-    <li>
-      <span class="step-num" aria-hidden="true">2</span>
-      <div class="stack-sm">
-        <h3>Alignment is mapped, not ruled</h3>
-        <p class="small secondary">Where it aligns and where it may be in tension, each with a source.</p>
-      </div>
-    </li>
-    <li>
-      <span class="step-num" aria-hidden="true">3</span>
-      <div class="stack-sm">
-        <h3>Departures get a fair hearing</h3>
-        <p class="small secondary">
-          Why a different path might serve the public, including the case for amendment
-          under Article V.
-        </p>
-      </div>
-    </li>
-  </ol>
-</section>"""
-    render("laws/constitution", "The Constitution", main, tab="laws", back=("Laws", "/laws/"))
 
 
 def full_constitution():
@@ -802,158 +306,6 @@ def full_constitution():
   </div>
   {blocks}
 </section>"""
-
-
-def build_clause(c):
-    group = next(t for g, t, _ in D.CLAUSE_GROUPS if g == c["group"])
-    text = "".join(f'<p class="constitution-text">{e(p)}</p>' for p in c["text"])
-    issues = "".join(issue_card(i) for i in issues_for_clause(c["slug"]))
-    laws = "".join(law_card(l) for l in laws_for_clause(c["slug"]))
-    main = f"""{page_head(group, c['title'], e(c['subtitle']))}
-<section class="parchment stack">
-  <h2 class="label">Full text</h2>
-  {text}
-  <p class="small">{e(c['note'])}</p>
-</section>
-{cards_section("Related issues", issues, "No sample issues cite this section yet.")}
-{cards_section("Related laws", laws, "No sample laws cite this section yet.")}"""
-    render(f"laws/constitution/{c['slug']}", c["title"], main, tab="laws",
-           back=("The Constitution", "/laws/constitution/"))
-
-
-# ---------------------------------------------------------------------------
-# Tab 3: + Report flow (placeholders)
-# ---------------------------------------------------------------------------
-
-REPORT_STEPS = [
-    ("", "Details", "Say what happened, who is responsible, and when. Facts only, in your own words."),
-    ("evidence", "Evidence", "Attach documents, photos, video, links, or public records that support the facts."),
-    ("perspective", "Perspective", "Optional: why it matters to you. Shown separately from the facts."),
-    ("constitution", "Constitution", "Pick the parts of the Constitution this touches, or let reviewers suggest."),
-    ("review", "Review", "Check everything before it goes to review. Your name is never attached."),
-    ("submitted", "Submitted", "Your report is in review. Reviewed reports join an issue."),
-]
-
-
-def build_report():
-    n = len(REPORT_STEPS)
-    for idx, (slug, title, desc) in enumerate(REPORT_STEPS):
-        path = "report/" + slug if slug else "report"
-        steps = "".join(
-            f'<li class="{"is-done" if j < idx else "is-current" if j == idx else ""}">{e(t)}</li>'
-            for j, (_, t, _) in enumerate(REPORT_STEPS)
-        )
-        if idx < n - 1:
-            nxt_slug, nxt_title, _ = REPORT_STEPS[idx + 1]
-            label = "Submit for review" if nxt_slug == "submitted" else f"Next: {nxt_title}"
-            action = f'<a class="btn btn--primary btn--block" href="/report/{nxt_slug}/">{e(label)}</a>'
-        else:
-            action = '<a class="btn btn--primary btn--block" href="/home/">Back to Home</a>'
-        if idx == 0:
-            back = None
-        elif slug == "submitted":
-            back = ("Home", "/home/")
-        else:
-            prev_slug, prev_title, _ = REPORT_STEPS[idx - 1]
-            back = (prev_title, f"/report/{prev_slug}/" if prev_slug else "/report/")
-        main = f"""
-<header class="page-head">
-  <p class="label">New report · Step {idx + 1} of {n}</p>
-  <h1>{e(title)}</h1>
-  <p class="subtitle">{e(desc)}</p>
-</header>
-<ol class="progress" aria-label="Report steps">{steps}</ol>
-<p class="banner">Placeholder page, form to come</p>
-{action}"""
-        render(path, f"New report: {title}", main, tab="report", root=idx == 0, back=back)
-
-
-# ---------------------------------------------------------------------------
-# Tab 5: You, plus About and other placeholders
-# ---------------------------------------------------------------------------
-
-def build_you():
-    following = []
-    for kind, slugs in D.FOLLOWING.items():
-        k = {"reps": "rep", "bodies": "body", "issues": "issue", "laws": "law"}[kind]
-        meta = {"rep": "Rep", "body": "Body", "issue": "Issue", "law": "Law"}[k]
-        following += [link_row(url(k, s), name(k, s), meta) for s in slugs]
-    notes = "".join(link_row(url(k, s), text, f"{d} · {name(k, s)}") for d, text, (k, s) in D.NOTIFICATIONS)
-    reports = "".join(
-        link_row(url(*link), title, status) if link else
-        f'<div class="list-row"><div><div class="list-title">{e(title)}</div><div class="list-meta">{e(status)}</div></div></div>'
-        for title, status, link in D.MY_REPORTS
-    )
-    districts = "".join([
-        link_row("/reps/", "County", "Calaveras · Board of Supervisors"),
-        link_row("/reps/", "State Assembly", "[District]"),
-        link_row("/reps/", "State Senate", "[District]"),
-        link_row("/reps/", "U.S. House", "[District]"),
-        link_row("/reps/", "U.S. Senate", "California"),
-    ])
-    about = "".join([
-        link_row("/about/", "About The Pillory"),
-        link_row("/how-it-works.html", "How it works"),
-        link_row("/principles.html", "Principles"),
-        link_row("/about/methodology/", "Methodology"),
-        link_row("/about/funding/", "Funding"),
-        link_row("/about/advisory-group/", "Advisory group"),
-    ])
-    main = f"""
-<header class="page-head">
-  <h1>You</h1>
-  <p class="subtitle">What you follow, what you've reported, and what we hold about you.</p>
-</header>
-<section class="panel-navy stack-sm">
-  <span class="badge">Verified resident · Calaveras County</span>
-  <p class="small secondary">This is all anyone else sees. Never your name, address, or ID.</p>
-</section>
-
-{section("Following & notifications", f'<div>{notes}</div><h3 class="label">Following</h3><div>{"".join(following)}</div>')}
-{section("My reports", f'<div>{reports}</div><a class="btn btn--primary" href="/report/">+ New report</a>')}
-<section class="card stack">
-  <h2 class="label">Civic jury</h2>
-  <p>You have <strong>[#] invitations</strong> to review reports from other verified residents before they join an issue.</p>
-  <a class="btn" href="/you/jury/">Review a report</a>
-</section>
-{section("Verification & districts", f'<p class="small secondary">Verified [date]. Your address was only used to match these districts.</p><div>{districts}</div><a class="btn" href="/join/">Update address</a>')}
-<section class="card stack">
-  <h2 class="label">Privacy</h2>
-  <p class="small">See what we hold about you, download a copy, or delete your account.</p>
-  <a class="btn" href="/you/privacy/">Open privacy dashboard</a>
-</section>
-{section("About", f'<div>{about}</div>')}"""
-    render("you", "You", main, tab="you", root=True)
-
-    placeholder("you/jury", "Civic jury review",
-                "Review a report as a randomly invited, verified resident before it joins an issue.",
-                back=("You", "/you/"), tab="you")
-    placeholder("you/privacy", "Privacy dashboard",
-                "What we hold about you, with options to download it or delete it.",
-                back=("You", "/you/"), tab="you")
-
-    about_links = "".join([
-        link_row("/about/methodology/", "Methodology"),
-        link_row("/about/funding/", "Funding"),
-        link_row("/about/advisory-group/", "Advisory group"),
-        link_row("/how-it-works.html", "How it works"),
-        link_row("/principles.html", "Principles"),
-        link_row("/agency/", "For agencies and offices", "Agency portal"),
-    ])
-    placeholder("about", "About The Pillory",
-                "Evidence-first, nonpartisan civic accountability, built by and for verified residents.",
-                back=("You", "/you/"), tab="you",
-                extra=f'<section class="card"><div>{about_links}</div></section>')
-    build_methodology()
-    placeholder("about/funding", "Funding",
-                "Who funds The Pillory, and the rules that keep funders out of editorial decisions.",
-                back=("About", "/about/"), tab="you")
-    placeholder("about/advisory-group", "Advisory group",
-                "The people who advise on methodology and fairness, and how they are chosen.",
-                back=("About", "/about/"), tab="you")
-    placeholder("agency", "Agency portal",
-                "Private link for agencies and offices: verify your office, view an issue, and post an unedited response.",
-                app=False)
 
 
 def build_methodology():
@@ -1044,67 +396,252 @@ def build_methodology():
 
 <section class="card stack-sm">
   <h2>Reports and issues</h2>
-  <p class="banner">Content to come</p>
+  <p class="small">Reporting isn't open yet: it opens when accounts launch. When it does, this section will explain how reports are reviewed, corroborated, and given a confidence level. <a class="inline-link" href="/about/how-it-works/">How it works</a></p>
   <p class="small secondary">How reports are reviewed, corroborated, and given a confidence level.</p>
 </section>"""
     render("about/methodology", "Methodology", main, tab="you", back=("About", "/about/"))
+
+
+# ---------------------------------------------------------------------------
+# Pages
+# ---------------------------------------------------------------------------
+
+def build_issues():
+    """/issues/: every report and issue. None yet: reporting opens when accounts launch."""
+    main = f"""
+<header class="page-head">
+  <h1>Issues near you</h1>
+  <p class="subtitle">Reports from verified residents, with evidence, grouped into issues.</p>
+</header>
+{EMPTY_REPORTS}"""
+    render("issues", "Issues near you", main, tab="home", back=("Home", "/"))
+
+
+def build_report():
+    """The + Report tab: reporting isn't open yet."""
+    main = """
+<header class="page-head">
+  <h1>Report</h1>
+  <p class="subtitle">Tell your community what happened, with the evidence to back it up.</p>
+</header>
+<section class="card empty-state stack-sm">
+  <p>No reports yet. Reporting opens when accounts launch.</p>
+  <p class="small secondary">Reports will come from verified residents, one voice each, with names and addresses never shown. Each report states the facts, attaches evidence, and keeps the resident's perspective in its own section.</p>
+  <a class="inline-link" href="/about/how-it-works/">How it works</a>
+</section>
+<section class="card stack-sm">
+  <h2 class="label">What you can do now</h2>
+  <p class="small">See how your officials vote, read the constitutional analysis of the bills they vote on, and follow what's on your county's meeting agendas.</p>
+  <div>
+    <a class="list-row link-row" href="/"><div><div class="list-title">This week's meetings and votes</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>
+    <a class="list-row link-row" href="/reps/"><div><div class="list-title">Your reps</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>
+    <a class="list-row link-row" href="/laws/"><div><div class="list-title">Bills and the Constitution</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>
+  </div>
+</section>"""
+    render("report", "Report", main, tab="report", root=True)
+
+
+def build_you():
+    about = "".join([
+        link_row("/about/", "About The Pillory"),
+        link_row("/about/how-it-works/", "How it works"),
+        link_row("/about/principles/", "Principles"),
+        link_row("/about/methodology/", "Methodology", "How analyses and summaries are made and checked"),
+    ])
+    main = f"""
+<header class="page-head">
+  <h1>You</h1>
+  <p class="subtitle">Your account, and about The Pillory.</p>
+</header>
+<section class="card empty-state stack-sm">
+  <p>Accounts aren't open yet.</p>
+  <p class="small secondary">When they launch, you'll verify once that you're a real resident. Then you can report, corroborate, and follow reps, bills and meetings. Other people will only ever see "Verified resident · Calaveras County", never your name, address or ID.</p>
+</section>
+{section("About", f'<div>{about}</div>')}"""
+    render("you", "You", main, tab="you", root=True)
+
+
+def build_about():
+    links = "".join([
+        link_row("/about/how-it-works/", "How it works"),
+        link_row("/about/principles/", "Principles"),
+        link_row("/about/methodology/", "Methodology", "How analyses and summaries are made and checked"),
+    ])
+    main = f"""
+<header class="page-head">
+  <h1>About The Pillory</h1>
+  <p class="subtitle">A fact-based civic accountability platform, built for communities that value facts over noise.</p>
+</header>
+<section class="card stack-sm">
+  <h2 class="label">What's here now</h2>
+  <ul class="plain-list small stack-sm">
+    <li><strong>Your officials and their votes:</strong> the supervisors, state legislators and members of Congress who represent Calaveras County, and every recorded vote, each linked to the official record.</li>
+    <li><strong>Bills and the Constitution:</strong> for the bills they vote on, which parts of the Constitution a bill touches, quoted word for word. The Pillory maps the Constitution; it doesn't rule on it.</li>
+    <li><strong>County meetings:</strong> Board of Supervisors and Planning Commission agendas, how to comment, and plain-language summaries of each item.</li>
+  </ul>
+</section>
+<section class="card stack-sm">
+  <h2 class="label">What opens with accounts</h2>
+  <ul class="plain-list small stack-sm">
+    <li><strong>Verified participation, protected identities:</strong> real people, one voice each. Identities are protected by default.</li>
+    <li><strong>Evidence-first reports and corroboration:</strong> documents, links, photos, records. Claims without evidence don't travel far.</li>
+    <li><strong>Private inputs, public accountability:</strong> individual actions stay private while patterns emerge.</li>
+  </ul>
+</section>
+<section class="card"><div>{links}</div></section>
+<p class="small secondary">Nonpartisan: no party labels anywhere, and nothing that suggests a political side.</p>"""
+    render("about", "About", main, tab="you", back=("You", "/you/"))
+
+
+def example_issue_card():
+    i = D.EXAMPLE_ISSUE
+    return card(None, f"{LEVEL_NAME[i['level']]} · {i['category']}", i["title"], i["responsible"], clause_chip(i["clause"]),
+                f"Status: <strong>{e(i['status'])}</strong>", f"Confidence: <strong>{e(i['confidence'])}</strong>",
+                level=i["level"], example=True)
+
+
+HOW_STEPS = [
+    ("Join and verify", "Participants verify uniqueness and residency. Real people, one voice each. Identities are protected by default."),
+    ("Make a claim", "Claims are tied to a place, category, and timeframe. No vague accusations or drive-by posts."),
+    ("Attach evidence", "Documents, links, photos, records. Claims without evidence don't travel far."),
+    ("Community actions", "Others can corroborate with evidence, support with context, or identify as affected, all without public pile-ons."),
+    ("Aggregate signal", "Individual inputs stay private while patterns emerge: consistency, volume, quality, confidence."),
+    ("Publish accountability", "When thresholds are met, the output becomes a structured, shareable record for media, officials, or institutions."),
+]
+
+
+def build_how_it_works():
+    steps = "".join(f"""
+    <li>
+      <span class="step-num" aria-hidden="true">{n}</span>
+      <div class="stack-sm">
+        <h2>{e(title)}</h2>
+        <p class="small secondary">{e(text)}</p>
+      </div>
+    </li>""" for n, (title, text) in enumerate(HOW_STEPS, 1))
+    i = D.EXAMPLE_ISSUE
+    main = f"""
+<header class="page-head">
+  <h1>How it works</h1>
+  <p class="subtitle">How residents' reports will become a public, evidence-first record.</p>
+</header>
+<section class="panel-navy stack-sm small" id="now">
+  <p><strong>Live now:</strong> your officials and their votes, bills mapped to the Constitution, and county meeting agendas. <strong>Opens when accounts launch:</strong> verification, reports and corroboration (steps 1 to 6 below).</p>
+</section>
+<ol class="numbered card">{steps}
+</ol>
+<section class="stack-sm" id="example">
+  <h2 class="label">What a report will look like</h2>
+  <p class="small secondary">An example only. It's hypothetical, and not a report about any real official or agency.</p>
+  {example_issue_card()}
+  <p class="small">Facts, as a resident would file them: {e(i["facts"])}</p>
+</section>
+<p class="small"><a class="inline-link" href="/about/principles/">Principles</a> · <a class="inline-link" href="/about/methodology/">Methodology</a></p>"""
+    render("about/how-it-works", "How it works", main, tab="you", back=("About", "/about/"))
+
+
+PRINCIPLES = [
+    ("Evidence first", "Claims without evidence do not amplify. The system is designed to reward documentation, consistency, and verifiability over volume or emotion."),
+    ("Protected identities", "Participants are verified for uniqueness and relevance, but identities are protected by default. Safety enables honesty."),
+    ("No public pile-ons", "Individual actions remain private. Only aggregated signal becomes public. The goal is accountability, not spectacle."),
+    ("Anti-manipulation by design", "One person, one voice. Astroturfing, brigading, and impersonation are structurally constrained rather than moderated after the fact."),
+    ("Nonpartisan", "No party labels anywhere, and nothing that suggests a political side. The Pillory maps the Constitution; it doesn't rule on it."),
+]
+
+
+def build_principles():
+    cards = "".join(f"""
+<section class="card stack-sm">
+  <h2>{e(t)}</h2>
+  <p class="small secondary">{e(x)}</p>
+</section>""" for t, x in PRINCIPLES)
+    main = f"""
+<header class="page-head">
+  <h1>Principles</h1>
+</header>
+<div class="stack">{cards}</div>"""
+    render("about/principles", "Principles", main, tab="you", back=("About", "/about/"))
+
+
+def build_constitution():
+    tops = [p for p in CONSTITUTION if p["parent"] is None and p["id"] != "preamble"]
+    toc = "".join(f'<a class="chip chip--parch" href="#{p["id"]}">{e(p["label"])}</a>' for p in tops)
+    preamble = PROVISION.get("preamble")
+    main = f"""
+<header class="page-head">
+  <h1>The Constitution</h1>
+  <p class="subtitle">The starting point for every analysis on The Pillory.</p>
+</header>
+{f'<section class="parchment stack-sm" id="preamble"><h2 class="label">Preamble</h2><p class="quote">{e(preamble["text"])}</p></section>' if preamble else ""}
+<nav class="card stack-sm" aria-label="Articles and amendments">
+  <h2 class="label">Jump to</h2>
+  <div class="chips">{toc}</div>
+</nav>
+{full_constitution()}
+<section class="card stack">
+  <h2 class="label">How the baseline works</h2>
+  <ol class="numbered">
+    <li>
+      <span class="step-num" aria-hidden="true">1</span>
+      <div class="stack-sm">
+        <h3>Every analysis links to the text</h3>
+        <p class="small secondary">Each bill's analysis names the provisions it touches, quoted word for word from this text.</p>
+      </div>
+    </li>
+    <li>
+      <span class="step-num" aria-hidden="true">2</span>
+      <div class="stack-sm">
+        <h3>Alignment is mapped, not ruled</h3>
+        <p class="small secondary">Where it aligns and where it may be in tension, each with a source.</p>
+      </div>
+    </li>
+    <li>
+      <span class="step-num" aria-hidden="true">3</span>
+      <div class="stack-sm">
+        <h3>Departures get a fair hearing</h3>
+        <p class="small secondary">Why a different path might serve the public, including the case for amendment under Article V.</p>
+      </div>
+    </li>
+  </ol>
+  <a class="inline-link" href="/about/methodology/#analysis">How analyses are made</a>
+</section>"""
+    render("laws/constitution", "The Constitution", main, tab="laws", back=("Laws", "/laws/"))
 
 
 def build_search():
     main = """
 <header class="page-head">
   <h1>Search</h1>
-  <p class="subtitle">Reps, bodies, laws, issues, the Constitution, and meetings.</p>
+  <p class="subtitle">Reps, governing bodies, bills, meetings, and the Constitution.</p>
 </header>
 <div id="search-page-results" class="stack" aria-live="polite"></div>"""
     render("search", "Search", main)
 
 
-def tags(refs):
-    return " ".join(f"{CLAUSES[c]['short']} {aspect}" for c, aspect in refs)
-
-
 def search_index():
+    """Static search entries: the governing bodies and every provision of the
+    Constitution. Officials, bills and meetings are added from D1 by
+    /api/search-officials."""
     items = []
     for b in D.BODIES:
         items.append({"type": "Body", "title": b["name"], "sub": LEVEL_NAME[b["level"]] + " · Governing body",
-                      "url": url("body", b["slug"]), "k": b["short"]})
-    for l in D.LAWS:
-        items.append({"type": l["kind"], "title": l["title"], "sub": f"{BODIES[l['body']]['short']} · {l['status']}",
-                      "url": url("law", l["slug"]), "k": "law bill ordinance " + LEVEL_NAME[l["level"]] + " " + tags(l["clauses"])})
-    for i in D.ISSUES:
-        items.append({"type": "Issue", "title": i["title"], "sub": f"Example · {LEVEL_NAME[i['level']]} · {i['category']}",
-                      "url": url("issue", i["slug"]), "k": " ".join([i["short"], responsible(i)[0], tags(i["clauses"])])})
+                      "url": f"/bodies/{b['slug']}/", "k": b["short"]})
     items.append({"type": "Constitution", "title": "The Constitution", "sub": "Preamble, articles, and amendments",
-                  "url": "/laws/constitution/", "k": "preamble"})
-    for c in D.CLAUSES:
-        items.append({"type": "Constitution", "title": c["title"], "sub": c["subtitle"],
-                      "url": url("clause", c["slug"]), "k": c["short"] + " " + " ".join(c["text"])})
-    for m in D.MEETINGS:
-        items.append({"type": "Meeting", "title": m["title"], "sub": m["date"],
-                      "url": url("meeting", m["slug"]), "k": BODIES[m["body"]]["name"]})
-    return ("// Generated by tools/build.py from tools/data.py. Don't edit by hand.\n"
+                  "url": "/laws/constitution/", "k": "preamble constitution"})
+    for p in CONSTITUTION:
+        if not p["leaf"] or p["id"] == "preamble":
+            continue
+        text = p["text"]
+        items.append({"type": "Constitution", "title": p["label"], "sub": text[:90] + ("…" if len(text) > 90 else ""),
+                      "url": f"/laws/constitution/#{p['id']}", "k": text})
+    return ("// Generated by tools/build.py. Don't edit by hand.\n"
             "window.PILLORY_INDEX = " + json.dumps(items, ensure_ascii=False, indent=1) + ";\n")
 
 
-# ---------------------------------------------------------------------------
-
-HOME_START = "<!-- build:home-issues (filled in by tools/build.py from tools/data.py; edits inside are overwritten) -->"
-HOME_END = "<!-- /build:home-issues -->"
-
-
-def fill_home_preview():
-    """Refresh the sample issue cards on the hand-written home page (one per level)."""
-    home = ROOT / "index.html"
-    s = home.read_text(encoding="utf-8")
-    if HOME_START not in s or HOME_END not in s:
-        sys.exit("build.py: index.html is missing the build:home-issues markers")
-    picks = [next(i for i in D.ISSUES if i["level"] == level) for level in D.LEVELS]
-    cards = "".join(issue_card(i) for i in picks)
-    indented = "\n".join("          " + line if line else "" for line in cards.strip("\n").splitlines())
-    before, rest = s.split(HOME_START, 1)
-    _, after = rest.split(HOME_END, 1)
-    home.write_text(f"{before}{HOME_START}\n{indented}\n          {HOME_END}{after}", encoding="utf-8")
+def write_redirects():
+    lines = ["# Generated by tools/build.py: old URLs and where they go now. Don't edit by hand."]
+    lines += [f"{src} {dst} 301" for src, dst in REDIRECTS]
+    (ROOT / "_redirects").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 # ---------------------------------------------------------------------------
@@ -1115,11 +652,11 @@ FUNCTIONS_EXPORT = ROOT / "functions" / "_lib" / "generated.js"
 
 
 def export_for_functions():
-    """Write functions/_lib/generated.js: the page shell and sample-data snippets.
+    """Write functions/_lib/generated.js: the page shell and shared snippets.
 
-    Pages Functions render the D1-backed pages (Reps, rep profiles, bodies, the
-    Laws index, real bills) in JavaScript. Rather than duplicate the templates,
-    they import the exact shell and card HTML produced here.
+    Pages Functions render the D1-backed pages (Home, Reps, bodies, Laws,
+    meetings) in JavaScript. Rather than duplicate the templates, they import
+    the exact shell and card HTML produced here.
     """
     page = shell("%%TITLE%%", "%%MAIN%%", nav="%%NAV%%", back_html="%%BACK%%", title_is_html=True)
     tabbars = {t: {"root": tabbar(t, True), "sub": tabbar(t, False)} for t, _, _ in TABS}
@@ -1128,28 +665,19 @@ def export_for_functions():
         "about": b["about"], "chip": clause_chip(b["clause"], link=True),
         "chip_span": clause_chip(b["clause"]), "card": body_card(b),
     } for b in D.BODIES]
-    meetings_by_body = {b["slug"]: [link_row(url("meeting", m["slug"]), m["title"], m["date"])
-                                    for m in D.MEETINGS if m["body"] == b["slug"]] for b in D.BODIES}
-    laws_by_body = {b["slug"]: [link_row(url("law", l["slug"]), l["title"], f"Sample {l['kind'].lower()} · {l['status']}")
-                                for l in D.LAWS if l["body"] == b["slug"]] for b in D.BODIES}
-    issues_by_body = {b["slug"]: [i["slug"] for i in issues_for_body(b["slug"])] for b in D.BODIES}
     data = {
         "ASSET_VERSION": ASSET_VERSION,
         "PAGE": page,
         "TABBARS": tabbars,
         "LEVEL_NAME": LEVEL_NAME,
         "BODIES": bodies,
-        "MEETINGS_BY_BODY": meetings_by_body,
-        "LAWS_BY_BODY": laws_by_body,
-        "ISSUES_BY_BODY": issues_by_body,
-        "ISSUE_CARDS": {i["slug"]: issue_card(i) for i in D.ISSUES},
-        "ISSUES": {i["slug"]: {"title": i["title"], "short": i["short"], "url": url("issue", i["slug"]),
-                               "level": i["level"], "body": i["body"], "category": i["category"],
-                               "facts": i["facts"]} for i in D.ISSUES},
-        "SAMPLE_LAW_CARDS": [law_card(l) for l in D.LAWS],
+        # Issues residents have reported, by slug. None until reporting opens;
+        # agenda watch and the admin review page read this.
+        "ISSUES": {},
+        "EMPTY_REPORTS": EMPTY_REPORTS,
     }
     out = ["// Generated by tools/build.py. Don't edit by hand; change tools/build.py or tools/data.py and rebuild.",
-           "// Shared page shell and sample-data snippets for the Pages Functions."]
+           "// Shared page shell and snippets for the Pages Functions."]
     for k, v in data.items():
         out.append(f"export const {k} = {json.dumps(v, ensure_ascii=False, indent=1)};")
     FUNCTIONS_EXPORT.parent.mkdir(parents=True, exist_ok=True)
@@ -1157,26 +685,20 @@ def export_for_functions():
 
 
 def main():
-    validate()
-    build_issues_index()
-    for i in D.ISSUES:
-        build_issue(i)
-    for m in D.MEETINGS:
-        build_meeting(m)
-    for v in D.EVIDENCE:
-        build_evidence(v)
-    for l in D.LAWS:
-        build_law(l)
-    build_constitution()
-    for c in D.CLAUSES:
-        build_clause(c)
+    for b in D.BODIES:
+        if b["clause"][0] not in PROVISION:
+            sys.exit(f"build.py: body {b['slug']} cites unknown provision {b['clause'][0]}")
+    if D.EXAMPLE_ISSUE["clause"][0] not in PROVISION:
+        sys.exit("build.py: the example issue cites an unknown provision")
+    build_issues()
     build_report()
     build_you()
+    build_about()
+    build_how_it_works()
+    build_principles()
+    build_methodology()
+    build_constitution()
     build_search()
-    # Old URLs from the first round of screens.
-    redirect("constitution", "/laws/constitution/")
-    redirect("feed", "/home/")  # the Feed tab became Home
-    redirect("issue", url("issue", "public-comment-limit"))
 
     for d in GENERATED_DIRS:
         shutil.rmtree(ROOT / d, ignore_errors=True)
@@ -1187,9 +709,9 @@ def main():
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(doc, encoding="utf-8")
     (ROOT / "assets" / "search-index.js").write_text(search_index(), encoding="utf-8")
-    fill_home_preview()
+    write_redirects()
     export_for_functions()
-    print(f"Built {len(PAGES)} pages.")
+    print(f"Built {len(PAGES)} pages and {len(REDIRECTS)} redirects.")
 
 
 if __name__ == "__main__":

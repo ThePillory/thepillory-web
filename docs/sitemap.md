@@ -1,47 +1,46 @@
 # The Pillory: sitemap
 
-## Public, no account needed
-- Home, How it works, Principles
-- Published record (from a shared link)
-- About: Methodology, Funding, Advisory group
+What's live now, and what opens when accounts launch. Everything live shows
+real data (from D1 or official sources) or an honest empty state. There are no
+sample pages. See docs/site-audit.md for the page-by-page audit.
 
-## Join & verify (onboarding)
+## Live now
 
-## Tab 1: Home (briefing)
+### Tab 1: Home (`/`, the briefing)
+- First-visit intro (dismissible) > How it works
 - County / State / Federal filter (applies to every section)
-- This week: upcoming meetings and hearings > Meeting; See all meetings > Calendar
-  - Meeting: details, add to calendar, follow, how to weigh in, agenda watch, full agenda, after the meeting
-- Issues near you > All issues
-- Your reps' latest votes > All votes
-- Issue
-  - Evidence item
-  - Constitutional section (under Laws)
-  - Responsible rep or body (under Reps)
-  - Agency response, record history
-  - Share > Published record
+- This week: upcoming meetings and hearings > Meeting; See all meetings > Calendar (`/meetings/`)
+  - Meeting: details, add to calendar, how to weigh in, agenda watch, full agenda, after the meeting
+- Issues near you: empty state until reporting opens (`/issues/`)
+- Your reps' latest votes > All votes (`/votes/`)
 
-## Tab 2: Reps
-- Rep: Overview, Promises, Votes, Issues
-  - Promise > Source / evidence
+### Tab 2: Reps (`/reps/`)
+- Governing body (`/bodies/<slug>/`): members; the Board of Supervisors also lists its meetings
+- Rep (`/reps/<slug>/`): Overview, Promises (not tracked yet), Votes, Issues (empty state)
   - Vote > Bill (under Laws)
-- Body: members, meetings, issues
 
-## Tab 3: + Report (flow)
-- Details > Evidence > Perspective > Constitution > Review > Submitted
+### Tab 3: + Report (`/report/`)
+- Reporting opens when accounts launch; links to what you can do now
 
-## Tab 4: Laws
-- Bill or ordinance: summary, baseline, votes, district signal, issues
-- Constitution > Article or amendment: text, issues, laws
+### Tab 4: Laws (`/laws/`)
+- Bill (`/laws/bills/<id>/`): summary, constitutional analysis (card or full), how your reps voted, "Something wrong?", "Request full analysis"
+- The Constitution (`/laws/constitution/`): full text, one anchor per provision
 
-## Tab 5: You
-- Following & notifications
-- My reports
-- Civic jury: invitations > review a report
-- Verification & districts
-- Privacy dashboard: what we hold, download, delete
-- About
+### Tab 5: You (`/you/`)
+- Accounts aren't open yet
+- About (`/about/`): How it works (`/about/how-it-works/`, with the site's one labeled example), Principles (`/about/principles/`), Methodology (`/about/methodology/`)
 
-## Separate: Agency portal (private link)
-- Verify office > view issue > post response
+### Every page
+- Search (`/search/`): reps, governing bodies, bills, meetings, the Constitution
+- Footer: About · How it works · Principles · Methodology
 
-## Global: search from every tab
+### Private
+- Review queue (`/admin/review/`, behind Cloudflare Access)
+
+## Opens when accounts launch
+- Join & verify (identity once, address > districts)
+- + Report flow: Details > Evidence > Perspective > Constitution > Review > Submitted
+- Issue: evidence, constitutional baseline, responsible rep or body, agency response, record history, published record
+- Rep: promises with sources
+- You: following and notifications, my reports, civic jury, verification and districts, privacy dashboard
+- Agency portal (private link): verify office > view issue > post response

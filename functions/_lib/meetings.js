@@ -69,21 +69,6 @@ export async function summariesFor(db, ids) {
   }
 }
 
-/** Approved issue links for these meetings. */
-export async function approvedLinks(db, ids) {
-  if (!ids.length) return [];
-  try {
-    const { results } = await db
-      .prepare(`SELECT * FROM item_issue_links WHERE status = 'approved' AND meeting_id IN (${ids.map(() => "?").join(",")})`)
-      .bind(...ids)
-      .all();
-    return results;
-  } catch (err) {
-    if (tableMissing(err)) return [];
-    throw err;
-  }
-}
-
 /** Items the summary flagged, and each flag once (in the order first seen). */
 export function flagSummary(summary) {
   const flags = [];

@@ -18,7 +18,10 @@ import { FLAGS, checkSummaries } from "./agenda-check.js";
 import { DEFAULT_MODEL, DraftRefused } from "./claude.js";
 
 export { FLAGS, FLAG_LABELS } from "./agenda-check.js";
-export const AGENDA_PROMPT_VERSION = "2026-09-29.1";
+export const AGENDA_PROMPT_VERSION = "2026-10-01.1";
+// Residents' issues to suggest links to. None until reporting opens: then the
+// prompt and the shape leave issue links out entirely.
+const HAS_ISSUES = Object.keys(ISSUES).length > 0;
 const INSTRUCTIONS = `You write plain-language summaries of county government agenda items for The Pillory, a nonpartisan civic site. People review every summary. Readers are residents who want to know what their Board of Supervisors or Planning Commission is about to decide.
 
 For every agenda item you are given:
@@ -29,9 +32,11 @@ For every agenda item you are given:
   fees_taxes: fees, rates, charges, assessments, taxes, bonds or measures that raise revenue.
   public_safety: sheriff, fire, emergency services, code enforcement, public health emergencies.
   public_access: public meetings, public comment, records, transparency, elections, appointments.
-Closed-session items: summarize only what the agenda states; flag them only when the agenda states a subject that fits.
-
-issue_links: only when an item plainly concerns the same subject as one of the listed issues, suggest a link with one neutral sentence on why. Most items won't have one. A person approves each link before it is shown.`;
+Closed-session items: summarize only what the agenda states; flag them only when the agenda states a subject that fits.${
+  HAS_ISSUES
+    ? "\n\nissue_links: only when an item plainly concerns the same subject as one of the listed issues, suggest a link with one neutral sentence on why. Most items won't have one. A person approves each link before it is shown."
+    : ""
+}`;
 
 function issueList() {
   return Object.entries(ISSUES)
@@ -44,7 +49,7 @@ function schema(keys) {
   return {
     type: "object",
     additionalProperties: false,
-    required: ["items", "issue_links"],
+    required: HAS_ISSUES ? ["items", "issue_links"] : ["items"],
     properties: {
       items: {
         type: "array",
@@ -59,7 +64,7 @@ function schema(keys) {
           },
         },
       },
-      issue_links: {
+      ...(HAS_ISSUES ? { issue_links: {
         type: "array",
         items: {
           type: "object",
@@ -71,7 +76,7 @@ function schema(keys) {
             reason: { type: "string" },
           },
         },
-      },
+      } } : {}),
     },
   };
 }
@@ -83,7 +88,7 @@ function agendaMessage(meeting, items) {
       .join("; ");
     return `[${it.item_key}] (${it.section || "no section"}) ${it.title}${docs ? `\n    (${docs})` : ""}`;
   });
-  return `${meeting.body}, ${meeting.meeting_type || "meeting"}, ${meeting.starts_at.replace("T", " ")}\n\nAgenda items, as [item number] (section) text:\n${lines.join("\n")}\n\nExisting issues on The Pillory (slug (level): title. facts):\n${issueList()}\n\nWrite the summaries.`;
+  return `${meeting.body}, ${meeting.meeting_type || "meeting"}, ${meeting.starts_at.replace("T", " ")}\n\nAgenda items, as [item number] (section) text:\n${lines.join("\n")}\n\n${HAS_ISSUES ? `Existing issues on The Pillory (slug (level): title. facts):\n${issueList()}\n\n` : ""}Write the summaries.`;
 }
 
 async function draftSummaries(env, meeting, items) {
