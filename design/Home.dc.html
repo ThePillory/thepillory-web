@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Home</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;font-family:"IBM Plex Sans",system-ui,sans-serif;background:#F5F2EA;color:#1A1D21}
+a{color:#1E3A5F}a:hover{color:#142A46}
+</style>
+</helmet>
+<div style="width: 390px; height: 1560px; box-sizing: border-box; display: flex; flex-direction: column; background: #F5F2EA; font-family: 'IBM Plex Sans', system-ui, sans-serif; color: #1A1D21">
+<header style="padding: 20px 20px 12px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: center">
+<div style="font-family: Newsreader, Georgia, serif; font-size: 26px; font-weight: 600">The Pillory</div>
+<div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px">
+<span style="font-size: 13px; font-weight: 600">Calaveras County</span>
+<span style="font-size: 11px; color: #4A4F57">Verified resident</span>
+</div>
+</div>
+<div role="group" aria-label="Scope" style="display: flex; gap: 8px">
+<button aria-pressed="true" style="min-height: 44px; padding: 0 16px; border-radius: 22px; border: 1px solid #1E3A5F; background: #1E3A5F; color: #FFFFFF; font: 600 14px 'IBM Plex Sans', sans-serif">All</button>
+<button aria-pressed="false" style="min-height: 44px; padding: 0 16px; border-radius: 22px; border: 1px solid #C9C1B1; background: #FFFFFF; color: #1A1D21; font: 500 14px 'IBM Plex Sans', sans-serif">County</button>
+<button aria-pressed="false" style="min-height: 44px; padding: 0 16px; border-radius: 22px; border: 1px solid #C9C1B1; background: #FFFFFF; color: #1A1D21; font: 500 14px 'IBM Plex Sans', sans-serif">State</button>
+<button aria-pressed="false" style="min-height: 44px; padding: 0 16px; border-radius: 22px; border: 1px solid #C9C1B1; background: #FFFFFF; color: #1A1D21; font: 500 14px 'IBM Plex Sans', sans-serif">Federal</button>
+</div>
+<div style="font-size: 13px; color: #4A4F57">Your briefing · [Day, date] · Sample content</div>
+</header>
+<section style="padding: 8px 20px 20px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><h2 style="margin: 0; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; color: #4A4F57">THIS WEEK</h2><a href="#" style="font-size: 13px; font-weight: 600; text-decoration: none">See all meetings</a></div>
+<a href="Meeting.dc.html" style="display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; background: #FFFFFF; border: 1px solid #DDD7CA; border-radius: 12px; text-decoration: none; color: #1A1D21">
+<div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: #4A4F57"><span>COUNTY · MEETING</span><span style="color: #8A3B12">Comments due [date]</span></div>
+<div style="font-family: Newsreader, Georgia, serif; font-size: 19px; font-weight: 600; line-height: 1.25">Board of Supervisors</div>
+<div style="font-size: 13px; color: #4A4F57">[Day, date] · 9:00 AM · San Andreas</div>
+<div style="display: flex; flex-wrap: wrap; gap: 6px"><span style="padding: 4px 10px; background: #E3EAF3; color: #1E3A5F; border-radius: 999px; font-size: 12px; font-weight: 600">3 items flagged</span><span style="padding: 4px 10px; background: #F5F2EA; border-radius: 999px; font-size: 12px">Budget</span><span style="padding: 4px 10px; background: #F5F2EA; border-radius: 999px; font-size: 12px">Land use</span><span style="padding: 4px 10px; background: #F5F2EA; border-radius: 999px; font-size: 12px">Public comment</span></div>
+</a>
+<div style="display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; background: #FFFFFF; border: 1px solid #DDD7CA; border-radius: 12px">
+<div style="font-size: 12px; font-weight: 600; color: #4A4F57">STATE · HEARING</div>
+<div style="font-size: 15px; font-weight: 600; line-height: 1.35">Assembly committee hearing on [bill number]</div>
+<div style="font-size: 13px; color: #4A4F57">[Day, date] · Sacramento · Your Assemblymember sits on this committee</div>
+</div>
+</section>
+<section style="padding: 8px 20px 20px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><h2 style="margin: 0; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; color: #4A4F57">ISSUES NEAR YOU</h2><a href="#" style="font-size: 13px; font-weight: 600; text-decoration: none">See all issues</a></div>
+<a href="Issue.dc.html" style="display: flex; flex-direction: column; gap: 10px; padding: 16px; background: #FFFFFF; border: 1px solid #DDD7CA; border-radius: 12px; text-decoration: none; color: #1A1D21">
+<div style="display: flex; gap: 6px; font-size: 12px; font-weight: 600; color: #4A4F57"><span>COUNTY</span><span>·</span><span>PUBLIC MEETINGS</span></div>
+<div style="font-family: Newsreader, Georgia, serif; font-size: 20px; font-weight: 600; line-height: 1.25">Public comment cut to one minute at Board of Supervisors meetings</div>
+<div style="font-size: 13px; color: #4A4F57">Calaveras County Board of Supervisors</div>
+<div style="display: flex; flex-wrap: wrap; gap: 6px"><span style="padding: 4px 10px; background: #F3E8D3; color: #6B4410; border-radius: 999px; font-size: 12px; font-weight: 600">Amendment I · Petition</span><span style="padding: 4px 10px; background: #E3EAF3; color: #1E3A5F; border-radius: 999px; font-size: 12px; font-weight: 600">On this week's agenda</span></div>
+<div style="display: flex; justify-content: space-between; font-size: 12px; color: #4A4F57; border-top: 1px solid #EEE9DE; padding-top: 10px"><span>Status: Agency responded</span><span>Confidence: High</span></div>
+</a>
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 16px; background: #FFFFFF; border: 1px solid #DDD7CA; border-radius: 12px">
+<div style="display: flex; gap: 6px; font-size: 12px; font-weight: 600; color: #4A4F57"><span>COUNTY</span><span>·</span><span>PUBLIC SERVICES</span></div>
+<div style="font-family: Newsreader, Georgia, serif; font-size: 20px; font-weight: 600; line-height: 1.25">[Road] repairs promised for [season] not yet scheduled</div>
+<div style="font-size: 13px; color: #4A4F57">Calaveras County Public Works</div>
+<div style="display: flex; justify-content: space-between; font-size: 12px; color: #4A4F57; border-top: 1px solid #EEE9DE; padding-top: 10px"><span>Status: Gathering evidence</span><span>Confidence: Medium</span></div>
+</div>
+</section>
+<section style="padding: 8px 20px 20px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><h2 style="margin: 0; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; color: #4A4F57">YOUR REPS' LATEST VOTES</h2><a href="#" style="font-size: 13px; font-weight: 600; text-decoration: none">See all votes</a></div>
+<div style="display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #DDD7CA; border-radius: 12px">
+<div style="display: flex; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #EEE9DE"><div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 600">[U.S. Senator]</span><span style="font-size: 12px; color: #4A4F57">[Bill] · Final passage · [date]</span></div><span style="align-self: center; font-size: 13px; font-weight: 600">Yes</span></div>
+<div style="display: flex; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #EEE9DE"><div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 600">[U.S. Representative, CA-5]</span><span style="font-size: 12px; color: #4A4F57">[Bill] · Final passage · [date]</span></div><span style="align-self: center; font-size: 13px; font-weight: 600">No</span></div>
+<div style="display: flex; justify-content: space-between; gap: 12px; padding: 12px 16px"><div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 600">[State Senator]</span><span style="font-size: 12px; color: #4A4F57">[Bill] · Final passage · [date]</span></div><span style="align-self: center; font-size: 13px; font-weight: 600">Yes</span></div>
+</div>
+</section>
+<div style="margin: 4px 20px 24px; padding: 16px; display: flex; align-items: center; gap: 12px; border-top: 1px solid #DDD7CA">
+<div style="width: 28px; height: 28px; border-radius: 14px; background: #E3EAF3; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E3A5F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 600">You're caught up</span><span style="font-size: 13px; color: #4A4F57">We'll let you know when something you follow changes.</span></div>
+</div>
+<nav aria-label="Main" style="margin-top: auto; display: flex; justify-content: space-around; align-items: center; padding: 10px 8px 24px; background: #FFFFFF; border-top: 1px solid #DDD7CA">
+<a href="Home.dc.html" style="min-width: 56px; min-height: 44px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #1E3A5F; text-decoration: none">Home</a>
+<a href="#" style="min-width: 56px; min-height: 44px; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #4A4F57; text-decoration: none">Reps</a>
+<a href="NewReport.dc.html" style="min-height: 44px; padding: 0 16px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #1E3A5F; color: #FFFFFF; border-radius: 22px; text-decoration: none">+ Report</a>
+<a href="Constitution.dc.html" style="min-width: 56px; min-height: 44px; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #4A4F57; text-decoration: none">Laws</a>
+<a href="Join.dc.html" style="min-width: 56px; min-height: 44px; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #4A4F57; text-decoration: none">You</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1560}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
