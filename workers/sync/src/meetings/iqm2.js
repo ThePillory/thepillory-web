@@ -1,9 +1,11 @@
 // Readers for the county's IQM2 (Granicus) meeting portal. Pure functions over
 // the portal's HTML; the network side is in ./county.js.
 //
-//   Citizens/calendar.aspx?View=List   every meeting this year, with document links
+//   Citizens/calendar.aspx?View=List   every meeting this year, with document links (often
+//                                      hidden in the list even when published)
 //   Services/RSS.aspx?Feed=Calendar    the most recently published agendas, with dates
-//   Citizens/Detail_Meeting.aspx?ID=N  one meeting's web agenda: sections, items, attachments
+//   Citizens/Detail_Meeting.aspx?ID=N  one meeting's web agenda: sections, items, attachments,
+//                                      and its agenda and packet links
 
 export const PORTAL = "https://calaverascountyca.iqm2.com";
 
@@ -169,9 +171,17 @@ export function parseMeeting(html, base = PORTAL) {
   }
   const agenda = /id="ContentPlaceholder1_hlPublicAgendaFile"[^>]*href="([^"]+)"/i.exec(doc);
   const packet = /id="ContentPlaceholder1_hlFullAgendaFile"[^>]*href="([^"]+)"/i.exec(doc);
+  const agendaUrl = agenda ? absolute(agenda[1], base) : null;
+  const fileId = agendaUrl && /[?&]ID=(\d+)/i.exec(agendaUrl);
   return {
     items,
-    agenda_url: agenda ? absolute(agenda[1], base) : null,
+    agenda_url: agendaUrl,
     packet_url: packet ? absolute(packet[1], base) : null,
+    // The calendar list often hides a meeting's document links, so the agenda's
+    // file ID comes from here: it changes when the county re-posts the agenda.
+    agenda_file_id: fileId ? fileId[1] : null,
+    // The county withdraws a meeting's page for a while (usually after the
+    // meeting, until the minutes are done): "The meeting is not available at this time".
+    unavailable: /meeting is not available at this time/i.test(doc),
   };
 }

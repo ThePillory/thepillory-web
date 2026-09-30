@@ -73,6 +73,9 @@ AGENDA_DAILY_LIMIT = "3"
 MEETING_BODIES = "Board of Supervisors|Planning Commission"
 IQM2_MIN_INTERVAL_MS = "60000"
 IQM2_DAILY_LIMIT = "12"
+# Meetings from this many days back are read once (agenda and agenda watch), so
+# recent agendas are filled in even when no new meetings are posted.
+MEETING_BACKFILL_DAYS = "30"
 
 # Secrets (set with `npx wrangler secret put NAME` or in the dashboard):
 #   CONGRESS_API_KEY    api.congress.gov key

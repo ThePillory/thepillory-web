@@ -40,6 +40,8 @@ await test("calendar rows: body, time, status, location and published documents"
   assert.match(past.minutes_url, /Type=12&ID=8005/);
   assert.equal(rows.find((r) => r.portal_id === "9006").status, "cancelled");
   assert.equal(rows.find((r) => r.portal_id === "9004").agenda_url, null);
+  // The list hides some agenda links; those meetings still get read from their own page.
+  assert.equal(rows.find((r) => r.portal_id === "9002").agenda_url, null);
 });
 
 await test("publish dates from the agenda feed", () => {
@@ -59,6 +61,14 @@ await test("web agenda: numbered items, sections, staff reports and exhibits", (
   assert.equal(items[3].section_kind, "regular");
   assert.match(agenda_url, /Type=14&ID=7001/);
   assert.match(packet_url, /Type=1&ID=7001/);
+  assert.equal(parseMeeting(meetingHtml(9001)).agenda_file_id, "7001");
+  const hidden = parseMeeting(meetingHtml(9002));
+  assert.equal(hidden.agenda_file_id, "7002");
+  assert.match(hidden.agenda_url, /Type=14&ID=7002/);
+  const none = parseMeeting(meetingHtml(9004));
+  assert.deepEqual([none.items.length, none.agenda_url, none.agenda_file_id, none.unavailable], [0, null, null, false]);
+  const withdrawn = parseMeeting(meetingHtml(9009));
+  assert.deepEqual([withdrawn.items.length, withdrawn.unavailable], [0, true]);
   const pc = parseMeeting(meetingHtml(9002)).items;
   assert.equal(pc[0].section_kind, "public_hearing");
   assert.equal(sectionKind("Adjournment"), "other");

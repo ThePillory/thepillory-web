@@ -111,8 +111,12 @@ async function draftSummaries(env, meeting, items) {
   return { draft: JSON.parse(text), model: msg.model, usage };
 }
 
-async function nextAgendas(db, limit) {
-  const from = `${addDays(pacificNow().slice(0, 10), -1)}T00:00`;
+// Agendas to summarize: requests from the review page first, then upcoming
+// meetings (soonest first), then meetings from the last MEETING_BACKFILL_DAYS
+// (latest first), so recent agendas have summaries too.
+async function nextAgendas(db, limit, backfillDays) {
+  const today = pacificNow().slice(0, 10);
+  const now = `${today}T00:00`;
   return (
     await db
       .prepare(
@@ -122,9 +126,9 @@ async function nextAgendas(db, limit) {
            AND EXISTS (SELECT 1 FROM meeting_items i WHERE i.meeting_id = m.id)
            AND (EXISTS (SELECT 1 FROM agenda_requests r WHERE r.meeting_id = m.id AND r.status = 'pending')
                 OR (m.starts_at >= ? AND NOT EXISTS (SELECT 1 FROM agenda_summaries s WHERE s.meeting_id = m.id AND s.agenda_file_id IS m.details_file_id)))
-         ORDER BY (request_id IS NULL), m.starts_at LIMIT ?`
+         ORDER BY (request_id IS NULL), m.starts_at < ?, CASE WHEN m.starts_at >= ? THEN m.starts_at END, m.starts_at DESC LIMIT ?`
       )
-      .bind(from, limit)
+      .bind(`${addDays(today, -backfillDays)}T00:00`, now, now, limit)
       .all()
   ).results;
 }
@@ -179,7 +183,7 @@ export async function runAgendaWatch(env, db, { run, deadline }) {
   let used = parseInt((await getState(db, key)) || "0", 10);
   let drafted = 0;
   let stoppedEarly = false;
-  const todo = used < limit ? await nextAgendas(db, limit - used) : [];
+  const todo = used < limit ? await nextAgendas(db, limit - used, parseInt(env.MEETING_BACKFILL_DAYS || "30", 10)) : [];
   for (const meeting of todo) {
     if (deadline - Date.now() < 3 * 60 * 1000) {
       stoppedEarly = true;

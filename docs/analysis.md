@@ -105,6 +105,7 @@ For each new county agenda (Board of Supervisors, Planning Commission), one Clau
 - **Checks:** a sentence stating a number, amount or date that the item's own agenda text doesn't contain is removed and logged. Unknown item numbers are dropped. Flags and issue slugs are limited to fixed lists.
 - **Label:** "AI-drafted from the official agenda", with a link to the source, until a person approves it.
 - **Links:** issue links start as `suggested` and show only once approved at `/admin/review/`.
+- **Order:** agendas someone asked to regenerate at `/admin/review/` first, then upcoming meetings (soonest first), then meetings from the last `MEETING_BACKFILL_DAYS` (30, latest first).
 - **Limits:** `AGENDA_DAILY_LIMIT` (default 3), separate from the bill limit. The prompt version is `AGENDA_PROMPT_VERSION` in `src/analysis/agenda.js`.
 
 Tables: `agenda_summaries` (every version kept), `agenda_summary_revisions`, `item_issue_links`, `agenda_requests` (migration `0003_meetings.sql`).

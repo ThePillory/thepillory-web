@@ -2,6 +2,8 @@
 // portal's structure (calendar rows, the "RSS" page, the web agenda table) so
 // the parsers are tested against it, but every name, item, and number is
 // invented. Dates are relative to today so "this week" always has meetings.
+// Like the real list, some rows hide their Agenda link (listed: false) even though
+// the meeting's own page links the agenda.
 
 const MONTHS = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
 const DAYS = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
@@ -28,8 +30,8 @@ function row(m) {
                 <div class="RowLink"><a href="/Citizens/Detail_Meeting.aspx?ID=${m.id}" title="${tip(d, m.time, m.board, m.type, m.status)}" >${d.toDateString()}</a></div>
                 ${m.status === "Cancelled" ? `<div class="RowRight"><span class='MeetingCancelled'>Cancelled</span></div>` : `
                 <div class="RowRight MeetingLinks">
-                    ${link(m.agenda ? `FileOpen.aspx?Type=14&ID=${m.agenda}&Inline=True` : "", "Agenda")}
-                    ${link(m.agenda ? `FileOpen.aspx?Type=1&ID=${m.agenda}&Inline=True` : "", "Agenda Packet")}
+                    ${link(m.agenda && m.listed !== false ? `FileOpen.aspx?Type=14&ID=${m.agenda}&Inline=True` : "", "Agenda")}
+                    ${link(m.agenda && m.listed !== false ? `FileOpen.aspx?Type=1&ID=${m.agenda}&Inline=True` : "", "Agenda Packet")}
                     ${link("", "Summary")}
                     ${link(m.minutes ? `FileOpen.aspx?Type=12&ID=${m.minutes}&Inline=True` : "", "Minutes")}
                     <div class="WithoutSeparator">&nbsp;<a href="#" id="lnkMeetingVideo" class="HiddenDocumentLink">Video</a>&nbsp;</div>
@@ -41,11 +43,16 @@ function row(m) {
 
 export const MEETINGS = [
   { id: 9001, day: 2, time: "9:00 AM", board: "Board of Supervisors", type: "Regular Meeting", status: "Scheduled", agenda: 7001 },
-  { id: 9002, day: 4, time: "9:00 AM", board: "Planning Commission", type: "Regular Meeting", status: "Scheduled", agenda: 7002 },
+  { id: 9002, day: 4, time: "9:00 AM", board: "Planning Commission", type: "Regular Meeting", status: "Scheduled", agenda: 7002, listed: false },
   { id: 9003, day: 6, time: "1:00 PM", board: "Parks and Recreation Commission", type: "Regular Meeting", status: "Scheduled", agenda: 7003 },
   { id: 9004, day: 9, time: "9:00 AM", board: "Board of Supervisors", type: "Regular Meeting", status: "Scheduled", agenda: null },
   { id: 9005, day: -5, time: "9:00 AM", board: "Board of Supervisors", type: "Regular Meeting", status: "Closed", agenda: 7005, minutes: 8005 },
   { id: 9006, day: 11, time: "9:00 AM", board: "Planning Commission", type: "Regular Meeting", status: "Cancelled", agenda: null },
+  // Past meetings with hidden links: 9007 is inside the 30-day backfill, 9008 isn't.
+  { id: 9007, day: -20, time: "9:00 AM", board: "Board of Supervisors", type: "Regular Meeting", status: "Closed", agenda: 7007, listed: false },
+  { id: 9008, day: -40, time: "9:00 AM", board: "Board of Supervisors", type: "Regular Meeting", status: "Closed", agenda: 7008, listed: false },
+  // The county has withdrawn this one's page for now, as it does after a meeting.
+  { id: 9009, day: -10, time: "9:00 AM", board: "Planning Commission", type: "Regular Meeting", status: "Closed", agenda: 7009, listed: false, withdrawn: true },
 ];
 
 export function calendarHtml() {
@@ -74,6 +81,14 @@ const attach = (label, href, printout) =>
 export function meetingHtml(id) {
   const m = MEETINGS.find((x) => String(x.id) === String(id));
   if (!m) return null;
+  // A withdrawn page, word for word as the portal shows it.
+  if (m.withdrawn) {
+    return `<html><body><div id="ContentPlaceholder1_divMeeting">${m.board} Regular Meeting</div>
+  <div class="Message">The meeting is not available at this time, please check back later</div>
+  <a href="javascript:history.back()">Go back to the page you were on.</a></body></html>`;
+  }
+  // No agenda posted yet: the page has no agenda links and an empty outline.
+  if (!m.agenda) return `<html><body><span id="ContentPlaceholder1_lblOutline"></span></body></html>`;
   const rows =
     m.board === "Planning Commission"
       ? [
