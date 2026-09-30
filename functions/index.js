@@ -1,132 +1,182 @@
-// /: the Home briefing (thepillory.co opens here; /home/ redirects).
-//   A dismissible intro for first-time visitors, linking How it works (assets/app.js remembers the dismissal)
-//   This week: up to 3 upcoming meetings or hearings, with comment deadlines and flagged-item chips
-//   Issues near you: none yet; reporting opens when accounts launch
-//   Your reps' latest votes: one row per rep and final-passage vote, newest first (3 rows)
-// The County / State / Federal filter (?level=) applies to all three.
-import { EMPTY_REPORTS } from "./_lib/generated.js";
-import { page, esc, fmtDate, safeUrl } from "./_lib/render.js";
-import { recentFinalVotes } from "./_lib/data.js";
-import { billHref } from "./_lib/votes.js";
-import { listMeetings, summariesFor, meetingCard, pacificNow, addDays, when } from "./_lib/meetings.js";
+// /: Home. The hub for every new visitor; once a visitor's districts are known
+// (the pillory_districts cookie, set by the lookup), their briefing instead:
+//   in Calaveras County   the full county briefing (also at /calaveras/)
+//   anywhere else         their reps, their reps' latest votes, Happening now
+// ?hub=1 always shows the hub. /home/ redirects here.
+//
+// The hub, top to bottom:
+//   headline; Find your representatives (address or ZIP; nothing stored);
+//   Happening now (Congress / California: latest final-passage votes, ?now=state);
+//   Take part (Calaveras comment deadlines, contacting your reps);
+//   Communities (Calaveras, live; the county waitlist with real counts);
+//   Understand (explainers).
+import { page, esc } from "./_lib/render.js";
+import { listMeetings, pacificNow, addDays, deadlineParts, meetingHref, when } from "./_lib/meetings.js";
+import { districtsFromCookie, isCalaveras, describe, STATE_NAME } from "./_lib/districts.js";
+import { happeningNow, happeningSection, lookupForm, waitlistCounts } from "./_lib/hub.js";
+import { calaverasBriefing, personalBriefing } from "./_lib/briefing.js";
+import { turnstileReady, turnstileWidget, turnstileScript } from "./_lib/turnstile.js";
 
-const LEVELS = ["county", "state", "federal"];
+const missing = (err) => /no such table|no such column/i.test(String(err && err.message));
 
-function filterNav(level) {
-  const opt = (value, label) => {
-    const href = value ? `/?level=${value}` : "/";
-    return `<a class="toggle" href="${href}"${(level || null) === value ? ' aria-current="true"' : ""}>${label}</a>`;
-  };
-  return `<nav class="pill-filter" aria-label="Scope">${opt(null, "All")}${opt("county", "County")}${opt("state", "State")}${opt("federal", "Federal")}</nav>`;
+const WAITLIST_MESSAGES = {
+  joined: "Thank you. We'll email you only when The Pillory launches in your county.",
+  turnstile: "The anti-spam check didn't go through. Please try again.",
+  limit: "That's enough sign-ups from this connection for today. Please try again tomorrow.",
+  invalid: "Choose a state and county, and enter an email address.",
+  closed: "The list isn't open yet.",
+};
+
+function takePart(deadlines, loaded) {
+  const rows = deadlines.length
+    ? deadlines
+        .map(({ m, d }) => {
+          const w = when(m.starts_at);
+          return `
+<a class="list-row link-row" href="${meetingHref(m.id)}#weigh-in">
+  <div><div class="list-title">Written comments by ${esc(d.label)}</div><div class="list-meta">${esc(m.body)} · meets ${esc([w.day, w.time].filter(Boolean).join(", "))}</div></div>
+  <span class="row-end"><span class="chev" aria-hidden="true">›</span></span>
+</a>`;
+        })
+        .join("")
+    : `<p class="small secondary">${
+        loaded ? "No written-comment deadlines posted for the next 30 days. Public comment is also taken at each meeting." : "Comment deadlines appear here once the data sync has run."
+      }</p>`;
+  // TODO: federal agency comment periods (Regulations.gov). Not built yet.
+  return `
+<section class="brief-section" id="take-part" aria-labelledby="h-take-part">
+  <div class="section-head"><h2 class="label" id="h-take-part">Take part</h2><a class="section-link" href="/meetings/?level=county">County meetings</a></div>
+  <div class="card stack-sm">
+    <p class="label">Calaveras County comment deadlines</p>
+    <div>${rows}</div>
+  </div>
+  <div class="card">
+    <a class="list-row link-row" href="/reps/">
+      <div><div class="list-title">Contact your representatives</div><div class="list-meta">Each rep's page links to their official website and office.</div></div>
+      <span class="row-end"><span class="chev" aria-hidden="true">›</span></span>
+    </a>
+  </div>
+</section>`;
 }
 
-function withLevel(href, level) {
-  return level ? `${href}${href.includes("?") ? "&" : "?"}level=${level}` : href;
+function stateOptions(selected) {
+  return Object.entries(STATE_NAME)
+    .sort((a, b) => a[1].localeCompare(b[1]))
+    .map(([code, name]) => `<option value="${code}"${code === selected ? " selected" : ""}>${esc(name)}</option>`)
+    .join("");
 }
 
-function sectionHead(id, title, href, linkText) {
-  return `<div class="section-head"><h2 class="label" id="${id}">${title}</h2><a class="section-link" href="${href}">${linkText}</a></div>`;
-}
-
-/** One row per official's position: name, bill · Final passage · result · date, and the position. */
-function voteRows(votes, max) {
-  const rows = [];
-  for (const v of votes) {
-    for (const p of v.positions || []) {
-      if (rows.length >= max) break;
-      const bill = v.bill_id && v.bill_number ? `<a href="${billHref(v.bill_id)}">${esc(v.bill_number)}</a>` : esc(v.subject || "");
-      const src = safeUrl(v.source_url);
-      rows.push(`
-  <li class="brief-vote">
-    <div class="brief-vote-main">
-      <a class="brief-vote-name" href="/reps/${esc(p.slug)}/#votes">${esc(p.name)}</a>
-      <span class="xsmall secondary">${bill} · Final passage · ${esc(v.result)} · ${fmtDate(v.vote_date)}${src ? ` · <a href="${esc(src)}" target="_blank" rel="noopener" title="${esc(v.question)}">Record ↗</a>` : ""}</span>
+function communities(env, counts, msg, error) {
+  const ready = turnstileReady(env);
+  const countLine = counts
+    ? counts.people
+      ? `<p class="small"><strong>${counts.people}</strong> ${counts.people === 1 ? "person is" : "people are"} waiting in <strong>${counts.counties}</strong> ${counts.counties === 1 ? "county" : "counties"}.</p>`
+      : '<p class="small secondary">No one is on the list yet.</p>'
+    : "";
+  const form = ready
+    ? `
+  <form class="stack-sm waitlist-form" method="post" action="/api/waitlist" data-county-picker>
+    <div class="field-row">
+      <label class="field"><span class="label">State</span>
+        <select class="input" name="state" required><option value="">Choose a state</option>${stateOptions("")}</select>
+      </label>
+      <label class="field"><span class="label">County</span>
+        <select class="input" name="county" required><option value="">Choose a state first</option></select>
+      </label>
     </div>
-    <span class="brief-vote-position" title="Recorded as: ${esc(p.raw_position)}">${esc(p.position)}</span>
-  </li>`);
+    <label class="field"><span class="label">Email</span>
+      <input class="input" type="email" name="email" autocomplete="email" required maxlength="254" />
+    </label>
+    <p class="hint">Your email is used only to announce your county's launch. It's never shown or shared.</p>
+    ${turnstileWidget(env)}
+    <button class="btn btn--primary" type="submit">Join the list</button>
+    <noscript><p class="small secondary">Choosing a county needs JavaScript.</p></noscript>
+  </form>`
+    : '<p class="small secondary">The list isn\'t open yet.</p>';
+  return `
+<section class="brief-section" id="communities" aria-labelledby="h-communities">
+  <div class="section-head"><h2 class="label" id="h-communities">Communities</h2></div>
+  <a class="card community-card stack-sm" href="/calaveras/">
+    <div class="card-top"><span class="label">California</span><span class="live-tag">Live</span></div>
+    <h3>Calaveras County</h3>
+    <p class="small secondary">County meetings and agendas, comment deadlines, and every recorded vote by the officials who represent the county.</p>
+    <span class="inline-link">Open the Calaveras briefing</span>
+  </a>
+  <div class="card stack-sm">
+    <h3>Bring The Pillory to your county</h3>
+    <p class="small">Communities open one county at a time. Tell us where you are, and we'll let you know when yours opens.</p>
+    ${msg ? `<p class="banner" role="status">${esc(msg)}</p>` : ""}
+    ${error ? `<p class="banner banner--error" role="alert">${esc(error)}</p>` : ""}
+    ${form}
+    ${countLine}
+  </div>
+</section>`;
+}
+
+const UNDERSTAND = [
+  ["/laws/constitution/", "The Constitution", "The full text, and how every analysis starts from it."],
+  ["/about/how-a-bill-becomes-law/", "How a bill becomes law", "From introduction to signature, in Congress and in California."],
+  ["/about/how-to-read-a-vote/", "How to read a vote", "Final passage, cloture, motions and nominations."],
+  ["/about/how-it-works/", "How The Pillory works", "Evidence first, protected identities, no party labels."],
+];
+
+function understand() {
+  return `
+<section class="brief-section" id="understand" aria-labelledby="h-understand">
+  <div class="section-head"><h2 class="label" id="h-understand">Understand</h2></div>
+  <div class="tile-grid">
+    ${UNDERSTAND.map(([href, title, sub]) => `<a class="card tile" href="${href}"><h3>${esc(title)}</h3><p class="small secondary">${esc(sub)}</p></a>`).join("")}
+  </div>
+</section>`;
+}
+
+async function hub(env, url, d) {
+  const which = url.searchParams.get("now") === "state" ? "state" : "federal";
+  const db = env.DB;
+  let now = [];
+  let deadlines = [];
+  let counts = null;
+  if (db) {
+    try {
+      now = await happeningNow(db, which, { limit: 4 });
+      const start = pacificNow();
+      const meetings = await listMeetings(db, { from: start, to: `${addDays(start.slice(0, 10), 30)}T23:59`, level: "county", limit: 30 });
+      deadlines = meetings
+        .filter((m) => m.status !== "cancelled")
+        .map((m) => ({ m, d: deadlineParts(m) }))
+        .filter((x) => x.d && x.d.date >= start.slice(0, 10))
+        .slice(0, 4);
+      counts = await waitlistCounts(db);
+    } catch (err) {
+      if (!missing(err)) throw err;
     }
   }
-  return rows.join("");
+  const joined = url.searchParams.get("waitlist");
+  const msg = joined === "joined" ? WAITLIST_MESSAGES.joined : "";
+  const error = joined && joined !== "joined" ? WAITLIST_MESSAGES[joined] || "" : "";
+  const notFound = url.searchParams.get("lookup") === "notfound";
+
+  const main = `
+<header class="hub-head stack-sm">
+  <h1 class="hub-title">Know what your government is doing. Then take part.</h1>
+  <p class="hub-sub">Votes, bills, and meetings in plain language, measured against the Constitution. Built on evidence, open to every point of view.</p>
+  ${d ? `<p class="small"><a class="inline-link" href="/">Back to your briefing</a> · ${esc(describe(d))}</p>` : ""}
+</header>
+${notFound ? '<p class="banner banner--error" role="alert">We couldn\'t find districts for that. Check the address, or try your ZIP code.</p>' : ""}
+${lookupForm(d)}
+${happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? "/?hub=1" : "/?hub=1&now=state"), loaded: !!db })}
+${takePart(deadlines, !!db)}
+${communities(env, counts, msg, error)}
+${understand()}
+${turnstileReady(env) ? turnstileScript : ""}`;
+  return page("Know what your government is doing", main, { tab: "home", root: true, personal: true });
 }
 
 export async function onRequestGet({ request, env }) {
   const url = new URL(request.url);
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
-  const level = LEVELS.includes(url.searchParams.get("level")) ? url.searchParams.get("level") : null;
-  const now = pacificNow();
-  const weekEnd = `${addDays(now.slice(0, 10), 7)}T23:59`;
-
-  let meetings = [];
-  let summaries = {};
-  let votes = { rows: [], more: false };
-  const db = env.DB;
-  if (db) {
-    try {
-      meetings = (await listMeetings(db, { from: now, to: weekEnd, level: level === "federal" ? "none" : level, limit: 20 })).filter((m) => m.status !== "cancelled");
-      summaries = await summariesFor(db, meetings.map((m) => m.id));
-      votes = level === "county" ? votes : await recentFinalVotes(db, { level, limit: 3 });
-    } catch (err) {
-      if (!/no such table/i.test(String(err && err.message))) throw err;
-    }
-  }
-
-  // This week
-  const week = meetings.slice(0, 3);
-  const weekHtml = week.length
-    ? week.map((m) => meetingCard(m, summaries[m.id])).join("")
-    : `<p class="secondary small empty-note">${
-        !db ? "Meetings appear here once the data sync has run." : level === "federal" ? "Congress's schedule isn't tracked here yet." : "Nothing scheduled in the next seven days."
-      }</p>`;
-
-  // Your reps' latest votes
-  const rows = voteRows(votes.rows, 3);
-  const votesHtml = rows
-    ? `<ul class="card plain-list brief-votes">${rows}</ul>`
-    : `<p class="secondary small empty-note">${
-        level === "county"
-          ? "Supervisors' votes will come from meeting minutes. That's coming next."
-          : db
-            ? "No final-passage votes loaded yet."
-            : "Votes appear here once the data sync has run."
-      }</p>`;
-
-  const main = `
-<header class="brief-head">
-  <div class="app-header">
-    <a class="wordmark" href="/">The Pillory</a>
-    <div class="header-meta"><strong>Calaveras County</strong></div>
-  </div>
-  <h1 class="visually-hidden">Home</h1>
-  ${filterNav(level)}
-  <p class="small secondary">Your briefing · ${esc(when(now).long || "")}</p>
-</header>
-<aside class="intro-banner" data-intro hidden aria-label="Welcome">
-  <p><strong>New here?</strong> The Pillory keeps a public, sourced record of what the officials who represent Calaveras County do: their votes, the bills they vote on mapped to the Constitution, and what's on county meeting agendas.</p>
-  <p><a class="inline-link" href="/about/how-it-works/">How it works</a></p>
-  <button class="intro-dismiss" type="button" data-intro-dismiss aria-label="Dismiss this introduction">×</button>
-</aside>
-
-<section class="brief-section" aria-labelledby="h-week">
-  ${sectionHead("h-week", "This week", withLevel("/meetings/", level === "federal" ? null : level), "See all meetings")}
-  ${weekHtml}
-</section>
-
-<section class="brief-section" aria-labelledby="h-issues">
-  <div class="section-head"><h2 class="label" id="h-issues">Issues near you</h2></div>
-  ${EMPTY_REPORTS}
-</section>
-
-<section class="brief-section" aria-labelledby="h-votes">
-  ${sectionHead("h-votes", "Your reps' latest votes", withLevel("/votes/", level === "county" ? null : level), "See all votes")}
-  ${votesHtml}
-</section>
-
-<div class="caught-up">
-  <span class="caught-up-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"></path></svg></span>
-  <div class="stack-xs"><strong>You're caught up</strong><span class="small secondary">That's everything for this week.</span></div>
-</div>`;
-  const res = page("Home", main, { tab: "home", root: true });
-  const headers = new Headers(res.headers);
-  headers.set("Cache-Control", "public, max-age=120");
-  return new Response(res.body, { status: res.status, headers });
+  const d = districtsFromCookie(request);
+  if (!d || url.searchParams.get("hub") === "1") return hub(env, url, d);
+  if (isCalaveras(d)) return calaverasBriefing(env, url, d);
+  return personalBriefing(env, url, d);
 }

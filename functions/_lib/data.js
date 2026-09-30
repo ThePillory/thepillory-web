@@ -32,26 +32,13 @@ export async function safe(env, fn) {
   }
 }
 
-export async function listOfficials(db) {
-  const { results } = await db.prepare(
-    `SELECT o.*, (SELECT COUNT(*) FROM vote_positions p WHERE p.official_id = o.id) AS vote_count
-     FROM officials o WHERE o.active = 1`
-  ).all();
-  return results.sort(
-    (a, b) =>
-      CHAMBER_ORDER.indexOf(a.chamber) - CHAMBER_ORDER.indexOf(b.chamber) ||
-      String(a.district || "").localeCompare(String(b.district || ""), undefined, { numeric: true }) ||
-      a.name.localeCompare(b.name)
-  );
-}
-
 export async function officialBySlug(db, slug) {
   return db.prepare("SELECT * FROM officials WHERE slug = ? AND active = 1").bind(slug).first();
 }
 
 export async function officialsForBody(db, body) {
   const { results } = await db
-    .prepare("SELECT * FROM officials WHERE body = ? AND active = 1 ORDER BY district, name")
+    .prepare("SELECT * FROM officials WHERE body = ? AND active = 1 ORDER BY state, CAST(district_code AS INTEGER), district, name")
     .bind(body)
     .all();
   return results;
@@ -87,25 +74,27 @@ export async function billById(db, id) {
   return db.prepare("SELECT * FROM bills WHERE id = ?").bind(id).first();
 }
 
-// Every recorded vote on a bill, with our officials' positions.
-export async function votesOnBill(db, billId) {
-  const { results } = await db
-    .prepare(
-      `SELECT v.*, p.position, p.raw_position, o.name, o.slug, o.office, o.district, o.party, o.chamber AS official_chamber
-       FROM votes v
-       JOIN vote_positions p ON p.vote_id = v.id
-       JOIN officials o ON o.id = p.official_id
-       WHERE v.bill_id = ?
-       ORDER BY v.vote_date DESC, v.id DESC, o.name`
-    )
+// Every recorded vote on a bill, newest first, with the positions of the
+// given officials only (a visitor's reps); totals are on each vote.
+export async function votesOnBill(db, billId, officialIds = []) {
+  const { results: votes } = await db
+    .prepare("SELECT * FROM votes WHERE bill_id = ? ORDER BY vote_date DESC, id DESC")
     .bind(billId)
     .all();
-  const byVote = new Map();
-  for (const r of results) {
-    if (!byVote.has(r.id)) byVote.set(r.id, { ...r, positions: [] });
-    byVote.get(r.id).positions.push(r);
+  for (const v of votes) v.positions = [];
+  if (votes.length && officialIds.length) {
+    const { results } = await db
+      .prepare(
+        `SELECT p.vote_id, p.position, p.raw_position, o.name, o.slug, o.office, o.district
+         FROM vote_positions p JOIN officials o ON o.id = p.official_id
+         WHERE p.vote_id IN (${votes.map(() => "?").join(",")}) AND p.official_id IN (${officialIds.map(() => "?").join(",")})
+         ORDER BY o.name`
+      )
+      .bind(...votes.map((v) => v.id), ...officialIds)
+      .all();
+    for (const v of votes) v.positions = results.filter((p) => p.vote_id === v.id);
   }
-  return [...byVote.values()];
+  return votes;
 }
 
 export async function recentBills(db, { level = null, all = false, limit = 40 } = {}) {
@@ -125,30 +114,60 @@ export async function recentBills(db, { level = null, all = false, limit = 40 } 
   return results;
 }
 
-// Most recent final-passage votes by any of our active officials, newest first,
-// each with our officials' positions. level: "federal" | "state" | null (all).
-export async function recentFinalVotes(db, { level = null, limit = 3, offset = 0 } = {}) {
+// Most recent final-passage votes by the given officials (ids), newest first,
+// each with those officials' positions. level: "federal" | "state" | null (all).
+export async function recentFinalVotes(db, { level = null, limit = 3, offset = 0, officialIds = [] } = {}) {
+  if (!officialIds.length) return { rows: [], more: false };
+  const ids = officialIds.map(() => "?").join(",");
   const { results } = await db
     .prepare(
       `SELECT v.*, b.bill_number, b.title AS bill_title FROM votes v
        LEFT JOIN bills b ON b.id = v.bill_id
        WHERE v.vote_type = 'final_passage' AND (? IS NULL OR v.level = ?)
-         AND EXISTS (SELECT 1 FROM vote_positions p JOIN officials o ON o.id = p.official_id AND o.active = 1 WHERE p.vote_id = v.id)
+         AND EXISTS (SELECT 1 FROM vote_positions p WHERE p.vote_id = v.id AND p.official_id IN (${ids}))
        ORDER BY v.vote_date DESC, v.id DESC LIMIT ? OFFSET ?`
     )
-    .bind(level, level, limit + 1, offset)
+    .bind(level, level, ...officialIds, limit + 1, offset)
     .all();
   const rows = results.slice(0, limit);
   if (rows.length) {
     const { results: pos } = await db
       .prepare(
         `SELECT p.vote_id, p.position, p.raw_position, o.name, o.slug, o.office, o.district FROM vote_positions p
-         JOIN officials o ON o.id = p.official_id AND o.active = 1
-         WHERE p.vote_id IN (${rows.map(() => "?").join(",")}) ORDER BY o.name`
+         JOIN officials o ON o.id = p.official_id
+         WHERE p.vote_id IN (${rows.map(() => "?").join(",")}) AND p.official_id IN (${ids}) ORDER BY o.name`
       )
-      .bind(...rows.map((r) => r.id))
+      .bind(...rows.map((r) => r.id), ...officialIds)
       .all();
     for (const r of rows) r.positions = pos.filter((p) => p.vote_id === r.id);
   }
   return { rows, more: results.length > limit };
+}
+
+// ---------------------------------------------------------------------------
+// Whose reps: a visitor's districts (functions/_lib/districts.js), or
+// Calaveras County's own districts, which the sync records as "home_districts".
+
+export async function homeDistricts(db) {
+  try {
+    const row = await db.prepare("SELECT value FROM sync_state WHERE key = 'home_districts'").first();
+    const d = row ? JSON.parse(row.value) : null;
+    if (d && d.st) return { ...d, co: "06009" };
+  } catch (_) {}
+  // Before the first sync records them: the county and its state only.
+  return { st: "CA", co: "06009" };
+}
+
+/** The active officials for a WHERE clause from repsWhere(), in ballot order. */
+export async function officialsWhere(db, where) {
+  const { results } = await db
+    .prepare(`SELECT o.*, (SELECT COUNT(*) FROM vote_positions p WHERE p.official_id = o.id) AS vote_count FROM officials o WHERE ${where.sql}`)
+    .bind(...where.binds)
+    .all();
+  return results.sort(
+    (a, b) =>
+      CHAMBER_ORDER.indexOf(b.chamber) - CHAMBER_ORDER.indexOf(a.chamber) ||
+      String(a.district || "").localeCompare(String(b.district || ""), undefined, { numeric: true }) ||
+      a.name.localeCompare(b.name)
+  );
 }

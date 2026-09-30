@@ -163,7 +163,7 @@ export function baselineSection(a, provisions, { underReview = false, empty = ""
     .map((c) => {
       const u = safeUrl(c.url);
       const name = `<cite>${esc(c.case_name)}</cite>, ${esc(c.citation)}`;
-      return `<li>${u ? `<a href="${esc(u)}" target="_blank" rel="noopener">${name} ↗</a>` : name}${c.point ? `<br><span class="small">${esc(c.point)}</span>` : ""}</li>`;
+      return `<li>${u ? `<a class="tap" href="${esc(u)}" target="_blank" rel="noopener">${name} ↗</a>` : name}${c.point ? `<br><span class="small">${esc(c.point)}</span>` : ""}</li>`;
     })
     .join("")}</ul>
   <p class="small">Each case was found in CourtListener under the same name. Cases that couldn't be verified were removed.</p>
@@ -194,7 +194,7 @@ export function baselineSection(a, provisions, { underReview = false, empty = ""
   ${a.uncertainty ? `<div class="stack-sm"><h3>What this analysis can't tell you</h3><p class="small">${esc(a.uncertainty)}</p></div>` : ""}
   <p class="small baseline-foot">
     Mapped, not ruled: this is not a finding on whether the bill is constitutional.
-    ${card ? "This is a short card: the most relevant provisions, one sentence each. " : ""}${src ? `Based on <a href="${esc(src)}" target="_blank" rel="noopener">${esc(a.text_version || "the bill text")} ↗</a>.` : ""}
+    ${card ? "This is a short card: the most relevant provisions, one sentence each. " : ""}${src ? `Based on <a class="tap" href="${esc(src)}" target="_blank" rel="noopener">${esc(a.text_version || "the bill text")} ↗</a>.` : ""}
     Drafted ${fmtDate(a.created_at)} with ${esc(a.model)}${a.status !== "reviewed" && a.ai_review === "pass" ? `, checked by a separate AI reviewer${a.ai_review_model ? ` (${esc(a.ai_review_model)})` : ""}` : ""}.
     <br><a class="inline-link" href="${METHOD_URL}">How this is made</a>
   </p>

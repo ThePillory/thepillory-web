@@ -10,24 +10,29 @@ import { calendarHtml, rssHtml, meetingHtml, agendaLines, makePdf, dayFromToday 
 const PORT = parseInt(process.env.FIXTURE_PORT || "8788", 10);
 const hits = {};
 
-const member = (id, name, last, chamber, district, party) => ({
+const member = (id, name, last, chamber, district, party, state = "California") => ({
   bioguideId: id,
   name: `${last}, ${name.split(" ")[0]}`,
   partyName: party,
-  state: "California",
+  state,
   district,
   terms: { item: [{ chamber, startYear: 2023 }] },
   depiction: { imageUrl: `https://example.org/photos/${id}.jpg`, attribution: "Fixture photo" },
 });
 
 const congress = {
-  "/member/CA": {
+  // Every current member (nationwide). T000004, T000005 and T000006 have no
+  // detail record, so the list's record is used for them.
+  "/member": {
     members: [
       member("T000001", "Test Senator Alpha", "Alpha", "Senate", undefined, "Party A"),
       member("T000002", "Test Senator Beta", "Beta", "Senate", undefined, "Party B"),
       member("T000003", "Test Representative Gamma", "Gamma", "House of Representatives", 77, "Party C"),
       member("T000004", "Test Representative Other", "Other", "House of Representatives", 12, "Party A"),
+      member("T000005", "Other Senator Alpha", "Alpha", "Senate", undefined, "Party B", "Nevada"),
+      member("T000006", "Test Delegate Zeta", "Zeta", "House of Representatives", undefined, "Party A", "Alaska"),
     ],
+    pagination: { count: 6 },
   },
   ...Object.fromEntries(
     [
@@ -56,11 +61,12 @@ const congress = {
     houseRollCallVotes: [1, 2, 3].map((n) => ({ congress: 119, sessionNumber: 1, rollCallNumber: n })),
   },
   "/house-vote/119/2": { houseRollCallVotes: [4, 5].map((n) => ({ congress: 119, sessionNumber: 2, rollCallNumber: n })) },
-  "/house-vote/119/1/1": { houseRollCallVote: { voteQuestion: "On Passage", legislationType: "HR", legislationNumber: "10", result: "Passed", startDate: "2025-02-01T15:00:00-05:00", sourceDataURL: "https://clerk.house.gov/evs/2025/roll1.xml" } },
+  "/house-vote/119/1/1": { houseRollCallVote: { voteQuestion: "On Passage", legislationType: "HR", legislationNumber: "10", result: "Passed", startDate: "2025-02-01T15:00:00-05:00", sourceDataURL: "https://clerk.house.gov/evs/2025/roll1.xml",
+    votePartyTotal: [{ voteParty: "A", yeaTotal: 200, nayTotal: 10, presentTotal: 1, notVotingTotal: 3 }, { voteParty: "B", yeaTotal: 20, nayTotal: 190, presentTotal: 0, notVotingTotal: 11 }] } },
   "/house-vote/119/1/2": { houseRollCallVote: { voteQuestion: "On Motion to Recommit", legislationType: "HR", legislationNumber: "10", result: "Failed", startDate: "2025-02-01T14:00:00-05:00" } },
   "/house-vote/119/1/3": { houseRollCallVote: { voteQuestion: "On Agreeing to the Resolution", legislationType: "HRES", legislationNumber: "5", result: "Passed", startDate: "2025-01-31T12:00:00-05:00" } },
   "/house-vote/119/2/4": { houseRollCallVote: { voteQuestion: "On Motion to Suspend the Rules and Pass", legislationType: "HR", legislationNumber: "20", result: "Passed", startDate: "2026-03-10T12:00:00-04:00" } },
-  "/house-vote/119/1/1/members": { houseRollCallVoteMemberVotes: { results: [{ bioguideID: "T000003", voteCast: "Yea" }, { bioguideID: "T000004", voteCast: "Nay" }] } },
+  "/house-vote/119/1/1/members": { houseRollCallVoteMemberVotes: { results: [{ bioguideID: "T000003", voteCast: "Yea" }, { bioguideID: "T000004", voteCast: "Nay" }, { bioguideID: "T000006", voteCast: "Yea" }, { bioguideID: "X999999", voteCast: "Nay" }] } },
   "/house-vote/119/1/2/members": { houseRollCallVoteMemberVotes: { results: [{ bioguideID: "T000003", voteCast: "Nay" }] } },
   "/house-vote/119/1/3/members": { houseRollCallVoteMemberVotes: { results: [{ bioguideID: "T000003", voteCast: "Aye" }] } },
   "/house-vote/119/2/4/members": { houseRollCallVoteMemberVotes: { results: [{ bioguideID: "T000003", voteCast: "Not Voting" }] } },
@@ -76,7 +82,7 @@ const congress = {
 const senMember = (last, first, state, cast, lis) =>
   `<member><member_full>${last} (X-${state})</member_full><last_name>${last}</last_name><first_name>${first}</first_name><party>X</party><state>${state}</state><vote_cast>${cast}</vote_cast><lis_member_id>${lis}</lis_member_id></member>`;
 const senVote = (n, s, date, question, docType, docNumber, title, members, extra = "") =>
-  `<?xml version="1.0" encoding="UTF-8"?><roll_call_vote><congress>119</congress><session>${s}</session><vote_number>${n}</vote_number><vote_date>${date}</vote_date><question>${question}</question><vote_result>Passed</vote_result><document><document_congress>119</document_congress><document_type>${docType}</document_type><document_number>${docNumber}</document_number><document_title>${title}</document_title></document>${extra}<vote_document_text>${title}</vote_document_text><members>${members}</members></roll_call_vote>`;
+  `<?xml version="1.0" encoding="UTF-8"?><roll_call_vote><congress>119</congress><session>${s}</session><vote_number>${n}</vote_number><vote_date>${date}</vote_date><question>${question}</question><vote_result>Passed</vote_result>${n === 1 && s === 1 ? "<count><yeas>51</yeas><nays>47</nays><present/><absent>2</absent></count>" : ""}<document><document_congress>119</document_congress><document_type>${docType}</document_type><document_number>${docNumber}</document_number><document_title>${title}</document_title></document>${extra}<vote_document_text>${title}</vote_document_text><members>${members}</members></roll_call_vote>`;
 const senate = {
   "/roll_call_lists/vote_menu_119_1.xml": "<vote_summary><votes><vote><vote_number>00001</vote_number></vote><vote><vote_number>00002</vote_number></vote></votes></vote_summary>",
   "/roll_call_lists/vote_menu_119_2.xml": "<vote_summary><votes><vote><vote_number>00001</vote_number></vote></votes></vote_summary>",
@@ -147,7 +153,8 @@ const openstates = {
   },
   "/people.geo": { results: osPeople },
   "/people": {
-    results: osPeople.slice(0, 2).map((p) => ({
+    pagination: { page: 1, max_page: 1 },
+    results: [...osPeople.slice(0, 2), person("fake-asm-2", "Test Assemblymember Eta", "Eta", "lower", "12", "state")].map((p) => ({
       ...p,
       links: [{ url: `https://example.org/${p.family_name.toLowerCase()}` }],
       sources: [{ url: `https://example.org/source/${p.family_name.toLowerCase()}` }],
@@ -164,7 +171,8 @@ const openstates = {
     results: [
       osBill("AB 101", "Test Assembly Bill One Oh One", [
         { id: "ocd-vote/1", motion_text: "AB 101 Assembly Third Reading", motion_classification: ["passage"], start_date: "2025-05-20", result: "pass",
-          organization: { classification: "lower" }, votes: [{ option: "yes", voter_name: "Delta", voter: { id: "ocd-person/fake-asm" } }] },
+          organization: { classification: "lower" }, counts: [{ option: "yes", value: 60 }, { option: "no", value: 15 }, { option: "not voting", value: 5 }],
+          votes: [{ option: "yes", voter_name: "Delta", voter: { id: "ocd-person/fake-asm" } }, { option: "no", voter_name: "Eta", voter: { id: "ocd-person/fake-asm-2" } }] },
         { id: "ocd-vote/2", motion_text: "Do pass as amended", motion_classification: [], start_date: "2025-04-01", result: "pass",
           organization: { classification: "committee" }, votes: [{ option: "no", voter_name: "Delta", voter: null }] },
         { id: "ocd-vote/3", motion_text: "AB 101 Senate Third Reading", motion_classification: ["passage"], start_date: "2025-08-30", result: "pass",
@@ -547,6 +555,20 @@ http
     if (api === "courtlistener" && path === "/api/rest/v4/citation-lookup/" && req.method === "POST") {
       if (req.headers.authorization !== "Token fake-courtlistener-token") return send(res, 401, { detail: "no token" });
       return send(res, 200, citationLookup(new URLSearchParams(await readBody(req)).get("text") || ""));
+    }
+    // FAKE Census Geocoder: one known address, in the fixtures' districts.
+    if (api === "census") {
+      const address = String(u.searchParams.get("address") || "");
+      const g = (name, extra) => [{ STATE: "06", ...extra, NAME: name }];
+      const match = /test street/i.test(address)
+        ? [{ matchedAddress: "NOT RETURNED TO THE BROWSER", geographies: {
+            "119th Congressional Districts": g("Congressional District 77", { GEOID: "0677", BASENAME: "77" }),
+            "2024 State Legislative Districts - Upper": g("State Senate District 98", { GEOID: "06098", BASENAME: "98" }),
+            "2024 State Legislative Districts - Lower": g("Assembly District 99", { GEOID: "06099", BASENAME: "99" }),
+            Counties: g("Calaveras County", { GEOID: "06009", BASENAME: "Calaveras" }),
+          } }]
+        : [];
+      return send(res, 200, { result: { addressMatches: match } });
     }
     if (api === "congress") {
       if (!u.searchParams.get("api_key")) return send(res, 403, { error: "no key" });

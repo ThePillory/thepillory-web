@@ -1,5 +1,5 @@
-// California legislative committee hearings that involve our two state
-// legislators, from Open States v3 (/committees with memberships, /events).
+// California legislative committee hearings that involve Calaveras County's two
+// state legislators (the districts in sync_state "home_districts"), from Open States v3 (/committees with memberships, /events).
 //
 // Request-conscious, like the rest of the Open States code: committee
 // memberships are refreshed weekly (at most COMMITTEE_PAGES requests), upcoming
@@ -15,8 +15,13 @@ const EVENT_PAGES = 3;
 const WEEK_MS = 7 * 86400000;
 
 async function ourLegislators(db) {
+  const home = JSON.parse((await getState(db, "home_districts")) || "{}");
   const { results } = await db
-    .prepare("SELECT * FROM officials WHERE chamber IN ('ca-assembly', 'ca-senate') AND active = 1 AND openstates_id IS NOT NULL")
+    .prepare(
+      `SELECT * FROM officials WHERE active = 1 AND openstates_id IS NOT NULL
+         AND ((chamber = 'ca-senate' AND district_code = ?) OR (chamber = 'ca-assembly' AND district_code = ?))`
+    )
+    .bind(String(home.su || ""), String(home.sl || ""))
     .all();
   return results;
 }

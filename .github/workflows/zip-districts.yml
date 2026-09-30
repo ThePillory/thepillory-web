@@ -1,0 +1,24 @@
+# Rebuilds the ZIP code lookup data (data/zip/, data/counties.json) from
+# Census Bureau files and commits it. Run it by hand (Actions -> Refresh ZIP
+# district data -> Run workflow), e.g. when the 120th Congress's district
+# files are published. See tools/build_zip_districts.py.
+name: Refresh ZIP district data
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tools/build_zip_districts.py /tmp/zipbuild
+      - name: Commit the data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/zip data/counties.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Refresh ZIP district data from Census Bureau files"
+          git push

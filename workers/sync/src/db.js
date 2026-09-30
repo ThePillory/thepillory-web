@@ -3,13 +3,16 @@ import init0001 from "../migrations/0001_init.sql";
 import init0002 from "../migrations/0002_analysis.sql";
 import init0003 from "../migrations/0003_meetings.sql";
 import init0004 from "../migrations/0004_review_load.sql";
+import init0005 from "../migrations/0005_nationwide.sql";
 import { isHttp, today } from "./util.js";
+import { totals } from "./rollcall.js";
 
 const MIGRATIONS = [
   ["0001_init.sql", init0001],
   ["0002_analysis.sql", init0002],
   ["0003_meetings.sql", init0003],
   ["0004_review_load.sql", init0004],
+  ["0005_nationwide.sql", init0005],
 ];
 
 function statements(sql) {
@@ -73,8 +76,8 @@ export async function upsertOfficial(db, o) {
     .prepare(
       `INSERT INTO officials (id, slug, name, last_name, office, level, chamber, body, district, party,
          term_start, term_end, website, photo_url, photo_credit, source_url, last_verified,
-         bioguide_id, openstates_id, active, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, datetime('now'))
+         bioguide_id, openstates_id, state, district_code, detail_checked, active, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, datetime('now'))
        ON CONFLICT(id) DO UPDATE SET
          name = excluded.name, last_name = excluded.last_name, office = excluded.office,
          level = excluded.level, chamber = excluded.chamber, body = excluded.body,
@@ -82,13 +85,16 @@ export async function upsertOfficial(db, o) {
          term_end = excluded.term_end, website = excluded.website, photo_url = excluded.photo_url,
          photo_credit = excluded.photo_credit, source_url = excluded.source_url,
          last_verified = excluded.last_verified, bioguide_id = excluded.bioguide_id,
-         openstates_id = excluded.openstates_id, active = 1, updated_at = excluded.updated_at`
+         openstates_id = excluded.openstates_id, state = excluded.state, district_code = excluded.district_code,
+         detail_checked = COALESCE(excluded.detail_checked, officials.detail_checked),
+         active = 1, updated_at = excluded.updated_at`
     )
     .bind(
       o.id, slug, o.name, o.last_name || null, o.office, o.level, o.chamber, o.body,
       o.district || null, o.party || null, o.term_start || null, o.term_end || null,
       o.website || null, o.photo_url || null, o.photo_credit || null, o.source_url,
-      o.last_verified || today(), o.bioguide_id || null, o.openstates_id || null
+      o.last_verified || today(), o.bioguide_id || null, o.openstates_id || null,
+      o.state || null, o.district_code == null ? null : String(o.district_code), o.detail_checked || null
     )
     .run();
 }
@@ -128,19 +134,25 @@ export async function billExists(db, id) {
   return !!(await db.prepare("SELECT 1 AS x FROM bills WHERE id = ?").bind(id).first());
 }
 
-/** Save a vote and our officials' positions on it, in one batch. */
+/** Save a vote, its totals, and every loaded member's position on it, in one batch. */
 export async function saveVote(db, v, positions) {
   requireSource("vote", v.id, v.source_url);
   const stmts = [
     db
       .prepare(
-        `INSERT INTO votes (id, bill_id, subject, level, chamber, vote_date, question, vote_type, result, source_url, updated_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+        `INSERT INTO votes (id, bill_id, subject, level, chamber, vote_date, question, vote_type, result, source_url,
+           yea, nay, present, not_voting, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
          ON CONFLICT(id) DO UPDATE SET bill_id = excluded.bill_id, subject = excluded.subject,
            vote_date = excluded.vote_date, question = excluded.question, vote_type = excluded.vote_type,
-           result = excluded.result, source_url = excluded.source_url, updated_at = excluded.updated_at`
+           result = excluded.result, source_url = excluded.source_url,
+           yea = excluded.yea, nay = excluded.nay, present = excluded.present, not_voting = excluded.not_voting,
+           updated_at = excluded.updated_at`
       )
-      .bind(v.id, v.bill_id || null, v.subject || null, v.level, v.chamber, v.vote_date, v.question, v.vote_type, v.result, v.source_url),
+      .bind(
+        v.id, v.bill_id || null, v.subject || null, v.level, v.chamber, v.vote_date, v.question, v.vote_type, v.result, v.source_url,
+        ...totals(v.totals)
+      ),
   ];
   for (const p of positions) {
     stmts.push(
@@ -155,7 +167,19 @@ export async function saveVote(db, v, positions) {
   await db.batch(stmts);
 }
 
+// Vote IDs already saved with their totals. Votes saved before totals were
+// read (yea IS NULL) aren't included, so they are fetched once more: that
+// fills in the totals and every member's position.
 export async function existingVoteIds(db, prefix) {
-  const { results } = await db.prepare("SELECT id FROM votes WHERE id LIKE ?").bind(`${prefix}%`).all();
+  const { results } = await db.prepare("SELECT id FROM votes WHERE id LIKE ? AND yea IS NOT NULL").bind(`${prefix}%`).all();
   return new Set(results.map((r) => r.id));
+}
+
+/** Map of a key (bioguide_id, lis_id, openstates_id) to official id, for matching a whole roll call. */
+export async function officialIndex(db, chambers, column) {
+  const { results } = await db
+    .prepare(`SELECT * FROM officials WHERE active = 1 AND chamber IN (${chambers.map(() => "?").join(",")})`)
+    .bind(...chambers)
+    .all();
+  return { all: results, by: new Map(results.filter((o) => o[column]).map((o) => [o[column], o])) };
 }

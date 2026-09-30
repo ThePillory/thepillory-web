@@ -135,7 +135,7 @@ function itemDocs(it) {
   const atts = JSON.parse(it.attachments || "[]");
   const parts = [];
   if (safeUrl(it.staff_report_url)) parts.push(`<a class="inline-link" href="${esc(it.staff_report_url)}" target="_blank" rel="noopener">Staff report ↗</a>`);
-  if (atts.length) parts.push(`<span class="small secondary">${atts.length} attachment${atts.length === 1 ? "" : "s"}${safeUrl(it.item_url) ? ` · <a href="${esc(it.item_url)}" target="_blank" rel="noopener">item page ↗</a>` : ""}</span>`);
+  if (atts.length) parts.push(`<span class="small secondary">${atts.length} attachment${atts.length === 1 ? "" : "s"}${safeUrl(it.item_url) ? ` · <a class="tap" href="${esc(it.item_url)}" target="_blank" rel="noopener">item page ↗</a>` : ""}</span>`);
   else if (safeUrl(it.item_url)) parts.push(`<a class="inline-link" href="${esc(it.item_url)}" target="_blank" rel="noopener">Item page ↗</a>`);
   return parts.length ? `<div class="item-docs">${parts.join(" ")}</div>` : "";
 }
@@ -198,7 +198,7 @@ async function meeting(env, id) {
 </div>
 <div class="weigh-row">
   <h3>Speak in person or online</h3>
-  <p class="small">${esc(m.location || "Location: see the agenda")}${online ? ` · <a href="${esc(online)}" target="_blank" rel="noopener">Join online ↗</a>` : ""}</p>
+  <p class="small">${esc(m.location || "Location: see the agenda")}${online ? ` · <a class="tap" href="${esc(online)}" target="_blank" rel="noopener">Join online ↗</a>` : ""}</p>
 </div>`;
   }
 
@@ -226,7 +226,7 @@ async function meeting(env, id) {
     reviewed
       ? `Summaries were drafted by AI from the official agenda and reviewed by ${esc(summary.reviewer)}.`
       : "Summaries are AI-drafted from the official agenda"
-  } and flagged for budget, land use, fees, safety, and public access. Always check the source. <a href="/about/methodology/#agenda-watch">How this is made</a></p>
+  } and flagged for budget, land use, fees, safety, and public access. Always check the source. <a class="tap" href="/about/methodology/#agenda-watch">How this is made</a></p>
 </section>`
     : m.level === "county" && items.length
       ? `<section class="stack-sm" id="agenda-watch"><div class="section-head"><h2 class="label">Agenda watch</h2></div><p class="small secondary">Plain-language summaries of this agenda haven't been drafted yet.</p></section>`
@@ -304,7 +304,7 @@ async function meeting(env, id) {
   <p class="meeting-when"><strong>${esc(w.long)}${w.time ? ` · ${esc(w.time)}` : ""}</strong></p>
   ${
     m.location || online
-      ? `<p class="small secondary">${esc(m.location || "")}${m.location && online ? " · " : ""}${online ? `Also online: <a href="${esc(online)}" target="_blank" rel="noopener">meeting link ↗</a>` : ""}</p>`
+      ? `<p class="small secondary">${esc(m.location || "")}${m.location && online ? " · " : ""}${online ? `Also online: <a class="tap" href="${esc(online)}" target="_blank" rel="noopener">meeting link ↗</a>` : ""}</p>`
       : ""
   }
   ${state && participantsText(m) ? `<p class="small secondary">${esc(participantsText(m))}</p>` : ""}

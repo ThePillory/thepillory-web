@@ -6,16 +6,21 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 
 ## Live now
 
-### Tab 1: Home (`/`, the briefing)
-- First-visit intro (dismissible) > How it works
-- County / State / Federal filter (applies to every section)
-- This week: upcoming meetings and hearings > Meeting; See all meetings > Calendar (`/meetings/`)
-  - Meeting: details, add to calendar, how to weigh in, agenda watch, full agenda, after the meeting
-- Issues near you: empty state until reporting opens (`/issues/`)
-- Your reps' latest votes > All votes (`/votes/`)
+### Tab 1: Home (`/`)
+- **The hub**, for every new visitor (and at `/?hub=1`):
+  - Headline and subtitle
+  - Find your representatives: address or ZIP (`/api/districts`; nothing stored; district IDs kept in the browser)
+  - Happening now: Congress / California toggle (`?now=state`), latest final-passage votes with status, summary, constitutional chip, review label, totals, "See how your rep voted" > Bill
+  - Take part: Calaveras comment deadlines > Meeting (#weigh-in); Contact your representatives > Reps. (Federal agency comment periods from Regulations.gov: to do)
+  - Communities: Calaveras County (Live) > Calaveras briefing; Bring The Pillory to your county (waitlist, real counts)
+  - Understand: The Constitution, How a bill becomes law, How to read a vote, How The Pillory works
+- **Your briefing**, once your districts are known:
+  - In Calaveras County: the Calaveras briefing (also `/calaveras/` for everyone): first-visit intro, County / State / Federal filter, This week (meetings and hearings) > Meeting / Calendar (`/meetings/`), Issues near you (empty state), Your reps' latest votes > All votes (`/votes/`)
+  - Elsewhere: your reps, your reps' latest votes, Happening now; a note that state and local coverage comes as communities launch
 
 ### Tab 2: Reps (`/reps/`)
-- Governing body (`/bodies/<slug>/`): members; the Board of Supervisors also lists its meetings
+- Find your representatives (address or ZIP), your reps once known, governing bodies, members of Congress by state (`/reps/?state=CA`)
+- Governing body (`/bodies/<slug>/`): members (Congress: yours, then by state); the Board of Supervisors also lists its meetings
 - Rep (`/reps/<slug>/`): Overview, Promises (not tracked yet), Votes, Issues (empty state)
   - Vote > Bill (under Laws)
 
@@ -28,14 +33,15 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 
 ### Tab 5: You (`/you/`)
 - Accounts aren't open yet
-- About (`/about/`): How it works (`/about/how-it-works/`, with the site's one labeled example), Principles (`/about/principles/`), Methodology (`/about/methodology/`)
+- About (`/about/`): How it works (`/about/how-it-works/`, with the site's one labeled example), Principles (`/about/principles/`), Methodology (`/about/methodology/`), How a bill becomes law (`/about/how-a-bill-becomes-law/`), How to read a vote (`/about/how-to-read-a-vote/`)
 
 ### Every page
-- Search (`/search/`): reps, governing bodies, bills, meetings, the Constitution
+- One header: The Pillory wordmark and search (`/search/`: reps, governing bodies, bills, meetings, the Constitution)
+- One nav: Home, Reps, + Report, Laws, You (bottom on phones, top from 768px)
 - Footer: About · How it works · Principles · Methodology
 
 ### Private
-- Review queue (`/admin/review/`, behind Cloudflare Access)
+- Review queue (`/admin/review/`) and county waitlist counts (`/admin/waitlist/`), behind Cloudflare Access
 
 ## Opens when accounts launch
 - Join & verify (identity once, address > districts)
