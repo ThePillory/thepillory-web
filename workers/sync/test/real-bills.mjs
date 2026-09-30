@@ -12,6 +12,7 @@ import { Budget, currentCongress, congressSessions, ordinal } from "../src/util.
 import { PROVISIONS } from "../src/constitution.js";
 import { fetchBillText } from "../src/analysis/billtext.js";
 import { draftAnalysis } from "../src/analysis/claude.js";
+import { reviewDraft, CHECK_LABELS } from "../src/analysis/review.js";
 import { verifyQuotes, verifyCitations, sameCase } from "../src/analysis/verify.js";
 import { makeLookup } from "../src/analysis/courtlistener.js";
 import { PROMPT_VERSION } from "../src/analysis/prompt.js";
@@ -87,7 +88,7 @@ ${list(draft.tension)}
 **Why this might still serve the public**
 ${list(draft.departure)}
 
-**Article V.** ${draft.article_v}
+${draft.article_v ? `**Article V.** ${draft.article_v}` : ""}
 
 **How different approaches read it**
 ${
@@ -99,7 +100,7 @@ ${
 **Cases cited (verified in CourtListener)**
 ${list(draft.citations.map((c) => `[${c.case_name}, ${c.citation}](${c.url}): ${c.point}`))}
 
-**What this analysis can't tell you.** ${draft.uncertainty}
+${draft.uncertainty ? `**What this analysis can't tell you.** ${draft.uncertainty}` : ""}
 
 <details><summary>What the automatic checks did</summary>
 
@@ -115,7 +116,7 @@ ${citeLog.removed_sentences.map((r) => `  - ${r.field}: “${r.sentence}” (${r
 }
 
 const picks = args[0] === "--latest" ? await latestPassed(parseInt(args[1] || "3", 10)) : args.map((id) => ({ id, vote: null }));
-console.log(`# Real-bill analysis drafts\n\nRun ${new Date().toISOString()}. Drafts are unreviewed and were not saved anywhere.\n`);
+console.log(`# Real-bill analysis drafts\n\nRun ${new Date().toISOString()}: ${process.env.REAL_DEPTH === "full" ? "full analyses" : "short cards"}, each with the AI reviewer's verdict. Nothing was saved anywhere.\n`);
 for (const pick of picks) {
   try {
     const bill = await billInfo(pick.id);
@@ -124,11 +125,19 @@ for (const pick of picks) {
       console.log(`## ${bill.bill_number}\n\nSkipped: no bill text or official summary available.\n`);
       continue;
     }
-    const result = await draftAnalysis(env, bill, source);
+    // Cards by default, as in production; REAL_DEPTH=full for the full format.
+    const depth = process.env.REAL_DEPTH === "full" ? "full" : "card";
+    const result = await draftAnalysis(env, bill, source, depth);
     const draft = result.draft;
     const quoteLog = verifyQuotes(draft, PROVISIONS);
     const citeLog = await verifyCitations(draft, makeLookup(env, budget, sameCase));
+    const review = await reviewDraft(env, bill, source, draft, depth);
     console.log(markdown(bill, pick.vote, source, result, draft, quoteLog, citeLog));
+    console.log(
+      `**AI reviewer (${review.model}): ${review.verdict}.** ${review.verdict === "pass" ? "Would be published as auto-checked." : "Would go to the review queue."}\n\n` +
+        review.checks.map((c) => `- ${c.ok ? "✓" : "✗"} ${CHECK_LABELS[c.id]} ${c.note}`).join("\n") +
+        `\n\n_Reviewer tokens: in ${review.usage.input_tokens}, out ${review.usage.output_tokens}._\n`
+    );
   } catch (err) {
     console.log(`## ${pick.id}\n\nFailed: ${err.name}: ${err.message}\n`);
   }

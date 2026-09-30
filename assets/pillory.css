@@ -1162,3 +1162,45 @@ a.constitution-link:hover { border-color: var(--parch-text); }
 .ai-label { font-weight: 600; }
 
 .pager { display: flex; gap: 8px; justify-content: center; }
+
+/* ---------- Analysis review load: labels, reader forms, review queue ---------- */
+
+.review-badge--auto { background: var(--navy-light); border-color: var(--navy-light); color: var(--navy); text-decoration: none; }
+a.review-badge--auto { min-height: var(--tap); }
+a.review-badge--auto:hover { border-color: var(--navy); }
+.review-badge--flag { border-color: var(--tension); color: var(--tension); }
+
+.reader-forms { border-top: 1px solid var(--parch-border); padding-top: 12px; }
+.reader-form > summary {
+  display: flex;
+  align-items: center;
+  min-height: var(--tap);
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--navy);
+}
+.reader-form[open] > summary { margin-bottom: 8px; }
+.reader-form form { background: #fff; border: 1px solid var(--parch-border); border-radius: var(--radius); padding: 12px; }
+.radio-row { display: flex; align-items: center; gap: 10px; min-height: var(--tap); font-size: 0.9375rem; cursor: pointer; }
+.radio-row input { width: 20px; height: 20px; accent-color: var(--navy); }
+.cf-turnstile { min-height: 65px; max-width: 100%; }
+
+.queue-head { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.queue-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--navy);
+  color: #fff;
+  font-size: 0.75rem;
+  letter-spacing: 0;
+}
+.queue-why { font-size: 0.875rem; color: var(--text); }
+.queue-why .panel-list { margin: 0; }
+.card--why { border: 2px solid var(--tension); padding: 15px; }
+.stat-line { display: flex; align-items: baseline; gap: 8px; margin: 0; }
+.stat-line strong { font-family: var(--serif); font-size: 2rem; font-weight: 600; }
+.check-list li { list-style: none; }

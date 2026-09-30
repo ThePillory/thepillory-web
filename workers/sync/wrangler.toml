@@ -68,6 +68,13 @@ MAX_BILL_TEXT_CHARS = "400000"
 # Agenda watch: plain-language summaries of county agendas. Separate daily cap
 # from bill analyses (each agenda is one Claude API call).
 AGENDA_DAILY_LIMIT = "3"
+# Review load (docs/analysis.md): the relevance check (claude-haiku-4-5) runs on
+# titles before drafting; the AI reviewer (claude-sonnet-5-5) checks every draft.
+REVIEW_EFFORT = "medium"
+# Share of drafts the AI reviewer passes that also go to the review queue as spot checks.
+SPOT_CHECK_RATE = "0.1"
+# Earlier drafts reviewed per day by the AI reviewer (drafts written before it existed, or whose review failed).
+REVIEW_BACKLOG_DAILY = "10"
 # County meetings (src/meetings/county.js): the county portal's robots.txt asks
 # for 60 seconds between requests, so requests are paced and capped per day.
 MEETING_BODIES = "Board of Supervisors|Planning Commission"

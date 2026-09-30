@@ -255,8 +255,11 @@ export default {
         counts = await env.DB.prepare(
           "SELECT (SELECT COUNT(*) FROM officials WHERE active = 1) AS officials, (SELECT COUNT(*) FROM bills) AS bills, " +
             "(SELECT COUNT(*) FROM votes) AS votes, (SELECT COUNT(*) FROM vote_positions) AS positions, " +
-            "(SELECT COUNT(*) FROM bill_analyses WHERE current = 1 AND status = 'ai_draft') AS analyses_awaiting_review, " +
-            "(SELECT COUNT(*) FROM bill_analyses WHERE current = 1 AND status = 'reviewed') AS analyses_reviewed"
+            "(SELECT COUNT(*) FROM bill_analyses WHERE current = 1 AND status = 'ai_draft' AND ai_review = 'pass') AS analyses_auto_checked, " +
+            "(SELECT COUNT(*) FROM bill_analyses WHERE current = 1 AND status = 'ai_draft' AND ai_review = 'flag') AS analyses_flagged_by_ai, " +
+            "(SELECT COUNT(*) FROM bill_analyses WHERE current = 1 AND status = 'ai_draft' AND ai_review IS NULL) AS analyses_awaiting_ai_review, " +
+            "(SELECT COUNT(*) FROM bill_analyses WHERE current = 1 AND status = 'reviewed') AS analyses_reviewed, " +
+            "(SELECT COUNT(*) FROM bill_relevance WHERE verdict = 'skip' AND override IS NULL) AS bills_skipped_as_ceremonial"
         ).first();
         recent = (await env.DB.prepare("SELECT * FROM sync_log ORDER BY id DESC LIMIT 30").all()).results;
       }

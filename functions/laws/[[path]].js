@@ -1,11 +1,32 @@
 // /laws/                real bills your officials have voted on, sample laws, and the Constitution
-// /laws/bills/<id>/     one real bill: summary, how your reps voted, related issues
+// /laws/bills/<id>/     one real bill: summary, constitutional analysis, how your reps voted, related issues
+//   POST /laws/bills/<id>/flag           "Something wrong?" on a published analysis
+//   POST /laws/bills/<id>/request-full   "Request full analysis"
+//   Both need Turnstile and are rate-limited per visitor (functions/_lib/turnstile.js).
 // Everything else under /laws/ (the Constitution, sample laws) is static and passed through.
 import { SAMPLE_LAW_CARDS, ISSUE_CARDS } from "../_lib/generated.js";
 import { page, notFound, notLoaded, esc, safeUrl, section, sourceLink, card, fmtDate } from "../_lib/render.js";
 import { safe, recentBills, billById, votesOnBill, approvedIssuesForBill, CHAMBER_NAME } from "../_lib/data.js";
 import { billVote, billHref } from "../_lib/votes.js";
-import { currentAnalysis, parse, provisionsFor, baselineSection } from "../_lib/analysis.js";
+import { currentAnalysis, parse, provisionsFor, baselineSection, isPublic, openFlagCount, METHOD_URL } from "../_lib/analysis.js";
+import { turnstileReady, turnstileWidget, turnstileScript, verifyTurnstile, visitorHash, actionsToday, recordAction } from "../_lib/turnstile.js";
+
+const FLAGS_PER_VISITOR = 5; // per day
+const FULL_REQUESTS_PER_VISITOR = 3; // per day
+const FLAG_REASONS = [
+  ["inaccurate", "Inaccurate"],
+  ["unfair", "Unfair to one side"],
+  ["missing", "Missing perspective"],
+  ["other", "Other"],
+];
+const CATEGORY_NAMES = {
+  commemoration: "a commemoration",
+  awareness: "an awareness day, week or month",
+  naming: "a naming",
+  honorary: "an honorary measure",
+  procedural_rule: "a procedural rule for debating another bill",
+  other_routine: "a routine measure",
+};
 
 const LEVELS = { federal: "Federal", state: "State" };
 
@@ -62,21 +83,91 @@ ${real}
   return page("Laws", main, { tab: "laws", root: true });
 }
 
-// The current analysis, if any. Missing tables (before the analysis step's first
-// run) just mean there's no analysis yet.
+// The current analysis and what the page needs around it. Missing tables
+// (before the analysis step's first run) just mean there's no analysis yet.
 async function analysisFor(db, id) {
+  const none = { a: null, row: null, provisions: new Map(), flags: 0, relevance: null, pendingFull: false };
   try {
     const row = await currentAnalysis(db, id);
-    if (!row) return null;
+    const relevance = await db.prepare("SELECT * FROM bill_relevance WHERE bill_id = ?").bind(id).first();
+    const pendingFull = await db
+      .prepare("SELECT id FROM analysis_requests WHERE bill_id = ? AND status = 'pending' AND depth = 'full'")
+      .bind(id)
+      .first();
+    if (!row) return { ...none, relevance, pendingFull: Boolean(pendingFull) };
     const a = parse(row);
-    return { a, provisions: await provisionsFor(db, a.clauses.map((c) => c.id)) };
+    return {
+      a: isPublic(row) ? a : null,
+      row,
+      provisions: await provisionsFor(db, a.clauses.map((c) => c.id)),
+      flags: isPublic(row) ? await openFlagCount(db, row.id) : 0,
+      relevance,
+      pendingFull: Boolean(pendingFull),
+    };
   } catch (err) {
-    if (/no such table/i.test(String(err && err.message))) return null;
+    if (/no such table|no such column/i.test(String(err && err.message))) return none;
     throw err;
   }
 }
 
-async function bill(env, id) {
+const skipped = (r) => r && r.verdict === "skip" && r.override !== "unskip";
+
+const MESSAGES = {
+  flag: "Thank you. Your report went to the review queue, and the analysis is marked \"Under review\" until a person checks it (this page can take a few minutes to update).",
+  full: "Thank you. A full analysis is requested; it's usually written within a day, then checked like every analysis.",
+  turnstile: "The anti-spam check didn't go through. Please try again.",
+  limit: "You've reached today's limit for this. Please try again tomorrow.",
+  busy: "Today's full-analysis requests are used up. Please try again tomorrow.",
+  closed: "This form isn't open yet.",
+  invalid: "Something was missing from the form. Please try again.",
+};
+
+/** "Something wrong?" and "Request full analysis", under the analysis. */
+function readerForms(env, id, analysis) {
+  const { a, row, relevance, pendingFull } = analysis;
+  const ready = turnstileReady(env);
+  const action = (what) => `/laws/bills/${encodeURIComponent(id)}/${what}`;
+  const closed = '<p class="small secondary">This form isn\'t open yet.</p>';
+  const parts = [];
+  if (a) {
+    parts.push(`
+<details class="reader-form" id="something-wrong">
+  <summary>Something wrong?</summary>
+  ${
+    ready
+      ? `<form method="post" action="${action("flag")}" class="stack-sm">
+    <fieldset class="stack-sm bare">
+      <legend class="small">What's the problem?</legend>
+      ${FLAG_REASONS.map(([v, label], i) => `<label class="radio-row"><input type="radio" name="reason" value="${v}"${i === 0 ? " required" : ""}> ${label}</label>`).join("")}
+    </fieldset>
+    <label class="field"><span class="field-label">Explain (optional)</span><textarea class="textarea" name="note" rows="3" maxlength="1000"></textarea></label>
+    <p class="hint">No account needed. A person reads every report; the analysis stays up, marked "Under review", until then.</p>
+    ${turnstileWidget(env)}
+    <button class="btn" type="submit">Send report</button>
+  </form>`
+      : closed
+  }
+</details>`);
+  }
+  const canRequest = !skipped(relevance) && !(row && row.depth === "full" && (a || row.status === "ai_draft"));
+  if (pendingFull) {
+    parts.push('<p class="small">A full analysis has been requested. It\'s usually written within a day, then checked like every analysis.</p>');
+  } else if (canRequest && (a || !row)) {
+    parts.push(`
+<div class="reader-form stack-sm" id="request-full">
+  <p class="small">${a ? "Want more than the short card? A full analysis covers every provision the bill touches, contested readings, and what it can't tell you." : "Want an analysis of this bill? A full analysis maps every provision it touches."}</p>
+  ${
+    ready
+      ? `<form method="post" action="${action("request-full")}" class="stack-sm">${turnstileWidget(env)}<button class="btn" type="submit">Request full analysis</button></form>`
+      : closed
+  }
+</div>`);
+  }
+  if (!parts.length) return "";
+  return `<div class="stack-sm reader-forms">${parts.join("")}</div>${ready ? turnstileScript : ""}`;
+}
+
+async function bill(env, id, url) {
   const data = await safe(env, async (db) => {
     const b = await billById(db, id);
     if (!b) return { b: null };
@@ -86,6 +177,13 @@ async function bill(env, id) {
   if (!data) return notLoaded("Laws", "laws", false, ["Laws", "/laws/"]);
   const { b, votes, links, analysis } = data;
   if (!b) return notFound("No bill at this address.", "laws", ["Laws", "/laws/"]);
+  const sent = MESSAGES[url.searchParams.get("sent")] || null;
+  const error = MESSAGES[url.searchParams.get("error")] || null;
+  const empty = skipped(analysis.relevance)
+    ? `<p>Not analyzed. Before any analysis is written, a quick check sets aside ceremonial and routine measures; it found this bill to be ${esc(CATEGORY_NAMES[analysis.relevance.category] || "a routine measure")}: ${esc(analysis.relevance.reason)}</p>`
+    : analysis.row
+      ? "<p>An analysis of this bill is being checked. It appears here once it passes review.</p>"
+      : "";
 
   const official = safeUrl(b.official_url);
   const summary = b.summary
@@ -103,7 +201,9 @@ async function bill(env, id) {
   ${summary}
   ${official ? sourceLink(official, "Official bill page") : sourceLink(b.source_url)}
 </section>
-${baselineSection(analysis && analysis.a, analysis ? analysis.provisions : new Map())}
+${sent ? `<p class="banner" role="status">${esc(sent)}</p>` : ""}
+${error ? `<p class="banner banner--error" role="alert">${esc(error)}</p>` : ""}
+${baselineSection(analysis.a, analysis.provisions, { underReview: analysis.flags > 0, empty, after: readerForms(env, id, analysis) })}
 <section class="stack">
   <h2 class="label">How your reps voted</h2>
   <p class="hint">Every recorded vote on this bill by officials who represent Calaveras County, newest first. Each links to the official record.</p>
@@ -119,8 +219,69 @@ export async function onRequestGet(context) {
   if (parts.length === 0) return index(context.env, url);
   if (parts[0] === "bills" && parts.length === 2) {
     if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
-    return bill(context.env, decodeURIComponent(parts[1]));
+    return bill(context.env, decodeURIComponent(parts[1]), url);
   }
   // Static pages: /laws/constitution/…, sample laws.
   return context.next();
+}
+
+// ---------------------------------------------------------------------------
+// Reader actions
+
+async function readerPost(context, id, what) {
+  const { request, env } = context;
+  const url = new URL(request.url);
+  const back = (q) => Response.redirect(`${url.origin}/laws/bills/${encodeURIComponent(id)}/?${q}#baseline`, 303);
+  const origin = request.headers.get("Origin");
+  if (origin && origin !== url.origin) return new Response("Refused", { status: 403 });
+  if (!env.DB || !turnstileReady(env)) return back("error=closed");
+  const form = await request.formData();
+  if (!(await verifyTurnstile(env, form.get("cf-turnstile-response"), request.headers.get("CF-Connecting-IP")))) return back("error=turnstile");
+  const db = env.DB;
+  const visitor = await visitorHash(env, request);
+
+  if (what === "flag") {
+    const reason = String(form.get("reason") || "");
+    if (!FLAG_REASONS.some(([v]) => v === reason)) return back("error=invalid");
+    const row = await currentAnalysis(db, id);
+    if (!row || !isPublic(row)) return back("error=invalid");
+    if ((await actionsToday(db, "flag", visitor)) >= FLAGS_PER_VISITOR) return back("error=limit");
+    const note = String(form.get("note") || "").replace(/\s+/g, " ").trim().slice(0, 1000);
+    await db.batch([
+      db.prepare("INSERT INTO analysis_flags (analysis_id, bill_id, reason, note) VALUES (?, ?, ?, ?)").bind(row.id, id, reason, note),
+      recordAction(db, "flag", visitor),
+    ]);
+    return back("sent=flag");
+  }
+
+  // request-full
+  const b = await billById(db, id);
+  if (!b) return back("error=invalid");
+  const relevance = await db.prepare("SELECT verdict, override FROM bill_relevance WHERE bill_id = ?").bind(id).first();
+  if (skipped(relevance)) return back("error=invalid");
+  const pending = await db.prepare("SELECT id FROM analysis_requests WHERE bill_id = ? AND status = 'pending' AND depth = 'full'").bind(id).first();
+  if (pending) return back("sent=full");
+  if ((await actionsToday(db, "full_request", visitor)) >= FULL_REQUESTS_PER_VISITOR) return back("error=limit");
+  const today = await db
+    .prepare("SELECT COUNT(*) AS n FROM analysis_requests WHERE source = 'reader' AND requested_at > datetime('now', '-1 day')")
+    .first();
+  if (today && today.n >= parseInt(env.READER_FULL_REQUESTS_DAILY || "10", 10)) return back("error=busy");
+  await db.batch([
+    db.prepare("INSERT INTO analysis_requests (bill_id, requested_by, depth, source) VALUES (?, 'reader', 'full', 'reader')").bind(id),
+    recordAction(db, "full_request", visitor),
+  ]);
+  return back("sent=full");
+}
+
+export async function onRequestPost(context) {
+  const parts = (context.params.path || []).filter(Boolean);
+  if (parts[0] === "bills" && parts.length === 3 && ["flag", "request-full"].includes(parts[2])) {
+    try {
+      return await readerPost(context, decodeURIComponent(parts[1]), parts[2] === "flag" ? "flag" : "full");
+    } catch (err) {
+      if (/no such table|no such column/i.test(String(err && err.message))) return new Response("Not available yet", { status: 503 });
+      throw err;
+    }
+  }
+  return new Response("Not found", { status: 404 });
 }

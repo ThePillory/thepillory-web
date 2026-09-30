@@ -55,7 +55,7 @@ const congress = {
   "/house-vote/119/1": {
     houseRollCallVotes: [1, 2, 3].map((n) => ({ congress: 119, sessionNumber: 1, rollCallNumber: n })),
   },
-  "/house-vote/119/2": { houseRollCallVotes: [{ congress: 119, sessionNumber: 2, rollCallNumber: 4 }] },
+  "/house-vote/119/2": { houseRollCallVotes: [4, 5].map((n) => ({ congress: 119, sessionNumber: 2, rollCallNumber: n })) },
   "/house-vote/119/1/1": { houseRollCallVote: { voteQuestion: "On Passage", legislationType: "HR", legislationNumber: "10", result: "Passed", startDate: "2025-02-01T15:00:00-05:00", sourceDataURL: "https://clerk.house.gov/evs/2025/roll1.xml" } },
   "/house-vote/119/1/2": { houseRollCallVote: { voteQuestion: "On Motion to Recommit", legislationType: "HR", legislationNumber: "10", result: "Failed", startDate: "2025-02-01T14:00:00-05:00" } },
   "/house-vote/119/1/3": { houseRollCallVote: { voteQuestion: "On Agreeing to the Resolution", legislationType: "HRES", legislationNumber: "5", result: "Passed", startDate: "2025-01-31T12:00:00-05:00" } },
@@ -64,9 +64,13 @@ const congress = {
   "/house-vote/119/1/2/members": { houseRollCallVoteMemberVotes: { results: [{ bioguideID: "T000003", voteCast: "Nay" }] } },
   "/house-vote/119/1/3/members": { houseRollCallVoteMemberVotes: { results: [{ bioguideID: "T000003", voteCast: "Aye" }] } },
   "/house-vote/119/2/4/members": { houseRollCallVoteMemberVotes: { results: [{ bioguideID: "T000003", voteCast: "Not Voting" }] } },
+  // A ceremonial bill (a post office naming): the relevance check skips it.
+  "/house-vote/119/2/5": { houseRollCallVote: { voteQuestion: "On Motion to Suspend the Rules and Pass", legislationType: "HR", legislationNumber: "40", result: "Passed", startDate: "2026-03-12T12:00:00-04:00" } },
+  "/house-vote/119/2/5/members": { houseRollCallVoteMemberVotes: { results: [{ bioguideID: "T000003", voteCast: "Yea" }] } },
   "/bill/119/hr/10": { bill: { title: "Test Bill Ten Act" } },
   "/bill/119/hres/5": { bill: { title: "Providing for consideration of the bill (H.R. 10) to test things" } },
   "/bill/119/hr/20": { bill: { title: "Test Bill Twenty Act of 2026 ($1 test)" } },
+  "/bill/119/hr/40": { bill: { title: "To designate the facility of the United States Postal Service located at 100 Example Street in Testville, California, as the \"Test Person Post Office Building\"." } },
 };
 
 const senMember = (last, first, state, cast, lis) =>
@@ -374,9 +378,90 @@ function agendaAnthropic(req, res, body) {
   ]);
 }
 
+// FAKE relevance check (claude-haiku-4-5): skips by keywords in the title,
+// rates local relevance by keywords too. Checks the request's shape.
+function relevanceAnthropic(req, res, body) {
+  const problems = [];
+  if (req.headers["x-api-key"] !== "fake-anthropic-key") problems.push("x-api-key");
+  if (body.model !== "claude-haiku-4-5-20251001") problems.push("model");
+  if (body.thinking) problems.push("thinking (Haiku 4.5 has no adaptive thinking)");
+  if (!body.output_config || !body.output_config.format || body.output_config.format.type !== "json_schema") problems.push("output_config.format");
+  anthropicRequests.push({ kind: "relevance", problems });
+  if (problems.length) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: `fixture: bad ${problems.join(", ")}` } });
+  const bills = body.messages[0].content
+    .split("\n")
+    .filter((l) => / \| /.test(l) && !/^Bills,/.test(l))
+    .map((l) => {
+      const [id, number, , title] = l.split(" | ");
+      const cat = /Postal Service|designate the facility/i.test(title) ? "naming" : /Providing for consideration/i.test(title) ? "procedural_rule" : "substantive";
+      const local = /Assembly|Senate Bill|county|rural|water/i.test(`${number} ${title}`) ? "high" : /Thirty/.test(title) ? "medium" : "low";
+      return {
+        bill_id: id,
+        verdict: cat === "substantive" ? "analyze" : "skip",
+        category: cat,
+        reason: cat === "naming" ? "It names a post office and changes no policy." : cat === "procedural_rule" ? "It only sets how the House will debate another bill." : "It changes a program or rule.",
+        local,
+        local_reason: local === "high" ? "It is about California or local government." : "It applies nationally.",
+      };
+    });
+  return sseText(res, "claude-haiku-4-5-20251001", JSON.stringify({ bills }), 300 + bills.length * 40, 60 * bills.length);
+}
+
+// FAKE AI reviewer: flags H.R. 20 (its summary leaves out the petition
+// deadline's exceptions, say), passes everything else.
+function reviewAnthropic(req, res, body) {
+  const problems = [];
+  if (body.model !== "claude-sonnet-5-5") problems.push("model");
+  if (!body.thinking || body.thinking.type !== "adaptive") problems.push("thinking");
+  if (!body.output_config || body.output_config.effort !== "medium") problems.push("effort");
+  if (!/<draft>/.test(body.messages[0].content)) problems.push("draft");
+  anthropicRequests.push({ kind: "review", problems });
+  if (problems.length) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: `fixture: bad ${problems.join(", ")}` } });
+  const bill = (body.messages[0].content.match(/^Bill: (.+?) \(/m) || [])[1];
+  const ok = (id) => ({ id, ok: true, note: "No problem found." });
+  const flag = bill === "H.R. 20";
+  const out = {
+    checks: [
+      flag ? { id: "summary", ok: false, note: "The summary says agencies must respond within 60 days but leaves out that the text lets them extend it once." } : ok("summary"),
+      ok("balance"),
+      ok("language"),
+      ok("provisions"),
+      flag ? { id: "certainty", ok: false, note: "The tension panel treats the 60-day deadline as settled when the text allows an extension." } : ok("certainty"),
+    ],
+    verdict: flag ? "flag" : "pass",
+  };
+  return sseText(res, "claude-sonnet-5-5", JSON.stringify(out), 5000, 700);
+}
+
+function sseText(res, model, text, inTokens, outTokens) {
+  sse(res, [
+    { type: "message_start", message: { id: "msg_fixture", type: "message", role: "assistant", model, content: [], stop_reason: null, stop_sequence: null, usage: { input_tokens: inTokens, output_tokens: 1, cache_read_input_tokens: 0, cache_creation_input_tokens: 0 } } },
+    { type: "content_block_start", index: 0, content_block: { type: "text", text: "" } },
+    { type: "content_block_delta", index: 0, delta: { type: "text_delta", text } },
+    { type: "content_block_stop", index: 0 },
+    { type: "message_delta", delta: { stop_reason: "end_turn", stop_sequence: null }, usage: { output_tokens: outTokens } },
+    { type: "message_stop" },
+  ]);
+}
+
+/** A card in the card schema's shape, from the canned full draft. */
+function asCard(d) {
+  return {
+    plain_summary: d.plain_summary,
+    clauses: d.clauses,
+    aligns: d.aligns[0] || "",
+    tension: d.tension[0] || "",
+    departure: d.departure[0] || "",
+    readings: d.readings,
+    citations: d.citations,
+  };
+}
+
 const anthropicRequests = [];
 function anthropic(req, res, body) {
   if (/Agenda items, as \[item number\]/.test((body.messages && body.messages[0] && body.messages[0].content) || "")) return agendaAnthropic(req, res, body);
+  if (String(body.model || "").startsWith("claude-haiku")) return relevanceAnthropic(req, res, body);
+  if (/^You are the independent reviewer/.test((body.system && body.system[0] && body.system[0].text) || "")) return reviewAnthropic(req, res, body);
   const problems = [];
   if (req.headers["x-api-key"] !== "fake-anthropic-key") problems.push("x-api-key");
   if (!String(req.headers["anthropic-beta"] || "").includes("server-side-fallback-2026-07-01")) problems.push("anthropic-beta");
@@ -386,14 +471,16 @@ function anthropic(req, res, body) {
   if (!body.output_config || !body.output_config.format || body.output_config.format.type !== "json_schema") problems.push("output_config.format");
   if (!body.system || !body.system[1] || !body.system[1].cache_control) problems.push("system cache_control");
   if (!/\[amend-27\]/.test(body.system && body.system[1] && body.system[1].text)) problems.push("constitution block");
-  anthropicRequests.push({ problems, model: body.model, effort: body.output_config && body.output_config.effort, bytes: JSON.stringify(body).length });
+  const card = /Draft the short card\.$/.test(body.messages[0].content);
+  if (card && body.output_config.format.schema.properties.aligns.type !== "string") problems.push("card schema");
+  anthropicRequests.push({ kind: card ? "card" : "full", problems, model: body.model, effort: body.output_config && body.output_config.effort, bytes: JSON.stringify(body).length });
   if (problems.length) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: `fixture: bad ${problems.join(", ")}` } });
   const msg = body.messages[0].content;
   const bill = (msg.match(/^Bill: (.+?) \(/m) || [])[1];
   const draft = DRAFTS[bill];
   if (!draft) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: `fixture: no draft for ${bill}` } });
   if (bill === "H.R. 10" && /OLD TEXT/.test(msg)) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: "fixture: sent the old text version" } });
-  const text = JSON.stringify(draft);
+  const text = JSON.stringify(card ? asCard(draft) : draft);
   const cacheRead = anthropicRequests.length > 1 ? 18000 : 0;
   sse(res, [
     { type: "message_start", message: { id: `msg_test_${anthropicRequests.length}`, type: "message", role: "assistant", model: "claude-sonnet-5-5", content: [], stop_reason: null, stop_sequence: null, usage: { input_tokens: 900 + Math.round(msg.length / 4), output_tokens: 1, cache_read_input_tokens: cacheRead, cache_creation_input_tokens: cacheRead ? 0 : 18000 } } },
@@ -429,6 +516,11 @@ http
     const path = "/" + rest.join("/");
     hits[api] = (hits[api] || 0) + 1;
     if (u.pathname === "/__hits") return send(res, 200, hits);
+    // FAKE Turnstile siteverify: any token passes except "bad".
+    if (u.pathname === "/turnstile/siteverify" && req.method === "POST") {
+      const raw = await readBody(req);
+      return send(res, 200, { success: !/name="response"\r?\n\r?\nbad\r?\n/.test(raw) && !/response=bad(&|$)/.test(raw) });
+    }
     if (u.pathname === "/__anthropic") return send(res, 200, anthropicRequests);
     if (api === "anthropic" && path === "/v1/messages" && req.method === "POST") return anthropic(req, res, JSON.parse(await readBody(req)));
     if (api === "iqm2") {

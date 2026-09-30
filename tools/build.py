@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # The full Constitution (National Archives transcription), shared with the sync
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
-ASSET_VERSION = "15"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "16"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. reps/ and bodies/ are NOT here: those pages are
 # rendered from D1 by Pages Functions (functions/), as are the laws/ index and
@@ -965,34 +965,48 @@ def build_methodology():
 
 <section class="card stack" id="analysis">
   <h2>Constitutional analysis of bills</h2>
-  <p>The Pillory maps the Constitution; it doesn't rule on it. For bills that our officials have voted on, an AI tool writes a first draft showing which parts of the Constitution a bill touches. People review every draft. Nothing here is a verdict on whether a bill is constitutional, and nothing here is legal advice.</p>
+  <p>The Pillory maps the Constitution; it doesn't rule on it. For bills our officials have voted on, an AI tool writes an analysis showing which parts of the Constitution a bill touches. Automatic checks and a second AI tool check every analysis, and a person reviews any that are flagged, plus a random share of the rest. Nothing here is a verdict on whether a bill is constitutional, and nothing here is legal advice.</p>
   <ol class="numbered">
     <li>
       <span class="step-num" aria-hidden="true">1</span>
       <div class="stack-sm">
-        <h3>Start from the bill's own words</h3>
-        <p class="small secondary">We read the latest text on Congress.gov for federal bills, or on the California Legislature's site for state bills. If the text isn't available, we use the official summary and label the analysis "limited: based on summary only." Very long bills are cut at a set length, and the analysis says so.</p>
+        <h3>Which bills get analyzed</h3>
+        <p class="small secondary">Bills with a final-passage vote by one of the officials who represent Calaveras County, and any bill an issue on this site links to. (Once residents can follow bills, followed bills will count too.) First, a quick AI check (Claude Haiku) reads each bill's title and sets aside ceremonial and routine measures, such as commemorations, awareness days, post office and building namings, and honorary resolutions. Each one set aside is logged with the reason, the bill page says why, and a person can reverse it. The same check rates how much each bill bears on this county (California, rural counties, federal lands, water, wildfire, roads and similar), so the daily limit goes to what matters most here. It judges by subject only, never by party or sponsor.</p>
       </div>
     </li>
     <li>
       <span class="step-num" aria-hidden="true">2</span>
       <div class="stack-sm">
-        <h3>An AI tool writes a draft</h3>
-        <p class="small secondary">The draft is written by Claude, an AI model made by Anthropic, from the bill text and the full text of the Constitution. Its instructions: give no verdicts on constitutionality, use no party labels or partisan language, present the strongest version of each view, and say "uncertain" rather than guess.</p>
+        <h3>Two levels: a short card, or a full analysis</h3>
+        <p class="small secondary">Most bills get a <strong>short card</strong>: a two to three sentence summary, the one to three most relevant provisions of the Constitution with one sentence each, and one sentence each for where the bill aligns, where it may be in tension, and why a departure might still serve the public. A <strong>full analysis</strong> covers every provision the bill touches, contested readings and what the analysis can't tell you. It's written when an issue on this site links to the bill, or when a resident asks for one with "Request full analysis" on the bill page. Both start from the bill's own words: the latest text on Congress.gov or the California Legislature's site, or the official summary, labeled "limited", when the text isn't available.</p>
       </div>
     </li>
     <li>
       <span class="step-num" aria-hidden="true">3</span>
       <div class="stack-sm">
-        <h3>Automatic checks before anything is saved</h3>
-        <p class="small secondary">Every passage quoted from the Constitution is compared with the National Archives text. A quote that doesn't match word for word is replaced with the exact text. Every court case is looked up in CourtListener, a free public database of court opinions. Cases that can't be found under the same name are removed, along with every sentence that relies on them. Each change is logged.</p>
+        <h3>An AI tool writes it, and automatic checks correct it</h3>
+        <p class="small secondary">Claude, an AI model made by Anthropic, writes the card or analysis from the bill text and the full text of the Constitution. Its instructions: no verdicts on constitutionality, no party labels or partisan language, the strongest version of each view, and "uncertain" rather than a guess. Then every passage quoted from the Constitution is compared with the National Archives text and replaced with the exact words if it doesn't match, and every court case is looked up in CourtListener, a free public database of court opinions. Cases that can't be found under the same name are removed, with every sentence that relies on them. Each change is logged.</p>
       </div>
     </li>
     <li>
       <span class="step-num" aria-hidden="true">4</span>
       <div class="stack-sm">
-        <h3>People review it</h3>
-        <p class="small secondary">Until a person reviews it, an analysis is marked "AI-drafted, not yet reviewed." A reviewer can edit any part, approve it, reject it, or ask for a new draft. Approved analyses show "Reviewed by" with the reviewer's name and the date. Earlier versions and every edit are kept.</p>
+        <h3>A second AI tool reviews it</h3>
+        <p class="small secondary">A separate Claude call reads the analysis against the bill text and answers five questions. Is the summary accurate and complete for what the bill does? Is any side's argument noticeably weaker or less charitable than the other's? Is opinion stated as fact, or is there loaded or partisan language? Are the chosen provisions relevant, with nothing obviously missing? Does anything claim more certainty than the sources support? If all five are fine, the analysis is published, labeled <strong>"AI-drafted, auto-checked"</strong>. If any isn't, it stays off the public page and goes to a person with the reviewer's reasons.</p>
+      </div>
+    </li>
+    <li>
+      <span class="step-num" aria-hidden="true">5</span>
+      <div class="stack-sm">
+        <h3>Readers can flag problems</h3>
+        <p class="small secondary">Every published analysis has "Something wrong?". Choose a reason (inaccurate, unfair to one side, missing perspective, or other) and add a note if you like. No account is needed. Any report sends the analysis to a person; until they resolve it, it stays up, marked <strong>"Under review"</strong>. To keep the forms free of spam, they use Cloudflare Turnstile and a daily limit per visitor. We don't store your address, only a one-way code that changes every day.</p>
+      </div>
+    </li>
+    <li>
+      <span class="step-num" aria-hidden="true">6</span>
+      <div class="stack-sm">
+        <h3>People check the system, too</h3>
+        <p class="small secondary">A random 10% of the analyses the AI reviewer passes also go to a person as spot checks. The review page keeps a running count of how often the person agrees with the AI reviewer, so we can see whether it can be trusted. A person can edit any part, approve, reject, or ask for a new draft. Analyses a person approves show "Reviewed by" with their name and the date. Earlier versions and every edit are kept.</p>
       </div>
     </li>
   </ol>
@@ -1010,7 +1024,8 @@ def build_methodology():
 </section>
 
 <section class="card stack-sm">
-  <h2>What each analysis contains</h2>
+  <h2>What a full analysis contains</h2>
+  <p class="small">A short card has the first four parts, briefly: the summary, the one to three most relevant provisions, one sentence for each panel, and contested readings only when a question is genuinely contested.</p>
   <ul class="plain-list small">
     <li><strong>What the bill does:</strong> a short, plain summary without judgment words.</li>
     <li><strong>Provisions it touches:</strong> each quoted from the Constitution, with one sentence on why.</li>

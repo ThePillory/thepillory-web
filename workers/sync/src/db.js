@@ -2,12 +2,14 @@
 import init0001 from "../migrations/0001_init.sql";
 import init0002 from "../migrations/0002_analysis.sql";
 import init0003 from "../migrations/0003_meetings.sql";
+import init0004 from "../migrations/0004_review_load.sql";
 import { isHttp, today } from "./util.js";
 
 const MIGRATIONS = [
   ["0001_init.sql", init0001],
   ["0002_analysis.sql", init0002],
   ["0003_meetings.sql", init0003],
+  ["0004_review_load.sql", init0004],
 ];
 
 function statements(sql) {
