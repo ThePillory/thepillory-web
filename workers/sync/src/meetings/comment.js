@@ -57,7 +57,7 @@ const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 /**
  * A short label for a written-comment deadline, worked out only from wording the
  * agenda actually uses ("no later than 4:00 pm on the day before the … meeting").
- * Returns {label, date: "YYYY-MM-DD"} or null when the sentence doesn't say it plainly.
+ * Returns {label, day, time, date: "YYYY-MM-DD"} or null when the sentence doesn't say it plainly.
  */
 export function deadlineLabel(sentence, startsAt) {
   const s = String(sentence || "");
@@ -66,8 +66,6 @@ export function deadlineLabel(sentence, startsAt) {
   const d = new Date(`${startsAt.slice(0, 10)}T12:00:00Z`);
   d.setUTCDate(d.getUTCDate() - 1);
   const time = m[1].replace(/\s+/g, " ").replace(/\.$/, "").toLowerCase();
-  return {
-    date: d.toISOString().slice(0, 10),
-    label: `${WEEKDAYS[d.getUTCDay()]}, ${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}, ${time}`,
-  };
+  const day = `${WEEKDAYS[d.getUTCDay()]}, ${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}`;
+  return { date: d.toISOString().slice(0, 10), day, time, label: `${day}, ${time}` };
 }

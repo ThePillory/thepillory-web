@@ -84,54 +84,79 @@ export async function approvedLinks(db, ids) {
   }
 }
 
-/** Flag chips for a summary: each flag once, with how many items carry it. */
-export function flagChips(summary) {
-  if (!summary) return "";
-  const counts = {};
-  for (const it of summary.items || []) for (const f of it.flags || []) counts[f] = (counts[f] || 0) + 1;
-  return Object.entries(counts)
-    .map(([f, n]) => `<span class="chip chip--flag">${esc(FLAG_LABELS[f] || f)}${n > 1 ? ` · ${n}` : ""}</span>`)
-    .join("");
+/** Items the summary flagged, and each flag once (in the order first seen). */
+export function flagSummary(summary) {
+  const flags = [];
+  let items = 0;
+  for (const it of (summary && summary.items) || []) {
+    if (!(it.flags || []).length) continue;
+    items += 1;
+    for (const f of it.flags) if (!flags.includes(f)) flags.push(f);
+  }
+  return { items, flags };
 }
 
-/** The comment deadline in a few words, or null. Only from the agenda's own plain wording. */
+/** "3 items flagged" plus one quiet chip per flag. */
+export function flagChips(summary) {
+  const { items, flags } = flagSummary(summary);
+  if (!items) return "";
+  return (
+    `<span class="chip chip--light chip--sm">${items} item${items === 1 ? "" : "s"} flagged</span>` +
+    flags.map((f) => `<span class="chip chip--quiet chip--sm">${esc(FLAG_LABELS[f] || f)}</span>`).join("")
+  );
+}
+
+/** The written-comment deadline, or null. Only from the agenda's own plain wording. */
+export function deadlineParts(m) {
+  return deadlineLabel(m.comment_deadline_text, m.starts_at);
+}
+
 export function shortDeadline(m) {
-  const d = deadlineLabel(m.comment_deadline_text, m.starts_at);
+  const d = deadlineParts(m);
   return d ? `Written comments by ${d.label}` : null;
+}
+
+/** The town from a meeting location ("Board Chambers, 891 Mountain Ranch Road, San Andreas" -> "San Andreas"). */
+export function placeName(location) {
+  const parts = String(location || "")
+    .split(",")
+    .map((x) => x.trim())
+    .filter((x) => x && !/^(CA|California)?\s*\d{5}(-\d{4})?$/i.test(x) && !/^(CA|California)$/i.test(x));
+  return parts.length ? parts[parts.length - 1] : "";
 }
 
 /** A compact meeting card (Home, calendar). */
 export function meetingCard(m, summary) {
   const w = when(m.starts_at);
-  const deadline = shortDeadline(m);
-  const chips = flagChips(summary);
-  const status = m.status === "cancelled" ? '<span class="chip chip--gray">Cancelled</span>' : "";
-  const note =
+  const d = deadlineParts(m);
+  const state = m.level === "state";
+  const right =
     m.status === "cancelled"
-      ? ""
-      : deadline
-        ? `<p class="deadline">${esc(deadline)}</p>`
-        : m.level === "state"
-          ? `<p class="small secondary">${esc(participantsText(m) || "Legislative hearing")}</p>`
-          : m.agenda_url
-            ? '<p class="small secondary">Comment deadline: see the agenda</p>'
-            : '<p class="small secondary">Agenda not posted yet</p>';
+      ? '<span class="card-top-note">Cancelled</span>'
+      : d
+        ? `<span class="card-top-note card-top-note--due">Comments due ${esc(d.day)}</span>`
+        : !state && !m.agenda_url
+          ? '<span class="card-top-note">Agenda not posted yet</span>'
+          : "";
+  const meta = [w.day, w.time, state ? participantsText(m) : placeName(m.location)].filter(Boolean).map(esc).join(" · ");
+  const chips = flagChips(summary);
   return `
-<a class="card meeting-card" href="${meetingHref(m.id)}" data-level="${esc(m.level)}">
-  <p class="label">${esc(LEVEL_LABEL[m.level] || "")} · ${esc(m.meeting_type || "Meeting")} ${status}</p>
+<a class="card meeting-card${state ? " meeting-card--hearing" : ""}" href="${meetingHref(m.id)}" data-level="${esc(m.level)}">
+  <div class="card-top"><span class="label">${esc(LEVEL_LABEL[m.level] || "")} · ${state ? "Hearing" : "Meeting"}</span>${right}</div>
   <h3>${esc(m.body)}</h3>
-  <p class="meeting-when"><strong>${esc(w.day)}</strong>${w.time ? ` · ${esc(w.time)}` : ""}</p>
-  ${note}
-  ${chips ? `<div class="chips">${chips}</div>` : ""}
+  <p class="small secondary">${meta}</p>
+  ${chips ? `<div class="chips chips--tight">${chips}</div>` : ""}
 </a>`;
 }
 
+/** "[Name] sits on this committee" for our state legislators on a hearing. */
 export function participantsText(m) {
   let names = [];
   try {
     names = JSON.parse(m.participants || "[]");
   } catch (_) {}
-  return names.length ? `With ${names.join(" and ")}` : "";
+  if (!names.length) return "";
+  return `${names.join(" and ")} ${names.length === 1 ? "sits" : "sit"} on this committee`;
 }
 
 export function sourceHref(u) {
