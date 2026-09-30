@@ -1,10 +1,11 @@
-// /reps/            all current officials for Calaveras County, grouped County / State / Federal
+// /reps/            find your reps (address or ZIP), your reps once known, the
+//                   governing bodies, and members of Congress by state (?state=CA)
 // /reps/<slug>/     one official: Overview, Promises, Votes, Issues
 import { BODIES, LEVEL_NAME, EMPTY_REPORTS } from "../_lib/generated.js";
 import { page, notFound, notLoaded, esc, safeUrl, kv, card, section, sourceLink, fmtDate } from "../_lib/render.js";
-import {
-  safe, listOfficials, officialBySlug, voteCounts, votesFor, LEVEL_ORDER, CHAMBER_NAME,
-} from "../_lib/data.js";
+import { safe, officialBySlug, officialsWhere, voteCounts, votesFor, CHAMBER_NAME } from "../_lib/data.js";
+import { districtsFromCookie, repsWhere, describe, STATE_NAME } from "../_lib/districts.js";
+import { lookupForm } from "../_lib/hub.js";
 import { voteRow, voteFilter } from "../_lib/votes.js";
 
 const BODY = Object.fromEntries(BODIES.map((b) => [b.slug, b]));
@@ -28,29 +29,71 @@ function repCard(o) {
   });
 }
 
-async function list(env) {
-  const officials = await safe(env, listOfficials);
-  if (!officials) return notLoaded("Reps", "reps", true);
-  const groups = LEVEL_ORDER.map((level) => {
-    const bodies = BODIES.filter((b) => b.level === level).map((b) => b.card).join("");
-    const reps = officials.filter((o) => o.level === level).map(repCard).join("");
-    const empty = level === "county"
-      ? '<p class="secondary small">County supervisors are entered by hand and will appear once added.</p>'
-      : '<p class="secondary small">None loaded yet.</p>';
-    return `
-<section class="stack">
-  <h2 class="label">${LEVEL_NAME[level]}</h2>
-  ${bodies}${reps || empty}
-</section>`;
-  }).join("");
+function stateChips(current) {
+  return Object.entries(STATE_NAME)
+    .sort((x, y) => x[1].localeCompare(y[1]))
+    .map(([code, name]) => `<a class="chip state-chip${code === current ? " is-current" : ""}" href="/reps/?state=${code}#browse"${code === current ? ' aria-current="true"' : ""}>${esc(name)}</a>`)
+    .join("");
+}
+
+async function stateOfficials(db, st) {
+  const { results } = await db
+    .prepare(
+      `SELECT o.*, (SELECT COUNT(*) FROM vote_positions p WHERE p.official_id = o.id) AS vote_count
+       FROM officials o WHERE o.active = 1 AND o.state = ? AND o.chamber IN ('us-senate', 'us-house')
+       ORDER BY o.chamber DESC, CAST(o.district_code AS INTEGER), o.name`
+    )
+    .bind(st)
+    .all();
+  return results;
+}
+
+async function list(env, url, request) {
+  const d = districtsFromCookie(request);
+  const st = STATE_NAME[String(url.searchParams.get("state") || "").toUpperCase()] ? String(url.searchParams.get("state")).toUpperCase() : null;
+  const data = await safe(env, async (db) => ({
+    mine: d ? await officialsWhere(db, repsWhere(d)) : [],
+    state: st ? await stateOfficials(db, st) : [],
+  }));
+  if (!data) return notLoaded("Reps", "reps", true);
+
+  const mine = d
+    ? `
+<section class="stack" id="yours">
+  <h2 class="label">Your representatives</h2>
+  <p class="small secondary">${esc(describe(d))}</p>
+  ${data.mine.map(repCard).join("") || '<p class="secondary small">None loaded yet for your districts. They appear after the data sync runs.</p>'}
+  ${d.st !== "CA" ? '<p class="hint">State and local coverage comes as communities launch.</p>' : ""}
+</section>`
+    : "";
+
+  const browse = st
+    ? `
+<section class="stack" id="state-list">
+  <h2 class="label">${esc(STATE_NAME[st])}: members of Congress</h2>
+  ${data.state.map(repCard).join("") || '<p class="secondary small">None loaded yet.</p>'}
+  ${st === "CA" ? '<a class="list-row link-row card" href="/bodies/state-legislature/"><div><div class="list-title">California State Legislature</div><div class="list-meta">All 120 members</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>' : ""}
+</section>`
+    : "";
+
   const main = `
 <header class="page-head">
   <h1>Reps</h1>
-  <p class="subtitle">The officials who represent Calaveras County, and the record they keep.</p>
+  <p class="subtitle">Members of Congress, California legislators, and Calaveras County supervisors, with the record they keep.</p>
 </header>
-<p class="hint">Every official here is loaded from an official source, linked on their page, with the date it was last checked.</p>
-${groups}`;
-  return page("Reps", main, { tab: "reps", root: true });
+${lookupForm(d, { heading: d ? "Change your location" : "Find your representatives" })}
+${mine}
+<section class="stack">
+  <h2 class="label">Governing bodies</h2>
+  ${BODIES.map((b) => b.card).join("")}
+</section>
+<section class="card stack-sm" id="browse">
+  <h2 class="label">Browse members of Congress by state</h2>
+  <div class="chips">${stateChips(st)}</div>
+</section>
+${browse}
+<p class="hint">Every official here is loaded from an official source, linked on their page, with the date it was last checked.</p>`;
+  return page("Reps", main, { tab: "reps", root: true, personal: true });
 }
 
 async function profile(env, slug, url) {
@@ -147,7 +190,7 @@ ${section("Office", kv([
 export async function onRequestGet(context) {
   const url = new URL(context.request.url);
   const parts = (context.params.path || []).filter(Boolean);
-  if (parts.length === 0) return list(context.env);
+  if (parts.length === 0) return list(context.env, url, context.request);
   if (parts.length === 1) {
     if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
     return profile(context.env, parts[0], url);

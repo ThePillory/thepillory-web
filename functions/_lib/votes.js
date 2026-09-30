@@ -3,7 +3,7 @@
 // "voted against X" summaries, and positions are styled the same whatever
 // they are.
 import { esc, fmtDate, sourceLink } from "./render.js";
-import { TYPE_LABELS } from "./data.js";
+import { TYPE_LABELS, CHAMBER_NAME } from "./data.js";
 
 export function billHref(id) {
   return `/laws/bills/${encodeURIComponent(id)}/`;
@@ -37,8 +37,10 @@ export function voteRow(v) {
 </li>`;
 }
 
-// One vote on a bill page, with each of our officials' positions.
-export function billVote(v) {
+// One vote on a bill page: the question, result, totals, and (when the
+// visitor's districts are known) their reps' positions. The official record
+// lists every member.
+export function billVote(v, { personal = false } = {}) {
   const rows = v.positions
     .map(
       (p) => `
@@ -49,14 +51,23 @@ export function billVote(v) {
     </li>`
     )
     .join("");
+  const tally = tallyText(v);
   return `
 <article class="card stack-sm bill-vote">
-  <p class="label">${fmtDate(v.vote_date)} ${typeTag(v)}</p>
+  <p class="label">${esc(CHAMBER_NAME[v.chamber] || v.chamber || "")} · ${fmtDate(v.vote_date)} ${typeTag(v)}</p>
   <p class="vote-question">${esc(v.question)}</p>
   <p class="small">Result: ${esc(v.result)}</p>
-  <ul class="plain-list positions">${rows}</ul>
+  ${tally ? `<p class="tally small">${tally}</p>` : ""}
+  ${rows ? `<ul class="plain-list positions">${rows}</ul>` : personal ? '<p class="small secondary">None of your reps cast a recorded vote on this.</p>' : ""}
   ${sourceLink(v.source_url, "Official record")}
 </article>`;
+}
+
+/** "Yes 216 · No 214 · Present 0 · Not voting 3", in one neutral style, or "". */
+export function tallyText(v) {
+  if (v.yea == null && v.nay == null) return "";
+  const parts = [["Yes", v.yea], ["No", v.nay], ["Present", v.present], ["Not voting", v.not_voting]].filter(([, n]) => n != null);
+  return parts.map(([k, n]) => `${k} <strong>${n}</strong>`).join(" · ");
 }
 
 // Final passage only (default) or everything, as two plain links so it works without JS.

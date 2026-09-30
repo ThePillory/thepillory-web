@@ -195,4 +195,105 @@
     window.addEventListener("hashchange", fromHash);
     fromHash();
   });
+  // ---------------------------------------------------------------------
+  // Find your representatives. The address or ZIP goes to /api/districts,
+  // which answers with district IDs only; this browser keeps those IDs in
+  // the pillory_districts cookie (never the address). Without JS the form
+  // posts to the same place and the server sets the cookie.
+  var COOKIE = "pillory_districts";
+
+  function saveDistricts(d) {
+    var parts = [];
+    Object.keys(d).forEach(function (k) { parts.push(k + "=" + encodeURIComponent(d[k])); });
+    document.cookie = COOKIE + "=" + encodeURIComponent(parts.join("&")) + "; Path=/; Max-Age=31536000; SameSite=Lax" +
+      (location.protocol === "https:" ? "; Secure" : "");
+  }
+
+  document.querySelectorAll("[data-forget-districts]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      document.cookie = COOKIE + "=; Path=/; Max-Age=0; SameSite=Lax";
+      location.href = "/";
+    });
+  });
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text) n.textContent = text;
+    return n;
+  }
+
+  document.querySelectorAll("[data-district-lookup]").forEach(function (form) {
+    var out = form.querySelector("[data-lookup-result]");
+    var input = form.querySelector("input[name=q]");
+    var button = form.querySelector("button[type=submit]");
+
+    function show(nodes) {
+      out.textContent = "";
+      nodes.forEach(function (n) { out.appendChild(n); });
+    }
+
+    function done(d) {
+      saveDistricts(d);
+      show([el("p", "small", "Found your districts. Opening your briefing…")]);
+      location.href = "/";
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var q = (input.value || "").trim();
+      if (!q) {
+        show([el("p", "small form-error", "Enter a street address with city and state, or a ZIP code.")]);
+        input.focus();
+        return;
+      }
+      button.disabled = true;
+      show([el("p", "small secondary", "Looking up your districts…")]);
+      fetch("/api/districts", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ q: q }) })
+        .then(function (r) { return r.json(); })
+        .then(function (res) {
+          button.disabled = false;
+          if (res.found && res.districts) return done(res.districts);
+          if (res.choices && res.choices.length) {
+            var intro = el("p", "small", "This ZIP code is split between districts. Choose yours, or enter your street address instead.");
+            var list = el("div", "choice-list");
+            res.choices.forEach(function (c) {
+              var b = el("button", "btn choice-btn", c.label);
+              b.type = "button";
+              b.addEventListener("click", function () { done(c.districts); });
+              list.appendChild(b);
+            });
+            show([intro, list]);
+            return;
+          }
+          show([el("p", "small form-error", res.error || "Something went wrong. Please try again.")]);
+        })
+        .catch(function () {
+          button.disabled = false;
+          show([el("p", "small form-error", "The lookup didn't answer. Check your connection and try again.")]);
+        });
+    });
+  });
+
+  // Waitlist: fill the county list for the chosen state (data/counties.json).
+  document.querySelectorAll("[data-county-picker]").forEach(function (form) {
+    var state = form.querySelector("select[name=state]");
+    var county = form.querySelector("select[name=county]");
+    var counties = null;
+    function fill() {
+      var st = state.value;
+      county.textContent = "";
+      county.appendChild(new Option(st ? "Choose a county" : "Choose a state first", ""));
+      if (!st || !counties) return;
+      Object.keys(counties)
+        .filter(function (f) { return counties[f][1] === st; })
+        .sort(function (a, b) { return counties[a][0].localeCompare(counties[b][0]); })
+        .forEach(function (f) { county.appendChild(new Option(counties[f][0], f)); });
+      county.disabled = false;
+    }
+    state.addEventListener("change", function () {
+      if (counties) return fill();
+      fetch("/data/counties.json").then(function (r) { return r.json(); }).then(function (c) { counties = c; fill(); });
+    });
+  });
 })();

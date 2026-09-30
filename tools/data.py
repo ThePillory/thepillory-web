@@ -1,7 +1,7 @@
 """Site data for tools/build.py.
 
-Only real, plain facts live here: the governing bodies that represent
-Calaveras County, described in general terms. Everything about specific
+Only real, plain facts live here: the governing bodies The Pillory covers,
+described in general terms. Everything about specific
 officials, bills, votes and meetings comes from Cloudflare D1, loaded by the
 sync Worker (workers/sync) and rendered by Pages Functions (functions/).
 
@@ -33,7 +33,7 @@ BODIES = [
         "name": "California State Legislature",
         "short": "State Legislature",
         "level": "state",
-        "about": "The State Assembly and State Senate. Shown here: the members who represent your districts.",
+        "about": "The State Assembly (80 members) and State Senate (40 members). Every current member, with their recorded votes.",
         "clause": ("amend-10", "State powers"),
     },
     {
@@ -41,7 +41,7 @@ BODIES = [
         "name": "U.S. House of Representatives",
         "short": "U.S. House",
         "level": "federal",
-        "about": "Members elected every two years by district. Shown here: the member who represents your district.",
+        "about": "Members elected by district every two years, plus non-voting delegates. Every current member, with their recorded votes.",
         "clause": ("art-1-sec-2", "The House"),
     },
     {
@@ -49,7 +49,7 @@ BODIES = [
         "name": "U.S. Senate",
         "short": "U.S. Senate",
         "level": "federal",
-        "about": "Two senators per state, elected to six-year terms. Shown here: California's senators.",
+        "about": "Two senators per state, elected to six-year terms. Every current senator, with their recorded votes.",
         "clause": ("art-1-sec-3", "The Senate"),
     },
 ]

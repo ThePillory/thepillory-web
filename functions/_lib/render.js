@@ -17,7 +17,8 @@ export function safeUrl(u) {
   return /^https?:\/\//i.test(String(u || "")) ? String(u) : null;
 }
 
-export function page(title, main, { tab = null, root = false, back = null, status = 200 } = {}) {
+// personal: the page depends on the visitor's district cookie, so no shared cache.
+export function page(title, main, { tab = null, root = false, back = null, status = 200, personal = false } = {}) {
   const nav = tab ? TABBARS[tab][root ? "root" : "sub"] : "";
   const backHtml = back ? `<a class="back-link" href="${esc(back[1])}">← ${esc(back[0])}</a>` : "";
   // Function replacements: data may contain "$", which .replace() would treat as a pattern.
@@ -27,11 +28,13 @@ export function page(title, main, { tab = null, root = false, back = null, statu
     .replace("%%MAIN%%", () => main);
   return new Response(html, {
     status,
-    headers: {
-      "Content-Type": "text/html; charset=utf-8",
-      // Data changes at most daily; a short edge cache keeps D1 reads low.
-      "Cache-Control": "public, max-age=300",
-    },
+    headers: personal
+      ? { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "private, no-cache", Vary: "Cookie" }
+      : {
+          "Content-Type": "text/html; charset=utf-8",
+          // Data changes at most daily; a short edge cache keeps D1 reads low.
+          "Cache-Control": "public, max-age=300",
+        },
   });
 }
 

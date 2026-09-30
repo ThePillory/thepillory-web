@@ -5,7 +5,8 @@
 //   Both need Turnstile and are rate-limited per visitor (functions/_lib/turnstile.js).
 // /laws/constitution/ is static and passed through. Old sample pages redirect (OLD_PAGES).
 import { page, notFound, notLoaded, esc, safeUrl, section, sourceLink, card, fmtDate } from "../_lib/render.js";
-import { safe, recentBills, billById, votesOnBill, CHAMBER_NAME } from "../_lib/data.js";
+import { safe, recentBills, billById, votesOnBill, officialsWhere, CHAMBER_NAME } from "../_lib/data.js";
+import { districtsFromCookie, repsWhere, describe } from "../_lib/districts.js";
 import { billVote, billHref } from "../_lib/votes.js";
 import { currentAnalysis, parse, provisionsFor, baselineSection, isPublic, openFlagCount, METHOD_URL } from "../_lib/analysis.js";
 import { turnstileReady, turnstileWidget, turnstileScript, verifyTurnstile, visitorHash, actionsToday, recordAction } from "../_lib/turnstile.js";
@@ -75,7 +76,7 @@ async function index(env, url) {
   const main = `
 <header class="page-head">
   <h1>Laws</h1>
-  <p class="subtitle">Bills your officials have voted on, and the Constitution they answer to.</p>
+  <p class="subtitle">Bills in Congress and the California Legislature with recorded votes, and the Constitution they answer to.</p>
 </header>
 <a class="parchment stack-sm constitution-link" href="/laws/constitution/">
   <p class="label">The Constitution</p>
@@ -175,11 +176,13 @@ function readerForms(env, id, analysis) {
   return `<div class="stack-sm reader-forms">${parts.join("")}</div>${ready ? turnstileScript : ""}`;
 }
 
-async function bill(env, id, url) {
+async function bill(env, id, url, request) {
+  const districts = districtsFromCookie(request);
   const data = await safe(env, async (db) => {
     const b = await billById(db, id);
     if (!b) return { b: null };
-    const [votes, analysis] = await Promise.all([votesOnBill(db, id), analysisFor(db, id)]);
+    const reps = districts ? await officialsWhere(db, repsWhere(districts)) : [];
+    const [votes, analysis] = await Promise.all([votesOnBill(db, id, reps.map((o) => o.id)), analysisFor(db, id)]);
     return { b, votes, analysis };
   });
   if (!data) return notLoaded("Laws", "laws", false, ["Laws", "/laws/"]);
@@ -211,13 +214,18 @@ async function bill(env, id, url) {
 ${sent ? `<p class="banner" role="status">${esc(sent)}</p>` : ""}
 ${error ? `<p class="banner banner--error" role="alert">${esc(error)}</p>` : ""}
 ${baselineSection(analysis.a, analysis.provisions, { underReview: analysis.flags > 0, empty, after: readerForms(env, id, analysis) })}
-<section class="stack">
-  <h2 class="label">How your reps voted</h2>
-  <p class="hint">Every recorded vote on this bill by officials who represent Calaveras County, newest first. Each links to the official record.</p>
-  ${votes.map(billVote).join("") || '<p class="secondary small">No recorded votes by your officials.</p>'}
+<section class="stack" id="votes">
+  <h2 class="label">${districts ? "How your reps voted" : "Votes"}</h2>
+  <p class="hint">${
+    districts
+      ? `Every recorded vote on this bill, newest first, with the totals and how your reps voted (${esc(describe(districts))}). Each links to the official record, which lists every member.`
+      : "Every recorded vote on this bill, newest first, with the totals. Each links to the official record, which lists every member."
+  }</p>
+  ${districts ? "" : '<p class="small"><a class="inline-link" href="/#find">Find your representatives</a> to see how yours voted.</p>'}
+  ${votes.map((v) => billVote(v, { personal: !!districts })).join("") || '<p class="secondary small">No recorded votes loaded for this bill.</p>'}
 </section>
 `;
-  return page(`${b.bill_number}: ${b.title}`, main, { tab: "laws", back: ["Laws", "/laws/"] });
+  return page(`${b.bill_number}: ${b.title}`, main, { tab: "laws", back: ["Laws", "/laws/"], personal: true });
 }
 
 export async function onRequestGet(context) {
@@ -230,7 +238,7 @@ export async function onRequestGet(context) {
   }
   if (parts[0] === "bills" && parts.length === 2) {
     if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
-    return bill(context.env, decodeURIComponent(parts[1]), url);
+    return bill(context.env, decodeURIComponent(parts[1]), url, context.request);
   }
   const old = OLD_PAGES[parts.join("/")];
   if (old) return Response.redirect(`${url.origin}${old}`, 301);

@@ -55,3 +55,6 @@ IQM2_DAILY_LIMIT = "20"
 # recent agendas are filled in even when no new meetings are posted.
 MEETING_BACKFILL_DAYS = "30"
 MEETING_BODIES = "Board of Supervisors|Planning Commission"
+# The fixtures list a handful of members, not ~540 and ~120.
+MIN_FEDERAL_MEMBERS = "1"
+MIN_STATE_LEGISLATORS = "1"

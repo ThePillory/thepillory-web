@@ -17,6 +17,7 @@ node access.test.mjs | tail -1
 node d1retry.test.mjs | tail -1
 node meetings.test.mjs | tail -1
 node review.test.mjs | grep "^# pass"
+node nationwide.test.mjs | tail -1
 
 node fixture-server.mjs & FIX=$!
 $WRANGLER dev -c wrangler.test.toml --port 8789 --persist-to "$STATE" --test-scheduled >/tmp/pillory-worker.log 2>&1 & WK=$!
@@ -52,6 +53,7 @@ kill $WK
   --binding ADMIN_LOCAL_DEV=1 --binding REVIEWER_NAME="Test Reviewer" \
   --binding TURNSTILE_SITE_KEY=1x00000000000000000000AA --binding TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA \
   --binding TURNSTILE_VERIFY_URL=http://127.0.0.1:8788/turnstile/siteverify --binding VISITOR_SALT=local-test \
+  --binding CENSUS_GEOCODER_URL=http://127.0.0.1:8788/census/geographies/onelineaddress \
   >/tmp/pillory-pages.log 2>&1) & PG=$!
 until curl -s localhost:8790/ >/dev/null 2>&1; do sleep 1; done
 echo "--- reader actions on the site (Turnstile is faked):"
@@ -59,5 +61,11 @@ curl -s -o /dev/null -w "report on H.R. 10's card: %{http_code} %{redirect_url}\
 curl -s -o /dev/null -w "report with a failed check: %{http_code} %{redirect_url}\n" -X POST -d "reason=unfair&cf-turnstile-response=bad" localhost:8790/laws/bills/us-119-hr-10/flag
 curl -s -o /dev/null -w "full analysis of H.R. 10: %{http_code} %{redirect_url}\n" -X POST -d "cf-turnstile-response=ok" localhost:8790/laws/bills/us-119-hr-10/request-full
 curl -s -o /dev/null -w "full analysis of a skipped bill: %{http_code} %{redirect_url}\n" -X POST -d "cf-turnstile-response=ok" localhost:8790/laws/bills/us-119-hr-40/request-full
+echo "--- district lookups (fake Census geocoder; nothing is stored):"
+curl -s -X POST -H "Content-Type: application/json" -d '{"q":"1 Test Street, San Andreas, CA"}' localhost:8790/api/districts; echo
+curl -s -X POST -H "Content-Type: application/json" -d '{"q":"95249"}' localhost:8790/api/districts; echo
+echo "--- waitlist (Turnstile is faked):"
+curl -s -o /dev/null -w "join: %{http_code} %{redirect_url}\n" -X POST -d "state=CA&county=06009&email=test%40example.org&cf-turnstile-response=ok" localhost:8790/api/waitlist
+curl -s -o /dev/null -w "county not in that state: %{http_code} %{redirect_url}\n" -X POST -d "state=NV&county=06009&email=test%40example.org&cf-turnstile-response=ok" localhost:8790/api/waitlist
 echo "--- site with local data: http://localhost:8790/reps/  and  http://localhost:8790/admin/review/  (Ctrl-C to stop)"
 wait $PG

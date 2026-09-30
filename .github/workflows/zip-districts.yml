@@ -5,9 +5,6 @@
 name: Refresh ZIP district data
 on:
   workflow_dispatch:
-  push:
-    branches: [claude/pillory-mobile-screens-p5zekn]
-    paths: [tools/build_zip_districts.py]
 permissions:
   contents: write
 jobs:

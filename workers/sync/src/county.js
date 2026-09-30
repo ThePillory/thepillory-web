@@ -42,6 +42,8 @@ export async function syncCounty(env, db, budget) {
       chamber: "county-board",
       body: "board-of-supervisors",
       district: `District ${district}`,
+      state: "CA",
+      district_code: String(district),
       party: (entry.party || "").trim() || null,
       term_start: entry.term_start || null,
       term_end: entry.term_end || null,

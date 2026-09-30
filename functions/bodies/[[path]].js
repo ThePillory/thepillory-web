@@ -1,7 +1,8 @@
 // /bodies/<slug>/   a governing body: its members, and (for the Board of Supervisors) its meetings, from D1.
 import { BODIES, LEVEL_NAME } from "../_lib/generated.js";
 import { page, notFound, esc, linkRow, section } from "../_lib/render.js";
-import { safe, officialsForBody } from "../_lib/data.js";
+import { safe, officialsForBody, officialsWhere } from "../_lib/data.js";
+import { districtsFromCookie, repsWhere, STATE_NAME } from "../_lib/districts.js";
 import { meetingCard, summariesFor, pacificNow, addDays } from "../_lib/meetings.js";
 
 // Meetings upcoming and from the last 30 days, soonest first.
@@ -30,16 +31,33 @@ export async function onRequestGet(context) {
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
 
   const county = b.level === "county";
+  // Congress is too large to list here: the visitor's own members, then by state on /reps/.
+  const federal = b.level === "federal";
+  const d = districtsFromCookie(context.request);
   const data = await safe(context.env, async (db) => ({
-    members: await officialsForBody(db, b.slug),
+    members: federal
+      ? d ? (await officialsWhere(db, repsWhere(d))).filter((o) => o.body === b.slug) : []
+      : await officialsForBody(db, b.slug),
     meetings: county ? await meetingsFor(db, b.slug) : null,
   }));
   const members = data ? data.members : null;
   const memberRows = members && members.length
     ? members.map((o) => linkRow(`/reps/${o.slug}/`, o.name, [o.office, o.district].filter(Boolean).join(" · "))).join("")
     : `<p class="secondary small">${
-        !data ? "Not loaded yet. Members appear after the data sync runs." : county ? "Supervisors are entered by hand and will appear once added." : "Not loaded yet."
+        !data ? "Not loaded yet. Members appear after the data sync runs."
+          : federal ? `<a class="inline-link" href="/#find">Find your representatives</a> to see yours here.`
+          : county ? "Supervisors are entered by hand and will appear once added." : "Not loaded yet."
       }</p>`;
+  const byState = federal
+    ? section(
+        "Members by state",
+        `<div class="chips">${Object.entries(STATE_NAME)
+          .sort((x, y) => x[1].localeCompare(y[1]))
+          .map(([code, name]) => `<a class="chip state-chip" href="/reps/?state=${code}#state-list">${esc(name)}</a>`)
+          .join("")}</div>`,
+        "card stack-sm"
+      )
+    : "";
 
   let meetings = "";
   if (county) {
@@ -62,8 +80,9 @@ export async function onRequestGet(context) {
   <div class="secondary">${esc(b.about)}</div>
   <div class="chips">${b.chip}</div>
 </header>
-${section("Members", `<div>${memberRows}</div>`)}
+${section(federal ? "Your members" : "Members", `<div>${memberRows}</div>`)}
+${byState}
 ${meetings}
 <p class="hint">Members and meetings come from official sources, each linked on its own page.</p>`;
-  return page(b.name, main, { tab: "reps", back: ["Reps", "/reps/"] });
+  return page(b.name, main, { tab: "reps", back: ["Reps", "/reps/"], personal: federal });
 }

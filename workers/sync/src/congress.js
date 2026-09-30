@@ -3,9 +3,12 @@
 import { api, API, BILL_TYPES } from "./congress-api.js";
 
 export { BILL_TYPES };
-import { upsertOfficial, deactivateOthers, activeOfficials, upsertBill, billExists, saveVote, existingVoteIds } from "./db.js";
+import { upsertOfficial, deactivateOthers, officialIndex, upsertBill, billExists, saveVote, existingVoteIds } from "./db.js";
 import { classifyFederal, normalizePosition } from "./classify.js";
-import { getState, setState, slugify, ordinal, today, currentCongress, congressSessions, isHttp, BudgetExhausted } from "./util.js";
+import { STATE_CODES, directName, districtCode, houseTotals, tally } from "./rollcall.js";
+
+export { tally };
+import { getState, setState, slugify, ordinal, today, currentCongress, congressSessions, isHttp, BudgetExhausted, UpstreamError } from "./util.js";
 
 
 export function normalizeBillType(t) {
@@ -45,69 +48,113 @@ function currentParty(detail, fallback) {
   return hist.length ? hist[hist.length - 1].partyName : fallback || null;
 }
 
-// Refreshed once per calendar day (UTC), so each day's scheduled run refreshes
-// no matter what time the previous check happened. The day is recorded only
-// once the Representative has loaded, so a run that couldn't find the House
-// seat tries again next run. (This key replaced "federal_officials_checked",
-// which also forces one refresh on the first run after the change.)
+// The member list is refreshed once per calendar day (UTC). Each member's
+// detail record (full name, website, party history) is read when first seen
+// and then every 30 days, spread across runs.
 const FEDERAL_DAY_KEY = "federal_officials_day";
+const DETAIL_DAYS = 30;
+
+async function listCurrentMembers(env, budget) {
+  const out = [];
+  for (let offset = 0; offset < 2000; offset += 250) {
+    const data = await budget.json(api(env, "/member", { currentMember: "true", limit: "250", offset: String(offset) }), {}, `members ${offset}`);
+    const items = data.members || [];
+    out.push(...items);
+    if (items.length < 250) break;
+  }
+  return out;
+}
+
+function memberRecord(m, d, detailDay) {
+  const term = lastTerm(m);
+  const isSenate = term.chamber === "Senate";
+  const state = STATE_CODES[m.state] || STATE_CODES[d.state] || null;
+  const code = isSenate ? null : districtCode(m.district);
+  const name = d.directOrderName || directName(m.name);
+  const since = d.terms ? serviceSince(d, isSenate ? "Senate" : "House of Representatives") : null;
+  const photo = (d.depiction && d.depiction.imageUrl) || (m.depiction && m.depiction.imageUrl);
+  const delegate = !isSenate && ["DC", "PR", "GU", "AS", "VI", "MP"].includes(state);
+  return {
+    id: `bioguide:${m.bioguideId}`,
+    slug: slugify(name),
+    name,
+    last_name: d.lastName || String(m.name || "").split(",")[0].trim() || name.split(/\s+/).pop(),
+    office: isSenate ? "U.S. Senator" : delegate ? (state === "PR" ? "Resident Commissioner" : "Delegate") : "U.S. Representative",
+    level: "federal",
+    chamber: isSenate ? "us-senate" : "us-house",
+    body: isSenate ? "us-senate" : "us-house",
+    district: isSenate ? m.state : code === "0" ? `${state} (at large)` : `${state}-${code}`,
+    state,
+    district_code: code,
+    party: currentParty(d, m.partyName),
+    // Congress.gov gives years. term_start = first year of continuous service in this chamber;
+    // term_end only when the source states it.
+    term_start: since || (term.startYear ? String(term.startYear) : null),
+    term_end: term.endYear ? String(term.endYear) : null,
+    website: isHttp(d.officialWebsiteUrl) ? d.officialWebsiteUrl : null,
+    photo_url: isHttp(photo) ? photo : null,
+    photo_credit: (d.depiction && d.depiction.attribution) || (m.depiction && m.depiction.attribution) || null,
+    source_url: `https://bioguide.congress.gov/search/bio/${m.bioguideId}`,
+    last_verified: today(),
+    bioguide_id: m.bioguideId,
+    detail_checked: detailDay,
+  };
+}
 
 export async function syncFederalOfficials(env, db, budget) {
   const day = await getState(db, FEDERAL_DAY_KEY);
   if (day === today()) return { status: "skipped", message: `already refreshed today (${day}); refreshes at each day's first run` };
-  const district = String(env.CA_HOUSE_DISTRICT || (await getState(db, "house_district_detected")) || "").trim();
 
-  const list = await budget.json(api(env, "/member/CA", { currentMember: "true", limit: "250" }), {}, "members CA");
-  const members = list.members || [];
-  const senators = members.filter((m) => lastTerm(m).chamber === "Senate");
-  const rep = district ? members.find((m) => lastTerm(m).chamber !== "Senate" && String(m.district) === district) : null;
+  const members = (await listCurrentMembers(env, budget)).filter((m) => m.bioguideId && STATE_CODES[m.state]);
+  // A short list means a bad response, not 100 retirements: change nothing.
+  const min = parseInt(env.MIN_FEDERAL_MEMBERS || "400", 10);
+  if (members.length < min) throw new Error(`Congress.gov listed only ${members.length} current members; nothing changed`);
+  const { results } = await db.prepare("SELECT bioguide_id, detail_checked, website, name, term_start FROM officials WHERE bioguide_id IS NOT NULL").all();
+  const known = new Map(results.map((r) => [r.bioguide_id, r]));
+  const cutoff = new Date(Date.now() - DETAIL_DAYS * 86400000).toISOString().slice(0, 10);
 
-  const picks = [...senators.map((m) => ["us-senate", m]), ...(rep ? [["us-house", rep]] : [])];
+  // Members needing their detail record first (never read, then oldest).
+  const order = [...members].sort((a, b) => String((known.get(a.bioguideId) || {}).detail_checked || "").localeCompare(String((known.get(b.bioguideId) || {}).detail_checked || "")));
   const loaded = { "us-senate": [], "us-house": [] };
-  for (const [chamber, m] of picks) {
-    const d = (await budget.json(api(env, `/member/${m.bioguideId}`), {}, `member ${m.bioguideId}`)).member || {};
-    const name = d.directOrderName || [d.firstName, d.lastName].filter(Boolean).join(" ") || m.name;
-    const isSenate = chamber === "us-senate";
-    const since = serviceSince(d, isSenate ? "Senate" : "House of Representatives");
-    const term = lastTerm(m);
-    const photo = (d.depiction && d.depiction.imageUrl) || (m.depiction && m.depiction.imageUrl);
-    await upsertOfficial(db, {
-      id: `bioguide:${m.bioguideId}`,
-      slug: slugify(name),
-      name,
-      last_name: d.lastName || name.split(/\s+/).pop(),
-      office: isSenate ? "U.S. Senator" : "U.S. Representative",
-      level: "federal",
-      chamber,
-      body: isSenate ? "us-senate" : "us-house",
-      district: isSenate ? "California" : `CA-${district}`,
-      party: currentParty(d, m.partyName),
-      // Congress.gov gives years. term_start = first year of continuous service in this chamber;
-      // term_end only when the source states it.
-      term_start: since || (term.startYear ? String(term.startYear) : null),
-      term_end: term.endYear ? String(term.endYear) : null,
-      website: isHttp(d.officialWebsiteUrl) ? d.officialWebsiteUrl : null,
-      photo_url: isHttp(photo) ? photo : null,
-      photo_credit: (d.depiction && d.depiction.attribution) || null,
-      source_url: `https://bioguide.congress.gov/search/bio/${m.bioguideId}`,
-      last_verified: today(),
-      bioguide_id: m.bioguideId,
-    });
-    loaded[chamber].push(`bioguide:${m.bioguideId}`);
+  let details = 0;
+  let detailsLeft = 0;
+  let detailErrors = 0;
+  for (const m of order) {
+    const prev = known.get(m.bioguideId);
+    const stale = !prev || !prev.detail_checked || prev.detail_checked < cutoff;
+    let d = {};
+    let checked = null;
+    // Leave room in this round's budget for the vote steps.
+    if (stale && budget.remaining() > Math.min(60, Math.floor(budget.max / 3)) && budget.timeLeft() > 60000) {
+      try {
+        d = (await budget.json(api(env, `/member/${m.bioguideId}`), {}, `member ${m.bioguideId}`)).member || {};
+        details += 1;
+      } catch (err) {
+        if (!(err instanceof UpstreamError)) throw err;
+        detailErrors += 1; // the list's record is used; tried again in 30 days
+      }
+      checked = today();
+    } else if (stale) {
+      detailsLeft += 1;
+    }
+    const rec = memberRecord(m, d, checked);
+    // Keep what an earlier detail read found until the next one.
+    if (!checked && prev) {
+      rec.name = prev.name || rec.name;
+      rec.website = prev.website;
+      rec.term_start = prev.term_start || rec.term_start;
+    }
+    await upsertOfficial(db, rec);
+    loaded[rec.chamber].push(rec.id);
   }
-  if (loaded["us-senate"].length) await deactivateOthers(db, "us-senate", loaded["us-senate"]);
-  if (loaded["us-house"].length) await deactivateOthers(db, "us-house", loaded["us-house"]);
-  if (rep) await setState(db, FEDERAL_DAY_KEY, today());
-  const msg = `loaded ${loaded["us-senate"].length} senator(s), ${loaded["us-house"].length} representative(s)`;
-  if (!rep) {
-    return {
-      status: "partial",
-      message: district
-        ? `${msg}. Congress.gov lists no current member for CA-${district}; trying again next run.`
-        : `${msg}. No House district known: set CA_HOUSE_DISTRICT or let the Open States lookup run first.`,
-    };
-  }
-  return { status: "ok", message: `${msg} (district CA-${district})` };
+  await deactivateOthers(db, "us-senate", loaded["us-senate"]);
+  await deactivateOthers(db, "us-house", loaded["us-house"]);
+  const msg =
+    `loaded ${loaded["us-senate"].length} senators and ${loaded["us-house"].length} House members; read ${details} detail record(s)` +
+    (detailErrors ? ` (${detailErrors} couldn't be read; the member list's record is used)` : "");
+  if (detailsLeft) return { status: "partial", message: `${msg}; ${detailsLeft} detail record(s) left for the next run` };
+  await setState(db, FEDERAL_DAY_KEY, today());
+  return { status: "ok", message: msg };
 }
 
 // ---------------------------------------------------------------------------
@@ -134,8 +181,8 @@ async function listHouseVotes(env, budget, congress, session) {
 }
 
 export async function syncHouseVotes(env, db, budget) {
-  const reps = await activeOfficials(db, "us-house");
-  if (!reps.length) return { status: "skipped", message: "no U.S. Representative loaded yet" };
+  const reps = await officialIndex(db, ["us-house"], "bioguide_id");
+  if (!reps.all.length) return { status: "skipped", message: "no House members loaded yet" };
   const congress = currentCongress();
   let saved = 0;
   let pending = 0;
@@ -178,10 +225,11 @@ export async function syncHouseVotes(env, db, budget) {
         const clerkXml = pick(v, "sourceDataURL", "sourceDataUrl");
         const source = date ? `https://clerk.house.gov/Votes/${date.slice(0, 4)}${roll}` : clerkXml;
 
+        // Every loaded member's position; members no longer serving aren't loaded.
         const positions = [];
-        for (const r of reps) {
-          const m = results.find((x) => (x.bioguideID || x.bioguideId) === r.bioguide_id);
-          if (m) positions.push({ official_id: r.id, position: normalizePosition(m.voteCast), raw_position: String(m.voteCast) });
+        for (const m of results) {
+          const r = reps.by.get(m.bioguideID || m.bioguideId);
+          if (r && m.voteCast) positions.push({ official_id: r.id, position: normalizePosition(m.voteCast), raw_position: String(m.voteCast) });
         }
         await saveVote(
           db,
@@ -196,6 +244,7 @@ export async function syncHouseVotes(env, db, budget) {
             vote_type: classifyFederal(question, { billTitle: title, isAmendment }),
             result: pick(v, "result", "voteResult") || "Unknown",
             source_url: isHttp(source) ? source : clerkXml,
+            totals: houseTotals(v, results),
           },
           positions
         );
@@ -203,7 +252,7 @@ export async function syncHouseVotes(env, db, budget) {
         pending -= 1;
       }
     }
-    return { status: "ok", message: `Congress ${congress}: ${saved} new House vote(s) saved; caught up` };
+    return { status: "ok", message: `Congress ${congress}: ${saved} House vote(s) saved (new, or re-read for totals and all members); caught up` };
   } catch (err) {
     if (err instanceof BudgetExhausted) {
       return { status: "partial", message: `Congress ${congress}: ${saved} new House vote(s) saved; ${pending} still to fetch. ${err.message}` };

@@ -5,6 +5,7 @@
 //                         edit any field, approve, reject, reopen, ask for a new draft or a
 //                         full analysis, close reader reports; full history
 // POST /admin/review/relevance/<bill id>/   un-skip (or skip again) a bill
+// /admin/waitlist/        "Bring The Pillory to your county": sign-ups by county (counts only)
 //
 // Protected by Cloudflare Access (see functions/_lib/access.js and docs/analysis.md).
 // Every change writes a bill_analysis_revisions row with the row as it was before.
@@ -173,6 +174,7 @@ async function list(db, url) {
     `<header class="page-head">
   <h1>Review queue</h1>
   <p class="subtitle">What needs a person. Drafts the AI reviewer passes are published as "AI-drafted, auto-checked"; the rest wait here.</p>
+  <p class="small"><a class="inline-link" href="/admin/waitlist/">County waitlist</a></p>
 </header>
 ${queue("flagged-ai", "Flagged by AI", "The AI reviewer found a problem. These are hidden from public pages until you decide.", aiFlagged, aiReasons)}
 ${queue("flagged-readers", "Flagged by readers", 'Readers reported a problem. These stay up, marked "Under review", until you approve, edit, reject or close the reports.', readerFlagged, (r) => {
@@ -764,6 +766,52 @@ async function change(db, env, id, request, email) {
 }
 
 // ---------------------------------------------------------------------------
+// Waitlist: counts by county. Emails stay in D1 and aren't shown here.
+
+async function waitlist(db) {
+  let rows = [];
+  let total = null;
+  try {
+    rows = (
+      await db
+        .prepare(
+          `SELECT county_fips, county_name, COUNT(*) AS n, MIN(created_at) AS first_at, MAX(created_at) AS last_at
+           FROM waitlist GROUP BY county_fips, county_name ORDER BY n DESC, county_name`
+        )
+        .all()
+    ).results;
+    total = await db.prepare("SELECT COUNT(DISTINCT email) AS people, COUNT(DISTINCT county_fips) AS counties, COUNT(*) AS signups FROM waitlist").first();
+  } catch (err) {
+    if (/no such table/i.test(String(err && err.message))) return missingTables();
+    throw err;
+  }
+  const table = rows.length
+    ? `<div class="card">${rows
+        .map(
+          (r) => `
+<div class="list-row">
+  <div><div class="list-title">${esc(r.county_name)}</div><div class="list-meta">FIPS ${esc(r.county_fips)} · first ${fmtDate(r.first_at)} · latest ${fmtDate(r.last_at)}</div></div>
+  <span class="row-end"><strong>${r.n}</strong></span>
+</div>`
+        )
+        .join("")}</div>`
+    : '<p class="secondary small">No sign-ups yet.</p>';
+  const res = page(
+    "Waitlist",
+    `<header class="page-head"><h1>Waitlist</h1><p class="subtitle">Sign-ups for "Bring The Pillory to your county", by county.</p></header>
+<section class="card stack-sm">
+  <p><strong>${total ? total.people : 0}</strong> people · <strong>${total ? total.counties : 0}</strong> counties · <strong>${total ? total.signups : 0}</strong> sign-ups</p>
+  <p class="hint">Emails are used only to announce a county's launch. They aren't shown here or anywhere public.</p>
+</section>
+${table}`,
+    { back: ["Review drafts", "/admin/review/"] }
+  );
+  const headers = new Headers(res.headers);
+  headers.set("Cache-Control", "no-store");
+  headers.set("X-Robots-Tag", "noindex, nofollow");
+  headers.set("X-Frame-Options", "DENY");
+  return new Response(res.body, { status: 200, headers });
+}
 
 async function handle(context) {
   const { request, env } = context;
@@ -772,9 +820,13 @@ async function handle(context) {
   if (!who.ok) return locked(who.reason);
   const parts = (context.params.path || []).filter(Boolean);
   if (parts.length === 0) return Response.redirect(`${url.origin}/admin/review/`, 302);
-  if (parts[0] !== "review") return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+  if (parts[0] !== "review" && parts[0] !== "waitlist") return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
   if (!env.DB) return missingTables();
+  if (parts[0] === "waitlist") {
+    if (parts.length !== 1 || request.method !== "GET") return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+    return waitlist(env.DB);
+  }
   if (parts[1] === "relevance") {
     if (parts.length !== 3 || request.method !== "POST") return Response.redirect(`${url.origin}/admin/review/#skipped`, 302);
     const origin = request.headers.get("Origin");
