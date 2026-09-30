@@ -1,6 +1,10 @@
-// /admin/review/          AI-drafted constitutional analyses, newest first
-// /admin/review/<id>/     one draft: preview, what the checks changed, edit any field,
-//                         approve, reject, reopen, or ask for a new draft; full history
+// /admin/review/          the review queue: flagged by the AI reviewer, flagged by readers,
+//                         spot checks; the agreement rate; bills the relevance check skipped;
+//                         every analysis by status; agenda summaries and issue links
+// /admin/review/<id>/     one analysis: why it's in the queue, preview, what the checks changed,
+//                         edit any field, approve, reject, reopen, ask for a new draft or a
+//                         full analysis, close reader reports; full history
+// POST /admin/review/relevance/<bill id>/   un-skip (or skip again) a bill
 //
 // Protected by Cloudflare Access (see functions/_lib/access.js and docs/analysis.md).
 // Every change writes a bill_analysis_revisions row with the row as it was before.
@@ -8,11 +12,21 @@ import { page, esc, fmtDate, safeUrl } from "../_lib/render.js";
 import { checkAccess } from "../_lib/access.js";
 import { parse, badge, baselineSection, provisionsFor } from "../_lib/analysis.js";
 import { verifyQuotes } from "../../workers/sync/src/analysis/verify.js";
+import { CHECKS } from "../../workers/sync/src/analysis/review.js";
 import { FLAGS, FLAG_LABELS } from "../../workers/sync/src/analysis/agenda-check.js";
 import { ISSUES } from "../_lib/generated.js";
 import { when, meetingHref } from "../_lib/meetings.js";
 
-const STATUS_NAMES = { ai_draft: "Drafts awaiting review", reviewed: "Reviewed", rejected: "Rejected", all: "All" };
+// Browse every current analysis by where it stands.
+const BROWSE = {
+  auto: ["Published, auto-checked", "a.status = 'ai_draft' AND a.ai_review = 'pass'"],
+  reviewed: ["Reviewed by you", "a.status = 'reviewed'"],
+  waiting: ["Waiting for the AI reviewer", "a.status = 'ai_draft' AND a.ai_review IS NULL"],
+  rejected: ["Rejected", "a.status = 'rejected'"],
+  all: ["All", "1 = 1"],
+};
+const FLAG_REASON_NAMES = { inaccurate: "Inaccurate", unfair: "Unfair to one side", missing: "Missing perspective", other: "Other" };
+const CHECK_QUESTIONS = Object.fromEntries(CHECKS);
 
 function adminPage(title, main, status = 200) {
   const res = page(title, main, { back: title === "Review drafts" ? null : ["Review drafts", "/admin/review/"], status });
@@ -36,66 +50,163 @@ function missingTables() {
   return adminPage(
     "Review drafts",
     `<header class="page-head"><h1>Review drafts</h1></header>
-<section class="card stack-sm"><h2 class="label">Nothing yet</h2><p>The analysis tables are created on the sync Worker's next run. Drafts appear here after that.</p></section>`
+<section class="card stack-sm"><h2 class="label">Nothing yet</h2><p>The sync Worker hasn't set up the latest analysis tables yet. They're created on its next run, or as soon as you open its /status link. The review queue appears here after that.</p></section>`
   );
 }
 
 // ---------------------------------------------------------------------------
 // List
 
-async function list(db, url) {
-  const status = STATUS_NAMES[url.searchParams.get("status")] ? url.searchParams.get("status") : "ai_draft";
-  const where = status === "all" ? "" : "AND a.status = ?";
-  const stmt = db.prepare(
-    `SELECT a.id, a.bill_id, a.status, a.basis, a.created_at, a.reviewer, a.reviewed_at, a.quote_check, a.citation_check,
-            b.bill_number, b.title, b.level
-     FROM bill_analyses a JOIN bills b ON b.id = a.bill_id
-     WHERE a.current = 1 ${where} ORDER BY a.created_at DESC, a.id DESC LIMIT 200`
-  );
-  const { results } = await (status === "all" ? stmt : stmt.bind(status)).all();
-  const counts = await db
-    .prepare("SELECT status, COUNT(*) AS n FROM bill_analyses WHERE current = 1 GROUP BY status")
-    .all()
-    .then((r) => Object.fromEntries(r.results.map((x) => [x.status, x.n])));
-  const pending = await db.prepare("SELECT COUNT(*) AS n FROM analysis_requests WHERE status = 'pending'").first();
-  const tabs = Object.entries(STATUS_NAMES)
-    .map(([k, name]) => {
-      const n = k === "all" ? Object.values(counts).reduce((x, y) => x + y, 0) : counts[k] || 0;
-      return `<a class="chip chip-tab ${k === status ? "chip--navy" : "chip--outline"}" href="/admin/review/?status=${k}"${k === status ? ' aria-current="page"' : ""}>${esc(name)} (${n})</a>`;
-    })
-    .join("");
-  const rows = results
-    .map((r) => {
-      const a = parse(r);
-      const fixes = (a.quote_check.replaced || []).length + (a.citation_check.removed_citations || []).length;
-      const meta = [
-        r.level === "federal" ? "Federal" : "State",
-        `drafted ${fmtDate(r.created_at)}`,
-        r.basis === "full_text" ? null : r.basis === "summary_only" ? "summary only" : "partial text",
-        fixes ? `${fixes} automatic fix${fixes === 1 ? "" : "es"}` : null,
-      ]
-        .filter(Boolean)
-        .join(" · ");
-      return `
+const ROW_SQL = `SELECT a.id, a.bill_id, a.status, a.depth, a.basis, a.created_at, a.reviewer, a.reviewed_at, a.ai_review,
+    a.ai_review_detail, a.spot_check, b.bill_number, b.title, b.level,
+    (SELECT COUNT(*) FROM analysis_flags f WHERE f.analysis_id = a.id AND f.status = 'open') AS open_flags
+  FROM bill_analyses a JOIN bills b ON b.id = a.bill_id WHERE a.current = 1`;
+
+function analysisRow(r, why) {
+  const meta = [
+    r.level === "federal" ? "Federal" : "State",
+    r.depth === "card" ? "short card" : "full analysis",
+    `drafted ${fmtDate(r.created_at)}`,
+    r.basis === "full_text" ? null : r.basis === "summary_only" ? "summary only" : "partial text",
+  ]
+    .filter(Boolean)
+    .join(" · ");
+  return `
 <a class="list-row link-row" href="/admin/review/${r.id}/">
-  <div class="stack-sm"><div class="list-title">${esc(r.bill_number)}: ${esc(r.title)}</div><div class="list-meta">${esc(meta)}</div><div>${badge(r)}</div></div>
+  <div class="stack-sm"><div class="list-title">${esc(r.bill_number)}: ${esc(r.title)}</div><div class="list-meta">${esc(meta)}</div>
+  ${why ? `<div class="queue-why">${why}</div>` : ""}<div class="chips">${badge(r, false)}${r.open_flags ? '<span class="review-badge review-badge--flag">Under review</span>' : ""}</div></div>
   <span class="row-end"><span class="chev" aria-hidden="true">›</span></span>
 </a>`;
-    })
+}
+
+function aiReasons(r) {
+  const d = parse(r).ai_review_detail || {};
+  const reasons = d.reasons || [];
+  return reasons.length ? `<ul class="panel-list small">${reasons.slice(0, 3).map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : "";
+}
+
+/** Your agreement with the AI reviewer, from every decision on a draft it looked at. */
+async function agreementCard(db) {
+  const { results } = await db.prepare("SELECT ai_review, human_agrees FROM bill_analyses WHERE human_agrees IS NOT NULL").all();
+  const pct = (xs) => (xs.length ? Math.round((100 * xs.filter((x) => x.human_agrees === 1).length) / xs.length) : null);
+  const all = pct(results);
+  const passes = results.filter((r) => r.ai_review === "pass");
+  const flags = results.filter((r) => r.ai_review === "flag");
+  const line = (label, xs) =>
+    `<li>${label}: ${xs.length ? `you agreed on ${xs.filter((x) => x.human_agrees === 1).length} of ${xs.length} (${pct(xs)}%)` : "no decisions yet"}</li>`;
+  return `
+<section class="card stack-sm" id="agreement">
+  <h2 class="label">Your agreement with the AI reviewer</h2>
+  <p class="stat-line"><strong>${all == null ? "—" : `${all}%`}</strong> <span class="small secondary">${results.length ? `of ${results.length} decision${results.length === 1 ? "" : "s"}` : "no decisions yet"}</span></p>
+  <ul class="panel-list small">
+    ${line("Drafts it passed (spot checks and reader reports)", passes)}
+    ${line("Drafts it flagged", flags)}
+  </ul>
+  <p class="hint">Agreeing means: it passed a draft and you approved it unchanged, or it flagged one and you rejected or edited it. Around 30 decisions give a fair first read.</p>
+</section>`;
+}
+
+async function readerReasons(db, ids) {
+  if (!ids.length) return new Map();
+  const { results } = await db
+    .prepare(`SELECT analysis_id, reason, note, created_at FROM analysis_flags WHERE status = 'open' AND analysis_id IN (${ids.map(() => "?").join(",")}) ORDER BY id`)
+    .bind(...ids)
+    .all();
+  const out = new Map();
+  for (const f of results) (out.get(f.analysis_id) || out.set(f.analysis_id, []).get(f.analysis_id)).push(f);
+  return out;
+}
+
+async function skippedSection(db) {
+  const { results } = await db
+    .prepare(
+      `SELECT r.*, b.bill_number, b.title FROM bill_relevance r JOIN bills b ON b.id = r.bill_id
+       WHERE r.verdict = 'skip' ORDER BY r.override IS NOT NULL, r.checked_at DESC LIMIT 100`
+    )
+    .all();
+  const rows = results
+    .map(
+      (r) => `
+<div class="list-row stack-sm">
+  <p class="small"><a class="inline-link" href="/laws/bills/${esc(r.bill_id)}/">${esc(r.bill_number)}</a>: ${esc(r.title)}</p>
+  <p class="small secondary">${esc(r.category.replace(/_/g, " "))}: ${esc(r.reason)} · checked ${fmtDate(r.checked_at)} (${esc(r.model)})</p>
+  ${
+    r.override === "unskip"
+      ? `<p class="small">Un-skipped by ${esc(r.override_by || "you")}, ${fmtDate(r.override_at)}. It's analyzed like any other bill.</p>
+  <form method="post" action="/admin/review/relevance/${encodeURIComponent(r.bill_id)}/"><input type="hidden" name="action" value="skip"><button class="btn" type="submit">Skip again</button></form>`
+      : `<form method="post" action="/admin/review/relevance/${encodeURIComponent(r.bill_id)}/"><input type="hidden" name="action" value="unskip"><button class="btn" type="submit">Un-skip: analyze this bill</button></form>`
+  }
+</div>`
+    )
     .join("");
+  return `<h2 class="label" id="skipped">Skipped as ceremonial or routine</h2>
+<p class="hint">The relevance check sets these aside before any drafting. Un-skip one and it's drafted on the next run.</p>
+<section class="card">${rows || '<p class="secondary small">None skipped yet.</p>'}</section>`;
+}
+
+async function list(db, url) {
+  const q = async (where) => (await db.prepare(`${ROW_SQL} AND ${where} ORDER BY a.created_at DESC, a.id DESC LIMIT 100`).all()).results;
+  const aiFlagged = await q("a.status = 'ai_draft' AND a.ai_review = 'flag'");
+  const readerFlagged = await q("a.status != 'rejected' AND EXISTS (SELECT 1 FROM analysis_flags f WHERE f.analysis_id = a.id AND f.status = 'open')");
+  const spot = await q("a.status = 'ai_draft' AND a.ai_review = 'pass' AND a.spot_check = 1");
+  const reports = await readerReasons(db, readerFlagged.map((r) => r.id));
+
+  const browseKey = BROWSE[url.searchParams.get("status")] ? url.searchParams.get("status") : "auto";
+  const browsed = await q(BROWSE[browseKey][1]);
+  const counts = {};
+  for (const k of Object.keys(BROWSE)) counts[k] = (await db.prepare(`SELECT COUNT(*) AS n FROM bill_analyses a WHERE a.current = 1 AND ${BROWSE[k][1]}`).first()).n;
+  const tabs = Object.entries(BROWSE)
+    .map(
+      ([k, [name]]) =>
+        `<a class="chip chip-tab ${k === browseKey ? "chip--navy" : "chip--outline"}" href="/admin/review/?status=${k}#browse"${k === browseKey ? ' aria-current="page"' : ""}>${esc(name)} (${counts[k]})</a>`
+    )
+    .join("");
+  const pending = await db.prepare("SELECT COUNT(*) AS n, SUM(source = 'reader') AS readers FROM analysis_requests WHERE status = 'pending'").first();
+
+  const queue = (id, title, hint, rows, why) => `
+<h2 class="label queue-head" id="${id}">${title} <span class="queue-count">${rows.length}</span></h2>
+<p class="hint">${hint}</p>
+<section class="card">${rows.map((r) => analysisRow(r, why(r))).join("") || '<p class="secondary small">Nothing waiting.</p>'}</section>`;
+
   return adminPage(
     "Review drafts",
     `<header class="page-head">
-  <h1>Review drafts</h1>
-  <p class="subtitle">AI drafts, newest first: constitutional analyses of bills, and agenda summaries. Nothing is marked reviewed until you approve it.</p>
+  <h1>Review queue</h1>
+  <p class="subtitle">What needs a person. Drafts the AI reviewer passes are published as "AI-drafted, auto-checked"; the rest wait here.</p>
 </header>
-<h2 class="label">Bill analyses</h2>
+${queue("flagged-ai", "Flagged by AI", "The AI reviewer found a problem. These are hidden from public pages until you decide.", aiFlagged, aiReasons)}
+${queue("flagged-readers", "Flagged by readers", 'Readers reported a problem. These stay up, marked "Under review", until you approve, edit, reject or close the reports.', readerFlagged, (r) => {
+      const fs = reports.get(r.id) || [];
+      return `<ul class="panel-list small">${fs
+        .slice(0, 3)
+        .map((f) => `<li><strong>${esc(FLAG_REASON_NAMES[f.reason] || f.reason)}</strong>${f.note ? `: ${esc(f.note.slice(0, 200))}` : ""} <span class="secondary">(${fmtDate(f.created_at)})</span></li>`)
+        .join("")}${fs.length > 3 ? `<li>and ${fs.length - 3} more</li>` : ""}</ul>`;
+    })}
+${queue("spot-checks", "Spot checks", "A random share of drafts the AI reviewer passed. They're already public; your decision measures the reviewer.", spot, () => '<p class="small">Spot check: the AI reviewer passed it.</p>')}
+${await agreementCard(db)}
+${pending && pending.n ? `<p class="hint">${pending.n} new draft${pending.n === 1 ? "" : "s"} requested${pending.readers ? ` (${pending.readers} by readers)` : ""}; they're written on the sync Worker's next run.</p>` : ""}
+<h2 class="label" id="browse">All analyses</h2>
 <div class="chips" role="navigation" aria-label="Filter by status">${tabs}</div>
-${pending && pending.n ? `<p class="hint">${pending.n} new draft${pending.n === 1 ? "" : "s"} requested; they're written on the sync Worker's next run.</p>` : ""}
-<section class="card">${rows || '<p class="secondary small">Nothing here.</p>'}</section>
+<section class="card">${browsed.map((r) => analysisRow(r, "")).join("") || '<p class="secondary small">Nothing here.</p>'}</section>
+${await skippedSection(db)}
 ${await agendaSection(db)}
 ${await linkSection(db)}`
   );
+}
+
+async function relevanceChange(db, billId, request, email) {
+  const form = await request.formData();
+  const action = form.get("action");
+  if (action === "unskip") {
+    await db.prepare("UPDATE bill_relevance SET override = 'unskip', override_by = ?, override_at = datetime('now') WHERE bill_id = ?").bind(email, billId).run();
+    // A bill with an earlier (rejected) analysis needs a request; one with none is picked up as new.
+    const had = await db.prepare("SELECT id FROM bill_analyses WHERE bill_id = ? LIMIT 1").bind(billId).first();
+    const pending = await db.prepare("SELECT id FROM analysis_requests WHERE bill_id = ? AND status = 'pending'").bind(billId).first();
+    if (had && !pending) await db.prepare("INSERT INTO analysis_requests (bill_id, requested_by, depth, source) VALUES (?, ?, 'card', 'admin')").bind(billId, email).run();
+  } else if (action === "skip") {
+    await db.prepare("UPDATE bill_relevance SET override = NULL, override_by = NULL, override_at = NULL WHERE bill_id = ?").bind(billId).run();
+  }
+  return Response.redirect(`${new URL(request.url).origin}/admin/review/#skipped`, 303);
 }
 
 // ---------------------------------------------------------------------------
@@ -341,6 +452,65 @@ function checksLog(a) {
 </section>`;
 }
 
+/** At the top of a queued analysis: why it's here. */
+function whySection(a, openFlags) {
+  const parts = [];
+  const d = a.ai_review_detail || {};
+  if (a.status === "ai_draft" && a.ai_review === "flag") {
+    parts.push(`<p><strong>Flagged by the AI reviewer.</strong> Hidden from the public bill page until you decide.</p>
+  <ul class="panel-list">${(d.reasons || []).map((x) => `<li>${esc(x)}</li>`).join("") || "<li>No reason given.</li>"}</ul>`);
+  }
+  if (openFlags.length) {
+    parts.push(`<p><strong>Flagged by ${openFlags.length} reader report${openFlags.length === 1 ? "" : "s"}.</strong> Still public, marked "Under review".</p>
+  <ul class="panel-list">${openFlags.map((f) => `<li>${esc(FLAG_REASON_NAMES[f.reason] || f.reason)}${f.note ? `: ${esc(f.note)}` : ""}</li>`).join("")}</ul>`);
+  }
+  if (a.status === "ai_draft" && a.ai_review === "pass" && a.spot_check) {
+    parts.push("<p><strong>Spot check.</strong> Picked at random from drafts the AI reviewer passed; it's public as \"AI-drafted, auto-checked\". Approve it if it's right, edit or reject it if not: either way it counts toward your agreement rate.</p>");
+  }
+  if (a.status === "ai_draft" && !a.ai_review) parts.push("<p><strong>Waiting for the AI reviewer.</strong> Not public yet; it's reviewed on the sync Worker's next run.</p>");
+  return parts.length ? `<section class="card card--why stack-sm" aria-label="Why this is in the queue">${parts.join("")}</section>` : "";
+}
+
+/** The AI reviewer's full checklist. */
+function aiReviewSection(a) {
+  const d = a.ai_review_detail || {};
+  if (!a.ai_review) return "";
+  const tokens = (() => {
+    try {
+      return JSON.parse(a.ai_review_tokens || "{}");
+    } catch (_) {
+      return {};
+    }
+  })();
+  const checks = (d.checks || [])
+    .map((c) => `<li>${c.ok ? "✓" : "✗"} ${esc(CHECK_QUESTIONS[c.id] || c.id)}${c.note ? `<br><span class="secondary">${esc(c.note)}</span>` : ""}</li>`)
+    .join("");
+  return `
+<section class="card stack-sm">
+  <h2 class="label">AI reviewer: ${a.ai_review === "pass" ? "pass" : "flag"}</h2>
+  ${checks ? `<ul class="panel-list small check-list">${checks}</ul>` : `<ul class="panel-list small">${(d.reasons || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ul>`}
+  <p class="small secondary">Model ${esc(a.ai_review_model || "?")} · reviewed ${fmtDate(a.ai_reviewed_at)} · tokens in ${tokens.input ?? "?"}, out ${tokens.output ?? "?"}</p>
+</section>`;
+}
+
+/**
+ * Whether your decision agrees with the AI reviewer: it passed the draft and you
+ * approved it unchanged, or it flagged it and you rejected or edited it.
+ * null when the AI reviewer never looked at it.
+ */
+function agreement(row, decision) {
+  if (!row.ai_review) return null;
+  const edited = Boolean(row.edited_at && (!row.ai_reviewed_at || row.edited_at > row.ai_reviewed_at));
+  if (row.ai_review === "pass") return decision === "approve" && !edited ? 1 : 0;
+  return decision === "reject" || edited ? 1 : 0;
+}
+
+function closeFlags(db, row, resolution, email) {
+  return db
+    .prepare("UPDATE analysis_flags SET status = 'resolved', resolution = ?, resolved_by = ?, resolved_at = datetime('now') WHERE analysis_id = ? AND status = 'open'")
+    .bind(resolution, email, row.id);
+}
+
 async function detail(db, env, id, { error = "", done = "", form = null, email = "" } = {}) {
   const row = await db.prepare("SELECT * FROM bill_analyses WHERE id = ?").bind(id).first();
   if (!row) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
@@ -369,9 +539,11 @@ async function detail(db, env, id, { error = "", done = "", form = null, email =
     await db.prepare("SELECT id, status, created_at, current FROM bill_analyses WHERE bill_id = ? ORDER BY id DESC").bind(row.bill_id).all()
   ).results;
   const pendingRegen = await db
-    .prepare("SELECT requested_at FROM analysis_requests WHERE bill_id = ? AND status = 'pending'")
+    .prepare("SELECT requested_at, depth FROM analysis_requests WHERE bill_id = ? AND status = 'pending'")
     .bind(row.bill_id)
     .first();
+  const flags = (await db.prepare("SELECT * FROM analysis_flags WHERE analysis_id = ? ORDER BY id DESC").bind(row.id).all()).results;
+  const openFlags = flags.filter((f) => f.status === "open");
 
   const actions = row.current
     ? `
@@ -392,9 +564,19 @@ async function detail(db, env, id, { error = "", done = "", form = null, email =
   ${row.status !== "ai_draft" ? '<form method="post"><input type="hidden" name="action" value="reopen"><button class="btn" type="submit">Return to draft</button></form>' : ""}
   <form method="post">
     <input type="hidden" name="action" value="regenerate">
-    <button class="btn" type="submit"${pendingRegen ? " disabled" : ""}>${pendingRegen ? "New draft requested" : "Ask for a new draft"}</button>
+    <button class="btn" type="submit"${pendingRegen ? " disabled" : ""}>${pendingRegen ? `New ${pendingRegen.depth === "full" ? "full analysis" : "draft"} requested` : "Ask for a new draft"}</button>
   </form>
-  <p class="hint">A new draft is written on the sync Worker's next run (daily, or open its /analyze link). This version is kept in the history.</p>
+  ${
+    row.depth === "card" && !pendingRegen
+      ? '<form method="post"><input type="hidden" name="action" value="full"><button class="btn" type="submit">Ask for a full analysis</button></form>'
+      : ""
+  }
+  ${
+    openFlags.length
+      ? `<form method="post"><input type="hidden" name="action" value="dismiss"><button class="btn" type="submit">Keep as is and close ${openFlags.length} reader report${openFlags.length === 1 ? "" : "s"}</button></form>`
+      : ""
+  }
+  <p class="hint">Approving or rejecting also closes open reader reports. A new draft is written on the sync Worker's next run (daily, or open its /analyze link), checked, and reviewed by the AI reviewer again; this version is kept in the history.</p>
 </section>`
     : `<p class="banner">This is an earlier version. <a href="/admin/review/${versions.find((v) => v.current)?.id || ""}/">Open the current one</a>.</p>`;
 
@@ -406,9 +588,14 @@ async function detail(db, env, id, { error = "", done = "", form = null, email =
 </header>
 ${done ? `<p class="banner" role="status">${esc(done)}</p>` : ""}
 ${error ? `<p class="banner banner--error" role="alert">${esc(error)}</p>` : ""}
+${whySection(a, openFlags)}
 ${actions}
 <h2 class="label">Preview</h2>
-${baselineSection(a, provisions)}
+${baselineSection(a, provisions, { underReview: openFlags.length > 0 })}
+${aiReviewSection(a)}
+${flags.length ? `<section class="card stack-sm"><h2 class="label">Reader reports</h2><ul class="panel-list small">${flags
+    .map((f) => `<li><strong>${esc(FLAG_REASON_NAMES[f.reason] || f.reason)}</strong>${f.note ? `: ${esc(f.note)}` : ""} (${fmtDate(f.created_at)}; ${f.status === "open" ? "open" : `closed: ${esc(f.resolution || "")}`})</li>`)
+    .join("")}</ul></section>` : ""}
 ${checksLog(a)}
 ${
   row.current
@@ -482,31 +669,42 @@ async function change(db, env, id, request, email) {
     await db.batch([
       await revision(db, row, "approved", email),
       db
-        .prepare("UPDATE bill_analyses SET status = 'reviewed', reviewer = ?, reviewer_email = ?, reviewed_at = datetime('now') WHERE id = ?")
-        .bind(reviewer, email, id),
+        .prepare("UPDATE bill_analyses SET status = 'reviewed', reviewer = ?, reviewer_email = ?, reviewed_at = datetime('now'), human_agrees = ? WHERE id = ?")
+        .bind(reviewer, email, agreement(row, "approve"), id),
+      closeFlags(db, row, "approved", email),
     ]);
     return back(`Approved. The bill page now shows "Reviewed by ${reviewer}".`);
   }
   if (action === "reject") {
     await db.batch([
       await revision(db, row, "rejected", email, String(form.get("note") || "").trim()),
-      db.prepare("UPDATE bill_analyses SET status = 'rejected', reviewer = NULL, reviewer_email = ?, reviewed_at = datetime('now') WHERE id = ?").bind(email, id),
+      db
+        .prepare("UPDATE bill_analyses SET status = 'rejected', reviewer = NULL, reviewer_email = ?, reviewed_at = datetime('now'), human_agrees = ? WHERE id = ?")
+        .bind(email, agreement(row, "reject"), id),
+      closeFlags(db, row, "rejected", email),
     ]);
     return back("Rejected. The bill page no longer shows this analysis.");
   }
   if (action === "reopen") {
     await db.batch([
       await revision(db, row, "reopened", email),
-      db.prepare("UPDATE bill_analyses SET status = 'ai_draft', reviewer = NULL, reviewer_email = NULL, reviewed_at = NULL WHERE id = ?").bind(id),
+      db.prepare("UPDATE bill_analyses SET status = 'ai_draft', reviewer = NULL, reviewer_email = NULL, reviewed_at = NULL, human_agrees = NULL WHERE id = ?").bind(id),
     ]);
-    return back("Returned to draft.");
+    return back(row.ai_review === "pass" ? "Returned to draft: public again as \"AI-drafted, auto-checked\"." : "Returned to draft: hidden from the public page until you decide.");
   }
-  if (action === "regenerate") {
+  if (action === "regenerate" || action === "full") {
     const pending = await db.prepare("SELECT id FROM analysis_requests WHERE bill_id = ? AND status = 'pending'").bind(row.bill_id).first();
     if (!pending) {
-      await db.prepare("INSERT INTO analysis_requests (bill_id, requested_by) VALUES (?, ?)").bind(row.bill_id, email).run();
+      await db
+        .prepare("INSERT INTO analysis_requests (bill_id, requested_by, depth, source) VALUES (?, ?, ?, 'admin')")
+        .bind(row.bill_id, email, action === "full" ? "full" : null)
+        .run();
     }
-    return back("New draft requested. It's written on the sync Worker's next run; this version stays in the history.");
+    return back(`${action === "full" ? "Full analysis" : "New draft"} requested. It's written on the sync Worker's next run; this version stays in the history.`);
+  }
+  if (action === "dismiss") {
+    await closeFlags(db, row, "dismissed", email).run();
+    return back('Reader reports closed. The analysis is no longer marked "Under review".');
   }
   if (action !== "save") return detail(db, env, id, { error: "Unknown action." });
 
@@ -575,6 +773,12 @@ async function handle(context) {
   if (parts[0] !== "review") return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
   if (!env.DB) return missingTables();
+  if (parts[1] === "relevance") {
+    if (parts.length !== 3 || request.method !== "POST") return Response.redirect(`${url.origin}/admin/review/#skipped`, 302);
+    const origin = request.headers.get("Origin");
+    if (origin && origin !== url.origin) return adminPage("Refused", '<header class="page-head"><h1>Refused</h1></header>', 403);
+    return relevanceChange(env.DB, decodeURIComponent(parts[2]), request, who.email);
+  }
   if (parts[1] === "agenda" || parts[1] === "link") {
     const sub = parseInt(parts[2], 10);
     if (parts.length !== 3 || !(sub > 0)) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
@@ -587,7 +791,7 @@ async function handle(context) {
       if (parts[1] === "link") return Response.redirect(`${url.origin}/admin/review/`, 302);
       return await agendaDetail(env.DB, env, sub, { done: url.searchParams.get("done") || "" });
     } catch (err) {
-      if (/no such table/i.test(String(err && err.message))) return missingTables();
+      if (/no such table|no such column/i.test(String(err && err.message))) return missingTables();
       throw err;
     }
   }
@@ -603,7 +807,7 @@ async function handle(context) {
     if (!id) return await list(env.DB, url);
     return await detail(env.DB, env, id, { done: url.searchParams.get("done") || "", email: who.email });
   } catch (err) {
-    if (/no such table/i.test(String(err && err.message))) return missingTables();
+    if (/no such table|no such column/i.test(String(err && err.message))) return missingTables();
     throw err;
   }
 }

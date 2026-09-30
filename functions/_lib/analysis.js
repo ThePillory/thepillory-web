@@ -2,6 +2,13 @@
 // Quotes are always shown from the stored Constitution text in D1: a clause's
 // quote is shown only if it appears word for word in that provision; otherwise
 // the provision's full stored text is shown instead.
+//
+// What the public sees:
+//   - approved by a person: "Reviewed by [name], [date]"
+//   - passed by the AI reviewer: "AI-drafted, auto-checked" (linked to the methodology)
+//   - flagged by the AI reviewer, or not reviewed yet: nothing (it's in the review queue)
+//   - rejected: nothing
+// A published analysis with open reader flags stays up, marked "Under review".
 import { esc, safeUrl, fmtDate } from "./render.js";
 
 export const METHOD_URL = "/about/methodology/#analysis";
@@ -11,6 +18,16 @@ export async function currentAnalysis(db, billId) {
     .prepare("SELECT * FROM bill_analyses WHERE bill_id = ? AND current = 1 AND status != 'rejected'")
     .bind(billId)
     .first();
+}
+
+/** Shown on public pages: approved by a person, or passed by the AI reviewer. */
+export function isPublic(a) {
+  return Boolean(a) && (a.status === "reviewed" || (a.status === "ai_draft" && a.ai_review === "pass"));
+}
+
+export async function openFlagCount(db, analysisId) {
+  const r = await db.prepare("SELECT COUNT(*) AS n FROM analysis_flags WHERE analysis_id = ? AND status = 'open'").bind(analysisId).first();
+  return r ? r.n : 0;
 }
 
 export async function provisionsFor(db, ids) {
@@ -41,6 +58,7 @@ export function parse(a) {
     citations: j(a.citations, []),
     quote_check: j(a.quote_check, {}),
     citation_check: j(a.citation_check, {}),
+    ai_review_detail: j(a.ai_review_detail, {}),
   };
 }
 
@@ -68,26 +86,42 @@ export function storedQuote(quote, text) {
   return norm(quote).replace(/^["']+|["']+$/g, "");
 }
 
-export function badge(a) {
+export function badge(a, link = true) {
   if (a.status === "reviewed") {
     return `<span class="review-badge review-badge--reviewed">Reviewed by ${esc(a.reviewer)}, ${fmtDate(a.reviewed_at)}</span>`;
   }
-  if (a.status === "rejected") return '<span class="review-badge">Rejected by a reviewer</span>';
-  return '<span class="review-badge review-badge--draft">AI-drafted, not yet reviewed</span>';
+  if (a.status === "rejected") return '<span class="review-badge">Rejected</span>';
+  if (a.ai_review === "pass") {
+    return link ? `<a class="review-badge review-badge--auto" href="${METHOD_URL}">AI-drafted, auto-checked</a>` : '<span class="review-badge review-badge--auto">AI-drafted, auto-checked</span>';
+  }
+  if (a.ai_review === "flag") return '<span class="review-badge review-badge--flag">Flagged by the AI reviewer</span>';
+  return '<span class="review-badge review-badge--draft">AI-drafted, waiting for the AI reviewer</span>';
 }
 
-const items = (list) => (list.length ? `<ul class="panel-list">${list.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : "");
+const UNDER_REVIEW = '<span class="review-badge review-badge--flag">Under review</span>';
 
-/** The parchment "Constitutional baseline" section. `a` is a parsed analysis row or null. */
-export function baselineSection(a, provisions) {
+const items = (list) => (list.length ? `<ul class="panel-list">${list.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : "");
+// A card has one sentence per panel: a paragraph, not a one-item list.
+const panel = (list, card) => (card && list.length === 1 ? `<p class="small">${esc(list[0])}</p>` : items(list));
+
+/**
+ * The parchment "Constitutional baseline" section. `a` is a parsed analysis
+ * row or null. Options:
+ *   underReview  reader flags are open: mark it "Under review"
+ *   empty        what to say when there's no public analysis (HTML)
+ *   after        extra HTML at the end (the reader forms)
+ */
+export function baselineSection(a, provisions, { underReview = false, empty = "", after = "" } = {}) {
   if (!a) {
     return `
 <section class="parchment stack-sm" id="baseline">
   <h2 class="label">Constitutional baseline</h2>
-  <p>Not yet mapped. The parts of the Constitution this bill touches will appear here once an analysis is drafted, marked as AI-drafted until a person reviews it.</p>
+  ${empty || "<p>Not yet mapped. The parts of the Constitution this bill touches will appear here once an analysis is written and checked.</p>"}
   <p class="baseline-foot"><a class="inline-link" href="${METHOD_URL}">How this is made</a></p>
+  ${after}
 </section>`;
   }
+  const card = a.depth === "card";
   const clauses = a.clauses
     .map((c) => {
       const p = provisions.get(c.id);
@@ -139,9 +173,10 @@ export function baselineSection(a, provisions) {
   return `
 <section class="parchment stack baseline-wide" id="baseline">
   <div class="baseline-head">
-    <h2 class="label">Constitutional baseline</h2>
-    ${badge(a)}
+    <h2 class="label">Constitutional baseline${card ? " · Short card" : ""}</h2>
+    <div class="chips">${badge(a)}${underReview ? UNDER_REVIEW : ""}</div>
   </div>
+  ${underReview ? '<p class="small">A reader reported a possible problem with this analysis. It stays up while a person checks it.</p>' : ""}
   ${a.basis_note ? `<p class="limited-note">${esc(a.basis_note.replace(/^limited:/i, "Limited:"))}</p>` : ""}
   <div class="stack-sm">
     <h3>What the bill does</h3>
@@ -149,9 +184,9 @@ export function baselineSection(a, provisions) {
   </div>
   ${clauses ? `<div class="stack-sm"><h3>Provisions it touches</h3>${clauses}</div>` : ""}
   <div class="baseline-panels">
-    <div class="panel"><p class="label">Where it aligns</p>${items(a.aligns) || '<p class="small">None identified.</p>'}</div>
-    <div class="panel panel--tension"><p class="label">Where it may be in tension</p>${items(a.tension) || '<p class="small">None identified.</p>'}</div>
-    <div class="panel"><p class="label">Why this might still serve the public</p>${items(a.departure) || '<p class="small">No departure identified.</p>'}
+    <div class="panel"><p class="label">Where it aligns</p>${panel(a.aligns, card) || '<p class="small">None identified.</p>'}</div>
+    <div class="panel panel--tension"><p class="label">Where it may be in tension</p>${panel(a.tension, card) || '<p class="small">None identified.</p>'}</div>
+    <div class="panel"><p class="label">Why this might still serve the public</p>${panel(a.departure, card) || '<p class="small">No departure identified.</p>'}
       ${a.article_v ? `<p class="small"><strong>Article V:</strong> ${esc(a.article_v)}</p>` : ""}</div>
   </div>
   ${readings}
@@ -159,9 +194,10 @@ export function baselineSection(a, provisions) {
   ${a.uncertainty ? `<div class="stack-sm"><h3>What this analysis can't tell you</h3><p class="small">${esc(a.uncertainty)}</p></div>` : ""}
   <p class="small baseline-foot">
     Mapped, not ruled: this is not a finding on whether the bill is constitutional.
-    ${src ? `Based on <a href="${esc(src)}" target="_blank" rel="noopener">${esc(a.text_version || "the bill text")} ↗</a>.` : ""}
-    Drafted ${fmtDate(a.created_at)} with ${esc(a.model)}.
+    ${card ? "This is a short card: the most relevant provisions, one sentence each. " : ""}${src ? `Based on <a href="${esc(src)}" target="_blank" rel="noopener">${esc(a.text_version || "the bill text")} ↗</a>.` : ""}
+    Drafted ${fmtDate(a.created_at)} with ${esc(a.model)}${a.status !== "reviewed" && a.ai_review === "pass" ? `, checked by a separate AI reviewer${a.ai_review_model ? ` (${esc(a.ai_review_model)})` : ""}` : ""}.
     <br><a class="inline-link" href="${METHOD_URL}">How this is made</a>
   </p>
+  ${after}
 </section>`;
 }
