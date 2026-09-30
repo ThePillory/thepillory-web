@@ -125,28 +125,6 @@ export async function recentBills(db, { level = null, all = false, limit = 40 } 
   return results;
 }
 
-// Issue ↔ bill links: only approved ones are ever shown.
-export async function approvedIssuesForBill(db, billId) {
-  const { results } = await db
-    .prepare("SELECT issue_slug, reason FROM issue_bill_links WHERE bill_id = ? AND status = 'approved'")
-    .bind(billId)
-    .all();
-  return results;
-}
-
-export async function approvedIssuesForOfficial(db, officialId) {
-  const { results } = await db
-    .prepare(
-      `SELECT DISTINCT l.issue_slug FROM issue_bill_links l
-       JOIN votes v ON v.bill_id = l.bill_id
-       JOIN vote_positions p ON p.vote_id = v.id
-       WHERE l.status = 'approved' AND p.official_id = ?`
-    )
-    .bind(officialId)
-    .all();
-  return results.map((r) => r.issue_slug);
-}
-
 // Most recent final-passage votes by any of our active officials, newest first,
 // each with our officials' positions. level: "federal" | "state" | null (all).
 export async function recentFinalVotes(db, { level = null, limit = 3, offset = 0 } = {}) {

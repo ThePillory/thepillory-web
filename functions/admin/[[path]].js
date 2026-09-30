@@ -249,6 +249,8 @@ async function agendaSection(db) {
 }
 
 async function linkSection(db) {
+  // Links between agenda items and residents' issues. No issues exist until reporting opens.
+  if (!Object.keys(ISSUES).length) return "";
   let rows = [];
   try {
     rows = (

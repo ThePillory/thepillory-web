@@ -121,7 +121,8 @@ await test("agenda summaries: made-up numbers and unknown items are removed", ()
   assert.equal(log.removed_sentences.length, 1);
   assert.match(log.removed_sentences[0].because, /36/);
   assert.equal(log.dropped_items[0].item_key, "99");
-  assert.equal(draft.issue_links.length, 1);
+  // No residents' issues exist yet, so every suggested link is dropped.
+  assert.equal(draft.issue_links.length, 0);
 });
 
 console.log(`\n${n} passed`);

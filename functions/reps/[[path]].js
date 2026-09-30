@@ -1,9 +1,9 @@
 // /reps/            all current officials for Calaveras County, grouped County / State / Federal
 // /reps/<slug>/     one official: Overview, Promises, Votes, Issues
-import { BODIES, ISSUE_CARDS, LEVEL_NAME } from "../_lib/generated.js";
+import { BODIES, LEVEL_NAME, EMPTY_REPORTS } from "../_lib/generated.js";
 import { page, notFound, notLoaded, esc, safeUrl, kv, card, section, sourceLink, fmtDate } from "../_lib/render.js";
 import {
-  safe, listOfficials, officialBySlug, voteCounts, votesFor, approvedIssuesForOfficial, LEVEL_ORDER, CHAMBER_NAME,
+  safe, listOfficials, officialBySlug, voteCounts, votesFor, LEVEL_ORDER, CHAMBER_NAME,
 } from "../_lib/data.js";
 import { voteRow, voteFilter } from "../_lib/votes.js";
 
@@ -59,15 +59,14 @@ async function profile(env, slug, url) {
     if (!o) return { o: null };
     const all = url.searchParams.get("votes") === "all";
     const pageNum = Math.max(1, parseInt(url.searchParams.get("page") || "1", 10) || 1);
-    const [counts, votes, issues] = await Promise.all([
+    const [counts, votes] = await Promise.all([
       voteCounts(db, o.id),
       votesFor(db, o.id, { all, limit: 50, offset: (pageNum - 1) * 50 }),
-      approvedIssuesForOfficial(db, o.id),
     ]);
-    return { o, all, pageNum, counts, votes, issues };
+    return { o, all, pageNum, counts, votes };
   });
   if (!data) return notLoaded("Reps", "reps", false, ["Reps", "/reps/"]);
-  const { o, all, pageNum, counts, votes, issues } = data;
+  const { o, all, pageNum, counts, votes } = data;
   if (!o) return notFound("No current official at this address.", "reps", ["Reps", "/reps/"]);
 
   const body = BODY[o.body];
@@ -122,16 +121,15 @@ ${section("Office", kv([
           : all ? "No recorded votes yet." : "No final-passage votes recorded yet. Try “All votes”."
       }</p>`;
 
-  const issueHtml = issues.length
-    ? issues.map((s) => ISSUE_CARDS[s]).filter(Boolean).join("")
-    : '<p class="secondary small">No issues linked yet. Issues are linked to bills only after review.</p>';
+  // Reports and issues open with accounts; none exist yet.
+  const issueHtml = EMPTY_REPORTS;
 
   const tab = (k, label, n) =>
     `<a role="tab" id="tab-${k}" href="#${k}" aria-controls="${k}">${label}${n != null ? `<span class="count">${n}</span>` : ""}</a>`;
   const main = `${head}
 <div class="rep-tabs stack" data-tabs>
   <nav class="tabs" role="tablist" aria-label="Sections">
-    ${tab("overview", "Overview")}${tab("promises", "Promises")}${tab("votes", "Votes", counts.total || 0)}${tab("issues", "Issues", issues.length)}
+    ${tab("overview", "Overview")}${tab("promises", "Promises")}${tab("votes", "Votes", counts.total || 0)}${tab("issues", "Issues")}
   </nav>
   <div class="stack" role="tabpanel" id="overview" aria-labelledby="tab-overview">${overview}</div>
   <div class="stack" role="tabpanel" id="promises" aria-labelledby="tab-promises">

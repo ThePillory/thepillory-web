@@ -1,5 +1,6 @@
-// /api/search-officials: adds current officials and recently voted bills
-// from D1 to the global search index (the static part is assets/search-index.js).
+// /api/search-officials: adds current officials, recently voted bills and
+// meetings from D1 to the global search index (the static part, governing
+// bodies and the Constitution, is assets/search-index.js).
 import { safe } from "../_lib/data.js";
 
 export async function onRequestGet(context) {
@@ -13,7 +14,23 @@ export async function onRequestGet(context) {
            ORDER BY b.updated_at DESC LIMIT 500`
         ).all()
       ).results;
+      const meetings = (
+        await db
+          .prepare(
+            `SELECT id, body, meeting_type, starts_at, level FROM meetings
+             WHERE status != 'cancelled' AND starts_at >= date('now', '-60 days') ORDER BY starts_at LIMIT 200`
+          )
+          .all()
+          .catch(() => ({ results: [] }))
+      ).results;
       return [
+        ...meetings.map((m) => ({
+          type: "Meeting",
+          title: `${m.body}: ${m.meeting_type || "Meeting"}`,
+          sub: `${m.level === "state" ? "State" : "County"} · ${m.starts_at.slice(0, 10)}`,
+          url: `/meetings/${encodeURIComponent(m.id)}/`,
+          k: "meeting agenda hearing",
+        })),
         ...officials.map((o) => ({
           type: "Rep",
           title: o.name,

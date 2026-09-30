@@ -1,13 +1,11 @@
 // /meetings/                     calendar: upcoming meetings and hearings, then recent ones
 // /meetings/<id>/                one meeting: details, how to weigh in, agenda watch, full agenda, after the meeting
 // /meetings/<id>/calendar.ics    add to calendar
-// Anything else under /meetings/ (the sample meeting pages) is static and passed through.
-import { ISSUES } from "../_lib/generated.js";
+// Anything else under /meetings/ (old sample meeting pages) redirects to the calendar.
 import { page, notFound, esc, safeUrl, sourceLink } from "../_lib/render.js";
 import {
   listMeetings,
   summariesFor,
-  approvedLinks,
   meetingCard,
   meetingHref,
   pacificNow,
@@ -68,7 +66,7 @@ ${
     : ""
 }
 <p class="hint">From the county's official meeting portal and Open States. Each meeting links to its source.</p>`;
-  return withHeaders(page("Meetings", main, { tab: "home", back: ["Home", "/home/"] }));
+  return withHeaders(page("Meetings", main, { tab: "home", back: ["Home", "/"] }));
 }
 
 // ---------------------------------------------------------------------------
@@ -133,10 +131,6 @@ const KIND_GROUPS = [
 ];
 const KIND_TAG = { consent: "Consent item", regular: "Action item", public_hearing: "Public hearing", closed_session: "Closed session" };
 
-function relatedIssues(links, key) {
-  return links.filter((l) => l.item_key === key && ISSUES[l.issue_slug]).map((l) => ISSUES[l.issue_slug]);
-}
-
 function itemDocs(it) {
   const atts = JSON.parse(it.attachments || "[]");
   const parts = [];
@@ -161,10 +155,9 @@ async function meeting(env, id) {
   } catch (err) {
     if (!/no such table/i.test(String(err && err.message))) throw err;
   }
-  if (!m) return notFound("No meeting at this address.", "home", ["Home", "/home/"]);
+  if (!m) return notFound("No meeting at this address.", "home", ["Home", "/"]);
   const items = (await db.prepare("SELECT * FROM meeting_items WHERE meeting_id = ? ORDER BY sort").bind(id).all()).results;
   const summary = (await summariesFor(db, [id]))[id] || null;
-  const links = await approvedLinks(db, [id]);
   const byKey = new Map(((summary && summary.items) || []).map((s) => [s.item_key, s]));
   const w = when(m.starts_at);
   const now = pacificNow();
@@ -215,17 +208,12 @@ async function meeting(env, id) {
   const watchCards = flagged
     .map((it) => {
       const s = byKey.get(it.item_key);
-      const related = relatedIssues(links, it.item_key);
-      const affected = `<a class="btn btn--sm" href="/join/?affected=${encodeURIComponent(`${m.id}:${it.item_key}`)}">I'm affected</a>`;
-      const report = `<a class="btn btn--sm" href="/report/?${new URLSearchParams({ meeting: m.id, item: it.item_key })}">File a report</a>`;
       return `
-  <article class="card watch-card${related.length ? " card--highlight" : ""}">
+  <article class="card watch-card">
     <div class="card-top"><span class="label">Item ${esc(it.number)} · ${s.flags.map((f) => esc(FLAG_LABELS[f] || f)).join(" · ")}</span><span class="card-top-note">${esc(KIND_TAG[it.section_kind] || it.section || "")}</span></div>
     <h3>${esc(it.title)}</h3>
     ${s.summary ? `<p class="small secondary">${esc(s.summary)}</p>` : ""}
-    ${related.map((r) => `<a class="related-link" href="${esc(r.url)}"><span>Related example issue: ${esc(r.short)}</span><span aria-hidden="true">→</span></a>`).join("")}
-    <div class="btn-pair">${affected}${related.length ? `<a class="btn btn--sm" href="${esc(related[0].url)}">Corroborate</a>` : report}</div>
-    ${related.length ? `<a class="small inline-link" href="/report/?${new URLSearchParams({ meeting: m.id, item: it.item_key })}">Or file a new report</a>` : ""}
+    <a class="small inline-link" href="#item-${esc(it.item_key)}">In the full agenda</a>
   </article>`;
     })
     .join("");
@@ -322,9 +310,8 @@ async function meeting(env, id) {
   ${state && participantsText(m) ? `<p class="small secondary">${esc(participantsText(m))}</p>` : ""}
 </header>
 ${status}
-<div class="btn-pair">
+<div class="meeting-actions">
   <a class="btn" href="${meetingHref(m.id)}calendar.ics">Add to calendar</a>
-  <a class="btn" href="/join/?follow=${encodeURIComponent(m.id)}">Follow meeting</a>
 </div>
 ${
   m.status !== "cancelled" && !past
@@ -335,7 +322,7 @@ ${watch}
 ${agenda}
 ${after}
 <p class="hint">From the ${state ? "Open States record of the Legislature's schedule" : "county's official meeting portal"}. Each document links to its source.</p>`;
-  return withHeaders(page(`${m.body}: ${w.day}`, main, { tab: "home", back: ["Home", "/home/"] }));
+  return withHeaders(page(`${m.body}: ${w.day}`, main, { tab: "home", back: ["Home", "/"] }));
 }
 
 export async function onRequestGet(context) {
@@ -346,10 +333,10 @@ export async function onRequestGet(context) {
     return calendar(context.env, url);
   }
   const id = decodeURIComponent(parts[0]);
-  if (!REAL_ID.test(id)) return context.next(); // sample meeting pages (static)
+  if (!REAL_ID.test(id)) return Response.redirect(`${url.origin}/meetings/`, 301); // old sample meeting pages
   if (parts.length === 2 && parts[1] === "calendar.ics") {
     const m = context.env.DB ? await context.env.DB.prepare("SELECT * FROM meetings WHERE id = ?").bind(id).first() : null;
-    return m ? ics(m) : notFound("No meeting at this address.", "home", ["Home", "/home/"]);
+    return m ? ics(m) : notFound("No meeting at this address.", "home", ["Home", "/"]);
   }
   if (parts.length > 1) return notFound("No page at this address.", "home", ["Meetings", "/meetings/"]);
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);

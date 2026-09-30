@@ -1204,3 +1204,49 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 .stat-line { display: flex; align-items: baseline; gap: 8px; margin: 0; }
 .stat-line strong { font-family: var(--serif); font-size: 2rem; font-weight: 600; }
 .check-list li { list-style: none; }
+
+/* ---------- Real data only: intro, empty states, footer ---------- */
+
+.intro-banner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 52px 14px 16px;
+  border-radius: var(--radius);
+  background: var(--navy-light);
+  color: var(--text);
+  font-size: 0.9375rem;
+}
+.intro-banner[hidden] { display: none; }
+.intro-banner p { margin: 0; }
+.intro-dismiss {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: var(--tap);
+  height: var(--tap);
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--navy);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.intro-dismiss:hover { background: #fff; }
+
+.empty-state p:first-child { font-weight: 600; }
+.empty-state .inline-link { display: inline-flex; align-items: center; min-height: var(--tap); align-self: flex-start; }
+
+.app-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 16px;
+  margin-top: 16px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  font-size: 0.875rem;
+}
+.app-footer a { display: inline-flex; align-items: center; min-height: var(--tap); color: var(--text-2); text-decoration: none; }
+.app-footer a:hover { color: var(--navy); text-decoration: underline; }
