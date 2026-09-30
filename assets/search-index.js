@@ -52,28 +52,28 @@ window.PILLORY_INDEX = [
  {
   "type": "Issue",
   "title": "Public comment cut to one minute at Board of Supervisors meetings",
-  "sub": "County · Public meetings",
+  "sub": "Example · County · Public meetings",
   "url": "/issues/public-comment-limit/",
   "k": "Public comment limit Calaveras County Board of Supervisors Amendment I Petition"
  },
  {
   "type": "Issue",
   "title": "[Bill number]: how rural counties are scored for broadband funding",
-  "sub": "State · Legislation",
+  "sub": "Example · State · Legislation",
   "url": "/issues/broadband-scoring/",
   "k": "Broadband funding scoring California State Legislature Amendment X State powers"
  },
  {
   "type": "Issue",
   "title": "Promised quarterly town halls in the district: none held since [date]",
-  "sub": "Federal · Official conduct",
+  "sub": "Example · Federal · Official conduct",
   "url": "/issues/town-halls/",
   "k": "District town halls Office of the U.S. Representative, [district] Article I, Sec. 2 The House"
  },
  {
   "type": "Issue",
   "title": "Repaving of [County road] past its promised completion date",
-  "sub": "County · Public services",
+  "sub": "Example · County · Public services",
   "url": "/issues/road-repaving/",
   "k": "[County road] repaving County Public Works "
  },

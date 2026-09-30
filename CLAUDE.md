@@ -73,6 +73,7 @@ To test the sync and Functions locally with **fake** data: `workers/sync/test/ru
 ## Sample data rules
 
 - Issues, meetings, evidence and sample laws are static sample data. Beyond the D1 data above, there is no backend, login or verification yet.
+- **Every sample issue is tagged "Example"** (the `.example-tag` from `issue_card()` in `tools/build.py`, on cards, issue pages and search) until real reports exist.
 - **No real names** in sample data. Use role placeholders: `[Supervisor, District 1]`.
 - **No party labels** or anything that suggests a political side. Keep wording neutral: facts, sources, statuses.
 - Anything in `[brackets]` is a visible placeholder. Keep it visible. Don't invent specifics.

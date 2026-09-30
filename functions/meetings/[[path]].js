@@ -13,8 +13,8 @@ import {
   pacificNow,
   addDays,
   when,
-  flagChips,
-  shortDeadline,
+  deadlineParts,
+  flagSummary,
   participantsText,
   FLAG_LABELS,
   LEVEL_LABEL,
@@ -124,16 +124,17 @@ function ics(m) {
   });
 }
 
-function aiBadge(summary) {
-  if (summary.status === "reviewed") return `<span class="review-badge review-badge--reviewed">Reviewed by ${esc(summary.reviewer)}</span>`;
-  return '<span class="review-badge review-badge--draft">AI-drafted from the official agenda</span>';
-}
+// How the full agenda groups items, in the order the design lists them.
+const KIND_GROUPS = [
+  ["consent", "Consent calendar"],
+  ["regular", "Regular items"],
+  ["public_hearing", "Public hearings"],
+  ["closed_session", "Closed session"],
+];
+const KIND_TAG = { consent: "Consent item", regular: "Action item", public_hearing: "Public hearing", closed_session: "Closed session" };
 
-function issueLinksFor(links, key) {
-  return links
-    .filter((l) => l.item_key === key && ISSUES[l.issue_slug])
-    .map((l) => `<a class="inline-link" href="${esc(ISSUES[l.issue_slug].url)}">Related issue: ${esc(ISSUES[l.issue_slug].short)}</a>`)
-    .join("");
+function relatedIssues(links, key) {
+  return links.filter((l) => l.item_key === key && ISSUES[l.issue_slug]).map((l) => ISSUES[l.issue_slug]);
 }
 
 function itemDocs(it) {
@@ -145,6 +146,13 @@ function itemDocs(it) {
   return parts.length ? `<div class="item-docs">${parts.join(" ")}</div>` : "";
 }
 
+function listRow(left, right, href) {
+  const inner = `<span>${left}</span>${right ? `<span class="secondary">${right}</span>` : ""}`;
+  return href
+    ? `<a class="list-card-row list-card-row--link" href="${esc(href)}" target="_blank" rel="noopener">${inner}</a>`
+    : `<div class="list-card-row">${inner}</div>`;
+}
+
 async function meeting(env, id) {
   const db = env.DB;
   let m = null;
@@ -153,7 +161,7 @@ async function meeting(env, id) {
   } catch (err) {
     if (!/no such table/i.test(String(err && err.message))) throw err;
   }
-  if (!m) return notFound("No meeting at this address.", "home", ["Meetings", "/meetings/"]);
+  if (!m) return notFound("No meeting at this address.", "home", ["Home", "/home/"]);
   const items = (await db.prepare("SELECT * FROM meeting_items WHERE meeting_id = ? ORDER BY sort").bind(id).all()).results;
   const summary = (await summariesFor(db, [id]))[id] || null;
   const links = await approvedLinks(db, [id]);
@@ -162,6 +170,8 @@ async function meeting(env, id) {
   const now = pacificNow();
   const past = m.starts_at < now;
   const src = safeUrl(m.source_url);
+  const online = safeUrl(m.online_url);
+  const state = m.level === "state";
 
   const status =
     m.status === "cancelled"
@@ -171,80 +181,86 @@ async function meeting(env, id) {
         : "";
 
   // How to weigh in
-  const deadline = shortDeadline(m);
   let weighIn;
-  if (m.level === "state") {
+  if (state) {
     weighIn = `
-<p>State committee hearings take public testimony in person, and some take written positions ahead of time. The committee's page has the details.</p>
-${src ? `<a class="btn btn--primary" href="${esc(src)}" target="_blank" rel="noopener">Committee hearing page ↗</a>` : ""}`;
+<div class="weigh-row">
+  <h3>Testify at the hearing</h3>
+  <p class="small">State committee hearings take public testimony in person, and some take written positions ahead of time. ${src ? `<a href="${esc(src)}" target="_blank" rel="noopener">Committee hearing page ↗</a>` : ""}</p>
+</div>`;
   } else {
-    const fromAgenda = m.comment_text
-      ? `<div class="stack-sm"><p class="label">From the official agenda</p><blockquote class="agenda-quote">${esc(m.comment_text)}</blockquote>${sourceLink(m.agenda_url, "Official agenda (PDF)")}</div>`
+    const d = deadlineParts(m);
+    const email = m.comment_text && /[\w.+-]+@[\w-]+(?:\.[\w-]+)+/.exec(m.comment_text);
+    const quote = m.comment_text
+      ? `<blockquote class="agenda-quote">${esc(m.comment_text)}</blockquote>${sourceLink(m.agenda_url, "Official agenda (PDF)")}`
       : m.body === "Board of Supervisors"
-        ? `<div class="stack-sm"><p class="label">The Board's standing rule</p><blockquote class="agenda-quote">${esc(BOS_RULE.text)}</blockquote>${sourceLink(BOS_RULE.source, "Board of Supervisors: how to participate")}</div>`
-        : `<p class="small">The agenda says how to comment on this meeting.</p>${sourceLink(m.agenda_url || m.source_url, "Official agenda")}`;
+        ? `<blockquote class="agenda-quote">${esc(BOS_RULE.text)}</blockquote>${sourceLink(BOS_RULE.source, "Board of Supervisors: how to participate")}`
+        : "";
+    const written = [d ? `Due ${esc(d.label)}` : "", email ? `email <a href="mailto:${esc(email[0])}">${esc(email[0])}</a>` : ""].filter(Boolean).join(" · ");
     weighIn = `
-${deadline ? `<p class="deadline deadline--lg">${esc(deadline)}</p>` : ""}
-<ul class="plain-list weigh-list">
-  <li><strong>In person:</strong> ${esc(m.location || "see the agenda")}</li>
-  ${safeUrl(m.online_url) ? `<li><strong>Online:</strong> <a class="inline-link" href="${esc(m.online_url)}" target="_blank" rel="noopener">Join or register ↗</a></li>` : ""}
-</ul>
-${fromAgenda}`;
+<div class="weigh-row">
+  <h3>Written comment</h3>
+  <p class="small">${written || (quote ? "The agenda's instructions:" : `See the <a href="${esc(safeUrl(m.agenda_url) || src || "")}" target="_blank" rel="noopener">agenda</a> for how to comment.`)}</p>
+  ${quote ? (written ? `<details class="weigh-details"><summary>The agenda's exact wording</summary>${quote}</details>` : quote) : ""}
+</div>
+<div class="weigh-row">
+  <h3>Speak in person or online</h3>
+  <p class="small">${esc(m.location || "Location: see the agenda")}${online ? ` · <a href="${esc(online)}" target="_blank" rel="noopener">Join online ↗</a>` : ""}</p>
+</div>`;
   }
 
-  // Agenda watch (flagged items first)
-  const flagged = items.filter((it) => (byKey.get(it.item_key) || {}).flags && byKey.get(it.item_key).flags.length);
+  // Agenda watch: flagged items only
+  const flagged = items.filter((it) => ((byKey.get(it.item_key) || {}).flags || []).length);
+  const reviewed = summary && summary.status === "reviewed";
+  const watchCards = flagged
+    .map((it) => {
+      const s = byKey.get(it.item_key);
+      const related = relatedIssues(links, it.item_key);
+      const affected = `<a class="btn btn--sm" href="/join/?affected=${encodeURIComponent(`${m.id}:${it.item_key}`)}">I'm affected</a>`;
+      const report = `<a class="btn btn--sm" href="/report/?${new URLSearchParams({ meeting: m.id, item: it.item_key })}">File a report</a>`;
+      return `
+  <article class="card watch-card${related.length ? " card--highlight" : ""}">
+    <div class="card-top"><span class="label">Item ${esc(it.number)} · ${s.flags.map((f) => esc(FLAG_LABELS[f] || f)).join(" · ")}</span><span class="card-top-note">${esc(KIND_TAG[it.section_kind] || it.section || "")}</span></div>
+    <h3>${esc(it.title)}</h3>
+    ${s.summary ? `<p class="small secondary">${esc(s.summary)}</p>` : ""}
+    ${related.map((r) => `<a class="related-link" href="${esc(r.url)}"><span>Related example issue: ${esc(r.short)}</span><span aria-hidden="true">→</span></a>`).join("")}
+    <div class="btn-pair">${affected}${related.length ? `<a class="btn btn--sm" href="${esc(related[0].url)}">Corroborate</a>` : report}</div>
+    ${related.length ? `<a class="small inline-link" href="/report/?${new URLSearchParams({ meeting: m.id, item: it.item_key })}">Or file a new report</a>` : ""}
+  </article>`;
+    })
+    .join("");
   const watch = summary
     ? `
-<section class="card stack" id="agenda-watch" aria-labelledby="h-watch">
-  <div class="baseline-head"><h2 class="label" id="h-watch">Agenda watch</h2>${aiBadge(summary)}</div>
-  <p class="small secondary">Plain-language summaries of the official agenda, with items flagged in five areas. Read the agenda for the exact wording.</p>
-  ${
-    flagged.length
-      ? flagged
-          .map((it) => {
-            const s = byKey.get(it.item_key);
-            const q = new URLSearchParams({ meeting: m.id, item: it.item_key });
-            return `
-  <article class="watch-item stack-sm">
-    <p class="label">Item ${esc(it.number)} · ${esc(it.section || "")}</p>
-    <h3>${esc(it.title)}</h3>
-    ${s.summary ? `<p>${esc(s.summary)}</p>` : ""}
-    <div class="chips">${s.flags.map((f) => `<span class="chip chip--flag">${esc(FLAG_LABELS[f] || f)}</span>`).join("")}</div>
-    ${issueLinksFor(links, it.item_key)}
-    <div class="watch-actions">
-      <a class="btn" href="/join/?affected=${encodeURIComponent(`${m.id}:${it.item_key}`)}">I'm affected</a>
-      <a class="btn btn--primary" href="/report/?${q}">File a report</a>
-    </div>
-  </article>`;
-          })
-          .join("")
-      : '<p class="small">No items were flagged in the five areas.</p>'
-  }
-  <p class="small secondary">Areas: ${Object.values(FLAG_LABELS).map(esc).join(", ")}. <a href="/about/methodology/#agenda-watch">How this is made</a></p>
+<section class="stack" id="agenda-watch" aria-labelledby="h-watch">
+  <div class="section-head"><h2 class="label" id="h-watch">Agenda watch</h2><span class="small secondary">${flagged.length} of ${items.length} items</span></div>
+  ${watchCards || '<p class="small secondary">No items were flagged for budget, land use, fees, safety, or public access.</p>'}
+  <p class="xsmall secondary">${
+    reviewed
+      ? `Summaries were drafted by AI from the official agenda and reviewed by ${esc(summary.reviewer)}.`
+      : "Summaries are AI-drafted from the official agenda"
+  } and flagged for budget, land use, fees, safety, and public access. Always check the source. <a href="/about/methodology/#agenda-watch">How this is made</a></p>
 </section>`
     : m.level === "county" && items.length
-      ? '<section class="card stack-sm"><h2 class="label">Agenda watch</h2><p class="small">Plain-language summaries of this agenda haven\'t been drafted yet.</p></section>'
+      ? `<section class="stack-sm" id="agenda-watch"><div class="section-head"><h2 class="label">Agenda watch</h2></div><p class="small secondary">Plain-language summaries of this agenda haven't been drafted yet.</p></section>`
       : "";
 
-  // Full agenda by section
-  const sections = [];
+  // Full agenda: one expandable row per kind of item, then the official documents
+  const groups = [];
   for (const it of items) {
-    let s = sections.find((x) => x.name === (it.section || ""));
-    if (!s) sections.push((s = { name: it.section || "", kind: it.section_kind, items: [] }));
-    s.items.push(it);
+    const known = KIND_GROUPS.find(([k]) => k === it.section_kind);
+    const name = known ? known[1] : it.section || "Other items";
+    let g = groups.find((x) => x.name === name);
+    if (!g) groups.push((g = { name, order: known ? KIND_GROUPS.indexOf(known) : -1, items: [] }));
+    g.items.push(it);
   }
-  const agenda = items.length
-    ? `
-<section class="stack" id="agenda" aria-labelledby="h-agenda">
-  <h2 class="label" id="h-agenda">Full agenda</h2>
-  ${sections
+  groups.sort((a, b) => (a.order === -1 || b.order === -1 ? 0 : a.order - b.order));
+  const groupRows = groups
     .map(
-      (s) => `
-  <div class="card stack-sm agenda-section">
-    <h3>${esc(s.name || "Items")}</h3>
+      (g) => `
+  <details class="list-card-group">
+    <summary class="list-card-row"><span>${esc(g.name)}</span><span class="secondary">${g.items.length} item${g.items.length === 1 ? "" : "s"}</span></summary>
     <ol class="plain-list agenda-items">
-      ${s.items
+      ${g.items
         .map((it) => {
           const sm = byKey.get(it.item_key);
           return `<li class="agenda-item" id="item-${esc(it.item_key)}">
@@ -255,61 +271,71 @@ ${fromAgenda}`;
         })
         .join("")}
     </ol>
-  </div>`
+  </details>`
     )
-    .join("")}
-</section>`
-    : m.level === "county"
-      ? `<section class="card stack-sm"><h2 class="label">Agenda</h2><p class="small">${m.agenda_url ? "The agenda's items haven't been read yet." : "The county hasn't posted the agenda yet. Agendas are posted at least 72 hours before a regular meeting."}</p></section>`
-      : "";
-
-  const docs = [
-    m.agenda_url ? sourceLink(m.agenda_url, "Official agenda (PDF)") : "",
-    m.packet_url ? sourceLink(m.packet_url, "Agenda packet with staff reports (PDF)") : "",
-    src ? sourceLink(src, m.level === "state" ? "Official hearing page" : "Meeting on the county portal") : "",
-  ]
-    .filter(Boolean)
     .join("");
+  const posted = m.posted_at ? `posted ${esc(when(m.posted_at.slice(0, 16)).day)}` : "";
+  const docRows = [
+    safeUrl(m.agenda_url) ? listRow('<strong class="link-text">Official agenda (PDF) ↗</strong>', posted, m.agenda_url) : "",
+    safeUrl(m.packet_url) ? listRow('<strong class="link-text">Agenda packet (PDF) ↗</strong>', "staff reports", m.packet_url) : "",
+    src ? listRow(`<strong class="link-text">${state ? "Official hearing page" : "Meeting on the county portal"} ↗</strong>`, "source", src) : "",
+  ].join("");
+  const agendaNote = !items.length && m.level === "county"
+    ? `<div class="list-card-row"><span class="small secondary">${m.agenda_url ? "The agenda's items haven't been read yet." : "The county hasn't posted the agenda yet. Agendas are posted at least 72 hours before a regular meeting."}</span></div>`
+    : "";
+  const agenda = `
+<section class="card list-card" id="agenda" aria-labelledby="h-agenda">
+  <h2 class="label list-card-head" id="h-agenda">${state ? "Hearing details" : "Full agenda"}</h2>
+  ${groupRows}${agendaNote}${docRows}
+</section>`;
 
-  const video = safeUrl(m.video_url) || (m.body === "Board of Supervisors" ? BOS_VIDEO : null);
-  const after =
-    m.level === "county"
-      ? `
-<section class="card stack-sm" id="after" aria-labelledby="h-after">
+  // After the meeting
+  const video = safeUrl(m.video_url);
+  const after = !state
+    ? `
+<section class="card card--dashed stack-sm" id="after" aria-labelledby="h-after">
   <h2 class="label" id="h-after">After the meeting</h2>
-  <ul class="plain-list weigh-list">
-    <li>${m.minutes_url ? sourceLink(m.minutes_url, "Minutes") : '<span class="small secondary">Minutes: not published yet.</span>'}</li>
-    <li>${video ? sourceLink(video, safeUrl(m.video_url) ? "Video" : "Video: the County Clerk's YouTube channel") : '<span class="small secondary">Video: not published yet.</span>'}</li>
+  ${
+    m.minutes_url || video
+      ? `<ul class="plain-list weigh-list">
+    ${m.minutes_url ? `<li>${sourceLink(m.minutes_url, "Minutes")}</li>` : '<li class="small secondary">Minutes: not published yet.</li>'}
+    ${video ? `<li>${sourceLink(video, "Video")}</li>` : '<li class="small secondary">Video: not published yet.</li>'}
   </ul>
-  <p class="small secondary">How each supervisor voted on each item will be added from the minutes.</p>
+  <p class="small secondary">Each supervisor's vote on each item will be added from the minutes.</p>`
+      : `<p>Minutes and video appear here once published. Each supervisor's vote will be added from the minutes.</p>
+  ${m.body === "Board of Supervisors" ? sourceLink(BOS_VIDEO, "Live and past meetings: the County Clerk's YouTube channel") : ""}`
+  }
 </section>`
-      : "";
+    : "";
 
+  const typeLabel = m.meeting_type || (state ? "Hearing" : "Meeting");
   const main = `
 <header class="page-head">
-  <p class="label">${esc(LEVEL_LABEL[m.level] || "")} · ${esc(m.body)}</p>
-  <h1>${esc(m.meeting_type || "Meeting")}</h1>
-  <p class="meeting-when"><strong>${esc(w.long)}</strong>${w.time ? ` · ${esc(w.time)}` : ""}</p>
-  ${m.location ? `<p class="secondary small">${esc(m.location)}</p>` : ""}
-  ${m.level === "state" && participantsText(m) ? `<p class="secondary small">${esc(participantsText(m))}</p>` : ""}
-  ${summary ? `<div class="chips">${flagChips(summary)}</div>` : ""}
+  <p class="label">${esc(LEVEL_LABEL[m.level] || "")} · ${esc(typeLabel)}</p>
+  <h1>${esc(m.body)}</h1>
+  <p class="meeting-when"><strong>${esc(w.long)}${w.time ? ` · ${esc(w.time)}` : ""}</strong></p>
+  ${
+    m.location || online
+      ? `<p class="small secondary">${esc(m.location || "")}${m.location && online ? " · " : ""}${online ? `Also online: <a href="${esc(online)}" target="_blank" rel="noopener">meeting link ↗</a>` : ""}</p>`
+      : ""
+  }
+  ${state && participantsText(m) ? `<p class="small secondary">${esc(participantsText(m))}</p>` : ""}
 </header>
 ${status}
-<div class="meeting-actions">
+<div class="btn-pair">
   <a class="btn" href="${meetingHref(m.id)}calendar.ics">Add to calendar</a>
-  <a class="btn" href="/join/?follow=${encodeURIComponent(m.id)}">Follow</a>
+  <a class="btn" href="/join/?follow=${encodeURIComponent(m.id)}">Follow meeting</a>
 </div>
 ${
   m.status !== "cancelled" && !past
-    ? `<section class="card stack-sm" id="weigh-in" aria-labelledby="h-weigh"><h2 class="label" id="h-weigh">How to weigh in</h2>${weighIn}</section>`
+    ? `<section class="panel-navy weigh-panel" id="weigh-in" aria-labelledby="h-weigh"><h2 class="label label--navy" id="h-weigh">How to weigh in</h2>${weighIn}</section>`
     : ""
 }
 ${watch}
 ${agenda}
-${docs ? `<section class="stack-sm"><h2 class="label">Official documents</h2><div class="stack-sm">${docs}</div></section>` : ""}
 ${after}
-<p class="hint">${m.posted_at ? `Agenda published ${esc(when(m.posted_at.slice(0, 16)).long || "")}. ` : ""}From the ${m.level === "state" ? "Open States record of the Legislature's schedule" : "county's official meeting portal"}.</p>`;
-  return withHeaders(page(`${m.body}: ${w.day}`, main, { tab: "home", back: ["Meetings", "/meetings/"] }));
+<p class="hint">From the ${state ? "Open States record of the Legislature's schedule" : "county's official meeting portal"}. Each document links to its source.</p>`;
+  return withHeaders(page(`${m.body}: ${w.day}`, main, { tab: "home", back: ["Home", "/home/"] }));
 }
 
 export async function onRequestGet(context) {
@@ -323,7 +349,7 @@ export async function onRequestGet(context) {
   if (!REAL_ID.test(id)) return context.next(); // sample meeting pages (static)
   if (parts.length === 2 && parts[1] === "calendar.ics") {
     const m = context.env.DB ? await context.env.DB.prepare("SELECT * FROM meetings WHERE id = ?").bind(id).first() : null;
-    return m ? ics(m) : notFound("No meeting at this address.", "home", ["Meetings", "/meetings/"]);
+    return m ? ics(m) : notFound("No meeting at this address.", "home", ["Home", "/home/"]);
   }
   if (parts.length > 1) return notFound("No page at this address.", "home", ["Meetings", "/meetings/"]);
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);

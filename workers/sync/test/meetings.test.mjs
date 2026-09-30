@@ -77,7 +77,7 @@ await test("comment instructions come out of a real PDF, word for word", async (
 });
 
 await test("the short deadline label is worked out only from plain wording", () => {
-  assert.deepEqual(deadlineLabel("… no later than 4:00 pm on the day before the Board meeting.", "2026-10-13T09:00"), { date: "2026-10-12", label: "Mon, Oct 12, 4:00 pm" });
+  assert.deepEqual(deadlineLabel("… no later than 4:00 pm on the day before the Board meeting.", "2026-10-13T09:00"), { date: "2026-10-12", day: "Mon, Oct 12", time: "4:00 pm", label: "Mon, Oct 12, 4:00 pm" });
   assert.equal(deadlineLabel("Written comments received by 5:00 pm on the Monday before the meeting will be forwarded.", "2026-10-15T09:00"), null);
   assert.equal(deadlineLabel(null, "2026-10-15T09:00"), null);
 });

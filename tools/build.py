@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # The full Constitution (National Archives transcription), shared with the sync
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
-ASSET_VERSION = "14"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "15"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. reps/ and bodies/ are NOT here: those pages are
 # rendered from D1 by Pages Functions (functions/), as are the laws/ index and
@@ -208,11 +208,16 @@ def plural(n, word, many=None):
 # Components
 # ---------------------------------------------------------------------------
 
-def card(href, label, title, who, chips, foot_left, foot_right, level=None, h="h3"):
+EXAMPLE_TAG = '<span class="example-tag">Example</span>'
+
+
+def card(href, label, title, who, chips, foot_left, foot_right, level=None, h="h3", example=False):
     lvl = f' data-level="{level}"' if level else ""
+    top = (f'<div class="card-top"><p class="label">{e(label)}</p>{EXAMPLE_TAG}</div>' if example
+           else f'<p class="label">{e(label)}</p>')
     return f"""
 <a class="card issue-card" href="{href}"{lvl}>
-  <p class="label">{e(label)}</p>
+  {top}
   <{h}>{e(title)}</{h}>
   <p class="secondary small">{e(who)}</p>
   <div class="chips">{chips}</div>
@@ -229,7 +234,7 @@ def issue_card(i, h="h3"):
         clause_chips(i["clauses"]),
         f"Status: <strong>{e(i['status'])}</strong>",
         f"Confidence: <strong>{e(i['confidence'])}</strong>",
-        level=i["level"], h=h,
+        level=i["level"], h=h, example=True,
     )
 
 
@@ -529,7 +534,7 @@ def build_issues_index():
   <label class="toggle"><input type="radio" name="scope" value="state" /><span>State</span></label>
   <label class="toggle"><input type="radio" name="scope" value="federal" /><span>Federal</span></label>
 </fieldset>
-<p class="banner">Sample issues, for layout only</p>"""
+<p class="banner">Every issue here is an example, until residents can file real reports.</p>"""
     issues = "".join(issue_card(i, h="h2") for i in D.ISSUES)
     main = f"""
 <header class="page-head">
@@ -545,17 +550,17 @@ def build_issues_index():
 
 
 SAMPLE_ISSUE_NOTICE = (
-    '<p class="banner">Hypothetical sample issue, for layout only. '
-    "It is not a report about any real official or agency.</p>"
+    '<p class="banner"><strong>Example issue.</strong> It is hypothetical, shown for layout until residents '
+    "can file real reports, and it is not a report about any real official or agency.</p>"
 )
 
 
 def build_issue(i):
     who, who_url = responsible(i)
-    status_chips = (f'<span class="chip chip--navy">{e(i["status"])}</span>'
+    status_chips = (EXAMPLE_TAG + f'<span class="chip chip--navy">{e(i["status"])}</span>'
                     f'<span class="chip chip--outline">Confidence: {e(i["confidence"])}</span>')
     head = page_head(
-        f"{LEVEL_NAME[i['level']]} · {i['category']} · Sample",
+        f"{LEVEL_NAME[i['level']]} · {i['category']}",
         i["title"],
         f'<a class="inline-link" href="{who_url}">{e(who)}</a>',
         status_chips,
@@ -1053,7 +1058,7 @@ def search_index():
         items.append({"type": l["kind"], "title": l["title"], "sub": f"{BODIES[l['body']]['short']} · {l['status']}",
                       "url": url("law", l["slug"]), "k": "law bill ordinance " + LEVEL_NAME[l["level"]] + " " + tags(l["clauses"])})
     for i in D.ISSUES:
-        items.append({"type": "Issue", "title": i["title"], "sub": f"{LEVEL_NAME[i['level']]} · {i['category']}",
+        items.append({"type": "Issue", "title": i["title"], "sub": f"Example · {LEVEL_NAME[i['level']]} · {i['category']}",
                       "url": url("issue", i["slug"]), "k": " ".join([i["short"], responsible(i)[0], tags(i["clauses"])])})
     items.append({"type": "Constitution", "title": "The Constitution", "sub": "Preamble, articles, and amendments",
                   "url": "/laws/constitution/", "k": "preamble"})
