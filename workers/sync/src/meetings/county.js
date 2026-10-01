@@ -1,5 +1,12 @@
-// County meetings: Board of Supervisors and Planning Commission agendas from
-// the county's IQM2 meeting portal (see ./iqm2.js).
+// County meetings: Board of Supervisors and Planning Commission agendas.
+//
+// COUNTY_MEETING_SOURCES (default "tylermm") picks the systems read, in order:
+//   tylermm  Tyler Meeting Manager, the county's system since September 2026
+//            (see ./tylermm-sync.js)
+//   iqm2     the former IQM2 portal (below). It has published nothing since
+//            August 28, 2026; meetings already saved from it stay.
+//
+// The rest of this file is the IQM2 reader.
 //
 // The portal's robots.txt asks for 60 seconds between requests, so every request
 // here is paced (IQM2_MIN_INTERVAL_MS) and capped per day (IQM2_DAILY_LIMIT).
@@ -26,6 +33,8 @@
 import { extractText, getDocumentProxy } from "unpdf";
 import { PORTAL, parseCalendar, parseRss, parseMeeting } from "./iqm2.js";
 import { commentInfo } from "./comment.js";
+import { saveItems } from "./items.js";
+import { syncTylerMeetings } from "./tylermm-sync.js";
 import { getState, setState, isHttp, BudgetExhausted } from "../util.js";
 import { pacificNow, addDays } from "./time.js";
 
@@ -87,37 +96,13 @@ async function saveMeeting(db, m, postedAt) {
     .run();
 }
 
-async function saveItems(db, meetingId, fileId, parsed) {
-  // A page with no items (agenda not posted yet) never erases items already saved.
-  const stmts = parsed.items.length ? [db.prepare("DELETE FROM meeting_items WHERE meeting_id = ?").bind(meetingId)] : [];
-  for (const it of parsed.items) {
-    stmts.push(
-      db
-        .prepare(
-          `INSERT OR REPLACE INTO meeting_items (meeting_id, item_key, number, title, section, section_kind, item_url, staff_report_url, attachments, sort)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-        )
-        .bind(meetingId, it.item_key, it.number, it.title, it.section, it.section_kind, it.item_url, it.staff_report_url, JSON.stringify(it.attachments), it.sort)
-    );
-  }
-  stmts.push(
-    db
-      .prepare(
-        `UPDATE meetings SET details_checked_at = datetime('now'), details_file_id = ?, agenda_file_id = COALESCE(?, agenda_file_id),
-           agenda_url = COALESCE(?, agenda_url), packet_url = COALESCE(?, packet_url) WHERE id = ?`
-      )
-      .bind(fileId, parsed.agenda_file_id, parsed.agenda_url, parsed.packet_url, meetingId)
-  );
-  await db.batch(stmts);
-}
-
 export async function agendaPdfText(bytes) {
   const pdf = await getDocumentProxy(new Uint8Array(bytes));
   const { text } = await extractText(pdf, { mergePages: false });
   return text;
 }
 
-export async function syncCountyMeetings(env, db, budget) {
+async function syncIqm2Meetings(env, db, budget) {
   const { base, pace, bodies, backfillDays } = options(env);
   const fetchText = async (url, label) => (await budget.paced(db, "iqm2", pace, url, {}, label)).text();
   const today = pacificNow().slice(0, 10);
@@ -226,4 +211,20 @@ export async function syncCountyMeetings(env, db, budget) {
   const tail = notes.length ? `; ${notes.join("; ")}` : "";
   if (!calendarCount && !agendasRead && !notPosted && !withdrawn && !pdfsRead) return { status: "skipped", message: `calendar already read today; no new agendas${tail}` };
   return { status: "ok", message: `${summary()}${tail}` };
+}
+
+export async function syncCountyMeetings(env, db, budget) {
+  const readers = { tylermm: syncTylerMeetings, iqm2: syncIqm2Meetings };
+  const sources = (env.COUNTY_MEETING_SOURCES || "tylermm").split("|").map((x) => x.trim()).filter((x) => readers[x]);
+  if (sources.length === 1) return readers[sources[0]](env, db, budget);
+  const parts = [];
+  let status = "skipped";
+  for (const src of sources) {
+    const r = await readers[src](env, db, budget);
+    parts.push(`${src}: ${r.message}`);
+    if (r.status === "partial") status = "partial";
+    else if (r.status === "ok" && status === "skipped") status = "ok";
+    if (r.status === "partial") break;
+  }
+  return { status, message: parts.join(" | ") };
 }

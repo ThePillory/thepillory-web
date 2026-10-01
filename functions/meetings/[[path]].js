@@ -18,7 +18,7 @@ import {
   LEVEL_LABEL,
 } from "../_lib/meetings.js";
 
-const REAL_ID = /^(iqm2|os)-[a-z0-9-]+$/;
+const REAL_ID = /^(iqm2|tmm|os)-[a-z0-9-]+$/;
 // The Board's standing rule for written comments, from its own page (used when an agenda's wording isn't available).
 const BOS_RULE = {
   text: "Send written comments, no later than 4:00 pm on the day before the meeting.",

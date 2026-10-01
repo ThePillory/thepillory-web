@@ -1,18 +1,23 @@
 // Text of an agenda PDF, page by page, in two forms:
-//   streamPages   the order the PDF draws its text (unpdf's extractText). Good
+//   streamPages   the order the PDF draws its text (as unpdf's extractText). Good
 //                 for agenda bodies, but a line with mixed fonts can come out
 //                 shuffled ("… Clerk of the Board, , nobosclerk@… later than").
 //   linePages     each line rebuilt from where its words sit on the page (top to
 //                 bottom, left to right), which keeps such lines in reading order.
-import { extractText, getDocumentProxy } from "unpdf";
+import { getDocumentProxy } from "unpdf";
 
 export async function openPdf(bytes) {
   return getDocumentProxy(new Uint8Array(bytes));
 }
 
-export async function streamPages(pdf) {
-  const { text } = await extractText(pdf, { mergePages: false });
-  return text;
+/** The first `maxPages` pages in drawing order (as unpdf's extractText, without reading every page of a long packet). */
+export async function streamPages(pdf, maxPages = 40) {
+  const out = [];
+  for (let p = 1; p <= Math.min(pdf.numPages, maxPages); p++) {
+    const { items } = await (await pdf.getPage(p)).getTextContent();
+    out.push(items.filter((it) => it.str != null).map((it) => it.str + (it.hasEOL ? "\n" : "")).join(""));
+  }
+  return out;
 }
 
 /** Lines by position, for the first `maxPages` pages. */

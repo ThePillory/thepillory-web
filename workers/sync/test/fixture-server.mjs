@@ -6,6 +6,7 @@
 // senate.gov roll call XML closely enough to exercise the sync end to end.
 import http from "node:http";
 import { calendarHtml, rssHtml, meetingHtml, agendaLines, makePdf, dayFromToday } from "./iqm2-fixtures.mjs";
+import { meetingList, agendaPages } from "./tylermm-fixtures.mjs";
 
 const PORT = parseInt(process.env.FIXTURE_PORT || "8788", 10);
 const hits = {};
@@ -554,6 +555,21 @@ http
         return res.end(Buffer.from(makePdf(lines)));
       }
       return send(res, 404, "not found", "text/plain");
+    }
+    if (api === "tylermm") {
+      // FAKE Tyler Meeting Manager API.
+      if (path === "/meetingInformation/getMeetingInformationByDate" && req.method === "POST") {
+        const list = meetingList(JSON.parse((await readBody(req)) || "{}"));
+        return list ? send(res, 200, list) : send(res, 500, { message: "Internal Server Error" });
+      }
+      const a = /^\/meetingInformation\/Agenda\/(true|false)\/(\d+)$/.exec(path);
+      if (a && req.method === "GET") {
+        const pages = agendaPages(a[2], a[1] === "true");
+        if (!pages) return send(res, 404, { message: "Not Found" });
+        res.writeHead(200, { "Content-Type": "application/pdf" }); // the real server sends no Content-Length
+        return res.end(Buffer.from(makePdf(pages)));
+      }
+      return send(res, 404, { message: "Not Found" });
     }
     if (api === "textfiles") return textfiles[path] ? send(res, 200, textfiles[path], "text/html") : send(res, 404, "not found", "text/plain");
     if (api === "leginfo") {

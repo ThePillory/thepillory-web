@@ -171,7 +171,14 @@ export function parseSummaryAgenda(pages, titles) {
       found.push(null);
       continue;
     }
-    found.push({ start: at[i], end: at[i + key.length - 1] + 1 });
+    // Also take the title's closing punctuation ("(SMU).") when the PDF has it.
+    let end = at[i + key.length - 1] + 1;
+    for (const c of /[^A-Za-z0-9]*$/.exec(title)[0].replace(/\s/g, "")) {
+      while (end < text.length && /[ \t]/.test(text[end])) end++;
+      if (text[end] !== c) break;
+      end++;
+    }
+    found.push({ start: at[i], end });
     from = i + key.length;
   }
   const items = [];

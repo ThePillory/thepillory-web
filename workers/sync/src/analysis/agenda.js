@@ -127,7 +127,7 @@ async function nextAgendas(db, limit, backfillDays) {
       .prepare(
         `SELECT m.*, (SELECT r.id FROM agenda_requests r WHERE r.meeting_id = m.id AND r.status = 'pending' LIMIT 1) AS request_id
          FROM meetings m
-         WHERE m.source = 'iqm2' AND m.details_file_id IS NOT NULL AND m.status != 'cancelled'
+         WHERE m.source IN ('iqm2', 'tylermm') AND m.details_file_id IS NOT NULL AND m.status != 'cancelled'
            AND EXISTS (SELECT 1 FROM meeting_items i WHERE i.meeting_id = m.id)
            AND (EXISTS (SELECT 1 FROM agenda_requests r WHERE r.meeting_id = m.id AND r.status = 'pending')
                 OR (m.starts_at >= ? AND NOT EXISTS (SELECT 1 FROM agenda_summaries s WHERE s.meeting_id = m.id AND s.agenda_file_id IS m.details_file_id)))
