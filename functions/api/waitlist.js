@@ -1,4 +1,4 @@
-// POST /api/waitlist   "Bring The Pillory to your county" (the hub's Communities section)
+// POST /api/waitlist   "Bring ThePillory to your county" (the hub's Communities section)
 //   form fields: state, county (5-digit FIPS), email, cf-turnstile-response
 //
 // Stores the county and email in D1 (table waitlist). The email is used only

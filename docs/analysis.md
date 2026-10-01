@@ -1,12 +1,12 @@
 # AI-drafted constitutional analysis: setup and operations
 
-The Pillory maps the Constitution; it does not rule on it. AI drafts, automatic checks and an AI reviewer check them, and a person reviews what's flagged plus a random share. Nothing is presented as a verdict.
+ThePillory maps the Constitution; it does not rule on it. AI drafts, automatic checks and an AI reviewer check them, and a person reviews what's flagged plus a random share. Nothing is presented as a verdict.
 
 ```
 bills with a final-passage vote by our officials, or linked to an issue (D1)
    │  after each daily sync, inside the SyncRunner Durable Object (workers/sync/src/analysis/)
    ▼
-relevance check ── claude-haiku-4-5, titles in batches of 25 (relevance.js)
+relevance check ── claude-haiku-4-5, titles and official summaries in batches of 25 (relevance.js)
    │   ceremonial or routine → skipped, logged with the reason (un-skip at /admin/review)
    │   the rest rated for local relevance → ranks the daily queue
    ▼
@@ -37,7 +37,7 @@ AI reviewer ── claude-sonnet-5-5, five-point checklist against the bill text
 ## Which bills, and in what order
 
 - **Eligible:** bills with a final-passage vote by one of our officials, and bills an approved issue link points to. (Once residents can follow bills, followed bills join; the query has a TODO for it.)
-- **Relevance check** (`src/analysis/relevance.js`, `claude-haiku-4-5-20251001`): one call per 25 bills, by number and title only. It skips commemorations, awareness days, post office and building namings, honorary resolutions, and rules that only set how a chamber debates another bill. A bill that creates or changes a state or federal holiday is substantive (it changes law), even when it's named for a person or occasion; only observances with no legal effect are skipped. When unsure, it analyzes. When the rules change (`RELEVANCE_PROMPT_VERSION`), bills skipped under the old rules are checked again once (un-skipped ones are left alone). It also rates local relevance (`high`: California, rural counties, federal lands, water, wildfire, roads, local government…; `medium`, `low`, `none`), by subject only. Every verdict is in `bill_relevance`; every skip is logged as a `relevance-skip` row in `sync_log`, and the bill page says why it wasn't analyzed. Issue-linked bills skip the check.
+- **Relevance check** (`src/analysis/relevance.js`, `claude-haiku-4-5-20251001`): one call per 25 bills, with each bill's number, title and official description: Congress.gov's latest CRS summary (or, before CRS writes one, the official title as introduced, "To amend … to …"), or a California bill's Legislative Counsel's Digest from leginfo. The description is fetched once per bill before its check (`official_summary` on `bills`, migration 0006; 1 or 2 requests a bill) and cut to 1,500 characters in the call. It skips commemorations, awareness days, post office and building namings, honorary resolutions, and rules that only set how a chamber debates another bill. A bill that creates or changes a state or federal holiday is substantive (it changes law), even when it's named for a person or occasion; only observances with no legal effect are skipped. When unsure, it analyzes. It never skips for lack of information: a skip whose reason is that the title or description doesn't say enough ("title acronym", "not disclosed in title", "unable to determine") is turned into "analyze" by the code, and so is a "procedural_rule" skip of anything but one chamber's resolution (H.Res., S.Res., or a California HR or SR). When the rules change (`RELEVANCE_PROMPT_VERSION`), bills skipped under the old rules are checked again once (un-skipped ones are left alone). It also rates local relevance (`high`: California, rural counties, federal lands, water, wildfire, roads, local government…; `medium`, `low`, `none`), by subject only. Every verdict is in `bill_relevance`; every skip is logged as a `relevance-skip` row in `sync_log`, and the bill page says why it wasn't analyzed. Issue-linked bills skip the check.
 - **Order:** requests (yours first, then readers'), then bills an issue now links to whose analysis is only a card, then new bills: issue-linked first, then by local relevance, then by the latest final-passage vote.
 - **Un-skip:** `/admin/review/#skipped` lists every skipped bill with its reason. Un-skip drafts it on the next run; "Skip again" undoes that.
 
@@ -68,7 +68,7 @@ Every published analysis has **Something wrong?** (inaccurate, unfair to one sid
 
 ### Turnstile setup
 
-1. Cloudflare dashboard → **Turnstile** → **Add widget**. Name `The Pillory`; hostnames `thepillory.co` and `thepillory-web.pages.dev`; widget mode **Managed**.
+1. Cloudflare dashboard → **Turnstile** → **Add widget**. Name `ThePillory`; hostnames `thepillory.co` and `thepillory-web.pages.dev`; widget mode **Managed**.
 2. Pages project `thepillory-web` → Settings → **Variables and Secrets**, for Production and Preview:
 
    | Name | Value |
@@ -123,7 +123,7 @@ The Worker now has one npm dependency (the Anthropic SDK, in `workers/sync/packa
 
 1. Cloudflare dashboard → **Zero Trust**. The first time, it asks for a **team name** (for example `thepillory`, which gives the team domain `thepillory.cloudflareaccess.com`) and a plan. Pick **Free**. It may ask for a payment method even for the free plan.
 2. **Access → Applications → Add an application → Self-hosted.**
-   - Application name: `The Pillory admin`
+   - Application name: `ThePillory admin`
    - Session duration: `24 hours`
    - Add these public hostnames, each with path `admin`:
      - `thepillory.co`
@@ -159,19 +159,21 @@ Access stops everyone else before the request reaches the site. The site also ve
 - **Retries:** a bill that can't be drafted (no text or summary, a model refusal, an error) is retried after 7 days.
 - **Other settings in `wrangler.toml`:** `ANALYSIS_MODEL` (default `claude-sonnet-5-5`), `ANALYSIS_EFFORT` (default `high`), `MAX_BILL_TEXT_CHARS` (default 400,000; longer texts are cut and the draft is marked "limited"), `CARD_TEXT_CHARS` (default 60,000; see Long bills), `REVISIONS_PER_DRAFT` (default 1; 0 turns the revision step off), `RELEVANCE_MODEL` (default `claude-haiku-4-5-20251001`), `REVIEW_MODEL` (default `claude-sonnet-5-5`), `REVIEW_EFFORT` (default `medium`), `SPOT_CHECK_RATE` (default `0.1`) and `REVIEW_BACKLOG_DAILY` (default 10).
 
-**Cost, roughly:** each draft sends the Constitution (about 12,000 tokens, cached across the drafts in a run) plus the bill text, and gets back a few thousand tokens (a card, fewer). The AI reviewer sends the bill text again with the draft, at `medium` effort; a flagged draft adds one revision and one more review. A card of a long bill sends at most about 15,000 tokens of bill text per call. At claude-sonnet-5-5 prices ($2 per million input tokens, $10 per million output), a typical bill costs about $0.05 to $0.40 for draft and review together; the longest bills up to about $2. The relevance check costs a fraction of a cent per 25 titles. The daily cap bounds the total. Every call's token counts are in `sync_log` and on the review page.
+**Cost, roughly:** each draft sends the Constitution (about 12,000 tokens, cached across the drafts in a run) plus the bill text, and gets back a few thousand tokens (a card, fewer). The AI reviewer sends the bill text again with the draft, at `medium` effort; a flagged draft adds one revision and one more review. A card of a long bill sends at most about 15,000 tokens of bill text per call. At claude-sonnet-5-5 prices ($2 per million input tokens, $10 per million output), a typical bill costs about $0.05 to $0.40 for draft and review together; the longest bills up to about $2. The relevance check costs about a cent per 25 bills. The daily cap bounds the total. Every call's token counts are in `sync_log` and on the review page.
 
 **Refusal fallback:** the request opts into the API's server-side fallback (`fallbacks: "default"`). If the model declines on certain safety categories, the API retries on another model in the same call. The model that actually wrote a draft is saved with it and shown on the page.
 
 ## Agenda watch
 
-For each new county agenda (Board of Supervisors, Planning Commission), one Claude API call writes 2 to 3 neutral sentences per item and flags items in five areas: budget, land use, fees and taxes, public safety, public access and meetings. It also suggests links to existing issues.
+For each new county agenda (Board of Supervisors, Planning Commission), one Claude API call writes 2 to 3 neutral sentences per item, rates each item's public impact (`high`, `medium`, `low`, by subject and scale), and flags items in five areas: budget, land use, fees and taxes, public safety, public access and meetings. It also suggests links to existing issues.
+
+- **At most five flagged items per agenda** (`MAX_FLAGGED`, `rankFlags` in `src/analysis/agenda-check.js`), ranked by impact: high before medium, regular items before consent items, then agenda order. A `low` item is never flagged, and a consent-calendar item only when rated `high`. The drafter is told the same; the code enforces it, and the meeting page applies it to summaries drafted before the limit. The other items keep their summaries in the full agenda only. Under Agenda watch, the flagged items are listed by rank.
 
 - **Source:** only the official agenda's items, their sections, and their attachment titles.
 - **Checks:** a sentence stating a number, amount or date that the item's own agenda text doesn't contain is removed and logged. Unknown item numbers are dropped. Flags and issue slugs are limited to fixed lists.
 - **Label:** "AI-drafted from the official agenda", with a link to the source, until a person approves it.
 - **Links:** issue links start as `suggested` and show only once approved at `/admin/review/`. While no residents' issues exist (reporting opens with accounts), agenda watch doesn't suggest any.
-- **Order:** agendas someone asked to regenerate at `/admin/review/` first, then upcoming meetings (soonest first), then meetings from the last `MEETING_BACKFILL_DAYS` (30, latest first).
+- **Order:** agendas someone asked to regenerate at `/admin/review/` first, then upcoming meetings (soonest first), then meetings from the last `MEETING_BACKFILL_DAYS` (30, latest first). An AI draft written under an earlier `AGENDA_PROMPT_VERSION` in that window is drafted again (one a person reviewed is kept).
 - **Limits:** `AGENDA_DAILY_LIMIT` (default 3), separate from the bill limit. The prompt version is `AGENDA_PROMPT_VERSION` in `src/analysis/agenda.js`.
 
 Tables: `agenda_summaries` (every version kept), `agenda_summary_revisions`, `item_issue_links`, `agenda_requests` (migration `0003_meetings.sql`).

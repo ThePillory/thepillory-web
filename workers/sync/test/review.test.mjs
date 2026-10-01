@@ -45,6 +45,40 @@ test("relevance: schema limits ids to the batch; message lists every bill; ranks
   assert.ok(LOCAL_RANK.high > LOCAL_RANK.medium && LOCAL_RANK.medium > LOCAL_RANK.low && LOCAL_RANK.low > LOCAL_RANK.none);
 });
 
+test("relevance: never skipped for lack of information; only a chamber resolution is a procedural rule", () => {
+  const more = [
+    { id: "us-119-hr-10326", bill_number: "H.R. 10326", level: "federal", title: "SHIELD Act" },
+    { id: "ca-20252026-sb-337", bill_number: "SB 337", level: "state", title: "Prisons." },
+    { id: "us-119-hres-12", bill_number: "H.Res. 12", level: "federal", title: "Providing for consideration of the bill (H.R. 5)" },
+    { id: "ca-20252026-hr-9", bill_number: "HR 9", level: "state", title: "Relative to the Assembly's rules for floor sessions." },
+  ];
+  const v = (bill_id, category, reason) => ({ bill_id, verdict: "skip", category, reason, local: "low", local_reason: "" });
+  const out = cleanVerdicts(
+    {
+      bills: [
+        v("us-119-hr-10326", "other_routine", "Title acronym alone does not indicate substantive content; unable to determine policy impact from title."),
+        v("ca-20252026-sb-337", "procedural_rule", "Is a resolution concerning prison operations."),
+        v("us-119-hres-12", "procedural_rule", "It only sets how the House will debate another bill."),
+        v("ca-20252026-hr-9", "procedural_rule", "It sets the Assembly's floor rules."),
+      ],
+    },
+    more
+  );
+  assert.deepEqual(out.map((x) => x.verdict), ["analyze", "analyze", "skip", "skip"]);
+  assert.deepEqual(out.map((x) => x.category), ["substantive", "substantive", "procedural_rule", "procedural_rule"]);
+});
+
+test("relevance: the message gives each bill's official description, or says there is none", () => {
+  const msg = relevanceMessage([
+    { ...bills[0], official_summary: "This bill designates the facility of the U.S. Postal Service at 100 Example Street as the Test Post Office.", official_summary_label: "CRS summary, Introduced in House, 2026-01-05" },
+    { ...bills[1], official_summary: "x".repeat(4000), official_summary_label: "Legislative Counsel's Digest" },
+    { id: "us-119-hr-1", bill_number: "H.R. 1", level: "federal", title: "SHIELD Act" },
+  ]);
+  assert.match(msg, /us-119-hr-40 \| H\.R\. 40 \| U\.S\. Congress \| To designate[^\n]*\n    CRS summary, Introduced in House, 2026-01-05: This bill designates/);
+  assert.match(msg, /Legislative Counsel's Digest: x{1500}…/, "long descriptions are cut");
+  assert.match(msg, /SHIELD Act\n    No official description available\./);
+});
+
 const allOk = CHECKS.map(([id]) => ({ id, ok: true, note: "Fine." }));
 
 test("reviewer: pass only when every check is ok and the verdict is pass", () => {

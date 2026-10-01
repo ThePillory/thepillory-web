@@ -57,6 +57,8 @@ CA_SESSION = ""
 MAX_SUBREQUESTS = "900"
 # Open States free tier: stay well under the daily limit and ~10 requests/min.
 OPENSTATES_DAILY_LIMIT = "250"
+# Kept each day for loading state legislators while their weekly load is due.
+OPENSTATES_OFFICIALS_RESERVE = "10"
 OPENSTATES_MIN_INTERVAL_MS = "6500"
 # AI-drafted constitutional analysis (src/analysis/). At most this many drafts a
 # day; each costs one Claude API call. Set to "0" to pause drafting.

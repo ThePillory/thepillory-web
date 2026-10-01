@@ -1,4 +1,4 @@
-# The Pillory: sitemap
+# ThePillory: sitemap
 
 What's live now, and what opens when accounts launch. Everything live shows
 real data (from D1 or official sources) or an honest empty state. There are no
@@ -12,8 +12,8 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
   - Find your representatives: address or ZIP (`/api/districts`; nothing stored; district IDs kept in the browser)
   - Happening now: Congress / California toggle (`?now=state`), latest final-passage votes with status, summary, constitutional chip, review label, totals, "See how your rep voted" > Bill
   - Take part: Calaveras comment deadlines > Meeting (#weigh-in); Contact your representatives > Reps. (Federal agency comment periods from Regulations.gov: to do)
-  - Communities: Calaveras County (Live) > Calaveras briefing; Bring The Pillory to your county (waitlist, real counts)
-  - Understand: The Constitution, How a bill becomes law, How to read a vote, How The Pillory works
+  - Communities: Calaveras County (Live) > Calaveras briefing; Bring ThePillory to your county (waitlist, real counts)
+  - Understand: The Constitution, How a bill becomes law, How to read a vote, How ThePillory works
 - **Your briefing**, once your districts are known:
   - In Calaveras County: the Calaveras briefing (also `/calaveras/` for everyone): first-visit intro, County / State / Federal filter, This week (meetings and hearings) > Meeting / Calendar (`/meetings/`), Issues near you (empty state), Your reps' latest votes > All votes (`/votes/`)
   - Elsewhere: your reps, your reps' latest votes, Happening now; a note that state and local coverage comes as communities launch
@@ -36,7 +36,7 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 - About (`/about/`): How it works (`/about/how-it-works/`, with the site's one labeled example), Principles (`/about/principles/`), Methodology (`/about/methodology/`), How a bill becomes law (`/about/how-a-bill-becomes-law/`), How to read a vote (`/about/how-to-read-a-vote/`)
 
 ### Every page
-- One header: The Pillory wordmark and search (`/search/`: reps, governing bodies, bills, meetings, the Constitution)
+- One header: ThePillory wordmark and search (`/search/`: reps, governing bodies, bills, meetings, the Constitution)
 - One nav: Home, Reps, + Report, Laws, You (bottom on phones, top from 768px)
 - Footer: About · How it works · Principles · Methodology
 

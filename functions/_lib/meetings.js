@@ -6,7 +6,7 @@ import { inChunks } from "./data.js";
 import { esc, safeUrl } from "./render.js";
 import { deadlineLabel } from "../../workers/sync/src/meetings/comment.js";
 import { pacificNow, addDays } from "../../workers/sync/src/meetings/time.js";
-import { FLAG_LABELS } from "../../workers/sync/src/analysis/agenda-check.js";
+import { FLAG_LABELS, rankFlags } from "../../workers/sync/src/analysis/agenda-check.js";
 
 export { pacificNow, addDays, FLAG_LABELS };
 
@@ -66,7 +66,18 @@ export async function summariesFor(db, ids) {
           .bind(...chunk)
           .all()
       ).results);
-    return Object.fromEntries(results.map((r) => [r.meeting_id, { ...r, items: JSON.parse(r.items || "[]") }]));
+    // At most five flagged items per agenda, ranked by impact. New drafts are
+    // saved that way; this also caps summaries drafted before the limit.
+    const agenda = await inChunks(ids, async (chunk) =>
+      (
+        await db
+          .prepare(`SELECT meeting_id, item_key, section_kind FROM meeting_items WHERE meeting_id IN (${chunk.map(() => "?").join(",")}) ORDER BY meeting_id, sort`)
+          .bind(...chunk)
+          .all()
+      ).results);
+    return Object.fromEntries(
+      results.map((r) => [r.meeting_id, { ...r, items: rankFlags(JSON.parse(r.items || "[]"), agenda.filter((a) => a.meeting_id === r.meeting_id)).items }])
+    );
   } catch (err) {
     if (tableMissing(err)) return {};
     throw err;

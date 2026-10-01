@@ -6,7 +6,8 @@ import { parseCalendar, parseRss, parseMeeting, localDateTime, sectionKind } fro
 import { commentInfo, deadlineLabel, flatten, sentences } from "../src/meetings/comment.js";
 import { agendaPdfText } from "../src/meetings/county.js";
 import { matchEvent } from "../src/meetings/state.js";
-import { checkSummaries } from "../src/analysis/agenda-check.js";
+import { checkSummaries, rankFlags, MAX_FLAGGED } from "../src/analysis/agenda-check.js";
+import { caDigest } from "../src/analysis/billtext.js";
 import { calendarHtml, rssHtml, meetingHtml, agendaLines, makePdf, MEETINGS } from "./iqm2-fixtures.mjs";
 import { parseMeetingList, parseSummaryAgenda, parsePacketAgenda, meetingDate, clock } from "../src/meetings/tylermm.js";
 import { openPdf, streamPages, linePages } from "../src/meetings/pdftext.js";
@@ -108,7 +109,7 @@ await test("agenda summaries: made-up numbers and unknown items are removed", ()
   const items = parseMeeting(meetingHtml(9001)).items.map((i) => ({ ...i, attachments: JSON.stringify(i.attachments) }));
   const draft = {
     items: [
-      { item_key: "2", summary: "The Board would approve a road repair contract with Example Paving Co. The contract may not exceed $250,000. It runs for 36 months.", flags: ["budget", "budget"] },
+      { item_key: "2", summary: "The Board would approve a road repair contract with Example Paving Co. The contract may not exceed $250,000. It runs for 36 months.", impact: "high", flags: ["budget", "budget"] },
       { item_key: "4", summary: "Staff would report on the budget for fiscal year 2026-27. The Board would give direction.", flags: ["budget"] },
       { item_key: "99", summary: "Not on the agenda.", flags: [] },
     ],
@@ -209,6 +210,32 @@ await test("Tyler: how to comment, from lines rebuilt by position, and both dead
   assert.equal(deadlineLabel(pc.comment_deadline_text, "2026-09-24T09:00").label, "Mon, Sep 21, 4:00 pm");
   assert.equal(deadlineLabel(pc.comment_deadline_text, "2026-09-28T09:00").date, "2026-09-21");
   assert.equal(deadlineLabel(bos.comment_deadline_text, "2026-09-22T09:00").label, "Mon, Sep 21, 4:00 pm");
+});
+
+await test("agenda watch: at most five flagged items, ranked by impact; consent items only when high", () => {
+  // 32 items like tmm-102: 2 closed session, 1 recognition, 26 consent, 3 regular. The drafter flagged 27.
+  const kinds = ["closed_session", "closed_session", "other", ...Array(26).fill("consent"), "regular", "regular", "regular"];
+  const agenda = kinds.map((k, i) => ({ item_key: String(i + 1), section_kind: k }));
+  const impact = (i) => (i === 7 ? "high" : i === 12 ? "high" : i >= 29 ? (i === 31 ? "high" : "medium") : i === 1 ? "low" : "medium");
+  const summary = agenda.map((a, i) => ({ item_key: a.item_key, summary: "x", impact: impact(i), flags: i === 2 || i === 4 ? [] : ["budget"] }));
+  const { items, kept, cleared } = rankFlags(summary, agenda);
+  assert.equal(MAX_FLAGGED, 5);
+  assert.equal(kept, 5);
+  const shown = items.filter((s) => s.flags.length).sort((a, b) => a.rank - b.rank).map((s) => s.item_key);
+  // High first (regular before consent, then agenda order), then medium regular items.
+  assert.deepEqual(shown, ["32", "8", "13", "1", "30"]);
+  assert.equal(cleared, 30 - 5, "every other flagged item keeps its summary, without flags");
+  assert.ok(items.every((s) => s.summary === "x"));
+  assert.ok(!items.find((s) => s.item_key === "2").flags.length, "a low-impact item is never flagged");
+  // Summaries drafted before impact ratings: every flagged consent item is left out.
+  const legacy = rankFlags(summary.map(({ impact: _i, ...s }) => s), agenda);
+  assert.deepEqual(legacy.items.filter((s) => s.flags.length).map((s) => s.item_key), ["1", "2", "30", "31", "32"]);
+});
+
+await test("relevance: the Legislative Counsel's Digest from a leginfo page", () => {
+  const html = `<div id="bill_all"><p>An act to amend Section 1 of the Penal Code, relating to prisons.</p><p>LEGISLATIVE COUNSEL&#39;S DIGEST</p><p>SB 337, as introduced, [Senator]. Prisons: visiting.</p><p>Existing law requires the Department of Corrections and Rehabilitation to allow visits. This bill would require each prison to post its visiting hours online.</p><p>Vote: majority Appropriation: no</p><p>The people of the State of California do enact as follows:</p><p>SECTION 1. ...</p></div>`;
+  assert.equal(caDigest(html), "SB 337, as introduced, [Senator]. Prisons: visiting.\nExisting law requires the Department of Corrections and Rehabilitation to allow visits. This bill would require each prison to post its visiting hours online.");
+  assert.equal(caDigest("<p>No text available.</p>"), null);
 });
 
 console.log(`\n${n} passed`);

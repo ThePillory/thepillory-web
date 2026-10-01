@@ -6,6 +6,8 @@ import { districtsFromMatch, zipResult, cookieHeader } from "../../../functions/
 import { cleanDistricts, districtsFromCookie, repsWhere, describe, isCalaveras } from "../../../functions/_lib/districts.js";
 import { sectionHeadings, condense } from "../src/analysis/billtext.js";
 import { revisionMessage } from "../src/analysis/prompt.js";
+import { Budget } from "../src/util.js";
+import { openStatesReserve } from "../src/openstates-api.js";
 import { houseTotals, directName, districtCode, senateTotals, stateTotals, matchPositions, totals } from "../src/rollcall.js";
 
 let passed = 0;
@@ -135,5 +137,41 @@ test("revision: the reviewer's problems and the previous draft go back to the dr
   assert.match(msg, /1\. Summary is incomplete\.\n2\. Too certain\./);
   assert.match(msg, /Revise the short card\.$/);
 });
+
+// Open States: the votes backfill leaves a reserve for loading the legislators.
+{
+  const state = new Map();
+  const db = {
+    prepare: (sql) => ({
+      bind: (...a) => ({
+        first: async () => (/SELECT value/.test(sql) && state.has(a[0]) ? { value: state.get(a[0]) } : null),
+        run: async () => {
+          if (/INSERT/.test(sql)) state.set(a[0], a[1]);
+        },
+      }),
+    }),
+  };
+  const env = { OPENSTATES_DAILY_LIMIT: "20", OPENSTATES_MIN_INTERVAL_MS: "0", MAX_SUBREQUESTS: "100" };
+  const budget = new Budget(env, 600000);
+  budget.json = async () => ({});
+  assert.equal(await openStatesReserve(env, db), 10, "due: the default reserve");
+  const reserve = await openStatesReserve(env, db);
+  let votes = 0;
+  try {
+    for (;;) {
+      await budget.openStates(db, "https://example.org/bills", {}, "bills page", { reserve });
+      votes += 1;
+    }
+  } catch (err) {
+    assert.equal(err.name, "BudgetExhausted");
+    assert.match(err.message, /less the 10 kept for loading state legislators/);
+  }
+  assert.equal(votes, 10, "the votes stop 10 short of the daily limit");
+  for (let i = 0; i < 10; i++) await budget.openStates(db, "https://example.org/people", {}, "people page");
+  await assert.rejects(budget.openStates(db, "https://example.org/people", {}, "people page"), /daily limit \(20\) reached$/);
+  state.set("state_officials_all", new Date().toISOString());
+  assert.equal(await openStatesReserve(env, db), 0, "nothing reserved once every legislator loaded this week");
+  passed += 1;
+}
 
 console.log(`${passed} passed`);

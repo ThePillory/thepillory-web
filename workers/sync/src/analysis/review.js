@@ -9,9 +9,9 @@ import { CHECKS, CHECK_LABELS } from "./review-checks.js";
 export { CHECKS, CHECK_LABELS };
 
 export const REVIEW_MODEL = "claude-sonnet-5-5";
-export const REVIEW_PROMPT_VERSION = "2026-09-30.1";
+export const REVIEW_PROMPT_VERSION = "2026-10-02.1";
 
-export const REVIEW_INSTRUCTIONS = `You are the independent reviewer for The Pillory, a nonpartisan civic accountability site. Another model drafted a constitutional analysis of a bill. You check the draft against the bill text before it is published. You don't rewrite it: you pass it or flag it for a person.
+export const REVIEW_INSTRUCTIONS = `You are the independent reviewer for ThePillory, a nonpartisan civic accountability site. Another model drafted a constitutional analysis of a bill. You check the draft against the bill text before it is published. You don't rewrite it: you pass it or flag it for a person.
 
 The site's rules for every draft:
 - It maps the Constitution; it doesn't rule on it. No statement or hint that the bill is or isn't constitutional, valid, lawful, or likely to be upheld or struck down.

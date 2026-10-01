@@ -81,7 +81,7 @@ function ics(m) {
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//The Pillory//Meetings//EN",
+    "PRODID:-//ThePillory//Meetings//EN",
     "CALSCALE:GREGORIAN",
     "BEGIN:VTIMEZONE",
     "TZID:America/Los_Angeles",
@@ -203,7 +203,9 @@ async function meeting(env, id) {
   }
 
   // Agenda watch: flagged items only
-  const flagged = items.filter((it) => ((byKey.get(it.item_key) || {}).flags || []).length);
+  const flagged = items
+    .filter((it) => ((byKey.get(it.item_key) || {}).flags || []).length)
+    .sort((a, b) => (byKey.get(a.item_key).rank || 99) - (byKey.get(b.item_key).rank || 99));
   const reviewed = summary && summary.status === "reviewed";
   const watchCards = flagged
     .map((it) => {
@@ -220,7 +222,7 @@ async function meeting(env, id) {
   const watch = summary
     ? `
 <section class="stack" id="agenda-watch" aria-labelledby="h-watch">
-  <div class="section-head"><h2 class="label" id="h-watch">Agenda watch</h2><span class="small secondary">${flagged.length} of ${items.length} items</span></div>
+  <div class="section-head"><h2 class="label" id="h-watch">Agenda watch</h2><span class="small secondary">${flagged.length} of ${items.length} items, by public impact</span></div>
   ${watchCards || '<p class="small secondary">No items were flagged for budget, land use, fees, safety, or public access.</p>'}
   <p class="xsmall secondary">${
     reviewed

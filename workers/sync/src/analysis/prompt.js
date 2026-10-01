@@ -4,12 +4,12 @@
 // (card) whenever the instructions or the shape change; it's saved with each draft.
 import { PROVISIONS } from "../constitution.js";
 
-export const PROMPT_VERSION = "2026-10-01.1";
-export const CARD_PROMPT_VERSION = "2026-10-01.1";
+export const PROMPT_VERSION = "2026-10-02.1";
+export const CARD_PROMPT_VERSION = "2026-10-02.1";
 
-const INTRO = `You draft constitutional context for bills on The Pillory, a nonpartisan civic accountability site. Every draft is checked automatically (quotes against the stored Constitution, cases against CourtListener), then by a separate AI reviewer, and people review flagged drafts and a random share of the rest.
+const INTRO = `You draft constitutional context for bills on ThePillory, a nonpartisan civic accountability site. Every draft is checked automatically (quotes against the stored Constitution, cases against CourtListener), then by a separate AI reviewer, and people review flagged drafts and a random share of the rest.
 
-The Pillory maps the Constitution; it does not rule on it. Your job is to show which provisions a bill touches and how different careful readers would see the question, not to decide it.`;
+ThePillory maps the Constitution; it does not rule on it. Your job is to show which provisions a bill touches and how different careful readers would see the question, not to decide it.`;
 
 export const RULES = `Rules:
 - No verdicts on constitutionality. Never say or imply that a bill is or is not constitutional, valid, lawful, or likely to be upheld or struck down. Describe where it aligns with the text, where it may be in tension, and why a departure might still serve the public.

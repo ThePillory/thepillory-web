@@ -1,13 +1,13 @@
-# The Pillory: read this first
+# ThePillory: read this first
 
 ## What it is
 
-The Pillory is an **evidence-first civic accountability platform**:
+ThePillory is an **evidence-first civic accountability platform**:
 
 - **Verified residents, one voice each.** People verify once (identity plus address → districts). Everyone else sees only "Verified resident · [County]".
 - **Protected identities.** Names, addresses and IDs are never shown to other users, and never to the officials or agencies in a report.
 - **Evidence first.** Reports are facts plus evidence. A resident's perspective is kept in its own, clearly separate section.
-- **Constitution as the baseline.** Issues and laws are mapped to the clauses they touch, with three panels: *Where it aligns*, *Where it may be in tension*, *Why this might still serve the public*. The Pillory maps the Constitution; it doesn't rule on it.
+- **Constitution as the baseline.** Issues and laws are mapped to the clauses they touch, with three panels: *Where it aligns*, *Where it may be in tension*, *Why this might still serve the public*. ThePillory maps the Constitution; it doesn't rule on it.
 - **Nonpartisan.** No party labels anywhere, and nothing that suggests a political side.
 
 The information architecture lives in **[docs/sitemap.md](docs/sitemap.md)**. Check it before adding or moving screens.
@@ -54,7 +54,7 @@ To test the sync and Functions locally with **fake** data: `workers/sync/test/ru
 - **One header and one nav on every page:** the wordmark and search at the top (`site_header()` in `tools/build.py`), and five tabs (`.tabbar`): Home, Reps, **+ Report** (center, navy pill), Laws, You. `/home/` and `/feed/` redirect to `/`.
 - **Home (`/`) is the hub** for new visitors: the headline, Find your representatives, Happening now (Congress / California), Take part, Communities (Calaveras "Live", and the county waitlist), and Understand. Once a visitor's districts are known, `/` shows their briefing instead: the Calaveras County briefing (also at `/calaveras/`) in Calaveras, otherwise their reps, their reps' latest votes and Happening now. `/?hub=1` always shows the hub.
 - **Districts stay in the visitor's browser.** The lookup (`/api/districts`) takes an address (U.S. Census Geocoder, 119th Congress districts) or a ZIP code (`data/zip/`), answers with district IDs only, and never stores or logs the address or ZIP. The browser keeps the IDs in the `pillory_districts` cookie (`functions/_lib/districts.js`); pages that read it are served `Cache-Control: private`. When the 120th Congress starts (January 2027), set `CENSUS_VINTAGE` and rerun the ZIP workflow with the new district files.
-- **Waitlist** ("Bring The Pillory to your county"): county and email in D1 (`waitlist`), Turnstile plus a per-visitor daily limit; the email is used only to announce that county's launch. The hub shows only the totals; `/admin/waitlist/` shows counts by county. About, How it works, Principles and Methodology live under About in the You tab and in the footer of every page. The bar is fixed to the bottom on phones and becomes a top nav at 768px and wider.
+- **Waitlist** ("Bring ThePillory to your county"): county and email in D1 (`waitlist`), Turnstile plus a per-visitor daily limit; the email is used only to announce that county's launch. The hub shows only the totals; `/admin/waitlist/` shows counts by county. About, How it works, Principles and Methodology live under About in the You tab and in the footer of every page. The bar is fixed to the bottom on phones and becomes a top nav at 768px and wider.
 - **Global search** sits at the top of every page and searches reps, governing bodies, bills, meetings and every provision of the Constitution (`assets/search-index.js` plus `/api/search-officials` from D1). Enter opens `/search/?q=`.
 - **Back labels:** every page below a tab root has `← <parent name>`, for example `← About`. Pass `back=(label, href)` to `render()`.
 - **No dead ends.** Every link leads to real content or an honest empty state. Don't add buttons for features that don't exist yet (following, reporting, corroborating); say plainly that they open when accounts launch.
@@ -71,7 +71,7 @@ To test the sync and Functions locally with **fake** data: `workers/sync/test/ru
 
 ## Constitutional analysis rules
 
-- **The Pillory maps the Constitution; it doesn't rule on it.** No verdicts on constitutionality anywhere, from the AI or on the page. The three panels are *Where it aligns*, *Where it may be in tension*, *Why this might still serve the public*.
+- **ThePillory maps the Constitution; it doesn't rule on it.** No verdicts on constitutionality anywhere, from the AI or on the page. The three panels are *Where it aligns*, *Where it may be in tension*, *Why this might still serve the public*.
 - **Quote the Constitution only from `data/constitution.json`**, word for word. Its IDs are stable: never renumber or reuse them.
 - **AI drafts are public only once checked.** A draft the AI reviewer passes is labeled "AI-drafted, auto-checked", linked to the methodology. A flagged draft stays off public pages until a person decides. A person's approval shows "Reviewed by [name], [date]". Every version and edit is kept.
 - **Reader flags** ("Something wrong?") need no account: Turnstile plus a per-visitor daily limit, and the visitor is a daily-rotating hash, never the address (`functions/_lib/turnstile.js`). A flagged analysis stays up, marked "Under review", until a person resolves it.
@@ -106,7 +106,9 @@ All styling is in **`assets/pillory.css`**, with tokens on `:root`. Reuse the cl
 
 ## Logo
 
-The logo is the **Seal P**: a serif "P" (Newsreader 600) inside a double ring, like an official stamp on a public record. It sits beside "The Pillory" in Newsreader 600. The "P" is stored as vector outlines, so the icons don't depend on the web font loading. Everything lives in `assets/logo/`:
+The name is written **ThePillory**: one word, capital T and P, in every heading, title, meta tag, email and doc. The domain is written out in lowercase, `thepillory.co`, in the footer of every page (`FOOTER` in `tools/build.py`).
+
+The logo is the **Seal P**: a serif "P" (Newsreader 600) inside a double ring, like an official stamp on a public record. It sits beside "ThePillory" in Newsreader 600. The "P" is stored as vector outlines, so the icons don't depend on the web font loading. Everything lives in `assets/logo/`:
 
 - `mark.svg`: the seal on its own. CSS draws it before every `.wordmark` through `.wordmark::before` (a mask filled with navy), so the wordmark HTML stays plain text. Bump the `?v=` on the mask URL in `pillory.css` if the file changes.
 - `icon.svg` and `favicon-32.png`: the browser-tab icon, a parchment seal on a rounded navy tile.

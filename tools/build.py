@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build The Pillory's static pages.
+"""Build ThePillory's static pages.
 
     python3 tools/build.py
 
@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "18"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "19"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -86,11 +86,12 @@ EMPTY_REPORTS = (
     "</section>"
 )
 
-FOOTER = """<footer class="app-footer" aria-label="About The Pillory">
+FOOTER = """<footer class="app-footer" aria-label="About ThePillory">
   <a href="/about/">About</a>
   <a href="/about/how-it-works/">How it works</a>
   <a href="/about/principles/">Principles</a>
   <a href="/about/methodology/">Methodology</a>
+  <p class="app-footer-domain">thepillory.co</p>
 </footer>"""
 
 
@@ -172,7 +173,7 @@ SEARCH = """
 # computers the wordmark moves into the top navigation bar.
 def site_header():
     return f"""<header class="site-header">
-  <a class="wordmark" href="/">The Pillory</a>
+  <a class="wordmark" href="/">ThePillory</a>
   {SEARCH.strip()}
 </header>"""
 
@@ -192,7 +193,7 @@ def tabbar(current, is_root):
     return f"""
 <nav class="tabbar" aria-label="Main">
   <div class="tabbar-row">
-    <a class="wordmark tabbar-brand" href="/">The Pillory</a>
+    <a class="wordmark tabbar-brand" href="/">ThePillory</a>
     <div class="tabbar-inner">
       {"".join(links)}
     </div>
@@ -212,14 +213,14 @@ def head_tags(title):
     <link rel="icon" href="/assets/logo/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/assets/logo/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta property="og:site_name" content="The Pillory" />
+    <meta property="og:site_name" content="ThePillory" />
     <meta property="og:title" content="{e(title)}" />
     <meta property="og:description" content="{SITE_DESCRIPTION}" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="{SITE_URL}/assets/logo/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="The Pillory: a serif P in a seal beside the wordmark, with the line Evidence-first civic accountability" />
+    <meta property="og:image:alt" content="ThePillory: a serif P in a seal beside the wordmark, with the line Evidence-first civic accountability" />
     <meta name="twitter:card" content="summary_large_image" />
 """
 
@@ -238,13 +239,13 @@ def shell(title, main, *, nav="", back_html="", after="", title_is_html=False):
     scripts = (f'<script src="/assets/search-index.js?v={ASSET_VERSION}"></script>\n'
                '    <script src="/api/search-officials"></script>\n'
                f'    <script src="/assets/app.js?v={ASSET_VERSION}"></script>')
-    head = head_tags(f"{t} – The Pillory") if title_is_html else head_tags(f"{title} – The Pillory")
+    head = head_tags(f"{t} – ThePillory") if title_is_html else head_tags(f"{title} – ThePillory")
     return f"""<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{t} – The Pillory</title>
+    <title>{t} – ThePillory</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,600&display=swap" rel="stylesheet" />
@@ -303,7 +304,7 @@ def full_constitution():
     return f"""<section class="stack" id="full-text">
   <div class="stack-sm">
     <h2 class="label">Full text</h2>
-    <p class="small secondary">As transcribed by the <a href="https://www.archives.gov/founding-docs/constitution">National Archives</a>, with its original spelling. Every quote on The Pillory comes from this text.</p>
+    <p class="small secondary">As transcribed by the <a href="https://www.archives.gov/founding-docs/constitution">National Archives</a>, with its original spelling. Every quote on ThePillory comes from this text.</p>
   </div>
   {blocks}
 </section>"""
@@ -313,12 +314,12 @@ def build_methodology():
     main = """
 <header class="page-head">
   <h1>Methodology</h1>
-  <p class="subtitle">How The Pillory maps laws and issues to the Constitution, and how reports are reviewed.</p>
+  <p class="subtitle">How ThePillory maps laws and issues to the Constitution, and how reports are reviewed.</p>
 </header>
 
 <section class="card stack" id="analysis">
   <h2>Constitutional analysis of bills</h2>
-  <p>The Pillory maps the Constitution; it doesn't rule on it. For bills our officials have voted on, an AI tool writes an analysis showing which parts of the Constitution a bill touches. Automatic checks and a second AI tool check every analysis, and a person reviews any that are flagged, plus a random share of the rest. Nothing here is a verdict on whether a bill is constitutional, and nothing here is legal advice.</p>
+  <p>ThePillory maps the Constitution; it doesn't rule on it. For bills our officials have voted on, an AI tool writes an analysis showing which parts of the Constitution a bill touches. Automatic checks and a second AI tool check every analysis, and a person reviews any that are flagged, plus a random share of the rest. Nothing here is a verdict on whether a bill is constitutional, and nothing here is legal advice.</p>
   <ol class="numbered">
     <li>
       <span class="step-num" aria-hidden="true">1</span>
@@ -370,7 +371,7 @@ def build_methodology():
   <p>Meeting times, places, agendas, staff reports, minutes and video links come from Calaveras County's official meeting portal, for the Board of Supervisors and the Planning Commission. State committee hearings come from Open States and show when one of Calaveras County's two state legislators sits on the committee.</p>
   <ul class="plain-list small">
     <li><strong>How to weigh in:</strong> the comment instructions and deadline are copied word for word from the official agenda. When a short deadline is shown (for example "Written comments by Mon, Oct 12, 4:00 pm"), it is worked out only from the agenda's own plain wording, such as "no later than 4:00 pm on the day before the meeting".</li>
-    <li><strong>Agenda watch:</strong> an AI tool (Claude, made by Anthropic) writes two or three neutral sentences about each item, from the official agenda only, and flags items about the budget, land use, fees and taxes, public safety, or public access and meetings. These summaries are labeled "AI-drafted from the official agenda" and link to the source. A sentence that states a number, amount or date the agenda item doesn't contain is removed automatically. People review the summaries.</li>
+    <li><strong>Agenda watch:</strong> an AI tool (Claude, made by Anthropic) writes two or three neutral sentences about each item, from the official agenda only, rates each item's public impact by its subject and scale, and flags at most five items per agenda, the ones with the most impact, under budget, land use, fees and taxes, public safety, or public access and meetings. Consent-calendar items, which are routine by design, are flagged only when they adopt a budget, a tax or fee, an ordinance or an emergency. Every other item is in the full agenda with its summary. These summaries are labeled "AI-drafted from the official agenda" and link to the source. A sentence that states a number, amount or date the agenda item doesn't contain is removed automatically. People review the summaries.</li>
     <li><strong>Links to issues:</strong> the AI tool may suggest that an agenda item relates to an issue. A suggestion is shown only after a person approves it.</li>
     <li><strong>Votes:</strong> how each supervisor voted will be added from the published minutes.</li>
   </ul>
@@ -392,7 +393,7 @@ def build_methodology():
 
 <section class="card stack-sm">
   <h2>The Constitution's text</h2>
-  <p class="small secondary">The Pillory quotes the Constitution and its 27 amendments only from one stored copy of the National Archives transcription, which keeps the original spelling (such as "chuse" and "Controul"). The <a href="/laws/constitution/#full-text">full text</a> is on the Constitution page, and an automatic check compares it with the Archives whenever it changes.</p>
+  <p class="small secondary">ThePillory quotes the Constitution and its 27 amendments only from one stored copy of the National Archives transcription, which keeps the original spelling (such as "chuse" and "Controul"). The <a href="/laws/constitution/#full-text">full text</a> is on the Constitution page, and an automatic check compares it with the Archives whenever it changes.</p>
 </section>
 
 <section class="card stack-sm">
@@ -444,7 +445,7 @@ def build_report():
 
 def build_you():
     about = "".join([
-        link_row("/about/", "About The Pillory"),
+        link_row("/about/", "About ThePillory"),
         link_row("/about/how-it-works/", "How it works"),
         link_row("/about/principles/", "Principles"),
         link_row("/about/methodology/", "Methodology", "How analyses and summaries are made and checked"),
@@ -454,7 +455,7 @@ def build_you():
     main = f"""
 <header class="page-head">
   <h1>You</h1>
-  <p class="subtitle">Your account, and about The Pillory.</p>
+  <p class="subtitle">Your account, and about ThePillory.</p>
 </header>
 <section class="card empty-state stack-sm">
   <p>Accounts aren't open yet.</p>
@@ -478,14 +479,14 @@ def build_about():
     ])
     main = f"""
 <header class="page-head">
-  <h1>About The Pillory</h1>
+  <h1>About ThePillory</h1>
   <p class="subtitle">A fact-based civic accountability platform, built for communities that value facts over noise.</p>
 </header>
 <section class="card stack-sm">
   <h2 class="label">What's here now</h2>
   <ul class="plain-list small stack-sm">
     <li><strong>Your officials and their votes:</strong> every member of Congress and every California legislator, with every recorded vote and its totals, each linked to the official record. Find yours with an address or ZIP code.</li>
-    <li><strong>Bills and the Constitution:</strong> for the bills they vote on, which parts of the Constitution a bill touches, quoted word for word. The Pillory maps the Constitution; it doesn't rule on it.</li>
+    <li><strong>Bills and the Constitution:</strong> for the bills they vote on, which parts of the Constitution a bill touches, quoted word for word. ThePillory maps the Constitution; it doesn't rule on it.</li>
     <li><strong>Calaveras County, live:</strong> Board of Supervisors and Planning Commission agendas, how to comment, plain-language summaries of each item, and the county's supervisors. More counties open as communities launch.</li>
   </ul>
 </section>
@@ -612,7 +613,7 @@ def build_bill_becomes_law():
     main = f"""
 <header class="page-head">
   <h1>How a bill becomes law</h1>
-  <p class="subtitle">The path a bill takes in Congress and in the California Legislature, and where the votes on The Pillory fit in.</p>
+  <p class="subtitle">The path a bill takes in Congress and in the California Legislature, and where the votes on ThePillory fit in.</p>
 </header>
 <section class="card stack">
   <h2>In Congress</h2>
@@ -625,7 +626,7 @@ def build_bill_becomes_law():
   </ol>
 </section>
 <section class="card stack-sm">
-  <h2 class="label">Where The Pillory fits in</h2>
+  <h2 class="label">Where ThePillory fits in</h2>
   <p class="small">Each bill page shows the recorded votes on the bill, with the totals and the official record for each, and how the bill maps to the Constitution. Final-passage votes show first; procedural, amendment, committee and nomination votes are one tap away and clearly labeled. <a class="inline-link" href="/about/how-to-read-a-vote/">How to read a vote</a></p>
 </section>
 {sources_block([
@@ -643,7 +644,7 @@ VOTE_TYPES = [
     ("Final passage",
      "The vote on passing the bill itself, or agreeing to a resolution, in that chamber. In the House it may read &ldquo;On Passage&rdquo; or "
      "&ldquo;On Motion to Suspend the Rules and Pass&rdquo; (a faster route that needs two-thirds). In the Senate, &ldquo;On Passage of the Bill&rdquo;. "
-     "These show by default on The Pillory."),
+     "These show by default on ThePillory."),
     ("Cloture",
      "A Senate vote to end debate so the Senate can move to a vote. On most matters it takes three-fifths of the senators duly chosen and sworn "
      "(60 when there are no vacancies); on nominations, a majority. A cloture vote is about ending debate, not about passing the bill."),
@@ -688,7 +689,7 @@ def build_read_a_vote():
   <p class="small">How many votes a question needs depends on the question: most need a majority of those voting, some need two-thirds (such as overriding a veto) or three-fifths (such as Senate cloture). &ldquo;Not voting&rdquo; includes members who were absent. The result the chamber recorded is the official outcome.</p>
 </section>
 <section class="card stack-sm">
-  <h2 class="label">On The Pillory</h2>
+  <h2 class="label">On ThePillory</h2>
   <p class="small">Votes are shown as facts: the bill, the exact question, each position, the result, the date and the source. There are no scores, grades, or &ldquo;voted against&rdquo; summaries, and every position has the same style. <a class="inline-link" href="/about/how-a-bill-becomes-law/">How a bill becomes law</a></p>
 </section>
 {sources_block([
@@ -711,7 +712,7 @@ PRINCIPLES = [
     ("Protected identities", "Participants are verified for uniqueness and relevance, but identities are protected by default. Safety enables honesty."),
     ("No public pile-ons", "Individual actions remain private. Only aggregated signal becomes public. The goal is accountability, not spectacle."),
     ("Anti-manipulation by design", "One person, one voice. Astroturfing, brigading, and impersonation are structurally constrained rather than moderated after the fact."),
-    ("Nonpartisan", "No party labels anywhere, and nothing that suggests a political side. The Pillory maps the Constitution; it doesn't rule on it."),
+    ("Nonpartisan", "No party labels anywhere, and nothing that suggests a political side. ThePillory maps the Constitution; it doesn't rule on it."),
 ]
 
 
@@ -736,7 +737,7 @@ def build_constitution():
     main = f"""
 <header class="page-head">
   <h1>The Constitution</h1>
-  <p class="subtitle">The starting point for every analysis on The Pillory.</p>
+  <p class="subtitle">The starting point for every analysis on ThePillory.</p>
 </header>
 {f'<section class="parchment stack-sm" id="preamble"><h2 class="label">Preamble</h2><p class="quote">{e(preamble["text"])}</p></section>' if preamble else ""}
 <nav class="card stack-sm" aria-label="Articles and amendments">

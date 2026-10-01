@@ -229,6 +229,13 @@ Object.assign(congress, {
   "/bill/119/hr/20/summaries": {
     summaries: [{ actionDate: "2026-03-01", actionDesc: "Introduced in House", updateDate: "2026-03-02T00:00:00Z", text: "<p>This bill requires agencies to accept petitions by mail and online. [FAKE SUMMARY]</p>" }],
   },
+  // No CRS summary yet for H.R. 10: the relevance check gets its official title.
+  "/bill/119/hr/10/titles": {
+    titles: [
+      { title: "Test Bill Ten Act", titleType: "Display Title" },
+      { title: "To provide grants to States for rural broadband, and for other purposes.", titleType: "Official Title as Introduced" },
+    ],
+  },
   "/bill/119/hres/5/summaries": {
     summaries: [
       { actionDate: "2025-01-30", actionDesc: "Introduced in House", updateDate: "2025-02-01T00:00:00Z", text: "<p>This resolution sets the rules for considering the Test Bill Ten Act (H.R. 10) in the House.</p>" },
@@ -353,18 +360,18 @@ function sse(res, events) {
 const AGENDA_DRAFTS = {
   "Board of Supervisors": {
     items: [
-      { item_key: "1", summary: "The Board would meet in closed session with its lawyers about a pending case named on the agenda.", flags: [] },
-      { item_key: "2", summary: "The Board would approve a road repair contract with Example Paving Co. The contract may not exceed $250,000. It would run for 36 months.", flags: ["budget"] },
-      { item_key: "3", summary: "The Board would adopt a resolution setting fees for a permit program. The agenda doesn't list the new amounts.", flags: ["fees_taxes"] },
-      { item_key: "4", summary: "Staff would report on the budget for fiscal year 2026-27, and the Board would give direction.", flags: ["budget"] },
-      { item_key: "5", summary: "The Board would discuss changing the time limit for public comment at its meetings.", flags: ["public_access"] },
+      { item_key: "1", summary: "The Board would meet in closed session with its lawyers about a pending case named on the agenda.", impact: "low", flags: [] },
+      { item_key: "2", summary: "The Board would approve a road repair contract with Example Paving Co. The contract may not exceed $250,000. It would run for 36 months.", impact: "medium", flags: ["budget"] },
+      { item_key: "3", summary: "The Board would adopt a resolution setting fees for a permit program. The agenda doesn't list the new amounts.", impact: "high", flags: ["fees_taxes"] },
+      { item_key: "4", summary: "Staff would report on the budget for fiscal year 2026-27, and the Board would give direction.", impact: "medium", flags: ["budget"] },
+      { item_key: "5", summary: "The Board would discuss changing the time limit for public comment at its meetings.", impact: "medium", flags: ["public_access"] },
     ],
     issue_links: [{ item_key: "5", issue_slug: "public-comment-limit", reason: "Both concern the time limit for public comment at Board meetings." }],
   },
   "Planning Commission": {
     items: [
-      { item_key: "1", summary: "The Commission would hold a public hearing on a permit for a gravel yard and decide whether it is exempt from CEQA review.", flags: ["land_use"] },
-      { item_key: "2", summary: "The Commission would consider changing zoning text for accessory dwellings.", flags: ["land_use"] },
+      { item_key: "1", summary: "The Commission would hold a public hearing on a permit for a gravel yard and decide whether it is exempt from CEQA review.", impact: "high", flags: ["land_use"] },
+      { item_key: "2", summary: "The Commission would consider changing zoning text for accessory dwellings.", impact: "medium", flags: ["land_use"] },
     ],
     issue_links: [],
   },
@@ -399,7 +406,9 @@ function relevanceAnthropic(req, res, body) {
   if (body.model !== "claude-haiku-4-5-20251001") problems.push("model");
   if (body.thinking) problems.push("thinking (Haiku 4.5 has no adaptive thinking)");
   if (!body.output_config || !body.output_config.format || body.output_config.format.type !== "json_schema") problems.push("output_config.format");
-  anthropicRequests.push({ kind: "relevance", problems });
+  // How many bills came with an official description (the CRS summary, official title or digest).
+  const described = (body.messages[0].content.match(/^    (?!No official description)/gm) || []).length;
+  anthropicRequests.push({ kind: "relevance", problems, described });
   if (problems.length) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: `fixture: bad ${problems.join(", ")}` } });
   const bills = body.messages[0].content
     .split("\n")

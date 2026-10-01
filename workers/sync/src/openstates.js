@@ -7,7 +7,7 @@
 import { upsertOfficial, deactivateOthers, officialIndex, upsertBill, saveVote } from "./db.js";
 import { classifyState } from "./classify.js";
 import { matchPositions, stateTotals } from "./rollcall.js";
-import { API, headers } from "./openstates-api.js";
+import { API, headers, openStatesReserve } from "./openstates-api.js";
 import { getState, setState, isHttp, slugify, today, BudgetExhausted } from "./util.js";
 
 
@@ -135,13 +135,20 @@ export async function syncStateVotes(env, db, budget) {
   const api = env.OPENSTATES_API_BASE || API;
   const session = currentSession(env);
 
-  // Once, after every legislator was loaded (migration 0005): read the whole
-  // session again, so earlier votes get their totals and every member's position.
-  if (!(await getState(db, `ca_votes_all_members_${session}`))) {
+  // Read the whole session again, so earlier votes get their totals and every
+  // member's position: once after migration 0005, and again whenever more
+  // legislators are loaded than when the last full read started (positions are
+  // saved only for loaded legislators). Not for a partial load (fewer than
+  // MIN_STATE_LEGISLATORS), which would just be repeated.
+  const full = officials.all.length >= parseInt(env.MIN_STATE_LEGISLATORS || "100", 10);
+  const readWith = parseInt((await getState(db, `ca_votes_backfill_members_${session}`)) || "0", 10);
+  if (!(await getState(db, `ca_votes_all_members_${session}`)) || (full && officials.all.length > readWith)) {
     await setState(db, `ca_votes_since_${session}`, `${session.slice(0, 4)}-01-01`);
     await setState(db, `ca_votes_page_${session}`, "1");
     await setState(db, `ca_votes_all_members_${session}`, new Date().toISOString());
+    await setState(db, `ca_votes_backfill_members_${session}`, String(officials.all.length));
   }
+  const reserve = await openStatesReserve(env, db);
 
   // Cursor: bills updated since `since`, resuming at `page`.
   const since = (await getState(db, `ca_votes_since_${session}`)) || `${session.slice(0, 4)}-01-01`;
@@ -156,7 +163,7 @@ export async function syncStateVotes(env, db, budget) {
         `${api}/bills?jurisdiction=ca&session=${encodeURIComponent(session)}` +
         `&updated_since=${encodeURIComponent(since)}&sort=updated_asc&include=votes&include=sources` +
         `&per_page=20&page=${page}`;
-      const data = await budget.openStates(db, url, { headers: headers(env) }, `bills page ${page}`);
+      const data = await budget.openStates(db, url, { headers: headers(env) }, `bills page ${page}`, { reserve });
       pages += 1;
       for (const bill of data.results || []) {
         if (bill.updated_at && bill.updated_at > maxUpdated) maxUpdated = bill.updated_at;

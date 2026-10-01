@@ -31,6 +31,9 @@ curl -s "localhost:8789/run?token=local-test-token"
 until curl -s "localhost:8789/status?token=local-test-token" | grep -q '"status": "finished"'; do sleep 2; done
 echo "--- analysis results (two drafts are deliberately wrong; see fixture-server.mjs):"
 curl -s "localhost:8789/status?token=local-test-token" | grep -E '"message": "(us|ca)-' | sed 's/^ *//' 
+echo "--- relevance check requests (bills with an official description, of those sent):"
+curl -s localhost:8788/__anthropic | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin) if r.get('kind') == 'relevance']"
+$WRANGLER d1 execute pillory-local-test -c wrangler.test.toml --local --persist-to "$STATE" --json --command "SELECT id, official_summary_label AS label, substr(official_summary, 1, 60) AS summary FROM bills ORDER BY id" 2>/dev/null | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
 echo "--- 150 House members who left (more than D1's 100 bound values), then the federal step again:"
 D1="$WRANGLER d1 execute pillory-local-test -c wrangler.test.toml --local --persist-to $STATE"
 python3 -c "

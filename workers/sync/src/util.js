@@ -96,8 +96,9 @@ export class Budget {
     return this.fetch(url, init, label);
   }
 
-  // Open States: daily cap (persisted) and pacing between calls.
-  async openStates(db, url, init, label) {
+  // Open States: daily cap (persisted) and pacing between calls. `reserve`
+  // requests are left for another step (see openStatesReserve).
+  async openStates(db, url, init, label, { reserve = 0 } = {}) {
     const day = new Date().toISOString().slice(0, 10);
     const key = `openstates_requests_${day}`;
     if (this.osUsedToday === null) {
@@ -106,6 +107,9 @@ export class Budget {
     }
     const limit = parseInt(this.env.OPENSTATES_DAILY_LIMIT || "250", 10);
     if (this.osUsedToday >= limit) throw new BudgetExhausted(`Open States daily limit (${limit}) reached`);
+    if (reserve > 0 && this.osUsedToday >= limit - reserve) {
+      throw new BudgetExhausted(`Open States daily limit (${limit}) reached, less the ${reserve} kept for loading state legislators`);
+    }
     const gap = parseInt(this.env.OPENSTATES_MIN_INTERVAL_MS || "6500", 10);
     const wait = this.lastOpenStates + gap - Date.now();
     if (wait > 0) {

@@ -5,7 +5,7 @@
 //                         edit any field, approve, reject, reopen, ask for a new draft or a
 //                         full analysis, close reader reports; full history
 // POST /admin/review/relevance/<bill id>/   un-skip (or skip again) a bill
-// /admin/waitlist/        "Bring The Pillory to your county": sign-ups by county (counts only)
+// /admin/waitlist/        "Bring ThePillory to your county": sign-ups by county (counts only)
 //
 // Protected by Cloudflare Access (see functions/_lib/access.js and docs/analysis.md).
 // Every change writes a bill_analysis_revisions row with the row as it was before.
@@ -15,7 +15,7 @@ import { inChunks } from "../_lib/data.js";
 import { parse, badge, baselineSection, provisionsFor } from "../_lib/analysis.js";
 import { verifyQuotes } from "../../workers/sync/src/analysis/verify.js";
 import { CHECKS } from "../../workers/sync/src/analysis/review-checks.js";
-import { FLAGS, FLAG_LABELS } from "../../workers/sync/src/analysis/agenda-check.js";
+import { FLAGS, FLAG_LABELS, IMPACT, MAX_FLAGGED } from "../../workers/sync/src/analysis/agenda-check.js";
 import { ISSUES } from "../_lib/generated.js";
 import { when, meetingHref } from "../_lib/meetings.js";
 
@@ -360,7 +360,7 @@ ${
     ? `<form method="post" class="card stack">
   <h2 class="label">Edit</h2>
   <input type="hidden" name="action" value="save">
-  ${field("items", "Summaries and flags (JSON)", form ? form.items : pretty(summaries), { rows: 16, hint: `A list of {"item_key", "summary", "flags"}; flags from: ${FLAGS.join(", ")}.` })}
+  ${field("items", "Summaries and flags (JSON)", form ? form.items : pretty(summaries), { rows: 16, hint: `A list of {"item_key", "summary", "impact", "flags"}; impact: ${IMPACT.join(", ")}; flags from: ${FLAGS.join(", ")}. At most ${MAX_FLAGGED} flagged items are shown, by impact; a consent item only when its impact is high.` })}
   <button class="btn btn--primary" type="submit">Save changes</button>
 </form>`
     : ""
@@ -411,7 +411,8 @@ async function agendaChange(db, env, id, request, email) {
       const flags = Array.isArray(x.flags) ? x.flags : [];
       const bad = flags.filter((f) => !FLAGS.includes(f));
       if (bad.length) throw new Error(`entry ${i + 1}: unknown flag ${bad.join(", ")}`);
-      return { item_key: String(x.item_key), summary: String(x.summary || "").trim(), flags: [...new Set(flags)] };
+      if (x.impact !== undefined && !IMPACT.includes(x.impact)) throw new Error(`entry ${i + 1}: impact must be one of ${IMPACT.join(", ")}`);
+      return { item_key: String(x.item_key), summary: String(x.summary || "").trim(), ...(x.impact ? { impact: x.impact } : {}), flags: [...new Set(flags)] };
     });
   } catch (err) {
     return agendaDetail(db, env, id, { error: `Summaries: ${err.message}`, form: { items: text } });
@@ -803,7 +804,7 @@ async function waitlist(db) {
     : '<p class="secondary small">No sign-ups yet.</p>';
   const res = page(
     "Waitlist",
-    `<header class="page-head"><h1>Waitlist</h1><p class="subtitle">Sign-ups for "Bring The Pillory to your county", by county.</p></header>
+    `<header class="page-head"><h1>Waitlist</h1><p class="subtitle">Sign-ups for "Bring ThePillory to your county", by county.</p></header>
 <section class="card stack-sm">
   <p><strong>${total ? total.people : 0}</strong> people · <strong>${total ? total.counties : 0}</strong> counties · <strong>${total ? total.signups : 0}</strong> sign-ups</p>
   <p class="hint">Emails are used only to announce a county's launch. They aren't shown here or anywhere public.</p>
