@@ -1,28 +1,21 @@
-// TEMPORARY diagnostic, round 2: has the county moved its agendas, or does the
-// portal answer browsers differently? Few requests, paced.
+// TEMPORARY diagnostic, round 3: the county's new meetings site.
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const BROWSER = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36";
-async function get(url, ua = BROWSER) {
+const UA = "ThePilloryDataSync/1.0 (+https://thepillory.co)";
+async function get(url) {
   try {
-    const res = await fetch(url, { headers: { "User-Agent": ua }, redirect: "follow" });
+    const res = await fetch(url, { headers: { "User-Agent": UA }, redirect: "follow" });
     const text = await res.text();
-    console.log(`GET ${url} -> ${res.status} ${res.url} ${text.length} bytes`);
+    console.log(`GET ${url} -> ${res.status} ${res.url} ${res.headers.get("content-type")} ${text.length} bytes`);
     return text;
   } catch (e) { console.log(`GET ${url} failed: ${e.message}`); return ""; }
 }
-const links = (html) => [...new Set([...html.matchAll(/href="([^"]+)"/gi)].map((m) => m[1]).filter((h) => /agenda|meeting|iqm2|granicus|legistar|civicclerk|primegov|boarddocs|novus|civicplus|escribe|municode|youtube/i.test(h)))];
-// The county's own site.
-for (const u of ["https://www.calaverascounty.gov/", "https://www.calaverascounty.gov/government/board-of-supervisors", "https://www.calaverascounty.gov/government/board-of-supervisors/agendas-minutes", "https://calaverascounty.gov/agendas"]) {
-  const h = await get(u);
-  console.log("  links:", JSON.stringify(links(h).slice(0, 40)));
-  await sleep(3000);
-}
-// Same IQM2 page as a browser would see it.
-await sleep(30000);
-const h = await get("https://calaverascountyca.iqm2.com/Citizens/Detail_Meeting.aspx?ID=2827");
-console.log("  browser UA unavailable:", /not available at this time/i.test(h), "MeetingDetail:", /id=['"]MeetingDetail['"]/.test(h));
-const m = /<div id="MainWindow">([\s\S]{0,3000})/.exec(h);
-console.log("  main:", m ? m[1].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").slice(0, 800) : "");
-await sleep(61000);
-const old = await get("https://calaverascountyca.iqm2.com/Citizens/Detail_Meeting.aspx?ID=2825");
-console.log("  Aug 28 meeting (last in RSS) unavailable:", /not available at this time/i.test(old), "MeetingDetail:", /id=['"]MeetingDetail['"]/.test(old));
+const show = (h, n = 60) => [...new Set([...h.matchAll(/(?:href|src)="([^"]+)"/gi)].map((m) => m[1]))].filter((x) => !/\.(css|png|jpg|svg|woff2?|ico)(\?|$)/i.test(x)).slice(0, n);
+for (const u of ["https://bos.calaverasgov.us/robots.txt", "https://www.calaverasgov.us/robots.txt"]) { console.log((await get(u)).slice(0, 800)); await sleep(5000); }
+const b = await get("https://bos.calaverasgov.us/Board-Meetings");
+console.log("generator/platform hints:", (b.match(/<meta[^>]+generator[^>]*>|granicus|civicplus|primegov|legistar|civicclerk|novus|escribe|boarddocs|onbase|laserfiche|iqm2|swagit|municode meetings|agendacenter/gi) || []).slice(0, 20));
+console.log("links:", JSON.stringify(show(b, 120)));
+console.log("text:", b.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").slice(0, 3000));
+await sleep(10000);
+const c = await get("https://www.calaverasgov.us/Meeting-Calendar");
+console.log("calendar links:", JSON.stringify(show(c, 80).filter((x) => /meet|agenda|calendar|event|bos\./i.test(x))));
+console.log("calendar text:", c.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").slice(0, 2000));
