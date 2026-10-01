@@ -1,34 +1,28 @@
-// TEMPORARY diagnostic (see .github/workflows/research-iqm2.yml): read the
-// county portal the way the sync Worker does, paced at robots.txt's 60 s.
-import { parseCalendar, parseRss, parseMeeting, PORTAL } from "../workers/sync/src/meetings/iqm2.js";
-const UA = "ThePilloryDataSync/1.0 (+https://thepillory.co)";
+// TEMPORARY diagnostic, round 2: has the county moved its agendas, or does the
+// portal answer browsers differently? Few requests, paced.
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-async function get(url) {
-  const res = await fetch(url, { headers: { "User-Agent": UA } });
-  const text = await res.text();
-  console.log(`GET ${url} -> ${res.status} ${text.length} bytes`);
-  return text;
+const BROWSER = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36";
+async function get(url, ua = BROWSER) {
+  try {
+    const res = await fetch(url, { headers: { "User-Agent": ua }, redirect: "follow" });
+    const text = await res.text();
+    console.log(`GET ${url} -> ${res.status} ${res.url} ${text.length} bytes`);
+    return text;
+  } catch (e) { console.log(`GET ${url} failed: ${e.message}`); return ""; }
 }
-const cal = await get(`${PORTAL}/Citizens/calendar.aspx?View=List`);
-const rows = parseCalendar(cal);
-console.log(`calendar rows: ${rows.length}; MeetingRow markers: ${(cal.match(/class="Row MeetingRow/g) || []).length}`);
-const today = new Date().toISOString().slice(0, 10);
-const pick = rows.filter((m) => /Board of Supervisors|Planning Commission/.test(m.body || "") && m.starts_at && m.starts_at.slice(0, 10) >= "2026-09-01" && m.starts_at.slice(0, 10) <= "2026-11-15");
-for (const m of pick) console.log(JSON.stringify({ id: m.portal_id, at: m.starts_at, body: m.body, status: m.status, agenda: !!m.agenda_url, file: m.agenda_file_id }));
-if (!rows.length) console.log(cal.slice(0, 3000));
+const links = (html) => [...new Set([...html.matchAll(/href="([^"]+)"/gi)].map((m) => m[1]).filter((h) => /agenda|meeting|iqm2|granicus|legistar|civicclerk|primegov|boarddocs|novus|civicplus|escribe|municode|youtube/i.test(h)))];
+// The county's own site.
+for (const u of ["https://www.calaverascounty.gov/", "https://www.calaverascounty.gov/government/board-of-supervisors", "https://www.calaverascounty.gov/government/board-of-supervisors/agendas-minutes", "https://calaverascounty.gov/agendas"]) {
+  const h = await get(u);
+  console.log("  links:", JSON.stringify(links(h).slice(0, 40)));
+  await sleep(3000);
+}
+// Same IQM2 page as a browser would see it.
+await sleep(30000);
+const h = await get("https://calaverascountyca.iqm2.com/Citizens/Detail_Meeting.aspx?ID=2827");
+console.log("  browser UA unavailable:", /not available at this time/i.test(h), "MeetingDetail:", /id=['"]MeetingDetail['"]/.test(h));
+const m = /<div id="MainWindow">([\s\S]{0,3000})/.exec(h);
+console.log("  main:", m ? m[1].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").slice(0, 800) : "");
 await sleep(61000);
-const rss = await get(`${PORTAL}/Services/RSS.aspx?Feed=Calendar`);
-console.log("rss entries", Object.keys(parseRss(rss)).length, JSON.stringify(parseRss(rss)).slice(0, 600));
-const sample = [...pick.filter((m) => m.starts_at.slice(0, 10) >= today).slice(0, 2), ...pick.filter((m) => m.starts_at.slice(0, 10) < today).slice(-2)];
-for (const m of sample) {
-  await sleep(61000);
-  const html = await get(m.source_url);
-  const p = parseMeeting(html);
-  console.log(`meeting ${m.portal_id} ${m.starts_at}: items=${p.items.length} unavailable=${p.unavailable} agenda_url=${p.agenda_url} file=${p.agenda_file_id}`);
-  if (p.items[0]) console.log("  first item:", JSON.stringify(p.items[0]).slice(0, 300));
-  if (!p.items.length) {
-    const i = html.search(/MeetingDetail|not available|Agenda/i);
-    console.log("  has MeetingDetail table:", /id=['"]MeetingDetail['"]/.test(html));
-    console.log("  snippet:", html.slice(Math.max(0, i - 200), i + 1500).replace(/\s+/g, " "));
-  }
-}
+const old = await get("https://calaverascountyca.iqm2.com/Citizens/Detail_Meeting.aspx?ID=2825");
+console.log("  Aug 28 meeting (last in RSS) unavailable:", /not available at this time/i.test(old), "MeetingDetail:", /id=['"]MeetingDetail['"]/.test(old));
