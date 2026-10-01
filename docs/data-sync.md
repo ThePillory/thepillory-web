@@ -61,14 +61,14 @@ After the sync, the same run drafts constitutional analyses of new bills (step `
 
 Temporary D1 errors ("Network connection lost", "… caused object to be reset" and the like) are retried automatically, up to 4 times with increasing waits (`workers/sync/src/d1retry.js`). Any other database error fails the step and is logged.
 
-Each step (county officials, state officials, federal officials, House votes, Senate votes, state votes) logs `ok`, `partial` (stopped at a limit; resumes next run), `skipped` (nothing due) or `error`, with the message. One failing source never stops the others. Worker logs are also in the dashboard under `pillory-sync` → Logs.
+Each step (county officials, state officials, federal officials, House votes, Senate votes, state votes) logs `ok`, `partial` (stopped at a limit; resumes next run), `skipped` (nothing due) or `error`, with the message. One failing source never stops the others. A step that fails is skipped for the rest of that day's rounds ("failed earlier today …") and tried again in the next day's run; a manual `/run` tries it again right away, for example after a fix is deployed. Worker logs are also in the dashboard under `pillory-sync` → Logs.
 
 ### What each step fetches, and how often
 
 | Step | Source | Frequency and what's new |
 |---|---|---|
 | County officials | `data/county-officials.json` on the live site | every run (1 request) |
-| State officials | Open States `people.geo` (a point in San Andreas: records Calaveras's districts as `home_districts`), then `people?jurisdiction=ca` (every current legislator, about 120) | weekly (about 4 requests) |
+| State officials | Open States `people.geo` (a point in San Andreas: records Calaveras's districts as `home_districts`), then `people?jurisdiction=ca` (every current legislator, about 120, picked out by their `lower`/`upper` role) | weekly (about 4 requests), counted from the last run that loaded every legislator; fewer than 100 changes nothing and is an error |
 | Federal officials | Congress.gov `member?currentMember=true` (every current member, about 540), and `member/{id}` for each member's full name and website | the list once per calendar day (3 requests); each member's detail when first seen and then every 30 days, spread over runs so the vote steps keep their budget. A list shorter than 400 members changes nothing |
 | House votes | Congress.gov `house-vote/{congress}/{session}`, with detail (party totals), members and the bill title | only roll calls not already in D1 with totals. Every member's position and the totals are saved. Votes saved before migration 0005 have no totals, so each is read once more (2 requests) to fill them in |
 | Senate votes | senate.gov `vote_menu_{congress}_{session}.xml`, then each vote's XML | same as House votes: every senator's position (matched by LIS ID, or state and last name) and the `<count>` totals |

@@ -498,6 +498,7 @@ function aiReviewSection(a) {
   <h2 class="label">AI reviewer: ${a.ai_review === "pass" ? "pass" : "flag"}</h2>
   ${checks ? `<ul class="panel-list small check-list">${checks}</ul>` : `<ul class="panel-list small">${(d.reasons || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ul>`}
   <p class="small secondary">Model ${esc(a.ai_review_model || "?")} · reviewed ${fmtDate(a.ai_reviewed_at)} · tokens in ${tokens.input ?? "?"}, out ${tokens.output ?? "?"}</p>
+  ${d.revised && d.first_review ? `<details class="small"><summary>Revised once. The first draft was flagged for:</summary><ul class="panel-list">${(d.first_review.reasons || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ul><p class="secondary">The review above is of the revision.</p></details>` : ""}
 </section>`;
 }
 

@@ -22,7 +22,10 @@ checks ── every Constitution quote vs. the stored text (mismatches replaced,
    ▼
 AI reviewer ── claude-sonnet-5-5, five-point checklist against the bill text (review.js)
    │   pass → published: "AI-drafted, auto-checked" (10% also go to the queue as spot checks)
-   │   flag → hidden, in the review queue with the reasons
+   │   flag → revision step: the drafter fixes the named problems once, the checks run
+   │          again, and the reviewer reads the revision
+   │            pass → published, as above
+   │            flag → hidden, in the review queue with both reviews
    ▼
 /laws/bills/<id>/ ── "Something wrong?" (reader flag → queue, "Under review") and
    │                 "Request full analysis" (Turnstile, per-visitor limits)
@@ -34,7 +37,7 @@ AI reviewer ── claude-sonnet-5-5, five-point checklist against the bill text
 ## Which bills, and in what order
 
 - **Eligible:** bills with a final-passage vote by one of our officials, and bills an approved issue link points to. (Once residents can follow bills, followed bills join; the query has a TODO for it.)
-- **Relevance check** (`src/analysis/relevance.js`, `claude-haiku-4-5-20251001`): one call per 25 bills, by number and title only. It skips commemorations, awareness days, post office and building namings, honorary resolutions, and rules that only set how a chamber debates another bill. When unsure, it analyzes. It also rates local relevance (`high`: California, rural counties, federal lands, water, wildfire, roads, local government…; `medium`, `low`, `none`), by subject only. Every verdict is in `bill_relevance`; every skip is logged as a `relevance-skip` row in `sync_log`, and the bill page says why it wasn't analyzed. Issue-linked bills skip the check.
+- **Relevance check** (`src/analysis/relevance.js`, `claude-haiku-4-5-20251001`): one call per 25 bills, by number and title only. It skips commemorations, awareness days, post office and building namings, honorary resolutions, and rules that only set how a chamber debates another bill. A bill that creates or changes a state or federal holiday is substantive (it changes law), even when it's named for a person or occasion; only observances with no legal effect are skipped. When unsure, it analyzes. When the rules change (`RELEVANCE_PROMPT_VERSION`), bills skipped under the old rules are checked again once (un-skipped ones are left alone). It also rates local relevance (`high`: California, rural counties, federal lands, water, wildfire, roads, local government…; `medium`, `low`, `none`), by subject only. Every verdict is in `bill_relevance`; every skip is logged as a `relevance-skip` row in `sync_log`, and the bill page says why it wasn't analyzed. Issue-linked bills skip the check.
 - **Order:** requests (yours first, then readers'), then bills an issue now links to whose analysis is only a card, then new bills: issue-linked first, then by local relevance, then by the latest final-passage vote.
 - **Un-skip:** `/admin/review/#skipped` lists every skipped bill with its reason. Un-skip drafts it on the next run; "Skip again" undoes that.
 
@@ -43,6 +46,7 @@ AI reviewer ── claude-sonnet-5-5, five-point checklist against the bill text
 - **Short card** (default, `CARD_INSTRUCTIONS` in `prompt.js`): a 2 to 3 sentence summary; the 1 to 3 most relevant provisions, one sentence each (extra provisions are cut and logged); one sentence each for aligns, tension and departure; readings only when genuinely contested. Stored in the same columns as a full analysis (`depth = 'card'`).
 - **Full analysis** (`INSTRUCTIONS`): the earlier format. Written when an approved issue link points to the bill, when a reader presses "Request full analysis", or when you ask from the review page.
 - Both get the same checks: exact quotes from the stored text, and every case checked against CourtListener.
+- **Long bills** (`cardSource` in `billtext.js`): a card of a bill longer than `CARD_TEXT_CHARS` (default 60,000 characters, about 15,000 tokens) is drafted from the official summary (Congress.gov's CRS summary; a California bill's Legislative Counsel's Digest is at the top of its text), the bill's list of titles and sections, and its opening text up to the limit. The card is marked "limited" with exactly what it was based on, and the AI reviewer checks it against the same text. A full analysis still reads the whole bill (up to `MAX_BILL_TEXT_CHARS`). Before this, a card of H.R. 9497 sent about 142,000 input tokens to the drafter and again to the reviewer.
 
 ## The AI reviewer
 
@@ -54,7 +58,7 @@ AI reviewer ── claude-sonnet-5-5, five-point checklist against the bill text
 4. Are the chosen provisions relevant, with nothing obviously missing?
 5. Does anything claim more certainty than the sources support?
 
-It passes only if every check is fine; a missing answer counts as a failure. **Pass:** published as "AI-drafted, auto-checked", linked to the methodology page. **Flag:** off public pages, in the queue with the reasons at the top. A refusal or unusable answer is a flag. A failed call (network, timeout) leaves the draft unreviewed and hidden; it's reviewed on the next run (`REVIEW_BACKLOG_DAILY`, default 10 a day, also covers drafts written before the reviewer existed).
+It passes only if every check is fine; a missing answer counts as a failure. **Pass:** published as "AI-drafted, auto-checked", linked to the methodology page. **Flag:** first the **revision step** (`REVISIONS_PER_DRAFT`, default 1): the drafter gets its previous draft and the reviewer's problems, writes it again (same instructions and output shape, `revisionMessage` in `prompt.js`), the quote and citation checks run on the revision, and the reviewer reads it. A pass is published; a second flag goes to the queue with the reasons at the top, and the review page shows what the first review found. The log line says "revised once after the AI reviewer flagged N problem(s)" with each call's tokens. A reviewer call that fails or refuses doesn't trigger a revision. A refusal or unusable answer is a flag. A failed call (network, timeout) leaves the draft unreviewed and hidden; it's reviewed on the next run (`REVIEW_BACKLOG_DAILY`, default 10 a day, also covers drafts written before the reviewer existed).
 
 **Drafts from before this change:** on the first run, each pending draft goes through the relevance check and the AI reviewer. Ceremonial ones are rejected automatically (the history says why); passes are published as auto-checked; flags go to the queue.
 
@@ -153,9 +157,9 @@ Access stops everyone else before the request reaches the site. The site also ve
 - **Order:** see "Which bills, and in what order" above.
 - **Daily cap:** `ANALYSIS_DAILY_LIMIT` in `workers/sync/wrangler.toml` (currently `5`). Set it to `"0"` to pause drafting.
 - **Retries:** a bill that can't be drafted (no text or summary, a model refusal, an error) is retried after 7 days.
-- **Other settings in `wrangler.toml`:** `ANALYSIS_MODEL` (default `claude-sonnet-5-5`), `ANALYSIS_EFFORT` (default `high`), `MAX_BILL_TEXT_CHARS` (default 400,000; longer texts are cut and the draft is marked "limited"), `RELEVANCE_MODEL` (default `claude-haiku-4-5-20251001`), `REVIEW_MODEL` (default `claude-sonnet-5-5`), `REVIEW_EFFORT` (default `medium`), `SPOT_CHECK_RATE` (default `0.1`) and `REVIEW_BACKLOG_DAILY` (default 10).
+- **Other settings in `wrangler.toml`:** `ANALYSIS_MODEL` (default `claude-sonnet-5-5`), `ANALYSIS_EFFORT` (default `high`), `MAX_BILL_TEXT_CHARS` (default 400,000; longer texts are cut and the draft is marked "limited"), `CARD_TEXT_CHARS` (default 60,000; see Long bills), `REVISIONS_PER_DRAFT` (default 1; 0 turns the revision step off), `RELEVANCE_MODEL` (default `claude-haiku-4-5-20251001`), `REVIEW_MODEL` (default `claude-sonnet-5-5`), `REVIEW_EFFORT` (default `medium`), `SPOT_CHECK_RATE` (default `0.1`) and `REVIEW_BACKLOG_DAILY` (default 10).
 
-**Cost, roughly:** each draft sends the Constitution (about 12,000 tokens, cached across the drafts in a run) plus the bill text, and gets back a few thousand tokens (a card, fewer). The AI reviewer sends the bill text again with the draft, at `medium` effort. At claude-sonnet-5-5 prices ($2 per million input tokens, $10 per million output), a typical bill costs about $0.05 to $0.40 for draft and review together; the longest bills up to about $2. The relevance check costs a fraction of a cent per 25 titles. The daily cap bounds the total. Every call's token counts are in `sync_log` and on the review page.
+**Cost, roughly:** each draft sends the Constitution (about 12,000 tokens, cached across the drafts in a run) plus the bill text, and gets back a few thousand tokens (a card, fewer). The AI reviewer sends the bill text again with the draft, at `medium` effort; a flagged draft adds one revision and one more review. A card of a long bill sends at most about 15,000 tokens of bill text per call. At claude-sonnet-5-5 prices ($2 per million input tokens, $10 per million output), a typical bill costs about $0.05 to $0.40 for draft and review together; the longest bills up to about $2. The relevance check costs a fraction of a cent per 25 titles. The daily cap bounds the total. Every call's token counts are in `sync_log` and on the review page.
 
 **Refusal fallback:** the request opts into the API's server-side fallback (`fallbacks: "default"`). If the model declines on certain safety categories, the API retries on another model in the same call. The model that actually wrote a draft is saved with it and shown on the page.
 

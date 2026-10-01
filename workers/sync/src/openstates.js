@@ -55,9 +55,6 @@ export async function syncStateOfficials(env, db, budget) {
   // ("state_officials_all"); until one succeeds, every run tries again.
   const loadedAll = await getState(db, "state_officials_all");
   if (loadedAll && daysSince(loadedAll) < 7) return { status: "skipped", message: `every legislator loaded ${loadedAll}; refreshes weekly` };
-  // After a failed attempt, wait 6 hours rather than retrying every round (Open States has a daily cap).
-  const failed = await getState(db, "state_officials_failed");
-  if (failed && daysSince(failed) < 0.25) return { status: "skipped", message: `last attempt failed at ${failed}; tried again 6 hours after that` };
   const api = env.OPENSTATES_API_BASE || API;
   const h = { headers: headers(env) };
 
@@ -98,8 +95,7 @@ export async function syncStateOfficials(env, db, budget) {
   const current = people.filter((p) => p.current_role && CHAMBER[p.current_role.org_classification] && p.current_role.district);
   if (current.length < parseInt(env.MIN_STATE_LEGISLATORS || "100", 10)) {
     const roles = [...new Set(people.map((p) => (p.current_role && p.current_role.org_classification) || "none"))].join(", ");
-    await setState(db, "state_officials_failed", new Date().toISOString());
-    throw new Error(`Open States listed ${people.length} people but only ${current.length} current California legislators (roles seen: ${roles || "none"}); nothing changed, tried again next run`);
+    throw new Error(`Open States listed ${people.length} people but only ${current.length} current California legislators (roles seen: ${roles || "none"}); nothing changed`);
   }
 
   const loaded = [];

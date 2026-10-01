@@ -65,6 +65,13 @@ ANALYSIS_MODEL = "claude-sonnet-5-5"
 ANALYSIS_EFFORT = "high"
 # Longer bill texts are cut to this many characters and the draft is marked "limited".
 MAX_BILL_TEXT_CHARS = "400000"
+# A short card of a bill longer than this is drafted (and reviewed) from the
+# official summary, the list of sections and the opening text, so a 500-page
+# bill isn't read in full twice. Full analyses still read the whole text.
+CARD_TEXT_CHARS = "60000"
+# When the AI reviewer flags a draft, the drafter revises it this many times
+# (each revision is reviewed again) before it goes to the review queue.
+REVISIONS_PER_DRAFT = "1"
 # Agenda watch: plain-language summaries of county agendas. Separate daily cap
 # from bill analyses (each agenda is one Claude API call).
 AGENDA_DAILY_LIMIT = "3"

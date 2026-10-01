@@ -58,3 +58,5 @@ MEETING_BODIES = "Board of Supervisors|Planning Commission"
 # The fixtures list a handful of members, not ~540 and ~120.
 MIN_FEDERAL_MEMBERS = "1"
 MIN_STATE_LEGISLATORS = "1"
+# Small, so the fixtures' H.R. 20 counts as a long bill and its card is condensed.
+CARD_TEXT_CHARS = "300"

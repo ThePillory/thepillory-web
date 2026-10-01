@@ -4,8 +4,8 @@
 // (card) whenever the instructions or the shape change; it's saved with each draft.
 import { PROVISIONS } from "../constitution.js";
 
-export const PROMPT_VERSION = "2026-09-30.1";
-export const CARD_PROMPT_VERSION = "2026-09-30.1";
+export const PROMPT_VERSION = "2026-10-01.1";
+export const CARD_PROMPT_VERSION = "2026-10-01.1";
 
 const INTRO = `You draft constitutional context for bills on The Pillory, a nonpartisan civic accountability site. Every draft is checked automatically (quotes against the stored Constitution, cases against CourtListener), then by a separate AI reviewer, and people review flagged drafts and a random share of the rest.
 
@@ -152,6 +152,27 @@ export function cardToDraft(card) {
     },
     trimmed: clauses.slice(MAX_CARD_CLAUSES).map((c) => c.id),
   };
+}
+
+/**
+ * The revision step: the draft the AI reviewer flagged (as the reviewer saw
+ * it), the problems it named, and the same bill text. The answer has the same
+ * shape as a first draft. Same system prompt as drafting, so it's cached.
+ */
+export function revisionMessage(bill, source, depth, reviewedDraft, reasons) {
+  return `${billContext(bill, source)}
+
+<previous_draft>
+${JSON.stringify(reviewedDraft, null, 1)}
+</previous_draft>
+
+<reviewer_problems>
+${reasons.map((r, i) => `${i + 1}. ${r}`).join("\n")}
+</reviewer_problems>
+
+An independent reviewer checked the previous draft against the bill text and found the problems listed. Write the ${depth === "card" ? "card" : "analysis"} again, fixing each problem. Keep what the reviewer didn't question, unless fixing a problem requires changing it. Follow every rule in your instructions; where a problem can't be settled from the text, say it is uncertain rather than guessing.
+
+${depth === "card" ? "Revise the short card." : "Revise the analysis."}`;
 }
 
 /** The per-bill message. depth "card" asks for the short card. */

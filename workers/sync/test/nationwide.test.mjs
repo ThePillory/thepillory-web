@@ -4,6 +4,8 @@
 import assert from "node:assert/strict";
 import { districtsFromMatch, zipResult, cookieHeader } from "../../../functions/api/districts.js";
 import { cleanDistricts, districtsFromCookie, repsWhere, describe, isCalaveras } from "../../../functions/_lib/districts.js";
+import { sectionHeadings, condense } from "../src/analysis/billtext.js";
+import { revisionMessage } from "../src/analysis/prompt.js";
 import { houseTotals, directName, districtCode, senateTotals, stateTotals, matchPositions, totals } from "../src/rollcall.js";
 
 let passed = 0;
@@ -112,6 +114,26 @@ test("state votes: every loaded legislator's position, one per person", () => {
   ] };
   const got = matchPositions(vote, officials);
   assert.deepEqual(got.map((p) => [p.official_id, p.position]), [["openstates:a", "Yes"], ["openstates:b", "No"]]);
+});
+
+test("long bills: a card reads the summary, the sections and the opening", () => {
+  const text = ["SECTION 1. SHORT TITLE.", "This Act may be cited as the Test Act.", "TITLE I--GRANTS", "SEC. 101. GRANTS.", "x".repeat(5000), "SEC. 102. REPORTS.", "y".repeat(5000)].join("\n");
+  assert.deepEqual(sectionHeadings(text), ["SECTION 1. SHORT TITLE.", "TITLE I--GRANTS", "SEC. 101. GRANTS.", "SEC. 102. REPORTS."]);
+  const short = { basis: "full_text", text: "short" };
+  assert.equal(condense(short, { limit: 1000 }), short, "a short bill is unchanged");
+  const c = condense({ basis: "full_text", text }, { limit: 6000, summary: { label: "CRS summary", text: "It makes grants." } });
+  assert.equal(c.basis, "partial_text");
+  assert.ok(c.text.length <= 6000 + 200);
+  assert.match(c.text, /OFFICIAL SUMMARY \(CRS summary\):\nIt makes grants\./);
+  assert.match(c.text, /SEC\. 102\. REPORTS\./, "headings from past the cut are listed");
+  assert.match(c.note, /^the official summary, the list of sections and the first [\d,]+ of 10,117 characters$/);
+});
+
+test("revision: the reviewer's problems and the previous draft go back to the drafter", () => {
+  const msg = revisionMessage({ bill_number: "H.R. 1", level: "federal", title: "T", session: "119" }, { basis: "full_text", text: "TEXT" }, "card", { plain_summary: "S" }, ["Summary is incomplete.", "Too certain."]);
+  assert.match(msg, /<previous_draft>[\s\S]*"plain_summary": "S"/);
+  assert.match(msg, /1\. Summary is incomplete\.\n2\. Too certain\./);
+  assert.match(msg, /Revise the short card\.$/);
 });
 
 console.log(`${passed} passed`);
