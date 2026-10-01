@@ -43,6 +43,9 @@ sleep 2
 until curl -s "localhost:8789/status?token=local-test-token" | grep -q '"status": "finished"'; do sleep 2; done
 $D1 --command "SELECT status, message FROM sync_log WHERE step = 'federal-officials' ORDER BY id DESC LIMIT 1" | grep -E '"(status|message)"' | sed 's/^ *//'
 $D1 --command "SELECT COUNT(*) AS still_active FROM officials WHERE id LIKE 'bioguide:GONE%' AND active = 1" | grep still_active | sed 's/^ *//'
+echo "--- county meetings (IQM2, then Tyler Meeting Manager; duplicates kept once):"
+$D1 --command "SELECT m.id, m.body, m.status, substr(m.starts_at, 1, 10) AS day, (SELECT COUNT(*) FROM meeting_items i WHERE i.meeting_id = m.id) AS items, m.comment_deadline_text IS NOT NULL AS deadline, m.online_url IS NOT NULL AS zoom FROM meetings m WHERE m.level = 'county' ORDER BY m.starts_at" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
+$D1 --command "SELECT status, message FROM sync_log WHERE step = 'county-meetings' ORDER BY id LIMIT 2" | grep -E '"(status|message)"' | sed 's/^ *//'
 echo "--- second run (should fetch nothing new):"
 curl -s "localhost:8789/run?token=local-test-token" | grep -E '"(step|status|requests|message)"'
 echo "--- cron trigger:"

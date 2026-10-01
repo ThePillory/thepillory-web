@@ -82,9 +82,14 @@ REVIEW_EFFORT = "medium"
 SPOT_CHECK_RATE = "0.1"
 # Earlier drafts reviewed per day by the AI reviewer (drafts written before it existed, or whose review failed).
 REVIEW_BACKLOG_DAILY = "10"
-# County meetings (src/meetings/county.js): the county portal's robots.txt asks
-# for 60 seconds between requests, so requests are paced and capped per day.
+# County meetings (src/meetings/county.js). The county moved to Tyler Meeting
+# Manager in September 2026; "tylermm|iqm2" would also read the old IQM2 portal.
+COUNTY_MEETING_SOURCES = "tylermm"
 MEETING_BODIES = "Board of Supervisors|Planning Commission"
+TYLERMM_MIN_INTERVAL_MS = "10000"
+TYLERMM_DAILY_LIMIT = "20"
+TYLERMM_PDF_MAX_BYTES = "26214400"
+# The old IQM2 portal's robots.txt asks for 60 seconds between requests.
 IQM2_MIN_INTERVAL_MS = "60000"
 IQM2_DAILY_LIMIT = "12"
 # Meetings from this many days back are read once (agenda and agenda watch), so

@@ -52,20 +52,25 @@ export function commentInfo(pages) {
 }
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const WEEKDAY_NAMES = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 /**
  * A short label for a written-comment deadline, worked out only from wording the
- * agenda actually uses ("no later than 4:00 pm on the day before the … meeting").
+ * agenda actually uses: "no later than 4:00 pm on the day before the … meeting",
+ * or "no later than 4:00pm on the Monday prior to the … meeting" (the last Monday
+ * before the meeting date).
  * Returns {label, day, time, date: "YYYY-MM-DD"} or null when the sentence doesn't say it plainly.
  */
 export function deadlineLabel(sentence, startsAt) {
   const s = String(sentence || "");
-  const m = /no later than (\d{1,2}(?::\d{2})?\s*[ap]\.?\s?m\.?)(?:,)? on the day (before|prior to)/i.exec(s);
+  const m = /no later than (\d{1,2}(?::\d{2})?\s*[ap]\.?\s?m\.?)(?:,)? on the (day|sunday|monday|tuesday|wednesday|thursday|friday|saturday) (before|prior to)/i.exec(s);
   if (!m || !/^\d{4}-\d{2}-\d{2}/.test(startsAt || "")) return null;
   const d = new Date(`${startsAt.slice(0, 10)}T12:00:00Z`);
-  d.setUTCDate(d.getUTCDate() - 1);
-  const time = m[1].replace(/\s+/g, " ").replace(/\.$/, "").toLowerCase();
+  const want = WEEKDAY_NAMES.indexOf(m[2].toLowerCase());
+  do d.setUTCDate(d.getUTCDate() - 1);
+  while (want >= 0 && d.getUTCDay() !== want);
+  const time = m[1].replace(/\s+/g, " ").replace(/\.$/, "").replace(/(\d)([ap])/i, "$1 $2").toLowerCase();
   const day = `${WEEKDAYS[d.getUTCDay()]}, ${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}`;
   return { date: d.toISOString().slice(0, 10), day, time, label: `${day}, ${time}` };
 }

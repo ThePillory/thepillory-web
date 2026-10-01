@@ -8,6 +8,10 @@ import { agendaPdfText } from "../src/meetings/county.js";
 import { matchEvent } from "../src/meetings/state.js";
 import { checkSummaries } from "../src/analysis/agenda-check.js";
 import { calendarHtml, rssHtml, meetingHtml, agendaLines, makePdf, MEETINGS } from "./iqm2-fixtures.mjs";
+import { parseMeetingList, parseSummaryAgenda, parsePacketAgenda, meetingDate, clock } from "../src/meetings/tylermm.js";
+import { openPdf, streamPages, linePages } from "../src/meetings/pdftext.js";
+import { meetingList, agendaPages } from "./tylermm-fixtures.mjs";
+import { dayFromToday } from "./iqm2-fixtures.mjs";
 
 let n = 0;
 const test = async (name, fn) => {
@@ -123,6 +127,88 @@ await test("agenda summaries: made-up numbers and unknown items are removed", ()
   assert.equal(log.dropped_items[0].item_key, "99");
   // No residents' issues exist yet, so every suggested link is dropped.
   assert.equal(draft.issue_links.length, 0);
+});
+
+// ---- Tyler Meeting Manager ----
+
+await test("Tyler: meeting dates in both of the API's formats, times, and cancellations", () => {
+  assert.equal(meetingDate({ actualStartDate: "2026-09-22 00:00:00.0" }), "2026-09-22");
+  assert.equal(meetingDate({ actualStartDate: "Thu Oct 22 00:00:00 EDT 2026" }), "2026-10-22");
+  assert.equal(meetingDate({ actualStartDate: "Tue Nov 10 00:00:00 EST 2026" }), "2026-11-10");
+  // Midnight Eastern, given in UTC.
+  assert.equal(meetingDate({ startDateTime: "2026-11-10T05:00:00.000+00:00" }), "2026-11-10");
+  assert.equal(clock("9:00 AM"), "09:00");
+  assert.equal(clock("1:30 PM"), "13:30");
+  assert.equal(clock("12:00 PM"), "12:00");
+  assert.equal(clock(""), null);
+  assert.equal(meetingList({ startDate: "2026-10-01", endDate: "2026-11-01", meetingTypeIds: [5] }), null); // the real API answers 500
+  const list = parseMeetingList(meetingList({ startDate: "01/01/2026", endDate: "12/31/2026", meetingTypeIds: [5, 11, 4] }), "https://tmm.example/api/");
+  assert.ok(!list.some((m) => m.id === "tmm-701"), "a committee we don't follow");
+  const bos = list.find((m) => m.id === "tmm-502");
+  assert.equal(bos.body, "Board of Supervisors");
+  assert.equal(bos.meeting_type, "Special Meeting");
+  assert.match(bos.starts_at, /^\d{4}-\d{2}-\d{2}T09:00$/);
+  assert.equal(bos.agenda_url, "https://tmm.example/api/meetingInformation/Agenda/false/8101");
+  assert.equal(bos.packet_url, "https://tmm.example/api/meetingInformation/Agenda/true/8101");
+  assert.match(bos.agenda_file_id, /^8101@/);
+  assert.equal(bos.titles.length, 6);
+  const pc = list.find((m) => m.id === "tmm-601");
+  assert.equal(pc.agenda_url, "https://tmm.example/api/meetingInformation/Agenda/true/8102", "the Commission posts only the packet");
+  assert.equal(pc.packet_url, null);
+  assert.equal(list.find((m) => m.id === "tmm-602").status, "cancelled");
+  const unposted = list.find((m) => m.id === "tmm-503");
+  assert.equal(unposted.agenda_url, null, "an agenda id without a posted agenda isn't linked");
+  assert.equal(unposted.agenda_file_id, null);
+  // tmm-504 has the long date format ("Tue Nov 10 00:00:00 EST 2026").
+  assert.equal(list.find((m) => m.id === "tmm-504").starts_at.slice(0, 10), dayFromToday(16).toISOString().slice(0, 10));
+});
+
+const tylerPdf = async (id, packet) => openPdf(makePdf(agendaPages(id, packet)));
+
+await test("Tyler: Board agenda items, sections, departments and attachments from the agenda PDF", async () => {
+  const titles = parseMeetingList(meetingList({ startDate: "01/01/2026", endDate: "12/31/2026", meetingTypeIds: [5] })).find((m) => m.id === "tmm-502").titles;
+  const items = parseSummaryAgenda(await streamPages(await tylerPdf(8101, false)), titles);
+  assert.equal(items.length, 6);
+  assert.deepEqual(items.map((i) => i.number), ["1", "2", "3", "4", "5", "6"]);
+  assert.deepEqual(items.map((i) => i.section_kind), ["closed_session", "other", "consent", "consent", "consent", "regular"]);
+  // The closed-session title comes from the JSON (the PDF inserts a stray period).
+  assert.equal(items[0].title, titles[0]);
+  assert.equal(items[1].title, "Proclamation - 2099-0101, Clerk of the Board. Adopt a Proclamation recognizing [a fake observance].");
+  assert.deepEqual(items[1].attachments.map((a) => a.title), ["Staff Memo_Fake.docx", "Proclamation_Fake.docx"]);
+  assert.equal(items[2].section, "Consent Agenda");
+  assert.deepEqual(items[2].attachments.map((a) => a.title), ["Minutes_20990106.pdf"], "attachments continue past the page break");
+  assert.equal(items[3].title, "Resolution - 2099-0102, Public Works. Adopt a Resolution approving [a fake road project] in an amount not to exceed $100.");
+  assert.equal(items[4].title, "Agreement-2099-0103, Library. Authorize the Board Chair to sign an agreement with [Vendor A].");
+  assert.equal(items[4].attachments.length, 0);
+  assert.equal(items[5].section, "Regular Agenda");
+  assert.deepEqual(items[5].attachments.map((a) => a.title), ["Staff Memo_Ordinance.docx", "Draft Ordinance.pdf"], "stops at the next section");
+  // A title the PDF doesn't have still becomes an item.
+  const extra = parseSummaryAgenda(await streamPages(await tylerPdf(8101, false)), [...titles, "Resolution - 2099-0999"]);
+  assert.equal(extra[6].title, "Resolution - 2099-0999");
+  assert.equal(extra[6].section, null);
+});
+
+await test("Tyler: Planning Commission items from the packet, stopping before the staff reports", async () => {
+  const items = parsePacketAgenda(await streamPages(await tylerPdf(8102, true), 8));
+  assert.equal(items.length, 2);
+  assert.equal(items[0].number, "1");
+  assert.equal(items[0].section, "Regular Agenda");
+  assert.equal(items[0].section_kind, "regular");
+  assert.equal(items[0].title, "2099-001 Tentative Parcel Map for [Applicant A] The applicant is requesting approval to divide one parcel into two lots. The project site (APN 000-000-000) is located in Section 1, T01N, R01E, MDM&B. ([Planner], Planner)");
+  assert.match(items[1].title, /^2099-002 Conditional Use Permit/);
+});
+
+await test("Tyler: how to comment, from lines rebuilt by position, and both deadline wordings", async () => {
+  const bos = commentInfo(await linePages(await tylerPdf(8101, false), 2));
+  assert.equal(bos.comment_deadline_text, "As an alternative to commenting in person or via Zoom, you can make a public comment by e-mailing the Clerk of the Board, clerk@example.org, no later than 4:00 pm on the day before the Board meeting.");
+  assert.equal(bos.online_url, "https://us02web.zoom.us/webinar/register/WN_fakeTest123");
+  const pc = commentInfo(await linePages(await tylerPdf(8102, true), 2));
+  assert.match(pc.comment_deadline_text, /no later than 4:00pm on the Monday prior to the Commission meeting\.$/);
+  assert.equal(pc.online_url, "https://us06web.zoom.us/meeting/register/fakePC456");
+  // Thursday Sep 24, 2026: the Monday before is Sep 21. Monday Sep 28: the Monday before is Sep 21.
+  assert.equal(deadlineLabel(pc.comment_deadline_text, "2026-09-24T09:00").label, "Mon, Sep 21, 4:00 pm");
+  assert.equal(deadlineLabel(pc.comment_deadline_text, "2026-09-28T09:00").date, "2026-09-21");
+  assert.equal(deadlineLabel(bos.comment_deadline_text, "2026-09-22T09:00").label, "Mon, Sep 21, 4:00 pm");
 });
 
 console.log(`\n${n} passed`);
