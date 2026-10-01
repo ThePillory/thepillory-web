@@ -25,13 +25,13 @@
 import { log } from "../db.js";
 import { Budget, BudgetExhausted, getState, setState, redact } from "../util.js";
 import { loadConstitution, PROVISIONS } from "../constitution.js";
-import { fetchBillText } from "./billtext.js";
+import { fetchBillText, cardSource } from "./billtext.js";
 import { draftAnalysis, DraftRefused } from "./claude.js";
 import { verifyQuotes, verifyCitations, sameCase } from "./verify.js";
 import { makeLookup } from "./courtlistener.js";
 import { PROMPT_VERSION, CARD_PROMPT_VERSION } from "./prompt.js";
 import { checkRelevance, BATCH, RELEVANCE_PROMPT_VERSION } from "./relevance.js";
-import { reviewDraft } from "./review.js";
+import { reviewDraft, draftForReview } from "./review.js";
 import { withD1Retry } from "../d1retry.js";
 import { runAgendaWatch } from "./agenda.js";
 
@@ -60,12 +60,15 @@ async function uncheckedBills(db, limit) {
     await db
       .prepare(
         `SELECT b.* FROM bills b
-         WHERE NOT EXISTS (SELECT 1 FROM bill_relevance r WHERE r.bill_id = b.id)
+         -- Not checked yet, or set aside under an earlier version of the rules
+         -- (and not un-skipped by a person): checked again with the current rules.
+         WHERE NOT EXISTS (SELECT 1 FROM bill_relevance r WHERE r.bill_id = b.id
+                             AND NOT (r.verdict = 'skip' AND r.override IS NULL AND r.prompt_version != ?))
            AND (${FINAL_VOTE}
                 OR EXISTS (SELECT 1 FROM bill_analyses a WHERE a.bill_id = b.id AND a.current = 1 AND a.status = 'ai_draft' AND a.ai_review IS NULL))
          ORDER BY (SELECT MAX(v.vote_date) FROM votes v WHERE v.bill_id = b.id) DESC, b.id LIMIT ?`
       )
-      .bind(limit)
+      .bind(RELEVANCE_PROMPT_VERSION, limit)
       .all()
   ).results;
 }
@@ -131,7 +134,7 @@ function reviewColumns(env, review) {
   const pass = review.verdict === "pass";
   return [
     review.verdict,
-    J({ verdict: review.verdict, checks: review.checks, reasons: review.reasons }),
+    J({ verdict: review.verdict, checks: review.checks, reasons: review.reasons, ...(review.first ? { revised: true, first_review: review.first } : {}) }),
     review.model,
     J({ input: review.usage.input_tokens, output: review.usage.output_tokens, cache_read: review.usage.cache_read_tokens }),
     new Date().toISOString().replace("T", " ").slice(0, 19),
@@ -221,6 +224,12 @@ async function saveReview(env, db, row, review) {
 
 function reviewNote(review, spot) {
   if (!review) return "AI review pending (tried again next run)";
+  if (review.first) {
+    const before = `revised once after the AI reviewer flagged ${review.first.reasons.length} problem(s)`;
+    return review.verdict === "pass"
+      ? `${before}; the revision passed (published as auto-checked${spot ? "; picked for a spot check" : ""})`
+      : `${before}; the revision was flagged again (${review.reasons.length} reason(s)), sent to the review queue`;
+  }
   if (review.verdict === "pass") return `AI reviewer: pass (published as auto-checked${spot ? "; picked for a spot check" : ""})`;
   return `AI reviewer: flag, sent to the review queue (${review.reasons.length} reason(s))`;
 }
@@ -265,7 +274,8 @@ async function reviewBacklog(env, db, budget, run) {
     const bill = { id: row.bill_id, bill_number: row.bill_number, title: row.title, level: row.level, session: row.session, chamber: row.chamber, official_url: row.official_url, summary: row.bill_summary || "", source_url: row.bill_source_url };
     const before = budget.used;
     try {
-      const source = await fetchBillText(env, budget, bill);
+      const fetched = await fetchBillText(env, budget, bill);
+      const source = (row.depth || "full") === "card" ? await cardSource(env, budget, bill, fetched) : fetched;
       if (!source) {
         await log(db, run, "analysis-backlog", "skipped", budget.used - before, `${row.bill_id}: no bill text to review against; tried again tomorrow`, t0);
         continue;
@@ -366,7 +376,9 @@ async function finishRequest(db, bill, status, message) {
 /** Draft, verify, review and save one bill. `bill.depth` is "card" or "full". Returns a log entry. */
 export async function analyzeBill(env, db, budget, bill) {
   const depth = bill.depth === "full" ? "full" : "card";
-  const source = await fetchBillText(env, budget, bill);
+  const fetched = await fetchBillText(env, budget, bill);
+  // A card of a long bill is drafted and reviewed from a condensed text (billtext.js).
+  const source = depth === "card" ? await cardSource(env, budget, bill, fetched) : fetched;
   if (!source) {
     const msg = "no bill text or official summary available";
     await noteAttempt(db, bill.id, msg);
@@ -384,10 +396,13 @@ export async function analyzeBill(env, db, budget, bill) {
     await finishRequest(db, bill, "failed", msg);
     return { status: err instanceof DraftRefused ? "skipped" : "error", message: `${bill.id}: ${msg}`, counted: true };
   }
-  const { draft, model, usage, trimmed } = result;
-  const quoteCheck = verifyQuotes(draft, PROVISIONS);
-  for (const id of trimmed) quoteCheck.dropped.push({ id, reason: "a card keeps only the 3 most relevant provisions" });
-  const citationCheck = await verifyCitations(draft, makeLookup(env, budget, sameCase));
+  let { draft, model, usage, trimmed } = result;
+  const checks = async (d, t) => {
+    const quoteCheck = verifyQuotes(d, PROVISIONS);
+    for (const id of t) quoteCheck.dropped.push({ id, reason: "a card keeps only the 3 most relevant provisions" });
+    return { quoteCheck, citationCheck: await verifyCitations(d, makeLookup(env, budget, sameCase)) };
+  };
+  let { quoteCheck, citationCheck } = await checks(draft, trimmed);
 
   // The AI reviewer reads the checked draft. If the call fails, the draft is
   // saved unreviewed (so not public) and reviewed on the next run.
@@ -400,6 +415,35 @@ export async function analyzeBill(env, db, budget, bill) {
     if (err instanceof BudgetExhausted) reviewError = "; AI review waits for the next run";
     else reviewError = `; AI review failed (${redact(`${err.name}: ${err.message}`)}), tried again next run`;
   }
+
+  // The revision step: when the reviewer flags named problems (not when its
+  // own call failed), the drafter gets one chance to fix them. The revision
+  // goes through the same checks and a second review; if that review flags it
+  // too, it goes to the queue with both reviews kept.
+  let revisionNote = "";
+  if (review && review.verdict === "flag" && review.checks.some((c) => !c.ok) && parseInt(env.REVISIONS_PER_DRAFT || "1", 10) > 0) {
+    try {
+      budget.take(`revision ${bill.id}`);
+      const revised = await draftAnalysis(env, bill, source, depth, { draft: draftForReview(draft, depth), reasons: review.reasons });
+      const checked = await checks(revised.draft, revised.trimmed);
+      budget.take(`AI reviewer (revision) ${bill.id}`);
+      const second = await reviewDraft(env, bill, source, revised.draft, depth);
+      const first = { verdict: review.verdict, checks: review.checks, reasons: review.reasons, model: review.model, usage: review.usage };
+      draft = revised.draft;
+      ({ quoteCheck, citationCheck } = checked);
+      usage = {
+        input_tokens: usage.input_tokens + revised.usage.input_tokens,
+        output_tokens: usage.output_tokens + revised.usage.output_tokens,
+        cache_read_tokens: usage.cache_read_tokens + revised.usage.cache_read_tokens,
+        cache_write_tokens: usage.cache_write_tokens + revised.usage.cache_write_tokens,
+      };
+      review = { ...second, first };
+      revisionNote = `; revision tokens in ${revised.usage.input_tokens}, out ${revised.usage.output_tokens}; second review tokens in ${second.usage.input_tokens}, out ${second.usage.output_tokens}`;
+    } catch (err) {
+      // The first draft and its review stand; it's in the queue.
+      revisionNote = err instanceof BudgetExhausted ? "; no budget left for the revision step" : `; revision step failed (${redact(`${err.name}: ${err.message}`)})`;
+    }
+  }
   const row = await save(env, db, bill, source, draft, { depth, model, usage, quoteCheck, citationCheck, review });
   await finishRequest(db, bill, "done", `analysis ${row.id}`);
   const fixes = [
@@ -407,13 +451,13 @@ export async function analyzeBill(env, db, budget, bill) {
     `${citationCheck.checked.length - citationCheck.removed_citations.length} of ${citationCheck.checked.length} citations verified`,
     citationCheck.removed_sentences.length ? `${citationCheck.removed_sentences.length} sentences removed` : null,
   ].filter(Boolean);
-  const reviewTokens = review ? `; reviewer ${review.model}, tokens in ${review.usage.input_tokens}, out ${review.usage.output_tokens}` : "";
+  const reviewTokens = review ? `; reviewer ${review.model}, tokens in ${(review.first || review).usage.input_tokens}, out ${(review.first || review).usage.output_tokens}` : "";
   return {
     status: "ok",
     counted: true,
     message:
-      `${bill.id}: ${depth === "card" ? "card" : "full analysis"} ${row.id} saved (${source.basis}); model ${model}; tokens in ${usage.input_tokens}, out ${usage.output_tokens}, ` +
-      `cache read ${usage.cache_read_tokens}, cache write ${usage.cache_write_tokens}; ${fixes.join("; ")}; ${reviewNote(review, row.spot_check)}${reviewTokens}${reviewError}`,
+      `${bill.id}: ${depth === "card" ? "card" : "full analysis"} ${row.id} saved (${source.basis}${source.condensed ? ", long bill condensed for the card" : ""}); model ${model}; tokens in ${usage.input_tokens}, out ${usage.output_tokens}, ` +
+      `cache read ${usage.cache_read_tokens}, cache write ${usage.cache_write_tokens}; ${fixes.join("; ")}; ${reviewNote(review, row.spot_check)}${reviewTokens}${revisionNote}${reviewError}`,
   };
 }
 

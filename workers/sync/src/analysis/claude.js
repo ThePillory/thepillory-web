@@ -1,11 +1,12 @@
 // Claude API calls for the analysis pipeline. Each call returns JSON in a fixed
 // shape (structured outputs), plus the model and token counts, which are saved
 // with the result and logged.
-//   draftAnalysis  the card or the full analysis (claude-sonnet-5-5)
+//   draftAnalysis  the card or the full analysis (claude-sonnet-5-5), or its
+//                  one revision after the AI reviewer flags it
 //   (review.js)    the AI reviewer pass (claude-sonnet-5-5)
 //   (relevance.js) the cheap relevance check (claude-haiku-4-5)
 import Anthropic from "@anthropic-ai/sdk";
-import { INSTRUCTIONS, CARD_INSTRUCTIONS, constitutionBlock, schema, cardSchema, billMessage, cardToDraft } from "./prompt.js";
+import { INSTRUCTIONS, CARD_INSTRUCTIONS, constitutionBlock, schema, cardSchema, billMessage, revisionMessage, cardToDraft } from "./prompt.js";
 
 export const DEFAULT_MODEL = "claude-sonnet-5-5";
 
@@ -82,14 +83,16 @@ export async function structuredCall(env, { model, system, message, jsonSchema, 
  * Returns {draft, model, usage, trimmed}: a card comes back in the full
  * analysis's shape, and `trimmed` lists provisions cut beyond the first three.
  */
-export async function draftAnalysis(env, bill, source, depth = "card") {
+export async function draftAnalysis(env, bill, source, depth = "card", revision = null) {
   const card = depth === "card";
   const { data, model, usage } = await structuredCall(env, {
     model: env.ANALYSIS_MODEL || DEFAULT_MODEL,
     // The instructions and the Constitution are identical for every bill of the
     // same kind, so they're cached across the bills in a run.
     system: [card ? CARD_INSTRUCTIONS : INSTRUCTIONS, constitution()],
-    message: billMessage(bill, source, depth),
+    message: revision
+      ? revisionMessage(bill, source, depth, revision.draft, revision.reasons)
+      : billMessage(bill, source, depth),
     jsonSchema: card ? cardSchema() : schema(),
     maxTokens: card ? 16000 : 32000,
     thinking: true,

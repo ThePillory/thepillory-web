@@ -15,7 +15,7 @@
 // in rounds, capped per day (ANALYSIS_DAILY_LIMIT).
 import { DurableObject } from "cloudflare:workers";
 import { ensureSchema, log } from "./db.js";
-import { Budget, redact } from "./util.js";
+import { Budget, redact, getState, setState } from "./util.js";
 import { syncCounty } from "./county.js";
 import { syncStateOfficials, syncStateVotes } from "./openstates.js";
 import { syncFederalOfficials, syncHouseVotes } from "./congress.js";
@@ -52,16 +52,26 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId }) {
   const run = { id: runId || crypto.randomUUID(), trigger };
   const budget = new Budget(env, deadlineMs);
   const summary = [];
+  const day = new Date().toISOString().slice(0, 10);
   for (const [step, fn] of STEPS) {
     const started = new Date().toISOString();
     const before = budget.used;
     let result;
-    try {
-      result = await fn(env, env.DB, budget);
-    } catch (err) {
-      // Logged, never swallowed: one failing source doesn't stop the others.
-      result = { status: "error", message: redact(`${err.name}: ${err.message}`) };
-      console.error(`[${run.id}] ${step}: ${result.message}`);
+    // A step that failed waits for the next day's run instead of failing again
+    // every round. A manual run (/run) retries a step that failed in an
+    // earlier run today, e.g. after a fix is deployed.
+    const failed = JSON.parse((await getState(env.DB, `step_failed_${step}`)) || "null");
+    if (failed && failed.day === day && (failed.run === run.id || trigger === "cron")) {
+      result = { status: "skipped", message: `failed earlier today (${failed.message}); tried again in tomorrow's run or a manual run` };
+    } else {
+      try {
+        result = await fn(env, env.DB, budget);
+      } catch (err) {
+        // Logged, never swallowed: one failing source doesn't stop the others.
+        result = { status: "error", message: redact(`${err.name}: ${err.message}`) };
+        console.error(`[${run.id}] ${step}: ${result.message}`);
+        await setState(env.DB, `step_failed_${step}`, JSON.stringify({ day, run: run.id, message: result.message.slice(0, 300) }));
+      }
     }
     await log(env.DB, run, step, result.status, budget.used - before, result.message, started);
     summary.push({ step, ...result, requests: budget.used - before });

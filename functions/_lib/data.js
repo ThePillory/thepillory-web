@@ -21,6 +21,14 @@ export const TYPE_LABELS = {
   other: "Other",
 };
 
+// D1 allows at most 100 bound values per query: run `fn(chunk)` over chunks of
+// `ids` and concatenate the rows.
+export async function inChunks(ids, fn, size = 80) {
+  const out = [];
+  for (let i = 0; i < ids.length; i += size) out.push(...(await fn(ids.slice(i, i + size))));
+  return out;
+}
+
 // Returns null when D1 isn't bound or the schema doesn't exist yet.
 export async function safe(env, fn) {
   if (!env.DB) return null;
@@ -83,15 +91,18 @@ export async function votesOnBill(db, billId, officialIds = []) {
     .all();
   for (const v of votes) v.positions = [];
   if (votes.length && officialIds.length) {
-    const { results } = await db
-      .prepare(
-        `SELECT p.vote_id, p.position, p.raw_position, o.name, o.slug, o.office, o.district
-         FROM vote_positions p JOIN officials o ON o.id = p.official_id
-         WHERE p.vote_id IN (${votes.map(() => "?").join(",")}) AND p.official_id IN (${officialIds.map(() => "?").join(",")})
-         ORDER BY o.name`
-      )
-      .bind(...votes.map((v) => v.id), ...officialIds)
-      .all();
+    const results = await inChunks(votes.map((v) => v.id), async (ids) =>
+      (
+        await db
+          .prepare(
+            `SELECT p.vote_id, p.position, p.raw_position, o.name, o.slug, o.office, o.district
+             FROM vote_positions p JOIN officials o ON o.id = p.official_id
+             WHERE p.vote_id IN (${ids.map(() => "?").join(",")}) AND p.official_id IN (${officialIds.map(() => "?").join(",")})
+             ORDER BY o.name`
+          )
+          .bind(...ids, ...officialIds)
+          .all()
+      ).results, 60);
     for (const v of votes) v.positions = results.filter((p) => p.vote_id === v.id);
   }
   return votes;

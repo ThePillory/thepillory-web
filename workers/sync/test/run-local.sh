@@ -31,6 +31,18 @@ curl -s "localhost:8789/run?token=local-test-token"
 until curl -s "localhost:8789/status?token=local-test-token" | grep -q '"status": "finished"'; do sleep 2; done
 echo "--- analysis results (two drafts are deliberately wrong; see fixture-server.mjs):"
 curl -s "localhost:8789/status?token=local-test-token" | grep -E '"message": "(us|ca)-' | sed 's/^ *//' 
+echo "--- 150 House members who left (more than D1's 100 bound values), then the federal step again:"
+D1="$WRANGLER d1 execute pillory-local-test -c wrangler.test.toml --local --persist-to $STATE"
+python3 -c "
+rows = ','.join(f\"('bioguide:GONE{i:03d}', 'gone-{i}', 'Former Member {i}', 'U.S. Representative', 'federal', 'us-house', 'us-house', 'https://example.org/gone', '2026-01-01', 1)\" for i in range(150))
+print('INSERT INTO officials (id, slug, name, office, level, chamber, body, source_url, last_verified, active) VALUES ' + rows + '; DELETE FROM sync_state WHERE key = \'federal_officials_day\';')
+" > /tmp/pillory-gone.sql
+$D1 --file /tmp/pillory-gone.sql >/dev/null
+curl -s "localhost:8789/run?token=local-test-token" >/dev/null
+sleep 2
+until curl -s "localhost:8789/status?token=local-test-token" | grep -q '"status": "finished"'; do sleep 2; done
+$D1 --command "SELECT status, message FROM sync_log WHERE step = 'federal-officials' ORDER BY id DESC LIMIT 1" | grep -E '"(status|message)"' | sed 's/^ *//'
+$D1 --command "SELECT COUNT(*) AS still_active FROM officials WHERE id LIKE 'bioguide:GONE%' AND active = 1" | grep still_active | sed 's/^ *//'
 echo "--- second run (should fetch nothing new):"
 curl -s "localhost:8789/run?token=local-test-token" | grep -E '"(step|status|requests|message)"'
 echo "--- cron trigger:"

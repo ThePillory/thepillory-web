@@ -11,6 +11,7 @@
 // Every change writes a bill_analysis_revisions row with the row as it was before.
 import { page, esc, fmtDate, safeUrl } from "../_lib/render.js";
 import { checkAccess } from "../_lib/access.js";
+import { inChunks } from "../_lib/data.js";
 import { parse, badge, baselineSection, provisionsFor } from "../_lib/analysis.js";
 import { verifyQuotes } from "../../workers/sync/src/analysis/verify.js";
 import { CHECKS } from "../../workers/sync/src/analysis/review-checks.js";
@@ -109,10 +110,13 @@ async function agreementCard(db) {
 
 async function readerReasons(db, ids) {
   if (!ids.length) return new Map();
-  const { results } = await db
-    .prepare(`SELECT analysis_id, reason, note, created_at FROM analysis_flags WHERE status = 'open' AND analysis_id IN (${ids.map(() => "?").join(",")}) ORDER BY id`)
-    .bind(...ids)
-    .all();
+  const results = await inChunks(ids, async (chunk) =>
+    (
+      await db
+        .prepare(`SELECT analysis_id, reason, note, created_at FROM analysis_flags WHERE status = 'open' AND analysis_id IN (${chunk.map(() => "?").join(",")}) ORDER BY id`)
+        .bind(...chunk)
+        .all()
+    ).results);
   const out = new Map();
   for (const f of results) (out.get(f.analysis_id) || out.set(f.analysis_id, []).get(f.analysis_id)).push(f);
   return out;
@@ -494,6 +498,7 @@ function aiReviewSection(a) {
   <h2 class="label">AI reviewer: ${a.ai_review === "pass" ? "pass" : "flag"}</h2>
   ${checks ? `<ul class="panel-list small check-list">${checks}</ul>` : `<ul class="panel-list small">${(d.reasons || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ul>`}
   <p class="small secondary">Model ${esc(a.ai_review_model || "?")} · reviewed ${fmtDate(a.ai_reviewed_at)} · tokens in ${tokens.input ?? "?"}, out ${tokens.output ?? "?"}</p>
+  ${d.revised && d.first_review ? `<details class="small"><summary>Revised once. The first draft was flagged for:</summary><ul class="panel-list">${(d.first_review.reasons || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ul><p class="secondary">The review above is of the revision.</p></details>` : ""}
 </section>`;
 }
 

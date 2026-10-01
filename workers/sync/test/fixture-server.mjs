@@ -224,6 +224,10 @@ Object.assign(congress, {
   "/bill/119/hr/20/text": textVersion("hr20.htm"),
   "/bill/119/s/30/text": textVersion("s30.htm", "Introduced in Senate"),
   "/bill/119/hres/5/text": { textVersions: [] },
+  // H.R. 20 is longer than the test's CARD_TEXT_CHARS, so its card is drafted from the condensed text.
+  "/bill/119/hr/20/summaries": {
+    summaries: [{ actionDate: "2026-03-01", actionDesc: "Introduced in House", updateDate: "2026-03-02T00:00:00Z", text: "<p>This bill requires agencies to accept petitions by mail and online. [FAKE SUMMARY]</p>" }],
+  },
   "/bill/119/hres/5/summaries": {
     summaries: [
       { actionDate: "2025-01-30", actionDesc: "Introduced in House", updateDate: "2025-02-01T00:00:00Z", text: "<p>This resolution sets the rules for considering the Test Bill Ten Act (H.R. 10) in the House.</p>" },
@@ -427,7 +431,8 @@ function reviewAnthropic(req, res, body) {
   if (problems.length) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: `fixture: bad ${problems.join(", ")}` } });
   const bill = (body.messages[0].content.match(/^Bill: (.+?) \(/m) || [])[1];
   const ok = (id) => ({ id, ok: true, note: "No problem found." });
-  const flag = bill === "H.R. 20";
+  // The revision (see the drafter below) adds the extension, which clears the flag.
+  const flag = bill === "H.R. 20" && !/extend the deadline once/.test(body.messages[0].content);
   const out = {
     checks: [
       flag ? { id: "summary", ok: false, note: "The summary says agencies must respond within 60 days but leaves out that the text lets them extend it once." } : ok("summary"),
@@ -479,16 +484,19 @@ function anthropic(req, res, body) {
   if (!body.output_config || !body.output_config.format || body.output_config.format.type !== "json_schema") problems.push("output_config.format");
   if (!body.system || !body.system[1] || !body.system[1].cache_control) problems.push("system cache_control");
   if (!/\[amend-27\]/.test(body.system && body.system[1] && body.system[1].text)) problems.push("constitution block");
-  const card = /Draft the short card\.$/.test(body.messages[0].content);
+  const card = /(Draft|Revise) the short card\.$/.test(body.messages[0].content);
+  const revision = /<reviewer_problems>/.test(body.messages[0].content);
   if (card && body.output_config.format.schema.properties.aligns.type !== "string") problems.push("card schema");
-  anthropicRequests.push({ kind: card ? "card" : "full", problems, model: body.model, effort: body.output_config && body.output_config.effort, bytes: JSON.stringify(body).length });
+  anthropicRequests.push({ kind: revision ? "revision" : card ? "card" : "full", problems, model: body.model, effort: body.output_config && body.output_config.effort, bytes: JSON.stringify(body).length });
   if (problems.length) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: `fixture: bad ${problems.join(", ")}` } });
   const msg = body.messages[0].content;
   const bill = (msg.match(/^Bill: (.+?) \(/m) || [])[1];
   const draft = DRAFTS[bill];
   if (!draft) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: `fixture: no draft for ${bill}` } });
   if (bill === "H.R. 10" && /OLD TEXT/.test(msg)) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: "fixture: sent the old text version" } });
-  const text = JSON.stringify(card ? asCard(draft) : draft);
+  // A revision of H.R. 20 fixes what the fake reviewer flagged.
+  const fixed = revision && bill === "H.R. 20" ? { ...draft, plain_summary: `${draft.plain_summary} An agency may extend the deadline once.` } : draft;
+  const text = JSON.stringify(card ? asCard(fixed) : fixed);
   const cacheRead = anthropicRequests.length > 1 ? 18000 : 0;
   sse(res, [
     { type: "message_start", message: { id: `msg_test_${anthropicRequests.length}`, type: "message", role: "assistant", model: "claude-sonnet-5-5", content: [], stop_reason: null, stop_sequence: null, usage: { input_tokens: 900 + Math.round(msg.length / 4), output_tokens: 1, cache_read_input_tokens: cacheRead, cache_creation_input_tokens: cacheRead ? 0 : 18000 } } },

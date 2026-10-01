@@ -10,7 +10,7 @@
 import { structuredCall } from "./claude.js";
 
 export const RELEVANCE_MODEL = "claude-haiku-4-5-20251001";
-export const RELEVANCE_PROMPT_VERSION = "2026-09-30.1";
+export const RELEVANCE_PROMPT_VERSION = "2026-10-01.1";
 export const BATCH = 25;
 
 export const CATEGORIES = ["substantive", "procedural_rule", "commemoration", "awareness", "naming", "honorary", "other_routine"];
@@ -28,6 +28,7 @@ For each bill:
   - procedural_rule: a resolution that only sets how a chamber will consider or debate another bill
   - other_routine: another purely ceremonial or housekeeping measure (say which in the reason)
   Everything else is "analyze" (category "substantive"), including anything that spends money, changes a program, a right, a tax, a rule or a power. If you are unsure, choose "analyze".
+  Holidays and "days": a bill that establishes, adds, moves or removes a state or federal holiday (a legal or paid holiday, or one that closes or changes state offices, schools, courts or deadlines) is "analyze", category "substantive", even when it is named for a person, faith or occasion: it changes law. Skip a "day", "week" or "month" measure only when it just recognizes, proclaims or encourages observance with no legal effect (usually a resolution), as "commemoration" or "awareness". From the title alone, "establishes ... as a state holiday", "adds ... to the list of holidays", or an amendment to holiday sections of a code means "analyze".
 - reason: one short, neutral sentence saying why.
 - local: how directly the bill bears on residents of this county.
   - "high": it is about California, rural counties or communities, federal or public lands and forests, water, wildfire, roads and rural transportation, rural broadband, agriculture or ranching, or local government, or it changes something county residents directly use or pay.
