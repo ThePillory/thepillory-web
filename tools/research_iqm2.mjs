@@ -1,21 +1,30 @@
-// TEMPORARY diagnostic, round 3: the county's new meetings site.
+// TEMPORARY diagnostic, round 4: Tyler Meeting Manager's public calendar.
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const UA = "ThePilloryDataSync/1.0 (+https://thepillory.co)";
-async function get(url) {
+const B = "https://calaverascountycatmmapp.tylerhost.net";
+async function get(url, show = 0) {
   try {
-    const res = await fetch(url, { headers: { "User-Agent": UA }, redirect: "follow" });
+    const res = await fetch(url, { headers: { "User-Agent": UA, Accept: "application/json, text/html, */*" } });
     const text = await res.text();
-    console.log(`GET ${url} -> ${res.status} ${res.url} ${res.headers.get("content-type")} ${text.length} bytes`);
+    console.log(`GET ${url} -> ${res.status} ${res.headers.get("content-type")} ${text.length} bytes`);
+    if (show) console.log(text.slice(0, show));
     return text;
   } catch (e) { console.log(`GET ${url} failed: ${e.message}`); return ""; }
 }
-const show = (h, n = 60) => [...new Set([...h.matchAll(/(?:href|src)="([^"]+)"/gi)].map((m) => m[1]))].filter((x) => !/\.(css|png|jpg|svg|woff2?|ico)(\?|$)/i.test(x)).slice(0, n);
-for (const u of ["https://bos.calaverasgov.us/robots.txt", "https://www.calaverasgov.us/robots.txt"]) { console.log((await get(u)).slice(0, 800)); await sleep(5000); }
-const b = await get("https://bos.calaverasgov.us/Board-Meetings");
-console.log("generator/platform hints:", (b.match(/<meta[^>]+generator[^>]*>|granicus|civicplus|primegov|legistar|civicclerk|novus|escribe|boarddocs|onbase|laserfiche|iqm2|swagit|municode meetings|agendacenter/gi) || []).slice(0, 20));
-console.log("links:", JSON.stringify(show(b, 120)));
-console.log("text:", b.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").slice(0, 3000));
-await sleep(10000);
-const c = await get("https://www.calaverasgov.us/Meeting-Calendar");
-console.log("calendar links:", JSON.stringify(show(c, 80).filter((x) => /meet|agenda|calendar|event|bos\./i.test(x))));
-console.log("calendar text:", c.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").slice(0, 2000));
+await get(`${B}/robots.txt`, 600);
+await sleep(3000);
+const html = await get(`${B}/9579prod/tylermm/calendar/`, 3000);
+const scripts = [...html.matchAll(/src="([^"]+\.js[^"]*)"/g)].map((m) => m[1]);
+console.log("scripts:", scripts);
+for (const s of scripts.slice(0, 6)) {
+  await sleep(3000);
+  const url = s.startsWith("http") ? s : new URL(s, `${B}/9579prod/tylermm/calendar/`).href;
+  const js = await get(url);
+  const apis = [...new Set([...js.matchAll(/["'`]((?:\/|https?:\/\/)[^"'`\s]*(?:api|odata|meeting|agenda|calendar|event|document)[^"'`\s]*)["'`]/gi)].map((m) => m[1]))];
+  console.log("  api-like strings:", JSON.stringify(apis.slice(0, 60)));
+}
+// Common Tyler Meeting Manager endpoints, guessed; logged whatever they return.
+for (const p of ["/9579prod/tylermm/api/meetings", "/9579prod/tylermm/api/calendar", "/9579prod/tylermm/api/public/meetings", "/9579prod/tylermm/odata/Meetings", "/9579prod/tylermm/api/v1/meetings"]) {
+  await sleep(3000);
+  await get(`${B}${p}`, 800);
+}
