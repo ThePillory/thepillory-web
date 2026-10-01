@@ -25,7 +25,7 @@
 import { log } from "../db.js";
 import { Budget, BudgetExhausted, getState, setState, redact } from "../util.js";
 import { loadConstitution, PROVISIONS } from "../constitution.js";
-import { fetchBillText, cardSource } from "./billtext.js";
+import { fetchBillText, cardSource, officialSummary } from "./billtext.js";
 import { draftAnalysis, DraftRefused } from "./claude.js";
 import { verifyQuotes, verifyCitations, sameCase } from "./verify.js";
 import { makeLookup } from "./courtlistener.js";
@@ -73,6 +73,31 @@ async function uncheckedBills(db, limit) {
   ).results;
 }
 
+/**
+ * The official description of each bill not looked up yet (once per bill; see
+ * officialSummary). A lookup that fails is noted and not retried: the check
+ * never skips a bill for lack of a description.
+ */
+async function fillSummaries(env, db, budget, bills) {
+  const failed = [];
+  for (const b of bills) {
+    if (b.official_summary_checked_at) continue;
+    let s = null;
+    try {
+      s = await officialSummary(env, budget, b);
+    } catch (err) {
+      if (err instanceof BudgetExhausted) throw err;
+      failed.push(`${b.id} (${redact(err.message).slice(0, 120)})`);
+    }
+    await db
+      .prepare("UPDATE bills SET official_summary = ?, official_summary_label = ?, official_summary_url = ?, official_summary_checked_at = datetime('now') WHERE id = ?")
+      .bind(s ? s.text : null, s ? s.label : null, s ? s.url : null, b.id)
+      .run();
+    Object.assign(b, { official_summary: s ? s.text : null, official_summary_label: s ? s.label : null });
+  }
+  return failed;
+}
+
 async function runRelevance(env, db, budget, run) {
   let checked = 0;
   let skipped = 0;
@@ -80,6 +105,14 @@ async function runRelevance(env, db, budget, run) {
     const bills = await uncheckedBills(db, BATCH);
     if (!bills.length || budget.timeLeft() < MIN_TIME_PER_BILL_MS) break;
     const t0 = new Date().toISOString();
+    let lookupFailed;
+    try {
+      lookupFailed = await fillSummaries(env, db, budget, bills);
+    } catch (err) {
+      if (!(err instanceof BudgetExhausted)) throw err;
+      break; // the rest are looked up next round
+    }
+    const described = bills.filter((b) => b.official_summary).length;
     budget.take("relevance check");
     let result;
     try {
@@ -112,7 +145,8 @@ async function runRelevance(env, db, budget, run) {
       "relevance",
       "ok",
       1,
-      `${verdicts.length} bill(s) checked, ${skips.length} skipped as ceremonial or routine${missing ? `, ${missing} not answered (tried again next round)` : ""}; model ${model}; tokens in ${usage.input_tokens}, out ${usage.output_tokens}`,
+      `${verdicts.length} bill(s) checked (${described} with an official summary or title), ${skips.length} skipped as ceremonial or routine${missing ? `, ${missing} not answered (tried again next round)` : ""}` +
+        `${lookupFailed.length ? `; description lookup failed for ${lookupFailed.join(", ")}` : ""}; model ${model}; tokens in ${usage.input_tokens}, out ${usage.output_tokens}`,
       t0
     );
     if (missing === bills.length) break; // nothing usable came back; don't loop

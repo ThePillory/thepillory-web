@@ -6,7 +6,7 @@
 // events at most once a day (at most EVENT_PAGES requests). Both count toward
 // OPENSTATES_DAILY_LIMIT, and this step runs before state votes so hearings
 // are never starved by the vote backfill.
-import { API, headers } from "../openstates-api.js";
+import { API, headers, openStatesReserve } from "../openstates-api.js";
 import { getState, setState, isHttp, slugify, BudgetExhausted } from "../util.js";
 import { pacificNow, toPacific } from "./time.js";
 
@@ -32,7 +32,7 @@ async function refreshCommittees(env, db, budget, legislators) {
   const api = env.OPENSTATES_API_BASE || API;
   for (let page = 1; page <= COMMITTEE_PAGES; page++) {
     const url = `${api}/committees?jurisdiction=ca&classification=committee&include=memberships&per_page=20&page=${page}`;
-    const data = await budget.openStates(db, url, { headers: headers(env) }, `committees page ${page}`);
+    const data = await budget.openStates(db, url, { headers: headers(env) }, `committees page ${page}`, { reserve: await openStatesReserve(env, db) });
     for (const c of data.results || []) {
       const members = (c.memberships || []).map((m) => byPerson.get(m.person && m.person.id)).filter(Boolean);
       if (!members.length) continue;
@@ -95,7 +95,7 @@ export async function syncStateHearings(env, db, budget) {
       const url =
         `${api}/events?jurisdiction=ca&after=${today}&include=participants&include=links&include=sources` +
         `&per_page=20&page=${page}`;
-      const data = await budget.openStates(db, url, { headers: headers(env) }, `events page ${page}`);
+      const data = await budget.openStates(db, url, { headers: headers(env) }, `events page ${page}`, { reserve: await openStatesReserve(env, db) });
       for (const ev of data.results || []) {
         const match = matchEvent(ev, committees, legislators);
         if (!match) continue;

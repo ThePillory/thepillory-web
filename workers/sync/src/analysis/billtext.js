@@ -173,3 +173,58 @@ async function california(env, budget, bill) {
   }
   return null;
 }
+
+// ---------------------------------------------------------------------------
+// The official description, for the relevance check (saved on the bill once)
+//   federal     Congress.gov's latest CRS summary; before CRS writes one, the
+//               official title as introduced ("To amend … to …")
+//   California  the Legislative Counsel's Digest at the top of the bill text,
+//               including the bill's "An act to …" title
+
+const SUMMARY_CHARS = 6000;
+
+/** The Legislative Counsel's Digest from a leginfo bill text page, or null. Pure. */
+export function caDigest(html) {
+  const text = htmlToText(html);
+  const start = text.search(/LEGISLATIVE COUNSEL[’']S DIGEST/i);
+  if (start < 0) return null;
+  const rest = text.slice(start).replace(/^LEGISLATIVE COUNSEL[’']S DIGEST\s*/i, "");
+  const end = rest.search(/The people of the State of California do enact as follows|^Digest Key|^Vote:/im);
+  const digest = (end > 0 ? rest.slice(0, end) : rest).trim();
+  return digest.length > 40 ? digest.slice(0, SUMMARY_CHARS) : null;
+}
+
+/** Returns {text, label, url} or null. A source that has nothing (404) is null, not an error. */
+export async function officialSummary(env, budget, bill) {
+  const missing = (err) => err && err.name === "UpstreamError" && (err.status === 404 || err.status === 400);
+  if (bill.level === "federal") {
+    const m = /^us-(\d+)-([a-z]+)-(\d+)$/.exec(bill.id);
+    if (!m) return null;
+    try {
+      const s = await federalSummary(env, budget, bill);
+      if (s) return { text: s.text.slice(0, SUMMARY_CHARS), label: s.version, url: bill.official_url || bill.source_url };
+    } catch (err) {
+      if (!missing(err)) throw err;
+    }
+    try {
+      const data = await budget.json(api(env, `/bill/${m[1]}/${m[2]}/${m[3]}/titles`), {}, `bill titles ${bill.id}`);
+      const titles = data.titles || [];
+      const official = titles.find((t) => /^Official Title as Introduced/i.test(t.titleType || "")) || titles.find((t) => /^Official Title/i.test(t.titleType || ""));
+      if (official && official.title) return { text: String(official.title).trim().slice(0, SUMMARY_CHARS), label: official.titleType, url: bill.official_url || bill.source_url };
+    } catch (err) {
+      if (!missing(err)) throw err;
+    }
+    return null;
+  }
+  const id = `${bill.session}0${String(bill.bill_number || "").replace(/\s+/g, "")}`;
+  const url = `${env.LEGINFO_BASE || LEGINFO}/faces/billTextClient.xhtml?bill_id=${encodeURIComponent(id)}`;
+  let html;
+  try {
+    html = await budget.text(url, {}, `leginfo digest ${bill.id}`);
+  } catch (err) {
+    if (!missing(err)) throw err;
+    return null;
+  }
+  const digest = caDigest(html);
+  return digest ? { text: digest, label: "Legislative Counsel's Digest", url: url.replace(env.LEGINFO_BASE || LEGINFO, LEGINFO) } : null;
+}

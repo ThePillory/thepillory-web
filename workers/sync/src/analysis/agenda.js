@@ -1,5 +1,6 @@
 // Agenda watch: for each new county agenda, a plain-language summary of every
-// item (2 to 3 neutral sentences), flags in five categories, and suggested
+// item (2 to 3 neutral sentences), an impact rating, flags in five categories
+// on at most five items (ranked by impact; see rankFlags), and suggested
 // links to existing issues. Drafted by Claude from the official agenda,
 // labeled "AI-drafted from the official agenda", reviewed at /admin/review.
 //
@@ -14,11 +15,11 @@ import { ISSUES } from "../../../../functions/_lib/generated.js";
 import { log } from "../db.js";
 import { getState, setState, redact } from "../util.js";
 import { pacificNow, addDays } from "../meetings/time.js";
-import { FLAGS, checkSummaries } from "./agenda-check.js";
+import { FLAGS, IMPACT, MAX_FLAGGED, checkSummaries } from "./agenda-check.js";
 import { DEFAULT_MODEL, DraftRefused } from "./claude.js";
 
 export { FLAGS, FLAG_LABELS } from "./agenda-check.js";
-export const AGENDA_PROMPT_VERSION = "2026-10-01.1";
+export const AGENDA_PROMPT_VERSION = "2026-10-02.1";
 // Residents' issues to suggest links to. None until reporting opens: then the
 // prompt and the shape leave issue links out entirely.
 const HAS_ISSUES = Object.keys(ISSUES).length > 0;
@@ -26,7 +27,12 @@ const INSTRUCTIONS = `You write plain-language summaries of county government ag
 
 For every agenda item you are given:
 - summary: 2 to 3 short, neutral sentences on what the item would do or decide, in plain language. Use only what the agenda says. If the agenda doesn't say something (a cost, a location, who is affected), don't guess; you may say "The agenda doesn't say …". Keep every number, amount and date exactly as the agenda gives it. No adjectives of judgment ("controversial", "costly", "common-sense"), no predictions, no party labels or partisan language.
-- flags: any that plainly apply, else none:
+- impact: how much the item matters to the public, judged by subject and scale only:
+  high: a decision with broad or lasting effects on residents: a budget adoption, a tax, fee or rate change, a new or amended ordinance, a land-use or development decision, a moratorium, an emergency declaration, a major contract or a large grant.
+  medium: a real decision with narrower effects: a contract or agreement of moderate size, a program change, an appointment to a board or commission.
+  low: routine business: minutes, proclamations and recognitions, presentations, routine renewals and amendments, small agreements, job descriptions, bylaws, and closed-session conferences.
+  Consent-calendar items are routine by design; rate one "high" only when it plainly adopts a budget, a tax or fee, an ordinance, or an emergency.
+- flags: the categories that plainly apply to the item, else none. Flags are for what residents should notice: only the five or so highest-impact items on an agenda are shown under Agenda watch, so most items, and nearly every consent item, should have no flags.
   budget: spending, budgets, appropriations, contracts or agreements with a stated amount.
   land_use: zoning, permits, general or community plans, development, CEQA findings, property.
   fees_taxes: fees, rates, charges, assessments, taxes, bonds or measures that raise revenue.
@@ -56,10 +62,11 @@ function schema(keys) {
         items: {
           type: "object",
           additionalProperties: false,
-          required: ["item_key", "summary", "flags"],
+          required: ["item_key", "summary", "impact", "flags"],
           properties: {
             item_key: { type: "string", enum: keys },
             summary: { type: "string" },
+            impact: { type: "string", enum: IMPACT },
             flags: { type: "array", items: { type: "string", enum: FLAGS } },
           },
         },
@@ -130,10 +137,13 @@ async function nextAgendas(db, limit, backfillDays) {
          WHERE m.source IN ('iqm2', 'tylermm') AND m.details_file_id IS NOT NULL AND m.status != 'cancelled'
            AND EXISTS (SELECT 1 FROM meeting_items i WHERE i.meeting_id = m.id)
            AND (EXISTS (SELECT 1 FROM agenda_requests r WHERE r.meeting_id = m.id AND r.status = 'pending')
-                OR (m.starts_at >= ? AND NOT EXISTS (SELECT 1 FROM agenda_summaries s WHERE s.meeting_id = m.id AND s.agenda_file_id IS m.details_file_id)))
+                OR (m.starts_at >= ? AND NOT EXISTS (SELECT 1 FROM agenda_summaries s WHERE s.meeting_id = m.id AND s.agenda_file_id IS m.details_file_id))
+                -- An AI draft written under an earlier prompt is drafted again (a person's review is kept).
+                OR (m.starts_at >= ? AND EXISTS (SELECT 1 FROM agenda_summaries s WHERE s.meeting_id = m.id AND s.current = 1
+                                                   AND s.status = 'ai_draft' AND s.prompt_version IS NOT ?)))
          ORDER BY (request_id IS NULL), m.starts_at < ?, CASE WHEN m.starts_at >= ? THEN m.starts_at END, m.starts_at DESC LIMIT ?`
       )
-      .bind(`${addDays(today, -backfillDays)}T00:00`, now, now, limit)
+      .bind(`${addDays(today, -backfillDays)}T00:00`, `${addDays(today, -backfillDays)}T00:00`, AGENDA_PROMPT_VERSION, now, now, limit)
       .all()
   ).results;
 }
@@ -205,7 +215,7 @@ export async function runAgendaWatch(env, db, { run, deadline }) {
       drafted += 1;
       message =
         `${meeting.id}: agenda summary ${id} saved (${draft.items.length} of ${items.length} items, ` +
-        `${draft.items.filter((i) => i.flags.length).length} flagged, ${draft.issue_links.length} issue link(s) suggested); ` +
+        `${draft.items.filter((i) => i.flags.length).length} flagged (at most ${MAX_FLAGGED}, by impact; ${checkLog.flags_cleared} other item(s) the drafter flagged left to the full agenda), ${draft.issue_links.length} issue link(s) suggested); ` +
         `model ${model}; tokens in ${usage.input_tokens}, out ${usage.output_tokens}, cache read ${usage.cache_read_tokens}; ` +
         `${checkLog.removed_sentences.length} sentence(s) removed by the number check`;
       await finishRequest(db, meeting, "done", `summary ${id}`);
