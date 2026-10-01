@@ -1,38 +1,19 @@
-// TEMPORARY diagnostic, round 7: meetings and an agenda from Tyler Meeting Manager.
+// TEMPORARY diagnostic, round 8: the 12 recent meetings and one agenda's format.
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const UA = "ThePilloryDataSync/1.0 (+https://thepillory.co)";
-const H = "https://calaverascountycatmmapp.tylerhost.net";
-const API = `${H}/tylermmcalendar9579prod/`;
-async function req(method, url, body, show = 2500) {
-  try {
-    const res = await fetch(url, { method, headers: { "User-Agent": UA, Accept: "application/json, */*", "Content-Type": "application/json; charset=UTF-8" }, body: body ? JSON.stringify(body) : undefined });
-    const text = await res.text();
-    console.log(`${method} ${url} ${body ? JSON.stringify(body) : ""} -> ${res.status} ${res.headers.get("content-type")} ${text.length} bytes`);
-    if (show) console.log(text.slice(0, show));
-    return { res, text };
-  } catch (e) { console.log(`${method} ${url} failed: ${e.message}`); return { text: "" }; }
+const API = "https://calaverascountycatmmapp.tylerhost.net/tylermmcalendar9579prod/";
+const res = await fetch(`${API}meetingInformation/getMeetingInformationByDate`, { method: "POST", headers: { "User-Agent": UA, Accept: "application/json", "Content-Type": "application/json; charset=UTF-8" }, body: JSON.stringify({ startDate: "09/01/2026", endDate: "11/15/2026", meetingTypeIds: [5, 11] }) });
+const list = await res.json();
+for (const m of list) {
+  const { base64ThumbnailsString, ...rest } = m;
+  console.log(JSON.stringify({ date: m.actualStartDate, time: m.startTime, title: m.meetingTitle, type: m.meetingTypeId, meetingId: m.meetingId, agendaId: m.meetingAgendaId, agendaStatus: m.agendaStatus, minutesId: m.minutesId, minutesStatus: m.minutesStatus, keys: Object.keys(rest).join(",") }));
 }
-const main = await (await fetch(`${H}/9579prod/tylermm/calendar/main.js`, { headers: { "User-Agent": UA } })).text();
-for (const k of ["format = {", "format: {", "getMeeting(", "agendaLink", "getAgendaMergePDF", "meetingInformation/getMeeting'", "minutesLink"]) {
-  let i = -1, n = 0;
-  while ((i = main.indexOf(k, i + 1)) >= 0 && n < 2) console.log(`--- ctx ${k} #${++n}:`, main.slice(Math.max(0, i - 300), i + 600).replace(/\s+/g, " "));
-}
-const types = JSON.parse((await req("GET", `${API}meetingType/getMeetingTypes`, null, 0)).text || "[]");
-console.log("types:", JSON.stringify(types.map((t) => [t.meetingTypeId, t.meetingTypeTitle, t.meetingTypeDescription])));
-const ids = types.filter((t) => /supervisor|planning/i.test(t.meetingTypeTitle)).map((t) => t.meetingTypeId);
-let list = [];
-for (const [s, e] of [["2026-09-01", "2026-11-15"], ["09/01/2026", "11/15/2026"]]) {
+const one = list.find((m) => m.meetingTypeId === 5 && m.meetingAgendaId) || list[0];
+for (const p of ["false", "true", "0", "1"]) {
   await sleep(3000);
-  const r = await req("POST", `${API}meetingInformation/getMeetingInformationByDate`, { startDate: s, endDate: e, meetingTypeIds: ids }, 4000);
-  try { const j = JSON.parse(r.text); if (Array.isArray(j) && j.length) { list = j; break; } } catch {}
-}
-console.log("meetings:", list.length);
-const m = list.find((x) => /supervisor/i.test(JSON.stringify(x))) || list[0];
-if (m) {
-  console.log("one meeting:", JSON.stringify(m).slice(0, 3000));
-  const id = m.id || m.meetingId || m.meetingInformationId;
-  for (const u of [`${API}meetingInformation/getMeeting?meetingId=${id}`, `${API}meetingInformation/getMeeting/${id}`, `${API}meetingInformation/Agenda/${id}`]) {
-    await sleep(3000);
-    await req("GET", u, null, 3000);
-  }
+  const r = await fetch(`${API}meetingInformation/Agenda/${p}/${one.meetingAgendaId}`, { headers: { "User-Agent": UA } });
+  const buf = Buffer.from(await r.arrayBuffer());
+  console.log(`Agenda/${p}/${one.meetingAgendaId} -> ${r.status} ${r.headers.get("content-type")} ${buf.length} bytes; starts: ${JSON.stringify(buf.subarray(0, 120).toString("latin1"))}`);
+  if (r.ok && /html|json/.test(r.headers.get("content-type") || "")) console.log(buf.toString("utf8").replace(/\s+/g, " ").slice(0, 2500));
+  if (r.ok) break;
 }
