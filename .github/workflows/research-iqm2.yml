@@ -1,0 +1,16 @@
+# TEMPORARY: diagnose county agendas against the real portal. Removed before merge.
+name: Research county portal
+on:
+  push:
+    paths: [".github/workflows/research-iqm2.yml", "tools/research_iqm2.mjs"]
+permissions:
+  contents: read
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node tools/research_iqm2.mjs
