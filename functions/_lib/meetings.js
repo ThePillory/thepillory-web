@@ -2,6 +2,7 @@
 // States) for Home, the calendar, and meeting pages. Everything shown comes
 // from D1 rows that carry a source URL. Agenda summaries are AI drafts and are
 // always labeled; issue links show only once approved.
+import { inChunks } from "./data.js";
 import { esc, safeUrl } from "./render.js";
 import { deadlineLabel } from "../../workers/sync/src/meetings/comment.js";
 import { pacificNow, addDays } from "../../workers/sync/src/meetings/time.js";
@@ -58,10 +59,13 @@ export async function listMeetings(db, { from, to, level = null, limit = 100, or
 export async function summariesFor(db, ids) {
   if (!ids.length) return {};
   try {
-    const { results } = await db
-      .prepare(`SELECT * FROM agenda_summaries WHERE current = 1 AND status != 'rejected' AND meeting_id IN (${ids.map(() => "?").join(",")})`)
-      .bind(...ids)
-      .all();
+    const results = await inChunks(ids, async (chunk) =>
+      (
+        await db
+          .prepare(`SELECT * FROM agenda_summaries WHERE current = 1 AND status != 'rejected' AND meeting_id IN (${chunk.map(() => "?").join(",")})`)
+          .bind(...chunk)
+          .all()
+      ).results);
     return Object.fromEntries(results.map((r) => [r.meeting_id, { ...r, items: JSON.parse(r.items || "[]") }]));
   } catch (err) {
     if (tableMissing(err)) return {};

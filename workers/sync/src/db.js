@@ -99,13 +99,24 @@ export async function upsertOfficial(db, o) {
     .run();
 }
 
-// Mark officials for a chamber inactive unless they're in `keepIds` (e.g. after an election).
+// Mark officials for a chamber inactive unless they're in `keepIds` (e.g. after
+// an election). D1 allows at most 100 bound values per query, and the House has
+// about 440 members, so the IDs to drop are worked out here and updated in chunks.
 export async function deactivateOthers(db, chamber, keepIds) {
-  const placeholders = keepIds.map(() => "?").join(",") || "''";
-  await db
-    .prepare(`UPDATE officials SET active = 0, updated_at = datetime('now') WHERE chamber = ? AND id NOT IN (${placeholders})`)
-    .bind(chamber, ...keepIds)
-    .run();
+  const keep = new Set(keepIds);
+  const { results } = await db.prepare("SELECT id FROM officials WHERE chamber = ? AND active = 1").bind(chamber).all();
+  const drop = results.map((r) => r.id).filter((id) => !keep.has(id));
+  const stmts = [];
+  for (let i = 0; i < drop.length; i += 50) {
+    const chunk = drop.slice(i, i + 50);
+    stmts.push(
+      db
+        .prepare(`UPDATE officials SET active = 0, updated_at = datetime('now') WHERE id IN (${chunk.map(() => "?").join(",")})`)
+        .bind(...chunk)
+    );
+  }
+  if (stmts.length) await db.batch(stmts);
+  return drop.length;
 }
 
 export async function activeOfficials(db, chamber) {

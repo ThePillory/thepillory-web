@@ -51,9 +51,13 @@ function legislatorRecord(p) {
 // point lookup inside Calaveras County also records the county's own
 // districts, for the Calaveras briefing.
 export async function syncStateOfficials(env, db, budget) {
-  const checked = await getState(db, "state_officials_checked");
-  // home_districts is new with the nationwide load: without it, refresh now.
-  if (daysSince(checked) < 7 && (await getState(db, "home_districts"))) return { status: "skipped", message: `checked ${checked}; refreshes weekly` };
+  // The weekly wait counts only from a run that loaded every legislator
+  // ("state_officials_all"); until one succeeds, every run tries again.
+  const loadedAll = await getState(db, "state_officials_all");
+  if (loadedAll && daysSince(loadedAll) < 7) return { status: "skipped", message: `every legislator loaded ${loadedAll}; refreshes weekly` };
+  // After a failed attempt, wait 6 hours rather than retrying every round (Open States has a daily cap).
+  const failed = await getState(db, "state_officials_failed");
+  if (failed && daysSince(failed) < 0.25) return { status: "skipped", message: `last attempt failed at ${failed}; tried again 6 hours after that` };
   const api = env.OPENSTATES_API_BASE || API;
   const h = { headers: headers(env) };
 
@@ -81,7 +85,9 @@ export async function syncStateOfficials(env, db, budget) {
   for (let page = 1; page <= 10; page++) {
     const data = await budget.openStates(
       db,
-      `${api}/people?jurisdiction=ca&org_classification=legislature&include=links&include=sources&per_page=50&page=${page}`,
+      // No org_classification filter: a legislator's current role is in the
+      // "lower" or "upper" chamber, which is filtered below.
+      `${api}/people?jurisdiction=ca&include=links&include=sources&per_page=50&page=${page}`,
       h,
       `people page ${page}`
     );
@@ -90,7 +96,11 @@ export async function syncStateOfficials(env, db, budget) {
     if (page >= max) break;
   }
   const current = people.filter((p) => p.current_role && CHAMBER[p.current_role.org_classification] && p.current_role.district);
-  if (current.length < parseInt(env.MIN_STATE_LEGISLATORS || "100", 10)) throw new Error(`Open States listed only ${current.length} current California legislators; nothing changed`);
+  if (current.length < parseInt(env.MIN_STATE_LEGISLATORS || "100", 10)) {
+    const roles = [...new Set(people.map((p) => (p.current_role && p.current_role.org_classification) || "none"))].join(", ");
+    await setState(db, "state_officials_failed", new Date().toISOString());
+    throw new Error(`Open States listed ${people.length} people but only ${current.length} current California legislators (roles seen: ${roles || "none"}); nothing changed, tried again next run`);
+  }
 
   const loaded = [];
   for (const p of current) {
@@ -104,6 +114,7 @@ export async function syncStateOfficials(env, db, budget) {
     if (keep.length) await deactivateOthers(db, chamber, keep);
   }
   await setState(db, "state_officials_checked", new Date().toISOString());
+  await setState(db, "state_officials_all", new Date().toISOString());
   return { status: "ok", message: `loaded ${loaded.length} California legislators; Calaveras districts ${JSON.stringify(here)}` };
 }
 

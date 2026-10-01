@@ -60,12 +60,15 @@ async function uncheckedBills(db, limit) {
     await db
       .prepare(
         `SELECT b.* FROM bills b
-         WHERE NOT EXISTS (SELECT 1 FROM bill_relevance r WHERE r.bill_id = b.id)
+         -- Not checked yet, or set aside under an earlier version of the rules
+         -- (and not un-skipped by a person): checked again with the current rules.
+         WHERE NOT EXISTS (SELECT 1 FROM bill_relevance r WHERE r.bill_id = b.id
+                             AND NOT (r.verdict = 'skip' AND r.override IS NULL AND r.prompt_version != ?))
            AND (${FINAL_VOTE}
                 OR EXISTS (SELECT 1 FROM bill_analyses a WHERE a.bill_id = b.id AND a.current = 1 AND a.status = 'ai_draft' AND a.ai_review IS NULL))
          ORDER BY (SELECT MAX(v.vote_date) FROM votes v WHERE v.bill_id = b.id) DESC, b.id LIMIT ?`
       )
-      .bind(limit)
+      .bind(RELEVANCE_PROMPT_VERSION, limit)
       .all()
   ).results;
 }
