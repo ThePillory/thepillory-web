@@ -1,25 +1,26 @@
-// TEMPORARY diagnostic, round 5: the Tyler Meeting Manager app's data endpoints.
+// TEMPORARY diagnostic, round 6: how the Tyler Meeting Manager calendar asks for meetings.
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const UA = "ThePilloryDataSync/1.0 (+https://thepillory.co)";
-const B = "https://calaverascountycatmmapp.tylerhost.net";
-const C = `${B}/9579prod/tylermm/calendar/`;
-async function get(url, show = 0, headers = {}) {
+const H = "https://calaverascountycatmmapp.tylerhost.net";
+const API = `${H}/tylermmcalendar9579prod/`;
+async function req(method, url, body, show = 1500) {
   try {
-    const res = await fetch(url, { headers: { "User-Agent": UA, Accept: "application/json, */*", ...headers } });
+    const res = await fetch(url, { method, headers: { "User-Agent": UA, Accept: "application/json", ...(body ? { "Content-Type": "application/json" } : {}) }, body: body ? JSON.stringify(body) : undefined });
     const text = await res.text();
-    console.log(`GET ${url} -> ${res.status} ${res.headers.get("content-type")} ${text.length} bytes`);
+    console.log(`${method} ${url} ${body ? JSON.stringify(body) : ""} -> ${res.status} ${res.headers.get("content-type")} ${text.length} bytes`);
     if (show) console.log(text.slice(0, show));
     return text;
-  } catch (e) { console.log(`GET ${url} failed: ${e.message}`); return ""; }
+  } catch (e) { console.log(`${method} ${url} failed: ${e.message}`); return ""; }
 }
-const main = await get(`${C}main.js`);
-const strs = [...new Set([...main.matchAll(/["'`]([^"'`\n]{2,160})["'`]/g)].map((m) => m[1]))];
-console.log("url-ish:", JSON.stringify(strs.filter((s) => /\/|api|http/i.test(s) && /api|meeting|agenda|calendar|event|doc|file|public|portal|media|minutes|packet|body|board/i.test(s) && !/\s{2}|[<>{}]/.test(s)).slice(0, 150)));
-for (const k of ["apiUrl", "baseUrl", "apiBase", "environment", "serverUrl", "tylermm/"]) {
-  const i = main.indexOf(k);
-  if (i >= 0) console.log(`ctx ${k}:`, main.slice(Math.max(0, i - 200), i + 400).replace(/\s+/g, " "));
+console.log((await req("GET", `${H}/robots.txt`, null, 500)));
+const main = await (await fetch(`${H}/9579prod/tylermm/calendar/main.js`, { headers: { "User-Agent": UA } })).text();
+for (const k of ["getMeetingByDateRange", "meetingCalendarSearch/search", "getMeetingInformationByDate", "meetingInformation/getMeeting\"", "meetingInformation/Agenda/", "getAgendaMergePDF", "serviceUrl = {", "serviceUrl:"]) {
+  let i = -1, n = 0;
+  while ((i = main.indexOf(k, i + 1)) >= 0 && n < 3) {
+    console.log(`--- ctx ${k} #${++n}:`, main.slice(Math.max(0, i - 500), i + 700).replace(/\s+/g, " "));
+  }
 }
 await sleep(3000);
-await get(`${C}assets/config.json`, 1500);
+await req("GET", `${API}meetingType/getMeetingTypes`);
 await sleep(3000);
-await get(`${C}assets/env.json`, 1500);
+await req("GET", `${API}boards/getBoards`);
