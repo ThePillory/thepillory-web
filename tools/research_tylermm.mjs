@@ -1,24 +1,32 @@
-// TEMPORARY: what the Planning Commission publishes, and the packet link.
-import { extractText, getDocumentProxy } from "unpdf";
+// TEMPORARY: run the new Tyler Meeting Manager parsers on the county's real agendas.
+import { parseMeetingList, parseSummaryAgenda, parsePacketAgenda, API } from "../workers/sync/src/meetings/tylermm.js";
+import { openPdf, streamPages, linePages } from "../workers/sync/src/meetings/pdftext.js";
+import { commentInfo, deadlineLabel } from "../workers/sync/src/meetings/comment.js";
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const UA = "ThePilloryDataSync/1.0 (+https://thepillory.co)";
-const API = "https://calaverascountycatmmapp.tylerhost.net/tylermmcalendar9579prod/";
-for (const [p, id] of [["false", 140], ["true", 140], ["true", 145], ["true", 142], ["false", 129]]) {
-  const r = await fetch(`${API}meetingInformation/Agenda/${p}/${id}`, { method: "HEAD", headers: { "User-Agent": UA } });
-  console.log(`HEAD Agenda/${p}/${id} -> ${r.status} ${r.headers.get("content-type")} ${r.headers.get("content-length")} ${r.headers.get("content-disposition")}`);
-  await sleep(2000);
-}
-// The Planning Commission's Sep 24 agenda, whichever form is small enough.
-for (const p of ["false", "true"]) {
-  const r = await fetch(`${API}meetingInformation/Agenda/${p}/140`, { headers: { "User-Agent": UA } });
-  const len = parseInt(r.headers.get("content-length") || "0", 10);
-  console.log(`GET Agenda/${p}/140 -> ${r.status} ${r.headers.get("content-type")} ${len}`);
-  if (!r.ok || len > 40e6) { await r.body?.cancel(); continue; }
-  const buf = new Uint8Array(await r.arrayBuffer());
-  if (buf[0] !== 0x25) { console.log(new TextDecoder().decode(buf.slice(0, 300))); continue; }
-  const pdf = await getDocumentProxy(buf);
-  const { text } = await extractText(pdf, { mergePages: false });
-  console.log(`pages ${text.length}`);
-  console.log(text.slice(0, 6).join("\n<<PAGE>>\n").slice(0, 9000));
-  break;
+const res = await fetch(`${API}meetingInformation/getMeetingInformationByDate`, {
+  method: "POST",
+  headers: { "User-Agent": UA, "Content-Type": "application/json; charset=UTF-8", Accept: "application/json" },
+  body: JSON.stringify({ startDate: "08/15/2026", endDate: "11/15/2026", meetingTypeIds: [5, 11] }),
+});
+const json = await res.json();
+const meetings = parseMeetingList(json);
+for (const m of meetings) console.log("MEETING", JSON.stringify({ ...m, titles: m.titles.length }));
+for (const m of meetings.filter((x) => x.pdf_url)) {
+  await sleep(3000);
+  const t0 = Date.now();
+  const r = await fetch(m.pdf_url, { headers: { "User-Agent": UA } });
+  const buf = await r.arrayBuffer();
+  console.log(`\n===== ${m.id} ${m.body} ${m.starts_at} ${r.status} ${buf.byteLength} bytes ${Date.now() - t0}ms`);
+  const pdf = await openPdf(buf);
+  const stream = await streamPages(pdf);
+  const lines = await linePages(pdf, 2);
+  console.log(`pages ${stream.length}`);
+  console.log("--- LINE PAGE 1\n" + lines[0]);
+  for (const [name, pages] of [["stream", stream], ["lines", [...lines, ...stream.slice(2)]]]) {
+    const info = commentInfo(pages);
+    console.log(`--- COMMENT (${name})`, JSON.stringify(info), JSON.stringify(deadlineLabel(info.comment_deadline_text, m.starts_at)));
+  }
+  const items = m.packet_url ? parseSummaryAgenda(stream, m.titles) : parsePacketAgenda(stream);
+  for (const it of items) console.log(`ITEM ${it.number} [${it.section} / ${it.section_kind}] ${it.title.slice(0, 260)} | att ${it.attachments.map((a) => a.title).join("; ")}`);
 }
