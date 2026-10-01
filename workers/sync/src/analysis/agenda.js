@@ -23,7 +23,7 @@ export const AGENDA_PROMPT_VERSION = "2026-10-02.1";
 // Residents' issues to suggest links to. None until reporting opens: then the
 // prompt and the shape leave issue links out entirely.
 const HAS_ISSUES = Object.keys(ISSUES).length > 0;
-const INSTRUCTIONS = `You write plain-language summaries of county government agenda items for The Pillory, a nonpartisan civic site. People review every summary. Readers are residents who want to know what their Board of Supervisors or Planning Commission is about to decide.
+const INSTRUCTIONS = `You write plain-language summaries of county government agenda items for ThePillory, a nonpartisan civic site. People review every summary. Readers are residents who want to know what their Board of Supervisors or Planning Commission is about to decide.
 
 For every agenda item you are given:
 - summary: 2 to 3 short, neutral sentences on what the item would do or decide, in plain language. Use only what the agenda says. If the agenda doesn't say something (a cost, a location, who is affected), don't guess; you may say "The agenda doesn't say …". Keep every number, amount and date exactly as the agenda gives it. No adjectives of judgment ("controversial", "costly", "common-sense"), no predictions, no party labels or partisan language.
@@ -95,7 +95,7 @@ function agendaMessage(meeting, items) {
       .join("; ");
     return `[${it.item_key}] (${it.section || "no section"}) ${it.title}${docs ? `\n    (${docs})` : ""}`;
   });
-  return `${meeting.body}, ${meeting.meeting_type || "meeting"}, ${meeting.starts_at.replace("T", " ")}\n\nAgenda items, as [item number] (section) text:\n${lines.join("\n")}\n\n${HAS_ISSUES ? `Existing issues on The Pillory (slug (level): title. facts):\n${issueList()}\n\n` : ""}Write the summaries.`;
+  return `${meeting.body}, ${meeting.meeting_type || "meeting"}, ${meeting.starts_at.replace("T", " ")}\n\nAgenda items, as [item number] (section) text:\n${lines.join("\n")}\n\n${HAS_ISSUES ? `Existing issues on ThePillory (slug (level): title. facts):\n${issueList()}\n\n` : ""}Write the summaries.`;
 }
 
 async function draftSummaries(env, meeting, items) {

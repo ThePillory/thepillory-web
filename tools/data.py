@@ -1,6 +1,6 @@
 """Site data for tools/build.py.
 
-Only real, plain facts live here: the governing bodies The Pillory covers,
+Only real, plain facts live here: the governing bodies ThePillory covers,
 described in general terms. Everything about specific
 officials, bills, votes and meetings comes from Cloudflare D1, loaded by the
 sync Worker (workers/sync) and rendered by Pages Functions (functions/).

@@ -51,7 +51,7 @@ function briefHead(title, sub, { hubLink = true, now } = {}) {
     <h1 class="brief-title">${esc(title)}</h1>
     <p class="small secondary">${sub}</p>
   </div>
-  ${hubLink ? `<p class="small brief-links"><a class="inline-link" href="/?hub=1">The Pillory hub</a> · <a class="inline-link" href="/#find">Change location</a></p>` : ""}
+  ${hubLink ? `<p class="small brief-links"><a class="inline-link" href="/?hub=1">ThePillory hub</a> · <a class="inline-link" href="/#find">Change location</a></p>` : ""}
   ${now ? `<p class="xsmall secondary">Your briefing · ${esc(now)}</p>` : ""}
 </header>`;
 }
@@ -114,7 +114,7 @@ export async function calaverasBriefing(env, url, visitor = null) {
   const main = `
 ${briefHead("Calaveras County", "Live · the county's meetings and the votes of the officials who represent it", { hubLink: base === "/", now: when(now).long || "" })}
 <aside class="intro-banner" data-intro hidden aria-label="Welcome">
-  <p><strong>New here?</strong> The Pillory keeps a public, sourced record of what the officials who represent Calaveras County do: their votes, the bills they vote on mapped to the Constitution, and what's on county meeting agendas.</p>
+  <p><strong>New here?</strong> ThePillory keeps a public, sourced record of what the officials who represent Calaveras County do: their votes, the bills they vote on mapped to the Constitution, and what's on county meeting agendas.</p>
   <p><a class="inline-link" href="/about/how-it-works/">How it works</a></p>
   <button class="intro-dismiss" type="button" data-intro-dismiss aria-label="Dismiss this introduction">×</button>
 </aside>
@@ -173,7 +173,7 @@ export async function personalBriefing(env, url, d) {
   const rows = voteRows(votes.rows, 5);
   const main = `
 ${briefHead("Your briefing", esc(describe(d)))}
-<p class="panel-navy small">${esc(coverage)} <a class="inline-link" href="/?hub=1#communities">Bring The Pillory to your county</a></p>
+<p class="panel-navy small">${esc(coverage)} <a class="inline-link" href="/?hub=1#communities">Bring ThePillory to your county</a></p>
 
 <section class="brief-section" aria-labelledby="h-reps">
   ${sectionHead("h-reps", "Your representatives", "/reps/", "All reps")}

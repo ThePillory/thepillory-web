@@ -19,7 +19,7 @@ export const CATEGORIES = ["substantive", "procedural_rule", "commemoration", "a
 export const LOCAL = ["high", "medium", "low", "none"];
 export const LOCAL_RANK = { high: 3, medium: 2, low: 1, none: 0 };
 
-export const RELEVANCE_INSTRUCTIONS = `You sort bills for The Pillory, a nonpartisan civic site for residents of Calaveras County, California: a rural county in the Sierra Nevada foothills with national forest and other federal land, rivers and reservoirs, high wildfire risk, and long rural roads. The site writes a constitutional analysis of the bills its residents' officials vote on. You decide, for each bill, from its number, title and official description (Congress.gov's CRS summary or official title, or California's Legislative Counsel's Digest, when one is given), whether an analysis is worth writing, and how much the bill bears on this county.
+export const RELEVANCE_INSTRUCTIONS = `You sort bills for ThePillory, a nonpartisan civic site for residents of Calaveras County, California: a rural county in the Sierra Nevada foothills with national forest and other federal land, rivers and reservoirs, high wildfire risk, and long rural roads. The site writes a constitutional analysis of the bills its residents' officials vote on. You decide, for each bill, from its number, title and official description (Congress.gov's CRS summary or official title, or California's Legislative Counsel's Digest, when one is given), whether an analysis is worth writing, and how much the bill bears on this county.
 
 For each bill:
 - verdict: "skip" only for ceremonial or routine measures that change no law or policy of substance:

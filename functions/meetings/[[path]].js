@@ -81,7 +81,7 @@ function ics(m) {
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//The Pillory//Meetings//EN",
+    "PRODID:-//ThePillory//Meetings//EN",
     "CALSCALE:GREGORIAN",
     "BEGIN:VTIMEZONE",
     "TZID:America/Los_Angeles",

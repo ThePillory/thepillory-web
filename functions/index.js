@@ -20,7 +20,7 @@ import { turnstileReady, turnstileWidget, turnstileScript } from "./_lib/turnsti
 const missing = (err) => /no such table|no such column/i.test(String(err && err.message));
 
 const WAITLIST_MESSAGES = {
-  joined: "Thank you. We'll email you only when The Pillory launches in your county.",
+  joined: "Thank you. We'll email you only when ThePillory launches in your county.",
   turnstile: "The anti-spam check didn't go through. Please try again.",
   limit: "That's enough sign-ups from this connection for today. Please try again tomorrow.",
   invalid: "Choose a state and county, and enter an email address.",
@@ -103,7 +103,7 @@ function communities(env, counts, msg, error) {
     <span class="inline-link">Open the Calaveras briefing</span>
   </a>
   <div class="card stack-sm">
-    <h3>Bring The Pillory to your county</h3>
+    <h3>Bring ThePillory to your county</h3>
     <p class="small">Communities open one county at a time. Tell us where you are, and we'll let you know when yours opens.</p>
     ${msg ? `<p class="banner" role="status">${esc(msg)}</p>` : ""}
     ${error ? `<p class="banner banner--error" role="alert">${esc(error)}</p>` : ""}
@@ -117,7 +117,7 @@ const UNDERSTAND = [
   ["/laws/constitution/", "The Constitution", "The full text, and how every analysis starts from it."],
   ["/about/how-a-bill-becomes-law/", "How a bill becomes law", "From introduction to signature, in Congress and in California."],
   ["/about/how-to-read-a-vote/", "How to read a vote", "Final passage, cloture, motions and nominations."],
-  ["/about/how-it-works/", "How The Pillory works", "Evidence first, protected identities, no party labels."],
+  ["/about/how-it-works/", "How ThePillory works", "Evidence first, protected identities, no party labels."],
 ];
 
 function understand() {

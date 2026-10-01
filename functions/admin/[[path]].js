@@ -5,7 +5,7 @@
 //                         edit any field, approve, reject, reopen, ask for a new draft or a
 //                         full analysis, close reader reports; full history
 // POST /admin/review/relevance/<bill id>/   un-skip (or skip again) a bill
-// /admin/waitlist/        "Bring The Pillory to your county": sign-ups by county (counts only)
+// /admin/waitlist/        "Bring ThePillory to your county": sign-ups by county (counts only)
 //
 // Protected by Cloudflare Access (see functions/_lib/access.js and docs/analysis.md).
 // Every change writes a bill_analysis_revisions row with the row as it was before.
@@ -804,7 +804,7 @@ async function waitlist(db) {
     : '<p class="secondary small">No sign-ups yet.</p>';
   const res = page(
     "Waitlist",
-    `<header class="page-head"><h1>Waitlist</h1><p class="subtitle">Sign-ups for "Bring The Pillory to your county", by county.</p></header>
+    `<header class="page-head"><h1>Waitlist</h1><p class="subtitle">Sign-ups for "Bring ThePillory to your county", by county.</p></header>
 <section class="card stack-sm">
   <p><strong>${total ? total.people : 0}</strong> people · <strong>${total ? total.counties : 0}</strong> counties · <strong>${total ? total.signups : 0}</strong> sign-ups</p>
   <p class="hint">Emails are used only to announce a county's launch. They aren't shown here or anywhere public.</p>

@@ -111,7 +111,7 @@ The site's lookup (`/api/districts`, a Pages Function) doesn't touch D1 or the W
 
 ## The county waitlist
 
-"Bring The Pillory to your county" on the hub posts to `/api/waitlist`, which stores the county and email in the `waitlist` table (migration 0005), after Turnstile and a per-visitor daily limit (`waitlist_attempts`, a daily-rotating hash, never the address). The hub shows only the totals. Counts by county are at `/admin/waitlist/` (behind Cloudflare Access). To export the emails for a county's launch, run in the D1 console:
+"Bring ThePillory to your county" on the hub posts to `/api/waitlist`, which stores the county and email in the `waitlist` table (migration 0005), after Turnstile and a per-visitor daily limit (`waitlist_attempts`, a daily-rotating hash, never the address). The hub shows only the totals. Counts by county are at `/admin/waitlist/` (behind Cloudflare Access). To export the emails for a county's launch, run in the D1 console:
 
 ```sql
 SELECT email FROM waitlist WHERE county_fips = '06009';

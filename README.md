@@ -1,2 +1,2 @@
 # thepillory-web
-The Pillory - Fact-Based Civic Accountability Platform
+ThePillory - Fact-Based Civic Accountability Platform

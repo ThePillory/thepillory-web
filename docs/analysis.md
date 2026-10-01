@@ -1,6 +1,6 @@
 # AI-drafted constitutional analysis: setup and operations
 
-The Pillory maps the Constitution; it does not rule on it. AI drafts, automatic checks and an AI reviewer check them, and a person reviews what's flagged plus a random share. Nothing is presented as a verdict.
+ThePillory maps the Constitution; it does not rule on it. AI drafts, automatic checks and an AI reviewer check them, and a person reviews what's flagged plus a random share. Nothing is presented as a verdict.
 
 ```
 bills with a final-passage vote by our officials, or linked to an issue (D1)
@@ -68,7 +68,7 @@ Every published analysis has **Something wrong?** (inaccurate, unfair to one sid
 
 ### Turnstile setup
 
-1. Cloudflare dashboard → **Turnstile** → **Add widget**. Name `The Pillory`; hostnames `thepillory.co` and `thepillory-web.pages.dev`; widget mode **Managed**.
+1. Cloudflare dashboard → **Turnstile** → **Add widget**. Name `ThePillory`; hostnames `thepillory.co` and `thepillory-web.pages.dev`; widget mode **Managed**.
 2. Pages project `thepillory-web` → Settings → **Variables and Secrets**, for Production and Preview:
 
    | Name | Value |
@@ -123,7 +123,7 @@ The Worker now has one npm dependency (the Anthropic SDK, in `workers/sync/packa
 
 1. Cloudflare dashboard → **Zero Trust**. The first time, it asks for a **team name** (for example `thepillory`, which gives the team domain `thepillory.cloudflareaccess.com`) and a plan. Pick **Free**. It may ask for a payment method even for the free plan.
 2. **Access → Applications → Add an application → Self-hosted.**
-   - Application name: `The Pillory admin`
+   - Application name: `ThePillory admin`
    - Session duration: `24 hours`
    - Add these public hostnames, each with path `admin`:
      - `thepillory.co`

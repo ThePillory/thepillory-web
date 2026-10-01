@@ -1,4 +1,4 @@
-// The Pillory: shared behavior for the app screens.
+// ThePillory: shared behavior for the app screens.
 // - Global search (dropdown on every tab, full results on /search/)
 // - Tabs on rep profiles (#overview, #promises, #votes, #issues)
 // - The first-visit intro on Home (dismissed once, remembered in this browser)

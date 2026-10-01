@@ -1,4 +1,4 @@
-/* The Pillory: shared styles for the app screens
+/* ThePillory: shared styles for the app screens
    (/join, /feed, /issue, /report, /constitution).
    The original Home, How it works and Principles pages keep their own inline styles. */
 
@@ -499,7 +499,7 @@ a.card:hover { border-color: var(--navy); }
   align-items: center;
   min-height: var(--tap);
 }
-/* The seal mark sits before "The Pillory" wherever the wordmark appears */
+/* The seal mark sits before "ThePillory" wherever the wordmark appears */
 .wordmark::before {
   content: "";
   flex: none;
@@ -1132,6 +1132,7 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 }
 .app-footer a { display: inline-flex; align-items: center; min-height: var(--tap); color: var(--text-2); text-decoration: none; }
 .app-footer a:hover { color: var(--navy); text-decoration: underline; }
+.app-footer-domain { flex-basis: 100%; margin: 0; padding: 4px 0 12px; color: var(--text-2); }
 
 /* =========================================================================
    The hub (/), briefings, lookup, communities, explainers

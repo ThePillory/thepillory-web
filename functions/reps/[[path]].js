@@ -149,7 +149,7 @@ ${section("Office", kv([
     <div class="stat"><div class="stat-num">${counts.final || 0}</div><div class="stat-label">Final-passage votes</div></div>
     <div class="stat"><div class="stat-num">${counts.total || 0}</div><div class="stat-label">All recorded votes</div></div>
   </div>
-  <p class="hint">Counts of recorded votes only. The Pillory doesn't score or grade officials.</p>
+  <p class="hint">Counts of recorded votes only. ThePillory doesn't score or grade officials.</p>
 </section>`;
 
   const base = `/reps/${o.slug}/`;
