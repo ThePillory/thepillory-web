@@ -4,9 +4,6 @@
 name: Refresh map data
 on:
   workflow_dispatch:
-  push:
-    branches-ignore: [main]
-    paths: [".github/workflows/map-data.yml", "tools/build_geo.mjs"]
 permissions:
   contents: write
 jobs:
