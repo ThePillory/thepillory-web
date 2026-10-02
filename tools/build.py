@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "19"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "20"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -374,6 +374,22 @@ def build_methodology():
     <li><strong>Agenda watch:</strong> an AI tool (Claude, made by Anthropic) writes two or three neutral sentences about each item, from the official agenda only, rates each item's public impact by its subject and scale, and flags at most five items per agenda, the ones with the most impact, under budget, land use, fees and taxes, public safety, or public access and meetings. Consent-calendar items, which are routine by design, are flagged only when they adopt a budget, a tax or fee, an ordinance or an emergency. Every other item is in the full agenda with its summary. These summaries are labeled "AI-drafted from the official agenda" and link to the source. A sentence that states a number, amount or date the agenda item doesn't contain is removed automatically. People review the summaries.</li>
     <li><strong>Links to issues:</strong> the AI tool may suggest that an agenda item relates to an issue. A suggestion is shown only after a person approves it.</li>
     <li><strong>Votes:</strong> how each supervisor voted will be added from the published minutes.</li>
+  </ul>
+</section>
+
+<section class="card stack" id="funding">
+  <h2>Campaign funding and lobbying</h2>
+  <p><strong>Money and votes are shown side by side, as facts.</strong> ThePillory never says or implies that money caused a vote. A contribution and a vote can sit next to each other in the record for many reasons, and the data can't tell you why someone voted as they did. Every number says what it counts, the period it covers, and where it comes from.</p>
+  <ul class="plain-list small">
+    <li><strong>Campaign funding (members of Congress):</strong> from the Federal Election Commission (FEC), for the current and the previous two-year period (for example 2025–2026), as of each campaign's latest report. Totals cover all of a member's authorized campaign committees. PAC contributions are every contribution from PACs and other political committees (FEC line 11C) to the member's principal campaign committee, summed by committee. Outside spending is independent expenditures for or against the member: groups spending on their own, not money given to the campaign. Members are matched to their FEC records through the public congress-legislators project; a member without an FEC record (often a newly appointed senator) says so.</li>
+    <li><strong>Where the money came from:</strong> small donors are people who gave $200 or less in the period (the FEC doesn't itemize them); larger donors gave more than $200; then PACs, party committees, and the candidate's own money and loans. The chamber comparison is the average of the members of the same chamber whose filings for that period are loaded. A senator's fundraising depends on where they are in a six-year term, so compare senators with care.</li>
+    <li><strong>Industries are approximate.</strong> The FEC doesn't assign industries. ThePillory sorts a PAC's name, or the employer a donor named, into a category by fixed keyword rules (for example "bank" or "credit union" → Finance, insurance and banking). The rules are the same for everyone. A name that matches no rule stays "Not classified" rather than guessed, and each page says what share of the money matched. Another member's leadership PAC or campaign is its own category, from the FEC record.</li>
+    <li><strong>Individual donors are never named.</strong> No donor below $2,000, or above it, is listed by name; individual giving is shown only as totals, by size, and by the employers donors named, and an employer only when three or more people named it. "Retired", "None" and similar answers aren't employers.</li>
+    <li><strong>Federal law restricts the use of this data.</strong> Information about individual contributors in FEC reports may not be sold or used to ask for contributions or for any commercial purpose (52 U.S.C. 30111(a)(4)). ThePillory offers no download or export of donor information.</li>
+    <li><strong>Lobbying:</strong> from the federal Lobbying Disclosure Act database (lda.gov), for bills in Congress with a final-passage vote. Lobbying reports describe their issues in their own words, so a bill's reports are found by searching for its number ("H.R. 4" and "H.R.4") during that Congress's two years. Each mention is then checked: "H.R. 4" isn't "H.R. 40", and because bill numbers restart every Congress, a mention next to another Congress, or followed by a different bill's title, is set aside. A report that writes the number another way can be missed. Each organization links to its report.</li>
+    <li><strong>Lobbying amounts cover the whole report.</strong> A report's income (a lobbying firm) or expenses (an organization lobbying for itself) covers every issue it lists, not just one bill, so the total on a bill page overstates spending on that bill. An amended report replaces the one it amends.</li>
+    <li><strong>On a bill page, for your reps:</strong> each rep's recorded vote is shown beside contributions, in the same two-year period, from the industries of the organizations that lobbied on the bill. This shows a relationship in the data, not a cause.</li>
+    <li><strong>State and county:</strong> California's campaign disclosure system (CAL-ACCESS) is being replaced after the November 2026 election, and Calaveras County's campaign statements since 2021 are on its public filing portal. State and county funding will be added from those systems.</li>
   </ul>
 </section>
 

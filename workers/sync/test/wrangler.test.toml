@@ -51,6 +51,12 @@ REVIEW_BACKLOG_DAILY = "10"
 IQM2_BASE = "http://127.0.0.1:8788/iqm2"
 IQM2_MIN_INTERVAL_MS = "0"
 IQM2_DAILY_LIMIT = "20"
+# Campaign funding and lobbying (fixtures; no pacing).
+FEC_API_BASE = "http://127.0.0.1:8788/fec/v1"
+FEC_MIN_INTERVAL_MS = "0"
+LEGISLATORS_URL = "http://127.0.0.1:8788/legislators/current.json"
+LDA_API_BASE = "http://127.0.0.1:8788/lda/api/v1"
+LDA_MIN_INTERVAL_MS = "0"
 # Both county systems: IQM2 first, so the Tyler reader's de-duplication is tested.
 COUNTY_MEETING_SOURCES = "iqm2|tylermm"
 TYLERMM_BASE = "http://127.0.0.1:8788/tylermm/"

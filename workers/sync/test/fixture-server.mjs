@@ -7,6 +7,7 @@
 import http from "node:http";
 import { calendarHtml, rssHtml, meetingHtml, agendaLines, makePdf, dayFromToday } from "./iqm2-fixtures.mjs";
 import { meetingList, agendaPages } from "./tylermm-fixtures.mjs";
+import { legislators, fec as fecFixture, lda as ldaFixture } from "./funding-fixtures.mjs";
 
 const PORT = parseInt(process.env.FIXTURE_PORT || "8788", 10);
 const hits = {};
@@ -564,6 +565,16 @@ http
         return res.end(Buffer.from(makePdf(lines)));
       }
       return send(res, 404, "not found", "text/plain");
+    }
+    // FAKE FEC API, member ID crosswalk, and lda.gov.
+    if (api === "fec") {
+      const r = fecFixture(path.replace(/^\/v1/, ""), u.searchParams);
+      return r ? send(res, r.status, r.body) : send(res, 404, { message: "fixture: no FEC route" });
+    }
+    if (api === "legislators") return send(res, 200, legislators);
+    if (api === "lda") {
+      const r = ldaFixture(path.replace(/^\/api\/v1/, ""), u.searchParams);
+      return r ? send(res, r.status, r.body) : send(res, 404, { detail: "Not found." });
     }
     if (api === "tylermm") {
       // FAKE Tyler Meeting Manager API.

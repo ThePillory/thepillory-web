@@ -1,12 +1,14 @@
 // /reps/            find your reps (address or ZIP), your reps once known, the
 //                   governing bodies, and members of Congress by state (?state=CA)
-// /reps/<slug>/     one official: Overview, Promises, Votes, Issues
+// /reps/<slug>/     one official: Overview, Promises, Votes, Funding, Issues
 import { BODIES, LEVEL_NAME, EMPTY_REPORTS } from "../_lib/generated.js";
 import { page, notFound, notLoaded, esc, safeUrl, kv, card, section, sourceLink, fmtDate } from "../_lib/render.js";
 import { safe, officialBySlug, officialsWhere, voteCounts, votesFor, CHAMBER_NAME } from "../_lib/data.js";
 import { districtsFromCookie, repsWhere, describe, STATE_NAME } from "../_lib/districts.js";
 import { lookupForm } from "../_lib/hub.js";
 import { voteRow, voteFilter } from "../_lib/votes.js";
+import { fundingFor, fundingTab } from "../_lib/funding.js";
+import { currentCycle } from "../../workers/sync/src/funding/fec.js";
 
 const BODY = Object.fromEntries(BODIES.map((b) => [b.slug, b]));
 
@@ -102,14 +104,16 @@ async function profile(env, slug, url) {
     if (!o) return { o: null };
     const all = url.searchParams.get("votes") === "all";
     const pageNum = Math.max(1, parseInt(url.searchParams.get("page") || "1", 10) || 1);
-    const [counts, votes] = await Promise.all([
+    const cycle = parseInt(url.searchParams.get("cycle") || "", 10) || currentCycle();
+    const [counts, votes, funding] = await Promise.all([
       voteCounts(db, o.id),
       votesFor(db, o.id, { all, limit: 50, offset: (pageNum - 1) * 50 }),
+      o.level === "federal" ? fundingFor(db, o, cycle) : null,
     ]);
-    return { o, all, pageNum, counts, votes };
+    return { o, all, pageNum, counts, votes, funding };
   });
   if (!data) return notLoaded("Reps", "reps", false, ["Reps", "/reps/"]);
-  const { o, all, pageNum, counts, votes } = data;
+  const { o, all, pageNum, counts, votes, funding } = data;
   if (!o) return notFound("No current official at this address.", "reps", ["Reps", "/reps/"]);
 
   const body = BODY[o.body];
@@ -172,7 +176,7 @@ ${section("Office", kv([
   const main = `${head}
 <div class="rep-tabs stack" data-tabs>
   <nav class="tabs" role="tablist" aria-label="Sections">
-    ${tab("overview", "Overview")}${tab("promises", "Promises")}${tab("votes", "Votes", counts.total || 0)}${tab("issues", "Issues")}
+    ${tab("overview", "Overview")}${tab("promises", "Promises")}${tab("votes", "Votes", counts.total || 0)}${tab("funding", "Funding")}${tab("issues", "Issues")}
   </nav>
   <div class="stack" role="tabpanel" id="overview" aria-labelledby="tab-overview">${overview}</div>
   <div class="stack" role="tabpanel" id="promises" aria-labelledby="tab-promises">
@@ -182,6 +186,7 @@ ${section("Office", kv([
     ${voteFilter(base, all, counts)}
     ${voteList}
   </div>
+  <div class="stack" role="tabpanel" id="funding" aria-labelledby="tab-funding">${fundingTab(o, funding, base)}</div>
   <div class="stack" role="tabpanel" id="issues" aria-labelledby="tab-issues">${issueHtml}</div>
 </div>`;
   return page(o.name, main, { tab: "reps", back: ["Reps", "/reps/"] });
