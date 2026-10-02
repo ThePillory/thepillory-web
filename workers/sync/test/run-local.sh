@@ -18,6 +18,7 @@ node d1retry.test.mjs | tail -1
 node meetings.test.mjs | tail -1
 node review.test.mjs | grep "^# pass"
 node nationwide.test.mjs | tail -1
+node funding.test.mjs | tail -1
 
 node fixture-server.mjs & FIX=$!
 $WRANGLER dev -c wrangler.test.toml --port 8789 --persist-to "$STATE" --test-scheduled >/tmp/pillory-worker.log 2>&1 & WK=$!
@@ -49,6 +50,10 @@ $D1 --command "SELECT COUNT(*) AS still_active FROM officials WHERE id LIKE 'bio
 echo "--- county meetings (IQM2, then Tyler Meeting Manager; duplicates kept once):"
 $D1 --command "SELECT m.id, m.body, m.status, substr(m.starts_at, 1, 10) AS day, (SELECT COUNT(*) FROM meeting_items i WHERE i.meeting_id = m.id) AS items, m.comment_deadline_text IS NOT NULL AS deadline, m.online_url IS NOT NULL AS zoom FROM meetings m WHERE m.level = 'county' ORDER BY m.starts_at" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
 $D1 --command "SELECT status, message FROM sync_log WHERE step = 'county-meetings' ORDER BY id LIMIT 2" | grep -E '"(status|message)"' | sed 's/^ *//'
+echo "--- campaign funding (FEC) and lobbying (lda.gov):"
+$D1 --command "SELECT step, status, message FROM sync_log WHERE step IN ('federal-funding', 'federal-lobbying') AND status != 'skipped' ORDER BY id" --json | python3 -c "import json,sys; [print(' ', r['step'], r['status'], r['message']) for r in json.load(sys.stdin)[0]['results']]"
+$D1 --command "SELECT f.official_id, f.candidate_id, f.committee_id, f.note, (SELECT COUNT(*) FROM funding_progress p WHERE p.official_id = f.official_id AND p.done_at IS NOT NULL) AS periods, (SELECT COUNT(*) FROM funding_pacs p WHERE p.official_id = f.official_id) AS pacs FROM fec_candidates f ORDER BY 1" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
+$D1 --command "SELECT l.bill_id, f.client_name, f.amount, f.industry FROM bill_lobbying l JOIN lobbying_filings f USING (filing_uuid) ORDER BY 2" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
 echo "--- second run (should fetch nothing new):"
 curl -s "localhost:8789/run?token=local-test-token" | grep -E '"(step|status|requests|message)"'
 echo "--- cron trigger:"

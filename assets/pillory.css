@@ -1205,3 +1205,23 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 .tap { display: inline-flex; align-items: center; min-height: var(--tap); }
 .brief-vote-meta { display: flex; align-items: center; min-height: var(--tap); color: var(--text-2); text-decoration: none; }
 .brief-vote-meta:hover { color: var(--navy); text-decoration: underline; }
+
+/* =========================================================================
+   Funding and lobbying: names on the left, amounts on the right
+   ========================================================================= */
+
+.money-list { display: flex; flex-direction: column; }
+.money-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+}
+.money-row:first-child { border-top: 0; }
+.money-name { min-width: 0; overflow-wrap: anywhere; font-size: 0.9375rem; }
+.money-amt { flex: none; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+.money-amt .secondary { font-weight: 400; margin-left: 4px; }
+.money-sub { font-size: 0.9375rem; font-weight: 600; margin: 4px 0 0; }
+.card-inset { padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--page); }

@@ -24,11 +24,12 @@ import { runAnalysis } from "./analysis/index.js";
 import { syncCountyMeetings } from "./meetings/county.js";
 import { syncStateHearings } from "./meetings/state.js";
 import { withD1Retry } from "./d1retry.js";
+import { syncFederalFunding, syncFederalLobbying } from "./funding/sync.js";
 
 // Order matters: officials before votes; state officials first because the
 // Open States lookup also detects the U.S. House district. State hearings come
 // before state votes, which can use up the Open States daily cap. County
-// meetings come last: the county portal asks for a minute between requests.
+// meetings come next: the county portal asks for a minute between requests.
 const STEPS = [
   ["county-officials", syncCounty],
   ["state-officials", syncStateOfficials],
@@ -38,6 +39,9 @@ const STEPS = [
   ["senate-votes", syncSenateVotes],
   ["state-votes", syncStateVotes],
   ["county-meetings", syncCountyMeetings],
+  // Paced and long-running (the first full load takes a few days): last.
+  ["federal-funding", syncFederalFunding],
+  ["federal-lobbying", syncFederalLobbying],
 ];
 
 const ROUND_MS = 12 * 60 * 1000; // stop starting new requests after this; the alarm limit is 15 minutes
@@ -76,7 +80,7 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId }) {
     await log(env.DB, run, step, result.status, budget.used - before, result.message, started);
     summary.push({ step, ...result, requests: budget.used - before });
   }
-  const partialVotes = summary.filter((s) => (s.step.endsWith("-votes") || s.step === "county-meetings") && s.status === "partial");
+  const partialVotes = summary.filter((s) => (s.step.endsWith("-votes") || ["county-meetings", "federal-funding", "federal-lobbying"].includes(s.step)) && s.status === "partial");
   return {
     run_id: run.id,
     trigger,

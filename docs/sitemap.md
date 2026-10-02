@@ -21,14 +21,14 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 ### Tab 2: Reps (`/reps/`)
 - Find your representatives (address or ZIP), your reps once known, governing bodies, members of Congress by state (`/reps/?state=CA`)
 - Governing body (`/bodies/<slug>/`): members (Congress: yours, then by state); the Board of Supervisors also lists its meetings
-- Rep (`/reps/<slug>/`): Overview, Promises (not tracked yet), Votes, Issues (empty state)
+- Rep (`/reps/<slug>/`): Overview, Promises (not tracked yet), Votes, Funding (members of Congress: FEC; `?cycle=` for the earlier period), Issues (empty state)
   - Vote > Bill (under Laws)
 
 ### Tab 3: + Report (`/report/`)
 - Reporting opens when accounts launch; links to what you can do now
 
 ### Tab 4: Laws (`/laws/`)
-- Bill (`/laws/bills/<id>/`): summary, constitutional analysis (card or full), how your reps voted, "Something wrong?", "Request full analysis"
+- Bill (`/laws/bills/<id>/`): summary, constitutional analysis (card or full), how your reps voted, Follow the money (lobbying reports; your reps' votes beside contributions from the industries that lobbied), "Something wrong?", "Request full analysis"
 - The Constitution (`/laws/constitution/`): full text, one anchor per provision
 
 ### Tab 5: You (`/you/`)

@@ -8,6 +8,7 @@ import { page, notFound, notLoaded, esc, safeUrl, section, sourceLink, card, fmt
 import { safe, recentBills, billById, votesOnBill, officialsWhere, CHAMBER_NAME } from "../_lib/data.js";
 import { districtsFromCookie, repsWhere, describe } from "../_lib/districts.js";
 import { billVote, billHref } from "../_lib/votes.js";
+import { lobbyingFor, industryMoney, followTheMoney, cycleOf } from "../_lib/funding.js";
 import { currentAnalysis, parse, provisionsFor, baselineSection, isPublic, openFlagCount, METHOD_URL } from "../_lib/analysis.js";
 import { turnstileReady, turnstileWidget, turnstileScript, verifyTurnstile, visitorHash, actionsToday, recordAction } from "../_lib/turnstile.js";
 
@@ -182,11 +183,27 @@ async function bill(env, id, url, request) {
     const b = await billById(db, id);
     if (!b) return { b: null };
     const reps = districts ? await officialsWhere(db, repsWhere(districts)) : [];
-    const [votes, analysis] = await Promise.all([votesOnBill(db, id, reps.map((o) => o.id)), analysisFor(db, id)]);
-    return { b, votes, analysis };
+    const [votes, analysis, lobbying] = await Promise.all([votesOnBill(db, id, reps.map((o) => o.id)), analysisFor(db, id), b.level === "federal" ? lobbyingFor(db, id) : null]);
+    // Each rep's latest final-passage position on this bill, beside contributions in
+    // that two-year period from the industries that lobbied on it.
+    let repMoney = [];
+    let cycle = null;
+    if (districts && lobbying && lobbying.orgs.length) {
+      const finals = votes.filter((v) => v.vote_type === "final_passage");
+      const federal = reps.filter((o) => o.level === "federal");
+      const latest = finals[0] || votes[0];
+      cycle = cycleOf(latest && latest.vote_date);
+      const m = await industryMoney(db, federal.map((o) => o.id), lobbying.industries, cycle);
+      repMoney = federal.map((rep) => {
+        const v = finals.find((x) => x.positions.some((p) => p.slug === rep.slug));
+        const p = v && v.positions.find((x) => x.slug === rep.slug);
+        return { rep, vote: v || null, position: p ? p.position : null, money: m[rep.id] };
+      });
+    }
+    return { b, votes, analysis, lobbying, repMoney, cycle, reps };
   });
   if (!data) return notLoaded("Laws", "laws", false, ["Laws", "/laws/"]);
-  const { b, votes, analysis } = data;
+  const { b, votes, analysis, lobbying, repMoney, cycle, reps } = data;
   if (!b) return notFound("No bill at this address.", "laws", ["Laws", "/laws/"]);
   const sent = MESSAGES[url.searchParams.get("sent")] || null;
   const error = MESSAGES[url.searchParams.get("error")] || null;
@@ -224,6 +241,7 @@ ${baselineSection(analysis.a, analysis.provisions, { underReview: analysis.flags
   ${districts ? "" : '<p class="small"><a class="inline-link" href="/#find">Find your representatives</a> to see how yours voted.</p>'}
   ${votes.map((v) => billVote(v, { personal: !!districts })).join("") || '<p class="secondary small">No recorded votes loaded for this bill.</p>'}
 </section>
+${followTheMoney(b, lobbying, { reps: districts ? reps : null, repMoney, cycle })}
 `;
   return page(`${b.bill_number}: ${b.title}`, main, { tab: "laws", back: ["Laws", "/laws/"], personal: true });
 }
