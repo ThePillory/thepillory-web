@@ -1,6 +1,6 @@
 // /calaveras/: the Calaveras County briefing, for everyone (the Communities
 // card on the hub opens it). A visitor whose districts are in the county
-// also gets it at /.
+// also gets it at /briefing/.
 import { calaverasBriefing } from "../_lib/briefing.js";
 import { districtsFromCookie } from "../_lib/districts.js";
 

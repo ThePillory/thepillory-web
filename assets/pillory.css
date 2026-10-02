@@ -1225,3 +1225,7 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 .money-amt .secondary { font-weight: 400; margin-left: 4px; }
 .money-sub { font-size: 0.9375rem; font-weight: 600; margin: 4px 0 0; }
 .card-inset { padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--page); }
+
+.card.briefing-link { display: flex; flex-wrap: nowrap; align-items: center; justify-content: space-between; gap: 12px; min-height: var(--tap); color: var(--text); text-decoration: none; }
+.card.briefing-link > .stack-xs { flex: 1; min-width: 0; }
+.card.briefing-link:hover { border-color: var(--navy); }
