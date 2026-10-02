@@ -1,0 +1,16 @@
+# TEMPORARY: record what the funding and lobbying sources publish. Removed before merge.
+name: Research funding sources
+on:
+  push:
+    paths: [".github/workflows/research-funding.yml", "tools/research_funding.mjs", "tools/research_funding2.mjs"]
+permissions:
+  contents: read
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node tools/research_funding.mjs
