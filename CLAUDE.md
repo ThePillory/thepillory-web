@@ -4,6 +4,7 @@
 
 ThePillory is an **evidence-first civic accountability platform**:
 
+- **Facts first, then dialogue.** ThePillory presents evidence without emotion or spin, so people with different views can work from the same truth. Every feature follows this: lead with the record and its source, keep wording plain and calm (no loaded adjectives, alarm or outrage framing), and keep opinion and discussion separate from the facts they respond to.
 - **Verified residents, one voice each.** People verify once (identity plus address → districts). Everyone else sees only "Verified resident · [County]".
 - **Protected identities.** Names, addresses and IDs are never shown to other users, and never to the officials or agencies in a report.
 - **Evidence first.** Reports are facts plus evidence. A resident's perspective is kept in its own, clearly separate section.
