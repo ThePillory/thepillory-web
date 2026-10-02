@@ -724,6 +724,7 @@ def build_read_a_vote():
 
 
 PRINCIPLES = [
+    ("Facts first, then dialogue", "ThePillory presents evidence without emotion or spin, so people with different views can work from the same truth."),
     ("Evidence first", "Claims without evidence do not amplify. The system is designed to reward documentation, consistency, and verifiability over volume or emotion."),
     ("Protected identities", "Participants are verified for uniqueness and relevance, but identities are protected by default. Safety enables honesty."),
     ("No public pile-ons", "Individual actions remain private. Only aggregated signal becomes public. The goal is accountability, not spectacle."),
