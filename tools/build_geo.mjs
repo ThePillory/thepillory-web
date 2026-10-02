@@ -32,9 +32,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import * as shapefile from "shapefile";
 import { topology } from "topojson-server";
-import { presimplify, simplify, quantile } from "topojson-simplify";
+import { presimplify, simplify, filter, filterAttachedWeight } from "topojson-simplify";
 import { feature, neighbors } from "topojson-client";
-import { geoPath, geoAlbersUsa, geoTransverseMercator, geoCentroid } from "d3-geo";
+import { geoPath, geoAlbersUsa, geoTransverseMercator, geoCentroid, geoStream } from "d3-geo";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = path.join(ROOT, "data", "geo");
@@ -124,14 +124,39 @@ const write = (rel, data) => {
   return fs.statSync(file).size;
 };
 
-/** Simplified SVG paths for one layer of one state. */
-function layerPaths(features, projection, keep) {
+/** A GeoJSON feature in screen coordinates (the projection applied, antimeridian and clipping handled by d3). */
+function projectFeature(f, projection) {
+  const polys = [];
+  let poly = null;
+  let ring = null;
+  const sink = {
+    point(x, y) { ring.push([Math.round(x * 10) / 10, Math.round(y * 10) / 10]); },
+    lineStart() { ring = []; },
+    lineEnd() { if (ring.length > 2) { ring.push(ring[0]); poly.push(ring); } },
+    polygonStart() { poly = []; },
+    polygonEnd() { if (poly.length) polys.push(poly); },
+    sphere() {},
+  };
+  geoStream(f, projection.stream(sink));
+  // d3 emits each polygon's exterior ring first, then its holes.
+  return { type: "Feature", properties: f.properties, geometry: { type: "MultiPolygon", coordinates: polys } };
+}
+
+/**
+ * Simplified SVG paths for one layer, in screen units: detail smaller than
+ * MIN_AREA square pixels is dropped, and so are detached islands smaller than
+ * MIN_ISLAND, so a state with thousands of islands (Alaska) stays light.
+ */
+const MIN_AREA = 0.6;
+const MIN_ISLAND = 6;
+function layerPaths(features, projection) {
   if (!features.length) return [];
-  let topo = topology({ f: { type: "FeatureCollection", features } }, 1e5);
+  let topo = topology({ f: { type: "FeatureCollection", features: features.map((f) => projectFeature(f, projection)) } });
   topo = presimplify(topo);
-  topo = simplify(topo, quantile(topo, keep));
+  topo = filter(topo, filterAttachedWeight(topo, MIN_ISLAND));
+  topo = simplify(topo, MIN_AREA);
   const fc = feature(topo, topo.objects.f);
-  const p = geoPath(projection).digits(1);
+  const p = geoPath(null).digits(1);
   return fc.features.map((f) => ({ id: f.properties.id, d: p(f) })).filter((x) => x.d);
 }
 
@@ -149,7 +174,7 @@ async function main() {
   // 1. The U.S. map (Albers USA, 975 × 610, as the us-atlas package draws it).
   const us = geoAlbersUsa().scale(1300).translate([487.5, 305]);
   const usStates = states.map((f) => ({ ...f, properties: { id: f.properties.STUSPS } }));
-  const usPaths = layerPaths(usStates, us, 0.12);
+  const usPaths = layerPaths(usStates, us);
   const names = Object.fromEntries(states.map((f) => [f.properties.STUSPS, f.properties.NAME]));
   console.log("us.json", write("us.json", { viewBox: "0 0 975 610", states: usPaths.map((s) => ({ st: s.id, name: names[s.id], d: s.d })) }), "bytes");
 
@@ -212,8 +237,7 @@ async function main() {
     const sizes = {};
     for (const [layer, feats] of Object.entries(layers)) {
       if (!feats.length) continue;
-      const keep = feats.length > 150 ? 0.06 : feats.length > 60 ? 0.1 : 0.16;
-      const paths = layerPaths(feats, proj, keep);
+      const paths = layerPaths(feats, proj);
       sizes[layer] = write(`shapes/${st.toLowerCase()}-${layer}.json`, { viewBox, paths });
       place.layers.push(layer);
     }
