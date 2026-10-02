@@ -2,6 +2,7 @@
 // built by tools/build_geo.mjs) inside each [data-map] figure. Every shape is a
 // link (its page is also in the list beside the map). Zoom with the buttons,
 // pinch, or drag once zoomed in; at normal size a swipe still scrolls the page.
+// A [data-still] map (the hub) never zooms or drags: taps only.
 (function () {
   "use strict";
   var NS = "http://www.w3.org/2000/svg";
@@ -23,6 +24,7 @@
     var meta = JSON.parse(fig.querySelector("[data-map-links]").textContent);
     var src = fig.getAttribute("data-src");
     var layered = src.indexOf("{layer}") >= 0;
+    var still = fig.hasAttribute("data-still");
     var view = null; // [x, y, w, h]
     var base = null;
     var svg = null;
@@ -36,6 +38,7 @@
       var y = Math.max(base[1], Math.min(base[1] + base[3] - h, v[1]));
       view = [x, y, w, h];
       svg.setAttribute("viewBox", view.join(" "));
+      if (still) return;
       // Zoomed in, one finger pans the map; at full size it scrolls the page.
       svg.style.touchAction = w < base[2] - 0.5 ? "none" : "pan-y";
       svg.classList.toggle("is-zoomed", w < base[2] - 0.5);
@@ -91,7 +94,7 @@
           canvas.removeAttribute("aria-busy");
           setView(base);
           if (zoomBox) zoomBox.hidden = false;
-          gestures();
+          if (!still) gestures();
         })
         .catch(function () {
           canvas.innerHTML = '<p class="small secondary">The map couldn\'t load. Everything on it is in the lists below.</p>';

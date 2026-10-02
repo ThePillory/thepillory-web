@@ -5,8 +5,10 @@
 // redirects here; /home/ redirects here.
 //
 // The hub, top to bottom:
-//   headline; Find your representatives (address or ZIP; nothing stored), or
-//   explore the map (/explore/);
+//   headline; a U.S. map (tap a state for its /explore/ page; no zooming or
+//   dragging here, so scrolling always works), the small-state buttons, live and
+//   waiting counts, and Explore the full map; Find your representatives (address
+//   or ZIP; nothing stored);
 //   Happening now (Congress / California: latest final-passage votes, ?now=state);
 //   Take part (Calaveras comment deadlines, contacting your reps);
 //   Communities (Calaveras, live; the county waitlist with real counts);
@@ -15,6 +17,8 @@ import { page, esc } from "./_lib/render.js";
 import { listMeetings, pacificNow, addDays, deadlineParts, meetingHref, when } from "./_lib/meetings.js";
 import { districtsFromCookie, describe, STATE_NAME } from "./_lib/districts.js";
 import { happeningNow, happeningSection, lookupForm, waitlistCounts } from "./_lib/hub.js";
+import { LIVE, loadIndex, waitlistBy, usMapLinks, smallStateButtons, mapFigure } from "./_lib/geo.js";
+import { ASSET_VERSION } from "./_lib/generated.js";
 import { turnstileReady, turnstileWidget, turnstileScript } from "./_lib/turnstile.js";
 
 const missing = (err) => /no such table|no such column/i.test(String(err && err.message));
@@ -113,6 +117,26 @@ function communities(env, counts, msg, error) {
 </section>`;
 }
 
+const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+
+// The U.S. map at the top of the hub: real counts, taps only.
+function usMap(index, waiting) {
+  if (!index) return '<p class="explore-link"><a class="btn btn--block" href="/explore/">Explore the map</a></p>';
+  const { links, status } = usMapLinks(index, waiting);
+  const live = Object.keys(LIVE).length;
+  const counties = Object.keys(waiting.county).filter((f) => !LIVE[f]).length;
+  return `
+<section class="hub-map stack-xs" aria-labelledby="h-map">
+  <h2 class="visually-hidden" id="h-map">Map of the United States</h2>
+  ${mapFigure({ id: "us-map", src: "/data/geo/us.json", links, status, label: "Map of the United States: tap a state to explore it", still: true })}
+  ${smallStateButtons(index)}
+  <div class="hub-map-foot">
+    <p class="map-counts small"><span><span class="swatch is-live" aria-hidden="true"></span>${plural(live, "live community", "live communities")}</span><span class="dot"> · </span><span><span class="swatch is-waiting" aria-hidden="true"></span>${plural(counties, "county", "counties")} waiting</span></p>
+    <a class="inline-link" href="/explore/">Explore the full map</a>
+  </div>
+</section>`;
+}
+
 const UNDERSTAND = [
   ["/laws/constitution/", "The Constitution", "The full text, and how every analysis starts from it."],
   ["/about/how-a-bill-becomes-law/", "How a bill becomes law", "From introduction to signature, in Congress and in California."],
@@ -130,12 +154,14 @@ function understand() {
 </section>`;
 }
 
-async function hub(env, url, d) {
+async function hub(env, request, url, d) {
   const which = url.searchParams.get("now") === "state" ? "state" : "federal";
   const db = env.DB;
   let now = [];
   let deadlines = [];
   let counts = null;
+  let waiting = { county: {}, state: {} };
+  const index = await loadIndex(env, request);
   if (db) {
     try {
       now = await happeningNow(db, which, { limit: 4 });
@@ -147,6 +173,7 @@ async function hub(env, url, d) {
         .filter((x) => x.d && x.d.date >= start.slice(0, 10))
         .slice(0, 4);
       counts = await waitlistCounts(db);
+      waiting = await waitlistBy(db);
     } catch (err) {
       if (!missing(err)) throw err;
     }
@@ -161,20 +188,21 @@ async function hub(env, url, d) {
   <h1 class="hub-title">Know what your government is doing. Then take part.</h1>
   <p class="hub-sub">Votes, bills, and meetings in plain language, measured against the Constitution. Built on evidence, open to every point of view.</p>
 </header>
+${usMap(index, waiting)}
+${notFound ? '<p class="banner banner--error" role="alert">We couldn\'t find districts for that. Check the address, or try your ZIP code.</p>' : ""}
+${lookupForm(d)}
 ${d ? `<a class="card briefing-link" href="/briefing/"><span class="stack-xs"><span class="label">Your briefing</span><span class="small">${esc(describe(d))}</span></span><span class="chev" aria-hidden="true">›</span></a>` : ""}
 <aside class="intro-banner" data-intro hidden aria-label="Welcome">
   <p><strong>New here?</strong> ThePillory keeps a public, sourced record of what your officials do: every recorded vote, the bills they vote on mapped to the Constitution, local meeting agendas, and the money around them. Facts and sources, no party labels.</p>
   <p><a class="inline-link" href="/about/how-it-works/">How it works</a> · <a class="inline-link" href="/about/principles/">Principles</a></p>
   <button class="intro-dismiss" type="button" data-intro-dismiss aria-label="Dismiss this introduction">×</button>
 </aside>
-${notFound ? '<p class="banner banner--error" role="alert">We couldn\'t find districts for that. Check the address, or try your ZIP code.</p>' : ""}
-${lookupForm(d)}
-<p class="explore-link"><a class="btn btn--block" href="/explore/">Or explore the map</a></p>
 ${happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? "/" : "/?now=state"), loaded: !!db })}
 ${takePart(deadlines, !!db)}
 ${communities(env, counts, msg, error)}
 ${understand()}
-${turnstileReady(env) ? turnstileScript : ""}`;
+${turnstileReady(env) ? turnstileScript : ""}
+${index ? `<script src="/assets/map.js?v=${ASSET_VERSION}" defer></script>` : ""}`;
   return page("Know what your government is doing", main, { tab: "home", root: true, personal: true });
 }
 
@@ -186,5 +214,5 @@ export async function onRequestGet({ request, env }) {
     url.searchParams.delete("hub");
     return Response.redirect(`${url.origin}/${url.search}${url.hash}`, 301);
   }
-  return hub(env, url, districtsFromCookie(request));
+  return hub(env, request, url, districtsFromCookie(request));
 }

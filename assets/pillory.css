@@ -1264,3 +1264,24 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 .county-list li[hidden] { display: none; }
 .district-grid { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 0; }
 .explore-link { margin: 0; }
+
+/* The hub's map: taps only, a fixed shape (no jump while it loads), and the
+   small states in one row, so the headline, map and lookup fit a phone screen. */
+.map-figure--still .map-canvas { aspect-ratio: 975 / 610; min-height: 0; }
+.map-figure--still .map-svg { touch-action: manipulation; }
+.hub-map .small-states { display: grid; grid-template-columns: repeat(9, 1fr); gap: 4px; }
+.hub-map .small-states .chip--tap { min-width: 0; padding: 0; font-size: 0.8125rem; }
+.hub-map-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 12px; }
+.hub-map-foot .inline-link { display: inline-flex; align-items: center; min-height: var(--tap); }
+.map-counts { margin: 0; color: var(--text-2); }
+.map-counts > span { white-space: nowrap; }
+/* Phones: the counts stack beside the link, so the lookup stays on the first screen. */
+@media (max-width: 479px) {
+  .hub-head { padding-top: 0; }
+  .hub-title { font-size: 1.75rem; }
+  .hub-sub { font-size: 1rem; line-height: 1.45; }
+  .hub-map-foot { flex-wrap: nowrap; }
+  .map-counts > span { display: block; line-height: 1.4; }
+  .map-counts .dot { display: none; }
+}
+.map-counts .swatch { display: inline-block; width: 10px; height: 10px; margin-right: 5px; vertical-align: -1px; }

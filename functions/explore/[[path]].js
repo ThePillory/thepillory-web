@@ -10,7 +10,7 @@ import { page, notFound, esc, fmtDate } from "../_lib/render.js";
 import { ASSET_VERSION } from "../_lib/generated.js";
 import { billHref } from "../_lib/votes.js";
 import {
-  LIVE, liveStates, SMALL_STATES, loadIndex, loadPlace, waitlistBy, officialsFor, repRow, breadcrumb, mapFigure,
+  LIVE, usMapLinks, smallStateButtons, loadIndex, loadPlace, waitlistBy, officialsFor, repRow, breadcrumb, mapFigure,
   layerName, districtLabel, districtHref, placeHref, stOfFips,
 } from "../_lib/geo.js";
 
@@ -29,17 +29,13 @@ async function usPage(env, request, url) {
   } catch (err) {
     if (!missing(err)) throw err;
   }
-  const live = liveStates();
-  const status = {};
-  for (const s of index) status[s.st] = live.includes(s.st) ? "live" : waiting.state[s.st] ? "waiting" : "";
-  const links = Object.fromEntries(index.map((s) => [s.st, [`/explore/${s.st.toLowerCase()}/`, `${s.name}${status[s.st] === "live" ? " (live community)" : status[s.st] === "waiting" ? ` (${waiting.state[s.st]} waiting)` : ""}`]]));
+  const { links, status } = usMapLinks(index, waiting);
   const legend = `
   <ul class="map-legend plain-list small">
     <li><span class="swatch is-live" aria-hidden="true"></span>Live community</li>
     <li><span class="swatch is-waiting" aria-hidden="true"></span>People waiting</li>
     <li><span class="swatch" aria-hidden="true"></span>Federal data only</li>
   </ul>`;
-  const small = index.filter((s) => SMALL_STATES.includes(s.st));
 
   // Live communities and the most-requested counties (waitlist totals only).
   const liveRows = [];
@@ -65,7 +61,7 @@ async function usPage(env, request, url) {
 ${mapFigure({ id: "map", src: "/data/geo/us.json", links, status, label: "Map of the United States: tap a state", legend })}
 <section class="stack-sm" aria-labelledby="h-small">
   <h2 class="label" id="h-small">Smaller states</h2>
-  <div class="chips small-states">${small.map((s) => `<a class="chip chip--tap" href="/explore/${s.st.toLowerCase()}/">${esc(s.st)}<span class="visually-hidden"> ${esc(s.name)}</span></a>`).join("")}</div>
+  ${smallStateButtons(index)}
 </section>
 <section class="card stack-sm" aria-labelledby="h-pick">
   <h2 class="label" id="h-pick">Choose a state</h2>
