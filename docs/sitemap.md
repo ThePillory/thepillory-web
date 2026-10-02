@@ -8,11 +8,11 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 
 ### Tab 1: Home (`/`)
 - **The hub**, at thepillory.co itself, for every visitor (the old `/?hub=1` redirects here):
-  - First-visit intro (dismissible; How it works, Principles)
-  - Your briefing link, once your districts are known > `/briefing/`
   - Headline and subtitle
+  - U.S. map (live community states navy, waitlist states light navy; taps only, no zooming or dragging): a state > `/explore/<st>/`; small-state buttons; "1 live community · [#] counties waiting" (real counts); Explore the full map > Explore
   - Find your representatives: address or ZIP (`/api/districts`; nothing stored; district IDs kept in the browser)
-  - Or explore the map > Explore
+  - Your briefing link, once your districts are known > `/briefing/`
+  - First-visit intro (dismissible; How it works, Principles)
   - Happening now: Congress / California toggle (`?now=state`), latest final-passage votes with status, summary, constitutional chip, review label, totals, "See how your rep voted" > Bill
   - Take part: Calaveras comment deadlines > Meeting (#weigh-in); Contact your representatives > Reps. (Federal agency comment periods from Regulations.gov: to do)
   - Communities: Calaveras County (Live) > Calaveras briefing; Bring ThePillory to your county (waitlist, real counts)

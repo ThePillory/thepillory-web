@@ -66,6 +66,27 @@ export async function waitlistBy(db) {
 }
 
 /**
+ * The U.S. map's links and colors: each state goes to its /explore/ page;
+ * live community states are "live", states with waitlist signups "waiting".
+ */
+export function usMapLinks(index, waiting) {
+  const live = liveStates();
+  const status = {};
+  for (const s of index) status[s.st] = live.includes(s.st) ? "live" : waiting.state[s.st] ? "waiting" : "";
+  const note = (st) => (status[st] === "live" ? " (live community)" : status[st] === "waiting" ? ` (${waiting.state[st]} waiting)` : "");
+  const links = Object.fromEntries(index.map((s) => [s.st, [`/explore/${s.st.toLowerCase()}/`, `${s.name}${note(s.st)}`]]));
+  return { links, status };
+}
+
+/** Buttons for the small states, easier to tap than their shapes. */
+export function smallStateButtons(index) {
+  return `<div class="chips small-states">${index
+    .filter((s) => SMALL_STATES.includes(s.st))
+    .map((s) => `<a class="chip chip--tap" href="/explore/${s.st.toLowerCase()}/">${esc(s.st)}<span class="visually-hidden"> ${esc(s.name)}</span></a>`)
+    .join("")}</div>`;
+}
+
+/**
  * Officials for districts in a state: {senators, house, upper, lower, county}.
  * `d` is {cd: [ids], sldu: [ids], sldl: [ids], county: fips?}. State
  * legislators are loaded for California only so far.
@@ -103,23 +124,27 @@ export function breadcrumb(items) {
     .join("")}</ol></nav>`;
 }
 
-/** A map: the SVG is drawn by /assets/map.js from `src`; `links` says where each shape goes. */
-export function mapFigure({ id, src, links, status = {}, layers = null, active = null, label, legend = "" }) {
+/**
+ * A map: the SVG is drawn by /assets/map.js from `src`; `links` says where each
+ * shape goes. `still`: no zooming or dragging (the hub), so a swipe always
+ * scrolls the page.
+ */
+export function mapFigure({ id, src, links, status = {}, layers = null, active = null, label, legend = "", still = false }) {
   const toggles = layers && layers.length > 1
     ? `<div class="pill-filter map-layers" role="group" aria-label="Map layers">${layers
         .map(([key, name]) => `<a class="toggle" href="?layer=${key}#map" data-layer="${key}"${key === active ? ' aria-current="true"' : ""}>${esc(name)}</a>`)
         .join("")}</div>`
     : "";
   return `
-<figure class="map-figure" id="${id}" data-map data-src="${esc(src)}" data-layer="${esc(active || "")}" aria-label="${esc(label)}">
+<figure class="map-figure${still ? " map-figure--still" : ""}" id="${id}" data-map${still ? " data-still" : ""} data-src="${esc(src)}" data-layer="${esc(active || "")}" aria-label="${esc(label)}">
   ${toggles}
   <div class="map-stage">
     <div class="map-canvas" data-map-canvas><p class="small secondary map-loading">Loading the map…</p></div>
-    <div class="map-zoom" data-map-zoom hidden>
+    ${still ? "" : `<div class="map-zoom" data-map-zoom hidden>
       <button type="button" class="btn btn--small" data-zoom="in" aria-label="Zoom in">+</button>
       <button type="button" class="btn btn--small" data-zoom="out" aria-label="Zoom out">−</button>
       <button type="button" class="btn btn--small" data-zoom="reset">Reset</button>
-    </div>
+    </div>`}
   </div>
   ${legend}
   <script type="application/json" data-map-links>${JSON.stringify({ links, status }).replace(/</g, "\\u003c")}</script>
