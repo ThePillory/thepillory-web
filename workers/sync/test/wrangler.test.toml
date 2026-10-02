@@ -54,6 +54,8 @@ IQM2_DAILY_LIMIT = "20"
 # Campaign funding and lobbying (fixtures; no pacing).
 FEC_API_BASE = "http://127.0.0.1:8788/fec/v1"
 FEC_MIN_INTERVAL_MS = "0"
+FEC_SHARED_MIN_INTERVAL_MS = "0"
+LIVE_HOUSE_DISTRICTS = "CA-5"
 LEGISLATORS_URL = "http://127.0.0.1:8788/legislators/current.json"
 LDA_API_BASE = "http://127.0.0.1:8788/lda/api/v1"
 LDA_MIN_INTERVAL_MS = "0"
