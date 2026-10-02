@@ -1,0 +1,16 @@
+# TEMPORARY: check the live site. Removed in the next commit.
+name: Research home page
+on:
+  push:
+    paths: [".github/workflows/research-home.yml", "tools/research_home.mjs"]
+permissions:
+  contents: read
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node tools/research_home.mjs
