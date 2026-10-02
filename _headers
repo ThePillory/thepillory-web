@@ -1,0 +1,4 @@
+# Map data (data/geo/, built by tools/build_geo.mjs) changes only when the
+# "Refresh map data" workflow runs: browsers and Cloudflare may keep it a day.
+/data/geo/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800

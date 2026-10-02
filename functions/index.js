@@ -5,7 +5,8 @@
 // redirects here; /home/ redirects here.
 //
 // The hub, top to bottom:
-//   headline; Find your representatives (address or ZIP; nothing stored);
+//   headline; Find your representatives (address or ZIP; nothing stored), or
+//   explore the map (/explore/);
 //   Happening now (Congress / California: latest final-passage votes, ?now=state);
 //   Take part (Calaveras comment deadlines, contacting your reps);
 //   Communities (Calaveras, live; the county waitlist with real counts);
@@ -168,6 +169,7 @@ ${d ? `<a class="card briefing-link" href="/briefing/"><span class="stack-xs"><s
 </aside>
 ${notFound ? '<p class="banner banner--error" role="alert">We couldn\'t find districts for that. Check the address, or try your ZIP code.</p>' : ""}
 ${lookupForm(d)}
+<p class="explore-link"><a class="btn btn--block" href="/explore/">Or explore the map</a></p>
 ${happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? "/" : "/?now=state"), loaded: !!db })}
 ${takePart(deadlines, !!db)}
 ${communities(env, counts, msg, error)}

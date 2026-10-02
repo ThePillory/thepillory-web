@@ -5,7 +5,8 @@
 // to announce that county's launch; it's never shown, and the hub shows only
 // the totals. Protected like the other public forms: Turnstile, and at most
 // SIGNUPS_PER_VISITOR a day per visitor (a daily-rotating hash, never the
-// address; table waitlist_attempts). Answers with a redirect back to the hub.
+// address; table waitlist_attempts). Answers with a redirect back to the hub,
+// or to the county page (/place/…) the form was on.
 import { verifyTurnstile, turnstileReady, visitorHash } from "../_lib/turnstile.js";
 
 const SIGNUPS_PER_VISITOR = 5;
@@ -21,12 +22,16 @@ async function countyName(env, request, fips) {
 
 export async function onRequestPost({ request, env }) {
   const url = new URL(request.url);
-  const back = (q) => Response.redirect(`${url.origin}/?waitlist=${q}#communities`, 303);
   const origin = request.headers.get("Origin");
   if (origin && origin !== url.origin) return new Response("Refused", { status: 403 });
+  const form = await request.formData();
+  // A county page (/place/…) sends people back to itself; anything else goes to the hub.
+  const from = String(form.get("back") || "");
+  const back = /^\/place\/[a-z]{2}\/[a-z0-9-]+\/$/.test(from)
+    ? (q) => Response.redirect(`${url.origin}${from}?waitlist=${q}#waitlist`, 303)
+    : (q) => Response.redirect(`${url.origin}/?waitlist=${q}#communities`, 303);
   if (!env.DB || !turnstileReady(env)) return back("closed");
 
-  const form = await request.formData();
   const state = String(form.get("state") || "").toUpperCase();
   const fips = String(form.get("county") || "");
   const email = String(form.get("email") || "").trim().toLowerCase();

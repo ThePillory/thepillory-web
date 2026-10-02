@@ -12,6 +12,7 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
   - Your briefing link, once your districts are known > `/briefing/`
   - Headline and subtitle
   - Find your representatives: address or ZIP (`/api/districts`; nothing stored; district IDs kept in the browser)
+  - Or explore the map > Explore
   - Happening now: Congress / California toggle (`?now=state`), latest final-passage votes with status, summary, constitutional chip, review label, totals, "See how your rep voted" > Bill
   - Take part: Calaveras comment deadlines > Meeting (#weigh-in); Contact your representatives > Reps. (Federal agency comment periods from Regulations.gov: to do)
   - Communities: Calaveras County (Live) > Calaveras briefing; Bring ThePillory to your county (waitlist, real counts)
@@ -19,6 +20,12 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 - **Your briefing** (`/briefing/`), once your districts are known (the lookup opens it):
   - In Calaveras County: the Calaveras briefing (also `/calaveras/` for everyone): first-visit intro, County / State / Federal filter, This week (meetings and hearings) > Meeting / Calendar (`/meetings/`), Issues near you (empty state), Your reps' latest votes > All votes (`/votes/`)
   - Elsewhere: your reps, your reps' latest votes, Happening now; a note that state and local coverage comes as communities launch
+
+### Explore (from Home)
+- **United States** (`/explore/`): map (live community / people waiting / federal data only), smaller-state buttons, state picker (`?st=`), Live communities, Most requested next (waitlist counts)
+- **State** (`/explore/<st>/`): map with layer toggles (`?layer=county|cd|sldu|sldl`; legislative layers only where the Census has them), Find a county (filter), every district as a list, Statewide (U.S. Senators, House members, state legislators where loaded, statewide offices: not loaded), the legislature (California: latest floor votes)
+- **County** (`/place/<st>/<county>/`): breadcrumb; live: Live badge, Open briefing, Make this my place; others: Bring ThePillory here (waitlist); who represents it (County / State / Federal, "covers part of this county"); live: upcoming meetings, issues; recent votes; Funding; nearby counties
+- **District** (`/district/<type>/<st>-<id>/`, type `congressional`, `state-senate`, `assembly`, `state-house`, `house-of-delegates`, `general-assembly`, `legislature`): representative, counties it covers (entirely or partly), recent votes, Funding
 
 ### Tab 2: Reps (`/reps/`)
 - Find your representatives (address or ZIP), your reps once known, governing bodies, members of Congress by state (`/reps/?state=CA`)
