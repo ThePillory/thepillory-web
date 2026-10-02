@@ -1,100 +1,92 @@
-// TEMPORARY: what FEC, the Senate lobbying database, Cal-Access and the county publish.
+// TEMPORARY: second look at the crosswalk, lobbying search, CARS and the county.
 const UA = "ThePilloryDataSync/1.0 (+https://thepillory.co)";
-const KEY = process.env.FEC_KEY || "DEMO_KEY";
-const FEC = "https://api.open.fec.gov/v1";
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const short = (o, n = 1500) => JSON.stringify(o, (k, v) => (typeof v === "string" && v.length > 200 ? v.slice(0, 200) + "…" : v)).slice(0, n);
 async function get(url, init = {}) {
   const t = Date.now();
   try {
     const r = await fetch(url, { redirect: "follow", ...init, headers: { "User-Agent": UA, ...(init.headers || {}) } });
-    const h = Object.fromEntries([...r.headers].filter(([k]) => /rate|content-length|content-type|location|retry/i.test(k)));
-    const body = init.method === "HEAD" ? "" : await r.text();
-    console.log(`\n## ${init.method || "GET"} ${url.replace(KEY, "KEY")} -> ${r.status} ${r.url !== url ? `(final ${r.url})` : ""} ${Date.now() - t}ms ${JSON.stringify(h)} ${body.length} chars`);
+    const h = Object.fromEntries([...r.headers].filter(([k]) => /rate|content-length|content-type|retry|allow/i.test(k)));
+    const body = await r.text();
+    console.log(`\n## ${url} -> ${r.status} ${r.url !== url ? `(final ${r.url})` : ""} ${Date.now() - t}ms ${JSON.stringify(h)} ${body.length} chars`);
     return { status: r.status, body, url: r.url };
   } catch (e) {
     console.log(`\n## ${url} -> ERROR ${e.message} ${e.cause ? e.cause.code || e.cause.message : ""}`);
     return { status: 0, body: "" };
   }
 }
-const fec = async (path) => {
-  const r = await get(`${FEC}${path}${path.includes("?") ? "&" : "?"}api_key=${KEY}`);
-  try { return JSON.parse(r.body); } catch { console.log(r.body.slice(0, 300)); return {}; }
-};
+const text = (html) => html.replace(/<(script|style)[\s\S]*?<\/\1>/gi, " ").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/\s+/g, " ");
+const links = (html, re) => [...new Set([...html.matchAll(/href="([^"]+)"[^>]*>([\s\S]{0,120}?)<\/a>/gi)].map((m) => `${text(m[2]).trim()} -> ${m[1]}`).filter((s) => re.test(s)))];
 
 // 1. Crosswalk
-const leg = await get("https://theunitedstates.io/congress-legislators/legislators-current.json");
-let fecIds = [];
-try {
-  const all = JSON.parse(leg.body);
-  console.log("legislators:", all.length, "with fec ids:", all.filter((l) => (l.id.fec || []).length).length);
-  const m = all.find((l) => l.id.bioguide === "M001177");
-  console.log("sample:", short({ id: m.id, terms: m.terms.slice(-1) }));
-  fecIds = m.id.fec || [];
-  const multi = all.filter((l) => (l.id.fec || []).length > 1).slice(0, 3).map((l) => [l.id.bioguide, l.id.fec, l.terms.at(-1).type]);
-  console.log("multi:", JSON.stringify(multi));
-} catch (e) { console.log("crosswalk parse failed", e.message); }
-const cand = fecIds.find((x) => x.startsWith("H")) || "H8CA04152";
+for (const u of ["https://unitedstates.github.io/congress-legislators/legislators-current.json", "https://raw.githubusercontent.com/unitedstates/congress-legislators/main/legislators-current.yaml"]) {
+  const r = await get(u);
+  if (u.endsWith(".json") && r.body) {
+    try {
+      const all = JSON.parse(r.body);
+      const withFec = all.filter((l) => (l.id.fec || []).length);
+      console.log("legislators", all.length, "with fec", withFec.length, "missing:", all.filter((l) => !(l.id.fec || []).length).map((l) => `${l.id.bioguide} ${l.terms.at(-1).type} ${l.terms.at(-1).state}`).join(", "));
+      const m = all.find((l) => l.id.bioguide === "M001177");
+      console.log("sample", JSON.stringify(m && m.id));
+      console.log("multi", JSON.stringify(all.filter((l) => l.id.fec && l.id.fec.length > 1).slice(0, 5).map((l) => [l.id.bioguide, l.id.fec, l.terms.at(-1).type, l.terms.at(-1).state])));
+    } catch (e) { console.log("parse", e.message); }
+  } else console.log(r.body.slice(0, 300));
+}
 
-// 2. FEC
-let j = await fec(`/candidate/${cand}/totals/?cycle=2026`);
-console.log("totals keys:", Object.keys((j.results || [])[0] || {}).join(","));
-console.log("totals:", short((j.results || [])[0], 2500));
-j = await fec(`/candidate/${cand}/committees/?designation=P&cycle=2026`);
-const cmte = ((j.results || [])[0] || {}).committee_id;
-console.log("committee:", cmte, short((j.results || [])[0], 600));
-j = await fec(`/schedules/schedule_a/?committee_id=${cmte}&two_year_transaction_period=2026&line_number=F3-11C&per_page=100&sort=-contribution_receipt_amount`);
-console.log("11C pagination:", short(j.pagination), "rows", (j.results || []).length);
-console.log("11C row:", short((j.results || [])[0], 2500));
-console.log("11C top:", JSON.stringify((j.results || []).slice(0, 8).map((r) => [r.contributor_name, r.contributor_id, r.contribution_receipt_amount, r.contributor && r.contributor.committee_type, r.memo_code, r.entity_type])));
-j = await fec(`/schedules/schedule_a/by_employer/?committee_id=${cmte}&cycle=2026&sort=-total&per_page=15`);
-console.log("by_employer:", short(j.pagination), JSON.stringify((j.results || []).slice(0, 15).map((r) => [r.employer, r.total, r.count])));
-j = await fec(`/schedules/schedule_a/by_size/by_candidate/?candidate_id=${cand}&cycle=2026`);
-console.log("by_size:", short(j.results, 800));
-j = await fec(`/schedules/schedule_e/by_candidate/?candidate_id=${cand}&cycle=2024&per_page=20&sort=-total`);
-console.log("sched_e:", short(j.pagination), short((j.results || []).slice(0, 4), 1500));
-j = await fec(`/candidates/totals/?cycle=2026&office=H&per_page=3&is_active_candidate=true`);
-console.log("candidates/totals keys:", Object.keys((j.results || [])[0] || {}).join(","), short(j.pagination));
-
-// 3. Bulk files
-for (const f of ["2026/weball26.zip", "2026/pas226.zip", "2026/cm26.zip", "2026/webl26.zip", "2024/pas224.zip"]) await get(`https://www.fec.gov/files/bulk-downloads/${f}`, { method: "HEAD" });
-
-// 4. Lobbying
-for (const base of ["https://lda.senate.gov/api/v1", "https://lda.gov/api/v1"]) {
-  const r = await get(`${base}/filings/?filing_specific_lobbying_issues=${encodeURIComponent('"H.R. 1"')}&filing_year=2025&page_size=5`);
+// 2. Lobbying search
+const L = "https://lda.gov/api/v1/filings/";
+for (const [q, size] of [['"H.R. 4"', 100], ['"S. 1071"', 25], ['"H.R.4"', 25]]) {
+  const r = await get(`${L}?filing_specific_lobbying_issues=${encodeURIComponent(q)}&filing_year=2025&page_size=${size}`);
   try {
     const d = JSON.parse(r.body);
-    console.log("count", d.count, "next", d.next);
-    const f = (d.results || [])[0];
-    if (f) {
-      console.log("filing keys:", Object.keys(f).join(","));
-      console.log("filing:", short({ ...f, lobbying_activities: undefined, conviction_disclosures: undefined }, 2500));
-      console.log("activity:", short(f.lobbying_activities[0], 1500));
+    console.log(q, "count", d.count, "returned", (d.results || []).length, "next", d.next);
+    for (const f of (d.results || []).slice(0, 4)) {
+      for (const a of f.lobbying_activities) {
+        const i = a.description.search(/H\.?\s?R\.?\s?4\b|S\.?\s?1071\b/);
+        if (i >= 0) console.log(`  [${f.client.name} | ${f.client.general_description} | ${f.income || f.expenses}] ...${a.description.slice(Math.max(0, i - 60), i + 140)}`);
+      }
     }
   } catch { console.log(r.body.slice(0, 400)); }
-  await sleep(4000);
+  await sleep(5000);
 }
-await get("https://lda.senate.gov/api/v1/constants/filing/lobbyingactivityissues/");
-
-// 5. California
-const ca = [
-  "https://www.sos.ca.gov/campaign-lobbying/cal-access-resources/raw-data-campaign-finance-and-lobbying-activity",
-  "https://campaignfinance.cdn.sos.ca.gov/dbwebexport.zip",
-  "https://powersearch.sos.ca.gov/",
-  "https://cal-access.sos.ca.gov/Campaign/",
-  "https://www.sos.ca.gov/campaign-lobbying",
-];
-for (const u of ca) {
-  const r = await get(u, u.endsWith(".zip") ? { method: "HEAD" } : {});
-  const links = [...r.body.matchAll(/href="([^"]+)"[^>]*>([^<]{0,80})</gi)].map((m) => `${m[2].trim()} -> ${m[1]}`).filter((s) => /cars|replacement|raw|export|api|download|power|new system|cal-access|bulk|csv/i.test(s));
-  console.log("links:", [...new Set(links)].slice(0, 25).join("\n  "));
-  const text = r.body.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
-  for (const m of text.matchAll(/.{0,200}(replacement|CARS|new system|retire|transition).{0,200}/gi)) { console.log("CTX:", m[0]); break; }
+// Rapid requests: is there a limit for anonymous use?
+for (let i = 0; i < 6; i++) {
+  const r = await get(`${L}?filing_year=2025&page_size=1&page=${i + 1}`);
+  if (r.status !== 200) { console.log(r.body.slice(0, 300)); break; }
 }
+await get("https://lda.gov/api/");
 
-// 6. Calaveras County elections
-for (const u of ["https://elections.calaverasgov.us/", "https://calaverasgov.us/Elections", "https://calaverasgov.us/"]) {
+// 3. California: CARS and Power Search
+for (const u of [
+  "https://www.sos.ca.gov/campaign-lobbying/helpful-resources/cal-access-replacement-system-project-cars-updates/cal-access-replacement-system-cars-go-live-updates",
+  "https://www.sos.ca.gov/campaign-lobbying/helpful-resources/cal-access-replacement-system-project-cars-updates",
+]) {
   const r = await get(u);
-  const links = [...r.body.matchAll(/href="([^"]+)"[^>]*>([^<]{0,80})</gi)].map((m) => `${m[2].trim()} -> ${m[1]}`).filter((s) => /elect|campaign|460|netfile|disclos|filing|fppc/i.test(s));
-  console.log("links:", [...new Set(links)].slice(0, 30).join("\n  "));
+  const t = text(r.body);
+  const i = t.search(/CAL-ACCESS Replacement|CARS/);
+  console.log("TEXT:", t.slice(i, i + 3500));
+  console.log("links:", links(r.body, /cars|api|data|download|portal|launch|go.?live/i).slice(0, 20).join("\n  "));
+}
+for (const u of ["https://powersearch.sos.ca.gov/advanced.php", "https://powersearch.sos.ca.gov/quick-search.php"]) {
+  const r = await get(u);
+  console.log("forms:", [...r.body.matchAll(/<form[^>]*>/gi)].map((m) => m[0]).join(" "), "| csv:", /csv|export|download/i.test(r.body));
+  console.log("TEXT:", text(r.body).slice(0, 1200));
+}
+
+// 4. Calaveras County campaign filings
+const seen = new Set();
+const queue = ["https://elections.calaverasgov.us/Campaign-Services"];
+while (queue.length && seen.size < 8) {
+  const u = queue.shift();
+  if (seen.has(u)) continue;
+  seen.add(u);
+  const r = await get(u);
+  const t = text(r.body);
+  const i = t.search(/Campaign/);
+  console.log("TEXT:", t.slice(i, i + 1500));
+  const l = links(r.body, /campaign|460|netfile|disclos|filing|fppc|candidate|statement|committee|form 7|econ/i);
+  console.log("links:", l.slice(0, 30).join("\n  "));
+  for (const s of l) {
+    const href = s.split(" -> ").pop();
+    if (/^https:\/\/elections\.calaverasgov\.us\/Campaign-Services\//i.test(href)) queue.push(href);
+  }
 }
