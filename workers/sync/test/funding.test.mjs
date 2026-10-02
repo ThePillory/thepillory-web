@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import { currentCycle, candidateIdsFor, parseTotals, aggregatePacs, parseEmployers, parseOutside } from "../src/funding/fec.js";
 import { classify, classifyCommittee, NOT_EMPLOYED, INDUSTRIES } from "../src/funding/industry.js";
 import { billQueries, mentionPattern, mentionsIn, filingRow, congressYears } from "../src/funding/lobbying.js";
+import { fecOptions, liveDistricts, priorityOf } from "../src/funding/sync.js";
 import { fec, lda } from "./funding-fixtures.mjs";
 
 let n = 0;
@@ -21,6 +22,23 @@ test("cycles and candidate IDs for the current office", () => {
   assert.deepEqual(candidateIdsFor(["H8CA04152", "H6CA21135"], "us-house", "CA"), ["H8CA04152", "H6CA21135"]);
   assert.deepEqual(candidateIdsFor(["H8CA04152"], "us-house", "NV"), [], "another state's ID isn't used");
   assert.deepEqual(candidateIdsFor([], "us-senate", "OK"), []);
+});
+
+test("order and key: live communities' members first; funding's own FEC key", () => {
+  assert.deepEqual(liveDistricts({ LIVE_HOUSE_DISTRICTS: "CA-5, ca-05,TX-x" }), [{ st: "CA", cd: "5" }, { st: "CA", cd: "5" }]);
+  assert.deepEqual(liveDistricts({ CA_HOUSE_DISTRICT: "5" }), [{ st: "CA", cd: "5" }], "falls back to CA_HOUSE_DISTRICT");
+  assert.deepEqual(priorityOf({}).binds, []);
+  const p = priorityOf({ LIVE_HOUSE_DISTRICTS: "CA-5" });
+  assert.deepEqual(p.binds, ["CA-5", "CA", "CA"]);
+  assert.match(p.sql, /us-senate/);
+  const own = fecOptions({ FEC_API_KEY: "fec", CONGRESS_API_KEY: "congress" });
+  assert.equal(own.key, "fec");
+  assert.equal(own.own, true);
+  assert.equal(own.pace.intervalMs, 4000);
+  const shared = fecOptions({ CONGRESS_API_KEY: "congress", FEC_MIN_INTERVAL_MS: "4000" });
+  assert.equal(shared.key, "congress");
+  assert.equal(shared.own, false);
+  assert.equal(shared.pace.intervalMs, 8000, "half the pace when sharing the Congress.gov key");
 });
 
 test("totals: the FEC's own figures, split by source", () => {

@@ -95,9 +95,17 @@ TYLERMM_PDF_MAX_BYTES = "26214400"
 IQM2_MIN_INTERVAL_MS = "60000"
 IQM2_DAILY_LIMIT = "12"
 # Campaign funding (FEC; src/funding/). An api.data.gov key allows 1,000 FEC
-# requests an hour: one every 4 seconds stays under it. FEC_API_KEY falls back to
-# CONGRESS_API_KEY (also an api.data.gov key).
+# requests an hour: one every 4 seconds stays under it. Funding uses its own key
+# (secret FEC_API_KEY), so it doesn't share an hourly limit with the votes steps;
+# without it, it borrows CONGRESS_API_KEY at half the pace.
 FEC_MIN_INTERVAL_MS = "4000"
+FEC_SHARED_MIN_INTERVAL_MS = "8000"
+# Funding loads these House districts' members first (the live communities; keep
+# in step with LIVE in functions/_lib/geo.js), with their state's senators, then
+# the rest of those states' delegations, then everyone else.
+LIVE_HOUSE_DISTRICTS = "CA-5"
+# While lobbying has bills waiting, funding leaves it this share of each round.
+LOBBYING_ROUND_SHARE = "0.4"
 FEC_DAILY_LIMIT = "3000"
 FUNDING_REFRESH_DAYS = "7"
 # Lobbying reports (lda.gov; no key needed, LDA_API_KEY optional).

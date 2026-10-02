@@ -54,7 +54,19 @@ export async function fundingFor(db, official, cycle) {
         .bind(official.chamber, c)
         .first(),
     ]);
-    return { fec: fecRow, cycles, cycle: c, totals, progress, pacs: pacs.results, outside: outside.results, employers: employers.results, industries: industries.results, avg };
+    let loadedCount = null;
+    if (!progress) {
+      loadedCount = await db
+        .prepare(
+          `SELECT COUNT(*) AS total, COUNT(p.official_id) AS done FROM officials o
+           LEFT JOIN fec_candidates f ON f.official_id = o.id
+           LEFT JOIN funding_progress p ON p.official_id = o.id AND p.cycle = ? AND p.done_at IS NOT NULL
+           WHERE o.level = 'federal' AND o.active = 1 AND NOT (f.official_id IS NOT NULL AND f.candidate_id IS NULL)`
+        )
+        .bind(cycle)
+        .first();
+    }
+    return { fec: fecRow, cycles, cycle: c, totals, progress, loadedCount, pacs: pacs.results, outside: outside.results, employers: employers.results, industries: industries.results, avg };
   } catch (err) {
     if (missing(err)) return null;
     throw err;
@@ -151,13 +163,24 @@ function cycleNav(base, f) {
 }
 
 /** The Funding tab on a member of Congress's page. */
+function loading(f) {
+  const n = f && f.loadedCount;
+  const progress = n && n.total ? ` So far, ${n.done.toLocaleString("en-US")} of ${n.total.toLocaleString("en-US")} members of Congress are loaded.` : "";
+  return `<div class="card empty-state stack-sm">
+  <p>Funding data is loading.</p>
+  <p class="small secondary">Campaign finance reports from the Federal Election Commission are being loaded one member at a time, starting with the members who represent live communities. This member's appear here once they're loaded.${progress}</p>
+  <a class="inline-link" href="${METHOD}">How funding is shown</a>
+</div>`;
+}
+
 export function fundingTab(official, f, base) {
   if (official.level !== "federal") {
     return `<p class="secondary small">Campaign funding is shown for members of Congress, from the Federal Election Commission. California's state disclosure system is being replaced (the new system is expected after the November 2026 election); state and county funding comes after that. <a class="inline-link" href="${METHOD}">How funding is shown</a></p>`;
   }
-  if (!f || !f.fec) return `<p class="secondary small">Not loaded yet. Campaign funding appears after the funding sync reaches this member; the first full load takes a few days.</p>`;
-  if (!f.fec.candidate_id || !f.progress) {
-    return `<p class="secondary small">${esc(f.fec.note || "Not loaded yet. Campaign funding appears after the funding sync reaches this member; the first full load takes a few days.")}</p>
+  // Not read yet: say so, rather than show an empty tab.
+  if (!f || !f.fec || (f.fec.candidate_id && !f.progress)) return loading(f);
+  if (!f.fec.candidate_id) {
+    return `<p class="secondary small">${esc(f.fec.note || "No FEC record found for this member.")}</p>
       ${safeUrl(f.fec.source_url) ? `<a class="small inline-link" href="${esc(f.fec.source_url)}" target="_blank" rel="noopener">Source ↗</a>` : ""}`;
   }
   const t = f.totals;

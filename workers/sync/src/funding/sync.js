@@ -15,6 +15,12 @@
 // Both are paced and capped per day (FEC: an api.data.gov key allows 1,000
 // requests an hour), keep their place across rounds and days, and stop with
 // "partial" when a round's time or the day's cap runs out.
+//
+// Order: members who represent a live community (LIVE_HOUSE_DISTRICTS, e.g.
+// "CA-5", plus that state's senators) first, then the rest of those states'
+// delegations, then everyone else; each member is matched to FEC IDs and read
+// in turn. While lobbying has bills waiting, funding leaves it
+// LOBBYING_ROUND_SHARE (0.4) of the round's remaining time.
 import { getState, setState, BudgetExhausted, UpstreamError, isHttp } from "../util.js";
 import { API as FEC_API, currentCycle, candidateIdsFor, candidatePage, parseTotals, aggregatePacs, parseEmployers, parseOutside } from "./fec.js";
 import { API as LDA_API, congressYears, billQueries, mentionsIn, filingRow } from "./lobbying.js";
@@ -34,62 +40,85 @@ async function inBatches(db, stmts, size = 50) {
 // ---------------------------------------------------------------------------
 // FEC
 
-function fecOptions(env) {
+export function fecOptions(env) {
+  // Funding has its own api.data.gov key (FEC_API_KEY), so it doesn't share an
+  // hourly limit with the votes steps. Without it, funding borrows the
+  // Congress.gov key at half the pace, leaving room for votes.
+  const own = !!env.FEC_API_KEY;
   return {
     base: (env.FEC_API_BASE || FEC_API).replace(/\/$/, ""),
     key: env.FEC_API_KEY || env.CONGRESS_API_KEY,
-    pace: { intervalMs: parseInt(env.FEC_MIN_INTERVAL_MS || "4000", 10), dailyLimit: parseInt(env.FEC_DAILY_LIMIT || "3000", 10) },
+    own,
+    pace: {
+      intervalMs: parseInt((own ? env.FEC_MIN_INTERVAL_MS : env.FEC_SHARED_MIN_INTERVAL_MS) || (own ? "4000" : "8000"), 10),
+      dailyLimit: parseInt(env.FEC_DAILY_LIMIT || "3000", 10),
+    },
     refreshDays: parseInt(env.FUNDING_REFRESH_DAYS || "7", 10),
     crosswalk: env.LEGISLATORS_URL || CROSSWALK,
   };
 }
 
-/** Resolve each member's FEC candidate ID and principal campaign committee. */
-async function resolveCandidates(env, db, budget, fec, o, cycle) {
+/**
+ * Live communities' House districts ("CA-5"), from LIVE_HOUSE_DISTRICTS (keep in
+ * step with LIVE in functions/_lib/geo.js), else CA_HOUSE_DISTRICT.
+ */
+export function liveDistricts(env) {
+  const raw = env.LIVE_HOUSE_DISTRICTS || (env.CA_HOUSE_DISTRICT ? `CA-${env.CA_HOUSE_DISTRICT}` : "");
+  return raw
+    .split(",")
+    .map((x) => x.trim().toUpperCase().match(/^([A-Z]{2})-(\d+)$/))
+    .filter(Boolean)
+    .map((m) => ({ st: m[1], cd: String(parseInt(m[2], 10)) }));
+}
+
+/** SQL for a member's place in line (0: represents a live community; 1: same state; 2: everyone else), and its binds. */
+export function priorityOf(env) {
+  const live = liveDistricts(env);
+  if (!live.length) return { sql: "2", binds: [] };
+  const states = [...new Set(live.map((d) => d.st))];
+  const ph = (a) => a.map(() => "?").join(",");
+  return {
+    sql: `CASE WHEN (o.chamber = 'us-house' AND (o.state || '-' || o.district_code) IN (${ph(live)})) OR (o.chamber = 'us-senate' AND o.state IN (${ph(states)})) THEN 0
+               WHEN o.state IN (${ph(states)}) THEN 1 ELSE 2 END`,
+    binds: [...live.map((d) => `${d.st}-${d.cd}`), ...states, ...states],
+  };
+}
+
+async function loadCrosswalk(db, budget, o) {
   let crosswalk = JSON.parse((await getState(db, "fec_crosswalk")) || "null");
   if (!crosswalk || daysSince(crosswalk.at) >= 7) {
     const all = await budget.json(o.crosswalk, {}, "FEC ID crosswalk");
     crosswalk = { at: new Date().toISOString(), ids: Object.fromEntries(all.filter((l) => l.id && l.id.bioguide).map((l) => [l.id.bioguide, l.id.fec || []])) };
     await setState(db, "fec_crosswalk", JSON.stringify(crosswalk));
   }
-  const todo = (
-    await db
-      .prepare(
-        `SELECT o.id, o.bioguide_id, o.chamber, o.state FROM officials o
-         LEFT JOIN fec_candidates f ON f.official_id = o.id
-         WHERE o.level = 'federal' AND o.active = 1
-           AND (f.official_id IS NULL OR f.checked_at < datetime('now', '-30 days'))
-         ORDER BY f.official_id IS NOT NULL, o.id LIMIT 600`
-      )
-      .all()
-  ).results;
-  let resolved = 0;
-  for (const m of todo) {
-    const bioguide = m.bioguide_id || m.id.replace(/^bioguide:/, "");
-    const ids = candidateIdsFor(crosswalk.ids[bioguide], m.chamber, m.state);
-    let row = { candidate_id: ids[0] || null, committee_id: null, committee_name: null, note: null, source_url: ids[0] ? candidatePage(ids[0], cycle) : o.crosswalk };
-    if (!ids.length) row.note = "No FEC candidate ID for this office in the public crosswalk (often a newly appointed senator).";
-    for (const id of ids) {
-      const d = await fec(`/candidate/${id}/committees/?designation=P&cycle=${cycle}&per_page=5`, `committees ${id}`);
-      const c = (d.results || [])[0];
-      if (c) {
-        row = { candidate_id: id, committee_id: c.committee_id, committee_name: c.name || null, note: null, source_url: candidatePage(id, cycle) };
-        break;
-      }
+  return crosswalk;
+}
+
+/** Match one member to an FEC candidate ID and principal campaign committee. */
+async function resolveOne(db, fec, o, crosswalk, m, cycle) {
+  const bioguide = m.bioguide_id || m.id.replace(/^bioguide:/, "");
+  const ids = candidateIdsFor(crosswalk.ids[bioguide], m.chamber, m.state);
+  let row = { candidate_id: ids[0] || null, committee_id: null, committee_name: null, note: null, source_url: ids[0] ? candidatePage(ids[0], cycle) : o.crosswalk };
+  if (!ids.length) row.note = "No FEC candidate ID for this office in the public crosswalk (often a newly appointed senator).";
+  for (const id of ids) {
+    const d = await fec(`/candidate/${id}/committees/?designation=P&cycle=${cycle}&per_page=5`, `committees ${id}`);
+    const c = (d.results || [])[0];
+    if (c) {
+      row = { candidate_id: id, committee_id: c.committee_id, committee_name: c.name || null, note: null, source_url: candidatePage(id, cycle) };
+      break;
     }
-    if (ids.length && !row.committee_id) row.note = `No principal campaign committee registered for ${cycle - 1}–${cycle}.`;
-    await db
-      .prepare(
-        `INSERT INTO fec_candidates (official_id, candidate_id, committee_id, committee_name, note, source_url, checked_at)
-         VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
-         ON CONFLICT(official_id) DO UPDATE SET candidate_id = excluded.candidate_id, committee_id = excluded.committee_id,
-           committee_name = excluded.committee_name, note = excluded.note, source_url = excluded.source_url, checked_at = excluded.checked_at`
-      )
-      .bind(m.id, row.candidate_id, row.committee_id, row.committee_name, row.note, row.source_url)
-      .run();
-    resolved += 1;
   }
-  return resolved;
+  if (ids.length && !row.committee_id) row.note = `No principal campaign committee registered for ${cycle - 1}–${cycle}.`;
+  await db
+    .prepare(
+      `INSERT INTO fec_candidates (official_id, candidate_id, committee_id, committee_name, note, source_url, checked_at)
+       VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
+       ON CONFLICT(official_id) DO UPDATE SET candidate_id = excluded.candidate_id, committee_id = excluded.committee_id,
+         committee_name = excluded.committee_name, note = excluded.note, source_url = excluded.source_url, checked_at = excluded.checked_at`
+    )
+    .bind(m.id, row.candidate_id, row.committee_id, row.committee_name, row.note, row.source_url)
+    .run();
+  return row;
 }
 
 /** Every page of a keyset-paginated Schedule A search. */
@@ -194,10 +223,31 @@ async function readOne(db, fec, m, cycle, current) {
   return { pacs: pacs.length, outside: outside.length, employers: employers.length, totals: !!totals };
 }
 
+// Bills whose lobbying search is due (see syncFederalLobbying).
+const LOBBYING_DUE = `b.level = 'federal'
+  AND b.session = (SELECT MAX(session) FROM bills WHERE level = 'federal')
+  AND EXISTS (SELECT 1 FROM votes v WHERE v.bill_id = b.id AND v.vote_type = 'final_passage')
+  AND (p.bill_id IS NULL OR p.done_at IS NULL OR p.done_at < datetime('now', ?))`;
+
+async function lobbyingWaiting(env, db) {
+  const days = `-${parseInt(env.LOBBYING_REFRESH_DAYS || "30", 10)} days`;
+  const r = await db.prepare(`SELECT COUNT(*) AS n FROM bills b LEFT JOIN bill_lobbying_progress p ON p.bill_id = b.id WHERE ${LOBBYING_DUE}`).bind(days).first();
+  return r ? r.n : 0;
+}
+
+// Leave a member-period unstarted when less than this much of funding's time is left.
+const MIN_MEMBER_MS = 90000;
+
 export async function syncFederalFunding(env, db, budget) {
   const o = fecOptions(env);
   if (!o.key) return { status: "skipped", message: "FEC_API_KEY (or CONGRESS_API_KEY) secret is not set" };
+  // While lobbying has bills waiting, it keeps its share of what's left of this round.
+  const share = Math.min(0.9, Math.max(0, parseFloat(env.LOBBYING_ROUND_SHARE || "0.4")));
+  const reserveMs = share > 0 && (await lobbyingWaiting(env, db)) > 0 ? Math.round(budget.timeLeft() * share) : 0;
+  const ownTimeLeft = () => budget.timeLeft() - reserveMs;
+  const SHARE_USED = "run time limit reached (the rest of this round is federal-lobbying's share)";
   const fec = async (path, label) => {
+    if (ownTimeLeft() < o.pace.intervalMs + 15000) throw new BudgetExhausted(`${reserveMs ? SHARE_USED : "run time limit reached"} before ${label}`);
     const url = `${o.base}${path}${path.includes("?") ? "&" : "?"}api_key=${encodeURIComponent(o.key)}`;
     try {
       return await (await budget.paced(db, "fec", o.pace, url, { headers: { Accept: "application/json" } }, label)).json();
@@ -208,39 +258,69 @@ export async function syncFederalFunding(env, db, budget) {
     }
   };
   const current = currentCycle();
-  const cycles = [current, current - 2];
+  const prev = current - 2;
+  const prio = priorityOf(env);
+  let crosswalk = null;
   let resolved = 0;
   let read = 0;
   const counts = { pacs: 0, outside: 0, employers: 0, noTotals: 0 };
+  const firstDone = [];
   const summary = (extra = "") => {
     return `${read} member-period(s) read (${counts.pacs} PAC, ${counts.outside} outside-spending and ${counts.employers} employer rows)` +
-      `${counts.noTotals ? `, ${counts.noTotals} with no FEC totals for that period` : ""}${resolved ? `; ${resolved} member(s) matched to FEC IDs` : ""}${extra}`;
+      `${counts.noTotals ? `, ${counts.noTotals} with no FEC totals for that period` : ""}${resolved ? `; ${resolved} member(s) matched to FEC IDs` : ""}` +
+      `${firstDone.length ? `; live communities' members done: ${firstDone.join(", ")}` : ""}; ${o.own ? "FEC key" : "sharing the Congress.gov key (set FEC_API_KEY)"}${extra}`;
   };
+  // Members with anything due: an FEC match (new, or older than 30 days) or a
+  // period to read. Never-loaded members first, in priority order; then refreshes.
+  const nextMembers = async () =>
+    (
+      await db
+        .prepare(
+          `SELECT o.id, o.bioguide_id, o.chamber, o.state, f.official_id AS matched, f.candidate_id, f.committee_id,
+             f.official_id IS NULL OR f.checked_at < datetime('now', '-30 days') AS needs_match,
+             p1.done_at AS cur_done, p2.done_at AS prev_done, ${prio.sql} AS priority
+           FROM officials o
+           LEFT JOIN fec_candidates f ON f.official_id = o.id
+           LEFT JOIN funding_progress p1 ON p1.official_id = o.id AND p1.cycle = ?
+           LEFT JOIN funding_progress p2 ON p2.official_id = o.id AND p2.cycle = ?
+           WHERE o.level = 'federal' AND o.active = 1
+             AND (f.official_id IS NULL OR f.checked_at < datetime('now', '-30 days')
+                  OR (f.candidate_id IS NOT NULL AND (p1.done_at IS NULL OR p1.done_at < datetime('now', ?) OR p2.done_at IS NULL OR p2.done_at < datetime('now', '-90 days'))))
+           ORDER BY (f.candidate_id IS NOT NULL AND p1.done_at IS NOT NULL AND p2.done_at IS NOT NULL) OR (f.official_id IS NOT NULL AND f.candidate_id IS NULL),
+             priority, p1.done_at IS NOT NULL, MIN(COALESCE(p1.done_at, ''), COALESCE(p2.done_at, '')), o.id
+           LIMIT 10`
+        )
+        .bind(...prio.binds, current, prev, `-${o.refreshDays} days`)
+        .all()
+    ).results;
+  const seen = new Set();
   try {
-    resolved = await resolveCandidates(env, db, budget, fec, o, current);
     for (;;) {
-      const todo = (
-        await db
-          .prepare(
-            `SELECT f.official_id, f.candidate_id, f.committee_id, c.cycle
-             FROM fec_candidates f JOIN officials o ON o.id = f.official_id
-             JOIN (SELECT ? AS cycle UNION ALL SELECT ?) c
-             LEFT JOIN funding_progress p ON p.official_id = f.official_id AND p.cycle = c.cycle
-             WHERE o.active = 1 AND f.candidate_id IS NOT NULL
-               AND (p.done_at IS NULL OR p.done_at < datetime('now', CASE WHEN c.cycle = ? THEN ? ELSE '-90 days' END))
-             ORDER BY p.done_at IS NOT NULL, c.cycle DESC, p.done_at, f.official_id LIMIT 20`
-          )
-          .bind(cycles[0], cycles[1], current, `-${o.refreshDays} days`)
-          .all()
-      ).results;
+      const todo = (await nextMembers()).filter((m) => !seen.has(m.id));
       if (!todo.length) break;
       for (const m of todo) {
-        const r = await readOne(db, fec, m, m.cycle, current);
-        read += 1;
-        counts.pacs += r.pacs;
-        counts.outside += r.outside;
-        counts.employers += r.employers;
-        if (!r.totals) counts.noTotals += 1;
+        seen.add(m.id); // at most once per run, whatever is left due
+        let fecRow = m;
+        if (m.needs_match) {
+          crosswalk ||= await loadCrosswalk(db, budget, o);
+          fecRow = await resolveOne(db, fec, o, crosswalk, m, current);
+          resolved += 1;
+        }
+        if (!fecRow.candidate_id) continue;
+        const due = [
+          [current, m.cur_done, `-${o.refreshDays}`],
+          [prev, m.prev_done, "-90"],
+        ].filter(([, done, days]) => !done || Date.parse(`${done.replace(" ", "T")}Z`) < Date.now() + parseInt(days, 10) * DAY);
+        for (const [cycle] of due) {
+          if (ownTimeLeft() < MIN_MEMBER_MS) throw new BudgetExhausted(reserveMs ? SHARE_USED : "run time limit reached");
+          const r = await readOne(db, fec, { official_id: m.id, candidate_id: fecRow.candidate_id, committee_id: fecRow.committee_id }, cycle, current);
+          read += 1;
+          counts.pacs += r.pacs;
+          counts.outside += r.outside;
+          counts.employers += r.employers;
+          if (!r.totals) counts.noTotals += 1;
+        }
+        if (m.priority === 0 && due.length) firstDone.push(m.id.replace(/^bioguide:/, ""));
       }
     }
   } catch (err) {
@@ -248,15 +328,14 @@ export async function syncFederalFunding(env, db, budget) {
     const waiting = (
       await db
         .prepare(
-          `SELECT COUNT(*) AS n FROM fec_candidates f JOIN officials o ON o.id = f.official_id
-           JOIN (SELECT ? AS cycle UNION ALL SELECT ?) c
-           LEFT JOIN funding_progress p ON p.official_id = f.official_id AND p.cycle = c.cycle
-           WHERE o.active = 1 AND f.candidate_id IS NOT NULL AND p.done_at IS NULL`
+          `SELECT COUNT(*) AS n FROM officials o LEFT JOIN fec_candidates f ON f.official_id = o.id
+           LEFT JOIN funding_progress p ON p.official_id = o.id AND p.cycle = ?
+           WHERE o.level = 'federal' AND o.active = 1 AND (f.official_id IS NULL OR (f.candidate_id IS NOT NULL AND p.done_at IS NULL))`
         )
-        .bind(cycles[0], cycles[1])
+        .bind(current)
         .first()
     ).n;
-    return { status: "partial", message: `${summary()}; ${waiting} member-period(s) not read yet; ${err.message}` };
+    return { status: "partial", message: `${summary()}; ${waiting} member(s) not loaded yet; ${err.message}` };
   }
   if (!read && !resolved) return { status: "skipped", message: "every member's funding is up to date" };
   return { status: "ok", message: summary() };
@@ -314,10 +393,7 @@ export async function syncFederalLobbying(env, db, budget) {
           .prepare(
             `SELECT b.*, p.cursor, p.done_at, p.searched, p.matched FROM bills b
              LEFT JOIN bill_lobbying_progress p ON p.bill_id = b.id
-             WHERE b.level = 'federal'
-               AND b.session = (SELECT MAX(session) FROM bills WHERE level = 'federal')
-               AND EXISTS (SELECT 1 FROM votes v WHERE v.bill_id = b.id AND v.vote_type = 'final_passage')
-               AND (p.bill_id IS NULL OR p.done_at IS NULL OR p.done_at < datetime('now', ?))
+             WHERE ${LOBBYING_DUE}
              ORDER BY p.cursor IS NULL, (SELECT MAX(v.vote_date) FROM votes v WHERE v.bill_id = b.id) DESC LIMIT 10`
           )
           .bind(`-${o.refreshDays} days`)
