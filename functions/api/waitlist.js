@@ -21,7 +21,7 @@ async function countyName(env, request, fips) {
 
 export async function onRequestPost({ request, env }) {
   const url = new URL(request.url);
-  const back = (q) => Response.redirect(`${url.origin}/?hub=1&waitlist=${q}#communities`, 303);
+  const back = (q) => Response.redirect(`${url.origin}/?waitlist=${q}#communities`, 303);
   const origin = request.headers.get("Origin");
   if (origin && origin !== url.origin) return new Response("Refused", { status: 403 });
   if (!env.DB || !turnstileReady(env)) return back("closed");
@@ -55,5 +55,5 @@ export async function onRequestPost({ request, env }) {
 }
 
 export function onRequestGet({ request }) {
-  return Response.redirect(`${new URL(request.url).origin}/?hub=1#communities`, 302);
+  return Response.redirect(`${new URL(request.url).origin}/#communities`, 302);
 }

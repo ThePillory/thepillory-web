@@ -1,8 +1,8 @@
-// /: Home. The hub for every new visitor; once a visitor's districts are known
-// (the pillory_districts cookie, set by the lookup), their briefing instead:
-//   in Calaveras County   the full county briefing (also at /calaveras/)
-//   anywhere else         their reps, their reps' latest votes, Happening now
-// ?hub=1 always shows the hub. /home/ redirects here.
+// /: Home, the hub, for every visitor (thepillory.co itself). First-time
+// visitors get a short intro they can dismiss (remembered in the browser).
+// A visitor whose districts are known (the pillory_districts cookie, set by the
+// lookup) also gets a link to their briefing at /briefing/. The old ?hub=1 flag
+// redirects here; /home/ redirects here.
 //
 // The hub, top to bottom:
 //   headline; Find your representatives (address or ZIP; nothing stored);
@@ -12,9 +12,8 @@
 //   Understand (explainers).
 import { page, esc } from "./_lib/render.js";
 import { listMeetings, pacificNow, addDays, deadlineParts, meetingHref, when } from "./_lib/meetings.js";
-import { districtsFromCookie, isCalaveras, describe, STATE_NAME } from "./_lib/districts.js";
+import { districtsFromCookie, describe, STATE_NAME } from "./_lib/districts.js";
 import { happeningNow, happeningSection, lookupForm, waitlistCounts } from "./_lib/hub.js";
-import { calaverasBriefing, personalBriefing } from "./_lib/briefing.js";
 import { turnstileReady, turnstileWidget, turnstileScript } from "./_lib/turnstile.js";
 
 const missing = (err) => /no such table|no such column/i.test(String(err && err.message));
@@ -160,11 +159,16 @@ async function hub(env, url, d) {
 <header class="hub-head stack-sm">
   <h1 class="hub-title">Know what your government is doing. Then take part.</h1>
   <p class="hub-sub">Votes, bills, and meetings in plain language, measured against the Constitution. Built on evidence, open to every point of view.</p>
-  ${d ? `<p class="small"><a class="inline-link" href="/">Back to your briefing</a> · ${esc(describe(d))}</p>` : ""}
 </header>
+${d ? `<a class="card briefing-link" href="/briefing/"><span class="stack-xs"><span class="label">Your briefing</span><span class="small">${esc(describe(d))}</span></span><span class="chev" aria-hidden="true">›</span></a>` : ""}
+<aside class="intro-banner" data-intro hidden aria-label="Welcome">
+  <p><strong>New here?</strong> ThePillory keeps a public, sourced record of what your officials do: every recorded vote, the bills they vote on mapped to the Constitution, local meeting agendas, and the money around them. Facts and sources, no party labels.</p>
+  <p><a class="inline-link" href="/about/how-it-works/">How it works</a> · <a class="inline-link" href="/about/principles/">Principles</a></p>
+  <button class="intro-dismiss" type="button" data-intro-dismiss aria-label="Dismiss this introduction">×</button>
+</aside>
 ${notFound ? '<p class="banner banner--error" role="alert">We couldn\'t find districts for that. Check the address, or try your ZIP code.</p>' : ""}
 ${lookupForm(d)}
-${happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? "/?hub=1" : "/?hub=1&now=state"), loaded: !!db })}
+${happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? "/" : "/?now=state"), loaded: !!db })}
 ${takePart(deadlines, !!db)}
 ${communities(env, counts, msg, error)}
 ${understand()}
@@ -175,8 +179,10 @@ ${turnstileReady(env) ? turnstileScript : ""}`;
 export async function onRequestGet({ request, env }) {
   const url = new URL(request.url);
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
-  const d = districtsFromCookie(request);
-  if (!d || url.searchParams.get("hub") === "1") return hub(env, url, d);
-  if (isCalaveras(d)) return calaverasBriefing(env, url, d);
-  return personalBriefing(env, url, d);
+  // The hub used to need ?hub=1 for visitors with saved districts; it's at / now.
+  if (url.searchParams.has("hub")) {
+    url.searchParams.delete("hub");
+    return Response.redirect(`${url.origin}/${url.search}${url.hash}`, 301);
+  }
+  return hub(env, url, districtsFromCookie(request));
 }

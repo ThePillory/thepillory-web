@@ -1,12 +1,12 @@
 // The two briefings:
-//   calaverasBriefing   the full county briefing (the former Home): this week's
-//                       meetings and hearings, issues, and the county's reps'
-//                       latest votes. Served at /calaveras/, and at / for a
-//                       visitor whose districts are in Calaveras County.
+//   calaverasBriefing   the full county briefing: this week's meetings and
+//                       hearings, issues, and the county's reps' latest votes.
+//                       Served at /calaveras/, and at /briefing/ for a visitor
+//                       whose districts are in Calaveras County.
 //   personalBriefing    for a visitor elsewhere: their federal (and in
 //                       California, state) reps, those reps' latest votes,
 //                       and Happening now.
-// Both link back to the hub (/?hub=1).
+// Both link back to the hub (/).
 import { EMPTY_REPORTS } from "./generated.js";
 import { page, esc, fmtDate } from "./render.js";
 import { recentFinalVotes, officialsWhere, homeDistricts } from "./data.js";
@@ -51,7 +51,7 @@ function briefHead(title, sub, { hubLink = true, now } = {}) {
     <h1 class="brief-title">${esc(title)}</h1>
     <p class="small secondary">${sub}</p>
   </div>
-  ${hubLink ? `<p class="small brief-links"><a class="inline-link" href="/?hub=1">ThePillory hub</a> · <a class="inline-link" href="/#find">Change location</a></p>` : ""}
+  ${hubLink ? `<p class="small brief-links"><a class="inline-link" href="/">ThePillory hub</a> · <a class="inline-link" href="/#find">Change location</a></p>` : ""}
   ${now ? `<p class="xsmall secondary">Your briefing · ${esc(now)}</p>` : ""}
 </header>`;
 }
@@ -112,7 +112,7 @@ export async function calaverasBriefing(env, url, visitor = null) {
       }</p>`;
 
   const main = `
-${briefHead("Calaveras County", "Live · the county's meetings and the votes of the officials who represent it", { hubLink: base === "/", now: when(now).long || "" })}
+${briefHead("Calaveras County", "Live · the county's meetings and the votes of the officials who represent it", { hubLink: base === "/briefing/", now: when(now).long || "" })}
 <aside class="intro-banner" data-intro hidden aria-label="Welcome">
   <p><strong>New here?</strong> ThePillory keeps a public, sourced record of what the officials who represent Calaveras County do: their votes, the bills they vote on mapped to the Constitution, and what's on county meeting agendas.</p>
   <p><a class="inline-link" href="/about/how-it-works/">How it works</a></p>
@@ -135,7 +135,7 @@ ${filterNav()}
   ${votesHtml}
 </section>
 ${caughtUp}`;
-  return page("Calaveras County briefing", main, { tab: "home", root: base === "/", back: base === "/" ? null : ["Home", "/?hub=1"], personal: true });
+  return page("Calaveras County briefing", main, { tab: "home", back: ["Home", "/"], personal: true });
 }
 
 /** The briefing for a visitor outside Calaveras County. */
@@ -173,7 +173,7 @@ export async function personalBriefing(env, url, d) {
   const rows = voteRows(votes.rows, 5);
   const main = `
 ${briefHead("Your briefing", esc(describe(d)))}
-<p class="panel-navy small">${esc(coverage)} <a class="inline-link" href="/?hub=1#communities">Bring ThePillory to your county</a></p>
+<p class="panel-navy small">${esc(coverage)} <a class="inline-link" href="/#communities">Bring ThePillory to your county</a></p>
 
 <section class="brief-section" aria-labelledby="h-reps">
   ${sectionHead("h-reps", "Your representatives", "/reps/", "All reps")}
@@ -185,7 +185,7 @@ ${briefHead("Your briefing", esc(describe(d)))}
   ${rows ? `<ul class="card plain-list brief-votes">${rows}</ul>` : `<p class="secondary small empty-note">${db ? "No final-passage votes loaded yet for your reps." : "Votes appear here once the data sync has run."}</p>`}
 </section>
 
-${happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? "/" : `/?now=${v}`), personal: true, loaded: !!db })}
+${happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? "/briefing/" : `/briefing/?now=${v}`), personal: true, loaded: !!db })}
 ${caughtUp}`;
-  return page("Your briefing", main, { tab: "home", root: true, personal: true });
+  return page("Your briefing", main, { tab: "home", back: ["Home", "/"], personal: true });
 }

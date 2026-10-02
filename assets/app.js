@@ -236,7 +236,7 @@
     function done(d) {
       saveDistricts(d);
       show([el("p", "small", "Found your districts. Opening your briefing…")]);
-      location.href = "/";
+      location.href = "/briefing/";
     }
 
     form.addEventListener("submit", function (e) {

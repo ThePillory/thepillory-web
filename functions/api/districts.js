@@ -199,7 +199,7 @@ export async function onRequestPost({ request, env }) {
   const pick = form.get("pick");
   let result = pick ? { found: true, districts: cleanDistricts(Object.fromEntries(new URLSearchParams(String(pick)))) } : await lookup(env, request, form.get("q"));
   if (result.found && result.districts) {
-    return new Response(null, { status: 303, headers: { Location: `${url.origin}/`, "Set-Cookie": cookieHeader(result.districts), "Cache-Control": "no-store" } });
+    return new Response(null, { status: 303, headers: { Location: `${url.origin}/briefing/`, "Set-Cookie": cookieHeader(result.districts), "Cache-Control": "no-store" } });
   }
   if (result.choices) return choicePage(result);
   return back("lookup=notfound");
