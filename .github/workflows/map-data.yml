@@ -1,0 +1,46 @@
+# Rebuilds the map data (data/geo/) from Census Bureau boundary and block
+# files and commits it. Run it by hand (Actions -> Refresh map data -> Run
+# workflow), e.g. when new district maps are published. See tools/build_geo.mjs.
+name: Refresh map data
+on:
+  workflow_dispatch:
+  push:
+    branches-ignore: [main]
+    paths: [".github/workflows/map-data.yml", "tools/build_geo.mjs"]
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Download Census files
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/geobuild && cd /tmp/geobuild
+          get() { curl -fsSL --retry 3 -A "ThePillory data build (+https://thepillory.co)" -o "$(basename "$1")" "$1"; }
+          for f in state_20m county_500k cd119_500k sldu_500k sldl_500k; do
+            get "https://www2.census.gov/geo/tiger/GENZ2024/shp/cb_2024_us_${f}.zip"
+            unzip -oq "cb_2024_us_${f}.zip"
+          done
+          BEF=https://www2.census.gov/programs-surveys/decennial/rdo/mapping-files/2025
+          get "$BEF/119-congressional-district-befs/cd119.zip"; mkdir -p cd119 && unzip -oq cd119.zip -d cd119
+          get "$BEF/2024-state-legislative-bef/sldu24.zip"; mkdir -p sldu24 && unzip -oq sldu24.zip -d sldu24
+          get "$BEF/2024-state-legislative-bef/sldl24.zip"; mkdir -p sldl24 && unzip -oq sldl24.zip -d sldl24
+          ls -la
+      - name: Build
+        run: |
+          npm i --no-save --no-package-lock shapefile@0.6 topojson-server@3 topojson-simplify@3 topojson-client@3 d3-geo@3
+          node tools/build_geo.mjs /tmp/geobuild
+          du -sh data/geo data/geo/shapes data/geo/places
+      - name: Commit the data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/geo
+          git diff --cached --quiet && exit 0
+          git commit -m "Refresh map data from Census Bureau files"
+          git push
