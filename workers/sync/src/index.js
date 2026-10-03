@@ -117,9 +117,12 @@ export class SyncRunner extends DurableObject {
       const phase = url.searchParams.get("only") === "analysis" ? "analysis" : "sync";
       const state = await this.getState();
       const since = Date.parse(state.round_started_at || state.started_at || 0);
-      if (state.running && Date.now() - since < STALE_MS) {
+      // restart=1 replaces a run in progress (e.g. after a deploy, so new code takes over).
+      const restart = url.searchParams.get("restart") === "1";
+      if (state.running && Date.now() - since < STALE_MS && !restart) {
         return Response.json({ status: "already running", run_id: state.run_id, started_at: state.started_at, round: state.round });
       }
+      const replaced = state.running ? state.run_id : null;
       const next = {
         running: true,
         run_id: crypto.randomUUID(),
@@ -135,10 +138,27 @@ export class SyncRunner extends DurableObject {
       };
       await this.ctx.storage.put("state", next);
       await this.ctx.storage.setAlarm(Date.now() + 50);
-      return Response.json({ status: "started", run_id: next.run_id, started_at: next.started_at });
+      return Response.json({ status: "started", run_id: next.run_id, started_at: next.started_at, ...(replaced ? { replaced } : {}) });
+    }
+    if (url.pathname === "/stop") {
+      const state = await this.getState();
+      if (!state.running) return Response.json({ status: "not running", run_id: state.run_id || null });
+      state.running = false;
+      state.outcome = "stopped by hand";
+      state.finished_at = new Date().toISOString();
+      await this.ctx.storage.put("state", state);
+      await this.ctx.storage.deleteAlarm();
+      return Response.json({ status: "stopped", run_id: state.run_id });
     }
     if (url.pathname === "/state") return Response.json(await this.getState());
     return new Response("not found", { status: 404 });
+  }
+
+  // A round that finishes after its run was stopped or replaced (/stop, /run?restart=1)
+  // keeps what it saved to D1 but doesn't touch the newer state or schedule more rounds.
+  async superseded(state) {
+    const now = await this.getState();
+    return !now.running || now.run_id !== state.run_id;
   }
 
   async alarm() {
@@ -150,6 +170,7 @@ export class SyncRunner extends DurableObject {
     await this.ctx.storage.put("state", state);
     try {
       const result = await runSync(this.env, { trigger: state.trigger, deadlineMs: ROUND_MS, runId: state.run_id });
+      if (await this.superseded(state)) return;
       state.rounds = [...state.rounds, roundSummary(result, state.round, state.round_started_at)].slice(-10);
       if (result.continue_now && state.round < MAX_ROUNDS) {
         // More to fetch and this round only stopped at its budget: keep going.
@@ -163,6 +184,7 @@ export class SyncRunner extends DurableObject {
           : "caught up except for sources at a daily limit; the daily sync continues them"
         : "up to date";
     } catch (err) {
+      if (await this.superseded(state)) return;
       // Caught so the alarm isn't retried in a loop; the error is visible in /status.
       state.error = redact(`${err.name}: ${err.message}`);
       state.outcome = "error";
@@ -180,6 +202,7 @@ export class SyncRunner extends DurableObject {
     await this.ctx.storage.put("state", state);
     try {
       const r = await runAnalysis(this.env, { deadlineMs: ROUND_MS, runId: state.run_id, trigger: state.trigger });
+      if (await this.superseded(state)) return;
       const prev = state.analysis || { drafted: 0 };
       state.analysis = {
         status: r.status,
@@ -194,6 +217,7 @@ export class SyncRunner extends DurableObject {
         return;
       }
     } catch (err) {
+      if (await this.superseded(state)) return;
       state.analysis = { ...(state.analysis || {}), status: "error", error: redact(`${err.name}: ${err.message}`) };
       console.error(`[${state.run_id}] analysis failed: ${state.analysis.error}`);
     }
@@ -237,18 +261,32 @@ export default {
   async fetch(request, rawEnv) {
     const env = withD1Retry(rawEnv);
     const url = new URL(request.url);
-    if (!["/run", "/analyze", "/status"].includes(url.pathname)) {
-      return json({ ok: true, routes: ["/run?token=…", "/analyze?token=…", "/status?token=…"] });
+    if (!["/run", "/stop", "/analyze", "/status"].includes(url.pathname)) {
+      return json({ ok: true, routes: ["/run?token=…", "/run?restart=1&token=…", "/stop?token=…", "/analyze?token=…", "/status?token=…"] });
     }
     if (!(await authorized(request, env))) return json({ error: "unauthorized: pass ?token= or Authorization: Bearer" }, 401);
 
     try {
       if (url.pathname === "/run") {
-        const res = await runner(env).fetch("https://sync-runner/start?trigger=manual");
+        const restart = url.searchParams.get("restart") === "1" ? "&restart=1" : "";
+        const res = await runner(env).fetch(`https://sync-runner/start?trigger=manual${restart}`);
         const started = await res.json();
         return json({
           ...started,
-          next: "Working in the background. Open /status (with the same token) to follow progress.",
+          next:
+            started.status === "already running"
+              ? "A run is already going. To replace it with a fresh one (e.g. after a deploy), open /run?restart=1 (with the same token)."
+              : `Working in the background. Open /status (with the same token) to follow progress.${
+                  started.replaced ? " The replaced run's round in progress finishes its current requests first, then this run starts." : ""
+                }`,
+        });
+      }
+
+      if (url.pathname === "/stop") {
+        const res = await runner(env).fetch("https://sync-runner/stop");
+        return json({
+          ...(await res.json()),
+          next: "No more rounds will start. A round already in progress finishes its current requests (up to about 12 minutes); what it saved is kept.",
         });
       }
 

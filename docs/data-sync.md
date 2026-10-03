@@ -48,6 +48,8 @@ Everything shown carries a source URL. The database refuses rows without one.
   ```
 
   It answers right away with `"status": "started"` and does the work in the background. Opening it again while a run is going says `"already running"`, and never starts a second one.
+
+  To replace a run in progress, for example after a deploy so the new code takes over, open `/run?restart=1&token=<SYNC_TOKEN>`. To stop a run without starting another, open `/stop?token=<SYNC_TOKEN>`. Either way, a round already in progress finishes the requests it's making (up to about 12 minutes) and keeps what it saved; it then neither schedules more rounds nor overwrites the new run's status.
 - **Check progress:** open the status link:
 
   ```
