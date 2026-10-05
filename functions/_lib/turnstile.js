@@ -14,12 +14,12 @@ export function turnstileReady(env) {
   return Boolean(env.TURNSTILE_SITE_KEY && env.TURNSTILE_SECRET_KEY);
 }
 
-/** The widget; include turnstileScript() once per page that has one. */
+/** The widget. assets/app.js loads Turnstile's script once the page has
+ * finished loading, so its challenge frame never holds up the page (or, in
+ * Safari, the tab's icon, which appears only when the page has loaded). */
 export function turnstileWidget(env) {
   return `<div class="cf-turnstile" data-sitekey="${String(env.TURNSTILE_SITE_KEY).replace(/[^\w-]/g, "")}" data-size="flexible"></div>`;
 }
-
-export const turnstileScript = '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>';
 
 /** true if Cloudflare accepts the token for this visitor. */
 export async function verifyTurnstile(env, token, ip) {

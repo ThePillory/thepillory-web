@@ -11,7 +11,7 @@ import { EMPTY_REPORTS } from "../_lib/generated.js";
 import { recentFinalVotes } from "../_lib/data.js";
 import { voteRows } from "../_lib/briefing.js";
 import { listMeetings, summariesFor, meetingCard, pacificNow, addDays } from "../_lib/meetings.js";
-import { turnstileReady, turnstileWidget, turnstileScript } from "../_lib/turnstile.js";
+import { turnstileReady, turnstileWidget } from "../_lib/turnstile.js";
 import { LIVE, loadPlace, officialsFor, allIds, repRow, executiveRows, breadcrumb, districtLabel, districtHref, placeHref } from "../_lib/geo.js";
 
 const missing = (err) => /no such table|no such column/i.test(String(err && err.message));
@@ -132,7 +132,7 @@ export async function onRequestGet({ request, env, params }) {
     <p class="hint">Used only to announce this county's launch. Never shown or shared.</p>
     ${turnstileWidget(env)}
     <button class="btn btn--primary" type="submit">Join the list</button>
-  </form>${turnstileScript}`
+  </form>`
       : '<p class="small secondary">The list isn\'t open yet.</p>'
   }
 </section>`;

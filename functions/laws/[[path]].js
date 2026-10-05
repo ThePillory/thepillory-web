@@ -11,7 +11,7 @@ import { billVote, billHref } from "../_lib/votes.js";
 import { lobbyingFor, industryMoney, followTheMoney, cycleOf } from "../_lib/funding.js";
 import { outcomeFor, outcomeSection } from "../_lib/executive.js";
 import { currentAnalysis, parse, provisionsFor, baselineSection, isPublic, openFlagCount, METHOD_URL } from "../_lib/analysis.js";
-import { turnstileReady, turnstileWidget, turnstileScript, verifyTurnstile, visitorHash, actionsToday, recordAction } from "../_lib/turnstile.js";
+import { turnstileReady, turnstileWidget, verifyTurnstile, visitorHash, actionsToday, recordAction } from "../_lib/turnstile.js";
 
 const FLAGS_PER_VISITOR = 5; // per day
 const FULL_REQUESTS_PER_VISITOR = 3; // per day
@@ -175,7 +175,7 @@ function readerForms(env, id, analysis) {
 </div>`);
   }
   if (!parts.length) return "";
-  return `<div class="stack-sm reader-forms">${parts.join("")}</div>${ready ? turnstileScript : ""}`;
+  return `<div class="stack-sm reader-forms">${parts.join("")}</div>`;
 }
 
 async function bill(env, id, url, request) {
