@@ -61,11 +61,13 @@ Four sync steps (`workers/sync/src/executive/`); parsers are pure functions in
 
 ## Funding
 
-The President's campaign funding loads like a member of Congress's (FEC, the
-presidential `P…` candidate ID from `executive.json`). The Vice President has
-no separate FEC record in that data, and the Cabinet is appointed: their Funding
-tabs say so. California's statewide officers file with the state, whose
-disclosure system is being replaced; see `docs/funding.md`.
+Every executive office has a Funding tab, the same rules for every office (see
+`docs/funding.md`, "The executive branch"): the President's FEC campaign money,
+inaugural committee and OGE financial disclosures; the Vice President's ticket
+money (when they ran with the President), the inaugural committee and OGE
+disclosures; the Cabinet's OGE financial disclosure reports and ethics
+agreements (no campaign money: appointed); California's statewide officers'
+campaign committees (Cal-Access) and Form 700 statements (FPPC).
 
 ## Pages
 

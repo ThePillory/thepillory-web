@@ -27,6 +27,7 @@ import { syncCountyMeetings } from "./meetings/county.js";
 import { syncStateHearings } from "./meetings/state.js";
 import { withD1Retry } from "./d1retry.js";
 import { syncFederalFunding, syncFederalLobbying } from "./funding/sync.js";
+import { syncExecutiveFunding } from "./funding/executive.js";
 
 // Order matters: officials before votes; state officials first because the
 // Open States lookup also detects the U.S. House district. State hearings come
@@ -46,6 +47,9 @@ const STEPS = [
   ["bill-outcomes", syncBillOutcomes],
   ["executive-orders", syncExecutiveOrders],
   ["nominations", syncNominations],
+  // Executive money and disclosures: small, so they run before federal-funding
+  // rather than wait behind its first load.
+  ["executive-funding", syncExecutiveFunding],
   // Paced and long-running (the first full load takes a few days): last.
   ["federal-funding", syncFederalFunding],
   ["federal-lobbying", syncFederalLobbying],
@@ -87,7 +91,7 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId }) {
     await log(env.DB, run, step, result.status, budget.used - before, result.message, started);
     summary.push({ step, ...result, requests: budget.used - before });
   }
-  const partialVotes = summary.filter((s) => (s.step.endsWith("-votes") || ["county-meetings", "bill-outcomes", "executive-orders", "nominations", "federal-funding", "federal-lobbying"].includes(s.step)) && s.status === "partial");
+  const partialVotes = summary.filter((s) => (s.step.endsWith("-votes") || ["county-meetings", "bill-outcomes", "executive-orders", "nominations", "executive-funding", "federal-funding", "federal-lobbying"].includes(s.step)) && s.status === "partial");
   return {
     run_id: run.id,
     trigger,

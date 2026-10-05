@@ -85,7 +85,9 @@ test("employers: never a person; 'Retired' and 'None' aren't employers; classifi
 
 test("outside spending: for and against, by spender", () => {
   const o = parseOutside(fec("/schedules/schedule_e/by_candidate/", q({ candidate_id: "H0CA77001", cycle: "2026" })).body.results, "H0CA77001", 2026);
-  assert.deepEqual(o.map((x) => [x.name, x.support_oppose, x.total]), [["TEST FUTURE FUND", "O", 220000], ["EXAMPLE VOTERS ALLIANCE", "S", 150000], ["SAMPLE CITIZENS COMMITTEE", "O", 40000]]);
+  assert.deepEqual(o.map((x) => [x.name, x.support_oppose, x.total]), [
+    ["TEST FUTURE FUND", "O", 220000], ["EXAMPLE VOTERS ALLIANCE", "S", 150000], ["EXAMPLE ISSUES FUND", "S", 90000], ["SAMPLE CITIZENS COMMITTEE", "O", 40000], ["DOE, JANE", "O", 12000],
+  ]);
 });
 
 test("industries: fixed keyword rules, the same for everyone; unknown names aren't guessed", () => {

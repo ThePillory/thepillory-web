@@ -10,10 +10,11 @@ import { districtsFromCookie, repsWhere, describe, STATE_NAME } from "../_lib/di
 import { lookupForm } from "../_lib/hub.js";
 import { voteRow, voteFilter } from "../_lib/votes.js";
 import { fundingFor, fundingTab } from "../_lib/funding.js";
+import { executiveMoney, executiveFundingTab } from "../_lib/exec-funding.js";
 import { currentCycle } from "../../workers/sync/src/funding/fec.js";
 import {
   isExecutive, isPresident, isGovernor, executiveOfficials, ordersFor, billsActedOn, nominationsFor,
-  ordersTab, billsTab, nominationsTab, executiveFundingNote, executiveRows,
+  ordersTab, billsTab, nominationsTab, executiveRows,
 } from "../_lib/executive.js";
 
 const BODY = Object.fromEntries(BODIES.map((b) => [b.slug, b]));
@@ -148,7 +149,7 @@ async function profile(env, slug, url) {
     const [counts, votes, funding, orders, bills, nominations] = await Promise.all([
       voteCounts(db, o.id),
       votesFor(db, o.id, { all, limit: 50, offset: (pageNum - 1) * 50 }),
-      o.level === "federal" && (!exec || isPresident(o)) ? fundingFor(db, o, cycle) : null,
+      exec ? executiveMoney(db, o, cycle) : o.level === "federal" ? fundingFor(db, o, cycle) : null,
       isPresident(o) || isGovernor(o) ? ordersFor(db, o.id, { offset }) : null,
       isPresident(o) || isGovernor(o) ? billsActedOn(db, o.id, { show, offset }) : null,
       isPresident(o) ? nominationsFor(db, o.id, { status, offset }) : null,
@@ -237,7 +238,7 @@ ${exec ? execGlance(o, orders, bills, nominations) : `<section class="card stack
     ${voteFilter(base, all, counts)}
     ${voteList}
   </div>`}
-  <div class="stack" role="tabpanel" id="funding" aria-labelledby="tab-funding">${executiveFundingNote(o) || fundingTab(o, funding, base)}</div>
+  <div class="stack" role="tabpanel" id="funding" aria-labelledby="tab-funding">${exec ? executiveFundingTab(o, funding, base) : fundingTab(o, funding, base)}</div>
   <div class="stack" role="tabpanel" id="issues" aria-labelledby="tab-issues">${issueHtml}</div>
 </div>`;
   return page(o.name, main, { tab: "reps", back: ["Reps", "/reps/"] });

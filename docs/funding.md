@@ -10,7 +10,7 @@
 | Bill page, **Follow the money** (bills in Congress) | Organizations whose lobbying reports mention the bill, the number of reports and the reported amounts (which cover the whole report); and, for the visitor's own reps (district cookie), each rep's final-passage position beside contributions in that two-year period from the industries that lobbied, with the note "This shows a relationship in the data, not a cause." |
 | Methodology, `#funding` | Sources, categories, limits, the no-causation rule, and the legal restriction on FEC donor data. |
 
-State legislators and county officials say plainly that their funding isn't shown yet.
+State legislators and county officials say plainly that their funding isn't shown yet. The executive branch is below.
 
 ## Sources and sync
 
@@ -31,6 +31,25 @@ Two steps in the sync Worker (`workers/sync/src/funding/`), last in the daily ru
 
 Each mention is checked in `lobbying.js`: the whole number ("H.R. 4" isn't "H.R. 40"), not next to another Congress ("118th Congress S 1071"), and not followed by a different bill's title ("H.R. 1, Lower Energy Costs Act" for this Congress's H.R. 1). The report's own words around the mention are kept as the excerpt.
 
+## The executive branch (`executive-funding`, migration 0009)
+
+The same rules as for Congress, for every office whatever the officeholder's party. One step in the sync Worker (`src/funding/executive.js`), before `federal-funding`; pure parsers in `src/funding/disclosure.js` (tested in `test/disclosure.test.mjs`).
+
+| Office | Funding tab |
+|---|---|
+| President | The FEC campaign money (the same tab as a member of Congress, from the President's `P…` candidate ID), the inaugural committee, and OGE financial disclosures. |
+| Vice President | When their term began with the President's (they ran on one ticket): the same campaign figures as the President's, said plainly, since the FEC records the ticket's money under the presidential committee; the inaugural committee; OGE financial disclosures. |
+| Cabinet | No campaign money (appointed), said plainly; OGE financial disclosure reports and ethics agreements. |
+| California's statewide officers | Their campaign committees' Form 460 totals (Cal-Access), and their Form 700 statements (FPPC). |
+
+- **Outside spenders and "Donors not disclosed":** each committee in `funding_outside` (Congress and the President) is looked up once at the FEC (`/committees/?committee_id=…`, 50 at a time, again after 180 days) into `fec_committees`. A spender of FEC committee type **I** ("Independent expenditure filer (not a committee)") files Form 5 and doesn't have to report its donors except those who gave for those ads: its spending is labeled **Donors not disclosed**, and each list says how much of its total came from such groups. A person spending their own money (filed as "LAST, FIRST") is shown as "An individual, spending their own money (name not shown)", never by name, and isn't labeled. Super PACs and other committees report their donors and aren't labeled. See the methodology's `#donors-not-disclosed`.
+- **Inaugural committee:** the committee named "inaugural" that first filed with the FEC in the 150 days before the President's term began (`/committees/?q=inaugural`). Its Form 13 reports (`/filings/?form_type=F13`), the latest version of each, with each report's own total (not added together: a later report can repeat earlier amounts). The main report's electronic file (`.fec` on docquery.fec.gov, one request, `FEC_FILES_DAILY_LIMIT` 20) is read line by line: donations (F132) summed, organizations by name, individuals only as a count and total (never named, never stored by name); refunds (F133) summed. Shown only when it adds up to the report's total within 5%. Checked every `INAUGURAL_REFRESH_DAYS` (7); the file is read again only when a new version is filed.
+- **OGE (Office of Government Ethics):** its disclosure search API (`extapps2.oge.gov/201/Presiden.nsf/API.xsp/v3/rest`, the JSON behind OGE's "Officials' Individual Disclosures Search Collection"), searched by last name, kept only when the first name matches too (`ogeNameMatches`). Each record: type as OGE lists it (Nominee or Annual 278e, 278 Transaction, Ethics Agreement, Certification of Ethics Agreement Compliance…), the position and agency, the date OGE added it, and the document's link, or OGE's request form for documents released only on request (Form 201). Every `OGE_REFRESH_DAYS` (7), one request every `OGE_MIN_INTERVAL_MS` (3 s), at most `OGE_DAILY_LIMIT` (200) a day.
+- **California campaign committees (Cal-Access):** `tools/build_ca_campaign.py`, run weekly by the **Refresh California campaign data** workflow (`.github/workflows/ca-campaign.yml`; also on demand), downloads the Secretary of State's export (`campaignfinance.cdn.sos.ca.gov/dbwebexport.zip`, about 1.6 GB, rebuilt nightly), reads the Form 460 cover pages (`CVR_CAMPAIGN_DISCLOSURE_CD`) filed by a candidate or candidate-controlled committee (`CAO`, `CTL`) that name an officer from `data/state-executive-officials.json` as the candidate (last name, and first name), since 2023; an amendment replaces the statement it amends. For each, the Summary Page lines (`SMRY_CD`, column A, this period): 5 total contributions received, 11 total expenditures made, 16 ending cash balance. It writes `data/ca-campaign.json` (committee pages and each statement's PDF on cal-access.sos.ca.gov), which the step loads when the file changes. No contributor is read. Tested in `tools/test_build_ca_campaign.py`. **Cal-Access is replaced by CARS after the November 2026 election**; the workflow then needs the new system's data access.
+- **California Form 700 (FPPC):** the FPPC's Form 700 search (`form700search.fppc.ca.gov/Home/SearchDocuments`, a JSON POST: `FilerLastName`, exact match). A statement is kept when the first name matches and one of its positions or agencies is the officer's office ("State Controller" matches "Controller"); statements filed only for boards the officer sits on are left out. The FPPC's PDF links expire, so `/api/form700/<index ID>` (a Pages Function) asks the FPPC for a fresh link when a reader opens one and redirects to it, or to the FPPC's search if that fails. Every `FPPC_REFRESH_DAYS` (7), `FPPC_MIN_INTERVAL_MS` (3 s), `FPPC_DAILY_LIMIT` (100).
+
+Tables: `fec_committees`, `inaugural_committees`, `inaugural_reports`, `inaugural_breakdown`, `inaugural_organizations`, `disclosures` (OGE and FPPC), `disclosure_checks`, `state_campaign_committees`, `state_campaign_totals`.
+
 ## Tables (migration 0007)
 
 `fec_candidates`, `funding_totals`, `funding_pacs`, `funding_outside`, `funding_employers`, `funding_progress`; `lobbying_filings`, `bill_lobbying`, `bill_lobbying_progress`. Every row has a source URL (the FEC candidate page or receipts search, or the lobbying report).
@@ -44,9 +63,9 @@ Each mention is checked in `lobbying.js`: the whole number ("H.R. 4" isn't "H.R.
 - No individual donor is stored or shown by name, at any amount. Individual giving appears only as totals, by size, and by employer, and an employer only when 3 or more donors named it.
 - 52 U.S.C. 30111(a)(4): contributor information from FEC reports may not be sold or used to solicit contributions or for commercial purposes. There is no export, download or API of donor information, and none should be added.
 
-## State and county (not built yet)
+## State legislators and county (not built yet)
 
-- **California (Cal-Access):** no API. The raw export is a single 1.6 GB zip (`campaignfinance.cdn.sos.ca.gov/dbwebexport.zip`) of form-shaped tables, too large for the Worker; Power Search (MapLight) is a search form without a stable export. The Secretary of State is replacing Cal-Access with **CARS** ("post-election, November 2026"), after which the current system "will no longer be available". Anything built on Cal-Access now would break within weeks, so state funding waits for CARS and whatever data access it offers.
+- **California legislators:** the Cal-Access export (above) could cover them the same way, but Cal-Access is replaced by **CARS** ("post-election, November 2026"), after which the current system "will no longer be available"; legislators' funding waits for CARS and whatever data access it offers. The statewide officers' totals above are read from the export until then.
 - **Calaveras County:** campaign statements (Form 460) filed since 2021 are on the county's NetFile public portal (`public.netfile.com/pub2/?aid=CLVS`); Form 700s are at `netfile.com/public/CLVS/sei`. NetFile publishes agency data through public exports, which is the likely path for a later phase (supervisors' committees would need to be matched by hand in `data/county-officials.json`).
 
 ## Testing

@@ -4,11 +4,11 @@
 //
 // Mimics the response shapes of Congress.gov v3, Open States v3, and the
 // senate.gov roll call XML closely enough to exercise the sync end to end.
-import { executive, cabinetHtml, fr, congressExec, leginfoHistory, stateExecutiveFile, govFeed, govPosts } from "./executive-fixtures.mjs";
+import { executive, cabinetHtml, fr, congressExec, leginfoHistory, stateExecutiveFile, govFeed, govPosts, caCampaignFile, fppcSearch } from "./executive-fixtures.mjs";
 import http from "node:http";
 import { calendarHtml, rssHtml, meetingHtml, agendaLines, makePdf, dayFromToday } from "./iqm2-fixtures.mjs";
 import { meetingList, agendaPages } from "./tylermm-fixtures.mjs";
-import { legislators, fec as fecFixture, lda as ldaFixture } from "./funding-fixtures.mjs";
+import { legislators, fec as fecFixture, lda as ldaFixture, oge as ogeFixture, form13File } from "./funding-fixtures.mjs";
 
 const PORT = parseInt(process.env.FIXTURE_PORT || "8788", 10);
 const hits = {};
@@ -574,6 +574,11 @@ http
       const r = fecFixture(path.replace(/^\/v1/, ""), u.searchParams);
       return r ? send(res, r.status, r.body) : send(res, 404, { message: "fixture: no FEC route" });
     }
+    if (api === "fppc" && path === "/Home/SearchDocuments" && req.method === "POST") return send(res, 200, fppcSearch(JSON.parse((await readBody(req)) || "{}")));
+    if (api === "fppc" && path === "/Home/GetRedactedFormPdf") return send(res, 200, { PDFDownloadUrl: `http://127.0.0.1:8788/fppc/Home/DownloadPdf?key=test&fileName=${encodeURIComponent(u.searchParams.get("fileNameInfo.LastName") || "")}`, Message: null });
+    if (api === "fppc" && path === "/Home/DownloadPdf") return send(res, 200, "%PDF-1.3 [FAKE TEST PDF]", "application/pdf");
+    if (api === "fecfiles") return send(res, 200, form13File(), "text/plain");
+    if (api === "oge" && path === "/201/Presiden.nsf/API.xsp/v3/rest") return send(res, 200, ogeFixture(u.searchParams));
     if (api === "legislators") return send(res, 200, path === "/executive.json" ? executive : legislators);
     // FAKE executive branch sources.
     if (api === "whitehouse") return send(res, 200, cabinetHtml, "text/html");
@@ -639,6 +644,7 @@ http
     if (api === "senate") return senate[path] ? send(res, 200, senate[path], "application/xml") : send(res, 404, "not found", "text/plain");
     if (api === "site") {
       if (path === "/data/state-executive-officials.json") return send(res, 200, stateExecutiveFile);
+      if (path === "/data/ca-campaign.json") return send(res, 200, caCampaignFile);
       return county[path] ? send(res, 200, county[path]) : send(res, 404, { error: "no" });
     }
     send(res, 404, { error: "unknown api" });
