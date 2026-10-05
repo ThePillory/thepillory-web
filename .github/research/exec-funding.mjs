@@ -32,3 +32,4 @@ show('D form700search', { status: d.status, final: d.url, ct: d.ct, text: text(d
 for (const u of ['https://form700search.fppc.ca.gov/Search/SearchFilerForms.aspx', 'https://form700search.fppc.ca.gov/Search/SearchFilerForms.aspx?name=Newsom']) {
   const r = await get(u); show('D2 ' + u, { status: r.status, final: r.url, text: text(r.t).slice(0, 1200), links: [...r.t.matchAll(/href="([^"]+)"/g)].map(m => m[1]).filter(h => /pdf|View|Filer|Form|aspx/i.test(h)).slice(0, 25) });
 }
+// retry
