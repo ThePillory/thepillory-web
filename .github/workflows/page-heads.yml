@@ -1,0 +1,17 @@
+# Every page carries the shared <head> (icons, manifest, link-share tags): static
+# pages from head_tags() in tools/build.py, Functions only through page().
+name: Page heads
+on:
+  push:
+    paths: &paths ["**.html", "functions/**", "tools/build.py", "tools/check_heads.py", ".github/workflows/page-heads.yml"]
+  pull_request:
+    paths: *paths
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tools/check_heads.py
