@@ -205,7 +205,7 @@ SITE_DESCRIPTION = "Evidence-first civic accountability. Verified residents, pro
 SITE_URL = "https://thepillory.co"
 # Bump when anything in assets/logo/ or site.webmanifest changes: browsers keep
 # favicons and home-screen icons far longer than other files.
-ICON_VERSION = 2
+ICON_VERSION = 3
 
 
 def head_tags(title):
