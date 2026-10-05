@@ -296,4 +296,21 @@
       fetch("/data/counties.json").then(function (r) { return r.json(); }).then(function (c) { counties = c; fill(); });
     });
   });
+  // ---------------------------------------------------------------------
+  // Cloudflare Turnstile, for the forms that have a .cf-turnstile widget (the
+  // waitlist, "Something wrong?", "Request full analysis"). Its script is
+  // loaded only after the page has finished loading: the challenge frame it
+  // creates would otherwise hold up the load, and Safari shows a tab's icon
+  // only once the page has loaded. The script renders every widget on the page
+  // when it arrives.
+  if (document.querySelector(".cf-turnstile")) {
+    var loadTurnstile = function () {
+      var s = document.createElement("script");
+      s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+      s.async = true;
+      document.head.appendChild(s);
+    };
+    if (document.readyState === "complete") loadTurnstile();
+    else window.addEventListener("load", loadTurnstile);
+  }
 })();

@@ -22,7 +22,7 @@ import { LIVE, loadIndex, waitlistBy, usMapLinks, smallStateButtons, mapFigure }
 import { ASSET_VERSION } from "./_lib/generated.js";
 import { executiveOfficials, executiveRows } from "./_lib/executive.js";
 import { linkRow } from "./_lib/render.js";
-import { turnstileReady, turnstileWidget, turnstileScript } from "./_lib/turnstile.js";
+import { turnstileReady, turnstileWidget } from "./_lib/turnstile.js";
 
 const missing = (err) => /no such table|no such column/i.test(String(err && err.message));
 
@@ -229,7 +229,6 @@ ${happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? "/" : "/?now
 ${takePart(deadlines, !!db)}
 ${communities(env, counts, msg, error)}
 ${understand()}
-${turnstileReady(env) ? turnstileScript : ""}
 ${index ? `<script src="/assets/map.js?v=${ASSET_VERSION}" defer></script>` : ""}`;
   return page("Know what your government is doing", main, { tab: "home", root: true, personal: true });
 }

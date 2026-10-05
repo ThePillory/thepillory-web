@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "25"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "26"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
