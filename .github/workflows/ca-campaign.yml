@@ -9,10 +9,6 @@ on:
   schedule:
     - cron: "17 14 * * 1"  # Mondays; Cal-Access's export is rebuilt nightly
   workflow_dispatch:
-  # TEMPORARY: build the first file on this PR's branch. Remove before merging.
-  push:
-    branches: [claude/pillory-mobile-screens-p5zekn]
-    paths: [tools/build_ca_campaign.py, .github/workflows/ca-campaign.yml]
 permissions:
   contents: write
 jobs:
