@@ -148,7 +148,7 @@ function disclosureRows(rows) {
         d.source === "fppc"
           ? `<a class="tap" href="/api/form700/${esc(String(d.id).replace(/^fppc:/, ""))}" target="_blank" rel="noopener">Statement (PDF) ↗</a>`
           : d.document_url ? ext(d.document_url, "Document") : d.request_url ? ext(d.request_url, "Request from OGE") : "";
-      const meta = [d.position, d.agency].filter(Boolean).map(esc).join(" · ");
+      const meta = [d.position, d.agency !== d.position ? d.agency : null].filter(Boolean).map(esc).join(" · ");
       return `<li class="exec-row stack-xs">
   <span>${esc(d.doc_type)}${d.amended_on && d.source === "oge" ? ` <span class="secondary small">(amended ${esc(d.amended_on)})</span>` : ""}</span>
   ${meta ? `<span class="small secondary">${meta}</span>` : ""}
@@ -184,6 +184,12 @@ function ogeSection(d, name) {
 </section>`;
 }
 
+/** "Cal-Access export of Mon, 05 Oct 2026 08:54:52 GMT" → " of Oct 5, 2026". */
+function exportDate(note) {
+  const t = Date.parse(String(note || "").replace(/^Cal-Access export of /, ""));
+  return Number.isFinite(t) ? ` of ${fmtDate(new Date(t).toISOString().slice(0, 10))}` : "";
+}
+
 function stateSections(o, m) {
   const c = m.campaign;
   const head = '<h3 class="label" id="campaign">Campaign committees</h3>';
@@ -202,8 +208,8 @@ function stateSections(o, m) {
                 .map((x) =>
                   row(
                     `${fmtDate(x.period_start)} to ${fmtDate(x.period_end)}`,
-                    money(x.contributions),
-                    `Contributions received · spent ${money(x.expenditures)}${x.cash_end != null ? ` · cash at end ${money(x.cash_end)}` : ""} ${ext(x.source_url, "Statement")}`
+                    `${money(x.contributions)} <span class="secondary">received</span>`,
+                    `Spent ${money(x.expenditures)}${x.cash_end != null ? ` · cash at end ${money(x.cash_end)}` : ""} ${ext(x.source_url, "Statement")}`
                   )
                 )
                 .join("")}</ul>`
@@ -211,7 +217,7 @@ function stateSections(o, m) {
         } ${ext(k.source_url, "Committee record")}</div>`;
       })
       .join("");
-    campaign = `<section class="card stack-sm" aria-labelledby="campaign">${head}<p class="small">Money raised and spent by the committees ${esc(o.name)} controls, as reported to the California Secretary of State. Each row is one campaign statement (Form 460) and its own totals for that period. A committee can be for another office or a future race, a ballot measure, or an officeholder account; each is listed under its own name.</p>${blocks}<p class="hint">From the Cal-Access export${c.check.note ? ` (${esc(String(c.check.note).replace(/^Cal-Access export of /, ""))})` : ""}. California replaces Cal-Access with a new disclosure system after the November 2026 election. Individual donors are never named on ThePillory. <a class="tap" href="${METHOD}">Methodology</a></p></section>`;
+    campaign = `<section class="card stack-sm" aria-labelledby="campaign">${head}<p class="small">Money raised and spent by the committees ${esc(o.name)} controls, as reported to the California Secretary of State. Each row is one campaign statement (Form 460) and its own totals for that period. A committee can be for another office or a future race, a ballot measure, or an officeholder account; each is listed under its own name.</p>${blocks}<p class="hint">From the Cal-Access export${exportDate(c.check.note)}. California replaces Cal-Access with a new disclosure system after the November 2026 election. Individual donors are never named on ThePillory. <a class="tap" href="${METHOD}">Methodology</a></p></section>`;
   }
   const f = m.form700;
   const head7 = '<h3 class="label" id="disclosures">Statements of economic interests (Form 700)</h3>';
