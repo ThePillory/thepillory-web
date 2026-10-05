@@ -14,7 +14,8 @@ import { checkAccess } from "../_lib/access.js";
 import { inChunks } from "../_lib/data.js";
 import { parse, badge, baselineSection, provisionsFor } from "../_lib/analysis.js";
 import { verifyQuotes } from "../../workers/sync/src/analysis/verify.js";
-import { CHECKS } from "../../workers/sync/src/analysis/review-checks.js";
+import { CHECKS, CHECK_LABELS } from "../../workers/sync/src/analysis/review-checks.js";
+import { summarizeFlags } from "../../workers/sync/src/analysis/flags.js";
 import { FLAGS, FLAG_LABELS, IMPACT, MAX_FLAGGED } from "../../workers/sync/src/analysis/agenda-check.js";
 import { ISSUES } from "../_lib/generated.js";
 import { when, meetingHref } from "../_lib/meetings.js";
@@ -79,6 +80,21 @@ function analysisRow(r, why) {
   ${why ? `<div class="queue-why">${why}</div>` : ""}<div class="chips">${badge(r, false)}${r.open_flags ? '<span class="review-badge review-badge--flag">Under review</span>' : ""}</div></div>
   <span class="row-end"><span class="chev" aria-hidden="true">›</span></span>
 </a>`;
+}
+
+/** Why drafts are flagged: which checks fail most often, and how serious. */
+function flagSummary(rows) {
+  const s = summarizeFlags(rows.map((r) => ({ bill_id: r.bill_id, detail: parse(r).ai_review_detail || {} })));
+  if (!s.drafts) return "";
+  const top = Object.entries(s.by_check).filter(([, n]) => n).sort((a, b) => b[1] - a[1]);
+  const sev = s.by_severity;
+  return `<section class="card stack-sm" aria-label="Why drafts are flagged">
+  <p class="label">Why ${s.drafts === 1 ? "this draft is" : `these ${s.drafts} drafts are`} flagged</p>
+  <ul class="plain-list money-list">${top.map(([id, n]) => `<li class="money-row"><span>${esc(CHECK_LABELS[id])}</span><span class="money-amt">${n}</span></li>`).join("")}</ul>
+  <p class="hint">Failed checks across the flagged drafts (a draft can fail more than one).${
+    sev.major || sev.minor ? ` Rated major: ${sev.major}; minor: ${sev.minor}.` : ""
+  }${sev.unrated ? ` ${sev.unrated} from reviews before major and minor were rated; those drafts are reviewed again under the current rules, and only major problems stay here.` : ""}</p>
+</section>`;
 }
 
 function aiReasons(r) {
@@ -180,7 +196,8 @@ async function list(db, url) {
   <p class="subtitle">What needs a person. Drafts the AI reviewer passes are published as "AI-drafted, auto-checked"; the rest wait here.</p>
   <p class="small"><a class="inline-link" href="/admin/waitlist/">County waitlist</a></p>
 </header>
-${queue("flagged-ai", "Flagged by AI", "The AI reviewer found a problem. These are hidden from public pages until you decide.", aiFlagged, aiReasons)}
+${queue("flagged-ai", "Flagged by AI", "The AI reviewer found a major problem: a factual error, unfair treatment of one side, or opinion stated as fact. These are hidden from public pages until you decide. Minor problems (completeness, wording) are fixed or noted automatically and don't come here.", aiFlagged, aiReasons)}
+${flagSummary(aiFlagged)}
 ${queue("flagged-readers", "Flagged by readers", 'Readers reported a problem. These stay up, marked "Under review", until you approve, edit, reject or close the reports.', readerFlagged, (r) => {
       const fs = reports.get(r.id) || [];
       return `<ul class="panel-list small">${fs
@@ -492,11 +509,12 @@ function aiReviewSection(a) {
     }
   })();
   const checks = (d.checks || [])
-    .map((c) => `<li>${c.ok ? "✓" : "✗"} ${esc(CHECK_QUESTIONS[c.id] || c.id)}${c.note ? `<br><span class="secondary">${esc(c.note)}</span>` : ""}</li>`)
+    .map((c) => `<li>${c.ok ? "✓" : "✗"} ${esc(CHECK_QUESTIONS[c.id] || c.id)}${!c.ok && (c.severity === "major" || c.severity === "minor") ? ` <strong>(${c.severity})</strong>` : ""}${c.note ? `<br><span class="secondary">${esc(c.note)}</span>` : ""}</li>`)
     .join("");
   return `
 <section class="card stack-sm">
-  <h2 class="label">AI reviewer: ${a.ai_review === "pass" ? "pass" : "flag"}</h2>
+  <h2 class="label">AI reviewer: ${a.ai_review === "pass" ? ((d.notes || []).length ? "pass, with minor notes" : "pass") : "flag"}</h2>
+  ${d.previous ? `<p class="small secondary">Reviewed again under the current rules (major and minor). The earlier review flagged: ${esc((d.previous.reasons || []).join(" "))}</p>` : ""}
   ${checks ? `<ul class="panel-list small check-list">${checks}</ul>` : `<ul class="panel-list small">${(d.reasons || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ul>`}
   <p class="small secondary">Model ${esc(a.ai_review_model || "?")} · reviewed ${fmtDate(a.ai_reviewed_at)} · tokens in ${tokens.input ?? "?"}, out ${tokens.output ?? "?"}</p>
   ${d.revised && d.first_review ? `<details class="small"><summary>Revised once. The first draft was flagged for:</summary><ul class="panel-list">${(d.first_review.reasons || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ul><p class="secondary">The review above is of the revision.</p></details>` : ""}

@@ -9,3 +9,11 @@ export const CHECKS = [
   ["certainty", "Does anything claim more certainty than the sources support?"],
 ];
 export const CHECK_LABELS = Object.fromEntries(CHECKS.map(([id, q]) => [id, q]));
+
+// How serious a failed check is. Only a major problem keeps a draft off public
+// pages and sends it to a person; minor ones are revised once automatically, and
+// any that remain are published as a short note under the analysis.
+export const SEVERITIES = {
+  major: "Factual error, unfair to one side, or opinion stated as fact",
+  minor: "Completeness, phrasing or style",
+};

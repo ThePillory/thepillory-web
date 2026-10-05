@@ -2,8 +2,9 @@
 // relevance check's answers, settling the AI reviewer's verdict, and cards.
 import assert from "node:assert/strict";
 import test from "node:test";
-import { cleanVerdicts, relevanceSchema, relevanceMessage, LOCAL_RANK } from "../src/analysis/relevance.js";
-import { settleReview, draftForReview, reviewSchema, CHECKS } from "../src/analysis/review.js";
+import { cleanVerdicts, relevanceSchema, relevanceMessage, LOCAL_RANK, RELEVANCE_INSTRUCTIONS } from "../src/analysis/relevance.js";
+import { settleReview, draftForReview, reviewSchema, CHECKS, REVIEW_PROMPT_VERSION } from "../src/analysis/review.js";
+import { summarizeFlags } from "../src/analysis/flags.js";
 import { cardToDraft, cardSchema, MAX_CARD_CLAUSES } from "../src/analysis/prompt.js";
 
 const bills = [
@@ -68,6 +69,19 @@ test("relevance: never skipped for lack of information; only a chamber resolutio
   assert.deepEqual(out.map((x) => x.category), ["substantive", "substantive", "procedural_rule", "procedural_rule"]);
 });
 
+test("relevance: a bill that requires a study or report is a mandate, never a commemoration", () => {
+  const bills = [
+    { id: "ca-20252026-ab-1334", bill_number: "AB 1334", level: "state", title: "Veterans: history project.", official_summary: "This bill would require the Department of Veterans Affairs to conduct a study of ... and report its findings to the Legislature." },
+    { id: "us-119-hr-77", bill_number: "H.R. 77", level: "federal", title: "To direct the Secretary to submit a report on wildfire smoke." },
+    { id: "ca-20252026-acr-5", bill_number: "ACR 5", level: "state", title: "Literacy Awareness Month.", official_summary: "This measure would proclaim September as Literacy Awareness Month." },
+  ];
+  const skip = (bill_id, category) => ({ bill_id, verdict: "skip", category, reason: "Honors a group.", local: "low", local_reason: "" });
+  const out = cleanVerdicts({ bills: [skip("ca-20252026-ab-1334", "commemoration"), skip("us-119-hr-77", "honorary"), skip("ca-20252026-acr-5", "awareness")] }, bills);
+  assert.deepEqual(out.map((x) => x.verdict), ["analyze", "analyze", "skip"]);
+  assert.match(out[0].reason, /mandate/);
+  assert.match(RELEVANCE_INSTRUCTIONS, /Mandates are substantive/);
+});
+
 test("relevance: the message gives each bill's official description, or says there is none", () => {
   const msg = relevanceMessage([
     { ...bills[0], official_summary: "This bill designates the facility of the U.S. Postal Service at 100 Example Street as the Test Post Office.", official_summary_label: "CRS summary, Introduced in House, 2026-01-05" },
@@ -97,6 +111,44 @@ test("reviewer: a missing check counts as failed; unknown checks are ignored", (
   assert.equal(r.checks.find((c) => c.id === "summary").ok, false);
   assert.equal(settleReview(null).verdict, "flag");
   assert.deepEqual(reviewSchema().properties.checks.items.properties.id.enum, CHECKS.map(([id]) => id));
+});
+
+test("reviewer: only major problems flag; minor ones pass with notes", () => {
+  const fail = (id, severity, note) => allOk.map((c) => (c.id === id ? { ...c, ok: false, severity, note } : c));
+  const minor = settleReview({ checks: fail("provisions", "minor", "Could also cite the spending clause."), verdict: "pass" });
+  assert.equal(minor.verdict, "pass", "completeness alone doesn't send a draft to the queue");
+  assert.deepEqual(minor.notes, ["Could also cite the spending clause."]);
+  assert.deepEqual(minor.reasons, []);
+  assert.equal(minor.version, REVIEW_PROMPT_VERSION);
+  const major = settleReview({ checks: fail("summary", "major", "The deadline is 90 days, not 60."), verdict: "flag" });
+  assert.equal(major.verdict, "flag");
+  assert.match(major.reasons[0], /90 days, not 60/);
+  const unrated = settleReview({ checks: fail("balance", undefined, "The tension view is one line."), verdict: "pass" });
+  assert.equal(unrated.verdict, "flag", "a failure without a severity counts as major");
+  assert.equal(unrated.checks.find((c) => c.id === "balance").severity, "major");
+  const both = settleReview({ checks: fail("language", "major", "States the bill is unconstitutional.").map((c) => (c.id === "provisions" ? { ...c, ok: false, severity: "minor", note: "Also cite X." } : c)), verdict: "flag" });
+  assert.equal(both.verdict, "flag");
+  assert.equal(both.reasons.length, 1);
+  assert.deepEqual(both.notes, ["Also cite X."]);
+  assert.equal(settleReview({ checks: allOk, verdict: "flag" }).verdict, "flag", "a flag with no failed check still goes to a person");
+  assert.deepEqual(reviewSchema().properties.checks.items.properties.severity.enum, ["none", "minor", "major"]);
+});
+
+test("flag summary: failed checks counted across drafts, earlier reviews kept", () => {
+  const rows = [
+    { bill_id: "a", detail: { checks: [{ id: "summary", ok: false, note: "x" }, { id: "provisions", ok: false, note: "y" }], reasons: ["x", "y"] } },
+    { bill_id: "b", detail: { revised: true, checks: [{ id: "provisions", ok: false, severity: "minor", note: "z" }, { id: "balance", ok: true }], previous: { checks: [{ id: "certainty", ok: false, note: "old" }] } } },
+  ];
+  const s = summarizeFlags(rows);
+  assert.equal(s.drafts, 2);
+  assert.equal(s.by_check.provisions, 2);
+  assert.equal(s.by_check.summary, 1);
+  assert.deepEqual(s.by_severity, { major: 0, minor: 1, unrated: 2 });
+  assert.equal(s.revised, 1);
+  assert.deepEqual(s.items[1].failed, ["provisions (minor)"]);
+  const before = summarizeFlags(rows, { which: "previous" });
+  assert.equal(before.drafts, 1);
+  assert.equal(before.by_check.certainty, 1);
 });
 
 test("reviewer: sees what readers see, not internal fields", () => {

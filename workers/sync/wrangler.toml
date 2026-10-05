@@ -82,8 +82,9 @@ AGENDA_DAILY_LIMIT = "3"
 REVIEW_EFFORT = "medium"
 # Share of drafts the AI reviewer passes that also go to the review queue as spot checks.
 SPOT_CHECK_RATE = "0.1"
-# Earlier drafts reviewed per day by the AI reviewer (drafts written before it existed, or whose review failed).
-REVIEW_BACKLOG_DAILY = "10"
+# Earlier drafts reviewed per day by the AI reviewer (drafts written before it
+# existed, whose review failed, or that were flagged under earlier rules).
+REVIEW_BACKLOG_DAILY = "30"
 # County meetings (src/meetings/county.js). The county moved to Tyler Meeting
 # Manager in September 2026; "tylermm|iqm2" would also read the old IQM2 portal.
 COUNTY_MEETING_SOURCES = "tylermm"

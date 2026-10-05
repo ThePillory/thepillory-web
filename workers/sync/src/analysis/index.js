@@ -31,7 +31,7 @@ import { verifyQuotes, verifyCitations, sameCase } from "./verify.js";
 import { makeLookup } from "./courtlistener.js";
 import { PROMPT_VERSION, CARD_PROMPT_VERSION } from "./prompt.js";
 import { checkRelevance, BATCH, RELEVANCE_PROMPT_VERSION } from "./relevance.js";
-import { reviewDraft, draftForReview } from "./review.js";
+import { reviewDraft, draftForReview, REVIEW_PROMPT_VERSION } from "./review.js";
 import { withD1Retry } from "../d1retry.js";
 import { runAgendaWatch } from "./agenda.js";
 
@@ -168,7 +168,12 @@ function reviewColumns(env, review) {
   const pass = review.verdict === "pass";
   return [
     review.verdict,
-    J({ verdict: review.verdict, checks: review.checks, reasons: review.reasons, ...(review.first ? { revised: true, first_review: review.first } : {}) }),
+    J({
+      verdict: review.verdict, checks: review.checks, reasons: review.reasons, notes: review.notes || [], version: review.version || null,
+      ...(review.first ? { revised: true, first_review: review.first } : {}),
+      ...(review.kept_first ? { kept_first: true } : {}),
+      ...(review.previous ? { previous: review.previous } : {}),
+    }),
     review.model,
     J({ input: review.usage.input_tokens, output: review.usage.output_tokens, cache_read: review.usage.cache_read_tokens }),
     new Date().toISOString().replace("T", " ").slice(0, 19),
@@ -258,14 +263,15 @@ async function saveReview(env, db, row, review) {
 
 function reviewNote(review, spot) {
   if (!review) return "AI review pending (tried again next run)";
+  const notes = review.notes && review.notes.length ? `, with ${review.notes.length} minor note(s)` : "";
+  const published = `published as auto-checked${notes}${spot ? "; picked for a spot check" : ""}`;
+  if (review.kept_first) return `the revision added a major problem, so the first draft was kept (${published})`;
   if (review.first) {
-    const before = `revised once after the AI reviewer flagged ${review.first.reasons.length} problem(s)`;
-    return review.verdict === "pass"
-      ? `${before}; the revision passed (published as auto-checked${spot ? "; picked for a spot check" : ""})`
-      : `${before}; the revision was flagged again (${review.reasons.length} reason(s)), sent to the review queue`;
+    const before = `revised once after the AI reviewer noted ${review.first.checks.filter((c) => !c.ok).length} problem(s)`;
+    return review.verdict === "pass" ? `${before}; the revision passed (${published})` : `${before}; the revision still has ${review.reasons.length} major problem(s), sent to the review queue`;
   }
-  if (review.verdict === "pass") return `AI reviewer: pass (published as auto-checked${spot ? "; picked for a spot check" : ""})`;
-  return `AI reviewer: flag, sent to the review queue (${review.reasons.length} reason(s))`;
+  if (review.verdict === "pass") return `AI reviewer: pass (${published})`;
+  return `AI reviewer: ${review.reasons.length} major problem(s), sent to the review queue`;
 }
 
 // ---------------------------------------------------------------------------
@@ -281,9 +287,13 @@ async function reviewBacklog(env, db, budget, run) {
         `SELECT a.*, b.bill_number, b.title, b.level, b.session, b.chamber, b.official_url, b.summary AS bill_summary, b.source_url AS bill_source_url,
                 r.verdict AS rel_verdict, r.category AS rel_category, r.reason AS rel_reason, r.override AS rel_override
          FROM bill_analyses a JOIN bills b ON b.id = a.bill_id LEFT JOIN bill_relevance r ON r.bill_id = a.bill_id
-         WHERE a.current = 1 AND a.status = 'ai_draft' AND a.ai_review IS NULL
-         ORDER BY a.created_at, a.id LIMIT 25`
+         -- Not reviewed yet, or flagged under an earlier version of the reviewer's
+         -- rules (and no person has decided yet): reviewed again with the current rules.
+         WHERE a.current = 1 AND a.status = 'ai_draft'
+           AND (a.ai_review IS NULL OR (a.ai_review = 'flag' AND COALESCE(json_extract(a.ai_review_detail, '$.version'), '') != ?))
+         ORDER BY a.ai_review IS NOT NULL, a.created_at, a.id LIMIT 25`
       )
+      .bind(REVIEW_PROMPT_VERSION)
       .all()
   ).results;
   let rejected = 0;
@@ -326,7 +336,12 @@ async function reviewBacklog(env, db, budget, run) {
         citations: JSON.parse(row.citations || "[]"),
         uncertainty: row.uncertainty,
       };
-      const review = await reviewDraft(env, bill, source, draft, row.depth || "full");
+      let review = await reviewDraft(env, bill, source, draft, row.depth || "full");
+      // A re-review keeps the earlier review (and its reasons) beside the new one.
+      if (row.ai_review) {
+        const prev = JSON.parse(row.ai_review_detail || "{}");
+        review = { ...review, previous: { verdict: prev.verdict, checks: prev.checks, reasons: prev.reasons, version: prev.version || null, reviewed_at: row.ai_reviewed_at } };
+      }
       const spot = await saveReview(env, db, row, review);
       used += 1;
       await setState(db, key, String(used));
@@ -377,7 +392,11 @@ async function nextBills(db, limit) {
         `SELECT b.*, ${LINKED} AS linked, ${RANK} AS local_rank,
                 (SELECT MAX(v.vote_date) FROM votes v WHERE v.bill_id = b.id AND v.vote_type = 'final_passage') AS last_vote
          FROM bills b LEFT JOIN bill_relevance r ON r.bill_id = b.id
-         WHERE NOT EXISTS (SELECT 1 FROM bill_analyses a WHERE a.bill_id = b.id)
+         -- No draft yet, or only drafts the relevance check rejected automatically
+         -- (a bill it now finds substantive gets drafted; a person's rejection stands).
+         WHERE NOT EXISTS (SELECT 1 FROM bill_analyses a WHERE a.bill_id = b.id
+                             AND NOT (a.status = 'rejected' AND EXISTS (SELECT 1 FROM bill_analysis_revisions v
+                                       WHERE v.analysis_id = a.id AND v.action = 'rejected' AND v.actor = 'pipeline')))
            AND ${retry}
            AND (${LINKED} OR (${FINAL_VOTE} AND (r.verdict = 'analyze' OR r.override = 'unskip')))
          ORDER BY linked DESC, local_rank DESC, last_vote DESC, b.id LIMIT ?`
@@ -450,28 +469,33 @@ export async function analyzeBill(env, db, budget, bill) {
     else reviewError = `; AI review failed (${redact(`${err.name}: ${err.message}`)}), tried again next run`;
   }
 
-  // The revision step: when the reviewer flags named problems (not when its
-  // own call failed), the drafter gets one chance to fix them. The revision
-  // goes through the same checks and a second review; if that review flags it
-  // too, it goes to the queue with both reviews kept.
+  // The revision step: when the reviewer names problems (major or minor; not
+  // when its own call failed), the drafter gets one chance to fix them. The
+  // revision goes through the same checks and a second review. A major problem
+  // left sends it to the queue with both reviews kept; minor ones left are
+  // published as notes. If the first draft had only minor problems and the
+  // revision has a major one, the first draft is kept.
   let revisionNote = "";
-  if (review && review.verdict === "flag" && review.checks.some((c) => !c.ok) && parseInt(env.REVISIONS_PER_DRAFT || "1", 10) > 0) {
+  if (review && review.checks.some((c) => !c.ok) && parseInt(env.REVISIONS_PER_DRAFT || "1", 10) > 0) {
     try {
       budget.take(`revision ${bill.id}`);
       const revised = await draftAnalysis(env, bill, source, depth, { draft: draftForReview(draft, depth), reasons: review.reasons });
       const checked = await checks(revised.draft, revised.trimmed);
       budget.take(`AI reviewer (revision) ${bill.id}`);
       const second = await reviewDraft(env, bill, source, revised.draft, depth);
-      const first = { verdict: review.verdict, checks: review.checks, reasons: review.reasons, model: review.model, usage: review.usage };
-      draft = revised.draft;
-      ({ quoteCheck, citationCheck } = checked);
+      const first = { verdict: review.verdict, checks: review.checks, reasons: review.reasons, notes: review.notes, model: review.model, usage: review.usage };
+      const worse = review.verdict === "pass" && second.verdict === "flag";
+      if (!worse) {
+        draft = revised.draft;
+        ({ quoteCheck, citationCheck } = checked);
+      }
       usage = {
         input_tokens: usage.input_tokens + revised.usage.input_tokens,
         output_tokens: usage.output_tokens + revised.usage.output_tokens,
         cache_read_tokens: usage.cache_read_tokens + revised.usage.cache_read_tokens,
         cache_write_tokens: usage.cache_write_tokens + revised.usage.cache_write_tokens,
       };
-      review = { ...second, first };
+      review = worse ? { ...review, kept_first: true, first: { ...second, revision_rejected: true } } : { ...second, first };
       revisionNote = `; revision tokens in ${revised.usage.input_tokens}, out ${revised.usage.output_tokens}; second review tokens in ${second.usage.input_tokens}, out ${second.usage.output_tokens}`;
     } catch (err) {
       // The first draft and its review stand; it's in the queue.

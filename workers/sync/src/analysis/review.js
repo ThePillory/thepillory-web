@@ -1,15 +1,18 @@
 // The AI reviewer pass: a separate claude-sonnet-5-5 call that reads a draft
 // (after the quote and citation checks) against the bill text and answers a
-// fixed checklist. Pass: the draft is published as "AI-drafted, auto-checked".
-// Flag: it stays off public pages and goes to the review queue with the reasons.
+// fixed checklist, rating each failed check major or minor.
+//   - major (a factual error, unfair to one side, opinion stated as fact): flag.
+//     The draft stays off public pages and goes to the review queue.
+//   - minor only (completeness, phrasing, style): pass. The draft is revised once
+//     to fix them; any minor notes left are published under the analysis.
 import { structuredCall, constitution, DraftRefused } from "./claude.js";
 import { billContext } from "./prompt.js";
-import { CHECKS, CHECK_LABELS } from "./review-checks.js";
+import { CHECKS, CHECK_LABELS, SEVERITIES } from "./review-checks.js";
 
-export { CHECKS, CHECK_LABELS };
+export { CHECKS, CHECK_LABELS, SEVERITIES };
 
 export const REVIEW_MODEL = "claude-sonnet-5-5";
-export const REVIEW_PROMPT_VERSION = "2026-10-02.1";
+export const REVIEW_PROMPT_VERSION = "2026-10-05.1";
 
 export const REVIEW_INSTRUCTIONS = `You are the independent reviewer for ThePillory, a nonpartisan civic accountability site. Another model drafted a constitutional analysis of a bill. You check the draft against the bill text before it is published. You don't rewrite it: you pass it or flag it for a person.
 
@@ -22,14 +25,22 @@ The site's rules for every draft:
 
 Already checked by code, so don't re-check them: every quote of the Constitution matches the stored text, and every court case was found in CourtListener under the same name.
 
-Answer each check with ok true or false and a note of one or two sentences. When a check fails, name the passage and say what is wrong, so a person can fix it quickly.
-- summary: ${CHECKS[0][1]} Compare with the bill text: a wrong statement, or a missing central provision, fails. A card may leave out detail.
+Answer each check with ok true or false, a severity, and a note of one or two sentences. When a check fails, name the passage and say what is wrong, so it can be fixed quickly.
+- summary: ${CHECKS[0][1]} Compare with the bill text.
 - balance: ${CHECKS[1][1]} (ok means no: the views are treated with equal care.)
 - language: ${CHECKS[2][1]} Any verdict on constitutionality fails this check. (ok means no.)
 - provisions: ${CHECKS[3][1]} (ok means yes.)
 - certainty: ${CHECKS[4][1]} (ok means no.)
 
-verdict: "flag" if any check is not ok, otherwise "pass". When unsure, flag: a person will look.`;
+severity: "none" when the check is ok. When it fails:
+- "major": a reader would be misled, or one side treated unfairly:
+  - a factual error: the draft says something the bill text contradicts or doesn't say (a wrong amount, date, deadline, actor, power or effect), or leaves out a provision so that what it does say becomes wrong;
+  - unfair to one side: one view noticeably weaker, less charitable or given less care than the other, or partisan or loaded language;
+  - opinion stated as fact: any verdict on constitutionality, or a contested reading or prediction presented as settled.
+- "minor": the draft is accurate and fair but could be better: completeness (a detail or a relevant provision left out without making anything said wrong), phrasing, clarity, length, order, or style. A card leaving out detail is at most minor.
+When you can't tell whether a failure is major or minor, it is major.
+
+verdict: "flag" if any check fails with severity "major", otherwise "pass".`;
 
 export function reviewSchema() {
   return {
@@ -42,8 +53,13 @@ export function reviewSchema() {
         items: {
           type: "object",
           additionalProperties: false,
-          required: ["id", "ok", "note"],
-          properties: { id: { type: "string", enum: CHECKS.map(([id]) => id) }, ok: { type: "boolean" }, note: { type: "string" } },
+          required: ["id", "ok", "severity", "note"],
+          properties: {
+            id: { type: "string", enum: CHECKS.map(([id]) => id) },
+            ok: { type: "boolean" },
+            severity: { type: "string", enum: ["none", "minor", "major"] },
+            note: { type: "string" },
+          },
         },
       },
       verdict: { type: "string", enum: ["pass", "flag"] },
@@ -71,21 +87,28 @@ Review the draft.`;
 }
 
 /**
- * The verdict as saved: every check present, and "pass" only if every check is
- * ok and the model said pass. A missing check counts as a failure. Pure; tested.
- * Returns {verdict, checks: [{id, ok, note}], reasons: [text]}.
+ * The verdict as saved. Every check is present; a missing check counts as a
+ * major failure, and so does a failed check without a valid severity. "flag"
+ * only for a major failure (or a flag with no failed check, which a person
+ * should see); minor failures pass, with their notes kept. Pure; tested.
+ * Returns {verdict, checks: [{id, ok, severity, note}], reasons: [major], notes: [minor], version}.
  */
 export function settleReview(data) {
   const byId = new Map(((data && data.checks) || []).filter((c) => c && CHECK_LABELS[c.id]).map((c) => [c.id, c]));
   const checks = CHECKS.map(([id]) => {
     const c = byId.get(id);
-    return c ? { id, ok: c.ok === true, note: String(c.note || "").trim() } : { id, ok: false, note: "The reviewer didn't answer this check." };
+    if (!c) return { id, ok: false, severity: "major", note: "The reviewer didn't answer this check." };
+    const ok = c.ok === true;
+    return { id, ok, severity: ok ? "none" : c.severity === "minor" ? "minor" : "major", note: String(c.note || "").trim() };
   });
-  const failed = checks.filter((c) => !c.ok);
-  const verdict = failed.length || !data || data.verdict !== "pass" ? "flag" : "pass";
-  const reasons = failed.map((c) => `${CHECK_LABELS[c.id]} ${c.note}`.trim());
-  if (verdict === "flag" && !reasons.length) reasons.push("The reviewer flagged the draft without naming a failed check.");
-  return { verdict, checks, reasons };
+  const major = checks.filter((c) => !c.ok && c.severity === "major");
+  const minor = checks.filter((c) => !c.ok && c.severity === "minor");
+  const unexplained = !data || (data.verdict === "flag" && !major.length && !minor.length);
+  const verdict = major.length || unexplained ? "flag" : "pass";
+  const reasons = major.map((c) => `${CHECK_LABELS[c.id]} ${c.note}`.trim());
+  if (unexplained) reasons.push("The reviewer flagged the draft without naming a failed check.");
+  const notes = minor.map((c) => c.note).filter(Boolean);
+  return { verdict, checks, reasons, notes, version: REVIEW_PROMPT_VERSION };
 }
 
 /**
@@ -112,6 +135,8 @@ export async function reviewDraft(env, bill, source, draft, depth) {
         verdict: "flag",
         checks: [],
         reasons: [`The AI reviewer couldn't finish its check (${err.message}), so a person needs to look.`],
+        notes: [],
+        version: REVIEW_PROMPT_VERSION,
         model: err.model || env.REVIEW_MODEL || REVIEW_MODEL,
         usage: err.usage || { input_tokens: 0, output_tokens: 0, cache_read_tokens: 0, cache_write_tokens: 0 },
       };

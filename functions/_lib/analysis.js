@@ -98,6 +98,19 @@ export function badge(a, link = true) {
   return '<span class="review-badge review-badge--draft">AI-drafted, waiting for the AI reviewer</span>';
 }
 
+// Minor notes the AI reviewer left on a published draft (completeness, wording):
+// shown as a small, collapsed note. Major problems never reach a public page.
+function minorNotes(a) {
+  if (a.status !== "ai_draft" || a.ai_review !== "pass") return "";
+  const d = typeof a.ai_review_detail === "string" ? (() => { try { return JSON.parse(a.ai_review_detail); } catch (_) { return {}; } })() : a.ai_review_detail || {};
+  const notes = (d.notes || []).filter(Boolean);
+  if (!notes.length) return "";
+  return `<details class="small review-notes"><summary>Auto-checked, with ${notes.length === 1 ? "a minor note" : `${notes.length} minor notes`}</summary>
+  <ul class="panel-list">${notes.map((n) => `<li>${esc(n)}</li>`).join("")}</ul>
+  <p class="secondary">The AI reviewer found these gaps in completeness or wording, not errors of fact or fairness. <a class="inline-link" href="${METHOD_URL}">How drafts are checked</a></p>
+</details>`;
+}
+
 const UNDER_REVIEW = '<span class="review-badge review-badge--flag">Under review</span>';
 
 const items = (list) => (list.length ? `<ul class="panel-list">${list.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>` : "");
@@ -178,6 +191,7 @@ export function baselineSection(a, provisions, { underReview = false, empty = ""
   </div>
   ${underReview ? '<p class="small">A reader reported a possible problem with this analysis. It stays up while a person checks it.</p>' : ""}
   ${a.basis_note ? `<p class="limited-note">${esc(a.basis_note.replace(/^limited:/i, "Limited:"))}</p>` : ""}
+  ${minorNotes(a)}
   <div class="stack-sm">
     <h3>What the bill does</h3>
     <p>${esc(a.plain_summary)}</p>
