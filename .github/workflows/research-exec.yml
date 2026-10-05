@@ -6,13 +6,13 @@ on:
 jobs:
   look:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 20
     steps:
       - name: Fetch samples
-        continue-on-error: true
+        shell: bash {0}
         run: |
           UA="ThePillory research (+https://thepillory.co)"
-          g() { curl -sSL -m 40 -A "$UA" "$@" || true; }
+          g() { curl -sSL -m 40 -A "$UA" "$@"; }
           cat > /tmp/txt.py <<'PY'
           import sys,re,html
           t=sys.stdin.read()
@@ -21,22 +21,23 @@ jobs:
           print('\n'.join(l.strip() for l in t.splitlines() if l.strip()))
           PY
           txt() { python3 /tmp/txt.py 2>/dev/null; }
-          echo "=== A whitehouse cabinet (main content)"; g https://www.whitehouse.gov/administration/cabinet/ > /tmp/cab.html; wc -c /tmp/cab.html; txt < /tmp/cab.html | sed -n '/^The Cabinet$/,$p' | head -200
-          echo "=== A2 cabinet html structure sample"; grep -o '<h[2-4][^>]*>[^<]*</h[2-4]>' /tmp/cab.html | head -80
-          echo "=== B congress bills updated recently with veto"; for off in 0 250 500 750; do g "https://api.congress.gov/v3/bill/119?api_key=DEMO_KEY&format=json&limit=250&offset=$off&sort=updateDate+desc" | jq -c '.bills[] | select(.latestAction.text|test("eto|without signature";"i")) | {type,number,la:.latestAction}'; done
-          echo "=== B2 fromDateTime param"; g "https://api.congress.gov/v3/bill/119?api_key=DEMO_KEY&format=json&limit=2&fromDateTime=2026-09-30T00:00:00Z&toDateTime=2026-10-01T00:00:00Z" | jq -c '{count: .pagination.count, b: [.bills[]|{type,number,updateDate,la:.latestAction.text}]}'
-          echo "=== C leginfo history AB 1..60 (governor lines)"; for n in $(seq 1 60); do h=$(g "https://leginfo.legislature.ca.gov/faces/billHistoryClient.xhtml?bill_id=202520260AB$n" | txt | grep -iE "governor|chaptered|veto|without his signature|became law" | head -4 | tr '\n' '|'); [ -n "$h" ] && echo "AB $n: $h"; done
-          echo "=== C2 leginfo status for a chaptered bill (first found)"
-          echo "=== D gov feed item detail"; g https://www.gov.ca.gov/category/executive-orders/feed/ | python3 -c "
-          import sys,re
-          t=sys.stdin.read()
-          items=t.split('<item>')[1:]
-          print('items',len(items))
-          print(items[1][:4000])"
-          echo "=== D2 feed paged=40"; g "https://www.gov.ca.gov/category/executive-orders/feed/?paged=40" | grep -c '<item>'; g "https://www.gov.ca.gov/category/executive-orders/feed/?paged=40" | grep -o '<pubDate>[^<]*' | head -2
-          echo "=== D3 EO post page links to PDF"; L=$(g https://www.gov.ca.gov/category/executive-orders/feed/ | grep -o '<link>https://www.gov.ca.gov/20[^<]*' | sed -n 2p | sed 's/<link>//'); echo $L; g "$L" | grep -oiE 'href="[^"]*(EO|executive-order|\.pdf)[^"]*"' | head -10
-          echo "=== E FEC"; g "https://api.open.fec.gov/v1/candidate/P80001571/totals/?api_key=DEMO_KEY&cycle=2024&election_full=false" | head -c 1500; echo
-          echo "=== F insurance commissioner"; g https://www.insurance.ca.gov/0500-about-us/ | txt | grep -i -B2 -A2 "commissioner" | head -30
-          echo "=== F2 superintendent"; g https://www.cde.ca.gov/eo/ | txt | grep -i -B2 -A2 "superintendent" | head -30
-          echo "=== F3 treasurer"; g https://www.treasurer.ca.gov/ | txt | grep -i "treasurer " | head -8
-          echo "=== G Open States executive orgs"; g "https://v3.openstates.org/jurisdictions/ocd-jurisdiction/country:us/state:ca/government?include=organizations" | head -c 600; echo
+          echo "=== A leginfo history AB 1 table html"; g "https://leginfo.legislature.ca.gov/faces/billHistoryClient.xhtml?bill_id=202520260AB1" > /tmp/h1.html; python3 - <<'PY'
+          import re
+          t=open('/tmp/h1.html').read()
+          i=t.find('Approved by the Governor')
+          print(t[i-1500:i+600])
+          PY
+          echo "=== A2 AB 7 (vetoed) history text"; g "https://leginfo.legislature.ca.gov/faces/billHistoryClient.xhtml?bill_id=202520260AB7" | txt | sed -n '/Date/,$p' | head -24
+          echo "=== A3 SB 1-40 lines with 'without'"; for n in $(seq 1 120); do g "https://leginfo.legislature.ca.gov/faces/billHistoryClient.xhtml?bill_id=202520260SB$n" | txt | grep -i "without\|pocket\|override\|Chaptered by Secretary of State - Res" | head -2 | sed "s/^/SB $n: /"; done
+          echo "=== B gov EO post page"; L=https://www.gov.ca.gov/2026/09/18/governor-newsom-issues-executive-order-to-accelerate-independent-oversight-and-advance-the-creation-of-an-ai-kill-switch/; g "$L" > /tmp/p.html; grep -oiE 'href="[^"]+"' /tmp/p.html | grep -iE 'pdf|EO|N-[0-9]' | head -10; txt < /tmp/p.html | grep -iE "executive order|N-[0-9]+-[0-9]+" | head -8
+          echo "=== B2 feed pages"; for p in 2 5 10 20 30; do echo "page $p: $(g "https://www.gov.ca.gov/category/executive-orders/feed/?paged=$p" | grep -c '<item>') items, $(g "https://www.gov.ca.gov/category/executive-orders/feed/?paged=$p" | grep -o '<pubDate>[^<]*' | tail -1)"; done
+          echo "=== B3 EO list page on gov.ca.gov"; g https://www.gov.ca.gov/executive-orders/ | txt | head -40
+          echo "=== C FEC"; g "https://api.open.fec.gov/v1/candidate/P80001571/totals/?api_key=DEMO_KEY&cycle=2026&election_full=false" | head -c 1200; echo; g "https://api.open.fec.gov/v1/candidate/P80001571/committees/?api_key=DEMO_KEY&designation=P&cycle=2026" | head -c 600; echo
+          echo "=== D insurance"; for u in https://www.insurance.ca.gov/0500-about-us/ https://www.insurance.ca.gov/0400-news/ https://www.insurance.ca.gov/; do g "$u" | txt | grep -iE "commissioner [A-Z]" | head -5; done
+          echo "=== D2 superintendent"; for u in https://www.cde.ca.gov/eo/ https://www.cde.ca.gov/eo/in/ https://www.cde.ca.gov/; do g "$u" | txt | grep -iE "superintendent [A-Z]|state superintendent" | head -6; done
+          echo "=== D3 treasurer + controller"; g https://www.treasurer.ca.gov/ | txt | grep -iE "^Treasurer [A-Z]|Fiona" | head -3; g https://www.sco.ca.gov/ | txt | grep -i "cohen" | head -3
+          echo "=== E cabinet html around a name"; g https://www.whitehouse.gov/administration/cabinet/ > /tmp/cab.html; python3 - <<'PY'
+          t=open('/tmp/cab.html').read()
+          i=t.find('Secretary of the Treasury')
+          print(t[i-900:i+300])
+          PY
