@@ -1,12 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <title>ThePillory</title>
-  <!-- Browser-tab icon: parchment seal P on a rounded navy tile -->
+  <!-- Browser-tab icon: parchment seal P on a rounded navy tile. The seal fills
+       most of the tile so the P stays legible at 16px; in a dark browser theme a
+       parchment rim keeps the tile's edge from disappearing into the tab bar. -->
+  <style>.rim{display:none}@media (prefers-color-scheme:dark){.rim{display:inline}}</style>
   <rect width="64" height="64" rx="14" fill="#1E3A5F"/>
-  <g transform="translate(8 8) scale(0.75)">
+  <rect class="rim" x="1.25" y="1.25" width="61.5" height="61.5" rx="12.75" fill="none" stroke="#F3E8D3" stroke-opacity="0.55" stroke-width="2.5"/>
+  <g transform="translate(2.4 2.4) scale(0.925)">
   <g fill="none" stroke="#F3E8D3">
-    <circle cx="32" cy="32" r="27" stroke-width="4"/>
-    <circle cx="32" cy="32" r="21.5" stroke-width="1.5" stroke-opacity="0.6"/>
+    <circle cx="32" cy="32" r="27" stroke-width="4.5"/>
+    <circle cx="32" cy="32" r="21.5" stroke-width="1.75" stroke-opacity="0.7"/>
   </g>
-  <path fill="#F3E8D3" transform="translate(-0.35 -0.83)" d="M38.06 27.81Q38.06 26.26 37.45 25.18Q36.85 24.1 35.51 23.54Q34.17 22.99 31.88 22.99H26.25L26.14 20.66H33.59Q36.98 20.66 39.04 21.58Q41.1 22.5 42.04 24.08Q42.99 25.67 42.99 27.67Q42.99 29.66 42.03 31.32Q41.06 32.98 39.02 33.96Q36.98 34.94 33.7 34.94H26.11L26.25 32.62H33.12Q34.58 32.62 35.69 32.08Q36.8 31.54 37.43 30.47Q38.06 29.39 38.06 27.81ZM29.44 20.66V43.04L32.23 44.01V45H21.71V44.01L24.5 43.04V22.63L21.71 21.64V20.66Z"/>
+  <path fill="#F3E8D3" transform="translate(32 32) scale(1.12) translate(-32.35 -32.83)" d="M38.06 27.81Q38.06 26.26 37.45 25.18Q36.85 24.1 35.51 23.54Q34.17 22.99 31.88 22.99H26.25L26.14 20.66H33.59Q36.98 20.66 39.04 21.58Q41.1 22.5 42.04 24.08Q42.99 25.67 42.99 27.67Q42.99 29.66 42.03 31.32Q41.06 32.98 39.02 33.96Q36.98 34.94 33.7 34.94H26.11L26.25 32.62H33.12Q34.58 32.62 35.69 32.08Q36.8 31.54 37.43 30.47Q38.06 29.39 38.06 27.81ZM29.44 20.66V43.04L32.23 44.01V45H21.71V44.01L24.5 43.04V22.63L21.71 21.64V20.66Z"/>
   </g>
 </svg>
