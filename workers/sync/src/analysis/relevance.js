@@ -12,7 +12,7 @@
 import { structuredCall } from "./claude.js";
 
 export const RELEVANCE_MODEL = "claude-haiku-4-5-20251001";
-export const RELEVANCE_PROMPT_VERSION = "2026-10-02.1";
+export const RELEVANCE_PROMPT_VERSION = "2026-10-05.1";
 export const BATCH = 25;
 
 export const CATEGORIES = ["substantive", "procedural_rule", "commemoration", "awareness", "naming", "honorary", "other_routine"];
@@ -30,6 +30,7 @@ For each bill:
   - procedural_rule: a resolution that only sets how a chamber will consider or debate another bill
   - other_routine: another purely ceremonial or housekeeping measure (say which in the reason)
   Everything else is "analyze" (category "substantive"), including anything that spends money, changes a program, a right, a tax, a rule or a power. If you are unsure, choose "analyze".
+  Mandates are substantive: a bill that requires, directs or authorizes an agency, official or body to conduct a study, write a report, make a plan, run an audit or assessment, collect data or report to the Legislature or Congress is "analyze", even when its subject is a person, a group, an anniversary or a cause. Only a measure that asks for nothing to be done (it just honors, recognizes or commemorates) can be skipped.
   Skip only what the title or description shows is ceremonial or routine. Never skip because the title is short, an acronym or a single word, or because the description is missing or doesn't say enough: when you can't tell what a bill does, it is "analyze".
   procedural_rule applies only to a resolution of one chamber (H.Res., S.Res., or a California House or Senate Resolution) that sets how that chamber will consider another measure. A bill (H.R., S., AB, SB) is never procedural_rule.
   Holidays and "days": a bill that establishes, adds, moves or removes a state or federal holiday (a legal or paid holiday, or one that closes or changes state offices, schools, courts or deadlines) is "analyze", category "substantive", even when it is named for a person, faith or occasion: it changes law. Skip a "day", "week" or "month" measure only when it just recognizes, proclaims or encourages observance with no legal effect (usually a resolution), as "commemoration" or "awareness". From the title alone, "establishes ... as a state holiday", "adds ... to the list of holidays", or an amendment to holiday sections of a code means "analyze".
@@ -85,6 +86,9 @@ export function relevanceMessage(bills) {
 
 // A skip whose reason is that there wasn't enough to go on.
 const NOT_ENOUGH = /title alone|from the title|acronym|unable to (?:determine|tell)|cannot (?:determine|tell)|can't tell|not (?:clear|disclosed|specified|stated|described)|unclear|insufficient|no (?:details|description|summary|information)|without (?:details|a description|more information)|doesn't say|does not say/i;
+// A measure that requires something to be done (a study, a report, a plan, an
+// audit, data): a mandate, never a commemoration.
+const MANDATE = /\b(?:requires?|requiring|required|shall|direct(?:s|ed|ing)?|mandat(?:es?|ing)|authoriz(?:es?|ing)|instruct(?:s|ing)?)\b[^.;]{0,200}?\b(?:stud(?:y|ies)|reports?|reporting|plans?|audits?|assessments?|evaluations?|surveys?|analys[ie]s|data)\b/i;
 // One chamber's resolution: the only kind of measure that can be a procedural rule.
 const CHAMBER_RESOLUTION = /^(?:H\.\s?Res\.|S\.\s?Res\.|HR|SR)\s*\d/i;
 
@@ -92,7 +96,8 @@ const CHAMBER_RESOLUTION = /^(?:H\.\s?Res\.|S\.\s?Res\.|HR|SR)\s*\d/i;
  * Keep only well-formed verdicts for bills that were asked about, once each.
  * A "skip" must come with a routine category; otherwise it's treated as
  * "analyze" (the check only skips what it can name), and so is a skip for lack
- * of information, or a "procedural_rule" that isn't one chamber's resolution.
+ * of information, a "procedural_rule" that isn't one chamber's resolution, or a
+ * bill whose title or official description requires a study, report, plan or audit.
  * Pure; tested.
  */
 export function cleanVerdicts(data, bills) {
@@ -107,12 +112,19 @@ export function cleanVerdicts(data, bills) {
     // Never skipped for lack of information, and only a chamber resolution is a procedural rule.
     if (verdict === "skip" && NOT_ENOUGH.test(String(v.reason || ""))) verdict = "analyze";
     if (verdict === "skip" && category === "procedural_rule" && !CHAMBER_RESOLUTION.test(String((byId.get(v.bill_id) || {}).bill_number || ""))) verdict = "analyze";
+    // A bill that requires a study, report, plan or audit is a mandate, not a commemoration.
+    const bill = byId.get(v.bill_id) || {};
+    let reason = String(v.reason || "").trim();
+    if (verdict === "skip" && category !== "procedural_rule" && MANDATE.test(`${bill.title || ""}. ${bill.official_summary || ""}`)) {
+      verdict = "analyze";
+      reason = "It requires a study, report, plan or audit: a mandate, not a ceremonial measure.";
+    }
     if (verdict === "analyze") category = "substantive";
     out.set(v.bill_id, {
       bill_id: v.bill_id,
       verdict,
       category,
-      reason: String(v.reason || "").trim().slice(0, 400) || (verdict === "skip" ? "Ceremonial or routine measure." : "Substantive measure."),
+      reason: reason.slice(0, 400) || (verdict === "skip" ? "Ceremonial or routine measure." : "Substantive measure."),
       local: LOCAL.includes(v.local) ? v.local : "medium",
       local_reason: String(v.local_reason || "").trim().slice(0, 400),
     });

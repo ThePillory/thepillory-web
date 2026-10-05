@@ -1295,3 +1295,7 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 .exec-title { font-weight: 600; color: var(--navy); text-decoration: none; }
 .exec-title:hover { text-decoration: underline; }
 .outcome-line { margin: 0; font-size: 1.0625rem; }
+
+/* Minor notes from the AI reviewer on a published analysis: small and collapsed. */
+.review-notes summary { min-height: var(--tap); display: flex; align-items: center; cursor: pointer; color: var(--text-2); }
+.review-notes .panel-list { margin: 4px 0; }

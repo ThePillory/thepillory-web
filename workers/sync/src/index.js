@@ -13,6 +13,7 @@
 // while a round stops at the request/time budget, and never runs two syncs at once.
 // After the sync rounds, it drafts constitutional analyses for new bills, also
 // in rounds, capped per day (ANALYSIS_DAILY_LIMIT).
+import { summarizeFlags } from "./analysis/flags.js";
 import { syncExecutiveOfficials, syncExecutiveOrders, syncBillOutcomes, syncNominations } from "./executive/sync.js";
 import { DurableObject } from "cloudflare:workers";
 import { ensureSchema, log } from "./db.js";
@@ -308,6 +309,7 @@ export default {
       const run = await (await runner(env).fetch("https://sync-runner/state")).json();
       let counts = null;
       let recent = [];
+      let flags = null;
       if (env.DB) {
         await ensureSchema(env.DB);
         counts = await env.DB.prepare(
@@ -320,6 +322,23 @@ export default {
             "(SELECT COUNT(*) FROM bill_relevance WHERE verdict = 'skip' AND override IS NULL) AS bills_skipped_as_ceremonial"
         ).first();
         recent = (await env.DB.prepare("SELECT * FROM sync_log ORDER BY id DESC LIMIT 30").all()).results;
+        // Why drafts are flagged: the current flags, and the earlier reviews of
+        // drafts re-reviewed under the reviewer's newer rules (with the new outcome).
+        const rows = (
+          await env.DB.prepare(
+            `SELECT bill_id, ai_review, ai_review_detail FROM bill_analyses
+             WHERE current = 1 AND status = 'ai_draft' AND (ai_review = 'flag' OR json_extract(ai_review_detail, '$.previous') IS NOT NULL)`
+          ).all()
+        ).results.map((r) => ({ bill_id: r.bill_id, verdict: r.ai_review, detail: JSON.parse(r.ai_review_detail || "{}") }));
+        const rereviewed = rows.filter((r) => r.detail.previous);
+        flags = {
+          flagged_now: summarizeFlags(rows.filter((r) => r.verdict === "flag")),
+          rereviewed_under_new_rules: {
+            ...summarizeFlags(rereviewed, { which: "previous" }),
+            now_published: rereviewed.filter((r) => r.verdict === "pass").length,
+            still_flagged: rereviewed.filter((r) => r.verdict === "flag").length,
+          },
+        };
       }
       return json({
         run: {
@@ -336,6 +355,7 @@ export default {
           rounds: run.rounds || [],
         },
         counts,
+        ai_review_flags: flags,
         recent_log: recent,
       });
     } catch (err) {

@@ -442,16 +442,18 @@ function reviewAnthropic(req, res, body) {
   anthropicRequests.push({ kind: "review", problems });
   if (problems.length) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: `fixture: bad ${problems.join(", ")}` } });
   const bill = (body.messages[0].content.match(/^Bill: (.+?) \(/m) || [])[1];
-  const ok = (id) => ({ id, ok: true, note: "No problem found." });
+  const ok = (id) => ({ id, ok: true, severity: "none", note: "No problem found." });
   // The revision (see the drafter below) adds the extension, which clears the flag.
   const flag = bill === "H.R. 20" && !/extend the deadline once/.test(body.messages[0].content);
+  // H.R. 10 has a minor completeness note every time: published with the note.
+  const minor = bill === "H.R. 10";
   const out = {
     checks: [
-      flag ? { id: "summary", ok: false, note: "The summary says agencies must respond within 60 days but leaves out that the text lets them extend it once." } : ok("summary"),
+      flag ? { id: "summary", ok: false, severity: "major", note: "The summary says agencies must respond within 60 days but leaves out that the text lets them extend it once." } : ok("summary"),
       ok("balance"),
       ok("language"),
-      ok("provisions"),
-      flag ? { id: "certainty", ok: false, note: "The tension panel treats the 60-day deadline as settled when the text allows an extension." } : ok("certainty"),
+      minor ? { id: "provisions", ok: false, severity: "minor", note: "The card could also name the grant program's reporting requirement." } : ok("provisions"),
+      flag ? { id: "certainty", ok: false, severity: "major", note: "The tension panel treats the 60-day deadline as settled when the text allows an extension." } : ok("certainty"),
     ],
     verdict: flag ? "flag" : "pass",
   };

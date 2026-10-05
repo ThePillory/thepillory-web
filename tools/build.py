@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "24"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "25"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -346,7 +346,7 @@ def build_methodology():
       <span class="step-num" aria-hidden="true">4</span>
       <div class="stack-sm">
         <h3>A second AI tool reviews it</h3>
-        <p class="small secondary">A separate Claude call reads the analysis against the bill text and answers five questions. Is the summary accurate and complete for what the bill does? Is any side's argument noticeably weaker or less charitable than the other's? Is opinion stated as fact, or is there loaded or partisan language? Are the chosen provisions relevant, with nothing obviously missing? Does anything claim more certainty than the sources support? If all five are fine, the analysis is published, labeled <strong>"AI-drafted, auto-checked"</strong>. If any isn't, the first AI tool gets one chance to fix the problems the reviewer named; the revision goes through the same automatic checks and is reviewed again. If it still isn't right, it stays off the public page and goes to a person with the reviewer's reasons and both versions.</p>
+        <p class="small secondary">A separate Claude call reads the analysis against the bill text and answers five questions. Is the summary accurate and complete for what the bill does? Is any side's argument noticeably weaker or less charitable than the other's? Is opinion stated as fact, or is there loaded or partisan language? Are the chosen provisions relevant, with nothing obviously missing? Does anything claim more certainty than the sources support? Each problem it finds is rated <strong>major</strong> (a factual error, unfair treatment of one side, or opinion stated as fact, including any verdict on constitutionality) or <strong>minor</strong> (completeness, phrasing or style). When any problem is found, the first AI tool gets one chance to fix what the reviewer named; the revision goes through the same automatic checks and is reviewed again. With no major problem, the analysis is published, labeled <strong>"AI-drafted, auto-checked"</strong>; any minor notes left are shown in a small note with it. With a major problem, it stays off the public page and goes to a person with the reviewer's reasons and both versions.</p>
       </div>
     </li>
     <li>
