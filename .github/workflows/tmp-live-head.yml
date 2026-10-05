@@ -1,0 +1,17 @@
+# TEMPORARY: read the live site's <head> on a few pages. Remove before merging.
+name: TEMP live head check
+on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [.github/workflows/tmp-live-head.yml]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          for u in https://thepillory.co/ "https://thepillory.co/?x=1" https://thepillory.co/reps/ https://thepillory.co/explore/ https://thepillory.co/explore/ca/ https://thepillory.co/about/ https://www.thepillory.co/ https://thepillory.co/favicon.ico https://thepillory.co/assets/logo/icon.svg?v=2; do
+            echo "=================== $u"
+            curl -sS -m 30 -A "Mozilla/5.0 (Macintosh) Chrome/130" -D /tmp/h -o /tmp/b "$u"; cat /tmp/h | grep -iE "^(HTTP|content-type|cache-control|location|cf-cache-status|age|server|x-)" 
+            echo "--- head links:"; grep -oiE '<(link|meta)[^>]*(icon|manifest|og:title)[^>]*>' /tmp/b | head -8
+            echo "--- first 300 bytes:"; head -c 300 /tmp/b; echo
+          done
