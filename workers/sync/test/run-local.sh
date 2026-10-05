@@ -19,6 +19,7 @@ node meetings.test.mjs | tail -1
 node review.test.mjs | grep "^# pass"
 node nationwide.test.mjs | tail -1
 node funding.test.mjs | tail -1
+node executive.test.mjs | tail -1
 
 node fixture-server.mjs & FIX=$!
 $WRANGLER dev -c wrangler.test.toml --port 8789 --persist-to "$STATE" --test-scheduled >/tmp/pillory-worker.log 2>&1 & WK=$!
@@ -54,6 +55,13 @@ echo "--- campaign funding (FEC) and lobbying (lda.gov):"
 $D1 --command "SELECT step, status, message FROM sync_log WHERE step IN ('federal-funding', 'federal-lobbying') AND status != 'skipped' ORDER BY id" --json | python3 -c "import json,sys; [print(' ', r['step'], r['status'], r['message']) for r in json.load(sys.stdin)[0]['results']]"
 $D1 --command "SELECT f.official_id, f.candidate_id, f.committee_id, f.note, (SELECT COUNT(*) FROM funding_progress p WHERE p.official_id = f.official_id AND p.done_at IS NOT NULL) AS periods, (SELECT COUNT(*) FROM funding_pacs p WHERE p.official_id = f.official_id) AS pacs FROM fec_candidates f ORDER BY 1" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
 $D1 --command "SELECT l.bill_id, f.client_name, f.amount, f.industry FROM bill_lobbying l JOIN lobbying_filings f USING (filing_uuid) ORDER BY 2" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
+echo "--- executive branch (officials, orders, outcomes, nominations):"
+$D1 --command "SELECT id, slug, office, rank FROM officials WHERE chamber IN ('us-executive', 'ca-executive') AND active = 1 ORDER BY chamber DESC, rank" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
+$D1 --command "SELECT step, status, message FROM sync_log WHERE step IN ('executive-officials', 'executive-orders', 'bill-outcomes', 'nominations') ORDER BY id LIMIT 8" --json | python3 -c "import json,sys; [print(' ', r['step'], r['status'], r['message']) for r in json.load(sys.stdin)[0]['results']]"
+$D1 --command "SELECT id, official_id, kind, number, substr(title, 1, 50) AS title, document_url IS NOT NULL AS pdf FROM executive_actions ORDER BY id" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
+$D1 --command "SELECT bill_id, outcome, action_date, law_number, actor_name FROM bill_outcomes ORDER BY bill_id" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
+$D1 --command "SELECT id, official_id, status FROM nominations ORDER BY id" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
+$D1 --command "SELECT o.id, f.candidate_id, f.note, (SELECT COUNT(*) FROM funding_progress p WHERE p.official_id = o.id) AS periods FROM officials o LEFT JOIN fec_candidates f ON f.official_id = o.id WHERE o.chamber = 'us-executive' AND o.rank <= 2" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
 echo "--- second run (should fetch nothing new):"
 curl -s "localhost:8789/run?token=local-test-token" | grep -E '"(step|status|requests|message)"'
 echo "--- cron trigger:"

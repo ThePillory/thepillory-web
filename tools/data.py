@@ -52,6 +52,22 @@ BODIES = [
         "about": "Two senators per state, elected to six-year terms. Every current senator, with their recorded votes.",
         "clause": ("art-1-sec-3", "The Senate"),
     },
+    {
+        "slug": "us-executive",
+        "name": "The President and the Cabinet",
+        "short": "Executive Branch",
+        "level": "federal",
+        "about": "The President, the Vice President, and the Cabinet as the White House lists it. The President's executive orders, bills signed and vetoed, and nominations.",
+        "clause": ("art-2-sec-1", "Executive power"),
+    },
+    {
+        "slug": "ca-executive",
+        "name": "California's statewide elected offices",
+        "short": "CA Executive",
+        "level": "state",
+        "about": "The Governor and the other offices California elects statewide. The Governor's executive orders and bills signed and vetoed.",
+        "clause": ("amend-10", "State powers"),
+    },
 ]
 
 # Shown once, on How it works, labeled "Example". Hypothetical.

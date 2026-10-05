@@ -97,7 +97,9 @@ async function loadCrosswalk(db, budget, o) {
 /** Match one member to an FEC candidate ID and principal campaign committee. */
 async function resolveOne(db, fec, o, crosswalk, m, cycle) {
   const bioguide = m.bioguide_id || m.id.replace(/^bioguide:/, "");
-  const ids = candidateIdsFor(crosswalk.ids[bioguide], m.chamber, m.state);
+  // The President's FEC IDs come from executive.json (saved by executive-officials).
+  const execIds = m.chamber === "us-executive" ? JSON.parse((await getState(db, "executive_fec")) || "{}")[m.id] : null;
+  const ids = candidateIdsFor(execIds || crosswalk.ids[bioguide], m.chamber, m.state);
   let row = { candidate_id: ids[0] || null, committee_id: null, committee_name: null, note: null, source_url: ids[0] ? candidatePage(ids[0], cycle) : o.crosswalk };
   if (!ids.length) row.note = "No FEC candidate ID for this office in the public crosswalk (often a newly appointed senator).";
   for (const id of ids) {
@@ -235,6 +237,10 @@ async function lobbyingWaiting(env, db) {
   return r ? r.n : 0;
 }
 
+// Who has campaign funding to load: members of Congress and the President (the
+// Vice President runs on the President's ticket; the Cabinet is appointed).
+const FUNDED = "(o.chamber IN ('us-house', 'us-senate') OR (o.chamber = 'us-executive' AND o.rank = 1))";
+
 // Leave a member-period unstarted when less than this much of funding's time is left.
 const MIN_MEMBER_MS = 90000;
 
@@ -283,7 +289,7 @@ export async function syncFederalFunding(env, db, budget) {
            LEFT JOIN fec_candidates f ON f.official_id = o.id
            LEFT JOIN funding_progress p1 ON p1.official_id = o.id AND p1.cycle = ?
            LEFT JOIN funding_progress p2 ON p2.official_id = o.id AND p2.cycle = ?
-           WHERE o.level = 'federal' AND o.active = 1
+           WHERE o.level = 'federal' AND o.active = 1 AND ${FUNDED}
              AND (f.official_id IS NULL OR f.checked_at < datetime('now', '-30 days')
                   OR (f.candidate_id IS NOT NULL AND (p1.done_at IS NULL OR p1.done_at < datetime('now', ?) OR p2.done_at IS NULL OR p2.done_at < datetime('now', '-90 days'))))
            ORDER BY (f.candidate_id IS NOT NULL AND p1.done_at IS NOT NULL AND p2.done_at IS NOT NULL) OR (f.official_id IS NOT NULL AND f.candidate_id IS NULL),
@@ -330,7 +336,7 @@ export async function syncFederalFunding(env, db, budget) {
         .prepare(
           `SELECT COUNT(*) AS n FROM officials o LEFT JOIN fec_candidates f ON f.official_id = o.id
            LEFT JOIN funding_progress p ON p.official_id = o.id AND p.cycle = ?
-           WHERE o.level = 'federal' AND o.active = 1 AND (f.official_id IS NULL OR (f.candidate_id IS NOT NULL AND p.done_at IS NULL))`
+           WHERE o.level = 'federal' AND o.active = 1 AND ${FUNDED} AND (f.official_id IS NULL OR (f.candidate_id IS NOT NULL AND p.done_at IS NULL))`
         )
         .bind(current)
         .first()

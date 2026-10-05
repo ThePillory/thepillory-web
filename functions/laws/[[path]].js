@@ -9,6 +9,7 @@ import { safe, recentBills, billById, votesOnBill, officialsWhere, CHAMBER_NAME 
 import { districtsFromCookie, repsWhere, describe } from "../_lib/districts.js";
 import { billVote, billHref } from "../_lib/votes.js";
 import { lobbyingFor, industryMoney, followTheMoney, cycleOf } from "../_lib/funding.js";
+import { outcomeFor, outcomeSection } from "../_lib/executive.js";
 import { currentAnalysis, parse, provisionsFor, baselineSection, isPublic, openFlagCount, METHOD_URL } from "../_lib/analysis.js";
 import { turnstileReady, turnstileWidget, turnstileScript, verifyTurnstile, visitorHash, actionsToday, recordAction } from "../_lib/turnstile.js";
 
@@ -183,7 +184,12 @@ async function bill(env, id, url, request) {
     const b = await billById(db, id);
     if (!b) return { b: null };
     const reps = districts ? await officialsWhere(db, repsWhere(districts)) : [];
-    const [votes, analysis, lobbying] = await Promise.all([votesOnBill(db, id, reps.map((o) => o.id)), analysisFor(db, id), b.level === "federal" ? lobbyingFor(db, id) : null]);
+    const [votes, analysis, lobbying, outcome] = await Promise.all([
+      votesOnBill(db, id, reps.map((o) => o.id)),
+      analysisFor(db, id),
+      b.level === "federal" ? lobbyingFor(db, id) : null,
+      outcomeFor(db, id),
+    ]);
     // Each rep's latest final-passage position on this bill, beside contributions in
     // that two-year period from the industries that lobbied on it.
     let repMoney = [];
@@ -200,10 +206,10 @@ async function bill(env, id, url, request) {
         return { rep, vote: v || null, position: p ? p.position : null, money: m[rep.id] };
       });
     }
-    return { b, votes, analysis, lobbying, repMoney, cycle, reps };
+    return { b, votes, analysis, lobbying, repMoney, cycle, reps, outcome };
   });
   if (!data) return notLoaded("Laws", "laws", false, ["Laws", "/laws/"]);
-  const { b, votes, analysis, lobbying, repMoney, cycle, reps } = data;
+  const { b, votes, analysis, lobbying, repMoney, cycle, reps, outcome } = data;
   if (!b) return notFound("No bill at this address.", "laws", ["Laws", "/laws/"]);
   const sent = MESSAGES[url.searchParams.get("sent")] || null;
   const error = MESSAGES[url.searchParams.get("error")] || null;
@@ -228,6 +234,7 @@ async function bill(env, id, url, request) {
   ${summary}
   ${official ? sourceLink(official, "Official bill page") : sourceLink(b.source_url)}
 </section>
+${outcomeSection(b, outcome)}
 ${sent ? `<p class="banner" role="status">${esc(sent)}</p>` : ""}
 ${error ? `<p class="banner banner--error" role="alert">${esc(error)}</p>` : ""}
 ${baselineSection(analysis.a, analysis.provisions, { underReview: analysis.flags > 0, empty, after: readerForms(env, id, analysis) })}

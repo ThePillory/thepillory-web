@@ -4,6 +4,7 @@
 //
 // Mimics the response shapes of Congress.gov v3, Open States v3, and the
 // senate.gov roll call XML closely enough to exercise the sync end to end.
+import { executive, cabinetHtml, fr, congressExec, leginfoHistory, stateExecutiveFile, govFeed, govPosts } from "./executive-fixtures.mjs";
 import http from "node:http";
 import { calendarHtml, rssHtml, meetingHtml, agendaLines, makePdf, dayFromToday } from "./iqm2-fixtures.mjs";
 import { meetingList, agendaPages } from "./tylermm-fixtures.mjs";
@@ -571,7 +572,15 @@ http
       const r = fecFixture(path.replace(/^\/v1/, ""), u.searchParams);
       return r ? send(res, r.status, r.body) : send(res, 404, { message: "fixture: no FEC route" });
     }
-    if (api === "legislators") return send(res, 200, legislators);
+    if (api === "legislators") return send(res, 200, path === "/executive.json" ? executive : legislators);
+    // FAKE executive branch sources.
+    if (api === "whitehouse") return send(res, 200, cabinetHtml, "text/html");
+    if (api === "fr" && path === "/api/v1/documents.json") return send(res, 200, fr(u.searchParams));
+    if (api === "govca") {
+      if (path === "/category/executive-orders/feed/") return send(res, 200, govFeed(parseInt(u.searchParams.get("paged") || "1", 10)), "application/rss+xml");
+      const post = govPosts[path.split("/").filter(Boolean).pop()];
+      return post ? send(res, 200, post, "text/html") : send(res, 404, "not found", "text/plain");
+    }
     if (api === "lda") {
       const r = ldaFixture(path.replace(/^\/api\/v1/, ""), u.searchParams);
       return r ? send(res, r.status, r.body) : send(res, 404, { detail: "Not found." });
@@ -594,6 +603,7 @@ http
     if (api === "textfiles") return textfiles[path] ? send(res, 200, textfiles[path], "text/html") : send(res, 404, "not found", "text/plain");
     if (api === "leginfo") {
       const id = u.searchParams.get("bill_id");
+      if (path === "/faces/billHistoryClient.xhtml") return leginfoHistory[id] ? send(res, 200, leginfoHistory[id], "text/html") : send(res, 200, "<html><body><table id=\"billhistory\"><tbody></tbody></table></body></html>", "text/html");
       return leginfo[id] ? send(res, 200, leginfo[id], "text/html") : send(res, 404, "not found", "text/plain");
     }
     if (api === "courtlistener" && path === "/api/rest/v4/citation-lookup/" && req.method === "POST") {
@@ -616,7 +626,8 @@ http
     }
     if (api === "congress") {
       if (!u.searchParams.get("api_key")) return send(res, 403, { error: "no key" });
-      return congress[path] ? send(res, 200, congress[path]) : send(res, 404, { error: `no fixture for ${path}` });
+      const c = congress[path] || congressExec[path];
+      return c ? send(res, 200, c) : send(res, 404, { error: `no fixture for ${path}` });
     }
     if (api === "openstates") {
       if (!req.headers["x-api-key"]) return send(res, 403, { error: "no key" });
@@ -624,7 +635,10 @@ http
       return openstates[key] ? send(res, 200, openstates[key]) : send(res, 404, { error: `no fixture for ${key}` });
     }
     if (api === "senate") return senate[path] ? send(res, 200, senate[path], "application/xml") : send(res, 404, "not found", "text/plain");
-    if (api === "site") return county[path] ? send(res, 200, county[path]) : send(res, 404, { error: "no" });
+    if (api === "site") {
+      if (path === "/data/state-executive-officials.json") return send(res, 200, stateExecutiveFile);
+      return county[path] ? send(res, 200, county[path]) : send(res, 404, { error: "no" });
+    }
     send(res, 404, { error: "unknown api" });
   })
   .listen(PORT, () => console.log(`fixtures on http://127.0.0.1:${PORT}`));

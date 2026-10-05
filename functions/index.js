@@ -8,7 +8,8 @@
 //   headline; a U.S. map (tap a state for its /explore/ page; no zooming or
 //   dragging here, so scrolling always works), the small-state buttons, live and
 //   waiting counts, and Explore the full map; Find your representatives (address
-//   or ZIP; nothing stored);
+//   or ZIP; nothing stored); Who represents you (the President, Vice President
+//   and Cabinet; California's Governor and statewide offices);
 //   Happening now (Congress / California: latest final-passage votes, ?now=state);
 //   Take part (Calaveras comment deadlines, contacting your reps);
 //   Communities (Calaveras, live; the county waitlist with real counts);
@@ -19,6 +20,8 @@ import { districtsFromCookie, describe, STATE_NAME } from "./_lib/districts.js";
 import { happeningNow, happeningSection, lookupForm, waitlistCounts } from "./_lib/hub.js";
 import { LIVE, loadIndex, waitlistBy, usMapLinks, smallStateButtons, mapFigure } from "./_lib/geo.js";
 import { ASSET_VERSION } from "./_lib/generated.js";
+import { executiveOfficials, executiveRows } from "./_lib/executive.js";
+import { linkRow } from "./_lib/render.js";
 import { turnstileReady, turnstileWidget, turnstileScript } from "./_lib/turnstile.js";
 
 const missing = (err) => /no such table|no such column/i.test(String(err && err.message));
@@ -137,6 +140,26 @@ function usMap(index, waiting) {
 </section>`;
 }
 
+// Who represents you: the federal executive for everyone; California's statewide
+// offices for California (and for visitors whose state isn't known yet).
+function whoRepresents(federal, ca, d) {
+  if (!federal.length && !ca.length) return "";
+  const inCA = !d || d.st === "CA";
+  const governor = ca.filter((o) => o.rank === 1);
+  const state = inCA
+    ? ca.length
+      ? `<div class="card stack-xs"><p class="label">California, statewide</p>${governor.map((o) => linkRow(`/reps/${o.slug}/`, o.name, o.office)).join("")}${linkRow("/bodies/ca-executive/", "California's statewide offices", `${ca.length} elected statewide`)}</div>`
+      : ""
+    : `<p class="small secondary">${esc(STATE_NAME[d.st] || "Your state")}'s governor and statewide offices aren't on ThePillory yet. They open as communities launch.</p>`;
+  return `
+<section class="brief-section" id="who" aria-labelledby="h-who">
+  <div class="section-head"><h2 class="label" id="h-who">Who represents you</h2><a class="section-link" href="/reps/">All reps</a></div>
+  ${federal.length ? `<div class="card stack-xs"><p class="label">Everyone in the United States</p>${executiveRows(federal)}</div>` : ""}
+  ${state}
+  ${d ? linkRow("/briefing/", d.st === "CA" ? "Your members of Congress and state legislators" : "Your members of Congress", describe(d)) : '<p class="small"><a class="inline-link" href="#find">Find your representatives</a> to add your members of Congress and state legislators.</p>'}
+</section>`;
+}
+
 const UNDERSTAND = [
   ["/laws/constitution/", "The Constitution", "The full text, and how every analysis starts from it."],
   ["/about/how-a-bill-becomes-law/", "How a bill becomes law", "From introduction to signature, in Congress and in California."],
@@ -161,6 +184,8 @@ async function hub(env, request, url, d) {
   let deadlines = [];
   let counts = null;
   let waiting = { county: {}, state: {} };
+  let federalExec = [];
+  let caExec = [];
   const index = await loadIndex(env, request);
   if (db) {
     try {
@@ -174,6 +199,8 @@ async function hub(env, request, url, d) {
         .slice(0, 4);
       counts = await waitlistCounts(db);
       waiting = await waitlistBy(db);
+      federalExec = await executiveOfficials(db, "us-executive");
+      caExec = await executiveOfficials(db, "ca-executive");
     } catch (err) {
       if (!missing(err)) throw err;
     }
@@ -197,6 +224,7 @@ ${d ? `<a class="card briefing-link" href="/briefing/"><span class="stack-xs"><s
   <p><a class="inline-link" href="/about/how-it-works/">How it works</a> · <a class="inline-link" href="/about/principles/">Principles</a></p>
   <button class="intro-dismiss" type="button" data-intro-dismiss aria-label="Dismiss this introduction">×</button>
 </aside>
+${whoRepresents(federalExec, caExec, d)}
 ${happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? "/" : "/?now=state"), loaded: !!db })}
 ${takePart(deadlines, !!db)}
 ${communities(env, counts, msg, error)}

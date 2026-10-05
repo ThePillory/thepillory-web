@@ -92,8 +92,20 @@ export function smallStateButtons(index) {
  * legislators are loaded for California only so far.
  */
 export async function officialsFor(db, st, d) {
-  const out = { senators: [], house: [], upper: [], lower: [], county: [] };
+  const out = { senators: [], house: [], upper: [], lower: [], county: [], executive: [], stateExecutive: [] };
   if (!db) return out;
+  // The executive branch: the President, Vice President and Cabinet for every
+  // place; California's statewide offices for California.
+  const exec = async (chamber) => {
+    try {
+      return (await db.prepare("SELECT * FROM officials WHERE chamber = ? AND active = 1 ORDER BY rank, name").bind(chamber).all()).results;
+    } catch (err) {
+      if (/no such column|no such table/i.test(String(err && err.message))) return [];
+      throw err;
+    }
+  };
+  out.executive = await exec("us-executive");
+  if (st === "CA") out.stateExecutive = await exec("ca-executive");
   const q = async (sql, binds) => (await db.prepare(`SELECT o.* FROM officials o WHERE o.active = 1 AND ${sql}`).bind(...binds).all()).results;
   const ph = (a) => a.map(() => "?").join(",");
   const sortD = (a, b) => String(a.district_code || "").localeCompare(String(b.district_code || ""), undefined, { numeric: true }) || a.name.localeCompare(b.name);
@@ -108,6 +120,18 @@ export async function officialsFor(db, st, d) {
 }
 
 export const allIds = (o) => [...o.county, ...o.upper, ...o.lower, ...o.house, ...o.senators].map((x) => x.id);
+
+/** The executive rows for "Who represents": the President and Vice President (or the Governor), then a link to the rest. */
+export function executiveRows(list, { href, label }) {
+  const lead = list.filter((o) => o.rank && o.rank <= (o.chamber === "ca-executive" ? 1 : 2));
+  const rest = list.length - lead.length;
+  return [
+    ...lead.map((o) => repRow(o)),
+    ...(rest > 0
+      ? [`<a class="list-row link-row" href="${href}"><div><div class="list-title">${esc(label)}</div><div class="list-meta">${rest} more</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>`]
+      : []),
+  ];
+}
 
 /** One official as a list row: name, office · district, and an optional note. */
 export function repRow(o, note = "") {

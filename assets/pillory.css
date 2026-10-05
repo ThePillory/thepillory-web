@@ -1285,3 +1285,13 @@ a.review-badge--auto:hover { border-color: var(--navy); }
   .map-counts .dot { display: none; }
 }
 .map-counts .swatch { display: inline-block; width: 10px; height: 10px; margin-right: 5px; vertical-align: -1px; }
+
+/* ---------- The executive branch: orders, nominations, a bill's final action ---------- */
+
+.exec-list { padding: 0 16px; }
+.exec-row { padding: 12px 0; border-top: 1px solid var(--border); }
+.exec-row:first-child { border-top: 0; }
+.exec-row .label { margin: 0; }
+.exec-title { font-weight: 600; color: var(--navy); text-decoration: none; }
+.exec-title:hover { text-decoration: underline; }
+.outcome-line { margin: 0; font-size: 1.0625rem; }

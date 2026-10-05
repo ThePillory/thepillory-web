@@ -2,7 +2,7 @@
 // a source URL (the schema requires one), so nothing unsourced can be shown.
 
 export const LEVEL_ORDER = ["county", "state", "federal"];
-const CHAMBER_ORDER = ["county-board", "ca-assembly", "ca-senate", "us-house", "us-senate"];
+const CHAMBER_ORDER = ["county-board", "ca-assembly", "ca-senate", "ca-executive", "us-house", "us-senate", "us-executive"];
 
 export const CHAMBER_NAME = {
   "county-board": "Board of Supervisors",
@@ -10,6 +10,8 @@ export const CHAMBER_NAME = {
   "ca-senate": "State Senate",
   "us-house": "U.S. House",
   "us-senate": "U.S. Senate",
+  "us-executive": "Executive Branch",
+  "ca-executive": "Executive Branch",
 };
 
 export const TYPE_LABELS = {
@@ -46,7 +48,7 @@ export async function officialBySlug(db, slug) {
 
 export async function officialsForBody(db, body) {
   const { results } = await db
-    .prepare("SELECT * FROM officials WHERE body = ? AND active = 1 ORDER BY state, CAST(district_code AS INTEGER), district, name")
+    .prepare("SELECT * FROM officials WHERE body = ? AND active = 1 ORDER BY COALESCE(rank, 999), state, CAST(district_code AS INTEGER), district, name")
     .bind(body)
     .all();
   return results;

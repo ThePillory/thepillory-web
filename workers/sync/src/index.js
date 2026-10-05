@@ -13,6 +13,7 @@
 // while a round stops at the request/time budget, and never runs two syncs at once.
 // After the sync rounds, it drafts constitutional analyses for new bills, also
 // in rounds, capped per day (ANALYSIS_DAILY_LIMIT).
+import { syncExecutiveOfficials, syncExecutiveOrders, syncBillOutcomes, syncNominations } from "./executive/sync.js";
 import { DurableObject } from "cloudflare:workers";
 import { ensureSchema, log } from "./db.js";
 import { Budget, redact, getState, setState } from "./util.js";
@@ -34,11 +35,16 @@ const STEPS = [
   ["county-officials", syncCounty],
   ["state-officials", syncStateOfficials],
   ["federal-officials", syncFederalOfficials],
+  ["executive-officials", syncExecutiveOfficials],
   ["state-hearings", syncStateHearings],
   ["house-votes", syncHouseVotes],
   ["senate-votes", syncSenateVotes],
   ["state-votes", syncStateVotes],
   ["county-meetings", syncCountyMeetings],
+  // After the votes: California outcomes are looked up for bills that passed both houses.
+  ["bill-outcomes", syncBillOutcomes],
+  ["executive-orders", syncExecutiveOrders],
+  ["nominations", syncNominations],
   // Paced and long-running (the first full load takes a few days): last.
   ["federal-funding", syncFederalFunding],
   ["federal-lobbying", syncFederalLobbying],
@@ -80,7 +86,7 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId }) {
     await log(env.DB, run, step, result.status, budget.used - before, result.message, started);
     summary.push({ step, ...result, requests: budget.used - before });
   }
-  const partialVotes = summary.filter((s) => (s.step.endsWith("-votes") || ["county-meetings", "federal-funding", "federal-lobbying"].includes(s.step)) && s.status === "partial");
+  const partialVotes = summary.filter((s) => (s.step.endsWith("-votes") || ["county-meetings", "bill-outcomes", "executive-orders", "nominations", "federal-funding", "federal-lobbying"].includes(s.step)) && s.status === "partial");
   return {
     run_id: run.id,
     trigger,

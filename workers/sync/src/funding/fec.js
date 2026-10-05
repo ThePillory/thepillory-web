@@ -21,6 +21,8 @@ export function currentCycle(date = new Date()) {
  * two letters are the state after the year digit (H8CA04152 → CA).
  */
 export function candidateIdsFor(fecIds, chamber, state) {
+  // The President's are presidential (P) IDs, with no state.
+  if (chamber === "us-executive") return (fecIds || []).filter((id) => /^P\d/.test(id));
   const prefix = chamber === "us-senate" ? "S" : "H";
   return (fecIds || []).filter((id) => /^[HS]\d[A-Z]{2}/.test(id) && id[0] === prefix && (!state || id.slice(2, 4) === state));
 }

@@ -6,6 +6,7 @@ import init0004 from "../migrations/0004_review_load.sql";
 import init0005 from "../migrations/0005_nationwide.sql";
 import init0006 from "../migrations/0006_bill_summaries.sql";
 import init0007 from "../migrations/0007_funding.sql";
+import init0008 from "../migrations/0008_executive.sql";
 import { isHttp, today } from "./util.js";
 import { totals } from "./rollcall.js";
 
@@ -17,6 +18,7 @@ const MIGRATIONS = [
   ["0005_nationwide.sql", init0005],
   ["0006_bill_summaries.sql", init0006],
   ["0007_funding.sql", init0007],
+  ["0008_executive.sql", init0008],
 ];
 
 function statements(sql) {
@@ -75,13 +77,22 @@ async function uniqueSlug(db, id, base) {
 export async function upsertOfficial(db, o) {
   requireSource("official", o.id, o.source_url);
   const existing = await db.prepare("SELECT slug FROM officials WHERE id = ?").bind(o.id).first();
+  // claimSlug: a former officeholder's inactive row (no page of its own) gives up
+  // the plain name slug, e.g. a former senator now in the Cabinet.
+  if (!existing && o.claimSlug && o.slug) {
+    const other = await db.prepare("SELECT id, chamber FROM officials WHERE slug = ? AND active = 0").bind(o.slug).first();
+    if (other && other.id !== o.id) {
+      const moved = await uniqueSlug(db, other.id, `${o.slug}-${other.chamber}`);
+      await db.prepare("UPDATE officials SET slug = ? WHERE id = ?").bind(moved, other.id).run();
+    }
+  }
   const slug = existing ? existing.slug : await uniqueSlug(db, o.id, o.slug);
   await db
     .prepare(
       `INSERT INTO officials (id, slug, name, last_name, office, level, chamber, body, district, party,
          term_start, term_end, website, photo_url, photo_credit, source_url, last_verified,
-         bioguide_id, openstates_id, state, district_code, detail_checked, active, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, datetime('now'))
+         bioguide_id, openstates_id, state, district_code, detail_checked, rank, active, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, datetime('now'))
        ON CONFLICT(id) DO UPDATE SET
          name = excluded.name, last_name = excluded.last_name, office = excluded.office,
          level = excluded.level, chamber = excluded.chamber, body = excluded.body,
@@ -91,14 +102,15 @@ export async function upsertOfficial(db, o) {
          last_verified = excluded.last_verified, bioguide_id = excluded.bioguide_id,
          openstates_id = excluded.openstates_id, state = excluded.state, district_code = excluded.district_code,
          detail_checked = COALESCE(excluded.detail_checked, officials.detail_checked),
-         active = 1, updated_at = excluded.updated_at`
+         rank = excluded.rank, active = 1, updated_at = excluded.updated_at`
     )
     .bind(
       o.id, slug, o.name, o.last_name || null, o.office, o.level, o.chamber, o.body,
       o.district || null, o.party || null, o.term_start || null, o.term_end || null,
       o.website || null, o.photo_url || null, o.photo_credit || null, o.source_url,
       o.last_verified || today(), o.bioguide_id || null, o.openstates_id || null,
-      o.state || null, o.district_code == null ? null : String(o.district_code), o.detail_checked || null
+      o.state || null, o.district_code == null ? null : String(o.district_code), o.detail_checked || null,
+      o.rank == null ? null : o.rank
     )
     .run();
 }

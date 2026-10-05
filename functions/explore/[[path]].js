@@ -10,7 +10,7 @@ import { page, notFound, esc, fmtDate } from "../_lib/render.js";
 import { ASSET_VERSION } from "../_lib/generated.js";
 import { billHref } from "../_lib/votes.js";
 import {
-  LIVE, usMapLinks, smallStateButtons, loadIndex, loadPlace, waitlistBy, officialsFor, repRow, breadcrumb, mapFigure,
+  LIVE, usMapLinks, smallStateButtons, executiveRows, loadIndex, loadPlace, waitlistBy, officialsFor, repRow, breadcrumb, mapFigure,
   layerName, districtLabel, districtHref, placeHref, stOfFips,
 } from "../_lib/geo.js";
 
@@ -94,7 +94,7 @@ async function statePage(env, request, url, st) {
   const layer = place.layers.includes(url.searchParams.get("layer")) ? url.searchParams.get("layer") : "county";
   const db = env.DB;
   let waiting = { county: {} };
-  let officials = { senators: [], house: [], upper: [], lower: [] };
+  let officials = { senators: [], house: [], upper: [], lower: [], executive: [], stateExecutive: [] };
   let activity = null;
   if (db) {
     try {
@@ -176,11 +176,13 @@ ${mapFigure({ id: "map", src: `/data/geo/shapes/${place.st.toLowerCase()}-{layer
 </section>
 ${districtLists ? `<section class="stack-sm" aria-labelledby="h-districts"><h2 class="label" id="h-districts">Districts</h2>${districtLists}</section>` : ""}
 <section class="stack-sm" aria-labelledby="h-statewide">
-  <h2 class="label" id="h-statewide">Statewide</h2>
+  <h2 class="label" id="h-statewide">Who represents ${esc(place.name)}</h2>
+  ${officials.executive.length ? `<div class="card">${executiveRows(officials.executive, { href: "/bodies/us-executive/", label: "The Cabinet" }).join("")}</div>` : ""}
+  ${officials.stateExecutive.length ? `<div class="card">${executiveRows(officials.stateExecutive, { href: "/bodies/ca-executive/", label: "California's other statewide offices" }).join("")}</div>` : ""}
   <div class="card">${officials.senators.map((o) => repRow(o)).join("") || '<p class="small secondary">U.S. Senators appear after the data sync runs.</p>'}</div>
   <p class="small">${officials.house.length ? `${officials.house.length} House ${officials.house.length === 1 ? "member" : "members"}, each linked from their district. <a class="inline-link" href="/reps/?state=${place.st}#browse">All of ${esc(place.name)}'s members of Congress</a>` : "House members appear after the data sync runs."}</p>
   ${place.st === "DC" ? "" : legislators}
-  <p class="small secondary">Statewide offices (the governor and others) aren't on ThePillory yet.</p>
+  ${place.st === "CA" ? "" : `<p class="small secondary">${esc(place.name)}'s governor and other statewide offices aren't on ThePillory yet.</p>`}
 </section>
 ${place.st === "DC" ? "" : `<section class="stack-sm" aria-labelledby="h-leg"><h2 class="label" id="h-leg">The legislature</h2>${legislature}</section>`}
 <p class="hint">Boundaries: U.S. Census Bureau cartographic boundary files (2024): counties, 119th Congress districts and 2024 state legislative districts.</p>
