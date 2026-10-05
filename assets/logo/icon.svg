@@ -1,11 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <title>ThePillory</title>
   <!-- Browser-tab icon: parchment seal P on a rounded navy tile. The seal fills
-       most of the tile so the P stays legible at 16px; in a dark browser theme a
-       parchment rim keeps the tile's edge from disappearing into the tab bar. -->
-  <style>.rim{display:none}@media (prefers-color-scheme:dark){.rim{display:inline}}</style>
+       most of the tile so the P stays legible at 16px, and the parchment seal
+       reads on light and dark tab bars alike. favicon-32.png and /favicon.ico
+       are rendered from this file unchanged, so every tab shows the same icon. -->
   <rect width="64" height="64" rx="14" fill="#1E3A5F"/>
-  <rect class="rim" x="1.25" y="1.25" width="61.5" height="61.5" rx="12.75" fill="none" stroke="#F3E8D3" stroke-opacity="0.55" stroke-width="2.5"/>
   <g transform="translate(2.4 2.4) scale(0.925)">
   <g fill="none" stroke="#F3E8D3">
     <circle cx="32" cy="32" r="27" stroke-width="4.5"/>
