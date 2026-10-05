@@ -17,7 +17,7 @@ import { summarizeFlags } from "./analysis/flags.js";
 import { syncExecutiveOfficials, syncExecutiveOrders, syncBillOutcomes, syncNominations } from "./executive/sync.js";
 import { DurableObject } from "cloudflare:workers";
 import { ensureSchema, log } from "./db.js";
-import { Budget, redact, getState, setState } from "./util.js";
+import { Budget, redact, getState, setState, isTemporary } from "./util.js";
 import { syncCounty } from "./county.js";
 import { syncStateOfficials, syncStateVotes } from "./openstates.js";
 import { syncFederalOfficials, syncHouseVotes } from "./congress.js";
@@ -82,25 +82,56 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId }) {
       try {
         result = await fn(env, env.DB, budget);
       } catch (err) {
-        // Logged, never swallowed: one failing source doesn't stop the others.
-        result = { status: "error", message: redact(`${err.name}: ${err.message}`) };
-        console.error(`[${run.id}] ${step}: ${result.message}`);
-        await setState(env.DB, `step_failed_${step}`, JSON.stringify({ day, run: run.id, message: result.message.slice(0, 300) }));
+        if (isTemporary(err)) {
+          // A rate limit or an unavailable server, still failing after the
+          // retries: not a failure for the day. The step keeps its place and is
+          // tried again in a later round (TEMPORARY_RETRY_MS).
+          result = { status: "partial", message: redact(`temporary error, tried again later: ${err.name}: ${err.message}`) };
+          console.warn(`[${run.id}] ${step}: ${result.message}`);
+        } else {
+          // Logged, never swallowed: one failing source doesn't stop the others.
+          result = { status: "error", message: redact(`${err.name}: ${err.message}`) };
+          console.error(`[${run.id}] ${step}: ${result.message}`);
+          await setState(env.DB, `step_failed_${step}`, JSON.stringify({ day, run: run.id, message: result.message.slice(0, 300) }));
+        }
       }
     }
     await log(env.DB, run, step, result.status, budget.used - before, result.message, started);
     summary.push({ step, ...result, requests: budget.used - before });
   }
+  const temporary = summary.filter((s) => s.status === "partial" && /^temporary error/.test(s.message || ""));
   const partialVotes = summary.filter((s) => (s.step.endsWith("-votes") || ["county-meetings", "bill-outcomes", "executive-orders", "nominations", "executive-funding", "federal-funding", "federal-lobbying"].includes(s.step)) && s.status === "partial");
   return {
     run_id: run.id,
     trigger,
     requests_used: budget.used,
     steps: summary,
-    more_to_do: partialVotes.length > 0,
+    more_to_do: partialVotes.length > 0 || temporary.length > 0,
     // Worth another round now only if a step stopped at this round's request or time
     // budget. A daily limit (Open States) resets tomorrow; the daily cron picks it up.
     continue_now: partialVotes.some((s) => /request budget used up|run time limit reached/.test(s.message || "")),
+    // A step that stopped on a temporary error (after its retries) gets another
+    // round after a pause, rather than waiting for tomorrow.
+    retry_later: temporary.map((s) => s.step),
+    retries: budget.retries || 0,
+  };
+}
+
+// The secrets the sync uses: whether each is set (never its value), plus any
+// set name that looks like one but isn't spelled the same (a stray space, a
+// different case, FEC_KEY…), so a mistyped secret shows up in /status.
+const SECRETS = ["CONGRESS_API_KEY", "FEC_API_KEY", "OPENSTATES_API_KEY", "ANTHROPIC_API_KEY", "COURTLISTENER_API_TOKEN", "LDA_API_KEY", "SYNC_TOKEN"];
+export function keyReport(env) {
+  const names = [];
+  for (const k in env || {}) names.push(k);
+  const set = Object.fromEntries(SECRETS.map((k) => [k, typeof env[k] === "string" && env[k].trim().length > 0]));
+  const norm = (k) => k.trim().toUpperCase().replace(/[^A-Z]/g, "");
+  const setting = /_(BASE|URL|MS|LIMIT|DAYS|SHARE|DAILY|INTERVAL)$|_MIN_/; // the Worker's own settings, not keys
+  const near = names.filter((n) => !SECRETS.includes(n) && !setting.test(n.trim()) && SECRETS.some((s) => norm(n) === norm(s) || (/FEC/i.test(n) && /FEC/.test(s))));
+  return {
+    set,
+    look_alike_names: near,
+    fec_key_in_use: set.FEC_API_KEY ? "FEC_API_KEY" : set.CONGRESS_API_KEY ? "CONGRESS_API_KEY (FEC_API_KEY isn't set for this Worker)" : "none",
   };
 }
 
@@ -110,6 +141,7 @@ function roundSummary(result, round, startedAt) {
     started_at: startedAt,
     finished_at: new Date().toISOString(),
     requests: result.requests_used,
+    retries: result.retries || 0,
     steps: result.steps.map((s) => ({ step: s.step, status: s.status, requests: s.requests, message: s.message })),
   };
 }
@@ -183,10 +215,13 @@ export class SyncRunner extends DurableObject {
       const result = await runSync(this.env, { trigger: state.trigger, deadlineMs: ROUND_MS, runId: state.run_id });
       if (await this.superseded(state)) return;
       state.rounds = [...state.rounds, roundSummary(result, state.round, state.round_started_at)].slice(-10);
-      if (result.continue_now && state.round < MAX_ROUNDS) {
+      if ((result.continue_now || result.retry_later.length) && state.round < MAX_ROUNDS) {
         // More to fetch and this round only stopped at its budget: keep going.
+        // A temporary error alone (a rate limit, a server timing out) waits
+        // TEMPORARY_RETRY_MS (5 minutes) first, so the source can recover.
         await this.ctx.storage.put("state", state);
-        await this.ctx.storage.setAlarm(Date.now() + 1000);
+        const pause = result.continue_now ? 1000 : parseInt(this.env.TEMPORARY_RETRY_MS || "300000", 10);
+        await this.ctx.storage.setAlarm(Date.now() + pause);
         return;
       }
       state.outcome = result.more_to_do
@@ -359,6 +394,7 @@ export default {
           rounds: run.rounds || [],
         },
         counts,
+        keys: keyReport(env),
         ai_review_flags: flags,
         recent_log: recent,
       });

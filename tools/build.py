@@ -428,11 +428,11 @@ def build_methodology():
   <ul class="plain-list small">
     <li><strong>What the bill does:</strong> a short, plain summary without judgment words.</li>
     <li><strong>Provisions it touches:</strong> each quoted from the Constitution, with one sentence on why.</li>
-    <li><strong>Where it aligns</strong> and <strong>where it may be in tension</strong> with that text, written as questions a careful reader could raise, not conclusions.</li>
+    <li><strong>Where it aligns</strong> and <strong>where it may be in tension</strong> with that text, written as questions a careful reader could raise, not conclusions. Every panel, including the next one, is written the same way ("One view is that …"), with the same hedging and similar length.</li>
     <li><strong>Why this might still serve the public:</strong> where a policy departs from the baseline, the case for it, including whether it would need a constitutional amendment under Article V.</li>
     <li><strong>How different approaches read it:</strong> for contested questions only, how a reading based on original meaning, one based on precedent, and one based on evolving interpretation would each see it, side by side.</li>
     <li><strong>Cases cited:</strong> only cases verified in CourtListener, each linked to the opinion.</li>
-    <li><strong>What it can't tell you:</strong> the limits of the analysis.</li>
+    <li><strong>What it can't tell you:</strong> the limits of the analysis. When only part of a long bill's text (or only its official summary) was read, the summary says so, and nothing describes sections that weren't read.</li>
   </ul>
 </section>
 

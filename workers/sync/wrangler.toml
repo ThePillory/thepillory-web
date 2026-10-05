@@ -9,6 +9,9 @@ main = "src/index.js"
 compatibility_date = "2025-09-01"
 # Serve the Worker on its workers.dev URL, which the manual /run and /status links use.
 workers_dev = true
+# Keep variables set in the Cloudflare dashboard when this file is deployed
+# (each deploy otherwise replaces them with [vars] below). Secrets are always kept.
+keep_vars = true
 
 # Import .sql migration files as text so the Worker can apply them itself.
 rules = [{ type = "Text", globs = ["**/*.sql"], fallthrough = true }]

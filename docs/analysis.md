@@ -20,6 +20,11 @@ checks ── every Constitution quote vs. the stored text (mismatches replaced,
        └─ every case vs. CourtListener citation lookup (unverified cases removed with
           every sentence relying on them, logged)
    ▼
+wording check ── lint.js, no AI: a verdict in a panel ("fits the Tenth Amendment", "falls
+   │              within this power"), a panel not starting "One view is that", card panels
+   │              of very different lengths, or a partly read bill that doesn't say so →
+   │              one revision with the named problems (kept only if fewer remain)
+   ▼
 AI reviewer ── claude-sonnet-5-5, five-point checklist against the bill text (review.js);
    │            each failed check rated major (factual error, unfair to one side,
    │            opinion stated as fact) or minor (completeness, phrasing, style)
@@ -43,6 +48,18 @@ AI reviewer ── claude-sonnet-5-5, five-point checklist against the bill text
 - **Relevance check** (`src/analysis/relevance.js`, `claude-haiku-4-5-20251001`): one call per 25 bills, with each bill's number, title and official description: Congress.gov's latest CRS summary (or, before CRS writes one, the official title as introduced, "To amend … to …"), or a California bill's Legislative Counsel's Digest from leginfo. The description is fetched once per bill before its check (`official_summary` on `bills`, migration 0006; 1 or 2 requests a bill) and cut to 1,500 characters in the call. It skips commemorations, awareness days, post office and building namings, honorary resolutions, and rules that only set how a chamber debates another bill. A bill that creates or changes a state or federal holiday is substantive (it changes law), even when it's named for a person or occasion; only observances with no legal effect are skipped. A bill that requires, directs or authorizes a study, report, plan, audit, assessment or data collection is a mandate, not a commemoration, whatever its subject; the code also turns a skip into "analyze" when the title or official description says so (`MANDATE` in `relevance.js`). A bill whose only draft the relevance check had rejected automatically is drafted once a later check finds it substantive. When unsure, it analyzes. It never skips for lack of information: a skip whose reason is that the title or description doesn't say enough ("title acronym", "not disclosed in title", "unable to determine") is turned into "analyze" by the code, and so is a "procedural_rule" skip of anything but one chamber's resolution (H.Res., S.Res., or a California HR or SR). When the rules change (`RELEVANCE_PROMPT_VERSION`), bills skipped under the old rules are checked again once (un-skipped ones are left alone). It also rates local relevance (`high`: California, rural counties, federal lands, water, wildfire, roads, local government…; `medium`, `low`, `none`), by subject only. Every verdict is in `bill_relevance`; every skip is logged as a `relevance-skip` row in `sync_log`, and the bill page says why it wasn't analyzed. Issue-linked bills skip the check.
 - **Order:** requests (yours first, then readers'), then bills an issue now links to whose analysis is only a card, then new bills: issue-linked first, then by local relevance, then by the latest final-passage vote.
 - **Un-skip:** `/admin/review/#skipped` lists every skipped bill with its reason. Un-skip drafts it on the next run; "Skip again" undoes that.
+
+## Wording rules the drafter follows
+
+Most drafts the reviewer flagged had the same few problems, so they're fixed at the drafter (`prompt.js`) and checked in code (`lint.js`) before the reviewer reads the draft:
+
+- **No verdicts in any panel.** Phrasings like "fits the Tenth Amendment", "falls within this power", "is a valid exercise of", "rests on", "is consistent with [a provision]", words of certainty ("clearly", "squarely") and "is constitutional" are banned by name.
+- **Parallel panels.** Every panel item starts "One view is that … because …", with the same hedging. In a card each panel is one sentence of 20 to 35 words; panels more than 1.6 times (and 8 words) longer than another are sent back. A full analysis gives each panel the same number of points.
+- **Say what was read.** A card drafted from part of a long bill says "Only part of the bill text was read" in its summary, and one drafted from the official summary says "Only the official summary was read". The drafter never describes sections it wasn't given (a list of headings shows only that a section exists).
+
+A draft with any of these problems gets one wording fix (`WORDING_FIXES_PER_DRAFT`, 1) before the AI reviewer; the fix is kept only if it has fewer problems. Problems still left are added to the reviewer's list for the revision step.
+
+**Redrafts.** A draft the reviewer flagged, written under an earlier prompt version and not yet decided by a person, is drafted again under the current prompt, in its own daily allowance (`REDRAFT_DAILY`, default 20) so new bills aren't held back. The earlier version is kept. Bumping `PROMPT_VERSION` or `CARD_PROMPT_VERSION` is what queues them.
 
 ## Two levels
 
@@ -162,7 +179,7 @@ Access stops everyone else before the request reaches the site. The site also ve
 - **Order:** see "Which bills, and in what order" above.
 - **Daily cap:** `ANALYSIS_DAILY_LIMIT` in `workers/sync/wrangler.toml` (currently `5`). Set it to `"0"` to pause drafting.
 - **Retries:** a bill that can't be drafted (no text or summary, a model refusal, an error) is retried after 7 days.
-- **Other settings in `wrangler.toml`:** `ANALYSIS_MODEL` (default `claude-sonnet-5-5`), `ANALYSIS_EFFORT` (default `high`), `MAX_BILL_TEXT_CHARS` (default 400,000; longer texts are cut and the draft is marked "limited"), `CARD_TEXT_CHARS` (default 60,000; see Long bills), `REVISIONS_PER_DRAFT` (default 1; 0 turns the revision step off), `RELEVANCE_MODEL` (default `claude-haiku-4-5-20251001`), `REVIEW_MODEL` (default `claude-sonnet-5-5`), `REVIEW_EFFORT` (default `medium`), `SPOT_CHECK_RATE` (default `0.1`) and `REVIEW_BACKLOG_DAILY` (default 10).
+- **Other settings in `wrangler.toml`:** `ANALYSIS_MODEL` (default `claude-sonnet-5-5`), `ANALYSIS_EFFORT` (default `high`), `MAX_BILL_TEXT_CHARS` (default 400,000; longer texts are cut and the draft is marked "limited"), `CARD_TEXT_CHARS` (default 60,000; see Long bills), `REVISIONS_PER_DRAFT` (default 1; 0 turns the revision step off), `RELEVANCE_MODEL` (default `claude-haiku-4-5-20251001`), `REVIEW_MODEL` (default `claude-sonnet-5-5`), `REVIEW_EFFORT` (default `medium`), `SPOT_CHECK_RATE` (default `0.1`), `REVIEW_BACKLOG_DAILY` (default 10) and `REDRAFT_DAILY` (default 20).
 
 **Cost, roughly:** each draft sends the Constitution (about 12,000 tokens, cached across the drafts in a run) plus the bill text, and gets back a few thousand tokens (a card, fewer). The AI reviewer sends the bill text again with the draft, at `medium` effort; a flagged draft adds one revision and one more review. A card of a long bill sends at most about 15,000 tokens of bill text per call. At claude-sonnet-5-5 prices ($2 per million input tokens, $10 per million output), a typical bill costs about $0.05 to $0.40 for draft and review together; the longest bills up to about $2. The relevance check costs about a cent per 25 bills. The daily cap bounds the total. Every call's token counts are in `sync_log` and on the review page.
 

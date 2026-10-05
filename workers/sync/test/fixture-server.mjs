@@ -509,7 +509,24 @@ function anthropic(req, res, body) {
   if (!draft) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: `fixture: no draft for ${bill}` } });
   if (bill === "H.R. 10" && /OLD TEXT/.test(msg)) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: "fixture: sent the old text version" } });
   // A revision of H.R. 20 fixes what the fake reviewer flagged.
-  const fixed = revision && bill === "H.R. 20" ? { ...draft, plain_summary: `${draft.plain_summary} An agency may extend the deadline once.` } : draft;
+  let fixed = revision && bill === "H.R. 20" ? { ...draft, plain_summary: `${draft.plain_summary} An agency may extend the deadline once.` } : draft;
+  // A revision asked to fix the wording (src/analysis/lint.js) does so: every
+  // panel in the "One view is that" form, and a partly read bill says so.
+  if (revision && /One view is that|Only part of the bill text was read|Only the official summary was read/.test(msg)) {
+    const lead = (x) => (/^One view is that/.test(x) ? x : `One view is that ${x.charAt(0).toLowerCase()}${x.slice(1)}`);
+    fixed = {
+      ...fixed,
+      plain_summary:
+        /Only part of the bill text was read/.test(msg) && !/Only part of the bill text was read/.test(fixed.plain_summary)
+          ? `${fixed.plain_summary} Only part of the bill text was read: the official summary, the list of sections and the opening text.`
+          : /Only the official summary was read/.test(msg) && !/Only the official summary was read/.test(fixed.plain_summary)
+            ? `Only the official summary was read. ${fixed.plain_summary}`
+            : fixed.plain_summary,
+      aligns: fixed.aligns.map(lead),
+      tension: fixed.tension.map(lead),
+      departure: fixed.departure.map(lead),
+    };
+  }
   const text = JSON.stringify(card ? asCard(fixed) : fixed);
   const cacheRead = anthropicRequests.length > 1 ? 18000 : 0;
   sse(res, [
