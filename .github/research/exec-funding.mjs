@@ -3,7 +3,7 @@ const KEY = process.env.FEC_KEY || 'DEMO_KEY';
 const UA = { 'User-Agent': 'ThePillory research (thepillory.co)' };
 const show = (label, x) => console.log(`\n### ${label}\n` + (typeof x === 'string' ? x : JSON.stringify(x, null, 1)).slice(0, 3500));
 async function get(url, opts = {}) {
-  try { const r = await fetch(url, { headers: UA, redirect: 'follow', ...opts }); const t = await r.text(); return { status: r.status, ct: r.headers.get('content-type'), url: r.url, t }; }
+  try { const r = await fetch(url, { headers: UA, redirect: 'follow', signal: AbortSignal.timeout(25000), ...opts }); const t = await r.text(); return { status: r.status, ct: r.headers.get('content-type'), url: r.url, t }; }
   catch (e) { return { status: 'ERR ' + e.message, t: '' }; }
 }
 const fec = async (path) => { const r = await get(`https://api.open.fec.gov/v1${path}${path.includes('?') ? '&' : '?'}api_key=${KEY}`); try { return JSON.parse(r.t); } catch { return { status: r.status, body: r.t.slice(0, 300) }; } };
