@@ -177,17 +177,6 @@ export function nominationsTab(o, data, base, status, offset) {
   return `${intro}${filters}${rows ? `<ul class="plain-list card exec-list">${rows}</ul>` : '<p class="secondary small">None in this group.</p>'}${pager(base, "nominations", status === "all" ? {} : { status }, data.more, offset)}`;
 }
 
-/** Funding for executive offices other than the President. */
-export function executiveFundingNote(o) {
-  if (o.chamber === "us-executive" && o.rank === 2) {
-    return `<p class="secondary small">The Federal Election Commission has no separate campaign record for the Vice President's office in the data ThePillory uses. The ticket's campaign money is on the President's Funding tab.</p>`;
-  }
-  if (o.chamber === "us-executive") {
-    return `<p class="secondary small">Cabinet members are appointed, not elected, so they have no campaign committees and no campaign funding to show.</p>`;
-  }
-  return null;
-}
-
 /** "Final action" on a bill page: signed, vetoed, or law without a signature. */
 export function outcomeSection(b, { outcome: o, checked }) {
   const who = b.level === "federal" ? "the President" : "the Governor";

@@ -5,6 +5,7 @@
 import { esc, safeUrl, fmtDate } from "./render.js";
 import { INDUSTRIES } from "../../workers/sync/src/funding/industry.js";
 import { currentCycle } from "../../workers/sync/src/funding/fec.js";
+import { donorsDisclosed, isPersonName } from "../../workers/sync/src/funding/disclosure.js";
 
 export const METHOD = "/about/methodology/#funding";
 export const NOT_A_CAUSE =
@@ -30,7 +31,7 @@ export async function fundingFor(db, official, cycle) {
       q("SELECT * FROM funding_totals WHERE official_id = ? AND cycle = ?").first(),
       q("SELECT * FROM funding_progress WHERE official_id = ? AND cycle = ?").first(),
       q("SELECT * FROM funding_pacs WHERE official_id = ? AND cycle = ? ORDER BY total DESC LIMIT 10").all(),
-      q("SELECT * FROM funding_outside WHERE official_id = ? AND cycle = ? ORDER BY total DESC").all(),
+      outsideRows(db, official.id, c),
       db
         .prepare(`SELECT * FROM funding_employers WHERE official_id = ? AND cycle = ? AND count >= ${MIN_EMPLOYER_DONORS} ORDER BY total DESC LIMIT 10`)
         .bind(official.id, c)
@@ -72,6 +73,34 @@ export async function fundingFor(db, official, cycle) {
     throw err;
   }
 }
+
+/** Outside spending rows, with each spender's FEC committee type when it's been looked up (executive-funding). */
+async function outsideRows(db, officialId, cycle) {
+  try {
+    return await db
+      .prepare(
+        `SELECT x.*, c.committee_type FROM funding_outside x LEFT JOIN fec_committees c ON c.committee_id = x.committee_id
+         WHERE x.official_id = ? AND x.cycle = ? ORDER BY x.total DESC`
+      )
+      .bind(officialId, cycle)
+      .all();
+  } catch (err) {
+    if (!missing(err)) throw err;
+    return db.prepare("SELECT * FROM funding_outside WHERE official_id = ? AND cycle = ? ORDER BY total DESC").bind(officialId, cycle).all();
+  }
+}
+
+/**
+ * How an outside spender is named on a page. A person spending their own money
+ * isn't named (ThePillory never names individuals in money data); a group that
+ * doesn't have to disclose its donors says so.
+ */
+export function spenderLabel(x) {
+  if (isPersonName(x.name)) return "An individual, spending their own money (name not shown)";
+  return undisclosed(x) ? `${esc(x.name)} <span class="chip chip--gray chip--sm">Donors not disclosed</span>` : esc(x.name);
+}
+/** A group (not a person spending their own money) that doesn't have to disclose its donors. */
+export const undisclosed = (x) => donorsDisclosed(x.committee_type) === false && !isPersonName(x.name);
 
 /** Lobbying reports that mention a bill, grouped by organization. Amendments replace the report they amend. */
 export async function lobbyingFor(db, billId) {
@@ -187,7 +216,9 @@ export function fundingTab(official, f, base) {
   const span = period(f.cycle);
   const fecLink = safeUrl((t && t.source_url) || f.fec.source_url);
   const asOf = t && t.coverage_end ? `through ${fmtDate(t.coverage_end)}${t.last_report ? ` (latest report: ${esc(t.last_report.toLowerCase())})` : ""}` : "";
-  const intro = `<p class="small">Money raised by ${esc(official.name)}'s campaign committees in ${span}${asOf ? `, ${asOf}` : ""}, as reported to the Federal Election Commission. These are facts about money, shown beside the voting record; they don't explain any vote.</p>`;
+  const intro = `<p class="small">Money raised by ${esc(official.name)}'s campaign committees in ${span}${asOf ? `, ${asOf}` : ""}, as reported to the Federal Election Commission. ${
+    official.chamber === "us-executive" ? "These are facts about money; they don't explain any action in office." : "These are facts about money, shown beside the voting record; they don't explain any vote."
+  }</p>`;
   if (!t) return `${cycleNav(base, f)}${intro}<p class="secondary small">${esc((f.progress && f.progress.note) || `No FEC totals for ${span}.`)}</p>`;
 
   // 1. PAC and special-interest money
@@ -202,16 +233,22 @@ export function fundingTab(official, f, base) {
   const outsideList = (so, label) => {
     const rows = side(so);
     const sum = rows.reduce((s, x) => s + x.total, 0);
+    const hidden = rows.filter(undisclosed).reduce((s, x) => s + x.total, 0);
     return `<div class="stack-xs"><h4 class="money-sub">${label}: ${money(sum)}</h4>${
       rows.length
-        ? `<ul class="plain-list money-list">${rows.slice(0, 5).map((x) => row(esc(x.name), money(x.total))).join("")}</ul>${rows.length > 5 ? `<p class="hint">And ${rows.length - 5} more.</p>` : ""}`
+        ? `<ul class="plain-list money-list">${rows.slice(0, 5).map((x) => row(spenderLabel(x), money(x.total))).join("")}</ul>${rows.length > 5 ? `<p class="hint">And ${rows.length - 5} more.</p>` : ""}${
+            hidden ? `<p class="hint">${money(hidden)} of this came from groups whose donors are not disclosed.</p>` : ""
+          }`
         : '<p class="secondary small">None reported.</p>'
     }</div>`;
   };
+  const anyHidden = f.outside.some(undisclosed);
   const outside = `
     ${outsideList("S", "Spent to support")}
     ${outsideList("O", "Spent to oppose")}
-    <p class="hint">Independent expenditures: groups spending on ads and outreach about this member, without coordinating with the campaign. This money isn't given to the campaign. ${fecLink ? `<a class="tap" href="${esc(fecLink)}" target="_blank" rel="noopener">FEC record ↗</a>` : ""}</p>`;
+    <p class="hint">Independent expenditures: spending on ads and outreach about ${official.chamber === "us-executive" ? "this candidate" : "this member"}, without coordinating with the campaign. This money isn't given to the campaign.${
+      anyHidden ? ` "Donors not disclosed": the group files with the FEC as a spender, not as a political committee, so it doesn't have to report who funds it (<a class="tap" href="${METHOD.replace("#funding", "#donors-not-disclosed")}">what this means</a>).` : ""
+    } ${fecLink ? `<a class="tap" href="${esc(fecLink)}" target="_blank" rel="noopener">FEC record ↗</a>` : ""}</p>`;
 
   const known = f.industries.filter((i) => i.industry !== "other");
   const classified = known.reduce((s, i) => s + i.pac + i.emp, 0);

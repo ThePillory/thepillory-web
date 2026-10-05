@@ -85,6 +85,7 @@ kill $WK
   --binding TURNSTILE_SITE_KEY=1x00000000000000000000AA --binding TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA \
   --binding TURNSTILE_VERIFY_URL=http://127.0.0.1:8788/turnstile/siteverify --binding VISITOR_SALT=local-test \
   --binding CENSUS_GEOCODER_URL=http://127.0.0.1:8788/census/geographies/onelineaddress \
+  --binding FPPC_SEARCH=http://127.0.0.1:8788/fppc \
   >/tmp/pillory-pages.log 2>&1) & PG=$!
 until curl -s localhost:8790/ >/dev/null 2>&1; do sleep 1; done
 echo "--- reader actions on the site (Turnstile is faked):"

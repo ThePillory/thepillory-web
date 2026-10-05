@@ -12,7 +12,7 @@ export const legislators = [
   ["T000006", ["H0AK00001"]],
 ].map(([bioguide, fec]) => ({ id: { bioguide, fec }, name: { official_full: "[Test member]" }, terms: [] }));
 
-const committeeFor = { S0CA00001: "C00000001", S0CA00002: "C00000002", H0CA77001: "C00000003", H0CA12001: "C00000004", H0AK00001: "C00000006" };
+const committeeFor = { P00000001: "C00000009", S0CA00001: "C00000001", S0CA00002: "C00000002", H0CA77001: "C00000003", H0CA12001: "C00000004", H0AK00001: "C00000006" };
 
 const CURRENT = ((y) => (y % 2 ? y + 1 : y))(new Date().getUTCFullYear());
 
@@ -84,6 +84,36 @@ const OUTSIDE = [
   ["C80000001", "EXAMPLE VOTERS ALLIANCE", "S", 150000, 12],
   ["C80000002", "TEST FUTURE FUND", "O", 220000, 20],
   ["C80000003", "SAMPLE CITIZENS COMMITTEE", "O", 40000, 3],
+  // A group that files as a non-committee spender (donors not disclosed), and a person.
+  ["C90000004", "EXAMPLE ISSUES FUND", "S", 90000, 4],
+  ["C90000005", "DOE, JANE", "O", 12000, 2],
+];
+// FEC committee types of the spenders: O super PAC, V hybrid PAC, I non-committee spender.
+const SPENDER_TYPES = { C80000001: "O", C80000002: "V", C80000003: "O", C90000004: "I", C90000005: "I" };
+
+// The fake President's inaugural committee, its Form 13 reports, and the
+// electronic report file (fields separated by \x1c, as the FEC posts them).
+const thisYear = new Date().getUTCFullYear();
+const termStart = `${thisYear - 1}-01-20`;
+const INAUGURAL = { committee_id: "C00000999", name: "[TEST] EXAMPLE INAUGURAL COMMITTEE, INC.", committee_type: "X", first_file_date: `${thisYear - 2}-11-20`, last_file_date: `${thisYear - 1}-08-01` };
+export function form13File() {
+  const FS = "\x1c";
+  const line = (entity, org, last, first, amount) => ["F132", "C00000999", `F132.${amount}`, "", "", entity, org, last, first, "", "", "", "1 TEST ST", "", "TESTVILLE", "CA", "90000", `${thisYear - 1}0110`, amount.toFixed(2), amount.toFixed(2), "", ""].join(FS);
+  return [
+    ["HDR", "FEC", "8.5", "Fixture"].join(FS),
+    ["F13", "C00000999", "[TEST] EXAMPLE INAUGURAL COMMITTEE, INC."].join(FS),
+    line("ORG", "EXAMPLE WIDGETS CORP", "", "", 1000000),
+    line("ORG", "EXAMPLE WIDGETS CORP", "", "", 500000),
+    line("ORG", "SAMPLE ENERGY LLC", "", "", 750000),
+    line("ORG", "TEST BANK OF EXAMPLE", "", "", 250000),
+    line("IND", "", "DOE", "JOHN", 100000),
+    line("IND", "", "ROE", "JANE", 50000),
+    line("IND", "", "POE", "SAM", 1000),
+  ].join("\r\n");
+}
+const FILINGS = [
+  { form_type: "F13", document_description: `POST INAUGURAL ${thisYear - 1}`, coverage_start_date: `${thisYear - 2}-11-20`, coverage_end_date: `${thisYear - 1}-04-20`, receipt_date: `${thisYear - 1}-04-20T00:00:00`, total_receipts: 2601000, amendment_indicator: "N", file_number: 9001, pdf_url: "https://docquery.fec.gov/pdf/test/9001.pdf", fec_url: "http://127.0.0.1:8788/fecfiles/9001.fec" },
+  { form_type: "F13", document_description: `POST INAUGURAL SUPPLEMENT ${thisYear - 1}`, coverage_start_date: `${thisYear - 1}-04-21`, coverage_end_date: `${thisYear - 1}-07-19`, receipt_date: `${thisYear - 1}-08-01T00:00:00`, total_receipts: 2603000, amendment_indicator: "N", file_number: 9002, pdf_url: "https://docquery.fec.gov/pdf/test/9002.pdf", fec_url: null },
 ];
 
 /** The FEC API: path without the version prefix, and the query. Null: 404. */
@@ -121,10 +151,41 @@ export function fec(path, q) {
   }
   if (path === "/schedules/schedule_e/by_candidate/") {
     const cand = q.get("candidate_id");
-    const rows = cand === "H0CA77001" || cand === "S0CA00001" ? OUTSIDE : [];
+    const rows = cand === "H0CA77001" || cand === "S0CA00001" || cand === "P00000001" ? OUTSIDE : [];
     return { status: 200, body: { results: rows.map(([committee_id, committee_name, support_oppose_indicator, total, count]) => ({ candidate_id: cand, committee_id, committee_name, support_oppose_indicator, total, count, cycle: +q.get("cycle") })), pagination: { count: rows.length, page: 1, pages: 1 } } };
   }
+  if (path === "/committees/") {
+    if (q.get("q") === "inaugural") return { status: 200, body: { results: [INAUGURAL, { committee_id: "C00000998", name: "OLD INAUGURAL COMMITTEE", committee_type: "X", first_file_date: "2000-12-01" }], pagination: { count: 2, pages: 1 } } };
+    const ids = q.getAll("committee_id");
+    return { status: 200, body: { results: ids.filter((id) => SPENDER_TYPES[id]).map((id) => ({ committee_id: id, name: (OUTSIDE.find((o) => o[0] === id) || [])[1], committee_type: SPENDER_TYPES[id], committee_type_full: SPENDER_TYPES[id] === "I" ? "Independent expenditure filer (not a committee)" : "Super PAC (Independent Expenditure-Only)" })), pagination: { count: ids.length, pages: 1 } } };
+  }
+  if (path === "/filings/" && q.get("committee_id") === "C00000999") return { status: 200, body: { results: FILINGS, pagination: { count: FILINGS.length, pages: 1 } } };
   return null;
+}
+
+// ---------------------------------------------------------------------------
+// Office of Government Ethics: the disclosure search API (DataTables JSON).
+const OGE_ROWS = [
+  ["Presidente, Testa Q", "Office of the President", "President", "<a href='https://extapps2.oge.gov/test/presidente-278e.pdf'>Annual (OGE 278e)</a>", `${thisYear}-05-15T04:00:00`],
+  ["Vicepresidente, Vicky", "Office of the Vice President", "Vice President", "<a href='https://extapps2.oge.gov/test/vicepresidente-278e.pdf'>Annual (OGE 278e)</a>", `${thisYear}-05-16T04:00:00`],
+  ["Testsecretary, Alex", "Department of State", "Secretary of State", "<a href='https://extapps2.oge.gov/test/testsecretary-ea.pdf'>Ethics Agreement</a>", `${thisYear - 1}-01-10T04:00:00`],
+  ["Testsecretary, Alex", "Department of State", "Secretary of State", "<a href='https://extapps2.oge.gov/test/testsecretary-nominee.pdf'>Nominee (OGE 278e)</a>", `${thisYear - 1}-01-10T04:00:00`],
+  ["Testsecretary, Alex", "Department of State", "Secretary of State", "<a href='https://extapps2.oge.gov/test/testsecretary-cert.pdf'>Certification of Ethics Agreement Compliance</a> (Amended 03/02/" + thisYear + ")", `${thisYear - 1}-04-01T04:00:00`],
+  ["Testsecretary, Alex", "Department of State", "Secretary of State", "278 Transaction (<a href='https://extapps2.oge.gov/201/Presiden.nsf/201%20Request?OpenForm&Filer=Testsecretary'>Request this Document</a>)", `${thisYear}-02-01T04:00:00`],
+  // A different person with the same last name: not matched.
+  ["Testsecretary, Morgan", "Department of Examples", "Deputy Assistant Secretary", "<a href='https://extapps2.oge.gov/test/other.pdf'>Nominee (OGE 278e)</a>", `${thisYear - 3}-06-01T04:00:00`],
+];
+export function oge(q) {
+  const term = String(q.get("search[value]") || "").toLowerCase();
+  const rows = OGE_ROWS.filter((r) => !term || r.join(" ").toLowerCase().includes(term));
+  const start = parseInt(q.get("start") || "0", 10);
+  const length = parseInt(q.get("length") || "10", 10);
+  return {
+    draw: parseInt(q.get("draw") || "0", 10),
+    recordsTotal: OGE_ROWS.length,
+    recordsFiltered: rows.length,
+    data: rows.slice(start, start + length).map(([name, agency, title, type, docDate]) => ({ type, name, agency, title, level: "n/a", docDate, amended: "" })),
+  };
 }
 
 // ---------------------------------------------------------------------------

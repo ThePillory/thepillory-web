@@ -1,0 +1,32 @@
+# Rebuilds data/ca-campaign.json (California statewide officers' campaign
+# statement totals) from the Secretary of State's Cal-Access export and commits
+# it, weekly and on demand (Actions -> Refresh California campaign data -> Run
+# workflow). See tools/build_ca_campaign.py. The sync Worker loads the file
+# when it changes. Cal-Access is replaced by CARS after the November 2026
+# election; this workflow then needs the new system's data access.
+name: Refresh California campaign data
+on:
+  schedule:
+    - cron: "17 14 * * 1"  # Mondays; Cal-Access's export is rebuilt nightly
+  workflow_dispatch:
+  # TEMPORARY: build the first file on this PR's branch. Remove before merging.
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [tools/build_ca_campaign.py, .github/workflows/ca-campaign.yml]
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tools/build_ca_campaign.py /tmp/cabuild
+      - name: Commit the data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/ca-campaign.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Refresh California campaign data from the Cal-Access export"
+          git push

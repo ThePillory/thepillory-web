@@ -173,3 +173,45 @@ export const govPosts = {
   "proclamation-test": `<html><body><p>[FAKE] <a href="https://www.gov.ca.gov/wp-content/uploads/${thisYear}/09/Test-County-SOE-Proclamation.pdf">Proclamation</a></p></body></html>`,
   "other-test": `<html><body><p>[FAKE] No document.</p></body></html>`,
 };
+
+// data/ca-campaign.json, as tools/build_ca_campaign.py writes it from the Cal-Access export.
+export const caCampaignFile = {
+  _readme: "FAKE TEST DATA",
+  source: "https://campaignfinance.cdn.sos.ca.gov/dbwebexport.zip",
+  export_modified: "Mon, 05 Oct 2026 08:54:52 GMT",
+  generated: "2026-10-05",
+  officials: {
+    governor: {
+      name: "Gloria Testgovernor",
+      committees: [
+        {
+          filer_id: "9000001", name: "Testgovernor for Governor 2022 [FAKE]", source_url: "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=9000001",
+          reports: [
+            { filing_id: "8000002", amend_id: 0, from: `${thisYear}-01-01`, thru: `${thisYear}-06-30`, filed: `${thisYear}-07-31`, contributions: 0, expenditures: 228831.95, cash_end: 2521988.33, source_url: "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=8000002&amendid=0" },
+            { filing_id: "8000001", amend_id: 1, from: `${thisYear - 1}-07-01`, thru: `${thisYear - 1}-12-31`, filed: `${thisYear}-02-02`, contributions: 120500, expenditures: 5500.19, cash_end: 2757658.42, source_url: "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=8000001&amendid=1" },
+          ],
+        },
+      ],
+    },
+    "lieutenant-governor": { name: "Leo Testlieutenant", committees: [] },
+  },
+};
+
+// The FPPC's Form 700 search (/Home/SearchDocuments, answered as a JSON string of JSON).
+export function fppcSearch(body) {
+  const last = (((body || {}).searchFieldQueryInfos || [])[0] || {}).filterValue;
+  const doc = (indexID, first, filedDate, positions, isAmendment = false) => ({ indexID, filer: { lastName: last, firstName: first }, filingInfo: { noReportableInterests: false, isAmendment, filedDate }, filingPositions: positions, hits: {} });
+  const pos = (agency, position, filingType, filingYear) => ({ agency, position, filingType, filingYear, dueDate: "03/02/2026" });
+  const docs =
+    last === "Testgovernor"
+      ? [
+          doc("C5CCD568-1380-4357-9384-E97BC6E2B450", "Gloria", `${thisYear}-03-02T13:41:17`, [pos("Governor", "Governor", "Annual", thisYear - 1), pos("Example Authority", "Governing Board", "Annual", thisYear - 1)]),
+          doc("67864095-2591-4232-97C4-17B849652E4B", "Gloria", `${thisYear - 1}-03-03T00:00:00`, [pos("Governor", "Governor", "Annual", thisYear - 2)]),
+          doc("B37CAE95-1B9E-427F-B942-C32C89721B72", "Gloria", `${thisYear - 2}-08-29T00:00:00`, [pos("Governor", "Governor", "Annual", thisYear - 3)], true),
+          // The same person filing only for a board, and a namesake: neither is listed.
+          doc("CE60A69A-718A-40B9-A6F2-5E7B2DDBD081", "Gloria", `${thisYear - 1}-03-03T13:03:21`, [pos("Example Authority", "Governing Board", "Annual", thisYear - 2)]),
+          doc("1710494C-D4C8-4F78-9967-D1AE278EAE3B", "Harriet", `${thisYear}-03-31T13:30:56`, [pos("City of Example", "City/Town Council Member", "Annual", thisYear - 1)]),
+        ]
+      : [];
+  return JSON.stringify({ documents: docs, took: 12 });
+}
