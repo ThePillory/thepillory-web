@@ -1,64 +1,56 @@
-// TEMPORARY research script: executive-branch funding sources. Remove before merging.
+// TEMPORARY research script (round 2): executive-branch funding sources. Remove before merging.
 const KEY = process.env.FEC_KEY || 'DEMO_KEY';
 const UA = { 'User-Agent': 'ThePillory research (thepillory.co)' };
-const show = (label, x) => console.log(`\n### ${label}\n` + (typeof x === 'string' ? x : JSON.stringify(x, null, 1)).slice(0, 3500));
+const show = (label, x) => console.log(`\n### ${label}\n` + (typeof x === 'string' ? x : JSON.stringify(x)).slice(0, 2500));
 async function get(url, opts = {}) {
-  try { const r = await fetch(url, { headers: UA, redirect: 'follow', signal: AbortSignal.timeout(25000), ...opts }); const t = await r.text(); return { status: r.status, ct: r.headers.get('content-type'), url: r.url, t }; }
+  try { const r = await fetch(url, { headers: { ...UA, ...(opts.headers || {}) }, redirect: 'follow', signal: AbortSignal.timeout(25000), ...opts }); const t = await r.text(); return { status: r.status, ct: r.headers.get('content-type'), url: r.url, t }; }
   catch (e) { return { status: 'ERR ' + e.message, t: '' }; }
 }
 const fec = async (path) => { const r = await get(`https://api.open.fec.gov/v1${path}${path.includes('?') ? '&' : '?'}api_key=${KEY}`); try { return JSON.parse(r.t); } catch { return { status: r.status, body: r.t.slice(0, 300) }; } };
-const links = (html, re) => [...new Set([...html.matchAll(/href="([^"]+)"[^>]*>([^<]{0,120})</g)].filter(m => re.test(m[1] + ' ' + m[2])).map(m => m[1] + ' | ' + m[2].trim()))].slice(0, 40);
+const text = (h) => h.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+const links = (html, re) => [...new Set([...html.matchAll(/href="([^"]+)"[^>]*>([^<]{0,100})</g)].filter(m => re.test(m[1] + ' ' + m[2])).map(m => m[1] + ' | ' + m[2].trim()))].slice(0, 30);
 
-// ---------- A. FEC ----------
+// A. FEC compact
 const ex = JSON.parse((await get('https://unitedstates.github.io/congress-legislators/executive.json')).t);
 const cur = ex.filter(p => p.terms.some(t => t.end >= '2026-10-05' && t.start <= '2026-10-05'));
-show('A1 current executive.json people (ids + current term types)', cur.map(p => ({ id: p.id, terms: p.terms.filter(t => t.end >= '2026-10-05').map(t => ({ type: t.type, start: t.start, how: t.how })) })));
-const pres = cur.find(p => p.terms.some(t => t.type === 'prez' && t.end >= '2026-10-05'));
-const pid = (pres.id.fec || []).filter(x => x.startsWith('P')).pop();
-show('A2 president fec ids', pres.id.fec);
-const inaug = await fec('/committees/?q=inaugural&sort=-last_file_date&per_page=8');
-show('A3 inaugural committees', (inaug.results || []).map(c => ({ id: c.committee_id, name: c.name, type: c.committee_type, type_full: c.committee_type_full, desig: c.designation, first: c.first_file_date, last: c.last_file_date, cycles: c.cycles })));
-const ic = (inaug.results || [])[0];
-if (ic) {
-  const f = await fec(`/filings/?committee_id=${ic.committee_id}&per_page=10&sort=-receipt_date`);
-  show('A4 inaugural filings', (f.results || []).map(x => ({ form: x.form_type, receipt: x.receipt_date, cov: [x.coverage_start_date, x.coverage_end_date], total_receipts: x.total_receipts, pdf: x.pdf_url, fec_url: x.fec_url, amend: x.amendment_indicator, doc: x.document_description })));
-  const sa = await fec(`/schedules/schedule_a/?committee_id=${ic.committee_id}&per_page=5&sort=-contribution_receipt_amount`);
-  show('A5 inaugural schedule_a (top 5 by amount) fields', { pagination: sa.pagination, rows: (sa.results || []).map(r => ({ entity: r.entity_type, entity_desc: r.entity_type_desc, name: r.contributor_name, amt: r.contribution_receipt_amount, date: r.contribution_receipt_date, line: r.line_number, form: r.filing_form, cycle: r.two_year_transaction_period, memo: r.memo_code, receipt_type: r.receipt_type })) , status: sa.status, body: sa.body });
-  const sa2 = await fec(`/schedules/schedule_a/?committee_id=${ic.committee_id}&per_page=5&contributor_type=committee&sort=-contribution_receipt_amount`);
-  show('A5b inaugural schedule_a contributor_type=committee', { pagination: sa2.pagination, n: (sa2.results||[]).length });
-  const tot = await fec(`/committee/${ic.committee_id}/totals/`);
-  show('A6 inaugural committee totals', tot.results ? tot.results.slice(0, 2) : tot);
+show('A1 current', cur.map(p => ({ fec: p.id.fec, bioguide: p.id.bioguide, types: p.terms.filter(t => t.end >= '2026-10-05').map(t => t.type) })));
+const inaug = await fec('/committees/?q=inaugural&sort=-last_file_date&per_page=6');
+show('A3 inaugural committees', (inaug.results || []).map(c => [c.committee_id, c.name, c.committee_type, c.committee_type_full, c.first_file_date, c.last_file_date]));
+for (const ic of (inaug.results || []).slice(0, 2)) {
+  const f = await fec(`/filings/?committee_id=${ic.committee_id}&per_page=6&sort=-receipt_date`);
+  show('A4 filings ' + ic.committee_id, (f.results || []).map(x => [x.form_type, x.receipt_date, x.coverage_start_date, x.coverage_end_date, x.total_receipts, x.fec_url, x.pdf_url, x.amendment_indicator, x.document_description, x.file_number]));
+  const sa = await fec(`/schedules/schedule_a/?committee_id=${ic.committee_id}&per_page=6&sort=-contribution_receipt_amount`);
+  show('A5 sched A ' + ic.committee_id, { count: sa.pagination && sa.pagination.count, rows: (sa.results || []).map(r => [r.entity_type, r.contributor_name, r.contribution_receipt_amount, r.contribution_receipt_date, r.line_number, r.filing_form, r.two_year_transaction_period, r.memo_code]), err: sa.body });
+  const sao = await fec(`/schedules/schedule_a/?committee_id=${ic.committee_id}&per_page=6&sort=-contribution_receipt_amount&contributor_type=individual`);
+  show('A5b individual filter ' + ic.committee_id, { count: sao.pagination && sao.pagination.count });
+  const sac = await fec(`/schedules/schedule_a/by_size/?committee_id=${ic.committee_id}`);
+  show('A5c by size', sac.results || sac);
 }
-const se = await fec(`/schedules/schedule_e/by_candidate/?candidate_id=${pid}&per_page=10&sort=-total&cycle=2024`);
-show('A7 schedule_e by_candidate for president 2024', (se.results || []).map(r => ({ cid: r.committee_id, name: r.committee_name, so: r.support_oppose_indicator, total: r.total, count: r.count })));
-const ids = [...new Set((se.results || []).map(r => r.committee_id))].slice(0, 10);
-const cm = await fec(`/committees/?${ids.map(i => 'committee_id=' + i).join('&')}&per_page=20`);
-show('A8 spender committee types', (cm.results || []).map(c => ({ id: c.committee_id, name: c.name, type: c.committee_type, type_full: c.committee_type_full, desig: c.designation, org: c.organization_type_full })));
-const f5 = await fec(`/schedules/schedule_e/?candidate_id=${pid}&filing_form=F5&per_page=5&sort=-expenditure_amount&cycle=2024`);
-show('A9 schedule_e F5 (non-committee) filers for president 2024', { pagination: f5.pagination, rows: (f5.results || []).map(r => ({ cid: r.committee_id, name: r.committee && r.committee.name, type: r.committee && r.committee.committee_type, amt: r.expenditure_amount, so: r.support_oppose_indicator, form: r.filing_form })) });
-const vt = await fec(`/committees/?committee_type=I&per_page=3&sort=-last_file_date`);
-show('A10 committee_type=I sample', (vt.results || []).map(c => ({ id: c.committee_id, name: c.name, type_full: c.committee_type_full })));
+// Earlier presidential inaugural committee (to see history): search names
+const old = await fec('/committees/?q=inaugural&sort=first_file_date&per_page=10');
+show('A6 oldest inaugural committees', (old.results || []).map(c => [c.committee_id, c.name, c.first_file_date]));
 
-// ---------- B. OGE ----------
-for (const u of ['https://www.oge.gov/web/OGE.nsf/Officials%20Individual%20Disclosures%20Search%20Collection?OpenForm',
-  'https://www.oge.gov/web/oge.nsf/Nominee%20Reports', 'https://www.oge.gov/Web/OGE.nsf/Agency%20Ethics%20Agreements?OpenView',
-  'https://extapps2.oge.gov/web/OGE.nsf/Officials%20Individual%20Disclosures%20Search%20Collection?OpenForm']) {
-  const r = await get(u); show('B ' + u, { status: r.status, ct: r.ct, final: r.url, title: (r.t.match(/<title>([^<]*)/i) || [])[1], scripts: [...r.t.matchAll(/<script[^>]*src="([^"]+)"/g)].map(m => m[1]).slice(0, 10), forms: [...r.t.matchAll(/<form[^>]*>/g)].map(m => m[0]).slice(0, 5), json: [...r.t.matchAll(/["']([^"']*(?:json|api|ReadViewEntries|\?OpenView|SearchView)[^"']*)["']/gi)].map(m => m[1]).slice(0, 25), links: links(r.t, /nsf|278|ethics|agreement|disclos|search/i) });
+// B. OGE API
+const base = 'https://extapps2.oge.gov/201/Presiden.nsf/API.xsp/v3/rest';
+for (const q of ['?draw=1&start=0&length=5', '?draw=1&start=0&length=5&search%5Bvalue%5D=Secretary', '?draw=1&start=0&length=5&search%5Bvalue%5D=Ethics%20Agreement', '?start=0&length=3&search%5Bvalue%5D=Vice%20President']) {
+  const r = await get(base + q, { headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' } });
+  show('B ' + q, { status: r.status, ct: r.ct, body: r.t.slice(0, 2200) });
 }
-const wh = await get('https://www.whitehouse.gov/administration/cabinet/');
-const firstCab = (wh.t.match(/<h2[^>]*>([^<]{3,60})<\/h2>/) || [])[1];
-show('B2 first cabinet h2 (for search test)', firstCab);
+const page = await get('https://www.oge.gov/web/OGE.nsf/Officials%20Individual%20Disclosures%20Search%20Collection?OpenForm');
+const m = page.t.match(/"ajax"[\s\S]{0,1500}/) || page.t.match(/&quot;ajax&quot;[\s\S]{0,1800}/);
+show('B2 ajax config', m ? m[0].replace(/&quot;/g, '"') : 'none');
+show('B3 table headers', [...page.t.matchAll(/<th[^>]*>([^<]*)<\/th>/g)].map(x => x[1]));
 
-// ---------- C. Cal-Access / CARS ----------
-const st = JSON.parse((await import('fs')).readFileSync('data/state-executive-officials.json', 'utf8')).officials;
-const gov = st[0].name.split(' ').pop();
-for (const u of ['https://cal-access.sos.ca.gov/Campaign/Candidates/', `https://cal-access.sos.ca.gov/Campaign/Candidates/list.aspx?view=certified&electNav=93`, 'https://www.sos.ca.gov/campaign-lobbying/cars-project', 'https://cars.sos.ca.gov/', 'https://powersearch.sos.ca.gov/']) {
-  const r = await get(u); show('C ' + u, { status: r.status, final: r.url, title: (r.t.match(/<title>([^<]*)/i) || [])[1], text: r.t.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 1200), links: links(r.t, /Detail\.aspx|Candidates|cars|launch|Committees|search|export|api|download/i) });
+// C. California
+for (const u of ['https://www.sos.ca.gov/campaign-lobbying', 'https://www.sos.ca.gov/campaign-lobbying/cal-access-resources', 'https://powersearch.sos.ca.gov/quick-search.php', 'https://powersearch.sos.ca.gov/advanced.php', 'https://powersearch.sos.ca.gov/help/']) {
+  const r = await get(u); show('C ' + u, { status: r.status, final: r.url, text: text(r.t).slice(0, 900), links: links(r.t, /cars|CARS|export|csv|api|download|search|filer|committee|candidate|new system|replace/i) });
 }
-const srch = await get(`https://cal-access.sos.ca.gov/Campaign/Candidates/list.aspx?view=search&searchtext=${encodeURIComponent(gov)}`);
-show('C2 candidate search ' + gov, { status: srch.status, final: srch.url, links: links(srch.t, /Detail\.aspx/i) });
+const ps = await get('https://powersearch.sos.ca.gov/quick-search.php?type=candidate&name=Newsom');
+show('C2 powersearch candidate', { status: ps.status, final: ps.url, text: text(ps.t).slice(0, 1500), links: links(ps.t, /csv|export|download|result|php\?/i) });
+const ca = await get('https://cal-access.sos.ca.gov/Campaign/Committees/');
+show('C3 cal-access committees index', { status: ca.status, text: text(ca.t).slice(0, 300) });
 
-// ---------- D. FPPC Form 700 ----------
-for (const u of ['https://www.fppc.ca.gov/transparency/form-700-filed-by-public-officials.html', 'https://www.fppc.ca.gov/transparency/form-700-filed-by-public-officials/form700-2024-2025.html']) {
-  const r = await get(u); show('D ' + u, { status: r.status, final: r.url, title: (r.t.match(/<title>([^<]*)/i) || [])[1], links: links(r.t, /700|form|governor|constitutional|statewide|newsom|\.pdf/i) });
+// D. FPPC
+for (const u of ['https://www.fppc.ca.gov/link/f968c492e8e642d0b9c08bdf8beb9609.aspx', 'https://www.fppc.ca.gov/transparency/form-700-filed-by-public-officials.html', 'https://www.fppc.ca.gov/transparency.html']) {
+  const r = await get(u); show('D ' + u, { status: r.status, final: r.url, title: (r.t.match(/<title>([^<]*)/i) || [])[1], text: text(r.t).slice(0, 800), links: links(r.t, /700|statewide|governor|search|official|filed/i) });
 }
