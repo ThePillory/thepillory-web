@@ -1,0 +1,30 @@
+# TEMPORARY: research for the executive branch sources. Removed before merging.
+name: TEMPORARY research (executive)
+on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+jobs:
+  look:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Fetch samples
+        run: |
+          UA="ThePillory research (+https://thepillory.co)"
+          g() { curl -sSL -m 40 -A "$UA" "$@"; }
+          txt() { python3 -c "import sys,re,html;t=sys.stdin.read();t=re.sub(r'(?s)<(script|style).*?</\1>','',t);t=re.sub(r'<[^>]+>','\n',t);t=html.unescape(t);print('\n'.join(l.strip() for l in t.splitlines() if l.strip()))"; }
+          echo "=== 1 executive.json (last 3)"; g https://unitedstates.github.io/congress-legislators/executive.json | jq -c '.[-3:][]' | cut -c1-900
+          echo "=== 2 Federal Register EOs (newest 3, current president)"; g "https://www.federalregister.gov/api/v1/documents.json?per_page=3&order=newest&conditions%5Btype%5D%5B%5D=PRESDOCU&conditions%5Bpresidential_document_type%5D%5B%5D=executive_order&fields%5B%5D=executive_order_number&fields%5B%5D=title&fields%5B%5D=signing_date&fields%5B%5D=publication_date&fields%5B%5D=document_number&fields%5B%5D=html_url&fields%5B%5D=pdf_url&fields%5B%5D=president&fields%5B%5D=citation&fields%5B%5D=disposition_notes" | jq -c '{count, total_pages, next_page_url, results}' | cut -c1-2500
+          echo "=== 2b FR president facet"; g "https://www.federalregister.gov/api/v1/documents/facets/president?conditions%5Bpresidential_document_type%5D%5B%5D=executive_order" | jq -c . | cut -c1-1200
+          echo "=== 3 whitehouse cabinet"; g https://www.whitehouse.gov/administration/cabinet/ | txt | head -150
+          echo "=== 4a congress law/119"; g "https://api.congress.gov/v3/law/119?api_key=DEMO_KEY&format=json&limit=2" | jq -c . | cut -c1-2500
+          echo "=== 4b bill actions hr 1 119"; g "https://api.congress.gov/v3/bill/119/hr/1/actions?api_key=DEMO_KEY&format=json&limit=8" | jq -c '.actions[]' | cut -c1-400
+          echo "=== 4c nominations 119"; g "https://api.congress.gov/v3/nomination/119?api_key=DEMO_KEY&format=json&limit=2" | jq -c . | cut -c1-2000
+          echo "=== 5 senate vetoes"; g https://www.senate.gov/legislative/vetoes/vetoCounts.htm | txt | head -60; g https://www.senate.gov/legislative/vetoes/vetoCounts.htm | grep -o 'href="[^"]*veto[^"]*"' | sort -u | head -20
+          echo "=== 6 leginfo status SB 1"; g "https://leginfo.legislature.ca.gov/faces/billStatusClient.xhtml?bill_id=202520260SB1" | txt | head -80
+          echo "=== 6b leginfo downloads"; g https://downloads.leginfo.legislature.ca.gov/ | txt | head -40
+          echo "=== 7 gov.ca.gov EO feed"; g https://www.gov.ca.gov/category/executive-orders/feed/ | head -c 3000; echo
+          echo "=== 7b gov EO page"; g https://www.gov.ca.gov/category/executive-orders/ | txt | head -60
+          echo "=== 8 CA officers"; for u in https://www.sco.ca.gov/ https://www.treasurer.ca.gov/ https://www.insurance.ca.gov/ https://www.cde.ca.gov/eo/ https://www.ltg.ca.gov/ https://oag.ca.gov/ https://www.sos.ca.gov/ https://www.gov.ca.gov/; do echo "--- $u"; g "$u" | txt | head -25; done
+          echo "=== 9 FEC presidential 2024 (DEMO_KEY)"; g "https://api.open.fec.gov/v1/candidates/?api_key=DEMO_KEY&office=P&election_year=2024&has_raised_funds=true&sort=-receipts&per_page=3" | jq -c '.results[] | {candidate_id,name,party,election_years}' 
+          echo "=== 10 leginfo search options"; g "https://leginfo.legislature.ca.gov/faces/billSearchClient.xhtml" | grep -io '<select[^>]*>' | head; g "https://leginfo.legislature.ca.gov/faces/billSearchClient.xhtml" | grep -io 'option value="[^"]*"[^<]*<' | grep -i "chapter\|veto\|status" | head -20
