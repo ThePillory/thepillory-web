@@ -1,26 +1,30 @@
 #!/bin/bash
-# TEMPORARY research (round 5). Remove before merging.
+# TEMPORARY research (round 6): the Form 700 search request format. Remove before merging.
 set -u
 UA="ThePillory research (thepillory.co)"
-echo "### A build"; time python3 tools/build_ca_campaign.py /tmp/cabuild
+B=https://form700search.fppc.ca.gov
+curl -sS -A "$UA" -c /tmp/cj $B/ > /tmp/f7.html
+for b in $(grep -oE '/Scripts/[a-zA-Z]+\?v=[^"]+' /tmp/f7.html); do curl -sS -A "$UA" "$B$b" >> /tmp/all.js; echo >> /tmp/all.js; done
+wc -c /tmp/all.js
 python3 - <<'PY'
-import json
-d = json.load(open('data/ca-campaign.json'))
-print({k: d[k] for k in ('source', 'export_modified', 'generated')})
-for k, v in d['officials'].items():
-    print('==', k, v['name'])
-    for c in v['committees'][:4]:
-        print('  ', c['filer_id'], c['name'], len(c['reports']), c['reports'][:2])
+import re
+s = open('/tmp/all.js', encoding='utf-8', errors='replace').read()
+for key in ['hdnSearchDocumentsUrl', 'SearchDocuments', 'hdnGetRedactedFormPdfUrl', 'GetRedactedFormPdf', 'indexID', 'searchCriteria', 'filingYear']:
+    for m in list(re.finditer(re.escape(key), s))[:3]:
+        print(f'--- {key} @{m.start()}')
+        print(s[max(0, m.start()-500): m.start()+700].replace('\n', ' '))
 PY
-URL=$(python3 -c "import json; d=json.load(open('data/ca-campaign.json')); print(next(r['source_url'] for v in d['officials'].values() for c in v['committees'] for r in c['reports']))")
-echo "### A2 statement link $URL"; curl -sS -o /tmp/s.bin -w "%{http_code} %{content_type} %{size_download}\n" -A "$UA" "$URL"; head -c 200 /tmp/s.bin | strings | head -3
-echo "### B form700 hidden urls"
-curl -sS -A "$UA" -c /tmp/cj https://form700search.fppc.ca.gov/ > /tmp/f7.html
-grep -oE '<input[^>]+id="hdn[A-Za-z]+"[^>]*>' /tmp/f7.html | sed -E 's/.*id="([^"]+)".*value="([^"]*)".*/\1 = \2/' 
-S=$(grep -oE 'id="hdnSearchDocumentsUrl"[^>]*value="[^"]*"' /tmp/f7.html | sed -E 's/.*value="([^"]*)"/\1/'); B=$(grep -oE 'id="hdnGetBootstrapUrl"[^>]*value="[^"]*"' /tmp/f7.html | sed -E 's/.*value="([^"]*)"/\1/')
-echo "search=$S bootstrap=$B"
-echo "### B2 bootstrap"; curl -sS -A "$UA" -b /tmp/cj "https://form700search.fppc.ca.gov$B" | head -c 2500; echo
-echo "### B3 search GET"; curl -sS -A "$UA" -b /tmp/cj "https://form700search.fppc.ca.gov$S?searchText=Newsom" | head -c 1500; echo
-echo "### B4 search POST json"; curl -sS -A "$UA" -b /tmp/cj -H "Content-Type: application/json" -X POST -d '{"searchText":"Newsom","pageNumber":1,"pageSize":10}' "https://form700search.fppc.ca.gov$S" | head -c 2500; echo
-echo "### B5 searchExportBundle snippets"
-curl -sS -A "$UA" "https://form700search.fppc.ca.gov$(grep -oE '/Scripts/bundle\?v=[^"]+' /tmp/f7.html | head -1)" | grep -oE '.{0,200}(hdnSearchDocumentsUrl|SearchDocuments|searchText|filters|pageSize).{0,300}' | head -12
+echo "### bootstrap keys"
+curl -sS -A "$UA" -b /tmp/cj -X POST "$B/Home/GetBootstrap" -o /tmp/boot.json -w "%{http_code}\n"; python3 -c "
+import json; d=json.load(open('/tmp/boot.json'))
+def walk(x, p=''):
+    if isinstance(x, dict):
+        for k, v in x.items():
+            if k in ('WebSiteLogo',): continue
+            walk(v, p + '.' + k)
+    elif isinstance(x, list):
+        print(p, '[list', len(x), ']', json.dumps(x[:3])[:400])
+    else:
+        print(p, '=', str(x)[:200])
+walk(d)
+" | head -80
