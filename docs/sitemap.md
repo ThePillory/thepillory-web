@@ -11,6 +11,7 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
   - Headline and subtitle
   - U.S. map (live community states navy, waitlist states light navy; taps only, no zooming or dragging): a state > `/explore/<st>/`; small-state buttons; "1 live community · [#] counties waiting" (real counts); Explore the full map > Explore
   - Find your representatives: address or ZIP (`/api/districts`; nothing stored; district IDs kept in the browser)
+  - Who represents you: the President, Vice President, the Cabinet > `/bodies/us-executive/`; California's Governor and statewide offices > `/bodies/ca-executive/` (other states: not covered yet); your members of Congress and state legislators > Your briefing
   - Your briefing link, once your districts are known > `/briefing/`
   - First-visit intro (dismissible; How it works, Principles)
   - Happening now: Congress / California toggle (`?now=state`), latest final-passage votes with status, summary, constitutional chip, review label, totals, "See how your rep voted" > Bill
@@ -28,16 +29,19 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 - **District** (`/district/<type>/<st>-<id>/`, type `congressional`, `state-senate`, `assembly`, `state-house`, `house-of-delegates`, `general-assembly`, `legislature`): representative, counties it covers (entirely or partly), recent votes, Funding
 
 ### Tab 2: Reps (`/reps/`)
-- Find your representatives (address or ZIP), your reps once known, governing bodies, members of Congress by state (`/reps/?state=CA`)
-- Governing body (`/bodies/<slug>/`): members (Congress: yours, then by state); the Board of Supervisors also lists its meetings
-- Rep (`/reps/<slug>/`): Overview, Promises (not tracked yet), Votes, Funding (members of Congress: FEC; `?cycle=` for the earlier period), Issues (empty state)
+- Find your representatives (address or ZIP), your reps once known, Executive branch (the President, Vice President and Cabinet; California's statewide offices), governing bodies, members of Congress by state (`/reps/?state=CA`)
+- Governing body (`/bodies/<slug>/`): members (Congress: yours, then by state; the executive branches, `us-executive` and `ca-executive`, in full, in order); the Board of Supervisors also lists its meetings
+- Rep (`/reps/<slug>/`): Overview, Promises (not tracked yet), Votes, Funding (members of Congress and the President: FEC; `?cycle=` for the earlier period), Issues (empty state)
+  - The President: Overview, Executive orders (Federal Register), Bills (signed / vetoed, `?show=`), Nominations (civilian, `?status=`), Promises, Funding, Issues; no Votes tab
+  - The Governor: Overview, Bills (leginfo), Executive orders (gov.ca.gov), Promises, Funding (state disclosure: later), Issues
+  - Other executive offices (Vice President, Cabinet, California statewide): Overview, Promises, Funding (why there's none), Issues
   - Vote > Bill (under Laws)
 
 ### Tab 3: + Report (`/report/`)
 - Reporting opens when accounts launch; links to what you can do now
 
 ### Tab 4: Laws (`/laws/`)
-- Bill (`/laws/bills/<id>/`): summary, constitutional analysis (card or full), how your reps voted, Follow the money (lobbying reports; your reps' votes beside contributions from the industries that lobbied), "Something wrong?", "Request full analysis"
+- Bill (`/laws/bills/<id>/`): summary, Final action (signed, vetoed, law without a signature: date, law or chapter number, who acted, the recorded action, source), constitutional analysis (card or full), how your reps voted, Follow the money (lobbying reports; your reps' votes beside contributions from the industries that lobbied), "Something wrong?", "Request full analysis"
 - The Constitution (`/laws/constitution/`): full text, one anchor per provision
 
 ### Tab 5: You (`/you/`)

@@ -30,7 +30,7 @@ Every page and section before this change, and after. The earlier cleanup (the p
 | Page | Section | Shows |
 |---|---|---|
 | Every page | Header (wordmark and search), nav (Home, Reps, + Report, Laws, You), footer (About, How it works, Principles, Methodology) | Real; same on every page |
-| `/` hub | Headline, U.S. map (waitlist counts from D1), Find your representatives | Real (Census boundaries, Census Geocoder, Census ZIP files) |
+| `/` hub | Headline, U.S. map (waitlist counts from D1), Find your representatives, Who represents you | Real (Census boundaries, Census Geocoder, Census ZIP files; executive officials from executive.json, whitehouse.gov and the hand-entered state file) |
 | | Happening now (Congress / California) | Real: latest final-passage votes from D1, totals, public analyses only; "No plain-language summary yet" and "Not yet mapped to the Constitution" where none exist |
 | | Take part: Calaveras comment deadlines | Real (agenda wording); empty state when none in 30 days |
 | | Take part: Contact your representatives | Real (links to reps' pages and official sites) |

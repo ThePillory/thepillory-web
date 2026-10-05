@@ -32,7 +32,9 @@ export async function onRequestGet(context) {
 
   const county = b.level === "county";
   // Congress is too large to list here: the visitor's own members, then by state on /reps/.
-  const federal = b.level === "federal";
+  // The executive branches are listed in full.
+  const executive = b.slug === "us-executive" || b.slug === "ca-executive";
+  const federal = b.level === "federal" && !executive;
   const d = districtsFromCookie(context.request);
   const data = await safe(context.env, async (db) => ({
     members: federal
@@ -46,7 +48,8 @@ export async function onRequestGet(context) {
     : `<p class="secondary small">${
         !data ? "Not loaded yet. Members appear after the data sync runs."
           : federal ? `<a class="inline-link" href="/#find">Find your representatives</a> to see yours here.`
-          : county ? "Supervisors are entered by hand and will appear once added." : "Not loaded yet."
+          : county ? "Supervisors are entered by hand and will appear once added."
+          : executive ? "Not loaded yet. These offices appear after the data sync runs." : "Not loaded yet."
       }</p>`;
   const byState = federal
     ? section(
@@ -83,6 +86,12 @@ export async function onRequestGet(context) {
 ${section(federal ? "Your members" : "Members", `<div>${memberRows}</div>`)}
 ${byState}
 ${meetings}
-<p class="hint">Members and meetings come from official sources, each linked on its own page.</p>`;
+<p class="hint">${
+    b.slug === "us-executive"
+      ? "The President and Vice President from the congress-legislators project's executive data; the Cabinet as listed on whitehouse.gov. Each linked on its own page."
+      : b.slug === "ca-executive"
+        ? "Entered from each office's official website, linked on each officer's page."
+        : "Members and meetings come from official sources, each linked on its own page."
+  }</p>`;
   return page(b.name, main, { tab: "reps", back: ["Reps", "/reps/"], personal: federal });
 }

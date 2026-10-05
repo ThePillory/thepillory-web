@@ -112,6 +112,12 @@ FUNDING_REFRESH_DAYS = "7"
 LDA_MIN_INTERVAL_MS = "3000"
 LDA_DAILY_LIMIT = "1200"
 LOBBYING_REFRESH_DAYS = "30"
+# The executive branch (src/executive/; docs/executive.md). The Governor's site
+# and leginfo have no API: one request every 2 seconds, capped per day.
+GOVCA_MIN_INTERVAL_MS = "2000"
+GOVCA_DAILY_LIMIT = "300"
+LEGINFO_MIN_INTERVAL_MS = "2000"
+LEGINFO_DAILY_LIMIT = "1500"
 # Meetings from this many days back are read once (agenda and agenda watch), so
 # recent agendas are filled in even when no new meetings are posted.
 MEETING_BACKFILL_DAYS = "30"

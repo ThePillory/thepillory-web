@@ -58,6 +58,13 @@ FEC_SHARED_MIN_INTERVAL_MS = "0"
 LIVE_HOUSE_DISTRICTS = "CA-5"
 LEGISLATORS_URL = "http://127.0.0.1:8788/legislators/current.json"
 LDA_API_BASE = "http://127.0.0.1:8788/lda/api/v1"
+# The executive branch (fixtures; no pacing).
+EXECUTIVE_URL = "http://127.0.0.1:8788/legislators/executive.json"
+CABINET_URL = "http://127.0.0.1:8788/whitehouse/administration/cabinet/"
+FR_API_BASE = "http://127.0.0.1:8788/fr/api/v1"
+GOV_FEED_URL = "http://127.0.0.1:8788/govca/category/executive-orders/feed/"
+GOVCA_MIN_INTERVAL_MS = "0"
+LEGINFO_MIN_INTERVAL_MS = "0"
 LDA_MIN_INTERVAL_MS = "0"
 # Both county systems: IQM2 first, so the Tyler reader's de-duplication is tested.
 COUNTY_MEETING_SOURCES = "iqm2|tylermm"

@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "23"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "24"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -375,6 +375,19 @@ def build_methodology():
     <li><strong>Links to issues:</strong> the AI tool may suggest that an agenda item relates to an issue. A suggestion is shown only after a person approves it.</li>
     <li><strong>Votes:</strong> how each supervisor voted will be added from the published minutes.</li>
   </ul>
+</section>
+
+<section class="card stack" id="executive">
+  <h2>The executive branch</h2>
+  <p>The President, the Vice President and the Cabinet, and California's Governor and the other offices California elects statewide. Each record says where it comes from and links to it.</p>
+  <ul class="plain-list small">
+    <li><strong>Who holds each office:</strong> the President and Vice President, with their terms, from the congress-legislators project's public executive data; the Cabinet exactly as whitehouse.gov lists it, checked daily; California's statewide officers entered by hand from each office's official website, with the date they were checked.</li>
+    <li><strong>Executive orders:</strong> the President's from the Federal Register, with each order's number, signing date and official title, exactly as published. The Governor's from the Office of the Governor's website: its "Executive orders" posts, with the signed order linked when the post links it. The titles of those posts are the Governor's Office's own headlines, shown as published.</li>
+    <li><strong>Bills signed and vetoed:</strong> for Congress, each bill's actions on Congress.gov; for California, each bill's history on California Legislative Information (leginfo). An outcome is recorded only from the action that states it ("Signed by President.", "Vetoed by Governor.", "Became Public Law No: …"). When a bill became law and the record shows no signature, ThePillory says exactly that and doesn't assume one. The President or Governor named is whoever held the office on that date.</li>
+    <li><strong>Nominations:</strong> civilian nominations the President sent to the Senate, from Congress.gov, with each one's latest action as Congress.gov records it.</li>
+    <li><strong>Campaign funding:</strong> the President's, from the Federal Election Commission, like members of Congress. The Vice President has no separate FEC campaign record here, and Cabinet members are appointed, so they have none. California's statewide officers file with the state, whose disclosure system is being replaced; their funding comes after that.</li>
+  </ul>
+  <p>No scores, grades or commentary: counts of what's on the record, and the record itself.</p>
 </section>
 
 <section class="card stack" id="funding">

@@ -29,6 +29,20 @@ window.PILLORY_INDEX = [
   "k": "U.S. Senate"
  },
  {
+  "type": "Body",
+  "title": "The President and the Cabinet",
+  "sub": "Federal · Governing body",
+  "url": "/bodies/us-executive/",
+  "k": "Executive Branch"
+ },
+ {
+  "type": "Body",
+  "title": "California's statewide elected offices",
+  "sub": "State · Governing body",
+  "url": "/bodies/ca-executive/",
+  "k": "CA Executive"
+ },
+ {
   "type": "Constitution",
   "title": "The Constitution",
   "sub": "Preamble, articles, and amendments",

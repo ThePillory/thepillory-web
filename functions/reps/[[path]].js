@@ -1,6 +1,8 @@
 // /reps/            find your reps (address or ZIP), your reps once known, the
 //                   governing bodies, and members of Congress by state (?state=CA)
-// /reps/<slug>/     one official: Overview, Promises, Votes, Funding, Issues
+// /reps/<slug>/     one official: Overview, Promises, Votes, Funding, Issues. The
+//                   President adds Executive orders, Bills and Nominations (no
+//                   Votes); the Governor adds Bills and Executive orders.
 import { BODIES, LEVEL_NAME, EMPTY_REPORTS } from "../_lib/generated.js";
 import { page, notFound, notLoaded, esc, safeUrl, kv, card, section, sourceLink, fmtDate } from "../_lib/render.js";
 import { safe, officialBySlug, officialsWhere, voteCounts, votesFor, CHAMBER_NAME } from "../_lib/data.js";
@@ -9,6 +11,10 @@ import { lookupForm } from "../_lib/hub.js";
 import { voteRow, voteFilter } from "../_lib/votes.js";
 import { fundingFor, fundingTab } from "../_lib/funding.js";
 import { currentCycle } from "../../workers/sync/src/funding/fec.js";
+import {
+  isExecutive, isPresident, isGovernor, executiveOfficials, ordersFor, billsActedOn, nominationsFor,
+  ordersTab, billsTab, nominationsTab, executiveFundingNote, executiveRows,
+} from "../_lib/executive.js";
 
 const BODY = Object.fromEntries(BODIES.map((b) => [b.slug, b]));
 
@@ -56,6 +62,8 @@ async function list(env, url, request) {
   const data = await safe(env, async (db) => ({
     mine: d ? await officialsWhere(db, repsWhere(d)) : [],
     state: st ? await stateOfficials(db, st) : [],
+    federalExec: await executiveOfficials(db, "us-executive"),
+    caExec: await executiveOfficials(db, "ca-executive"),
   }));
   if (!data) return notLoaded("Reps", "reps", true);
 
@@ -81,10 +89,16 @@ async function list(env, url, request) {
   const main = `
 <header class="page-head">
   <h1>Reps</h1>
-  <p class="subtitle">Members of Congress, California legislators, and Calaveras County supervisors, with the record they keep.</p>
+  <p class="subtitle">The President and Cabinet, members of Congress, California's Governor, statewide officers and legislators, and Calaveras County supervisors, with the record they keep.</p>
 </header>
 ${lookupForm(d, { heading: d ? "Change your location" : "Find your representatives" })}
 ${mine}
+<section class="stack" id="executive">
+  <h2 class="label">Executive branch</h2>
+  <div class="card">${executiveRows(data.federalExec) || '<p class="secondary small">The President, Vice President and Cabinet appear after the data sync runs.</p>'}</div>
+  <h3 class="label">California's statewide offices</h3>
+  <div class="card">${executiveRows(data.caExec, { cabinetLink: false }) || '<p class="secondary small">California\'s Governor and statewide officers appear after the data sync runs.</p>'}</div>
+</section>
 <section class="stack">
   <h2 class="label">Governing bodies</h2>
   ${BODIES.map((b) => b.card).join("")}
@@ -98,6 +112,28 @@ ${browse}
   return page("Reps", main, { tab: "reps", root: true, personal: true });
 }
 
+// The executive's "Record at a glance": what's loaded, counted, never scored.
+function execGlance(o, orders, bills, nominations) {
+  if (!orders && !bills) {
+    return `<section class="card stack-sm">
+  <h2 class="label">Record</h2>
+  <p class="small">${esc(o.office)}${o.chamber === "ca-executive" ? ", elected statewide" : o.rank === 2 ? ", elected with the President" : ", a member of the President's Cabinet"}. ThePillory tracks the President's and the Governor's executive orders and bill actions; other executive offices have no separate record here yet.</p>
+</section>`;
+  }
+  const b = (bills && bills.counts) || {};
+  const stats = [
+    [orders ? (orders.counts.executive_order || 0) : null, "Executive orders"],
+    [bills ? (b.signed || 0) + (b.without_signature || 0) + (b.became_law || 0) : null, "Bills became law"],
+    [bills ? b.vetoed || 0 : null, "Vetoes"],
+    [nominations ? Object.values(nominations.counts).reduce((s, n) => s + n, 0) : null, "Civilian nominations"],
+  ].filter(([n]) => n != null);
+  return `<section class="card stack">
+  <h2 class="label">Record at a glance</h2>
+  <div class="grid-2">${stats.map(([n, label]) => `<div class="stat"><div class="stat-num">${n}</div><div class="stat-label">${label}</div></div>`).join("")}</div>
+  <p class="hint">Counts of what's loaded from official records. ThePillory doesn't score or grade officials.</p>
+</section>`;
+}
+
 async function profile(env, slug, url) {
   const data = await safe(env, async (db) => {
     const o = await officialBySlug(db, slug);
@@ -105,15 +141,23 @@ async function profile(env, slug, url) {
     const all = url.searchParams.get("votes") === "all";
     const pageNum = Math.max(1, parseInt(url.searchParams.get("page") || "1", 10) || 1);
     const cycle = parseInt(url.searchParams.get("cycle") || "", 10) || currentCycle();
-    const [counts, votes, funding] = await Promise.all([
+    const offset = Math.max(0, parseInt(url.searchParams.get("offset") || "0", 10) || 0);
+    const show = ["signed", "vetoed"].includes(url.searchParams.get("show")) ? url.searchParams.get("show") : "all";
+    const status = url.searchParams.get("status") || "all";
+    const exec = isExecutive(o);
+    const [counts, votes, funding, orders, bills, nominations] = await Promise.all([
       voteCounts(db, o.id),
       votesFor(db, o.id, { all, limit: 50, offset: (pageNum - 1) * 50 }),
-      o.level === "federal" ? fundingFor(db, o, cycle) : null,
+      o.level === "federal" && (!exec || isPresident(o)) ? fundingFor(db, o, cycle) : null,
+      isPresident(o) || isGovernor(o) ? ordersFor(db, o.id, { offset }) : null,
+      isPresident(o) || isGovernor(o) ? billsActedOn(db, o.id, { show, offset }) : null,
+      isPresident(o) ? nominationsFor(db, o.id, { status, offset }) : null,
     ]);
-    return { o, all, pageNum, counts, votes, funding };
+    return { o, all, pageNum, counts, votes, funding, orders, bills, nominations, offset, show, status };
   });
   if (!data) return notLoaded("Reps", "reps", false, ["Reps", "/reps/"]);
-  const { o, all, pageNum, counts, votes, funding } = data;
+  const { o, all, pageNum, counts, votes, funding, orders, bills, nominations, offset, show, status } = data;
+  const exec = isExecutive(o);
   if (!o) return notFound("No current official at this address.", "reps", ["Reps", "/reps/"]);
 
   const body = BODY[o.body];
@@ -135,7 +179,7 @@ async function profile(env, slug, url) {
   const overview = `
 ${section("Office", kv([
     ["Office", esc(o.office)],
-    ["District", o.district ? esc(o.district) : "Statewide"],
+    ["District", exec ? null : o.district ? esc(o.district) : "Statewide"],
     ["Party", o.party ? esc(o.party) : null],
     ["Term", term],
     ["Body", body ? `<a class="inline-link" href="/bodies/${esc(body.slug)}/">${esc(body.name)}</a>` : null],
@@ -147,14 +191,14 @@ ${section("Office", kv([
   ${sourceLink(o.source_url, "Official source")}
   ${o.photo_credit ? `<p class="hint">Photo: ${esc(o.photo_credit)}</p>` : ""}
 </section>
-<section class="card stack">
+${exec ? execGlance(o, orders, bills, nominations) : `<section class="card stack">
   <h2 class="label">Record at a glance</h2>
   <div class="grid-2">
     <div class="stat"><div class="stat-num">${counts.final || 0}</div><div class="stat-label">Final-passage votes</div></div>
     <div class="stat"><div class="stat-num">${counts.total || 0}</div><div class="stat-label">All recorded votes</div></div>
   </div>
   <p class="hint">Counts of recorded votes only. ThePillory doesn't score or grade officials.</p>
-</section>`;
+</section>`}`;
 
   const base = `/reps/${o.slug}/`;
   const more = votes.more
@@ -176,17 +220,24 @@ ${section("Office", kv([
   const main = `${head}
 <div class="rep-tabs stack" data-tabs>
   <nav class="tabs" role="tablist" aria-label="Sections">
-    ${tab("overview", "Overview")}${tab("promises", "Promises")}${tab("votes", "Votes", counts.total || 0)}${tab("funding", "Funding")}${tab("issues", "Issues")}
+    ${tab("overview", "Overview")}${
+      isPresident(o)
+        ? `${tab("orders", "Executive orders")}${tab("bills", "Bills")}${tab("nominations", "Nominations")}`
+        : isGovernor(o) ? `${tab("bills", "Bills")}${tab("orders", "Executive orders")}` : ""
+    }${tab("promises", "Promises")}${exec ? "" : tab("votes", "Votes", counts.total || 0)}${tab("funding", "Funding")}${tab("issues", "Issues")}
   </nav>
   <div class="stack" role="tabpanel" id="overview" aria-labelledby="tab-overview">${overview}</div>
   <div class="stack" role="tabpanel" id="promises" aria-labelledby="tab-promises">
     <p class="secondary small">Promise tracking for real officials hasn't started. Promises will be added only with a source for each one.</p>
   </div>
-  <div class="stack" role="tabpanel" id="votes" aria-labelledby="tab-votes">
+  ${orders ? `<div class="stack" role="tabpanel" id="orders" aria-labelledby="tab-orders">${ordersTab(o, orders, base, offset)}</div>` : ""}
+  ${bills ? `<div class="stack" role="tabpanel" id="bills" aria-labelledby="tab-bills">${billsTab(o, bills, base, show, offset)}</div>` : ""}
+  ${nominations ? `<div class="stack" role="tabpanel" id="nominations" aria-labelledby="tab-nominations">${nominationsTab(o, nominations, base, status, offset)}</div>` : ""}
+  ${exec ? "" : `<div class="stack" role="tabpanel" id="votes" aria-labelledby="tab-votes">
     ${voteFilter(base, all, counts)}
     ${voteList}
-  </div>
-  <div class="stack" role="tabpanel" id="funding" aria-labelledby="tab-funding">${fundingTab(o, funding, base)}</div>
+  </div>`}
+  <div class="stack" role="tabpanel" id="funding" aria-labelledby="tab-funding">${executiveFundingNote(o) || fundingTab(o, funding, base)}</div>
   <div class="stack" role="tabpanel" id="issues" aria-labelledby="tab-issues">${issueHtml}</div>
 </div>`;
   return page(o.name, main, { tab: "reps", back: ["Reps", "/reps/"] });

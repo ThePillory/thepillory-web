@@ -12,7 +12,7 @@ import { recentFinalVotes } from "../_lib/data.js";
 import { voteRows } from "../_lib/briefing.js";
 import { listMeetings, summariesFor, meetingCard, pacificNow, addDays } from "../_lib/meetings.js";
 import { turnstileReady, turnstileWidget, turnstileScript } from "../_lib/turnstile.js";
-import { LIVE, loadPlace, officialsFor, allIds, repRow, breadcrumb, districtLabel, districtHref, placeHref } from "../_lib/geo.js";
+import { LIVE, loadPlace, officialsFor, allIds, repRow, executiveRows, breadcrumb, districtLabel, districtHref, placeHref } from "../_lib/geo.js";
 
 const missing = (err) => /no such table|no such column/i.test(String(err && err.message));
 const WAITLIST_MESSAGES = {
@@ -77,8 +77,10 @@ export async function onRequestGet({ request, env, params }) {
         : `<a class="list-row link-row" href="${d.href}"><div><div class="list-title">${esc(d.label)}</div><div class="list-meta">${note ? `${note} · ` : ""}representative not loaded yet</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>`;
     });
   const countyRows = live ? o.county.map((r) => repRow(r)) : [];
-  const stateRows = place.st === "CA" ? [...byDistrict("sldu", o.upper), ...byDistrict("sldl", o.lower)] : [];
-  const federalRows = [...o.senators.map((r) => repRow(r)), ...byDistrict("cd", o.house)];
+  const stateRows = place.st === "CA"
+    ? [...executiveRows(o.stateExecutive, { href: "/bodies/ca-executive/", label: "California's other statewide offices" }), ...byDistrict("sldu", o.upper), ...byDistrict("sldl", o.lower)]
+    : [];
+  const federalRows = [...executiveRows(o.executive, { href: "/bodies/us-executive/", label: "The Cabinet" }), ...o.senators.map((r) => repRow(r)), ...byDistrict("cd", o.house)];
   // One compact row per chamber: the district numbers, and whether they cover all or part of the county.
   const districtsLine = ["cd", "sldu", "sldl"]
     .filter((l) => c[l] && c[l].length)
@@ -158,7 +160,7 @@ ${action}
   <h2 class="label" id="h-who">Who represents ${esc(c.name)}</h2>
   ${districtsLine ? `<div class="card stack-sm">${districtsLine}<p class="hint">District lines don't follow county lines, so a county can be split between districts.</p></div>` : ""}
   ${group("County", countyRows, live ? "The supervisors appear after the data sync runs." : "County officials aren't on ThePillory yet. County coverage opens when a community launches.")}
-  ${group("State", stateRows, place.st === "CA" ? "State legislators appear after the data sync runs." : `${esc(place.name)}'s state legislators aren't on ThePillory yet.`)}
+  ${group("State", stateRows, place.st === "CA" ? "State legislators appear after the data sync runs." : `${esc(place.name)}'s governor, statewide offices and state legislators aren't on ThePillory yet.`)}
   ${group("Federal", federalRows, "Members of Congress appear after the data sync runs.")}
 </section>
 ${
