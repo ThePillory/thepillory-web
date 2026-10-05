@@ -3,7 +3,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { cleanVerdicts, relevanceSchema, relevanceMessage, LOCAL_RANK, RELEVANCE_INSTRUCTIONS } from "../src/analysis/relevance.js";
-import { settleReview, draftForReview, reviewSchema, CHECKS, REVIEW_PROMPT_VERSION } from "../src/analysis/review.js";
+import { settleReview, draftForReview, reviewSchema, CHECKS, REVIEW_PROMPT_VERSION, REVIEW_INSTRUCTIONS } from "../src/analysis/review.js";
 import { summarizeFlags } from "../src/analysis/flags.js";
 import { cardToDraft, cardSchema, MAX_CARD_CLAUSES } from "../src/analysis/prompt.js";
 
@@ -132,6 +132,13 @@ test("reviewer: only major problems flag; minor ones pass with notes", () => {
   assert.deepEqual(both.notes, ["Also cite X."]);
   assert.equal(settleReview({ checks: allOk, verdict: "flag" }).verdict, "flag", "a flag with no failed check still goes to a person");
   assert.deepEqual(reviewSchema().properties.checks.items.properties.severity.enum, ["none", "minor", "major"]);
+});
+
+test("reviewer: uneven panels and hedged statements are minor; strawmen and verdicts are major", () => {
+  assert.match(REVIEW_INSTRUCTIONS, /Panels of uneven length or detail are minor/);
+  assert.match(REVIEW_INSTRUCTIONS, /A hedged statement is not opinion stated as fact/);
+  assert.match(REVIEW_INSTRUCTIONS, /strawman/);
+  assert.match(REVIEW_INSTRUCTIONS, /any verdict on constitutionality/);
 });
 
 test("flag summary: failed checks counted across drafts, earlier reviews kept", () => {
