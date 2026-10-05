@@ -1,0 +1,14 @@
+# TEMPORARY: research executive-branch funding sources. Remove before merging.
+name: TEMP research
+on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [.github/research/**, .github/workflows/tmp-research.yml]
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node .github/research/exec-funding.mjs
+        env:
+          FEC_KEY: ${{ secrets.CONGRESS_API_KEY }}
