@@ -1,8 +1,10 @@
-# Rebuilds data/ca-campaign.json (California statewide officers' campaign
-# statement totals) from the Secretary of State's Cal-Access export and commits
-# it, weekly and on demand (Actions -> Refresh California campaign data -> Run
-# workflow). See tools/build_ca_campaign.py. The sync Worker loads the file
-# when it changes. Cal-Access is replaced by CARS after the November 2026
+# Rebuilds data/ca-campaign.json (campaign finance for California's statewide
+# officers and every legislative candidate since 2025: committees, statement
+# totals, contributions by industry and employer, organizations, and Form 496
+# independent expenditures) from the Secretary of State's Cal-Access export and
+# commits it, weekly and on demand (Actions -> Refresh California campaign data
+# -> Run workflow). See tools/build_ca_campaign.py and
+# tools/ca_campaign_finish.mjs. The sync Worker loads the file when it changes. Cal-Access is replaced by CARS after the November 2026
 # election; this workflow then needs the new system's data access.
 name: Refresh California campaign data
 on:
@@ -14,10 +16,17 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # Reads the 1.6 GB export once (about 3 minutes); individuals leave this
+      # step only as totals and by employer, never by name.
       - run: python3 tools/build_ca_campaign.py /tmp/cabuild
+      # Industries by the same keyword rules as federal funding, and lists cut to what pages show.
+      - run: node tools/ca_campaign_finish.mjs /tmp/cabuild/ca-campaign-raw.json data/ca-campaign.json
       - name: Commit the data
         run: |
           git config user.name "github-actions[bot]"

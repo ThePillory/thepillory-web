@@ -129,6 +129,11 @@ test("FPPC: a Form 700 is kept when the name and the office both match", async (
   assert.equal(ctl.length, 1);
   // A Lieutenant Governor's statement isn't the Governor's.
   assert.equal(fppcRows([{ indexID: "Y", filer: { lastName: "Doe", firstName: "Jan" }, filingInfo: {}, filingPositions: [{ agency: "Lieutenant Governor", position: "Lieutenant Governor" }] }], { name: "Jan Doe", office: "Governor" }).length, 0);
+  // Legislators file under their house: "State Assembly" / "Assembly Member", "State Senate" / "Senator".
+  const doc = (agency, position) => ({ indexID: agency, filer: { lastName: "Doe", firstName: "Jan" }, filingInfo: {}, filingPositions: [{ agency, position, filingType: "Annual", filingYear: 2025 }] });
+  const both = [doc("State Assembly", "Assembly Member"), doc("State Senate", "Senator"), doc("City of Example", "City/Town Council Member")];
+  assert.deepEqual(fppcRows(both, { name: "Jan Doe", office: "State Assemblymember", chamber: "ca-assembly" }).map((r) => r.agency), ["State Assembly"]);
+  assert.deepEqual(fppcRows(both, { name: "Jan Doe", office: "State Senator", chamber: "ca-senate" }).map((r) => r.agency), ["State Senate"]);
   const url = fppcPdfUrl(rows[0].index_id, rows[0].pdf);
   assert.match(url, /^https:\/\/form700search\.fppc\.ca\.gov\/Home\/GetRedactedFormPdf\?indexID=C5CCD568-/);
   assert.match(url, /fileNameInfo\.Position=Governor/);

@@ -20,6 +20,7 @@
 // on their own.
 import { getState, setState, BudgetExhausted, UpstreamError, isHttp, slugify } from "../util.js";
 import { fecOptions } from "./sync.js";
+import { seatOf, matchSeat, moneyRows } from "./state.js";
 import {
   committeeTypes, pickInauguralCommittee, latestReports, parseForm13, form13Consistent, fecCommitteePage,
   OGE_API, OGE_SEARCH_PAGE, ogeRow, ogeKey, ogeNameMatches, nameParts,
@@ -213,13 +214,15 @@ async function fppcStatements(env, db, budget) {
   const days = parseInt(env.FPPC_REFRESH_DAYS || "7", 10);
   const pace = { intervalMs: parseInt(env.FPPC_MIN_INTERVAL_MS || "3000", 10), dailyLimit: parseInt(env.FPPC_DAILY_LIMIT || "100", 10) };
   const base = (env.FPPC_SEARCH || FPPC_SEARCH).replace(/\/$/, "");
+  // The live communities' legislators first (Calaveras: Assembly 8, Senate 4), then the rest.
+  const firstSeats = String(env.LIVE_STATE_DISTRICTS ?? "ca-assembly:8,ca-senate:4").split(",").map((x) => x.trim()).filter(Boolean);
   const { results: people } = await db
     .prepare(
-      `SELECT o.id, o.name, o.office FROM officials o LEFT JOIN disclosure_checks k ON k.official_id = o.id AND k.source = 'fppc'
-       WHERE o.chamber = 'ca-executive' AND o.active = 1 AND (k.checked_at IS NULL OR k.checked_at < datetime('now', ?))
-       ORDER BY k.checked_at IS NOT NULL, o.rank LIMIT 20`
+      `SELECT o.id, o.name, o.office, o.chamber FROM officials o LEFT JOIN disclosure_checks k ON k.official_id = o.id AND k.source = 'fppc'
+       WHERE o.chamber IN ('ca-executive', 'ca-assembly', 'ca-senate') AND o.active = 1 AND (k.checked_at IS NULL OR k.checked_at < datetime('now', ?))
+       ORDER BY k.checked_at IS NOT NULL, o.chamber <> 'ca-executive', (o.chamber || ':' || o.district_code) NOT IN (${firstSeats.map(() => "?").join(",") || "''"}), o.rank, o.name LIMIT ?`
     )
-    .bind(`-${days} days`)
+    .bind(`-${days} days`, ...firstSeats, parseInt(env.FPPC_PER_RUN || "30", 10))
     .all();
   let searched = 0;
   let found = 0;
@@ -260,7 +263,59 @@ async function fppcStatements(env, db, budget) {
   return searched ? `FPPC: ${searched} official(s) searched, ${found} Form 700(s)` : null;
 }
 
-/** data/ca-campaign.json (Cal-Access, built in GitHub Actions) → state_campaign_*; only when the file changes. */
+/** The statements that replace one official's California campaign rows with an entry from data/ca-campaign.json. */
+export function stateCampaignStatements(db, id, entry, note) {
+  const stmts = [
+    db.prepare("DELETE FROM state_campaign_totals WHERE filer_id IN (SELECT filer_id FROM state_campaign_committees WHERE official_id = ?)").bind(id),
+    db.prepare("DELETE FROM state_campaign_committees WHERE official_id = ?").bind(id),
+    ...["state_money_cycles", "state_money_industries", "state_money_employers", "state_money_orgs", "state_money_ie"].map((t) => db.prepare(`DELETE FROM ${t} WHERE official_id = ?`).bind(id)),
+  ];
+  let committees = 0;
+  let reports = 0;
+  for (const c of (entry && entry.committees) || []) {
+    if (!c.filer_id || !isHttp(c.source_url)) continue;
+    stmts.push(db.prepare("INSERT OR REPLACE INTO state_campaign_committees (official_id, filer_id, name, source_url, checked_at) VALUES (?, ?, ?, ?, datetime('now'))").bind(id, String(c.filer_id), c.name || null, c.source_url));
+    committees += 1;
+    for (const r of c.reports || []) {
+      if (!r.from || !r.thru || !isHttp(r.source_url)) continue;
+      stmts.push(
+        db
+          .prepare("INSERT OR REPLACE INTO state_campaign_totals (filer_id, period_start, period_end, contributions, expenditures, cash_end, source_url) VALUES (?, ?, ?, ?, ?, ?, ?)")
+          .bind(String(c.filer_id), r.from, r.thru, r.contributions ?? null, r.expenditures ?? null, r.cash_end ?? null, r.source_url)
+      );
+      reports += 1;
+    }
+  }
+  if (entry) {
+    const m = moneyRows(id, entry);
+    const insert = (table, rows) => {
+      for (const row of rows) {
+        const cols = Object.keys(row);
+        stmts.push(db.prepare(`INSERT OR REPLACE INTO ${table} (${cols.join(", ")}) VALUES (${cols.map(() => "?").join(", ")})`).bind(...cols.map((k) => row[k])));
+      }
+    };
+    insert("state_money_cycles", m.cycles);
+    insert("state_money_industries", m.industries);
+    insert("state_money_employers", m.employers);
+    insert("state_money_orgs", m.orgs);
+    insert("state_money_ie", m.ie);
+  }
+  stmts.push(
+    db
+      .prepare(
+        `INSERT INTO disclosure_checks (official_id, source, checked_at, note) VALUES (?, 'cal-access', datetime('now'), ?)
+         ON CONFLICT(official_id, source) DO UPDATE SET checked_at = excluded.checked_at, note = excluded.note`
+      )
+      .bind(id, note)
+  );
+  return { stmts, committees, reports };
+}
+
+/**
+ * data/ca-campaign.json (Cal-Access, built in GitHub Actions) → state_campaign_*
+ * and state_money_*, for the statewide officers and every legislator; only when
+ * the file changes.
+ */
 async function caCampaign(env, db, budget) {
   const url = `${(env.SITE_URL || "").replace(/\/$/, "")}/data/ca-campaign.json`;
   let file;
@@ -272,41 +327,40 @@ async function caCampaign(env, db, budget) {
   }
   const stamp = `${file.generated}|${file.export_modified}`;
   if ((await getState(db, "ca_campaign_loaded")) === stamp) return null;
-  const { results: officials } = await db.prepare("SELECT id FROM officials WHERE chamber = 'ca-executive' AND active = 1").all();
+  const exported = `Cal-Access export of ${file.export_modified || file.generated}`;
+  const { results: officials } = await db
+    .prepare("SELECT id, name, chamber, district_code FROM officials WHERE chamber IN ('ca-executive', 'ca-assembly', 'ca-senate') AND active = 1")
+    .all();
   const stmts = [];
   let committees = 0;
   let reports = 0;
+  let people = 0;
+  let unmatched = 0;
+  const add = (id, entry, note) => {
+    const r = stateCampaignStatements(db, id, entry, note);
+    stmts.push(...r.stmts);
+    committees += r.committees;
+    reports += r.reports;
+    people += 1;
+  };
+  // Statewide officers, by office.
   for (const [key, entry] of Object.entries(file.officials || {})) {
     const id = `ca-exec:${slugify(key)}:${slugify(entry.name || "")}`;
     if (!officials.some((o) => o.id === id)) continue;
-    stmts.push(db.prepare("DELETE FROM state_campaign_totals WHERE filer_id IN (SELECT filer_id FROM state_campaign_committees WHERE official_id = ?)").bind(id));
-    stmts.push(db.prepare("DELETE FROM state_campaign_committees WHERE official_id = ?").bind(id));
-    for (const c of entry.committees || []) {
-      if (!c.filer_id || !isHttp(c.source_url)) continue;
-      stmts.push(db.prepare("INSERT OR REPLACE INTO state_campaign_committees (official_id, filer_id, name, source_url, checked_at) VALUES (?, ?, ?, ?, datetime('now'))").bind(id, String(c.filer_id), c.name || null, c.source_url));
-      committees += 1;
-      for (const r of c.reports || []) {
-        if (!r.from || !r.thru || !isHttp(r.source_url)) continue;
-        stmts.push(
-          db
-            .prepare("INSERT OR REPLACE INTO state_campaign_totals (filer_id, period_start, period_end, contributions, expenditures, cash_end, source_url) VALUES (?, ?, ?, ?, ?, ?, ?)")
-            .bind(String(c.filer_id), r.from, r.thru, r.contributions ?? null, r.expenditures ?? null, r.cash_end ?? null, r.source_url)
-        );
-        reports += 1;
-      }
+    add(id, entry, (entry.committees || []).length ? exported : "No campaign statements (Form 460) naming this official as the candidate since 2023 in the Cal-Access export.");
+  }
+  // Legislators, by seat and name; the seats file lists only candidates with a statement since 2025.
+  if (file.seats) {
+    for (const o of officials.filter((x) => x.chamber !== "ca-executive")) {
+      const seat = seatOf(o);
+      const entry = seat ? matchSeat(file.seats[seat], o) : null;
+      if (!entry) unmatched += 1;
+      add(o.id, entry, entry ? exported : `No campaign statement (Form 460) since 2025 naming this legislator as the candidate for this seat in the ${exported}.`);
     }
-    stmts.push(
-      db
-        .prepare(
-          `INSERT INTO disclosure_checks (official_id, source, checked_at, note) VALUES (?, 'cal-access', datetime('now'), ?)
-           ON CONFLICT(official_id, source) DO UPDATE SET checked_at = excluded.checked_at, note = excluded.note`
-        )
-        .bind(id, (entry.committees || []).length ? `Cal-Access export of ${file.export_modified || file.generated}` : "No campaign statements (Form 460) naming this official as the candidate since 2023 in the Cal-Access export.")
-    );
   }
   await inBatches(db, stmts);
   await setState(db, "ca_campaign_loaded", stamp);
-  return `California campaign data: ${committees} committee(s), ${reports} statement(s)`;
+  return `California campaign data: ${people} official(s) (${unmatched} legislator(s) without a statement for their seat), ${committees} committee(s), ${reports} statement(s)`;
 }
 
 export async function syncExecutiveFunding(env, db, budget) {

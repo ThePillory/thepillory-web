@@ -195,7 +195,33 @@ export const caCampaignFile = {
     },
     "lieutenant-governor": { name: "Leo Testlieutenant", committees: [] },
   },
+  seats: {
+    // Test Assemblymember Delta (Assembly District 99 in the Open States fixture) and a challenger.
+    "ASM-99": [
+      {
+        name: "Test Assemblymember Delta",
+        committees: [{ filer_id: "9000099", name: "Delta for Assembly 2026 [FAKE]", source_url: "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=9000099",
+          reports: [{ filing_id: "8000099", amend_id: 0, from: `${thisYear}-01-01`, thru: `${thisYear}-06-30`, filed: `${thisYear}-07-31`, contributions: 51000, expenditures: 20000, cash_end: 31000, source_url: "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=8000099&amendid=0" }] }],
+        cycles: {},
+      },
+      { name: "Bo Challenger", committees: [], cycles: {} },
+    ],
+  },
 };
+const fakeCycle = {
+  raised: 51000, spent: 20000, statements: 1,
+  individuals: { total: 4850, count: 5 }, not_employed: { total: 100, count: 1 },
+  industries: [{ industry: "labor", total: 4900 }, { industry: "health", total: 4750 }, { industry: "other", total: 900 }],
+  employers: [{ employer: "EXAMPLE HOSPITAL [FAKE]", industry: "health", total: 4750, count: 4 }],
+  organizations: [{ name: "Example Teachers Union PAC [FAKE]", kind: "committee", industry: "labor", total: 4900, count: 1, filer_id: "1234" }],
+  ie: [
+    { spender: "Example Jobs Coalition [FAKE]", filer_id: "700", support_oppose: "support", race: "State Assembly", total: 15000, filings: 2, first: `${thisYear}-02-28`, last: `${thisYear}-03-02`, source_url: "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=700" },
+    { spender: "Example Taxpayers Group [FAKE]", filer_id: "701", support_oppose: "oppose", race: "State Assembly", total: 8000, filings: 1, first: `${thisYear}-03-01`, last: `${thisYear}-03-01`, source_url: "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=701" },
+  ],
+};
+const cycleName = `${thisYear - (thisYear % 2 ? 0 : 1)}-${thisYear + (thisYear % 2)}`;
+caCampaignFile.seats["ASM-99"][0].cycles[cycleName] = fakeCycle;
+caCampaignFile.officials.governor.cycles = { [cycleName]: { ...fakeCycle, raised: 120500, spent: 234332.14, statements: 2, ie: [] } };
 
 // The FPPC's Form 700 search (/Home/SearchDocuments, answered as a JSON string of JSON).
 export function fppcSearch(body) {

@@ -11,6 +11,7 @@
 //   California        Cal-Access campaign committees and FPPC Form 700s.
 import { esc, safeUrl, fmtDate } from "./render.js";
 import { fundingFor, fundingTab, money, METHOD } from "./funding.js";
+import { stateMoneyFor, stateFundingTab } from "./state-funding.js";
 
 const missing = (err) => /no such table|no such column/i.test(String(err && err.message));
 const ext = (href, label) => (safeUrl(href) ? `<a class="tap" href="${esc(href)}" target="_blank" rel="noopener">${label} ↗</a>` : "");
@@ -51,20 +52,10 @@ export async function inauguralFor(db, presidentId) {
   });
 }
 
-export async function stateCampaignFor(db, officialId) {
-  return orNull(async () => {
-    const committees = (await db.prepare("SELECT * FROM state_campaign_committees WHERE official_id = ? ORDER BY name").bind(officialId).all()).results;
-    const totals = committees.length
-      ? (
-          await db
-            .prepare(`SELECT * FROM state_campaign_totals WHERE filer_id IN (${committees.map(() => "?").join(",")}) ORDER BY period_end DESC`)
-            .bind(...committees.map((c) => c.filer_id))
-            .all()
-        ).results
-      : [];
-    const check = await db.prepare("SELECT * FROM disclosure_checks WHERE official_id = ? AND source = 'cal-access'").bind(officialId).first();
-    return { committees, totals, check };
-  });
+/** A California official's money (Cal-Access) and Form 700s (FPPC): the Governor, statewide officers and legislators alike. */
+export async function stateOfficialMoney(db, o, cycle) {
+  const [money_, form700] = await Promise.all([stateMoneyFor(db, o.id, cycle), disclosuresFor(db, o.id, "fppc")]);
+  return { kind: "state", money: money_, form700 };
 }
 
 /**
@@ -72,10 +63,7 @@ export async function stateCampaignFor(db, officialId) {
  * President (or the Governor), 2 the Vice President (or Lieutenant Governor).
  */
 export async function executiveMoney(db, o, cycle) {
-  if (o.chamber === "ca-executive") {
-    const [campaign, form700] = await Promise.all([stateCampaignFor(db, o.id), disclosuresFor(db, o.id, "fppc")]);
-    return { kind: "state", campaign, form700 };
-  }
+  if (o.chamber === "ca-executive") return stateOfficialMoney(db, o, cycle);
   const president = o.rank === 1 ? o : await db.prepare("SELECT * FROM officials WHERE chamber = 'us-executive' AND rank = 1 AND active = 1").first();
   const elected = o.rank === 1 || o.rank === 2;
   // The Vice President ran on the President's ticket when their terms began together.
@@ -184,48 +172,11 @@ function ogeSection(d, name) {
 </section>`;
 }
 
-/** "Cal-Access export of Mon, 05 Oct 2026 08:54:52 GMT" → " of Oct 5, 2026". */
-function exportDate(note) {
-  const t = Date.parse(String(note || "").replace(/^Cal-Access export of /, ""));
-  return Number.isFinite(t) ? ` of ${fmtDate(new Date(t).toISOString().slice(0, 10))}` : "";
-}
-
-function stateCampaign(o, m) {
-  const c = m.campaign;
-  const head = '<h3 class="label" id="campaign">Campaign committees</h3>';
-  let campaign;
-  if (!c || !c.check) {
-    campaign = `<section class="card stack-sm" aria-labelledby="campaign">${head}<p class="secondary small">Not loaded yet. California campaign finance comes from the Secretary of State's disclosure system, read in the daily data sync.</p></section>`;
-  } else if (!c.committees.length) {
-    campaign = `<section class="card stack-sm" aria-labelledby="campaign">${head}<p class="secondary small">${esc(c.check.note || "No campaign committee found.")}</p></section>`;
-  } else {
-    const blocks = c.committees
-      .map((k) => {
-        const t = c.totals.filter((x) => x.filer_id === k.filer_id).slice(0, 4);
-        return `<div class="stack-xs"><h4 class="money-sub">${esc(k.name || `Committee ${k.filer_id}`)}</h4>${
-          t.length
-            ? `<ul class="plain-list money-list">${t
-                .map((x) =>
-                  row(
-                    `${fmtDate(x.period_start)} to ${fmtDate(x.period_end)}`,
-                    `${money(x.contributions)} <span class="secondary">received</span>`,
-                    `Spent ${money(x.expenditures)}${x.cash_end != null ? ` · cash at end ${money(x.cash_end)}` : ""} ${ext(x.source_url, "Statement")}`
-                  )
-                )
-                .join("")}</ul>`
-            : '<p class="secondary small">No reports loaded for this committee.</p>'
-        } ${ext(k.source_url, "Committee record")}</div>`;
-      })
-      .join("");
-    campaign = `<section class="card stack-sm" aria-labelledby="campaign">${head}<p class="small">Money raised and spent by the committees ${esc(o.name)} controls, as reported to the California Secretary of State. Each row is one campaign statement (Form 460) and its own totals for that period. A committee can be for another office or a future race, a ballot measure, or an officeholder account; each is listed under its own name.</p>${blocks}<p class="hint">From the Cal-Access export${exportDate(c.check.note)}. California replaces Cal-Access with a new disclosure system after the November 2026 election. Individual donors are never named on ThePillory. <a class="tap" href="${METHOD}">Methodology</a></p></section>`;
-  }
-  return campaign;
-}
-
-function stateForm700(m) {
+/** Form 700s (FPPC), for More. */
+export function stateForm700(m) {
   const f = m.form700;
   const head7 = '<h3 class="label" id="disclosures">Statements of economic interests (Form 700)</h3>';
-  const intro7 = `<p class="small">California officials file a Statement of Economic Interests (Form 700) each year: their investments, real property, income and gifts. Statewide officers file with the Fair Political Practices Commission (FPPC).</p>`;
+  const intro7 = `<p class="small">California officials file a Statement of Economic Interests (Form 700) each year: their investments, real property, income and gifts. Statewide officers and members of the Legislature file theirs with the Fair Political Practices Commission (FPPC), which publishes them.</p>`;
   let form700;
   if (!f || !f.check) form700 = `<section class="card stack-sm" aria-labelledby="disclosures">${head7}${intro7}<p class="secondary small">Not loaded yet. The FPPC's Form 700 records are searched in the daily data sync.</p></section>`;
   else if (!f.rows.length) form700 = `<section class="card stack-sm" aria-labelledby="disclosures">${head7}${intro7}<p class="secondary small">${esc(f.check.note || "No statements listed.")}</p></section>`;
@@ -242,7 +193,7 @@ function stateForm700(m) {
  */
 export function executiveFundingParts(o, m, base) {
   if (!m) return { funding: '<p class="secondary small">Not loaded yet.</p>', disclosures: '<p class="secondary small">Not loaded yet.</p>' };
-  if (m.kind === "state") return { funding: stateCampaign(o, m), disclosures: stateForm700(m) };
+  if (m.kind === "state") return { funding: stateFundingTab(o, m.money, base), disclosures: stateForm700(m) };
   const parts = [];
   if (m.kind === "president") {
     parts.push(fundingTab(o, m.campaign, base));
