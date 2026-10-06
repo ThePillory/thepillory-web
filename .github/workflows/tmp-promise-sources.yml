@@ -8,60 +8,21 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Probe
+      - name: Probe govinfo DCPD
         run: |
-          UA="ThePillory/1.0 (+https://thepillory.co; civic records)"
-          for f in releases remarks; do
-            echo "===== whitehouse.gov/$f/feed/"
-            curl -s -A "$UA" "https://www.whitehouse.gov/$f/feed/" > /tmp/f.xml; curl -s -o /dev/null -w "paged=2: %{http_code}\n" -A "$UA" "https://www.whitehouse.gov/$f/feed/?paged=2"
-            python3 - <<'PY'
-          import re
-          t=open('/tmp/f.xml',encoding='utf-8',errors='replace').read()
-          items=re.findall(r'<item>(.*?)</item>', t, re.S)
-          print('items:', len(items))
-          for it in items[:6]:
-              g=lambda tag: (re.search(rf'<{tag}>(.*?)</{tag}>', it, re.S) or [None,''])[1]
-              ce=re.search(r'<content:encoded><!\[CDATA\[(.*?)\]\]></content:encoded>', it, re.S)
-              print(' ', g('pubDate')[:16], g('link'), '|', g('title')[:70], '| cats', re.findall(r'<category><!\[CDATA\[(.*?)\]\]>', it), '| content chars', len(ce.group(1)) if ce else 0)
-          PY
-          done
-          echo "===== a whitehouse.gov article page"
-          URL=$(python3 -c "import re;t=open('/tmp/f.xml').read();print(re.findall(r'<item>.*?<link>(.*?)</link>',t,re.S)[0])")
-          curl -s -A "$UA" -o /tmp/a.html -w "%{http_code} %{size_download}\n" "$URL"; echo "$URL"
+          K=DEMO_KEY
+          curl -s "https://api.govinfo.gov/collections/CPD/2025-01-01T00:00:00Z?offsetMark=*&pageSize=1000&api_key=$K" > /tmp/c.json
           python3 - <<'PY'
-          import re
-          t=open('/tmp/a.html',encoding='utf-8',errors='replace').read()
-          for cls in ['entry-content','wp-block-post-content','page-content','body-content','wp-block-group']:
-              print(cls, t.count(cls))
-          m=re.search(r'<div class="[^"]*(entry-content|wp-block-post-content)[^"]*"[^>]*>(.*?)</div>\s*</div>', t, re.S)
-          body=re.sub(r'<[^>]+>',' ', m.group(2) if m else '')
-          print('body sample:', re.sub(r'\s+',' ',body)[:400])
-          print('published meta:', re.findall(r'"datePublished":"([^"]+)"', t)[:1], re.findall(r'<time[^>]*datetime="([^"]+)"', t)[:2])
+          import json,re
+          d=json.load(open('/tmp/c.json'))
+          print('count', d.get('count'), 'keys', list(d.keys()), 'next', bool(d.get('nextPage')))
+          pk=d.get('packages',[])
+          print('first', pk[:2])
+          for p in pk:
+              if re.search(r'joint session|state of the union|inaugural', p.get('title',''), re.I): print(' ', p['packageId'], p.get('dateIssued'), p['title'][:120], p.get('packageLink'))
           PY
-          echo "===== inaugural / joint address in remarks feed history (pages 1-40)"
-          for p in $(seq 1 40); do curl -s -A "$UA" "https://www.whitehouse.gov/remarks/feed/?paged=$p" | python3 -c "
-          import sys,re
-          t=sys.stdin.read()
-          for it in re.findall(r'<item>(.*?)</item>', t, re.S):
-              ti=(re.search(r'<title>(.*?)</title>',it,re.S) or [0,''])[1]
-              if re.search(r'inaugural|joint address|joint session|state of the union', ti, re.I): print('  page $p', (re.search(r'<pubDate>(.*?)</pubDate>',it) or [0,''])[1][:16], (re.search(r'<link>(.*?)</link>',it) or [0,''])[1], ti[:80])
-          "; done
-          echo "===== gov.ca.gov wp-json press release with content"
-          curl -s -A "$UA" "https://www.gov.ca.gov/wp-json/wp/v2/posts?categories=17&per_page=2&_fields=id,date,modified,link,title,content" | python3 -c "
-          import json,sys,re
-          for p in json.load(sys.stdin): print(p['date'], p['link'], p['title']['rendered'][:70], '| content chars', len(p['content']['rendered']), '|', re.sub(r'\s+',' ',re.sub(r'<[^>]+>',' ',p['content']['rendered']))[:300])"
-          curl -s -o /dev/null -D - -A "$UA" "https://www.gov.ca.gov/wp-json/wp/v2/posts?categories=17&per_page=20&_fields=id" | grep -i "x-wp-total"
-          echo "===== gov.ca.gov speeches feed"
-          curl -s -A "$UA" "https://www.gov.ca.gov/category/speeches/feed/" | head -c 600; echo
-          curl -s -A "$UA" "https://www.gov.ca.gov/wp-json/wp/v2/posts?search=state%20of%20the%20state&per_page=10&_fields=date,link,title" | python3 -c "import json,sys; [print(' ',p['date'][:10],p['link'],p['title']['rendered'][:80]) for p in json.load(sys.stdin)]"
-          echo "===== Calaveras agenda item descriptions sample"
-          API=https://calaverascountycatmmapp.tylerhost.net/tylermmcalendar9579prod/
-          curl -s -A "$UA" -X POST -H "Content-Type: application/json" -d "{\"startDate\":\"$(date -d '-60 days' +%m/%d/%Y)\",\"endDate\":\"$(date +%m/%d/%Y)\",\"meetingTypeIds\":[5]}" "${API}meetingInformation/getMeetingInformationByDate" | python3 -c "
-          import json,sys
-          d=json.load(sys.stdin)
-          r=d[-1]
-          print(r.get('actualStartDate'), 'titles', len(r.get('agendaItemTitles') or []), 'descs', len(r.get('agendaItemDescriptions') or []))
-          for t in (r.get('agendaItemTitles') or [])[:40]:
-              if any(w in t.lower() for w in ['supervisor','board member','report','announce']): print('  T:', t[:160])
-          print('ocr chars', len(r.get('agendaOCRedContent') or ''))
-          "
+          ID=$(python3 -c "import json,re; d=json.load(open('/tmp/c.json')); print(next((p['packageId'] for p in d.get('packages',[]) if re.search(r'joint session',p.get('title',''),re.I)),''))")
+          echo "package $ID"
+          curl -s "https://api.govinfo.gov/packages/$ID/summary?api_key=$K" | python3 -c "import json,sys; d=json.load(sys.stdin); print({k:d.get(k) for k in ['title','dateIssued','packageId','download','detailsLink','documentType','subject','category']})"
+          curl -s -o /tmp/p.htm -w "htm %{http_code} %{size_download}\n" "https://api.govinfo.gov/packages/$ID/htm?api_key=$K"
+          python3 -c "import re; t=open('/tmp/p.htm',encoding='utf-8',errors='replace').read(); print(re.sub(r'\s+',' ',re.sub(r'<[^>]+>',' ',t))[:600])"
