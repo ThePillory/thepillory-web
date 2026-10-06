@@ -123,7 +123,8 @@ export const BILLS_PER_PAGE = 20;
  * One page of the Laws list, newest first, from bill_list (built during the
  * sync; never computed from the votes tables on a visit). all: every bill with
  * a recorded vote; otherwise only bills with a final-passage vote. Returns
- * null if the list hasn't been built yet.
+ * null if the list hasn't been built yet (no table, or an empty table the sync
+ * hasn't filled).
  */
 export async function billList(db, { level, all = false, limit = BILLS_PER_PAGE, offset = 0 }) {
   const order = all ? "last_vote" : "last_final";
@@ -135,11 +136,18 @@ export async function billList(db, { level, all = false, limit = BILLS_PER_PAGE,
       )
       .bind(level, limit + 1, offset)
       .all();
+    if (!results.length && !offset && !(await summariesBuilt(db))) return null;
     return { rows: results.slice(0, limit), more: results.length > limit };
   } catch (err) {
     if (/no such table/i.test(String(err && err.message))) return null;
     throw err;
   }
+}
+
+/** Whether the sync has built the page summaries at least once (an empty bill_list may just be new). */
+async function summariesBuilt(db) {
+  const row = await db.prepare("SELECT value FROM sync_state WHERE key = 'summaries_fingerprint'").first();
+  return Boolean(row && row.value);
 }
 
 // Most recent final-passage votes by the given officials (ids), newest first,

@@ -39,11 +39,14 @@ export async function happeningNow(db, level, { limit = 4, officialIds = [] } = 
     FROM bill_list l JOIN votes v ON v.id = l.final_vote_id JOIN bills b ON b.id = l.bill_id
     WHERE l.level = ? AND l.last_final IS NOT NULL AND l.routine = 0
     ORDER BY l.last_final DESC, v.id DESC LIMIT ?`;
-  let rows;
+  let rows = null;
   try {
     rows = (await db.prepare(fromList).bind(level, limit).all()).results;
   } catch (err) {
     if (!missingTable(err)) throw err;
+  }
+  // No list yet, or an empty one the sync hasn't filled: the same from the votes table.
+  if (!rows || !rows.length) {
     try {
       rows = (await db.prepare(sql(true)).bind(level, limit).all()).results;
     } catch (err2) {

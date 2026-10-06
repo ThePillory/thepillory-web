@@ -85,10 +85,11 @@ ${mapScript}`;
 }
 
 // California's latest bills with a final vote: from bill_list (built during
-// the sync); before the first build, from the votes table.
+// the sync); before the first build (or while it's empty), from the votes table.
 async function latestStateBills(db) {
   try {
-    return (await db.prepare("SELECT bill_id AS id, bill_number, title, last_final AS last_vote FROM bill_list WHERE level = 'state' AND last_final IS NOT NULL ORDER BY last_final DESC, bill_id DESC LIMIT 5").all()).results;
+    const { results } = await db.prepare("SELECT bill_id AS id, bill_number, title, last_final AS last_vote FROM bill_list WHERE level = 'state' AND last_final IS NOT NULL ORDER BY last_final DESC, bill_id DESC LIMIT 5").all();
+    if (results.length) return results;
   } catch (err) {
     if (!missing(err)) throw err;
   }

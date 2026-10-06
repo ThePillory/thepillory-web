@@ -86,7 +86,7 @@ function billSection(level, list, { all, offset = 0, heading = true }) {
   const head = heading ? `<h2 class="label">${LEVELS[level]}</h2>` : "";
   if (list === FAILED) return sectionError(LEVELS[level]);
   if (!list) {
-    return `<section class="stack">${head}<p class="secondary small">The bill list is being prepared. It appears after the next data sync.</p></section>`;
+    return `<section class="stack">${head}<p class="secondary small">The bill list is being prepared. It appears within a few minutes of the next data sync starting.</p></section>`;
   }
   const more = list.more
     ? `<a class="btn btn--block load-more" href="${lawsHref({ all, level, offset: offset + BILLS_PER_PAGE })}" data-load-more="${id}">Load more</a>`
@@ -120,7 +120,7 @@ async function index(env, url) {
 </header>
 <nav class="segmented vote-filter" aria-label="Which bills to show">${filter("With final-passage votes", false)}${filter("All with recorded votes", true)}</nav>
 ${billSection(onlyLevel, lists[0], { all, offset, heading: false })}`;
-    return page(`${LEVELS[onlyLevel]} bills`, main, { tab: "laws", back: ["Laws", lawsHref({ all })], partial: anyFailed(...lists) });
+    return page(`${LEVELS[onlyLevel]} bills`, main, { tab: "laws", back: ["Laws", lawsHref({ all })], partial: anyFailed(...lists) || lists.includes(null) });
   }
 
   const main = `
@@ -136,7 +136,7 @@ ${billSection(onlyLevel, lists[0], { all, offset, heading: false })}`;
 <nav class="segmented vote-filter" aria-label="Which bills to show">${filter("With final-passage votes", false)}${filter("All with recorded votes", true)}</nav>
 ${levels.map((level, i) => billSection(level, lists[i], { all })).join("")}
 `;
-  return page("Laws", main, { tab: "laws", root: true, partial: anyFailed(...lists) });
+  return page("Laws", main, { tab: "laws", root: true, partial: anyFailed(...lists) || lists.includes(null) });
 }
 
 // The current analysis and what the page needs around it. Missing tables
