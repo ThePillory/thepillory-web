@@ -7,68 +7,61 @@ on:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 50
     steps:
-      - name: Live pages
+      - name: FPPC legislators
         run: |
-          UA="ThePillory/1.0 (+https://thepillory.co)"
-          curl -s -A "$UA" "https://thepillory.co/reps/gavin-newsom/?x=$RANDOM" > /tmp/g.html
-          python3 - <<'PY'
-          import re
-          t=open('/tmp/g.html',encoding='utf-8').read()
-          m=t[t.find('id="funding"'):t.find('id="more"')]
-          print('GOVERNOR FUNDING TAB:', re.sub(r'\s+',' ',re.sub(r'<[^>]+>',' ',m))[:1500])
+          for n in Tangipa Alvarado-Gil; do
+            curl -s -X POST -H "Content-Type: application/json" -d "{\"searchFieldQueryInfos\":[{\"queryField\":\"FilerLastName\",\"queryType\":\"Exact Match\",\"filterValue\":\"$n\"}],\"showOnlyHeldPositions\":false}" https://form700search.fppc.ca.gov/Search/SearchFilerForms > /tmp/f.json
+            python3 - <<'PY'
+          import json
+          t=open('/tmp/f.json').read()
+          try:
+              d=json.loads(t)
+              if isinstance(d,str): d=json.loads(d)
+          except Exception as e:
+              print('not json', t[:300]); raise SystemExit
+          docs=d.get('documents') or d.get('Documents') or []
+          print('documents', len(docs))
+          for x in docs[:6]:
+              f=x.get('filer',{}); print(' ', f.get('firstName'), f.get('lastName'), [(p.get('agency'), p.get('position'), p.get('filingType'), p.get('filingYear')) for p in x.get('filingPositions',[])], (x.get('filingInfo') or {}).get('filedDate'))
           PY
-          curl -s -A "$UA" "https://thepillory.co/bodies/state-legislature/" > /tmp/l.html
-          python3 - <<'PY'
-          import re
-          t=open('/tmp/l.html',encoding='utf-8').read()
-          for m in re.finditer(r'href="/reps/([^/"]+)/"[^>]*>.*?list-title">([^<]+)</div><div class="list-meta">([^<]+)<', t, re.S):
-              if re.search(r'District (8|4)\b', m.group(3)): print('LEGISLATOR', m.group(1), '|', m.group(2), '|', m.group(3))
-          PY
-          curl -s -A "$UA" "https://thepillory.co/data/ca-campaign.json" | head -c 300; echo
-      - name: Cal-Access export layout
+          done
+          grep -rn "SearchFilerForms\|fppcSearch" -h workers/sync/src/funding/executive.js 2>/dev/null | head -3 || true
+      - uses: actions/checkout@v4
+      - name: FPPC endpoint used by the sync
+        run: grep -n "Search\|fetch(" workers/sync/src/funding/executive.js | sed -n 1,40p | grep -i "fppc\|search" | head
+      - name: Cal-Access codes and timing
         run: |
           curl -s -o /tmp/x.zip -A "ThePillory data build (thepillory.co)" https://campaignfinance.cdn.sos.ca.gov/dbwebexport.zip
-          ls -la /tmp/x.zip
           python3 - <<'PY'
-          import zipfile, io, csv, itertools, collections
+          import zipfile, io, csv, collections, time
           csv.field_size_limit(10**9)
           z=zipfile.ZipFile('/tmp/x.zip')
-          for i in z.infolist():
-              if i.filename.upper().endswith('.TSV') and any(k in i.filename.upper() for k in ['RCPT_CD','EXPN_CD','S496_CD','S497_CD','CVR_CAMPAIGN_DISCLOSURE','SMRY_CD','FILER_FILINGS','FILERNAME','CVR2_CAMPAIGN','LOAN_CD','DEBT']):
-                  print(i.filename, i.file_size)
-          def head(t, n=3, pred=None):
-              member=next(x for x in z.namelist() if x.upper().endswith('/'+t+'.TSV'))
-              with z.open(member) as raw:
+          def rows(t):
+              m=next(x for x in z.namelist() if x.upper().endswith('/'+t+'.TSV'))
+              with z.open(m) as raw:
                   r=csv.reader(io.TextIOWrapper(raw,encoding='latin-1',newline=''),delimiter='\t',quoting=csv.QUOTE_NONE)
-                  h=next(r); print('==',t,h)
-                  k=0
-                  for row in r:
-                      d=dict(zip(h,row))
-                      if pred is None or pred(d):
-                          print('  ', {a:b for a,b in d.items() if b})
-                          k+=1
-                          if k>=n: break
-          head('RCPT_CD', 4, lambda d: d.get('FORM_TYPE')=='A' and d.get('ENTITY_CD')=='IND')
-          head('RCPT_CD', 2, lambda d: d.get('FORM_TYPE')=='A' and d.get('ENTITY_CD')=='COM')
-          head('EXPN_CD', 4, lambda d: d.get('SUP_OPP_CD') in ('S','O') and d.get('CAND_NAML'))
-          head('S496_CD', 3)
-          head('CVR_CAMPAIGN_DISCLOSURE_CD', 3, lambda d: d.get('FORM_TYPE')=='F496')
-          head('CVR_CAMPAIGN_DISCLOSURE_CD', 3, lambda d: d.get('FORM_TYPE')=='F460' and d.get('OFFICE_CD') in ('ASM','SEN'))
-          # Which office/district codes and form types appear on F460 covers since 2025.
-          member=next(x for x in z.namelist() if x.upper().endswith('/CVR_CAMPAIGN_DISCLOSURE_CD.TSV'))
-          c=collections.Counter(); ent=collections.Counter(); dist=collections.Counter(); f496=collections.Counter()
-          with z.open(member) as raw:
-              r=csv.reader(io.TextIOWrapper(raw,encoding='latin-1',newline=''),delimiter='\t',quoting=csv.QUOTE_NONE)
-              h=next(r)
-              for row in r:
-                  d=dict(zip(h,row))
-                  if d.get('FORM_TYPE')=='F460' and d.get('THRU_DATE','')[-15:-11] in ('2025','2026'):
-                      c[(d.get('OFFICE_CD'), d.get('ENTITY_CD'))]+=1
-                      if d.get('OFFICE_CD') in ('ASM','SEN'): dist[(d.get('OFFICE_CD'), d.get('DIST_NO'))]+=1
-                  if d.get('FORM_TYPE') in ('F496','F465','F461'): f496[(d.get('FORM_TYPE'), d.get('SUP_OPP_CD'), bool(d.get('CAND_NAML')))]+=1
-          print('F460 covers 2025-26 by (office, entity):', c.most_common(25))
-          print('ASM/SEN districts seen:', sorted(dist.items())[:12], '... total', len(dist))
-          print('F496/465/461 covers by (form, sup_opp, has cand):', f496.most_common(12))
+                  h=next(r)
+                  for row in r: yield dict(zip(h,row))
+          yr=lambda s: (s.split(' ')[0].split('/')[-1] if s else '')
+          off=collections.Counter(); juris=collections.Counter(); seats=collections.Counter(); stw=collections.Counter(); names=collections.Counter()
+          for d in rows('CVR_CAMPAIGN_DISCLOSURE_CD'):
+              y=yr(d.get('THRU_DATE') or d.get('RPT_DATE'))
+              if d['FORM_TYPE']=='F460' and y in ('2025','2026') and d['ENTITY_CD'] in ('CAO','CTL'):
+                  off[(d['OFFICE_CD'],d['JURIS_CD'])]+=1
+                  if d['OFFICE_CD'] in ('ASM','SEN'): seats[(d['OFFICE_CD'],d['DIST_NO'])]+=1
+              if d['FORM_TYPE']=='F496' and yr(d.get('RPT_DATE')) in ('2024','2025','2026'):
+                  juris[(d['OFFICE_CD'],d['JURIS_CD'])]+=1
+                  nm=(d['CAND_NAML']+' '+d['CAND_NAMF']).lower()
+                  if any(k in nm for k in ['newsom','tangipa','alvarado','bonta','kounalakis','weber','thurmond','cohen']): names[(d['OFFICE_CD'],d['JURIS_CD'],d['DIST_NO'],d['CAND_NAML'],d['CAND_NAMF'],d['SUP_OPP_CD'])]+=1
+          print('F460 2025-26 (OFFICE_CD, JURIS_CD):', off.most_common(30))
+          print('ASM/SEN seats with covers:', len(seats), 'e.g. ASM 8:', seats.get(('ASM','08')), seats.get(('ASM','8')), 'SEN 4:', seats.get(('SEN','04')), seats.get(('SEN','4')))
+          print('sample DIST_NO formats:', list(seats)[:8])
+          print('F496 2024-26 (OFFICE_CD, JURIS_CD):', juris.most_common(30))
+          print('F496 naming known officials:', names.most_common(30))
+          t=time.time(); n=0; f=collections.Counter()
+          for d in rows('RCPT_CD'):
+              n+=1; f[(d['FORM_TYPE'], d['ENTITY_CD'], bool(d['MEMO_CODE']))]+=1
+          print('RCPT_CD rows', n, 'seconds', round(time.time()-t), f.most_common(15))
           PY
