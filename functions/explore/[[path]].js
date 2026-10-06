@@ -6,7 +6,7 @@
 //                    district as a list; Statewide officials; the legislature.
 // Maps are drawn by /assets/map.js from data/geo/ (Census Bureau boundaries);
 // every shape on a map is also a link in a list.
-import { page, notFound, esc, fmtDate } from "../_lib/render.js";
+import { page, notFound, esc, fmtDate, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { ASSET_VERSION } from "../_lib/generated.js";
 import { billHref } from "../_lib/votes.js";
 import {
@@ -23,12 +23,8 @@ async function usPage(env, request, url) {
   const pick = String(url.searchParams.get("st") || "").toLowerCase();
   if (index.some((s) => s.st.toLowerCase() === pick)) return Response.redirect(`${url.origin}/explore/${pick}/`, 302);
 
-  let waiting = { county: {}, state: {} };
-  try {
-    waiting = await waitlistBy(env.DB);
-  } catch (err) {
-    if (!missing(err)) throw err;
-  }
+  const waitingLoaded = env.DB ? await loadSection("map waitlist", () => waitlistBy(env.DB), { county: {}, state: {} }) : { county: {}, state: {} };
+  const waiting = waitingLoaded === FAILED ? { county: {}, state: {} } : waitingLoaded;
   const { links, status } = usMapLinks(index, waiting);
   const legend = `
   <ul class="map-legend plain-list small">
@@ -85,7 +81,25 @@ ${mapFigure({ id: "map", src: "/data/geo/us.json", links, status, label: "Map of
 </section>
 <p class="hint">Boundaries: U.S. Census Bureau cartographic boundary files (2024), simplified for the web. Every state's federal representatives, and their votes, are on ThePillory now; local coverage opens one county at a time.</p>
 ${mapScript}`;
-  return page("Explore the map", main, { tab: "home", back: ["Home", "/"] });
+  return page("Explore the map", main, { tab: "home", back: ["Home", "/"], partial: waitingLoaded === FAILED });
+}
+
+// California's latest bills with a final vote: from bill_list (built during
+// the sync); before the first build, from the votes table.
+async function latestStateBills(db) {
+  try {
+    return (await db.prepare("SELECT bill_id AS id, bill_number, title, last_final AS last_vote FROM bill_list WHERE level = 'state' AND last_final IS NOT NULL ORDER BY last_final DESC, bill_id DESC LIMIT 5").all()).results;
+  } catch (err) {
+    if (!missing(err)) throw err;
+  }
+  return (
+    await db
+      .prepare(
+        `SELECT b.id, b.bill_number, b.title, MAX(v.vote_date) AS last_vote FROM bills b JOIN votes v ON v.bill_id = b.id
+         WHERE b.level = 'state' AND v.vote_type = 'final_passage' GROUP BY b.id ORDER BY last_vote DESC LIMIT 5`
+      )
+      .all()
+  ).results;
 }
 
 async function statePage(env, request, url, st) {
@@ -93,28 +107,16 @@ async function statePage(env, request, url, st) {
   if (!place) return notFound("No state at this address.", "home", ["Explore", "/explore/"]);
   const layer = place.layers.includes(url.searchParams.get("layer")) ? url.searchParams.get("layer") : "county";
   const db = env.DB;
-  let waiting = { county: {} };
-  let officials = { senators: [], house: [], upper: [], lower: [], executive: [], stateExecutive: [] };
-  let activity = null;
-  if (db) {
-    try {
-      waiting = await waitlistBy(db);
-      const ids = (l) => Object.keys((place.districts || {})[l] || {});
-      officials = await officialsFor(db, place.st, { cd: ids("cd"), sldu: ids("sldu"), sldl: ids("sldl") });
-      if (place.st === "CA") {
-        activity = (
-          await db
-            .prepare(
-              `SELECT b.id, b.bill_number, b.title, MAX(v.vote_date) AS last_vote FROM bills b JOIN votes v ON v.bill_id = b.id
-               WHERE b.level = 'state' AND v.vote_type = 'final_passage' GROUP BY b.id ORDER BY last_vote DESC LIMIT 5`
-            )
-            .all()
-        ).results;
-      }
-    } catch (err) {
-      if (!missing(err)) throw err;
-    }
-  }
+  const emptyOfficials = { senators: [], house: [], upper: [], lower: [], executive: [], stateExecutive: [] };
+  const ids = (l) => Object.keys((place.districts || {})[l] || {});
+  // Each section loads on its own: one that can't load shows a short note.
+  const [waitingLoaded, officialsLoaded, activity] = await Promise.all([
+    db ? loadSection("state waitlist", () => waitlistBy(db), { county: {} }) : { county: {} },
+    db ? loadSection("state officials", () => officialsFor(db, place.st, { cd: ids("cd"), sldu: ids("sldu"), sldl: ids("sldl") }), emptyOfficials) : emptyOfficials,
+    db && place.st === "CA" ? loadSection("state legislature", () => latestStateBills(db), null) : null,
+  ]);
+  const waiting = waitingLoaded === FAILED ? { county: {} } : waitingLoaded;
+  const officials = officialsLoaded === FAILED ? emptyOfficials : officialsLoaded;
 
   // Where each shape on the map goes.
   const links = { county: {} };
@@ -155,7 +157,7 @@ async function statePage(env, request, url, st) {
       : '<p class="small secondary">California\'s legislators appear after the data sync loads them.</p>'
     : `<p class="small secondary">${esc(place.name)}'s state legislators aren't on ThePillory yet. State coverage opens as communities launch.</p>`;
   const legislature = place.st === "CA"
-    ? activity && activity.length
+    ? activity === FAILED ? sectionError("") : activity && activity.length
       ? `<p class="small">Latest recorded floor vote on a bill: <strong>${fmtDate(activity[0].last_vote)}</strong>. Whether the Legislature is in session or in recess isn't tracked yet; these are its most recent final votes.</p>
          <div class="card">${activity.map((b) => `<a class="list-row link-row" href="${billHref(b.id)}"><div><div class="list-title">${esc(b.bill_number)}: ${esc(b.title)}</div><div class="list-meta">Last final vote ${fmtDate(b.last_vote)}</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>`).join("")}</div>`
       : '<p class="small secondary">No state floor votes loaded yet.</p>'
@@ -179,6 +181,7 @@ ${districtLists ? `<section class="stack-sm" aria-labelledby="h-districts"><h2 c
   <h2 class="label" id="h-statewide">Who represents ${esc(place.name)}</h2>
   ${officials.executive.length ? `<div class="card">${executiveRows(officials.executive, { href: "/bodies/us-executive/", label: "The Cabinet" }).join("")}</div>` : ""}
   ${officials.stateExecutive.length ? `<div class="card">${executiveRows(officials.stateExecutive, { href: "/bodies/ca-executive/", label: "California's other statewide offices" }).join("")}</div>` : ""}
+  ${officialsLoaded === FAILED ? sectionError("") : ""}
   <div class="card">${officials.senators.map((o) => repRow(o)).join("") || '<p class="small secondary">U.S. Senators appear after the data sync runs.</p>'}</div>
   <p class="small">${officials.house.length ? `${officials.house.length} House ${officials.house.length === 1 ? "member" : "members"}, each linked from their district. <a class="inline-link" href="/reps/?state=${place.st}#browse">All of ${esc(place.name)}'s members of Congress</a>` : "House members appear after the data sync runs."}</p>
   ${place.st === "DC" ? "" : legislators}
@@ -187,18 +190,22 @@ ${districtLists ? `<section class="stack-sm" aria-labelledby="h-districts"><h2 c
 ${place.st === "DC" ? "" : `<section class="stack-sm" aria-labelledby="h-leg"><h2 class="label" id="h-leg">The legislature</h2>${legislature}</section>`}
 <p class="hint">Boundaries: U.S. Census Bureau cartographic boundary files (2024): counties, 119th Congress districts and 2024 state legislative districts.</p>
 ${mapScript}`;
-  return page(place.name, main, { tab: "home", back: ["Explore", "/explore/"] });
+  return page(place.name, main, { tab: "home", back: ["Explore", "/explore/"], partial: anyFailed(waitingLoaded, officialsLoaded, activity) });
 }
 
-export async function onRequestGet({ request, env, params }) {
+// The map pages are the same for every visitor: kept at the edge for a few minutes.
+const MAP_CACHE_SECONDS = 300;
+
+export const onRequestGet = guard((context) => {
+  const { request, env, params } = context;
   const url = new URL(request.url);
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
   const parts = (params.path || []).filter(Boolean);
-  if (!parts.length) return usPage(env, request, url);
+  if (!parts.length) return edgeCached(context, MAP_CACHE_SECONDS, () => usPage(env, request, url));
   if (parts.length === 1) {
     const st = parts[0].toLowerCase();
     if (st !== parts[0]) return Response.redirect(`${url.origin}/explore/${st}/${url.search}`, 301);
-    return statePage(env, request, url, st);
+    return edgeCached(context, MAP_CACHE_SECONDS, () => statePage(env, request, url, st));
   }
   return notFound("No page at this address.", "home", ["Explore", "/explore/"]);
-}
+}, { tab: "home" });

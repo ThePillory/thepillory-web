@@ -297,6 +297,44 @@
     });
   });
   // ---------------------------------------------------------------------
+  // "Load more" (the Laws list): the link opens the next page of that list,
+  // which works without JavaScript; here, the next cards are appended in place
+  // and the link moves on to the page after.
+  document.addEventListener("click", function (e) {
+    var link = e.target.closest ? e.target.closest("a[data-load-more]") : null;
+    if (!link || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    var list = document.getElementById(link.getAttribute("data-load-more"));
+    if (!list || !window.fetch || !window.DOMParser) return;
+    e.preventDefault();
+    if (link.getAttribute("aria-busy") === "true") return;
+    link.setAttribute("aria-busy", "true");
+    var label = link.textContent;
+    link.textContent = "Loading…";
+    fetch(link.href, { credentials: "same-origin" })
+      .then(function (r) {
+        if (!r.ok) throw new Error(r.status);
+        return r.text();
+      })
+      .then(function (html) {
+        var doc = new DOMParser().parseFromString(html, "text/html");
+        var next = doc.getElementById(list.id);
+        if (!next) throw new Error("no list");
+        while (next.firstElementChild) list.appendChild(next.firstElementChild);
+        var more = doc.querySelector('a[data-load-more="' + list.id + '"]');
+        if (more) {
+          link.href = more.getAttribute("href");
+          link.textContent = label;
+          link.removeAttribute("aria-busy");
+        } else {
+          link.remove();
+        }
+      })
+      .catch(function () {
+        // Fall back to opening the next page.
+        window.location.href = link.href;
+      });
+  });
+  // ---------------------------------------------------------------------
   // Cloudflare Turnstile, for the forms that have a .cf-turnstile widget (the
   // waitlist, "Something wrong?", "Request full analysis"). Its script is
   // loaded only after the page has finished loading: the challenge frame it

@@ -2,7 +2,7 @@
 // /meetings/<id>/                one meeting: details, how to weigh in, agenda watch, full agenda, after the meeting
 // /meetings/<id>/calendar.ics    add to calendar
 // Anything else under /meetings/ (old sample meeting pages) redirects to the calendar.
-import { page, notFound, esc, safeUrl, sourceLink } from "../_lib/render.js";
+import { page, notFound, esc, safeUrl, sourceLink, guard } from "../_lib/render.js";
 import {
   listMeetings,
   summariesFor,
@@ -327,7 +327,7 @@ ${after}
   return withHeaders(page(`${m.body}: ${w.day}`, main, { tab: "home", back: ["Home", "/"] }));
 }
 
-export async function onRequestGet(context) {
+export const onRequestGet = guard(async (context) => {
   const url = new URL(context.request.url);
   const parts = (context.params.path || []).filter(Boolean);
   if (parts.length === 0) {
@@ -343,4 +343,4 @@ export async function onRequestGet(context) {
   if (parts.length > 1) return notFound("No page at this address.", "home", ["Meetings", "/meetings/"]);
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
   return meeting(context.env, id);
-}
+}, { tab: "home" });

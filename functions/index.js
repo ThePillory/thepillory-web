@@ -14,7 +14,7 @@
 //   Take part (Calaveras comment deadlines, contacting your reps);
 //   Communities (Calaveras, live; the county waitlist with real counts);
 //   Understand (explainers).
-import { page, esc } from "./_lib/render.js";
+import { page, esc, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "./_lib/render.js";
 import { listMeetings, pacificNow, addDays, deadlineParts, meetingHref, when } from "./_lib/meetings.js";
 import { districtsFromCookie, describe, STATE_NAME } from "./_lib/districts.js";
 import { happeningNow, happeningSection, lookupForm, waitlistCounts } from "./_lib/hub.js";
@@ -24,7 +24,6 @@ import { executiveOfficials, executiveRows } from "./_lib/executive.js";
 import { linkRow } from "./_lib/render.js";
 import { turnstileReady, turnstileWidget } from "./_lib/turnstile.js";
 
-const missing = (err) => /no such table|no such column/i.test(String(err && err.message));
 
 const WAITLIST_MESSAGES = {
   joined: "Thank you. We'll email you only when ThePillory launches in your county.",
@@ -180,31 +179,23 @@ function understand() {
 async function hub(env, request, url, d) {
   const which = url.searchParams.get("now") === "state" ? "state" : "federal";
   const db = env.DB;
-  let now = [];
-  let deadlines = [];
-  let counts = null;
-  let waiting = { county: {}, state: {} };
-  let federalExec = [];
-  let caExec = [];
-  const index = await loadIndex(env, request);
-  if (db) {
-    try {
-      now = await happeningNow(db, which, { limit: 4 });
-      const start = pacificNow();
-      const meetings = await listMeetings(db, { from: start, to: `${addDays(start.slice(0, 10), 30)}T23:59`, level: "county", limit: 30 });
-      deadlines = meetings
+  // Each section loads on its own: one that can't load shows a short note, and
+  // the rest of the hub still shows.
+  const start = pacificNow();
+  const [index, now, deadlines, counts, waiting, federalExec, caExec] = await Promise.all([
+    loadIndex(env, request),
+    loadSection("hub happening now", db ? () => happeningNow(db, which, { limit: 4 }) : async () => [], []),
+    loadSection("hub deadlines", db ? async () =>
+      (await listMeetings(db, { from: start, to: `${addDays(start.slice(0, 10), 30)}T23:59`, level: "county", limit: 30 }))
         .filter((m) => m.status !== "cancelled")
         .map((m) => ({ m, d: deadlineParts(m) }))
         .filter((x) => x.d && x.d.date >= start.slice(0, 10))
-        .slice(0, 4);
-      counts = await waitlistCounts(db);
-      waiting = await waitlistBy(db);
-      federalExec = await executiveOfficials(db, "us-executive");
-      caExec = await executiveOfficials(db, "ca-executive");
-    } catch (err) {
-      if (!missing(err)) throw err;
-    }
-  }
+        .slice(0, 4) : async () => [], []),
+    loadSection("hub waitlist counts", db ? () => waitlistCounts(db) : async () => null, null),
+    loadSection("hub waitlist map", db ? () => waitlistBy(db) : async () => ({ county: {}, state: {} }), { county: {}, state: {} }),
+    loadSection("hub executive", db ? () => executiveOfficials(db, "us-executive") : async () => [], []),
+    loadSection("hub california executive", db ? () => executiveOfficials(db, "ca-executive") : async () => [], []),
+  ]);
   const joined = url.searchParams.get("waitlist");
   const msg = joined === "joined" ? WAITLIST_MESSAGES.joined : "";
   const error = joined && joined !== "joined" ? WAITLIST_MESSAGES[joined] || "" : "";
@@ -215,7 +206,7 @@ async function hub(env, request, url, d) {
   <h1 class="hub-title">Know what your government is doing. Then take part.</h1>
   <p class="hub-sub">Votes, bills, and meetings in plain language, measured against the Constitution. Built on evidence, open to every point of view.</p>
 </header>
-${usMap(index, waiting)}
+${usMap(index, waiting === FAILED ? { county: {}, state: {} } : waiting)}
 ${notFound ? '<p class="banner banner--error" role="alert">We couldn\'t find districts for that. Check the address, or try your ZIP code.</p>' : ""}
 ${lookupForm(d)}
 ${d ? `<a class="card briefing-link" href="/briefing/"><span class="stack-xs"><span class="label">Your briefing</span><span class="small">${esc(describe(d))}</span></span><span class="chev" aria-hidden="true">›</span></a>` : ""}
@@ -224,16 +215,22 @@ ${d ? `<a class="card briefing-link" href="/briefing/"><span class="stack-xs"><s
   <p><a class="inline-link" href="/about/how-it-works/">How it works</a> · <a class="inline-link" href="/about/principles/">Principles</a></p>
   <button class="intro-dismiss" type="button" data-intro-dismiss aria-label="Dismiss this introduction">×</button>
 </aside>
-${whoRepresents(federalExec, caExec, d)}
-${happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? "/" : "/?now=state"), loaded: !!db })}
-${takePart(deadlines, !!db)}
-${communities(env, counts, msg, error)}
+${federalExec === FAILED || caExec === FAILED ? sectionError("Who represents you") : whoRepresents(federalExec, caExec, d)}
+${now === FAILED ? sectionError("Happening now") : happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? "/" : "/?now=state"), loaded: !!db })}
+${deadlines === FAILED ? sectionError("Take part") : takePart(deadlines, !!db)}
+${communities(env, counts === FAILED ? null : counts, msg, error)}
 ${understand()}
 ${index ? `<script src="/assets/map.js?v=${ASSET_VERSION}" defer></script>` : ""}`;
-  return page("Know what your government is doing", main, { tab: "home", root: true, personal: true });
+  // Personal only once the visitor's districts are known; otherwise the same for everyone.
+  return page("Know what your government is doing", main, { tab: "home", root: true, personal: !!d, partial: anyFailed(now, deadlines, counts, waiting, federalExec, caExec) });
 }
 
-export async function onRequestGet({ request, env }) {
+// The hub for a visitor without saved districts is the same for everyone: kept
+// at the edge for a few minutes. With districts, it's built for that visitor.
+const HUB_CACHE_SECONDS = 300;
+
+export const onRequestGet = guard(async (context) => {
+  const { request, env } = context;
   const url = new URL(request.url);
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
   // The hub used to need ?hub=1 for visitors with saved districts; it's at / now.
@@ -241,5 +238,7 @@ export async function onRequestGet({ request, env }) {
     url.searchParams.delete("hub");
     return Response.redirect(`${url.origin}/${url.search}${url.hash}`, 301);
   }
-  return hub(env, request, url, districtsFromCookie(request));
-}
+  const d = districtsFromCookie(request);
+  if (d) return hub(env, request, url, d);
+  return edgeCached(context, HUB_CACHE_SECONDS, () => hub(env, request, url, null));
+}, { tab: "home" });

@@ -3,14 +3,18 @@
 //   <type>: congressional, state-senate, assembly, state-house,
 //           house-of-delegates, general-assembly, legislature (Nebraska)
 // e.g. /district/congressional/ca-5/, /district/assembly/ca-8/.
-import { page, notFound, esc } from "../_lib/render.js";
+import { page, notFound, esc, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { recentFinalVotes } from "../_lib/data.js";
 import { voteRows } from "../_lib/briefing.js";
 import { LAYER_OF_TYPE, typeOf, loadPlace, officialsFor, repRow, breadcrumb, districtLabel, placeHref } from "../_lib/geo.js";
 
-const missing = (err) => /no such table|no such column/i.test(String(err && err.message));
 
-export async function onRequestGet({ request, env, params }) {
+// A district page is the same for every visitor: kept at the edge for a few minutes.
+const DISTRICT_CACHE_SECONDS = 300;
+
+export const onRequestGet = guard((context) => edgeCached(context, DISTRICT_CACHE_SECONDS, () => districtPage(context)), { tab: "home" });
+
+async function districtPage({ request, env, params }) {
   const url = new URL(request.url);
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
   const [type, key, extra] = (params.path || []).filter(Boolean).map((s) => s.toLowerCase());
@@ -27,19 +31,17 @@ export async function onRequestGet({ request, env, params }) {
 
   const label = districtLabel(layer, id, place);
   const db = env.DB;
-  let reps = [];
-  let votes = { rows: [] };
-  if (db) {
-    try {
-      const o = await officialsFor(db, place.st, { senators: false, cd: layer === "cd" ? [id] : [], sldu: layer === "sldu" ? [id] : [], sldl: layer === "sldl" ? [id] : [] });
-      reps = [...o.house, ...o.upper, ...o.lower];
-      votes = await recentFinalVotes(db, { limit: 5, officialIds: reps.map((r) => r.id) });
-    } catch (err) {
-      if (!missing(err)) throw err;
-    }
-  }
+  // Each section loads on its own: one that can't load shows a short note.
+  const repsLoaded = db
+    ? await loadSection("district reps", async () => {
+        const o = await officialsFor(db, place.st, { senators: false, cd: layer === "cd" ? [id] : [], sldu: layer === "sldu" ? [id] : [], sldl: layer === "sldl" ? [id] : [] });
+        return [...o.house, ...o.upper, ...o.lower];
+      }, [])
+    : [];
+  const reps = repsLoaded === FAILED ? [] : repsLoaded;
+  const votes = db && reps.length ? await loadSection("district votes", () => recentFinalVotes(db, { limit: 5, officialIds: reps.map((r) => r.id) }), { rows: [] }) : { rows: [] };
   const stateLoaded = layer === "cd" || place.st === "CA";
-  const repHtml = reps.length
+  const repHtml = repsLoaded === FAILED ? sectionError("") : reps.length
     ? `<div class="card">${reps.map((r) => repRow(r)).join("")}</div>`
     : `<p class="small secondary">${stateLoaded ? "The representative appears after the data sync runs." : `${esc(place.name)}'s state legislators aren't on ThePillory yet. State coverage opens as communities launch.`}</p>`;
   const countyRows = counties
@@ -49,7 +51,7 @@ export async function onRequestGet({ request, env, params }) {
       return `<a class="list-row link-row" href="${placeHref(place.st, c.slug)}"><div><div class="list-title">${esc(c.name)}</div><div class="list-meta">${full ? "Entirely in this district" : "Part of the county"}</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>`;
     })
     .join("");
-  const rows = voteRows(votes.rows, 5);
+  const rows = votes === FAILED ? "" : voteRows(votes.rows, 5);
   const federal = reps.filter((r) => r.level === "federal");
 
   const main = `
@@ -70,8 +72,8 @@ ${breadcrumb([["United States", "/explore/"], [place.name, `/explore/${m[1]}/`],
 </section>
 <section class="stack-sm" aria-labelledby="h-votes">
   <h2 class="label" id="h-votes">Recent votes</h2>
-  ${rows ? `<ul class="card plain-list brief-votes">${rows}</ul>` : `<p class="small secondary">${reps.length ? "No final-passage votes loaded yet." : "Votes appear once the representative is loaded."}</p>`}
+  ${votes === FAILED ? sectionError("") : rows ? `<ul class="card plain-list brief-votes">${rows}</ul>` : `<p class="small secondary">${reps.length ? "No final-passage votes loaded yet." : "Votes appear once the representative is loaded."}</p>`}
 </section>
 ${federal.length ? `<section class="stack-sm" aria-labelledby="h-funding"><h2 class="label" id="h-funding">Funding</h2><div class="chips">${federal.map((r) => `<a class="chip chip--tap" href="/reps/${esc(r.slug)}/#funding">${esc(r.name)}</a>`).join("")}</div><p class="hint">Campaign funding, from the Federal Election Commission.</p></section>` : ""}`;
-  return page(`${label}, ${place.name}`, main, { tab: "home", back: [place.name, `/explore/${m[1]}/`] });
+  return page(`${label}, ${place.name}`, main, { tab: "home", back: [place.name, `/explore/${m[1]}/`], partial: anyFailed(repsLoaded, votes) });
 }

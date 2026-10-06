@@ -9,7 +9,7 @@
 //
 // Protected by Cloudflare Access (see functions/_lib/access.js and docs/analysis.md).
 // Every change writes a bill_analysis_revisions row with the row as it was before.
-import { page, esc, fmtDate, safeUrl } from "../_lib/render.js";
+import { page, esc, fmtDate, safeUrl, guard } from "../_lib/render.js";
 import { checkAccess } from "../_lib/access.js";
 import { inChunks } from "../_lib/data.js";
 import { parse, badge, baselineSection, provisionsFor } from "../_lib/analysis.js";
@@ -890,5 +890,5 @@ async function handle(context) {
   }
 }
 
-export const onRequestGet = handle;
-export const onRequestPost = handle;
+export const onRequestGet = guard(handle);
+export const onRequestPost = guard(handle);

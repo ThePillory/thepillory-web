@@ -1,6 +1,6 @@
 // /bodies/<slug>/   a governing body: its members, and (for the Board of Supervisors) its meetings, from D1.
 import { BODIES, LEVEL_NAME } from "../_lib/generated.js";
-import { page, notFound, esc, linkRow, section } from "../_lib/render.js";
+import { page, notFound, esc, linkRow, section, guard } from "../_lib/render.js";
 import { safe, officialsForBody, officialsWhere } from "../_lib/data.js";
 import { districtsFromCookie, repsWhere, STATE_NAME } from "../_lib/districts.js";
 import { meetingCard, summariesFor, pacificNow, addDays } from "../_lib/meetings.js";
@@ -23,7 +23,7 @@ async function meetingsFor(db, slug) {
   }
 }
 
-export async function onRequestGet(context) {
+export const onRequestGet = guard(async (context) => {
   const url = new URL(context.request.url);
   const parts = (context.params.path || []).filter(Boolean);
   const b = parts.length === 1 ? BODIES.find((x) => x.slug === parts[0]) : null;
@@ -94,4 +94,4 @@ ${meetings}
         : "Members and meetings come from official sources, each linked on its own page."
   }</p>`;
   return page(b.name, main, { tab: "reps", back: ["Reps", "/reps/"], personal: federal });
-}
+}, { tab: "reps" });
