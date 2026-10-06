@@ -14,6 +14,7 @@ import { lookupForm } from "../_lib/hub.js";
 import { voteRow, voteFilter } from "../_lib/votes.js";
 import { fundingFor, fundingTab } from "../_lib/funding.js";
 import { executiveMoney, executiveFundingParts } from "../_lib/exec-funding.js";
+import { promisesFor, promisesTab } from "../_lib/promises.js";
 import { currentCycle } from "../../workers/sync/src/funding/fec.js";
 import {
   isExecutive, isPresident, isGovernor, executiveOfficials, ordersFor, billsActedOn, nominationsFor,
@@ -183,9 +184,10 @@ async function profile(env, slug, url) {
     isPresident(o) || isGovernor(o) ? loadSection("rep bills", () => billsActedOn(db, o.id, { show, offset }), null) : null,
     isPresident(o) ? loadSection("rep nominations", () => nominationsFor(db, o.id, { status, offset }), null) : null,
     o.level === "state" && !exec ? loadSection("rep committees", () => committeesFor(db, o.id), []) : [],
+    loadSection("rep promises", () => promisesFor(db, o.id), null),
   ]);
-  const [countsLoaded, votes, funding, orders, bills, nominations, committees] = loaded;
-  const partial = anyFailed(countsLoaded, votes, funding, orders, bills, nominations, committees);
+  const [countsLoaded, votes, funding, orders, bills, nominations, committees, promises] = loaded;
+  const partial = anyFailed(countsLoaded, votes, funding, orders, bills, nominations, committees, promises);
   const counts = countsLoaded === FAILED ? null : countsLoaded || {};
   const ok = (v) => (v === FAILED ? null : v);
 
@@ -288,9 +290,7 @@ ${exec ? execGlance(o, ok(orders), ok(bills), ok(nominations)) : !counts ? secti
     ${tab("about", "About")}${tab("promises", "Promises")}${tab("votes", "Votes")}${tab("funding", "Funding")}${tab("more", "More")}
   </nav>
   <div class="stack" role="tabpanel" id="about" aria-labelledby="tab-about">${overview}</div>
-  <div class="stack" role="tabpanel" id="promises" aria-labelledby="tab-promises">
-    <p class="secondary small">Promise tracking for real officials hasn't started. Promises will be added only with a source for each one.</p>
-  </div>
+  <div class="stack" role="tabpanel" id="promises" aria-labelledby="tab-promises">${promises === FAILED ? sectionError("") : promisesTab(o, promises)}</div>
   <div class="stack" role="tabpanel" id="votes" aria-labelledby="tab-votes">${votesHtml}</div>
   <div class="stack" role="tabpanel" id="funding" aria-labelledby="tab-funding">${fundingHtml}</div>
   <div class="stack" role="tabpanel" id="more" aria-labelledby="tab-more">${moreParts.join("")}</div>

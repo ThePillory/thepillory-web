@@ -32,7 +32,7 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 - Find your representatives (address or ZIP), your reps once known, Executive branch (the President, Vice President and Cabinet; California's statewide offices), governing bodies, members of Congress by state (`/reps/?state=CA`)
 - Governing body (`/bodies/<slug>/`): members (Congress: yours, then by state; the executive branches, `us-executive` and `ca-executive`, in full, in order); the Board of Supervisors also lists its meetings
 - Rep (`/reps/<slug>/`): one row of five equal tabs for every official, About · Promises · Votes · Funding · More (fits a 360px phone; a link to a section inside a tab, like `#disclosures`, opens that tab)
-  - About: office, source, record at a glance. Promises: not tracked yet
+  - About: office, source, record at a glance. Promises: approved promises (quote, date, source, status and its history; see docs/promises.md); so far the President, the Governor and Calaveras's supervisors
   - Members of Congress, California legislators and county supervisors: Votes (final passage, or all), Funding (FEC for members of Congress; `?cycle=` for the earlier period), More (Committees for California legislators, from Open States; Issues, empty state)
   - The President: Votes is bills signed and vetoed (`?show=`); Funding (FEC and the inaugural committee); More holds Executive orders (Federal Register), Nominations (civilian, `?status=`), Disclosures (OGE) and Issues
   - The Governor: Votes is bills signed and vetoed (leginfo); Funding (Cal-Access); More holds Executive orders (gov.ca.gov), Disclosures (Form 700) and Issues

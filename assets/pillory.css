@@ -1323,3 +1323,18 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 /* Minor notes from the AI reviewer on a published analysis: small and collapsed. */
 .review-notes summary { min-height: var(--tap); display: flex; align-items: center; cursor: pointer; color: var(--text-2); }
 .review-notes .panel-list { margin: 4px 0; }
+
+/* Promises (official's page, review page) */
+.promise-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.promise-quote {
+  margin: 0;
+  padding: 4px 0 4px 12px;
+  border-left: 3px solid var(--navy-light);
+  font-family: var(--serif);
+  font-size: 1.0625rem;
+  line-height: 1.45;
+}
+.promise-history { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.promise-change { padding-top: 8px; border-top: 1px solid var(--border); }
+.promise-change:first-child { padding-top: 0; border-top: 0; }
+.promise-suggestion + .promise-suggestion { border-top: 1px solid var(--border); }

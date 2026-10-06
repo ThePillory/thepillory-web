@@ -21,6 +21,7 @@ node nationwide.test.mjs | tail -1
 node funding.test.mjs | tail -1
 node executive.test.mjs | tail -1
 node --test pages.test.mjs 2>/dev/null | grep -E "positions:|^# (pass|fail)"
+node --test promises.test.mjs 2>/dev/null | grep -E "^# (pass|fail)"
 
 node fixture-server.mjs & FIX=$!
 $WRANGLER dev -c wrangler.test.toml --port 8789 --persist-to "$STATE" --test-scheduled >/tmp/pillory-worker.log 2>&1 & WK=$!
@@ -66,6 +67,9 @@ $D1 --command "SELECT o.id, f.candidate_id, f.note, (SELECT COUNT(*) FROM fundin
 echo "--- page summaries (the Laws list and vote counts, built during the sync):"
 $D1 --command "SELECT status, message FROM sync_log WHERE step = 'page-summaries' ORDER BY id LIMIT 1" | grep -E '"(status|message)"' | sed 's/^ *//'
 $D1 --command "SELECT bill_id, last_final, final_result, yea, nay, outcome, routine FROM bill_list ORDER BY level, last_final DESC" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
+echo "--- promises: sources found, and what the AI suggested after the checks (at most 3 a day; officials take turns):"
+$D1 --command "SELECT step, status, message FROM sync_log WHERE step IN ('promise-sources', 'promises') ORDER BY id" --json | python3 -c "import json,sys; [print(' ', r['step'], r['status'], r['message']) for r in json.load(sys.stdin)[0]['results']]"
+$D1 --command "SELECT p.id, o.name, p.source_kind, p.made_on, p.review, p.quote, p.check_note, p.due FROM promises p JOIN officials o ON o.id = p.official_id ORDER BY p.id" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
 echo "--- second run (should fetch nothing new):"
 curl -s "localhost:8789/run?token=local-test-token" | grep -E '"(step|status|requests|message)"'
 echo "--- cron trigger:"
@@ -102,6 +106,20 @@ for u in / /laws/ "/laws/?votes=all" "/laws/?level=federal&offset=20" /reps/ /re
   curl -s -o /tmp/pillory-page.html -w "  %{http_code} %{time_total}s $u" "localhost:8790$u"
   grep -q "Couldn't load this" /tmp/pillory-page.html && echo " (a section couldn't load)" || echo
 done
+echo "--- promises on the review page: approve one, record a status change (evidence and source required), and see it on the official's page:"
+curl -s localhost:8790/admin/review/ | grep -o 'Suggested promises <span class="queue-count">[0-9]*' | sed 's/<[^>]*>//g; s/^/  /'
+PID=$($D1 --command "SELECT id FROM promises WHERE review = 'suggested' ORDER BY id LIMIT 1" --json | python3 -c "import json,sys; print(json.load(sys.stdin)[0]['results'][0]['id'])")
+curl -s -o /dev/null -w "  approve promise $PID: %{http_code} %{redirect_url}\n" -X POST -d "action=approve&reviewer=Test+Reviewer" localhost:8790/admin/review/promise/$PID/
+curl -s -X POST -d "action=status&to_status=kept&evidence=&evidence_on=2026-10-01&source_url=https%3A%2F%2Fexample.org%2Fevidence&reviewer=Test+Reviewer" localhost:8790/admin/review/promise/$PID/ | grep -o 'Describe the evidence\.' | sed 's/^/  without evidence: /'
+curl -s -X POST -d "action=status&to_status=kept&evidence=A+record+shows+it&evidence_on=2026-10-01&source_url=not-a-link&reviewer=Test+Reviewer" localhost:8790/admin/review/promise/$PID/ | grep -o 'Enter the source as an http(s) link\.' | sed 's/^/  without a source link: /'
+curl -s -o /dev/null -w "  in progress, with evidence and a source: %{http_code}\n" -X POST -d "action=status&to_status=in_progress&evidence=A+contract+for+the+first+site+was+signed.&evidence_on=2026-10-01&source_url=https%3A%2F%2Fexample.org%2Fevidence&reviewer=Test+Reviewer" localhost:8790/admin/review/promise/$PID/
+SLUG=$($D1 --command "SELECT o.slug FROM promises p JOIN officials o ON o.id = p.official_id WHERE p.id = $PID" --json | python3 -c "import json,sys; print(json.load(sys.stdin)[0]['results'][0]['slug'])")
+curl -s "localhost:8790/reps/$SLUG/?fresh=$PID" | python3 -c "
+import sys,re
+t=sys.stdin.read()
+m=t[t.find('id=\"promises\"'):t.find('id=\"votes\"')]
+print('  official page:', re.sub(r'\s+',' ',re.sub(r'<[^>]+>',' ',m))[:600])"
+curl -s "localhost:8790/reps/$SLUG/?fresh=x" | grep -c 'class="card stack-sm promise"' | sed 's/^/  promises shown (approved only): /'
 echo "--- district lookups (fake Census geocoder; nothing is stored):"
 curl -s -X POST -H "Content-Type: application/json" -d '{"q":"1 Test Street, San Andreas, CA"}' localhost:8790/api/districts; echo
 curl -s -X POST -H "Content-Type: application/json" -d '{"q":"95249"}' localhost:8790/api/districts; echo

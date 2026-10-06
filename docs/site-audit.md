@@ -12,7 +12,7 @@ Every page and section before this change, and after. The earlier cleanup (the p
 |---|---|---|---|
 | `/` | Calaveras briefing: intro, filter, This week, Issues near you, Your reps' latest votes | Real; Issues empty | No hub; everyone saw the Calaveras briefing |
 | `/reps/` | Governing bodies, officials | Real | Calaveras's 7 officials only |
-| `/reps/<slug>/` | About, Promises, Votes, Funding, More (Issues inside More) | Real; Promises and Issues empty | |
+| `/reps/<slug>/` | About, Promises, Votes, Funding, More (Issues inside More) | Real; Promises only once approved (docs/promises.md); Issues empty | |
 | `/bodies/<slug>/` | Members, meetings | Real | Calaveras's members only ("Shown here: …") |
 | `/laws/`, `/laws/bills/<id>/` | Bills, analysis, votes | Real | Positions of Calaveras's officials only; no vote totals |
 | `/votes/` | Final-passage votes | Real | Calaveras's officials only |

@@ -35,6 +35,7 @@ import { reviewDraft, draftForReview, REVIEW_PROMPT_VERSION } from "./review.js"
 import { lintDraft } from "./lint.js";
 import { withD1Retry } from "../d1retry.js";
 import { runAgendaWatch } from "./agenda.js";
+import { runPromises } from "../promises/index.js";
 
 const RETRY_AFTER_DAYS = 7; // a bill that couldn't be drafted waits this long before another try
 const MIN_TIME_PER_BILL_MS = 4 * 60 * 1000; // don't start a bill without this much time left in the round
@@ -649,5 +650,12 @@ export async function runAnalysis(rawEnv, { deadlineMs, runId, trigger }) {
   );
   // Agenda watch: county agenda summaries, with their own daily cap.
   const agendas = await runAgendaWatch(env, db, { run, deadline: budget.deadline });
-  return { status: "ok", analyzed, used, limit, agendas, more_now: (waiting && (stoppedEarly || unchecked)) || agendas.more_now };
+  // Promises: candidates for review, with their own small daily caps.
+  let promises = { suggested: 0 };
+  try {
+    promises = await runPromises(env, db, { run, deadline: budget.deadline });
+  } catch (err) {
+    await log(db, run, "promises", "error", 0, redact(`${err.name}: ${err.message}`), new Date().toISOString());
+  }
+  return { status: "ok", analyzed, used, limit, agendas, promises, more_now: (waiting && (stoppedEarly || unchecked)) || agendas.more_now };
 }
