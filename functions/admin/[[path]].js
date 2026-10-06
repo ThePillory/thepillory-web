@@ -878,6 +878,20 @@ async function promiseQueue(db, env) {
     if (/no such table/i.test(String(err && err.message))) return "";
     throw err;
   }
+  // What the promise step last did, so an empty queue explains itself.
+  let activity = [];
+  try {
+    activity = (
+      await db
+        .prepare("SELECT step, status, message, finished_at FROM sync_log WHERE step IN ('promise-sources', 'promises') ORDER BY id DESC LIMIT 6")
+        .all()
+    ).results;
+  } catch {
+    activity = [];
+  }
+  const activityList = activity.length
+    ? `<ul class="plain-list">${activity.map((a) => `<li class="small"><span class="secondary">${esc(String(a.finished_at || "").slice(0, 16).replace("T", " "))} · ${esc(a.step === "promise-sources" ? "looking for documents" : "reading a document")} · ${esc(a.status)}</span><br>${esc(String(a.message || "").slice(0, 400))}</li>`).join("")}</ul>`
+    : '<p class="secondary small">The promise step hasn\'t run yet. It runs after the bill analysis in each sync.</p>';
   const rows = suggested
     .map(
       (p) => `
@@ -908,6 +922,7 @@ async function promiseQueue(db, env) {
   return `<h2 class="label queue-head" id="promises">Suggested promises <span class="queue-count">${suggested.length}</span></h2>
 <p class="hint">Proposed by AI from official press releases, addresses and county agendas, a few a day. The quote was checked word for word against the source in code; check that it's a specific commitment by this official. Nothing shows on the site until you approve it.</p>
 <section class="card">${rows || '<p class="secondary small">No suggestions waiting.</p>'}</section>
+<details class="weigh-details"${suggested.length ? "" : " open"}><summary>Recent activity</summary><section class="card stack-sm">${activityList}</section></details>
 <details class="weigh-details"><summary>Approved promises (${approved.length}): record a status change</summary><section class="card">${list || '<p class="secondary small">None yet.</p>'}</section></details>`;
 }
 
