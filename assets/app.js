@@ -346,6 +346,15 @@
       });
   });
   // ---------------------------------------------------------------------
+  // "Select all" on the review page: <input type="checkbox" data-select-all="ids"
+  // data-form="promise-batch"> ticks every checkbox named "ids" for that form.
+  document.addEventListener("change", function (e) {
+    var all = e.target;
+    if (!all || !all.matches || !all.matches("input[data-select-all]")) return;
+    var boxes = document.querySelectorAll('input[type="checkbox"][name="' + all.getAttribute("data-select-all") + '"][form="' + all.getAttribute("data-form") + '"]');
+    for (var i = 0; i < boxes.length; i++) boxes[i].checked = all.checked;
+  });
+  // ---------------------------------------------------------------------
   // Cloudflare Turnstile, for the forms that have a .cf-turnstile widget (the
   // waitlist, "Something wrong?", "Request full analysis"). Its script is
   // loaded only after the page has finished loading: the challenge frame it

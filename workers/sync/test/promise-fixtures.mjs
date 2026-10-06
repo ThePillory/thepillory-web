@@ -51,6 +51,12 @@ export function govcaStateOfTheState() {
   ];
 }
 
+// A campaign "Issues" page (listed by a person on /admin/review/promise/pages/): a slogan, a position and one commitment.
+export const campaignIssuesPage = () =>
+  `<html><body><nav>Home Donate Volunteer</nav><main><h1>Issues</h1><p>FAKE-PROMISE-DOC-ISSUES.</p>
+<h2>Roads</h2><p>Roads matter to every family.</p><p>As Governor I will repave Route 4 between Murphys and Arnold by the end of 2027.</p>
+<h2>Water</h2><p>I believe in clean water for everyone.</p></main><footer>Paid for by a fake committee</footer></body></html>`;
+
 export function govinfoCollection() {
   return {
     count: 2, nextPage: null,
@@ -78,6 +84,12 @@ export function promiseDraft(message) {
   if (message.includes("FAKE-PROMISE-DOC-GOV")) {
     return { promises: [
       { speaker, quote: "The state will award $25 million in grants to 40 rural libraries by June 30, 2027.", check_note: "Grant awards totaling $25 million to 40 rural libraries.", due: "by June 30, 2027" },
+    ] };
+  }
+  if (message.includes("FAKE-PROMISE-DOC-ISSUES")) {
+    return { promises: [
+      { speaker, quote: "As Governor I will repave Route 4 between Murphys and Arnold by the end of 2027.", check_note: "Completed repaving of Route 4 between Murphys and Arnold.", due: "by the end of 2027" },
+      { speaker, quote: "Roads matter to every family.", check_note: "Roads are better.", due: "" },
     ] };
   }
   if (message.includes("FAKE-PROMISE-DOC-SOTS")) {

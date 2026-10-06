@@ -1339,3 +1339,9 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 .promise-change { padding-top: 8px; border-top: 1px solid var(--border); }
 .promise-change:first-child { padding-top: 0; border-top: 0; }
 .promise-suggestion + .promise-suggestion { border-top: 1px solid var(--border); }
+
+/* A checkbox with its label, a full tap target (review page: "Select", "Select all") */
+.check-row { display: inline-flex; align-items: center; align-self: flex-start; gap: 8px; min-height: var(--tap); cursor: pointer; }
+.check-row input { width: 20px; height: 20px; accent-color: var(--navy); margin: 0; }
+/* Sync log lines on the review page carry long links: let them wrap */
+.activity-list li { overflow-wrap: anywhere; }

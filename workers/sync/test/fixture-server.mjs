@@ -8,7 +8,7 @@ import { executive, cabinetHtml, fr, congressExec, leginfoHistory, stateExecutiv
 import http from "node:http";
 import { calendarHtml, rssHtml, meetingHtml, agendaLines, makePdf, dayFromToday } from "./iqm2-fixtures.mjs";
 import { meetingList, agendaPages } from "./tylermm-fixtures.mjs";
-import { whiteHouseFeed, govcaPosts, govcaStateOfTheState, govinfoCollection, govinfoHtm, promiseDraft } from "./promise-fixtures.mjs";
+import { whiteHouseFeed, govcaPosts, govcaStateOfTheState, govinfoCollection, govinfoHtm, promiseDraft, campaignIssuesPage } from "./promise-fixtures.mjs";
 import { legislators, fec as fecFixture, lda as ldaFixture, oge as ogeFixture, form13File } from "./funding-fixtures.mjs";
 
 const PORT = parseInt(process.env.FIXTURE_PORT || "8788", 10);
@@ -618,6 +618,7 @@ http
     if (api === "oge" && path === "/201/Presiden.nsf/API.xsp/v3/rest") return send(res, 200, ogeFixture(u.searchParams));
     if (api === "legislators") return send(res, 200, path === "/executive.json" ? executive : legislators);
     // FAKE executive branch sources.
+    if (api === "campaign" && path === "/issues/") return send(res, 200, campaignIssuesPage(), "text/html");
     if (api === "whitehouse" && path === "/releases/feed/") return send(res, 200, whiteHouseFeed("releases"), "application/rss+xml");
     if (api === "whitehouse" && path === "/remarks/feed/") return send(res, 200, whiteHouseFeed("remarks"), "application/rss+xml");
     if (api === "govinfo" && path.startsWith("/collections/CPD/")) return send(res, 200, govinfoCollection());

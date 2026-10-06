@@ -26,6 +26,8 @@ const GOVCA = "https://www.gov.ca.gov/";
 const GOVINFO = "https://api.govinfo.gov/";
 const COUNTY_GROUP = "county-board"; // agenda documents belong to the whole Board
 const today = () => new Date().toISOString().slice(0, 10);
+const sha256 = async (text) =>
+  [...new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)))].map((b) => b.toString(16).padStart(2, "0")).join("");
 
 async function get(url, { json = false, timeoutMs = 30000 } = {}) {
   const res = await fetch(url, { headers: { "User-Agent": UA, Accept: json ? "application/json" : "*/*" }, signal: AbortSignal.timeout(timeoutMs) });
@@ -135,6 +137,49 @@ export async function discover(env, db, officials) {
       return `${n} new`;
     });
   }
+  await tryIt("Issues and priorities pages", async () => {
+    const days = parseInt(env.PROMISE_PAGES_REFRESH_DAYS || "7", 10);
+    const { results: pages } = await db
+      .prepare(
+        `SELECT p.url, p.official_id, p.kind, p.title FROM promise_pages p JOIN officials o ON o.id = p.official_id
+         WHERE o.active = 1 AND (p.fetched_at IS NULL OR p.fetched_at < datetime('now', ?)) ORDER BY p.fetched_at IS NOT NULL, p.fetched_at LIMIT 10`
+      )
+      .bind(`-${days} days`)
+      .all();
+    let changed = 0;
+    let failed = 0;
+    for (const pg of pages) {
+      let note;
+      let hash = null;
+      try {
+        const text = clip(htmlToText(await get(pg.url)), 60000);
+        hash = await sha256(text);
+        const before = await db.prepare("SELECT text_hash FROM promise_pages WHERE url = ?").bind(pg.url).first();
+        if (before && before.text_hash === hash) note = "unchanged";
+        else {
+          // Read again from the top: the same page, with its new text. Promises already
+          // suggested from it aren't suggested twice (one per official and quote).
+          await db
+            .prepare(
+              `INSERT OR REPLACE INTO promise_sources (url, official_id, kind, title, published_on, text, status, note, first_seen)
+               VALUES (?, ?, ?, ?, ?, ?, 'pending', NULL, datetime('now'))`
+            )
+            .bind(pg.url, pg.official_id, pg.kind, pg.title, today(), text)
+            .run();
+          changed += 1;
+          note = before && before.text_hash ? "changed; to be read again" : "to be read";
+        }
+      } catch (err) {
+        failed += 1;
+        note = redact(`${err.name}: ${err.message}`).slice(0, 200);
+      }
+      await db
+        .prepare("UPDATE promise_pages SET fetched_at = datetime('now'), text_hash = COALESCE(?, text_hash), note = ? WHERE url = ?")
+        .bind(hash, note, pg.url)
+        .run();
+    }
+    return `${pages.length} checked, ${changed} new or changed${failed ? `, ${failed} failed` : ""}`;
+  });
   if (officials.supervisors.length) {
     await tryIt("Board of Supervisors agendas", async () => {
       const { results: meetings } = await db
@@ -208,7 +253,8 @@ export async function runPromises(env, db, { run, deadline }) {
   const started = new Date().toISOString();
   if (!env.ANTHROPIC_API_KEY) return { suggested: 0 };
   const officials = await trackedOfficials(db);
-  if (!officials.president && !officials.governor && !officials.supervisors.length) return { suggested: 0 };
+  const anyPages = await db.prepare("SELECT 1 FROM promise_pages LIMIT 1").first().catch(() => null);
+  if (!officials.president && !officials.governor && !officials.supervisors.length && !anyPages) return { suggested: 0 };
 
   // 1. Discover, once a day.
   const dayKey = `promises_discovered_${today()}`;
@@ -250,8 +296,18 @@ export async function runPromises(env, db, { run, deadline }) {
   }
   if (none.length) await log(db, run, "promises", "ok", 0, `${none.length} document(s) skipped without AI: no sentence committing to an action (will, plan to, by a date…); ${pending.length} left to read`, started);
   const todo = roundRobin(pending, docLimit - read);
+  // The speaker: the Board for an agenda; otherwise the official the source belongs to
+  // (the President, the Governor, or whoever an Issues page was listed for).
+  const others = new Map();
+  for (const id of new Set(todo.map((d) => d.official_id))) {
+    if (id === COUNTY_GROUP || [officials.president, officials.governor].some((o) => o && o.id === id)) continue;
+    const o = await db.prepare("SELECT id, slug, name, office, chamber, rank, term_start FROM officials WHERE id = ? AND active = 1").bind(id).first();
+    if (o) others.set(id, o);
+  }
   const speakersFor = (doc) =>
-    doc.official_id === COUNTY_GROUP ? officials.supervisors : [officials.president, officials.governor].filter((o) => o && o.id === doc.official_id);
+    doc.official_id === COUNTY_GROUP
+      ? officials.supervisors
+      : [officials.president, officials.governor, others.get(doc.official_id)].filter((o) => o && o.id === doc.official_id);
   let added = 0;
   for (const doc of todo) {
     if (suggested >= sugLimit || read >= docLimit || waiting + added >= queueMax) break;
