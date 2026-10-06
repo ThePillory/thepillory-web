@@ -13,7 +13,8 @@ import { districtsFromCookie, repsWhere, describe, STATE_NAME } from "../_lib/di
 import { lookupForm } from "../_lib/hub.js";
 import { voteRow, voteFilter } from "../_lib/votes.js";
 import { fundingFor, fundingTab } from "../_lib/funding.js";
-import { executiveMoney, executiveFundingParts } from "../_lib/exec-funding.js";
+import { executiveMoney, executiveFundingParts, stateOfficialMoney, stateForm700 } from "../_lib/exec-funding.js";
+import { stateFundingTab } from "../_lib/state-funding.js";
 import { promisesFor, promisesTab } from "../_lib/promises.js";
 import { currentCycle } from "../../workers/sync/src/funding/fec.js";
 import {
@@ -175,11 +176,14 @@ async function profile(env, slug, url) {
   const show = ["signed", "vetoed"].includes(url.searchParams.get("show")) ? url.searchParams.get("show") : "all";
   const status = url.searchParams.get("status") || "all";
   const exec = isExecutive(o);
+  const stateLegislator = o.chamber === "ca-assembly" || o.chamber === "ca-senate";
   // Each tab loads on its own: one that can't load shows a short note there.
   const loaded = await Promise.all([
     exec ? {} : loadSection("rep vote counts", () => voteCounts(db, o.id), {}),
     exec ? { rows: [], more: false } : loadSection("rep votes", () => votesFor(db, o.id, { all, limit: 50, offset: (pageNum - 1) * 50 }), { rows: [], more: false }),
-    exec ? loadSection("rep funding", () => executiveMoney(db, o, cycle), null) : o.level === "federal" ? loadSection("rep funding", () => fundingFor(db, o, cycle), null) : null,
+    exec ? loadSection("rep funding", () => executiveMoney(db, o, cycle), null)
+      : o.level === "federal" ? loadSection("rep funding", () => fundingFor(db, o, cycle), null)
+      : stateLegislator ? loadSection("rep funding", () => stateOfficialMoney(db, o, cycle), null) : null,
     isPresident(o) || isGovernor(o) ? loadSection("rep orders", () => ordersFor(db, o.id, { offset }), null) : null,
     isPresident(o) || isGovernor(o) ? loadSection("rep bills", () => billsActedOn(db, o.id, { show, offset }), null) : null,
     isPresident(o) ? loadSection("rep nominations", () => nominationsFor(db, o.id, { status, offset }), null) : null,
@@ -268,6 +272,7 @@ ${exec ? execGlance(o, ok(orders), ok(bills), ok(nominations)) : !counts ? secti
   if (funding === FAILED) fundingHtml = sectionError("");
   else if (role === "appointed") fundingHtml = appointedNote(`${esc(o.office)} is an appointed office, so there's no campaign money to show: appointed officials don't run campaigns.`);
   else if (exec) fundingHtml = money.funding || '<p class="secondary small">No campaign money to show for this office.</p>';
+  else if (stateLegislator) fundingHtml = stateFundingTab(o, funding && funding.money, base);
   else fundingHtml = fundingTab(o, funding, base);
 
   // More: everything else, in sections.
@@ -275,6 +280,7 @@ ${exec ? execGlance(o, ok(orders), ok(bills), ok(nominations)) : !counts ? secti
   if (orders) moreParts.push(sub("orders", "Executive orders", orders === FAILED ? sectionError("") : ordersTab(o, orders, base, offset)));
   if (nominations) moreParts.push(sub("nominations", "Nominations", nominations === FAILED ? sectionError("") : nominationsTab(o, nominations, base, status, offset)));
   if (exec) moreParts.push(sub("more-disclosures", "Disclosures", funding === FAILED ? sectionError("") : money.disclosures));
+  if (stateLegislator) moreParts.push(sub("more-disclosures", "Disclosures", funding === FAILED ? sectionError("") : funding ? stateForm700(funding) : ""));
   if (o.level === "state" && !exec) {
     moreParts.push(sub("committees", "Committees", committees === FAILED ? sectionError("") : committees.length
       ? `<div class="card"><ul class="plain-list">${committees.map((c) => `<li class="list-row"><span class="list-title">${esc(c.name)}</span><span class="row-end">${sourceLink(c.source_url)}</span></li>`).join("")}</ul></div><p class="hint">From Open States, refreshed weekly.</p>`
