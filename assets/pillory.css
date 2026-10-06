@@ -719,6 +719,30 @@ a.chip:hover { border-color: var(--parch-text); }
   text-decoration: none;
 }
 .tabs [role="tab"][aria-selected="true"] { color: var(--navy); border-bottom-color: var(--navy); font-weight: 600; }
+/* Official's page: one row of five equal tabs, About · Promises · Votes ·
+   Funding · More, that fits a 360px phone without sideways scrolling. */
+.tabs--five {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  overflow: visible;
+}
+.tabs--five [role="tab"] {
+  justify-content: center;
+  min-width: 0;
+  min-height: var(--tap);
+  padding: 0 2px;
+  border-bottom-width: 3px;
+  border-radius: 8px 8px 0 0;
+  font-size: 0.875rem;
+  text-align: center;
+  white-space: nowrap;
+}
+.tabs--five [role="tab"][aria-selected="true"] { background: var(--navy-light); }
+.tabs--five [role="tab"]:focus-visible { outline: 2px solid var(--navy); outline-offset: -2px; }
+@media (max-width: 374px) {
+  .tabs--five [role="tab"] { font-size: 0.8125rem; }
+}
 .tabs .count {
   min-width: 20px;
   padding: 0 6px;

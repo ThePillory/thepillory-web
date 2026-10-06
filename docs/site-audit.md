@@ -12,7 +12,7 @@ Every page and section before this change, and after. The earlier cleanup (the p
 |---|---|---|---|
 | `/` | Calaveras briefing: intro, filter, This week, Issues near you, Your reps' latest votes | Real; Issues empty | No hub; everyone saw the Calaveras briefing |
 | `/reps/` | Governing bodies, officials | Real | Calaveras's 7 officials only |
-| `/reps/<slug>/` | Overview, Promises, Votes, Issues | Real; Promises and Issues empty | |
+| `/reps/<slug>/` | About, Promises, Votes, Funding, More (Issues inside More) | Real; Promises and Issues empty | |
 | `/bodies/<slug>/` | Members, meetings | Real | Calaveras's members only ("Shown here: …") |
 | `/laws/`, `/laws/bills/<id>/` | Bills, analysis, votes | Real | Positions of Calaveras's officials only; no vote totals |
 | `/votes/` | Final-passage votes | Real | Calaveras's officials only |
@@ -44,7 +44,7 @@ Every page and section before this change, and after. The earlier cleanup (the p
 | `/votes/` | Your reps' votes, or all final-passage votes with totals | Real |
 | `/about/how-a-bill-becomes-law/`, `/about/how-to-read-a-vote/` | Explainers | Real, neutral, sources linked |
 | `/admin/waitlist/` | Counts by county | Real (behind Cloudflare Access) |
-| `/issues/`, `/report/`, rep Issues tab | | Empty state |
+| `/issues/`, `/report/`, rep Issues (under More) | | Empty state |
 | `/about/how-it-works/` | One example issue | Sample, labeled "Example", hypothetical |
 
 Not built yet (said plainly where relevant): reporting and accounts, promises, supervisors' votes from minutes, state and local coverage outside California and Calaveras, and federal agency comment periods (Regulations.gov; a TODO in `functions/index.js`).

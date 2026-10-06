@@ -31,10 +31,13 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 ### Tab 2: Reps (`/reps/`)
 - Find your representatives (address or ZIP), your reps once known, Executive branch (the President, Vice President and Cabinet; California's statewide offices), governing bodies, members of Congress by state (`/reps/?state=CA`)
 - Governing body (`/bodies/<slug>/`): members (Congress: yours, then by state; the executive branches, `us-executive` and `ca-executive`, in full, in order); the Board of Supervisors also lists its meetings
-- Rep (`/reps/<slug>/`): Overview, Promises (not tracked yet), Votes, Funding (members of Congress and the President: FEC; `?cycle=` for the earlier period), Issues (empty state)
-  - The President: Overview, Executive orders (Federal Register), Bills (signed / vetoed, `?show=`), Nominations (civilian, `?status=`), Promises, Funding, Issues; no Votes tab
-  - The Governor: Overview, Bills (leginfo), Executive orders (gov.ca.gov), Promises, Funding (state disclosure: later), Issues
-  - Other executive offices (Vice President, Cabinet, California statewide): Overview, Promises, Funding (why there's none), Issues
+- Rep (`/reps/<slug>/`): one row of five equal tabs for every official, About · Promises · Votes · Funding · More (fits a 360px phone; a link to a section inside a tab, like `#disclosures`, opens that tab)
+  - About: office, source, record at a glance. Promises: not tracked yet
+  - Members of Congress, California legislators and county supervisors: Votes (final passage, or all), Funding (FEC for members of Congress; `?cycle=` for the earlier period), More (Committees for California legislators, from Open States; Issues, empty state)
+  - The President: Votes is bills signed and vetoed (`?show=`); Funding (FEC and the inaugural committee); More holds Executive orders (Federal Register), Nominations (civilian, `?status=`), Disclosures (OGE) and Issues
+  - The Governor: Votes is bills signed and vetoed (leginfo); Funding (Cal-Access); More holds Executive orders (gov.ca.gov), Disclosures (Form 700) and Issues
+  - The Vice President and California's other statewide officers (elected): Votes says none are recorded for the office; Funding (the ticket's FEC money, or Cal-Access); More holds Disclosures and Issues
+  - The Cabinet (appointed): Votes and Funding say they don't apply to appointed officials, linking to Disclosures under More (OGE reports and ethics agreements)
   - Vote > Bill (under Laws)
 
 ### Tab 3: + Report (`/report/`)
