@@ -92,6 +92,8 @@ function statementsSection(o, m) {
 /** The Funding tab for a California official. `m` is stateMoneyFor's result. */
 export function stateFundingTab(o, m, base) {
   if (!m || !m.check) return loading();
+  // Statements loaded from an older build of the file, before totals by period: still loading.
+  if (!m.cycles.length && m.committees.length) return `${loading()}${statementsSection(o, m)}`;
   const span = period(m.cycle);
   const asOf = esc(String(m.check.note || "").replace(/^Cal-Access export of /, "the Cal-Access export of "));
   const intro = `<p class="small">Money raised and spent by the campaign committees ${esc(o.name)} controls in ${span}, as reported to the California Secretary of State. These are facts about money; they don't explain any vote or action in office.</p>`;
@@ -105,7 +107,7 @@ export function stateFundingTab(o, m, base) {
   <ul class="plain-list money-list">
     ${row("Raised", money(r.raised), `${r.statements} statement${r.statements === 1 ? "" : "s"}, Summary Page line 5`)}
     ${row("Spent", money(r.spent), "Summary Page line 11")}
-    ${r.individuals_total != null ? row("From individuals (itemized)", `${money(r.individuals_total)} <span class="secondary">${pct(r.individuals_total, r.raised)}</span>`, `${(r.individuals_count || 0).toLocaleString("en-US")} contributions of $100 or more`) : ""}
+    ${r.individuals_total != null ? row("From individuals (itemized)", `${money(r.individuals_total)} <span class="secondary">${pct(r.individuals_total, r.raised)}</span>`, `${(r.individuals_count || 0).toLocaleString("en-US")} contributions of $100 or more, net of refunds`) : ""}
   </ul>
   <p class="hint">Sums of each statement's own figures for its period. Contributions under $100 aren't itemized, so they're in "Raised" but not in the lists below.</p>
 </section>`;
@@ -118,7 +120,8 @@ export function stateFundingTab(o, m, base) {
   ${
     known.length
       ? `<ul class="plain-list money-list">${known.slice(0, 8).map((i) => row(esc(industryName(i.industry)), money(i.total))).join("")}</ul>
-  <p class="hint">Approximate. Industries are assigned by keywords in organizations' names and in the employers individual donors named (<a class="tap" href="${METHOD}">how</a>); ${pct(classified, all)} of these itemized dollars matched an industry, and the rest are left unclassified rather than guessed.</p>`
+  <p class="hint">Approximate. Industries are assigned by keywords in organizations' names and in the employers individual donors named; ${pct(classified, all)} of these itemized dollars matched an industry, and the rest are left unclassified rather than guessed.</p>
+  <a class="inline-link" href="${METHOD}">How industries are assigned</a>`
       : '<p class="secondary small">No itemized contributions matched an industry category.</p>'
   }
 </section>`;
@@ -151,7 +154,7 @@ export function stateFundingTab(o, m, base) {
       rows.length
         ? `<ul class="plain-list money-list">${rows
             .slice(0, 6)
-            .map((x) => row(esc(x.spender), money(x.total), [x.race ? `race: ${esc(x.race)}` : "", `${x.filings} report${x.filings === 1 ? "" : "s"}`, x.first_date ? `${fmtDate(x.first_date)}${x.last_date && x.last_date !== x.first_date ? ` to ${fmtDate(x.last_date)}` : ""}` : "", ext(x.source_url, "Spender's record")].filter(Boolean).join(" · ")))
+            .map((x) => row(esc(x.spender), money(x.total), `${[x.race ? `race: ${esc(x.race)}` : "", `${x.filings} report${x.filings === 1 ? "" : "s"}`, x.first_date ? `${fmtDate(x.first_date)}${x.last_date && x.last_date !== x.first_date ? ` to ${fmtDate(x.last_date)}` : ""}` : ""].filter(Boolean).join(" · ")}<div>${ext(x.source_url, "Spender's record")}</div>`))
             .join("")}</ul>${rows.length > 6 ? `<p class="hint">And ${rows.length - 6} more.</p>` : ""}`
         : '<p class="secondary small">None reported.</p>'
     }</div>`;
@@ -172,5 +175,6 @@ ${employers}
 ${orgs}
 ${ie}
 ${statementsSection(o, m)}
-<p class="hint">From ${asOf}. California replaces Cal-Access with a new disclosure system after the November 2026 election. <a class="tap" href="${METHOD}">Methodology</a></p>`;
+<p class="hint">From ${asOf}. California replaces Cal-Access with a new disclosure system after the November 2026 election.</p>
+<a class="inline-link" href="${METHOD}">Methodology</a>`;
 }

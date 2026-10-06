@@ -241,16 +241,20 @@ const officeKey = (s) =>
     .replace(/\s+/g, " ")
     .trim();
 
+// Legislators file under the house as the agency ("State Assembly",
+// "Assembly Member"; "State Senate", "Senator").
+const LEGISLATURE_AGENCY = { "ca-assembly": "assembly", "ca-senate": "senate" };
+
 /**
  * The search's documents → disclosure rows for one official: the filer's first
  * and last name match, and one of the statement's positions is the official's
- * office (the position or the agency, e.g. "Governor"). Statements filed only
- * for other boards the official sits on are left out.
+ * office (the position or the agency, e.g. "Governor"; for a legislator, their
+ * house). Statements filed only for other boards the official sits on are left out.
  */
 export function fppcRows(documents, official) {
   const p = nameParts(official.name);
   if (!p) return [];
-  const office = officeKey(official.office);
+  const office = LEGISLATURE_AGENCY[official.chamber] || officeKey(official.office);
   const out = [];
   for (const d of documents || []) {
     const f = d && d.filer;

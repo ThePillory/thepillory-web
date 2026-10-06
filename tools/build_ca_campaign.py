@@ -252,12 +252,13 @@ def build(zip_path, officials):
                 continue  # a transfer between the official's own committees
             b = bucket(p, cyc)
             if r["ENTITY_CD"] == "IND":
+                # A refund is a negative row: it nets against the totals, but it isn't a contribution.
                 b["individuals"]["total"] += amount
-                b["individuals"]["count"] += 1
+                b["individuals"]["count"] += amount > 0
                 emp = employer_key(r["CTRIB_EMP"])
                 e = b["employers"].setdefault(emp, {"employer": emp, "total": 0.0, "count": 0, "occupations": {}})
                 e["total"] += amount
-                e["count"] += 1
+                e["count"] += amount > 0
                 occ = employer_key(r["CTRIB_OCC"])
                 if occ:
                     e["occupations"][occ] = e["occupations"].get(occ, 0) + 1
@@ -267,7 +268,7 @@ def build(zip_path, officials):
                     continue
                 o = b["organizations"].setdefault(name.upper(), {"name": name, "kind": ORG_ENTITIES.get(r["ENTITY_CD"], "organization"), "total": 0.0, "count": 0, "filer_id": (r["CMTE_ID"] or "").strip() or None})
                 o["total"] += amount
-                o["count"] += 1
+                o["count"] += amount > 0
 
     # 4. Independent expenditures (Form 496): the amounts, and who they were for or against.
     ie_amount = {}
@@ -335,12 +336,13 @@ def build(zip_path, officials):
                 "raised": round(sum(c.get("contributions") or 0 for c in reps), 2),
                 "spent": round(sum(c.get("expenditures") or 0 for c in reps), 2),
                 "statements": len(reps),
-                "individuals": {"total": round(m["individuals"]["total"], 2), "count": m["individuals"]["count"]},
+                # Net of refunds; never below zero (a refund of money given in an earlier period).
+                "individuals": {"total": max(0.0, round(m["individuals"]["total"], 2)), "count": m["individuals"]["count"]},
                 "employers": sorted(
                     ({"employer": e["employer"], "total": round(e["total"], 2), "count": e["count"],
-                      "occupation": max(e["occupations"], key=e["occupations"].get) if e["occupations"] else None} for e in m["employers"].values()),
+                      "occupation": max(e["occupations"], key=e["occupations"].get) if e["occupations"] else None} for e in m["employers"].values() if e["total"] > 0 and e["count"]),
                     key=lambda e: -e["total"]),
-                "organizations": sorted(({**o, "total": round(o["total"], 2)} for o in m["organizations"].values()), key=lambda o: -o["total"]),
+                "organizations": sorted(({**o, "total": round(o["total"], 2)} for o in m["organizations"].values() if o["total"] > 0 and o["count"]), key=lambda o: -o["total"]),
                 "ie": sorted(({**x, "total": round(x["total"], 2)} for x in m["ie"].values()), key=lambda x: -x["total"]),
             }
         for k in committees.values():

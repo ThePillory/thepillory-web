@@ -214,13 +214,15 @@ async function fppcStatements(env, db, budget) {
   const days = parseInt(env.FPPC_REFRESH_DAYS || "7", 10);
   const pace = { intervalMs: parseInt(env.FPPC_MIN_INTERVAL_MS || "3000", 10), dailyLimit: parseInt(env.FPPC_DAILY_LIMIT || "100", 10) };
   const base = (env.FPPC_SEARCH || FPPC_SEARCH).replace(/\/$/, "");
+  // The live communities' legislators first (Calaveras: Assembly 8, Senate 4), then the rest.
+  const firstSeats = String(env.LIVE_STATE_DISTRICTS ?? "ca-assembly:8,ca-senate:4").split(",").map((x) => x.trim()).filter(Boolean);
   const { results: people } = await db
     .prepare(
-      `SELECT o.id, o.name, o.office FROM officials o LEFT JOIN disclosure_checks k ON k.official_id = o.id AND k.source = 'fppc'
-       WHERE o.chamber = 'ca-executive' AND o.active = 1 AND (k.checked_at IS NULL OR k.checked_at < datetime('now', ?))
-       ORDER BY k.checked_at IS NOT NULL, o.rank LIMIT 20`
+      `SELECT o.id, o.name, o.office, o.chamber FROM officials o LEFT JOIN disclosure_checks k ON k.official_id = o.id AND k.source = 'fppc'
+       WHERE o.chamber IN ('ca-executive', 'ca-assembly', 'ca-senate') AND o.active = 1 AND (k.checked_at IS NULL OR k.checked_at < datetime('now', ?))
+       ORDER BY k.checked_at IS NOT NULL, o.chamber <> 'ca-executive', (o.chamber || ':' || o.district_code) NOT IN (${firstSeats.map(() => "?").join(",") || "''"}), o.rank, o.name LIMIT ?`
     )
-    .bind(`-${days} days`)
+    .bind(`-${days} days`, ...firstSeats, parseInt(env.FPPC_PER_RUN || "30", 10))
     .all();
   let searched = 0;
   let found = 0;

@@ -85,6 +85,10 @@ class Build(unittest.TestCase):
             rcpt("20", "IND", "Doe", "Jane", "Example Hospital", "Nurse", "2/7/2026", "999", memo="X"),
             rcpt("20", "COM", "Ada Testassembly Officeholder", "", "", "", "2/8/2026", "7000", cmte="801"),
             rcpt("20", "IND", "Doe", "Jane", "Example Hospital", "Nurse", "2/9/2026", "300", form="C"),
+            # Refunds are negative rows: they net against totals and never show as negative.
+            rcpt("20", "IND", "Zoe", "Zed", "Refunded Shop", "Owner", "2/10/2026", "-200"),
+            rcpt("20", "COM", "Example Refunded PAC", "", "", "", "2/11/2026", "400"),
+            rcpt("20", "COM", "Example Refunded PAC", "", "", "", "2/12/2026", "-400"),
             # The 2025 statement: the 2025-2026 period too.
             rcpt("21", "IND", "Doe", "Jane", "Example Hospital", "Nurse", "3/1/2025", "250"),
         ]
@@ -137,13 +141,14 @@ class Build(unittest.TestCase):
         c = ada["cycles"]["2025-2026"]
         self.assertEqual((c["raised"], c["spent"], c["statements"]), (51000.0, 20000.0, 2))
         # Individuals: totals and employers only, the memo entry, Schedule C and self-transfer left out.
-        self.assertEqual(c["individuals"], {"total": 500 + 1500 + 2500 + 100 + 250.0, "count": 5})
+        self.assertEqual(c["individuals"], {"total": 500 + 1500 + 2500 + 100 + 250 - 200.0, "count": 5})
+        self.assertNotIn("REFUNDED SHOP", [e["employer"] for e in c["employers"]], "a refund alone isn't an employer")
         hospital = next(e for e in c["employers"] if e["employer"] == "EXAMPLE HOSPITAL")
         self.assertEqual((hospital["total"], hospital["count"], hospital["occupation"]), (4750.0, 4, "NURSE"))
         self.assertEqual([o["name"] for o in c["organizations"]], ["Example Builders Inc", "Example Teachers Union PAC"])
         self.assertEqual(c["organizations"][1]["kind"], "committee")
         text = str(c)
-        for person in ("Doe", "Roe", "Poe", "Moe", "Jane", "Rick"):
+        for person in ("Doe", "Roe", "Poe", "Moe", "Zoe", "Jane", "Rick"):
             self.assertNotIn(person, text, "no individual's name anywhere")
         # Independent expenditures: by spender, for and against; the report without a district still found her.
         ie = {(x["spender"], x["support_oppose"]): x for x in c["ie"]}

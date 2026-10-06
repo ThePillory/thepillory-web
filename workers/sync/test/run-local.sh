@@ -87,6 +87,10 @@ sleep 2
 until curl -s "localhost:8789/status?token=local-test-token" | grep -q '"status": "finished"'; do sleep 2; done
 curl -s "localhost:8789/status?token=local-test-token" | grep -E '"message": "(us|ca)-|earlier draft' | sed 's/^ *//'
 kill $WK
+echo "--- California campaign finance (Cal-Access file) and Form 700s:"
+$D1 --command "SELECT step, status, message FROM sync_log WHERE message LIKE 'California campaign%' OR message LIKE 'FPPC%' OR message LIKE '%FPPC:%' ORDER BY id LIMIT 4" --json | python3 -c "import json,sys; [print(' ', r['step'], r['status'], r['message']) for r in json.load(sys.stdin)[0]['results']]"
+$D1 --command "SELECT c.official_id, c.cycle, c.raised, c.spent, (SELECT COUNT(*) FROM state_money_ie i WHERE i.official_id = c.official_id) AS ie FROM state_money_cycles c ORDER BY 1" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
+$D1 --command "SELECT official_id, substr(note, 1, 90) AS note FROM disclosure_checks WHERE source = 'cal-access' ORDER BY 1" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
 
 (cd "$REPO" && $WRANGLER pages dev . --port 8790 --d1 DB=pillory-local-test --persist-to "$STATE" \
   --binding ADMIN_LOCAL_DEV=1 --binding REVIEWER_NAME="Test Reviewer" \
