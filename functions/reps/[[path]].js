@@ -4,8 +4,8 @@
 //                   President adds Executive orders, Bills and Nominations (no
 //                   Votes); the Governor adds Bills and Executive orders.
 import { BODIES, LEVEL_NAME, EMPTY_REPORTS } from "../_lib/generated.js";
-import { page, notFound, notLoaded, esc, safeUrl, kv, card, section, sourceLink, fmtDate } from "../_lib/render.js";
-import { safe, officialBySlug, officialsWhere, voteCounts, votesFor, CHAMBER_NAME } from "../_lib/data.js";
+import { page, notFound, notLoaded, esc, safeUrl, kv, card, section, sourceLink, fmtDate, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
+import { officialBySlug, officialsWhere, withVoteCounts, voteCounts, votesFor, CHAMBER_NAME } from "../_lib/data.js";
 import { districtsFromCookie, repsWhere, describe, STATE_NAME } from "../_lib/districts.js";
 import { lookupForm } from "../_lib/hub.js";
 import { voteRow, voteFilter } from "../_lib/votes.js";
@@ -32,7 +32,7 @@ function repCard(o) {
     title: o.name,
     who: who(o),
     chips: body ? body.chip_span : "",
-    left: `Votes recorded: <strong>${o.vote_count || 0}</strong>`,
+    left: o.vote_count == null ? "" : `Votes recorded: <strong>${o.vote_count}</strong>`,
     right: `Verified: <strong>${fmtDate(o.last_verified)}</strong>`,
     level: o.level,
   });
@@ -46,30 +46,30 @@ function stateChips(current) {
 }
 
 async function stateOfficials(db, st) {
-  const { results } = await db
-    .prepare(
-      `SELECT o.*, (SELECT COUNT(*) FROM vote_positions p WHERE p.official_id = o.id) AS vote_count
-       FROM officials o WHERE o.active = 1 AND o.state = ? AND o.chamber IN ('us-senate', 'us-house')
-       ORDER BY o.chamber DESC, CAST(o.district_code AS INTEGER), o.name`
-    )
-    .bind(st)
-    .all();
-  return results;
+  return withVoteCounts(
+    db,
+    (c) => `SELECT o.*${c.select} FROM officials o ${c.join}
+       WHERE o.active = 1 AND o.state = ? AND o.chamber IN ('us-senate', 'us-house')
+       ORDER BY o.chamber DESC, CAST(o.district_code AS INTEGER), o.name`,
+    [st]
+  );
 }
 
 async function list(env, url, request) {
   const d = districtsFromCookie(request);
   const st = STATE_NAME[String(url.searchParams.get("state") || "").toUpperCase()] ? String(url.searchParams.get("state")).toUpperCase() : null;
-  const data = await safe(env, async (db) => ({
-    mine: d ? await officialsWhere(db, repsWhere(d)) : [],
-    state: st ? await stateOfficials(db, st) : [],
-    federalExec: await executiveOfficials(db, "us-executive"),
-    caExec: await executiveOfficials(db, "ca-executive"),
-  }));
-  if (!data) return notLoaded("Reps", "reps", true);
-
-  const mine = d
-    ? `
+  if (!env.DB) return notLoaded("Reps", "reps", true);
+  const db = env.DB;
+  // Each section loads on its own: one that can't load shows a short note.
+  const [mine, state, federalExec, caExec] = await Promise.all([
+    d ? loadSection("reps mine", () => officialsWhere(db, repsWhere(d)), []) : [],
+    st ? loadSection("reps state", () => stateOfficials(db, st), []) : [],
+    loadSection("reps executive", () => executiveOfficials(db, "us-executive"), []),
+    loadSection("reps california executive", () => executiveOfficials(db, "ca-executive"), []),
+  ]);
+  const data = { mine, state, federalExec, caExec };
+  const mineHtml = d
+    ? mine === FAILED ? sectionError("Your representatives") : `
 <section class="stack" id="yours">
   <h2 class="label">Your representatives</h2>
   <p class="small secondary">${esc(describe(d))}</p>
@@ -79,7 +79,7 @@ async function list(env, url, request) {
     : "";
 
   const browse = st
-    ? `
+    ? state === FAILED ? sectionError(`${STATE_NAME[st]}: members of Congress`) : `
 <section class="stack" id="state-list">
   <h2 class="label">${esc(STATE_NAME[st])}: members of Congress</h2>
   ${data.state.map(repCard).join("") || '<p class="secondary small">None loaded yet.</p>'}
@@ -93,12 +93,12 @@ async function list(env, url, request) {
   <p class="subtitle">The President and Cabinet, members of Congress, California's Governor, statewide officers and legislators, and Calaveras County supervisors, with the record they keep.</p>
 </header>
 ${lookupForm(d, { heading: d ? "Change your location" : "Find your representatives" })}
-${mine}
+${mineHtml}
 <section class="stack" id="executive">
   <h2 class="label">Executive branch</h2>
-  <div class="card">${executiveRows(data.federalExec) || '<p class="secondary small">The President, Vice President and Cabinet appear after the data sync runs.</p>'}</div>
+  <div class="card">${federalExec === FAILED ? sectionError("") : executiveRows(data.federalExec) || '<p class="secondary small">The President, Vice President and Cabinet appear after the data sync runs.</p>'}</div>
   <h3 class="label">California's statewide offices</h3>
-  <div class="card">${executiveRows(data.caExec, { cabinetLink: false }) || '<p class="secondary small">California\'s Governor and statewide officers appear after the data sync runs.</p>'}</div>
+  <div class="card">${caExec === FAILED ? sectionError("") : executiveRows(data.caExec, { cabinetLink: false }) || '<p class="secondary small">California\'s Governor and statewide officers appear after the data sync runs.</p>'}</div>
 </section>
 <section class="stack">
   <h2 class="label">Governing bodies</h2>
@@ -110,7 +110,7 @@ ${mine}
 </section>
 ${browse}
 <p class="hint">Every official here is loaded from an official source, linked on their page, with the date it was last checked.</p>`;
-  return page("Reps", main, { tab: "reps", root: true, personal: true });
+  return page("Reps", main, { tab: "reps", root: true, personal: !!d, partial: anyFailed(mine, state, federalExec, caExec) });
 }
 
 // The executive's "Record at a glance": what's loaded, counted, never scored.
@@ -136,30 +136,31 @@ function execGlance(o, orders, bills, nominations) {
 }
 
 async function profile(env, slug, url) {
-  const data = await safe(env, async (db) => {
-    const o = await officialBySlug(db, slug);
-    if (!o) return { o: null };
-    const all = url.searchParams.get("votes") === "all";
-    const pageNum = Math.max(1, parseInt(url.searchParams.get("page") || "1", 10) || 1);
-    const cycle = parseInt(url.searchParams.get("cycle") || "", 10) || currentCycle();
-    const offset = Math.max(0, parseInt(url.searchParams.get("offset") || "0", 10) || 0);
-    const show = ["signed", "vetoed"].includes(url.searchParams.get("show")) ? url.searchParams.get("show") : "all";
-    const status = url.searchParams.get("status") || "all";
-    const exec = isExecutive(o);
-    const [counts, votes, funding, orders, bills, nominations] = await Promise.all([
-      voteCounts(db, o.id),
-      votesFor(db, o.id, { all, limit: 50, offset: (pageNum - 1) * 50 }),
-      exec ? executiveMoney(db, o, cycle) : o.level === "federal" ? fundingFor(db, o, cycle) : null,
-      isPresident(o) || isGovernor(o) ? ordersFor(db, o.id, { offset }) : null,
-      isPresident(o) || isGovernor(o) ? billsActedOn(db, o.id, { show, offset }) : null,
-      isPresident(o) ? nominationsFor(db, o.id, { status, offset }) : null,
-    ]);
-    return { o, all, pageNum, counts, votes, funding, orders, bills, nominations, offset, show, status };
-  });
-  if (!data) return notLoaded("Reps", "reps", false, ["Reps", "/reps/"]);
-  const { o, all, pageNum, counts, votes, funding, orders, bills, nominations, offset, show, status } = data;
-  const exec = isExecutive(o);
+  if (!env.DB) return notLoaded("Reps", "reps", false, ["Reps", "/reps/"]);
+  const db = env.DB;
+  const o = await loadSection("official", () => officialBySlug(db, slug), undefined);
+  if (o === undefined) return notLoaded("Reps", "reps", false, ["Reps", "/reps/"]);
+  if (o === FAILED) throw new Error(`official ${slug} couldn't load`);
   if (!o) return notFound("No current official at this address.", "reps", ["Reps", "/reps/"]);
+  const all = url.searchParams.get("votes") === "all";
+  const pageNum = Math.max(1, parseInt(url.searchParams.get("page") || "1", 10) || 1);
+  const cycle = parseInt(url.searchParams.get("cycle") || "", 10) || currentCycle();
+  const offset = Math.max(0, parseInt(url.searchParams.get("offset") || "0", 10) || 0);
+  const show = ["signed", "vetoed"].includes(url.searchParams.get("show")) ? url.searchParams.get("show") : "all";
+  const status = url.searchParams.get("status") || "all";
+  const exec = isExecutive(o);
+  // Each tab loads on its own: one that can't load shows a short note there.
+  const [countsLoaded, votes, funding, orders, bills, nominations] = await Promise.all([
+    exec ? {} : loadSection("rep vote counts", () => voteCounts(db, o.id), {}),
+    exec ? { rows: [], more: false } : loadSection("rep votes", () => votesFor(db, o.id, { all, limit: 50, offset: (pageNum - 1) * 50 }), { rows: [], more: false }),
+    exec ? loadSection("rep funding", () => executiveMoney(db, o, cycle), null) : o.level === "federal" ? loadSection("rep funding", () => fundingFor(db, o, cycle), null) : null,
+    isPresident(o) || isGovernor(o) ? loadSection("rep orders", () => ordersFor(db, o.id, { offset }), null) : null,
+    isPresident(o) || isGovernor(o) ? loadSection("rep bills", () => billsActedOn(db, o.id, { show, offset }), null) : null,
+    isPresident(o) ? loadSection("rep nominations", () => nominationsFor(db, o.id, { status, offset }), null) : null,
+  ]);
+  const partial = anyFailed(countsLoaded, votes, funding, orders, bills, nominations);
+  const counts = countsLoaded === FAILED ? null : countsLoaded || {};
+  const ok = (v) => (v === FAILED ? null : v);
 
   const body = BODY[o.body];
   const photo = safeUrl(o.photo_url);
@@ -192,7 +193,7 @@ ${section("Office", kv([
   ${sourceLink(o.source_url, "Official source")}
   ${o.photo_credit ? `<p class="hint">Photo: ${esc(o.photo_credit)}</p>` : ""}
 </section>
-${exec ? execGlance(o, orders, bills, nominations) : `<section class="card stack">
+${exec ? execGlance(o, ok(orders), ok(bills), ok(nominations)) : !counts ? sectionError("Record at a glance") : `<section class="card stack">
   <h2 class="label">Record at a glance</h2>
   <div class="grid-2">
     <div class="stat"><div class="stat-num">${counts.final || 0}</div><div class="stat-label">Final-passage votes</div></div>
@@ -202,10 +203,10 @@ ${exec ? execGlance(o, orders, bills, nominations) : `<section class="card stack
 </section>`}`;
 
   const base = `/reps/${o.slug}/`;
-  const more = votes.more
+  const more = votes !== FAILED && votes.more
     ? `<a class="btn btn--block" href="${base}?${all ? "votes=all&" : ""}page=${pageNum + 1}#votes">Older votes</a>`
     : "";
-  const voteList = votes.rows.length
+  const voteList = votes === FAILED ? sectionError("") : votes.rows.length
     ? `<ul class="plain-list vote-list card">${votes.rows.map(voteRow).join("")}</ul>${more}`
     : `<p class="secondary small">${
         o.level === "county"
@@ -225,32 +226,39 @@ ${exec ? execGlance(o, orders, bills, nominations) : `<section class="card stack
       isPresident(o)
         ? `${tab("orders", "Executive orders")}${tab("bills", "Bills")}${tab("nominations", "Nominations")}`
         : isGovernor(o) ? `${tab("bills", "Bills")}${tab("orders", "Executive orders")}` : ""
-    }${tab("promises", "Promises")}${exec ? "" : tab("votes", "Votes", counts.total || 0)}${tab("funding", "Funding")}${tab("issues", "Issues")}
+    }${tab("promises", "Promises")}${exec ? "" : tab("votes", "Votes", counts ? counts.total || 0 : null)}${tab("funding", "Funding")}${tab("issues", "Issues")}
   </nav>
   <div class="stack" role="tabpanel" id="overview" aria-labelledby="tab-overview">${overview}</div>
   <div class="stack" role="tabpanel" id="promises" aria-labelledby="tab-promises">
     <p class="secondary small">Promise tracking for real officials hasn't started. Promises will be added only with a source for each one.</p>
   </div>
-  ${orders ? `<div class="stack" role="tabpanel" id="orders" aria-labelledby="tab-orders">${ordersTab(o, orders, base, offset)}</div>` : ""}
-  ${bills ? `<div class="stack" role="tabpanel" id="bills" aria-labelledby="tab-bills">${billsTab(o, bills, base, show, offset)}</div>` : ""}
-  ${nominations ? `<div class="stack" role="tabpanel" id="nominations" aria-labelledby="tab-nominations">${nominationsTab(o, nominations, base, status, offset)}</div>` : ""}
+  ${orders ? `<div class="stack" role="tabpanel" id="orders" aria-labelledby="tab-orders">${orders === FAILED ? sectionError("") : ordersTab(o, orders, base, offset)}</div>` : ""}
+  ${bills ? `<div class="stack" role="tabpanel" id="bills" aria-labelledby="tab-bills">${bills === FAILED ? sectionError("") : billsTab(o, bills, base, show, offset)}</div>` : ""}
+  ${nominations ? `<div class="stack" role="tabpanel" id="nominations" aria-labelledby="tab-nominations">${nominations === FAILED ? sectionError("") : nominationsTab(o, nominations, base, status, offset)}</div>` : ""}
   ${exec ? "" : `<div class="stack" role="tabpanel" id="votes" aria-labelledby="tab-votes">
     ${voteFilter(base, all, counts)}
     ${voteList}
   </div>`}
-  <div class="stack" role="tabpanel" id="funding" aria-labelledby="tab-funding">${exec ? executiveFundingTab(o, funding, base) : fundingTab(o, funding, base)}</div>
+  <div class="stack" role="tabpanel" id="funding" aria-labelledby="tab-funding">${funding === FAILED ? sectionError("") : exec ? executiveFundingTab(o, funding, base) : fundingTab(o, funding, base)}</div>
   <div class="stack" role="tabpanel" id="issues" aria-labelledby="tab-issues">${issueHtml}</div>
 </div>`;
-  return page(o.name, main, { tab: "reps", back: ["Reps", "/reps/"] });
+  return page(o.name, main, { tab: "reps", back: ["Reps", "/reps/"], partial });
 }
 
-export async function onRequestGet(context) {
+// A rep's page is the same for every visitor: kept at the edge for a few
+// minutes. The Reps list is too, for visitors without saved districts.
+const REPS_CACHE_SECONDS = 300;
+
+export const onRequestGet = guard(async (context) => {
   const url = new URL(context.request.url);
   const parts = (context.params.path || []).filter(Boolean);
-  if (parts.length === 0) return list(context.env, url, context.request);
+  if (parts.length === 0) {
+    if (districtsFromCookie(context.request)) return list(context.env, url, context.request);
+    return edgeCached(context, REPS_CACHE_SECONDS, () => list(context.env, url, context.request));
+  }
   if (parts.length === 1) {
     if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
-    return profile(context.env, parts[0], url);
+    return edgeCached(context, REPS_CACHE_SECONDS, () => profile(context.env, parts[0], url));
   }
   return notFound("No page at this address.", "reps", ["Reps", "/reps/"]);
-}
+}, { tab: "reps" });

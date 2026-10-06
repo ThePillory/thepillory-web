@@ -6,7 +6,7 @@
 //   - anywhere else: "Bring ThePillory here" (the waitlist), recent votes by
 //     its state and federal reps, and Funding.
 // Then nearby counties. Data: data/geo/places/<st>.json and D1.
-import { page, notFound, esc } from "../_lib/render.js";
+import { page, notFound, esc, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { EMPTY_REPORTS } from "../_lib/generated.js";
 import { recentFinalVotes } from "../_lib/data.js";
 import { voteRows } from "../_lib/briefing.js";
@@ -14,7 +14,6 @@ import { listMeetings, summariesFor, meetingCard, pacificNow, addDays } from "..
 import { turnstileReady, turnstileWidget } from "../_lib/turnstile.js";
 import { LIVE, loadPlace, officialsFor, allIds, repRow, executiveRows, breadcrumb, districtLabel, districtHref, placeHref } from "../_lib/geo.js";
 
-const missing = (err) => /no such table|no such column/i.test(String(err && err.message));
 const WAITLIST_MESSAGES = {
   joined: "Thank you. We'll email you only when ThePillory launches in this county.",
   turnstile: "The anti-spam check didn't go through. Please try again.",
@@ -30,7 +29,12 @@ function districtNotes(pairs, layer, place) {
   return (pairs || []).map(([id, full]) => ({ id, full: !!full, label: districtLabel(layer, id, place), href: districtHref(layer, id, place) }));
 }
 
-export async function onRequestGet({ request, env, params }) {
+// A county page is the same for every visitor: kept at the edge for a few minutes.
+const PLACE_CACHE_SECONDS = 300;
+
+export const onRequestGet = guard((context) => edgeCached(context, PLACE_CACHE_SECONDS, () => placePage(context)), { tab: "home" });
+
+async function placePage({ request, env, params }) {
   const url = new URL(request.url);
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
   const [st, slug, extra] = (params.path || []).filter(Boolean).map((s) => s.toLowerCase());
@@ -44,23 +48,23 @@ export async function onRequestGet({ request, env, params }) {
 
   const live = LIVE[c.fips];
   const db = env.DB;
-  let o = { senators: [], house: [], upper: [], lower: [], county: [] };
-  let votes = { rows: [] };
-  let meetings = [];
-  let summaries = {};
-  if (db) {
-    try {
-      o = await officialsFor(db, place.st, { cd: c.cd.map((p) => p[0]), sldu: c.sldu.map((p) => p[0]), sldl: c.sldl.map((p) => p[0]), county: c.fips });
-      votes = await recentFinalVotes(db, { limit: 5, officialIds: allIds(o) });
-      if (live) {
-        const now = pacificNow();
-        meetings = (await listMeetings(db, { from: now, to: `${addDays(now.slice(0, 10), 30)}T23:59`, level: "county", limit: 3 })).filter((m) => m.status !== "cancelled");
-        summaries = await summariesFor(db, meetings.map((m) => m.id));
-      }
-    } catch (err) {
-      if (!missing(err)) throw err;
-    }
-  }
+  const emptyOfficials = { senators: [], house: [], upper: [], lower: [], county: [], executive: [], stateExecutive: [] };
+  // Each section loads on its own: one that can't load shows a short note.
+  const oLoaded = db
+    ? await loadSection("place officials", () => officialsFor(db, place.st, { cd: c.cd.map((p) => p[0]), sldu: c.sldu.map((p) => p[0]), sldl: c.sldl.map((p) => p[0]), county: c.fips }), emptyOfficials)
+    : emptyOfficials;
+  const o = oLoaded === FAILED ? emptyOfficials : oLoaded;
+  const now = pacificNow();
+  const [votes, meetingsLoaded] = await Promise.all([
+    db && oLoaded !== FAILED ? loadSection("place votes", () => recentFinalVotes(db, { limit: 5, officialIds: allIds(o) }), { rows: [] }) : { rows: [] },
+    db && live
+      ? loadSection("place meetings", async () => {
+          const meetings = (await listMeetings(db, { from: now, to: `${addDays(now.slice(0, 10), 30)}T23:59`, level: "county", limit: 3 })).filter((m) => m.status !== "cancelled");
+          return { meetings, summaries: await summariesFor(db, meetings.map((m) => m.id)) };
+        }, { meetings: [], summaries: {} })
+      : { meetings: [], summaries: {} },
+  ]);
+  const { meetings, summaries } = meetingsLoaded === FAILED ? { meetings: [], summaries: {} } : meetingsLoaded;
 
   // Who represents this county: every district that overlaps it.
   const group = (title, rows, empty) => `
@@ -137,8 +141,8 @@ export async function onRequestGet({ request, env, params }) {
   }
 </section>`;
 
-  const rows = voteRows(votes.rows, 5);
-  const votesHtml = rows ? `<ul class="card plain-list brief-votes">${rows}</ul>` : `<p class="small secondary">${db ? "No final-passage votes loaded yet for these representatives." : "Votes appear here once the data sync has run."}</p>`;
+  const rows = votes === FAILED ? "" : voteRows(votes.rows, 5);
+  const votesHtml = votes === FAILED ? sectionError("") : rows ? `<ul class="card plain-list brief-votes">${rows}</ul>` : `<p class="small secondary">${db ? "No final-passage votes loaded yet for these representatives." : "Votes appear here once the data sync has run."}</p>`;
   const federal = [...o.senators, ...o.house];
   const funding = federal.length
     ? `<div class="chips">${federal.map((r) => `<a class="chip chip--tap" href="/reps/${esc(r.slug)}/#funding">${esc(r.name)}</a>`).join("")}</div><p class="hint">Campaign funding for members of Congress, from the Federal Election Commission.</p>`
@@ -158,6 +162,7 @@ ${breadcrumb([["United States", "/explore/"], [place.name, `/explore/${st}/`], [
 ${action}
 <section class="stack" aria-labelledby="h-who">
   <h2 class="label" id="h-who">Who represents ${esc(c.name)}</h2>
+  ${oLoaded === FAILED ? sectionError("") : ""}
   ${districtsLine ? `<div class="card stack-sm">${districtsLine}<p class="hint">District lines don't follow county lines, so a county can be split between districts.</p></div>` : ""}
   ${group("County", countyRows, live ? "The supervisors appear after the data sync runs." : "County officials aren't on ThePillory yet. County coverage opens when a community launches.")}
   ${group("State", stateRows, place.st === "CA" ? "State legislators appear after the data sync runs." : `${esc(place.name)}'s governor, statewide offices and state legislators aren't on ThePillory yet.`)}
@@ -166,7 +171,7 @@ ${action}
 ${
   live
     ? `<section class="stack-sm" aria-labelledby="h-meet"><div class="section-head"><h2 class="label" id="h-meet">Upcoming meetings</h2><a class="section-link" href="/meetings/?level=county">All meetings</a></div>${
-        meetings.length ? meetings.map((m) => meetingCard(m, summaries[m.id])).join("") : '<p class="small secondary">No county meetings in the next 30 days.</p>'
+        meetingsLoaded === FAILED ? sectionError("") : meetings.length ? meetings.map((m) => meetingCard(m, summaries[m.id])).join("") : '<p class="small secondary">No county meetings in the next 30 days.</p>'
       }</section>
 <section class="stack-sm" aria-labelledby="h-issues"><h2 class="label" id="h-issues">Issues</h2>${EMPTY_REPORTS}</section>`
     : ""
@@ -181,5 +186,5 @@ ${
 </section>
 ${nearby ? `<section class="stack-sm" aria-labelledby="h-near"><h2 class="label" id="h-near">Nearby counties</h2><div class="chips">${nearby}</div></section>` : ""}
 <p class="hint">County boundaries and district overlaps: U.S. Census Bureau (2024 boundaries, 2020 census blocks).</p>`;
-  return page(`${c.name}, ${place.name}`, main, { tab: "home", back: [place.name, `/explore/${st}/`] });
+  return page(`${c.name}, ${place.name}`, main, { tab: "home", back: [place.name, `/explore/${st}/`], partial: anyFailed(oLoaded, votes, meetingsLoaded) });
 }

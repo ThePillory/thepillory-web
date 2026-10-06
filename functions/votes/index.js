@@ -3,7 +3,7 @@
 //   their reps cast, with each rep's position and the totals.
 //   Otherwise: every final-passage vote with its totals, and a link to find
 //   your reps.
-import { page, notLoaded, esc, fmtDate, sourceLink } from "../_lib/render.js";
+import { page, notLoaded, esc, fmtDate, sourceLink, guard } from "../_lib/render.js";
 import { safe, recentFinalVotes, officialsWhere, CHAMBER_NAME } from "../_lib/data.js";
 import { billHref, tallyText } from "../_lib/votes.js";
 import { districtsFromCookie, repsWhere, describe } from "../_lib/districts.js";
@@ -23,7 +23,7 @@ async function allFinalVotes(db, { level, limit, offset }) {
   return { rows: results.slice(0, limit), more: results.length > limit };
 }
 
-export async function onRequestGet({ request, env }) {
+export const onRequestGet = guard(async ({ request, env }) => {
   const url = new URL(request.url);
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
   const level = ["federal", "state"].includes(url.searchParams.get("level")) ? url.searchParams.get("level") : null;
@@ -73,4 +73,4 @@ ${d ? "" : '<p class="small"><a class="inline-link" href="/#find">Find your repr
 ${rows || `<p class="secondary small">${d ? "No final-passage votes loaded yet for your reps." : "No final-passage votes loaded yet."}</p>`}
 <nav class="pager">${pageNo > 1 ? `<a class="btn" href="${q(pageNo - 1)}">Newer</a>` : ""}${data.more ? `<a class="btn" href="${q(pageNo + 1)}">Older</a>` : ""}</nav>`;
   return page(title, main, { tab: "reps", back: ["Reps", "/reps/"], personal: true });
-}
+}, { tab: "reps" });

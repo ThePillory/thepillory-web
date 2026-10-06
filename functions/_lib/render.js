@@ -18,7 +18,7 @@ export function safeUrl(u) {
 }
 
 // personal: the page depends on the visitor's district cookie, so no shared cache.
-export function page(title, main, { tab = null, root = false, back = null, status = 200, personal = false } = {}) {
+export function page(title, main, { tab = null, root = false, back = null, status = 200, personal = false, partial = false } = {}) {
   const nav = tab ? TABBARS[tab][root ? "root" : "sub"] : "";
   const backHtml = back ? `<a class="back-link" href="${esc(back[1])}">← ${esc(back[0])}</a>` : "";
   // Function replacements: data may contain "$", which .replace() would treat as a pattern.
@@ -30,7 +30,10 @@ export function page(title, main, { tab = null, root = false, back = null, statu
     status,
     headers: personal
       ? { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "private, no-cache", Vary: "Cookie" }
-      : {
+      : partial || status >= 500
+        ? // A section failed to load: never keep this copy anywhere.
+          { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" }
+        : {
           "Content-Type": "text/html; charset=utf-8",
           // Data changes at most daily; a short edge cache keeps D1 reads low.
           "Cache-Control": "public, max-age=300",
@@ -101,4 +104,83 @@ export function card({ href, label, title, who, chips = "", left = "", right = "
 
 export function section(label, inner, cls = "card stack") {
   return `<section class="${cls}"><h2 class="label">${esc(label)}</h2>${inner}</section>`;
+}
+
+// ---------------------------------------------------------------------------
+// Failing gracefully. A data-heavy page loads each section on its own: if one
+// section's data can't load, the rest of the page still shows, with a short
+// note where that section would be (and the page isn't cached).
+
+export const FAILED = Symbol("section failed");
+
+/**
+ * Runs one section's loader. Returns its value, or FAILED (logged) if it
+ * threw. A missing table (before the first sync) returns `missingValue`.
+ */
+export async function loadSection(name, fn, missingValue = FAILED) {
+  try {
+    return await fn();
+  } catch (err) {
+    if (missingValue !== FAILED && /no such table|no such column/i.test(String(err && err.message))) return missingValue;
+    console.error(`section "${name}" failed: ${err && err.name}: ${err && err.message}`);
+    return FAILED;
+  }
+}
+
+/** True if any of the values is FAILED. */
+export const anyFailed = (...values) => values.some((v) => v === FAILED);
+
+/** The note shown where a section couldn't load. */
+export function sectionError(label) {
+  return `<section class="card stack-sm section-error" role="status">
+  ${label ? `<h2 class="label">${esc(label)}</h2>` : ""}
+  <p class="small secondary">Couldn't load this section right now. The rest of the page is fine; try again in a few minutes.</p>
+</section>`;
+}
+
+/** The page shown when a whole page fails: the shell and nav, never Cloudflare's error. */
+export function errorPage(tab = null) {
+  return page(
+    "Something went wrong",
+    `<header class="page-head"><h1>Couldn't load this page</h1><p class="subtitle">Something went wrong on our side. Please try again in a few minutes.</p></header>
+<section class="card stack-sm">
+  <p class="small">The rest of the site is working: <a class="inline-link" href="/">Home</a>, <a class="inline-link" href="/reps/">Reps</a>, <a class="inline-link" href="/laws/">Laws</a>.</p>
+</section>`,
+    { tab, root: true, status: 500 }
+  );
+}
+
+/** Wraps a page handler so an unexpected error shows errorPage() instead of crashing the Worker. */
+export function guard(handler, { tab = null } = {}) {
+  return async (context) => {
+    try {
+      return await handler(context);
+    } catch (err) {
+      console.error(`${new URL(context.request.url).pathname}: ${err && err.name}: ${err && err.message}`);
+      return errorPage(tab);
+    }
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Edge cache. A page that's the same for every visitor (no district cookie) is
+// kept at Cloudflare's edge for `seconds`, so most visits never reach D1.
+// Responses marked private or no-store (personal pages, a failed section, an
+// error) are never stored.
+
+export async function edgeCached(context, seconds, render) {
+  const { request } = context;
+  const cache = typeof caches !== "undefined" ? caches.default : null;
+  if (!cache || request.method !== "GET") return render();
+  const key = new Request(new URL(request.url).toString(), { method: "GET" });
+  const hit = await cache.match(key).catch(() => null);
+  if (hit) return hit;
+  const res = await render();
+  const cc = res.headers.get("Cache-Control") || "";
+  if (res.status !== 200 || /private|no-store|no-cache/.test(cc)) return res;
+  const out = new Response(res.body, res);
+  out.headers.set("Cache-Control", `public, max-age=${seconds}`);
+  const put = cache.put(key, out.clone()).catch((err) => console.error(`edge cache: ${err && err.message}`));
+  if (context.waitUntil) context.waitUntil(put);
+  return out;
 }

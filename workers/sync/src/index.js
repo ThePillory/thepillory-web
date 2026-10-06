@@ -28,6 +28,7 @@ import { syncStateHearings } from "./meetings/state.js";
 import { withD1Retry } from "./d1retry.js";
 import { syncFederalFunding, syncFederalLobbying } from "./funding/sync.js";
 import { syncExecutiveFunding } from "./funding/executive.js";
+import { syncSummaries, buildSummaries } from "./summaries.js";
 
 // Order matters: officials before votes; state officials first because the
 // Open States lookup also detects the U.S. House district. State hearings come
@@ -53,6 +54,9 @@ const STEPS = [
   // Paced and long-running (the first full load takes a few days): last.
   ["federal-funding", syncFederalFunding],
   ["federal-lobbying", syncFederalLobbying],
+  // What the pages show, precomputed from everything above (src/summaries.js).
+  // Rebuilt only when the votes, bills, outcomes or relevance checks changed.
+  ["page-summaries", syncSummaries],
 ];
 
 const ROUND_MS = 12 * 60 * 1000; // stop starting new requests after this; the alarm limit is 15 minutes
@@ -266,6 +270,13 @@ export class SyncRunner extends DurableObject {
       if (await this.superseded(state)) return;
       state.analysis = { ...(state.analysis || {}), status: "error", error: redact(`${err.name}: ${err.message}`) };
       console.error(`[${state.run_id}] analysis failed: ${state.analysis.error}`);
+    }
+    // The relevance checks just run decide which bills Happening now leaves out.
+    try {
+      state.summaries = (await buildSummaries(withD1Retry(this.env).DB)).message;
+    } catch (err) {
+      state.summaries = redact(`error: ${err.name}: ${err.message}`);
+      console.error(`[${state.run_id}] page summaries failed: ${state.summaries}`);
     }
     state.running = false;
     state.finished_at = new Date().toISOString();

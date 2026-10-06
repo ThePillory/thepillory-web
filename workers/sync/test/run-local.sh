@@ -20,6 +20,7 @@ node review.test.mjs | grep "^# pass"
 node nationwide.test.mjs | tail -1
 node funding.test.mjs | tail -1
 node executive.test.mjs | tail -1
+node --test pages.test.mjs 2>/dev/null | grep -E "positions:|^# (pass|fail)"
 
 node fixture-server.mjs & FIX=$!
 $WRANGLER dev -c wrangler.test.toml --port 8789 --persist-to "$STATE" --test-scheduled >/tmp/pillory-worker.log 2>&1 & WK=$!
@@ -62,6 +63,9 @@ $D1 --command "SELECT id, official_id, kind, number, substr(title, 1, 50) AS tit
 $D1 --command "SELECT bill_id, outcome, action_date, law_number, actor_name FROM bill_outcomes ORDER BY bill_id" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
 $D1 --command "SELECT id, official_id, status FROM nominations ORDER BY id" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
 $D1 --command "SELECT o.id, f.candidate_id, f.note, (SELECT COUNT(*) FROM funding_progress p WHERE p.official_id = o.id) AS periods FROM officials o LEFT JOIN fec_candidates f ON f.official_id = o.id WHERE o.chamber = 'us-executive' AND o.rank <= 2" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
+echo "--- page summaries (the Laws list and vote counts, built during the sync):"
+$D1 --command "SELECT status, message FROM sync_log WHERE step = 'page-summaries' ORDER BY id LIMIT 1" | grep -E '"(status|message)"' | sed 's/^ *//'
+$D1 --command "SELECT bill_id, last_final, final_result, yea, nay, outcome, routine FROM bill_list ORDER BY level, last_final DESC" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
 echo "--- second run (should fetch nothing new):"
 curl -s "localhost:8789/run?token=local-test-token" | grep -E '"(step|status|requests|message)"'
 echo "--- cron trigger:"
@@ -93,6 +97,11 @@ curl -s -o /dev/null -w "report on H.R. 10's card: %{http_code} %{redirect_url}\
 curl -s -o /dev/null -w "report with a failed check: %{http_code} %{redirect_url}\n" -X POST -d "reason=unfair&cf-turnstile-response=bad" localhost:8790/laws/bills/us-119-hr-10/flag
 curl -s -o /dev/null -w "full analysis of H.R. 10: %{http_code} %{redirect_url}\n" -X POST -d "cf-turnstile-response=ok" localhost:8790/laws/bills/us-119-hr-10/request-full
 curl -s -o /dev/null -w "full analysis of a skipped bill: %{http_code} %{redirect_url}\n" -X POST -d "cf-turnstile-response=ok" localhost:8790/laws/bills/us-119-hr-40/request-full
+echo "--- pages (status, and a section that couldn't load):"
+for u in / /laws/ "/laws/?votes=all" "/laws/?level=federal&offset=20" /reps/ /reps/?state=CA /explore/ /explore/ca/ /place/ca/calaveras/ /district/congressional/ca-5/ /laws/bills/us-119-hr-10/; do
+  curl -s -o /tmp/pillory-page.html -w "  %{http_code} %{time_total}s $u" "localhost:8790$u"
+  grep -q "Couldn't load this" /tmp/pillory-page.html && echo " (a section couldn't load)" || echo
+done
 echo "--- district lookups (fake Census geocoder; nothing is stored):"
 curl -s -X POST -H "Content-Type: application/json" -d '{"q":"1 Test Street, San Andreas, CA"}' localhost:8790/api/districts; echo
 curl -s -X POST -H "Content-Type: application/json" -d '{"q":"95249"}' localhost:8790/api/districts; echo

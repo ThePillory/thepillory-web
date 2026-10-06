@@ -4,12 +4,12 @@
 //   POST /laws/bills/<id>/request-full   "Request full analysis"
 //   Both need Turnstile and are rate-limited per visitor (functions/_lib/turnstile.js).
 // /laws/constitution/ is static and passed through. Old sample pages redirect (OLD_PAGES).
-import { page, notFound, notLoaded, esc, safeUrl, section, sourceLink, card, fmtDate } from "../_lib/render.js";
-import { safe, recentBills, billById, votesOnBill, officialsWhere, CHAMBER_NAME } from "../_lib/data.js";
+import { page, notFound, notLoaded, esc, safeUrl, section, sourceLink, card, fmtDate, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
+import { billList, BILLS_PER_PAGE, billById, votesOnBill, officialsWhere, CHAMBER_NAME } from "../_lib/data.js";
 import { districtsFromCookie, repsWhere, describe } from "../_lib/districts.js";
 import { billVote, billHref } from "../_lib/votes.js";
 import { lobbyingFor, industryMoney, followTheMoney, cycleOf } from "../_lib/funding.js";
-import { outcomeFor, outcomeSection } from "../_lib/executive.js";
+import { outcomeFor, outcomeSection, OUTCOME_LABEL } from "../_lib/executive.js";
 import { currentAnalysis, parse, provisionsFor, baselineSection, isPublic, openFlagCount, METHOD_URL } from "../_lib/analysis.js";
 import { turnstileReady, turnstileWidget, verifyTurnstile, visitorHash, actionsToday, recordAction } from "../_lib/turnstile.js";
 
@@ -50,31 +50,79 @@ function ordinal(n) {
   return n + (v >= 11 && v <= 13 ? "th" : { 1: "st", 2: "nd", 3: "rd" }[n % 10] || "th");
 }
 
-function billCard(b) {
+// A row of bill_list (built during the sync): the latest final-passage vote's
+// result and totals, and the final action when one is recorded.
+function billCard(b, all) {
+  const tally = b.yea != null || b.nay != null ? ` · Yes ${b.yea ?? "–"}, No ${b.nay ?? "–"}` : "";
+  const chips = [
+    b.final_result ? `<span class="chip chip--quiet">Latest final vote: ${esc(b.final_result)}${esc(tally)}</span>` : "",
+    b.outcome && b.outcome !== "presented" ? `<span class="chip chip--quiet">${esc(OUTCOME_LABEL[b.outcome] || b.outcome)} · ${fmtDate(b.outcome_date)}</span>` : "",
+  ].join("");
   return card({
-    href: billHref(b.id),
+    href: billHref(b.bill_id),
     label: `${LEVELS[b.level]} · ${CHAMBER_NAME[b.chamber] || "Bill"}`,
     title: `${b.bill_number}: ${b.title}`,
     who: b.level === "federal" ? `${ordinal(parseInt(b.session, 10))} Congress` : `California, ${b.session.slice(0, 4)}–${b.session.slice(4)} session`,
-    left: `Last vote: <strong>${fmtDate(b.last_vote)}</strong>`,
+    chips,
+    left: all || !b.last_final ? `Last vote: <strong>${fmtDate(b.last_vote)}</strong>` : `Last final vote: <strong>${fmtDate(b.last_final)}</strong>`,
     right: `Recorded votes: <strong>${b.vote_count}</strong>`,
     level: b.level,
   });
 }
 
+const lawsHref = ({ all, level, offset }) => {
+  const q = new URLSearchParams();
+  if (all) q.set("votes", "all");
+  if (level) q.set("level", level);
+  if (offset) q.set("offset", String(offset));
+  const s = q.toString();
+  return `/laws/${s ? `?${s}` : ""}`;
+};
+
+// One level's list: up to BILLS_PER_PAGE cards, then "Load more" (a plain link
+// to the next page of that level; app.js appends it in place).
+function billSection(level, list, { all, offset = 0, heading = true }) {
+  const id = `bills-${level}`;
+  const head = heading ? `<h2 class="label">${LEVELS[level]}</h2>` : "";
+  if (list === FAILED) return sectionError(LEVELS[level]);
+  if (!list) {
+    return `<section class="stack">${head}<p class="secondary small">The bill list is being prepared. It appears after the next data sync.</p></section>`;
+  }
+  const more = list.more
+    ? `<a class="btn btn--block load-more" href="${lawsHref({ all, level, offset: offset + BILLS_PER_PAGE })}" data-load-more="${id}">Load more</a>`
+    : "";
+  const empty = offset ? "" : '<p class="secondary small">No recorded votes loaded yet.</p>';
+  return `
+<section class="stack">
+  ${head}
+  <div class="stack" id="${id}" data-more-list>${list.rows.map((b) => billCard(b, all)).join("") || empty}</div>
+  ${more}
+</section>`;
+}
+
 async function index(env, url) {
   const all = url.searchParams.get("votes") === "all";
-  const bills = await safe(env, async (db) => ({
-    federal: await recentBills(db, { level: "federal", all }),
-    state: await recentBills(db, { level: "state", all }),
-  }));
-  const real = bills
-    ? ["federal", "state"].map((level) => `
-<section class="stack">
-  <h2 class="label">${LEVELS[level]}</h2>
-  ${bills[level].map(billCard).join("") || '<p class="secondary small">No recorded votes loaded yet.</p>'}
-</section>`).join("")
-    : '<section class="card stack-sm"><h2 class="label">Not loaded yet</h2><p>Real bills appear here after the first data sync runs.</p></section>';
+  const onlyLevel = LEVELS[url.searchParams.get("level")] ? url.searchParams.get("level") : null;
+  const offset = onlyLevel ? Math.max(0, parseInt(url.searchParams.get("offset") || "0", 10) || 0) : 0;
+  if (!env.DB) return notLoaded("Laws", "laws", true);
+  const levels = onlyLevel ? [onlyLevel] : ["federal", "state"];
+  // Each level loads on its own: if one can't, the other still shows.
+  const lists = await Promise.all(levels.map((level) => loadSection(`laws ${level}`, () => billList(env.DB, { level, all, offset }), null)));
+  const filter = (label, isAll) =>
+    `<a class="toggle" href="${lawsHref({ all: isAll, level: onlyLevel })}"${all === isAll ? ' aria-current="true"' : ""}>${label}</a>`;
+
+  // A later page of one level ("Load more" without JavaScript).
+  if (onlyLevel) {
+    const main = `
+<header class="page-head">
+  <h1>${LEVELS[onlyLevel]} bills</h1>
+  <p class="subtitle">${all ? "With recorded votes" : "With final-passage votes"}, newest first${offset ? `, from number ${offset + 1}` : ""}.</p>
+</header>
+<nav class="segmented vote-filter" aria-label="Which bills to show">${filter("With final-passage votes", false)}${filter("All with recorded votes", true)}</nav>
+${billSection(onlyLevel, lists[0], { all, offset, heading: false })}`;
+    return page(`${LEVELS[onlyLevel]} bills`, main, { tab: "laws", back: ["Laws", lawsHref({ all })], partial: anyFailed(...lists) });
+  }
+
   const main = `
 <header class="page-head">
   <h1>Laws</h1>
@@ -85,13 +133,10 @@ async function index(env, url) {
   <p class="quote">The starting point for every analysis.</p>
   <p class="small">The full text, as the National Archives transcribes it →</p>
 </a>
-<nav class="segmented vote-filter" aria-label="Which bills to show">
-  <a class="toggle" href="/laws/"${all ? "" : ' aria-current="true"'}>With final-passage votes</a>
-  <a class="toggle" href="/laws/?votes=all"${all ? ' aria-current="true"' : ""}>All with recorded votes</a>
-</nav>
-${real}
+<nav class="segmented vote-filter" aria-label="Which bills to show">${filter("With final-passage votes", false)}${filter("All with recorded votes", true)}</nav>
+${levels.map((level, i) => billSection(level, lists[i], { all })).join("")}
 `;
-  return page("Laws", main, { tab: "laws", root: true });
+  return page("Laws", main, { tab: "laws", root: true, partial: anyFailed(...lists) });
 }
 
 // The current analysis and what the page needs around it. Missing tables
@@ -180,37 +225,41 @@ function readerForms(env, id, analysis) {
 
 async function bill(env, id, url, request) {
   const districts = districtsFromCookie(request);
-  const data = await safe(env, async (db) => {
-    const b = await billById(db, id);
-    if (!b) return { b: null };
-    const reps = districts ? await officialsWhere(db, repsWhere(districts)) : [];
-    const [votes, analysis, lobbying, outcome] = await Promise.all([
-      votesOnBill(db, id, reps.map((o) => o.id)),
-      analysisFor(db, id),
-      b.level === "federal" ? lobbyingFor(db, id) : null,
-      outcomeFor(db, id),
-    ]);
-    // Each rep's latest final-passage position on this bill, beside contributions in
-    // that two-year period from the industries that lobbied on it.
-    let repMoney = [];
-    let cycle = null;
-    if (districts && lobbying && lobbying.orgs.length) {
-      const finals = votes.filter((v) => v.vote_type === "final_passage");
-      const federal = reps.filter((o) => o.level === "federal");
-      const latest = finals[0] || votes[0];
-      cycle = cycleOf(latest && latest.vote_date);
-      const m = await industryMoney(db, federal.map((o) => o.id), lobbying.industries, cycle);
-      repMoney = federal.map((rep) => {
-        const v = finals.find((x) => x.positions.some((p) => p.slug === rep.slug));
-        const p = v && v.positions.find((x) => x.slug === rep.slug);
-        return { rep, vote: v || null, position: p ? p.position : null, money: m[rep.id] };
-      });
-    }
-    return { b, votes, analysis, lobbying, repMoney, cycle, reps, outcome };
-  });
-  if (!data) return notLoaded("Laws", "laws", false, ["Laws", "/laws/"]);
-  const { b, votes, analysis, lobbying, repMoney, cycle, reps, outcome } = data;
+  if (!env.DB) return notLoaded("Laws", "laws", false, ["Laws", "/laws/"]);
+  const db = env.DB;
+  const b = await loadSection("bill", () => billById(db, id), undefined);
+  if (b === undefined) return notLoaded("Laws", "laws", false, ["Laws", "/laws/"]);
+  if (b === FAILED) throw new Error(`bill ${id} couldn't load`);
   if (!b) return notFound("No bill at this address.", "laws", ["Laws", "/laws/"]);
+  // Each section loads on its own: one that can't load shows a short note, and
+  // the rest of the page still shows.
+  const reps = districts ? await loadSection("bill reps", () => officialsWhere(db, repsWhere(districts)), []) : [];
+  const repIds = reps === FAILED ? [] : reps.map((o) => o.id);
+  const [votes, analysisLoaded, lobbying, outcome] = await Promise.all([
+    loadSection("bill votes", () => votesOnBill(db, id, repIds), []),
+    loadSection("bill analysis", () => analysisFor(db, id)),
+    b.level === "federal" ? loadSection("bill lobbying", () => lobbyingFor(db, id), null) : null,
+    loadSection("bill outcome", () => outcomeFor(db, id), { outcome: null, checked: null }),
+  ]);
+  const analysis = analysisLoaded === FAILED
+    ? { a: null, row: null, provisions: new Map(), flags: 0, relevance: null, pendingFull: false, failed: true }
+    : analysisLoaded;
+  // Each rep's latest final-passage position on this bill, beside contributions in
+  // that two-year period from the industries that lobbied on it.
+  let repMoney = [];
+  let cycle = null;
+  if (districts && reps !== FAILED && votes !== FAILED && lobbying && lobbying !== FAILED && lobbying.orgs.length) {
+    const finals = votes.filter((v) => v.vote_type === "final_passage");
+    const federal = reps.filter((o) => o.level === "federal");
+    const latest = finals[0] || votes[0];
+    cycle = cycleOf(latest && latest.vote_date);
+    const m = await loadSection("bill rep money", () => industryMoney(db, federal.map((o) => o.id), lobbying.industries, cycle), {});
+    repMoney = m === FAILED ? [] : federal.map((rep) => {
+      const v = finals.find((x) => x.positions.some((p) => p.slug === rep.slug));
+      const p = v && v.positions.find((x) => x.slug === rep.slug);
+      return { rep, vote: v || null, position: p ? p.position : null, money: m[rep.id] };
+    });
+  }
   const sent = MESSAGES[url.searchParams.get("sent")] || null;
   const error = MESSAGES[url.searchParams.get("error")] || null;
   const empty = skipped(analysis.relevance)
@@ -234,10 +283,10 @@ async function bill(env, id, url, request) {
   ${summary}
   ${official ? sourceLink(official, "Official bill page") : sourceLink(b.source_url)}
 </section>
-${outcomeSection(b, outcome)}
+${outcome === FAILED ? sectionError("Final action") : outcomeSection(b, outcome)}
 ${sent ? `<p class="banner" role="status">${esc(sent)}</p>` : ""}
 ${error ? `<p class="banner banner--error" role="alert">${esc(error)}</p>` : ""}
-${baselineSection(analysis.a, analysis.provisions, { underReview: analysis.flags > 0, empty, after: readerForms(env, id, analysis) })}
+${analysis.failed ? sectionError("Constitutional baseline") : baselineSection(analysis.a, analysis.provisions, { underReview: analysis.flags > 0, empty, after: readerForms(env, id, analysis) })}
 <section class="stack" id="votes">
   <h2 class="label">${districts ? "How your reps voted" : "Votes"}</h2>
   <p class="hint">${
@@ -246,17 +295,20 @@ ${baselineSection(analysis.a, analysis.provisions, { underReview: analysis.flags
       : "Every recorded vote on this bill, newest first, with the totals. Each links to the official record, which lists every member."
   }</p>
   ${districts ? "" : '<p class="small"><a class="inline-link" href="/#find">Find your representatives</a> to see how yours voted.</p>'}
-  ${votes.map((v) => billVote(v, { personal: !!districts })).join("") || '<p class="secondary small">No recorded votes loaded for this bill.</p>'}
+  ${votes === FAILED ? sectionError("") : votes.map((v) => billVote(v, { personal: !!districts })).join("") || '<p class="secondary small">No recorded votes loaded for this bill.</p>'}
 </section>
-${followTheMoney(b, lobbying, { reps: districts ? reps : null, repMoney, cycle })}
+${lobbying === FAILED ? sectionError("Follow the money") : followTheMoney(b, lobbying, { reps: districts && reps !== FAILED ? reps : null, repMoney, cycle })}
 `;
-  return page(`${b.bill_number}: ${b.title}`, main, { tab: "laws", back: ["Laws", "/laws/"], personal: true });
+  return page(`${b.bill_number}: ${b.title}`, main, { tab: "laws", back: ["Laws", "/laws/"], personal: true, partial: anyFailed(reps, votes, analysisLoaded, lobbying, outcome) });
 }
 
-export async function onRequestGet(context) {
+// The Laws list is the same for every visitor: kept at the edge for a few minutes.
+const LAWS_CACHE_SECONDS = 300;
+
+export const onRequestGet = guard(async (context) => {
   const url = new URL(context.request.url);
   const parts = (context.params.path || []).filter(Boolean);
-  if (parts.length === 0) return index(context.env, url);
+  if (parts.length === 0) return edgeCached(context, LAWS_CACHE_SECONDS, () => index(context.env, url));
   // The reader forms post to these; a plain visit goes back to the bill page.
   if (parts[0] === "bills" && parts.length === 3 && ["flag", "request-full"].includes(parts[2])) {
     return Response.redirect(`${url.origin}/laws/bills/${parts[1]}/`, 302);
@@ -269,7 +321,7 @@ export async function onRequestGet(context) {
   if (old) return Response.redirect(`${url.origin}${old}`, 301);
   // Static pages: /laws/constitution/.
   return context.next();
-}
+}, { tab: "laws" });
 
 // ---------------------------------------------------------------------------
 // Reader actions

@@ -55,6 +55,13 @@ export async function officialsForBody(db, body) {
 }
 
 export async function voteCounts(db, officialId) {
+  // Counted during the sync (official_stats); counted here only before the first build.
+  try {
+    const row = await db.prepare("SELECT vote_count AS total, final_count AS final FROM official_stats WHERE official_id = ?").bind(officialId).first();
+    if (row) return row;
+  } catch (err) {
+    if (!/no such table/i.test(String(err && err.message))) throw err;
+  }
   return db
     .prepare(
       `SELECT COUNT(*) AS total, SUM(CASE WHEN v.vote_type = 'final_passage' THEN 1 ELSE 0 END) AS final
@@ -110,21 +117,29 @@ export async function votesOnBill(db, billId, officialIds = []) {
   return votes;
 }
 
-export async function recentBills(db, { level = null, all = false, limit = 40 } = {}) {
-  const { results } = await db
-    .prepare(
-      `SELECT b.*, MAX(v.vote_date) AS last_vote, COUNT(DISTINCT v.id) AS vote_count
-       FROM bills b
-       JOIN votes v ON v.bill_id = b.id
-       JOIN vote_positions p ON p.vote_id = v.id
-       WHERE (? IS NULL OR b.level = ?) AND (? = 1 OR v.vote_type = 'final_passage')
-       GROUP BY b.id
-       ORDER BY last_vote DESC
-       LIMIT ?`
-    )
-    .bind(level, level, all ? 1 : 0, limit)
-    .all();
-  return results;
+export const BILLS_PER_PAGE = 20;
+
+/**
+ * One page of the Laws list, newest first, from bill_list (built during the
+ * sync; never computed from the votes tables on a visit). all: every bill with
+ * a recorded vote; otherwise only bills with a final-passage vote. Returns
+ * null if the list hasn't been built yet.
+ */
+export async function billList(db, { level, all = false, limit = BILLS_PER_PAGE, offset = 0 }) {
+  const order = all ? "last_vote" : "last_final";
+  try {
+    const { results } = await db
+      .prepare(
+        `SELECT * FROM bill_list WHERE level = ? ${all ? "" : "AND last_final IS NOT NULL"}
+         ORDER BY ${order} DESC, bill_id DESC LIMIT ? OFFSET ?`
+      )
+      .bind(level, limit + 1, offset)
+      .all();
+    return { rows: results.slice(0, limit), more: results.length > limit };
+  } catch (err) {
+    if (/no such table/i.test(String(err && err.message))) return null;
+    throw err;
+  }
 }
 
 // Most recent final-passage votes by the given officials (ids), newest first,
@@ -172,11 +187,24 @@ export async function homeDistricts(db) {
 }
 
 /** The active officials for a WHERE clause from repsWhere(), in ballot order. */
+/**
+ * Runs an officials query with each official's recorded-vote count
+ * (vote_count) from official_stats, counted during the sync. Before the first
+ * build, vote_count is null rather than counted from every position here.
+ * `sql(counts)` builds the query from counts.select and counts.join.
+ */
+export async function withVoteCounts(db, sql, binds = []) {
+  const counts = { select: ", s.vote_count AS vote_count", join: "LEFT JOIN official_stats s ON s.official_id = o.id" };
+  try {
+    return (await db.prepare(sql(counts)).bind(...binds).all()).results;
+  } catch (err) {
+    if (!/no such table/i.test(String(err && err.message))) throw err;
+    return (await db.prepare(sql({ select: ", NULL AS vote_count", join: "" })).bind(...binds).all()).results;
+  }
+}
+
 export async function officialsWhere(db, where) {
-  const { results } = await db
-    .prepare(`SELECT o.*, (SELECT COUNT(*) FROM vote_positions p WHERE p.official_id = o.id) AS vote_count FROM officials o WHERE ${where.sql}`)
-    .bind(...where.binds)
-    .all();
+  const results = await withVoteCounts(db, (counts) => `SELECT o.*${counts.select} FROM officials o ${counts.join} WHERE ${where.sql}`, where.binds);
   return results.sort(
     (a, b) =>
       CHAMBER_ORDER.indexOf(b.chamber) - CHAMBER_ORDER.indexOf(a.chamber) ||

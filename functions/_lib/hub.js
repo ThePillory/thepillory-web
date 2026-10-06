@@ -31,12 +31,25 @@ export async function happeningNow(db, level, { limit = 4, officialIds = [] } = 
       AND v.id = (SELECT v2.id FROM votes v2 WHERE v2.bill_id = v.bill_id AND v2.vote_type = 'final_passage'
                   ORDER BY v2.vote_date DESC, v2.id DESC LIMIT 1)
     ORDER BY v.vote_date DESC, v.id DESC LIMIT ?`;
+  // From bill_list (built during the sync): each bill's latest final-passage
+  // vote and whether the relevance check set it aside. Before the first build,
+  // the same from the votes table.
+  const fromList = `
+    SELECT v.*, b.bill_number, b.title AS bill_title, b.summary AS bill_summary
+    FROM bill_list l JOIN votes v ON v.id = l.final_vote_id JOIN bills b ON b.id = l.bill_id
+    WHERE l.level = ? AND l.last_final IS NOT NULL AND l.routine = 0
+    ORDER BY l.last_final DESC, v.id DESC LIMIT ?`;
   let rows;
   try {
-    rows = (await db.prepare(sql(true)).bind(level, limit).all()).results;
+    rows = (await db.prepare(fromList).bind(level, limit).all()).results;
   } catch (err) {
     if (!missingTable(err)) throw err;
-    rows = (await db.prepare(sql(false)).bind(level, limit).all()).results;
+    try {
+      rows = (await db.prepare(sql(true)).bind(level, limit).all()).results;
+    } catch (err2) {
+      if (!missingTable(err2)) throw err2;
+      rows = (await db.prepare(sql(false)).bind(level, limit).all()).results;
+    }
   }
   if (!rows.length) return rows;
 

@@ -8,7 +8,7 @@
 //                       and Happening now.
 // Both link back to the hub (/).
 import { EMPTY_REPORTS } from "./generated.js";
-import { page, esc, fmtDate } from "./render.js";
+import { page, esc, fmtDate, loadSection, FAILED, anyFailed, sectionError } from "./render.js";
 import { recentFinalVotes, officialsWhere, homeDistricts } from "./data.js";
 import { billHref } from "./votes.js";
 import { listMeetings, summariesFor, meetingCard, pacificNow, addDays, when } from "./meetings.js";
@@ -16,7 +16,6 @@ import { repsWhere, describe, isCalaveras } from "./districts.js";
 import { happeningNow, happeningSection, lookupForm } from "./hub.js";
 
 const LEVELS = ["county", "state", "federal"];
-const missing = (err) => /no such table|no such column/i.test(String(err && err.message));
 
 function sectionHead(id, title, href, linkText) {
   return `<div class="section-head"><h2 class="label" id="${id}">${title}</h2>${href ? `<a class="section-link" href="${href}">${linkText}</a>` : ""}</div>`;
@@ -73,23 +72,24 @@ export async function calaverasBriefing(env, url, visitor = null) {
   const now = pacificNow();
   const weekEnd = `${addDays(now.slice(0, 10), 7)}T23:59`;
 
-  let meetings = [];
-  let summaries = {};
-  let votes = { rows: [], more: false };
   const db = env.DB;
-  if (db) {
-    try {
-      meetings = (await listMeetings(db, { from: now, to: weekEnd, level: level === "federal" ? "none" : level, limit: 20 })).filter((m) => m.status !== "cancelled");
-      summaries = await summariesFor(db, meetings.map((m) => m.id));
-      if (level !== "county") {
-        const d = visitor && isCalaveras(visitor) ? visitor : await homeDistricts(db);
-        const reps = await officialsWhere(db, repsWhere(d));
-        votes = await recentFinalVotes(db, { level, limit: 3, officialIds: reps.map((o) => o.id) });
-      }
-    } catch (err) {
-      if (!missing(err)) throw err;
-    }
-  }
+  // Each section loads on its own: one that can't load shows a short note.
+  const [meetingsLoaded, votes] = await Promise.all([
+    db
+      ? loadSection("briefing meetings", async () => {
+          const meetings = (await listMeetings(db, { from: now, to: weekEnd, level: level === "federal" ? "none" : level, limit: 20 })).filter((m) => m.status !== "cancelled");
+          return { meetings, summaries: await summariesFor(db, meetings.map((m) => m.id)) };
+        }, { meetings: [], summaries: {} })
+      : { meetings: [], summaries: {} },
+    db && level !== "county"
+      ? loadSection("briefing votes", async () => {
+          const d = visitor && isCalaveras(visitor) ? visitor : await homeDistricts(db);
+          const reps = await officialsWhere(db, repsWhere(d));
+          return recentFinalVotes(db, { level, limit: 3, officialIds: reps.map((o) => o.id) });
+        }, { rows: [], more: false })
+      : { rows: [], more: false },
+  ]);
+  const { meetings, summaries } = meetingsLoaded === FAILED ? { meetings: [], summaries: {} } : meetingsLoaded;
 
   const filterNav = () => {
     const opt = (value, label) =>
@@ -99,13 +99,13 @@ export async function calaverasBriefing(env, url, visitor = null) {
   const withLevel = (href, l) => (l ? `${href}${href.includes("?") ? "&" : "?"}level=${l}` : href);
 
   const week = meetings.slice(0, 3);
-  const weekHtml = week.length
+  const weekHtml = meetingsLoaded === FAILED ? sectionError("") : week.length
     ? week.map((m) => meetingCard(m, summaries[m.id])).join("")
     : `<p class="secondary small empty-note">${
         !db ? "Meetings appear here once the data sync has run." : level === "federal" ? "Congress's schedule isn't tracked here yet." : "Nothing scheduled in the next seven days."
       }</p>`;
-  const rows = voteRows(votes.rows, 3);
-  const votesHtml = rows
+  const rows = votes === FAILED ? "" : voteRows(votes.rows, 3);
+  const votesHtml = votes === FAILED ? sectionError("") : rows
     ? `<ul class="card plain-list brief-votes">${rows}</ul>`
     : `<p class="secondary small empty-note">${
         level === "county" ? "Supervisors' votes will come from meeting minutes. That's coming next." : db ? "No final-passage votes loaded yet." : "Votes appear here once the data sync has run."
@@ -135,28 +135,22 @@ ${filterNav()}
   ${votesHtml}
 </section>
 ${caughtUp}`;
-  return page("Calaveras County briefing", main, { tab: "home", back: ["Home", "/"], personal: true });
+  return page("Calaveras County briefing", main, { tab: "home", back: ["Home", "/"], personal: true, partial: anyFailed(meetingsLoaded, votes) });
 }
 
 /** The briefing for a visitor outside Calaveras County. */
 export async function personalBriefing(env, url, d) {
   const which = url.searchParams.get("now") === "state" ? "state" : "federal";
   const db = env.DB;
-  let reps = [];
-  let votes = { rows: [] };
-  let now = [];
-  if (db) {
-    try {
-      reps = await officialsWhere(db, repsWhere(d));
-      const ids = reps.map((o) => o.id);
-      votes = await recentFinalVotes(db, { limit: 5, officialIds: ids });
-      now = await happeningNow(db, which, { limit: 4, officialIds: ids });
-    } catch (err) {
-      if (!missing(err)) throw err;
-    }
-  }
+  const repsLoaded = db ? await loadSection("briefing reps", () => officialsWhere(db, repsWhere(d)), []) : [];
+  const reps = repsLoaded === FAILED ? [] : repsLoaded;
+  const ids = reps.map((o) => o.id);
+  const [votes, now] = await Promise.all([
+    db && ids.length ? loadSection("briefing votes", () => recentFinalVotes(db, { limit: 5, officialIds: ids }), { rows: [] }) : { rows: [] },
+    db ? loadSection("briefing happening now", () => happeningNow(db, which, { limit: 4, officialIds: ids }), []) : [],
+  ]);
   const inCA = d.st === "CA";
-  const repRows = reps.length
+  const repRows = repsLoaded === FAILED ? sectionError("") : reps.length
     ? reps
         .map(
           (o) => `
@@ -170,7 +164,7 @@ export async function personalBriefing(env, url, d) {
   const coverage = inCA
     ? "State and federal coverage for your districts. County coverage comes as communities launch."
     : "Federal coverage for now. State and local coverage comes as communities launch.";
-  const rows = voteRows(votes.rows, 5);
+  const rows = votes === FAILED ? "" : voteRows(votes.rows, 5);
   const main = `
 ${briefHead("Your briefing", esc(describe(d)))}
 <p class="panel-navy small">${esc(coverage)} <a class="inline-link" href="/#communities">Bring ThePillory to your county</a></p>
@@ -182,10 +176,10 @@ ${briefHead("Your briefing", esc(describe(d)))}
 
 <section class="brief-section" aria-labelledby="h-votes">
   ${sectionHead("h-votes", "Your reps' latest votes", "/votes/", "See all votes")}
-  ${rows ? `<ul class="card plain-list brief-votes">${rows}</ul>` : `<p class="secondary small empty-note">${db ? "No final-passage votes loaded yet for your reps." : "Votes appear here once the data sync has run."}</p>`}
+  ${votes === FAILED ? sectionError("") : rows ? `<ul class="card plain-list brief-votes">${rows}</ul>` : `<p class="secondary small empty-note">${db ? "No final-passage votes loaded yet for your reps." : "Votes appear here once the data sync has run."}</p>`}
 </section>
 
-${happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? "/briefing/" : `/briefing/?now=${v}`), personal: true, loaded: !!db })}
+${now === FAILED ? sectionError("Happening now") : happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? "/briefing/" : `/briefing/?now=${v}`), personal: true, loaded: !!db })}
 ${caughtUp}`;
-  return page("Your briefing", main, { tab: "home", back: ["Home", "/"], personal: true });
+  return page("Your briefing", main, { tab: "home", back: ["Home", "/"], personal: true, partial: anyFailed(repsLoaded, votes, now) });
 }
