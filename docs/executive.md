@@ -71,9 +71,11 @@ campaign committees (Cal-Access) and Form 700 statements (FPPC).
 
 ## Pages
 
-- `/reps/<slug>/`: the President gets Executive orders, Bills and Nominations
-  tabs (no Votes tab); the Governor gets Bills and Executive orders; every
-  executive office keeps Promises, Funding and Issues.
+- `/reps/<slug>/`: the same five tabs as every official (About · Promises ·
+  Votes · Funding · More). For the President and the Governor, Votes is the
+  bills signed and vetoed, and More holds executive orders (and the President's
+  nominations) and disclosures. For the Cabinet, Votes and Funding say they
+  don't apply to appointed officials and link to Disclosures under More.
 - `/laws/bills/<id>/`: **Final action**, with the outcome, date, law or chapter
   number, who acted, the recorded action word for word, and the source.
 - "Who represents you" on the hub (`/`), state pages (`/explore/<st>/`) and

@@ -1,8 +1,11 @@
 // /reps/            find your reps (address or ZIP), your reps once known, the
 //                   governing bodies, and members of Congress by state (?state=CA)
-// /reps/<slug>/     one official: Overview, Promises, Votes, Funding, Issues. The
-//                   President adds Executive orders, Bills and Nominations (no
-//                   Votes); the Governor adds Bills and Executive orders.
+// /reps/<slug>/     one official, five tabs for everyone: About · Promises ·
+//                   Votes · Funding · More. The President and Governor: Votes is
+//                   bills signed and vetoed; More holds executive orders (and the
+//                   President's nominations) and disclosures. The Cabinet: Votes
+//                   and Funding say they don't apply, linking to Disclosures in
+//                   More. Everyone else: More holds committees and Issues.
 import { BODIES, LEVEL_NAME, EMPTY_REPORTS } from "../_lib/generated.js";
 import { page, notFound, notLoaded, esc, safeUrl, kv, card, section, sourceLink, fmtDate, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { officialBySlug, officialsWhere, withVoteCounts, voteCounts, votesFor, CHAMBER_NAME } from "../_lib/data.js";
@@ -10,7 +13,7 @@ import { districtsFromCookie, repsWhere, describe, STATE_NAME } from "../_lib/di
 import { lookupForm } from "../_lib/hub.js";
 import { voteRow, voteFilter } from "../_lib/votes.js";
 import { fundingFor, fundingTab } from "../_lib/funding.js";
-import { executiveMoney, executiveFundingTab } from "../_lib/exec-funding.js";
+import { executiveMoney, executiveFundingParts } from "../_lib/exec-funding.js";
 import { currentCycle } from "../../workers/sync/src/funding/fec.js";
 import {
   isExecutive, isPresident, isGovernor, executiveOfficials, ordersFor, billsActedOn, nominationsFor,
@@ -135,6 +138,28 @@ function execGlance(o, orders, bills, nominations) {
 </section>`;
 }
 
+// The California legislative committees an official sits on (Open States,
+// refreshed weekly by the state-hearings step).
+async function committeesFor(db, officialId) {
+  const { results } = await db
+    .prepare(
+      `SELECT name, chamber, source_url FROM state_committees
+       WHERE EXISTS (SELECT 1 FROM json_each(member_ids) WHERE value = ?) ORDER BY name`
+    )
+    .bind(officialId)
+    .all();
+  return results;
+}
+
+// Which kind of office: decides what the Votes, Funding and More tabs hold.
+function roleOf(o) {
+  if (isPresident(o)) return "president";
+  if (isGovernor(o)) return "governor";
+  if (o.chamber === "us-executive") return o.rank === 2 ? "vice-president" : "appointed";
+  if (o.chamber === "ca-executive") return "statewide";
+  return "legislator";
+}
+
 async function profile(env, slug, url) {
   if (!env.DB) return notLoaded("Reps", "reps", false, ["Reps", "/reps/"]);
   const db = env.DB;
@@ -150,15 +175,17 @@ async function profile(env, slug, url) {
   const status = url.searchParams.get("status") || "all";
   const exec = isExecutive(o);
   // Each tab loads on its own: one that can't load shows a short note there.
-  const [countsLoaded, votes, funding, orders, bills, nominations] = await Promise.all([
+  const loaded = await Promise.all([
     exec ? {} : loadSection("rep vote counts", () => voteCounts(db, o.id), {}),
     exec ? { rows: [], more: false } : loadSection("rep votes", () => votesFor(db, o.id, { all, limit: 50, offset: (pageNum - 1) * 50 }), { rows: [], more: false }),
     exec ? loadSection("rep funding", () => executiveMoney(db, o, cycle), null) : o.level === "federal" ? loadSection("rep funding", () => fundingFor(db, o, cycle), null) : null,
     isPresident(o) || isGovernor(o) ? loadSection("rep orders", () => ordersFor(db, o.id, { offset }), null) : null,
     isPresident(o) || isGovernor(o) ? loadSection("rep bills", () => billsActedOn(db, o.id, { show, offset }), null) : null,
     isPresident(o) ? loadSection("rep nominations", () => nominationsFor(db, o.id, { status, offset }), null) : null,
+    o.level === "state" && !exec ? loadSection("rep committees", () => committeesFor(db, o.id), []) : [],
   ]);
-  const partial = anyFailed(countsLoaded, votes, funding, orders, bills, nominations);
+  const [countsLoaded, votes, funding, orders, bills, nominations, committees] = loaded;
+  const partial = anyFailed(countsLoaded, votes, funding, orders, bills, nominations, committees);
   const counts = countsLoaded === FAILED ? null : countsLoaded || {};
   const ok = (v) => (v === FAILED ? null : v);
 
@@ -214,33 +241,59 @@ ${exec ? execGlance(o, ok(orders), ok(bills), ok(nominations)) : !counts ? secti
           : all ? "No recorded votes yet." : "No final-passage votes recorded yet. Try “All votes”."
       }</p>`;
 
-  // Reports and issues open with accounts; none exist yet.
-  const issueHtml = EMPTY_REPORTS;
+  // Five tabs for every official: About · Promises · Votes · Funding · More.
+  // What Votes, Funding and More hold depends on the office (roleOf).
+  const role = roleOf(o);
+  const money = exec && funding !== FAILED ? executiveFundingParts(o, funding, base) : null;
+  const sub = (id, label, html) => `<section class="stack-sm" id="${id}" aria-labelledby="h-${id}"><h2 class="label" id="h-${id}">${label}</h2>${html}</section>`;
+  const appointedNote = (what) =>
+    `<section class="card stack-sm"><p class="small">${what}</p><p class="small"><a class="inline-link" href="#disclosures">See financial disclosures and ethics agreements under More</a></p></section>`;
 
-  const tab = (k, label, n) =>
-    `<a role="tab" id="tab-${k}" href="#${k}" aria-controls="${k}">${label}${n != null ? `<span class="count">${n}</span>` : ""}</a>`;
+  let votesHtml;
+  if (role === "president" || role === "governor") {
+    votesHtml = `<p class="small secondary">The ${role === "president" ? "President" : "Governor"} doesn't vote on bills. Instead, the bills that passed are signed or vetoed:</p>
+  <div class="stack" id="bills">${bills === FAILED ? sectionError("") : billsTab(o, bills, base, show, offset)}</div>`;
+  } else if (role === "appointed") {
+    votesHtml = appointedNote(`${esc(o.office)} is an appointed office, so there are no votes to show: votes are recorded for members of Congress and the California Legislature.`);
+  } else if (exec) {
+    votesHtml = '<p class="secondary small">No votes are recorded for this office. ThePillory records votes in Congress and the California Legislature.</p>';
+  } else {
+    votesHtml = `${voteFilter(base, all, counts)}
+    ${voteList}`;
+  }
+
+  let fundingHtml;
+  if (funding === FAILED) fundingHtml = sectionError("");
+  else if (role === "appointed") fundingHtml = appointedNote(`${esc(o.office)} is an appointed office, so there's no campaign money to show: appointed officials don't run campaigns.`);
+  else if (exec) fundingHtml = money.funding || '<p class="secondary small">No campaign money to show for this office.</p>';
+  else fundingHtml = fundingTab(o, funding, base);
+
+  // More: everything else, in sections.
+  const moreParts = [];
+  if (orders) moreParts.push(sub("orders", "Executive orders", orders === FAILED ? sectionError("") : ordersTab(o, orders, base, offset)));
+  if (nominations) moreParts.push(sub("nominations", "Nominations", nominations === FAILED ? sectionError("") : nominationsTab(o, nominations, base, status, offset)));
+  if (exec) moreParts.push(sub("more-disclosures", "Disclosures", funding === FAILED ? sectionError("") : money.disclosures));
+  if (o.level === "state" && !exec) {
+    moreParts.push(sub("committees", "Committees", committees === FAILED ? sectionError("") : committees.length
+      ? `<div class="card"><ul class="plain-list">${committees.map((c) => `<li class="list-row"><span class="list-title">${esc(c.name)}</span><span class="row-end">${sourceLink(c.source_url)}</span></li>`).join("")}</ul></div><p class="hint">From Open States, refreshed weekly.</p>`
+      : '<p class="secondary small">No committee assignments loaded for this legislator.</p>'));
+  }
+  // Reports and issues open with accounts; none exist yet.
+  moreParts.push(sub("issues", "Issues", EMPTY_REPORTS));
+
+  const tab = (k, label) => `<a role="tab" id="tab-${k}" href="#${k}" aria-controls="${k}">${label}</a>`;
   const main = `${head}
 <div class="rep-tabs stack" data-tabs>
-  <nav class="tabs" role="tablist" aria-label="Sections">
-    ${tab("overview", "Overview")}${
-      isPresident(o)
-        ? `${tab("orders", "Executive orders")}${tab("bills", "Bills")}${tab("nominations", "Nominations")}`
-        : isGovernor(o) ? `${tab("bills", "Bills")}${tab("orders", "Executive orders")}` : ""
-    }${tab("promises", "Promises")}${exec ? "" : tab("votes", "Votes", counts ? counts.total || 0 : null)}${tab("funding", "Funding")}${tab("issues", "Issues")}
+  <nav class="tabs tabs--five" role="tablist" aria-label="Sections">
+    ${tab("about", "About")}${tab("promises", "Promises")}${tab("votes", "Votes")}${tab("funding", "Funding")}${tab("more", "More")}
   </nav>
-  <div class="stack" role="tabpanel" id="overview" aria-labelledby="tab-overview">${overview}</div>
+  <div class="stack" role="tabpanel" id="about" aria-labelledby="tab-about">${overview}</div>
   <div class="stack" role="tabpanel" id="promises" aria-labelledby="tab-promises">
     <p class="secondary small">Promise tracking for real officials hasn't started. Promises will be added only with a source for each one.</p>
   </div>
-  ${orders ? `<div class="stack" role="tabpanel" id="orders" aria-labelledby="tab-orders">${orders === FAILED ? sectionError("") : ordersTab(o, orders, base, offset)}</div>` : ""}
-  ${bills ? `<div class="stack" role="tabpanel" id="bills" aria-labelledby="tab-bills">${bills === FAILED ? sectionError("") : billsTab(o, bills, base, show, offset)}</div>` : ""}
-  ${nominations ? `<div class="stack" role="tabpanel" id="nominations" aria-labelledby="tab-nominations">${nominations === FAILED ? sectionError("") : nominationsTab(o, nominations, base, status, offset)}</div>` : ""}
-  ${exec ? "" : `<div class="stack" role="tabpanel" id="votes" aria-labelledby="tab-votes">
-    ${voteFilter(base, all, counts)}
-    ${voteList}
-  </div>`}
-  <div class="stack" role="tabpanel" id="funding" aria-labelledby="tab-funding">${funding === FAILED ? sectionError("") : exec ? executiveFundingTab(o, funding, base) : fundingTab(o, funding, base)}</div>
-  <div class="stack" role="tabpanel" id="issues" aria-labelledby="tab-issues">${issueHtml}</div>
+  <div class="stack" role="tabpanel" id="votes" aria-labelledby="tab-votes">${votesHtml}</div>
+  <div class="stack" role="tabpanel" id="funding" aria-labelledby="tab-funding">${fundingHtml}</div>
+  <div class="stack" role="tabpanel" id="more" aria-labelledby="tab-more">${moreParts.join("")}</div>
 </div>`;
   return page(o.name, main, { tab: "reps", back: ["Reps", "/reps/"], partial });
 }

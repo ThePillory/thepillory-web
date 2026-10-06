@@ -188,9 +188,20 @@
       });
     });
 
+    // A tab's own id opens it; the id of something inside a panel (#disclosures,
+    // #orders) opens that panel and scrolls to it. Old links: #overview is About.
+    var ALIASES = { overview: "about" };
     function fromHash() {
-      var id = location.hash.slice(1);
-      show(ids.indexOf(id) !== -1 ? id : ids[0]);
+      var id = ALIASES[location.hash.slice(1)] || location.hash.slice(1);
+      if (ids.indexOf(id) !== -1) return show(id);
+      var target = id && document.getElementById(id);
+      var panel = target && target.closest ? target.closest('[role="tabpanel"]') : null;
+      if (panel && root.contains(panel)) {
+        show(panel.id);
+        target.scrollIntoView();
+        return;
+      }
+      show(ids[0]);
     }
     window.addEventListener("hashchange", fromHash);
     fromHash();

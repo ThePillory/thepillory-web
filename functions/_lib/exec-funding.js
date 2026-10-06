@@ -190,7 +190,7 @@ function exportDate(note) {
   return Number.isFinite(t) ? ` of ${fmtDate(new Date(t).toISOString().slice(0, 10))}` : "";
 }
 
-function stateSections(o, m) {
+function stateCampaign(o, m) {
   const c = m.campaign;
   const head = '<h3 class="label" id="campaign">Campaign committees</h3>';
   let campaign;
@@ -219,6 +219,10 @@ function stateSections(o, m) {
       .join("");
     campaign = `<section class="card stack-sm" aria-labelledby="campaign">${head}<p class="small">Money raised and spent by the committees ${esc(o.name)} controls, as reported to the California Secretary of State. Each row is one campaign statement (Form 460) and its own totals for that period. A committee can be for another office or a future race, a ballot measure, or an officeholder account; each is listed under its own name.</p>${blocks}<p class="hint">From the Cal-Access export${exportDate(c.check.note)}. California replaces Cal-Access with a new disclosure system after the November 2026 election. Individual donors are never named on ThePillory. <a class="tap" href="${METHOD}">Methodology</a></p></section>`;
   }
+  return campaign;
+}
+
+function stateForm700(m) {
   const f = m.form700;
   const head7 = '<h3 class="label" id="disclosures">Statements of economic interests (Form 700)</h3>';
   const intro7 = `<p class="small">California officials file a Statement of Economic Interests (Form 700) each year: their investments, real property, income and gifts. Statewide officers file with the Fair Political Practices Commission (FPPC).</p>`;
@@ -227,16 +231,22 @@ function stateSections(o, m) {
   else if (!f.rows.length) form700 = `<section class="card stack-sm" aria-labelledby="disclosures">${head7}${intro7}<p class="secondary small">${esc(f.check.note || "No statements listed.")}</p></section>`;
   else
     form700 = `<section class="card stack-sm" aria-labelledby="disclosures">${head7}${intro7}<ul class="plain-list exec-list">${disclosureRows(f.rows.slice(0, 10))}</ul><p class="hint">Source: ${ext("https://form700search.fppc.ca.gov/", "FPPC Form 700 search")}, searched ${fmtDate(String(f.check.checked_at).slice(0, 10))}. <a class="tap" href="${DISCLOSURES}">How</a></p></section>`;
-  return `${campaign}${form700}`;
+  return form700;
 }
 
-/** The Funding tab for an executive office. */
-export function executiveFundingTab(o, m, base) {
-  if (!m) return `<p class="secondary small">Not loaded yet.</p>`;
-  if (m.kind === "state") return stateSections(o, m);
+/**
+ * An executive office's money and disclosures, apart: `funding` for the
+ * Funding tab (campaign money; the President's inaugural committee) and
+ * `disclosures` for More (OGE reports and ethics agreements, or Form 700s).
+ * Cabinet members have no campaign money: `funding` is null for them.
+ */
+export function executiveFundingParts(o, m, base) {
+  if (!m) return { funding: '<p class="secondary small">Not loaded yet.</p>', disclosures: '<p class="secondary small">Not loaded yet.</p>' };
+  if (m.kind === "state") return { funding: stateCampaign(o, m), disclosures: stateForm700(m) };
   const parts = [];
   if (m.kind === "president") {
     parts.push(fundingTab(o, m.campaign, base));
+    if (m.inaugural) parts.push(inauguralSection(m.inaugural));
   } else if (m.kind === "vice-president") {
     if (m.ticket && m.president) {
       parts.push(`<p class="small">The President and Vice President ran on one ticket. The Federal Election Commission records the ticket's money under the presidential campaign committee, so these are the same figures as on <a class="inline-link" href="/reps/${esc(m.president.slug)}/#funding">${esc(m.president.name)}'s</a> Funding tab.</p>`);
@@ -244,10 +254,7 @@ export function executiveFundingTab(o, m, base) {
     } else {
       parts.push('<p class="secondary small">The Vice President took office separately from the President\'s ticket, so the presidential campaign\'s money isn\'t theirs.</p>');
     }
-  } else {
-    parts.push('<p class="small">Cabinet members are appointed, not elected, so they have no campaign committees and no campaign money to show. Their financial disclosure reports and ethics agreements are below.</p>');
+    if (m.inaugural) parts.push(inauguralSection(m.inaugural));
   }
-  if (m.inaugural) parts.push(inauguralSection(m.inaugural));
-  parts.push(ogeSection(m.oge, o.name));
-  return parts.join("\n");
+  return { funding: parts.length ? parts.join("\n") : null, disclosures: ogeSection(m.oge, o.name) };
 }
