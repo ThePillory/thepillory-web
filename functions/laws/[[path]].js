@@ -65,7 +65,7 @@ function billCard(b, all) {
     who: b.level === "federal" ? `${ordinal(parseInt(b.session, 10))} Congress` : `California, ${b.session.slice(0, 4)}–${b.session.slice(4)} session`,
     chips,
     left: all || !b.last_final ? `Last vote: <strong>${fmtDate(b.last_vote)}</strong>` : `Last final vote: <strong>${fmtDate(b.last_final)}</strong>`,
-    right: `Recorded votes: <strong>${b.vote_count}</strong>`,
+    right: b.vote_count == null ? "" : `Recorded votes: <strong>${b.vote_count}</strong>`,
     level: b.level,
   });
 }
@@ -120,7 +120,7 @@ async function index(env, url) {
 </header>
 <nav class="segmented vote-filter" aria-label="Which bills to show">${filter("With final-passage votes", false)}${filter("All with recorded votes", true)}</nav>
 ${billSection(onlyLevel, lists[0], { all, offset, heading: false })}`;
-    return page(`${LEVELS[onlyLevel]} bills`, main, { tab: "laws", back: ["Laws", lawsHref({ all })], partial: anyFailed(...lists) || lists.includes(null) });
+    return page(`${LEVELS[onlyLevel]} bills`, main, { tab: "laws", back: ["Laws", lawsHref({ all })], partial: anyFailed(...lists) || lists.some((l) => !l || l.provisional) });
   }
 
   const main = `
@@ -136,7 +136,7 @@ ${billSection(onlyLevel, lists[0], { all, offset, heading: false })}`;
 <nav class="segmented vote-filter" aria-label="Which bills to show">${filter("With final-passage votes", false)}${filter("All with recorded votes", true)}</nav>
 ${levels.map((level, i) => billSection(level, lists[i], { all })).join("")}
 `;
-  return page("Laws", main, { tab: "laws", root: true, partial: anyFailed(...lists) || lists.includes(null) });
+  return page("Laws", main, { tab: "laws", root: true, partial: anyFailed(...lists) || lists.some((l) => !l || l.provisional) });
 }
 
 // The current analysis and what the page needs around it. Missing tables

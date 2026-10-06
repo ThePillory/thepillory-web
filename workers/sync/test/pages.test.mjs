@@ -127,17 +127,22 @@ test("pages before the first build: no heavy fallback, an honest state", async (
   const sqlite = new DatabaseSync(":memory:");
   const db = d1(sqlite);
   sqlite.exec(readFileSync(new URL("0001_init.sql", MIGRATIONS), "utf8"));
-  assert.equal(await billList(db, { level: "federal" }), null);
+  assert.deepEqual(await billList(db, { level: "federal" }), { rows: [], more: false, provisional: true });
   // Vote counts: null rather than counted from every position on a visit.
   const off = await withVoteCounts(db, (c) => `SELECT o.*${c.select} FROM officials o ${c.join}`);
   assert.deepEqual(off, []);
 });
 
-test("just after the migration: an empty, never-built list is 'being prepared', and Happening now still shows", async () => {
+test("just after the migration: an empty, never-built list falls back to the votes table, and Happening now still shows", async () => {
   const { sqlite, db } = freshDb();
   seed(sqlite, { bills: 3 });
-  // bill_list exists (migration 0010) but the sync hasn't filled it yet.
-  assert.equal(await billList(db, { level: "federal" }), null);
+  // bill_list exists (migration 0010) but the sync hasn't filled it yet: the
+  // list comes from the votes table alone, newest first, marked provisional.
+  const early = await billList(db, { level: "federal" });
+  assert.equal(early.provisional, true);
+  assert.deepEqual(early.rows.map((b) => b.bill_id), ["us-119-hr-3", "us-119-hr-2", "us-119-hr-1"]);
+  assert.equal(early.rows[0].vote_count, undefined, "no counts until the build");
+  assert.equal((await billList(db, { level: "federal", all: true })).rows.length, 3);
   const now = await happeningNow(db, "federal", { limit: 4 });
   assert.equal(now.length, 3, "falls back to the votes table");
   await buildSummaries(db);
@@ -223,13 +228,20 @@ test("scale: the Laws query no longer reads every vote position", async () => {
   let t = performance.now();
   sqlite.prepare(old).all();
   const oldMs = performance.now() - t;
+  // Before the build: the votes-only fallback (no vote_positions).
+  t = performance.now();
+  const early = await billList(db, { level: "federal" });
+  const fallbackMs = performance.now() - t;
+  assert.equal(early.provisional, true);
+  assert.equal(early.rows.length, 20);
   const build = await buildSummaries(db);
   t = performance.now();
   const list = await billList(db, { level: "federal" });
   const newMs = performance.now() - t;
-  console.log(`  ${positions} positions: old query ${oldMs.toFixed(0)} ms per level; bill_list page ${newMs.toFixed(1)} ms; build during sync: ${build.message}`);
+  console.log(`  ${positions} positions: old query ${oldMs.toFixed(0)} ms per level; votes-only fallback ${fallbackMs.toFixed(1)} ms; bill_list page ${newMs.toFixed(1)} ms; build during sync: ${build.message}`);
   assert.equal(list.rows.length, 20);
   assert.ok(newMs < oldMs / 10, "the page query is far cheaper than the old one");
+  assert.ok(fallbackMs < oldMs / 5, "the fallback doesn't read vote positions");
   const plan = sqlite.prepare("EXPLAIN QUERY PLAN SELECT * FROM bill_list WHERE level = ? AND last_final IS NOT NULL ORDER BY last_final DESC, bill_id DESC LIMIT 21 OFFSET 0").all("federal");
   assert.ok(plan.some((p) => /bill_list_final/.test(p.detail)), `uses the index: ${JSON.stringify(plan)}`);
 });
