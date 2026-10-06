@@ -169,7 +169,7 @@ async function skippedSection(db) {
 <section class="card">${rows || '<p class="secondary small">None skipped yet.</p>'}</section>`;
 }
 
-async function list(db, url) {
+async function list(db, url, env) {
   const q = async (where) => (await db.prepare(`${ROW_SQL} AND ${where} ORDER BY a.created_at DESC, a.id DESC LIMIT 100`).all()).results;
   const aiFlagged = await q("a.status = 'ai_draft' AND a.ai_review = 'flag'");
   const readerFlagged = await q("a.status != 'rejected' AND EXISTS (SELECT 1 FROM analysis_flags f WHERE f.analysis_id = a.id AND f.status = 'open')");
@@ -1079,7 +1079,7 @@ async function handle(context) {
       if (!id || (origin && origin !== url.origin)) return adminPage("Refused", '<header class="page-head"><h1>Refused</h1></header>', 403);
       return await change(env.DB, env, id, request, who.email);
     }
-    if (!id) return await list(env.DB, url);
+    if (!id) return await list(env.DB, url, env);
     return await detail(env.DB, env, id, { done: url.searchParams.get("done") || "", email: who.email });
   } catch (err) {
     if (/no such table|no such column/i.test(String(err && err.message))) return missingTables();

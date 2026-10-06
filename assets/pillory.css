@@ -1326,6 +1326,7 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 
 /* Promises (official's page, review page) */
 .promise-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.promise-head .status { flex: none; white-space: nowrap; }
 .promise-quote {
   margin: 0;
   padding: 4px 0 4px 12px;
