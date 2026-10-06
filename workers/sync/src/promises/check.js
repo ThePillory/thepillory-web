@@ -69,8 +69,8 @@ export function wordingProblems(text, { strict = true } = {}) {
 
 // A commitment says someone will do something. Values and positions ("I
 // believe in…", "We stand with…") aren't promises.
-const COMMIT = /\b(will|shall|going to|commit(s|ted)? to|pledge(s|d)? to|promise(s|d)? to|plan(s)? to|intend(s)? to|by (the end of )?(19|20)\d\d|within \d+ (days|weeks|months|years)|we('| a)re (going to|launching|creating|building|investing|cutting|ending|delivering))\b/i;
-const VALUES_ONLY = /^\s*(i|we) (believe|stand|value|support|oppose|care|are committed to the idea|love|honor)\b/i;
+export const COMMIT = /\b(will|shall|going to|commit(s|ted)? to|pledge(s|d)? to|promise(s|d)? to|plan(s)? to|intend(s)? to|by (the end of )?(19|20)\d\d|within \d+ (days|weeks|months|years)|we('| a)re (going to|launching|creating|building|investing|cutting|ending|delivering))\b/i;
+export const VALUES_ONLY = /^\s*(i|we) (believe|stand|value|support|oppose|care|are committed to the idea|love|honor)\b/i;
 
 /** Why a quote isn't a specific, checkable commitment, or null if it is one. */
 export function notACommitment(quote) {

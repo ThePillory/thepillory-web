@@ -18,7 +18,7 @@ import { getState, setState, redact } from "../util.js";
 import { structuredCall, DEFAULT_MODEL, DraftRefused } from "../analysis/claude.js";
 import { INSTRUCTIONS, schema, documentMessage, PROMISE_PROMPT_VERSION, MAX_PER_DOCUMENT } from "./prompt.js";
 import { checkCandidate, quoteKey } from "./check.js";
-import { parseRssWithContent, parseWpPosts, addressPackages, whiteHouseKind, worthReading, htmlToText, clip, roundRobin } from "./sources.js";
+import { parseRssWithContent, parseWpPosts, addressPackages, whiteHouseKind, worthReading, htmlToText, clip, roundRobin, commitmentScore } from "./sources.js";
 
 const UA = "ThePillory/1.0 (+https://thepillory.co; civic records)";
 const WH = "https://www.whitehouse.gov/";
@@ -128,6 +128,12 @@ export async function discover(env, db, officials) {
       await setState(db, "promises_govca_backfilled", "1");
       return `${n} new`;
     });
+    await tryIt("Governor's State of the State addresses", async () => {
+      const json = await get(`${env.GOVCA_BASE || GOVCA}wp-json/wp/v2/posts?search=${encodeURIComponent("State of the State")}&per_page=20&_fields=id,date,link,title,content`, { json: true });
+      let n = 0;
+      for (const d of parseWpPosts(json, env.GOVCA_BASE || GOVCA)) if (d.kind === "address") n += await addSource(db, d, g.id);
+      return `${n} new`;
+    });
   }
   if (officials.supervisors.length) {
     await tryIt("Board of Supervisors agendas", async () => {
@@ -226,7 +232,23 @@ export async function runPromises(env, db, { run, deadline }) {
     return { suggested: 0 };
   }
   if (suggested >= sugLimit || read >= docLimit) return { suggested: 0 };
-  const { results: pending } = await db.prepare("SELECT url, official_id, kind, title, published_on, text FROM promise_sources WHERE status = 'pending'").all();
+  const { results: all } = await db.prepare("SELECT url, official_id, kind, title, published_on, text FROM promise_sources WHERE status = 'pending'").all();
+  // Before any AI reads them: documents with no sentence that commits to anything are skipped.
+  const pending = [];
+  const none = [];
+  for (const d of all) {
+    const score = commitmentScore(d);
+    if (score) pending.push({ ...d, score });
+    else none.push(d);
+  }
+  for (let i = 0; i < none.length; i += 50) {
+    await db.batch(
+      none.slice(i, i + 50).map((d) =>
+        db.prepare("UPDATE promise_sources SET status = 'skipped', note = 'no sentence committing to an action (will, plan to, by a date…)', text = NULL, read_at = datetime('now') WHERE url = ?").bind(d.url)
+      )
+    );
+  }
+  if (none.length) await log(db, run, "promises", "ok", 0, `${none.length} document(s) skipped without AI: no sentence committing to an action (will, plan to, by a date…); ${pending.length} left to read`, started);
   const todo = roundRobin(pending, docLimit - read);
   const speakersFor = (doc) =>
     doc.official_id === COUNTY_GROUP ? officials.supervisors : [officials.president, officials.governor].filter((o) => o && o.id === doc.official_id);

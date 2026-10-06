@@ -11,6 +11,12 @@
 //                   press releases, and State of the State addresses posted there
 //   Supervisors     the Board of Supervisors' agenda text already in D1
 //                   (meeting_items); minutes when the county posts them
+//
+// Most press releases report what was done, so before any AI reads a document
+// code looks for sentences that commit to something (commitmentScore):
+// addresses first, then the documents with the most such sentences; a
+// document with none is skipped.
+import { COMMIT, VALUES_ONLY } from "./check.js";
 
 /** Plain text from HTML (or WordPress builder shortcodes), keeping paragraph breaks as spaces. */
 export function htmlToText(html) {
@@ -97,6 +103,21 @@ export const whiteHouseKind = (title) => (/inaugural address|joint address|state
 const NOT_COMMITMENTS = /\b(announces appointments|nominations sent to the senate|legislative update|weekly schedule|week ahead|proclaims|proclamation|recognizes|honors|mourns|statement on the passing)\b/i;
 export const worthReading = (title) => !NOT_COMMITMENTS.test(title || "");
 
+/** Sentences that say someone will do something (will, plan to, by a year…), not values. */
+export function commitmentSentences(text) {
+  return String(text || "")
+    .split(/(?<=[.!?]["'”’]?)\s+|\n+/)
+    .map((x) => x.trim())
+    .filter((x) => x.length >= 30 && x.length <= 600 && COMMIT.test(x) && !VALUES_ONLY.test(x));
+}
+
+/** How likely a document is to hold a promise: addresses first, then the number of commitment sentences. 0: skip it. */
+export function commitmentScore(doc) {
+  const n = commitmentSentences(doc.text).length;
+  if (!n) return 0;
+  return (doc.kind === "address" ? 1000 : 0) + n;
+}
+
 /** Text sent to the model, cut to a length a single call can read. */
 export function clip(text, max = 40000) {
   const t = String(text || "");
@@ -104,8 +125,9 @@ export function clip(text, max = 40000) {
 }
 
 /**
- * Take turns between officials (groups), newest document first within each,
- * so the daily reads are shared alike rather than going to whoever posts most.
+ * Take turns between officials (groups), so the daily reads are shared alike
+ * rather than going to whoever posts most. Within each, the highest `score`
+ * first (when rows carry one), then the newest.
  */
 export function roundRobin(rows, limit) {
   const groups = new Map();
@@ -113,7 +135,7 @@ export function roundRobin(rows, limit) {
     if (!groups.has(r.official_id)) groups.set(r.official_id, []);
     groups.get(r.official_id).push(r);
   }
-  for (const list of groups.values()) list.sort((a, b) => String(b.published_on || "").localeCompare(String(a.published_on || "")));
+  for (const list of groups.values()) list.sort((a, b) => (b.score || 0) - (a.score || 0) || String(b.published_on || "").localeCompare(String(a.published_on || "")));
   const out = [];
   const lists = [...groups.values()];
   for (let i = 0; out.length < limit && lists.some((l) => l.length); i = (i + 1) % lists.length) {
