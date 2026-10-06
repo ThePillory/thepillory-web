@@ -8,6 +8,7 @@ import { executive, cabinetHtml, fr, congressExec, leginfoHistory, stateExecutiv
 import http from "node:http";
 import { calendarHtml, rssHtml, meetingHtml, agendaLines, makePdf, dayFromToday } from "./iqm2-fixtures.mjs";
 import { meetingList, agendaPages } from "./tylermm-fixtures.mjs";
+import { whiteHouseFeed, govcaPosts, govinfoCollection, govinfoHtm, promiseDraft } from "./promise-fixtures.mjs";
 import { legislators, fec as fecFixture, lda as ldaFixture, oge as ogeFixture, form13File } from "./funding-fixtures.mjs";
 
 const PORT = parseInt(process.env.FIXTURE_PORT || "8788", 10);
@@ -485,7 +486,26 @@ function asCard(d) {
 }
 
 const anthropicRequests = [];
+// FAKE promise drafter: canned candidates per document (promise-fixtures.mjs).
+function promiseAnthropic(req, res, body) {
+  const problems = [];
+  if (req.headers["x-api-key"] !== "fake-anthropic-key") problems.push("x-api-key");
+  if (!body.output_config || !body.output_config.format || body.output_config.format.type !== "json_schema") problems.push("output_config.format");
+  anthropicRequests.push({ kind: "promises", problems });
+  if (problems.length) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: `fixture: bad ${problems.join(", ")}` } });
+  const text = JSON.stringify(promiseDraft(body.messages[0].content));
+  sse(res, [
+    { type: "message_start", message: { id: "msg_promises", type: "message", role: "assistant", model: "claude-sonnet-5-5", content: [], stop_reason: null, stop_sequence: null, usage: { input_tokens: 1500, output_tokens: 1, cache_read_input_tokens: 0, cache_creation_input_tokens: 0 } } },
+    { type: "content_block_start", index: 0, content_block: { type: "text", text: "" } },
+    { type: "content_block_delta", index: 0, delta: { type: "text_delta", text } },
+    { type: "content_block_stop", index: 0 },
+    { type: "message_delta", delta: { stop_reason: "end_turn", stop_sequence: null }, usage: { output_tokens: 300 } },
+    { type: "message_stop" },
+  ]);
+}
+
 function anthropic(req, res, body) {
+  if (/^Officials \(use these exact names/.test((body.messages && body.messages[0] && body.messages[0].content) || "")) return promiseAnthropic(req, res, body);
   if (/Agenda items, as \[item number\]/.test((body.messages && body.messages[0] && body.messages[0].content) || "")) return agendaAnthropic(req, res, body);
   if (String(body.model || "").startsWith("claude-haiku")) return relevanceAnthropic(req, res, body);
   if (/^You are the independent reviewer/.test((body.system && body.system[0] && body.system[0].text) || "")) return reviewAnthropic(req, res, body);
@@ -598,9 +618,14 @@ http
     if (api === "oge" && path === "/201/Presiden.nsf/API.xsp/v3/rest") return send(res, 200, ogeFixture(u.searchParams));
     if (api === "legislators") return send(res, 200, path === "/executive.json" ? executive : legislators);
     // FAKE executive branch sources.
+    if (api === "whitehouse" && path === "/releases/feed/") return send(res, 200, whiteHouseFeed("releases"), "application/rss+xml");
+    if (api === "whitehouse" && path === "/remarks/feed/") return send(res, 200, whiteHouseFeed("remarks"), "application/rss+xml");
+    if (api === "govinfo" && path.startsWith("/collections/CPD/")) return send(res, 200, govinfoCollection());
+    if (api === "govinfo" && /^\/packages\/[^/]+\/htm$/.test(path)) return send(res, 200, govinfoHtm(), "text/html");
     if (api === "whitehouse") return send(res, 200, cabinetHtml, "text/html");
     if (api === "fr" && path === "/api/v1/documents.json") return send(res, 200, fr(u.searchParams));
     if (api === "govca") {
+      if (path === "/wp-json/wp/v2/posts") return send(res, 200, u.searchParams.get("page") === "1" ? govcaPosts() : []);
       if (path === "/category/executive-orders/feed/") return send(res, 200, govFeed(parseInt(u.searchParams.get("paged") || "1", 10)), "application/rss+xml");
       const post = govPosts[path.split("/").filter(Boolean).pop()];
       return post ? send(res, 200, post, "text/html") : send(res, 404, "not found", "text/plain");

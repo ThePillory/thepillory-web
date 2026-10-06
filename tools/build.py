@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "28"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "29"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -391,6 +391,18 @@ def build_methodology():
     <li><strong>Money and disclosures:</strong> every office the same way, whatever the officeholder's party. The President: campaign money from the Federal Election Commission, like members of Congress, the inaugural committee, and financial disclosure reports. The Vice President: the ticket's campaign money (the FEC records it under the President's campaign committee), the inaugural committee, and financial disclosure reports. Cabinet members are appointed, so they have no campaign money; their financial disclosure reports and ethics agreements are shown instead. California's statewide officers: their state campaign committees and their Form 700 statements. See <a class="inline-link" href="#funding">Campaign funding</a> and <a class="inline-link" href="#disclosures">Financial disclosures</a>.</li>
   </ul>
   <p>No scores, grades or commentary: counts of what's on the record, and the record itself.</p>
+</section>
+
+<section class="card stack" id="promises">
+  <h2>Promises</h2>
+  <p>A promise is a <strong>specific, checkable commitment</strong> an official made: an action, with an object, that anyone could later check happened or didn't. General values, priorities and positions are not promises.</p>
+  <ul class="plain-list small">
+    <li><strong>Quoted exactly,</strong> with the date and a link to the source. The quote is checked word for word against the source before anyone sees it; a quote that doesn't match is dropped, never corrected.</li>
+    <li><strong>The same sources for everyone of the same office:</strong> official press releases, inaugural addresses, and State of the Union and State of the State addresses; for county supervisors, official meeting agendas and minutes. Coverage starts with the President, California's Governor and Calaveras County's supervisors.</li>
+    <li><strong>AI suggests, a person decides.</strong> An AI model reads these documents and suggests a few candidates a day. Nothing is published until a person checks the quote against the source and confirms it is a specific commitment by that official. Each promise shows who reviewed it and when.</li>
+    <li><strong>Statuses:</strong> No action yet, In progress, Kept, Broken. A status changes only with evidence and a source, recorded by a person, and every change stays listed under the promise with its date, evidence and source.</li>
+    <li><strong>Neutral wording.</strong> ThePillory adds only a short, plain note on what would show the promise done. No characterization of the official, no predictions.</li>
+  </ul>
 </section>
 
 <section class="card stack" id="funding">

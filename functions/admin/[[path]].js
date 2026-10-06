@@ -5,6 +5,8 @@
 //                         edit any field, approve, reject, reopen, ask for a new draft or a
 //                         full analysis, close reader reports; full history
 // POST /admin/review/relevance/<bill id>/   un-skip (or skip again) a bill
+// /admin/review/promise/<id>/   one promise: approve or reject a suggestion, edit its note,
+//                         record a status change (evidence and source required), history
 // /admin/waitlist/        "Bring ThePillory to your county": sign-ups by county (counts only)
 //
 // Protected by Cloudflare Access (see functions/_lib/access.js and docs/analysis.md).
@@ -19,6 +21,8 @@ import { summarizeFlags } from "../../workers/sync/src/analysis/flags.js";
 import { FLAGS, FLAG_LABELS, IMPACT, MAX_FLAGGED } from "../../workers/sync/src/analysis/agenda-check.js";
 import { ISSUES } from "../_lib/generated.js";
 import { when, meetingHref } from "../_lib/meetings.js";
+import { STATUS, STATUSES, SOURCE_KIND, statusChip, historyList } from "../_lib/promises.js";
+import { wordingProblems } from "../../workers/sync/src/promises/check.js";
 
 // Browse every current analysis by where it stands.
 const BROWSE = {
@@ -165,7 +169,7 @@ async function skippedSection(db) {
 <section class="card">${rows || '<p class="secondary small">None skipped yet.</p>'}</section>`;
 }
 
-async function list(db, url) {
+async function list(db, url, env) {
   const q = async (where) => (await db.prepare(`${ROW_SQL} AND ${where} ORDER BY a.created_at DESC, a.id DESC LIMIT 100`).all()).results;
   const aiFlagged = await q("a.status = 'ai_draft' AND a.ai_review = 'flag'");
   const readerFlagged = await q("a.status != 'rejected' AND EXISTS (SELECT 1 FROM analysis_flags f WHERE f.analysis_id = a.id AND f.status = 'open')");
@@ -196,6 +200,7 @@ async function list(db, url) {
   <p class="subtitle">What needs a person. Drafts the AI reviewer passes are published as "AI-drafted, auto-checked"; the rest wait here.</p>
   <p class="small"><a class="inline-link" href="/admin/waitlist/">County waitlist</a></p>
 </header>
+${await promiseQueue(db, env)}
 ${queue("flagged-ai", "Flagged by AI", "The AI reviewer found a major problem: a factual error, unfair treatment of one side, or opinion stated as fact. These are hidden from public pages until you decide. Minor problems (completeness, wording) are fixed or noted automatically and don't come here.", aiFlagged, aiReasons)}
 ${flagSummary(aiFlagged)}
 ${queue("flagged-readers", "Flagged by readers", 'Readers reported a problem. These stay up, marked "Under review", until you approve, edit, reject or close the reports.', readerFlagged, (r) => {
@@ -837,6 +842,183 @@ ${table}`,
   return new Response(res.body, { status: 200, headers });
 }
 
+
+// ---------------------------------------------------------------------------
+// Promises: suggestions from the AI wait here; nothing is public until approved.
+
+const REJECT_REASONS = [
+  ["not_commitment", "Not a specific, checkable commitment"],
+  ["not_official", "Not the official's own commitment"],
+  ["misquoted", "Quote doesn't match the source"],
+  ["duplicate", "Duplicate of another promise"],
+  ["other", "Other"],
+];
+
+async function promiseQueue(db, env) {
+  let suggested = [];
+  let approved = [];
+  try {
+    suggested = (
+      await db
+        .prepare(
+          `SELECT p.*, o.name, o.office, o.slug FROM promises p JOIN officials o ON o.id = p.official_id
+           WHERE p.review = 'suggested' ORDER BY p.created_at, p.id LIMIT 50`
+        )
+        .all()
+    ).results;
+    approved = (
+      await db
+        .prepare(
+          `SELECT p.id, p.quote, p.status, p.made_on, o.name FROM promises p JOIN officials o ON o.id = p.official_id
+           WHERE p.review = 'approved' ORDER BY p.made_on DESC, p.id DESC LIMIT 100`
+        )
+        .all()
+    ).results;
+  } catch (err) {
+    if (/no such table/i.test(String(err && err.message))) return "";
+    throw err;
+  }
+  const rows = suggested
+    .map(
+      (p) => `
+<div class="list-row stack-sm promise-suggestion">
+  <p class="small"><strong>${esc(p.name)}</strong>, ${esc(p.office)} · ${esc(SOURCE_KIND[p.source_kind] || p.source_kind)} · ${fmtDate(p.made_on)}</p>
+  <blockquote class="promise-quote">“${esc(p.quote)}”</blockquote>
+  <p class="small"><strong>What would show it done:</strong> ${esc(p.check_note)}${p.due ? ` · Deadline as stated: ${esc(p.due)}` : ""}</p>
+  <p class="small"><a class="inline-link" href="${esc(p.source_url)}" target="_blank" rel="noopener">${esc(p.source_title)} ↗</a> <span class="secondary">· check the quote against the source</span></p>
+  <p class="hint">Suggested by ${esc(p.suggested_by)}, ${fmtDate(String(p.created_at).slice(0, 10))}. <a class="inline-link" href="/admin/review/promise/${p.id}/">Edit the note</a></p>
+  <div class="watch-actions">
+    <form method="post" action="/admin/review/promise/${p.id}/" class="stack-sm">
+      <input type="hidden" name="action" value="approve">
+      <label class="field"><span class="field-label">Your name, as shown on the page</span><input class="input" name="reviewer" required value="${esc(env.REVIEWER_NAME || "")}" autocomplete="name"></label>
+      <button class="btn btn--primary" type="submit">Approve</button>
+    </form>
+    <form method="post" action="/admin/review/promise/${p.id}/" class="stack-sm">
+      <input type="hidden" name="action" value="reject">
+      <label class="field"><span class="field-label">Why not</span><select class="input" name="reason">${REJECT_REASONS.map(([v, l]) => `<option value="${v}">${esc(l)}</option>`).join("")}</select></label>
+      <button class="btn" type="submit">Reject</button>
+    </form>
+  </div>
+</div>`
+    )
+    .join("");
+  const list = approved
+    .map((p) => `<a class="list-row link-row" href="/admin/review/promise/${p.id}/"><div><div class="list-title">${esc(p.name)}: “${esc(p.quote.length > 110 ? `${p.quote.slice(0, 110)}…` : p.quote)}”</div><div class="list-meta">${fmtDate(p.made_on)} · ${STATUS[p.status] ? STATUS[p.status][0] : p.status}</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>`)
+    .join("");
+  return `<h2 class="label queue-head" id="promises">Suggested promises <span class="queue-count">${suggested.length}</span></h2>
+<p class="hint">Proposed by AI from official press releases, addresses and county agendas, a few a day. The quote was checked word for word against the source in code; check that it's a specific commitment by this official. Nothing shows on the site until you approve it.</p>
+<section class="card">${rows || '<p class="secondary small">No suggestions waiting.</p>'}</section>
+<details class="weigh-details"><summary>Approved promises (${approved.length}): record a status change</summary><section class="card">${list || '<p class="secondary small">None yet.</p>'}</section></details>`;
+}
+
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+async function promiseDetail(db, env, id, { error = "", done = "", form = null } = {}) {
+  const p = await db.prepare("SELECT p.*, o.name, o.office, o.slug FROM promises p JOIN officials o ON o.id = p.official_id WHERE p.id = ?").bind(id).first();
+  if (!p) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+  p.changes = (await db.prepare("SELECT * FROM promise_status_changes WHERE promise_id = ? ORDER BY evidence_on DESC, recorded_at DESC, id DESC").bind(id).all()).results;
+  const f = form || {};
+  const statusForm = p.review === "approved"
+    ? `<section class="card stack-sm" id="status">
+  <h2 class="label">Record a status change</h2>
+  <p class="hint">Every change needs evidence and a source. Describe the evidence plainly: what happened, when, and where it's recorded. No judgment of the official.</p>
+  <form method="post" action="/admin/review/promise/${p.id}/" class="stack-sm">
+    <input type="hidden" name="action" value="status">
+    <label class="field"><span class="field-label">New status</span><select class="input" name="to_status" required>${STATUSES.filter((s) => s !== p.status).map((s) => `<option value="${s}"${f.to_status === s ? " selected" : ""}>${esc(STATUS[s][0])}</option>`).join("")}</select></label>
+    <label class="field"><span class="field-label">Evidence</span><textarea class="textarea" name="evidence" rows="3" required maxlength="1000">${esc(f.evidence || "")}</textarea></label>
+    <label class="field"><span class="field-label">Date of the evidence</span><input class="input" type="date" name="evidence_on" required value="${esc(f.evidence_on || "")}"></label>
+    <label class="field"><span class="field-label">Source (link)</span><input class="input" type="url" name="source_url" required placeholder="https://" value="${esc(f.source_url || "")}"></label>
+    <label class="field"><span class="field-label">Your name, as shown on the page</span><input class="input" name="reviewer" required value="${esc(f.reviewer || env.REVIEWER_NAME || "")}" autocomplete="name"></label>
+    <button class="btn btn--primary" type="submit">Record the change</button>
+  </form>
+</section>`
+    : "";
+  const noteForm = p.review !== "rejected"
+    ? `<section class="card stack-sm">
+  <h2 class="label">What would show it done</h2>
+  <p class="hint">The quote can't be edited; it stays word for word as the source has it. This note can: plain, neutral words.</p>
+  <form method="post" action="/admin/review/promise/${p.id}/" class="stack-sm">
+    <input type="hidden" name="action" value="note">
+    <label class="field"><span class="field-label">Note</span><textarea class="textarea" name="check_note" rows="2" required maxlength="300">${esc(f.check_note != null ? f.check_note : p.check_note)}</textarea></label>
+    <button class="btn" type="submit">Save the note</button>
+  </form>
+</section>`
+    : "";
+  return adminPage(
+    "Promise",
+    `<header class="page-head">
+  <p class="label">${esc(p.name)} · ${esc(p.office)}</p>
+  <h1>Promise</h1>
+  <p class="subtitle">${p.review === "suggested" ? "Suggested, waiting for review" : p.review === "approved" ? `Approved by ${esc(p.reviewed_by)}, ${fmtDate(String(p.reviewed_at).slice(0, 10))}` : `Rejected (${esc(p.reject_reason || "")})`} · ${statusChip(p.status)}</p>
+</header>
+${done ? `<p class="banner" role="status">${esc(done)}</p>` : ""}
+${error ? `<p class="banner banner--error" role="alert">${esc(error)}</p>` : ""}
+<section class="card stack-sm">
+  <blockquote class="promise-quote">“${esc(p.quote)}”</blockquote>
+  <p class="small">${esc(SOURCE_KIND[p.source_kind] || p.source_kind)}, ${fmtDate(p.made_on)}: <a class="inline-link" href="${esc(p.source_url)}" target="_blank" rel="noopener">${esc(p.source_title)} ↗</a></p>
+  <p class="small"><strong>What would show it done:</strong> ${esc(p.check_note)}</p>
+  ${p.review === "approved" ? `<p class="small"><a class="inline-link" href="/reps/${esc(p.slug)}/#promises">On the official's page</a></p>` : ""}
+</section>
+${statusForm}
+${noteForm}
+<section class="card stack-sm"><h2 class="label">History</h2>${historyList(p)}</section>`
+  );
+}
+
+async function promiseChange(db, env, id, request) {
+  const form = await request.formData();
+  const action = form.get("action");
+  const back = (q) => Response.redirect(`${new URL(request.url).origin}/admin/review/promise/${id}/?${q}`, 303);
+  const p = await db.prepare("SELECT * FROM promises WHERE id = ?").bind(id).first();
+  if (!p) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+  const reviewer = String(form.get("reviewer") || "").replace(/\s+/g, " ").trim().slice(0, 80);
+  if (action === "approve") {
+    if (!reviewer) return promiseDetail(db, env, id, { error: "Enter your name: it's shown with the promise." });
+    await db.prepare("UPDATE promises SET review = 'approved', reviewed_by = ?, reviewed_at = datetime('now'), reject_reason = NULL WHERE id = ? AND review = 'suggested'").bind(reviewer, id).run();
+    return Response.redirect(`${new URL(request.url).origin}/admin/review/#promises`, 303);
+  }
+  if (action === "reject") {
+    const reason = REJECT_REASONS.find(([v]) => v === form.get("reason"));
+    await db.prepare("UPDATE promises SET review = 'rejected', reviewed_at = datetime('now'), reject_reason = ? WHERE id = ? AND review = 'suggested'").bind(reason ? reason[1] : "Other", id).run();
+    return Response.redirect(`${new URL(request.url).origin}/admin/review/#promises`, 303);
+  }
+  if (action === "note") {
+    const note = String(form.get("check_note") || "").replace(/\s+/g, " ").trim();
+    const problems = wordingProblems(note);
+    if (!note || note.length > 300 || problems.length) {
+      return promiseDetail(db, env, id, { error: !note ? "The note can't be empty." : note.length > 300 ? "Keep the note under 300 characters." : `Use neutral wording: ${problems.join("; ")}.`, form: { check_note: note } });
+    }
+    await db.prepare("UPDATE promises SET check_note = ? WHERE id = ?").bind(note, id).run();
+    return back("done=Note saved.");
+  }
+  if (action === "status") {
+    if (p.review !== "approved") return back("done=Approve the promise before recording a status.");
+    const f = {
+      to_status: String(form.get("to_status") || ""),
+      evidence: String(form.get("evidence") || "").replace(/\s+/g, " ").trim().slice(0, 1000),
+      evidence_on: String(form.get("evidence_on") || "").trim(),
+      source_url: String(form.get("source_url") || "").trim(),
+      reviewer,
+    };
+    const problems = wordingProblems(f.evidence, { strict: false });
+    const error = !STATUSES.includes(f.to_status) || f.to_status === p.status ? "Choose a different status."
+      : !f.evidence ? "Describe the evidence."
+      : problems.length ? `Use neutral wording in the evidence: ${problems.join("; ")}.`
+      : !ISO_DATE.test(f.evidence_on) || f.evidence_on > new Date().toISOString().slice(0, 10) ? "Enter the date of the evidence (not in the future)."
+      : !safeUrl(f.source_url) ? "Enter the source as an http(s) link."
+      : !reviewer ? "Enter your name: it's shown with the change."
+      : "";
+    if (error) return promiseDetail(db, env, id, { error, form: f });
+    await db.batch([
+      db.prepare("INSERT INTO promise_status_changes (promise_id, from_status, to_status, evidence, evidence_on, source_url, recorded_by) VALUES (?, ?, ?, ?, ?, ?, ?)")
+        .bind(id, p.status, f.to_status, f.evidence, f.evidence_on, f.source_url, reviewer),
+      db.prepare("UPDATE promises SET status = ? WHERE id = ?").bind(f.to_status, id),
+    ]);
+    return back(`done=${encodeURIComponent(`Recorded: ${STATUS[f.to_status][0]}.`)}`);
+  }
+  return back("done=Nothing changed.");
+}
+
 async function handle(context) {
   const { request, env } = context;
   const url = new URL(request.url);
@@ -856,6 +1038,21 @@ async function handle(context) {
     const origin = request.headers.get("Origin");
     if (origin && origin !== url.origin) return adminPage("Refused", '<header class="page-head"><h1>Refused</h1></header>', 403);
     return relevanceChange(env.DB, decodeURIComponent(parts[2]), request, who.email);
+  }
+  if (parts[1] === "promise") {
+    const sub = parseInt(parts[2], 10);
+    if (parts.length !== 3 || !(sub > 0)) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+    try {
+      if (request.method === "POST") {
+        const origin = request.headers.get("Origin");
+        if (origin && origin !== url.origin) return adminPage("Refused", '<header class="page-head"><h1>Refused</h1></header>', 403);
+        return await promiseChange(env.DB, env, sub, request);
+      }
+      return await promiseDetail(env.DB, env, sub, { done: url.searchParams.get("done") || "" });
+    } catch (err) {
+      if (/no such table|no such column/i.test(String(err && err.message))) return missingTables();
+      throw err;
+    }
   }
   if (parts[1] === "agenda" || parts[1] === "link") {
     const sub = parseInt(parts[2], 10);
@@ -882,7 +1079,7 @@ async function handle(context) {
       if (!id || (origin && origin !== url.origin)) return adminPage("Refused", '<header class="page-head"><h1>Refused</h1></header>', 403);
       return await change(env.DB, env, id, request, who.email);
     }
-    if (!id) return await list(env.DB, url);
+    if (!id) return await list(env.DB, url, env);
     return await detail(env.DB, env, id, { done: url.searchParams.get("done") || "", email: who.email });
   } catch (err) {
     if (/no such table|no such column/i.test(String(err && err.message))) return missingTables();

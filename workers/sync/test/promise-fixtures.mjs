@@ -1,0 +1,73 @@
+// FAKE sources and a FAKE drafter for the promises step (src/promises/).
+// Every name, quote and number here is invented.
+
+const WH = "http://127.0.0.1:8788/whitehouse/";
+const GOVCA = "http://127.0.0.1:8788/govca/";
+
+const item = (link, title, date, html) => `<item><title>${title}</title><link>${link}</link><pubDate>${date}</pubDate><category><![CDATA[Releases]]></category><content:encoded><![CDATA[${html}]]></content:encoded></item>`;
+const rss = (items) => `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Fake</title>${items.join("")}</channel></rss>`;
+
+export function whiteHouseFeed(kind) {
+  if (kind === "remarks") {
+    return rss([item(`${WH}remarks/2025/01/the-inaugural-address/`, "The Inaugural Address", "Mon, 20 Jan 2025 17:00:00 +0000",
+      "<p>FAKE-PROMISE-DOC-INAUGURAL. My fellow citizens, thank you.</p><p>I believe in the promise of this country.</p>")]);
+  }
+  return rss([
+    item(`${WH}releases/2026/10/fake-clinics/`, "FAKE: The President Announces a Veterans Clinic Plan", "Mon, 05 Oct 2026 15:00:00 +0000",
+      "<p>FAKE-PROMISE-DOC-1. Today the President spoke in Testville.</p><p>&#8220;We will open three new veterans clinics in Ohio by the end of 2027,&#8221; the President said.</p><p>&#8220;I believe in strong families and safe streets for every American.&#8221;</p>"),
+    item(`${WH}releases/2026/10/fake-appointments/`, "FAKE: President Announces Appointments", "Sun, 04 Oct 2026 15:00:00 +0000", "<p>A list of names.</p>"),
+    item("https://example.org/not-the-white-house/", "FAKE: Elsewhere", "Sat, 03 Oct 2026 15:00:00 +0000", "<p>Not an official page.</p>"),
+  ]);
+}
+
+export function govcaPosts() {
+  return [
+    {
+      id: 1, date: "2026-10-02T08:00:00", link: `${GOVCA}2026/10/02/fake-libraries/`,
+      title: { rendered: "FAKE: Governor announces rural library grants" },
+      content: { rendered: "[et_pb_section][et_pb_text]<p>FAKE-PROMISE-DOC-GOV. SACRAMENTO &#8211; The state will award $25 million in grants to 40 rural libraries by June 30, 2027.</p><p>We are proud of our libraries.</p>[/et_pb_text][/et_pb_section]" },
+    },
+    {
+      id: 2, date: "2026-10-01T08:00:00", link: `${GOVCA}2026/10/01/fake-appointments/`,
+      title: { rendered: "FAKE: Governor Newsom announces appointments" },
+      content: { rendered: "<p>Names.</p>" },
+    },
+  ];
+}
+
+export function govinfoCollection() {
+  return {
+    count: 2, nextPage: null,
+    packages: [
+      { packageId: "DCPD-FAKE00001", dateIssued: "2026-02-24", title: "Address Before a Joint Session of the Congress on the State of the Union" },
+      { packageId: "DCPD-FAKE00002", dateIssued: "2026-02-25", title: "Remarks at a Fake Event" },
+    ],
+  };
+}
+
+export const govinfoHtm = () =>
+  "<html><head><style>p{color:black}</style></head><body><p>FAKE-PROMISE-DOC-SOTU. Mr. Speaker.</p><p>Tonight I am asking Congress to pass the Fake Highways Act, and I will sign it the day it reaches my desk.</p></body></html>";
+
+// What the FAKE drafter answers for each document: some candidates pass the
+// checks; others are built to be dropped (misquoted, a value, loaded wording).
+export function promiseDraft(message) {
+  const speaker = (/^- ([^,\n]+),/m.exec(message) || [])[1] || "Nobody";
+  if (message.includes("FAKE-PROMISE-DOC-1")) {
+    return { promises: [
+      { speaker, quote: "We will open three new veterans clinics in Ohio by the end of 2027", check_note: "Three new veterans clinics open in Ohio.", due: "by the end of 2027" },
+      { speaker, quote: "We will open four new veterans clinics in Ohio by the end of 2027", check_note: "Four clinics open.", due: "" },
+      { speaker, quote: "I believe in strong families and safe streets for every American.", check_note: "Families are strong.", due: "" },
+    ] };
+  }
+  if (message.includes("FAKE-PROMISE-DOC-GOV")) {
+    return { promises: [
+      { speaker, quote: "The state will award $25 million in grants to 40 rural libraries by June 30, 2027.", check_note: "Grant awards totaling $25 million to 40 rural libraries.", due: "by June 30, 2027" },
+    ] };
+  }
+  if (message.includes("FAKE-PROMISE-DOC-SOTU")) {
+    return { promises: [
+      { speaker, quote: "I will sign it the day it reaches my desk", check_note: "A historic signature on the Fake Highways Act.", due: "" },
+    ] };
+  }
+  return { promises: [] };
+}

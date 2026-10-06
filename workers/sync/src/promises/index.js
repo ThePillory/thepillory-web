@@ -1,0 +1,261 @@
+// Promises: AI proposes candidate promises from official documents; a person
+// approves each on /admin/review/ before anything is public. See
+// docs/promises.md.
+//
+//   1. Discover (once a day, no AI): new documents from each official's
+//      sources (src/promises/sources.js), saved in promise_sources as pending.
+//   2. Read (AI): a few documents a day, taking turns between officials so
+//      no one's documents use up the day, newest first. Each candidate is
+//      checked in code (src/promises/check.js): the quote must be in the
+//      document word for word, the note neutral, the quote a commitment.
+//   3. Save what passes as review = 'suggested'.
+//
+// Caps, so review keeps up: PROMISE_SUGGESTIONS_DAILY (default 3) new
+// suggestions a day, PROMISE_DOCS_DAILY (default 6) documents read a day, and
+// none while PROMISE_QUEUE_MAX (default 12) suggestions wait for review.
+import { log } from "../db.js";
+import { getState, setState, redact } from "../util.js";
+import { structuredCall, DEFAULT_MODEL, DraftRefused } from "../analysis/claude.js";
+import { INSTRUCTIONS, schema, documentMessage, PROMISE_PROMPT_VERSION, MAX_PER_DOCUMENT } from "./prompt.js";
+import { checkCandidate, quoteKey } from "./check.js";
+import { parseRssWithContent, parseWpPosts, addressPackages, whiteHouseKind, worthReading, htmlToText, clip, roundRobin } from "./sources.js";
+
+const UA = "ThePillory/1.0 (+https://thepillory.co; civic records)";
+const WH = "https://www.whitehouse.gov/";
+const GOVCA = "https://www.gov.ca.gov/";
+const GOVINFO = "https://api.govinfo.gov/";
+const COUNTY_GROUP = "county-board"; // agenda documents belong to the whole Board
+const today = () => new Date().toISOString().slice(0, 10);
+
+async function get(url, { json = false, timeoutMs = 30000 } = {}) {
+  const res = await fetch(url, { headers: { "User-Agent": UA, Accept: json ? "application/json" : "*/*" }, signal: AbortSignal.timeout(timeoutMs) });
+  if (!res.ok) throw new Error(`${new URL(url).host}${new URL(url).pathname}: HTTP ${res.status}`);
+  return json ? res.json() : res.text();
+}
+
+/** The officials promises are tracked for so far: the President, the Governor, Calaveras's supervisors. */
+export async function trackedOfficials(db) {
+  const { results } = await db
+    .prepare(
+      `SELECT id, slug, name, office, chamber, rank, term_start FROM officials WHERE active = 1 AND (
+         (chamber = 'us-executive' AND rank = 1) OR (chamber = 'ca-executive' AND rank = 1) OR chamber = 'county-board')`
+    )
+    .all();
+  return {
+    president: results.find((o) => o.chamber === "us-executive") || null,
+    governor: results.find((o) => o.chamber === "ca-executive") || null,
+    supervisors: results.filter((o) => o.chamber === "county-board"),
+  };
+}
+
+async function addSource(db, doc, officialId) {
+  const status = doc.text && worthReading(doc.title) ? "pending" : "skipped";
+  const note = !doc.text ? "no text" : status === "skipped" ? "a list or announcement without commitments (by title)" : null;
+  const r = await db
+    .prepare(
+      `INSERT OR IGNORE INTO promise_sources (url, official_id, kind, title, published_on, text, status, note)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+    )
+    .bind(doc.url, officialId, doc.kind, doc.title.slice(0, 300), doc.published_on, status === "pending" ? clip(doc.text, 60000) : null, status, note)
+    .run();
+  return (r.meta && r.meta.changes) || 0;
+}
+
+/** Step 1: new documents from each tracked official's sources. Errors per source are logged, not thrown. */
+export async function discover(env, db, officials) {
+  const found = [];
+  const errors = [];
+  const tryIt = async (label, fn) => {
+    try {
+      found.push(`${label}: ${await fn()}`);
+    } catch (err) {
+      errors.push(`${label}: ${redact(`${err.name}: ${err.message}`)}`);
+    }
+  };
+  const p = officials.president;
+  if (p) {
+    await tryIt("White House press releases", async () => {
+      const backfilled = (await getState(db, "promises_wh_backfilled")) === "1";
+      let n = 0;
+      for (let page = 1; page <= (backfilled ? 1 : 3); page++) {
+        const xml = await get(`${env.WH_BASE || WH}releases/feed/${page > 1 ? `?paged=${page}` : ""}`);
+        for (const d of parseRssWithContent(xml, { origin: env.WH_BASE || WH, kind: whiteHouseKind })) n += await addSource(db, d, p.id);
+      }
+      await setState(db, "promises_wh_backfilled", "1");
+      return `${n} new`;
+    });
+    await tryIt("White House remarks (inaugural address)", async () => {
+      const xml = await get(`${env.WH_BASE || WH}remarks/feed/`);
+      let n = 0;
+      for (const d of parseRssWithContent(xml, { origin: env.WH_BASE || WH, kind: () => "address" })) {
+        if (/inaugural address|joint address|state of the union/i.test(d.title)) n += await addSource(db, d, p.id);
+      }
+      return `${n} new`;
+    });
+    const key = env.GOVINFO_API_KEY || env.CONGRESS_API_KEY;
+    if (key) {
+      await tryIt("govinfo addresses (State of the Union, inaugural)", async () => {
+        const since = (await getState(db, "promises_cpd_since")) || `${new Date().getUTCFullYear() - 2}-01-01T00:00:00Z`;
+        const termStart = p.term_start && /^\d{4}-\d{2}-\d{2}/.test(p.term_start) ? p.term_start.slice(0, 10) : null;
+        let url = `${env.GOVINFO_BASE || GOVINFO}collections/CPD/${since}?offsetMark=*&pageSize=1000&api_key=${key}`;
+        let n = 0;
+        for (let pages = 0; url && pages < 25; pages++) {
+          const json = await get(url, { json: true, timeoutMs: 60000 });
+          for (const pkg of addressPackages(json)) {
+            // Only this President's term, when the term start is on record.
+            if (termStart && pkg.published_on && pkg.published_on < termStart) continue;
+            const exists = await db.prepare("SELECT 1 FROM promise_sources WHERE url = ?").bind(`https://www.govinfo.gov/app/details/${pkg.packageId}`).first();
+            if (exists) continue;
+            const htm = await get(`${env.GOVINFO_BASE || GOVINFO}packages/${pkg.packageId}/htm?api_key=${key}`, { timeoutMs: 60000 });
+            n += await addSource(db, { url: `https://www.govinfo.gov/app/details/${pkg.packageId}`, title: pkg.title, published_on: pkg.published_on, kind: "address", text: htmlToText(htm) }, p.id);
+          }
+          url = json.nextPage ? `${json.nextPage}${json.nextPage.includes("api_key=") ? "" : `&api_key=${key}`}` : null;
+        }
+        await setState(db, "promises_cpd_since", `${today()}T00:00:00Z`);
+        return `${n} new`;
+      });
+    }
+  }
+  const g = officials.governor;
+  if (g) {
+    await tryIt("Governor's press releases", async () => {
+      const backfilled = (await getState(db, "promises_govca_backfilled")) === "1";
+      let n = 0;
+      for (let page = 1; page <= (backfilled ? 1 : 3); page++) {
+        const json = await get(`${env.GOVCA_BASE || GOVCA}wp-json/wp/v2/posts?categories=17&per_page=20&page=${page}&_fields=id,date,link,title,content`, { json: true });
+        for (const d of parseWpPosts(json, env.GOVCA_BASE || GOVCA)) n += await addSource(db, d, g.id);
+      }
+      await setState(db, "promises_govca_backfilled", "1");
+      return `${n} new`;
+    });
+  }
+  if (officials.supervisors.length) {
+    await tryIt("Board of Supervisors agendas", async () => {
+      const { results: meetings } = await db
+        .prepare(
+          `SELECT m.id, m.starts_at, m.agenda_url FROM meetings m
+           WHERE m.body = 'Board of Supervisors' AND m.agenda_url LIKE 'http%' AND m.starts_at >= date('now', '-60 days') AND m.starts_at <= date('now', '+1 day')
+             AND EXISTS (SELECT 1 FROM meeting_items i WHERE i.meeting_id = m.id)`
+        )
+        .all();
+      let n = 0;
+      for (const m of meetings) {
+        const items = (await db.prepare("SELECT number, title FROM meeting_items WHERE meeting_id = ? ORDER BY sort").bind(m.id).all()).results;
+        const text = items.map((i) => `${i.number ? `${i.number}. ` : ""}${i.title}`).join("\n");
+        n += await addSource(db, { url: m.agenda_url, title: `Board of Supervisors agenda, ${m.starts_at.slice(0, 10)}`, published_on: m.starts_at.slice(0, 10), kind: "agenda", text }, COUNTY_GROUP);
+      }
+      return `${n} new`;
+    });
+  }
+  return { found, errors };
+}
+
+/** Step 2 and 3 for one document: candidates from the AI, checked, saved as suggested. */
+export async function readDocument(env, db, doc, speakers, room) {
+  const names = speakers.map((o) => o.name);
+  const { data, model, usage } = await structuredCall(env, {
+    model: env.PROMISE_MODEL || DEFAULT_MODEL,
+    system: [INSTRUCTIONS],
+    message: documentMessage(doc, speakers),
+    jsonSchema: schema(names),
+    maxTokens: 4000,
+  });
+  const kept = [];
+  const dropped = [];
+  for (const c of (data.promises || []).slice(0, MAX_PER_DOCUMENT)) {
+    const speaker = speakers.find((o) => o.name === c.speaker);
+    if (!speaker) {
+      dropped.push("speaker not in the list");
+      continue;
+    }
+    const checked = checkCandidate(c, doc.text);
+    if (!checked.ok) {
+      dropped.push(checked.reason);
+      continue;
+    }
+    // On a county agenda, the supervisor must be named in the document itself.
+    if (doc.kind === "agenda" || doc.kind === "minutes") {
+      const last = speaker.name.split(/\s+/).pop().toLowerCase();
+      if (!doc.text.toLowerCase().includes(last)) {
+        dropped.push("supervisor not named in the document");
+        continue;
+      }
+    }
+    if (kept.length >= room) {
+      dropped.push("over today's suggestion cap");
+      continue;
+    }
+    const r = await db
+      .prepare(
+        `INSERT OR IGNORE INTO promises (official_id, quote, quote_key, made_on, source_url, source_title, source_kind, check_note, due, suggested_by, prompt_version)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      )
+      .bind(speaker.id, checked.quote, quoteKey(checked.quote), doc.published_on || today(), doc.url, doc.title, doc.kind, checked.check_note, checked.due, model, PROMISE_PROMPT_VERSION)
+      .run();
+    if (r.meta && r.meta.changes) kept.push(speaker.name);
+    else dropped.push("already suggested");
+  }
+  return { kept, dropped, model, usage };
+}
+
+export async function runPromises(env, db, { run, deadline }) {
+  const started = new Date().toISOString();
+  if (!env.ANTHROPIC_API_KEY) return { suggested: 0 };
+  const officials = await trackedOfficials(db);
+  if (!officials.president && !officials.governor && !officials.supervisors.length) return { suggested: 0 };
+
+  // 1. Discover, once a day.
+  const dayKey = `promises_discovered_${today()}`;
+  if (!(await getState(db, dayKey))) {
+    const { found, errors } = await discover(env, db, officials);
+    await setState(db, dayKey, "1");
+    await log(db, run, "promise-sources", errors.length ? (found.length ? "partial" : "error") : "ok", 0, [...found, ...errors].join("; ") || "no sources", started);
+  }
+
+  // 2. Read, within the caps.
+  const sugLimit = parseInt(env.PROMISE_SUGGESTIONS_DAILY || "3", 10);
+  const docLimit = parseInt(env.PROMISE_DOCS_DAILY || "6", 10);
+  const queueMax = parseInt(env.PROMISE_QUEUE_MAX || "12", 10);
+  const sugKey = `promise_suggestions_${today()}`;
+  const docKey = `promise_docs_${today()}`;
+  let suggested = parseInt((await getState(db, sugKey)) || "0", 10);
+  let read = parseInt((await getState(db, docKey)) || "0", 10);
+  const waiting = (await db.prepare("SELECT COUNT(*) AS n FROM promises WHERE review = 'suggested'").first()).n;
+  if (waiting >= queueMax) {
+    await log(db, run, "promises", "skipped", 0, `${waiting} suggestions wait for review (PROMISE_QUEUE_MAX ${queueMax}); none added until some are reviewed`, started);
+    return { suggested: 0 };
+  }
+  if (suggested >= sugLimit || read >= docLimit) return { suggested: 0 };
+  const { results: pending } = await db.prepare("SELECT url, official_id, kind, title, published_on, text FROM promise_sources WHERE status = 'pending'").all();
+  const todo = roundRobin(pending, docLimit - read);
+  const speakersFor = (doc) =>
+    doc.official_id === COUNTY_GROUP ? officials.supervisors : [officials.president, officials.governor].filter((o) => o && o.id === doc.official_id);
+  let added = 0;
+  for (const doc of todo) {
+    if (suggested >= sugLimit || read >= docLimit || waiting + added >= queueMax) break;
+    if (deadline - Date.now() < 2 * 60 * 1000) break;
+    const t0 = new Date().toISOString();
+    const speakers = speakersFor(doc);
+    let status = "ok";
+    let message;
+    let found = 0;
+    try {
+      if (!speakers.length) throw new Error("no current official for this source");
+      const r = await readDocument(env, db, doc, speakers, Math.min(sugLimit - suggested, queueMax - waiting - added));
+      found = r.kept.length;
+      suggested += found;
+      added += found;
+      message = `${doc.title} (${doc.url}): ${found} suggested${r.dropped.length ? `; dropped ${r.dropped.length} (${[...new Set(r.dropped)].join("; ")})` : ""}; model ${r.model}; tokens in ${r.usage.input_tokens}, out ${r.usage.output_tokens}`;
+      await db.prepare("UPDATE promise_sources SET status = 'read', found = ?, note = ?, text = NULL, read_at = datetime('now') WHERE url = ?").bind(found, r.dropped.length ? [...new Set(r.dropped)].join("; ").slice(0, 300) : null, doc.url).run();
+    } catch (err) {
+      status = err instanceof DraftRefused ? "skipped" : "error";
+      message = `${doc.title} (${doc.url}): ${redact(`${err.name}: ${err.message}`)}`;
+      await db.prepare("UPDATE promise_sources SET status = 'failed', note = ?, read_at = datetime('now') WHERE url = ?").bind(message.slice(0, 300), doc.url).run();
+    }
+    read += 1;
+    await setState(db, sugKey, String(suggested));
+    await setState(db, docKey, String(read));
+    await log(db, run, "promises", status, 1, message, t0);
+  }
+  return { suggested: added, read: todo.length };
+}
