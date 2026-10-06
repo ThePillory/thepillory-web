@@ -87,20 +87,95 @@ export function promiseCard(p) {
 </article>`;
 }
 
-/** The Promises tab. `rows` is null before the promise tables exist. */
-export function promisesTab(o, rows) {
-  const how = '<a class="inline-link" href="/about/methodology/#promises">How promises are chosen</a>';
-  if (!rows || !rows.length) {
+/**
+ * "In their own words": the excerpt from each listed Issues or Priorities page,
+ * and statements the official's office submitted. Empty before migration 0014.
+ */
+export async function ownWordsFor(db, officialId) {
+  try {
+    const [pages, statements] = await Promise.all([
+      db
+        .prepare(
+          `SELECT url, kind, title, excerpt, excerpt_at, excerpt_by FROM promise_pages
+           WHERE official_id = ? AND excerpt IS NOT NULL AND excerpt_by IS NOT 'hidden' ORDER BY kind, title`
+        )
+        .bind(officialId)
+        .all(),
+      db
+        .prepare("SELECT id, title, body, submitted_on, source_url FROM official_statements WHERE official_id = ? AND removed_at IS NULL ORDER BY submitted_on DESC, id DESC LIMIT 10")
+        .bind(officialId)
+        .all(),
+    ]);
+    return { pages: pages.results, statements: statements.results };
+  } catch (err) {
+    if (/no such (table|column)/i.test(String(err && err.message))) return { pages: [], statements: [] };
+    throw err;
+  }
+}
+
+const SITE = { campaign_site: "Campaign website", office_site: "Office website" };
+const paragraphs = (text) =>
+  String(text || "")
+    .split(/\n\s*\n/)
+    .map((x) => x.trim())
+    .filter(Boolean)
+    .map((x) => `<p>${esc(x).replace(/\n/g, "<br>")}</p>`)
+    .join("");
+
+function excerptCard(o, x) {
+  const by = String(x.excerpt_by || "");
+  return `<article class="card stack-sm own-words">
+  <p class="label">${esc(SITE[x.kind] || "Website")} · as of ${fmtDate(String(x.excerpt_at || "").slice(0, 10))}</p>
+  <blockquote class="promise-quote">“${esc(x.excerpt)}”</blockquote>
+  <p class="hint">${ext(x.url, x.title)}</p>
+  <p class="hint">${by.startsWith("person:") ? `Excerpt chosen by ${esc(by.slice(7))}` : "Excerpt picked automatically and checked word for word against the page"}; refreshed monthly. The whole page is at the link.</p>
+</article>`;
+}
+
+function statementCard(o, st) {
+  return `<article class="card stack-sm own-words">
+  <p class="label">Submitted by the official · ${fmtDate(st.submitted_on)}</p>
+  ${st.title ? `<h3 class="statement-title">${esc(st.title)}</h3>` : ""}
+  <div class="statement-body small">${paragraphs(st.body)}</div>
+  ${st.source_url ? `<p class="hint">${ext(st.source_url, "Also published here")}</p>` : ""}
+  <p class="hint">Sent to ThePillory by ${esc(o.name)}'s office and shown as submitted, without edits.</p>
+</article>`;
+}
+
+/**
+ * The Platform tab: "In their own words" at the top, then "Commitments
+ * tracked" once at least one promise has been approved. `rows` is the
+ * approved promises (null before the promise tables exist); `own` is
+ * ownWordsFor's result.
+ */
+export function platformTab(o, rows, own) {
+  const promises = rows || [];
+  const pages = (own && own.pages) || [];
+  const statements = (own && own.statements) || [];
+  const how = '<a class="inline-link" href="/about/methodology/#promises">How the platform is recorded</a>';
+  if (!promises.length && !pages.length && !statements.length) {
     return `<div class="card empty-state stack-sm">
-  <p><strong>No promises tracked yet</strong></p>
-  <p class="small">A promise here is a specific, checkable commitment ${esc(o.name)} made in public: something they said they would do, such as signing a named bill, funding a program at a stated amount, or finishing a project by a date, quoted word for word with the date and a link to the source. Statements of values or general goals ("keep families safe") aren't promises.</p>
-  <p class="small">Promises come from official statements, addresses, meetings and the official's own Issues pages. Each one is checked against its source by a person before it appears, and its status (No action yet, In progress, Kept, Broken) changes only with evidence.</p>
+  <p><strong>No platform recorded yet</strong></p>
+  <p class="small">This tab shows ${esc(o.name)}'s platform in two parts. <strong>In their own words:</strong> a short excerpt, word for word, from their own Issues or Priorities page, with a link to the whole page, and statements their office submits, labeled as such. <strong>Commitments tracked:</strong> specific, checkable promises (signing a named bill, funding a program at a stated amount, finishing a project by a date), each quoted with its date and source and checked by a person, with a status that changes only with evidence.</p>
   ${how}
 </div>`;
   }
-  const intro = `<p class="small secondary">Specific, checkable commitments ${esc(o.name)} made in public, quoted exactly, with the date and the source. Each status (No action yet, In progress, Kept, Broken) changes only with evidence and a source, and every change is listed.</p>${how}`;
-  const counts = STATUSES.map((s) => [s, rows.filter((r) => r.status === s).length]).filter(([, n]) => n);
-  return `${intro}
-<p class="small">${counts.map(([s, n]) => `${statusChip(s)} ${n}`).join(" · ")}</p>
-${rows.map(promiseCard).join("")}`;
+  const ownSection = `<section class="stack-sm">
+  <h2 class="label">In their own words</h2>
+  ${
+    pages.length || statements.length
+      ? `${statements.map((st) => statementCard(o, st)).join("")}${pages.map((x) => excerptCard(o, x)).join("")}`
+      : `<p class="secondary small">No excerpt from ${esc(o.name)}'s own Issues page, and no statement from their office, yet.</p>`
+  }
+</section>`;
+  if (!promises.length) return `${ownSection}${how}`;
+  const counts = STATUSES.map((s) => [s, promises.filter((r) => r.status === s).length]).filter(([, n]) => n);
+  return `${ownSection}
+<section class="stack-sm">
+  <h2 class="label">Commitments tracked</h2>
+  <p class="small secondary">Specific, checkable commitments ${esc(o.name)} made in public, quoted exactly, with the date and the source. Each status (No action yet, In progress, Kept, Broken) changes only with evidence and a source, and every change is listed.</p>
+  <p class="small">${counts.map(([s, n]) => `${statusChip(s)} ${n}`).join(" · ")}</p>
+  ${promises.map(promiseCard).join("")}
+</section>
+${how}`;
 }

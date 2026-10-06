@@ -10,7 +10,9 @@
 // /admin/review/promise/new/    add a promise by hand (a meeting video with its time, an
 //                         interview…): approved as it's saved, with the person's name
 // POST /admin/review/promise/batch/   approve the ticked suggestions at once
-// /admin/review/promise/pages/  campaign and office "Issues" or "Priorities" pages the sync reads
+// /admin/review/promise/pages/  campaign and office "Issues" or "Priorities" pages the sync reads,
+//                         and the excerpt each shows under "In their own words" (choose, hide)
+// /admin/review/promise/statements/  statements officials' offices sent in ("Submitted by the official")
 // /admin/waitlist/        "Bring ThePillory to your county": sign-ups by county (counts only)
 //
 // Protected by Cloudflare Access (see functions/_lib/access.js and docs/analysis.md).
@@ -26,7 +28,8 @@ import { FLAGS, FLAG_LABELS, IMPACT, MAX_FLAGGED } from "../../workers/sync/src/
 import { ISSUES } from "../_lib/generated.js";
 import { when, meetingHref } from "../_lib/meetings.js";
 import { STATUS, STATUSES, SOURCE_KIND, statusChip, historyList, sourceHref } from "../_lib/promises.js";
-import { checkEntry, checkPage, selectedIds, officialLabel, PAGE_KINDS } from "../_lib/promise-entry.js";
+import { checkEntry, checkPage, checkStatement, selectedIds, officialLabel, PAGE_KINDS } from "../_lib/promise-entry.js";
+import { checkExcerpt } from "../../workers/sync/src/promises/excerpt.js";
 import { wordingProblems, quoteKey } from "../../workers/sync/src/promises/check.js";
 
 // Browse every current analysis by where it stands.
@@ -945,6 +948,7 @@ ${done ? `<p class="banner" role="status">${esc(done)}</p>` : ""}
 <p class="hint">Proposed by AI from official press releases, addresses, county agendas and the Issues pages listed below, a few a day. The quote was checked word for word against the source in code; check that it's a specific commitment by this official. Nothing shows on the site until you approve it.</p>
 <p class="small"><a class="inline-link" href="/admin/review/promise/new/">Add a promise by hand</a></p>
 <p class="small"><a class="inline-link" href="/admin/review/promise/pages/">Issues and priorities pages (${pages})</a></p>
+<p class="small"><a class="inline-link" href="/admin/review/promise/statements/">Statements from officials</a></p>
 ${batch}
 <section class="card">${rows || '<p class="secondary small">No suggestions waiting.</p>'}</section>
 <details class="weigh-details"${suggested.length ? "" : " open"}><summary>Recent activity</summary><section class="card stack-sm">${activityList}</section></details>
@@ -1012,7 +1016,7 @@ async function promiseCreate(db, env, request) {
     .run();
   if (!(res.meta && res.meta.changes)) return promiseNew(db, env, { error: "This quote is already recorded for this official (as a suggestion, a promise, or a rejected suggestion).", form: r.form });
   const row = await db.prepare("SELECT id FROM promises WHERE official_id = ? AND quote_key = ?").bind(x.official_id, quoteKey(x.quote)).first();
-  return Response.redirect(`${new URL(request.url).origin}/admin/review/promise/${row.id}/?done=${encodeURIComponent("Saved and approved. It shows on the official's Promises tab.")}`, 303);
+  return Response.redirect(`${new URL(request.url).origin}/admin/review/promise/${row.id}/?done=${encodeURIComponent("Saved and approved. It shows on the official's Platform tab, under Commitments tracked.")}`, 303);
 }
 
 async function promiseBatch(db, request) {
@@ -1043,6 +1047,19 @@ async function promisePages(db, env, { error = "", done = "", form = null } = {}
   <p class="small"><strong>${esc(p.name)}</strong>, ${esc(p.office)} · ${esc(PAGE_KINDS[p.kind] || p.kind)}</p>
   <p class="small"><a class="inline-link" href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)} ↗</a></p>
   <p class="hint">Added by ${esc(p.added_by)}, ${fmtDate(String(p.added_at).slice(0, 10))} · ${p.fetched_at ? `last read ${fmtDate(String(p.fetched_at).slice(0, 10))}${p.note ? `: ${esc(p.note)}` : ""}` : "not read yet; it's read in the next sync"}</p>
+  <details class="weigh-details"><summary>In their own words: ${p.excerpt_by === "hidden" ? "hidden" : p.excerpt ? "excerpt shown" : "no excerpt yet"}</summary>
+    <div class="stack-sm">
+      ${p.excerpt && p.excerpt_by !== "hidden" ? `<blockquote class="promise-quote">“${esc(p.excerpt)}”</blockquote><p class="hint">${String(p.excerpt_by || "").startsWith("person:") ? `Chosen by ${esc(String(p.excerpt_by).slice(7))}` : `Picked by ${esc(p.excerpt_by || "the AI")}`}, ${fmtDate(String(p.excerpt_at || "").slice(0, 10))}.</p>` : `<p class="hint">${p.excerpt_by === "hidden" ? "Hidden from the official's page." : p.excerpt_by === "none" ? "The AI found no passage summing up the page; it looks again monthly." : "Picked when the page is next read."}</p>`}
+      <form method="post" action="/admin/review/promise/pages/" class="stack-sm">
+        <input type="hidden" name="action" value="excerpt"><input type="hidden" name="url" value="${esc(p.url)}">
+        <label class="field"><span class="field-label">Use this excerpt instead (word for word from the page)</span><textarea class="textarea" name="excerpt" rows="3" maxlength="600" required></textarea></label>
+        <label class="field"><span class="field-label">Your name, as shown with it</span><input class="input" name="reviewer" required autocomplete="name" value="${esc(env.REVIEWER_NAME || "")}"></label>
+        <button class="btn" type="submit">Use this excerpt</button>
+      </form>
+      <form method="post" action="/admin/review/promise/pages/"><input type="hidden" name="action" value="${p.excerpt_by === "hidden" ? "excerpt_auto" : "excerpt_hide"}"><input type="hidden" name="url" value="${esc(p.url)}"><button class="btn" type="submit">${p.excerpt_by === "hidden" ? "Show an excerpt again" : "Hide the excerpt"}</button></form>
+      ${String(p.excerpt_by || "").startsWith("person:") ? `<form method="post" action="/admin/review/promise/pages/"><input type="hidden" name="action" value="excerpt_auto"><input type="hidden" name="url" value="${esc(p.url)}"><button class="btn" type="submit">Let the AI pick again</button></form>` : ""}
+    </div>
+  </details>
   <form method="post" action="/admin/review/promise/pages/"><input type="hidden" name="action" value="remove"><input type="hidden" name="url" value="${esc(p.url)}"><button class="btn" type="submit">Stop reading this page</button></form>
 </div>`
     )
@@ -1051,7 +1068,7 @@ async function promisePages(db, env, { error = "", done = "", form = null } = {}
     "Issues pages",
     `<header class="page-head">
   <h1>Issues and priorities pages</h1>
-  <p class="subtitle">An official's campaign or office website's "Issues" or "Priorities" page. The sync reads each one weekly and again whenever it changes; the AI suggests only specific, checkable commitments from it, and each waits here for your review like any other suggestion.</p>
+  <p class="subtitle">An official's campaign or office website's "Issues" or "Priorities" page. The sync reads each one weekly. A short excerpt, word for word, shows on the official's Platform tab under "In their own words" (refreshed monthly; you can choose another or hide it), and the AI suggests specific, checkable commitments from it, each waiting for your review like any other suggestion.</p>
 </header>
 ${done ? `<p class="banner" role="status">${esc(done)}</p>` : ""}
 ${error ? `<p class="banner banner--error" role="alert">${esc(error)}</p>` : ""}
@@ -1076,6 +1093,26 @@ async function promisePagesChange(db, env, request, email) {
     await db.prepare("DELETE FROM promise_pages WHERE url = ?").bind(String(form.url || "")).run();
     return back("Removed. Promises already approved from it stay, with their source.");
   }
+  if (form.action === "excerpt" || form.action === "excerpt_hide" || form.action === "excerpt_auto") {
+    const pg = await db.prepare("SELECT url, page_text FROM promise_pages WHERE url = ?").bind(String(form.url || "")).first();
+    if (!pg) return back("That page isn't listed.");
+    if (form.action === "excerpt_hide") {
+      await db.prepare("UPDATE promise_pages SET excerpt_by = 'hidden' WHERE url = ?").bind(pg.url).run();
+      return back("Hidden. The official's Platform tab no longer shows an excerpt from this page.");
+    }
+    if (form.action === "excerpt_auto") {
+      // Read again in the next sync, which picks a new excerpt.
+      await db.prepare("UPDATE promise_pages SET excerpt = NULL, excerpt_by = NULL, excerpt_at = NULL, fetched_at = NULL WHERE url = ?").bind(pg.url).run();
+      return back("A new excerpt is picked when the page is read in the next sync.");
+    }
+    const reviewer = String(form.reviewer || "").replace(/\s+/g, " ").trim().slice(0, 80);
+    if (!reviewer) return promisePages(db, env, { error: "Enter your name: it's shown with the excerpt." });
+    if (!pg.page_text) return promisePages(db, env, { error: "The page hasn't been read yet, so the excerpt can't be checked. Try again after the next sync." });
+    const r = checkExcerpt(pg.page_text, form.excerpt);
+    if (!r.excerpt) return promisePages(db, env, { error: `Not used: ${r.reason}. Copy one to three sentences exactly as the page has them.` });
+    await db.prepare("UPDATE promise_pages SET excerpt = ?, excerpt_at = datetime('now'), excerpt_by = ? WHERE url = ?").bind(r.excerpt, `person:${reviewer}`, pg.url).run();
+    return back("Excerpt saved. It stays while it's still on the page.");
+  }
   const r = checkPage(form, await officialChoices(db), email);
   if (r.error) return promisePages(db, env, { error: r.error, form: r.form });
   const res = await db
@@ -1083,6 +1120,68 @@ async function promisePagesChange(db, env, request, email) {
     .bind(r.row.url, r.row.official_id, r.row.kind, r.row.title, r.row.added_by)
     .run();
   return back(res.meta && res.meta.changes ? "Added. It's read in the next sync." : "That page is already listed.");
+}
+
+async function officialStatements(db, env, { error = "", done = "", form = null } = {}) {
+  const officials = await officialChoices(db);
+  const { results: rows } = await db
+    .prepare("SELECT s.*, o.name, o.office, o.slug FROM official_statements s JOIN officials o ON o.id = s.official_id ORDER BY s.removed_at IS NOT NULL, s.submitted_on DESC, s.id DESC LIMIT 100")
+    .all();
+  const f = form || {};
+  const list = rows
+    .map(
+      (st) => `<div class="list-row stack-xs">
+  <p class="small"><strong>${esc(st.name)}</strong>, ${esc(st.office)} · sent ${fmtDate(st.submitted_on)}${st.removed_at ? ` · <span class="secondary">removed ${fmtDate(String(st.removed_at).slice(0, 10))}${st.removed_note ? `: ${esc(st.removed_note)}` : ""}</span>` : ""}</p>
+  ${st.title ? `<p class="small"><strong>${esc(st.title)}</strong></p>` : ""}
+  <p class="small">${esc(st.body.length > 280 ? `${st.body.slice(0, 280)}…` : st.body)}</p>
+  <p class="hint">Received: ${esc(st.received_via)} · recorded by ${esc(st.recorded_by)}${st.removed_at ? "" : ` · <a class="inline-link" href="/reps/${esc(st.slug)}/#platform">On the official's page</a>`}</p>
+  ${st.removed_at ? "" : `<form method="post" action="/admin/review/promise/statements/" class="stack-xs"><input type="hidden" name="action" value="remove"><input type="hidden" name="id" value="${st.id}"><label class="field"><span class="field-label">Why remove it (kept here, not shown)</span><input class="input" name="note" required maxlength="200" placeholder="Withdrawn by the office"></label><button class="btn" type="submit">Remove from the page</button></form>`}
+</div>`
+    )
+    .join("");
+  return adminPage(
+    "Official statements",
+    `<header class="page-head">
+  <h1>Statements from officials</h1>
+  <p class="subtitle">A statement an official or their office sends in, shown in full on their Platform tab under "In their own words", labeled "Submitted by the official". It's shown exactly as sent: no edits, no summary. Record only what came from the office itself, and how it arrived.</p>
+</header>
+${done ? `<p class="banner" role="status">${esc(done)}</p>` : ""}
+${error ? `<p class="banner banner--error" role="alert">${esc(error)}</p>` : ""}
+<section class="card">${list || '<p class="secondary small">No statements yet.</p>'}</section>
+<form method="post" action="/admin/review/promise/statements/" class="card stack-sm">
+  <h2 class="label">Record a statement</h2>
+  <input type="hidden" name="action" value="add">
+  ${officialPicker(officials, f.official)}
+  <label class="field"><span class="field-label">Title (optional, as the office gave it)</span><input class="input" name="title" maxlength="200" value="${esc(f.title || "")}"></label>
+  <label class="field"><span class="field-label">Statement, exactly as sent</span><textarea class="textarea" name="body" rows="8" required maxlength="4000">${esc(f.body || "")}</textarea></label>
+  <p class="hint">Up to 3,000 characters, shown in full with its paragraphs. If it's longer, ask the office for a shorter version rather than cutting it.</p>
+  <label class="field"><span class="field-label">Date the office sent it</span><input class="input" type="date" name="submitted_on" required value="${esc(f.submitted_on || "")}"></label>
+  <label class="field"><span class="field-label">How it reached ThePillory (not shown)</span><input class="input" name="received_via" required maxlength="300" placeholder="Email from the office's official address" value="${esc(f.received_via || "")}"></label>
+  <label class="field"><span class="field-label">Where the office also published it (optional)</span><input class="input" type="url" name="source_url" placeholder="https://" value="${esc(f.source_url || "")}"></label>
+  <label class="field"><span class="field-label">Your name</span><input class="input" name="recorded_by" required autocomplete="name" value="${esc(f.recorded_by || env.REVIEWER_NAME || "")}"></label>
+  <p class="hint">Treat every official alike: any official's office can send a statement the same way.</p>
+  <button class="btn btn--primary" type="submit">Publish the statement</button>
+</form>`
+  );
+}
+
+async function officialStatementsChange(db, env, request) {
+  const form = Object.fromEntries((await request.formData()).entries());
+  const back = (t) => Response.redirect(`${new URL(request.url).origin}/admin/review/promise/statements/?done=${encodeURIComponent(t)}`, 303);
+  if (form.action === "remove") {
+    const note = String(form.note || "").replace(/\s+/g, " ").trim().slice(0, 200);
+    if (!note) return officialStatements(db, env, { error: "Say why it's removed (kept here, not shown)." });
+    await db.prepare("UPDATE official_statements SET removed_at = datetime('now'), removed_note = ? WHERE id = ? AND removed_at IS NULL").bind(note, parseInt(form.id, 10) || 0).run();
+    return back("Removed from the official's page; kept here.");
+  }
+  const r = checkStatement(form, await officialChoices(db), new Date().toISOString().slice(0, 10));
+  if (r.error) return officialStatements(db, env, { error: r.error, form: r.form });
+  const x = r.row;
+  await db
+    .prepare("INSERT INTO official_statements (official_id, title, body, submitted_on, received_via, source_url, recorded_by) VALUES (?, ?, ?, ?, ?, ?, ?)")
+    .bind(x.official_id, x.title, x.body, x.submitted_on, x.received_via, x.source_url, x.recorded_by)
+    .run();
+  return back("Published on the official's Platform tab, labeled \"Submitted by the official\".");
 }
 
 async function promiseDetail(db, env, id, { error = "", done = "", form = null } = {}) {
@@ -1129,7 +1228,7 @@ ${error ? `<p class="banner banner--error" role="alert">${esc(error)}</p>` : ""}
   <blockquote class="promise-quote">“${esc(p.quote)}”</blockquote>
   <p class="small">${esc(SOURCE_KIND[p.source_kind] || p.source_kind)}, ${fmtDate(p.made_on)}: <a class="inline-link" href="${esc(sourceHref(p.source_url, p.source_time))}" target="_blank" rel="noopener">${esc(p.source_title)} ↗</a>${p.source_time ? ` at ${esc(p.source_time)}` : ""}</p>
   <p class="small"><strong>What would show it done:</strong> ${esc(p.check_note)}</p>
-  ${p.review === "approved" ? `<p class="small"><a class="inline-link" href="/reps/${esc(p.slug)}/#promises">On the official's page</a></p>` : ""}
+  ${p.review === "approved" ? `<p class="small"><a class="inline-link" href="/reps/${esc(p.slug)}/#platform">On the official's page</a></p>` : ""}
 </section>
 ${statusForm}
 ${noteForm}
@@ -1211,16 +1310,18 @@ async function handle(context) {
     if (origin && origin !== url.origin) return adminPage("Refused", '<header class="page-head"><h1>Refused</h1></header>', 403);
     return relevanceChange(env.DB, decodeURIComponent(parts[2]), request, who.email);
   }
-  if (parts[1] === "promise" && ["new", "batch", "pages"].includes(parts[2]) && parts.length === 3) {
+  if (parts[1] === "promise" && ["new", "batch", "pages", "statements"].includes(parts[2]) && parts.length === 3) {
     try {
       if (request.method === "POST") {
         const origin = request.headers.get("Origin");
         if (origin && origin !== url.origin) return adminPage("Refused", '<header class="page-head"><h1>Refused</h1></header>', 403);
         if (parts[2] === "new") return await promiseCreate(env.DB, env, request);
         if (parts[2] === "batch") return await promiseBatch(env.DB, request);
+        if (parts[2] === "statements") return await officialStatementsChange(env.DB, env, request);
         return await promisePagesChange(env.DB, env, request, who.email);
       }
       if (parts[2] === "new") return await promiseNew(env.DB, env);
+      if (parts[2] === "statements") return await officialStatements(env.DB, env, { done: url.searchParams.get("done") || "" });
       if (parts[2] === "pages") return await promisePages(env.DB, env, { done: url.searchParams.get("done") || "" });
       return Response.redirect(`${url.origin}/admin/review/#promises`, 302);
     } catch (err) {

@@ -100,3 +100,35 @@ export function checkPage(form, officials, addedBy) {
 export function selectedIds(values) {
   return [...new Set((values || []).map((v) => parseInt(v, 10)).filter((n) => n > 0))].slice(0, 50);
 }
+
+/**
+ * A statement an official's office sent in, shown word for word on the
+ * Platform tab as "Submitted by the official". The body is kept exactly as
+ * sent (line breaks too); how it arrived is recorded but not shown.
+ */
+export function checkStatement(form, officials, today) {
+  const body = String(form.body == null ? "" : form.body).replace(/\r\n?/g, "\n").trim();
+  const f = {
+    official: clean(form.official, 300),
+    title: clean(form.title, 200),
+    body: body.slice(0, 4000),
+    submitted_on: clean(form.submitted_on, 10),
+    received_via: clean(form.received_via, 300),
+    source_url: clean(form.source_url, 2000),
+    recorded_by: clean(form.recorded_by, 80),
+  };
+  const o = findOfficial(officials, f.official);
+  const error = !o ? "Choose the official from the list (name · office)."
+    : !f.body ? "Paste the statement exactly as the office sent it."
+    : body.length > 3000 ? "Statements are shown in full, up to 3,000 characters; ask the office for a shorter version rather than cutting it."
+    : !ISO_DATE.test(f.submitted_on) || f.submitted_on > today ? "Enter the date the office sent it (not in the future)."
+    : !f.received_via ? "Say how it reached ThePillory (for example, an email from the office's official address). It isn't shown."
+    : f.source_url && !safeUrl(f.source_url) ? "The link where the office also published it must be http(s), or leave it empty."
+    : !f.recorded_by ? "Enter your name."
+    : "";
+  return {
+    error,
+    form: f,
+    row: error ? null : { official_id: o.id, title: f.title || null, body: f.body, submitted_on: f.submitted_on, received_via: f.received_via, source_url: f.source_url || null, recorded_by: f.recorded_by },
+  };
+}

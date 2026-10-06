@@ -135,3 +135,39 @@ test("Issues pages are read right after addresses; nav and footer aren't part of
   assert.doesNotMatch(page.text, /Donate|Paid for/);
   assert.ok(commitmentScore(page) > 500 && commitmentScore(page) < 1000);
 });
+
+test("In their own words: an excerpt word for word, refreshed monthly; statements as sent", async () => {
+  const { checkExcerpt, needsExcerpt } = await import("../src/promises/excerpt.js");
+  const { checkStatement } = await import("../../../functions/_lib/promise-entry.js");
+  const { platformTab } = await import("../../../functions/_lib/promises.js");
+  const page = "Issues. As Governor I will repave Route 4 between Murphys and Arnold by the end of 2027. Roads matter.";
+  assert.equal(checkExcerpt(page, "As Governor I will repave Route 4 between Murphys and Arnold by the end of 2027.").excerpt, "As Governor I will repave Route 4 between Murphys and Arnold by the end of 2027.");
+  assert.match(checkExcerpt(page, "As Governor I will repave every road.").reason, /word for word/);
+  assert.match(checkExcerpt(page, "").reason, /no passage/);
+  const now = Date.parse("2026-10-06T00:00:00Z");
+  const row = (patch) => ({ excerpt: "As Governor I will repave Route 4 between Murphys and Arnold by the end of 2027.", excerpt_at: "2026-09-20 00:00:00", excerpt_by: "claude-sonnet-5-5", ...patch });
+  assert.equal(needsExcerpt(row({}), page, now), false, "picked 16 days ago");
+  assert.equal(needsExcerpt(row({ excerpt_at: "2026-08-01 00:00:00" }), page, now), true, "monthly");
+  assert.equal(needsExcerpt(row({ excerpt_at: "2026-08-01 00:00:00", excerpt_by: "person:Test" }), page, now), false, "a person's choice stays");
+  assert.equal(needsExcerpt(row({ excerpt_by: "person:Test" }), "The page changed.", now), true, "but not once it's gone from the page");
+  assert.equal(needsExcerpt(row({ excerpt_by: "hidden" }), page, now), false);
+  assert.equal(needsExcerpt({ excerpt: null, excerpt_by: "none", excerpt_at: "2026-09-20 00:00:00" }, page, now), false, "none found: not asked again for a month");
+  assert.equal(needsExcerpt({ excerpt: null, excerpt_by: null }, page, now), true);
+
+  const officials = [{ id: "g", name: "Gloria Testgovernor", office: "Governor" }];
+  const st = { official: "Gloria Testgovernor · Governor", body: "Line one.\r\n\r\nLine two.", submitted_on: "2026-10-01", received_via: "Email", recorded_by: "T" };
+  assert.equal(checkStatement(st, officials, "2026-10-06").row.body, "Line one.\n\nLine two.", "kept as sent");
+  assert.match(checkStatement({ ...st, received_via: "" }, officials, "2026-10-06").error, /how it reached/i);
+  assert.match(checkStatement({ ...st, body: "x".repeat(3001) }, officials, "2026-10-06").error, /3,000/);
+
+  const o = { name: "Gloria Testgovernor" };
+  const own = { pages: [{ url: "https://example.org/issues", kind: "campaign_site", title: "Issues", excerpt: "I will repave Route 4.", excerpt_at: "2026-10-01 00:00:00", excerpt_by: "claude-sonnet-5-5" }], statements: [{ id: 1, title: null, body: "Line one.\n\nLine two.", submitted_on: "2026-10-01", source_url: null }] };
+  const onlyOwn = platformTab(o, [], own);
+  assert.match(onlyOwn, /In their own words/);
+  assert.match(onlyOwn, /Submitted by the official/);
+  assert.doesNotMatch(onlyOwn, /Commitments tracked/, "only once a promise is approved");
+  assert.match(onlyOwn, /<p>Line one\.<\/p><p>Line two\.<\/p>/);
+  const promise = { id: 1, status: "kept", source_kind: "address", made_on: "2026-01-08", quote: "I will sign it.", check_note: "A signed law.", source_url: "https://example.org/a", source_title: "Address", changes: [], reviewed_by: "T", reviewed_at: "2026-10-01" };
+  assert.match(platformTab(o, [promise], own), /Commitments tracked/);
+  assert.match(platformTab(o, [], { pages: [], statements: [] }), /No platform recorded yet/);
+});

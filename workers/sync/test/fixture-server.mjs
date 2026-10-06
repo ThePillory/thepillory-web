@@ -505,7 +505,7 @@ function promiseAnthropic(req, res, body) {
 }
 
 function anthropic(req, res, body) {
-  if (/^Officials \(use these exact names/.test((body.messages && body.messages[0] && body.messages[0].content) || "")) return promiseAnthropic(req, res, body);
+  if (/^(Officials \(use these exact names|Pick an excerpt\.)/.test((body.messages && body.messages[0] && body.messages[0].content) || "")) return promiseAnthropic(req, res, body);
   if (/Agenda items, as \[item number\]/.test((body.messages && body.messages[0] && body.messages[0].content) || "")) return agendaAnthropic(req, res, body);
   if (String(body.model || "").startsWith("claude-haiku")) return relevanceAnthropic(req, res, body);
   if (/^You are the independent reviewer/.test((body.system && body.system[0] && body.system[0].text) || "")) return reviewAnthropic(req, res, body);

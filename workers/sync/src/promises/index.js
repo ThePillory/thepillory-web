@@ -18,6 +18,7 @@ import { getState, setState, redact } from "../util.js";
 import { structuredCall, DEFAULT_MODEL, DraftRefused } from "../analysis/claude.js";
 import { INSTRUCTIONS, schema, documentMessage, PROMISE_PROMPT_VERSION, MAX_PER_DOCUMENT } from "./prompt.js";
 import { checkCandidate, quoteKey } from "./check.js";
+import { EXCERPT_INSTRUCTIONS, excerptSchema, excerptMessage, checkExcerpt, needsExcerpt } from "./excerpt.js";
 import { parseRssWithContent, parseWpPosts, addressPackages, whiteHouseKind, worthReading, htmlToText, clip, roundRobin, commitmentScore } from "./sources.js";
 
 const UA = "ThePillory/1.0 (+https://thepillory.co; civic records)";
@@ -141,19 +142,30 @@ export async function discover(env, db, officials) {
     const days = parseInt(env.PROMISE_PAGES_REFRESH_DAYS || "7", 10);
     const { results: pages } = await db
       .prepare(
-        `SELECT p.url, p.official_id, p.kind, p.title FROM promise_pages p JOIN officials o ON o.id = p.official_id
+        `SELECT p.url, p.official_id, p.kind, p.title, p.excerpt, p.excerpt_at, p.excerpt_by, o.name FROM promise_pages p JOIN officials o ON o.id = p.official_id
          WHERE o.active = 1 AND (p.fetched_at IS NULL OR p.fetched_at < datetime('now', ?)) ORDER BY p.fetched_at IS NOT NULL, p.fetched_at LIMIT 10`
       )
       .bind(`-${days} days`)
       .all();
     let changed = 0;
     let failed = 0;
+    const excerpts = [];
     for (const pg of pages) {
       let note;
       let hash = null;
       try {
         const text = clip(htmlToText(await get(pg.url)), 60000);
         hash = await sha256(text);
+        await db.prepare("UPDATE promise_pages SET page_text = ? WHERE url = ?").bind(text, pg.url).run();
+        // "In their own words" on the Platform tab: a new excerpt monthly, or when the old one left the page.
+        if (needsExcerpt(pg, text)) {
+          const picked = await pickExcerpt(env, { ...pg, text }, { name: pg.name });
+          await db
+            .prepare("UPDATE promise_pages SET excerpt = ?, excerpt_at = datetime('now'), excerpt_by = ? WHERE url = ?")
+            .bind(picked.excerpt, picked.excerpt ? picked.model : "none", pg.url)
+            .run();
+          excerpts.push(`${pg.name}: ${picked.excerpt ? "excerpt updated" : `no excerpt (${picked.reason})`}`);
+        }
         const before = await db.prepare("SELECT text_hash FROM promise_pages WHERE url = ?").bind(pg.url).first();
         if (before && before.text_hash === hash) note = "unchanged";
         else {
@@ -178,7 +190,7 @@ export async function discover(env, db, officials) {
         .bind(hash, note, pg.url)
         .run();
     }
-    return `${pages.length} checked, ${changed} new or changed${failed ? `, ${failed} failed` : ""}`;
+    return `${pages.length} checked, ${changed} new or changed${failed ? `, ${failed} failed` : ""}${excerpts.length ? `; ${excerpts.join("; ")}` : ""}`;
   });
   if (officials.supervisors.length) {
     await tryIt("Board of Supervisors agendas", async () => {
@@ -199,6 +211,23 @@ export async function discover(env, db, officials) {
     });
   }
   return { found, errors };
+}
+
+/** An excerpt for "In their own words", checked word for word against the page; never an error that stops the step. */
+export async function pickExcerpt(env, page, official) {
+  if (!env.ANTHROPIC_API_KEY) return { excerpt: null, reason: "no ANTHROPIC_API_KEY" };
+  try {
+    const { data, model } = await structuredCall(env, {
+      model: env.PROMISE_MODEL || DEFAULT_MODEL,
+      system: [EXCERPT_INSTRUCTIONS],
+      message: excerptMessage(page, official),
+      jsonSchema: excerptSchema,
+      maxTokens: 2000,
+    });
+    return { ...checkExcerpt(page.text, data.excerpt), model };
+  } catch (err) {
+    return { excerpt: null, reason: redact(`${err.name}: ${err.message}`).slice(0, 120) };
+  }
 }
 
 /** Step 2 and 3 for one document: candidates from the AI, checked, saved as suggested. */

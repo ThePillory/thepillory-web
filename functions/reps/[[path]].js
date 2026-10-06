@@ -15,7 +15,7 @@ import { voteRow, voteFilter } from "../_lib/votes.js";
 import { fundingFor, fundingTab } from "../_lib/funding.js";
 import { executiveMoney, executiveFundingParts, stateOfficialMoney, stateForm700 } from "../_lib/exec-funding.js";
 import { stateFundingTab } from "../_lib/state-funding.js";
-import { promisesFor, promisesTab } from "../_lib/promises.js";
+import { promisesFor, ownWordsFor, platformTab } from "../_lib/promises.js";
 import { currentCycle } from "../../workers/sync/src/funding/fec.js";
 import {
   isExecutive, isPresident, isGovernor, executiveOfficials, ordersFor, billsActedOn, nominationsFor,
@@ -189,9 +189,10 @@ async function profile(env, slug, url) {
     isPresident(o) ? loadSection("rep nominations", () => nominationsFor(db, o.id, { status, offset }), null) : null,
     o.level === "state" && !exec ? loadSection("rep committees", () => committeesFor(db, o.id), []) : [],
     loadSection("rep promises", () => promisesFor(db, o.id), null),
+    loadSection("rep own words", () => ownWordsFor(db, o.id), null),
   ]);
-  const [countsLoaded, votes, funding, orders, bills, nominations, committees, promises] = loaded;
-  const partial = anyFailed(countsLoaded, votes, funding, orders, bills, nominations, committees, promises);
+  const [countsLoaded, votes, funding, orders, bills, nominations, committees, promises, ownWords] = loaded;
+  const partial = anyFailed(countsLoaded, votes, funding, orders, bills, nominations, committees, promises, ownWords);
   const counts = countsLoaded === FAILED ? null : countsLoaded || {};
   const ok = (v) => (v === FAILED ? null : v);
 
@@ -293,10 +294,10 @@ ${exec ? execGlance(o, ok(orders), ok(bills), ok(nominations)) : !counts ? secti
   const main = `${head}
 <div class="rep-tabs stack" data-tabs>
   <nav class="tabs tabs--five" role="tablist" aria-label="Sections">
-    ${tab("about", "About")}${tab("promises", "Promises")}${tab("votes", "Votes")}${tab("funding", "Funding")}${tab("more", "More")}
+    ${tab("about", "About")}${tab("platform", "Platform")}${tab("votes", "Votes")}${tab("funding", "Funding")}${tab("more", "More")}
   </nav>
   <div class="stack" role="tabpanel" id="about" aria-labelledby="tab-about">${overview}</div>
-  <div class="stack" role="tabpanel" id="promises" aria-labelledby="tab-promises">${promises === FAILED ? sectionError("") : promisesTab(o, promises)}</div>
+  <div class="stack" role="tabpanel" id="platform" aria-labelledby="tab-platform">${promises === FAILED || ownWords === FAILED ? sectionError("") : platformTab(o, promises, ownWords)}</div>
   <div class="stack" role="tabpanel" id="votes" aria-labelledby="tab-votes">${votesHtml}</div>
   <div class="stack" role="tabpanel" id="funding" aria-labelledby="tab-funding">${fundingHtml}</div>
   <div class="stack" role="tabpanel" id="more" aria-labelledby="tab-more">${moreParts.join("")}</div>
