@@ -1,0 +1,66 @@
+# TEMPORARY: research which official sources expose press releases, addresses and minutes. Removed before merge.
+name: TEMPORARY promise sources research
+on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [.github/workflows/tmp-promise-sources.yml]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe
+        run: |
+          UA="Mozilla/5.0 (compatible; ThePillory research)"
+          st() { printf "%s  " "$(curl -s -o /dev/null -w '%{http_code} %{content_type}' -A "$UA" -L "$1")"; echo "$1"; }
+          echo "===== whitehouse.gov candidates"
+          for u in https://www.whitehouse.gov/feed/ https://www.whitehouse.gov/wp-json/wp/v2/posts?per_page=1 \
+            https://www.whitehouse.gov/briefing-room/feed/ https://www.whitehouse.gov/briefing-room/speeches-remarks/feed/ \
+            https://www.whitehouse.gov/briefing-room/statements-releases/feed/ https://www.whitehouse.gov/remarks/feed/ \
+            https://www.whitehouse.gov/releases/feed/ https://www.whitehouse.gov/presidential-actions/feed/ \
+            https://www.whitehouse.gov/news/feed/ https://www.whitehouse.gov/fact-sheets/feed/; do st "$u"; done
+          echo "----- wp-json types/categories"
+          curl -s -A "$UA" "https://www.whitehouse.gov/wp-json/wp/v2/types" | python3 -c "import json,sys; d=json.load(sys.stdin); print({k:(v.get('rest_base'),v.get('name')) for k,v in d.items()})" 2>&1 | head -5
+          curl -s -A "$UA" "https://www.whitehouse.gov/wp-json/wp/v2/categories?per_page=100" | python3 -c "import json,sys; d=json.load(sys.stdin); print([(c['id'],c['slug'],c['count']) for c in d])" 2>&1 | head -5
+          echo "----- whitehouse.gov search: inaugural / joint session"
+          for q in "inaugural%20address" "joint%20session%20of%20congress" "address%20to%20congress"; do
+            curl -s -A "$UA" "https://www.whitehouse.gov/wp-json/wp/v2/posts?search=$q&per_page=5&_fields=id,date,link,title,categories" | python3 -c "import json,sys; d=json.load(sys.stdin); [print(' ',p['date'][:10],p['link'],p['title']['rendered'][:90],p.get('categories')) for p in d]" 2>&1 | head -6
+          done
+          echo "----- newest whitehouse.gov feed items"
+          curl -s -A "$UA" https://www.whitehouse.gov/feed/ | python3 -c "
+          import sys,re
+          t=sys.stdin.read()
+          for m in re.findall(r'<item>.*?<title>(.*?)</title>.*?<link>(.*?)</link>.*?<pubDate>(.*?)</pubDate>(.*?)</item>', t, re.S)[:12]:
+              cats=re.findall(r'<category><!\[CDATA\[(.*?)\]\]></category>', m[3])
+              print(' ', m[2][:16], m[1], '|', m[0][:80], '|', cats, '| content:', 'content:encoded' in m[3])
+          "
+          echo "===== gov.ca.gov candidates"
+          for u in https://www.gov.ca.gov/feed/ https://www.gov.ca.gov/category/press-releases/feed/ https://www.gov.ca.gov/newsroom/ \
+            https://www.gov.ca.gov/category/speeches/feed/ https://www.gov.ca.gov/wp-json/wp/v2/posts?per_page=1; do st "$u"; done
+          curl -s -A "$UA" "https://www.gov.ca.gov/wp-json/wp/v2/categories?per_page=100" | python3 -c "import json,sys; d=json.load(sys.stdin); print([(c['id'],c['slug'],c['count']) for c in d])" 2>&1 | head -5
+          for q in "state%20of%20the%20state" "inaugural%20address"; do
+            curl -s -A "$UA" "https://www.gov.ca.gov/wp-json/wp/v2/posts?search=$q&per_page=6&_fields=id,date,link,title,categories" | python3 -c "import json,sys; d=json.load(sys.stdin); [print(' ',p['date'][:10],p['link'],p['title']['rendered'][:90],p.get('categories')) for p in d]" 2>&1 | head -7
+          done
+          echo "----- newest gov.ca.gov feed items"
+          curl -s -A "$UA" https://www.gov.ca.gov/feed/ | python3 -c "
+          import sys,re
+          t=sys.stdin.read()
+          for m in re.findall(r'<item>.*?<title>(.*?)</title>.*?<link>(.*?)</link>.*?<pubDate>(.*?)</pubDate>(.*?)</item>', t, re.S)[:8]:
+              cats=re.findall(r'<category><!\[CDATA\[(.*?)\]\]></category>', m[3])
+              print(' ', m[2][:16], m[1], '|', m[0][:80], '|', cats, '| content:', 'content:encoded' in m[3])
+          "
+          echo "===== Calaveras Tyler Meeting Manager: minutes fields"
+          API=https://calaverascountycatmmapp.tylerhost.net/tylermmcalendar9579prod/
+          curl -s -A "$UA" -X POST -H "Content-Type: application/json" -d "{\"startDate\":\"$(date -d '-120 days' +%m/%d/%Y)\",\"endDate\":\"$(date +%m/%d/%Y)\",\"meetingTypeIds\":[5]}" "${API}meetingInformation/getMeetingInformationByDate" > /tmp/m.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/m.json'))
+          print('meetings:', len(d))
+          if d:
+              print('keys:', sorted(d[0].keys()))
+              for r in d[:12]:
+                  print(' ', r.get('meetingId'), r.get('actualStartDate') or r.get('startDateTime'), {k:v for k,v in r.items() if 'inute' in k.lower() or 'document' in k.lower()})
+          PY
+          ID=$(python3 -c "import json; d=json.load(open('/tmp/m.json')); ids=[r for r in d if any('inute' in k.lower() and r[k] for k in r)]; print((ids or d)[0]['meetingId'] if d else '')")
+          echo "sample meeting $ID"
+          for u in "${API}meetingInformation/Minutes/$ID" "${API}meetingInformation/minutes/$ID" "${API}meetingInformation/getMeetingInformation/$ID" "${API}meetingInformation/$ID"; do st "$u"; done
+          curl -s -A "$UA" "${API}meetingInformation/getMeetingInformation/$ID" | head -c 1500; echo
