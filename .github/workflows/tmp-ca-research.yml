@@ -1,4 +1,4 @@
-# TEMPORARY: research Cal-Access tables, the live Funding tab and FPPC legislators. Removed before merge.
+# TEMPORARY: run the new California build on the real export, and check FPPC for legislators. Removed before merge.
 name: TEMPORARY California funding research
 on:
   push:
@@ -7,61 +7,47 @@ on:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 60
     steps:
+      - uses: actions/checkout@v4
       - name: FPPC legislators
         run: |
-          for n in Tangipa Alvarado-Gil; do
-            curl -s -X POST -H "Content-Type: application/json" -d "{\"searchFieldQueryInfos\":[{\"queryField\":\"FilerLastName\",\"queryType\":\"Exact Match\",\"filterValue\":\"$n\"}],\"showOnlyHeldPositions\":false}" https://form700search.fppc.ca.gov/Search/SearchFilerForms > /tmp/f.json
+          for n in Tangipa Alvarado-Gil Newsom; do
+            curl -s -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d "{\"searchFieldQueryInfos\":[{\"queryField\":\"FilerLastName\",\"queryType\":\"Exact Match\",\"filterValue\":\"$n\"}],\"showOnlyHeldPositions\":false}" https://form700search.fppc.ca.gov/Home/SearchDocuments > /tmp/f.json
             python3 - <<'PY'
           import json
-          t=open('/tmp/f.json').read()
-          try:
-              d=json.loads(t)
-              if isinstance(d,str): d=json.loads(d)
-          except Exception as e:
-              print('not json', t[:300]); raise SystemExit
-          docs=d.get('documents') or d.get('Documents') or []
+          d=json.loads(open('/tmp/f.json').read())
+          if isinstance(d,str): d=json.loads(d)
+          docs=d.get('documents') or []
           print('documents', len(docs))
-          for x in docs[:6]:
+          for x in docs[:8]:
               f=x.get('filer',{}); print(' ', f.get('firstName'), f.get('lastName'), [(p.get('agency'), p.get('position'), p.get('filingType'), p.get('filingYear')) for p in x.get('filingPositions',[])], (x.get('filingInfo') or {}).get('filedDate'))
           PY
           done
-          grep -rn "SearchFilerForms\|fppcSearch" -h workers/sync/src/funding/executive.js 2>/dev/null | head -3 || true
-      - uses: actions/checkout@v4
-      - name: FPPC endpoint used by the sync
-        run: grep -n "Search\|fetch(" workers/sync/src/funding/executive.js | sed -n 1,40p | grep -i "fppc\|search" | head
-      - name: Cal-Access codes and timing
+      - name: Build
         run: |
-          curl -s -o /tmp/x.zip -A "ThePillory data build (thepillory.co)" https://campaignfinance.cdn.sos.ca.gov/dbwebexport.zip
+          time python3 tools/build_ca_campaign.py /tmp/cabuild
+          time node tools/ca_campaign_finish.mjs /tmp/cabuild/ca-campaign-raw.json /tmp/cabuild/ca-campaign.json
+          ls -la /tmp/cabuild/
           python3 - <<'PY'
-          import zipfile, io, csv, collections, time
-          csv.field_size_limit(10**9)
-          z=zipfile.ZipFile('/tmp/x.zip')
-          def rows(t):
-              m=next(x for x in z.namelist() if x.upper().endswith('/'+t+'.TSV'))
-              with z.open(m) as raw:
-                  r=csv.reader(io.TextIOWrapper(raw,encoding='latin-1',newline=''),delimiter='\t',quoting=csv.QUOTE_NONE)
-                  h=next(r)
-                  for row in r: yield dict(zip(h,row))
-          yr=lambda s: (s.split(' ')[0].split('/')[-1] if s else '')
-          off=collections.Counter(); juris=collections.Counter(); seats=collections.Counter(); stw=collections.Counter(); names=collections.Counter()
-          for d in rows('CVR_CAMPAIGN_DISCLOSURE_CD'):
-              y=yr(d.get('THRU_DATE') or d.get('RPT_DATE'))
-              if d['FORM_TYPE']=='F460' and y in ('2025','2026') and d['ENTITY_CD'] in ('CAO','CTL'):
-                  off[(d['OFFICE_CD'],d['JURIS_CD'])]+=1
-                  if d['OFFICE_CD'] in ('ASM','SEN'): seats[(d['OFFICE_CD'],d['DIST_NO'])]+=1
-              if d['FORM_TYPE']=='F496' and yr(d.get('RPT_DATE')) in ('2024','2025','2026'):
-                  juris[(d['OFFICE_CD'],d['JURIS_CD'])]+=1
-                  nm=(d['CAND_NAML']+' '+d['CAND_NAMF']).lower()
-                  if any(k in nm for k in ['newsom','tangipa','alvarado','bonta','kounalakis','weber','thurmond','cohen']): names[(d['OFFICE_CD'],d['JURIS_CD'],d['DIST_NO'],d['CAND_NAML'],d['CAND_NAMF'],d['SUP_OPP_CD'])]+=1
-          print('F460 2025-26 (OFFICE_CD, JURIS_CD):', off.most_common(30))
-          print('ASM/SEN seats with covers:', len(seats), 'e.g. ASM 8:', seats.get(('ASM','08')), seats.get(('ASM','8')), 'SEN 4:', seats.get(('SEN','04')), seats.get(('SEN','4')))
-          print('sample DIST_NO formats:', list(seats)[:8])
-          print('F496 2024-26 (OFFICE_CD, JURIS_CD):', juris.most_common(30))
-          print('F496 naming known officials:', names.most_common(30))
-          t=time.time(); n=0; f=collections.Counter()
-          for d in rows('RCPT_CD'):
-              n+=1; f[(d['FORM_TYPE'], d['ENTITY_CD'], bool(d['MEMO_CODE']))]+=1
-          print('RCPT_CD rows', n, 'seconds', round(time.time()-t), f.most_common(15))
+          import json
+          d=json.load(open('/tmp/cabuild/ca-campaign.json'))
+          def show(label, p):
+              print('==', label, p['name'], [c['name'] for c in p['committees']])
+              for cyc, c in p['cycles'].items():
+                  print('  ', cyc, 'raised', c['raised'], 'spent', c['spent'], 'statements', c['statements'], 'individuals', c['individuals'], 'not_employed', c['not_employed'])
+                  print('     industries', c['industries'][:6])
+                  print('     employers', c['employers'][:5])
+                  print('     organizations', [(o['name'], o['kind'], o['industry'], o['total']) for o in c['organizations'][:6]])
+                  print('     ie', [(x['spender'], x['support_oppose'], x['race'], x['total'], x['filings']) for x in c['ie'][:8]])
+          show('governor', d['officials']['governor'])
+          show('lt gov', d['officials']['lieutenant-governor'])
+          for seat in ('ASM-8', 'SEN-4'):
+              for p in d['seats'].get(seat, []): show(seat, p)
+          print('seats', len(d['seats']), 'candidates', sum(len(v) for v in d['seats'].values()))
           PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ca-campaign
+          path: /tmp/cabuild/ca-campaign.json
+          retention-days: 3
