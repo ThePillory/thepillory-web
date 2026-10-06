@@ -32,6 +32,7 @@ import { makeLookup } from "./courtlistener.js";
 import { PROMPT_VERSION, CARD_PROMPT_VERSION } from "./prompt.js";
 import { checkRelevance, BATCH, RELEVANCE_PROMPT_VERSION } from "./relevance.js";
 import { reviewDraft, draftForReview, REVIEW_PROMPT_VERSION } from "./review.js";
+import { lintDraft } from "./lint.js";
 import { withD1Retry } from "../d1retry.js";
 import { runAgendaWatch } from "./agenda.js";
 
@@ -360,7 +361,7 @@ async function reviewBacklog(env, db, budget, run) {
 
 const RANK = "CASE r.local WHEN 'high' THEN 3 WHEN 'medium' THEN 2 WHEN 'low' THEN 1 ELSE 0 END";
 
-async function nextBills(db, limit) {
+async function nextBills(db, limit, env = {}, redraftRoom = 0) {
   // Requests first: yours from /admin/review, then readers', oldest first.
   const requested = (
     await db
@@ -374,7 +375,7 @@ async function nextBills(db, limit) {
       .bind(limit)
       .all()
   ).results.map((b) => ({ ...b, depth: b.request_depth || b.current_depth || (b.linked ? "full" : "card") }));
-  if (requested.length >= limit) return requested;
+  if (requested.length >= limit && redraftRoom <= 0) return requested;
   const retry = `NOT EXISTS (SELECT 1 FROM analysis_attempts t WHERE t.bill_id = b.id AND t.last_attempt > datetime('now', '-${RETRY_AFTER_DAYS} days'))`;
   // Bills an issue now links to, whose current analysis is only a card.
   const upgrades = (
@@ -386,6 +387,22 @@ async function nextBills(db, limit) {
       .bind(limit - requested.length)
       .all()
   ).results.map((b) => ({ ...b, depth: "full", upgrade: true }));
+  // Drafts the AI reviewer flagged that no person has decided on yet, written
+  // under an earlier version of the drafting prompt: drafted again with the
+  // current one (the flagged draft stays in the history).
+  const redrafts = (
+    await db
+      .prepare(
+        `SELECT b.*, a.depth AS redraft_depth FROM bills b JOIN bill_analyses a ON a.bill_id = b.id AND a.current = 1
+         WHERE a.status = 'ai_draft' AND a.ai_review = 'flag'
+           AND COALESCE(a.prompt_version, '') != CASE WHEN a.depth = 'card' THEN ? ELSE ? END
+           AND NOT EXISTS (SELECT 1 FROM bill_analysis_revisions v WHERE v.analysis_id = a.id AND v.actor != 'pipeline')
+           AND ${retry}
+         ORDER BY a.id LIMIT ?`
+      )
+      .bind(CARD_PROMPT_VERSION, PROMPT_VERSION, Math.max(0, redraftRoom))
+      .all()
+  ).results.map((b) => ({ ...b, depth: b.redraft_depth === "full" ? "full" : "card", redraft: true }));
   const fresh = (
     await db
       .prepare(
@@ -405,7 +422,7 @@ async function nextBills(db, limit) {
       .all()
   ).results.map((b) => ({ ...b, depth: b.linked ? "full" : "card" }));
   const seen = new Set();
-  return [...requested, ...upgrades, ...fresh].filter((b) => (seen.has(b.id) ? false : seen.add(b.id)));
+  return [...requested, ...upgrades, ...redrafts, ...fresh].filter((b) => (seen.has(b.id) ? false : seen.add(b.id)));
 }
 
 async function noteAttempt(db, billId, error) {
@@ -456,6 +473,35 @@ export async function analyzeBill(env, db, budget, bill) {
     return { quoteCheck, citationCheck: await verifyCitations(d, makeLookup(env, budget, sameCase)) };
   };
   let { quoteCheck, citationCheck } = await checks(draft, trimmed);
+  const addUsage = (u) => {
+    usage = {
+      input_tokens: usage.input_tokens + u.input_tokens,
+      output_tokens: usage.output_tokens + u.output_tokens,
+      cache_read_tokens: usage.cache_read_tokens + u.cache_read_tokens,
+      cache_write_tokens: usage.cache_write_tokens + u.cache_write_tokens,
+    };
+  };
+
+  // The wording check (lint.js), before the reviewer: verdicts in a panel,
+  // panels not in parallel form or of very different lengths, and a partly
+  // read bill that doesn't say so. Any problem goes back to the drafter once.
+  let lintNote = "";
+  const lintFirst = lintDraft(draft, { basis: source.basis, depth });
+  if (lintFirst.length && parseInt(env.WORDING_FIXES_PER_DRAFT || "1", 10) > 0) {
+    try {
+      budget.take(`wording fix ${bill.id}`);
+      const fixed = await draftAnalysis(env, bill, source, depth, { draft: draftForReview(draft, depth), reasons: lintFirst });
+      addUsage(fixed.usage);
+      const left = lintDraft(fixed.draft, { basis: source.basis, depth });
+      if (left.length < lintFirst.length) {
+        draft = fixed.draft;
+        ({ quoteCheck, citationCheck } = await checks(draft, fixed.trimmed));
+      }
+      lintNote = `; wording check: ${lintFirst.length} problem(s), ${Math.min(left.length, lintFirst.length)} left after one fix`;
+    } catch (err) {
+      lintNote = err instanceof BudgetExhausted ? `; wording check: ${lintFirst.length} problem(s), no budget left to fix` : `; wording fix failed (${redact(`${err.name}: ${err.message}`)})`;
+    }
+  }
 
   // The AI reviewer reads the checked draft. If the call fails, the draft is
   // saved unreviewed (so not public) and reviewed on the next run.
@@ -479,7 +525,9 @@ export async function analyzeBill(env, db, budget, bill) {
   if (review && review.checks.some((c) => !c.ok) && parseInt(env.REVISIONS_PER_DRAFT || "1", 10) > 0) {
     try {
       budget.take(`revision ${bill.id}`);
-      const revised = await draftAnalysis(env, bill, source, depth, { draft: draftForReview(draft, depth), reasons: review.reasons });
+      // The reviewer's problems, plus anything the wording check still finds.
+      const reasons = [...review.reasons, ...lintDraft(draft, { basis: source.basis, depth })];
+      const revised = await draftAnalysis(env, bill, source, depth, { draft: draftForReview(draft, depth), reasons: reasons.length ? reasons : review.notes || [] });
       const checked = await checks(revised.draft, revised.trimmed);
       budget.take(`AI reviewer (revision) ${bill.id}`);
       const second = await reviewDraft(env, bill, source, revised.draft, depth);
@@ -489,12 +537,7 @@ export async function analyzeBill(env, db, budget, bill) {
         draft = revised.draft;
         ({ quoteCheck, citationCheck } = checked);
       }
-      usage = {
-        input_tokens: usage.input_tokens + revised.usage.input_tokens,
-        output_tokens: usage.output_tokens + revised.usage.output_tokens,
-        cache_read_tokens: usage.cache_read_tokens + revised.usage.cache_read_tokens,
-        cache_write_tokens: usage.cache_write_tokens + revised.usage.cache_write_tokens,
-      };
+      addUsage(revised.usage);
       review = worse ? { ...review, kept_first: true, first: { ...second, revision_rejected: true } } : { ...second, first };
       revisionNote = `; revision tokens in ${revised.usage.input_tokens}, out ${revised.usage.output_tokens}; second review tokens in ${second.usage.input_tokens}, out ${second.usage.output_tokens}`;
     } catch (err) {
@@ -515,7 +558,7 @@ export async function analyzeBill(env, db, budget, bill) {
     counted: true,
     message:
       `${bill.id}: ${depth === "card" ? "card" : "full analysis"} ${row.id} saved (${source.basis}${source.condensed ? ", long bill condensed for the card" : ""}); model ${model}; tokens in ${usage.input_tokens}, out ${usage.output_tokens}, ` +
-      `cache read ${usage.cache_read_tokens}, cache write ${usage.cache_write_tokens}; ${fixes.join("; ")}; ${reviewNote(review, row.spot_check)}${reviewTokens}${revisionNote}${reviewError}`,
+      `cache read ${usage.cache_read_tokens}, cache write ${usage.cache_write_tokens}; ${fixes.join("; ")}; ${reviewNote(review, row.spot_check)}${reviewTokens}${lintNote}${revisionNote}${reviewError}`,
   };
 }
 
@@ -549,9 +592,14 @@ export async function runAnalysis(rawEnv, { deadlineMs, runId, trigger }) {
 
   let analyzed = 0;
   let stoppedEarly = false;
-  const bills = used < limit ? await nextBills(db, limit - used) : [];
+  // Redrafts of flagged drafts (after a drafting-prompt change) have their own
+  // daily allowance, REDRAFT_DAILY (20), so they don't hold up new bills.
+  const redraftLimit = parseInt(env.REDRAFT_DAILY || "20", 10);
+  const redraftKey = `redrafts_${day()}`;
+  let redrafted = parseInt((await getState(db, redraftKey)) || "0", 10);
+  const bills = used < limit || redrafted < redraftLimit ? await nextBills(db, Math.max(0, limit - used), env, Math.max(0, redraftLimit - redrafted)) : [];
   for (const bill of bills) {
-    if (used >= limit) break;
+    if (bill.redraft ? redrafted >= redraftLimit : used >= limit) continue;
     if (budget.timeLeft() < MIN_TIME_PER_BILL_MS) {
       stoppedEarly = true;
       break;
@@ -570,7 +618,10 @@ export async function runAnalysis(rawEnv, { deadlineMs, runId, trigger }) {
       await noteAttempt(db, bill.id, r.message);
       await finishRequest(db, bill, "failed", r.message);
     }
-    if (r.counted) {
+    if (r.counted && bill.redraft) {
+      redrafted += 1;
+      await setState(db, redraftKey, String(redrafted));
+    } else if (r.counted) {
       used += 1;
       await setState(db, key, String(used));
     }
@@ -580,7 +631,7 @@ export async function runAnalysis(rawEnv, { deadlineMs, runId, trigger }) {
   }
   // More relevance checks wait only if this round's check made progress (a failing check doesn't loop).
   const unchecked = relevance.checked > 0 && (await uncheckedBills(db, 1)).length > 0;
-  const waiting = used < limit && (stoppedEarly || unchecked || (await nextBills(db, 1)).length > 0);
+  const waiting = (used < limit || redrafted < redraftLimit) && (stoppedEarly || unchecked || (await nextBills(db, used < limit ? 1 : 0, env, redrafted < redraftLimit ? 1 : 0)).length > 0);
   const summary =
     used >= limit
       ? `daily limit of ${limit} drafts reached; the rest wait for tomorrow`

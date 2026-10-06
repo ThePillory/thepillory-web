@@ -8,11 +8,42 @@ export class BudgetExhausted extends Error {
 }
 
 export class UpstreamError extends Error {
-  constructor(url, status, body) {
+  constructor(url, status, body, retryAfterMs = null) {
     super(`${status} from ${redact(url)}${body ? `: ${body.slice(0, 200)}` : ""}`);
     this.name = "UpstreamError";
     this.status = status;
+    this.retryAfterMs = retryAfterMs;
   }
+}
+
+// HTTP statuses that usually pass: rate limits, overloaded or unreachable
+// servers, and Cloudflare's 52x errors (524: the origin took too long).
+export const TEMPORARY_STATUS = new Set([408, 425, 429, 500, 502, 503, 504, 520, 521, 522, 523, 524, 525, 526, 527, 529, 530]);
+
+/** true for an error a later attempt can get past: a temporary HTTP status, or a network failure. */
+export function isTemporary(err) {
+  if (!err) return false;
+  if (err instanceof UpstreamError || err.name === "UpstreamError") return TEMPORARY_STATUS.has(err.status);
+  return err.name === "TypeError" && /fetch|network|connection|socket|timed? ?out/i.test(String(err.message || ""))
+    || /network connection lost|ECONNRESET|ETIMEDOUT|socket hang up/i.test(String(err.message || ""));
+}
+
+/** Retry-After in milliseconds (seconds or an HTTP date), or null. */
+export function retryAfterMs(value, now = Date.now()) {
+  if (value == null || value === "") return null;
+  const s = Number(value);
+  if (Number.isFinite(s)) return Math.max(0, s * 1000);
+  const t = Date.parse(value);
+  return Number.isFinite(t) ? Math.max(0, t - now) : null;
+}
+
+/**
+ * The wait before retry `attempt` (1, 2, 3…): the server's Retry-After when it
+ * gives one, else exponential backoff (2 s, 6 s, 18 s…) with ±25% jitter.
+ */
+export function backoffMs(attempt, retryAfter = null, { baseMs = 2000, factor = 3, random = Math.random } = {}) {
+  if (retryAfter != null) return retryAfter;
+  return Math.round(baseMs * factor ** (attempt - 1) * (0.75 + random() * 0.5));
 }
 
 // Never log API keys.
@@ -53,18 +84,39 @@ export class Budget {
     this.used += 1;
   }
 
+  /**
+   * One request, retried on a temporary error (a 429, a 5xx or 52x, or a
+   * network failure) up to FETCH_RETRIES (3) times with backoff, honoring the
+   * server's Retry-After. It doesn't wait longer than FETCH_RETRY_MAX_WAIT_MS
+   * (60 s) at a time or past the round's deadline; then the error is thrown,
+   * and the step reports "partial" and is tried again in a later round.
+   */
   async fetch(url, init = {}, label = "request") {
-    this.take(label);
-    const headers = { "User-Agent": USER_AGENT, ...(init.headers || {}) };
-    const res = await fetch(url, { ...init, headers });
-    if (!res.ok) {
-      let body = "";
+    const retries = parseInt(this.env.FETCH_RETRIES || "3", 10);
+    const maxWait = parseInt(this.env.FETCH_RETRY_MAX_WAIT_MS || "60000", 10);
+    const sleep = this.sleep || ((ms) => new Promise((r) => setTimeout(r, ms)));
+    for (let attempt = 1; ; attempt++) {
+      this.take(label);
+      const headers = { "User-Agent": USER_AGENT, ...(init.headers || {}) };
+      let err;
       try {
-        body = await res.text();
-      } catch (_) {}
-      throw new UpstreamError(url, res.status, body);
+        const res = await (this.fetchImpl || fetch)(url, { ...init, headers });
+        if (res.ok) return res;
+        let body = "";
+        try {
+          body = await res.text();
+        } catch (_) {}
+        err = new UpstreamError(url, res.status, body, retryAfterMs(res.headers && res.headers.get && res.headers.get("Retry-After")));
+      } catch (e) {
+        err = e;
+      }
+      if (!isTemporary(err) || attempt > retries) throw err;
+      const wait = backoffMs(attempt, err.retryAfterMs);
+      if (wait > maxWait || this.timeLeft() < wait + 15000) throw err;
+      console.warn(`${label}: temporary error (${redact(String(err.message || err))}); retry ${attempt} of ${retries} in ${Math.round(wait / 1000)} s`);
+      this.retries = (this.retries || 0) + 1;
+      await sleep(wait);
     }
-    return res;
   }
 
   async json(url, init, label) {

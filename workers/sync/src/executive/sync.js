@@ -14,7 +14,7 @@
 //
 // Every row keeps its source URL. Nothing is inferred: an outcome is recorded
 // only from the action that states it.
-import { getState, setState, BudgetExhausted, isHttp, slugify, today } from "../util.js";
+import { getState, setState, BudgetExhausted, UpstreamError, isHttp, isTemporary, redact, slugify, today } from "../util.js";
 import { upsertOfficial, deactivateOthers, upsertBill } from "../db.js";
 import {
   executiveOn, personName, parseCabinet, frOrder, federalOutcome, federalWorthChecking, presentableFederal,
@@ -203,7 +203,14 @@ export async function syncExecutiveOrders(env, db, budget) {
       const pace = { intervalMs: parseInt(env.GOVCA_MIN_INTERVAL_MS || "2000", 10), dailyLimit: parseInt(env.GOVCA_DAILY_LIMIT || "300", 10) };
       const backfilled = (await getState(db, "gov_feed_backfilled")) === "1";
       for (let page = 1; page <= (backfilled ? 1 : 40); page++) {
-        const res = await budget.paced(db, "govca", pace, page === 1 ? feed : `${feed}?paged=${page}`, {}, `Governor's executive orders feed page ${page}`);
+        let res;
+        try {
+          res = await budget.paced(db, "govca", pace, page === 1 ? feed : `${feed}?paged=${page}`, {}, `Governor's executive orders feed page ${page}`);
+        } catch (err) {
+          // WordPress answers 404 for a page past the last one: the feed is done.
+          if (page > 1 && err instanceof UpstreamError && err.status === 404) break;
+          throw err;
+        }
         const items = parseGovFeed(await res.text(), `${new URL(feed).origin}/`);
         if (!items.length) break;
         for (const item of items) {
@@ -332,13 +339,24 @@ async function californiaOutcomes(env, db, budget, counts) {
          ORDER BY c.bill_id IS NOT NULL, b.id DESC LIMIT 25`
       )
       .all();
-    const todo = results.filter((r) => presentableCalifornia(r.id));
-    for (const r of results) if (!presentableCalifornia(r.id)) await db.prepare("INSERT OR REPLACE INTO bill_outcome_checks (bill_id, final) VALUES (?, 1)").bind(r.id).run();
-    if (!results.length) break;
+    const fresh = results.filter((r) => !counts.caPostponed.includes(r.id));
+    const todo = fresh.filter((r) => presentableCalifornia(r.id));
+    for (const r of fresh) if (!presentableCalifornia(r.id)) await db.prepare("INSERT OR REPLACE INTO bill_outcome_checks (bill_id, final) VALUES (?, 1)").bind(r.id).run();
+    if (!fresh.length) break;
     for (const r of todo) {
       const lid = leginfoBillId(r.id);
       const url = leginfoHistoryUrl(lid);
-      const res = await budget.paced(db, "leginfo", pace, `${(env.LEGINFO_BASE || "https://leginfo.legislature.ca.gov").replace(/\/$/, "")}/faces/billHistoryClient.xhtml?bill_id=${lid}`, {}, `leginfo history ${r.id}`);
+      let res;
+      try {
+        res = await budget.paced(db, "leginfo", pace, `${(env.LEGINFO_BASE || "https://leginfo.legislature.ca.gov").replace(/\/$/, "")}/faces/billHistoryClient.xhtml?bill_id=${lid}`, {}, `leginfo history ${r.id}`);
+      } catch (err) {
+        // Still timing out after the retries (leginfo answers 524 for slow pages):
+        // this bill waits for a later round; the others go on.
+        if (!isTemporary(err)) throw err;
+        counts.caPostponed.push(r.id);
+        counts.lastTemporary = err.message;
+        continue;
+      }
       const o = californiaOutcome(parseLeginfoHistory(await res.text()));
       counts.caChecked += 1;
       if (!o) {
@@ -352,7 +370,7 @@ async function californiaOutcomes(env, db, budget, counts) {
 }
 
 export async function syncBillOutcomes(env, db, budget) {
-  const counts = { fed: 0, fedChecked: 0, ca: 0, caChecked: 0 };
+  const counts = { fed: 0, fedChecked: 0, ca: 0, caChecked: 0, caPostponed: [], lastTemporary: null };
   const summary = () => `federal: ${counts.fed} outcome(s) from ${counts.fedChecked} bill(s) checked; California: ${counts.ca} outcome(s) from ${counts.caChecked} bill(s) checked`;
   let note = null;
   try {
@@ -362,6 +380,9 @@ export async function syncBillOutcomes(env, db, budget) {
     if (err instanceof BudgetExhausted) return partialMsg(summary(), err);
     if (missing(err)) return { status: "skipped", message: "tables not created yet" };
     throw err;
+  }
+  if (counts.caPostponed.length) {
+    return { status: "partial", message: `temporary error, tried again later: ${counts.caPostponed.length} California bill(s) (${redact(String(counts.lastTemporary)).slice(0, 120)}); ${summary()}` };
   }
   if (!counts.fedChecked && !counts.caChecked) return { status: "skipped", message: `nothing new to check${note ? `; ${note}` : ""}` };
   return { status: "ok", message: `${summary()}${note ? `; ${note}` : ""}` };
