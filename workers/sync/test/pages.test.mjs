@@ -133,6 +133,19 @@ test("pages before the first build: no heavy fallback, an honest state", async (
   assert.deepEqual(off, []);
 });
 
+test("just after the migration: an empty, never-built list is 'being prepared', and Happening now still shows", async () => {
+  const { sqlite, db } = freshDb();
+  seed(sqlite, { bills: 3 });
+  // bill_list exists (migration 0010) but the sync hasn't filled it yet.
+  assert.equal(await billList(db, { level: "federal" }), null);
+  const now = await happeningNow(db, "federal", { limit: 4 });
+  assert.equal(now.length, 3, "falls back to the votes table");
+  await buildSummaries(db);
+  assert.equal((await billList(db, { level: "federal" })).rows.length, 3);
+  // Built, and a level with no bills: an honest empty list, not "being prepared".
+  assert.deepEqual(await billList(db, { level: "state" }), { rows: [], more: false });
+});
+
 test("Happening now reads the bill list and leaves out routine bills", async () => {
   const { sqlite, db } = freshDb();
   seed(sqlite, { bills: 6 });

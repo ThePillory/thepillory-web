@@ -68,6 +68,17 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId }) {
   if (!rawEnv.DB) throw new Error("D1 binding DB is missing (see wrangler.toml)");
   const env = withD1Retry(rawEnv); // temporary D1 errors are retried (src/d1retry.js)
   await ensureSchema(env.DB);
+  // The page summaries are built at the end of each round; on a database where
+  // they've never been built (just after migration 0010), build them first, so
+  // the Laws page doesn't wait a whole round.
+  if (!(await getState(env.DB, "summaries_fingerprint"))) {
+    try {
+      const r = await buildSummaries(env.DB);
+      console.log(`page summaries (first build): ${r.message}`);
+    } catch (err) {
+      console.error(`page summaries (first build) failed: ${redact(`${err.name}: ${err.message}`)}`);
+    }
+  }
   const run = { id: runId || crypto.randomUUID(), trigger };
   const budget = new Budget(env, deadlineMs);
   const summary = [];
@@ -318,8 +329,8 @@ export default {
   async fetch(request, rawEnv) {
     const env = withD1Retry(rawEnv);
     const url = new URL(request.url);
-    if (!["/run", "/stop", "/analyze", "/status"].includes(url.pathname)) {
-      return json({ ok: true, routes: ["/run?token=…", "/run?restart=1&token=…", "/stop?token=…", "/analyze?token=…", "/status?token=…"] });
+    if (!["/run", "/stop", "/analyze", "/status", "/summaries"].includes(url.pathname)) {
+      return json({ ok: true, routes: ["/run?token=…", "/run?restart=1&token=…", "/stop?token=…", "/analyze?token=…", "/summaries?token=…", "/status?token=…"] });
     }
     if (!(await authorized(request, env))) return json({ error: "unauthorized: pass ?token= or Authorization: Bearer" }, 401);
 
@@ -347,6 +358,15 @@ export default {
         });
       }
 
+      // Rebuilds the page summaries (the Laws list, vote counts) now, from what's
+      // already in D1. No outside requests; takes a few seconds.
+      if (url.pathname === "/summaries") {
+        await ensureSchema(env.DB);
+        const r = await buildSummaries(env.DB, { force: true });
+        await log(env.DB, { id: `summaries-${Date.now()}`, trigger: "manual" }, "page-summaries", r.status, 0, r.message, new Date().toISOString());
+        return json({ ...r, next: "The Laws page shows the new list within 5 minutes (Cloudflare keeps each copy that long)." });
+      }
+
       if (url.pathname === "/analyze") {
         const res = await runner(env).fetch("https://sync-runner/start?trigger=manual&only=analysis");
         return json({
@@ -369,7 +389,8 @@ export default {
             "(SELECT COUNT(*) FROM bill_analyses WHERE current = 1 AND status = 'ai_draft' AND ai_review = 'flag') AS analyses_flagged_by_ai, " +
             "(SELECT COUNT(*) FROM bill_analyses WHERE current = 1 AND status = 'ai_draft' AND ai_review IS NULL) AS analyses_awaiting_ai_review, " +
             "(SELECT COUNT(*) FROM bill_analyses WHERE current = 1 AND status = 'reviewed') AS analyses_reviewed, " +
-            "(SELECT COUNT(*) FROM bill_relevance WHERE verdict = 'skip' AND override IS NULL) AS bills_skipped_as_ceremonial"
+            "(SELECT COUNT(*) FROM bill_relevance WHERE verdict = 'skip' AND override IS NULL) AS bills_skipped_as_ceremonial, " +
+            "(SELECT COUNT(*) FROM bill_list) AS laws_page_bills"
         ).first();
         recent = (await env.DB.prepare("SELECT * FROM sync_log ORDER BY id DESC LIMIT 30").all()).results;
         // Why drafts are flagged: the current flags, and the earlier reviews of
