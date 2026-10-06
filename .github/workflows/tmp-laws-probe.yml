@@ -1,0 +1,26 @@
+# TEMPORARY: reads the live public pages to see what the Laws page shows. Remove before merging.
+name: TEMPORARY laws probe
+on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [.github/workflows/tmp-laws-probe.yml]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch pages
+        run: |
+          for u in "/laws/" "/laws/?votes=all" "/explore/ca/" "/reps/?state=CA" "/reps/alex-padilla/"; do
+            echo "=================== $u"
+            curl -s -D /tmp/h -o /tmp/b -w "HTTP %{http_code} in %{time_total}s\n" "https://thepillory.co$u" || true
+            grep -iE "^(cache-control|cf-cache-status|age|content-type):" /tmp/h || true
+            python3 - <<'PY'
+          import re
+          t = open('/tmp/b', encoding='utf-8', errors='replace').read()
+          m = t[t.find('<main'):t.find('</main>')] if '<main' in t else t
+          txt = re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', ' | ', m))
+          txt = re.sub(r'( \| )+', ' | ', txt)
+          print(txt[:2500])
+          print('cards:', t.count('class="card issue-card"'), '| couldnt-load notes:', t.count("Couldn't load this section"), '| being prepared:', t.count('being prepared'), '| no recorded votes:', t.count('No recorded votes loaded yet'))
+          PY
+          done
