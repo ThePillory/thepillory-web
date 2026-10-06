@@ -122,9 +122,9 @@ export const BILLS_PER_PAGE = 20;
 /**
  * One page of the Laws list, newest first, from bill_list (built during the
  * sync; never computed from the votes tables on a visit). all: every bill with
- * a recorded vote; otherwise only bills with a final-passage vote. Returns
- * null if the list hasn't been built yet (no table, or an empty table the sync
- * hasn't filled).
+ * a recorded vote; otherwise only bills with a final-passage vote. Until the
+ * sync has built the list (no table, or an empty table it hasn't filled), the
+ * same list from the votes table alone, marked provisional.
  */
 export async function billList(db, { level, all = false, limit = BILLS_PER_PAGE, offset = 0 }) {
   const order = all ? "last_vote" : "last_final";
@@ -136,12 +136,29 @@ export async function billList(db, { level, all = false, limit = BILLS_PER_PAGE,
       )
       .bind(level, limit + 1, offset)
       .all();
-    if (!results.length && !offset && !(await summariesBuilt(db))) return null;
-    return { rows: results.slice(0, limit), more: results.length > limit };
+    if (results.length || offset || (await summariesBuilt(db))) return { rows: results.slice(0, limit), more: results.length > limit };
   } catch (err) {
-    if (/no such table/i.test(String(err && err.message))) return null;
-    throw err;
+    if (!/no such table/i.test(String(err && err.message))) throw err;
   }
+  // Not built yet: the same list from the votes table alone (never from
+  // vote_positions), without the counts and totals the build adds.
+  return billListFromVotes(db, { level, all, limit, offset });
+}
+
+async function billListFromVotes(db, { level, all, limit, offset }) {
+  const { results } = await db
+    .prepare(
+      `SELECT b.id AS bill_id, b.level, b.chamber, b.bill_number, b.title, b.session,
+         MAX(v.vote_date) AS last_vote,
+         MAX(CASE WHEN v.vote_type = 'final_passage' THEN v.vote_date END) AS last_final
+       FROM votes v JOIN bills b ON b.id = v.bill_id
+       WHERE v.level = ? ${all ? "" : "AND v.vote_type = 'final_passage'"}
+       GROUP BY v.bill_id
+       ORDER BY ${all ? "last_vote" : "last_final"} DESC, b.id DESC LIMIT ? OFFSET ?`
+    )
+    .bind(level, limit + 1, offset)
+    .all();
+  return { rows: results.slice(0, limit), more: results.length > limit, provisional: true };
 }
 
 /** Whether the sync has built the page summaries at least once (an empty bill_list may just be new). */
