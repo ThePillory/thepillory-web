@@ -1,6 +1,6 @@
 // ThePillory: shared behavior for the app screens.
 // - Global search (dropdown on every tab, full results on /search/)
-// - Tabs on rep profiles (#overview, #promises, #votes, #issues)
+// - Tabs on rep profiles (#about, #platform, #votes, #funding, #more)
 // - The first-visit intro on Home (dismissed once, remembered in this browser)
 // - Links to an agenda item open its collapsed section on meeting pages
 // The search data comes from assets/search-index.js (governing bodies and the
@@ -189,8 +189,9 @@
     });
 
     // A tab's own id opens it; the id of something inside a panel (#disclosures,
-    // #orders) opens that panel and scrolls to it. Old links: #overview is About.
-    var ALIASES = { overview: "about" };
+    // #orders) opens that panel and scrolls to it. Old links: #overview is About,
+    // #promises is Platform.
+    var ALIASES = { overview: "about", promises: "platform" };
     function fromHash() {
       var id = ALIASES[location.hash.slice(1)] || location.hash.slice(1);
       if (ids.indexOf(id) !== -1) return show(id);

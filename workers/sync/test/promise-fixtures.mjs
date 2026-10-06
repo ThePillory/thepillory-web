@@ -86,6 +86,10 @@ export function promiseDraft(message) {
       { speaker, quote: "The state will award $25 million in grants to 40 rural libraries by June 30, 2027.", check_note: "Grant awards totaling $25 million to 40 rural libraries.", due: "by June 30, 2027" },
     ] };
   }
+  // "In their own words": the passage summing up the page, word for word.
+  if (message.startsWith("Pick an excerpt.")) {
+    return { excerpt: message.includes("FAKE-PROMISE-DOC-ISSUES") ? "As Governor I will repave Route 4 between Murphys and Arnold by the end of 2027." : "" };
+  }
   if (message.includes("FAKE-PROMISE-DOC-ISSUES")) {
     return { promises: [
       { speaker, quote: "As Governor I will repave Route 4 between Murphys and Arnold by the end of 2027.", check_note: "Completed repaving of Route 4 between Murphys and Arnold.", due: "by the end of 2027" },

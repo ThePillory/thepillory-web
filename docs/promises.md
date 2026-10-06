@@ -44,9 +44,18 @@ In the analysis phase of each run (`runPromises`, after agenda watch):
 
 The Promises tab lists approved promises, newest first: the source kind and date, the status, the quote, what would show it done (and a deadline as stated), the source link, "Reviewed by", and the full status history with each change's evidence and source. Status colors follow the design rules: Kept navy, Broken `#8A3B12`, In progress and No action yet gray.
 
-An official with no approved promises shows **"No promises tracked yet"**, with what counts as a promise and where promises come from.
+## The Platform tab (`platformTab` in `functions/_lib/promises.js`)
 
-## Tables (`workers/sync/migrations/0011_promises.sql`, `0013_promise_sources.sql`)
+Promises appear on each official's **Platform** tab (About · Platform · Votes · Funding · More; old `#promises` links open it), in two parts:
+
+1. **In their own words**, at the top:
+   - **An excerpt from each listed Issues or Priorities page**: one to three sentences, word for word (`src/promises/excerpt.js`). When the sync reads a page (weekly), it asks the AI for the passage that sums up the page in the official's own words, with the same instructions for everyone (the page's own opening summary when there is one; never the passage most likely to make them look good or bad), then checks in code that it's on the page word for word and at most 450 characters. It's picked again monthly (`EXCERPT_REFRESH_DAYS`), or as soon as it's no longer on the page. Shown with the page's link, "as of" the date it was taken, and who chose it. On `/admin/review/promise/pages/` a person can paste a different excerpt (checked word for word against the page's last-read text; it stays while it's on the page), hide it, or let the AI pick again.
+   - **Statements the official's office submitted** (`official_statements`, migration 0014), recorded on `/admin/review/promise/statements/`: shown in full and exactly as sent (paragraphs kept, up to 3,000 characters), labeled "Submitted by the official" with the date sent and, if the office also published it, that link. How it reached ThePillory is recorded but not shown. A removed statement is kept with the reason and no longer shown. Officials' own logins to submit directly come with accounts.
+2. **Commitments tracked**: the approved promises with their statuses, shown **only when at least one promise has been approved**.
+
+With nothing in either part, the tab says "No platform recorded yet" and explains both parts.
+
+## Tables (`workers/sync/migrations/0011_promises.sql`, `0013_promise_sources.sql`, `0014_platform.sql`)
 
 - `promises`: one row per candidate; unique per official and normalized quote, so the same promise isn't suggested twice.
 - `promise_status_changes`: every status change, never edited.

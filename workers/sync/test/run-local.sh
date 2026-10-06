@@ -89,7 +89,7 @@ sleep 2
 until curl -s "localhost:8789/status?token=local-test-token" | grep -q '"status": "finished"'; do sleep 2; done
 curl -s "localhost:8789/status?token=local-test-token" | grep -E '"message": "(us|ca)-|earlier draft' | sed 's/^ *//'
 echo "--- a campaign Issues page listed by a person, read in the next round:"
-$D1 --command "SELECT url, fetched_at IS NOT NULL AS fetched, note FROM promise_pages" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
+$D1 --command "SELECT url, fetched_at IS NOT NULL AS fetched, note, excerpt, excerpt_by FROM promise_pages" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
 $D1 --command "SELECT p.id, o.name, p.source_kind, p.quote FROM promises p JOIN officials o ON o.id = p.official_id WHERE p.source_kind = 'campaign_site'" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
 kill $WK
 echo "--- California campaign finance (Cal-Access file) and Form 700s:"
@@ -126,7 +126,7 @@ SLUG=$($D1 --command "SELECT o.slug FROM promises p JOIN officials o ON o.id = p
 curl -s "localhost:8790/reps/$SLUG/?fresh=$PID" | python3 -c "
 import sys,re
 t=sys.stdin.read()
-m=t[t.find('id=\"promises\"'):t.find('id=\"votes\"')]
+m=t[t.find('id=\"platform\"'):t.find('id=\"votes\"')]
 print('  official page:', re.sub(r'\s+',' ',re.sub(r'<[^>]+>',' ',m))[:600])"
 curl -s "localhost:8790/reps/$SLUG/?fresh=x" | grep -c 'class="card stack-sm promise"' | sed 's/^/  promises shown (approved only): /'
 echo "--- add a promise by hand (a meeting video with its time), approve suggestions in a batch, list an Issues page:"
@@ -137,7 +137,15 @@ IDS=$($D1 --command "SELECT id FROM promises WHERE review = 'suggested'" --json 
 curl -s -o /dev/null -w "  approve selected ($IDS): %{http_code} %{redirect_url}\n" -X POST -d "$IDS&reviewer=Test+Reviewer" localhost:8790/admin/review/promise/batch/
 curl -s -o /dev/null -w "  list a page: %{http_code} %{redirect_url}\n" -X POST -d "action=add&official=$GOV&kind=office_site&url=https%3A%2F%2Fexample.org%2Fpriorities&title=Priorities" localhost:8790/admin/review/promise/pages/
 $D1 --command "SELECT review, COUNT(*) AS n FROM promises GROUP BY review" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
-curl -s "localhost:8790/reps/test-assemblymember-delta/?fresh=empty" | grep -o 'No promises tracked yet' | sed 's/^/  empty tab: /'
+curl -s "localhost:8790/reps/test-assemblymember-delta/?fresh=empty" | grep -o 'No platform recorded yet' | sed 's/^/  empty tab: /'
+curl -s -X POST -d "action=add&official=Nobody&body=I+was+not+contacted+about+this+record.&submitted_on=2026-10-01&received_via=email&recorded_by=Test+Reviewer" localhost:8790/admin/review/promise/statements/ | grep -o 'Choose the official[^<]*\|Published[^<]*' | head -1 | sed 's/^/  statement without its official: /' || true
+curl -s -o /dev/null -w "  record a statement: %{http_code} %{redirect_url}\n" -X POST -d "action=add&official=$GOV&title=On+rural+roads&body=Our+office+will+publish+a+repaving+schedule+for+every+county+road+by+March+2027.%0D%0A%0D%0AQuestions+can+go+to+our+district+office.&submitted_on=2026-10-01&received_via=Email+from+the+office&recorded_by=Test+Reviewer" localhost:8790/admin/review/promise/statements/
+curl -s "localhost:8790/reps/gloria-testgovernor/?fresh=platform" | python3 -c "
+import sys,re
+t=sys.stdin.read()
+m=t[t.find('id=\"platform\"'):t.find('id=\"votes\"')]
+for k in ('In their own words','Submitted by the official','Campaign website','Commitments tracked','Excerpt picked automatically'):
+    print('  platform tab has', repr(k), k in m)"
 echo "--- district lookups (fake Census geocoder; nothing is stored):"
 curl -s -X POST -H "Content-Type: application/json" -d '{"q":"1 Test Street, San Andreas, CA"}' localhost:8790/api/districts; echo
 curl -s -X POST -H "Content-Type: application/json" -d '{"q":"95249"}' localhost:8790/api/districts; echo

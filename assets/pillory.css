@@ -1345,3 +1345,8 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 .check-row input { width: 20px; height: 20px; accent-color: var(--navy); margin: 0; }
 /* Sync log lines on the review page carry long links: let them wrap */
 .activity-list li { overflow-wrap: anywhere; }
+
+/* Platform tab: a statement an official's office submitted, as submitted */
+.statement-title { margin: 0; font-family: var(--serif); font-weight: 600; font-size: 1.125rem; line-height: 1.3; }
+.statement-body p { margin: 0 0 8px; overflow-wrap: anywhere; }
+.statement-body p:last-child { margin-bottom: 0; }
