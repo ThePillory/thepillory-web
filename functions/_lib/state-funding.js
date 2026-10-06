@@ -109,6 +109,7 @@ export function stateFundingTab(o, m, base) {
     ${row("Spent", money(r.spent), "Summary Page line 11")}
     ${r.individuals_total != null ? row("From individuals (itemized)", `${money(r.individuals_total)} <span class="secondary">${pct(r.individuals_total, r.raised)}</span>`, `${(r.individuals_count || 0).toLocaleString("en-US")} contributions of $100 or more, net of refunds`) : ""}
   </ul>
+  ${r.raised === 0 ? `<p class="small">No contributions were reported received in ${span} by the committees ${esc(o.name)} controls. A committee can keep spending money raised in earlier periods${m.committees.length ? '; each statement\'s cash on hand is listed under "Campaign committees and statements" below' : ""}.${m.cycles.some((c) => c !== m.cycle) ? " Other periods are listed above." : ""}</p>` : ""}
   <p class="hint">Sums of each statement's own figures for its period. Contributions under $100 aren't itemized, so they're in "Raised" but not in the lists below.</p>
 </section>`;
 
