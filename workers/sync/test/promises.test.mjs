@@ -4,7 +4,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { findQuote, quoteKey, notACommitment, wordingProblems, checkCandidate, normalizeText } from "../src/promises/check.js";
-import { htmlToText, parseRssWithContent, parseWpPosts, addressPackages, whiteHouseKind, worthReading, roundRobin } from "../src/promises/sources.js";
+import { htmlToText, parseRssWithContent, parseWpPosts, addressPackages, whiteHouseKind, worthReading, roundRobin, commitmentScore, commitmentSentences } from "../src/promises/sources.js";
 import { schema } from "../src/promises/prompt.js";
 import { whiteHouseFeed, govcaPosts, govinfoCollection } from "./promise-fixtures.mjs";
 
@@ -73,6 +73,22 @@ test("reading order: officials take turns, newest first", () => {
     { official_id: "c", published_on: "2026-09-20", url: "c1" },
   ];
   assert.deepEqual(roundRobin(rows, 4).map((r) => r.url), ["p2", "g1", "c1", "p3"]);
+});
+
+test("reading order: documents that commit to something first; none, skipped", () => {
+  const report = { kind: "press_release", text: "The program reached 10,000 people this year. Results continue to improve across the state." };
+  const plan = { kind: "press_release", text: "Progress was strong. The Governor will sign the budget by June 30, 2027. The state plans to open two new clinics in rural counties." };
+  const values = { kind: "press_release", text: "We believe in a strong and growing economy for every family in this state." };
+  const address = { kind: "address", text: "Tonight I will send Congress a bill to fund rural broadband in every state." };
+  assert.equal(commitmentScore(report), 0, "a report of results: nothing to read");
+  assert.equal(commitmentScore(values), 0, "values aren't commitments");
+  assert.equal(commitmentSentences(plan.text).length, 2);
+  assert.ok(commitmentScore(address) > commitmentScore(plan), "addresses first");
+  const rows = [
+    { official_id: "g", published_on: "2026-10-05", url: "newest", score: 1 },
+    { official_id: "g", published_on: "2026-09-01", url: "older-plan", score: 3 },
+  ];
+  assert.deepEqual(roundRobin(rows, 2).map((r) => r.url), ["older-plan", "newest"]);
 });
 
 test("the output shape limits the speaker to the listed officials", () => {

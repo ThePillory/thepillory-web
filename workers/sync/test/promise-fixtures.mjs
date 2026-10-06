@@ -35,6 +35,22 @@ export function govcaPosts() {
   ];
 }
 
+// The WordPress search for "State of the State": the address, and a press release that only mentions it.
+export function govcaStateOfTheState() {
+  return [
+    {
+      id: 3, date: "2026-01-08T10:00:00", link: `${GOVCA}2026/01/08/fake-state-of-the-state/`,
+      title: { rendered: "FAKE: Governor delivers 2026 State of the State address" },
+      content: { rendered: "<p>FAKE-PROMISE-DOC-SOTS. This year I will sign a law requiring every county to publish its water use data online by January 1, 2027.</p>" },
+    },
+    {
+      id: 4, date: "2026-01-09T10:00:00", link: `${GOVCA}2026/01/09/fake-reactions/`,
+      title: { rendered: "FAKE: What they're saying about the State of the State" },
+      content: { rendered: "<p>Quotes from others.</p>" },
+    },
+  ];
+}
+
 export function govinfoCollection() {
   return {
     count: 2, nextPage: null,
@@ -62,6 +78,11 @@ export function promiseDraft(message) {
   if (message.includes("FAKE-PROMISE-DOC-GOV")) {
     return { promises: [
       { speaker, quote: "The state will award $25 million in grants to 40 rural libraries by June 30, 2027.", check_note: "Grant awards totaling $25 million to 40 rural libraries.", due: "by June 30, 2027" },
+    ] };
+  }
+  if (message.includes("FAKE-PROMISE-DOC-SOTS")) {
+    return { promises: [
+      { speaker, quote: "This year I will sign a law requiring every county to publish its water use data online by January 1, 2027.", check_note: "A signed law requiring counties to publish water use data online.", due: "by January 1, 2027" },
     ] };
   }
   if (message.includes("FAKE-PROMISE-DOC-SOTU")) {

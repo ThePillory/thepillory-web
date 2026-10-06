@@ -8,7 +8,7 @@ import { executive, cabinetHtml, fr, congressExec, leginfoHistory, stateExecutiv
 import http from "node:http";
 import { calendarHtml, rssHtml, meetingHtml, agendaLines, makePdf, dayFromToday } from "./iqm2-fixtures.mjs";
 import { meetingList, agendaPages } from "./tylermm-fixtures.mjs";
-import { whiteHouseFeed, govcaPosts, govinfoCollection, govinfoHtm, promiseDraft } from "./promise-fixtures.mjs";
+import { whiteHouseFeed, govcaPosts, govcaStateOfTheState, govinfoCollection, govinfoHtm, promiseDraft } from "./promise-fixtures.mjs";
 import { legislators, fec as fecFixture, lda as ldaFixture, oge as ogeFixture, form13File } from "./funding-fixtures.mjs";
 
 const PORT = parseInt(process.env.FIXTURE_PORT || "8788", 10);
@@ -625,6 +625,7 @@ http
     if (api === "whitehouse") return send(res, 200, cabinetHtml, "text/html");
     if (api === "fr" && path === "/api/v1/documents.json") return send(res, 200, fr(u.searchParams));
     if (api === "govca") {
+      if (path === "/wp-json/wp/v2/posts" && /state of the state/i.test(u.searchParams.get("search") || "")) return send(res, 200, govcaStateOfTheState());
       if (path === "/wp-json/wp/v2/posts") return send(res, 200, u.searchParams.get("page") === "1" ? govcaPosts() : []);
       if (path === "/category/executive-orders/feed/") return send(res, 200, govFeed(parseInt(u.searchParams.get("paged") || "1", 10)), "application/rss+xml");
       const post = govPosts[path.split("/").filter(Boolean).pop()];
