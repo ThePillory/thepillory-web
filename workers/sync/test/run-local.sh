@@ -81,11 +81,16 @@ echo "--- review load: a legacy draft of a ceremonial bill, a draft the AI revie
 D1="$WRANGLER d1 execute pillory-local-test -c wrangler.test.toml --local --persist-to $STATE"
 $D1 --command "INSERT INTO bill_analyses (bill_id, status, basis, text_source_url, plain_summary, model, prompt_version) VALUES ('us-119-hr-40', 'ai_draft', 'full_text', 'https://example.org/hr40', 'A draft written before the relevance check existed.', 'claude-sonnet-5-5', 'legacy');
   UPDATE bill_analyses SET ai_review = NULL, ai_review_detail = '{}', spot_check = 0 WHERE bill_id = 'ca-20252026-ab-101';
-  INSERT INTO issue_bill_links (issue_slug, bill_id, reason, status, approved_by, approved_at, source_url) VALUES ('broadband-scoring', 'us-119-s-30', 'Test link', 'approved', 'Local tester', datetime('now'), 'https://example.org/link')" >/dev/null
+  INSERT INTO issue_bill_links (issue_slug, bill_id, reason, status, approved_by, approved_at, source_url) VALUES ('broadband-scoring', 'us-119-s-30', 'Test link', 'approved', 'Local tester', datetime('now'), 'https://example.org/link');
+  INSERT INTO promise_pages (url, official_id, kind, title, added_by) VALUES ('http://127.0.0.1:8788/campaign/issues/', 'ca-exec:governor:gloria-testgovernor', 'campaign_site', 'Issues', 'local test');
+  DELETE FROM sync_state WHERE key LIKE 'promises_discovered_%' OR key LIKE 'promise_suggestions_%' OR key LIKE 'promise_docs_%'" >/dev/null
 curl -s "localhost:8789/analyze?token=local-test-token" >/dev/null
 sleep 2
 until curl -s "localhost:8789/status?token=local-test-token" | grep -q '"status": "finished"'; do sleep 2; done
 curl -s "localhost:8789/status?token=local-test-token" | grep -E '"message": "(us|ca)-|earlier draft' | sed 's/^ *//'
+echo "--- a campaign Issues page listed by a person, read in the next round:"
+$D1 --command "SELECT url, fetched_at IS NOT NULL AS fetched, note FROM promise_pages" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
+$D1 --command "SELECT p.id, o.name, p.source_kind, p.quote FROM promises p JOIN officials o ON o.id = p.official_id WHERE p.source_kind = 'campaign_site'" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
 kill $WK
 echo "--- California campaign finance (Cal-Access file) and Form 700s:"
 $D1 --command "SELECT step, status, message FROM sync_log WHERE message LIKE 'California campaign%' OR message LIKE 'FPPC%' OR message LIKE '%FPPC:%' ORDER BY id LIMIT 4" --json | python3 -c "import json,sys; [print(' ', r['step'], r['status'], r['message']) for r in json.load(sys.stdin)[0]['results']]"
@@ -124,6 +129,15 @@ t=sys.stdin.read()
 m=t[t.find('id=\"promises\"'):t.find('id=\"votes\"')]
 print('  official page:', re.sub(r'\s+',' ',re.sub(r'<[^>]+>',' ',m))[:600])"
 curl -s "localhost:8790/reps/$SLUG/?fresh=x" | grep -c 'class="card stack-sm promise"' | sed 's/^/  promises shown (approved only): /'
+echo "--- add a promise by hand (a meeting video with its time), approve suggestions in a batch, list an Issues page:"
+GOV="Gloria+Testgovernor+%C2%B7+Governor"
+curl -s -X POST -d "official=$GOV&quote=We+value+our+parks+and+the+people+who+use+them.&made_on=2026-09-01&source_kind=meeting_video&source_url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3Dfake&source_title=Test+meeting&check_note=A+park.&reviewer=Test+Reviewer" localhost:8790/admin/review/promise/new/ | grep -o 'may not be a specific commitment[^.]*' | sed 's/^/  a value, not a commitment: /'
+curl -s -o /dev/null -w "  saved: %{http_code} %{redirect_url}\n" -X POST -d "official=$GOV&quote=I+will+open+the+new+library+in+San+Andreas+by+May+2027.&made_on=2026-09-01&source_kind=meeting_video&source_url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3Dfake&source_time=1%3A02%3A03&source_title=Test+meeting%2C+September+1%2C+2026&check_note=The+library+in+San+Andreas+opens.&due=by+May+2027&reviewer=Test+Reviewer" localhost:8790/admin/review/promise/new/
+IDS=$($D1 --command "SELECT id FROM promises WHERE review = 'suggested'" --json | python3 -c "import json,sys; print('&'.join('ids=%d' % r['id'] for r in json.load(sys.stdin)[0]['results']))")
+curl -s -o /dev/null -w "  approve selected ($IDS): %{http_code} %{redirect_url}\n" -X POST -d "$IDS&reviewer=Test+Reviewer" localhost:8790/admin/review/promise/batch/
+curl -s -o /dev/null -w "  list a page: %{http_code} %{redirect_url}\n" -X POST -d "action=add&official=$GOV&kind=office_site&url=https%3A%2F%2Fexample.org%2Fpriorities&title=Priorities" localhost:8790/admin/review/promise/pages/
+$D1 --command "SELECT review, COUNT(*) AS n FROM promises GROUP BY review" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
+curl -s "localhost:8790/reps/test-assemblymember-delta/?fresh=empty" | grep -o 'No promises tracked yet' | sed 's/^/  empty tab: /'
 echo "--- district lookups (fake Census geocoder; nothing is stored):"
 curl -s -X POST -H "Content-Type: application/json" -d '{"q":"1 Test Street, San Andreas, CA"}' localhost:8790/api/districts; echo
 curl -s -X POST -H "Content-Type: application/json" -d '{"q":"95249"}' localhost:8790/api/districts; echo

@@ -11,6 +11,8 @@
 //                   press releases, and State of the State addresses posted there
 //   Supervisors     the Board of Supervisors' agenda text already in D1
 //                   (meeting_items); minutes when the county posts them
+//   Anyone          campaign and office "Issues" or "Priorities" pages a person
+//                   listed (promise_pages), read weekly and again when changed
 //
 // Most press releases report what was done, so before any AI reads a document
 // code looks for sentences that commit to something (commitmentScore):
@@ -22,7 +24,7 @@ import { COMMIT, VALUES_ONLY } from "./check.js";
 export function htmlToText(html) {
   return String(html || "")
     .replace(/\[\/?et_pb_[^\]]*\]/g, " ") // Divi builder shortcodes on gov.ca.gov
-    .replace(/<(script|style|noscript|svg)[\s\S]*?<\/\1>/gi, " ")
+    .replace(/<(script|style|noscript|svg|nav|footer)[\s\S]*?<\/\1>/gi, " ")
     .replace(/<br\s*\/?>|<\/(p|div|li|h\d|blockquote)>/gi, "\n")
     .replace(/<[^>]+>/g, " ")
     .replace(/&nbsp;|&#160;/g, " ")
@@ -103,6 +105,10 @@ export const whiteHouseKind = (title) => (/inaugural address|joint address|state
 const NOT_COMMITMENTS = /\b(announces appointments|nominations sent to the senate|legislative update|weekly schedule|week ahead|proclaims|proclamation|recognizes|honors|mourns|statement on the passing)\b/i;
 export const worthReading = (title) => !NOT_COMMITMENTS.test(title || "");
 
+// An official's campaign or office "Issues" / "Priorities" page (entered by a
+// person on /admin/review/promise/pages/): read right after addresses.
+export const PAGE_KINDS = new Set(["campaign_site", "office_site"]);
+
 /** Sentences that say someone will do something (will, plan to, by a year…), not values. */
 export function commitmentSentences(text) {
   return String(text || "")
@@ -115,7 +121,7 @@ export function commitmentSentences(text) {
 export function commitmentScore(doc) {
   const n = commitmentSentences(doc.text).length;
   if (!n) return 0;
-  return (doc.kind === "address" ? 1000 : 0) + n;
+  return (doc.kind === "address" ? 1000 : PAGE_KINDS.has(doc.kind) ? 500 : 0) + n;
 }
 
 /** Text sent to the model, cut to a length a single call can read. */

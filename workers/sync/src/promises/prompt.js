@@ -2,7 +2,7 @@
 // document. The same instructions for every official, whatever their office or
 // party. Bump PROMISE_PROMPT_VERSION when this file changes.
 
-export const PROMISE_PROMPT_VERSION = "2026-10-06.1";
+export const PROMISE_PROMPT_VERSION = "2026-10-06.2";
 export const MAX_PER_DOCUMENT = 3;
 
 export const INSTRUCTIONS = `You find promises in official government documents for ThePillory, a nonpartisan civic record. A person reviews every candidate before anything is published.
@@ -47,7 +47,14 @@ export function schema(speakers) {
   };
 }
 
-const KIND = { press_release: "an official press release", address: "an official address", minutes: "official meeting minutes", agenda: "an official meeting agenda" };
+const KIND = {
+  press_release: "an official press release",
+  address: "an official address",
+  minutes: "official meeting minutes",
+  agenda: "an official meeting agenda",
+  campaign_site: "the official's campaign website page (as the campaign states it; keep only specific commitments to act, not slogans or positions)",
+  office_site: "the official's office website page (keep only specific commitments to act, not descriptions of the office's work)",
+};
 
 export function documentMessage(doc, officials) {
   return `Officials (use these exact names as "speaker"):

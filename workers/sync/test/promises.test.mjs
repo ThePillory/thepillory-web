@@ -96,3 +96,42 @@ test("the output shape limits the speaker to the listed officials", () => {
   assert.deepEqual(s.properties.promises.items.properties.speaker.enum, ["Gloria Testgovernor"]);
   assert.deepEqual(s.properties.promises.items.required, ["speaker", "quote", "check_note", "due"]);
 });
+
+test("a promise added by hand: the same rules in code; a video time; batch ids", async () => {
+  const { checkEntry, checkPage, selectedIds, officialLabel } = await import("../../../functions/_lib/promise-entry.js");
+  const { sourceHref, timeSeconds } = await import("../../../functions/_lib/promises.js");
+  const officials = [{ id: "ca-exec:governor:x", name: "Gloria Testgovernor", office: "Governor" }];
+  const good = {
+    official: officialLabel(officials[0]), quote: "I will open the new library in San Andreas by May 2027.", made_on: "2026-09-01",
+    source_kind: "meeting_video", source_url: "https://www.youtube.com/watch?v=abc", source_time: "1:02:03",
+    source_title: "Board meeting, September 1, 2026", check_note: "The library in San Andreas opens.", due: "by May 2027", reviewer: "Test Reviewer",
+  };
+  const ok = checkEntry(good, officials, "2026-10-06");
+  assert.equal(ok.error, "");
+  assert.equal(ok.row.official_id, "ca-exec:governor:x");
+  assert.equal(ok.row.suggested_by, "Added by Test Reviewer");
+  assert.equal(sourceHref(good.source_url, good.source_time), "https://www.youtube.com/watch?v=abc&t=3723s");
+  assert.equal(timeSeconds("61:00"), 3660);
+  assert.equal(timeSeconds("1:75:00"), null);
+  const err = (patch) => checkEntry({ ...good, ...patch }, officials, "2026-10-06").error;
+  assert.match(err({ official: "Gloria" }), /Choose the official/);
+  assert.match(err({ made_on: "2026-12-01" }), /not in the future/);
+  assert.match(err({ source_url: "javascript:alert(1)" }), /http\(s\) link/);
+  assert.match(err({ source_time: "noon" }), /h:mm:ss/);
+  assert.match(err({ check_note: "A historic library opens." }), /neutral wording/);
+  assert.match(err({ due: "by 2030" }), /only when the quote states one/);
+  // A value, not a commitment: refused unless the person confirms it is one.
+  const value = { ...good, quote: "We value our libraries and the people who use them.", due: "" };
+  assert.match(checkEntry(value, officials, "2026-10-06").error, /may not be a specific commitment/);
+  assert.equal(checkEntry({ ...value, confirm: "yes" }, officials, "2026-10-06").error, "");
+  // Pages: an official, an http(s) link, whose site.
+  assert.equal(checkPage({ official: officialLabel(officials[0]), url: "https://example.org/issues", kind: "campaign_site", title: "Issues" }, officials, "me@example.org").error, "");
+  assert.match(checkPage({ official: officialLabel(officials[0]), url: "ftp://x", kind: "campaign_site", title: "Issues" }, officials, "me").error, /http\(s\)/);
+  assert.deepEqual(selectedIds(["3", "3", "x", "-1", "7"]), [3, 7]);
+});
+
+test("Issues pages are read right after addresses; nav and footer aren't part of the text", () => {
+  const page = { kind: "campaign_site", text: htmlToText("<nav>Donate</nav><p>I will repave Route 4 by the end of 2027.</p><footer>Paid for by</footer>") };
+  assert.doesNotMatch(page.text, /Donate|Paid for/);
+  assert.ok(commitmentScore(page) > 500 && commitmentScore(page) < 1000);
+});

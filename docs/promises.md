@@ -12,6 +12,8 @@ The same kinds of source for everyone in the same office. Coverage starts with t
 | The Governor | Official press releases, including State of the State and inaugural addresses posted there | gov.ca.gov's WordPress API, category "Press releases" (17), full text (`wp-json/wp/v2/posts?categories=17`); the first run reads 3 pages of 20, then the newest page daily; and a daily search for "State of the State" (`search=State of the State`), keeping posts titled as the address |
 | Calaveras supervisors | Board of Supervisors meeting agendas, and minutes when the county posts them | The agenda text the meetings step already loads (`meeting_items`), for meetings in the last 60 days. A commitment counts only when the supervisor is named in the document. The county's meeting portal (Tyler Meeting Manager) lists a minutes record for each meeting but hadn't published any as of October 2026; adopted minutes appear only inside agenda packets, which aren't downloaded (often over 100 MB). Expect few supervisor candidates until minutes are published on their own |
 
+| Any official | Their campaign or office website's "Issues" or "Priorities" page, listed by a person on `/admin/review/promise/pages/` (never guessed) | `promise_pages` (migration 0013). Each page is fetched weekly (`PROMISE_PAGES_REFRESH_DAYS`, 7; 10 a day), its text (navigation and footer left out) hashed, and sent to be read again only when the text changes. Read right after addresses. Keep the same kind of page for every official in the same office. |
+
 Press releases that are lists rather than statements (appointments, nominations sent to the Senate, legislative updates, proclamations) are left unread by title (`worthReading` in `sources.js`).
 
 ## How a candidate is proposed
@@ -33,13 +35,18 @@ In the analysis phase of each run (`runPromises`, after agenda watch):
 ## Review (`/admin/review/`, behind Cloudflare Access)
 
 - **Suggested promises**: the quote, the official, the date, a link to the source, and the note. **Approve** (with your name, shown on the page as "Reviewed by [name], [date]") or **Reject** with a reason. The quote can't be edited; the note can (`/admin/review/promise/<id>/`), with the same neutral-wording check.
+- **Approve selected**: tick suggestions (or "Select all") and approve them at once, with your name. Reject or edit a note on the suggestion itself.
+- **Add a promise by hand** (`/admin/review/promise/new/`): the official (picked from the list), the quote word for word, the date, the kind of source (including a meeting video and an interview), the source link, the time in a video (h:mm:ss; a YouTube link opens at that time, other players show the time beside the link), the source's title, what would show it done, a deadline only as the quote states it, and your name. The same checks run in code as for AI suggestions (neutral note, a deadline only from the quote, an http(s) source); a quote that doesn't read as a commitment is refused unless you tick "This is a specific commitment". It's saved approved, with "Added by [name]".
+- **Issues and priorities pages** (`/admin/review/promise/pages/`): list or stop reading an official's campaign or office page.
 - **Approved promises → record a status change**: the new status (No action yet, In progress, Kept, Broken), the evidence in plain words, the date of the evidence, a source link (http or https) and your name. All are required. Each change is a row in `promise_status_changes` (from, to, evidence, date, source, who, when) and stays listed under the promise.
 
 ## On the official's page
 
 The Promises tab lists approved promises, newest first: the source kind and date, the status, the quote, what would show it done (and a deadline as stated), the source link, "Reviewed by", and the full status history with each change's evidence and source. Status colors follow the design rules: Kept navy, Broken `#8A3B12`, In progress and No action yet gray.
 
-## Tables (`workers/sync/migrations/0011_promises.sql`)
+An official with no approved promises shows **"No promises tracked yet"**, with what counts as a promise and where promises come from.
+
+## Tables (`workers/sync/migrations/0011_promises.sql`, `0013_promise_sources.sql`)
 
 - `promises`: one row per candidate; unique per official and normalized quote, so the same promise isn't suggested twice.
 - `promise_status_changes`: every status change, never edited.
