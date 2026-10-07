@@ -20,7 +20,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get install -y -qq poppler-utils >/dev/null
-      - name: Build from official sources
+      - name: TEMPORARY dump sources for parser fixes
+        run: |
+          curl -sSL -A "ThePillory/1.0" "https://elections.calaverasgov.us/Portals/Elections/Documents/Guides/Master%20VIP.pdf" -o vip.pdf && pdftotext -layout vip.pdf - | sed 's/^/VIP| /'
+          curl -sSL -A "ThePillory/1.0" "https://elections.cdn.sos.ca.gov/statewide-elections/2026-general/cert-list-candidates.pdf" -o cl.pdf && pdftotext -layout cl.pdf - | grep -n -i -B2 -A3 "court\|justice\|shall " | sed 's/^/CL| /' | head -400
+          curl -sSL -A "ThePillory/1.0" "https://www.sos.ca.gov/elections/randomized-alphabet" | sed 's/<[^>]*>/ /g' | tr -s ' \n' | grep -v '^ *$' | sed 's/^/RA| /' | head -200
+
         env:
           FEC_API_KEY: ${{ secrets.FEC_API_KEY }}
         run: python3 tools/build_elections.py
