@@ -1000,5 +1000,173 @@ window.PILLORY_INDEX = [
   "sub": "No law, varying the compensation for the services of the Senators and Representatives, sha…",
   "url": "/laws/constitution/#amend-27",
   "k": "No law, varying the compensation for the services of the Senators and Representatives, shall take effect, until an election of Representatives shall have intervened."
+ },
+ {
+  "type": "Elections",
+  "title": "Elections",
+  "sub": "What's on the ballot, Your ballot, How to vote",
+  "url": "/elections/",
+  "k": "election ballot vote voting register polling"
+ },
+ {
+  "type": "Elections",
+  "title": "November 3, 2026, General Election",
+  "sub": "Everything on the ballot",
+  "url": "/elections/2026-11-03/",
+  "k": "ballot candidates propositions"
+ },
+ {
+  "type": "Elections",
+  "title": "Governor",
+  "sub": "November 3, 2026, General Election · 2 candidates",
+  "url": "/elections/2026-11-03/contest/governor/",
+  "k": "Xavier Becerra Steve Hilton"
+ },
+ {
+  "type": "Elections",
+  "title": "Lieutenant Governor",
+  "sub": "November 3, 2026, General Election · 2 candidates",
+  "url": "/elections/2026-11-03/contest/lieutenant-governor/",
+  "k": "Fiona Ma Gloria Romero"
+ },
+ {
+  "type": "Elections",
+  "title": "Secretary of State",
+  "sub": "November 3, 2026, General Election · 2 candidates",
+  "url": "/elections/2026-11-03/contest/secretary-of-state/",
+  "k": "Shirley N. Weber Donald P. (Don) Wagner"
+ },
+ {
+  "type": "Elections",
+  "title": "Controller",
+  "sub": "November 3, 2026, General Election · 2 candidates",
+  "url": "/elections/2026-11-03/contest/controller/",
+  "k": "Malia M. Cohen Herb W Morgan"
+ },
+ {
+  "type": "Elections",
+  "title": "Treasurer",
+  "sub": "November 3, 2026, General Election · 2 candidates",
+  "url": "/elections/2026-11-03/contest/treasurer/",
+  "k": "Eleni Kounalakis Jennifer Hawks"
+ },
+ {
+  "type": "Elections",
+  "title": "Attorney General",
+  "sub": "November 3, 2026, General Election · 2 candidates",
+  "url": "/elections/2026-11-03/contest/attorney-general/",
+  "k": "Rob Bonta Michael E. Gates"
+ },
+ {
+  "type": "Elections",
+  "title": "Insurance Commissioner",
+  "sub": "November 3, 2026, General Election · 2 candidates",
+  "url": "/elections/2026-11-03/contest/insurance-commissioner/",
+  "k": "Ben Allen Jane Kim"
+ },
+ {
+  "type": "Elections",
+  "title": "Superintendent of Public Instruction",
+  "sub": "November 3, 2026, General Election · 2 candidates",
+  "url": "/elections/2026-11-03/contest/superintendent-of-public-instruction/",
+  "k": "Richard Barrera Sonja Shaw"
+ },
+ {
+  "type": "Elections",
+  "title": "Proposition 1",
+  "sub": "Authorizes bonds for housing affordability programs. legislative statute.",
+  "url": "/elections/2026-11-03/measure/prop-1/",
+  "k": "prop 1 AUTHORIZES BONDS FOR HOUSING AFFORDABILITY PROGRAMS. LEGISLATIVE STATUTE."
+ },
+ {
+  "type": "Elections",
+  "title": "Proposition 2",
+  "sub": "Increases state’s rainy day fund. legislative constitutional amendment.",
+  "url": "/elections/2026-11-03/measure/prop-2/",
+  "k": "prop 2 INCREASES STATE’S RAINY DAY FUND. LEGISLATIVE CONSTITUTIONAL AMENDMENT."
+ },
+ {
+  "type": "Elections",
+  "title": "Proposition 3",
+  "sub": "Provides permanent funding for schools and health care by extending existing tax on high i",
+  "url": "/elections/2026-11-03/measure/prop-3/",
+  "k": "prop 3 PROVIDES PERMANENT FUNDING FOR SCHOOLS AND HEALTH CARE BY EXTENDING EXISTING TAX ON HIGH INCOMES. INITIATIVE CONSTITUTIONAL AMENDMENT."
+ },
+ {
+  "type": "Elections",
+  "title": "Proposition 4",
+  "sub": "Repeals prohibition against public funding of election campaigns. legislative statute.",
+  "url": "/elections/2026-11-03/measure/prop-4/",
+  "k": "prop 4 REPEALS PROHIBITION AGAINST PUBLIC FUNDING OF ELECTION CAMPAIGNS. LEGISLATIVE STATUTE."
+ },
+ {
+  "type": "Elections",
+  "title": "Proposition 5",
+  "sub": "Changes recall election process for statewide officers. legislative constitutional amendme",
+  "url": "/elections/2026-11-03/measure/prop-5/",
+  "k": "prop 5 CHANGES RECALL ELECTION PROCESS FOR STATEWIDE OFFICERS. LEGISLATIVE CONSTITUTIONAL AMENDMENT."
+ },
+ {
+  "type": "Elections",
+  "title": "Proposition 37",
+  "sub": "Creates loan program for middle-income buyers of qualified new homes. initiative statute.",
+  "url": "/elections/2026-11-03/measure/prop-37/",
+  "k": "prop 37 CREATES LOAN PROGRAM FOR MIDDLE-INCOME BUYERS OF QUALIFIED NEW HOMES. INITIATIVE STATUTE."
+ },
+ {
+  "type": "Elections",
+  "title": "Proposition 38",
+  "sub": "Authorizes bonds for immunology medical research. initiative statute.",
+  "url": "/elections/2026-11-03/measure/prop-38/",
+  "k": "prop 38 AUTHORIZES BONDS FOR IMMUNOLOGY MEDICAL RESEARCH. INITIATIVE STATUTE."
+ },
+ {
+  "type": "Elections",
+  "title": "Proposition 39",
+  "sub": "Prohibits citizens from voting unless they present government-issued identification. initi",
+  "url": "/elections/2026-11-03/measure/prop-39/",
+  "k": "prop 39 PROHIBITS CITIZENS FROM VOTING UNLESS THEY PRESENT GOVERNMENT-ISSUED IDENTIFICATION. INITIATIVE CONSTITUTIONAL AMENDMENT."
+ },
+ {
+  "type": "Elections",
+  "title": "Proposition 40",
+  "sub": "Imposes one-time tax on certain taxpayers. initiative constitutional amendment and statute",
+  "url": "/elections/2026-11-03/measure/prop-40/",
+  "k": "prop 40 IMPOSES ONE-TIME TAX ON CERTAIN TAXPAYERS. INITIATIVE CONSTITUTIONAL AMENDMENT AND STATUTE."
+ },
+ {
+  "type": "Elections",
+  "title": "Proposition 41",
+  "sub": "Prohibits new state taxes that exclude revenues from state spending limit. requires audits",
+  "url": "/elections/2026-11-03/measure/prop-41/",
+  "k": "prop 41 PROHIBITS NEW STATE TAXES THAT EXCLUDE REVENUES FROM STATE SPENDING LIMIT. REQUIRES AUDITS FOR NEW STATE SPECIAL TAXES. INITIATIVE CONSTITUTIONAL AMENDMENT."
+ },
+ {
+  "type": "Elections",
+  "title": "Proposition 42",
+  "sub": "Prohibits new state personal property taxes and certain retroactive state taxes. initiativ",
+  "url": "/elections/2026-11-03/measure/prop-42/",
+  "k": "prop 42 PROHIBITS NEW STATE PERSONAL PROPERTY TAXES AND CERTAIN RETROACTIVE STATE TAXES. INITIATIVE CONSTITUTIONAL AMENDMENT."
+ },
+ {
+  "type": "Elections",
+  "title": "Proposition 43",
+  "sub": "Limits voters’ ability to raise revenues for local government services. legislative consti",
+  "url": "/elections/2026-11-03/measure/prop-43/",
+  "k": "prop 43 LIMITS VOTERS’ ABILITY TO RAISE REVENUES FOR LOCAL GOVERNMENT SERVICES. LEGISLATIVE CONSTITUTIONAL AMENDMENT."
+ },
+ {
+  "type": "Elections",
+  "title": "Proposition 44",
+  "sub": "Requires community health clinics spend 90% of revenue on program services. initiative sta",
+  "url": "/elections/2026-11-03/measure/prop-44/",
+  "k": "prop 44 REQUIRES COMMUNITY HEALTH CLINICS SPEND 90% OF REVENUE ON PROGRAM SERVICES. INITIATIVE STATUTE."
+ },
+ {
+  "type": "Elections",
+  "title": "Proposition 45",
+  "sub": "Modifies environmental review for certain projects. initiative statute.",
+  "url": "/elections/2026-11-03/measure/prop-45/",
+  "k": "prop 45 MODIFIES ENVIRONMENTAL REVIEW FOR CERTAIN PROJECTS. INITIATIVE STATUTE."
  }
 ];

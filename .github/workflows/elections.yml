@@ -1,0 +1,31 @@
+# Rebuilds data/elections/<date>.json (contests, candidates, ballot measures,
+# candidate statements and arguments) from official sources only: the
+# California Secretary of State, county elections offices and the FEC. See
+# tools/build_elections.py and docs/elections.md. Daily during election season,
+# and on demand (Actions -> Refresh election data -> Run workflow).
+name: Refresh election data
+on:
+  schedule:
+    - cron: "41 13 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get install -y -qq poppler-utils >/dev/null
+      - name: Build from official sources
+        env:
+          FEC_API_KEY: ${{ secrets.FEC_API_KEY }}
+        run: python3 tools/build_elections.py
+      - name: Commit the data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/elections
+          git diff --cached --quiet && exit 0
+          git commit -m "Refresh election data from official sources"
+          git push

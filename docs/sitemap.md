@@ -14,6 +14,7 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
   - Who represents you: the President, Vice President, the Cabinet > `/bodies/us-executive/`; California's Governor and statewide offices > `/bodies/ca-executive/` (other states: not covered yet); your members of Congress and state legislators > Your briefing
   - Your briefing link, once your districts are known > `/briefing/`
   - First-visit intro (dismissible; How it works, Principles)
+  - Elections: the next election > Election; Your ballot (once your districts are known: your district contests, courts, statewide offices and propositions, local count) > Your ballot; otherwise Find your ballot; How to vote > `/elections/#how-to-vote`
   - Happening now: Congress / California toggle (`?now=state`), latest final-passage votes with status, summary, constitutional chip, review label, totals, "See how your rep voted" > Bill
   - Take part: Calaveras comment deadlines > Meeting (#weigh-in); Contact your representatives > Reps. (Federal agency comment periods from Regulations.gov: to do)
   - Communities: Calaveras County (Live) > Calaveras briefing; Bring ThePillory to your county (waitlist, real counts)
@@ -25,8 +26,15 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 ### Explore (from Home)
 - **United States** (`/explore/`): map (live community / people waiting / federal data only), smaller-state buttons, state picker (`?st=`), Live communities, Most requested next (waitlist counts)
 - **State** (`/explore/<st>/`): map with layer toggles (`?layer=county|cd|sldu|sldl`; legislative layers only where the Census has them), Find a county (filter), every district as a list, Statewide (U.S. Senators, House members, state legislators where loaded, statewide offices: not loaded), the legislature (California: latest floor votes)
-- **County** (`/place/<st>/<county>/`): breadcrumb; live: Live badge, Open briefing, Make this my place; others: Bring ThePillory here (waitlist); who represents it (County / State / Federal, "covers part of this county"); live: upcoming meetings, issues; recent votes; Funding; nearby counties
-- **District** (`/district/<type>/<st>-<id>/`, type `congressional`, `state-senate`, `assembly`, `state-house`, `house-of-delegates`, `general-assembly`, `legislature`): representative, counties it covers (entirely or partly), recent votes, Funding
+- **County** (`/place/<st>/<county>/`): breadcrumb; live: Live badge, Open briefing, Make this my place; others: Bring ThePillory here (waitlist); On the ballot (California: statewide, every overlapping district's contest with "covers part of this county", Board of Equalization, courts, and local contests and measures where live; Your ballot shown in browsers with saved districts); who represents it (County / State / Federal, "covers part of this county"); live: upcoming meetings, issues; recent votes; Funding; nearby counties
+- **District** (`/district/<type>/<st>-<id>/`, type `congressional`, `state-senate`, `assembly`, `state-house`, `house-of-delegates`, `general-assembly`, `legislature`): representative, On the ballot (California: this seat's contest, or that it isn't on the certified list), counties it covers (entirely or partly), recent votes, Funding
+
+### Elections (from Home, county and district pages)
+- **Elections** (`/elections/`): upcoming elections, Your ballot, How to vote (official links only), other states > USA.gov's state election offices
+- **Election** (`/elections/<id>/`): statewide offices, propositions, contests by district (U.S. House, State Senate, Assembly, Board of Equalization), courts, local contests and measures (live counties), How to vote, sources
+- **Contest** (`/elections/<id>/contest/<contest>/`): candidates in ballot order, the same card for each (ballot designation, party preference as listed, FEC filing for U.S. House, Holds office now > Platform / Votes / Funding, the candidate statement word for word); results after the polls close; sources. Court pages (`contest/supreme-court/`, `contest/court-of-appeal-<n>/`): each retention question as worded
+- **Measure** (`/elections/<id>/measure/<measure>/`): official title and summary (or the ballot question, impartial analysis and tax rate statement for a local measure), what a yes and a no vote mean, arguments and rebuttals word for word with their signers, results after the polls close, official sources
+- **Your ballot** (`/elections/<id>/ballot/`, private): from the districts cookie; without it, the address or ZIP lookup, which returns here
 
 ### Tab 2: Reps (`/reps/`)
 - Find your representatives (address or ZIP), your reps once known, Executive branch (the President, Vice President and Cabinet; California's statewide offices), governing bodies, members of Congress by state (`/reps/?state=CA`)

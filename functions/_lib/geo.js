@@ -36,7 +36,7 @@ export const districtHref = (layer, id, place) => `/district/${typeOf(layer, pla
 export const placeHref = (st, slug) => `/place/${st.toLowerCase()}/${slug}/`;
 
 const cache = new Map();
-async function asset(env, request, path) {
+export async function asset(env, request, path) {
   if (cache.has(path)) return cache.get(path);
   if (!env.ASSETS) return null;
   const res = await env.ASSETS.fetch(new URL(path, request.url));

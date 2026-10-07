@@ -1350,3 +1350,21 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 .statement-title { margin: 0; font-family: var(--serif); font-weight: 600; font-size: 1.125rem; line-height: 1.3; }
 .statement-body p { margin: 0 0 8px; overflow-wrap: anywhere; }
 .statement-body p:last-child { margin-bottom: 0; }
+
+/* Elections: every candidate and measure gets the same card, in ballot order */
+.cand-name { margin: 0; font-family: var(--serif); font-weight: 600; font-size: 1.1875rem; line-height: 1.3; overflow-wrap: anywhere; }
+.cand-card .kv-row dd { overflow-wrap: anywhere; }
+.cand-statement summary { cursor: pointer; font-size: 0.875rem; font-weight: 500; color: var(--navy); min-height: var(--tap); display: flex; align-items: center; }
+.cand-statement summary::after { content: " ▾"; font-size: 0.75em; margin-left: 4px; }
+.cand-statement[open] summary::after { content: " ▴"; }
+.cand-statement .statement-body { padding-top: 4px; }
+.card.cand-statement { padding-top: 4px; padding-bottom: 4px; }
+.holds-office { padding-top: 8px; border-top: 1px solid var(--border); }
+.cand-links .inline-link { display: inline-flex; align-items: center; min-height: var(--tap); }
+.measure-title { margin: 0; font-family: var(--serif); font-weight: 600; font-size: 1.0625rem; line-height: 1.4; overflow-wrap: anywhere; }
+.signer-list { display: flex; flex-direction: column; gap: 4px; }
+.results-list { display: flex; flex-direction: column; }
+.result-row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--border); font-size: 0.9375rem; }
+.result-row:first-child { border-top: 0; }
+.result-name { min-width: 0; overflow-wrap: anywhere; }
+.result-num { flex: none; font-variant-numeric: tabular-nums; color: var(--text-2); }

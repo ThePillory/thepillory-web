@@ -1,0 +1,48 @@
+# Elections
+
+What's on the ballot, from official sources only. Pages: `functions/elections/[[path]].js` (plus the Elections section on Home, and "On the ballot" on county and district pages); shared code: `functions/_lib/elections.js`; data: `data/elections/<id>.json`.
+
+## Where the data comes from
+
+`tools/build_elections.py` builds `data/elections/<id>.json` (standard library plus `pdftotext` from poppler-utils). It runs in GitHub Actions, "Refresh election data" (`.github/workflows/elections.yml`), daily at 13:41 UTC and on demand, and commits the file when it changes. The official sites aren't reachable from everywhere, so don't expect it to run on a laptop or in a sandbox.
+
+| What | Source |
+|---|---|
+| Contests, candidates, ballot designations, party preference, incumbent mark | Secretary of State, Certified List of Candidates (PDF) |
+| Supreme Court and Court of Appeal retention questions, with each district's counties | The same list, at its end |
+| Ballot order | The Secretary of State's randomized alphabet (its press release for the election); the method is on sos.ca.gov/elections/randomized-alphabet |
+| Statewide candidate statements | Official Voter Information Guide, one page per office |
+| Propositions: title, summary, what a yes and a no vote mean, arguments and rebuttals with signers, the disclaimer | Official Voter Information Guide, each proposition's page and its arguments page |
+| Calaveras local contests | County's Qualified Candidates List (PDF), contests marked "On Ballot: Yes" |
+| Calaveras candidate statements, Measure A (question, impartial analysis, tax rate statement, arguments) | County's Voter Information Pamphlet (PDF) |
+| U.S. House candidates' FEC filings | api.open.fec.gov (`FEC_API_KEY` secret, or DEMO_KEY), matched by last name and district |
+| Results | api.sos.ca.gov/returns/ (read by the pages, never stored), only after `polls_close_utc` |
+
+Rules the builder keeps:
+- Every contest and measure keeps its `source_url`.
+- No candidate contact details: the county's candidate list has addresses and phone numbers, which are never read into the file; lines in a statement giving an email or phone are left out, the same for every candidate, and the statement's note says so.
+- Text from a PDF is extracted as printed (paragraphs rejoined) and the PDF stays linked as the official version.
+- The pamphlet is laid out with two statements per page; headings are one or two centered lines, and names come with or without "AGE:". A statement is attached only to a contest whose list has that candidate. The log lists anything not matched.
+
+To add a county: an entry in `COUNTIES` and `HOW_TO_VOTE` in the builder (its candidate list, pamphlet, results page, elections page and Board of Equalization district), and check the log after a run. To add an election: a new `ELECTION` block, then add its id to `ELECTIONS` in `functions/_lib/elections.js` (newest first).
+
+## Ballot order
+
+California orders candidates by a randomized alphabet drawn for each election (Elections Code 13112): last name first, letter by letter, then first and middle names. `ballotOrder()` applies it:
+- **Statewide offices** rotate by Assembly district (13111): as drawn in AD 1, and in each later district the first name moves to the bottom. Your ballot uses the visitor's AD.
+- **U.S. House** rotate among the ADs within the district, starting with its lowest-numbered AD; ThePillory doesn't have the AD list per congressional district, so it shows the drawn order and says the sample ballot may differ.
+- **Legislature**: the drawn order, but a county can draw its own order where a district crosses county lines; the page says so.
+- **Local contests** keep the county's list order. The tests check that it equals the computed order for every county contest (it does).
+- A multi-word surname is read as the last word unless it starts with a particle (de, van, le, …), because the certified list doesn't mark it.
+
+## Neutrality
+
+Every candidate in a contest gets the same card with the same fields in ballot order: name, ballot designation, party preference as listed (partisan offices), the FEC filing (U.S. House), "Holds office now" with Platform, Votes and Funding links when the name matches exactly one official in D1, and the statement word for word or the same "no statement" line. Measures show both sides' arguments in the guide's order, with the same card. No endorsements, polls, predictions or race calls; results show the feed's numbers in ballot order with its "reporting" line and time.
+
+## Results
+
+`sosResults()` reads the Secretary of State's feed only once `pollsClosed()` (8 p.m. Pacific on Election Day), kept at the edge for two minutes; before then the feed carries test numbers. County contests and judicial retention link to the county's and the Secretary of State's results pages.
+
+## Tests
+
+`node workers/sync/test/elections.test.mjs`: name parsing, ballot order and rotation, the real file's county order, which contests are on a ballot, officeholder matching, results gating, and the pages (same card for every candidate, arguments and signers, Your ballot private).
