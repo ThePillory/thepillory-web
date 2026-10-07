@@ -4,6 +4,8 @@
 //   POST /laws/bills/<id>/request-full   "Request full analysis"
 //   Both need Turnstile and are rate-limited per visitor (functions/_lib/turnstile.js).
 // /laws/constitution/ is static and passed through. Old sample pages redirect (OLD_PAGES).
+import { CURRENT, loadElection, electionHref, whenLine } from "../_lib/elections.js";
+import { pacificNow } from "../_lib/meetings.js";
 import { page, notFound, notLoaded, esc, safeUrl, section, sourceLink, card, fmtDate, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { billList, BILLS_PER_PAGE, billById, votesOnBill, officialsWhere, CHAMBER_NAME } from "../_lib/data.js";
 import { districtsFromCookie, repsWhere, describe } from "../_lib/districts.js";
@@ -100,7 +102,7 @@ function billSection(level, list, { all, offset = 0, heading = true }) {
 </section>`;
 }
 
-async function index(env, url) {
+async function index(env, url, request) {
   const all = url.searchParams.get("votes") === "all";
   const onlyLevel = LEVELS[url.searchParams.get("level")] ? url.searchParams.get("level") : null;
   const offset = onlyLevel ? Math.max(0, parseInt(url.searchParams.get("offset") || "0", 10) || 0) : 0;
@@ -123,6 +125,16 @@ ${billSection(onlyLevel, lists[0], { all, offset, heading: false })}`;
     return page(`${LEVELS[onlyLevel]} bills`, main, { tab: "laws", back: ["Laws", lawsHref({ all })], partial: anyFailed(...lists) || lists.some((l) => !l || l.provisional) });
   }
 
+  // On the ballot: propositions and measures are proposed laws, so the next election is linked here too.
+  const election = await loadSection("laws election", () => loadElection(env, request, CURRENT), null);
+  const ballot = election && election !== FAILED
+    ? `<a class="card stack-xs" href="${electionHref(election.election.id)}">
+  <p class="label">On the ballot</p>
+  <h3>${esc(election.election.name)}</h3>
+  <p class="small secondary">${esc(whenLine(election, pacificNow().slice(0, 10)))} · ${election.measures.filter((m) => m.scope === "statewide").length} statewide propositions, and the contests for office</p>
+  <span class="inline-link">What's on the ballot</span>
+</a>`
+    : "";
   const main = `
 <header class="page-head">
   <h1>Laws</h1>
@@ -133,6 +145,7 @@ ${billSection(onlyLevel, lists[0], { all, offset, heading: false })}`;
   <p class="quote">The starting point for every analysis.</p>
   <p class="small">The full text, as the National Archives transcribes it →</p>
 </a>
+${ballot}
 <nav class="segmented vote-filter" aria-label="Which bills to show">${filter("With final-passage votes", false)}${filter("All with recorded votes", true)}</nav>
 ${levels.map((level, i) => billSection(level, lists[i], { all })).join("")}
 `;
@@ -308,7 +321,7 @@ const LAWS_CACHE_SECONDS = 300;
 export const onRequestGet = guard(async (context) => {
   const url = new URL(context.request.url);
   const parts = (context.params.path || []).filter(Boolean);
-  if (parts.length === 0) return edgeCached(context, LAWS_CACHE_SECONDS, () => index(context.env, url));
+  if (parts.length === 0) return edgeCached(context, LAWS_CACHE_SECONDS, () => index(context.env, url, context.request));
   // The reader forms post to these; a plain visit goes back to the bill page.
   if (parts[0] === "bills" && parts.length === 3 && ["flag", "request-full"].includes(parts[2])) {
     return Response.redirect(`${url.origin}/laws/bills/${parts[1]}/`, 302);

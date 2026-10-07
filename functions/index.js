@@ -19,7 +19,7 @@ import { page, esc, loadSection, FAILED, anyFailed, sectionError, guard, edgeCac
 import { listMeetings, pacificNow, addDays, deadlineParts, meetingHref, when } from "./_lib/meetings.js";
 import { districtsFromCookie, describe, STATE_NAME } from "./_lib/districts.js";
 import { happeningNow, happeningSection, lookupForm, waitlistCounts } from "./_lib/hub.js";
-import { CURRENT, loadElection, ballotFor, ballotHref, electionHref, whenLine, contestRow, courtRow, statewideRow } from "./_lib/elections.js";
+import { CURRENT, loadElection, ballotFor, ballotHref, electionHref, whenLine, daysUntil, contestRow, courtRow, statewideRow } from "./_lib/elections.js";
 import { LIVE, loadIndex, loadPlace, waitlistBy, usMapLinks, smallStateButtons, mapFigure } from "./_lib/geo.js";
 import { ASSET_VERSION } from "./_lib/generated.js";
 import { executiveOfficials, executiveRows } from "./_lib/executive.js";
@@ -249,6 +249,9 @@ async function hub(env, request, url, d) {
   const error = joined && joined !== "joined" ? WAITLIST_MESSAGES[joined] || "" : "";
   const notFound = url.searchParams.get("lookup") === "notfound";
 
+  // Elections sits near the top until Election Day, then moves down to its usual place.
+  const electionsHtml = elections === FAILED ? sectionError("Elections") : electionsSection(elections, d);
+  const electionsLate = elections === FAILED || !elections.election || daysUntil(elections.election, start.slice(0, 10)) == null;
   const main = `
 <header class="hub-head stack-sm">
   <h1 class="hub-title">Know what your government is doing. Then take part.</h1>
@@ -258,13 +261,14 @@ ${usMap(index, waiting === FAILED ? { county: {}, state: {} } : waiting)}
 ${notFound ? '<p class="banner banner--error" role="alert">We couldn\'t find districts for that. Check the address, or try your ZIP code.</p>' : ""}
 ${lookupForm(d)}
 ${d ? `<a class="card briefing-link" href="/briefing/"><span class="stack-xs"><span class="label">Your briefing</span><span class="small">${esc(describe(d))}</span></span><span class="chev" aria-hidden="true">›</span></a>` : ""}
+${electionsLate ? "" : electionsHtml}
 <aside class="intro-banner" data-intro hidden aria-label="Welcome">
   <p><strong>New here?</strong> ThePillory keeps a public, sourced record of what your officials do: every recorded vote, the bills they vote on mapped to the Constitution, local meeting agendas, and the money around them. Facts and sources, no party labels.</p>
   <p><a class="inline-link" href="/about/how-it-works/">How it works</a> · <a class="inline-link" href="/about/principles/">Principles</a></p>
   <button class="intro-dismiss" type="button" data-intro-dismiss aria-label="Dismiss this introduction">×</button>
 </aside>
 ${federalExec === FAILED || caExec === FAILED ? sectionError("Who represents you") : whoRepresents(federalExec, caExec, d)}
-${elections === FAILED ? sectionError("Elections") : electionsSection(elections, d)}
+${electionsLate ? electionsHtml : ""}
 ${now === FAILED ? sectionError("Happening now") : happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? "/" : "/?now=state"), loaded: !!db })}
 ${deadlines === FAILED ? sectionError("Take part") : takePart(deadlines, !!db)}
 ${communities(env, counts === FAILED ? null : counts, msg, error)}

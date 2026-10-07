@@ -91,6 +91,7 @@ FOOTER = """<footer class="app-footer" aria-label="About ThePillory">
   <a href="/about/how-it-works/">How it works</a>
   <a href="/about/principles/">Principles</a>
   <a href="/about/methodology/">Methodology</a>
+  <a href="/elections/">Elections</a>
   <p class="app-footer-domain">thepillory.co</p>
 </footer>"""
 
@@ -541,6 +542,7 @@ def build_you():
   <h2 class="label">Your districts</h2>
   <p class="small">To see your own reps and briefing, look up your districts with an address or ZIP code. Only the district numbers are kept, in this browser. <a class="inline-link" href="/#find">Find your representatives</a></p>
 </section>
+{section("Elections", link_row("/elections/2026-11-03/ballot/", "Your ballot", "The contests and measures for your address") + link_row("/elections/", "Elections", "What's on the ballot, and how to vote"))}
 {section("About", f'<div>{about}</div>')}"""
     render("you", "You", main, tab="you", root=True)
 
