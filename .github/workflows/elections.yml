@@ -8,9 +8,6 @@ on:
   schedule:
     - cron: "41 13 * * *"
   workflow_dispatch:
-  push:  # TEMPORARY while building: run on this branch when the builder changes (removed before merge)
-    branches: [claude/pillory-mobile-screens-p5zekn]
-    paths: [tools/build_elections.py, .github/workflows/elections.yml]
 permissions:
   contents: write
 jobs:

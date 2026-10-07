@@ -10,6 +10,7 @@
 //   waiting counts, and Explore the full map; Find your representatives (address
 //   or ZIP; nothing stored); Who represents you (the President, Vice President
 //   and Cabinet; California's Governor and statewide offices);
+//   Elections (the next election; Your ballot once districts are known; How to vote);
 //   Happening now (Congress / California: latest final-passage votes, ?now=state);
 //   Take part (Calaveras comment deadlines, contacting your reps);
 //   Communities (Calaveras, live; the county waitlist with real counts);
@@ -18,7 +19,8 @@ import { page, esc, loadSection, FAILED, anyFailed, sectionError, guard, edgeCac
 import { listMeetings, pacificNow, addDays, deadlineParts, meetingHref, when } from "./_lib/meetings.js";
 import { districtsFromCookie, describe, STATE_NAME } from "./_lib/districts.js";
 import { happeningNow, happeningSection, lookupForm, waitlistCounts } from "./_lib/hub.js";
-import { LIVE, loadIndex, waitlistBy, usMapLinks, smallStateButtons, mapFigure } from "./_lib/geo.js";
+import { CURRENT, loadElection, ballotFor, ballotHref, electionHref, whenLine, contestRow, courtRow, statewideRow } from "./_lib/elections.js";
+import { LIVE, loadIndex, loadPlace, waitlistBy, usMapLinks, smallStateButtons, mapFigure } from "./_lib/geo.js";
 import { ASSET_VERSION } from "./_lib/generated.js";
 import { executiveOfficials, executiveRows } from "./_lib/executive.js";
 import { linkRow } from "./_lib/render.js";
@@ -159,6 +161,51 @@ function whoRepresents(federal, ca, d) {
 </section>`;
 }
 
+// Elections: the next election, and "Your ballot" once the visitor's districts are known.
+async function electionsData(env, request, d) {
+  const election = await loadElection(env, request, CURRENT);
+  if (!election || !d || d.st !== election.election.state) return { election, ballot: null };
+  const place = d.co ? await loadPlace(env, request, d.st.toLowerCase()) : null;
+  const county = place && place.counties.find((c) => c.fips === d.co);
+  return { election, ballot: ballotFor(election, d, county ? county.name : null), county };
+}
+
+function electionsSection({ election, ballot, county }, d) {
+  if (!election) return "";
+  const id = election.election.id;
+  const today = pacificNow().slice(0, 10);
+  let yours;
+  if (ballot) {
+    const district = ballot.contests.filter((c) => c.scope !== "statewide");
+    const local = ballot.partial.length + ballot.partialMeasures.length;
+    yours = `
+  <div class="card stack-xs">
+    <p class="label">Your ballot</p>
+    ${district.map((c) => contestRow(id, c)).join("")}${ballot.courts.map((g) => courtRow(id, g)).join("")}${statewideRow(election)}
+    ${local ? `<a class="list-row link-row" href="${ballotHref(id)}#h-yl"><div><div class="list-title">Local contests and measures</div><div class="list-meta">${local} on some ballots in ${esc(county ? county.name : "your county")}</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>` : ""}
+    <a class="btn btn--primary btn--block" href="${ballotHref(id)}">Open your ballot</a>
+  </div>`;
+  } else if (d) {
+    yours = `<p class="small secondary">ThePillory has California's ballot so far. For elections in ${esc(STATE_NAME[d.st] || "your state")}, find your state's election office at <a class="inline-link" href="https://www.usa.gov/state-election-office" target="_blank" rel="noopener">USA.gov ↗</a>.</p>`;
+  } else {
+    yours = `<p class="small"><a class="inline-link" href="${ballotHref(id)}">Find your ballot</a> by address or ZIP code.</p>`;
+  }
+  return `
+<section class="brief-section" id="elections" aria-labelledby="h-elections">
+  <div class="section-head"><h2 class="label" id="h-elections">Elections</h2><a class="section-link" href="/elections/">All elections</a></div>
+  <a class="card stack-xs" href="${electionHref(id)}">
+    <p class="label">${esc(STATE_NAME[election.election.state])}</p>
+    <h3>${esc(election.election.name)}</h3>
+    <p class="small secondary">${esc(whenLine(election, today))}</p>
+    <span class="inline-link">What's on the ballot</span>
+  </a>
+  ${yours}
+  <div class="card">
+    <a class="list-row link-row" href="/elections/#how-to-vote"><div><div class="list-title">How to vote</div><div class="list-meta">Registration, deadlines and where to vote, on the official sites</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>
+  </div>
+</section>`;
+}
+
 const UNDERSTAND = [
   ["/laws/constitution/", "The Constitution", "The full text, and how every analysis starts from it."],
   ["/about/how-a-bill-becomes-law/", "How a bill becomes law", "From introduction to signature, in Congress and in California."],
@@ -182,7 +229,7 @@ async function hub(env, request, url, d) {
   // Each section loads on its own: one that can't load shows a short note, and
   // the rest of the hub still shows.
   const start = pacificNow();
-  const [index, now, deadlines, counts, waiting, federalExec, caExec] = await Promise.all([
+  const [index, now, deadlines, counts, waiting, federalExec, caExec, elections] = await Promise.all([
     loadIndex(env, request),
     loadSection("hub happening now", db ? () => happeningNow(db, which, { limit: 4 }) : async () => [], []),
     loadSection("hub deadlines", db ? async () =>
@@ -195,6 +242,7 @@ async function hub(env, request, url, d) {
     loadSection("hub waitlist map", db ? () => waitlistBy(db) : async () => ({ county: {}, state: {} }), { county: {}, state: {} }),
     loadSection("hub executive", db ? () => executiveOfficials(db, "us-executive") : async () => [], []),
     loadSection("hub california executive", db ? () => executiveOfficials(db, "ca-executive") : async () => [], []),
+    loadSection("hub elections", () => electionsData(env, request, d), { election: null, ballot: null }),
   ]);
   const joined = url.searchParams.get("waitlist");
   const msg = joined === "joined" ? WAITLIST_MESSAGES.joined : "";
@@ -216,13 +264,14 @@ ${d ? `<a class="card briefing-link" href="/briefing/"><span class="stack-xs"><s
   <button class="intro-dismiss" type="button" data-intro-dismiss aria-label="Dismiss this introduction">×</button>
 </aside>
 ${federalExec === FAILED || caExec === FAILED ? sectionError("Who represents you") : whoRepresents(federalExec, caExec, d)}
+${elections === FAILED ? sectionError("Elections") : electionsSection(elections, d)}
 ${now === FAILED ? sectionError("Happening now") : happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? "/" : "/?now=state"), loaded: !!db })}
 ${deadlines === FAILED ? sectionError("Take part") : takePart(deadlines, !!db)}
 ${communities(env, counts === FAILED ? null : counts, msg, error)}
 ${understand()}
 ${index ? `<script src="/assets/map.js?v=${ASSET_VERSION}" defer></script>` : ""}`;
   // Personal only once the visitor's districts are known; otherwise the same for everyone.
-  return page("Know what your government is doing", main, { tab: "home", root: true, personal: !!d, partial: anyFailed(now, deadlines, counts, waiting, federalExec, caExec) });
+  return page("Know what your government is doing", main, { tab: "home", root: true, personal: !!d, partial: anyFailed(now, deadlines, counts, waiting, federalExec, caExec, elections) });
 }
 
 // The hub for a visitor without saved districts is the same for everyone: kept

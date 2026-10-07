@@ -221,6 +221,13 @@
       (location.protocol === "https:" ? "; Secure" : "");
   }
 
+  // Shared pages (kept at the edge for everyone) show links like "Your ballot"
+  // only in a browser that has saved districts.
+  if (new RegExp("(?:^|; )" + COOKIE + "=[^;]").test(document.cookie)) {
+    document.querySelectorAll("[data-if-districts]").forEach(function (n) { n.hidden = false; });
+    document.querySelectorAll("[data-unless-districts]").forEach(function (n) { n.hidden = true; });
+  }
+
   document.querySelectorAll("[data-forget-districts]").forEach(function (btn) {
     btn.addEventListener("click", function () {
       document.cookie = COOKIE + "=; Path=/; Max-Age=0; SameSite=Lax";
@@ -245,10 +252,11 @@
       nodes.forEach(function (n) { out.appendChild(n); });
     }
 
+    var next = form.getAttribute("data-next");
     function done(d) {
       saveDistricts(d);
-      show([el("p", "small", "Found your districts. Opening your briefing…")]);
-      location.href = "/briefing/";
+      show([el("p", "small", next ? "Found your districts. Opening your ballot…" : "Found your districts. Opening your briefing…")]);
+      location.href = next || "/briefing/";
     }
 
     form.addEventListener("submit", function (e) {

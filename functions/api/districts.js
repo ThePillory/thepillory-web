@@ -163,7 +163,11 @@ export function cookieHeader(d) {
 }
 
 // The no-JavaScript path: a page to pick among a ZIP's districts.
-function choicePage(result) {
+// Where a plain form post goes after the lookup: the briefing, or a ballot page that sent it.
+const NEXT_OK = /^\/(briefing|elections\/\d{4}-\d{2}-\d{2}\/ballot)\/$/;
+const nextPath = (v) => (NEXT_OK.test(String(v || "")) ? String(v) : "/briefing/");
+
+function choicePage(result, next) {
   const options = result.choices
     .map(
       (c, i) => `
@@ -174,6 +178,7 @@ function choicePage(result) {
     "Choose your districts",
     `<header class="page-head"><h1>Choose your districts</h1><p class="subtitle">This ZIP code is split between districts. Choose yours, or go back and enter your street address.</p></header>
 <form class="card stack-sm" method="post" action="/api/districts">${options}
+  <input type="hidden" name="next" value="${esc(next)}" />
   <button class="btn btn--primary" type="submit">Use these districts</button>
 </form>
 <p class="small"><a class="inline-link" href="/#find">Enter a street address instead</a></p>`,
@@ -197,11 +202,12 @@ export async function onRequestPost({ request, env }) {
   const form = await request.formData();
   const back = (q) => Response.redirect(`${url.origin}/?${q}#find`, 303);
   const pick = form.get("pick");
+  const next = nextPath(form.get("next"));
   let result = pick ? { found: true, districts: cleanDistricts(Object.fromEntries(new URLSearchParams(String(pick)))) } : await lookup(env, request, form.get("q"));
   if (result.found && result.districts) {
-    return new Response(null, { status: 303, headers: { Location: `${url.origin}/briefing/`, "Set-Cookie": cookieHeader(result.districts), "Cache-Control": "no-store" } });
+    return new Response(null, { status: 303, headers: { Location: `${url.origin}${next}`, "Set-Cookie": cookieHeader(result.districts), "Cache-Control": "no-store" } });
   }
-  if (result.choices) return choicePage(result);
+  if (result.choices) return choicePage(result, next);
   return back("lookup=notfound");
 }
 

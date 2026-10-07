@@ -146,12 +146,13 @@ export function happeningSection(rows, which, { hrefFor, personal = false, loade
 }
 
 /** The address or ZIP lookup. `d`: the visitor's districts, if known. */
-export function lookupForm(d, { id = "find", heading = "Find your representatives" } = {}) {
+export function lookupForm(d, { id = "find", heading = "Find your representatives", next = null } = {}) {
   return `
 <section class="card stack-sm lookup" id="${id}" aria-labelledby="h-${id}">
   <h2 class="label" id="h-${id}">${esc(heading)}</h2>
   ${d ? `<p class="small">Showing: <strong>${esc(describe(d))}</strong>. <button class="linkish" type="button" data-forget-districts>Forget this</button></p>` : ""}
-  <form class="lookup-form" data-district-lookup action="/api/districts" method="post">
+  <form class="lookup-form" data-district-lookup action="/api/districts" method="post"${next ? ` data-next="${esc(next)}"` : ""}>
+    ${next ? `<input type="hidden" name="next" value="${esc(next)}" />` : ""}
     <label class="visually-hidden" for="${id}-q">Street address or ZIP code</label>
     <div class="lookup-row">
       <input class="input" id="${id}-q" name="q" type="text" inputmode="text" autocomplete="street-address" placeholder="Street address or ZIP code" required />

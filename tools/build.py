@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "31"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "32"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -424,6 +424,23 @@ def build_methodology():
     <li><strong>On a bill page, for your reps:</strong> each rep's recorded vote is shown beside contributions, in the same two-year period, from the industries of the organizations that lobbied on the bill. This shows a relationship in the data, not a cause.</li>
     <li><strong>California's Governor, statewide officers and all 120 legislators:</strong> from the Secretary of State's Cal-Access export, rebuilt weekly. A campaign statement (Form 460) counts as an official's when it's filed by a candidate or a committee the candidate controls and names the official as the candidate (for legislators, for the seat they hold), since January 2023 for statewide officers and January 2025 for legislators. An amended statement replaces the one it amends. Totals are by two-year period: what each statement reports as contributions received and expenditures made, added up. Contributions itemized on Schedule A ($100 or more) are shown the same way as for members of Congress: individuals only as totals and by employer (an employer is listed only when 3 or more people named it), never by name, at any amount; committees, parties, businesses and other organizations by name; industries approximate, by the same keyword rules. Refunds are subtracted, and transfers between an official's own committees aren't counted. <strong>Independent expenditures</strong> for and against an official come from Form 496 reports, which are filed for $1,000 or more spent in the 90 days before an election; spending outside that window isn't included. California replaces Cal-Access with a new system (CARS) after the November 2026 election; the data will move to it then.</li>
     <li><strong>The county:</strong> not shown yet. Calaveras County's campaign statements since 2021 are on its public filing portal; county funding will be added from it.</li>
+  </ul>
+</section>
+
+<section class="card stack" id="elections">
+  <h2>Elections</h2>
+  <p>What's on the ballot, from official sources only, with a link to each. Every candidate and measure is shown the same way, in ballot order. ThePillory doesn't endorse candidates or measures, and doesn't publish polls, predictions or race calls.</p>
+  <ul class="plain-list small">
+    <li><strong>Contests and candidates:</strong> the Secretary of State's Certified List of Candidates: each candidate's name, ballot designation and party preference exactly as certified, and the Supreme Court and Court of Appeal justices on the ballot, with each question as the list words it. Local contests come from the county elections office's list of qualified candidates, for counties where ThePillory is live (Calaveras so far). No candidate's address, phone or email is kept.</li>
+    <li><strong>Ballot order:</strong> California orders candidates by a randomized alphabet the Secretary of State draws for each election, reading the last name first, then the first and middle names. Statewide offices rotate by Assembly district: the order drawn is used in Assembly District 1, and in each later district the first name moves to the bottom. Your ballot shows the order for your Assembly district. Congressional candidates rotate among the Assembly districts within the district, and a county can draw its own order for a legislative district that crosses county lines, so for those offices your sample ballot may differ; the page says so. A surname with more than one word is read as the last word unless it starts with a word like "de", "van" or "le", because the certified list doesn't mark where a surname begins. For Calaveras County's local contests, the order computed this way matches the county's own list in every contest.</li>
+    <li><strong>Candidate statements:</strong> word for word from the state Official Voter Information Guide (statewide offices) and the county's Voter Information Pamphlet (the county's contests, and the district offices on its ballot). A statement from a PDF is copied as printed, with the PDF linked as the official version. Lines giving a candidate's email or phone are left out, the same for every candidate, and the page says so. A candidate without a statement says where we looked.</li>
+    <li><strong>Officeholders:</strong> a candidate who already holds an office ThePillory follows links to their Platform, Votes and Funding. They're matched by name: the last name and the first name (or the nickname the ballot gives) must both match one official, or no link is shown.</li>
+    <li><strong>Federal candidates:</strong> each U.S. House candidate links to their filing with the Federal Election Commission, matched by last name and district; a candidate without a match says so.</li>
+    <li><strong>Ballot measures:</strong> the official title and summary, what a yes and a no vote mean, and the arguments and rebuttals for and against, word for word, each with who signed it, from the Official Voter Information Guide. Local measures show the question as it appears on the ballot, County Counsel's impartial analysis, the tax rate statement and the arguments, from the county's pamphlet. Where no argument was filed, the page says so.</li>
+    <li><strong>How to vote:</strong> links to the Secretary of State's and the county's own pages for registration, deadlines, vote centers and drop boxes, rather than repeating details that could change.</li>
+    <li><strong>Your ballot:</strong> built from the district numbers saved in your browser (never your address). Local contests are for part of a county (a supervisor district, a city, or a school, fire or water district), so they're listed as "on some ballots in the county". Your official sample ballot is the final word.</li>
+    <li><strong>Results:</strong> after the polls close at 8 p.m. on Election Day, from the Secretary of State's results feed, with the share of precincts reporting and the time of the update as the feed states them. Before then the feed carries test numbers, which are never shown. Local results link to the county elections office. Counts continue until each county certifies; ThePillory doesn't call races.</li>
+    <li><strong>Refreshed daily</strong> during election season from the same sources (the "Refresh election data" workflow).</li>
   </ul>
 </section>
 
@@ -861,6 +878,20 @@ def search_index():
         text = p["text"]
         items.append({"type": "Constitution", "title": p["label"], "sub": text[:90] + ("…" if len(text) > 90 else ""),
                       "url": f"/laws/constitution/#{p['id']}", "k": text})
+    # Elections (data/elections/, from tools/build_elections.py): the election, its statewide offices and propositions.
+    items.append({"type": "Elections", "title": "Elections", "sub": "What's on the ballot, Your ballot, How to vote", "url": "/elections/", "k": "election ballot vote voting register polling"})
+    for path in sorted((ROOT / "data" / "elections").glob("*.json"), reverse=True)[:1]:
+        e = json.loads(path.read_text(encoding="utf-8"))
+        eid = e["election"]["id"]
+        items.append({"type": "Elections", "title": e["election"]["name"], "sub": "Everything on the ballot", "url": f"/elections/{eid}/", "k": "ballot candidates propositions"})
+        for c in e["contests"]:
+            if c["scope"] == "statewide":
+                items.append({"type": "Elections", "title": c["office"], "sub": f"{e['election']['name']} · {len(c['candidates'])} candidates",
+                              "url": f"/elections/{eid}/contest/{c['id']}/", "k": " ".join(k["name"] for k in c["candidates"])})
+        for m in e["measures"]:
+            if m["scope"] == "statewide":
+                items.append({"type": "Elections", "title": f"Proposition {m['number']}", "sub": m["title"].capitalize()[:90],
+                              "url": f"/elections/{eid}/measure/{m['id']}/", "k": f"prop {m['number']} {m['title']}"})
     return ("// Generated by tools/build.py. Don't edit by hand.\n"
             "window.PILLORY_INDEX = " + json.dumps(items, ensure_ascii=False, indent=1) + ";\n")
 

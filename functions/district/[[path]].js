@@ -6,6 +6,8 @@
 import { page, notFound, esc, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { recentFinalVotes } from "../_lib/data.js";
 import { voteRows } from "../_lib/briefing.js";
+import { CURRENT, loadElection, onTheBallot, statewideRow, contestRow, electionHref } from "../_lib/elections.js";
+import { pacificNow } from "../_lib/meetings.js";
 import { LAYER_OF_TYPE, typeOf, loadPlace, officialsFor, repRow, breadcrumb, districtLabel, placeHref } from "../_lib/geo.js";
 
 
@@ -52,6 +54,14 @@ async function districtPage({ request, env, params }) {
     })
     .join("");
   const rows = votes === FAILED ? "" : voteRows(votes.rows, 5);
+  const electionLoaded = await loadSection("district election", () => loadElection(env, request, CURRENT), null);
+  const election = electionLoaded && electionLoaded !== FAILED && electionLoaded.election.state === place.st ? electionLoaded : null;
+  const contest = election && election.contests.find((x) => x.scope === layer && x.district === id);
+  const ballot = !election
+    ? ""
+    : contest
+      ? onTheBallot(election, { rows: [contestRow(election.election.id, contest), statewideRow(election)], today: pacificNow().slice(0, 10) })
+      : `<section class="stack-sm" aria-labelledby="h-elections"><h2 class="label" id="h-elections">Elections</h2><p class="small secondary">This seat isn't on the Secretary of State's certified list of candidates for the ${esc(election.election.name)}. <a class="inline-link" href="${electionHref(election.election.id)}">What's on the ballot</a></p></section>`;
   const federal = reps.filter((r) => r.level === "federal");
 
   const main = `
@@ -65,6 +75,7 @@ ${breadcrumb([["United States", "/explore/"], [place.name, `/explore/${m[1]}/`],
   <h2 class="label" id="h-rep">Representative</h2>
   ${repHtml}
 </section>
+${electionLoaded === FAILED ? sectionError("Elections") : ballot}
 <section class="stack-sm" aria-labelledby="h-counties">
   <h2 class="label" id="h-counties">Counties it covers</h2>
   <div class="card">${countyRows}</div>
@@ -75,5 +86,5 @@ ${breadcrumb([["United States", "/explore/"], [place.name, `/explore/${m[1]}/`],
   ${votes === FAILED ? sectionError("") : rows ? `<ul class="card plain-list brief-votes">${rows}</ul>` : `<p class="small secondary">${reps.length ? "No final-passage votes loaded yet." : "Votes appear once the representative is loaded."}</p>`}
 </section>
 ${federal.length ? `<section class="stack-sm" aria-labelledby="h-funding"><h2 class="label" id="h-funding">Funding</h2><div class="chips">${federal.map((r) => `<a class="chip chip--tap" href="/reps/${esc(r.slug)}/#funding">${esc(r.name)}</a>`).join("")}</div><p class="hint">Campaign funding, from the Federal Election Commission.</p></section>` : ""}`;
-  return page(`${label}, ${place.name}`, main, { tab: "home", back: [place.name, `/explore/${m[1]}/`], partial: anyFailed(repsLoaded, votes) });
+  return page(`${label}, ${place.name}`, main, { tab: "home", back: [place.name, `/explore/${m[1]}/`], partial: anyFailed(repsLoaded, votes, electionLoaded) });
 }

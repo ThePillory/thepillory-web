@@ -12,6 +12,7 @@ import { recentFinalVotes } from "../_lib/data.js";
 import { voteRows } from "../_lib/briefing.js";
 import { listMeetings, summariesFor, meetingCard, pacificNow, addDays } from "../_lib/meetings.js";
 import { turnstileReady, turnstileWidget } from "../_lib/turnstile.js";
+import { CURRENT, loadElection, onTheBallot, statewideRow, contestRow, measureRow, courtRow, courtGroups } from "../_lib/elections.js";
 import { LIVE, loadPlace, officialsFor, allIds, repRow, executiveRows, breadcrumb, districtLabel, districtHref, placeHref } from "../_lib/geo.js";
 
 const WAITLIST_MESSAGES = {
@@ -65,6 +66,8 @@ async function placePage({ request, env, params }) {
       : { meetings: [], summaries: {} },
   ]);
   const { meetings, summaries } = meetingsLoaded === FAILED ? { meetings: [], summaries: {} } : meetingsLoaded;
+  const electionLoaded = await loadSection("place election", () => loadElection(env, request, CURRENT), null);
+  const ballot = electionLoaded && electionLoaded !== FAILED && electionLoaded.election.state === place.st ? countyBallot(electionLoaded, c, place) : "";
 
   // Who represents this county: every district that overlaps it.
   const group = (title, rows, empty) => `
@@ -160,6 +163,7 @@ ${breadcrumb([["United States", "/explore/"], [place.name, `/explore/${st}/`], [
   <p class="secondary">${esc(place.name)}</p>
 </header>
 ${action}
+${electionLoaded === FAILED ? sectionError("On the ballot") : ballot}
 <section class="stack" aria-labelledby="h-who">
   <h2 class="label" id="h-who">Who represents ${esc(c.name)}</h2>
   ${oLoaded === FAILED ? sectionError("") : ""}
@@ -186,5 +190,30 @@ ${
 </section>
 ${nearby ? `<section class="stack-sm" aria-labelledby="h-near"><h2 class="label" id="h-near">Nearby counties</h2><div class="chips">${nearby}</div></section>` : ""}
 <p class="hint">County boundaries and district overlaps: U.S. Census Bureau (2024 boundaries, 2020 census blocks).</p>`;
-  return page(`${c.name}, ${place.name}`, main, { tab: "home", back: [place.name, `/explore/${st}/`], partial: anyFailed(oLoaded, votes, meetingsLoaded) });
+  return page(`${c.name}, ${place.name}`, main, { tab: "home", back: [place.name, `/explore/${st}/`], partial: anyFailed(oLoaded, votes, meetingsLoaded, electionLoaded) });
+}
+
+/** What's on the ballot in a county: statewide, every district that overlaps it, its Court of Appeal, and local contests where ThePillory has them. */
+function countyBallot(election, c, place) {
+  const id = election.election.id;
+  const rows = [statewideRow(election)];
+  for (const layer of ["cd", "sldu", "sldl"]) {
+    for (const [d, full] of c[layer] || []) {
+      const contest = election.contests.find((x) => x.scope === layer && x.district === String(d));
+      if (contest) rows.push(contestRow(id, contest, full ? "" : "covers part of this county"));
+    }
+  }
+  const local = (election.counties || {})[c.fips];
+  const boe = local && election.contests.find((x) => x.scope === "boe" && x.district === local.boe);
+  if (boe) rows.push(contestRow(id, boe));
+  const short = c.name.replace(/ County$/, "");
+  rows.push(...courtGroups(election.contests).filter((g) => g.court === "supreme" || g.counties.includes(short)).map((g) => courtRow(id, g)));
+  if (local) {
+    rows.push(...election.contests.filter((x) => x.scope === "county" && x.county === c.fips).map((x) => contestRow(id, x, "on some ballots in the county")));
+    rows.push(...election.measures.filter((m) => m.scope === "county" && m.county === c.fips).map((m) => measureRow(id, m, "on some ballots in the county")));
+  }
+  const intro = local
+    ? ""
+    : `Statewide, district and court contests. ${c.name}'s local contests are on its elections office's website and sample ballot.`;
+  return onTheBallot(election, { rows, intro, today: pacificNow().slice(0, 10) });
 }
