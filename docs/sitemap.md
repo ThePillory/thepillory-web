@@ -11,10 +11,10 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
   - Headline and subtitle
   - U.S. map (live community states navy, waitlist states light navy; taps only, no zooming or dragging): a state > `/explore/<st>/`; small-state buttons; "1 live community · [#] counties waiting" (real counts); Explore the full map > Explore
   - Find your representatives: address or ZIP (`/api/districts`; nothing stored; district IDs kept in the browser)
-  - Who represents you: the President, Vice President, the Cabinet > `/bodies/us-executive/`; California's Governor and statewide offices > `/bodies/ca-executive/` (other states: not covered yet); your members of Congress and state legislators > Your briefing
   - Your briefing link, once your districts are known > `/briefing/`
+  - Elections (here, near the top, until Election Day; then after Who represents you): the next election > Election; Your ballot (once your districts are known: your district contests, courts, statewide offices and propositions, local count) > Your ballot; otherwise Find your ballot; How to vote > `/elections/#how-to-vote`
   - First-visit intro (dismissible; How it works, Principles)
-  - Elections: the next election > Election; Your ballot (once your districts are known: your district contests, courts, statewide offices and propositions, local count) > Your ballot; otherwise Find your ballot; How to vote > `/elections/#how-to-vote`
+  - Who represents you: the President, Vice President, the Cabinet > `/bodies/us-executive/`; California's Governor and statewide offices > `/bodies/ca-executive/` (other states: not covered yet); your members of Congress and state legislators > Your briefing
   - Happening now: Congress / California toggle (`?now=state`), latest final-passage votes with status, summary, constitutional chip, review label, totals, "See how your rep voted" > Bill
   - Take part: Calaveras comment deadlines > Meeting (#weigh-in); Contact your representatives > Reps. (Federal agency comment periods from Regulations.gov: to do)
   - Communities: Calaveras County (Live) > Calaveras briefing; Bring ThePillory to your county (waitlist, real counts)
@@ -52,10 +52,12 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 - Reporting opens when accounts launch; links to what you can do now
 
 ### Tab 4: Laws (`/laws/`)
+- On the ballot: the next election > Election (between the Constitution and the bills)
 - Bill (`/laws/bills/<id>/`): summary, Final action (signed, vetoed, law without a signature: date, law or chapter number, who acted, the recorded action, source), constitutional analysis (card or full), how your reps voted, Follow the money (lobbying reports; your reps' votes beside contributions from the industries that lobbied), "Something wrong?", "Request full analysis"
 - The Constitution (`/laws/constitution/`): full text, one anchor per provision
 
 ### Tab 5: You (`/you/`)
+- Elections: Your ballot, Elections
 - Accounts aren't open yet
 - About (`/about/`): How it works (`/about/how-it-works/`, with the site's one labeled example), Principles (`/about/principles/`), Methodology (`/about/methodology/`), How a bill becomes law (`/about/how-a-bill-becomes-law/`), How to read a vote (`/about/how-to-read-a-vote/`)
 
