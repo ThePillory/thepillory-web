@@ -209,7 +209,52 @@ def certified_list():
         if current is None:
             unparsed.append(s)
     log(f"certified list: {len(contests)} contests; headings not used: {sorted(set(unparsed))[:60]}")
-    return [c for c in contests if c["candidates"]]
+    return [c for c in contests if c["candidates"]] + retention(lines)
+
+
+APPELLATE = {"First": "1", "Second": "2", "Third": "3", "Fourth": "4", "Fifth": "5", "Sixth": "6"}
+
+
+def retention(lines):
+    """Judicial retention contests (yes or no on each justice), from the end of the certified list:
+    "Supreme Court - For all 58 Counties", then each "Court of Appeal – <N> Appellate District"
+    with the counties it covers, then "• For <office>" and "Shall ... be elected ...?"."""
+    out, court, counties, office, q, collecting = [], None, [], None, [], None
+    for raw in lines:
+        s = raw.strip()
+        if re.match(r"^(General Election - |Official Certified List of Candidates|\d+/\d+/\d{4}$|Page \d+ of \d+)", s):
+            continue
+        m = re.match(r"^Supreme Court\s*[-–]\s*For all 58 Counties$", s)
+        if m:
+            court, counties, collecting = {"court": "supreme", "district": None, "name": "Supreme Court"}, ["all"], None
+            continue
+        m = re.match(r"^Court of Appeal\s*[-–]\s*(\w+) Appellate District$", s)
+        if m and m.group(1) in APPELLATE:
+            court, counties, collecting = {"court": "appeal", "district": APPELLATE[m.group(1)], "name": f"Court of Appeal, {m.group(1)} Appellate District"}, [], "counties"
+            continue
+        if court is None:
+            continue
+        if collecting == "counties" and s and not s.startswith("•"):
+            counties += [c.strip() for c in s.split(",") if c.strip()]
+            continue
+        m = re.match(r"^•\s*For (.+)$", s)
+        if m:
+            collecting, office, q = "office", m.group(1).strip(), []
+            continue
+        if office and s:
+            q.append(s)
+            if s.endswith("?"):
+                question = " ".join(q)
+                name = re.search(r"\b([A-Z][A-Z.,'-]*(?: [A-Z][A-Z.,'-]*)+) be elected", question)
+                n = len([x for x in out if x["court"] == court["court"] and x["district"] == court["district"]]) + 1
+                out.append({"id": f"{'supreme-court' if court['court'] == 'supreme' else 'court-of-appeal-' + court['district']}-{n}", "office": office, "scope": "judicial",
+                            "court": court["court"], "district": court["district"], "court_name": court["name"], "counties": counties,
+                            "question": question, "justice": name.group(1).strip().rstrip(",") if name else None, "vote_for": 1, "candidates": [],
+                            "choices": ["Yes", "No"], "results_path": None,
+                            "source_url": ELECTION["certified_list"], "source": "Secretary of State, Certified List of Candidates"})
+                office, q = None, []
+    log(f"judicial retention: {len(out)} ({sum(1 for x in out if x['court'] == 'supreme')} Supreme Court); third district counties: {next((x['counties'] for x in out if x['district'] == '3'), None)}")
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -240,7 +285,9 @@ def guide_statements(contests):
                 log(f"statements {office}: no candidate named {name}")
                 continue
             if paras and not re.match(r"No candidate statement", paras[0], re.I):
-                cand["statement"] = {"paragraphs": paras, "source_url": url, "source": "Official Voter Information Guide, Secretary of State"}
+                kept = [p for p in paras if not (len(p) < 200 and CONTACT.search(p))]
+                note = "The candidate's email and phone are left out; the guide is the official version." if len(kept) != len(paras) else None
+                cand["statement"] = {"paragraphs": kept, "source_url": url, "source": "Official Voter Information Guide, Secretary of State", "note": note}
                 found += 1
     log(f"statewide statements: {found}")
 
@@ -367,123 +414,175 @@ def county_contests(fips, cfg):
     return on
 
 
-PAMPHLET_FOOTER = re.compile(r"^(\d{3}[A-Z0-9-]{3,}|E?\d{6}.*Proof|005-.*Proof|.*\|\s*5\.375.*)$")
+PAMPHLET_SKIP = re.compile(r"^(\d{3}[A-Z0-9]{4,}|E?\d{6}\b.*Proof.*|005-.*Proof.*|INTENTIONALLY LEFT BLANK|CONTINUE TO NEXT PAGE.*|➔)$")
+# Lines giving an email address or phone number are left out of statements (the same for every candidate); websites stay.
+CONTACT = re.compile(r"^(e-?mail|phone|tel|telephone)\s*:|[\w.+-]+@[\w-]+\.[\w.]+|\(?\b\d{3}\)?[ .-]\d{3}-\d{4}\b", re.I)
+COUNTY_ABBR = {"CCD": "COMMUNITY COLLEGE DISTRICT", "FPD": "FIRE PROTECTION DISTRICT", "PUD": "PUBLIC UTILITY DISTRICT", "TA": "TRUSTEE AREA",
+               "USD": "UNIFIED SCHOOL DISTRICT", "UHSD": "UNION HIGH SCHOOL DISTRICT", "ANGELS": "ANGELS CAMP"}
+
+
+def pamphlet_lines(cfg):
+    """The pamphlet as (indent, text) lines, without printer's marks and page furniture."""
+    out = []
+    for raw in pdf_text(cfg["pamphlet_pdf"]).splitlines():
+        s = raw.strip()
+        if PAMPHLET_SKIP.match(s):
+            out.append((0, ""))
+            continue
+        out.append((len(raw) - len(raw.lstrip()), s))
+    return out
+
+
+def reflow(lines):
+    """Join printed lines into paragraphs. A paragraph ends at a blank line, a bullet
+    or numbered item, or a line that stops well short of the column (as printed)."""
+    width = max((len(t) for _, t in lines if t), default=0)
+    paras, cur, prev = [], [], None
+    for indent, t in lines:
+        if not t:
+            if cur:
+                paras.append(" ".join(cur))
+                cur = []
+            continue
+        # A bullet or numbered item starts a paragraph; so does a line set back left of the one before (the end of an item).
+        if cur and (re.match(r"^(•|\d+\.\s)", t) or (prev is not None and indent < prev - 2)):
+            paras.append(" ".join(cur))
+            cur = []
+        cur.append(t)
+        prev = indent
+        if len(t) < width * 0.85 and re.search(r"[.!?:”\"]$", t):
+            paras.append(" ".join(cur))
+            cur = []
+    if cur:
+        paras.append(" ".join(cur))
+    return [re.sub(r"\s+", " ", re.sub(r"(\w)- (\w)", r"\1-\2", p)).strip() for p in paras if p.strip()]
+
+
+def is_heading(indent, t):
+    return indent >= 10 and len(t) < 90 and t == t.upper() and re.search(r"[A-Z]{3}", t) and "AGE:" not in t and not t.startswith(("/S/", "BY:"))
 
 
 def pamphlet(fips, cfg, contests, local):
     """Candidate statements and local measures from the county's Voter Information Pamphlet."""
-    t = pdf_text(cfg["pamphlet_pdf"])
-    lines = [l for l in t.splitlines() if not PAMPHLET_FOOTER.match(l.strip())]
-    # Candidate statements: a heading line ("STATE SENATOR – DISTRICT 4"), then "NAME   AGE: 52",
-    # "Occupation: ...", then the statement until the next heading or name line.
-    blocks, cur, heading = [], None, None
-    for raw in lines:
-        s = raw.strip()
-        if re.match(r"^[A-Z][A-Z .,&'/()-]+(?:\s[–—-]\s.+)$", s) and len(s) < 90 and "AGE:" not in s:
-            heading = s
+    lines = pamphlet_lines(cfg)
+    # A statement: a centered heading (one or two lines: the office, then the seat),
+    # the name ("NAME   AGE: 52", or the name alone), "Occupation: ..." if given, then the text.
+    blocks, cur, heading, last_heading_i = [], None, [], -9
+    for i, (indent, t) in enumerate(lines):
+        if re.match(r"^(BOND MEASURE|IMPARTIAL ANALYSIS|MEASURE [A-Z]$|TAX RATE STATEMENT|ARGUMENT|REBUTTAL|FULL TEXT)", t):
+            break
+        if t and is_heading(indent, t):
+            heading = heading + [t] if last_heading_i >= i - 2 and heading else [t]
+            last_heading_i = i
             cur = None
             continue
-        m = re.match(r"^([A-Z][A-Z .,'()\"-]+?)\s{3,}AGE:\s*(\d+)$", s)
-        if m and heading:
-            cur = {"heading": heading, "name": m.group(1).strip(), "age": m.group(2), "lines": []}
+        m = re.match(r"^([A-Z][A-Z .,'()\"-]+?)(?:\s{3,}AGE:\s*(\d+))?$", t)
+        if m and heading and indent < 10 and cur is None and len(t) < 200:
+            cur = {"heading": " ".join(heading), "name": m.group(1).strip(), "age": m.group(2), "lines": []}
             blocks.append(cur)
             continue
         if cur is not None:
-            if re.match(r"^(IMPARTIAL ANALYSIS|MEASURE [A-Z]\b|ARGUMENT|REBUTTAL|TAX RATE STATEMENT|FULL TEXT)", s):
-                cur = None
-                continue
-            cur["lines"].append(s)
-    all_contests = contests + local
+            cur["lines"].append((indent, t))
     found = 0
     for b in blocks:
-        paras, para = [], []
-        for s in b["lines"]:
-            if not s:
-                if para:
-                    paras.append(" ".join(para))
-                    para = []
-                continue
-            para.append(s)
-        if para:
-            paras.append(" ".join(para))
-        paras = [re.sub(r"(\w)- (\w)", r"\1-\2", p) for p in paras]
-        occ = next((p for p in paras if p.startswith("Occupation:")), None)
-        body = [p for p in paras if p is not occ]
-        target = pamphlet_contest(b["heading"], all_contests)
-        cand = match_candidate(target["candidates"], b["name"].title()) if target else None
+        body = [(i, t) for i, t in b["lines"] if not CONTACT.search(t)]
+        dropped_contact = len(body) != len(b["lines"])
+        occ = next((t for _, t in body if t.startswith("Occupation:")), None)
+        body = [(i, t) for i, t in body if t != occ]
+        target = pamphlet_contest(b["heading"], b["name"], contests + local)
+        cand = match_candidate(target["candidates"], b["name"]) if target else None
         if not cand:
             log(f"pamphlet statement not matched: {b['heading']} / {b['name']}")
             continue
         if cand.get("statement"):
             continue
-        cand["statement"] = {"header": [f"Age: {b['age']}"] + ([occ] if occ else []), "paragraphs": body,
-                             "source_url": cfg["pamphlet_pdf"], "source": f"{cfg['name']} Voter Information Pamphlet",
-                             "note": "Text from the county's PDF, as printed; the PDF is the official version."}
+        note = "Text from the county's PDF, as printed" + ("; the candidate's email and phone are left out" if dropped_contact else "") + ". The PDF is the official version."
+        cand["statement"] = {"header": ([f"Age: {b['age']}"] if b["age"] else []) + ([occ] if occ else []), "paragraphs": reflow(body),
+                             "source_url": cfg["pamphlet_pdf"], "source": f"{cfg['name']} Voter Information Pamphlet", "note": note}
         found += 1
     log(f"{cfg['name']} pamphlet: {len(blocks)} statements, {found} matched")
     return pamphlet_measures(fips, cfg, lines)
 
 
-def pamphlet_contest(heading, contests):
+def county_words(s):
+    s = s.upper()
+    for k, v in COUNTY_ABBR.items():
+        s = re.sub(rf"\b{k}(?=\d|\b)", v + " ", s)
+    return set(re.findall(r"[A-Z]{3,}|\d+", s)) - {"THE", "AND", "MEMBER", "GOVERNING", "BOARD", "DISTRICT", "COUNTY", "CALAVERAS", "FULL", "TERM", "DIRECTOR", "CITY", "STATE", "UNITED", "STATES"}
+
+
+def pamphlet_contest(heading, name, contests):
     h = heading.upper()
     m = re.search(r"DISTRICT\s+(\d+)", h)
     num = m.group(1) if m else None
     if "UNITED STATES REPRESENTATIVE" in h:
         return next((c for c in contests if c["scope"] == "cd" and c["district"] == num), None)
-    if "STATE SENAT" in h:
+    if re.search(r"STATE SEN", h):  # the pamphlet has a misprint ("SENTATOR") on one page
         return next((c for c in contests if c["scope"] == "sldu" and c["district"] == num), None)
     if "ASSEMBLY" in h:
         return next((c for c in contests if c["scope"] == "sldl" and c["district"] == num), None)
-    words = set(re.findall(r"[A-Z]{3,}", h)) - {"DISTRICT", "MEMBER", "THE", "AND", "GOVERNING", "BOARD"}
-    best, score = None, 0
-    for c in contests:
-        if c["scope"] != "county":
-            continue
-        cw = set(re.findall(r"[A-Z]{3,}", c["office"].upper()))
-        s = len(words & cw)
-        if s > score:
-            best, score = c, s
-    return best
+    # Local contests: the candidate must be on that contest's list; the heading's words decide between several.
+    pool = [c for c in contests if c["scope"] == "county" and match_candidate(c["candidates"], name)]
+    words = county_words(h)
+    pool.sort(key=lambda c: -len(words & county_words(c["office"])))
+    return pool[0] if pool else None
 
 
 def pamphlet_measures(fips, cfg, lines):
-    text = "\n".join(lines)
+    """Local measures: the ballot question, County Counsel's impartial analysis,
+    the tax rate statement and the arguments, each as printed."""
+    texts = [t for _, t in lines]
     measures = []
-    for letter in sorted(set(re.findall(r"^\s*MEASURE ([A-Z])\s*$", text, re.M))):
-        # The ballot question: the first paragraph of County Counsel's impartial analysis, which restates it.
-        ia = re.search(r"IMPARTIAL ANALYSIS[^\n]*\n\s*MEASURE " + letter + r"\s*\n(.*?)(?=\n\s*(?:ARGUMENT|TAX RATE STATEMENT|FULL TEXT|REBUTTAL|MEASURE [A-Z]\s*\n))", text, re.S)
-        analysis = paragraphs(ia.group(1)) if ia else []
-        question = analysis[0] if analysis and analysis[0].endswith("?") else None
+    letters = sorted({m.group(1) for t in texts for m in [re.match(r"^MEASURE ([A-Z])$", t)] if m})
+    for letter in letters:
+        def part(title):
+            """Lines after a heading ("IMPARTIAL ANALYSIS BY COUNTY COUNSEL" / "MEASURE A") up to the next heading."""
+            for i, t in enumerate(texts):
+                if re.match(title, t) and (f"MEASURE {letter}" in t or (i + 1 < len(texts) and texts[i + 1] == f"MEASURE {letter}")):
+                    j = i + 1 + (texts[i + 1] == f"MEASURE {letter}")
+                    k = j
+                    while k < len(lines) and not (lines[k][1] and lines[k][0] >= 10 and re.match(r"^(IMPARTIAL ANALYSIS|TAX RATE STATEMENT|ARGUMENT|REBUTTAL|FULL TEXT|MEASURE [A-Z]$)", lines[k][1])):
+                        k += 1
+                    return lines[j:k]
+            return None
+        ia = part(r"^IMPARTIAL ANALYSIS")
+        question, analysis, by = None, [], None
+        if ia:
+            ia = [(i, t) for i, t in ia]
+            q_end = next((n for n, (_, t) in enumerate(ia) if t.endswith("?")), None)
+            if q_end is not None and q_end < 15:
+                question = re.sub(r"\s+", " ", " ".join(t for _, t in ia[: q_end + 1])).strip()
+                ia = ia[q_end + 1:]
+            sig = next((n for n, (_, t) in enumerate(ia) if t.startswith("By: /s/")), None)
+            if sig is not None:
+                by = " ".join(t for _, t in ia[sig + 1: sig + 2]).title() or None
+                ia = ia[:sig] + ia[sig + 2:]
+            analysis = reflow(ia)
+        trs = part(r"^TAX RATE STATEMENT")
         args = []
-        for kind, label in (("for", "IN FAVOR"), ("against", "AGAINST")):
-            m = re.search(r"ARGUMENT " + label + r"[^\n]*MEASURE " + letter + r"[^\n]*\n(.*?)(?=\n\s*(?:ARGUMENT|REBUTTAL|FULL TEXT|IMPARTIAL|TAX RATE|MEASURE [A-Z]\s*\n)|\Z)", text, re.S)
-            if m:
-                args.append({"kind": kind, "heading": f"Argument {label.lower()} of Measure {letter}", "paragraphs": paragraphs(m.group(1)), "signers": [], "none_submitted": None})
+        for kind, label in (("for", "IN FAVOR OF"), ("against", "AGAINST"), ("rebuttal_for", "REBUTTAL TO ARGUMENT AGAINST"), ("rebuttal_against", "REBUTTAL TO ARGUMENT IN FAVOR OF")):
+            body = part(rf"^{'ARGUMENT ' + label if not kind.startswith('rebuttal') else label}\b")
+            if body is None:
+                continue
+            txt = [(i, t) for i, t in body if t]
+            signers = [{"name": x.split(",")[0].strip(), "title": ",".join(x.split(",")[1:]).strip()} for x in (re.sub(r"^/s/\s*", "", t) for _, t in txt if t.startswith("/s/"))]
+            rest = [(i, t) for i, t in body if not t.startswith("/s/")]
+            none = next((t.strip("()") for _, t in txt if re.match(r"^\(?None Filed\)?$", t, re.I)), None)
+            heading = f"{'Argument ' if not kind.startswith('rebuttal') else ''}{label.title().replace('Of', 'of').replace('In Favor', 'in favor').replace('Against', 'against')} Measure {letter}"
+            args.append({"kind": kind, "heading": heading, "paragraphs": [] if none else reflow(rest), "signers": signers,
+                         "none_submitted": f"No argument {'against' if kind == 'against' else 'in favor of'} Measure {letter} was filed." if none else None})
         measures.append({
             "id": f"{fips}-measure-{letter.lower()}", "number": letter, "title": f"Measure {letter}", "question": question, "scope": "county", "county": fips,
-            "impartial_analysis": analysis[1:] if question else analysis, "impartial_analysis_by": "County Counsel",
-            "arguments": args, "arguments_note": "No argument against is printed in the pamphlet." if not any(a["kind"] == "against" for a in args) else None,
+            "jurisdiction": next((t.title() for t in texts[max(0, texts.index(f'MEASURE {letter}') - 2): texts.index(f'MEASURE {letter}')] if re.search(r"DISTRICT|CITY|COUNTY", t) and "MEASURE" not in t), None),
+            "impartial_analysis": analysis, "impartial_analysis_by": by or "County Counsel",
+            "tax_rate_statement": reflow(trs) if trs else [],
+            "arguments": args,
             "links": {"pamphlet": cfg["pamphlet_pdf"], "page": cfg["elections_page"]},
             "results_url": cfg["results_page"], "source_url": cfg["pamphlet_pdf"], "source": f"{cfg['name']} Voter Information Pamphlet",
-            "note": "Text from the county's PDF, as printed; the PDF is the official version.",
+            "note": "Text from the county's PDF, as printed. The PDF is the official version.",
         })
-    log(f"{cfg['name']} measures: {[(m['title'], bool(m['question']), [a['kind'] for a in m['arguments']]) for m in measures]}")
+    log(f"{cfg['name']} measures: {[(m['title'], m['jurisdiction'], bool(m['question']), len(m['impartial_analysis']), [(a['kind'], len(a['paragraphs']), len(a['signers']), bool(a['none_submitted'])) for a in m['arguments']]) for m in measures]}")
     return measures
-
-
-def paragraphs(block):
-    out, cur = [], []
-    for s in block.splitlines():
-        s = s.strip()
-        if not s:
-            if cur:
-                out.append(" ".join(cur))
-                cur = []
-            continue
-        cur.append(s)
-    if cur:
-        out.append(" ".join(cur))
-    return [re.sub(r"(\w)- (\w)", r"\1-\2", p) for p in out]
 
 
 # ---------------------------------------------------------------------------
