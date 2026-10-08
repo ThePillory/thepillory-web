@@ -23,6 +23,7 @@ import {
   whenLine, howToVote, contestRow, measureRow, courtRow,
 } from "../_lib/elections.js";
 import { pacificNow } from "../_lib/meetings.js";
+import { fold } from "../_lib/summary.js";
 
 const BACK = ["Elections", "/elections/"];
 const NEUTRAL = "Every candidate and measure is shown the same way, in ballot order, with what the official sources print. ThePillory doesn't endorse candidates or measures, and doesn't publish polls or predictions.";
@@ -327,18 +328,50 @@ function courtPage(election, g) {
 // ---------------------------------------------------------------------------
 // /elections/<id>/measure/<measure>/
 
-const KIND_ORDER = { for: 0, rebuttal_against: 1, against: 2, rebuttal_for: 3 };
+// The campaign arguments, as the official guide prints them: the argument in
+// favor and the opponents' rebuttal to it, then the argument against and the
+// supporters' rebuttal to it. A rebuttal is written by the other side.
+const ARG_PARTS = [
+  { kind: "for", label: "Supporters' argument" },
+  { kind: "rebuttal_against", label: "Opponents' rebuttal" },
+  { kind: "against", label: "Opponents' argument" },
+  { kind: "rebuttal_for", label: "Supporters' rebuttal" },
+];
+export const ARGUMENTS_NOTE = "Written by each campaign, printed word for word from the official voter guide. Not written or checked by ThePillory or any government agency.";
 
-function argumentCard(a) {
+/** One argument or rebuttal, the same layout for every side: label, the guide's heading, the full text, who signed it. */
+function argumentPart(part, a) {
+  if (!a) {
+    return `<article class="card stack-sm argument-card">
+  <p class="label">${esc(part.label)}</p>
+  <p class="small secondary">None printed in the official guide.</p>
+</article>`;
+  }
   const signers = a.signers.length
     ? `<div class="stack-xs"><p class="label">Signed by</p><ul class="plain-list signer-list">${a.signers.map((s) => `<li class="small"><strong>${esc(s.name)}</strong>${s.title ? `, ${esc(s.title)}` : ""}</li>`).join("")}</ul></div>`
     : "";
-  return `
-<article class="card stack-sm argument-card">
+  return `<article class="card stack-sm argument-card">
+  <p class="label">${esc(part.label)}</p>
   <h3 class="statement-title">${esc(a.heading)}</h3>
-  ${a.none_submitted ? `<p class="small secondary">${esc(a.none_submitted)}</p>` : `<details class="cand-statement"><summary>Read the argument</summary><div class="statement-body stack-xs">${a.paragraphs.map((p) => `<p>${esc(p)}</p>`).join("")}</div></details>`}
+  ${a.none_submitted ? `<p class="small secondary">${esc(a.none_submitted)}</p>` : `<div class="statement-body stack-xs">${a.paragraphs.map((p) => `<p>${esc(p)}</p>`).join("")}</div>`}
   ${signers}
 </article>`;
+}
+
+/** Both exchanges in matching panels, in the guide's order, collapsed until opened. */
+function argumentsSection(m, source) {
+  const by = (kind) => m.arguments.find((a) => a.kind === kind) || null;
+  const exchange = (title, parts) => `<div class="stack-sm argument-side">
+  <h3 class="label">${esc(title)}</h3>
+  ${parts.map((part) => argumentPart(part, by(part.kind))).join("")}
+</div>`;
+  const inner = `<p class="banner argument-note">${esc(ARGUMENTS_NOTE)}</p>
+<div class="argument-sides">
+  ${exchange("The argument for, and the opponents' rebuttal", ARG_PARTS.slice(0, 2))}
+  ${exchange("The argument against, and the supporters' rebuttal", ARG_PARTS.slice(2))}
+</div>
+${source ? `<p class="small">${source}</p>` : ""}`;
+  return fold("arguments", "Arguments from each campaign", inner);
 }
 
 async function measurePage(election, measureId) {
@@ -350,7 +383,6 @@ async function measurePage(election, measureId) {
   const county = m.county ? election.counties[m.county] : null;
   const feed = statewide ? await loadSection("measure results", () => sosResults(election, m.results_path), null) : null;
   const r = feed && feed !== FAILED ? measureResult(feed, m.results_number) : null;
-  const args = [...m.arguments].sort((a, b) => (KIND_ORDER[a.kind] ?? 9) - (KIND_ORDER[b.kind] ?? 9));
   const results = !pollsClosed(election)
     ? '<p class="small secondary">Results appear here after the polls close at 8 p.m. on Election Day.</p>'
     : feed === FAILED
@@ -358,19 +390,25 @@ async function measurePage(election, measureId) {
       : r
         ? `<div class="results stack-sm"><p class="label">Results so far</p><ul class="plain-list results-list"><li class="result-row"><span class="result-name">Yes</span><span class="result-num">${r.yes == null ? "—" : r.yes.toLocaleString("en-US")} votes · ${esc(r.yesPercent)}%</span></li><li class="result-row"><span class="result-name">No</span><span class="result-num">${r.no == null ? "—" : r.no.toLocaleString("en-US")} votes · ${esc(r.noPercent)}%</span></li></ul><p class="hint">${esc(feed.Reporting || "")}${feed.ReportingTime ? ` · as of ${esc(feed.ReportingTime)}` : ""}. Counting continues after Election Day until each county certifies its results. ${sourceLink(election.election.results_page, "Secretary of State results")}</p></div>`
         : `<p class="small">Results: ${sourceLink(m.results_url || election.election.results_page, county ? `${county.name} Elections, current results` : "Secretary of State results")}</p>`;
+  const list = (items) => (items.length > 1 ? `<ul class="plain-list bullet-list">${items.map((x) => `<li class="small">${esc(x)}</li>`).join("")}</ul>` : items.map((x) => `<p class="small">${esc(x)}</p>`).join(""));
   const official = statewide
     ? `
-<section class="card stack-sm">
-  <p class="label">Official title</p>
+<section class="card stack-sm" aria-labelledby="h-ts">
+  <h2 class="label" id="h-ts">Official title and summary · Prepared by the Attorney General</h2>
   <p class="measure-title">${esc(m.title)}</p>
-  <p class="label">Official summary</p>
-  <p class="small">${esc(m.summary || "")}</p>
+  ${m.ag_summary && m.ag_summary.length ? list(m.ag_summary) : `<p class="small secondary">The summary couldn't be read from the guide. ${sourceLink(m.links.guide, "Read it in the official guide")}</p>`}
 </section>
 <section class="stack-sm" aria-labelledby="h-means"><h2 class="label" id="h-means">What your vote means</h2>
-  <div class="card stack-sm">
-    <p class="small">${esc(m.yes_means || "")}</p>
-    <p class="small">${esc(m.no_means || "")}</p>
+  <div class="vote-means">
+    <div class="card stack-xs"><p class="vote-means-head">Yes</p><p class="small">${esc((m.yes_means || "").replace(/^A YES vote on this measure means:\s*/, "")) || "Not found in the guide."}</p></div>
+    <div class="card stack-xs"><p class="vote-means-head">No</p><p class="small">${esc((m.no_means || "").replace(/^A NO vote on this measure means:\s*/, "")) || "Not found in the guide."}</p></div>
   </div>
+  <p class="hint">As the official guide states it.</p>
+</section>
+<section class="card stack-sm" aria-labelledby="h-fiscal">
+  <h2 class="label" id="h-fiscal">Fiscal effect · Legislative Analyst's estimate</h2>
+  ${m.fiscal_effect && m.fiscal_effect.length ? list(m.fiscal_effect) : '<p class="small secondary">Not found in the guide.</p>'}
+  <p class="hint">The summary of the Legislative Analyst's estimate of the net state and local government fiscal impact, from the official title and summary. ${sourceLink(m.links.analysis, "The full analysis by the Legislative Analyst")}</p>
 </section>`
     : `
 <section class="card stack-sm">
@@ -384,7 +422,7 @@ ${m.tax_rate_statement && m.tax_rate_statement.length ? `<section class="stack-s
   <details class="card cand-statement"><summary>Read the tax rate statement</summary><div class="statement-body stack-xs">${m.tax_rate_statement.map((p) => `<p class="small">${esc(p)}</p>`).join("")}</div></details>
 </section>` : ""}`;
   const links = statewide
-    ? [[m.links.guide, "This proposition in the Official Voter Information Guide"], [m.links.analysis, "Analysis by the Legislative Analyst"], [m.links.arguments, "Arguments and rebuttals"], [m.links.text, "Text of the proposed law (PDF)"]]
+    ? [[m.links.guide, "This proposition in the Official Voter Information Guide"], [m.links.title_summary, "Official title and summary"], [m.links.analysis, "Analysis by the Legislative Analyst"], [m.links.arguments, "Arguments and rebuttals"], [m.links.text, "Text of the proposed law (PDF)"]]
     : [[m.links.pamphlet, `${county ? county.name : "County"} Voter Information Pamphlet (PDF), the official version`], [m.links.page, `${county ? county.name : "County"} Elections: candidates and measures`]];
   const main = `
 <header class="page-head stack-xs">
@@ -393,11 +431,8 @@ ${m.tax_rate_statement && m.tax_rate_statement.length ? `<section class="stack-s
   ${statewide ? "" : `<p class="small secondary">On ballots in ${esc(m.jurisdiction || "part of the county")}${county ? `, ${esc(county.name)}` : ""}.</p>`}
 </header>
 ${official}
-<section class="stack-sm" aria-labelledby="h-args"><h2 class="label" id="h-args">Arguments for and against</h2>
-  <p class="hint">${esc(statewide ? m.arguments_disclaimer || "" : "Printed as submitted, in the county's pamphlet.")}</p>
-  ${args.map(argumentCard).join("")}
-</section>
 <section class="stack-sm" aria-labelledby="h-res"><h2 class="label" id="h-res">Results</h2>${results}</section>
+${argumentsSection(m, statewide ? sourceLink(m.links.arguments, "Arguments and rebuttals in the official guide") : sourceLink(m.links.pamphlet, "Arguments in the county's Voter Information Pamphlet (PDF)"))}
 <section class="stack-sm" aria-labelledby="h-src"><h2 class="label" id="h-src">Official sources</h2>
   <div class="card stack-xs">${links.filter(([u]) => safeUrl(u)).map(([u, l]) => `<p class="small">${sourceLink(u, l)}</p>`).join("")}</div>
   ${m.note ? `<p class="hint">${esc(m.note)}</p>` : ""}

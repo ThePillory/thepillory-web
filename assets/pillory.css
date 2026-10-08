@@ -1526,6 +1526,16 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 .cand-links .inline-link { display: inline-flex; align-items: center; min-height: var(--tap); }
 .measure-title { margin: 0; font-family: var(--sans); font-weight: 700; font-size: 1.0625rem; line-height: 1.4; overflow-wrap: anywhere; }
 .signer-list { display: flex; flex-direction: column; gap: 4px; }
+/* Ballot measures: the official content first, then each campaign's argument and the
+   other side's rebuttal in matching panels (the app column is one panel wide) */
+.vote-means { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.vote-means-head { margin: 0; font-weight: 800; font-size: 1.0625rem; }
+.bullet-list { display: flex; flex-direction: column; gap: 6px; padding-left: 18px; list-style: disc; }
+.bullet-list li { overflow-wrap: anywhere; }
+.argument-sides { display: flex; flex-direction: column; gap: 20px; }
+.argument-side { padding-top: 12px; border-top: 1px solid var(--border); }
+.argument-side:first-child { padding-top: 0; border-top: 0; }
+.argument-card .statement-title { font-size: 0.9375rem; color: var(--text-2); }
 .results-list { display: flex; flex-direction: column; }
 .result-row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--border); font-size: 0.9375rem; }
 .result-row:first-child { border-top: 0; }

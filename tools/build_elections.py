@@ -327,17 +327,42 @@ def propositions():
         no = (re.search(r"NO (A NO vote on this measure means:.*)$", means) or [None, None])[1]
         args_url = f"{base}arguments-rebuttals.htm"
         args = arguments(fetch(args_url))
+        ts_url = f"{base}title-summary.htm"
+        ts = title_summary(fetch(ts_url))
         props.append({
             "id": f"prop-{n}", "number": n, "title": title, "scope": "statewide",
             "summary": summary, "yes_means": yes, "no_means": no,
+            "ag_summary": ts["ag_summary"], "fiscal_heading": ts["fiscal_heading"], "fiscal_effect": ts["fiscal_effect"],
             "arguments": args["arguments"], "arguments_disclaimer": args["disclaimer"],
-            "links": {"guide": base, "analysis": f"{base}analysis.htm", "arguments": args_url,
+            "links": {"guide": base, "title_summary": ts_url, "analysis": f"{base}analysis.htm", "arguments": args_url,
                       "text": f"https://vig.cdn.sos.ca.gov/2026/general/pdf/prop{n}-text-proposed-laws.pdf"},
             "results_path": "ballot-measures", "results_number": n.zfill(2),
             "source_url": base, "source": "Official Voter Information Guide, Secretary of State",
         })
     log(f"propositions: {[p['number'] for p in props]}")
     return props
+
+
+def blocks(h):
+    """The paragraphs and list items of a piece of the page, in order, as printed."""
+    h = re.sub(r"<(ul|ol)[^>]*>(.*?)</\1>", lambda m: "".join(f"<p>{x}</p>" for x in re.findall(r"<li[^>]*>(.*?)</li>", m.group(2), re.S)), h, flags=re.S)
+    return [t for t in (clean(re.split(r"</p>", x)[0]) for x in re.split(r"<p[^>]*>", h)[1:]) if t]
+
+
+def title_summary(h):
+    """The Official Title and Summary page: the Attorney General's summary, and the
+    summary of the Legislative Analyst's estimate of the fiscal impact, each as printed."""
+    h = numeric_entities(h)
+    start = h.find("PREPARED BY THE ATTORNEY GENERAL")
+    fiscal = re.search(r"<h3[^>]*>\s*SUMMARY OF LEGISLATIVE ANALYST.*?</h3>", h[start:], re.S) if start >= 0 else None
+    if start < 0 or not fiscal:
+        return {"ag_summary": [], "fiscal_heading": None, "fiscal_effect": []}
+    end = h.find("</section>", start + fiscal.end())
+    return {
+        "ag_summary": blocks(h[h.find("</h3>", start) + 5: start + fiscal.start()]),
+        "fiscal_heading": clean(fiscal.group(0)).rstrip(":"),
+        "fiscal_effect": blocks(h[start + fiscal.end(): end if end > 0 else None]),
+    }
 
 
 def section(text, start, end):
@@ -348,39 +373,68 @@ def section(text, start, end):
     return text[i + len(start): j if j > 0 else None].strip()
 
 
+# Who wrote each part. On the official page, each column is an argument
+# followed by the rebuttal to it, so a rebuttal is written by the other side:
+# the column for the measure holds the supporters' argument and the
+# opponents' rebuttal to it.
+SIDE = {"for": "supporters", "rebuttal_against": "opponents", "against": "opponents", "rebuttal_for": "supporters"}
+
+
+def argument_kind(heading):
+    h = heading.upper()
+    if "REBUTTAL TO ARGUMENT AGAINST" in h:
+        return "rebuttal_for"       # the supporters' rebuttal
+    if "REBUTTAL TO ARGUMENT IN FAVOR" in h:
+        return "rebuttal_against"   # the opponents' rebuttal
+    if "IN FAVOR" in h:
+        return "for"
+    if "AGAINST" in h:
+        return "against"
+    return "other"
+
+
+def argument_part(heading, body):
+    """One argument or rebuttal: its paragraphs word for word and its signers as printed."""
+    # A bulleted list (inside a paragraph or between them) becomes one paragraph per item, marked "• ".
+    body = re.sub(r"<(ul|ol)[^>]*>(.*?)</\1>", lambda m: "".join(f"<p>• {x}</p>" for x in re.findall(r"<li[^>]*>(.*?)</li>", m.group(2), re.S)), body, flags=re.S)
+    # Split at each opening <p>: a paragraph isn't always closed before the next one.
+    raw = [re.split(r"</p>", x)[0] for x in re.split(r"<p[^>]*>", body)[1:]]
+    # The signature block: the closing paragraphs that read "<strong>Name</strong>, Title"
+    # (or "<strong>Name,</strong> Title"); a bold line in the text doesn't.
+    sigs = []
+    while raw and re.match(r"\s*<strong>[^<]*(,\s*</strong>|</strong>\s*,)", raw[-1]):
+        sigs.insert(0, raw.pop())
+    signers = []
+    for sig in sigs:
+        for name, rest in re.findall(r"<strong>(.*?)</strong>(.*?)(?=<strong>|$)", sig, re.S):
+            lines = [clean(x).lstrip(", ") for x in re.split(r"<br\s*/?>", rest) if clean(x).lstrip(", ")]
+            signers.append({"name": clean(name).rstrip(","), "title": ", ".join(lines)})
+    paras = [clean(p) for p in raw]
+    paras = [p for p in paras if p and p != "•"]
+    none_submitted = bool(paras) and re.match(r"NO (ARGUMENT|REBUTTAL).*WAS SUBMITTED", paras[0], re.I)
+    kind = argument_kind(heading)
+    return {"kind": kind, "side": SIDE.get(kind), "heading": heading, "paragraphs": [] if none_submitted else paras,
+            "signers": signers, "none_submitted": paras[0] if none_submitted else None}
+
+
+def numeric_entities(h):
+    """Decode numeric entities ("&#44;", "&#45;") so markup like class="grid&#45;50" and
+    "</strong>&#44; Title" can be matched; "<", ">" and "&" stay encoded."""
+    def one(m):
+        c = chr(int(m.group(1)))
+        return m.group(0) if c in "<>&" else c
+    return re.sub(r"&#(\d+);", one, h)
+
+
 def arguments(h):
+    """Every argument and rebuttal on the page, in the page's order, each split at its own heading."""
+    h = numeric_entities(h)
     out = []
     for block in re.findall(r'<div class="grid-50 argumentsRebuttals">(.*?)</div>', h, re.S):
-        m = re.search(r"<h3[^>]*>(.*?)</h3>", block, re.S)
-        if not m:
-            continue
-        heading = clean(m.group(1))
-        kind = ("rebuttal_for" if "REBUTTAL TO ARGUMENT AGAINST" in heading else "rebuttal_against" if "REBUTTAL TO ARGUMENT IN FAVOR" in heading
-                else "for" if "IN FAVOR" in heading else "against" if "AGAINST" in heading else "other")
-        paras = []
-        for p in re.findall(r"<p[^>]*>(.*?)</p>", block[m.end():], re.S):
-            items = re.findall(r"<li[^>]*>(.*?)</li>", p, re.S)
-            if items:
-                lead = clean(re.split(r"<ul", p)[0])
-                if lead:
-                    paras.append(lead)
-                paras.extend(f"• {clean(x)}" for x in items)
-            else:
-                paras.append(clean(p))
-        paras = [p for p in paras if p]
-        signers = []
-        if paras and "<strong>" in block:
-            last = re.findall(r"<p[^>]*>((?:(?!</p>).)*<strong>.*?)</p>", block, re.S)
-            if last:
-                sig = last[-1]
-                for name, rest in re.findall(r"<strong>(.*?)</strong>(.*?)(?=<strong>|$)", sig, re.S):
-                    lines = [clean(x) for x in re.split(r"<br\s*/?>", rest) if clean(x)]
-                    signers.append({"name": clean(name).rstrip(","), "title": ", ".join(lines)})
-                signed = clean(sig)
-                paras = [p for p in paras if p != signed]
-        none_submitted = bool(paras) and re.match(r"NO (ARGUMENT|REBUTTAL).*WAS SUBMITTED", paras[0])
-        out.append({"kind": kind, "heading": heading, "paragraphs": [] if none_submitted else paras, "signers": signers,
-                    "none_submitted": paras[0] if none_submitted else None})
+        heads = list(re.finditer(r"<h3[^>]*>(.*?)</h3>", block, re.S))
+        for n, m in enumerate(heads):
+            body = block[m.end(): heads[n + 1].start() if n + 1 < len(heads) else len(block)]
+            out.append(argument_part(clean(m.group(1)), body))
     disclaimer = clean((re.search(r'<p class="disclaimer">(.*?)</p>', h, re.S) or [None, ""])[1])
     return {"arguments": out, "disclaimer": disclaimer}
 

@@ -6802,9 +6802,24 @@
    "summary": "Put on the Ballot by the Legislature Authorizes $11.25 billion in state general obligation bonds for housing affordability programs, including multifamily rental housing, mortgages for veterans, supportive housing, preservation of existing affordable housing, and downpayment assistance. Fiscal Impact : Increased state cost of $500 million to $600 million annually for about 25 years to repay the housing bond. Supporters: US Vets; CA Federation of Teachers; Self-Help for the Elderly; Habitat for Humanity CA; CA Alliance of Child & Family Services Opponents: None submitted",
    "yes_means": "A YES vote on this measure means: The state could borrow $11.25 billion to support veterans and affordable housing.",
    "no_means": "A NO vote on this measure means: The state could not borrow $11.25 billion to support veterans and affordable housing.",
+   "ag_summary": [
+    "Authorizes $11.25 billion in state general obligation bonds for housing affordability programs, including for California veterans, and to finance housing development projects seeking federal tax credits.",
+    "Allocates funds: $5.1 billion to build and rehabilitate multifamily rental housing;",
+    "$2.1 billion to acquire, rehabilitate, or preserve affordable housing units, and provide supportive housing for those experiencing homelessness;",
+    "$1.25 billion for state-funded mortgages for California veterans;",
+    "$1.1 billion for homeownership and downpayment assistance;",
+    "$1 billion for farmworker, tribal, and student housing;",
+    "$500 million for housing infrastructure; and",
+    "$200 million to support local housing programs."
+   ],
+   "fiscal_heading": "SUMMARY OF LEGISLATIVE ANALYST’S ESTIMATE OF NET STATE AND LOCAL GOVERNMENT FISCAL IMPACT",
+   "fiscal_effect": [
+    "Increased state cost of $500 million to $600 million annually for about 25 years to repay the housing bond."
+   ],
    "arguments": [
     {
      "kind": "for",
+     "side": "supporters",
      "heading": "ARGUMENT IN FAVOR OF PROPOSITION 1",
      "paragraphs": [
       "YES ON PROP. 1: AFFORDABLE HOMES FOR VETERANS, SENIORS, PEOPLE WITH DISABILITIES AND WORKING FAMILIES—WITHOUT RAISING TAXES",
@@ -6848,6 +6863,7 @@
     },
     {
      "kind": "against",
+     "side": "opponents",
      "heading": "ARGUMENT AGAINST PROPOSITION 1",
      "paragraphs": [],
      "signers": [],
@@ -6857,6 +6873,7 @@
    "arguments_disclaimer": "Arguments printed on this page are the opinions of the authors and have not been checked for accuracy by any official agency.",
    "links": {
     "guide": "https://voterguide.sos.ca.gov/propositions/1/",
+    "title_summary": "https://voterguide.sos.ca.gov/propositions/1/title-summary.htm",
     "analysis": "https://voterguide.sos.ca.gov/propositions/1/analysis.htm",
     "arguments": "https://voterguide.sos.ca.gov/propositions/1/arguments-rebuttals.htm",
     "text": "https://vig.cdn.sos.ca.gov/2026/general/pdf/prop1-text-proposed-laws.pdf"
@@ -6874,9 +6891,20 @@
    "summary": "Put on the Ballot by the Legislature Increases California's Rainy Day Fund, approved by voters in 2014, to provide funding for education, health care, public safety, and other essential services during economic downturns. Fiscal Impact : State budget reserves would be higher. Supporters : CA Professional Firefighters; LA Chamber of Commerce; Gavin Newsom; Xavier Becerra; Assemblymember Jesse Gabriel Opponents : None submitted",
    "yes_means": "A YES vote on this measure means: Rules for building state budget reserves and paying down extra state debts would change. As a result, state budget reserves would be higher. The state also would be required to make extra debt payments for longer.",
    "no_means": "A NO vote on this measure means: Rules for building state budget reserves and paying down extra state debts would not change.",
+   "ag_summary": [
+    "Increases California’s Rainy Day Fund, approved by voters in 2014, to provide funding for education, health care, public safety, and other essential services during economic downturns.",
+    "Doubles the budget reserve cap from 10% to 20% of General Fund revenues, requiring savings until Fund’s balance equals 20% of General Fund.",
+    "Requires additional savings in years when tax revenues are high.",
+    "Increases budget reserves available for education, state debts, and pension obligations."
+   ],
+   "fiscal_heading": "SUMMARY OF LEGISLATIVE ANALYST'S ESTIMATE OF NET STATE AND LOCAL GOVERNMENT FISCAL IMPACT",
+   "fiscal_effect": [
+    "State budget reserves would be higher."
+   ],
    "arguments": [
     {
      "kind": "for",
+     "side": "supporters",
      "heading": "ARGUMENT IN FAVOR OF PROPOSITION 2",
      "paragraphs": [
       "VOTE YES ON PROPOSITION 2 TO PROTECT SCHOOLS, HEALTHCARE, PUBLIC SAFETY AND CALIFORNIA'S FINANCIAL FUTURE.",
@@ -6890,8 +6918,29 @@
       "California's own nonpartisan Legislative Analyst's Office has recommended that the state should be saving significantly more than current rules require. Proposition 2 follows that advice.",
       "Please join the California Professional Firefighters, small business organizations, and former Health Secretary Xavier Becerra in supporting Proposition 2 because they see, firsthand, what happens when reserves run dry: healthcare clinics closed, schools defunded, essential services cut, and fire protection slashed.",
       "Saving for a rainy day is what California families do. It's what California's state government should do too. Vote YES on Proposition 2—and make sure the next time the economy turns, California is ready.",
-      "Learn more at YesOnProp2.com .",
-      "Darrell Roberts , President California Professional Firefighters Jesse Gabriel , Chair California State Assembly Budget Committee Maria S. Salinas , CEO Los Angeles Area Chamber of Commerce",
+      "Learn more at YesOnProp2.com ."
+     ],
+     "signers": [
+      {
+       "name": "Darrell Roberts",
+       "title": "President, California Professional Firefighters"
+      },
+      {
+       "name": "Jesse Gabriel",
+       "title": "Chair, California State Assembly Budget Committee"
+      },
+      {
+       "name": "Maria S. Salinas",
+       "title": "CEO, Los Angeles Area Chamber of Commerce"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_against",
+     "side": "opponents",
+     "heading": "REBUTTAL TO ARGUMENT IN FAVOR OF PROPOSITION 2",
+     "paragraphs": [
       "The supporters of Proposition 2 want you to believe this measure is about fiscal responsibility and protecting funding for education, public safety, and healthcare. Within 24 hours of introducing this measure, many of the same politicians who praised it as a way to build reserves also supported legislation to suspend more than $5 billion in required deposits into the state’s savings account. Proposition 2 asks Californians to double the size of the savings account while making it less likely that taxpayers will receive the rebates they are constitutionally owed.",
       "PROP. 2 MAKES TAXPAYER REBATES LESS LIKELY",
       "State revenues that exceed constitutional spending limits must be returned to taxpayers. Proposition 2 creates a loophole, allowing politicians to shift billions into reserve accounts that no longer count towards the spending limit, making your rebate far less likely.",
@@ -6903,21 +6952,22 @@
      "signers": [
       {
        "name": "David Tangipa",
-       "title": ", Vice Chair, Assembly Budget Committee"
+       "title": "Vice Chair, Assembly Budget Committee"
       },
       {
        "name": "Carl DeMaio",
-       "title": ", Chairman, Reform California"
+       "title": "Chairman, Reform California"
       },
       {
        "name": "Steven Choi",
-       "title": ", Vice Chair, Senate Elections and Constitutional Amendments Committee"
+       "title": "Vice Chair, Senate Elections and Constitutional Amendments Committee"
       }
      ],
      "none_submitted": null
     },
     {
      "kind": "against",
+     "side": "opponents",
      "heading": "ARGUMENT AGAINST PROPOSITION 2",
      "paragraphs": [
       "Voting NO on Prop. 2 means more money in your pocket— and less wasteful spending!",
@@ -6932,8 +6982,29 @@
       "When times are good, the state is supposed to set money aside so families and businesses are not hit with tax increases, cuts to essential services, or budget chaos during the next economic downturn. Sacramento doesn’t need a new tool to save money. It needs the discipline to follow the rules already in place and stop spending money it doesn’t have. Prop. 2 makes our budget more volatile— putting us at greater risk of a financial crisis.",
       "PROP. 2 IS OPPOSED BY TRUSTED BUDGET WATCHDOGS",
       "Take a look at who is supporting Prop. 2: politicians who have repeatedly mismanaged our budget and special interests that get government contracts! Within 24 hours of putting it on the ballot, the politicians backing Prop. 2 voted to suspend more than $5 billion in required deposits into the state’s budget reserve. In contrast, opponents of Prop. 2 are government accountability and transparency watchdogs—including the Reform California and the Transparency Foundation. Californians do not need another budget gimmick dressed up as reform. We need honest budgeting, reform of wasteful spending, and a real spending limit to hold politicians accountable.",
-      "VOTE NO ON PROP. 2.",
-      "David Tangipa , Vice Chair Assembly Budget Committee Steven Choi , Vice Chair Senate Elections and Constitutional Amendment Committee Carl DeMaio , Chairman Reform California",
+      "VOTE NO ON PROP. 2."
+     ],
+     "signers": [
+      {
+       "name": "David Tangipa",
+       "title": "Vice Chair, Assembly Budget Committee"
+      },
+      {
+       "name": "Steven Choi",
+       "title": "Vice Chair, Senate Elections and Constitutional Amendment Committee"
+      },
+      {
+       "name": "Carl DeMaio",
+       "title": "Chairman, Reform California"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_for",
+     "side": "supporters",
+     "heading": "REBUTTAL TO ARGUMENT AGAINST PROPOSITION 2",
+     "paragraphs": [
       "PROPOSITION 2 PROTECTS CALIFORNIANS FROM BOOM-AND-BUST BUDGETS",
       "Opponents say the state needs “discipline,” not a new tool. But relying on their definition of “discipline” alone gave California a $100 billion surplus followed by a $50 billion deficit—exactly the boom-and-bust cycle Proposition 2 is designed to prevent. That instability, not this measure, is what leads to layoffs, healthcare cuts, slashed services, and tax hikes.",
       "STOPS SACRAMENTO POLITICIANS FROM OVERSPENDING—Proposition 2 does not give Sacramento any new money to spend. On the contrary, it doubles the state’s reserve requirement and forces more savings—rather than new spending—when tax revenues spike.",
@@ -6944,15 +7015,15 @@
      "signers": [
       {
        "name": "Dr. Linda Darling-Hammond",
-       "title": ", President, California State Board of Education"
+       "title": "President, California State Board of Education"
       },
       {
        "name": "Carmela Coyle",
-       "title": ", CEO, California Hospital Association"
+       "title": "CEO, California Hospital Association"
       },
       {
        "name": "Francisco J. Silva",
-       "title": ", CEO, California Primary Care Association"
+       "title": "CEO, California Primary Care Association"
       }
      ],
      "none_submitted": null
@@ -6961,6 +7032,7 @@
    "arguments_disclaimer": "Arguments printed on this page are the opinions of the authors and have not been checked for accuracy by any official agency.",
    "links": {
     "guide": "https://voterguide.sos.ca.gov/propositions/2/",
+    "title_summary": "https://voterguide.sos.ca.gov/propositions/2/title-summary.htm",
     "analysis": "https://voterguide.sos.ca.gov/propositions/2/analysis.htm",
     "arguments": "https://voterguide.sos.ca.gov/propositions/2/arguments-rebuttals.htm",
     "text": "https://vig.cdn.sos.ca.gov/2026/general/pdf/prop2-text-proposed-laws.pdf"
@@ -6978,9 +7050,21 @@
    "summary": "Put on the Ballot by Petition Signatures Makes permanent existing voter-approved tax rates for individuals earning over $371,000 (adjusted annually for inflation). Allocates tax revenues to public education. Fiscal Impact : Maintains $5 billion to $15 billion of annual state income tax revenue by making a temporary tax increase on high-income earners permanent instead of letting it expire in 2031. Supporters : California Teachers Association; CA School Nurses Organization; California State PTA; Planned Parenthood Affiliates of CA Opponents : California Taxpayers Association; Family Business Association of California; California Hispanic Chambers of Commerce",
    "yes_means": "A YES vote on this measure means: An income tax increase on high-income earners in place since 2012 would become permanent instead of expiring in 2031.",
    "no_means": "A NO vote on this measure means: An income tax increase on high-income earners in place since 2012 would expire in 2031.",
+   "ag_summary": [
+    "Makes permanent the existing 2012 voter-approved tax rates for high-income Californians, currently set to expire in 2031.",
+    "Rates apply to income over about $371,000 for single filers, $742,000 for joint filers, and $505,000 for heads of household (2025 levels; adjusted annually for inflation).",
+    "Allocates tax revenues 89% to K–12 schools, 11% to community colleges.",
+    "Allows local school boards to decide how revenues are spent; bars use for administrative costs.",
+    "Increases General Fund revenues available for health care, budget reserves, and other programs."
+   ],
+   "fiscal_heading": "SUMMARY OF LEGISLATIVE ANALYST'S ESTIMATE OF NET STATE AND LOCAL GOVERNMENT FISCAL IMPACT",
+   "fiscal_effect": [
+    "Maintains $5 billion to $15 billion of annual state income tax revenue by making a temporary tax increase on high-income earners permanent instead of letting it expire in 2031."
+   ],
    "arguments": [
     {
      "kind": "for",
+     "side": "supporters",
      "heading": "ARGUMENT IN FAVOR OF PROPOSITION 3",
      "paragraphs": [
       "PROPOSITION 3 PROTECTS OUR SCHOOLS, HEALTHCARE AND OUR COMMUNITIES WITHOUT RAISING YOUR TAXES.",
@@ -7006,8 +7090,29 @@
       "• Nurse Alliance of SEIU California",
       "• Planned Parenthood Affiliates of CA",
       "The educators in our classrooms and the nurses who care for our kids all agree: Vote YES on Proposition 3. Let’s protect what matters most, without raising your taxes. Vote YES on Proposition 3.",
-      "www.YesProp3CA.com",
-      "David Goldberg , President California Teachers Association Katie Nilsson , RN, President California School Nurses Organization Jodi Hicks , President Planned Parenthood Affiliates of California",
+      "www.YesProp3CA.com"
+     ],
+     "signers": [
+      {
+       "name": "David Goldberg",
+       "title": "President, California Teachers Association"
+      },
+      {
+       "name": "Katie Nilsson",
+       "title": "RN, President, California School Nurses Organization"
+      },
+      {
+       "name": "Jodi Hicks",
+       "title": "President, Planned Parenthood Affiliates of California"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_against",
+     "side": "opponents",
+     "heading": "REBUTTAL TO ARGUMENT IN FAVOR OF PROPOSITION 3",
+     "paragraphs": [
       "NO ON PROP. 3—STOP PERMANENTLY HIGHER INCOME TAXES",
       "In 2012, politicians and special interests promised Californians that their income tax increases would be TEMPORARY. Now they’re claiming that making those taxes permanent somehow ISN’T a tax increase at all. Don’t buy it. Prop. 3 locks in what would become the largest permanent state income tax increase in California history— costing taxpayers up to $15 billion every year.",
       "NO ON PROP. 3—REMIND POLITICIANS WHAT “TEMPORARY” MEANS",
@@ -7024,21 +7129,22 @@
      "signers": [
       {
        "name": "Jon Coupal",
-       "title": ", President, Howard Jarvis Taxpayers Association"
+       "title": "President, Howard Jarvis Taxpayers Association"
       },
       {
        "name": "Carlos Solorzano",
-       "title": ", CEO, Hispanic Chambers of Commerce of San Francisco"
+       "title": "CEO, Hispanic Chambers of Commerce of San Francisco"
       },
       {
        "name": "Clint Olivier",
-       "title": ", President, Central Valley Business Federation"
+       "title": "President, Central Valley Business Federation"
       }
      ],
      "none_submitted": null
     },
     {
      "kind": "against",
+     "side": "opponents",
      "heading": "ARGUMENT AGAINST PROPOSITION 3",
      "paragraphs": [
       "PROP. 3—TURNS “TEMPORARY” TAXES INTO PERMANENT HIGHER INCOME TAXES",
@@ -7061,8 +7167,29 @@
       "Californians shouldn’t support any higher taxes until we get spending under control.",
       "STOP WASTEFUL SPENDING.",
       "NO NEW TAXES.",
-      "NO ON PROP. 3.",
-      "Robert Gutierrez , President California Taxpayers Association Robert Rivinius , President Family Business Association of California Julian Canete , President California Hispanic Chambers of Commerce",
+      "NO ON PROP. 3."
+     ],
+     "signers": [
+      {
+       "name": "Robert Gutierrez",
+       "title": "President, California Taxpayers Association"
+      },
+      {
+       "name": "Robert Rivinius",
+       "title": "President, Family Business Association of California"
+      },
+      {
+       "name": "Julian Canete",
+       "title": "President, California Hispanic Chambers of Commerce"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_for",
+     "side": "supporters",
+     "heading": "REBUTTAL TO ARGUMENT AGAINST PROPOSITION 3",
+     "paragraphs": [
       "Proposition 3 protects our schools, our healthcare and our communities—without raising your taxes.",
       "PROP. 3 KEEPS THE TAX RATES THE TOP 2% HAVE PAID FOR THE PAST 15 YEARS AND DOES NOT RAISE YOUR TAXES.",
       "Prop. 3 maintains the current tax rates the wealthiest 2% of Californians have been paying for 15 years, ensuring couples that earn more than $740,000 continue to pay their fair share.",
@@ -7071,20 +7198,21 @@
       "PROP. 3 HAS STRICT ACCOUNTABILITY AND FUNDS EDUCATION DIRECTLY.",
       "Prop. 3’s funding goes straight to local schools and community colleges. Sacramento politicians cannot touch it or redirect it. Not one penny may be spent on bureaucracy or administrative overhead. Every dollar is independently audited every year, districts must post their spending online, and any official who misuses the money faces prosecution and criminal penalties.",
       "PROP. 3 PROTECTS HEALTHCARE AND FIRE PROTECTION.",
-      "By guaranteeing funding for our classrooms, Prop. 3 ensures California can also invest in Medi-Cal and children’s healthcare, and in the firefighters and wildfire protection our communities depend on. That’s why teachers, school employees, nurses and firefighters agree: VOTE YES ON PROPOSITION 3."
+      "By guaranteeing funding for our classrooms, Prop. 3 ensures California can also invest in Medi-Cal and children’s healthcare, and in the firefighters and wildfire protection our communities depend on. That’s why teachers, school employees, nurses and firefighters agree: VOTE YES ON PROPOSITION 3.",
+      "www.YesProp3CA.com"
      ],
      "signers": [
       {
        "name": "Jeff Freitas",
-       "title": ", President, California Federation of Teachers"
+       "title": "President, California Federation of Teachers"
       },
       {
        "name": "Darrell Roberts",
-       "title": ", President, California Professional Firefighters"
+       "title": "President, California Professional Firefighters"
       },
       {
        "name": "Adam Weinberger",
-       "title": ", President, California School Employees Association"
+       "title": "President, California School Employees Association"
       }
      ],
      "none_submitted": null
@@ -7093,6 +7221,7 @@
    "arguments_disclaimer": "Arguments printed on this page are the opinions of the authors and have not been checked for accuracy by any official agency.",
    "links": {
     "guide": "https://voterguide.sos.ca.gov/propositions/3/",
+    "title_summary": "https://voterguide.sos.ca.gov/propositions/3/title-summary.htm",
     "analysis": "https://voterguide.sos.ca.gov/propositions/3/analysis.htm",
     "arguments": "https://voterguide.sos.ca.gov/propositions/3/arguments-rebuttals.htm",
     "text": "https://vig.cdn.sos.ca.gov/2026/general/pdf/prop3-text-proposed-laws.pdf"
@@ -7110,9 +7239,21 @@
    "summary": "Put on the Ballot by the Legislature Repeals prohibition on state and local governments offering public funding of candidate election campaigns. Public funding programs may not use funds earmarked for education, transportation, or public safety. Fiscal Impact: Ongoing costs to the state of a few hundred thousand dollars each year for the Fair Political Practices Commission to answer questions from state and local governments about public campaign finance programs. Supporters: League of Women Voters of CA; California Nurses Association; Mental Health Advocacy; Social Security Works; Consumer Watchdog Opponents: California Taxpayers Assn; Howard Jarvis Taxpayers Assn; Family Business Assn of California; United Latinos Action",
    "yes_means": "A YES vote on this measure means: State and local governments could create public campaign financing programs for public office candidates, subject to limits on which public funds could be used, how the public funds could be used, and who could receive them.",
    "no_means": "A NO vote on this measure means: State and most local governments would remain unable to create public campaign finance programs for public office candidates.",
+   "ag_summary": [
+    "Current law prohibits state and local governments from using public funds for election campaigns except in charter cities and counties.",
+    "This measure repeals that prohibition and allows state and local governments to establish public campaign financing programs for candidates who agree to specified spending limits and meet eligibility criteria.",
+    "Prohibits public funding programs from using funds earmarked for education, transportation, or public safety.",
+    "Prohibits candidates from using public funds for legal defense costs, fines, or repayment of personal loans to campaigns.",
+    "Triples maximum fine for campaign contributions by foreign entities."
+   ],
+   "fiscal_heading": "SUMMARY OF LEGISLATIVE ANALYST'S ESTIMATE OF NET STATE AND LOCAL GOVERNMENT FISCAL IMPACT",
+   "fiscal_effect": [
+    "Ongoing costs to the state of a few hundred thousand dollars each year for the Fair Political Practices Commission to answer questions from state and local governments about public campaign finance programs."
+   ],
    "arguments": [
     {
      "kind": "for",
+     "side": "supporters",
      "heading": "ARGUMENT IN FAVOR OF PROPOSITION 4",
      "paragraphs": [
       "YES ON PROPOSITION 4, THE CALIFORNIA FAIR ELECTIONS ACT: ELECTIONS SHOULD BE WON, NOT BOUGHT",
@@ -7137,8 +7278,29 @@
       "PROP. 4 IS SUPPORTED BY LEADERS ACROSS CALIFORNIA",
       "Proposition 4 is backed by a broad coalition including League of Women Voters of California, California Nurses Association, Mental Health Advocacy Services, Social Security Works, California Clean Money Campaign, California Common Cause, California National Organization for Women, Californians for Disability Rights, Consumer Watchdog, Courage California, Democracy for America, Indivisible California: Statestrong, La Defensa, Money Out Voters In, Voters Right to Know, and many others.",
       "PROP. 4 GIVES CALIFORNIANS THE OPPORTUNITY TO RECLAIM THEIR ELECTIONS and ensure they reflect the values of the people, not just the wealthiest donors.",
-      "YES ON 4—Restore power to voters, not wealthy donors",
-      "Lorrel Plimier , Co-President League of Women Voters of California Catherine Kennedy , President California Nurses Association Tom Umberg , California State Senator",
+      "YES ON 4—Restore power to voters, not wealthy donors"
+     ],
+     "signers": [
+      {
+       "name": "Lorrel Plimier",
+       "title": "Co-President, League of Women Voters of California"
+      },
+      {
+       "name": "Catherine Kennedy",
+       "title": "President, California Nurses Association"
+      },
+      {
+       "name": "Tom Umberg",
+       "title": "California State Senator"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_against",
+     "side": "opponents",
+     "heading": "REBUTTAL TO ARGUMENT IN FAVOR OF PROPOSITION 4",
+     "paragraphs": [
       "Here is what the politicians supporting Proposition 4 do not tell you:",
       "Proposition 4 REPEALS the voter-approved law that PROHIBITS candidates from using taxpayer money to run for office.",
       "Proposition 4 has NO LIMIT on the number of candidates who can get taxpayer money. In the election last June, more than 60 candidates ran for Governor. Proposition 4 would allow thousands of candidates to get taxpayer money!",
@@ -7152,15 +7314,81 @@
      "signers": [
       {
        "name": "Robert Gutierrez",
-       "title": ", President, California Taxpayers Association"
+       "title": "President, California Taxpayers Association"
       },
       {
        "name": "Jon Coupal",
-       "title": ", President, Howard Jarvis Taxpayers Association"
+       "title": "President, Howard Jarvis Taxpayers Association"
       },
       {
        "name": "Dan Schnur",
-       "title": ", Former Chair, Fair Political Practices Commission"
+       "title": "Former Chair, Fair Political Practices Commission"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "against",
+     "side": "opponents",
+     "heading": "ARGUMENT AGAINST PROPOSITION 4",
+     "paragraphs": [
+      "Why did Sacramento politicians put Proposition 4 on the ballot? They want access to YOUR TAXPAYER MONEY to fund THEIR OWN CAMPAIGNS.",
+      "Proposition 4 repeals a voter approved law that PROHIBITS these politicians from using public taxpayer funds for their own campaigns. That's right, Proposition 4 allows politicians to use your taxpayer money to fund their campaigns.",
+      "Proposition 4 has NO LIMIT on the number of candidates who can get taxpayer money and NO LIMIT on how much money they can get! Proposition 4 is a BLANK CHECK. There isn't even a limit on how much they can spend on their campaigns! More negative ads. More junk mail. More annoying text messages. More, more, more.",
+      "Proposition 4 is so poorly written, it could allow every state or local “candidate” to get public funding. They don't even have to actually qualify for the ballot to get taxpayer money. Proposition 4 allows for public funding of thousands of state and local candidates. It even allows for public financing of candidates for county political party committees.",
+      "In just the last primary election, there were more than 60 candidates for Governor. Do you want YOUR TAXPAYER MONEY going to support more of their negative campaign ads and junk mail?",
+      "Proposition 4 has NO LIMIT on how much taxpayer money a candidate can receive. It says it requires “strict criteria” to receive taxpayer funds but provides NO DETAILS on what the criteria are! Read the fine print:",
+      "“‘Strict criteria' means the requirement set by statute, ordinance, or charter that candidates must meet to receive public funds.”",
+      "But there is no current statute, ordinance or charter setting any criteria. Guess who will be setting the criteria? The same politicians who want to get your taxpayer money!",
+      "Some good government groups support public financing of campaigns because they want to get special interest money out of politics. BUT PROPOSITION 4 DOES NOT GET RID OF SPECIAL INTEREST MONEY! Under Proposition 4, candidates can raise money from special interests AND get public funding too.",
+      "Proposition 4 is the worst kind of public financing scheme. It provides no specifics. It leaves all the details to be worked out by the same politicians who want to get access to public funds.",
+      "It is a blank check. But worse than that, Proposition 4 allows special-interest funding of political campaigns.",
+      "Please join California's leading taxpayer protection organizations, including the California Taxpayers Association, the Howard Jarvis Taxpayers Association, the Family Business Association of California, United Latinos Action, as well as former members of California's Fair Political Practices Commission, who all oppose Proposition 4.",
+      "PLEASE VOTE NO ON THE POLITICIANS' BLANK CHECK PROPOSITION. VOTE NO ON PROP. 4."
+     ],
+     "signers": [
+      {
+       "name": "Dan Schnur",
+       "title": "Former Chair, Fair Political Practices Commission"
+      },
+      {
+       "name": "Colleen McAndrews",
+       "title": "Former Commissioner, Fair Political Practices Commission"
+      },
+      {
+       "name": "Julian Canete",
+       "title": "President, California Hispanic Chambers of Commerce"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_for",
+     "side": "supporters",
+     "heading": "REBUTTAL TO ARGUMENT AGAINST PROPOSITION 4",
+     "paragraphs": [
+      "DON'T BE MISLED BY SPECIAL INTERESTS WHO WANT TO KEEP BUYING ELECTIONS",
+      "California is the ONLY state that bans public funding of campaigns. Communities in all 49 other states have the right to adopt public financing to allow qualified candidates to compete against wealthy donors. California doesn't. Prop. 4 simply removes that ban and gives local voters the same choice everyone else has, while instituting strict taxpayer safeguards.",
+      "PROP. 4 GIVES POWER BACK TO LOCAL COMMUNITIES AND EMPOWERS VOTERS, NOT DONORS",
+      "Prop. 4 doesn't spend a single taxpayer dollar or institute public financing anywhere. It simply removes the ban to give every city, county, and the state the right to adopt public funding if local voters want it. The details are appropriately left to each community. But any system MUST require candidates to abide by spending limits and demonstrate broad-based support in their district to qualify.",
+      "PROP. 4 MAKES ELECTED OFFICIALS ACCOUNTABLE TO VOTERS, NOT DONORS",
+      "Corporate special interests oppose Prop. 4 because public financing allows candidates to run and win without relying on them—threatening their grip on California elections.",
+      "Thousands of candidates from different backgrounds have been elected across the country using public financing, for a tiny cost. Because they don't rely on wealthy donors, they can speak their minds and work for the people, not special interests.",
+      "DON'T BE FOOLED BY CORPORATE SPECIAL INTERESTS HIDING BEHIND NICE-SOUNDING NAMES.",
+      "VOTE YES ON 4 to let local voters and communities reclaim their elections so they're won, not bought."
+     ],
+     "signers": [
+      {
+       "name": "Carmen Balber",
+       "title": "Executive Director, Consumer Watchdog"
+      },
+      {
+       "name": "Camerina Davidson",
+       "title": "President, California National Organization for Women"
+      },
+      {
+       "name": "Darius Kemp",
+       "title": "Executive Director, California Common Cause"
       }
      ],
      "none_submitted": null
@@ -7169,6 +7397,7 @@
    "arguments_disclaimer": "Arguments printed on this page are the opinions of the authors and have not been checked for accuracy by any official agency.",
    "links": {
     "guide": "https://voterguide.sos.ca.gov/propositions/4/",
+    "title_summary": "https://voterguide.sos.ca.gov/propositions/4/title-summary.htm",
     "analysis": "https://voterguide.sos.ca.gov/propositions/4/analysis.htm",
     "arguments": "https://voterguide.sos.ca.gov/propositions/4/arguments-rebuttals.htm",
     "text": "https://vig.cdn.sos.ca.gov/2026/general/pdf/prop4-text-proposed-laws.pdf"
@@ -7186,9 +7415,20 @@
    "summary": "Put on the Ballot by the Legislature Under current law, voters elect replacement candidates at the same time as the recall election. This measure instead fills recall vacancies by subsequent special election or appointment. Fiscal Impact: Net fiscal effect unknown. In the event of a recall, savings or costs of millions of dollars to administer the election depending on the office recalled. Supporters: None submitted Opponents: None submitted",
    "yes_means": "A YES vote on this measure means: Recall elections would no longer include a question about who should fill the vacancy. Instead, vacancies typically would be filled through special elections or appointments, depending on the office and timing.",
    "no_means": "A NO vote on this measure means: Voters would continue to be asked who should fill the vacancy as part of recall elections.",
+   "ag_summary": [
+    "Under current law, voters decide at the same election whether (1) to recall a state officer, and (2) who will replace that officer if recalled.",
+    "Under this measure: if the Governor is recalled, the Lieutenant Governor becomes Governor for the remainder of the term or until a successor is elected;",
+    "for all other recalled officers, the office will remain vacant until filled by a subsequent special election or appointment as specified in existing law; and",
+    "a recalled officer may be a candidate in a special election to fill the office."
+   ],
+   "fiscal_heading": "SUMMARY OF LEGISLATIVE ANALYST'S ESTIMATE OF NET STATE AND LOCAL GOVERNMENT FISCAL IMPACT",
+   "fiscal_effect": [
+    "Net fiscal effect unknown. Possible state and local government savings or costs of millions of dollars to administer recall elections. These costs or savings would be rare, and depend on the office recalled and how often recalls occur."
+   ],
    "arguments": [
     {
      "kind": "for",
+     "side": "supporters",
      "heading": "ARGUMENT IN FAVOR OF PROPOSITION 5",
      "paragraphs": [
       "California’s recall process should protect our democracy by allowing for the removal of an elected official who is corrupt or abusing their power. It should never be used as a tactic to ‘redo’ an election as a political or partisan scheme. Proposition 5 will restore the recall to its original purpose by making it fair, democratic, and accountable to the will of the majority.",
@@ -7201,8 +7441,29 @@
       "In most states with recalls, vacancies are already filled by succession or a separate election, not a same-day replacement contest.",
       "By eliminating the second question, Proposition 5 removes the incentive and ability to weaponize recalls as a shortcut for partisan advantage. Recalls could not be gamed to overturn the results of regular elections or install candidates who couldn’t win under normal conditions.",
       "The framers of our recall process intended to safeguard voters against corrupt and unaccountable officials, not to provide a weapon for political operators to undo election results they don’t like. Proposition 5 preserves the recall as a tool for accountability while preventing it from being used to sidestep regular elections and majority rule.",
-      "Vote YES on Proposition 5 to protect majority rule, defend taxpayers, and restore California’s recall process back to the voters it was designed to serve.",
-      "Lorrel Plimier , Co-President League of Women Voters of California Darius L. Kemp , MPA, Executive Director California Common Cause Dan Schnur , Former Chair California Fair Political Practices Commission",
+      "Vote YES on Proposition 5 to protect majority rule, defend taxpayers, and restore California’s recall process back to the voters it was designed to serve."
+     ],
+     "signers": [
+      {
+       "name": "Lorrel Plimier",
+       "title": "Co-President, League of Women Voters of California"
+      },
+      {
+       "name": "Darius L. Kemp",
+       "title": "MPA, Executive Director, California Common Cause"
+      },
+      {
+       "name": "Dan Schnur",
+       "title": "Former Chair, California Fair Political Practices Commission"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_against",
+     "side": "opponents",
+     "heading": "REBUTTAL TO ARGUMENT IN FAVOR OF PROPOSITION 5",
+     "paragraphs": [
       "Disregard the mental gymnastics the other side is doing here to tie us in knots and try to make sense of the truly nonsensical.",
       "They say Proposition 5 “protects democracy.” It does the opposite—it erodes one of the fundamental elements of our recall process: to choose who replaces the recalled politician.",
       "That’s not protecting democracy—that’s protecting political elites.",
@@ -7217,11 +7478,68 @@
      "signers": [
       {
        "name": "Brian W. Jones",
-       "title": ", Senate Minority Leader"
+       "title": "Senate Minority Leader"
       },
       {
        "name": "Joe Patterson",
-       "title": ", Assemblymember"
+       "title": "Assemblymember"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "against",
+     "side": "opponents",
+     "heading": "ARGUMENT AGAINST PROPOSITION 5",
+     "paragraphs": [
+      "Proposition 5 will take away your voice and erode your ability to remove and replace failed or corrupt politicians from office.",
+      "California politicians already have too much power. Proposition 5 gives them even more—and it does it by taking power away from you, the voters.",
+      "For over 100 years, California’s recall process has given us the ability to remove elected officials who abuse their office, break promises or fail to do the job they were elected to do. And, when that happens, the current process allows you—not politicians—to choose who replaces them.",
+      "Proposition 5 changes that system forever and takes power away from the people.",
+      "Today, a recall election asks two simple questions: Should the elected official be removed from office? If so, who should replace them? That means Californians can remove a failed politician and immediately choose someone new to take their place.",
+      "Proposition 5 keeps the first part but eliminates your ability to vote for a replacement.",
+      "Instead, Sacramento political insiders would decide what happens next. In many cases, politicians themselves—not voters—would choose who fills the vacancy, essentially allowing them to appoint another one of their friends or political allies to replace the one you just ousted.",
+      "In other cases, rather than an immediate replacement, the seat would sit vacant until another costly election—funded by you, the taxpayer—was scheduled months later. And here’s the kicker; that failed politician you just ran out the door for failure or corruption, they'd be allowed to run in that next election to regain control of the seat they just lost.",
+      "In either case, your vote matters less, and the political establishment gains more control.",
+      "Californians deserve the right to remove an elected official—and to choose who comes next. Proposition 5 takes away half of that right, and that’s wrong.",
+      "Supporters claim this measure improves democracy. It doesn’t. Democracy means voters—not Sacramento politicians—get to choose their leaders, when to give them the boot and who to replace them with. Proposition 5 undermines that fundamental concept.",
+      "Ask yourself: if you vote to remove a governor or another statewide elected official, shouldn’t you also decide who replaces them?",
+      "The answer is clear.",
+      "It’s also worth wondering why this measure is on the ballot in the first place. Why fix a system that isn’t broken and has been working just fine for over a century?",
+      "Well, the author of this proposal himself was recalled by California voters when he voted to raise gas taxes after promising not to. Instead of respecting the will of the people, he now wants to rewrite the rules and protect politicians like him from any meaningful accountability. California’s recall belongs to the people—not politicians. Protect your voice. Protect your vote. Protect your right to hold elected officials accountable.",
+      "Vote NO on Proposition 5."
+     ],
+     "signers": [
+      {
+       "name": "Brian W. Jones",
+       "title": "Senate Minority Leader"
+      },
+      {
+       "name": "Joe Patterson",
+       "title": "Assemblymember"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_for",
+     "side": "supporters",
+     "heading": "REBUTTAL TO ARGUMENT AGAINST PROPOSITION 5",
+     "paragraphs": [
+      "Don’t be misled. Proposition 5 preserves your power to recall an official by majority vote while closing the loophole that allows a replacement candidate to take office with a small fraction of the vote.",
+      "Under current law, voters decide whether to remove an official by majority vote, but the replacement can win with far less than a majority. In 2021, a replacement candidate could have become Governor with support from 28% of recall voters. That is not majority rule.",
+      "Opponents want you to believe Proposition 5 takes away your right to choose. It does not. The real question is whether someone should become Governor with support from only a small fraction of California voters.",
+      "Proposition 5 preserves the recall while separating the decision to remove an officeholder from the decision about who should serve next. If a Governor is recalled, the Lieutenant Governor—elected statewide by California voters—provides continuity of government until voters choose the next Governor through a regular election. Voters will still choose their elected officials. But candidates seeking statewide office should earn that office in a regular election based on their qualifications, record, and plans for California, not use a recall as a shortcut to power.",
+      "A recall should decide whether an officeholder remains in office. Choosing who governs should happen in a regular election, where candidates earn the support of California voters. Proposition 5 protects the recall, respects majority rule, and ensures candidates run on their own merits. Vote YES on Proposition 5."
+     ],
+     "signers": [
+      {
+       "name": "Lorrel Plimier",
+       "title": "Co-President, League of Women Voters of California"
+      },
+      {
+       "name": "Darius L. Kemp",
+       "title": "MPA, Executive Director, California Common Cause"
       }
      ],
      "none_submitted": null
@@ -7230,6 +7548,7 @@
    "arguments_disclaimer": "Arguments printed on this page are the opinions of the authors and have not been checked for accuracy by any official agency.",
    "links": {
     "guide": "https://voterguide.sos.ca.gov/propositions/5/",
+    "title_summary": "https://voterguide.sos.ca.gov/propositions/5/title-summary.htm",
     "analysis": "https://voterguide.sos.ca.gov/propositions/5/analysis.htm",
     "arguments": "https://voterguide.sos.ca.gov/propositions/5/arguments-rebuttals.htm",
     "text": "https://vig.cdn.sos.ca.gov/2026/general/pdf/prop5-text-proposed-laws.pdf"
@@ -7247,9 +7566,19 @@
    "summary": "Put on the Ballot by Petition Signatures Authorizes $25 billion in bonds to offer eligible buyers fixed-rate mortgages for up to 17% of purchase price of a newly constructed home priced below about $1.5 million. Borrowers must be California residents, occupy the home, meet income limits, and pay at least 3% down. Bonds repaid by mortgage payments, not State. Fiscal Impact: No direct state or local costs. Supporters: United Nurses Associations of California; California Conference of Carpenters; California State Treasurer Fiona Ma Opponents: None submitted",
    "yes_means": "A YES vote on this measure means: The state would create a new homebuying assistance program. The state could sell up to $25 billion in revenue bonds to fund the program. Bonds would be paid back by homeowners’ payments on their home loans.",
    "no_means": "A NO vote on this measure means: The state would not be required to create a new homebuying assistance program.",
+   "ag_summary": [
+    "Authorizes up to $25 billion in bonds to offer eligible buyers fixed-rate mortgages for up to 17% of the purchase price of a “qualified new home” (new construction or first sale of converted nonresidential property, priced below about $1 million–$1.5 million, depending on county, adjusted annually).",
+    "Borrowers must be California residents for one year, occupy the home, earn less than twice the area’s median income, and pay at least 3% down.",
+    "Requires that bonds be repaid by homeowners’ mortgage payments, not the State."
+   ],
+   "fiscal_heading": "SUMMARY OF LEGISLATIVE ANALYST'S ESTIMATE OF NET STATE AND LOCAL GOVERNMENT FISCAL IMPACT",
+   "fiscal_effect": [
+    "No direct state or local costs."
+   ],
    "arguments": [
     {
      "kind": "for",
+     "side": "supporters",
      "heading": "ARGUMENT IN FAVOR OF PROPOSITION 37",
      "paragraphs": [
       "VOTE YES ON PROPOSITION 37: the California Middle- Class Homeownership & Family Home Construction Act. Proposition 37 creates affordable homeownership opportunities for working and middle-class Californians and encourages new home construction—with ZERO COST TO TAXPAYERS.",
@@ -7278,21 +7607,22 @@
      "signers": [
       {
        "name": "Danny Curtin",
-       "title": ", Director, California Conference of Carpenters"
+       "title": "Director, California Conference of Carpenters"
       },
       {
        "name": "Fiona Ma",
-       "title": ", Boardmember, California Housing Finance Agency (CalHFA)"
+       "title": "Boardmember, California Housing Finance Agency (CalHFA)"
       },
       {
        "name": "David West",
-       "title": ", Chair, California State Commanders Veterans Council"
+       "title": "Chair, California State Commanders Veterans Council"
       }
      ],
      "none_submitted": null
     },
     {
      "kind": "against",
+     "side": "opponents",
      "heading": "ARGUMENT AGAINST PROPOSITION 37",
      "paragraphs": [],
      "signers": [],
@@ -7302,6 +7632,7 @@
    "arguments_disclaimer": "Arguments printed on this page are the opinions of the authors and have not been checked for accuracy by any official agency.",
    "links": {
     "guide": "https://voterguide.sos.ca.gov/propositions/37/",
+    "title_summary": "https://voterguide.sos.ca.gov/propositions/37/title-summary.htm",
     "analysis": "https://voterguide.sos.ca.gov/propositions/37/analysis.htm",
     "arguments": "https://voterguide.sos.ca.gov/propositions/37/arguments-rebuttals.htm",
     "text": "https://vig.cdn.sos.ca.gov/2026/general/pdf/prop37-text-proposed-laws.pdf"
@@ -7319,9 +7650,20 @@
    "summary": "Put on the Ballot by Petition Signatures Authorizes $8.4 billion in general obligation bonds for immunology and immunotherapy research, half to a single University of California-affiliated nonprofit medical research institute, half to research grants. Fiscal Impact: Increased state cost of $500 million to $600 million annually for about 20 years to repay the research bond, with some or all of the cost offset if the funded research generates revenue. Supporters: Michael J. Fox Foundation; Alzheimer’s Los Angeles; Kidney Cancer Assoc; American Nurses Assoc\\CA Opponents: Robert M Kaplan Ph.D.",
    "yes_means": "A YES vote on this measure means: The state could borrow $8.4 billion to support medical research in immunology and immunotherapy conducted by California research institutes and universities.",
    "no_means": "A NO vote on this measure means: The state could not borrow $8.4 billion to support medical research in immunology and immunotherapy conducted by California research institutes and universities.",
+   "ag_summary": [
+    "Authorizes $8.4 billion in state general obligation bonds for immunology and immunotherapy research (technologies that use body’s immune system to treat disease), with half dedicated to cancer, heart disease, and Alzheimer’s disease.",
+    "Allocates funds equally between (1) a single University of California-affiliated nonprofit medical research institute, and (2) research grants for public or nonprofit universities and institutions.",
+    "Requires funding recipients to sell technology and drugs derived from research in California for 20% below national average price.",
+    "Appropriates money from General Fund to repay bonds; General Fund receives 10% of licensing royalties until bonds are repaid."
+   ],
+   "fiscal_heading": "SUMMARY OF LEGISLATIVE ANALYST'S ESTIMATE OF NET STATE AND LOCAL GOVERNMENT FISCAL IMPACT",
+   "fiscal_effect": [
+    "Increased state cost of $500 million to $600 million annually for about 20 years to repay the medical research bond. The state could recover part or all of this cost in subsequent decades if the funded research leads to discoveries that generate revenue."
+   ],
    "arguments": [
     {
      "kind": "for",
+     "side": "supporters",
      "heading": "ARGUMENT IN FAVOR OF PROPOSITION 38",
      "paragraphs": [
       "PATIENT ADVOCATES, DOCTORS, NURSES AND MEDICAL RESEARCHERS URGE YES ON PROP. 38",
@@ -7347,8 +7689,29 @@
       "YES ON PROP. 38: SUPPORTED BY DOCTORS, NURSES AND PATIENT ADVOCATES",
       "• ALS Association • Alzheimer’s Association • American Nurses Association\\California • Blood Cancer United • California Colorectal Cancer Coalition • Liver Coalition • Michael J. Fox Foundation • National Multiple Sclerosis Society • Parkinson Association of Northern California ... and many more.",
       "YES on PROP. 38 could save your life and someone you love. Please, vote Yes.",
-      "www.YesOn38.com",
-      "Susan Disney Lord , Board Chair Alzheimer’s Los Angeles Eugene P. Brandon , Ph.D., Board of Trustees ALS Association Dr. Brian Shuch , M.D., Board of Directors Member Kidney Cancer Association",
+      "www.YesOn38.com"
+     ],
+     "signers": [
+      {
+       "name": "Susan Disney Lord",
+       "title": "Board Chair, Alzheimer’s Los Angeles"
+      },
+      {
+       "name": "Eugene P. Brandon",
+       "title": "Ph.D., Board of Trustees, ALS Association"
+      },
+      {
+       "name": "Dr. Brian Shuch",
+       "title": "M.D., Board of Directors Member, Kidney Cancer Association"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_against",
+     "side": "opponents",
+     "heading": "REBUTTAL TO ARGUMENT IN FAVOR OF PROPOSITION 38",
+     "paragraphs": [
       "California should continue supporting biomedical research. Everyone hopes for new treatments for heart disease, cancer, Alzheimer’s disease, and other serious illnesses. I do too. But Proposition 38 is the wrong way to achieve that goal.",
       "The claim that Proposition 38 will pay for itself is speculative. Audits, public disclosure, and limits on administrative costs promote accountability, but they cannot guarantee that research investments will generate enough economic returns to offset billions of dollars in bond repayments.",
       "California faces a continuing structural budget deficit.",
@@ -7359,7 +7722,69 @@
      "signers": [
       {
        "name": "Robert M Kaplan",
-       "title": ", Ph.D."
+       "title": "Ph.D."
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "against",
+     "side": "opponents",
+     "heading": "ARGUMENT AGAINST PROPOSITION 38",
+     "paragraphs": [
+      "California recognizes that continued investment in science is essential. But this proposition is not the best way to achieve that goal.",
+      "The measure would authorize approximately $8.4 billion in state borrowing to support immunology and immunotherapy research through a new University of California institute. Although the objective is appealing, the financing and policy framework are flawed.",
+      "First, the proposition continues the use of ballot initiatives to direct research funding toward selected topics. California has already created separate funding programs for stem cell research and precision medicine. This measure would add another highly focused program. Research priorities should be established through scientific review and public health planning—not by election campaigns. Cancer, Alzheimer’s disease, and heart disease deserve attention, but so do mental illness, kidney disease, eye diseases, and many other conditions. Ballot-box science inevitably favors the most visible topics rather than the greatest scientific opportunities or public health needs.",
+      "Second, borrowing is an inappropriate way to finance scientific research. According to the Legislative Analyst’s Office, the bonds authorized by this measure would obligate taxpayers to $500 million in annual debt payments for about 25 years. Bonds are commonly used for highways, schools, and other long-lived infrastructure with predictable benefits. Scientific research is different. Discoveries often require decades before they improve patient care, and many promising lines of investigation never produce marketable treatments.",
+      "Third, the proposition assumes that successful discoveries will generate revenues to offset state costs. In reality, universities rarely commercialize new therapies on their own. Publicly funded research lays the scientific foundation, but private companies typically invest the far greater resources required for product development, clinical testing, manufacturing, and regulatory approval. The public benefits are real, but they generally do not flow back to the state treasury.",
+      "Finally, the proposition requires certain therapies developed with state support to be sold in California at discounted prices. While this may sound attractive, it could incentivize companies to prioritize selling these products in other states where the prices are not controlled.",
+      "California should continue to support biomedical research. But research funding should be strategic, flexible, and fiscally responsible. Decisions about scientific priorities should be based on expert evaluation of emerging scientific opportunities and public health needs, not on a series of expensive ballot measures financed through long-term debt.",
+      "California has better options. For example, Senator Scott Wiener has proposed creating a state-funded research agency modeled on the National Institutes of Health and the National Science Foundation. Rather than directing resources to specific areas of science, such an institution could establish priorities through expert scientific review and adapt its investments as new opportunities emerge. Although the legislation has not advanced, it received support from the University of California, the United Auto Workers, and the Union of American Physicians and Dentists. Similar legislation is likely to be considered in the future.",
+      "A “No” vote does not reject science. It rejects an inefficient financing mechanism and a fragmented approach to setting research priorities. California can and should support medical research through more coordinated, sustainable policies."
+     ],
+     "signers": [
+      {
+       "name": "Robert M Kaplan",
+       "title": "Ph.D."
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_for",
+     "side": "supporters",
+     "heading": "REBUTTAL TO ARGUMENT AGAINST PROPOSITION 38",
+     "paragraphs": [
+      "YES ON PROP. 38 IS VITALLY NEEDED FOR LIFE-SAVING IMMUNOLOGY MEDICAL RESEARCH",
+      "Today, breakthrough immunotherapies are already curing cancers like melanoma, lung cancer and leukemia. Promising research is underway to cure and prevent diseases including Alzheimer’s, heart disease, Parkinson’s, ALS and more.",
+      "MASSIVE FEDERAL FUNDING CUTS ARE THREATENING PROGRESS TOWARD LIFE-SAVING CURES",
+      "YES on 38 will ensure California universities and nonprofit research institutions can continue vitally needed immunology research to cure and prevent the most debilitating diseases.",
+      "“Immunology saved my life—I now live cancer-free, and it could save millions of other lives too.” —Andrew Dale, Immunotherapy Patient and Cancer Survivor",
+      "YES ON 38 IS DESIGNED TO PAY FOR ITSELF—WITH NO COST TO TAXPAYERS",
+      "Ten percent (10%) of revenue from licensing immunotherapies must be returned to California to offset bond costs. These requirements are locked into this measure.",
+      "YES ON 38 MANDATES STRONG ACCOUNTABILITY & TRANSPARENCY",
+      "• 2% Cap on State Administrative Expenses",
+      "• Public Disclosure of Spending",
+      "• Independent Financial Audits",
+      "YES ON 38 LOWERS HEALTHCARE COSTS",
+      "Immunotherapies developed through Prop. 38 must be provided to California patients at 20% discount. Preventing and curing diseases will also save families and the state billions of dollars in long-term healthcare expenses.",
+      "DOCTORS, NURSES AND PATIENT ADVOCATES URGE YES ON 38",
+      "• Alzheimer’s Association • American Nurses Association\\ California • ALS Association • Kidney Cancer Association • Melanoma Research Alliance • National Multiple Sclerosis Society • The Michael J. Fox Foundation for Parkinson’s Research ... and many more.",
+      "Support Life-Saving Cures. Please Vote YES on 38.",
+      "www.YESon38.com"
+     ],
+     "signers": [
+      {
+       "name": "Andrew Dale",
+       "title": "Cancer Survivor, Santa Monica"
+      },
+      {
+       "name": "Anne M. Holloway",
+       "title": "Board Member, The Michael J. Fox Foundation for Parkinson’s Research"
+      },
+      {
+       "name": "Chris Tarver",
+       "title": "R.N., President, American Nurses Association\\California"
       }
      ],
      "none_submitted": null
@@ -7368,6 +7793,7 @@
    "arguments_disclaimer": "Arguments printed on this page are the opinions of the authors and have not been checked for accuracy by any official agency.",
    "links": {
     "guide": "https://voterguide.sos.ca.gov/propositions/38/",
+    "title_summary": "https://voterguide.sos.ca.gov/propositions/38/title-summary.htm",
     "analysis": "https://voterguide.sos.ca.gov/propositions/38/analysis.htm",
     "arguments": "https://voterguide.sos.ca.gov/propositions/38/arguments-rebuttals.htm",
     "text": "https://vig.cdn.sos.ca.gov/2026/general/pdf/prop38-text-proposed-laws.pdf"
@@ -7385,9 +7811,20 @@
    "summary": "Put on the Ballot by Petition Signatures Invalidates mail ballots that do not have last four digits of designated government-issued identification number written on envelope. Prohibits in-person voting without presenting government-issued identification. Fiscal Impact: Costs of between tens of millions of dollars and low hundreds of millions of dollars each year to implement new voting requirements. Supporters: The Transparency Foundation; Latino American Political Assn; Howard Jarvis Taxpayers Assn; CA Women’s Leadership Assn Opponents: ACLU California Action; Common Cause; League of Women Voters of California",
    "yes_means": "A YES vote on this measure means: Voters would be required to present additional identifying information to elections officials each time they vote.",
    "no_means": "A NO vote on this measure means: A voter’s identity would continue to be established with the voter’s signature.",
+   "ag_summary": [
+    "Prohibits voting by mail unless voter designates a government-issued identification number for their voter registration.",
+    "Invalidates mail ballots if envelope does not include last four digits of a government-issued identification number matching the number designated in the voter’s registration (e.g., if voter designates Social Security number for registration, but provides driver’s license number on envelope, their ballot would not count).",
+    "Prohibits voting in person without presenting government-issued identification.",
+    "Requires elections officials to annually report percentage of each county’s voters whose citizenship status they have verified."
+   ],
+   "fiscal_heading": "SUMMARY OF LEGISLATIVE ANALYST'S ESTIMATE OF NET STATE AND LOCAL GOVERNMENT FISCAL IMPACT",
+   "fiscal_effect": [
+    "State and local government costs of between tens of millions of dollars and low hundreds of millions of dollars each year to implement new voting requirements. Costs depend on future decisions by the Legislature, state departments, local governments, and voters."
+   ],
    "arguments": [
     {
      "kind": "for",
+     "side": "supporters",
      "heading": "ARGUMENT IN FAVOR OF PROPOSITION 39",
      "paragraphs": [
       "VOTER ID: A BIPARTISAN WAY TO INCREASE TRUST IN OUR ELECTIONS",
@@ -7402,8 +7839,29 @@
       "Prop. 39 holds election officials accountable for keeping California’s voter lists accurate and updated. Election officials will also be required to check voter rolls to ensure only citizens are registered. Prop. 39 requires an independent audit be conducted every two years to give the public the confidence they deserve in the way our elections are conducted.",
       "YES ON PROP. 39: FOR A NON-PARTISAN SOLUTION TO VOTER ID",
       "Politicians and partisan organizations who oppose Prop. 39 are desperately trying to inject toxic partisanship into this debate. That’s because they benefit from unfounded election conspiracy theories and rapidly declining trust in our elections.",
-      "In contrast, supporters of Prop. 39 include solid majorities of Democratic, Republican and Independent voters and a diverse coalition including Latino American Political Association, California Women’s Leadership Association, Howard Jarvis Taxpayers Association, the Transparency Foundation, and trusted voting rights organizations. Vote YES on Prop. 39 to create a national model for implementing Voter ID in a bipartisan way.",
-      "Margit Whitlock , Democratic Coalition Chair Californians for Voter ID Tafa Jefferson , Republican Coalition Chair Californians for Voter ID Joe Green , Independent Coalition Chair Californians for Voter ID",
+      "In contrast, supporters of Prop. 39 include solid majorities of Democratic, Republican and Independent voters and a diverse coalition including Latino American Political Association, California Women’s Leadership Association, Howard Jarvis Taxpayers Association, the Transparency Foundation, and trusted voting rights organizations. Vote YES on Prop. 39 to create a national model for implementing Voter ID in a bipartisan way."
+     ],
+     "signers": [
+      {
+       "name": "Margit Whitlock",
+       "title": "Democratic Coalition Chair, Californians for Voter ID"
+      },
+      {
+       "name": "Tafa Jefferson",
+       "title": "Republican Coalition Chair, Californians for Voter ID"
+      },
+      {
+       "name": "Joe Green",
+       "title": "Independent Coalition Chair, Californians for Voter ID"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_against",
+     "side": "opponents",
+     "heading": "REBUTTAL TO ARGUMENT IN FAVOR OF PROPOSITION 39",
+     "paragraphs": [
       "NO on PROP. 39—Stop Trump from rigging our elections. Don’t believe the lies. Prop. 39 MAKES VOTING HARDER, MORE EXPENSIVE, AND LESS SAFE for Californians.",
       "PROP. 39 IS FUNDED BY MAGA RIGHTWING BILLIONAIRES. Follow the money. MAGA billionaires have spent millions spreading election lies. Republican operatives have pushed this voter suppression agenda for years. They want Trump to have unlimited power so they get more tax breaks for the rich while cutting funding to healthcare and schools for the rest of us.",
       "California election officials already verify voters. Prop. 39 just ADDS EXTRA HURDLES for citizens. THE FACTS DON’T LIE. When Texas tried this, they threw out 12 times more mail ballots than California.",
@@ -7415,21 +7873,22 @@
      "signers": [
       {
        "name": "Alex Padilla",
-       "title": ", U.S. Senator for California"
+       "title": "U.S. Senator for California"
       },
       {
        "name": "Catherine Kennedy",
-       "title": ", President, California Nurses Association"
+       "title": "President, California Nurses Association"
       },
       {
        "name": "Adam Weinberger",
-       "title": ", President, California School Employees Association"
+       "title": "President, California School Employees Association"
       }
      ],
      "none_submitted": null
     },
     {
      "kind": "against",
+     "side": "opponents",
      "heading": "ARGUMENT AGAINST PROPOSITION 39",
      "paragraphs": [
       "VOTE NO. Donald Trump lies about elections and uses those lies to grab power.",
@@ -7442,8 +7901,29 @@
       "PUSHES OUT VOTERS. “Free” state IDs aren’t free: voters still pay for transportation, time off work, and costs like childcare or getting required documents. Seniors, students, low-income workers, voters of color, and the millions of women who changed their names at marriage are hit hardest. These unfair barriers help politicians choose their voters instead of the other way around.",
       "TRUMP LIES TO GRAB POWER. DON’T LET THOSE LIES TAKE AWAY YOUR VOTE.",
       "PROTECT YOUR VOICE. PROTECT YOUR VOTE. VOTE NO.",
-      "Learn more at CAforVotingRights.org",
-      "David Trujillo , Executive Director ACLU California Action Darius Kemp , California State Director Common Cause Lorrel Plimier , Co-President League of Women Voters of California",
+      "Learn more at CAforVotingRights.org"
+     ],
+     "signers": [
+      {
+       "name": "David Trujillo",
+       "title": "Executive Director, ACLU California Action"
+      },
+      {
+       "name": "Darius Kemp",
+       "title": "California State Director, Common Cause"
+      },
+      {
+       "name": "Lorrel Plimier",
+       "title": "Co-President, League of Women Voters of California"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_for",
+     "side": "supporters",
+     "heading": "REBUTTAL TO ARGUMENT AGAINST PROPOSITION 39",
+     "paragraphs": [
       "PROP. 39 IS BIPARTISAN—NOT ABOUT DONALD TRUMP OR GAVIN NEWSOM",
       "Prop. 39 gives California a bipartisan solution for election security. While politicians in D.C. fight over partisan control of elections, Californians can adopt our own solution: Voter ID. Opponents will claim this measure is about Donald Trump or Gavin Newsom. It isn’t. Prop. 39 is a California solution to growing mistrust in our elections. Democrats, Republicans, and Nonpartisans encourage you to reject the big-money partisan allegations and vote yes on Prop. 39 to encourage voter participation and protect our elections.",
       "PROP. 39 IMPROVES ELECTION MANAGEMENT",
@@ -7457,15 +7937,15 @@
      "signers": [
       {
        "name": "Johnathan Hale",
-       "title": ", Executive Director, The Transparency Foundation"
+       "title": "Executive Director, The Transparency Foundation"
       },
       {
        "name": "Cynthia Kaui",
-       "title": ", Executive Director, California Women’s Leadership Association"
+       "title": "Executive Director, California Women’s Leadership Association"
       },
       {
        "name": "Ed Cervantes",
-       "title": ", President, Latino American Political Association"
+       "title": "President, Latino American Political Association"
       }
      ],
      "none_submitted": null
@@ -7474,6 +7954,7 @@
    "arguments_disclaimer": "Arguments printed on this page are the opinions of the authors and have not been checked for accuracy by any official agency.",
    "links": {
     "guide": "https://voterguide.sos.ca.gov/propositions/39/",
+    "title_summary": "https://voterguide.sos.ca.gov/propositions/39/title-summary.htm",
     "analysis": "https://voterguide.sos.ca.gov/propositions/39/analysis.htm",
     "arguments": "https://voterguide.sos.ca.gov/propositions/39/arguments-rebuttals.htm",
     "text": "https://vig.cdn.sos.ca.gov/2026/general/pdf/prop39-text-proposed-laws.pdf"
@@ -7491,9 +7972,20 @@
    "summary": "Put on the Ballot by Petition Signatures Imposes 5% tax on certain taxpayers with assets over $1 billion; revenue primarily for health care. Exempts revenues from constitutional requirements for school funding and spending limit. Fiscal Impact: Temporary revenue increase of tens of billions of dollars spread over several years from wealth tax on billionaires. Possible ongoing decrease of less than $1 billion per year in income tax revenue from billionaires. Supporters: US Senator Bernie Sanders; SEIU United Healthcare Workers West Opponents: California Primary Care Association; California School Boards Association; California Taxpayers Association",
    "yes_means": "A YES vote on this measure means: The state would collect a one-time tax from billionaires equal to 5 percent of their wealth.",
    "no_means": "A NO vote on this measure means: The state would not collect a one-time tax from billionaires equal to 5 percent of their wealth.",
+   "ag_summary": [
+    "Imposes one-time tax of up to 5% on certain taxpayers with covered assets valued over $1 billion; covered assets include businesses, securities, art, collectibles, and intellectual property, but exclude real property and some pensions and retirement accounts.",
+    "Allocates 90% of these tax revenues for health care, 10% for food assistance or education-related programs; prohibits using revenues to replace existing funding for these purposes.",
+    "Exempts such tax revenues from constitutional requirements for school funding, budget reserves, and state spending limit."
+   ],
+   "fiscal_heading": "SUMMARY OF LEGISLATIVE ANALYST'S ESTIMATE OF NET STATE AND LOCAL GOVERNMENT FISCAL IMPACT",
+   "fiscal_effect": [
+    "Temporary state revenue increase from a new wealth tax on billionaires. These wealth tax revenues probably would add up to tens of billions of dollars spread over several years.",
+    "Possible ongoing decrease of less than $1 billion per year in state income tax revenue collected from billionaires."
+   ],
    "arguments": [
     {
      "kind": "for",
+     "side": "supporters",
      "heading": "ARGUMENT IN FAVOR OF PROPOSITION 40",
      "paragraphs": [
       "YES ON PROP. 40 TO TAX BILLIONAIRES",
@@ -7513,8 +8005,29 @@
       "Google founder and Trump donor Sergey Brin’s wealth has DOUBLED to nearly $300 billion since Trump’s election. Now he’s spent over $57 million to oppose Prop. 40. He’d rather millions of Californians lose healthcare than pay his fair share in taxes.",
       "Billionaires like Brin have bought and paid for some corrupt politicians and organizational leaders to also oppose Prop. 40—but actual teachers, Planned Parenthood workers, nurses, and union members support it. Those opposing Prop. 40 have not put forth any viable solution to replacing the funding Trump took from us.",
       "Of course these billionaires and their puppets don’t want a billionaire tax, but you should—because someone has to pay, and working people are already paying enough for healthcare.",
-      "SAVE LIVES. TAX BILLIONAIRES.",
-      "Suzanne Jimenez , Chief of Staff SEIU-United Healthcare Workers West Victoria Barron , Patient Access Specialist Planned Parenthood of Pacific Southwest Denise Robb , Ph.D., Member of American Federation of Teachers Local 1521 Los Angeles College Faculty Guild",
+      "SAVE LIVES. TAX BILLIONAIRES."
+     ],
+     "signers": [
+      {
+       "name": "Suzanne Jimenez",
+       "title": "Chief of Staff, SEIU-United Healthcare Workers West"
+      },
+      {
+       "name": "Victoria Barron",
+       "title": "Patient Access Specialist, Planned Parenthood of Pacific Southwest"
+      },
+      {
+       "name": "Denise Robb",
+       "title": "Ph.D., Member of American Federation of Teachers, Local 1521, Los Angeles College Faculty Guild"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_against",
+     "side": "opponents",
+     "heading": "REBUTTAL TO ARGUMENT IN FAVOR OF PROPOSITION 40",
+     "paragraphs": [
       "CALIFORNIA’S EDUCATION, HEALTHCARE, PUBLIC SAFETY, LABOR AND BUSINESS LEADERS ALL OPPOSE PROP. 40’s FLAWED TAX SCHEME",
       "Prop. 40 is a flawed tax scheme that will damage our state while taxpayers pay the price.",
       "Here’s why a broad coalition of California teachers, doctors, clinics, hospitals, firefighters, taxpayers, blue-collar labor unions, businesses, Democrats and Republicans oppose 40:",
@@ -7530,15 +8043,94 @@
      "signers": [
       {
        "name": "April O’Connor",
-       "title": ", Teacher, California Teachers Association"
+       "title": "Teacher, California Teachers Association"
       },
       {
        "name": "Rob Gutierrez",
-       "title": ", President, California Taxpayers Association (CalTax)"
+       "title": "President, California Taxpayers Association (CalTax)"
       },
       {
        "name": "Chris Hannan",
-       "title": ", President, State Building and Construction Trades Council of California"
+       "title": "President, State Building and Construction Trades Council of California"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "against",
+     "side": "opponents",
+     "heading": "ARGUMENT AGAINST PROPOSITION 40",
+     "paragraphs": [
+      "No on 40—FLAWED WEALTH TAX “EXPERIMENT” HURTS ALL CALIFORNIANS",
+      "Prop. 40 is a poorly designed tax scheme that will damage our economy and cost our state budget billions of dollars—without doing anything to lower healthcare costs for Californians.",
+      "This measure is a one-time tax that only provides temporary funds. When the money runs out, the politicians will be back with yet another tax.",
+      "PROP. 40 WILL COST CALIFORNIA $25 BILLION IN LOST REVENUE FOR HEALTHCARE, EDUCATION",
+      "A study by Stanford University economists found the tax will cost California $25 billion as the tax drives companies and wealthy residents out-of-state.",
+      "These residents create new businesses, drive our economic growth and already pay nearly half the income taxes that fund state programs. If they leave, it will create a huge hole in our budget, threatening core services like education, healthcare and public safety or forcing other taxpayers to make up the difference.",
+      "California’s DOCTORS, HOSPITALS AND CLINICS OPPOSE PROP. 40 because the lost funding will endanger patients’ access to healthcare. “Prop. 40 doesn’t help the need for stable healthcare funding.",
+      "Prop. 40 makes it worse.”—Jodi Hicks, President and CEO, Planned Parenthood Affiliates of California",
+      "PROP. 40 IS WRITTEN TO GIVE POLITICIANS NEW POWER TO EXPAND THE TAX",
+      "Prop. 40 isn’t just a “billionaire tax.” The special interests behind the measure wrote it to give the State Legislature power to amend the measure—without voter approval.",
+      "Independent legal analysis found Prop. 40 opens the door to expanding the tax to the assets of ALL Californians—to your savings, home equity and even retirement funds. www.ReadltForYourself.org",
+      "PROP. 40 TAXES RETIREMENT ACCOUNTS FOR THE FIRST TIME",
+      "Prop. 40 would be the first in California history to tax retirement accounts—a dangerous precedent. If it passes, it will inevitably be expanded to tax more Californians’ retirement savings.",
+      "PROP. 40 IS A RECIPE FOR MORE WASTEFUL SPENDING",
+      "State government spending is up 79% since 2019, without delivering better results on key issues like crime, housing and homelessness. But Prop. 40 includes no accountability, transparency or oversight provisions to ensure funds are spent as intended.",
+      "Instead, Prop. 40: • Exempts itself from voter-approved constitutional protections for schools, shortchanging classrooms over $3 billion annually. www.ProtectCaliforniaSchools.org • Exempts itself from the voter-approved state spending limit, including its requirement that excess revenues get returned to taxpayers. • Includes no safeguards to prevent billions from going directly to health insurance companies and CEOs.",
+      "AUTHORS ADMIT THE ONE-TIME TAX IS AN EXPERIMENT",
+      "The French economists who co-authored Prop. 40 have unsuccessfully proposed wealth taxes in France and the European Union that were rejected due to economic concerns. They call Prop. 40 “an experiment” that may backfire but say “California is the ideal place to test their idea.”",
+      "We shouldn’t risk California’s future on a costly economic experiment. www.WhoWroteProp40.org",
+      "PROP. 40 IS OPPOSED BY LABOR AND BUSINESS, DEMOCRATS AND REPUBLICANS, TEACHERS AND FIREFIGHTERS",
+      "Prop. 40 is opposed by Governor Gavin Newsom, the Democratic and Republican candidates for governor, and the following organizations: California Teachers Association, Planned Parenthood Affiliates of California, California Children’s Hospital Association, State Building and Construction Trades Council of California, California Conference of Carpenters, California Professional Firefighters, California Asian Pacific Chamber of Commerce, California Council for Affordable Housing, California Taxpayers Association, California Chamber of Commerce, California Hispanic Chambers of Commerce",
+      "Join us and vote no on this flawed tax scheme.",
+      "Visit www.VoteNoOn40.org for more information."
+     ],
+     "signers": [
+      {
+       "name": "René Bravo",
+       "title": "M.D., President, California Medical Association"
+      },
+      {
+       "name": "Francisco Silva",
+       "title": "CEO, California Primary Care Association"
+      },
+      {
+       "name": "Dr. Debra Schade",
+       "title": "President, California School Boards Association"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_for",
+     "side": "supporters",
+     "heading": "REBUTTAL TO ARGUMENT AGAINST PROPOSITION 40",
+     "paragraphs": [
+      "LET’S CHECK THE FACTS",
+      "1. Prop. 40 is a BILLIONAIRE tax. It cannot be applied to anyone else—working people already pay more than their fair share.",
+      "2. Prop. 40 will GENERATE $100 billion to replace the healthcare funding Trump cut to fund billionaire tax breaks.",
+      "3. Billionaires pay MUCH LOWER TAX RATES compared to what working families pay out of every paycheck. DON’T LISTEN TO BILLIONAIRE LIES",
+      "The billionaires who helped Trump pass the “Big, Beautiful Bill” have spent millions to trick you into voting against a billionaire tax.",
+      "Don’t be fooled. The endorsements and studies from the billionaires are hiding the truth—they’re pushing a Trump agenda that protects billionaires and hurts everyday taxpayers.",
+      "ACTUAL DOCTORS, NURSES, TEACHERS, AND WORKERS SUPPORT PROP. 40",
+      "While some organizational leaders and lobbyists have sided with billionaires, the working people they’re supposed to represent are standing behind Prop. 40 and urging you to vote YES. Supporters include:",
+      "California Nurses Association, Representative Ro Khanna, Doctors with the Committee of Interns and Residents, SEIU, California League of United Latin American Citizens (LULAC), Clergy and Laity United for Economic Justice (CLUE)",
+      "OPPONENTS OF PROP. 40 HAVE NO PLAN TO SAVE YOUR HEALTHCARE",
+      "The billionaires and their puppets have not put forth ANY viable solution to replacing the healthcare funding Trump took from us. They’d rather the middle class get stuck with shuttered hospitals and skyrocketing healthcare costs than pay their fair share.",
+      "Vote YES on Prop. 40."
+     ],
+     "signers": [
+      {
+       "name": "Suzanne Jimenez",
+       "title": "Chief of Staff, SEIU-United Healthcare Workers West"
+      },
+      {
+       "name": "Victoria Barron",
+       "title": "Patient Access Specialist, Planned Parenthood of Pacific Southwest"
+      },
+      {
+       "name": "Denise Robb",
+       "title": "Ph.D., Member of American Federation of Teachers, Local 1521, Los Angeles College Faculty Guild"
       }
      ],
      "none_submitted": null
@@ -7547,6 +8139,7 @@
    "arguments_disclaimer": "Arguments printed on this page are the opinions of the authors and have not been checked for accuracy by any official agency.",
    "links": {
     "guide": "https://voterguide.sos.ca.gov/propositions/40/",
+    "title_summary": "https://voterguide.sos.ca.gov/propositions/40/title-summary.htm",
     "analysis": "https://voterguide.sos.ca.gov/propositions/40/analysis.htm",
     "arguments": "https://voterguide.sos.ca.gov/propositions/40/arguments-rebuttals.htm",
     "text": "https://vig.cdn.sos.ca.gov/2026/general/pdf/prop40-text-proposed-laws.pdf"
@@ -7564,9 +8157,19 @@
    "summary": "Put on the Ballot by Petition Signatures Nullifies state taxes enacted after January 1, 2026 that exempt their revenues from voter-approved state spending limit. Requires pre-election and recurring audits of programs funded by new special taxes. Fiscal Impact: The net fiscal effect is unknown as it depends on future decisions by voters, the Legislature, and other policymakers. Supporters: CA Society of Certified Public Accountants (CalCPAs); CalAsian Chamber of Commerce; California Taxpayers Association (CalTax) Opponents: US Senator Bernie Sanders; SEIU United Healthcare Workers West",
    "yes_means": "A YES vote on this measure means: When special taxes are proposed by voter initiatives, the California State Auditor would review programs funded by the tax before the initiative appears on the ballot. The California State Auditor also would regularly review programs funded by special taxes approved by voters or the Legislature. In addition, the state might not be able to exclude any new special tax spending from its spending limit.",
    "no_means": "A NO vote on this measure means: The California State Auditor’s responsibility to review government programs would not change. The state spending limit requirements would not change.",
+   "ag_summary": [
+    "Prohibits any new state taxes that exclude their revenues from the state spending limit approved by voters in 1979.",
+    "For statewide special taxes, requires (1) a pre-election audit of programs that would receive funding from a voter-proposed special tax, and (2) recurring audits of programs funded by special taxes enacted after January 1, 2026.",
+    "States that other voter-approved measures appearing on the same ballot are void if they conflict with this measure and this measure receives more affirmative votes."
+   ],
+   "fiscal_heading": "SUMMARY OF LEGISLATIVE ANALYST'S ESTIMATE OF NET STATE AND LOCAL GOVERNMENT FISCAL IMPACT",
+   "fiscal_effect": [
+    "Unknown net fiscal effect. Increased costs for the California State Auditor to implement new one-time and ongoing audit requirements of programs funded by special taxes. These costs would be mostly paid from the new revenues collected from the special taxes. Possible savings associated with implementing recommendations from the audits."
+   ],
    "arguments": [
     {
      "kind": "for",
+     "side": "supporters",
      "heading": "ARGUMENT IN FAVOR OF PROPOSITION 41",
      "paragraphs": [
       "CALIFORNIANS DESERVE BETTER RESULTS FOR OUR TAX DOLLARS",
@@ -7587,8 +8190,29 @@
       "Prop. 41 ensures taxpayers get better results—not just a bigger tax bill.",
       "“Every tax dollar we waste is a dollar that could actually help someone. Californians already pay the highest state income and sales taxes in the country—we need better transparency and accountability to make sure our tax dollars produce results. Prop. 41 delivers.” —Steve Westly, former Controller of California.",
       "Please join good government groups, small business owners, accountants, taxpayers and public transparency advocates in voting Yes on 41.",
-      "For more information, visit: www.ResultsCA.org",
-      "Denise LeDuc Froemming , CPA, President California Society of Certified Public Accountants (CalCPAs) Tom Hayes , Fmr. California State Auditor Robert Gutierrez , President California Taxpayers Association (CalTax)",
+      "For more information, visit: www.ResultsCA.org"
+     ],
+     "signers": [
+      {
+       "name": "Denise LeDuc Froemming",
+       "title": "CPA, President, California Society of Certified Public Accountants (CalCPAs)"
+      },
+      {
+       "name": "Tom Hayes",
+       "title": "Fmr. California State Auditor"
+      },
+      {
+       "name": "Robert Gutierrez",
+       "title": "President, California Taxpayers Association (CalTax)"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_against",
+     "side": "opponents",
+     "heading": "REBUTTAL TO ARGUMENT IN FAVOR OF PROPOSITION 41",
+     "paragraphs": [
       "THIS IS A BILLIONAIRE-FUNDED SMOKE SCREEN",
       "Don’t be fooled—Prop. 41 is not really about audits. This is all a trick so approximately 200 billionaires can keep avoiding paying their own taxes while YOU get stuck with the bill.",
       "PROP. 41 WOULD CANCEL OUT THE BILLIONAIRE TAX",
@@ -7606,7 +8230,65 @@
      "signers": [
       {
        "name": "Suzanne Jimenez",
-       "title": ", Chief of Staff, SEIU-United Healthcare Workers West"
+       "title": "Chief of Staff, SEIU-United Healthcare Workers West"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "against",
+     "side": "opponents",
+     "heading": "ARGUMENT AGAINST PROPOSITION 41",
+     "paragraphs": [
+      "VOTE NO ON PROP. 41. This is a billionaire-funded initiative designed specifically to undo the California Billionaire Tax, Prop. 40.",
+      "PROP. 41 WOULD CANCEL OUT THE BILLIONAIRE TAX",
+      "Prop. 41 was put on the ballot for one reason—because billionaires don’t want to pay their fair share. This initiative was created to trick voters like you into making a billionaire tax impossible to enforce. That’s why you must vote NO.",
+      "Don’t fall for the billionaires’ lies. Prop. 41 isn’t about auditing new taxes. It’s about defeating one specific tax that billionaires want to avoid, because they’d rather millions of working people lose healthcare than pay a modest, one-time tax on their extreme wealth.",
+      "PROP. 41 WAS FUNDED BY BILLIONAIRES WHO WANT YOU TO PAY MORE FOR HEALTHCARE",
+      "One of Prop. 41’s main funders is Google founder and Trump donor Sergey Brin, whose wealth has DOUBLED to nearly $300 billion since Trump’s election. Now he’s spent over $57 million to fund sham measures like Prop. 41 that attempt to cancel out a billionaire tax. U.S. Senator Bernie Sanders called this arrogant move by Brin “unacceptable.”",
+      "Donald Trump took money out of working peoples’ pockets and gave it to billionaires like Brin through massive tax breaks. Now, the billionaires backing Prop. 41 want YOU to pay more for your healthcare.",
+      "VOTE NO ON PROP. 41 IF YOU SUPPORT THE BILLIONAIRE TAX",
+      "We have a chance to make billionaires pay their fair share to keep hospitals open and healthcare affordable for California’s working families. Vote NO on Prop. 41."
+     ],
+     "signers": [
+      {
+       "name": "Suzanne Jimenez",
+       "title": "Chief of Staff, SEIU-United Healthcare Workers West"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_for",
+     "side": "supporters",
+     "heading": "REBUTTAL TO ARGUMENT AGAINST PROPOSITION 41",
+     "paragraphs": [
+      "When state government programs don’t deliver, it hurts the people who rely on those services and the taxpayers who fund them.",
+      "Prop. 41 requires the independent State Auditor to conduct performance and financial audits of the programs to be funded by new taxes—to help make programs more effective and efficient.",
+      "Ask yourself: why would a single, solitary Sacramento special interest oppose transparency and accountability?",
+      "YES ON 41: TAXPAYERS DESERVE BETTER RESULTS",
+      "Some facts:",
+      "• Our state budget is a record high $352 billion this year. • State spending is up 79% since 2019. • We’ve spent billions on programs like homelessness—with too little to show for it.",
+      "With some of the highest taxes in the nation and a rising cost of living, we can’t afford to fund failure. Every dollar wasted is one that could go to help someone.",
+      "Prop. 41 requires transparency and trackable progress of programs, to help improve education, health care and other public services Californians rely on.",
+      "PROP. 41: PUBLIC AUDITS TO IMPROVE ACCOUNTABILITY",
+      "“Independent performance audits give voters objective, credible information about public resources, strengthening accountability and public trust.” Denise LeDuc Froemming, President, California Society of Certified Public Accountants",
+      "Under Prop. 41, the independent State Auditor publicly reviews the programs that new taxes would fund, exposes any waste or mismanagement, and recommends program improvements. The audit findings are published in the Voter Information Guide before you vote—with ongoing audits if a tax is approved.",
+      "VOTERS DESERVE MORE TRANSPARENCY—even if special interests don’t like it.",
+      "Vote Yes on Prop. 41. More transparency, more accountability, better results for our tax dollars."
+     ],
+     "signers": [
+      {
+       "name": "Pat Fong Kushida",
+       "title": "President, California Asian Pacific Chamber of Commerce (CalAsian Chamber)"
+      },
+      {
+       "name": "Steve Westly",
+       "title": "Fmr. California State Controller"
+      },
+      {
+       "name": "Robert Gutierrez",
+       "title": "President, California Taxpayers Association (CalTax)"
       }
      ],
      "none_submitted": null
@@ -7615,6 +8297,7 @@
    "arguments_disclaimer": "Arguments printed on this page are the opinions of the authors and have not been checked for accuracy by any official agency.",
    "links": {
     "guide": "https://voterguide.sos.ca.gov/propositions/41/",
+    "title_summary": "https://voterguide.sos.ca.gov/propositions/41/title-summary.htm",
     "analysis": "https://voterguide.sos.ca.gov/propositions/41/analysis.htm",
     "arguments": "https://voterguide.sos.ca.gov/propositions/41/arguments-rebuttals.htm",
     "text": "https://vig.cdn.sos.ca.gov/2026/general/pdf/prop41-text-proposed-laws.pdf"
@@ -7632,9 +8315,20 @@
    "summary": "Put on the Ballot by Petition Signatures Prohibits any new state tax (1) imposed on the ownership of personal property (all things people own other than real estate), or (2) that applies retroactively based on taxpayer’s past activities. Nullifies taxes enacted after January 1, 2026 that conflict with this measure. Fiscal Impact: Possibility that tax revenues will not go up as much in the future. Supporters: CA Professional Firefighters; State Building & Construction Trades Council of CA; AMVETS Department of CA Opponents: US Senator Bernie Sanders; SEIU United Healthcare Workers West",
    "yes_means": "A YES vote on this measure means: The state could not establish new taxes on the ownership of financial assets or other personal property.",
    "no_means": "A NO vote on this measure means: The state would continue to have the option to establish new taxes on the ownership of financial assets or other personal property.",
+   "ag_summary": [
+    "Prohibits new state taxes on personal property, including business interests, intellectual property, and financial assets (including assets in retirement and investment accounts).",
+    "Prohibits new state taxes that apply retroactively based on the taxpayer’s conduct, activities, or a status that occurred before the new tax’s effective date.",
+    "Applies to new taxes that are enacted or take effect on or after January 1, 2026.",
+    "States that other voter-approved measures appearing on the same ballot are void if they conflict with this measure and this measure receives more affirmative votes."
+   ],
+   "fiscal_heading": "SUMMARY OF LEGISLATIVE ANALYST'S ESTIMATE OF NET STATE AND LOCAL GOVERNMENT FISCAL IMPACT",
+   "fiscal_effect": [
+    "Possibility that tax revenues will not go up as much in the future."
+   ],
    "arguments": [
     {
      "kind": "for",
+     "side": "supporters",
      "heading": "ARGUMENT IN FAVOR OF PROPOSITION 42",
      "paragraphs": [
       "YES ON PROP. 42: PROTECT YOUR RETIREMENT AND LIFE SAVINGS FROM STATE TAXES",
@@ -7655,8 +8349,29 @@
       "“It’s a question of fairness and common sense. People plan their retirement for years—they deserve stable, predictable rules that don’t change after years of saving and planning. Prop. 42 provides that certainty.” —Sean Morgan, licensed financial advisor",
       "Prop. 42 is supported by a broad coalition of seniors, veterans, small business owners, blue-collar workers, retirees, including groups like the California Professional Firefighters and Disabled American Veterans, Dept. of California.",
       "Californians are already struggling with high costs of living and high taxes. Many work their entire lives to achieve some measure of retirement security. It should be illegal for politicians and special interests to tax our retirement and savings.",
-      "You earned and saved it. Now we need to protect it. Please join us in voting Yes on 42. YesonProp42.org",
-      "Michael Hedges , President California Small Business Association Shelley Huff , Commander AMVETS, Department of California Jennifer Yoder , Board Member California Senior Alliance",
+      "You earned and saved it. Now we need to protect it. Please join us in voting Yes on 42. YesonProp42.org"
+     ],
+     "signers": [
+      {
+       "name": "Michael Hedges",
+       "title": "President, California Small Business Association"
+      },
+      {
+       "name": "Shelley Huff",
+       "title": "Commander, AMVETS, Department of California"
+      },
+      {
+       "name": "Jennifer Yoder",
+       "title": "Board Member, California Senior Alliance"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_against",
+     "side": "opponents",
+     "heading": "REBUTTAL TO ARGUMENT IN FAVOR OF PROPOSITION 42",
+     "paragraphs": [
       "THIS IS ANOTHER BILLIONAIRE-FUNDED TRICK",
       "Don’t be fooled—Prop. 42 is not really about protecting your retirement savings from new taxes.",
       "It’s a redundant, expensive trick to allow approximately 200 billionaires to keep avoiding paying their own taxes while YOU get stuck with the bill.",
@@ -7674,7 +8389,64 @@
      "signers": [
       {
        "name": "Suzanne Jimenez",
-       "title": ", Chief of Staff, SEIU-United Healthcare Workers West"
+       "title": "Chief of Staff, SEIU-United Healthcare Workers West"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "against",
+     "side": "opponents",
+     "heading": "ARGUMENT AGAINST PROPOSITION 42",
+     "paragraphs": [
+      "VOTE NO ON PROP. 42. This is a billionaire-funded initiative designed specifically to undo the California Billionaire Tax, Prop. 40.",
+      "PROP. 42 WOULD CANCEL OUT THE BILLIONAIRE TAX",
+      "Prop. 42 was put on the ballot for one reason—because billionaires don’t want to pay their fair share. This initiative was created to trick voters like you into making a billionaire tax impossible to enforce. That’s why you must vote NO.",
+      "Don’t fall for the billionaires’ lies. Prop. 42 isn’t about preventing new taxes on personal property. It’s about preventing one specific tax that billionaires want to avoid, because they’d rather millions of working people lose healthcare than pay a modest, one-time tax on their extreme wealth.",
+      "PROP. 42 WAS FUNDED BY BILLIONAIRES WHO WANT YOU TO PAY MORE FOR HEALTHCARE",
+      "One of Prop. 42’s main funders is Google founder and Trump donor Sergey Brin, whose wealth has DOUBLED to nearly $300 billion since Trump’s election. Now he’s spent over $57 million to fund sham measures like Prop. 42 that attempt to cancel out a billionaire tax. U.S. Senator Bernie Sanders called this arrogant move by Brin “unacceptable.”",
+      "Donald Trump took money out of working peoples’ pockets and gave it to billionaires like Brin through massive tax breaks. Now, the billionaires backing Prop. 42 want YOU to pay more for your healthcare.",
+      "VOTE NO ON PROP. 42 IF YOU SUPPORT THE BILLIONAIRE TAX",
+      "We have a chance to make billionaires pay their fair share to keep hospitals open and healthcare affordable for California’s working families. Vote NO on Prop. 42."
+     ],
+     "signers": [
+      {
+       "name": "Suzanne Jimenez",
+       "title": "Chief of Staff, SEIU-United Healthcare Workers West"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_for",
+     "side": "supporters",
+     "heading": "REBUTTAL TO ARGUMENT AGAINST PROPOSITION 42",
+     "paragraphs": [
+      "WHO SUPPORTS PROP. 42",
+      "Prop. 42 is supported by hundreds of thousands of seniors, veterans, firefighters, blue-collar workers, public-safety officers and working families because it protects the retirement and savings of ALL Californians from new taxes. Who opposes 42? One organization that wants to tax retirement accounts.",
+      "WHY WE NEED PROP. 42",
+      "Sacramento politicians and special interests have repeatedly tried to pass taxes on retirement and personal savings accounts in recent years. They’ve relied on a loophole in California’s Constitution that allows government to tax our income when we earn it, and AGAIN when it is simply sitting in our savings and retirement accounts.",
+      "CALIFORNIA IS EXPENSIVE ENOUGH WITHOUT DOUBLE TAXATION",
+      "Prop. 42 prohibits this double taxation by PROHIBITING ALL NEW TAXES ON RETIREMENT AND SAVINGS ACCOUNTS and other personal property, whether proposed by legislation or ballot measure, including proposals on this year’s ballot and in the future.",
+      "It is a comprehensive constitutional protection against politicians or special interests trying to tax our retirement funds and savings accounts.",
+      "WHO BENEFITS FROM PROP. 42",
+      "Prop. 42 protects the retirement and savings for all Californians—young workers just beginning to save; teachers, firefighters and police officers with pensions; retirees and veterans who depend on their savings for financial security.",
+      "You saved it. You deserve to keep it.",
+      "Prop. 42 asks a simple question: should California politicians have the power to tax your personal property, including retirement and savings accounts?",
+      "If you think your retirement and savings should be protected from taxes, vote Yes on 42."
+     ],
+     "signers": [
+      {
+       "name": "Darrell Roberts",
+       "title": "President, California Professional Firefighters"
+      },
+      {
+       "name": "Chris Hannan",
+       "title": "President, State Building and Construction Trades Council of California"
+      },
+      {
+       "name": "Brian R. Marvel",
+       "title": "President, Peace Officers Research Association of California"
       }
      ],
      "none_submitted": null
@@ -7683,6 +8455,7 @@
    "arguments_disclaimer": "Arguments printed on this page are the opinions of the authors and have not been checked for accuracy by any official agency.",
    "links": {
     "guide": "https://voterguide.sos.ca.gov/propositions/42/",
+    "title_summary": "https://voterguide.sos.ca.gov/propositions/42/title-summary.htm",
     "analysis": "https://voterguide.sos.ca.gov/propositions/42/analysis.htm",
     "arguments": "https://voterguide.sos.ca.gov/propositions/42/arguments-rebuttals.htm",
     "text": "https://vig.cdn.sos.ca.gov/2026/general/pdf/prop42-text-proposed-laws.pdf"
@@ -7700,9 +8473,19 @@
    "summary": "Put on the Ballot by the Legislature Limits voters’ ability to pass voter-proposed local special taxes by increasing percentage of votes needed to approve such ballot measures from a majority (over 50%) to two-thirds, beginning January 1, 2027. Fiscal Impact: Possibility that local government tax revenues will not go up as much in the future due to a higher vote threshold for certain taxes. Supporters: California Taxpayers Association; Family Business Association of California; California Hispanic Chambers of Commerce Opponents: California Professional Firefighters; California Federation of Teachers; Nurse Alliance of SEIU CA.",
    "yes_means": "A YES vote on this measure means: Certain local government taxes would require two-thirds approval by voters.",
    "no_means": "A NO vote on this measure means: Certain local government taxes could continue to be approved by voters with a majority vote.",
+   "ag_summary": [
+    "Currently, local governments must obtain two-thirds voter approval to impose, extend, or increase special taxes (taxes dedicated to a specific purpose) that they place on the ballot. However, this two-thirds vote requirement does not currently apply to special taxes put on ballot by voter signature gathering.",
+    "This measure would limit voters’ ability to pass voter-proposed local special taxes by raising the percentage of votes needed to approve such ballot measures from a majority (over 50%) to two-thirds.",
+    "Applies to voter-proposed ballot measures approved after January 1, 2027."
+   ],
+   "fiscal_heading": "SUMMARY OF LEGISLATIVE ANALYST'S ESTIMATE OF NET STATE AND LOCAL GOVERNMENT FISCAL IMPACT",
+   "fiscal_effect": [
+    "Possibility that local government tax revenues will not go up as much in the future due to a higher vote threshold for certain taxes."
+   ],
    "arguments": [
     {
      "kind": "for",
+     "side": "supporters",
      "heading": "ARGUMENT IN FAVOR OF PROPOSITION 43",
      "paragraphs": [
       "VOTE YES ON PROP. 43: THE LOCAL TAXPAYER PROTECTION ACT",
@@ -7723,8 +8506,29 @@
       "PROP. 43 PUTS VOTERS BACK IN CHARGE",
       "Every election, politicians say they need just one more tax increase. Prop. 43 simply ensures TAXPAYERS are fully protected by the right to vote on taxes.",
       "Vote YES on Prop. 43:",
-      "• Affirms the voters’ right to vote on all new or higher local taxes. • Restores the two-thirds vote requirement for local special taxes. • Protects Proposition 13 and closes court-created loopholes. • Makes it harder for special interests to raise taxes. • Protects homeowners, renters, and small businesses from new real estate taxes. • Strengthens accountability for how taxpayer dollars are spent.",
-      "Robert Gutierrez , President California Taxpayers Association Robert Rivinius , President Family Business Association of California Julian Canete , President California Hispanic Chambers of Commerce",
+      "• Affirms the voters’ right to vote on all new or higher local taxes. • Restores the two-thirds vote requirement for local special taxes. • Protects Proposition 13 and closes court-created loopholes. • Makes it harder for special interests to raise taxes. • Protects homeowners, renters, and small businesses from new real estate taxes. • Strengthens accountability for how taxpayer dollars are spent."
+     ],
+     "signers": [
+      {
+       "name": "Robert Gutierrez",
+       "title": "President, California Taxpayers Association"
+      },
+      {
+       "name": "Robert Rivinius",
+       "title": "President, Family Business Association of California"
+      },
+      {
+       "name": "Julian Canete",
+       "title": "President, California Hispanic Chambers of Commerce"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_against",
+     "side": "opponents",
+     "heading": "REBUTTAL TO ARGUMENT IN FAVOR OF PROPOSITION 43",
+     "paragraphs": [
       "We all want relief from California’s high cost of living. But Proposition 43 doesn’t cut your taxes a penny. It attacks something far more valuable: the power of your vote.",
       "PROP. 43 WEAKENS YOUR VOTE.",
       "Today, when local voters decide how to fund their communities, the majority rules. Prop. 43 throws that out, letting just 33.4% of voters veto what nearly 67% want. Under Prop. 43, a NO vote counts twice as much as a YES. That isn’t fair, and it isn’t democracy.",
@@ -7740,15 +8544,83 @@
      "signers": [
       {
        "name": "Nick Lapis",
-       "title": ", Director of Advocacy, Californians Against Waste"
+       "title": "Director of Advocacy, Californians Against Waste"
       },
       {
        "name": "Bill Barnes",
-       "title": ", Director of Campaigns & Community, Non-Profit Housing Association of Northern California"
+       "title": "Director of Campaigns & Community, Non-Profit Housing Association of Northern California"
       },
       {
        "name": "Steve Frisch",
-       "title": ", President, Sierra Business Council"
+       "title": "President, Sierra Business Council"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "against",
+     "side": "opponents",
+     "heading": "ARGUMENT AGAINST PROPOSITION 43",
+     "paragraphs": [
+      "PROPOSITION 43 LIMITS VOTERS’ ABILITY TO FUND ESSENTIAL LOCAL SERVICES.",
+      "Prop. 43 makes it harder for you to fund critical services like police and fire departments, fix and repair local roads, staff our local schools or backfill federal healthcare cuts. Prop. 43 undermines the voice of voters and the majority vote by letting just one-third of voters (33.4%) block local voter decisions—and it makes it easier for corporate special interests to avoid paying their fair share.",
+      "PROP. 43 MAKES IT HARDER TO FUND FIRE AND POLICE SERVICES.",
+      "Local police and firefighters can’t rely on Sacramento or Washington politicians. These services are funded at the local level. Prop. 43 wants to make it harder for local voters to direct new funding to services like police and fire. Without adequate funding, 911 response times are slower, fire stations sit understaffed, and families wait longer for help when every second counts. When a house fire breaks out—or a wildfire threatens our neighborhoods—that local funding is what protects us. Prop. 43 would let a small minority of voters block it. Even if 66% of voters say yes, Prop. 43 would prevent us from funding desperately needed local services.",
+      "PROP. 43 MAKES IT HARDER TO FIX ROADS, FUND SCHOOLS, AND PROTECT HEALTHCARE.",
+      "Across California, local voters have come together to repair crumbling roads and improve transportation, to fund their neighborhood schools, and to protect local hospitals and healthcare—especially as Washington cuts federal health funding. These are decisions communities make for themselves, by majority vote. Instead, Prop. 43 hands a small group of voters the power to veto those solutions, even when the majority supports them.",
+      "PROP. 43 EMPOWERS 33.4% OF VOTERS OVER THE WILL OF THE MAJORITY.",
+      "In America, we believe in one person, one vote—and the majority wins. Prop. 43 throws that out. It empowers just over one-third of voters to block what nearly 67% want. It puts the out-voted minority in charge—even if they are extremists. It makes their NO vote count twice as much as a YES vote.",
+      "CORPORATE DONORS BENEFIT. NOT TAXPAYERS.",
+      "Under Prop. 43, corporate donors who spend big in elections will benefit most. Right now, voters can hold these corporations and developers accountable at the ballot box, and make them pay their fair share for local needs. Prop. 43 is designed to take that power away—to protect the powerful few, at everyone else’s expense.",
+      "That’s why these organizations are asking you to vote NO on Prop. 43:",
+      "• California Professional Firefighters • Californians Against Waste • California Federation of Teachers • California School Employees Association • Communities for a Better Environment • AAPI Force • Non-Profit Housing Association of Northern California • Nurses Alliance of SEIU California • Sierra Business Council",
+      "Vote NO to protect your vote and majority rule. Keep the power where it belongs—with you and your neighbors.",
+      "VOTE NO ON PROPOSITION 43.",
+      "www.NoProp43CA.com"
+     ],
+     "signers": [
+      {
+       "name": "Darrell Roberts",
+       "title": "President, California Professional Firefighters"
+      },
+      {
+       "name": "Chris Harkins",
+       "title": "Executive Director, Nurse Alliance of SEIU California"
+      },
+      {
+       "name": "Adam Weinberger",
+       "title": "President, California School Employees Association"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_for",
+     "side": "supporters",
+     "heading": "REBUTTAL TO ARGUMENT AGAINST PROPOSITION 43",
+     "paragraphs": [
+      "VOTE YES ON PROP. 43 TO RESTORE TAXPAYER PROTECTIONS",
+      "Californians already pay high taxes. But instead of prioritizing funding for critical services like police and fire, local politicians waste your money on their pet projects— then demand tax increases, claiming the need to fund the most important priorities.",
+      "The state Constitution requires a two-thirds vote for taxes earmarked for a specific purpose, but recent court decisions created a loophole that allowed special taxes to pass with fewer votes. Now Californians are paying billions in taxes they should not have had to pay.",
+      "Prop. 43 RESTORES the longstanding two-thirds vote requirement for local special taxes, protecting homeowners, renters, and small businesses from costly new sales and parcel taxes, taxes on electricity and gas, and real estate taxes.",
+      "Prop. 43 GUARANTEES taxpayers the right to vote on new or higher local taxes and requires governments to spend taxpayer dollars for the specific purposes voters approved—preventing bait-and-switch schemes that make our sky-high cost of living even worse.",
+      "Over the last decade, local governments have imposed 2,000 new or higher taxes. Prop. 43 CLOSES LOOPHOLES used to pass some of the most damaging tax increases, restores the protections voters originally approved under Proposition 13, and makes it harder for special interests to raise taxes without broad voter support.",
+      "The Legislature’s nearly unanimous vote to place Prop. 43 on the ballot sends a clear message: activist courts exceeded voters’ intent by creating loopholes that weakened Proposition 13’s protections.",
+      "Restore your right to vote on ALL local taxes.",
+      "VOTE YES ON PROP. 43"
+     ],
+     "signers": [
+      {
+       "name": "Jon Coupal",
+       "title": "President, Howard Jarvis Taxpayers Association"
+      },
+      {
+       "name": "Michael Hedges",
+       "title": "President, California Small Business Association"
+      },
+      {
+       "name": "Greg Van Dyke",
+       "title": "Chairman, California Consumer Advocates for Affordability and, Safety"
       }
      ],
      "none_submitted": null
@@ -7757,6 +8629,7 @@
    "arguments_disclaimer": "Arguments printed on this page are the opinions of the authors and have not been checked for accuracy by any official agency.",
    "links": {
     "guide": "https://voterguide.sos.ca.gov/propositions/43/",
+    "title_summary": "https://voterguide.sos.ca.gov/propositions/43/title-summary.htm",
     "analysis": "https://voterguide.sos.ca.gov/propositions/43/analysis.htm",
     "arguments": "https://voterguide.sos.ca.gov/propositions/43/arguments-rebuttals.htm",
     "text": "https://vig.cdn.sos.ca.gov/2026/general/pdf/prop43-text-proposed-laws.pdf"
@@ -7774,9 +8647,20 @@
    "summary": "Put on the Ballot by Petition Signatures Imposes penalties on nonprofit Federally Qualified Health Centers (community clinics providing primary care to medically underserved areas and populations) that spend less than 90% of revenue on “program services” advancing their charitable purpose, including but not limited to patient services. Fiscal Impact: Increased state costs in the low tens of millions of dollars per year, covered by fees. Supporters: None submitted Opponents: American Academy of Pediatrics CA; CA School Nurses Org; CA Academy of Family Physicians; CA Medical Assoc.",
    "yes_means": "A YES vote on this measure means: Certain private nonprofit health care clinics would have to spend at least 90 percent of their revenue each year on providing health care services.",
    "no_means": "A NO vote on this measure means: The new requirement on health care clinic spending would not go into effect.",
+   "ag_summary": [
+    "Imposes penalties on nonprofit Federally Qualified Health Centers (community clinics providing primary care to medically underserved areas and populations) that spend less than 90% of revenue on “program services” advancing their charitable purpose, including but not limited to patient services. Department of Public Health may waive spending requirements in exceptional circumstances.",
+    "Authorizes Attorney General to publish guidance defining qualifying expenditures.",
+    "Monetary penalties may be refunded if centers become compliant within five years.",
+    "Authorizes criminal charges for false reports or artificially increasing spending ratio."
+   ],
+   "fiscal_heading": "SUMMARY OF LEGISLATIVE ANALYST'S ESTIMATE OF NET STATE AND LOCAL GOVERNMENT FISCAL IMPACT",
+   "fiscal_effect": [
+    "Increased state costs in the low tens of millions of dollars per year to enforce the new requirements on certain private nonprofit health care clinics, covered by fees charged to the affected clinics."
+   ],
    "arguments": [
     {
      "kind": "for",
+     "side": "supporters",
      "heading": "ARGUMENT IN FAVOR OF PROPOSITION 44",
      "paragraphs": [
       "VOTE YES ON PROP. 44 TO PUT PATIENTS FIRST AND HOLD CLINICS ACCOUNTABLE.",
@@ -7791,8 +8675,25 @@
       "Proposition 44 will increase transparency by requiring clinics to publicly report how healthcare dollars are spent, so patients and taxpayers can hold them accountable. Currently, there are hundreds of millions of dollars in the clinic system that are not being spent on the core mission of patient care. Prop. 44 will make sure those healthcare dollars go where they can do the most good.",
       "This measure does not cut clinic funding or reduce services patients rely on. Clinics that meet the standard keep every dollar, and even clinics that fall short can recover any penalties by coming into compliance. Unrecovered penalties, if any, are redirected to recruiting, training, and retaining the healthcare workers our clinics desperately need. Every dollar stays in the healthcare system—prioritized for patient care instead of excessive overhead.",
       "Join healthcare workers, patients, and Californians who believe accountability strengthens our healthcare system.",
-      "VOTE YES ON PROP. 44 TO PUT PATIENTS FIRST.",
-      "Shawna Brown , Initiative Proponent Brisa J. Barrera , Community Clinic Worker",
+      "VOTE YES ON PROP. 44 TO PUT PATIENTS FIRST."
+     ],
+     "signers": [
+      {
+       "name": "Shawna Brown",
+       "title": "Initiative Proponent"
+      },
+      {
+       "name": "Brisa J. Barrera",
+       "title": "Community Clinic Worker"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_against",
+     "side": "opponents",
+     "heading": "REBUTTAL TO ARGUMENT IN FAVOR OF PROPOSITION 44",
+     "paragraphs": [
       "PROP. 44 IS A DANGEROUS SPECIAL INTEREST MEASURE THAT THREATENS CARE FOR MILLIONS",
       "Make no mistake: Prop. 44 is not about resources for patient care. Prop. 44 is a dangerous measure written and funded entirely by one special interest that threatens access to care for millions. Prop. 44 imposes unworkable restrictions that actually prevent community clinics from providing the care patients need.",
       "NURSES, DOCTORS AND PATIENT ADVOCATES ALL AGREE: PROP. 44 WILL HURT PATIENTS. Prop. 44 will:",
@@ -7809,15 +8710,86 @@
      "signers": [
       {
        "name": "Brent K Sugimoto",
-       "title": ", MD, FAAFP, President-Elect, California Academy of Family Physicians"
+       "title": "MD, FAAFP, President-Elect, California Academy of Family Physicians"
       },
       {
        "name": "Kelly McCue",
-       "title": ", MD, Immediate Past Chair, American College of Obstetricians & Gynecologists District IX"
+       "title": "MD, Immediate Past Chair, American College of Obstetricians & Gynecologists District IX"
       },
       {
        "name": "Susanne J. Spano",
-       "title": ", MD, FACEP, President, American College of Emergency Physicians, California Chapter"
+       "title": "MD, FACEP, President, American College of Emergency Physicians, California Chapter"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "against",
+     "side": "opponents",
+     "heading": "ARGUMENT AGAINST PROPOSITION 44",
+     "paragraphs": [
+      "VOTE NO ON PROP. 44: STOP THE ATTACK ON PATIENTS & COMMUNITY HEALTH CLINICS",
+      "Prop. 44 is a dangerous, poorly drafted measure that would threaten care for millions of California patients.",
+      "Prop. 44 imposes deeply flawed and unworkable restrictions that prevent community clinics from providing the care patients need. Economic and health experts warn Prop. 44 will:",
+      "• Cut $1.7 billion from health clinics in the first year alone. • Cause 88% of all clinics in the state to operate at a loss. • Force thousands of clinics throughout the state to cut back patient services or shut down entirely. • Eliminate care for millions of Californians. • Send more patients to hospital emergency rooms—increasing wait times for all families.",
+      "PROP. 44 ARBITRARILY RESTRICTS SPENDING ON VITAL PATIENT SERVICES",
+      "Prop. 44 is so poorly written that it restricts clinics from spending resources on essential staff and services, including nurse managers, physician leaders, translation services, insurance assistance and community education. It even restricts clinics from funding mammogram, X-ray and CT machines, information technology and expanding or upgrading clinics.",
+      "PROP. 44 DECIMATES THE HEALTH CARE SYSTEM AND HURTS ALL PATIENTS",
+      "Community health clinics provide primary care, prenatal care, urgent care, mental and behavioral health services, telehealth, and dental services. They operate school-based health clinics that care for hundreds of thousands of children.",
+      "Community clinics serve 1 in 4 Medi-Cal patients, the uninsured, working families, seniors, veterans, and children. In many rural and medically underserved communities, community health clinics are the only source of care within hundreds of miles.",
+      "Prop. 44 will make our bad healthcare problems even worse— increasing patient wait times and eliminating the only source of care for many patients.",
+      "PROP. 44 IS UNNECESSARY. COMMUNITY CLINICS ARE STRICTLY REGULATED.",
+      "Community clinics are already heavily regulated by the federal and state governments, with strict funding rules on patient care and essential services, and regular mandatory public audits. All clinics are overseen by patient board members, to ensure care is focused on community needs. And clinics are non-profits legally required to focus resources on patient services and community benefits.",
+      "PROP. 44 OPPOSED BY PATIENTS, NURSES, DOCTORS AND COMMUNITY LEADERS",
+      "“Prop. 44 will eliminate the only source of care in many communities. Please vote NO.” —Kim Yu, MD, FAAFP, President, California Academy of Family Physicians",
+      "“Community clinics are a lifeline for my family and millions across California. Please, protect patients like me. Reject Prop. 44.” —Carmen Huertero, Clinic Patient, San Marcos, CA",
+      "“Prop. 44 threatens women’s access to healthcare at a time when it’s already under attack. Vote No.” —Jodi Hicks, President & CEO, Planned Parenthood Affiliates of California",
+      "\"By shutting down clinics, Prop. 44 will force millions of patients into already overcrowded emergency rooms—increasing wait times for everyone.” —Susanne J Spano, MD, FACEP, President, American College of Emergency Physicians, California",
+      "“Prop. 44 threatens to shut down hundreds of school-based clinics that provide primary care, vaccinations, health screenings and mental health services for tens of thousands of children. Vote NO.” —Katie Nilsson, RN, President, California School Nurses Organization",
+      "Prop. 44 Opposed By:",
+      "• American Academy of Pediatrics, California • California School Nurses Organization • California Medical Association • California Primary Care Association, representing thousands of community health centers and clinics • American College of Obstetricians & Gynecologists District IX • Planned Parenthood Affiliates of California • National Association of Social Workers, California Chapter • American College of Emergency Physicians, California • California Academy of Family Physicians",
+      "www.NoProp44.com"
+     ],
+     "signers": [
+      {
+       "name": "Eric Ball",
+       "title": "MD, FAAP, President, American Academy of Pediatrics, California"
+      },
+      {
+       "name": "Katie Nilsson",
+       "title": "RN, President, California School Nurses Organization"
+      },
+      {
+       "name": "René Bravo",
+       "title": "M.D., President, California Medical Association"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_for",
+     "side": "supporters",
+     "heading": "REBUTTAL TO ARGUMENT AGAINST PROPOSITION 44",
+     "paragraphs": [
+      "DON’T BE FOOLED BY SCARE TACTICS.",
+      "Highly paid clinic executives want you to believe this measure will close clinics, eliminate services, and hurt patients. Those claims are false.",
+      "PROP. 44 PROTECTS PATIENT CARE—IT DOESN'T CUT IT.",
+      "Proposition 44 simply requires that 90% of clinic revenue be spent on clinics’ non-profit mission: patient care and services that support care. This CAN INCLUDE: Transportation, language interpretation, care coordination, community outreach, nurse managers and clinical staff, medical equipment and information technology, and mental health, dental, and preventative care. The opposition falsely claims these services would be cut, but Prop. 44 is designed to protect spending that serves patients.",
+      "PROP. 44 PREVENTS PRECIOUS RESOURCES FROM BEING DIVERTED AWAY FROM PATIENT CARE",
+      "Prop. 44 seeks to reduce spending on: Excessive CEO pay, lavish events, expensive consultants, and unnecessary administrative spending. That means healthcare dollars would go where they belong: Caring for patients.",
+      "WHY ARE CLINIC EXECUTIVES FIGHTING ACCOUNTABILITY?",
+      "The campaign against Prop. 44 is funded by the same highly paid clinic executives who benefit from the current system. If today’s oversight were enough, some clinics wouldn’t be spending less than half of their funding on patient care and services. The real threat to clinics isn’t accountability, it’s devastating federal healthcare cuts. Patients can’t afford to see precious funding spent on excessive CEO compensation and other non-essentials while they wait months for appointments and healthcare workers struggle with understaffing and limited resources.",
+      "PUT PATIENTS FIRST, NOT CLINIC CEOS.",
+      "Vote YES on Proposition 44."
+     ],
+     "signers": [
+      {
+       "name": "Shawna Brown",
+       "title": "Initiative Proponent"
+      },
+      {
+       "name": "Brisa J. Barrera",
+       "title": "Community Clinic Worker"
       }
      ],
      "none_submitted": null
@@ -7826,6 +8798,7 @@
    "arguments_disclaimer": "Arguments printed on this page are the opinions of the authors and have not been checked for accuracy by any official agency.",
    "links": {
     "guide": "https://voterguide.sos.ca.gov/propositions/44/",
+    "title_summary": "https://voterguide.sos.ca.gov/propositions/44/title-summary.htm",
     "analysis": "https://voterguide.sos.ca.gov/propositions/44/analysis.htm",
     "arguments": "https://voterguide.sos.ca.gov/propositions/44/arguments-rebuttals.htm",
     "text": "https://vig.cdn.sos.ca.gov/2026/general/pdf/prop44-text-proposed-laws.pdf"
@@ -7843,9 +8816,20 @@
    "summary": "Put on the Ballot by Petition Signatures Amends California Environmental Quality Act (CEQA) to expedite environmental review for certain projects (including most housing, transportation, water, and health projects) by setting deadlines to complete environmental review and resolve lawsuits challenging project approvals. Fiscal Impact: Initial costs for state and local governments, likely in the high tens of millions of dollars—potentially exceeding $100 million—annually, partly covered by fees. Uncertain, potentially more significant positive or negative longer-term fiscal effects. Supporters: California Children’s Hospital Association; California Water Association; California Council for Affordable Housing Opponents: Coalition for Clean Air; CA Environmental Voters; Physicians for Social Responsibility, LA; National Wildlife Federation",
    "yes_means": "A YES vote on this measure means: Certain public and private projects would be eligible for new project review and court challenge procedures. For example, new procedures would tighten time limits for environmental review and reduce the scope of what courts can consider when reviewing legal challenges.",
    "no_means": "A NO vote on this measure means: Public and private projects would continue to use existing project review and court challenge procedures.",
+   "ag_summary": [
+    "Amends California Environmental Quality Act (CEQA) to expedite environmental review for specified project categories (including most housing, transportation, water, health, wildfire mitigation, educational facility, internet access, and clean energy projects). For these types of projects, this measure: Sets deadlines for public agencies to complete environmental review and take required actions.",
+    "Allows expedited review of environmental impacts, limiting public agencies’ current obligation to consider a range of feasible project alternatives to reduce environmental impacts.",
+    "Establishes deadlines for filing and resolving lawsuits challenging project approvals; limits evidence courts may consider and relief courts can order."
+   ],
+   "fiscal_heading": "SUMMARY OF LEGISLATIVE ANALYST'S ESTIMATE OF NET STATE AND LOCAL GOVERNMENT FISCAL IMPACT",
+   "fiscal_effect": [
+    "Initial costs for state and local governments, likely in the high tens of millions of dollars annually—potentially exceeding $100 million annually—to implement new project review and court challenge procedures for eligible projects. Fees paid by project applicants and people filing lawsuits would partly cover these costs.",
+    "In the longer term, uncertain, but potentially more significant positive or negative fiscal effects for state and local governments. The overall effect depends, in part, on how the new procedures change the number of eligible projects that get built and whether those projects have different environmental impacts."
+   ],
    "arguments": [
     {
      "kind": "for",
+     "side": "supporters",
      "heading": "ARGUMENT IN FAVOR OF PROPOSITION 45",
      "paragraphs": [
       "LENGTHY DELAYS AND RED TAPE ARE BLOCKING ESSENTIAL PROJECTS & DRIVING UP OUR COST OF LIVING.",
@@ -7870,8 +8854,29 @@
       "YES ON PROP. 45 TO BUILD A MORE AFFORDABLE CALIFORNIA.",
       "Every year of delay means Californians wait longer and pay more for the essential projects we need. It’s time to cut red tape, protect our environment and build the projects California needs to make life more affordable.",
       "VOTE YES ON PROP. 45.",
-      "YESonProp45.com",
-      "Ann-Louise Kuhns , President California Children’s Hospital Association Jennifer Capitolo , Executive Director California Water Association Jenna Abbott , Executive Director California Council on Affordable Housing",
+      "YESonProp45.com"
+     ],
+     "signers": [
+      {
+       "name": "Ann-Louise Kuhns",
+       "title": "President, California Children’s Hospital Association"
+      },
+      {
+       "name": "Jennifer Capitolo",
+       "title": "Executive Director, California Water Association"
+      },
+      {
+       "name": "Jenna Abbott",
+       "title": "Executive Director, California Council on Affordable Housing"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_against",
+     "side": "opponents",
+     "heading": "REBUTTAL TO ARGUMENT IN FAVOR OF PROPOSITION 45",
+     "paragraphs": [
       "PROPOSITION 45 WON’T LOWER YOUR COSTS.",
       "It doesn’t require a single project to lower your rent, your mortgage, or your utility bills. 45’s corporate funders profit while you bear the cost of their pollution.",
       "PROP. 45 DOESN’T DELIVER AN AFFORDABLE CALIFORNIA. IT LIMITS ENVIRONMENTAL AND PUBLIC REVIEW AND RISKS PUBLIC HEALTH.",
@@ -7887,21 +8892,22 @@
      "signers": [
       {
        "name": "Chris Tarver",
-       "title": ", R.N., President, American Nurses Association, CA"
+       "title": "R.N., President, American Nurses Association, CA"
       },
       {
        "name": "Vanessa Forsythe",
-       "title": ", RN, California Nurses for Environmental Health and Justice"
+       "title": "RN, California Nurses for Environmental Health and Justice"
       },
       {
        "name": "Martha Arguello",
-       "title": ", Executive Director, Physicians for Social Responsibility, LA"
+       "title": "Executive Director, Physicians for Social Responsibility, LA"
       }
      ],
      "none_submitted": null
     },
     {
      "kind": "against",
+     "side": "opponents",
      "heading": "ARGUMENT AGAINST PROPOSITION 45",
      "paragraphs": [
       "PROPOSITION 45 LIMITS ENVIRONMENTAL AND PUBLIC REVIEW OF PROJECTS BUILT IN YOUR COMMUNITY. VOTE NO ON PROP. 45 TO PROTECT WATER, AIR QUALITY AND PUBLIC HEALTH.",
@@ -7921,29 +8927,54 @@
       "• National Wildlife Federation • California Communities Against Toxics • California Environmental Voters • California Environmental Justice Alliance • California Nurses for Environmental Health & Justice • Clean Water Action • Coalition for Clean Air • Physicians for Social Responsibility—Los Angeles",
       "Whether you’re a Democrat, a Republican, or an independent, vote NO on Prop. 45 to protect your air and water, your tax dollars, and your right to be heard.",
       "VOTE NO on Prop. 45.",
-      "www.NoProp45CA.com .",
-      "Joe Lyou , President Coalition for Clean Air Jennifer Clary , California Director Clean Water Action Matt Abularach-Macias , Political Director California Environmental Voters",
+      "www.NoProp45CA.com ."
+     ],
+     "signers": [
+      {
+       "name": "Joe Lyou",
+       "title": "President, Coalition for Clean Air"
+      },
+      {
+       "name": "Jennifer Clary",
+       "title": "California Director, Clean Water Action"
+      },
+      {
+       "name": "Matt Abularach-Macias",
+       "title": "Political Director, California Environmental Voters"
+      }
+     ],
+     "none_submitted": null
+    },
+    {
+     "kind": "rebuttal_for",
+     "side": "supporters",
+     "heading": "REBUTTAL TO ARGUMENT AGAINST PROPOSITION 45",
+     "paragraphs": [
       "PROP. 45 IS THE CHANGE WE NEED TO BUILD A MORE AFFORDABLE CALIFORNIA.",
       "The status quo is failing California. Families cannot afford to live here because we’re failing to deliver the basics. Endless delays, lawsuits and red tape are driving up the cost of essentials—housing, water, electricity, schools, roads, healthcare and wildfire protection.",
       "We have a choice: accept the failing status quo—or fix it. PROP. 45 FIXES OUR BROKEN PROJECT APPROVAL SYSTEM by eliminating unnecessary delays for essential projects—lowering our cost of living and improving our quality of life.",
       "PROP. 45’s OPPONENTS ARE MISLEADING VOTERS TO PROTECT THE BROKEN STATUS QUO.",
       "The same opponents fighting Prop. 45 have spent decades using these same scare tactics to block even modest reforms. They’re fighting to preserve the broken status quo that’s making California unaffordable and lowering our quality of life.",
       "WE DON’T HAVE TO CHOOSE BETWEEN PROTECTING THE ENVIRONMENT AND BUILDING ESSENTIAL PROJECTS.",
+      "• FACT: Prop. 45 maintains every federal, state and local environmental law protecting our air, water, wildlife, and public health, including the Clean Air Act and Clean Water Act.",
+      "• FACT: Prop. 45 does not eliminate a single environmental law or exempt a single project from environmental review.",
+      "• FACT: Communities keep their voice. Residents maintain their right to provide public comments, oppose projects, and sue to stop projects.",
+      "• FACT: Prop. 45 only applies to essential projects : water, hospitals, housing, schools, roads, transit, clean energy, and wildfire prevention.",
       "THE CHOICE IS SIMPLE: accept the broken status quo—or fix it.",
       "VOTE YES ON PROP. 45 TO BUILD A MORE AFFORDABLE CALIFORNIA."
      ],
      "signers": [
       {
        "name": "Ann-Louise Kuhns",
-       "title": ", President, California Children’s Hospital Association"
+       "title": "President, California Children’s Hospital Association"
       },
       {
        "name": "Ruben Grijalva",
-       "title": ", Former California State Fire Marshal, CAL FIRE"
+       "title": "Former California State Fire Marshal, CAL FIRE"
       },
       {
        "name": "Robert Rivinius",
-       "title": ", President, Family Business Association of California"
+       "title": "President, Family Business Association of California"
       }
      ],
      "none_submitted": null
@@ -7952,6 +8983,7 @@
    "arguments_disclaimer": "Arguments printed on this page are the opinions of the authors and have not been checked for accuracy by any official agency.",
    "links": {
     "guide": "https://voterguide.sos.ca.gov/propositions/45/",
+    "title_summary": "https://voterguide.sos.ca.gov/propositions/45/title-summary.htm",
     "analysis": "https://voterguide.sos.ca.gov/propositions/45/analysis.htm",
     "arguments": "https://voterguide.sos.ca.gov/propositions/45/arguments-rebuttals.htm",
     "text": "https://vig.cdn.sos.ca.gov/2026/general/pdf/prop45-text-proposed-laws.pdf"
