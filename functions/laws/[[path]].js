@@ -147,6 +147,12 @@ ${billSection(onlyLevel, lists[0], { all, offset, heading: false })}`;
   <p class="small">The full text, as the National Archives transcribes it →</p>
 </a>
 ${ballot}
+<a class="card stack-xs" href="/finances/">
+  <p class="label">Time Machine</p>
+  <h3>Public finances by term</h3>
+  <p class="small secondary">Federal debt, spending by category, interest and the deficit by presidential term, and California's budget by governor's term, the same way for every administration.</p>
+  <span class="inline-link">See the timeline</span>
+</a>
 <nav class="segmented vote-filter" aria-label="Which bills to show">${filter("With final-passage votes", false)}${filter("All with recorded votes", true)}</nav>
 ${levels.map((level, i) => billSection(level, lists[i], { all })).join("")}
 `;

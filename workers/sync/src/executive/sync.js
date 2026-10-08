@@ -136,7 +136,7 @@ export async function syncExecutiveOfficials(env, db, budget) {
 // ---------------------------------------------------------------------------
 // Who held the office on a date
 
-async function presidentLookup(db) {
+export async function presidentLookup(db) {
   const terms = JSON.parse((await getState(db, "executive_terms")) || "[]").filter((t) => t.type === "prez");
   const { results } = await db.prepare("SELECT id, name, term_start FROM officials WHERE chamber = 'us-executive' AND rank = 1").all();
   const byGovtrack = Object.fromEntries(results.map((r) => [r.id.replace(/^exec:govtrack:/, ""), r.id]));
@@ -158,7 +158,7 @@ async function governorLookup(db) {
 // ---------------------------------------------------------------------------
 // Executive orders
 
-async function saveAction(db, official_id, a) {
+export async function saveAction(db, official_id, a) {
   await db
     .prepare(
       `INSERT INTO executive_actions (id, official_id, kind, number, title, signed_on, published_on, citation, document_url, source_url, updated_at)
@@ -391,45 +391,56 @@ export async function syncBillOutcomes(env, db, budget) {
 // ---------------------------------------------------------------------------
 // Nominations
 
-export async function syncNominations(env, db, budget) {
-  if (!env.CONGRESS_API_KEY) return { status: "skipped", message: "CONGRESS_API_KEY is not set" };
+/**
+ * Load one Congress's civilian nominations from Congress.gov, resuming where the
+ * last call stopped (sync_state nominations_<congress>). Returns { saved, done }.
+ * beforeRequest (optional) is awaited before each request (the history steps' daily cap).
+ */
+export async function loadNominations(env, db, budget, congress, presidentOn, beforeRequest = null) {
   const base = (env.CONGRESS_API_BASE || CONGRESS_API).replace(/\/$/, "");
-  const congress = currentCongress();
-  const presidentOn = await presidentLookup(db);
   const stateKey = `nominations_${congress}`;
   const saved = JSON.parse((await getState(db, stateKey)) || "{}");
   const started = new Date().toISOString().replace(/\.\d+Z$/, "Z");
   let offset = saved.offset || 0;
   let n = 0;
-  try {
-    for (;;) {
-      const url = `${base}/nomination/${congress}?api_key=${encodeURIComponent(env.CONGRESS_API_KEY)}&format=json&limit=250&offset=${offset}&sort=updateDate+asc${saved.since ? `&fromDateTime=${encodeURIComponent(saved.since)}` : ""}`;
-      const d = await budget.json(url, {}, `nominations offset ${offset}`);
-      const list = d.nominations || [];
-      const stmts = [];
-      for (const raw of list) {
-        if (!raw.nominationType || !raw.nominationType.isCivilian || !raw.citation) continue;
-        const r = nominationRow(raw);
-        const who = presidentOn(r.received_on || r.latest_on || today());
-        stmts.push(
-          db
-            .prepare(
-              `INSERT INTO nominations (id, congress, official_id, description, organization, received_on, latest_action, latest_on, status, source_url, updated_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
-               ON CONFLICT(id) DO UPDATE SET official_id = excluded.official_id, description = excluded.description, organization = excluded.organization,
-                 received_on = excluded.received_on, latest_action = excluded.latest_action, latest_on = excluded.latest_on, status = excluded.status,
-                 source_url = excluded.source_url, updated_at = excluded.updated_at`
-            )
-            .bind(r.id, r.congress, who.id, r.description, r.organization, r.received_on, r.latest_action, r.latest_on, r.status, r.source_url)
-        );
-        n += 1;
-      }
-      for (let i = 0; i < stmts.length; i += 50) await db.batch(stmts.slice(i, i + 50));
-      offset += list.length;
-      await setState(db, stateKey, JSON.stringify({ since: saved.since || null, offset, started: saved.started || started }));
-      if (list.length < 250) break;
+  for (;;) {
+    if (beforeRequest) await beforeRequest();
+    const url = `${base}/nomination/${congress}?api_key=${encodeURIComponent(env.CONGRESS_API_KEY)}&format=json&limit=250&offset=${offset}&sort=updateDate+asc${saved.since ? `&fromDateTime=${encodeURIComponent(saved.since)}` : ""}`;
+    const d = await budget.json(url, {}, `nominations ${congress} offset ${offset}`);
+    const list = d.nominations || [];
+    const stmts = [];
+    for (const raw of list) {
+      if (!raw.nominationType || !raw.nominationType.isCivilian || !raw.citation) continue;
+      const r = nominationRow(raw);
+      const who = presidentOn(r.received_on || r.latest_on || today());
+      stmts.push(
+        db
+          .prepare(
+            `INSERT INTO nominations (id, congress, official_id, description, organization, received_on, latest_action, latest_on, status, source_url, updated_at)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+             ON CONFLICT(id) DO UPDATE SET official_id = excluded.official_id, description = excluded.description, organization = excluded.organization,
+               received_on = excluded.received_on, latest_action = excluded.latest_action, latest_on = excluded.latest_on, status = excluded.status,
+               source_url = excluded.source_url, updated_at = excluded.updated_at`
+          )
+          .bind(r.id, r.congress, who.id, r.description, r.organization, r.received_on, r.latest_action, r.latest_on, r.status, r.source_url)
+      );
+      n += 1;
     }
-    await setState(db, stateKey, JSON.stringify({ since: saved.started || started, offset: 0 }));
+    for (let i = 0; i < stmts.length; i += 50) await db.batch(stmts.slice(i, i + 50));
+    offset += list.length;
+    await setState(db, stateKey, JSON.stringify({ since: saved.since || null, offset, started: saved.started || started }));
+    if (list.length < 250) break;
+  }
+  await setState(db, stateKey, JSON.stringify({ since: saved.started || started, offset: 0 }));
+  return { saved: n, done: true };
+}
+
+export async function syncNominations(env, db, budget) {
+  if (!env.CONGRESS_API_KEY) return { status: "skipped", message: "CONGRESS_API_KEY is not set" };
+  let n = 0;
+  try {
+    const r = await loadNominations(env, db, budget, currentCongress(), await presidentLookup(db));
+    n = r.saved;
   } catch (err) {
     if (err instanceof BudgetExhausted) return partialMsg(`${n} civilian nomination(s) saved`, err);
     if (missing(err)) return { status: "skipped", message: "tables not created yet" };

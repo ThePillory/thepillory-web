@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "33"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "34"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -457,6 +457,25 @@ def build_methodology():
     <li><strong>Correctable.</strong> A person can correct any item's topics on the review page. The old tags stay in the item's history, the new ones show the person's name, and the AI doesn't tag that item again. A Platform excerpt is tagged again when its text changes.</li>
     <li><strong>Funding by topic</strong> uses a fixed table from the campaign-funding industries to topics: {industry_map}. Other industries (lawyers and lobbyists, issue groups, leadership PACs, government, media, tribal governments, and money not classified) aren't tied to a topic, and topics without a related industry show no money. Industries are approximate (keyword rules on names, see Campaign funding), and an industry tied to a topic says nothing about what a contribution was for. Members of Congress: contributions in the current two-year period from PACs and donors' employers (FEC). California officials: their latest two-year period's itemized contributions (Cal-Access).</li>
     <li><strong>For a place,</strong> a topic page lists the latest bills on the topic with a final-passage vote and how each of the county's representatives voted (every district that overlaps the county, so a county split between districts shows each), county meeting items for live communities, the President's and the Governor's executive actions, excerpts from the officials' own pages, and the money above.</li>
+  </ul>
+</section>
+
+<section class="card stack" id="time-machine">
+  <h2>The Time Machine</h2>
+  <p>A year slider on county, official and topic pages shows the page as it was in an earlier year, back to 1993. A banner on every past-year view names the year, with one tap back to today. Who held an office is shown as a fact, with party as plain text, the same for everyone. Each past-year view ends with a list of what isn't available for that year, instead of leaving blanks.</p>
+  <ul class="plain-list small">
+    <li><strong>Presidents, Vice Presidents and members of Congress:</strong> every term from the Biographical Directory of the United States Congress (through the congress-legislators project, which also lists Presidents and Vice Presidents). A county's members of the House come from the districts that covered it that year, from the Census Bureau's county-to-district files: the 108th Congress's districts for 2003 to 2012 (a state that redrew its lines later in that decade isn't reflected), the districts drawn after the 2010 census for 2013 to 2022, and those drawn after the 2020 census since. District lines before 2003 aren't in these files.</li>
+    <li><strong>The Cabinet:</strong> Senate confirmations from Congress.gov's nomination records, from the 107th Congress (2001) on. For each department, a year shows the latest confirmation on or before December 31. The records don't show departures, acting secretaries or recess appointments, so a person listed may have left during the year.</li>
+    <li><strong>California:</strong> Governors from the California State Library's list. The other statewide officers and legislators are the winners in each general election's Statement of Vote from the Secretary of State (the candidate with the most votes in each contest), from 2002 on; an office elected in November is shown from the following January, and a State Senate seat (a four-year term) from the latest election that included it. Appointments, special elections and vacancies aren't in these records. California's legislative districts for a county come from the Census Bureau's files from 2013 on.</li>
+    <li><strong>County officials:</strong> no online county record of past supervisors has been found, so county offices aren't shown for past years.</li>
+    <li><strong>Votes:</strong> House roll calls from the Clerk of the House and Senate roll calls from the Senate, loaded back to 2001 a little each day, newest first, with each member's position as recorded and the whole chamber's totals. California floor votes are loaded for the current session only.</li>
+    <li><strong>Executive orders:</strong> the Federal Register, from 1994, with titles exactly as published.</li>
+    <li><strong>Campaign money:</strong> each campaign's totals by two-year period as reported to the FEC (raised, spent and cash on hand). Contributors by industry are shown for the current period only, and California's Cal-Access money for the current period only.</li>
+    <li><strong>Public finances by term</strong> (<a href="/finances/">federal</a>, <a href="/finances/california/">California</a>): every term is shown with the same measures and layout. The start is the fiscal year that ended before the term began; the end is the last fiscal year that ended during it (or the latest published, for a term in progress). Each measure shows both values, the change in dollars and in percent, the share of GDP, and the amount per person and per household. Sources: Treasury's Debt to the Penny and Historical Debt Outstanding (debt at the end of each fiscal year), OMB's Historical Tables 1.1 (receipts, outlays, surplus or deficit), 3.1 (outlays by function, including net interest) and 10.1 (GDP by fiscal year), Census Bureau population estimates (July 1) and households (Current Population Survey, Table HH-1); for California, the Department of Finance's Chart A (General Fund) and its population and housing estimates (January 1). Amounts are in dollars of each year, not adjusted for inflation.</li>
+    <li><strong>Fiscal years:</strong> the federal fiscal year starts October 1 and California's July 1. A new administration takes office in January, partway through a fiscal year whose budget was largely set before it, so a term's first fiscal year mostly reflects earlier decisions. Both pages say so.</li>
+    <li><strong>Party control</strong> of each chamber of Congress is shown as the House and Senate historians list it, for every Congress that overlaps a term; when the Senate's majority changed during a Congress, each change is listed. The California Legislature's seats come from the winners in each general election (seats filled otherwise aren't counted, and the page shows how many seats were read).</li>
+    <li><strong>Marked events</strong> are plain factual markers kept only when the source states them: recessions as dated by the National Bureau of Economic Research, the authorizations for the use of military force enacted by Congress (Public Laws 107-40 and 107-243), and public health emergencies declared by the Department of Health and Human Services.</li>
+    <li><strong>No cause and effect.</strong> Numbers sit beside who held office, which party led each chamber, and what happened in the world. ThePillory doesn't color anything by party, uses no evaluative labels, and never says that an officeholder caused a number.</li>
   </ul>
 </section>
 
@@ -917,6 +936,9 @@ def search_index():
     items.append({"type": "Topics", "title": "Topics", "sub": "One subject at a time, side by side", "url": "/topics/", "k": "topic topics subject issue"})
     for t in TOPIC_LIST:
         items.append({"type": "Topics", "title": t["name"], "sub": "Topic", "url": f"/topics/{t['slug']}/", "k": t["name"]})
+    # The Time Machine's finances pages (functions/finances/).
+    items.append({"type": "Laws", "title": "Federal finances by presidential term", "sub": "Debt, spending, interest and the deficit by term", "url": "/finances/", "k": "budget debt deficit spending interest finances president time machine history"})
+    items.append({"type": "Laws", "title": "California's budget by governor's term", "sub": "General Fund by term", "url": "/finances/california/", "k": "california budget general fund governor finances time machine history"})
     # Elections (data/elections/, from tools/build_elections.py): the election, its statewide offices and propositions.
     items.append({"type": "Elections", "title": "Elections", "sub": "What's on the ballot, Your ballot, How to vote", "url": "/elections/", "k": "election ballot vote voting register polling"})
     for path in sorted((ROOT / "data" / "elections").glob("*.json"), reverse=True)[:1]:
