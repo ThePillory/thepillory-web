@@ -11,12 +11,13 @@ import { page, notFound, notLoaded, esc, linkRow, fmtDate, loadSection, FAILED, 
 import { billById, votesOnBill, officialsWhere } from "../_lib/data.js";
 import { billRows, orderRows, constitutionRows, topClauses, BILL_FILTERS, ORDER_FILTERS, PER_PAGE } from "../_lib/laws-list.js";
 import { districtsFromCookie, repsWhere, describe } from "../_lib/districts.js";
-import { billVote, billHref } from "../_lib/votes.js";
+import { billHref } from "../_lib/votes.js";
 import { lobbyingFor, industryMoney, followTheMoney, cycleOf } from "../_lib/funding.js";
 import { outcomeFor, outcomeSection } from "../_lib/executive.js";
 import { currentAnalysis, parse, provisionsFor, baselineSection, isPublic, openFlagCount, analysisClauses, constitutionBrief } from "../_lib/analysis.js";
 import { summaryHead, contentsBar, fold, clauseChips, statusChip, compactRow, shortLabel } from "../_lib/summary.js";
 import { billStatus, billSummary, yourRepsCard, billHistory, billFullText } from "../_lib/bill-page.js";
+import { rollCallFilters, rollCallRows, rollCallBreakdown, pickVote, votePicker, voteHeading, totalsSection, rollCallFilterForm, rollCallList } from "../_lib/rollcall.js";
 import { orderById, orderHref, orderIdFromSlug, orderLabel, orderStatus, orderSummary, authoritySection, courtsSection, orderHistory, orderFullText } from "../_lib/orders.js";
 import { turnstileReady, turnstileWidget, verifyTurnstile, visitorHash, actionsToday, recordAction } from "../_lib/turnstile.js";
 
@@ -307,10 +308,28 @@ ${analysis.failed ? sectionError("Constitutional baseline") : baselineSection(an
     : a
       ? constitutionBrief(a, analysis.provisions, { fullHref: `${href}analysis/`, underReview: analysis.flags > 0 })
       : `${empty || "<p class=\"small\">Not yet mapped. The parts of the Constitution this bill touches appear here once an analysis is written and checked.</p>"}${readerForms(env, id, analysis)}`;
+  // All votes: a picker of every recorded vote (final passage by default), its
+  // totals by party and by state, and the full roll call, 20 members at a time.
+  const selected = votes === FAILED ? null : pickVote(voteList, url.searchParams.get("vote"));
+  const filters = { q: "", position: "", party: "", state: "", offset: 0 };
+  const [breakdown, roll] = selected
+    ? await Promise.all([loadSection("bill breakdown", () => rollCallBreakdown(db, selected.id)), loadSection("bill roll call", () => rollCallRows(db, selected.id, filters))])
+    : [null, null];
+  const yoursOnIt = districts && selected && selected.positions.length
+    ? `<div class="card--flat stack-xs"><p class="label">Your reps on this vote</p>${selected.positions.map((p) => `<div class="rep-vote"><a href="/reps/${esc(p.slug)}/">${esc(p.name)}</a><span class="position" title="Recorded as: ${esc(p.raw_position)}">${esc(p.position)}</span></div>`).join("")}</div>`
+    : "";
   const votesInner = votes === FAILED
     ? '<p class="small secondary">Couldn\'t load the votes right now.</p>'
-    : `<p class="hint">Every recorded vote on this bill, newest first, with the totals${districts ? ` and how your reps voted (${esc(describe(districts))})` : ""}. Each links to the official record, which lists every member.</p>
-  ${voteList.map((v) => billVote(v, { personal: !!districts })).join("") || '<p class="secondary small">No recorded votes loaded for this bill.</p>'}`;
+    : !selected
+      ? '<p class="secondary small">No recorded votes loaded for this bill.</p>'
+      : `${votePicker(voteList, selected, `${href}#votes`)}
+  ${voteHeading(selected)}
+  ${yoursOnIt}
+  ${breakdown === FAILED ? '<p class="small secondary">Couldn\'t load the totals by party and state right now.</p>' : totalsSection(selected, breakdown, { federal: b.level === "federal" })}
+  <h3 class="roll-head">Every member's vote</h3>
+  ${breakdown === FAILED ? "" : rollCallFilterForm(id, selected, filters, { parties: breakdown.byParty.map((x) => x.name), states: breakdown.byState.map((x) => x.name), federal: b.level === "federal" })}
+  ${roll === FAILED ? '<p class="small secondary">Couldn\'t load the roll call right now.</p>' : rollCallList(id, selected, filters, roll)}
+  <p class="hint">From the official record of each vote. A member who left office keeps their recorded position; their page shows the years they served.</p>`;
   const lastDate = voteList[0] ? fmtDate(voteList[0].vote_date) : "";
   const main = `
 ${contentsBar([["summary", "Summary"], ["your-reps", "Your reps"], ["constitution", "Constitution"], ["votes", "All votes"], ["money", "Money"], ["history", "History"], ["full-text", "Full text"]])}
@@ -318,7 +337,7 @@ ${head}
 ${banners}
 ${yourRepsCard(b, { districts, reps: reps === FAILED ? [] : reps, votes: voteList, failed: reps === FAILED || votes === FAILED })}
 ${fold("constitution", "Constitution", constitution, { meta: clauses.length ? `${clauses.length} ${clauses.length === 1 ? "provision" : "provisions"}` : "", cls: "fold--parch", open: Boolean(sent || error) })}
-${fold("votes", "All votes", votesInner, { meta: votes === FAILED ? "" : `${voteList.length} recorded` })}
+${fold("votes", "All votes", votesInner, { meta: votes === FAILED ? "" : `${voteList.length} recorded`, open: Boolean(url.searchParams.get("vote")) })}
 ${fold("money", "Money", lobbying === FAILED ? '<p class="small secondary">Couldn\'t load this section right now.</p>' : followTheMoney(b, lobbying, { reps: districts && reps !== FAILED ? reps : null, repMoney, cycle, bare: true }))}
 ${fold("history", "History", `${billHistory(b, outcome === FAILED ? null : outcome, voteList)}${outcome === FAILED ? sectionError("Final action") : outcomeSection(b, outcome)}`, { meta: lastDate })}
 ${fold("full-text", "Full text", billFullText(b, analysis.row && isPublic(analysis.row) ? analysis.row : null))}
@@ -394,6 +413,33 @@ ${tags.length ? `<section class="stack-sm">${topicChips(tags)}<p class="hint">${
   return page(`${label}: ${a.title}`, main, { tab: "laws", back, partial: analysisLoaded === FAILED || topics === FAILED });
 }
 
+// ---------------------------------------------------------------------------
+// One vote's roll call, 20 members at a time (/laws/bills/<id>/rollcall/?vote=…):
+// the page "Load more", the search box and the filters fetch; also a page of
+// its own without JavaScript. The same for every visitor.
+
+async function rollCallPage(env, id, url) {
+  if (!env.DB) return notLoaded("Laws", "laws", false, ["Laws", "/laws/"]);
+  const db = env.DB;
+  const f = rollCallFilters(url);
+  const b = await billById(db, id);
+  if (!b) return notFound("No bill at this address.", "laws", ["Laws", "/laws/"]);
+  const v = f.vote ? await db.prepare("SELECT * FROM votes WHERE id = ? AND bill_id = ?").bind(f.vote, id).first() : null;
+  if (!v) return Response.redirect(`${url.origin}${billHref(id)}#votes`, 302);
+  const [breakdown, roll] = await Promise.all([rollCallBreakdown(db, v.id), rollCallRows(db, v.id, f)]);
+  const main = `
+<header class="page-head">
+  <p class="label">${esc(b.bill_number)} · Roll call</p>
+  <h1>${esc(b.title)}</h1>
+</header>
+<section class="card stack-sm">
+  ${voteHeading(v)}
+  ${rollCallFilterForm(id, v, f, { parties: breakdown.byParty.map((x) => x.name), states: breakdown.byState.map((x) => x.name), federal: b.level === "federal" })}
+</section>
+${rollCallList(id, v, f, roll)}`;
+  return page(`${b.bill_number}: roll call`, main, { tab: "laws", back: [b.bill_number, `${billHref(id)}?vote=${encodeURIComponent(v.id)}#votes`] });
+}
+
 // The Laws list is the same for every visitor: kept at the edge for a few minutes.
 const LAWS_CACHE_SECONDS = 300;
 
@@ -410,6 +456,10 @@ export const onRequestGet = guard(async (context) => {
     const id = orderIdFromSlug(decodeURIComponent(parts[1]));
     if (!id) return notFound("No executive order at this address.", "laws", ["Laws", "/laws/?show=orders"]);
     return edgeCached(context, LAWS_CACHE_SECONDS, () => orderPage(context.env, id, url, { analysisPage: parts.length === 3 }));
+  }
+  if (parts[0] === "bills" && parts.length === 3 && parts[2] === "rollcall") {
+    if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
+    return edgeCached(context, LAWS_CACHE_SECONDS, () => rollCallPage(context.env, decodeURIComponent(parts[1]), url));
   }
   if (parts[0] === "bills" && (parts.length === 2 || (parts.length === 3 && parts[2] === "analysis"))) {
     if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);

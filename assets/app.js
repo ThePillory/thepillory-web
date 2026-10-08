@@ -355,6 +355,61 @@
       });
   });
   // ---------------------------------------------------------------------
+  // A select marked data-autosubmit submits its form when changed (the vote
+  // picker on bill pages); without JavaScript it has a button.
+  document.addEventListener("change", function (e) {
+    var sel = e.target;
+    if (sel && sel.matches && sel.matches("select[data-autosubmit]") && sel.form) sel.form.submit();
+  });
+
+  // A roll call's search box and filters (form[data-rollcall="<list id>"]):
+  // the matching members replace the list in place, from the roll-call page
+  // the form opens without JavaScript. Each request reads one page of 20.
+  document.querySelectorAll("form[data-rollcall]").forEach(function (form) {
+    var list = document.getElementById(form.getAttribute("data-rollcall"));
+    if (!list || !window.fetch || !window.DOMParser) return;
+    var timer = null;
+    var seq = 0;
+    function update() {
+      var params = new URLSearchParams(new FormData(form));
+      var url = form.action + "?" + params.toString();
+      var mine = ++seq;
+      list.setAttribute("aria-busy", "true");
+      fetch(url, { credentials: "same-origin" })
+        .then(function (r) {
+          if (!r.ok) throw new Error(r.status);
+          return r.text();
+        })
+        .then(function (html) {
+          if (mine !== seq) return;
+          var doc = new DOMParser().parseFromString(html, "text/html");
+          var next = doc.getElementById(list.id);
+          if (!next) throw new Error("no list");
+          list.innerHTML = next.innerHTML;
+          [["[data-rollcall-count]"], ["[data-rollcall-more]"]].forEach(function (sel) {
+            var here = list.parentNode.querySelector(sel[0]);
+            var there = doc.querySelector(sel[0]);
+            if (here && there) here.innerHTML = there.innerHTML;
+          });
+          list.removeAttribute("aria-busy");
+        })
+        .catch(function () {
+          window.location.href = url;
+        });
+    }
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      update();
+    });
+    form.addEventListener("change", update);
+    form.addEventListener("input", function (e) {
+      if (e.target.name !== "q") return;
+      clearTimeout(timer);
+      timer = setTimeout(update, 300);
+    });
+  });
+
+  // ---------------------------------------------------------------------
   // "Select all" on the review page: <input type="checkbox" data-select-all="ids"
   // data-form="promise-batch"> ticks every checkbox named "ids" for that form.
   document.addEventListener("change", function (e) {
