@@ -9,4 +9,5 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+      - run: sudo apt-get install -y -qq poppler-utils >/dev/null && pip install -q openpyxl xlrd
       - run: python3 .github/tmp/probe.py
