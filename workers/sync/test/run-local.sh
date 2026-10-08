@@ -143,9 +143,9 @@ if [ -n "$BROKEN" ]; then
   curl -s -o /dev/null -w "  record as Broken (promise $1): %{http_code}\n" -X POST -d "action=broken_confirm&suggestion=$2&reviewer=Test+Reviewer" localhost:8790/admin/review/promise/$1/
   $D1 --command "SELECT p.status, c.to_status, c.recorded_by FROM promises p JOIN promise_status_changes c ON c.promise_id = p.id WHERE p.id = $1 ORDER BY c.id DESC LIMIT 1" --json | python3 -c "import json,sys; [print('  after:', r) for r in json.load(sys.stdin)[0]['results']]"
 fi
-curl -s -X POST -d "action=status&to_status=kept&evidence=&evidence_on=2026-10-01&source_url=https%3A%2F%2Fexample.org%2Fevidence&reviewer=Test+Reviewer" localhost:8790/admin/review/promise/$PID/ | grep -o 'Describe the evidence\.' | sed 's/^/  without evidence: /'
-curl -s -X POST -d "action=status&to_status=kept&evidence=A+record+shows+it&evidence_on=2026-10-01&source_url=not-a-link&reviewer=Test+Reviewer" localhost:8790/admin/review/promise/$PID/ | grep -o 'Enter the source as an http(s) link\.' | sed 's/^/  without a source link: /'
-curl -s -o /dev/null -w "  in progress, with evidence and a source: %{http_code}\n" -X POST -d "action=status&to_status=in_progress&evidence=A+contract+for+the+first+site+was+signed.&evidence_on=2026-10-01&source_url=https%3A%2F%2Fexample.org%2Fevidence&reviewer=Test+Reviewer" localhost:8790/admin/review/promise/$PID/
+curl -s -X POST -d "action=status&to_status=in_progress&evidence=&evidence_on=2026-10-01&source_url=https%3A%2F%2Fexample.org%2Fevidence&reviewer=Test+Reviewer" localhost:8790/admin/review/promise/$PID/ | grep -o 'Describe the evidence\.' | sed 's/^/  without evidence: /'
+curl -s -X POST -d "action=status&to_status=in_progress&evidence=A+record+shows+it&evidence_on=2026-10-01&source_url=not-a-link&reviewer=Test+Reviewer" localhost:8790/admin/review/promise/$PID/ | grep -o 'Enter the source as an http(s) link\.' | sed 's/^/  without a source link: /'
+curl -s -o /dev/null -w "  back to no action yet, with evidence and a source: %{http_code}\n" -X POST -d "action=status&to_status=no_action&evidence=A+contract+for+the+first+site+was+signed.&evidence_on=2026-10-01&source_url=https%3A%2F%2Fexample.org%2Fevidence&reviewer=Test+Reviewer" localhost:8790/admin/review/promise/$PID/
 curl -s "localhost:8790/reps/$SLUG/?fresh=c$PID" | python3 -c "
 import sys,re
 t=sys.stdin.read()
