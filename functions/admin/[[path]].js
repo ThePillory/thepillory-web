@@ -209,6 +209,7 @@ async function list(db, url, env) {
   <p class="subtitle">What needs a person. Drafts the AI reviewer passes are published as "AI-drafted, auto-checked"; the rest wait here.</p>
   <p class="small"><a class="inline-link" href="/admin/waitlist/">County waitlist</a></p>
 </header>
+${await waitingSummary(db)}
 ${await promiseQueue(db, env, url)}
 ${queue("flagged-ai", "Flagged by AI", "The AI reviewer found a major problem: a factual error, unfair treatment of one side, or opinion stated as fact. These are hidden from public pages until you decide. Minor problems (completeness, wording) are fixed or noted automatically and don't come here.", aiFlagged, aiReasons)}
 ${flagSummary(aiFlagged)}
@@ -863,6 +864,30 @@ const REJECT_REASONS = [
   ["other", "Other"],
 ];
 
+/** At the top of the review page: how many suggested promises wait, and how far the Issues-page search has got. */
+async function waitingSummary(db) {
+  const n = async (sql) => {
+    try {
+      return (await db.prepare(sql).first()).n;
+    } catch {
+      return null;
+    }
+  };
+  const waiting = await n("SELECT COUNT(*) AS n FROM promises WHERE review = 'suggested'");
+  if (waiting == null) return "";
+  const found = await n("SELECT COUNT(*) AS n FROM issues_page_checks WHERE site_kind = 'office_site' AND result = 'found'");
+  const none = await n("SELECT COUNT(*) AS n FROM issues_page_checks WHERE site_kind = 'office_site' AND result IN ('none', 'no_website')");
+  const officials = await n("SELECT COUNT(*) AS n FROM officials WHERE active = 1");
+  const searched = (found || 0) + (none || 0);
+  return `<section class="card stack-sm">
+  <div class="grid-2">
+    <a class="stat" href="#promises"><div class="stat-num">${waiting}</div><div class="stat-label">suggested promise${waiting === 1 ? "" : "s"} waiting for your review</div></a>
+    <a class="stat" href="/admin/review/promise/pages/"><div class="stat-num">${found || 0}</div><div class="stat-label">Issues pages found${officials ? ` (${searched} of ${officials} officials' sites searched)` : ""}</div></a>
+  </div>
+  <p class="hint">New suggestions keep coming however many are waiting; nothing is public until you approve it.</p>
+</section>`;
+}
+
 async function promiseQueue(db, env, url) {
   let suggested = [];
   let approved = [];
@@ -944,9 +969,16 @@ async function promiseQueue(db, env, url) {
   <p class="hint">Approve only the ones you've checked against their source. To reject one, or edit its note first, use the buttons on that suggestion.</p>
 </form>`
     : "";
-  return `<h2 class="label queue-head" id="promises">Suggested promises <span class="queue-count">${suggested.length}</span></h2>
+  let total = suggested.length;
+  try {
+    total = (await db.prepare("SELECT COUNT(*) AS n FROM promises WHERE review = 'suggested'").first()).n;
+  } catch {
+    // before the promise tables exist
+  }
+  return `<h2 class="label queue-head" id="promises">Suggested promises <span class="queue-count">${total}</span></h2>
+${total > suggested.length ? `<p class="hint">Showing the oldest ${suggested.length} of ${total}.</p>` : ""}
 ${done ? `<p class="banner" role="status">${esc(done)}</p>` : ""}
-<p class="hint">Proposed by AI from official press releases, addresses, county agendas and the Issues pages listed below, a few a day. The quote was checked word for word against the source in code; check that it's a specific commitment by this official. Nothing shows on the site until you approve it.</p>
+<p class="hint">Proposed by AI from official press releases, addresses, county agendas and officials' Issues pages (found automatically or listed below), up to 10 a day. The quote was checked word for word against the source in code; check that it's a specific commitment by this official. Nothing shows on the site until you approve it.</p>
 <p class="small"><a class="inline-link" href="/admin/review/promise/new/">Add a promise by hand</a></p>
 <p class="small"><a class="inline-link" href="/admin/review/promise/pages/">Issues and priorities pages (${pages})</a></p>
 <p class="small"><a class="inline-link" href="/admin/review/promise/statements/">Statements from officials</a></p>
@@ -1049,7 +1081,7 @@ async function promisePages(db, env, { error = "", done = "", form = null } = {}
       (p) => `<div class="list-row stack-xs">
   <p class="small"><strong>${esc(p.name)}</strong>, ${esc(p.office)} · ${esc(PAGE_KINDS[p.kind] || p.kind)}</p>
   <p class="small"><a class="inline-link" href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)} ↗</a></p>
-  <p class="hint">Added by ${esc(p.added_by)}, ${fmtDate(String(p.added_at).slice(0, 10))} · ${p.fetched_at ? `last read ${fmtDate(String(p.fetched_at).slice(0, 10))}${p.note ? `: ${esc(p.note)}` : ""}` : "not read yet; it's read in the next sync"}</p>
+  <p class="hint">${p.found_by === "auto" ? "Found automatically on the official's website" : `Added by ${esc(p.added_by)}`}, ${fmtDate(String(p.added_at).slice(0, 10))} · ${p.fetched_at ? `last read ${fmtDate(String(p.fetched_at).slice(0, 10))}${p.note ? `: ${esc(p.note)}` : ""}` : "not read yet; it's read in the next sync"}</p>
   <details class="weigh-details"><summary>In their own words: ${p.excerpt_by === "hidden" ? "hidden" : p.excerpt ? "excerpt shown" : "no excerpt yet"}</summary>
     <div class="stack-sm">
       ${p.excerpt && p.excerpt_by !== "hidden" ? `<blockquote class="promise-quote">“${esc(p.excerpt)}”</blockquote><p class="hint">${String(p.excerpt_by || "").startsWith("person:") ? `Chosen by ${esc(String(p.excerpt_by).slice(7))}` : `Picked by ${esc(p.excerpt_by || "the AI")}`}, ${fmtDate(String(p.excerpt_at || "").slice(0, 10))}.</p>` : `<p class="hint">${p.excerpt_by === "hidden" ? "Hidden from the official's page." : p.excerpt_by === "none" ? "The AI found no passage summing up the page; it looks again monthly." : "Picked when the page is next read."}</p>`}
@@ -1063,7 +1095,7 @@ async function promisePages(db, env, { error = "", done = "", form = null } = {}
       ${String(p.excerpt_by || "").startsWith("person:") ? `<form method="post" action="/admin/review/promise/pages/"><input type="hidden" name="action" value="excerpt_auto"><input type="hidden" name="url" value="${esc(p.url)}"><button class="btn" type="submit">Let the AI pick again</button></form>` : ""}
     </div>
   </details>
-  <form method="post" action="/admin/review/promise/pages/"><input type="hidden" name="action" value="remove"><input type="hidden" name="url" value="${esc(p.url)}"><button class="btn" type="submit">Stop reading this page</button></form>
+  <form method="post" action="/admin/review/promise/pages/"><input type="hidden" name="action" value="remove"><input type="hidden" name="url" value="${esc(p.url)}"><button class="btn" type="submit">${p.found_by === "auto" ? "Remove: wrong page" : "Stop reading this page"}</button></form>
 </div>`
     )
     .join("");
@@ -1093,8 +1125,22 @@ async function promisePagesChange(db, env, request, email) {
   const form = Object.fromEntries((await request.formData()).entries());
   const back = (t) => Response.redirect(`${new URL(request.url).origin}/admin/review/promise/pages/?done=${encodeURIComponent(t)}`, 303);
   if (form.action === "remove") {
-    await db.prepare("DELETE FROM promise_pages WHERE url = ?").bind(String(form.url || "")).run();
-    return back("Removed. Promises already approved from it stay, with their source.");
+    const pg = await db.prepare("SELECT url, official_id FROM promise_pages WHERE url = ?").bind(String(form.url || "")).first();
+    if (!pg) return back("That page isn't listed.");
+    // Remembered, so the automatic search never adds it again.
+    try {
+      await db.batch([
+        db.prepare("INSERT OR REPLACE INTO promise_pages_removed (url, official_id, removed_by) VALUES (?, ?, ?)").bind(pg.url, pg.official_id, email || null),
+        db.prepare("DELETE FROM promise_pages WHERE url = ?").bind(pg.url),
+        db.prepare("DELETE FROM promise_sources WHERE url = ? AND status = 'pending'").bind(pg.url),
+        db.prepare("UPDATE issues_page_checks SET result = 'none', page_url = NULL, note = 'the page found was removed on the review page' WHERE official_id = ? AND page_url = ?").bind(pg.official_id, pg.url),
+      ]);
+    } catch (err) {
+      // Before the sync has added the tables for found pages (migration 0017).
+      if (!/no such (table|column)/i.test(String(err && err.message))) throw err;
+      await db.prepare("DELETE FROM promise_pages WHERE url = ?").bind(pg.url).run();
+    }
+    return back("Removed, and it won't be added again automatically. Promises already approved from it stay, with their source.");
   }
   if (form.action === "excerpt" || form.action === "excerpt_hide" || form.action === "excerpt_auto") {
     const pg = await db.prepare("SELECT url, page_text FROM promise_pages WHERE url = ?").bind(String(form.url || "")).first();

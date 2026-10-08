@@ -10,9 +10,9 @@
 //      document word for word, the note neutral, the quote a commitment.
 //   3. Save what passes as review = 'suggested'.
 //
-// Caps, so review keeps up: PROMISE_SUGGESTIONS_DAILY (default 3) new
-// suggestions a day, PROMISE_DOCS_DAILY (default 6) documents read a day, and
-// none while PROMISE_QUEUE_MAX (default 12) suggestions wait for review.
+// Caps on cost: PROMISE_SUGGESTIONS_DAILY (default 10) new suggestions a day
+// and PROMISE_DOCS_DAILY (default 15) documents read a day. Suggestions keep
+// coming however many wait for review; the review page shows the count.
 import { log } from "../db.js";
 import { getState, setState, redact } from "../util.js";
 import { structuredCall, DEFAULT_MODEL, DraftRefused } from "../analysis/claude.js";
@@ -36,7 +36,13 @@ async function get(url, { json = false, timeoutMs = 30000 } = {}) {
   return json ? res.json() : res.text();
 }
 
-/** The officials promises are tracked for so far: the President, the Governor, Calaveras's supervisors. */
+/**
+ * The officials with their own document sources: the President (press releases,
+ * addresses), the Governor (press releases, State of the State) and Calaveras's
+ * supervisors (agendas). Everyone else with a Platform page (an Issues page in
+ * promise_pages, found automatically or listed by a person) is tracked through
+ * that page.
+ */
 export async function trackedOfficials(db) {
   const { results } = await db
     .prepare(
@@ -143,9 +149,9 @@ export async function discover(env, db, officials) {
     const { results: pages } = await db
       .prepare(
         `SELECT p.url, p.official_id, p.kind, p.title, p.excerpt, p.excerpt_at, p.excerpt_by, o.name FROM promise_pages p JOIN officials o ON o.id = p.official_id
-         WHERE o.active = 1 AND (p.fetched_at IS NULL OR p.fetched_at < datetime('now', ?)) ORDER BY p.fetched_at IS NOT NULL, p.fetched_at LIMIT 10`
+         WHERE o.active = 1 AND (p.fetched_at IS NULL OR p.fetched_at < datetime('now', ?)) ORDER BY p.fetched_at IS NOT NULL, p.fetched_at LIMIT ?`
       )
-      .bind(`-${days} days`)
+      .bind(`-${days} days`, parseInt(env.PROMISE_PAGES_DAILY || "25", 10))
       .all();
     let changed = 0;
     let failed = 0;
@@ -294,18 +300,12 @@ export async function runPromises(env, db, { run, deadline }) {
   }
 
   // 2. Read, within the caps.
-  const sugLimit = parseInt(env.PROMISE_SUGGESTIONS_DAILY || "3", 10);
-  const docLimit = parseInt(env.PROMISE_DOCS_DAILY || "6", 10);
-  const queueMax = parseInt(env.PROMISE_QUEUE_MAX || "12", 10);
+  const sugLimit = parseInt(env.PROMISE_SUGGESTIONS_DAILY || "10", 10);
+  const docLimit = parseInt(env.PROMISE_DOCS_DAILY || "15", 10);
   const sugKey = `promise_suggestions_${today()}`;
   const docKey = `promise_docs_${today()}`;
   let suggested = parseInt((await getState(db, sugKey)) || "0", 10);
   let read = parseInt((await getState(db, docKey)) || "0", 10);
-  const waiting = (await db.prepare("SELECT COUNT(*) AS n FROM promises WHERE review = 'suggested'").first()).n;
-  if (waiting >= queueMax) {
-    await log(db, run, "promises", "skipped", 0, `${waiting} suggestions wait for review (PROMISE_QUEUE_MAX ${queueMax}); none added until some are reviewed`, started);
-    return { suggested: 0 };
-  }
   if (suggested >= sugLimit || read >= docLimit) return { suggested: 0 };
   const { results: all } = await db.prepare("SELECT url, official_id, kind, title, published_on, text FROM promise_sources WHERE status = 'pending'").all();
   // Before any AI reads them: documents with no sentence that commits to anything are skipped.
@@ -339,7 +339,7 @@ export async function runPromises(env, db, { run, deadline }) {
       : [officials.president, officials.governor, others.get(doc.official_id)].filter((o) => o && o.id === doc.official_id);
   let added = 0;
   for (const doc of todo) {
-    if (suggested >= sugLimit || read >= docLimit || waiting + added >= queueMax) break;
+    if (suggested >= sugLimit || read >= docLimit) break;
     if (deadline - Date.now() < 2 * 60 * 1000) break;
     const t0 = new Date().toISOString();
     const speakers = speakersFor(doc);
@@ -348,7 +348,7 @@ export async function runPromises(env, db, { run, deadline }) {
     let found = 0;
     try {
       if (!speakers.length) throw new Error("no current official for this source");
-      const r = await readDocument(env, db, doc, speakers, Math.min(sugLimit - suggested, queueMax - waiting - added));
+      const r = await readDocument(env, db, doc, speakers, sugLimit - suggested);
       found = r.kept.length;
       suggested += found;
       added += found;

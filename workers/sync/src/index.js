@@ -29,6 +29,7 @@ import { withD1Retry } from "./d1retry.js";
 import { syncFederalFunding, syncFederalLobbying } from "./funding/sync.js";
 import { syncExecutiveFunding } from "./funding/executive.js";
 import { syncSummaries, buildSummaries } from "./summaries.js";
+import { syncIssuesPages } from "./promises/finder-sync.js";
 import { syncHistoryOfficials, syncHistoryOrders, syncHistoryFunding, syncHistoryNominations, syncHistoryVotes } from "./history/sync.js";
 
 // Order matters: officials before votes; state officials first because the
@@ -52,6 +53,9 @@ const STEPS = [
   // Executive money and disclosures: small, so they run before federal-funding
   // rather than wait behind its first load.
   ["executive-funding", syncExecutiveFunding],
+  // Officials' Issues and Priorities pages, found by following links from their
+  // own websites (src/promises/finder-sync.js), a few dozen officials a day.
+  ["issues-pages", syncIssuesPages],
   // Paced and long-running (the first full load takes a few days): last.
   ["federal-funding", syncFederalFunding],
   ["federal-lobbying", syncFederalLobbying],

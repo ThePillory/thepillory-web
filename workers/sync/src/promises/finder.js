@@ -12,6 +12,15 @@ const WEAK = /\b(issues|priorities|platform)\b/;
 const NOT = /\b(constituent|casework|services?|help with|report|contact|newsletter|press|news|media|legislation|bills?|votes?|tickets?|tours?|grants?|federal agenc|agenda item|meeting|calendar|jobs|internships?|visit|flag|academy|nominations?|resources?|login|donate|volunteer)\b/;
 const PATH = /\/(on-the-issues|issues|priorities|legislative-priorities|policy-priorities|platform|key-issues|the-issues)\/?$/i;
 
+/** Whether an address is an issues index ("/issues", "/priorities", "/about/issues/"). */
+export const isIssuesPath = (u) => {
+  try {
+    return PATH.test(new URL(u).pathname);
+  } catch {
+    return false;
+  }
+};
+
 /** The likely address of the issues page on a site, tried only when the home page links to none. */
 export const FALLBACK_PATHS = ["/issues", "/priorities"];
 
