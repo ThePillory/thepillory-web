@@ -45,12 +45,16 @@ const ELECTION = {
   ],
   measures: [
     { id: "prop-1", number: "1", title: "AUTHORIZES EXAMPLE BONDS. LEGISLATIVE STATUTE.", scope: "statewide", summary: "Authorizes example bonds.", yes_means: "A YES vote on this measure means: example yes.", no_means: "A NO vote on this measure means: example no.",
+      ag_summary: ["Authorizes $1 billion in example bonds.", "Requires annual audits."], fiscal_heading: "SUMMARY OF LEGISLATIVE ANALYST'S ESTIMATE OF NET STATE AND LOCAL GOVERNMENT FISCAL IMPACT", fiscal_effect: ["Example state costs of about $50 million a year."],
+      // Out of order on purpose: the page puts them in the guide's order.
       arguments: [
-        { kind: "against", heading: "ARGUMENT AGAINST PROPOSITION 1", paragraphs: [], signers: [], none_submitted: "NO ARGUMENT AGAINST PROPOSITION 1 WAS SUBMITTED." },
-        { kind: "for", heading: "ARGUMENT IN FAVOR OF PROPOSITION 1", paragraphs: ["Vote yes because of the example."], signers: [{ name: "Quinn Reyes", title: "President, Example Association" }], none_submitted: null },
+        { kind: "rebuttal_for", side: "supporters", heading: "REBUTTAL TO ARGUMENT AGAINST PROPOSITION 1", paragraphs: ["The supporters reply."], signers: [{ name: "Quinn Reyes", title: "President, Example Association" }], none_submitted: null },
+        { kind: "against", side: "opponents", heading: "ARGUMENT AGAINST PROPOSITION 1", paragraphs: ["Vote no because of the example."], signers: [{ name: "Lee Moss", title: "Director, Example Taxpayers" }], none_submitted: null },
+        { kind: "rebuttal_against", side: "opponents", heading: "REBUTTAL TO ARGUMENT IN FAVOR OF PROPOSITION 1", paragraphs: ["The opponents reply."], signers: [{ name: "Ada Park", title: "U.S. Senator" }], none_submitted: null },
+        { kind: "for", side: "supporters", heading: "ARGUMENT IN FAVOR OF PROPOSITION 1", paragraphs: ["Vote yes because of the example."], signers: [{ name: "Quinn Reyes", title: "President, Example Association" }], none_submitted: null },
       ],
       arguments_disclaimer: "Arguments printed on this page are the opinions of the authors and have not been checked for accuracy by any official agency.",
-      links: { guide: SRC, analysis: SRC, arguments: SRC, text: SRC }, results_path: "ballot-measures", results_number: "01", source_url: SRC, source: "Official Voter Information Guide, Secretary of State" },
+      links: { guide: SRC, title_summary: SRC, analysis: SRC, arguments: SRC, text: SRC }, results_path: "ballot-measures", results_number: "01", source_url: SRC, source: "Official Voter Information Guide, Secretary of State" },
     { id: "06999-measure-a", number: "A", title: "Measure A", question: "Shall the example district issue bonds?", scope: "county", county: "06999", jurisdiction: "Example School District",
       impartial_analysis: ["A yes vote would authorize bonds."], impartial_analysis_by: "County Counsel", tax_rate_statement: [], arguments: [{ kind: "for", heading: "Argument in favor of Measure A", paragraphs: ["Vote yes."], signers: [{ name: "Sam Tate", title: "Registered Voter" }], none_submitted: null }, { kind: "against", heading: "Argument against Measure A", paragraphs: [], signers: [], none_submitted: "No argument against Measure A was filed." }],
       links: { pamphlet: SRC, page: SRC }, results_url: "https://county.example.org/results", source_url: SRC, source: "Example County Voter Information Pamphlet", note: "Text from the county's PDF, as printed." },
@@ -186,18 +190,34 @@ test("contest page: every candidate gets the same card, in ballot order, with no
   assert.match(html, /doesn&#x27;t endorse candidates or measures, and doesn&#x27;t publish polls or predictions/);
 });
 
-test("measure page: official text, arguments for and against with their signers, and 'none submitted' said plainly", async () => {
+test("measure page: official content first; then each argument and rebuttal labeled by side, in the guide's order, collapsed", async () => {
   const { html } = await get("/elections/2026-11-03/measure/prop-1/");
-  assert.match(html, /AUTHORIZES EXAMPLE BONDS\. LEGISLATIVE STATUTE\./);
-  assert.match(html, /A YES vote on this measure means: example yes\./);
-  assert.ok(html.indexOf("ARGUMENT IN FAVOR") < html.indexOf("ARGUMENT AGAINST"), "the guide's order: in favor first");
-  assert.match(html, /NO ARGUMENT AGAINST PROPOSITION 1 WAS SUBMITTED\./);
-  assert.match(html, /<strong>Quinn Reyes<\/strong>, President, Example Association/);
-  assert.match(html, /have not been checked for accuracy by any official agency/);
+  const at = (t) => {
+    const i = html.indexOf(t);
+    assert.ok(i >= 0, `missing: ${t}`);
+    return i;
+  };
+  // The neutral official content leads: title and summary, what a vote means, the fiscal estimate.
+  assert.ok(at("AUTHORIZES EXAMPLE BONDS. LEGISLATIVE STATUTE.") < at("Authorizes $1 billion in example bonds."));
+  assert.ok(at("Requires annual audits.") < at("example yes."));
+  assert.ok(at("example no.") < at("Example state costs of about $50 million a year."));
+  assert.ok(at("Example state costs of about $50 million a year.") < at("Arguments from each campaign"));
+  // Collapsed by default, under the note.
+  assert.match(html, /<details class="fold" id="arguments">/);
+  assert.match(html, /Written by each campaign, printed word for word from the official voter guide\. Not written or checked by ThePillory or any government agency\./);
+  // The guide's order, each labeled: supporters' argument, opponents' rebuttal, opponents' argument, supporters' rebuttal.
+  const order = ["Supporters&#x27; argument", "Vote yes because of the example.", "Opponents&#x27; rebuttal", "The opponents reply.", "Opponents&#x27; argument", "Vote no because of the example.", "Supporters&#x27; rebuttal", "The supporters reply."].map(at);
+  assert.deepEqual(order, [...order].sort((a, b) => a - b), "in the guide's order");
+  // Each part with its own signers: the opponents' rebuttal is signed by its author, not the supporters.
+  assert.ok(at("The opponents reply.") < at("<strong>Ada Park</strong>, U.S. Senator") && at("<strong>Ada Park</strong>, U.S. Senator") < at("Opponents&#x27; argument"));
+  assert.match(html, /<strong>Lee Moss<\/strong>, Director, Example Taxpayers/);
+  // The same full-text treatment for every part: nothing excerpted or behind a second tap.
+  assert.ok(!/Read the argument/.test(html));
   const local = (await get("/elections/2026-11-03/measure/06999-measure-a/")).html;
   assert.match(local, /Shall the example district issue bonds\?/);
   assert.match(local, /Impartial analysis by County Counsel/);
   assert.match(local, /No argument against Measure A was filed\./);
+  assert.match(local, /Opponents&#x27; rebuttal<\/p>\s*<p class="small secondary">None printed in the official guide\./);
 });
 
 test("your ballot: private, built from the districts cookie; without it, the lookup returns here", async () => {

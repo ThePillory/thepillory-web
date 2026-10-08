@@ -12,7 +12,7 @@ What's on the ballot, from official sources only. Pages: `functions/elections/[[
 | Supreme Court and Court of Appeal retention questions, with each district's counties | The same list, at its end |
 | Ballot order | The Secretary of State's randomized alphabet (its press release for the election); the method is on sos.ca.gov/elections/randomized-alphabet |
 | Statewide candidate statements | Official Voter Information Guide, one page per office |
-| Propositions: title, summary, what a yes and a no vote mean, arguments and rebuttals with signers, the disclaimer | Official Voter Information Guide, each proposition's page and its arguments page |
+| Propositions: official title and summary (Attorney General), what a yes and a no vote mean, the summary of the Legislative Analyst's fiscal estimate, and each argument and rebuttal with its signers | Official Voter Information Guide: each proposition's page, its Official Title and Summary page (`title-summary.htm`) and its Arguments and Rebuttals page |
 | Calaveras local contests | County's Qualified Candidates List (PDF), contests marked "On Ballot: Yes" |
 | Calaveras candidate statements, Measure A (question, impartial analysis, tax rate statement, arguments) | County's Voter Information Pamphlet (PDF) |
 | U.S. House candidates' FEC filings | api.open.fec.gov (`FEC_API_KEY` secret, or DEMO_KEY), matched by last name and district |
@@ -37,7 +37,9 @@ California orders candidates by a randomized alphabet drawn for each election (E
 
 ## Neutrality
 
-Every candidate in a contest gets the same card with the same fields in ballot order: name, ballot designation, party preference as listed (partisan offices), the FEC filing (U.S. House), "Holds office now" with Platform, Votes and Funding links when the name matches exactly one official in D1, and the statement word for word or the same "no statement" line. Measures show both sides' arguments in the guide's order, with the same card. No endorsements, polls, predictions or race calls; results show the feed's numbers in ballot order with its "reporting" line and time.
+Every candidate in a contest gets the same card with the same fields in ballot order: name, ballot designation, party preference as listed (partisan offices), the FEC filing (U.S. House), "Holds office now" with Platform, Votes and Funding links when the name matches exactly one official in D1, and the statement word for word or the same "no statement" line. Measure pages lead with the neutral official content: the official title and summary, what a Yes and a No vote mean, and the Legislative Analyst's fiscal estimate (with a link to the full analysis). The campaign arguments come after, collapsed, under the note "Written by each campaign, printed word for word from the official voter guide. Not written or checked by ThePillory or any government agency." They're in the guide's order in two matching panels: the supporters' argument with the opponents' rebuttal to it, then the opponents' argument with the supporters' rebuttal. Each part is labeled ("Supporters' argument", "Opponents' rebuttal", "Opponents' argument", "Supporters' rebuttal"), shown in full with who signed it, and a part the guide doesn't print says so.
+
+On the official arguments page each column is an argument followed by the rebuttal to it, so a rebuttal is written by the other side. `arguments()` in `tools/build_elections.py` splits each column at every heading (an earlier version read a column as one argument, which merged each rebuttal, and its signers, into the argument above it). The pages write commas and hyphens as numeric entities (`&#44;`, `grid&#45;50`) and put some bulleted lists outside paragraphs; the parser decodes the first and keeps each list item as its own paragraph, marked "•". No endorsements, polls, predictions or race calls; results show the feed's numbers in ballot order with its "reporting" line and time.
 
 ## Results
 
