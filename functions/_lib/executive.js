@@ -5,6 +5,7 @@
 import { tagsFor, topicChips } from "./topics.js";
 import { esc, safeUrl, fmtDate, linkRow, sourceLink } from "./render.js";
 import { OUTCOME_LABEL } from "../../workers/sync/src/executive/parse.js";
+import { orderHref } from "./orders.js";
 
 export { OUTCOME_LABEL };
 export const EXEC_CHAMBERS = ["us-executive", "ca-executive"];
@@ -108,7 +109,7 @@ export function ordersTab(o, data, base, offset) {
   const federal = o.chamber === "us-executive";
   const intro = federal
     ? `<p class="small">Executive orders signed by ${esc(o.name)} in this term, as published in the Federal Register, newest first. Titles are exactly as published.</p>`
-    : `<p class="small">Executive orders and proclamations posted by the Governor's Office under “Executive orders”, newest first. Titles are the Governor's Office's own headlines; each links to the post and, where linked, the signed document.</p>`;
+    : `<p class="small">Executive orders and proclamations posted by the Governor's Office under “Executive orders”, newest first. Titles are the Governor's Office's own headlines; each opens its page here, with links to the post and, where linked, the signed document.</p>`;
   if (!data.rows.length) return `${intro}<p class="secondary small">None loaded yet. They appear after the data sync runs.</p>`;
   const rows = data.rows
     .map((a) => {
@@ -118,8 +119,8 @@ export function ordersTab(o, data, base, offset) {
       const doc = safeUrl(a.document_url) ? ` · <a class="inline-link" href="${esc(a.document_url)}" target="_blank" rel="noopener">${federal ? "PDF" : "Signed document"} ↗</a>` : "";
       return `<li class="exec-row stack-xs">
   <span class="label">${esc(num)}${a.citation ? ` · ${esc(a.citation)}` : ""}</span>
-  <a class="exec-title" href="${esc(a.source_url)}" target="_blank" rel="noopener">${esc(a.title)}</a>
-  <span class="small secondary">${esc(when)}${doc}</span>
+  <a class="exec-title" href="${orderHref(a.id)}">${esc(a.title)}</a>
+  <span class="small secondary">${esc(when)} · <a class="inline-link" href="${esc(a.source_url)}" target="_blank" rel="noopener">${federal ? "Federal Register" : "Governor's Office"} ↗</a>${doc}</span>
   ${topicChips(a.topics, null, { label: false })}
 </li>`;
     })

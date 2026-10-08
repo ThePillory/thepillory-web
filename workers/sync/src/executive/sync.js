@@ -161,13 +161,14 @@ async function governorLookup(db) {
 export async function saveAction(db, official_id, a) {
   await db
     .prepare(
-      `INSERT INTO executive_actions (id, official_id, kind, number, title, signed_on, published_on, citation, document_url, source_url, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+      `INSERT INTO executive_actions (id, official_id, kind, number, title, signed_on, published_on, citation, document_url, source_url, notes, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
        ON CONFLICT(id) DO UPDATE SET kind = excluded.kind, number = COALESCE(excluded.number, executive_actions.number), title = excluded.title,
          signed_on = excluded.signed_on, published_on = excluded.published_on, citation = excluded.citation,
-         document_url = COALESCE(excluded.document_url, executive_actions.document_url), source_url = excluded.source_url, updated_at = excluded.updated_at`
+         document_url = COALESCE(excluded.document_url, executive_actions.document_url), source_url = excluded.source_url,
+         notes = COALESCE(excluded.notes, executive_actions.notes), updated_at = excluded.updated_at`
     )
-    .bind(a.id, official_id, a.kind, a.number, a.title, a.signed_on, a.published_on, a.citation || null, a.document_url, a.source_url)
+    .bind(a.id, official_id, a.kind, a.number, a.title, a.signed_on, a.published_on, a.citation || null, a.document_url, a.source_url, a.notes || null)
     .run();
 }
 
@@ -183,7 +184,7 @@ export async function syncExecutiveOrders(env, db, budget) {
       const terms = JSON.parse((await getState(db, "executive_terms")) || "[]");
       const t = terms.find((x) => x.type === "prez" && x.start === pres.term_start);
       const who = slugify(t ? t.name.replace(/ [A-Z]\. /, " ") : pres.name);
-      const fields = ["executive_order_number", "title", "signing_date", "publication_date", "document_number", "html_url", "pdf_url", "citation"].map((f) => `fields[]=${f}`).join("&");
+      const fields = ["executive_order_number", "title", "signing_date", "publication_date", "document_number", "html_url", "pdf_url", "citation", "executive_order_notes"].map((f) => `fields[]=${f}`).join("&");
       let url = `${(env.FR_API_BASE || FR_API).replace(/\/$/, "")}/documents.json?per_page=1000&order=newest&conditions[type][]=PRESDOCU&conditions[presidential_document_type][]=executive_order&conditions[president][]=${encodeURIComponent(who)}&conditions[signing_date][gte]=${pres.term_start}&${fields}`;
       for (let page = 0; url && page < 10; page++) {
         const d = await budget.json(url, {}, `Federal Register executive orders page ${page + 1}`);

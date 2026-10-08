@@ -190,7 +190,7 @@ async function save(env, db, bill, source, draft, meta) {
     source.basis === "summary_only"
       ? "limited: based on summary only."
       : source.basis === "partial_text"
-        ? `limited: based on ${source.note} of the bill text.`
+        ? `limited: based on ${source.note} of the ${bill.kind === "order" ? "order's" : "bill"} text.`
         : null;
   const insert = db
     .prepare(
@@ -198,8 +198,8 @@ async function save(env, db, bill, source, draft, meta) {
          plain_summary, clauses, aligns, tension, departure, article_v, readings, citations, uncertainty,
          model, prompt_version, quote_check, citation_check,
          input_tokens, output_tokens, cache_read_tokens, cache_write_tokens,
-         ai_review, ai_review_detail, ai_review_model, ai_review_tokens, ai_reviewed_at, spot_check)
-       VALUES (?, 1, 'ai_draft', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+         ai_review, ai_review_detail, ai_review_model, ai_review_tokens, ai_reviewed_at, spot_check, supporters, critics)
+       VALUES (?, 1, 'ai_draft', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
     .bind(
       bill.id,
@@ -225,7 +225,9 @@ async function save(env, db, bill, source, draft, meta) {
       meta.usage.output_tokens,
       meta.usage.cache_read_tokens,
       meta.usage.cache_write_tokens,
-      ...reviewColumns(env, meta.review)
+      ...reviewColumns(env, meta.review),
+      draft.supporters || "",
+      draft.critics || ""
     );
   const stmts = [];
   if (prev) {
@@ -247,7 +249,7 @@ async function save(env, db, bill, source, draft, meta) {
   stmts.push(insert);
   await db.batch(stmts);
   const row = await db.prepare("SELECT * FROM bill_analyses WHERE bill_id = ? AND current = 1").bind(bill.id).first();
-  const why = bill.request_id ? (bill.request_source === "reader" ? "a reader asked for a full analysis" : "requested at /admin/review") : bill.upgrade ? "an issue now links to this bill" : null;
+  const why = bill.request_id ? (bill.request_source === "reader" ? "a reader asked for a full analysis" : "requested at /admin/review") : bill.upgrade ? "an issue now links to this bill" : bill.redraft ? "redrafted under the current drafting prompt" : null;
   await db
     .prepare("INSERT INTO bill_analysis_revisions (analysis_id, bill_id, action, actor, note, snapshot) VALUES (?, ?, 'created', 'pipeline', ?, ?)")
     .bind(row.id, bill.id, why, J(row))
@@ -288,11 +290,13 @@ async function reviewBacklog(env, db, budget, run) {
     await db
       .prepare(
         `SELECT a.*, b.bill_number, b.title, b.level, b.session, b.chamber, b.official_url, b.summary AS bill_summary, b.source_url AS bill_source_url,
-                r.verdict AS rel_verdict, r.category AS rel_category, r.reason AS rel_reason, r.override AS rel_override
-         FROM bill_analyses a JOIN bills b ON b.id = a.bill_id LEFT JOIN bill_relevance r ON r.bill_id = a.bill_id
+                r.verdict AS rel_verdict, r.category AS rel_category, r.reason AS rel_reason, r.override AS rel_override,
+                x.id IS NOT NULL AS is_order
+         FROM bill_analyses a LEFT JOIN bills b ON b.id = a.bill_id LEFT JOIN executive_actions x ON x.id = a.bill_id
+           LEFT JOIN bill_relevance r ON r.bill_id = a.bill_id
          -- Not reviewed yet, or flagged under an earlier version of the reviewer's
          -- rules (and no person has decided yet): reviewed again with the current rules.
-         WHERE a.current = 1 AND a.status = 'ai_draft'
+         WHERE a.current = 1 AND a.status = 'ai_draft' AND (b.id IS NOT NULL OR x.id IS NOT NULL)
            AND (a.ai_review IS NULL OR (a.ai_review = 'flag' AND COALESCE(json_extract(a.ai_review_detail, '$.version'), '') != ?))
          ORDER BY a.ai_review IS NOT NULL, a.created_at, a.id LIMIT 25`
       )
@@ -304,8 +308,8 @@ async function reviewBacklog(env, db, budget, run) {
   for (const row of rows) {
     const t0 = new Date().toISOString();
     // Ceremonial or routine: rejected without a review call.
-    if (row.rel_verdict === "skip" && row.rel_override !== "unskip") {
-      const { rel_verdict, rel_category, rel_reason, rel_override, bill_number, title, level, session, chamber, official_url, bill_summary, bill_source_url, ...snapshot } = row;
+    if (!row.is_order && row.rel_verdict === "skip" && row.rel_override !== "unskip") {
+      const { rel_verdict, rel_category, rel_reason, rel_override, bill_number, title, level, session, chamber, official_url, bill_summary, bill_source_url, is_order, ...snapshot } = row;
       await db.batch([
         db
           .prepare("INSERT INTO bill_analysis_revisions (analysis_id, bill_id, action, actor, note, snapshot) VALUES (?, ?, 'rejected', 'pipeline', ?, ?)")
@@ -316,13 +320,15 @@ async function reviewBacklog(env, db, budget, run) {
       await log(db, run, "analysis-backlog", "ok", 0, `${row.bill_id}: analysis ${row.id} rejected automatically: ${rel_category}: ${rel_reason}`, t0);
       continue;
     }
-    if (!row.rel_verdict) continue; // relevance not checked yet; next round
+    if (!row.is_order && !row.rel_verdict) continue; // relevance not checked yet; next round
     if (used >= limit || budget.timeLeft() < MIN_TIME_PER_BILL_MS) break;
-    const bill = { id: row.bill_id, bill_number: row.bill_number, title: row.title, level: row.level, session: row.session, chamber: row.chamber, official_url: row.official_url, summary: row.bill_summary || "", source_url: row.bill_source_url };
+    const bill = row.is_order
+      ? await orderSubject(db, row.bill_id)
+      : { id: row.bill_id, bill_number: row.bill_number, title: row.title, level: row.level, session: row.session, chamber: row.chamber, official_url: row.official_url, summary: row.bill_summary || "", source_url: row.bill_source_url };
+    if (!bill) continue;
     const before = budget.used;
     try {
-      const fetched = await fetchBillText(env, budget, bill);
-      const source = (row.depth || "full") === "card" ? await cardSource(env, budget, bill, fetched) : fetched;
+      const source = await subjectSource(env, db, budget, bill, row.depth || "full");
       if (!source) {
         await log(db, run, "analysis-backlog", "skipped", budget.used - before, `${row.bill_id}: no bill text to review against; tried again tomorrow`, t0);
         continue;
@@ -338,6 +344,8 @@ async function reviewBacklog(env, db, budget, run) {
         readings: JSON.parse(row.readings || "[]"),
         citations: JSON.parse(row.citations || "[]"),
         uncertainty: row.uncertainty,
+        supporters: row.supporters || "",
+        critics: row.critics || "",
       };
       let review = await reviewDraft(env, bill, source, draft, row.depth || "full");
       // A re-review keeps the earlier review (and its reasons) beside the new one.
@@ -445,14 +453,111 @@ async function finishRequest(db, bill, status, message) {
     .run();
 }
 
+// ---------------------------------------------------------------------------
+// Executive orders: the same drafting, checks and review as bills, from the
+// order's own text (read by the order-texts step, src/executive/orders-sync.js).
+
+const MAX_ORDER_CHARS = 150000;
+
+/** An executive order as the pipeline's subject: what the prompt and the log need. */
+export async function orderSubject(db, id) {
+  const x = await db
+    .prepare("SELECT a.*, o.office AS issuer FROM executive_actions a LEFT JOIN officials o ON o.id = a.official_id WHERE a.id = ?")
+    .bind(id)
+    .first();
+  if (!x) return null;
+  return {
+    id: x.id,
+    kind: "order",
+    bill_number: x.number ? `Executive Order ${x.number}` : "Executive order",
+    title: x.title,
+    issuer: x.issuer || (x.id.startsWith("fr:") ? "President of the United States" : "Governor of California"),
+    level: x.id.startsWith("fr:") ? "federal" : "state",
+    signed_on: x.signed_on,
+    published_on: x.published_on,
+    source_url: x.source_url,
+  };
+}
+
+/**
+ * The text a draft is based on: a bill's text (a card of a long bill is
+ * drafted from a condensed text, billtext.js), or an order's stored text.
+ */
+async function subjectSource(env, db, budget, subject, depth) {
+  if (subject.kind === "order") {
+    const t = await db.prepare("SELECT text, text_url FROM executive_action_texts WHERE action_id = ? AND status = 'ok'").bind(subject.id).first();
+    if (!t || !t.text) return null;
+    const long = t.text.length > MAX_ORDER_CHARS;
+    return {
+      basis: long ? "partial_text" : "full_text",
+      note: long ? `the first ${MAX_ORDER_CHARS.toLocaleString("en-US")} characters` : null,
+      text: long ? t.text.slice(0, MAX_ORDER_CHARS) : t.text,
+      source_url: t.text_url || subject.source_url,
+      version: subject.id.startsWith("fr:") ? "the Federal Register's text" : "the signed order",
+    };
+  }
+  const fetched = await fetchBillText(env, budget, subject);
+  return depth === "card" ? await cardSource(env, budget, subject, fetched) : fetched;
+}
+
+/** Orders to draft, up to `limit`: requests first, then redrafts after a prompt change, then the newest orders not yet analyzed. */
+async function nextOrders(db, limit) {
+  if (limit <= 0) return [];
+  const retry = `NOT EXISTS (SELECT 1 FROM analysis_attempts t WHERE t.bill_id = x.id AND t.last_attempt > datetime('now', '-${RETRY_AFTER_DAYS} days'))`;
+  const ids = [];
+  const requested = (
+    await db
+      .prepare(
+        `SELECT r.id AS request_id, r.depth AS request_depth, r.source AS request_source, x.id,
+                (SELECT a.depth FROM bill_analyses a WHERE a.bill_id = x.id AND a.current = 1) AS current_depth
+         FROM analysis_requests r JOIN executive_actions x ON x.id = r.bill_id
+         WHERE r.status = 'pending' ORDER BY r.source = 'reader', r.requested_at LIMIT ?`
+      )
+      .bind(limit)
+      .all()
+  ).results.map((r) => ({ id: r.id, request_id: r.request_id, request_source: r.request_source, depth: r.request_depth || r.current_depth || "card" }));
+  ids.push(...requested);
+  const redrafts = (
+    await db
+      .prepare(
+        `SELECT x.id, a.depth FROM executive_actions x JOIN bill_analyses a ON a.bill_id = x.id AND a.current = 1
+         WHERE a.status = 'ai_draft' AND a.ai_review = 'flag'
+           AND COALESCE(a.prompt_version, '') != CASE WHEN a.depth = 'card' THEN ? ELSE ? END
+           AND NOT EXISTS (SELECT 1 FROM bill_analysis_revisions v WHERE v.analysis_id = a.id AND v.actor != 'pipeline')
+           AND ${retry} ORDER BY a.id LIMIT ?`
+      )
+      .bind(CARD_PROMPT_VERSION, PROMPT_VERSION, Math.max(0, limit - ids.length))
+      .all()
+  ).results.map((r) => ({ id: r.id, depth: r.depth === "full" ? "full" : "card", redraft: true }));
+  ids.push(...redrafts);
+  const fresh = (
+    await db
+      .prepare(
+        `SELECT x.id FROM executive_actions x JOIN executive_action_texts t ON t.action_id = x.id AND t.status = 'ok'
+         WHERE x.kind = 'executive_order' AND NOT EXISTS (SELECT 1 FROM bill_analyses a WHERE a.bill_id = x.id) AND ${retry}
+         ORDER BY COALESCE(x.signed_on, x.published_on) DESC, x.id DESC LIMIT ?`
+      )
+      .bind(Math.max(0, limit - ids.length))
+      .all()
+  ).results.map((r) => ({ id: r.id, depth: "card" }));
+  ids.push(...fresh);
+  const seen = new Set();
+  const out = [];
+  for (const o of ids) {
+    if (seen.has(o.id)) continue;
+    seen.add(o.id);
+    const subject = await orderSubject(db, o.id);
+    if (subject) out.push({ ...subject, ...o, kind: "order" });
+  }
+  return out;
+}
+
 /** Draft, verify, review and save one bill. `bill.depth` is "card" or "full". Returns a log entry. */
 export async function analyzeBill(env, db, budget, bill) {
   const depth = bill.depth === "full" ? "full" : "card";
-  const fetched = await fetchBillText(env, budget, bill);
-  // A card of a long bill is drafted and reviewed from a condensed text (billtext.js).
-  const source = depth === "card" ? await cardSource(env, budget, bill, fetched) : fetched;
+  const source = await subjectSource(env, db, budget, bill, depth);
   if (!source) {
-    const msg = "no bill text or official summary available";
+    const msg = bill.kind === "order" ? "no readable text of the order" : "no bill text or official summary available";
     await noteAttempt(db, bill.id, msg);
     await finishRequest(db, bill, "failed", msg);
     return { status: "skipped", message: `${bill.id}: ${msg}`, counted: false };
@@ -631,6 +736,45 @@ export async function runAnalysis(rawEnv, { deadlineMs, runId, trigger }) {
     console.log(`[${runId}] analysis ${r.status}: ${r.message}`);
     await log(db, run, "analysis", r.status, budget.used - before, r.message, t0);
   }
+  // Executive orders: the same pipeline, with their own daily cap (ORDER_ANALYSIS_DAILY).
+  const orderLimit = parseInt(env.ORDER_ANALYSIS_DAILY || "5", 10);
+  const orderKey = `order_analyses_${day()}`;
+  let ordersUsed = parseInt((await getState(db, orderKey)) || "0", 10);
+  let ordersWaiting = false;
+  try {
+    const orders = ordersUsed < orderLimit && !stoppedEarly ? await nextOrders(db, orderLimit - ordersUsed) : [];
+    for (const order of orders) {
+      if (ordersUsed >= orderLimit) break;
+      if (budget.timeLeft() < MIN_TIME_PER_BILL_MS) {
+        ordersWaiting = true;
+        break;
+      }
+      const t0 = new Date().toISOString();
+      const before = budget.used;
+      let r;
+      try {
+        r = await analyzeBill(env, db, budget, order);
+      } catch (err) {
+        if (err instanceof BudgetExhausted) {
+          ordersWaiting = true;
+          break;
+        }
+        r = { status: "error", message: `${order.id}: ${redact(`${err.name}: ${err.message}`)}`, counted: false };
+        await noteAttempt(db, order.id, r.message);
+        await finishRequest(db, order, "failed", r.message);
+      }
+      if (r.counted) {
+        ordersUsed += 1;
+        await setState(db, orderKey, String(ordersUsed));
+      }
+      if (r.status === "ok") analyzed += 1;
+      await log(db, run, "analysis-orders", r.status, budget.used - before, r.message, t0);
+    }
+  } catch (err) {
+    // Before migration 0018 (no order tables yet), there is nothing to do.
+    if (!/no such (table|column)/i.test(String(err && err.message))) throw err;
+  }
+
   // More relevance checks wait only if this round's check made progress (a failing check doesn't loop).
   const unchecked = relevance.checked > 0 && (await uncheckedBills(db, 1)).length > 0;
   const waiting = (used < limit || redrafted < redraftLimit) && (stoppedEarly || unchecked || (await nextBills(db, used < limit ? 1 : 0, env, redrafted < redraftLimit ? 1 : 0)).length > 0);
@@ -665,5 +809,5 @@ export async function runAnalysis(rawEnv, { deadlineMs, runId, trigger }) {
   } catch (err) {
     await log(db, run, "topics", "error", 0, redact(`${err.name}: ${err.message}`), new Date().toISOString());
   }
-  return { status: "ok", analyzed, used, limit, agendas, promises, topics, more_now: (waiting && (stoppedEarly || unchecked)) || agendas.more_now || topics.more_now };
+  return { status: "ok", analyzed, used, limit, agendas, promises, topics, more_now: (waiting && (stoppedEarly || unchecked)) || ordersWaiting || agendas.more_now || topics.more_now };
 }

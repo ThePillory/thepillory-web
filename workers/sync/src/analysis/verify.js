@@ -159,6 +159,8 @@ export function textFields(draft) {
   });
   (draft.citations || []).forEach((c, i) => str(c, "point", `citations[${i}].point`));
   str(draft, "uncertainty", "uncertainty");
+  if (draft.supporters != null) str(draft, "supporters", "supporters");
+  if (draft.critics != null) str(draft, "critics", "critics");
   return f;
 }
 

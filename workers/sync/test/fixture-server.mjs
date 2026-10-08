@@ -4,7 +4,7 @@
 //
 // Mimics the response shapes of Congress.gov v3, Open States v3, and the
 // senate.gov roll call XML closely enough to exercise the sync end to end.
-import { executive, cabinetHtml, fr, congressExec, leginfoHistory, stateExecutiveFile, govFeed, govPosts, caCampaignFile, fppcSearch } from "./executive-fixtures.mjs";
+import { executive, cabinetHtml, fr, congressExec, leginfoHistory, stateExecutiveFile, govFeed, govPosts, caCampaignFile, fppcSearch, frDocument, frRawText, govOrderLines, clSearch } from "./executive-fixtures.mjs";
 import http from "node:http";
 import { calendarHtml, rssHtml, meetingHtml, agendaLines, makePdf, dayFromToday } from "./iqm2-fixtures.mjs";
 import { meetingList, agendaPages } from "./tylermm-fixtures.mjs";
@@ -292,8 +292,34 @@ const base = {
   uncertainty: "Uncertain how the grant conditions would be applied in practice; the text leaves that to later rules.",
 };
 const DRAFTS = {
+  // An executive order (the order-texts step reads its text; see executive-fixtures.mjs).
+  "Executive Order 99902": {
+    ...base,
+    plain_summary: "The order directs each federal agency to post the forms it uses for public comments online within 90 days. It does not create new rights or change any agency's legal authority.",
+    clauses: [
+      { id: "art-2-sec-3", quote: "he shall take Care that the Laws be faithfully executed", why: "The order directs how agencies carry out existing duties." },
+      { id: "amend-1", quote: "to petition the Government for a redress of grievances", why: "Public comments are one way residents petition the government." },
+    ],
+    aligns: ["One view is that the order draws on the duty to see the laws faithfully executed, because it directs how agencies publish forms they already use."],
+    tension: ["One view is that the order may be in tension with agencies' own procedures set by statute, because it sets a deadline the statutes don't state."],
+    departure: ["One view is that, even so, it might serve the public, because residents could find every agency's comment forms in one predictable place."],
+    supporters: "Supporters argue that putting every agency's comment forms online makes it easier for residents to take part in decisions that affect them.",
+    critics: "Critics argue that a single 90-day deadline may strain smaller agencies and duplicate posting rules some agencies already follow.",
+  },
+  "Executive Order N-9-26": {
+    ...base,
+    plain_summary: "The order directs the Government Operations Agency to publish a test report by May 1. It states that it creates no new rights or benefits.",
+    clauses: [{ id: "amend-10", quote: "The powers not delegated to the United States by the Constitution, nor prohibited by it to the States, are reserved to the States respectively, or to the people.", why: "A Governor's order directs state agencies under state law." }],
+    aligns: ["One view is that the order reflects the States' reserved powers, because it directs a state agency on a matter of state administration."],
+    tension: ["One view is that the order may raise questions under state law about the Governor's role, because the deadline it sets isn't in the statute it cites."],
+    departure: [],
+    supporters: "Supporters argue that a published report with a fixed date lets residents see what the agency did and when it did it.",
+    critics: "Critics argue that setting agency deadlines by order rather than by statute leaves less room for public comment before they apply.",
+  },
   "H.R. 10": {
     ...base,
+    supporters: "Supporters argue that grants for rural broadband reach places private networks have not served, and that published scoring rules make awards easier to check.",
+    critics: "Critics argue that federal grant conditions can steer how States run their own programs, and that scoring rules add paperwork for small applicants.",
     plain_summary: "The bill creates a federal grant program for rural broadband. States that receive grants must publish the rules they use to score applications. The program is run by a federal Secretary.",
     clauses: [
       { id: "art-1-sec-8-cl-1", quote: "provide for the common Defence and general Welfare of the United States", why: "Grant programs rest on the spending power." },
@@ -442,7 +468,7 @@ function reviewAnthropic(req, res, body) {
   if (!/<draft>/.test(body.messages[0].content)) problems.push("draft");
   anthropicRequests.push({ kind: "review", problems });
   if (problems.length) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: `fixture: bad ${problems.join(", ")}` } });
-  const bill = (body.messages[0].content.match(/^Bill: (.+?) \(/m) || [])[1];
+  const bill = (body.messages[0].content.match(/^(?:Bill|Executive order): (.+?) \(/m) || [])[1];
   const ok = (id) => ({ id, ok: true, severity: "none", note: "No problem found." });
   // The revision (see the drafter below) adds the extension, which clears the flag.
   const flag = bill === "H.R. 20" && !/extend the deadline once/.test(body.messages[0].content);
@@ -475,6 +501,8 @@ function sseText(res, model, text, inTokens, outTokens) {
 /** A card in the card schema's shape, from the canned full draft. */
 function asCard(d) {
   return {
+    supporters: d.supporters || "",
+    critics: d.critics || "",
     plain_summary: d.plain_summary,
     clauses: d.clauses,
     aligns: d.aligns[0] || "",
@@ -565,7 +593,7 @@ function anthropic(req, res, body) {
   anthropicRequests.push({ kind: revision ? "revision" : card ? "card" : "full", problems, model: body.model, effort: body.output_config && body.output_config.effort, bytes: JSON.stringify(body).length });
   if (problems.length) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: `fixture: bad ${problems.join(", ")}` } });
   const msg = body.messages[0].content;
-  const bill = (msg.match(/^Bill: (.+?) \(/m) || [])[1];
+  const bill = (msg.match(/^(?:Bill|Executive order): (.+?) \(/m) || [])[1];
   const draft = DRAFTS[bill];
   if (!draft) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: `fixture: no draft for ${bill}` } });
   if (bill === "H.R. 10" && /OLD TEXT/.test(msg)) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: "fixture: sent the old text version" } });
@@ -666,6 +694,15 @@ http
     if (api === "govinfo" && /^\/packages\/[^/]+\/htm$/.test(path)) return send(res, 200, govinfoHtm(), "text/html");
     if (api === "whitehouse") return send(res, 200, cabinetHtml, "text/html");
     if (api === "fr" && path === "/api/v1/documents.json") return send(res, 200, fr(u.searchParams));
+    if (api === "fr" && /^\/api\/v1\/documents\/[\w-]+\.json$/.test(path)) {
+      const d = frDocument(path.split("/").pop().replace(/\.json$/, ""));
+      return d ? send(res, 200, d) : send(res, 404, { errors: "not found" });
+    }
+    if (api === "fr" && /^\/raw\/[\w-]+\.txt$/.test(path)) return send(res, 200, frRawText(path.split("/").pop().replace(/\.txt$/, "")), "text/html");
+    if (api === "govca" && /\/wp-content\/uploads\/.*N-9-26.*\.pdf$/.test(path)) {
+      res.writeHead(200, { "Content-Type": "application/pdf" });
+      return res.end(Buffer.from(makePdf([govOrderLines])));
+    }
     if (api === "govca") {
       if (path === "/wp-json/wp/v2/posts" && /state of the state/i.test(u.searchParams.get("search") || "")) return send(res, 200, govcaStateOfTheState());
       if (path === "/wp-json/wp/v2/posts") return send(res, 200, u.searchParams.get("page") === "1" ? govcaPosts() : []);
@@ -697,6 +734,10 @@ http
       const id = u.searchParams.get("bill_id");
       if (path === "/faces/billHistoryClient.xhtml") return leginfoHistory[id] ? send(res, 200, leginfoHistory[id], "text/html") : send(res, 200, "<html><body><table id=\"billhistory\"><tbody></tbody></table></body></html>", "text/html");
       return leginfo[id] ? send(res, 200, leginfo[id], "text/html") : send(res, 404, "not found", "text/plain");
+    }
+    if (api === "courtlistener" && path === "/api/rest/v4/search/") {
+      if (req.headers.authorization !== "Token fake-courtlistener-token") return send(res, 401, { detail: "no token" });
+      return send(res, 200, clSearch(u.searchParams));
     }
     if (api === "courtlistener" && path === "/api/rest/v4/citation-lookup/" && req.method === "POST") {
       if (req.headers.authorization !== "Token fake-courtlistener-token") return send(res, 401, { detail: "no token" });

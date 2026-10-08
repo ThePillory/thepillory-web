@@ -6,7 +6,7 @@
 //   (review.js)    the AI reviewer pass (claude-sonnet-5-5)
 //   (relevance.js) the cheap relevance check (claude-haiku-4-5)
 import Anthropic from "@anthropic-ai/sdk";
-import { INSTRUCTIONS, CARD_INSTRUCTIONS, constitutionBlock, schema, cardSchema, billMessage, revisionMessage, cardToDraft } from "./prompt.js";
+import { instructions, cardInstructions, constitutionBlock, schema, cardSchema, billMessage, revisionMessage, cardToDraft } from "./prompt.js";
 
 export const DEFAULT_MODEL = "claude-sonnet-5-5";
 
@@ -87,9 +87,9 @@ export async function draftAnalysis(env, bill, source, depth = "card", revision 
   const card = depth === "card";
   const { data, model, usage } = await structuredCall(env, {
     model: env.ANALYSIS_MODEL || DEFAULT_MODEL,
-    // The instructions and the Constitution are identical for every bill of the
-    // same kind, so they're cached across the bills in a run.
-    system: [card ? CARD_INSTRUCTIONS : INSTRUCTIONS, constitution()],
+    // The instructions and the Constitution are identical for every bill (or
+    // every executive order) of the same kind, so they're cached across a run.
+    system: [card ? cardInstructions(bill.kind) : instructions(bill.kind), constitution()],
     message: revision
       ? revisionMessage(bill, source, depth, revision.draft, revision.reasons)
       : billMessage(bill, source, depth),

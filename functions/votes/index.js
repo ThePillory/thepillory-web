@@ -3,10 +3,11 @@
 //   their reps cast, with each rep's position and the totals.
 //   Otherwise: every final-passage vote with its totals, and a link to find
 //   your reps.
-import { page, notLoaded, esc, fmtDate, sourceLink, guard } from "../_lib/render.js";
+import { page, notLoaded, esc, fmtDate, guard } from "../_lib/render.js";
 import { safe, recentFinalVotes, officialsWhere, CHAMBER_NAME } from "../_lib/data.js";
 import { billHref } from "../_lib/votes.js";
-import { voteBar } from "../_lib/charts.js";
+import { compactRow } from "../_lib/summary.js";
+import { firstClauses } from "../_lib/laws-list.js";
 import { districtsFromCookie, repsWhere, describe } from "../_lib/districts.js";
 
 const PER_PAGE = 30;
@@ -38,25 +39,22 @@ export const onRequestGet = guard(async ({ request, env }) => {
   });
   if (!data) return notLoaded("Votes", "reps", false, ["Reps", "/reps/"]);
   const q = (p) => `/votes/?${new URLSearchParams({ ...(level ? { level } : {}), ...(p > 1 ? { page: String(p) } : {}) })}`;
-  const opt = (value, label) => `<a class="toggle" href="/votes/${value ? `?level=${value}` : ""}"${level === value ? ' aria-current="true"' : ""}>${label}</a>`;
+  const clauses = await firstClauses(env.DB, [...new Set(data.rows.map((v) => v.bill_id).filter(Boolean))]);
+  const SHORT = { "us-house": "House", "us-senate": "Senate", "ca-assembly": "Assembly", "ca-senate": "State Senate" };
+  // One line per vote: the bill, its title, the result, and (with districts) how your reps voted.
   const rows = data.rows
-    .map((v) => {
-      const positions = v.positions.length
-        ? `<ul class="plain-list positions">${v.positions
-            .map((p) => `<li class="position-row"><a class="inline-link" href="/reps/${esc(p.slug)}/#votes">${esc(p.name)}</a><span class="position" title="Recorded as: ${esc(p.raw_position)}">${esc(p.position)}</span></li>`)
-            .join("")}</ul>`
-        : "";
-      return `
-<article class="card stack-sm">
-  <p class="label">${esc(CHAMBER_NAME[v.chamber] || (v.level === "federal" ? "Federal" : "State"))} · ${fmtDate(v.vote_date)}</p>
-  ${v.bill_id && v.bill_number ? `<a class="inline-link vote-bill" href="${billHref(v.bill_id)}">${esc(v.bill_number)}</a>${v.bill_title ? `<p class="small">${esc(v.bill_title)}</p>` : ""}` : `<p class="vote-bill-text">${esc(v.subject || "")}</p>`}
-  <p class="vote-question">${esc(v.question)} · Result: ${esc(v.result)}</p>
-  ${voteBar(v)}
-  ${positions}
-  ${sourceLink(v.source_url, "Official record")}
-</article>`;
-    })
+    .map((v) =>
+      compactRow({
+        href: v.bill_id ? `${billHref(v.bill_id)}#votes` : v.source_url,
+        type: v.bill_number || "Vote",
+        title: v.bill_title || v.subject || v.question,
+        status: `${v.result} · ${SHORT[v.chamber] || CHAMBER_NAME[v.chamber] || ""}${v.yea != null && v.nay != null ? ` · Yes ${v.yea}, No ${v.nay}` : ""}`,
+        meta: [fmtDate(v.vote_date), v.positions.length ? `Your reps: ${v.positions.map((p) => `${p.name} ${p.position}`).join(", ")}` : ""].filter(Boolean).join(" · "),
+        clause: (v.bill_id && clauses.get(v.bill_id)) || null,
+      })
+    )
     .join("");
+  const chip = (value, label) => `<a href="/votes/${value ? `?level=${value}` : ""}"${level === value ? ' aria-current="true"' : ""}>${label}</a>`;
   const title = d ? "Your reps' votes" : "Votes";
   const main = `
 <header class="page-head">
@@ -68,9 +66,9 @@ export const onRequestGet = guard(async ({ request, env }) => {
   }</p>
 </header>
 ${d ? "" : '<p class="small"><a class="inline-link" href="/#find">Find your representatives</a> to see how yours voted.</p>'}
-<nav class="segmented" aria-label="Show Federal or State">${opt(null, "All")}${opt("state", "State")}${opt("federal", "Federal")}</nav>
-<p class="hint">County supervisors' votes will come from meeting minutes. That's coming next.</p>
-${rows || `<p class="secondary small">${d ? "No final-passage votes loaded yet for your reps." : "No final-passage votes loaded yet."}</p>`}
-<nav class="pager">${pageNo > 1 ? `<a class="btn" href="${q(pageNo - 1)}">Newer</a>` : ""}${data.more ? `<a class="btn" href="${q(pageNo + 1)}">Older</a>` : ""}</nav>`;
+<nav class="filter-chips" aria-label="Show">${chip(null, "All")}${chip("federal", "Congress")}${chip("state", "California")}</nav>
+<section class="card compact-list" id="vote-list" data-more-list>${rows || `<p class="secondary small cr-empty">${d ? "No final-passage votes loaded yet for your reps." : "No final-passage votes loaded yet."}</p>`}</section>
+${data.more ? `<a class="btn btn--block load-more" href="${q(pageNo + 1)}" data-load-more="vote-list">Load more</a>` : ""}
+<p class="hint">Each line opens the bill's votes, which link to the official record. County supervisors' votes will come from meeting minutes. That's coming next.</p>`;
   return page(title, main, { tab: "reps", back: ["Reps", "/reps/"], personal: true });
 }, { tab: "reps" });

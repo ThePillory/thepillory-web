@@ -16,6 +16,7 @@ import { fundingFor, fundingTab } from "../_lib/funding.js";
 import { executiveMoney, executiveFundingParts, stateOfficialMoney, stateForm700 } from "../_lib/exec-funding.js";
 import { stateFundingTab } from "../_lib/state-funding.js";
 import { promisesFor, ownWordsFor, platformTab } from "../_lib/promises.js";
+import { fold } from "../_lib/summary.js";
 import { pickYear, yearBar, thisYear, FIRST_YEAR } from "../_lib/history.js";
 import { officialPastYear } from "../_lib/history-pages.js";
 import { currentCycle } from "../../workers/sync/src/funding/fec.js";
@@ -215,6 +216,15 @@ async function profile(env, slug, url, request) {
 
   const body = BODY[o.body];
   const photo = safeUrl(o.photo_url);
+  // Summary first: the record in one line, as counts and the latest recorded fact.
+  const latest = votes !== FAILED && !all && pageNum === 1 ? votes.rows[0] : null;
+  const glanceLine = exec
+    ? (isPresident(o) || isGovernor(o)) && ok(orders) && ok(bills)
+      ? `${ok(orders).counts.executive_order || 0} executive orders and ${ok(bills).counts.signed || 0} bills signed are on record${ok(bills).counts.vetoed ? `; ${ok(bills).counts.vetoed} vetoed` : ""}.`
+      : ""
+    : counts && counts.final
+      ? `${counts.final} final-passage votes on record${latest ? `; the latest, ${fmtDate(latest.vote_date)}: ${latest.position} on ${latest.bill_number || latest.question}` : ""}.`
+      : "";
   const head = `
 <header class="page-head rep-head">
   ${photo
@@ -224,6 +234,7 @@ async function profile(env, slug, url, request) {
     <p class="label">${LEVEL_NAME[o.level]} · ${CHAMBER_NAME[o.chamber]}</p>
     <h1>${esc(o.name)}</h1>
     <p class="secondary">${esc(who(o))}</p>
+    ${glanceLine ? `<p class="summary-text small">${esc(glanceLine)}</p>` : ""}
     ${body ? `<div class="chips">${body.chip}</div>` : ""}
     ${safeUrl(o.website) ? `<div class="chips"><a class="chip chip--tap" href="${esc(o.website)}" target="_blank" rel="noopener">Official site ↗</a></div>` : ""}
   </div>
@@ -233,21 +244,6 @@ async function profile(env, slug, url, request) {
     o.term_start && o.term_end ? `${esc(o.term_start)} to ${esc(o.term_end)}`
       : o.term_start ? `Since ${esc(o.term_start)}` : null;
   const overview = `
-${section("Office", kv([
-    ["Office", esc(o.office)],
-    ["District", exec ? null : o.district ? esc(o.district) : "Statewide"],
-    ["Party", o.party ? esc(o.party) : null],
-    ["Term", term],
-    ["Body", body ? `<a class="inline-link" href="/bodies/${esc(body.slug)}/">${esc(body.name)}</a>` : null],
-    ["Website", safeUrl(o.website) ? `<a class="inline-link" href="${esc(o.website)}" target="_blank" rel="noopener">Official site ↗</a>` : null],
-  ]), "card stack-sm")}
-${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}
-<section class="card stack-sm">
-  <h2 class="label">Source</h2>
-  <p class="small">Last verified ${fmtDate(o.last_verified)}.</p>
-  ${sourceLink(o.source_url, "Official source")}
-  ${o.photo_credit ? `<p class="hint">Photo: ${esc(o.photo_credit)}</p>` : ""}
-</section>
 ${exec ? execGlance(o, ok(orders), ok(bills), ok(nominations)) : !counts ? sectionError("Record at a glance") : `<section class="card stack">
   <h2 class="label">Record at a glance</h2>
   <div class="grid-2">
@@ -255,7 +251,19 @@ ${exec ? execGlance(o, ok(orders), ok(bills), ok(nominations)) : !counts ? secti
     <div class="stat"><div class="stat-num">${counts.total || 0}</div><div class="stat-label">All recorded votes</div></div>
   </div>
   <p class="hint">Counts of recorded votes only. ThePillory doesn't score or grade officials.</p>
-</section>`}`;
+</section>`}
+${fold("office", "Office", kv([
+    ["Office", esc(o.office)],
+    ["District", exec ? null : o.district ? esc(o.district) : "Statewide"],
+    ["Party", o.party ? esc(o.party) : null],
+    ["Term", term],
+    ["Body", body ? `<a class="inline-link" href="/bodies/${esc(body.slug)}/">${esc(body.name)}</a>` : null],
+    ["Website", safeUrl(o.website) ? `<a class="inline-link" href="${esc(o.website)}" target="_blank" rel="noopener">Official site ↗</a>` : null],
+  ]), { meta: o.party || "" })}
+${fold("source", "Source", `<p class="small">Last verified ${fmtDate(o.last_verified)}.</p>
+  ${sourceLink(o.source_url, "Official source")}
+  ${o.photo_credit ? `<p class="hint">Photo: ${esc(o.photo_credit)}</p>` : ""}`, { meta: fmtDate(o.last_verified) })}
+${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
 
   const base = `/reps/${o.slug}/`;
   const more = votes !== FAILED && votes.more
@@ -273,7 +281,8 @@ ${exec ? execGlance(o, ok(orders), ok(bills), ok(nominations)) : !counts ? secti
   // What Votes, Funding and More hold depends on the office (roleOf).
   const role = roleOf(o);
   const money = exec && funding !== FAILED ? executiveFundingParts(o, funding, base) : null;
-  const sub = (id, label, html) => `<section class="stack-sm" id="${id}" aria-labelledby="h-${id}"><h2 class="label" id="h-${id}">${label}</h2>${html}</section>`;
+  // More: each part collapsed until tapped (a link to its id opens it).
+  const sub = (id, label, html) => fold(id, label, html);
   const appointedNote = (what) =>
     `<section class="card stack-sm"><p class="small">${what}</p><p class="small"><a class="inline-link" href="#disclosures">See financial disclosures and ethics agreements under More</a></p></section>`;
 

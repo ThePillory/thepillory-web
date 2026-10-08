@@ -30,6 +30,7 @@ import { syncFederalFunding, syncFederalLobbying } from "./funding/sync.js";
 import { syncExecutiveFunding } from "./funding/executive.js";
 import { syncSummaries, buildSummaries } from "./summaries.js";
 import { syncIssuesPages } from "./promises/finder-sync.js";
+import { syncOrderTexts, syncOrderCourts } from "./executive/orders-sync.js";
 import { syncHistoryOfficials, syncHistoryOrders, syncHistoryFunding, syncHistoryNominations, syncHistoryVotes } from "./history/sync.js";
 
 // Order matters: officials before votes; state officials first because the
@@ -50,6 +51,10 @@ const STEPS = [
   ["bill-outcomes", syncBillOutcomes],
   ["executive-orders", syncExecutiveOrders],
   ["nominations", syncNominations],
+  // Each executive order's text and the authority it claims (read once), and
+  // court records on CourtListener that mention it (src/executive/orders-sync.js).
+  ["order-texts", syncOrderTexts],
+  ["order-courts", syncOrderCourts],
   // Executive money and disclosures: small, so they run before federal-funding
   // rather than wait behind its first load.
   ["executive-funding", syncExecutiveFunding],
@@ -127,7 +132,7 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId }) {
     summary.push({ step, ...result, requests: budget.used - before });
   }
   const temporary = summary.filter((s) => s.status === "partial" && /^temporary error/.test(s.message || ""));
-  const partialVotes = summary.filter((s) => (s.step.endsWith("-votes") || ["county-meetings", "bill-outcomes", "executive-orders", "nominations", "executive-funding", "federal-funding", "federal-lobbying"].includes(s.step)) && s.status === "partial");
+  const partialVotes = summary.filter((s) => (s.step.endsWith("-votes") || ["county-meetings", "bill-outcomes", "executive-orders", "nominations", "order-texts", "order-courts", "executive-funding", "federal-funding", "federal-lobbying"].includes(s.step)) && s.status === "partial");
   return {
     run_id: run.id,
     trigger,

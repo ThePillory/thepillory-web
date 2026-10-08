@@ -3,6 +3,7 @@
 // /meetings/<id>/calendar.ics    add to calendar
 // Anything else under /meetings/ (old sample meeting pages) redirects to the calendar.
 import { page, notFound, esc, safeUrl, sourceLink, guard } from "../_lib/render.js";
+import { summaryHead, contentsBar, fold, statusChip } from "../_lib/summary.js";
 import { tagsFor, topicChips, TOPIC, topicName, topicHref } from "../_lib/topics.js";
 
 // County meetings are Calaveras County's (the live community): topic chips open its topic pages.
@@ -182,9 +183,7 @@ async function meeting(env, id) {
   const status =
     m.status === "cancelled"
       ? '<p class="banner banner--error">This meeting was cancelled.</p>'
-      : past
-        ? '<p class="banner">This meeting has taken place. See "After the meeting" below.</p>'
-        : "";
+      : "";
 
   // How to weigh in
   let weighIn;
@@ -296,19 +295,12 @@ async function meeting(env, id) {
         .map(([t, n]) => `<a class="chip chip--sm chip--topic" href="${topicHref(t, COUNTY_PLACE)}">${esc(topicName(t))} · ${n}</a>`)
         .join("")}</div><span class="hint">AI-tagged from each item's title and summary; a person can correct any tag. <a class="inline-link" href="/about/methodology/#topics">How topics work</a></span></div>`
     : "";
-  const agenda = `
-<section class="card list-card" id="agenda" aria-labelledby="h-agenda">
-  <h2 class="label list-card-head" id="h-agenda">${state ? "Hearing details" : "Full agenda"}</h2>
-  ${topicsRow}
-  ${groupRows}${agendaNote}${docRows}
-</section>`;
+  const agenda = fold("agenda", state ? "Hearing details" : "Full agenda", `<div class="list-card">${topicsRow}${groupRows}${agendaNote}${docRows}</div>`, { meta: items.length ? `${items.length} item${items.length === 1 ? "" : "s"}` : "" });
 
   // After the meeting
   const video = safeUrl(m.video_url);
   const after = !state
-    ? `
-<section class="card card--dashed stack-sm" id="after" aria-labelledby="h-after">
-  <h2 class="label" id="h-after">After the meeting</h2>
+    ? fold("after", "After the meeting", `
   ${
     m.minutes_url || video
       ? `<ul class="plain-list weigh-list">
@@ -318,29 +310,38 @@ async function meeting(env, id) {
   <p class="small secondary">Each supervisor's vote on each item will be added from the minutes.</p>`
       : `<p>Minutes and video appear here once published. Each supervisor's vote will be added from the minutes.</p>
   ${m.body === "Board of Supervisors" ? sourceLink(BOS_VIDEO, "Live and past meetings: the County Clerk's YouTube channel") : ""}`
-  }
-</section>`
+  }`, { meta: m.minutes_url || video ? "Published" : "Not yet", open: past && Boolean(m.minutes_url || video) })
     : "";
 
   const typeLabel = m.meeting_type || (state ? "Hearing" : "Meeting");
+  // The summary: what's on the agenda, in counts, and what agenda watch flagged.
+  const sumText = items.length
+    ? `${items.length} item${items.length === 1 ? "" : "s"} on the agenda${summary ? `; agenda watch flagged ${flagged.length} for budget, land use, fees, safety or public access` : ""}.`
+    : state
+      ? "A committee hearing of the California Legislature."
+      : m.agenda_url ? "The agenda is posted; its items haven't been read yet." : "The agenda isn't posted yet.";
+  const meetingStatus = m.status === "cancelled" ? "Cancelled" : past ? "Took place" : "Upcoming";
+  const head = summaryHead({
+    kicker: `${esc(LEVEL_LABEL[m.level] || "")} · ${esc(typeLabel)}`,
+    status: `${statusChip(meetingStatus)}<span class="meeting-when"><strong>${esc(w.long)}${w.time ? ` · ${esc(w.time)}` : ""}</strong></span>`,
+    title: m.body,
+    summary: { text: sumText, source: null },
+    extra: `${
+      m.location || online
+        ? `<p class="small secondary">${esc(m.location || "")}${m.location && online ? " · " : ""}${online ? `Also online: <a class="tap" href="${esc(online)}" target="_blank" rel="noopener">meeting link ↗</a>` : ""}</p>`
+        : ""
+    }${state && participantsText(m) ? `<p class="small secondary">${esc(participantsText(m))}</p>` : ""}`,
+  });
+  const showWeigh = m.status !== "cancelled" && !past;
   const main = `
-<header class="page-head">
-  <p class="label">${esc(LEVEL_LABEL[m.level] || "")} · ${esc(typeLabel)}</p>
-  <h1>${esc(m.body)}</h1>
-  <p class="meeting-when"><strong>${esc(w.long)}${w.time ? ` · ${esc(w.time)}` : ""}</strong></p>
-  ${
-    m.location || online
-      ? `<p class="small secondary">${esc(m.location || "")}${m.location && online ? " · " : ""}${online ? `Also online: <a class="tap" href="${esc(online)}" target="_blank" rel="noopener">meeting link ↗</a>` : ""}</p>`
-      : ""
-  }
-  ${state && participantsText(m) ? `<p class="small secondary">${esc(participantsText(m))}</p>` : ""}
-</header>
+${contentsBar([["summary", "Summary"], showWeigh ? ["weigh-in", "Weigh in"] : [null], summary ? ["agenda-watch", "Agenda watch"] : [null], ["agenda", state ? "Details" : "Agenda"], !state ? ["after", "After"] : [null]])}
+${head}
 ${status}
 <div class="meeting-actions">
   <a class="btn" href="${meetingHref(m.id)}calendar.ics">Add to calendar</a>
 </div>
 ${
-  m.status !== "cancelled" && !past
+  showWeigh
     ? `<section class="panel-navy weigh-panel" id="weigh-in" aria-labelledby="h-weigh"><h2 class="label label--navy" id="h-weigh">How to weigh in</h2>${weighIn}</section>`
     : ""
 }

@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/assets/pillory.css?v=35" />
+    <link rel="stylesheet" href="/assets/pillory.css?v=36" />
     <script>document.documentElement.classList.add("js")</script>
     <meta name="description" content="Evidence-first civic accountability. Verified residents, protected identities, nonpartisan." />
     <meta name="color-scheme" content="light dark" />
@@ -51,8 +51,8 @@
 </header>
 
 <section class="card stack" id="analysis">
-  <h2>Constitutional analysis of bills</h2>
-  <p>ThePillory maps the Constitution; it doesn't rule on it. For bills our officials have voted on, an AI tool writes an analysis showing which parts of the Constitution a bill touches. Automatic checks and a second AI tool check every analysis, and a person reviews any that are flagged, plus a random share of the rest. Nothing here is a verdict on whether a bill is constitutional, and nothing here is legal advice.</p>
+  <h2>Constitutional analysis of bills and executive orders</h2>
+  <p>ThePillory maps the Constitution; it doesn't rule on it. For bills our officials have voted on, and for executive orders of the President and the Governor, an AI tool writes an analysis showing which parts of the Constitution a bill touches. Automatic checks and a second AI tool check every analysis, and a person reviews any that are flagged, plus a random share of the rest. Nothing here is a verdict on whether a bill is constitutional, and nothing here is legal advice.</p>
   <ol class="numbered">
     <li>
       <span class="step-num" aria-hidden="true">1</span>
@@ -72,7 +72,7 @@
       <span class="step-num" aria-hidden="true">3</span>
       <div class="stack-sm">
         <h3>An AI tool writes it, and automatic checks correct it</h3>
-        <p class="small secondary">Claude, an AI model made by Anthropic, writes the card or analysis from the bill text and the full text of the Constitution. Its instructions: no verdicts on constitutionality, no party labels or partisan language, the strongest version of each view, and "uncertain" rather than a guess. Then every passage quoted from the Constitution is compared with the National Archives text and replaced with the exact words if it doesn't match, and every court case is looked up in CourtListener, a free public database of court opinions. Cases that can't be found under the same name are removed, with every sentence that relies on them. Each change is logged.</p>
+        <p class="small secondary">Claude, an AI model made by Anthropic, writes the card or analysis from the bill text and the full text of the Constitution. Its instructions: no verdicts on constitutionality, no party labels or partisan language, the strongest version of each view, and "uncertain" rather than a guess. Each card or analysis also has one line beginning "Supporters argue that" and one beginning "Critics argue that": the strongest argument each side makes, attributed to that side rather than to ThePillory, of similar length, naming no person, party or group. Then every passage quoted from the Constitution is compared with the National Archives text and replaced with the exact words if it doesn't match, and every court case is looked up in CourtListener, a free public database of court opinions. Cases that can't be found under the same name are removed, with every sentence that relies on them. Each change is logged.</p>
       </div>
     </li>
     <li>
@@ -93,7 +93,7 @@
       <span class="step-num" aria-hidden="true">6</span>
       <div class="stack-sm">
         <h3>People check the system, too</h3>
-        <p class="small secondary">A random 10% of the analyses the AI reviewer passes also go to a person as spot checks. The review page keeps a running count of how often the person agrees with the AI reviewer, so we can see whether it can be trusted. A person can edit any part, approve, reject, or ask for a new draft. Analyses a person approves show "Reviewed by" with their name and the date. Earlier versions and every edit are kept.</p>
+        <p class="small secondary"><strong>Executive orders</strong> go through every step above the same way, from the order's own text (the Federal Register's, or the Governor's signed order), with the same instructions in the order's words and the same layout for every President and Governor; there's no relevance check, since every order is substantive. A random 10% of the analyses the AI reviewer passes also go to a person as spot checks. The review page keeps a running count of how often the person agrees with the AI reviewer, so we can see whether it can be trusted. A person can edit any part, approve, reject, or ask for a new draft. Analyses a person approves show "Reviewed by" with their name and the date. Earlier versions and every edit are kept.</p>
       </div>
     </li>
   </ol>
@@ -115,7 +115,8 @@
   <p>The President, the Vice President and the Cabinet, and California's Governor and the other offices California elects statewide. Each record says where it comes from and links to it.</p>
   <ul class="plain-list small">
     <li><strong>Who holds each office:</strong> the President and Vice President, with their terms, from the congress-legislators project's public executive data; the Cabinet exactly as whitehouse.gov lists it, checked daily; California's statewide officers entered by hand from each office's official website, with the date they were checked.</li>
-    <li><strong>Executive orders:</strong> the President's from the Federal Register, with each order's number, signing date and official title, exactly as published. The Governor's from the Office of the Governor's website: its "Executive orders" posts, with the signed order linked when the post links it. The titles of those posts are the Governor's Office's own headlines, shown as published.</li>
+    <li><strong>Executive orders:</strong> the President's from the Federal Register, with each order's number, signing date and official title, exactly as published, and the Register's notes (for example "Revoked by"). The Governor's from the Office of the Governor's website: its "Executive orders" posts, with the signed order linked when the post links it. The titles of those posts are the Governor's Office's own headlines, shown as published. Each order's page quotes, word for word from its text, <strong>the authority it claims</strong> ("By the authority vested in me …"); that is what the order says about itself, not a finding that it has that authority. A signed order that's a scanned image, with no readable text, says so.</li>
+    <li><strong>In the courts:</strong> court opinions and case filings on CourtListener, a free public database of court records, that mention an order by its number, newest first. A case is listed because something filed in it mentions the order; that doesn't mean the order is what the case is about. Filings are described exactly as the court docketed them (for example a motion for a preliminary injunction, or an order granting one). ThePillory doesn't summarize cases or call outcomes.</li>
     <li><strong>Bills signed and vetoed:</strong> for Congress, each bill's actions on Congress.gov; for California, each bill's history on California Legislative Information (leginfo). An outcome is recorded only from the action that states it ("Signed by President.", "Vetoed by Governor.", "Became Public Law No: …"). When a bill became law and the record shows no signature, ThePillory says exactly that and doesn't assume one. The President or Governor named is whoever held the office on that date.</li>
     <li><strong>Nominations:</strong> civilian nominations the President sent to the Senate, from Congress.gov, with each one's latest action as Congress.gov records it.</li>
     <li><strong>Money and disclosures:</strong> every office the same way, whatever the officeholder's party. The President: campaign money from the Federal Election Commission, like members of Congress, the inaugural committee, and financial disclosure reports. The Vice President: the ticket's campaign money (the FEC records it under the President's campaign committee), the inaugural committee, and financial disclosure reports. Cabinet members are appointed, so they have no campaign money; their financial disclosure reports and ethics agreements are shown instead. California's statewide officers: their state campaign committees, contributions and independent expenditures, and their Form 700 statements. See <a class="inline-link" href="#funding">Campaign funding</a> and <a class="inline-link" href="#disclosures">Financial disclosures</a>.</li>
@@ -257,8 +258,8 @@
     </div>
   </div>
 </nav>
-    <script src="/assets/search-index.js?v=35"></script>
+    <script src="/assets/search-index.js?v=36"></script>
     <script src="/api/search-officials"></script>
-    <script src="/assets/app.js?v=35"></script>
+    <script src="/assets/app.js?v=36"></script>
   </body>
 </html>

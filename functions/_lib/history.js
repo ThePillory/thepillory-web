@@ -6,6 +6,7 @@
 // blanks. Party is plain text, the same for everyone; nothing here is scored.
 import { esc, fmtDate } from "./render.js";
 import { asset } from "./geo.js";
+import { orderHref } from "./orders.js";
 import { CABINET, cabinetPosition, holdersInYear } from "../../workers/sync/src/history/parse.js";
 
 /** The earliest year the slider reaches: officeholder records and the federal budget tables start here. */
@@ -310,13 +311,13 @@ export function pastVoteRows(votes) {
   return rows.join("");
 }
 
-/** Executive orders as published, linked to the Federal Register. */
+/** Executive orders as published: each links to its page, and to the Federal Register. */
 export function orderRows(rows, { who = true } = {}) {
   return rows
     .map((a) => `<li class="exec-row stack-xs">
   <span class="label">${a.number ? `Executive Order ${esc(a.number)}` : "Executive order"}${a.citation ? ` · ${esc(a.citation)}` : ""}</span>
-  <a class="inline-link" href="${esc(a.source_url)}" target="_blank" rel="noopener">${esc(a.title)} ↗</a>
-  <span class="xsmall secondary">${a.signed_on ? `Signed ${fmtDate(a.signed_on)}` : ""}${who && a.official_name ? ` · ${esc(a.official_name)}` : ""}</span>
+  <a class="inline-link" href="${orderHref(a.id)}">${esc(a.title)}</a>
+  <span class="xsmall secondary">${a.signed_on ? `Signed ${fmtDate(a.signed_on)}` : ""}${who && a.official_name ? ` · ${esc(a.official_name)}` : ""} · <a class="inline-link" href="${esc(a.source_url)}" target="_blank" rel="noopener">Federal Register ↗</a></span>
 </li>`)
     .join("");
 }

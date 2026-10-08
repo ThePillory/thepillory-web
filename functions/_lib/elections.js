@@ -9,6 +9,7 @@
 // are tested in workers/sync/test/elections.test.mjs. Results are read from the
 // Secretary of State's results feed only after the polls close; before then the
 // feed carries test numbers, which are never shown.
+import { fold } from "./summary.js";
 import { esc, safeUrl, sourceLink, fmtDate } from "./render.js";
 import { asset } from "./geo.js";
 
@@ -318,8 +319,17 @@ export function courtRow(electionId, g) {
  * only covers part of it, and a "Your ballot" link that the browser shows only
  * when it has saved districts (data-if-districts, in assets/app.js).
  */
-export function onTheBallot(election, { rows, intro = "", today = null }) {
+export function onTheBallot(election, { rows, intro = "", today = null, folded = false }) {
   const id = election.election.id;
+  // folded: a collapsed section (summary-first pages), with the date beside its title.
+  if (folded) {
+    return fold("elections", "On the ballot", `<a class="out-link" href="${electionHref(id)}">Whole ballot</a>
+  ${intro ? `<p class="small secondary">${esc(intro)}</p>` : ""}
+  <div class="card">${rows.join("")}</div>
+  <a class="btn btn--primary btn--block" href="${ballotHref(id)}" data-if-districts hidden>Your ballot</a>
+  <p class="small" data-unless-districts><a class="inline-link" href="${ballotHref(id)}">Find your ballot</a> by address or ZIP code.</p>
+  ${today ? `<p class="hint"><a class="inline-link" href="/elections/#how-to-vote">How to vote</a></p>` : ""}`, { meta: today ? whenLine(election, today) : fmtDate(election.election.date) });
+  }
   return `
 <section class="stack-sm" id="elections" aria-labelledby="h-elections">
   <div class="section-head"><h2 class="label" id="h-elections">On the ballot · ${esc(fmtDate(election.election.date))}</h2><a class="section-link" href="${electionHref(id)}">Whole ballot</a></div>

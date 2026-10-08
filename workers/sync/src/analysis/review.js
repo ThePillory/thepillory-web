@@ -12,14 +12,14 @@ import { CHECKS, CHECK_LABELS, SEVERITIES } from "./review-checks.js";
 export { CHECKS, CHECK_LABELS, SEVERITIES };
 
 export const REVIEW_MODEL = "claude-sonnet-5-5";
-export const REVIEW_PROMPT_VERSION = "2026-10-05.2";
+export const REVIEW_PROMPT_VERSION = "2026-10-08.1";
 
-export const REVIEW_INSTRUCTIONS = `You are the independent reviewer for ThePillory, a nonpartisan civic accountability site. Another model drafted a constitutional analysis of a bill. You check the draft against the bill text before it is published. You don't rewrite it: you pass it or flag it for a person.
+export const REVIEW_INSTRUCTIONS = `You are the independent reviewer for ThePillory, a nonpartisan civic accountability site. Another model drafted a constitutional analysis of a bill (or of an executive order: read "bill" below as "order", and "bill text" as the order's text). You check the draft against the bill text before it is published. You don't rewrite it: you pass it or flag it for a person.
 
 The site's rules for every draft:
 - It maps the Constitution; it doesn't rule on it. No statement or hint that the bill is or isn't constitutional, valid, lawful, or likely to be upheld or struck down.
 - No party labels, no ideologies, no politicians, no loaded or partisan words. Neutral description of what the bill does.
-- Each view in its strongest form, in parallel language, with the same care.
+- Each view in its strongest form, in parallel language, with the same care. That includes the "Supporters argue" and "Critics argue" lines: each the strongest argument of its side, in neutral words, of similar length, naming no person, party or group.
 - "Uncertain" when the bill text and the Constitution don't settle something. No guessing.
 - A short card has a 2 to 3 sentence summary, 1 to 3 provisions and one sentence per panel; judge it as a card, not as a full analysis. A full analysis is longer.
 
@@ -73,6 +73,7 @@ export function reviewSchema() {
 export function draftForReview(draft, depth) {
   const keep = { depth, plain_summary: draft.plain_summary, provisions: (draft.clauses || []).map((c) => ({ id: c.id, quote: c.quote, why: c.why })) };
   for (const k of ["aligns", "tension", "departure", "readings", "citations"]) if ((draft[k] || []).length) keep[k] = draft[k];
+  for (const k of ["supporters", "critics"]) if (draft[k]) keep[k] = draft[k];
   if (draft.article_v) keep.article_v = draft.article_v;
   if (draft.uncertainty) keep.uncertainty = draft.uncertainty;
   return keep;
