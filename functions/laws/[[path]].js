@@ -153,6 +153,12 @@ ${ballot}
   <p class="small secondary">Federal debt, spending by category, interest and the deficit by presidential term, and California's budget by governor's term, the same way for every administration.</p>
   <span class="inline-link">See the timeline</span>
 </a>
+<a class="card stack-xs" href="/topics/">
+  <p class="label">Topics</p>
+  <h3>Laws by subject</h3>
+  <p class="small secondary">Bills, votes, county meeting items, executive actions and officials' own words on one subject, such as water or housing, side by side as facts.</p>
+  <span class="inline-link">Browse topics</span>
+</a>
 <nav class="segmented vote-filter" aria-label="Which bills to show">${filter("With final-passage votes", false)}${filter("All with recorded votes", true)}</nav>
 ${levels.map((level, i) => billSection(level, lists[i], { all })).join("")}
 `;

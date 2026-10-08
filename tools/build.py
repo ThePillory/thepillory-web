@@ -127,6 +127,7 @@ FOOTER = """<footer class="app-footer" aria-label="About ThePillory">
   <a href="/about/principles/">Principles</a>
   <a href="/about/methodology/">Methodology</a>
   <a href="/elections/">Elections</a>
+  <a href="/topics/">Topics</a>
   <p class="app-footer-domain">thepillory.co</p>
 </footer>"""
 
