@@ -47,6 +47,8 @@ import re
 import subprocess
 import sys
 import tempfile
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import date
@@ -84,17 +86,30 @@ def log(*a):
     print(*a, file=sys.stderr, flush=True)
 
 
-def fetch(url, binary=False, tries=3):
+NOTES = []  # checks printed again at the end of the run, where the job log keeps them
+
+
+def note(*a):
+    log(*a)
+    NOTES.append(" ".join(str(x) for x in a))
+
+
+def fetch(url, binary=False, tries=5):
     for i in range(tries):
         try:
             req = urllib.request.Request(urllib.parse.quote(url, safe=":/?=&%#~+[],"), headers={"User-Agent": UA})
             with urllib.request.urlopen(req, timeout=180) as r:
                 data = r.read()
             return data if binary else data.decode("utf-8", "ignore")
-        except Exception as e:  # noqa: BLE001
+        except urllib.error.HTTPError as e:
+            if e.code == 404 or i == tries - 1:
+                raise
+            # The Census Bureau's file server answers 429 when asked too quickly: wait and try again.
+            time.sleep(20 * (i + 1) if e.code == 429 else 3)
+        except Exception:  # noqa: BLE001
             if i == tries - 1:
                 raise
-            log(f"  retry {url}: {e}")
+            time.sleep(3)
 
 
 def text_of(h):
@@ -186,6 +201,7 @@ def congress_members():
 # Districts by county, by redistricting period (Census Bureau relationship files).
 
 def rel_rows(url):
+    time.sleep(1)  # one file a second keeps the Census file server from refusing
     try:
         t = fetch(url)
     except Exception as e:  # noqa: BLE001
@@ -202,6 +218,7 @@ def rel_rows(url):
 def cd108_rows(st, fips):
     """The 108th Congress file: county and district columns, fixed width or comma separated (format checked in the log)."""
     url = f"{RELFILES}cd108th/{st}/cou_c8_{fips}.txt"
+    time.sleep(1)
     try:
         t = fetch(url)
     except Exception as e:  # noqa: BLE001
@@ -212,8 +229,8 @@ def cd108_rows(st, fips):
         m = re.match(r"^\s*(\d{2})\s*,?\s*(\d{3})\s*,?\s*(\d{1,2})\b", line)
         if m and m.group(1) == fips:
             rows.append((m.group(1) + m.group(2), str(int(m.group(3)))))
-    if st == "CA":
-        log(f"  cd108 CA sample: {t.splitlines()[:4]} -> {rows[:4]}")
+    if st == "CA" or not rows:
+        note(f"cd108 {st} sample: {t.splitlines()[:6]} -> {len(rows)} rows {rows[:3]}")
     return rows, url
 
 
@@ -247,7 +264,7 @@ def districts_by_period():
                 periods.append(p)
         states[st] = {"periods": periods}
         if st == "CA":
-            log(f"districts CA: {[(p['from'], p['to'], p['cd'].get('06009'), (p.get('sldu') or {}).get('06009'), (p.get('sldl') or {}).get('06009')) for p in periods]}")
+            note(f"districts CA: {[(p['from'], p['to'], p['cd'].get('06009'), (p.get('sldu') or {}).get('06009'), (p.get('sldl') or {}).get('06009')) for p in periods]}")
     return states
 
 
@@ -348,24 +365,37 @@ def sov_elections():
         except Exception as e:  # noqa: BLE001
             log(f"SOV {year}: {e}")
             continue
-        summary = next((p for p in pdfs if re.search(r"/sov/[^/]*/(\d+-)?(summary|sum)\.pdf$", p) and "/ssov/" not in p), None)
-        if not summary:
-            log(f"SOV {year}: no summary PDF among {pdfs[:8]}")
+        pdfs = [p if p.startswith("http") else "https://www.sos.ca.gov" + p for p in pdfs]
+        summary = next((p for p in pdfs if re.search(r"/(\d+[-_])?(sov[-_])?(summary|sum)\.pdf$", p, re.I) and "/ssov/" not in p), None)
+        files = [summary] if summary else [p for p in pdfs if re.search(r"complete_sov|_entire\.pdf$", p)]
+        if not files:
+            # Older years publish one PDF per office instead of a summary.
+            files = [p for p in pdfs if re.search(r"(gov|ltgov|lt_gov|sos|sec|cont|treas|ag|ins|spi|supt|boe|congress|us_reps|assembly|senat)[^/]*\.pdf$", p, re.I)
+                     and not re.search(r"about|contents|vot_sys|reg|cert|errata|ballot_measures|pref|particip", p, re.I)]
+        if not files:
+            note(f"SOV {year}: no summary PDF among {[p.rsplit('/', 1)[-1] for p in pdfs]}")
             continue
-        try:
-            contests = sov_summary(pdf_text(summary))
-        except Exception as e:  # noqa: BLE001
-            log(f"SOV {year}: {e}")
-            continue
+        contests = {}
+        for f in files:
+            try:
+                for k, v in sov_summary(pdf_text(f)).items():
+                    contests.setdefault(k, []).extend(v)
+            except Exception as e:  # noqa: BLE001
+                note(f"SOV {year} {f}: {e}")
         winners = []
         for (key, label, district), cands in contests.items():
+            names = [c["name"] for c in cands]
+            if len(names) != len(set(names)):
+                # The same candidate listed more than once: county-by-county lines, not one statewide total. Not used.
+                continue
             top = max(cands, key=lambda c: c["votes"])
             winners.append({"office": key, "label": label, "district": district, "name": top["name"], "party": top["party"], "votes": top["votes"]})
         counts = {}
         for w in winners:
             counts[w["office"]] = counts.get(w["office"], 0) + 1
-        log(f"SOV {year}: {summary} -> {counts}")
-        out.append({"year": year, "source": summary, "page": link, "winners": winners})
+        note(f"SOV {year}: {[f.rsplit('/', 1)[-1] for f in files]} -> {counts}")
+        if winners:
+            out.append({"year": year, "source": files[0], "page": link, "winners": winners})
     out.sort(key=lambda e: e["year"])
     return out
 
@@ -455,17 +485,19 @@ def omb_series(links):
     log(f"OMB 3.1 rows: {list(funcs)[:30]}")
     # Table 10.1: GDP (billions), fiscal years.
     t101 = xlsx_rows(links["10z1"])
-    for r in t101[:8]:
-        log(f"  OMB 10.1 header: {r[:6]}")
     gdp = {}
     for r in t101:
-        if r and re.fullmatch(r"\d{4}", str(r[0] or "").strip()) and num(r[1]) is not None:
-            y = int(str(r[0]).strip())
-            if y >= FIRST_YEAR - 1:
-                gdp[y] = num(r[1]) * 1e9
+        y = str(r[0] or "").strip().replace(".0", "") if r else ""
+        if re.fullmatch(r"\d{4}", y) and int(y) >= FIRST_YEAR - 1:
+            # The first number after the year is GDP in billions of current dollars.
+            v = next((num(c) for c in r[1:] if num(c) is not None), None)
+            if v is not None:
+                gdp[int(y)] = v * 1e9
+    if not gdp or 2024 not in gdp:
+        note(f"OMB 10.1 rows: {[r[:5] for r in t101[:14]]}")
     out["gdp"] = gdp
     out["t101_url"] = links["10z1"]
-    log(f"OMB GDP: {min(gdp) if gdp else None}–{max(gdp) if gdp else None}; 2024 {gdp.get(2024)}")
+    note(f"OMB GDP: {min(gdp) if gdp else None}–{max(gdp) if gdp else None}; 2024 {gdp.get(2024)}")
     return out
 
 
@@ -490,7 +522,7 @@ def census_population():
             if m:
                 pop.setdefault(int(m.group(1)), int(m.group(2).replace(",", "")))
     except Exception as e:  # noqa: BLE001
-        log(f"population 1990s: {e}")
+        note(f"population 1990s: {e}")
     log(f"population: {min(pop)}–{max(pop)}")
     return pop
 
@@ -514,20 +546,32 @@ def party_control():
     """Majority party of each chamber, by Congress, as the House and Senate historians list it."""
     house = {}
     t = text_of(fetch(HOUSE_PARTY))
-    for m in re.finditer(r"(\d{3})(?:st|nd|rd|th) \((\d{4})[–-](\d{4})\) 435 (?:\d+ )?(\d+) (\d+)", t):
+    for m in re.finditer(r"(\d{3})(?:st|nd|rd|th) \((\d{4})[–-](\d{4})\) 435((?: \d+)+)", t):
         c = int(m.group(1))
         if c >= 102:
-            d, r = int(m.group(4)), int(m.group(5))
+            ns = [int(x) for x in m.group(4).split()]
+            # Democrats then Republicans, as the historian's table lists them: the first two
+            # adjacent counts that together come close to the 435 seats.
+            pair = next(((ns[i], ns[i + 1]) for i in range(len(ns) - 1) if 400 <= ns[i] + ns[i + 1] <= 435), None)
+            if not pair:
+                note(f"House {c}: counts not read from {m.group(0)}")
+                continue
+            d, r = pair
             house[c] = {"years": [int(m.group(2)), int(m.group(3))], "democrats": d, "republicans": r, "majority": "Democrats" if d > r else "Republicans"}
     senate = {}
     t = text_of(fetch(SENATE_PARTY))
-    for m in re.finditer(r"(\d{3})(?:st|nd|rd|th) Congress \((\d{4})[–-](\d{4})\)(.{0,600}?)(?=-{10,}|\d{3}(?:st|nd|rd|th) Congress \()", t):
+    for m in re.finditer(r"(\d{3})(?:st|nd|rd|th) Congress \((\d{4})[–-](\d{4})\)(.{0,1200}?)(?=-{10,}|\d{3}(?:st|nd|rd|th) Congress \(|$)", t):
         c = int(m.group(1))
         if c >= 102:
             body = re.sub(r"\s+", " ", m.group(4)).strip()
             maj = re.findall(r"Majority Party(?: \([^)]*\))?: (Democrats|Republicans)", body)
             senate[c] = {"years": [int(m.group(2)), int(m.group(3))], "majority": maj[0] if len(set(maj)) == 1 else None, "majorities": maj, "text": body[:400]}
-    log(f"party control: House {sorted(house)[:3]}…{sorted(house)[-3:]}, Senate {sorted(senate)[:3]}…{sorted(senate)[-3:]}; 107th Senate {senate.get(107)}")
+    note(f"party control: House {[(c, h['democrats'], h['republicans']) for c, h in sorted(house.items())]}")
+    note(f"party control: Senate {[(c, v['majority'], v['majorities']) for c, v in sorted(senate.items())]}")
+    for c in range(102, 120):
+        if c not in senate:
+            i = t.find(f"{c}th Congress") if c not in (101, 102, 103) else t.find(f"{c}{'st' if c == 101 else 'nd' if c == 102 else 'rd'} Congress")
+            note(f"Senate {c} not read: {t[i:i + 500] if i >= 0 else 'not on the page'}")
     return {"house": house, "senate": senate, "house_source": HOUSE_PARTY, "senate_source": SENATE_PARTY}
 
 
@@ -582,22 +626,24 @@ def dof_charts():
 def ca_general_fund(charts):
     """General Fund revenues and expenditures by fiscal year (thousands or millions as the chart states), from the chart that lists them."""
     for url, t in charts.items():
-        if not re.search(r"General Fund", t, re.I) or not re.search(r"Expenditures", t, re.I):
+        if not re.search(r"CHART A\b", t) or not re.search(r"GENERAL FUND BUDGET SUMMARY", t):
             continue
         rows = {}
         for line in t.splitlines():
-            m = re.match(r"^\s*(\d{4})-(\d{2})\s+(.*)$", line)
+            m = re.match(r"^\s*(\d{4})-(\d{2})\s*(\S*)\s+(.*)$", line)
             if not m:
                 continue
-            nums = [num(x) for x in re.findall(r"-?\$?[\d,]+\.?\d*", m.group(3))]
-            nums = [x for x in nums if x is not None]
-            if len(nums) >= 2:
-                rows[int(m.group(1)) + 1] = nums
+            body = re.sub(r"(?<![\d.,])\d{1,2}/", " ", m.group(4))  # footnote markers like "3/"
+            nums = [num(x) for x in re.findall(r"-?[\d,]+\.\d", body)]
+            if len(nums) >= 7:
+                # Chart A columns: prior-year balance, adjustment, adjusted balance, revenues and
+                # transfers, resources available, expenditures, ending balance ($ millions).
+                rows[int(m.group(1)) + 1] = {"revenues": nums[3] * 1e6, "expenditures": nums[5] * 1e6, "ending_balance": nums[6] * 1e6, "mark": m.group(3) or None}
+        tail = [l.strip() for l in t.splitlines() if l.strip()][-25:]
+        note(f"CA Chart A: {len(rows)} years {min(rows) if rows else None}–{max(rows) if rows else None}; last rows {sorted(rows.items())[-4:]}; notes {tail}")
         if len(rows) >= 20:
-            head = "\n".join(t.splitlines()[:14])
-            log(f"CA general fund chart: {url}\n{head}\n  sample: {sorted(rows.items())[-3:]}")
-            return {"source": url, "rows": rows, "header": head}
-    log("CA general fund: no chart matched")
+            return {"source": url, "rows": rows, "notes": tail}
+    note("CA general fund: Chart A not found")
     return None
 
 
@@ -614,16 +660,25 @@ def ca_population():
         try:
             wb = openpyxl.load_workbook(io.BytesIO(fetch(url, binary=True)), read_only=True, data_only=True)
         except Exception as e:  # noqa: BLE001
-            log(f"DOF {kind}: {e}")
+            note(f"DOF {kind}: {e}")
             continue
         for ws in wb.worksheets:
-            rows = [list(r) for r in ws.iter_rows(values_only=True)]
-            for r in rows:
-                cells = [str(c).strip() if c is not None else "" for c in r]
-                if any(re.fullmatch(r"California|State Total|California Total", c) for c in cells[:3]):
-                    log(f"  DOF {kind} {ws.title}: {cells[:14]}")
-                    break
-            break
+            ym = re.search(r"(20\d\d|19\d\d)", ws.title)
+            for r in ws.iter_rows(values_only=True):
+                cells = list(r)
+                first = next((str(c).strip() for c in cells[:3] if c not in (None, "")), "")
+                if not re.fullmatch(r"California|State Total|California Total|CALIFORNIA|STATE TOTAL", first):
+                    continue
+                vals = [num(c) for c in cells if num(c) is not None]
+                # E-5/E-8 layout: total population, household population, group quarters, total
+                # housing units, five housing types, occupied units (households), vacancy, persons per household.
+                if ym and len(vals) >= 10 and 25e6 < vals[0] < 50e6 and 8e6 < vals[9] < 20e6:
+                    out_pop[int(ym.group(1))] = int(vals[0])
+                    out_hh[int(ym.group(1))] = int(vals[9])
+                else:
+                    note(f"DOF {kind} sheet {ws.title}: not read {cells[:14]}")
+                break
+    note(f"CA population: {sorted(out_pop.items())}; households: {sorted(out_hh.items())}")
     return out_pop, out_hh, [u for u, _ in sources]
 
 
@@ -680,6 +735,10 @@ def main():
     for st, d in congress_members().items():
         write(f"congress/{st.lower()}.json", {"_readme": "Generated by tools/build_history.py; don't edit by hand.", "source": BIOGUIDE, "source_note": "congress-legislators (legislators-current and legislators-historical), compiled from the Biographical Directory of the United States Congress.", **d})
     for st, d in districts_by_period().items():
+        old = OUT / f"districts/{st.lower()}.json"
+        if old.exists() and len(json.loads(old.read_text())["periods"]) > len(d["periods"]):
+            note(f"districts {st}: kept the earlier file ({len(d['periods'])} periods read this time)")
+            continue
         write(f"districts/{st.lower()}.json", {"_readme": "Generated by tools/build_history.py; don't edit by hand.", "source": RELFILES, **d})
     govs = governors()
     elections = sov_elections()
@@ -691,6 +750,9 @@ def main():
         "sov_index": SOV_INDEX,
     })
     write("finances.json", finances(executive, govs))
+    log("\n==== Checks ====")
+    for n in NOTES:
+        log(n[:3000])
 
 
 if __name__ == "__main__":
