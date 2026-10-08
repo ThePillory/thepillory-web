@@ -224,14 +224,40 @@ def cd108_rows(st, fips):
     except Exception as e:  # noqa: BLE001
         log(f"  {url}: {e}")
         return [], url
-    rows = []
+    # "County<spaces>Congressional District" with ranges like "9-11,13": names are matched to
+    # FIPS codes through the county list in data/geo/places/<st>.json.
+    names = {}
+    try:
+        for c in json.loads((ROOT / "data" / "geo" / "places" / f"{st.lower()}.json").read_text())["counties"]:
+            names[county_key(c["name"])] = c["fips"]
+    except Exception as e:  # noqa: BLE001
+        note(f"cd108 {st}: county list: {e}")
+    rows, unmatched = [], []
     for line in t.splitlines():
-        m = re.match(r"^\s*(\d{2})\s*,?\s*(\d{3})\s*,?\s*(\d{1,2})\b", line)
-        if m and m.group(1) == fips:
-            rows.append((m.group(1) + m.group(2), str(int(m.group(3)))))
-    if st == "CA" or not rows:
-        note(f"cd108 {st} sample: {t.splitlines()[:6]} -> {len(rows)} rows {rows[:3]}")
+        m = re.match(r"^(\S.*?)\s{2,}((?:\d{1,2}(?:-\d{1,2})?)(?:\s*,\s*\d{1,2}(?:-\d{1,2})?)*|At Large|At-Large|AL)\s*$", line, re.I)
+        if not m or m.group(1).strip().lower() in ("county", "parish"):
+            continue
+        fips = names.get(county_key(m.group(1)))
+        if not fips:
+            unmatched.append(m.group(1).strip())
+            continue
+        spec = m.group(2)
+        if re.match(r"a", spec, re.I):
+            rows.append((fips, "0"))
+            continue
+        for part in re.split(r"\s*,\s*", spec):
+            lo, _, hi = part.partition("-")
+            for d in range(int(lo), int(hi or lo) + 1):
+                rows.append((fips, str(d)))
+    if st == "CA" or unmatched or not rows:
+        note(f"cd108 {st}: {len(set(r[0] for r in rows))} counties read; unmatched {unmatched[:8]}")
     return rows, url
+
+
+def county_key(name):
+    n = re.sub(r"[^a-z ]", "", name.lower().replace("saint", "st").replace("st.", "st"))
+    n = re.sub(r"\b(county|parish|borough|census area|city and borough|municipality)\b", "", n)
+    return re.sub(r"\s+", " ", n).strip()
 
 
 def group(rows):
@@ -249,7 +275,7 @@ def districts_by_period():
         periods = []
         r108, u108 = cd108_rows(st, fips)
         if r108:
-            periods.append({"from": 2003, "to": 2012, "cd": group(r108), "source": u108, "note": "Districts drawn after the 2000 census."})
+            periods.append({"from": 2003, "to": 2012, "cd": group(r108), "source": u108, "note": "Districts of the 108th Congress, drawn after the 2000 census. A state that redrew its lines later in the decade isn't reflected."})
         for folder, frm, to in (("cdsld13", 2013, 2022), ("cdsld18", 2023, None)):
             base = f"{RELFILES}{folder}/{fips}/"
             cd = rel_rows(f"{base}co_cd_delim_{fips}.txt")
@@ -366,7 +392,8 @@ def sov_elections():
             log(f"SOV {year}: {e}")
             continue
         pdfs = [p if p.startswith("http") else "https://www.sos.ca.gov" + p for p in pdfs]
-        summary = next((p for p in pdfs if re.search(r"/(\d+[-_])?(sov[-_])?(summary|sum)\.pdf$", p, re.I) and "/ssov/" not in p), None)
+        summary = next((p for p in pdfs if re.search(r"/(\d+[-_])+(sov[-_])?(summary|sum)(-pages)?\.pdf$", p, re.I) and "/ssov/" not in p), None) \
+            or next((p for p in pdfs if re.search(r"/(sov[-_])?(summary|sum)\.pdf$", p, re.I) and "/ssov/" not in p), None)
         files = [summary] if summary else [p for p in pdfs if re.search(r"complete_sov|_entire\.pdf$", p)]
         if not files:
             # Older years publish one PDF per office instead of a summary.
@@ -378,8 +405,13 @@ def sov_elections():
         contests = {}
         for f in files:
             try:
-                for k, v in sov_summary(pdf_text(f)).items():
+                text = pdf_text(f)
+                for k, v in sov_summary(text).items():
                     contests.setdefault(k, []).extend(v)
+                if not any(k[0] == "sldl" for k in contests) or not contests:
+                    heads = [l.strip()[:140] for l in text.splitlines() if re.search(r"(?i)assembly|state senat|governor", l) and re.search(r"(?i)votes|percent|district", l)][:6]
+                    cands = [l.strip()[:140] for l in text.splitlines() if re.search(r"[A-Z][a-z]+.*\b(DEM|REP|LIB|GRN|PF|AI|NPP)\b", l)][:4]
+                    note(f"SOV {year} {f.rsplit('/', 1)[-1]}: headers {heads}; candidate lines {cands}")
             except Exception as e:  # noqa: BLE001
                 note(f"SOV {year} {f}: {e}")
         winners = []
@@ -439,7 +471,15 @@ def treasury_debt():
     out = {}
     for r in rows:
         out[int(r["record_date"][:4])] = num(r["tot_pub_debt_out_amt"])  # later rows in September replace earlier
-    log(f"treasury debt: {min(out)}–{max(out)}, FY2025 {out.get(2025)}")
+    # Before Debt to the Penny (April 1993): Historical Debt Outstanding, the amount at the end of each fiscal year.
+    try:
+        for r in fiscal("v2/accounting/od/debt_outstanding", {"fields": "record_date,record_fiscal_year,debt_outstanding_amt", "sort": "record_date"}):
+            y = int(r.get("record_fiscal_year") or r["record_date"][:4])
+            if y >= FIRST_YEAR - 2 and y not in out and num(r.get("debt_outstanding_amt")) is not None:
+                out[y] = num(r["debt_outstanding_amt"])
+    except Exception as e:  # noqa: BLE001
+        note(f"treasury debt outstanding: {e}")
+    note(f"treasury debt: {min(out)}–{max(out)}, FY1992 {out.get(1992)}, FY2025 {out.get(2025)}")
     return out
 
 
@@ -451,7 +491,9 @@ def omb_links():
 def xlsx_rows(url):
     import openpyxl
     wb = openpyxl.load_workbook(io.BytesIO(fetch(url, binary=True)), read_only=True, data_only=True)
-    return [list(r) for r in wb.worksheets[0].iter_rows(values_only=True)]
+    ws = wb.worksheets[0]
+    ws.reset_dimensions()  # some sheets state a one-cell size; read every row there is
+    return [list(r) for r in ws.iter_rows(values_only=True)]
 
 
 def omb_series(links):
@@ -515,14 +557,18 @@ def census_population():
                     m = re.fullmatch(r"POPESTIMATE(\d{4})", k or "")
                     if m and v:
                         pop[int(m.group(1))] = int(v)
+    t90 = ""
     try:
-        t = fetch("https://www2.census.gov/programs-surveys/popest/tables/1990-2000/intercensal/national/us-est90int-07.csv")
-        for line in t.splitlines():
-            m = re.match(r"^\s*7/1/(\d{4})\s*,\s*([\d,]+)", line.replace('"', ""))
+        t90 = fetch("https://www2.census.gov/programs-surveys/popest/tables/1990-2000/intercensal/national/us-est90int-07.csv")
+        for line in t90.splitlines():
+            line = line.replace('"', "")
+            m = re.match(r"^\s*(?:7/1/(\d{4})|July 1,\s*(\d{4}))\s*,\s*([\d,]{9,})", line)
             if m:
-                pop.setdefault(int(m.group(1)), int(m.group(2).replace(",", "")))
+                pop.setdefault(int(m.group(1) or m.group(2)), int(m.group(3).replace(",", "")))
     except Exception as e:  # noqa: BLE001
         note(f"population 1990s: {e}")
+    if 1995 not in pop:
+        note(f"population 1990s: not read; first lines {t90.splitlines()[:14]}")
     log(f"population: {min(pop)}–{max(pop)}")
     return pop
 
@@ -560,12 +606,12 @@ def party_control():
             house[c] = {"years": [int(m.group(2)), int(m.group(3))], "democrats": d, "republicans": r, "majority": "Democrats" if d > r else "Republicans"}
     senate = {}
     t = text_of(fetch(SENATE_PARTY))
-    for m in re.finditer(r"(\d{3})(?:st|nd|rd|th) Congress \((\d{4})[–-](\d{4})\)(.{0,1200}?)(?=-{10,}|\d{3}(?:st|nd|rd|th) Congress \(|$)", t):
+    for m in re.finditer(r"(\d{3})(?:st|nd|rd|th) Congress \((\d{4})[–-](\d{4})\)(.{0,3000}?)(?=-{10,}|\d{3}(?:st|nd|rd|th) Congress \(|$)", t):
         c = int(m.group(1))
         if c >= 102:
             body = re.sub(r"\s+", " ", m.group(4)).strip()
             maj = re.findall(r"Majority Party(?: \([^)]*\))?: (Democrats|Republicans)", body)
-            senate[c] = {"years": [int(m.group(2)), int(m.group(3))], "majority": maj[0] if len(set(maj)) == 1 else None, "majorities": maj, "text": body[:400]}
+            senate[c] = {"years": [int(m.group(2)), int(m.group(3))], "majority": maj[0] if len(set(maj)) == 1 else None, "majorities": maj, "text": body[:600]}
     note(f"party control: House {[(c, h['democrats'], h['republicans']) for c, h in sorted(house.items())]}")
     note(f"party control: Senate {[(c, v['majority'], v['majorities']) for c, v in sorted(senate.items())]}")
     for c in range(102, 120):
@@ -630,7 +676,7 @@ def ca_general_fund(charts):
             continue
         rows = {}
         for line in t.splitlines():
-            m = re.match(r"^\s*(\d{4})-(\d{2})\s*(\S*)\s+(.*)$", line)
+            m = re.match(r"^\s*(\d{4})-(\d{2})([^\d\s-]*)\s+(.*)$", line)
             if not m:
                 continue
             body = re.sub(r"(?<![\d.,])\d{1,2}/", " ", m.group(4))  # footnote markers like "3/"
@@ -640,6 +686,9 @@ def ca_general_fund(charts):
                 # transfers, resources available, expenditures, ending balance ($ millions).
                 rows[int(m.group(1)) + 1] = {"revenues": nums[3] * 1e6, "expenditures": nums[5] * 1e6, "ending_balance": nums[6] * 1e6, "mark": m.group(3) or None}
         tail = [l.strip() for l in t.splitlines() if l.strip()][-25:]
+        last_lines = [l for l in t.splitlines() if re.match(r'^\s*20[12]\d-\d\d', l)][-5:]
+        est_lines = [l.strip()[:160] for l in t.splitlines() if re.search(r'(?i)estimat|budget act|proposed|enacted', l)][:8]
+        note(f"CA Chart A last data lines: {last_lines}; estimate words: {est_lines}")
         note(f"CA Chart A: {len(rows)} years {min(rows) if rows else None}–{max(rows) if rows else None}; last rows {sorted(rows.items())[-4:]}; notes {tail}")
         if len(rows) >= 20:
             return {"source": url, "rows": rows, "notes": tail}
@@ -663,21 +712,32 @@ def ca_population():
             note(f"DOF {kind}: {e}")
             continue
         for ws in wb.worksheets:
+            if "City" in ws.title:
+                continue  # the same state total as the County/State sheet
+            ws.reset_dimensions()
             ym = re.search(r"(20\d\d|19\d\d)", ws.title)
             for r in ws.iter_rows(values_only=True):
                 cells = list(r)
-                first = next((str(c).strip() for c in cells[:3] if c not in (None, "")), "")
-                if not re.fullmatch(r"California|State Total|California Total|CALIFORNIA|STATE TOTAL", first):
+                first = [str(c).strip() for c in cells[:3] if c not in (None, "")]
+                if not first or not re.fullmatch(r"California|State Total|California Total|CALIFORNIA|STATE TOTAL", first[0]):
                     continue
-                vals = [num(c) for c in cells if num(c) is not None]
-                # E-5/E-8 layout: total population, household population, group quarters, total
-                # housing units, five housing types, occupied units (households), vacancy, persons per household.
-                if ym and len(vals) >= 10 and 25e6 < vals[0] < 50e6 and 8e6 < vals[9] < 20e6:
-                    out_pop[int(ym.group(1))] = int(vals[0])
-                    out_hh[int(ym.group(1))] = int(vals[9])
-                else:
-                    note(f"DOF {kind} sheet {ws.title}: not read {cells[:14]}")
-                break
+                when = next((c for c in cells[:4] if hasattr(c, "year")), None)
+                year = when.year if when is not None and (when.month, when.day) == (1, 1) else (int(ym.group(1)) if ym and when is None else None)
+                if year is None:
+                    continue  # census-day (April 1) rows: the January 1 estimates are used
+                vals = [num(c) for c in cells if not hasattr(c, "year") and num(c) is not None]
+                # Total population, household population, ..., occupied units (households), vacancy rate, persons per household.
+                if len(vals) < 5 or not 25e6 < vals[0] < 50e6:
+                    continue
+                pph = vals[-1]
+                occupied = next((v for v in vals[3:-1] if v > 1e6 and abs(vals[1] / v - pph) < 0.01), None)
+                if occupied is None:
+                    note(f"DOF {kind} {ws.title}: households not found in {vals}")
+                    continue
+                out_pop.setdefault(year, int(vals[0]))
+                out_hh.setdefault(year, int(occupied))
+                if ym:
+                    break  # one state row per yearly sheet
     note(f"CA population: {sorted(out_pop.items())}; households: {sorted(out_hh.items())}")
     return out_pop, out_hh, [u for u, _ in sources]
 
