@@ -329,7 +329,7 @@ OFFICE_KEYS = [
 # 2010's summary pages list candidates without a party: "Steve Pougnet    87,141   42.2%".
 CAND_NO_PARTY = re.compile(r"([A-Z][A-Za-z.'\- ]{2,60}?)\*?\s{2,}([\d,]{2,})\s+([\d.]+)\s?%")
 CAND = re.compile(r"([A-Z][^,\d]{1,60}?(?:, (?:Jr|Sr|II|III)\.?)?),\s+([A-Z]{2,4})\*?\s+([\d,]{2,})\s+([\d.]+)\s?%")
-HEAD = re.compile(r"((?:Governor|Lieutenant Governor|Secretary of State|Controller|Treasurer|Attorney General|Insurance Commissioner|Superintendent of Public Instruction|Board of Equalization(?: Member)?(?: District \d+)?|State Senat(?:e|or) District \d+|(?:Member of (?:the )?)?(?:State )?Assembly(?: Member)?,? District \d+|United States Representative District \d+|US Senate[^V]*?|United States Senator[^V]*?))\s{2,}Votes\s+Percent")
+HEAD = re.compile(r"((?:Governor|Lieutenant Governor|Secretary of State|Controller|Treasurer|Attorney General|Insurance Commissioner|Superintendent of Public Instruction|Board of Equalization(?: Member)?(?: District \d+)?|State Senat(?:e|or) District \d+|(?:Member of (?:the )?)?(?:State )?Assembly(?: ?[Mm]ember)?,? District \d+|United States Representative District \d+|US Senate[^V]*?|United States Senator[^V]*?))\s{2,}Votes\s+Percent")
 
 
 def contest_key(h):
@@ -349,7 +349,7 @@ def contest_key(h):
     return None, None, None
 
 
-def sov_summary(text):
+def sov_summary(text, no_party=False):
     """Contests and candidates from the two-column Statement of Vote summary pages."""
     contests = {}
     current = {}  # column index -> contest key
@@ -370,7 +370,7 @@ def sov_summary(text):
                 current[col] = ("boe", "Board of Equalization", m.group(1))
                 boe_pending[col] = False
         found = [(m.start(), m.group(1), m.group(2), m.group(3)) for m in CAND.finditer(line)]
-        if not found:
+        if no_party:
             found = [(m.start(), m.group(1), None, m.group(2)) for m in CAND_NO_PARTY.finditer(line)]
         for start, raw, party, votes in found:
             col = 0 if start < 45 else 1
@@ -413,7 +413,10 @@ def sov_elections():
         for f in files:
             try:
                 text = pdf_text(f)
-                for k, v in sov_summary(text).items():
+                # Candidates are listed with their party ("Name, DEM"), except in years whose
+                # summary leaves it out (2010): read those without a party.
+                parsed = sov_summary(text) or sov_summary(text, no_party=True)
+                for k, v in parsed.items():
                     contests.setdefault(k, []).extend(v)
                 if not any(k[0] == "sldl" for k in contests) or not contests:
                     heads = [l.strip()[:140] for l in text.splitlines() if re.search(r"(?i)assembly", l)][:6]
