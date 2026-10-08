@@ -73,7 +73,7 @@ function congressRow(c) {
 }
 
 function eventRows(events) {
-  return events.map((e) => `<li class="small"><span class="fin-event">${esc(e.kind)}</span> ${esc(e.label)}: ${esc(e.from)}${e.to ? ` to ${esc(e.to)}` : ""} · <a class="inline-link" href="${esc(e.source)}" target="_blank" rel="noopener">Source ↗</a></li>`).join("");
+  return events.map((e) => `<li class="small">${esc(e.label)}: ${esc(e.from)}${e.to ? ` to ${esc(e.to)}` : ""} · <a class="inline-link" href="${esc(e.source)}" target="_blank" rel="noopener">Source ↗</a></li>`).join("");
 }
 
 const FISCAL_NOTE_FED = "The federal fiscal year starts October 1. A President takes office in January, partway through a fiscal year whose budget was largely set by the previous administration and Congress, so a term's first fiscal year mostly reflects decisions made before it began.";
