@@ -1844,3 +1844,23 @@ article.fin-term { scroll-margin-top: 16px; }
 .summary-head .label:has(.kicker-icon) { display: inline-flex; align-items: center; gap: 8px; }
 .kicker-icon { display: inline-flex; color: var(--navy); }
 .kicker-icon .icon { width: 22px; height: 22px; }
+
+/* ---------- Roll calls (bill pages: All votes) ---------- */
+.vote-picker select { width: 100%; }
+.roll-head { font-size: 1.0625rem; margin-top: 4px; }
+.roll-filters { display: flex; flex-direction: column; gap: 8px; }
+.roll-selects { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 8px; }
+.roll-selects .input, .roll-search .input { width: 100%; min-height: var(--tap); }
+.roll-list { padding: 4px 18px; }
+.roll-list[aria-busy="true"] { opacity: 0.6; }
+.roll-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; padding: 8px 0; border-top: 1px solid var(--border); color: inherit; text-decoration: none; }
+.roll-row:first-child { border-top: 0; }
+.roll-row:hover .roll-name { color: var(--navy); }
+.roll-name { display: flex; flex-direction: column; gap: 2px; font-weight: 600; min-width: 0; }
+.roll-meta { font-size: 0.8125rem; font-weight: 400; color: var(--text-2); }
+.roll-row .position { flex: none; }
+.table-scroll { overflow-x: auto; max-width: 100%; }
+.tally-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; font-variant-numeric: tabular-nums; }
+.tally-table th, .tally-table td { padding: 8px 6px; text-align: right; border-top: 1px solid var(--border); }
+.tally-table thead th { border-top: 0; font-size: 0.75rem; font-weight: 600; color: var(--text-2); }
+.tally-table th[scope="row"], .tally-table thead th:first-child { text-align: left; font-weight: 600; }
