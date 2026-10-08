@@ -230,6 +230,7 @@ const UNDERSTAND = [
   ["/about/how-a-bill-becomes-law/", "How a bill becomes law", "From introduction to signature, in Congress and in California."],
   ["/about/how-to-read-a-vote/", "How to read a vote", "Final passage, cloture, motions and nominations."],
   ["/about/how-it-works/", "How ThePillory works", "Evidence first, protected identities, no party labels."],
+  ["/finances/", "Public finances by term", "Debt, spending and deficits by President, and California's budget by Governor."],
 ];
 
 function understand() {

@@ -1386,3 +1386,73 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 .side-by-side { background: var(--page); }
 .list-card-row.agenda-topics { flex-direction: column; align-items: stretch; gap: 6px; }
 .list-card-row.agenda-topics > span:last-child { white-space: normal; flex: initial; }
+
+/* Time Machine: the year bar on place, official and topic pages, the banner
+   on every past-year view (sticks to the top while scrolling, below the top
+   nav on wide screens), and the list of what isn't available for that year. */
+.year-bar { display: flex; flex-direction: column; gap: 8px; }
+.year-bar-label { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: baseline; }
+.year-bar-row { display: flex; align-items: center; gap: 12px; }
+.year-range {
+  flex: 1;
+  min-width: 0;
+  height: var(--tap);
+  margin: 0;
+  accent-color: var(--navy);
+  background: transparent;
+  cursor: pointer;
+}
+.year-out {
+  min-width: 4.5ch;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--navy);
+  text-align: right;
+}
+.year-bar-ends { display: flex; justify-content: space-between; margin-top: -6px; }
+.year-bar.is-js .year-go { display: none; }
+.year-bar.is-js.is-moved .year-go { display: inline-flex; }
+.past-banner {
+  position: sticky;
+  top: 0;
+  z-index: 12;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 8px 8px 16px;
+  background: var(--navy);
+  color: #fff;
+  border-radius: var(--radius);
+}
+.past-banner .label { color: #fff; opacity: 0.85; }
+.past-banner strong { font-family: var(--serif); font-size: 1.25rem; font-weight: 600; }
+.past-banner .past-banner-back { background: #fff; color: var(--navy); border-color: #fff; white-space: nowrap; }
+.gaps { background: var(--page); }
+.gaps li { padding-left: 14px; position: relative; }
+.gaps li::before { content: "–"; position: absolute; left: 0; color: var(--text-2); }
+@media (min-width: 768px) {
+  .past-banner { top: calc(var(--tabbar-h) + 8px); }
+}
+
+/* Finances by term: the same block for every measure and every term. */
+.fin-name { font-family: var(--serif); font-weight: 600; font-size: 1.375rem; margin: 0; }
+.fin-measures { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.fin-measure { border-top: 1px solid var(--border); padding-top: 10px; }
+.fin-measure-name { margin: 0; font-size: 0.9375rem; font-weight: 600; }
+.kv--tight .kv-row { padding: 2px 0; }
+.kv--tight dd { overflow-wrap: anywhere; }
+.fin-details summary { min-height: var(--tap); display: flex; align-items: center; cursor: pointer; font-weight: 500; color: var(--navy); }
+.fin-cat { display: flex; flex-direction: column; gap: 0; }
+.fin-cat-name { font-weight: 500; font-size: 0.9375rem; }
+.fin-event { font-weight: 600; }
+.fin-chart svg { width: 100%; height: auto; display: block; }
+.fin-line { fill: none; stroke: var(--navy); stroke-width: 2; }
+.fin-grid { stroke: var(--border); stroke-width: 1; }
+.fin-termline { stroke: var(--neutral); stroke-width: 1; stroke-dasharray: 2 3; }
+.fin-axis { font-size: 10px; fill: var(--text-2); font-family: var(--sans); }
+article.fin-term { scroll-margin-top: 16px; }
+@media (min-width: 768px) {
+  article.fin-term { scroll-margin-top: calc(var(--tabbar-h) + 16px); }
+}

@@ -15,6 +15,8 @@ import { turnstileReady, turnstileWidget } from "../_lib/turnstile.js";
 import { placeTopicsIndex, placeTopicPage } from "../_lib/topic-pages.js";
 import { topicGrid, placeTopicsHref } from "../_lib/topics.js";
 import { CURRENT, loadElection, onTheBallot, statewideRow, contestRow, measureRow, courtRow, courtGroups } from "../_lib/elections.js";
+import { pickYear, yearBar } from "../_lib/history.js";
+import { placePastYear, topicPastYear } from "../_lib/history-pages.js";
 import { LIVE, loadPlace, officialsFor, allIds, repRow, executiveRows, breadcrumb, districtLabel, districtHref, placeHref } from "../_lib/geo.js";
 
 const WAITLIST_MESSAGES = {
@@ -49,7 +51,13 @@ async function placePage({ request, env, params }) {
   if (!c) return notFound("No county at this address.", "home", [place.name, `/explore/${st}/`]);
   if (c.slug !== slug) return Response.redirect(`${url.origin}${placeHref(place.st, c.slug)}${extra ? `topics/${topic ? `${topic}/` : ""}` : ""}`, 301);
   // Topics for this county: /place/<st>/<county>/topics/ and /topics/<topic>/ (functions/_lib/topic-pages.js).
-  if (extra === "topics") return topic ? placeTopicPage(env, place, c, topic) : placeTopicsIndex(place, c);
+  // The Time Machine: ?year= shows the county (or one of its topics) as it was that year.
+  const year = pickYear(url);
+  if (extra === "topics") {
+    if (topic && year) return topicPastYear(env, url, topic, year, { place, c });
+    return topic ? placeTopicPage(env, place, c, topic, url) : placeTopicsIndex(place, c);
+  }
+  if (year) return placePastYear(env, request, url, place, c, year);
 
   const live = LIVE[c.fips];
   const db = env.DB;
@@ -168,6 +176,7 @@ ${breadcrumb([["United States", "/explore/"], [place.name, `/explore/${st}/`], [
 </header>
 ${action}
 ${electionLoaded === FAILED ? sectionError("On the ballot") : ballot}
+${yearBar(url, null, { label: `See who represented ${c.name} in an earlier year` })}
 <section class="stack" aria-labelledby="h-who">
   <h2 class="label" id="h-who">Who represents ${esc(c.name)}</h2>
   ${oLoaded === FAILED ? sectionError("") : ""}

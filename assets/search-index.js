@@ -1142,6 +1142,20 @@ window.PILLORY_INDEX = [
   "k": "Government and Elections"
  },
  {
+  "type": "Laws",
+  "title": "Federal finances by presidential term",
+  "sub": "Debt, spending, interest and the deficit by term",
+  "url": "/finances/",
+  "k": "budget debt deficit spending interest finances president time machine history"
+ },
+ {
+  "type": "Laws",
+  "title": "California's budget by governor's term",
+  "sub": "General Fund by term",
+  "url": "/finances/california/",
+  "k": "california budget general fund governor finances time machine history"
+ },
+ {
   "type": "Elections",
   "title": "Elections",
   "sub": "What's on the ballot, Your ballot, How to vote",

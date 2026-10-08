@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/assets/pillory.css?v=33" />
+    <link rel="stylesheet" href="/assets/pillory.css?v=34" />
     <meta name="description" content="Evidence-first civic accountability. Verified residents, protected identities, nonpartisan." />
     <meta name="theme-color" content="#F5F2EA" />
     <link rel="icon" href="/assets/logo/icon.svg?v=3" type="image/svg+xml" />
@@ -163,6 +163,25 @@
   </ul>
 </section>
 
+<section class="card stack" id="time-machine">
+  <h2>The Time Machine</h2>
+  <p>A year slider on county, official and topic pages shows the page as it was in an earlier year, back to 1993. A banner on every past-year view names the year, with one tap back to today. Who held an office is shown as a fact, with party as plain text, the same for everyone. Each past-year view ends with a list of what isn't available for that year, instead of leaving blanks.</p>
+  <ul class="plain-list small">
+    <li><strong>Presidents, Vice Presidents and members of Congress:</strong> every term from the Biographical Directory of the United States Congress (through the congress-legislators project, which also lists Presidents and Vice Presidents). A county's members of the House come from the districts that covered it that year, from the Census Bureau's county-to-district files: the 108th Congress's districts for 2003 to 2012 (a state that redrew its lines later in that decade isn't reflected), the districts drawn after the 2010 census for 2013 to 2022, and those drawn after the 2020 census since. District lines before 2003 aren't in these files.</li>
+    <li><strong>The Cabinet:</strong> Senate confirmations from Congress.gov's nomination records, from the 107th Congress (2001) on. For each department, a year shows the latest confirmation on or before December 31. The records don't show departures, acting secretaries or recess appointments, so a person listed may have left during the year.</li>
+    <li><strong>California:</strong> Governors from the California State Library's list. The other statewide officers and legislators are the winners in each general election's Statement of Vote from the Secretary of State (the candidate with the most votes in each contest), from 2002 on; an office elected in November is shown from the following January, and a State Senate seat (a four-year term) from the latest election that included it. Appointments, special elections and vacancies aren't in these records. California's legislative districts for a county come from the Census Bureau's files from 2013 on.</li>
+    <li><strong>County officials:</strong> no online county record of past supervisors has been found, so county offices aren't shown for past years.</li>
+    <li><strong>Votes:</strong> House roll calls from the Clerk of the House and Senate roll calls from the Senate, loaded back to 2001 a little each day, newest first, with each member's position as recorded and the whole chamber's totals. California floor votes are loaded for the current session only.</li>
+    <li><strong>Executive orders:</strong> the Federal Register, from 1994, with titles exactly as published.</li>
+    <li><strong>Campaign money:</strong> each campaign's totals by two-year period as reported to the FEC (raised, spent and cash on hand). Contributors by industry are shown for the current period only, and California's Cal-Access money for the current period only.</li>
+    <li><strong>Public finances by term</strong> (<a href="/finances/">federal</a>, <a href="/finances/california/">California</a>): every term is shown with the same measures and layout. The start is the fiscal year that ended before the term began; the end is the last fiscal year that ended during it (or the latest published, for a term in progress). Each measure shows both values, the change in dollars and in percent, the share of GDP, and the amount per person and per household. Sources: Treasury's Debt to the Penny and Historical Debt Outstanding (debt at the end of each fiscal year), OMB's Historical Tables 1.1 (receipts, outlays, surplus or deficit), 3.1 (outlays by function, including net interest) and 10.1 (GDP by fiscal year), Census Bureau population estimates (July 1) and households (Current Population Survey, Table HH-1); for California, the Department of Finance's Chart A (General Fund) and its population and housing estimates (January 1). Amounts are in dollars of each year, not adjusted for inflation.</li>
+    <li><strong>Fiscal years:</strong> the federal fiscal year starts October 1 and California's July 1. A new administration takes office in January, partway through a fiscal year whose budget was largely set before it, so a term's first fiscal year mostly reflects earlier decisions. Both pages say so.</li>
+    <li><strong>Party control</strong> of each chamber of Congress is shown as the House and Senate historians list it, for every Congress that overlaps a term; when the Senate's majority changed during a Congress, each change is listed. The California Legislature's seats come from the winners in each general election (seats filled otherwise aren't counted, and the page shows how many seats were read).</li>
+    <li><strong>Marked events</strong> are plain factual markers kept only when the source states them: recessions as dated by the National Bureau of Economic Research, the authorizations for the use of military force enacted by Congress (Public Laws 107-40 and 107-243), and public health emergencies declared by the Department of Health and Human Services.</li>
+    <li><strong>No cause and effect.</strong> Numbers sit beside who held office, which party led each chamber, and what happened in the world. ThePillory doesn't color anything by party, uses no evaluative labels, and never says that an officeholder caused a number.</li>
+  </ul>
+</section>
+
 <section class="card stack" id="elections">
   <h2>Elections</h2>
   <p>What's on the ballot, from official sources only, with a link to each. Every candidate and measure is shown the same way, in ballot order. ThePillory doesn't endorse candidates or measures, and doesn't publish polls, predictions or race calls.</p>
@@ -231,8 +250,8 @@
     </div>
   </div>
 </nav>
-    <script src="/assets/search-index.js?v=33"></script>
+    <script src="/assets/search-index.js?v=34"></script>
     <script src="/api/search-officials"></script>
-    <script src="/assets/app.js?v=33"></script>
+    <script src="/assets/app.js?v=34"></script>
   </body>
 </html>

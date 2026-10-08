@@ -15,6 +15,7 @@ import {
   topicBills, positionsFor, topicMeetingItems, topicExecutive, topicPlatform, topicMoney, topicCounts,
   billRows, meetingRows, executiveRows, platformRows, moneyRows,
 } from "./topics.js";
+import { yearBar } from "./history.js";
 import { INDUSTRIES } from "../../workers/sync/src/funding/industry.js";
 
 const BACK = ["Topics", "/topics/"];
@@ -62,7 +63,7 @@ export async function topicsIndex(env) {
 // ---------------------------------------------------------------------------
 // /topics/<topic>/  (no place: Congress, California, the executive branch)
 
-export async function topicPage(env, slug) {
+export async function topicPage(env, slug, url = null) {
   const t = TOPIC[slug];
   if (!t) return notFound("No topic at this address.", "laws", BACK);
   const db = env.DB;
@@ -81,6 +82,7 @@ export async function topicPage(env, slug) {
   <h1>${esc(t.name)}</h1>
   <p class="subtitle">${esc(t.about)}</p>
 </header>
+${url ? yearBar(url, null, { label: `See ${t.name.toLowerCase()} in an earlier year` }) : ""}
 <section class="card stack-xs">
   <p class="small">To see how a place's representatives voted, its county meetings and the campaign money around its officials, open the topic for a county: <a class="inline-link" href="${topicHref(slug, { st: "CA", slug: "calaveras" })}">${esc(t.name)} in Calaveras County</a>, or pick a county on the <a class="inline-link" href="/explore/">map</a>.</p>
 </section>
@@ -108,7 +110,7 @@ ${topicGrid(p)}
   return page(`Topics in ${c.name}`, main, { tab: "home", back: [c.name, placeHref(place.st, c.slug)] });
 }
 
-export async function placeTopicPage(env, place, c, slug) {
+export async function placeTopicPage(env, place, c, slug, url = null) {
   const t = TOPIC[slug];
   const p = { st: place.st, slug: c.slug };
   if (!t) return notFound("No topic at this address.", "home", ["Topics", placeTopicsHref(p)]);
@@ -175,6 +177,7 @@ ${breadcrumb([["United States", "/explore/"], [place.name, `/explore/${place.st.
   <h1>${esc(t.name)} in ${esc(c.name)}</h1>
   <p class="subtitle">${esc(t.about)}</p>
 </header>
+${url ? yearBar(url, null, { label: `See ${t.name.toLowerCase()} in ${c.name} in an earlier year` }) : ""}
 ${sideBySide()}
 ${oLoaded === FAILED ? sectionError("Representatives") : ""}
 ${billBlock("fed", "Bills in Congress", federal, fedReps, noBills)}

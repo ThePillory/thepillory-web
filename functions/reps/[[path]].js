@@ -16,6 +16,8 @@ import { fundingFor, fundingTab } from "../_lib/funding.js";
 import { executiveMoney, executiveFundingParts, stateOfficialMoney, stateForm700 } from "../_lib/exec-funding.js";
 import { stateFundingTab } from "../_lib/state-funding.js";
 import { promisesFor, ownWordsFor, platformTab } from "../_lib/promises.js";
+import { pickYear, yearBar, thisYear, FIRST_YEAR } from "../_lib/history.js";
+import { officialPastYear } from "../_lib/history-pages.js";
 import { currentCycle } from "../../workers/sync/src/funding/fec.js";
 import {
   isExecutive, isPresident, isGovernor, executiveOfficials, ordersFor, billsActedOn, nominationsFor,
@@ -162,13 +164,22 @@ function roleOf(o) {
   return "legislator";
 }
 
-async function profile(env, slug, url) {
+async function profile(env, slug, url, request) {
   if (!env.DB) return notLoaded("Reps", "reps", false, ["Reps", "/reps/"]);
   const db = env.DB;
   const o = await loadSection("official", () => officialBySlug(db, slug), undefined);
   if (o === undefined) return notLoaded("Reps", "reps", false, ["Reps", "/reps/"]);
   if (o === FAILED) throw new Error(`official ${slug} couldn't load`);
-  if (!o) return notFound("No current official at this address.", "reps", ["Reps", "/reps/"]);
+  // The Time Machine: ?year= shows the official in that year. Past officeholders
+  // (no longer in office) have pages only for the years they served.
+  const year = pickYear(url);
+  if (!o || year) {
+    const any = await db.prepare("SELECT * FROM officials WHERE slug = ?").bind(slug).first();
+    if (!any) return notFound("No official at this address.", "reps", ["Reps", "/reps/"]);
+    if (year) return officialPastYear(env, request, url, any, year);
+    const last = Math.max(FIRST_YEAR, Math.min(thisYear() - 1, (parseInt(String(any.term_end || "").slice(0, 4), 10) || thisYear()) - 1));
+    return Response.redirect(`${url.origin}/reps/${any.slug}/?year=${last}`, 302);
+  }
   const all = url.searchParams.get("votes") === "all";
   const pageNum = Math.max(1, parseInt(url.searchParams.get("page") || "1", 10) || 1);
   const cycle = parseInt(url.searchParams.get("cycle") || "", 10) || currentCycle();
@@ -221,6 +232,7 @@ ${section("Office", kv([
     ["Body", body ? `<a class="inline-link" href="/bodies/${esc(body.slug)}/">${esc(body.name)}</a>` : null],
     ["Website", safeUrl(o.website) ? `<a class="inline-link" href="${esc(o.website)}" target="_blank" rel="noopener">Official site ↗</a>` : null],
   ]), "card stack-sm")}
+${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}
 <section class="card stack-sm">
   <h2 class="label">Source</h2>
   <p class="small">Last verified ${fmtDate(o.last_verified)}.</p>
@@ -318,7 +330,7 @@ export const onRequestGet = guard(async (context) => {
   }
   if (parts.length === 1) {
     if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
-    return edgeCached(context, REPS_CACHE_SECONDS, () => profile(context.env, parts[0], url));
+    return edgeCached(context, REPS_CACHE_SECONDS, () => profile(context.env, parts[0], url, context.request));
   }
   return notFound("No page at this address.", "reps", ["Reps", "/reps/"]);
 }, { tab: "reps" });

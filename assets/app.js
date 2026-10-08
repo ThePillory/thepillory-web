@@ -364,6 +364,53 @@
     for (var i = 0; i < boxes.length; i++) boxes[i].checked = all.checked;
   });
   // ---------------------------------------------------------------------
+  // Time Machine year bar: a range input in a GET form. Moving it shows the
+  // year; letting go with a pointer opens that year (the far right is today).
+  // Keyboard users move with the arrow keys and press "Show this year".
+  document.querySelectorAll("form[data-year-bar]").forEach(function (form) {
+    var range = form.querySelector("input[type=range]");
+    var out = form.querySelector("output");
+    if (!range) return;
+    form.classList.add("is-js");
+    var label = function () {
+      var today = range.value === range.max;
+      if (out) out.textContent = today ? "Today" : range.value;
+      range.setAttribute("aria-valuetext", today ? range.value + ", today" : range.value);
+    };
+    var go = function () {
+      if (range.value === range.max) {
+        // Today: the same page without ?year=.
+        var u = new URL(window.location.href);
+        u.searchParams.delete("year");
+        u.searchParams.delete("page");
+        u.searchParams.delete("offset");
+        u.hash = "";
+        window.location.href = u.toString();
+      } else form.submit();
+    };
+    range.addEventListener("input", function () {
+      label();
+      form.classList.add("is-moved");
+    });
+    // "change" fires when a pointer lets go, and on every arrow-key step: only the first opens the year.
+    var keyed = false;
+    range.addEventListener("keydown", function () {
+      keyed = true;
+    });
+    range.addEventListener("pointerdown", function () {
+      keyed = false;
+    });
+    range.addEventListener("change", function () {
+      if (!keyed) go();
+    });
+    form.addEventListener("submit", function (e) {
+      if (range.value === range.max) {
+        e.preventDefault();
+        go();
+      }
+    });
+  });
+  // ---------------------------------------------------------------------
   // Cloudflare Turnstile, for the forms that have a .cf-turnstile widget (the
   // waitlist, "Something wrong?", "Request full analysis"). Its script is
   // loaded only after the page has finished loading: the challenge frame it

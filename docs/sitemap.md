@@ -19,7 +19,7 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
   - Topics: every topic as a chip > the topic's page for your county when known (`/place/<st>/<county>/topics/<topic>/`), otherwise `/topics/<topic>/`
   - Take part: Calaveras comment deadlines > Meeting (#weigh-in); Contact your representatives > Reps. (Federal agency comment periods from Regulations.gov: to do)
   - Communities: Calaveras County (Live) > Calaveras briefing; Bring ThePillory to your county (waitlist, real counts)
-  - Understand: The Constitution, How a bill becomes law, How to read a vote, How ThePillory works
+  - Understand: The Constitution, How a bill becomes law, How to read a vote, How ThePillory works, Public finances by term > `/finances/`
 - **Your briefing** (`/briefing/`), once your districts are known (the lookup opens it):
   - In Calaveras County: the Calaveras briefing (also `/calaveras/` for everyone): first-visit intro, County / State / Federal filter, This week (meetings and hearings) > Meeting / Calendar (`/meetings/`), Issues near you (empty state), Your reps' latest votes > All votes (`/votes/`)
   - Elsewhere: your reps, your reps' latest votes, Happening now; a note that state and local coverage comes as communities launch
@@ -27,8 +27,9 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 ### Explore (from Home)
 - **United States** (`/explore/`): map (live community / people waiting / federal data only), smaller-state buttons, state picker (`?st=`), Live communities, Most requested next (waitlist counts)
 - **State** (`/explore/<st>/`): map with layer toggles (`?layer=county|cd|sldu|sldl`; legislative layers only where the Census has them), Find a county (filter), every district as a list, Statewide (U.S. Senators, House members, state legislators where loaded, statewide offices: not loaded), the legislature (California: latest floor votes)
-- **County** (`/place/<st>/<county>/`): breadcrumb; live: Live badge, Open briefing, Make this my place; others: Bring ThePillory here (waitlist); On the ballot (California: statewide, every overlapping district's contest with "covers part of this county", Board of Equalization, courts, and local contests and measures where live; Your ballot shown in browsers with saved districts); who represents it (County / State / Federal, "covers part of this county"); live: upcoming meetings, issues; Topics (chips > the county's topic pages); recent votes; Funding; nearby counties
-- **County topics** (`/place/<st>/<county>/topics/`, `…/topics/<topic>/`): side by side, as facts: bills with a final-passage vote and how the county's reps voted, county meeting items (live), executive actions, officials' own words, campaign money from industries tied to the topic
+- **County** (`/place/<st>/<county>/`): breadcrumb; live: Live badge, Open briefing, Make this my place; others: Bring ThePillory here (waitlist); On the ballot (California: statewide, every overlapping district's contest with "covers part of this county", Board of Equalization, courts, and local contests and measures where live; Your ballot shown in browsers with saved districts); who represents it (County / State / Federal, "covers part of this county"); live: upcoming meetings, issues; Topics (chips > the county's topic pages); the Time Machine year bar (> `?year=`); recent votes; Funding; nearby counties
+- **County in a past year** (`/place/<st>/<county>/?year=YYYY`, 1993 to last year): Viewing YEAR banner with Back to today, year bar, Federal (President, Vice President, senators, the House members for the districts that covered the county that year), the Cabinet (Senate confirmations through that year, from 2001), California (Governor, statewide officers and legislators from the Statement of Vote), final-passage votes that year, executive orders signed that year, FEC totals for the two-year period, Not available for YEAR
+- **County topics** (`/place/<st>/<county>/topics/`, `…/topics/<topic>/`): side by side, as facts: bills with a final-passage vote and how the county's reps voted, county meeting items (live), executive actions, officials' own words, campaign money from industries tied to the topic; year bar; `?year=` shows the topic's bills voted on and executive orders signed that year, with what isn't available
 - **District** (`/district/<type>/<st>-<id>/`, type `congressional`, `state-senate`, `assembly`, `state-house`, `house-of-delegates`, `general-assembly`, `legislature`): representative, On the ballot (California: this seat's contest, or that it isn't on the certified list), counties it covers (entirely or partly), recent votes, Funding
 
 ### Elections (from Home, county and district pages)
@@ -48,6 +49,7 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
   - The Governor: Votes is bills signed and vetoed (leginfo); Funding (Cal-Access); More holds Executive orders (gov.ca.gov), Disclosures (Form 700) and Issues
   - The Vice President and California's other statewide officers (elected): Votes says none are recorded for the office; Funding (the ticket's FEC money, or Cal-Access); More holds Disclosures and Issues
   - The Cabinet (appointed): Votes and Funding say they don't apply to appointed officials, linking to Disclosures under More (OGE reports and ethics agreements)
+  - About: the Time Machine year bar. `/reps/<slug>/?year=YYYY`: the office held that year (or that they didn't hold it), votes that year (final passage or all), executive orders that year (Presidents), FEC totals for the period, every term on record, Not available for YEAR. Past officeholders (Presidents and Vice Presidents since 1993, California's members of Congress since 2001) have pages only with `?year=`; their bare address redirects to their last year in office
   - Vote > Bill (under Laws)
 
 ### Tab 3: + Report (`/report/`)
@@ -56,6 +58,8 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 ### Tab 4: Laws (`/laws/`)
 - Topics (`/topics/`, `/topics/<topic>/`): every topic; one topic's bills in Congress and California, executive actions and officials' own words, with links to a county's topic page
 - On the ballot: the next election > Election (between the Constitution and the bills)
+- Time Machine: Public finances by term > Federal finances (`/finances/`: debt-to-GDP chart with term lines, jump chips, one card per presidential term with debt, receipts, outlays, surplus or deficit, net interest, spending by category, Congress during the term, marked events, what isn't available) and California's budget (`/finances/california/`: one card per governor's term, General Fund revenues, spending and ending balance, the Legislature's seats)
+- Topics in a past year (`/topics/<topic>/?year=YYYY`)
 - Bill (`/laws/bills/<id>/`): summary, Final action (signed, vetoed, law without a signature: date, law or chapter number, who acted, the recorded action, source), constitutional analysis (card or full), how your reps voted, Follow the money (lobbying reports; your reps' votes beside contributions from the industries that lobbied), "Something wrong?", "Request full analysis"
 - The Constitution (`/laws/constitution/`): full text, one anchor per provision
 
