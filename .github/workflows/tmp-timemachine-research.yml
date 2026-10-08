@@ -1,0 +1,12 @@
+name: TEMPORARY time machine research
+on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [.github/tmp/probe.py, .github/workflows/tmp-timemachine-research.yml]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 .github/tmp/probe.py
