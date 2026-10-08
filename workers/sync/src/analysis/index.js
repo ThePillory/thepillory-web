@@ -36,6 +36,7 @@ import { lintDraft } from "./lint.js";
 import { withD1Retry } from "../d1retry.js";
 import { runAgendaWatch } from "./agenda.js";
 import { runPromises } from "../promises/index.js";
+import { runTopics } from "../topics/index.js";
 
 const RETRY_AFTER_DAYS = 7; // a bill that couldn't be drafted waits this long before another try
 const MIN_TIME_PER_BILL_MS = 4 * 60 * 1000; // don't start a bill without this much time left in the round
@@ -657,5 +658,12 @@ export async function runAnalysis(rawEnv, { deadlineMs, runId, trigger }) {
   } catch (err) {
     await log(db, run, "promises", "error", 0, redact(`${err.name}: ${err.message}`), new Date().toISOString());
   }
-  return { status: "ok", analyzed, used, limit, agendas, promises, more_now: (waiting && (stoppedEarly || unchecked)) || agendas.more_now };
+  // Topics: tags for new bills, agenda items, executive actions and Platform excerpts, with their own daily cap.
+  let topics = { tagged: 0, more_now: false };
+  try {
+    topics = await runTopics(env, db, { run, deadline: budget.deadline });
+  } catch (err) {
+    await log(db, run, "topics", "error", 0, redact(`${err.name}: ${err.message}`), new Date().toISOString());
+  }
+  return { status: "ok", analyzed, used, limit, agendas, promises, topics, more_now: (waiting && (stoppedEarly || unchecked)) || agendas.more_now || topics.more_now };
 }

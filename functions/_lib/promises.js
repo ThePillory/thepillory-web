@@ -2,6 +2,7 @@
 // exactly, with date and source; only those a person approved. Each shows its
 // status (No action yet, In progress, Kept, Broken) and every change of
 // status with its evidence and source. See docs/promises.md.
+import { tagsFor, topicChips } from "./topics.js";
 import { esc, fmtDate, safeUrl } from "./render.js";
 
 export const STATUS = {
@@ -106,6 +107,8 @@ export async function ownWordsFor(db, officialId) {
         .bind(officialId)
         .all(),
     ]);
+    const topics = await tagsFor(db, "platform", pages.results.map((x) => x.url));
+    for (const x of pages.results) x.topics = topics.get(x.url) || [];
     return { pages: pages.results, statements: statements.results };
   } catch (err) {
     if (/no such (table|column)/i.test(String(err && err.message))) return { pages: [], statements: [] };
@@ -127,6 +130,7 @@ function excerptCard(o, x) {
   return `<article class="card stack-sm own-words">
   <p class="label">${esc(SITE[x.kind] || "Website")} · as of ${fmtDate(String(x.excerpt_at || "").slice(0, 10))}</p>
   <blockquote class="promise-quote">“${esc(x.excerpt)}”</blockquote>
+  ${topicChips(x.topics, null, { label: false })}
   <p class="hint">${ext(x.url, x.title)}</p>
   <p class="hint">${by.startsWith("person:") ? `Excerpt chosen by ${esc(by.slice(7))}` : "Excerpt picked automatically and checked word for word against the page"}; refreshed monthly. The whole page is at the link.</p>
 </article>`;

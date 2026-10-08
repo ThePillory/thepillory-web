@@ -1368,3 +1368,21 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 .result-row:first-child { border-top: 0; }
 .result-name { min-width: 0; overflow-wrap: anywhere; }
 .result-num { flex: none; font-variant-numeric: tabular-nums; color: var(--text-2); }
+
+/* Topics: chips on bills, agenda items, executive actions and Platform excerpts
+   (each a full tap target), and the topic pages' side-by-side sections */
+.chip--topic { min-height: var(--tap); background: var(--navy-light); border: 1px solid transparent; color: var(--navy); text-decoration: none; font-weight: 500; }
+.chip--topic:hover { border-color: var(--navy); }
+.topic-row { display: flex; flex-direction: column; gap: 4px; }
+.topic-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.topic-list { padding: 0 16px; }
+.topic-item { padding: 12px 0; border-top: 1px solid #EEE9DE; overflow-wrap: anywhere; }
+.topic-item:first-child { border-top: 0; }
+.topic-item .list-title { display: inline-flex; align-items: center; min-height: var(--tap); font-weight: 600; }
+.rep-positions { display: flex; flex-direction: column; gap: 2px; }
+.rep-positions li { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 0.875rem; }
+.rep-positions .inline-link { display: inline-flex; align-items: center; min-height: var(--tap); }
+.rep-positions .position { flex: none; font-weight: 600; }
+.side-by-side { background: var(--page); }
+.list-card-row.agenda-topics { flex-direction: column; align-items: stretch; gap: 6px; }
+.list-card-row.agenda-topics > span:last-child { white-space: normal; flex: initial; }

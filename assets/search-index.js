@@ -1002,6 +1002,146 @@ window.PILLORY_INDEX = [
   "k": "No law, varying the compensation for the services of the Senators and Representatives, shall take effect, until an election of Representatives shall have intervened."
  },
  {
+  "type": "Topics",
+  "title": "Topics",
+  "sub": "One subject at a time, side by side",
+  "url": "/topics/",
+  "k": "topic topics subject issue"
+ },
+ {
+  "type": "Topics",
+  "title": "Water",
+  "sub": "Topic",
+  "url": "/topics/water/",
+  "k": "Water"
+ },
+ {
+  "type": "Topics",
+  "title": "Wildfire",
+  "sub": "Topic",
+  "url": "/topics/wildfire/",
+  "k": "Wildfire"
+ },
+ {
+  "type": "Topics",
+  "title": "Roads and Transportation",
+  "sub": "Topic",
+  "url": "/topics/roads-transportation/",
+  "k": "Roads and Transportation"
+ },
+ {
+  "type": "Topics",
+  "title": "Housing",
+  "sub": "Topic",
+  "url": "/topics/housing/",
+  "k": "Housing"
+ },
+ {
+  "type": "Topics",
+  "title": "Land Use and Planning",
+  "sub": "Topic",
+  "url": "/topics/land-use/",
+  "k": "Land Use and Planning"
+ },
+ {
+  "type": "Topics",
+  "title": "Taxes and Budget",
+  "sub": "Topic",
+  "url": "/topics/taxes-budget/",
+  "k": "Taxes and Budget"
+ },
+ {
+  "type": "Topics",
+  "title": "Schools and Education",
+  "sub": "Topic",
+  "url": "/topics/schools/",
+  "k": "Schools and Education"
+ },
+ {
+  "type": "Topics",
+  "title": "Public Safety and Justice",
+  "sub": "Topic",
+  "url": "/topics/public-safety/",
+  "k": "Public Safety and Justice"
+ },
+ {
+  "type": "Topics",
+  "title": "Health",
+  "sub": "Topic",
+  "url": "/topics/health/",
+  "k": "Health"
+ },
+ {
+  "type": "Topics",
+  "title": "Social Services",
+  "sub": "Topic",
+  "url": "/topics/social-services/",
+  "k": "Social Services"
+ },
+ {
+  "type": "Topics",
+  "title": "Environment",
+  "sub": "Topic",
+  "url": "/topics/environment/",
+  "k": "Environment"
+ },
+ {
+  "type": "Topics",
+  "title": "Energy and Utilities",
+  "sub": "Topic",
+  "url": "/topics/energy/",
+  "k": "Energy and Utilities"
+ },
+ {
+  "type": "Topics",
+  "title": "Agriculture",
+  "sub": "Topic",
+  "url": "/topics/agriculture/",
+  "k": "Agriculture"
+ },
+ {
+  "type": "Topics",
+  "title": "Jobs and Economy",
+  "sub": "Topic",
+  "url": "/topics/jobs-economy/",
+  "k": "Jobs and Economy"
+ },
+ {
+  "type": "Topics",
+  "title": "Broadband and Technology",
+  "sub": "Topic",
+  "url": "/topics/technology/",
+  "k": "Broadband and Technology"
+ },
+ {
+  "type": "Topics",
+  "title": "Veterans",
+  "sub": "Topic",
+  "url": "/topics/veterans/",
+  "k": "Veterans"
+ },
+ {
+  "type": "Topics",
+  "title": "Defense and Foreign Affairs",
+  "sub": "Topic",
+  "url": "/topics/defense/",
+  "k": "Defense and Foreign Affairs"
+ },
+ {
+  "type": "Topics",
+  "title": "Immigration",
+  "sub": "Topic",
+  "url": "/topics/immigration/",
+  "k": "Immigration"
+ },
+ {
+  "type": "Topics",
+  "title": "Government and Elections",
+  "sub": "Topic",
+  "url": "/topics/government-elections/",
+  "k": "Government and Elections"
+ },
+ {
   "type": "Elections",
   "title": "Elections",
   "sub": "What's on the ballot, Your ballot, How to vote",

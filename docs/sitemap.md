@@ -16,6 +16,7 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
   - First-visit intro (dismissible; How it works, Principles)
   - Who represents you: the President, Vice President, the Cabinet > `/bodies/us-executive/`; California's Governor and statewide offices > `/bodies/ca-executive/` (other states: not covered yet); your members of Congress and state legislators > Your briefing
   - Happening now: Congress / California toggle (`?now=state`), latest final-passage votes with status, summary, constitutional chip, review label, totals, "See how your rep voted" > Bill
+  - Topics: every topic as a chip > the topic's page for your county when known (`/place/<st>/<county>/topics/<topic>/`), otherwise `/topics/<topic>/`
   - Take part: Calaveras comment deadlines > Meeting (#weigh-in); Contact your representatives > Reps. (Federal agency comment periods from Regulations.gov: to do)
   - Communities: Calaveras County (Live) > Calaveras briefing; Bring ThePillory to your county (waitlist, real counts)
   - Understand: The Constitution, How a bill becomes law, How to read a vote, How ThePillory works
@@ -26,7 +27,8 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 ### Explore (from Home)
 - **United States** (`/explore/`): map (live community / people waiting / federal data only), smaller-state buttons, state picker (`?st=`), Live communities, Most requested next (waitlist counts)
 - **State** (`/explore/<st>/`): map with layer toggles (`?layer=county|cd|sldu|sldl`; legislative layers only where the Census has them), Find a county (filter), every district as a list, Statewide (U.S. Senators, House members, state legislators where loaded, statewide offices: not loaded), the legislature (California: latest floor votes)
-- **County** (`/place/<st>/<county>/`): breadcrumb; live: Live badge, Open briefing, Make this my place; others: Bring ThePillory here (waitlist); On the ballot (California: statewide, every overlapping district's contest with "covers part of this county", Board of Equalization, courts, and local contests and measures where live; Your ballot shown in browsers with saved districts); who represents it (County / State / Federal, "covers part of this county"); live: upcoming meetings, issues; recent votes; Funding; nearby counties
+- **County** (`/place/<st>/<county>/`): breadcrumb; live: Live badge, Open briefing, Make this my place; others: Bring ThePillory here (waitlist); On the ballot (California: statewide, every overlapping district's contest with "covers part of this county", Board of Equalization, courts, and local contests and measures where live; Your ballot shown in browsers with saved districts); who represents it (County / State / Federal, "covers part of this county"); live: upcoming meetings, issues; Topics (chips > the county's topic pages); recent votes; Funding; nearby counties
+- **County topics** (`/place/<st>/<county>/topics/`, `…/topics/<topic>/`): side by side, as facts: bills with a final-passage vote and how the county's reps voted, county meeting items (live), executive actions, officials' own words, campaign money from industries tied to the topic
 - **District** (`/district/<type>/<st>-<id>/`, type `congressional`, `state-senate`, `assembly`, `state-house`, `house-of-delegates`, `general-assembly`, `legislature`): representative, On the ballot (California: this seat's contest, or that it isn't on the certified list), counties it covers (entirely or partly), recent votes, Funding
 
 ### Elections (from Home, county and district pages)
@@ -52,6 +54,7 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 - Reporting opens when accounts launch; links to what you can do now
 
 ### Tab 4: Laws (`/laws/`)
+- Topics (`/topics/`, `/topics/<topic>/`): every topic; one topic's bills in Congress and California, executive actions and officials' own words, with links to a county's topic page
 - On the ballot: the next election > Election (between the Constitution and the bills)
 - Bill (`/laws/bills/<id>/`): summary, Final action (signed, vetoed, law without a signature: date, law or chapter number, who acted, the recorded action, source), constitutional analysis (card or full), how your reps voted, Follow the money (lobbying reports; your reps' votes beside contributions from the industries that lobbied), "Something wrong?", "Request full analysis"
 - The Constitution (`/laws/constitution/`): full text, one anchor per provision
@@ -65,6 +68,9 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 - One header: ThePillory wordmark and search (`/search/`: reps, governing bodies, bills, meetings, the Constitution)
 - One nav: Home, Reps, + Report, Laws, You (bottom on phones, top from 768px)
 - Footer: About · How it works · Principles · Methodology
+
+### Chips
+- Topic chips on bill pages, each meeting agenda item (and "Topics on this agenda"), executive orders and Platform excerpts on officials' pages
 
 ### Private
 - Review queue (`/admin/review/`) and county waitlist counts (`/admin/waitlist/`), behind Cloudflare Access

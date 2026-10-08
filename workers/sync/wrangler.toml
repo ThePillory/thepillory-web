@@ -80,6 +80,8 @@ REVISIONS_PER_DRAFT = "1"
 # Agenda watch: plain-language summaries of county agendas. Separate daily cap
 # from bill analyses (each agenda is one Claude API call).
 AGENDA_DAILY_LIMIT = "3"
+# Topics: items tagged per day (bills, agenda items, executive actions, Platform excerpts), in batches of 25. See docs/topics.md.
+TOPIC_DAILY_LIMIT = "500"
 # Review load (docs/analysis.md): the relevance check (claude-haiku-4-5) runs on
 # titles before drafting; the AI reviewer (claude-sonnet-5-5) checks every draft.
 REVIEW_EFFORT = "medium"

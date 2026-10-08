@@ -504,7 +504,48 @@ function promiseAnthropic(req, res, body) {
   ]);
 }
 
+// FAKE topic tagger (claude-haiku-4-5): topics by keywords in each item's text;
+// procedure (pledge, roll call, minutes) gets none.
+const TOPIC_WORDS = [
+  ["water", /water|groundwater|reservoir|drought|sewer/i],
+  ["wildfire", /fire|forest/i],
+  ["roads-transportation", /road|bridge|highway|transit|traffic/i],
+  ["housing", /housing|home|rent/i],
+  ["taxes-budget", /budget|tax|bond|appropriat|fee/i],
+  ["schools", /school|student|teacher|education/i],
+  ["health", /health|hospital|medic/i],
+  ["agriculture", /farm|agricultur|ranch|crop/i],
+  ["veterans", /veteran/i],
+];
+function topicsAnthropic(req, res, body) {
+  const problems = [];
+  if (req.headers["x-api-key"] !== "fake-anthropic-key") problems.push("x-api-key");
+  if (body.model !== "claude-haiku-4-5-20251001") problems.push("model");
+  if (!body.output_config || !body.output_config.format || body.output_config.format.type !== "json_schema") problems.push("output_config.format");
+  anthropicRequests.push({ kind: "topics", problems });
+  if (problems.length) return send(res, 400, { type: "error", error: { type: "invalid_request_error", message: `fixture: bad ${problems.join(", ")}` } });
+  const items = body.messages[0].content
+    .split("\n")
+    .filter((l) => /^i\d+ \| /.test(l))
+    .map((l) => {
+      const [id, , text] = l.split(" | ");
+      if (/pledge|roll call|minutes|adjourn|public comment/i.test(text)) return { id, topics: [], reason: "Procedure; no topic." };
+      const topics = TOPIC_WORDS.filter(([, re]) => re.test(text)).map(([t]) => t).slice(0, 3);
+      return { id, topics: topics.length ? topics : ["government-elections"], reason: "Fake tagger: matched words in the text." };
+    });
+  const text = JSON.stringify({ items });
+  sse(res, [
+    { type: "message_start", message: { id: "msg_topics", type: "message", role: "assistant", model: "claude-haiku-4-5-20251001", content: [], stop_reason: null, stop_sequence: null, usage: { input_tokens: 800, output_tokens: 1, cache_read_input_tokens: 0, cache_creation_input_tokens: 0 } } },
+    { type: "content_block_start", index: 0, content_block: { type: "text", text: "" } },
+    { type: "content_block_delta", index: 0, delta: { type: "text_delta", text } },
+    { type: "content_block_stop", index: 0 },
+    { type: "message_delta", delta: { stop_reason: "end_turn", stop_sequence: null }, usage: { output_tokens: 200 } },
+    { type: "message_stop" },
+  ]);
+}
+
 function anthropic(req, res, body) {
+  if (/^Items, as: id \| kind \| text/.test((body.messages && body.messages[0] && body.messages[0].content) || "")) return topicsAnthropic(req, res, body);
   if (/^(Officials \(use these exact names|Pick an excerpt\.)/.test((body.messages && body.messages[0] && body.messages[0].content) || "")) return promiseAnthropic(req, res, body);
   if (/Agenda items, as \[item number\]/.test((body.messages && body.messages[0] && body.messages[0].content) || "")) return agendaAnthropic(req, res, body);
   if (String(body.model || "").startsWith("claude-haiku")) return relevanceAnthropic(req, res, body);

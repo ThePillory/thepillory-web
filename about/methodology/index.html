@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/assets/pillory.css?v=32" />
+    <link rel="stylesheet" href="/assets/pillory.css?v=33" />
     <meta name="description" content="Evidence-first civic accountability. Verified residents, protected identities, nonpartisan." />
     <meta name="theme-color" content="#F5F2EA" />
     <link rel="icon" href="/assets/logo/icon.svg?v=3" type="image/svg+xml" />
@@ -151,6 +151,18 @@
   </ul>
 </section>
 
+<section class="card stack" id="topics">
+  <h2>Topics</h2>
+  <p>Topics tie records about the same subject together: bills and how a place's representatives voted, county meeting items, executive actions, what officials say on their own Issues pages, and campaign money from industries tied to the subject. <strong>They're shown side by side as facts.</strong> A topic page never says that one record caused another, or why anyone voted, acted or gave as they did.</p>
+  <ul class="plain-list small">
+    <li><strong>One fixed list of topics,</strong> the same for every place, official and party: Water; Wildfire; Roads and Transportation; Housing; Land Use and Planning; Taxes and Budget; Schools and Education; Public Safety and Justice; Health; Social Services; Environment; Energy and Utilities; Agriculture; Jobs and Economy; Broadband and Technology; Veterans; Defense and Foreign Affairs; Immigration; Government and Elections.</li>
+    <li><strong>AI-tagged, with a reason.</strong> A small AI model reads each bill's title (and its plain summary or the relevance check's one-line description), each county agenda item's title (and its AI summary), each executive order's title, and each Platform excerpt, and gives it up to three topics, each with one short, plain sentence saying why. Items that are only procedure or ceremony (a roll call, the pledge, approving minutes, an honorary resolution) get none. The instructions are the same for every item and official, and judge by subject only; a reason with loaded or judging wording is replaced by a plain one. Bills the relevance check set aside as ceremonial or routine aren't tagged.</li>
+    <li><strong>Correctable.</strong> A person can correct any item's topics on the review page. The old tags stay in the item's history, the new ones show the person's name, and the AI doesn't tag that item again. A Platform excerpt is tagged again when its text changes.</li>
+    <li><strong>Funding by topic</strong> uses a fixed table from the campaign-funding industries to topics: Real estate → Housing, Land Use and Planning; Construction and engineering → Housing, Roads and Transportation; Health care → Health; Pharmaceuticals and medical products → Health; Energy and utilities → Energy and Utilities; Defense and aerospace → Defense and Foreign Affairs; Agriculture and food → Agriculture; Transportation → Roads and Transportation; Education → Schools and Education; Labor unions → Jobs and Economy; Finance, insurance and banking → Jobs and Economy; Manufacturing → Jobs and Economy; Retail and consumer goods → Jobs and Economy; Technology and telecommunications → Broadband and Technology. Other industries (lawyers and lobbyists, issue groups, leadership PACs, government, media, tribal governments, and money not classified) aren't tied to a topic, and topics without a related industry show no money. Industries are approximate (keyword rules on names, see Campaign funding), and an industry tied to a topic says nothing about what a contribution was for. Members of Congress: contributions in the current two-year period from PACs and donors' employers (FEC). California officials: their latest two-year period's itemized contributions (Cal-Access).</li>
+    <li><strong>For a place,</strong> a topic page lists the latest bills on the topic with a final-passage vote and how each of the county's representatives voted (every district that overlaps the county, so a county split between districts shows each), county meeting items for live communities, the President's and the Governor's executive actions, excerpts from the officials' own pages, and the money above.</li>
+  </ul>
+</section>
+
 <section class="card stack" id="elections">
   <h2>Elections</h2>
   <p>What's on the ballot, from official sources only, with a link to each. Every candidate and measure is shown the same way, in ballot order. ThePillory doesn't endorse candidates or measures, and doesn't publish polls, predictions or race calls.</p>
@@ -219,8 +231,8 @@
     </div>
   </div>
 </nav>
-    <script src="/assets/search-index.js?v=32"></script>
+    <script src="/assets/search-index.js?v=33"></script>
     <script src="/api/search-officials"></script>
-    <script src="/assets/app.js?v=32"></script>
+    <script src="/assets/app.js?v=33"></script>
   </body>
 </html>

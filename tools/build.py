@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "32"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "33"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -76,6 +76,24 @@ REDIRECTS = [
 ]
 
 e = html.escape
+
+
+def _read_topics():
+    """The topic list, and the industry-to-topic table, from the one copy in
+    workers/sync/src/topics/list.js (the pages and the sync use it too)."""
+    import re
+    src = (ROOT / "workers" / "sync" / "src" / "topics" / "list.js").read_text(encoding="utf-8")
+    topics = [{"slug": m.group(1), "name": m.group(2)} for m in re.finditer(r'\{ slug: "([a-z-]+)", name: "([^"]+)"', src)]
+    table = re.search(r"INDUSTRY_TOPICS = \{(.*?)\n\};", src, re.S).group(1)
+    mapping = {m.group(1): re.findall(r'"([a-z-]+)"', m.group(2)) for m in re.finditer(r"^\s*(\w+): \[([^\]]*)\]", table, re.M)}
+    ind = (ROOT / "workers" / "sync" / "src" / "funding" / "industry.js").read_text(encoding="utf-8")
+    names = dict(re.findall(r'^\s*(\w+): "([^"]+)",$', re.search(r"INDUSTRIES = \{(.*?)\n\};", ind, re.S).group(1), re.M))
+    assert 15 <= len(topics) <= 20 and mapping and all(k in names for k in mapping), "topics/list.js or industry.js changed shape"
+    return topics, mapping, names
+
+
+TOPIC_LIST, INDUSTRY_TOPIC_MAP, INDUSTRY_NAMES = _read_topics()
+TOPIC_NAME = {t["slug"]: t["name"] for t in TOPIC_LIST}
 LEVEL_NAME = {"county": "County", "state": "State", "federal": "Federal"}
 
 # The empty state for reports and issues, everywhere they would appear.
@@ -315,6 +333,8 @@ def full_constitution():
 
 
 def build_methodology():
+    topic_names = "; ".join(t["name"] for t in TOPIC_LIST)
+    industry_map = "; ".join(f"{INDUSTRY_NAMES[k]} → {', '.join(TOPIC_NAME[t] for t in ts)}" for k, ts in INDUSTRY_TOPIC_MAP.items())
     main = """
 <header class="page-head">
   <h1>Methodology</h1>
@@ -428,6 +448,18 @@ def build_methodology():
   </ul>
 </section>
 
+<section class="card stack" id="topics">
+  <h2>Topics</h2>
+  <p>Topics tie records about the same subject together: bills and how a place's representatives voted, county meeting items, executive actions, what officials say on their own Issues pages, and campaign money from industries tied to the subject. <strong>They're shown side by side as facts.</strong> A topic page never says that one record caused another, or why anyone voted, acted or gave as they did.</p>
+  <ul class="plain-list small">
+    <li><strong>One fixed list of topics,</strong> the same for every place, official and party: {topic_names}.</li>
+    <li><strong>AI-tagged, with a reason.</strong> A small AI model reads each bill's title (and its plain summary or the relevance check's one-line description), each county agenda item's title (and its AI summary), each executive order's title, and each Platform excerpt, and gives it up to three topics, each with one short, plain sentence saying why. Items that are only procedure or ceremony (a roll call, the pledge, approving minutes, an honorary resolution) get none. The instructions are the same for every item and official, and judge by subject only; a reason with loaded or judging wording is replaced by a plain one. Bills the relevance check set aside as ceremonial or routine aren't tagged.</li>
+    <li><strong>Correctable.</strong> A person can correct any item's topics on the review page. The old tags stay in the item's history, the new ones show the person's name, and the AI doesn't tag that item again. A Platform excerpt is tagged again when its text changes.</li>
+    <li><strong>Funding by topic</strong> uses a fixed table from the campaign-funding industries to topics: {industry_map}. Other industries (lawyers and lobbyists, issue groups, leadership PACs, government, media, tribal governments, and money not classified) aren't tied to a topic, and topics without a related industry show no money. Industries are approximate (keyword rules on names, see Campaign funding), and an industry tied to a topic says nothing about what a contribution was for. Members of Congress: contributions in the current two-year period from PACs and donors' employers (FEC). California officials: their latest two-year period's itemized contributions (Cal-Access).</li>
+    <li><strong>For a place,</strong> a topic page lists the latest bills on the topic with a final-passage vote and how each of the county's representatives voted (every district that overlaps the county, so a county split between districts shows each), county meeting items for live communities, the President's and the Governor's executive actions, excerpts from the officials' own pages, and the money above.</li>
+  </ul>
+</section>
+
 <section class="card stack" id="elections">
   <h2>Elections</h2>
   <p>What's on the ballot, from official sources only, with a link to each. Every candidate and measure is shown the same way, in ballot order. ThePillory doesn't endorse candidates or measures, and doesn't publish polls, predictions or race calls.</p>
@@ -478,6 +510,7 @@ def build_methodology():
   <p class="small">Reporting isn't open yet: it opens when accounts launch. When it does, this section will explain how reports are reviewed, corroborated, and given a confidence level. <a class="inline-link" href="/about/how-it-works/">How it works</a></p>
   <p class="small secondary">How reports are reviewed, corroborated, and given a confidence level.</p>
 </section>"""
+    main = main.replace("{topic_names}", e(topic_names)).replace("{industry_map}", e(industry_map))
     render("about/methodology", "Methodology", main, tab="you", back=("About", "/about/"))
 
 
@@ -880,6 +913,10 @@ def search_index():
         text = p["text"]
         items.append({"type": "Constitution", "title": p["label"], "sub": text[:90] + ("…" if len(text) > 90 else ""),
                       "url": f"/laws/constitution/#{p['id']}", "k": text})
+    # Topics (workers/sync/src/topics/list.js).
+    items.append({"type": "Topics", "title": "Topics", "sub": "One subject at a time, side by side", "url": "/topics/", "k": "topic topics subject issue"})
+    for t in TOPIC_LIST:
+        items.append({"type": "Topics", "title": t["name"], "sub": "Topic", "url": f"/topics/{t['slug']}/", "k": t["name"]})
     # Elections (data/elections/, from tools/build_elections.py): the election, its statewide offices and propositions.
     items.append({"type": "Elections", "title": "Elections", "sub": "What's on the ballot, Your ballot, How to vote", "url": "/elections/", "k": "election ballot vote voting register polling"})
     for path in sorted((ROOT / "data" / "elections").glob("*.json"), reverse=True)[:1]:

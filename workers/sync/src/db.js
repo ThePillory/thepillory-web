@@ -13,6 +13,7 @@ import init0011 from "../migrations/0011_promises.sql";
 import init0012 from "../migrations/0012_state_money.sql";
 import init0013 from "../migrations/0013_promise_sources.sql";
 import init0014 from "../migrations/0014_platform.sql";
+import init0015 from "../migrations/0015_topics.sql";
 import { isHttp, today } from "./util.js";
 import { totals } from "./rollcall.js";
 
@@ -31,6 +32,7 @@ const MIGRATIONS = [
   ["0012_state_money.sql", init0012],
   ["0013_promise_sources.sql", init0013],
   ["0014_platform.sql", init0014],
+  ["0015_topics.sql", init0015],
 ];
 
 function statements(sql) {

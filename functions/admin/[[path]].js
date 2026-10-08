@@ -31,6 +31,7 @@ import { STATUS, STATUSES, SOURCE_KIND, statusChip, historyList, sourceHref } fr
 import { checkEntry, checkPage, checkStatement, selectedIds, officialLabel, PAGE_KINDS } from "../_lib/promise-entry.js";
 import { checkExcerpt } from "../../workers/sync/src/promises/excerpt.js";
 import { wordingProblems, quoteKey } from "../../workers/sync/src/promises/check.js";
+import { KINDS as TOPIC_KINDS, itemFromLink, reviewHref, topicReviewList, topicReviewItem, topicReviewChange } from "../_lib/topic-review.js";
 
 // Browse every current analysis by where it stands.
 const BROWSE = {
@@ -949,6 +950,8 @@ ${done ? `<p class="banner" role="status">${esc(done)}</p>` : ""}
 <p class="small"><a class="inline-link" href="/admin/review/promise/new/">Add a promise by hand</a></p>
 <p class="small"><a class="inline-link" href="/admin/review/promise/pages/">Issues and priorities pages (${pages})</a></p>
 <p class="small"><a class="inline-link" href="/admin/review/promise/statements/">Statements from officials</a></p>
+<h2 class="label queue-head" id="topics">Topic tags</h2>
+<p class="small"><a class="inline-link" href="/admin/review/topics/">Check and correct topic tags</a> on bills, county agenda items, executive actions and Platform excerpts.</p>
 ${batch}
 <section class="card">${rows || '<p class="secondary small">No suggestions waiting.</p>'}</section>
 <details class="weigh-details"${suggested.length ? "" : " open"}><summary>Recent activity</summary><section class="card stack-sm">${activityList}</section></details>
@@ -1309,6 +1312,35 @@ async function handle(context) {
     const origin = request.headers.get("Origin");
     if (origin && origin !== url.origin) return adminPage("Refused", '<header class="page-head"><h1>Refused</h1></header>', 403);
     return relevanceChange(env.DB, decodeURIComponent(parts[2]), request, who.email);
+  }
+  if (parts[1] === "topics") {
+    try {
+      if (parts.length === 2) return adminPage(...Object.values(await topicReviewList(env.DB, url)));
+      if (parts[2] === "find" && parts.length === 3) {
+        const it = itemFromLink(url.searchParams.get("link"));
+        if (!it) return adminPage(...Object.values(await topicReviewList(env.DB, url, { error: "That isn't a bill page link, an agenda item link (…/meetings/…#item-…) or a bill id." })));
+        return Response.redirect(`${url.origin}${reviewHref(it.kind, it.id)}`, 303);
+      }
+      const kind = parts[2];
+      const id = url.searchParams.get("id") || "";
+      if (parts.length !== 3 || !TOPIC_KINDS[kind]) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+      if (request.method === "POST") {
+        const origin = request.headers.get("Origin");
+        if (origin && origin !== url.origin) return adminPage("Refused", '<header class="page-head"><h1>Refused</h1></header>', 403);
+        const fd = await request.formData();
+        const r = await topicReviewChange(env.DB, kind, id, { topics: fd.getAll("topics"), note: fd.get("note"), reviewer: fd.get("reviewer") });
+        if (r.error) {
+          const v = await topicReviewItem(env.DB, env, kind, id, { error: r.error, form: r.form });
+          return v ? adminPage(v.title, v.main) : adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+        }
+        return Response.redirect(`${url.origin}${reviewHref(kind, id)}&done=${encodeURIComponent(r.done)}`, 303);
+      }
+      const v = await topicReviewItem(env.DB, env, kind, id, { done: url.searchParams.get("done") || "" });
+      return v ? adminPage(v.title, v.main) : adminPage("Not found", '<header class="page-head"><h1>No such item</h1><p class="subtitle">Nothing with that id is on the site or tagged.</p></header>', 404);
+    } catch (err) {
+      if (/no such table|no such column/i.test(String(err && err.message))) return missingTables();
+      throw err;
+    }
   }
   if (parts[1] === "promise" && ["new", "batch", "pages", "statements"].includes(parts[2]) && parts.length === 3) {
     try {
