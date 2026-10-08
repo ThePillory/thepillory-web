@@ -25,7 +25,7 @@ export function govcaPosts() {
     {
       id: 1, date: "2026-10-02T08:00:00", link: `${GOVCA}2026/10/02/fake-libraries/`,
       title: { rendered: "FAKE: Governor announces rural library grants" },
-      content: { rendered: "[et_pb_section][et_pb_text]<p>FAKE-PROMISE-DOC-GOV. SACRAMENTO &#8211; The state will award $25 million in grants to 40 rural libraries by June 30, 2027.</p><p>We are proud of our libraries.</p>[/et_pb_text][/et_pb_section]" },
+      content: { rendered: "[et_pb_section][et_pb_text]<p>FAKE-PROMISE-DOC-GOV. SACRAMENTO &#8211; The state will award $25 million in grants to 40 rural libraries by June 30, 2027.</p><p>Last month the Governor signed a law requiring every county to publish its water use data online, starting next year.</p><p>We are proud of our libraries.</p>[/et_pb_text][/et_pb_section]" },
     },
     {
       id: 2, date: "2026-10-01T08:00:00", link: `${GOVCA}2026/10/01/fake-appointments/`,
@@ -55,7 +55,8 @@ export function govcaStateOfTheState() {
 export const campaignIssuesPage = () =>
   `<html><body><nav>Home Donate Volunteer</nav><main><h1>Issues</h1><p>FAKE-PROMISE-DOC-ISSUES.</p>
 <h2>Roads</h2><p>Roads matter to every family.</p><p>As Governor I will repave Route 4 between Murphys and Arnold by the end of 2027.</p>
-<h2>Water</h2><p>I believe in clean water for everyone.</p></main><footer>Paid for by a fake committee</footer></body></html>`;
+<h2>Water</h2><p>I believe in clean water for everyone.</p>
+<h2>Libraries</h2><p>The rural library grant program was canceled in the revised state budget.</p></main><footer>Paid for by a fake committee</footer></body></html>`;
 
 export function govinfoCollection() {
   return {
@@ -70,10 +71,17 @@ export function govinfoCollection() {
 export const govinfoHtm = () =>
   "<html><head><style>p{color:black}</style></head><body><p>FAKE-PROMISE-DOC-SOTU. Mr. Speaker.</p><p>Tonight I am asking Congress to pass the Fake Highways Act, and I will sign it the day it reaches my desk.</p></body></html>";
 
+// The tracked promises listed in the reader's message: [{ id, quote }].
+const tracked = (message) => [...message.matchAll(/^- id (\d+) \([^)]*\): "(.*)"$/gm)].map((m) => ({ id: +m[1], quote: m[2] }));
+
 // What the FAKE drafter answers for each document: some candidates pass the
-// checks; others are built to be dropped (misquoted, a value, loaded wording).
+// checks; others are built to be dropped (misquoted, a value, a general aim,
+// loaded wording). Status updates: Kept for the water law (recorded at once),
+// Broken for the library grants (sent for review), and one misquoted (dropped).
 export function promiseDraft(message) {
   const speaker = (/^- ([^,\n]+),/m.exec(message) || [])[1] || "Nobody";
+  const open = tracked(message);
+  const find = (word) => open.find((p) => p.quote.includes(word));
   if (message.includes("FAKE-PROMISE-DOC-1")) {
     return { promises: [
       { speaker, quote: "We will open three new veterans clinics in Ohio by the end of 2027", check_note: "Three new veterans clinics open in Ohio.", due: "by the end of 2027" },
@@ -84,6 +92,10 @@ export function promiseDraft(message) {
   if (message.includes("FAKE-PROMISE-DOC-GOV")) {
     return { promises: [
       { speaker, quote: "The state will award $25 million in grants to 40 rural libraries by June 30, 2027.", check_note: "Grant awards totaling $25 million to 40 rural libraries.", due: "by June 30, 2027" },
+      { speaker, quote: "We will always fight for every library in California.", check_note: "Libraries are supported.", due: "" },
+    ], status_updates: [
+      ...(find("water use") ? [{ promise_id: find("water use").id, to_status: "kept", evidence_quote: "Last month the Governor signed a law requiring every county to publish its water use data online", evidence_note: "A law requiring counties to publish water use data online was signed." }] : []),
+      ...(find("water use") ? [{ promise_id: find("water use").id, to_status: "in_progress", evidence_quote: "The Governor proposed a water bill", evidence_note: "A second update for the same promise." }] : []),
     ] };
   }
   // "In their own words": the passage summing up the page, word for word.
@@ -94,6 +106,9 @@ export function promiseDraft(message) {
     return { promises: [
       { speaker, quote: "As Governor I will repave Route 4 between Murphys and Arnold by the end of 2027.", check_note: "Completed repaving of Route 4 between Murphys and Arnold.", due: "by the end of 2027" },
       { speaker, quote: "Roads matter to every family.", check_note: "Roads are better.", due: "" },
+    ], status_updates: [
+      ...(find("rural libraries") ? [{ promise_id: find("rural libraries").id, to_status: "broken", evidence_quote: "The rural library grant program was canceled in the revised state budget.", evidence_note: "The revised budget canceled the grant program." }] : []),
+      { promise_id: 99999, to_status: "kept", evidence_quote: "Roads matter to every family.", evidence_note: "Not a tracked promise." },
     ] };
   }
   if (message.includes("FAKE-PROMISE-DOC-SOTS")) {

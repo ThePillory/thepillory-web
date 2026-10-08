@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/assets/pillory.css?v=37" />
+    <link rel="stylesheet" href="/assets/pillory.css?v=38" />
     <script>document.documentElement.classList.add("js")</script>
     <meta name="description" content="Evidence-first civic accountability. Verified residents, protected identities, nonpartisan." />
     <meta name="color-scheme" content="light dark" />
@@ -126,13 +126,14 @@
 
 <section class="card stack" id="promises">
   <h2>Platform and promises</h2>
-  <p>A promise is a <strong>specific, checkable commitment</strong> an official made: an action, with an object, that anyone could later check happened or didn't. General values, priorities and positions are not promises.</p>
+  <p>A promise is a <strong>specific, checkable commitment</strong> an official made: an action, a vote or a deadline, with an object, that anyone could later check happened or didn't. General values, priorities and positions are not promises.</p>
   <ul class="plain-list small">
-    <li><strong>Quoted exactly,</strong> with the date and a link to the source. The quote is checked word for word against the source before anyone sees it; a quote that doesn't match is dropped, never corrected.</li>
+    <li><strong>Quoted exactly,</strong> with the date and a link to the source. The quote is checked word for word against the source before it's published; a quote that doesn't match is dropped, never corrected.</li>
     <li><strong>The same sources for everyone of the same office:</strong> official press releases, inaugural addresses, and State of the Union and State of the State addresses; for county supervisors, official meeting agendas and minutes. Every official with a Platform page is tracked: their own office website’s “Issues” or “Priorities” page is found automatically, by following links from the site’s home page the same way for everyone (Calaveras County’s representatives first, then California, then everyone else), and a person can add a campaign page or remove a wrong one. When no page is found, the Platform tab says so, with a link to the official’s website.</li>
-    <li><strong>AI suggests, a person decides.</strong> Documents with no sentence committing to an action are set aside first, by a simple word check (will, plan to, by a date), the same for everyone; addresses are read first. An AI model reads the rest and suggests a few candidates a day. Nothing is published until a person checks the quote against the source and confirms it is a specific commitment by that official. Each promise shows who reviewed it and when.</li>
-    <li><strong>Statuses:</strong> No action yet, In progress, Kept, Broken. A status changes only with evidence and a source, recorded by a person, and every change stays listed under the promise with its date, evidence and source.</li>
-    <li><strong>In their own words.</strong> At the top of each official’s Platform tab: a short excerpt, word for word, from their own Issues or Priorities page, with a link to the whole page. It’s picked automatically with the same instructions for every official (the page’s own summary of what they say they’ll work on, never the passage most likely to make them look good or bad), checked word for word against the page, and refreshed monthly; a reviewer can choose another passage or hide it, and the page shows who chose it. Statements an official’s office sends in are shown in full, exactly as sent, labeled “Submitted by the official”. Commitments tracked appear below once at least one promise has been checked and approved.</li>
+    <li id="ai-identified"><strong>“AI-identified, auto-checked.”</strong> Documents with no sentence committing to an action are set aside first, by a simple word check (will, plan to, by a date), the same for everyone; addresses are read first. An AI model reads the rest with the same instructions for every official and finds up to ten promises a day. Each one is then checked in code, and published only if it passes every check: the quote is in the source word for word; it commits the official to act; it names a specific action, vote or deadline (signing, vetoing or voting on a measure, introducing a bill, or a concrete action with a date, an amount or a named measure; “fight for”, “protect” or “make the state safer” alone are dropped); the note ThePillory adds is plain and neutral; and a deadline is kept only when the quote states it. What passes is published at once, labeled “AI-identified, auto-checked”. What doesn't is never shown.</li>
+    <li><strong>Statuses:</strong> every promise starts at No action yet, then In progress, Kept or Broken. A status changes only with evidence and a source, and every change stays listed under the promise with its date, evidence and source. When the AI finds a passage in a later official document showing a promise moving, it's checked the same way (the passage word for word, a neutral note, a forward step): In progress and Kept are published with their evidence, labeled “AI-identified, auto-checked”; Broken is shown only after a person checks the evidence.</li>
+    <li><strong>People check the work.</strong> About one in ten auto-published promises, picked at random, goes to a person for a spot check, the same rate as constitutional analyses. Anyone can report a promise with “Something wrong?” (no account needed); it stays up, marked “Under review”, until a person decides. A person can confirm a promise, which then shows “Reviewed by” with their name and the date, or take it down; nothing is deleted, and every decision is kept.</li>
+    <li><strong>In their own words.</strong> At the top of each official’s Platform tab: a short excerpt, word for word, from their own Issues or Priorities page, with a link to the whole page. It’s picked automatically with the same instructions for every official (the page’s own summary of what they say they’ll work on, never the passage most likely to make them look good or bad), checked word for word against the page, and refreshed monthly; a reviewer can choose another passage or hide it, and the page shows who chose it. Statements an official’s office sends in are shown in full, exactly as sent, labeled “Submitted by the official”. Commitments tracked appear below once at least one promise is published.</li>
     <li><strong>Added by a person.</strong> A reviewer can also record a promise from a meeting video, an interview or another public record, with the time in the video where it was said. The same checks apply, and it shows "Reviewed by" with their name.</li>
     <li><strong>Neutral wording.</strong> ThePillory adds only a short, plain note on what would show the promise done. No characterization of the official, no predictions.</li>
   </ul>
@@ -258,8 +259,8 @@
     </div>
   </div>
 </nav>
-    <script src="/assets/search-index.js?v=37"></script>
+    <script src="/assets/search-index.js?v=38"></script>
     <script src="/api/search-officials"></script>
-    <script src="/assets/app.js?v=37"></script>
+    <script src="/assets/app.js?v=38"></script>
   </body>
 </html>

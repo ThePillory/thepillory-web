@@ -3,7 +3,7 @@
 // the reading order. Every name and quote here is invented.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { findQuote, quoteKey, notACommitment, wordingProblems, checkCandidate, normalizeText } from "../src/promises/check.js";
+import { findQuote, quoteKey, notACommitment, notSpecific, wordingProblems, checkCandidate, checkStatusUpdate, normalizeText } from "../src/promises/check.js";
 import { htmlToText, parseRssWithContent, parseWpPosts, addressPackages, whiteHouseKind, worthReading, roundRobin, commitmentScore, commitmentSentences } from "../src/promises/sources.js";
 import { schema } from "../src/promises/prompt.js";
 import { whiteHouseFeed, govcaPosts, govinfoCollection } from "./promise-fixtures.mjs";
@@ -170,4 +170,44 @@ test("In their own words: an excerpt word for word, refreshed monthly; statement
   const promise = { id: 1, status: "kept", source_kind: "address", made_on: "2026-01-08", quote: "I will sign it.", check_note: "A signed law.", source_url: "https://example.org/a", source_title: "Address", changes: [], reviewed_by: "T", reviewed_at: "2026-10-01" };
   assert.match(platformTab(o, [promise], own), /Commitments tracked/);
   assert.match(platformTab(o, [], { pages: [], statements: [] }), /No platform recorded yet/);
+});
+
+test("only specific, checkable commitments: an action, a vote or a deadline", () => {
+  for (const q of [
+    "We will open three new veterans clinics in Ohio by the end of 2027",
+    "The state will award $25 million in grants to 40 rural libraries by June 30, 2027.",
+    "I will introduce legislation to cap the cost of insulin for seniors.",
+    "I will vote against any budget that raises the gas tax.",
+    "This year I will sign a law requiring every county to publish its water use data online by January 1, 2027.",
+    "On day one, I will end the hiring freeze at the Department of Veterans Affairs.",
+    "We will repave Main Street from Highway 4 to Mountain Ranch Road by the end of 2027.",
+  ]) assert.equal(notSpecific(q), null, q);
+  assert.match(notSpecific("I will always fight for working families and a fair wage."), /general aim/);
+  assert.match(notSpecific("We are going to protect Social Security and Medicare for every senior."), /general aim/);
+  assert.match(notSpecific("We will make California the safest state in the nation."), /general aim/);
+  assert.match(notSpecific("I will create jobs in every corner of this great state."), /nothing to check it against/);
+  // checkCandidate refuses the same quotes.
+  const doc = "I will always fight for working families and a fair wage.";
+  assert.equal(checkCandidate({ quote: doc, check_note: "Wages rise." }, doc).ok, false);
+});
+
+test("a status update: the evidence word for word, a neutral note, a forward step", () => {
+  const promise = { id: 7, status: "no_action", quote_key: quoteKey("We will open three new veterans clinics in Ohio by the end of 2027") };
+  const src = "The Governor cut the ribbon on the third of three new veterans clinics in Ohio on Friday, completing the plan announced last year.";
+  const ok = checkStatusUpdate({ to_status: "kept", evidence_quote: "The Governor cut the ribbon on the third of three new veterans clinics in Ohio on Friday", evidence_note: "The third clinic opened." }, promise, src);
+  assert.equal(ok.ok, true);
+  assert.equal(ok.to_status, "kept");
+  assert.match(checkStatusUpdate({ to_status: "kept", evidence_quote: "The Governor opened five clinics in Ohio on Friday", evidence_note: "Opened." }, promise, src).reason, /word for word/);
+  assert.match(checkStatusUpdate({ to_status: "kept", evidence_quote: "The Governor cut the ribbon on the third of three new veterans clinics", evidence_note: "She finally kept her word!" }, promise, src).reason, /loaded/);
+  assert.match(checkStatusUpdate({ to_status: "in_progress", evidence_quote: "The Governor cut the ribbon on the third of three new veterans clinics", evidence_note: "Opened." }, { ...promise, status: "kept" }, src).reason, /can't go/);
+  assert.match(checkStatusUpdate({ to_status: "kept", evidence_quote: "The Governor cut the ribbon on the third of three new veterans clinics", evidence_note: "" }, promise, src).reason, /no note/);
+  // The promise repeated isn't evidence.
+  const again = "We will open three new veterans clinics in Ohio by the end of 2027, the Governor said again.";
+  assert.match(checkStatusUpdate({ to_status: "in_progress", evidence_quote: "We will open three new veterans clinics in Ohio by the end of 2027", evidence_note: "Repeated." }, promise, again).reason, /promise itself/);
+});
+
+test("the reader's output shape carries status updates", () => {
+  const s = schema(["Gloria Testgovernor"]);
+  assert.deepEqual(s.required, ["promises", "status_updates"]);
+  assert.deepEqual(s.properties.status_updates.items.properties.to_status.enum, ["in_progress", "kept", "broken"]);
 });

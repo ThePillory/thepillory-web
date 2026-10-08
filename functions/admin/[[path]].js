@@ -28,7 +28,7 @@ import { summarizeFlags } from "../../workers/sync/src/analysis/flags.js";
 import { FLAGS, FLAG_LABELS, IMPACT, MAX_FLAGGED } from "../../workers/sync/src/analysis/agenda-check.js";
 import { ISSUES } from "../_lib/generated.js";
 import { when, meetingHref } from "../_lib/meetings.js";
-import { STATUS, STATUSES, SOURCE_KIND, statusChip, historyList, sourceHref } from "../_lib/promises.js";
+import { STATUS, STATUSES, SOURCE_KIND, statusChip, historyList, sourceHref, checkedLine, FLAG_REASONS as PROMISE_FLAG_REASONS } from "../_lib/promises.js";
 import { checkEntry, checkPage, checkStatement, selectedIds, officialLabel, PAGE_KINDS } from "../_lib/promise-entry.js";
 import { checkExcerpt } from "../../workers/sync/src/promises/excerpt.js";
 import { wordingProblems, quoteKey } from "../../workers/sync/src/promises/check.js";
@@ -875,7 +875,9 @@ ${table}`,
 
 
 // ---------------------------------------------------------------------------
-// Promises: suggestions from the AI wait here; nothing is public until approved.
+// Promises publish on their own once they pass the code checks ("AI-identified,
+// auto-checked"). What waits here: "Broken" status suggestions, promises a
+// reader flagged, random spot checks, and suggestions the checks held back.
 
 const REJECT_REASONS = [
   ["not_commitment", "Not a specific, checkable commitment"],
@@ -884,131 +886,200 @@ const REJECT_REASONS = [
   ["duplicate", "Duplicate of another promise"],
   ["other", "Other"],
 ];
+const PROMISE_FLAG_LABELS = Object.fromEntries(PROMISE_FLAG_REASONS);
 
-/** At the top of the review page: how many suggested promises wait, and how far the Issues-page search has got. */
+const count = async (db, sql) => {
+  try {
+    return (await db.prepare(sql).first()).n;
+  } catch {
+    return null;
+  }
+};
+const PROMISE_COUNTS = {
+  broken: "SELECT COUNT(*) AS n FROM promise_status_suggestions WHERE status = 'pending'",
+  flagged: "SELECT COUNT(DISTINCT f.promise_id) AS n FROM promise_flags f JOIN promises p ON p.id = f.promise_id WHERE f.status = 'open' AND p.review IN ('auto', 'approved')",
+  spot: "SELECT COUNT(*) AS n FROM promises WHERE review = 'auto' AND spot_check = 1",
+  held: "SELECT COUNT(*) AS n FROM promises WHERE review = 'suggested'",
+};
+
+/** At the top of the review page: what about promises needs a person, and how far the Issues-page search has got. */
 async function waitingSummary(db) {
-  const n = async (sql) => {
-    try {
-      return (await db.prepare(sql).first()).n;
-    } catch {
-      return null;
-    }
-  };
-  const waiting = await n("SELECT COUNT(*) AS n FROM promises WHERE review = 'suggested'");
-  if (waiting == null) return "";
-  const found = await n("SELECT COUNT(*) AS n FROM issues_page_checks WHERE site_kind = 'office_site' AND result = 'found'");
-  const none = await n("SELECT COUNT(*) AS n FROM issues_page_checks WHERE site_kind = 'office_site' AND result IN ('none', 'no_website')");
-  const officials = await n("SELECT COUNT(*) AS n FROM officials WHERE active = 1");
+  const broken = await count(db, PROMISE_COUNTS.broken);
+  const held = await count(db, PROMISE_COUNTS.held);
+  if (held == null) return "";
+  const flagged = (await count(db, PROMISE_COUNTS.flagged)) || 0;
+  const spot = (await count(db, PROMISE_COUNTS.spot)) || 0;
+  const published = (await count(db, "SELECT COUNT(*) AS n FROM promises WHERE review IN ('auto', 'approved')")) || 0;
+  const found = await count(db, "SELECT COUNT(*) AS n FROM issues_page_checks WHERE site_kind = 'office_site' AND result = 'found'");
+  const none = await count(db, "SELECT COUNT(*) AS n FROM issues_page_checks WHERE site_kind = 'office_site' AND result IN ('none', 'no_website')");
+  const officials = await count(db, "SELECT COUNT(*) AS n FROM officials WHERE active = 1");
   const searched = (found || 0) + (none || 0);
+  const stat = (href, n, label) => `<a class="stat" href="${href}"><div class="stat-num">${n}</div><div class="stat-label">${label}</div></a>`;
   return `<section class="card stack-sm">
   <div class="grid-2">
-    <a class="stat" href="#promises"><div class="stat-num">${waiting}</div><div class="stat-label">suggested promise${waiting === 1 ? "" : "s"} waiting for your review</div></a>
-    <a class="stat" href="/admin/review/promise/pages/"><div class="stat-num">${found || 0}</div><div class="stat-label">Issues pages found${officials ? ` (${searched} of ${officials} officials' sites searched)` : ""}</div></a>
+    ${stat("#promise-broken", broken || 0, `"Broken" status${broken === 1 ? "" : "es"} to confirm`)}
+    ${stat("#promise-flags", flagged, `promise${flagged === 1 ? "" : "s"} flagged by readers`)}
+    ${stat("#promise-spot", spot, `spot check${spot === 1 ? "" : "s"}`)}
+    ${stat("#promise-held", held, `suggestion${held === 1 ? "" : "s"} held back by the checks`)}
+    ${stat("/admin/review/promise/pages/", found || 0, `Issues pages found${officials ? ` (${searched} of ${officials} officials' sites searched)` : ""}`)}
+    ${stat("#promise-published", published, "promises published")}
   </div>
-  <p class="hint">New suggestions keep coming however many are waiting; nothing is public until you approve it.</p>
+  <p class="hint">Promises that pass the code checks publish on their own, labeled "AI-identified, auto-checked", and so do "In progress" and "Kept" with their evidence. Only what's counted above waits for you.</p>
 </section>`;
 }
 
-async function promiseQueue(db, env, url) {
-  let suggested = [];
-  let approved = [];
-  try {
-    suggested = (
-      await db
-        .prepare(
-          `SELECT p.*, o.name, o.office, o.slug FROM promises p JOIN officials o ON o.id = p.official_id
-           WHERE p.review = 'suggested' ORDER BY p.created_at, p.id LIMIT 50`
-        )
-        .all()
-    ).results;
-    approved = (
-      await db
-        .prepare(
-          `SELECT p.id, p.quote, p.status, p.made_on, o.name FROM promises p JOIN officials o ON o.id = p.official_id
-           WHERE p.review = 'approved' ORDER BY p.made_on DESC, p.id DESC LIMIT 100`
-        )
-        .all()
-    ).results;
-  } catch (err) {
-    if (/no such table/i.test(String(err && err.message))) return "";
-    throw err;
-  }
-  // What the promise step last did, so an empty queue explains itself.
-  let activity = [];
-  try {
-    activity = (
-      await db
-        .prepare("SELECT step, status, message, finished_at FROM sync_log WHERE step IN ('promise-sources', 'promises') ORDER BY id DESC LIMIT 6")
-        .all()
-    ).results;
-  } catch {
-    activity = [];
-  }
-  const activityList = activity.length
-    ? `<ul class="plain-list activity-list">${activity.map((a) => `<li class="small"><span class="secondary">${esc(String(a.finished_at || "").slice(0, 16).replace("T", " "))} · ${esc(a.step === "promise-sources" ? "looking for documents" : "reading a document")} · ${esc(a.status)}</span><br>${esc(String(a.message || "").slice(0, 400))}</li>`).join("")}</ul>`
-    : '<p class="secondary small">The promise step hasn\'t run yet. It runs after the bill analysis in each sync.</p>';
-  const rows = suggested
-    .map(
-      (p) => `
-<div class="list-row stack-sm promise-suggestion">
-  <label class="check-row"><input type="checkbox" name="ids" value="${p.id}" form="promise-batch"> <span class="small">Select</span></label>
-  <p class="small"><strong>${esc(p.name)}</strong>, ${esc(p.office)} · ${esc(SOURCE_KIND[p.source_kind] || p.source_kind)} · ${fmtDate(p.made_on)}</p>
+/** A promise as the queue shows it: who, the quote, the note, the source, and how it was published. */
+function promiseBlock(p) {
+  return `<p class="small"><strong>${esc(p.name)}</strong>, ${esc(p.office)} · ${esc(SOURCE_KIND[p.source_kind] || p.source_kind)} · ${fmtDate(p.made_on)} · ${statusChip(p.status)}</p>
   <blockquote class="promise-quote">“${esc(p.quote)}”</blockquote>
   <p class="small"><strong>What would show it done:</strong> ${esc(p.check_note)}${p.due ? ` · Deadline as stated: ${esc(p.due)}` : ""}</p>
-  <p class="small"><a class="inline-link" href="${esc(p.source_url)}" target="_blank" rel="noopener">${esc(p.source_title)} ↗</a> <span class="secondary">· check the quote against the source</span></p>
-  <p class="hint">Suggested by ${esc(p.suggested_by)}, ${fmtDate(String(p.created_at).slice(0, 10))}. <a class="inline-link" href="/admin/review/promise/${p.id}/">Edit the note</a></p>
-  <div class="watch-actions">
+  <p class="small"><a class="inline-link" href="${esc(sourceHref(p.source_url, p.source_time))}" target="_blank" rel="noopener">${esc(p.source_title)} ↗</a> <span class="secondary">· check the quote against the source</span></p>
+  <p class="hint">${p.review === "suggested" ? `Suggested by ${esc(p.suggested_by)}, ${fmtDate(String(p.created_at).slice(0, 10))}` : checkedLine(p)}. <a class="inline-link" href="/admin/review/promise/${p.id}/">Open</a>${p.review !== "suggested" ? ` · <a class="inline-link" href="/reps/${esc(p.slug)}/#promise-${p.id}">On the page</a>` : ""}</p>`;
+}
+
+const reviewerField = (env) => `<label class="field"><span class="field-label">Your name, as shown on the page</span><input class="input" name="reviewer" required value="${esc(env.REVIEWER_NAME || "")}" autocomplete="name"></label>`;
+/** Confirm (published as "Reviewed by [name]") and take down, for one promise. */
+function promiseActions(env, p, { confirm = "Confirm", takeDown = "Take down" } = {}) {
+  return `<div class="watch-actions">
     <form method="post" action="/admin/review/promise/${p.id}/" class="stack-sm">
       <input type="hidden" name="action" value="approve">
-      <label class="field"><span class="field-label">Your name, as shown on the page</span><input class="input" name="reviewer" required value="${esc(env.REVIEWER_NAME || "")}" autocomplete="name"></label>
-      <button class="btn btn--primary" type="submit">Approve</button>
+      ${reviewerField(env)}
+      <button class="btn btn--primary" type="submit">${esc(confirm)}</button>
     </form>
     <form method="post" action="/admin/review/promise/${p.id}/" class="stack-sm">
       <input type="hidden" name="action" value="reject">
-      <label class="field"><span class="field-label">Why not</span><select class="input" name="reason">${REJECT_REASONS.map(([v, l]) => `<option value="${v}">${esc(l)}</option>`).join("")}</select></label>
-      <button class="btn" type="submit">Reject</button>
+      <label class="field"><span class="field-label">Why</span><select class="input" name="reason">${REJECT_REASONS.map(([v, l]) => `<option value="${v}">${esc(l)}</option>`).join("")}</select></label>
+      ${reviewerField(env)}
+      <button class="btn" type="submit">${esc(takeDown)}</button>
+    </form>
+  </div>`;
+}
+
+const PROMISE_COLS = "p.*, o.name, o.office, o.slug";
+async function queryRows(db, sql, ...binds) {
+  try {
+    return (await db.prepare(sql).bind(...binds).all()).results;
+  } catch (err) {
+    if (/no such (table|column)/i.test(String(err && err.message))) return null;
+    throw err;
+  }
+}
+
+async function promiseQueue(db, env, url) {
+  const held = await queryRows(db, `SELECT ${PROMISE_COLS} FROM promises p JOIN officials o ON o.id = p.official_id WHERE p.review = 'suggested' ORDER BY p.created_at, p.id LIMIT 50`);
+  if (held == null) return "";
+  const broken = (await queryRows(
+    db,
+    `SELECT s.id AS sid, s.evidence, s.evidence_quote, s.evidence_on, s.source_url AS evidence_url, s.suggested_by AS s_by, s.created_at AS s_at, ${PROMISE_COLS}
+     FROM promise_status_suggestions s JOIN promises p ON p.id = s.promise_id JOIN officials o ON o.id = p.official_id
+     WHERE s.status = 'pending' ORDER BY s.created_at, s.id LIMIT 50`
+  )) || [];
+  const flagged = (await queryRows(
+    db,
+    `SELECT ${PROMISE_COLS} FROM promises p JOIN officials o ON o.id = p.official_id
+     WHERE p.review IN ('auto', 'approved') AND EXISTS (SELECT 1 FROM promise_flags f WHERE f.promise_id = p.id AND f.status = 'open') ORDER BY p.id LIMIT 50`
+  )) || [];
+  const flags = flagged.length
+    ? (await queryRows(db, `SELECT * FROM promise_flags WHERE status = 'open' AND promise_id IN (${flagged.map(() => "?").join(",")}) ORDER BY created_at`, ...flagged.map((p) => p.id))) || []
+    : [];
+  const spot = (await queryRows(db, `SELECT ${PROMISE_COLS} FROM promises p JOIN officials o ON o.id = p.official_id WHERE p.review = 'auto' AND p.spot_check = 1 ORDER BY p.published_at, p.id LIMIT 30`)) || [];
+  const published = (await queryRows(
+    db,
+    `SELECT p.id, p.quote, p.status, p.made_on, p.review, o.name FROM promises p JOIN officials o ON o.id = p.official_id
+     WHERE p.review IN ('auto', 'approved') ORDER BY p.made_on DESC, p.id DESC LIMIT 100`
+  )) || [];
+  const n = {};
+  for (const [k, sql] of Object.entries(PROMISE_COUNTS)) n[k] = (await count(db, sql)) || 0;
+
+  // What the promise step last did, so an empty queue explains itself.
+  const activity = (await queryRows(db, "SELECT step, status, message, finished_at FROM sync_log WHERE step IN ('promise-sources', 'promises') ORDER BY id DESC LIMIT 6")) || [];
+  const activityList = activity.length
+    ? `<ul class="plain-list activity-list">${activity.map((a) => `<li class="small"><span class="secondary">${esc(String(a.finished_at || "").slice(0, 16).replace("T", " "))} · ${esc(a.step === "promise-sources" ? "looking for documents" : "reading a document")} · ${esc(a.status)}</span><br>${esc(String(a.message || "").slice(0, 400))}</li>`).join("")}</ul>`
+    : '<p class="secondary small">The promise step hasn\'t run yet. It runs after the bill analysis in each sync.</p>';
+
+  const brokenRows = broken
+    .map(
+      (b) => `
+<div class="list-row stack-sm promise-suggestion">
+  ${promiseBlock(b)}
+  <p class="label">Suggested: ${statusChip(b.status)} → ${statusChip("broken")}</p>
+  ${b.evidence_quote ? `<blockquote class="promise-quote">“${esc(b.evidence_quote)}”</blockquote>` : ""}
+  <p class="small">${esc(b.evidence)}</p>
+  <p class="small">${fmtDate(b.evidence_on)} · <a class="inline-link" href="${esc(b.evidence_url)}" target="_blank" rel="noopener">Evidence source ↗</a></p>
+  <p class="hint">Suggested by ${esc(b.s_by)}, ${fmtDate(String(b.s_at).slice(0, 10))}. The evidence was checked word for word against its source in code. Confirm only if it shows the promise won't be kept, was reversed, or missed a deadline the quote states.</p>
+  <div class="watch-actions">
+    <form method="post" action="/admin/review/promise/${b.id}/" class="stack-sm">
+      <input type="hidden" name="action" value="broken_confirm"><input type="hidden" name="suggestion" value="${b.sid}">
+      ${reviewerField(env)}
+      <button class="btn btn--primary" type="submit">Record as Broken</button>
+    </form>
+    <form method="post" action="/admin/review/promise/${b.id}/" class="stack-sm">
+      <input type="hidden" name="action" value="broken_reject"><input type="hidden" name="suggestion" value="${b.sid}">
+      <label class="field"><span class="field-label">Why not (kept here, not shown)</span><input class="input" name="reason" maxlength="200"></label>
+      ${reviewerField(env)}
+      <button class="btn" type="submit">Don't record</button>
     </form>
   </div>
 </div>`
     )
     .join("");
-  const list = approved
-    .map((p) => `<a class="list-row link-row" href="/admin/review/promise/${p.id}/"><div><div class="list-title">${esc(p.name)}: “${esc(p.quote.length > 110 ? `${p.quote.slice(0, 110)}…` : p.quote)}”</div><div class="list-meta">${fmtDate(p.made_on)} · ${STATUS[p.status] ? STATUS[p.status][0] : p.status}</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>`)
+  const flagRows = flagged
+    .map((p) => {
+      const mine = flags.filter((f) => f.promise_id === p.id);
+      return `
+<div class="list-row stack-sm promise-suggestion">
+  ${promiseBlock(p)}
+  <ul class="plain-list">${mine.map((f) => `<li class="small"><strong>${esc(PROMISE_FLAG_LABELS[f.reason] || f.reason)}</strong>${f.note ? `: ${esc(f.note)}` : ""} <span class="secondary">· ${fmtDate(String(f.created_at).slice(0, 10))}</span></li>`).join("")}</ul>
+  <p class="hint">Shown as "Under review" until you decide. Confirm keeps it up as "Reviewed by" you and closes the reports; to change its status or note, open it first.</p>
+  ${promiseActions(env, p, { confirm: "Keep it up", takeDown: "Take it down" })}
+</div>`;
+    })
     .join("");
-  let pages = 0;
-  try {
-    pages = (await db.prepare("SELECT COUNT(*) AS n FROM promise_pages").first()).n;
-  } catch {
-    pages = 0;
-  }
+  const spotRows = spot.map((p) => `<div class="list-row stack-sm promise-suggestion">${promiseBlock(p)}${promiseActions(env, p, { confirm: "Looks right", takeDown: "Take it down" })}</div>`).join("");
+  const heldRows = held
+    .map(
+      (p) => `
+<div class="list-row stack-sm promise-suggestion">
+  <label class="check-row"><input type="checkbox" name="ids" value="${p.id}" form="promise-batch"> <span class="small">Select</span></label>
+  ${promiseBlock(p)}
+  ${p.check_reason ? `<p class="small"><strong>Held back:</strong> ${esc(p.check_reason)}</p>` : ""}
+  ${promiseActions(env, p, { confirm: "Publish", takeDown: "Reject" })}
+</div>`
+    )
+    .join("");
+  const list = published
+    .map((p) => `<a class="list-row link-row" href="/admin/review/promise/${p.id}/"><div><div class="list-title">${esc(p.name)}: “${esc(p.quote.length > 110 ? `${p.quote.slice(0, 110)}…` : p.quote)}”</div><div class="list-meta">${fmtDate(p.made_on)} · ${STATUS[p.status] ? STATUS[p.status][0] : p.status} · ${p.review === "auto" ? "auto-checked" : "reviewed"}</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>`)
+    .join("");
+  const pages = (await count(db, "SELECT COUNT(*) AS n FROM promise_pages")) || 0;
   const done = url && url.searchParams.get("promises");
-  const batch = suggested.length
+  const batch = held.length
     ? `<form id="promise-batch" method="post" action="/admin/review/promise/batch/" class="card stack-sm">
-  <label class="check-row"><input type="checkbox" data-select-all="ids" data-form="promise-batch"> <span class="small">Select all ${suggested.length}</span></label>
-  <label class="field"><span class="field-label">Your name, as shown on the page</span><input class="input" name="reviewer" required value="${esc(env.REVIEWER_NAME || "")}" autocomplete="name"></label>
-  <button class="btn btn--primary" type="submit">Approve selected</button>
-  <p class="hint">Approve only the ones you've checked against their source. To reject one, or edit its note first, use the buttons on that suggestion.</p>
+  <label class="check-row"><input type="checkbox" data-select-all="ids" data-form="promise-batch"> <span class="small">Select all ${held.length}</span></label>
+  ${reviewerField(env)}
+  <button class="btn btn--primary" type="submit">Publish selected</button>
+  <p class="hint">Publish only the ones you've checked against their source: they show "Reviewed by" you.</p>
 </form>`
     : "";
-  let total = suggested.length;
-  try {
-    total = (await db.prepare("SELECT COUNT(*) AS n FROM promises WHERE review = 'suggested'").first()).n;
-  } catch {
-    // before the promise tables exist
-  }
-  return `<h2 class="label queue-head" id="promises">Suggested promises <span class="queue-count">${total}</span></h2>
-${total > suggested.length ? `<p class="hint">Showing the oldest ${suggested.length} of ${total}.</p>` : ""}
+  const head = (id, title, k, shown) => `<h2 class="label queue-head" id="${id}">${title} <span class="queue-count">${n[k]}</span></h2>${n[k] > shown ? `<p class="hint">Showing the oldest ${shown} of ${n[k]}.</p>` : ""}`;
+  return `<h2 class="label queue-head" id="promises">Promises</h2>
 ${done ? `<p class="banner" role="status">${esc(done)}</p>` : ""}
-<p class="hint">Proposed by AI from official press releases, addresses, county agendas and officials' Issues pages (found automatically or listed below), up to 10 a day. The quote was checked word for word against the source in code; check that it's a specific commitment by this official. Nothing shows on the site until you approve it.</p>
-<p class="small"><a class="inline-link" href="/admin/review/promise/new/">Add a promise by hand</a></p>
-<p class="small"><a class="inline-link" href="/admin/review/promise/pages/">Issues and priorities pages (${pages})</a></p>
-<p class="small"><a class="inline-link" href="/admin/review/promise/statements/">Statements from officials</a></p>
-<h2 class="label queue-head" id="topics">Topic tags</h2>
-<p class="small"><a class="inline-link" href="/admin/review/topics/">Check and correct topic tags</a> on bills, county agenda items, executive actions and Platform excerpts.</p>
+<p class="hint">Found by AI in official press releases, addresses, county agendas and officials' Issues pages, up to 10 a day. Each one is checked in code (the quote word for word in its source, a specific action, vote or deadline, a neutral note) and published at once, labeled "AI-identified, auto-checked". "In progress" and "Kept" publish with their evidence the same way; "Broken" waits for you.</p>
+<p class="small"><a class="inline-link" href="/admin/review/promise/new/">Add a promise by hand</a> · <a class="inline-link" href="/admin/review/promise/pages/">Issues and priorities pages (${pages})</a> · <a class="inline-link" href="/admin/review/promise/statements/">Statements from officials</a></p>
+${head("promise-broken", '"Broken": waiting for you', "broken", broken.length)}
+<section class="card">${brokenRows || '<p class="secondary small">None waiting.</p>'}</section>
+${head("promise-flags", "Flagged by readers", "flagged", flagged.length)}
+<section class="card">${flagRows || '<p class="secondary small">No open reports.</p>'}</section>
+${head("promise-spot", "Spot checks", "spot", spot.length)}
+<p class="hint">About 1 in 10 auto-published promises, picked at random. Check the quote against the source and that it's a specific commitment by this official.</p>
+<section class="card">${spotRows || '<p class="secondary small">None waiting.</p>'}</section>
+${head("promise-held", "Held back by the checks", "held", held.length)}
+<p class="hint">Suggestions saved before promises published on their own that don't pass today's checks (usually not specific enough). Nothing here is public.</p>
 ${batch}
-<section class="card">${rows || '<p class="secondary small">No suggestions waiting.</p>'}</section>
-<details class="weigh-details"${suggested.length ? "" : " open"}><summary>Recent activity</summary><section class="card stack-sm">${activityList}</section></details>
-<details class="weigh-details"><summary>Approved promises (${approved.length}): record a status change</summary><section class="card">${list || '<p class="secondary small">None yet.</p>'}</section></details>`;
+<section class="card">${heldRows || '<p class="secondary small">None.</p>'}</section>
+<details class="weigh-details"><summary>Recent activity</summary><section class="card stack-sm">${activityList}</section></details>
+<details class="weigh-details" id="promise-published"><summary>Published promises (${published.length}): record a status change</summary><section class="card">${list || '<p class="secondary small">None yet.</p>'}</section></details>
+<h2 class="label queue-head" id="topics">Topic tags</h2>
+<p class="small"><a class="inline-link" href="/admin/review/topics/">Check and correct topic tags</a> on bills, county agenda items, executive actions and Platform excerpts.</p>`;
 }
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -1065,8 +1136,8 @@ async function promiseCreate(db, env, request) {
   const x = r.row;
   const res = await db
     .prepare(
-      `INSERT OR IGNORE INTO promises (official_id, quote, quote_key, made_on, source_url, source_title, source_kind, source_time, check_note, due, review, reviewed_by, reviewed_at, suggested_by)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'approved', ?, datetime('now'), ?)`
+      `INSERT OR IGNORE INTO promises (official_id, quote, quote_key, made_on, source_url, source_title, source_kind, source_time, check_note, due, review, reviewed_by, reviewed_at, published_at, suggested_by)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'approved', ?, datetime('now'), datetime('now'), ?)`
     )
     .bind(x.official_id, x.quote, quoteKey(x.quote), x.made_on, x.source_url, x.source_title, x.source_kind, x.source_time, x.check_note, x.due, x.reviewed_by, x.suggested_by)
     .run();
@@ -1081,14 +1152,14 @@ async function promiseBatch(db, request) {
   const reviewer = String(form.get("reviewer") || "").replace(/\s+/g, " ").trim().slice(0, 80);
   const origin = new URL(request.url).origin;
   const msg = (t) => Response.redirect(`${origin}/admin/review/?promises=${encodeURIComponent(t)}#promises`, 303);
-  if (!ids.length) return msg("Nothing approved: tick the suggestions to approve.");
-  if (!reviewer) return msg("Nothing approved: enter your name, as shown with each promise.");
+  if (!ids.length) return msg("Nothing published: tick the suggestions to publish.");
+  if (!reviewer) return msg("Nothing published: enter your name, as shown with each promise.");
   const res = await db
-    .prepare(`UPDATE promises SET review = 'approved', reviewed_by = ?, reviewed_at = datetime('now'), reject_reason = NULL WHERE review = 'suggested' AND id IN (${ids.map(() => "?").join(",")})`)
+    .prepare(`UPDATE promises SET review = 'approved', reviewed_by = ?, reviewed_at = datetime('now'), published_at = COALESCE(published_at, datetime('now')), reject_reason = NULL WHERE review = 'suggested' AND id IN (${ids.map(() => "?").join(",")})`)
     .bind(reviewer, ...ids)
     .run();
   const n = (res.meta && res.meta.changes) || 0;
-  return msg(`Approved ${n} promise${n === 1 ? "" : "s"}.`);
+  return msg(`Published ${n} promise${n === 1 ? "" : "s"}, reviewed by ${reviewer}.`);
 }
 
 async function promisePages(db, env, { error = "", done = "", form = null } = {}) {
@@ -1124,7 +1195,7 @@ async function promisePages(db, env, { error = "", done = "", form = null } = {}
     "Issues pages",
     `<header class="page-head">
   <h1>Issues and priorities pages</h1>
-  <p class="subtitle">An official's campaign or office website's "Issues" or "Priorities" page. The sync reads each one weekly. A short excerpt, word for word, shows on the official's Platform tab under "In their own words" (refreshed monthly; you can choose another or hide it), and the AI suggests specific, checkable commitments from it, each waiting for your review like any other suggestion.</p>
+  <p class="subtitle">An official's campaign or office website's "Issues" or "Priorities" page. The sync reads each one weekly. A short excerpt, word for word, shows on the official's Platform tab under "In their own words" (refreshed monthly; you can choose another or hide it), and the AI finds specific, checkable commitments in it, published once they pass the code checks like any other.</p>
 </header>
 ${done ? `<p class="banner" role="status">${esc(done)}</p>` : ""}
 ${error ? `<p class="banner banner--error" role="alert">${esc(error)}</p>` : ""}
@@ -1258,8 +1329,10 @@ async function promiseDetail(db, env, id, { error = "", done = "", form = null }
   const p = await db.prepare("SELECT p.*, o.name, o.office, o.slug FROM promises p JOIN officials o ON o.id = p.official_id WHERE p.id = ?").bind(id).first();
   if (!p) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
   p.changes = (await db.prepare("SELECT * FROM promise_status_changes WHERE promise_id = ? ORDER BY evidence_on DESC, recorded_at DESC, id DESC").bind(id).all()).results;
+  const flags = (await queryRows(db, "SELECT * FROM promise_flags WHERE promise_id = ? ORDER BY created_at DESC", id)) || [];
+  const live = p.review === "approved" || p.review === "auto";
   const f = form || {};
-  const statusForm = p.review === "approved"
+  const statusForm = live
     ? `<section class="card stack-sm" id="status">
   <h2 class="label">Record a status change</h2>
   <p class="hint">Every change needs evidence and a source. Describe the evidence plainly: what happened, when, and where it's recorded. No judgment of the official.</p>
@@ -1290,7 +1363,7 @@ async function promiseDetail(db, env, id, { error = "", done = "", form = null }
     `<header class="page-head">
   <p class="label">${esc(p.name)} · ${esc(p.office)}</p>
   <h1>Promise</h1>
-  <p class="subtitle">${p.review === "suggested" ? "Suggested, waiting for review" : p.review === "approved" ? `Approved by ${esc(p.reviewed_by)}, ${fmtDate(String(p.reviewed_at).slice(0, 10))}` : `Rejected (${esc(p.reject_reason || "")})`} · ${statusChip(p.status)}</p>
+  <p class="subtitle">${p.review === "suggested" ? `Held back by the checks${p.check_reason ? ` (${esc(p.check_reason)})` : ""}; not public` : p.review === "approved" ? `Published, reviewed by ${esc(p.reviewed_by)}, ${fmtDate(String(p.reviewed_at).slice(0, 10))}` : p.review === "auto" ? `Published, ${checkedLine(p)}` : `Taken down (${esc(p.reject_reason || "")})`} · ${statusChip(p.status)}</p>
 </header>
 ${done ? `<p class="banner" role="status">${esc(done)}</p>` : ""}
 ${error ? `<p class="banner banner--error" role="alert">${esc(error)}</p>` : ""}
@@ -1298,8 +1371,10 @@ ${error ? `<p class="banner banner--error" role="alert">${esc(error)}</p>` : ""}
   <blockquote class="promise-quote">“${esc(p.quote)}”</blockquote>
   <p class="small">${esc(SOURCE_KIND[p.source_kind] || p.source_kind)}, ${fmtDate(p.made_on)}: <a class="inline-link" href="${esc(sourceHref(p.source_url, p.source_time))}" target="_blank" rel="noopener">${esc(p.source_title)} ↗</a>${p.source_time ? ` at ${esc(p.source_time)}` : ""}</p>
   <p class="small"><strong>What would show it done:</strong> ${esc(p.check_note)}</p>
-  ${p.review === "approved" ? `<p class="small"><a class="inline-link" href="/reps/${esc(p.slug)}/#platform">On the official's page</a></p>` : ""}
+  ${live ? `<p class="small"><a class="inline-link" href="/reps/${esc(p.slug)}/#promise-${p.id}">On the official's page</a></p>` : ""}
 </section>
+${flags.length ? `<section class="card stack-sm"><h2 class="label">Reader reports (${flags.length})</h2><ul class="plain-list">${flags.map((x) => `<li class="small"><strong>${esc(PROMISE_FLAG_LABELS[x.reason] || x.reason)}</strong>${x.note ? `: ${esc(x.note)}` : ""} <span class="secondary">· ${fmtDate(String(x.created_at).slice(0, 10))} · ${x.status === "open" ? "open" : `${esc(x.resolution || "resolved")} by ${esc(x.resolved_by || "")}`}</span></li>`).join("")}</ul></section>` : ""}
+${p.review !== "rejected" ? `<section class="card stack-sm"><h2 class="label">${p.review === "approved" ? "Take down" : "Confirm or take down"}</h2>${promiseActions(env, p, { confirm: p.review === "suggested" ? "Publish" : "Confirm", takeDown: p.review === "suggested" ? "Reject" : "Take down" })}</section>` : ""}
 ${statusForm}
 ${noteForm}
 <section class="card stack-sm"><h2 class="label">History</h2>${historyList(p)}</section>`
@@ -1313,15 +1388,58 @@ async function promiseChange(db, env, id, request) {
   const p = await db.prepare("SELECT * FROM promises WHERE id = ?").bind(id).first();
   if (!p) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
   const reviewer = String(form.get("reviewer") || "").replace(/\s+/g, " ").trim().slice(0, 80);
+  const queue = (t) => Response.redirect(`${new URL(request.url).origin}/admin/review/?promises=${encodeURIComponent(t)}#promises`, 303);
+  // Open reader reports close when a person decides; tolerant before migration 0019.
+  const closeFlags = (resolution) =>
+    db.prepare("UPDATE promise_flags SET status = 'resolved', resolution = ?, resolved_by = ?, resolved_at = datetime('now') WHERE promise_id = ? AND status = 'open'").bind(resolution, reviewer, id);
+  const withFlags = async (stmt, resolution) => {
+    try {
+      await db.batch([stmt, closeFlags(resolution)]);
+    } catch (err) {
+      if (!/no such (table|column)/i.test(String(err && err.message))) throw err;
+      await stmt.run();
+    }
+  };
   if (action === "approve") {
     if (!reviewer) return promiseDetail(db, env, id, { error: "Enter your name: it's shown with the promise." });
-    await db.prepare("UPDATE promises SET review = 'approved', reviewed_by = ?, reviewed_at = datetime('now'), reject_reason = NULL WHERE id = ? AND review = 'suggested'").bind(reviewer, id).run();
-    return Response.redirect(`${new URL(request.url).origin}/admin/review/#promises`, 303);
+    if (!["suggested", "auto", "approved"].includes(p.review)) return back("done=Nothing changed: it was taken down.");
+    let stmt;
+    try {
+      await db.prepare("SELECT spot_check FROM promises LIMIT 0").all();
+      stmt = db.prepare("UPDATE promises SET review = 'approved', reviewed_by = ?, reviewed_at = datetime('now'), published_at = COALESCE(published_at, datetime('now')), spot_check = 0, reject_reason = NULL WHERE id = ?").bind(reviewer, id);
+    } catch {
+      stmt = db.prepare("UPDATE promises SET review = 'approved', reviewed_by = ?, reviewed_at = datetime('now'), reject_reason = NULL WHERE id = ?").bind(reviewer, id);
+    }
+    await withFlags(stmt, "kept");
+    return queue(`${p.review === "suggested" ? "Published" : "Confirmed"}: it shows "Reviewed by ${reviewer}".`);
   }
   if (action === "reject") {
+    if (!reviewer) return promiseDetail(db, env, id, { error: "Enter your name: it's kept with the decision." });
     const reason = REJECT_REASONS.find(([v]) => v === form.get("reason"));
-    await db.prepare("UPDATE promises SET review = 'rejected', reviewed_at = datetime('now'), reject_reason = ? WHERE id = ? AND review = 'suggested'").bind(reason ? reason[1] : "Other", id).run();
-    return Response.redirect(`${new URL(request.url).origin}/admin/review/#promises`, 303);
+    await withFlags(
+      db.prepare("UPDATE promises SET review = 'rejected', reviewed_by = ?, reviewed_at = datetime('now'), reject_reason = ? WHERE id = ?").bind(reviewer, reason ? reason[1] : "Other", id),
+      "taken down"
+    );
+    return queue(p.review === "suggested" ? "Rejected." : "Taken down from the official's page; kept here with its history.");
+  }
+  if (action === "broken_confirm" || action === "broken_reject") {
+    const sid = parseInt(form.get("suggestion"), 10) || 0;
+    const sug = await db.prepare("SELECT * FROM promise_status_suggestions WHERE id = ? AND promise_id = ? AND status = 'pending'").bind(sid, id).first();
+    if (!sug) return queue("Nothing changed: that suggestion was already decided.");
+    if (!reviewer) return queue("Nothing changed: enter your name, as shown with the change.");
+    if (action === "broken_reject") {
+      const why = String(form.get("reason") || "").replace(/\s+/g, " ").trim().slice(0, 200);
+      await db.prepare("UPDATE promise_status_suggestions SET status = 'rejected', decided_by = ?, decided_at = datetime('now'), reason = ? WHERE id = ?").bind(reviewer, why || null, sid).run();
+      return queue("Not recorded. The suggestion is kept here, not shown.");
+    }
+    if (!["auto", "approved"].includes(p.review) || ["kept", "broken"].includes(p.status)) return queue(`Nothing changed: the promise is ${STATUS[p.status] ? STATUS[p.status][0] : p.status} or no longer published.`);
+    await db.batch([
+      db.prepare("INSERT INTO promise_status_changes (promise_id, from_status, to_status, evidence, evidence_quote, evidence_on, source_url, recorded_by) VALUES (?, ?, 'broken', ?, ?, ?, ?, ?)")
+        .bind(id, p.status, sug.evidence, sug.evidence_quote, sug.evidence_on, sug.source_url, reviewer),
+      db.prepare("UPDATE promises SET status = 'broken' WHERE id = ?").bind(id),
+      db.prepare("UPDATE promise_status_suggestions SET status = 'approved', decided_by = ?, decided_at = datetime('now') WHERE id = ?").bind(reviewer, sid),
+    ]);
+    return queue(`Recorded as Broken, by ${reviewer}, with its evidence.`);
   }
   if (action === "note") {
     const note = String(form.get("check_note") || "").replace(/\s+/g, " ").trim();
@@ -1333,7 +1451,7 @@ async function promiseChange(db, env, id, request) {
     return back("done=Note saved.");
   }
   if (action === "status") {
-    if (p.review !== "approved") return back("done=Approve the promise before recording a status.");
+    if (p.review !== "approved" && p.review !== "auto") return back("done=Publish the promise before recording a status.");
     const f = {
       to_status: String(form.get("to_status") || ""),
       evidence: String(form.get("evidence") || "").replace(/\s+/g, " ").trim().slice(0, 1000),
