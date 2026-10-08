@@ -38,7 +38,7 @@ function measureBlock(label, m, { fed, signedChange = true, noPct = false, gapNo
   if (!gapNote && m.start != null && m.startShare == null) gaps.push(`GDP for ${fy(m.from, fed)}`);
   if (!gapNote && m.end != null && m.endShare == null) gaps.push(`GDP for ${fy(m.to, fed)}`);
   const pair = (a, b, f) => `${a == null ? "Not available" : f(a)} → ${b == null ? "Not available" : f(b)}`;
-  const share = (v) => `${v.toFixed(1)}%`;
+  const share = (v) => `${v < 0 ? "−" : ""}${Math.abs(v).toFixed(1)}%`;
   const rows = [
     [`${fy(m.from, fed)} → ${fy(m.to, fed)}`, pair(m.start, m.end, (v) => usd(v))],
     ["Change", m.change == null ? "Not available" : `${usd(m.change, { signed: signedChange })}${noPct ? "" : ` (${pctText(m.changePct)})`}`],

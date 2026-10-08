@@ -7,9 +7,6 @@ on:
   schedule:
     - cron: "17 9 * * 1"
   workflow_dispatch:
-  push:  # TEMPORARY while building: run on this branch when the builder changes (removed before merge)
-    branches: [claude/pillory-mobile-screens-p5zekn]
-    paths: [tools/build_history.py, .github/workflows/history.yml]
 permissions:
   contents: write
 jobs:

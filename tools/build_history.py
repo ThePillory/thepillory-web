@@ -571,11 +571,18 @@ def census_population():
     t90 = ""
     try:
         t90 = fetch("https://www2.census.gov/programs-surveys/popest/tables/1990-2000/intercensal/national/us-est90int-07.csv")
-        for line in t90.splitlines():
-            line = line.replace('"', "")
-            m = re.match(r"^\s*(?:7/1/(\d{4})|July 1,\s*(\d{4}))\s*,\s*([\d,]{9,})", line)
-            if m:
-                pop.setdefault(int(m.group(1) or m.group(2)), int(m.group(3).replace(",", "")))
+        for row in csv.reader(io.StringIO(t90)):
+            if not row:
+                continue
+            m = re.match(r"^\s*(?:7/1/(\d{4})|July 1,\s*(\d{4}))\s*$", row[0])
+            if not m:
+                continue
+            # The first figure after the date that is a national total (between 200 and 350 million).
+            v = next((int(c.replace(",", "")) for c in row[1:] if re.fullmatch(r"\s*[\d,]+\s*", c) and 2e8 < int(c.replace(",", "")) < 3.5e8), None)
+            if v:
+                pop.setdefault(int(m.group(1) or m.group(2)), v)
+            else:
+                note(f"population 1990s: no national total in {row[:6]}")
     except Exception as e:  # noqa: BLE001
         note(f"population 1990s: {e}")
     if 1995 not in pop:
