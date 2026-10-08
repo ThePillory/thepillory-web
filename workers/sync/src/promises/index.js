@@ -1,23 +1,29 @@
-// Promises: AI proposes candidate promises from official documents; a person
-// approves each on /admin/review/ before anything is public. See
-// docs/promises.md.
+// Promises: AI finds candidate promises in official documents; each one that
+// passes the code checks is published at once, labeled "AI-identified,
+// auto-checked" (review = 'auto'). A person can confirm or take one down on
+// /admin/review/. See docs/promises.md.
 //
 //   1. Discover (once a day, no AI): new documents from each official's
 //      sources (src/promises/sources.js), saved in promise_sources as pending.
 //   2. Read (AI): a few documents a day, taking turns between officials so
 //      no one's documents use up the day, newest first. Each candidate is
 //      checked in code (src/promises/check.js): the quote must be in the
-//      document word for word, the note neutral, the quote a commitment.
-//   3. Save what passes as review = 'suggested'.
+//      document word for word, the note neutral, the quote a specific,
+//      checkable commitment (an action, a vote or a deadline).
+//   3. Publish what passes (review = 'auto', status No action yet); a random
+//      SPOT_CHECK_RATE share is marked for a person to look at.
+//   4. Status updates: the same read reports passages that show one of the
+//      official's published promises moving, quoted word for word. In progress
+//      and Kept are recorded at once with their evidence; Broken waits in
+//      promise_status_suggestions for a person.
 //
 // Caps on cost: PROMISE_SUGGESTIONS_DAILY (default 10) new suggestions a day
-// and PROMISE_DOCS_DAILY (default 15) documents read a day. Suggestions keep
-// coming however many wait for review; the review page shows the count.
+// and PROMISE_DOCS_DAILY (default 15) documents read a day.
 import { log } from "../db.js";
 import { getState, setState, redact } from "../util.js";
 import { structuredCall, DEFAULT_MODEL, DraftRefused } from "../analysis/claude.js";
 import { INSTRUCTIONS, schema, documentMessage, PROMISE_PROMPT_VERSION, MAX_PER_DOCUMENT } from "./prompt.js";
-import { checkCandidate, quoteKey } from "./check.js";
+import { checkCandidate, checkStatusUpdate, notACommitment, notSpecific, wordingProblems, normalizeText, quoteKey } from "./check.js";
 import { EXCERPT_INSTRUCTIONS, excerptSchema, excerptMessage, checkExcerpt, needsExcerpt } from "./excerpt.js";
 import { parseRssWithContent, parseWpPosts, addressPackages, whiteHouseKind, worthReading, htmlToText, clip, roundRobin, commitmentScore } from "./sources.js";
 
@@ -236,13 +242,121 @@ export async function pickExcerpt(env, page, official) {
   }
 }
 
-/** Step 2 and 3 for one document: candidates from the AI, checked, saved as suggested. */
-export async function readDocument(env, db, doc, speakers, room) {
+export const AI_LABEL = "AI-identified, auto-checked";
+const spotRate = (env) => Math.min(1, Math.max(0, parseFloat(env.SPOT_CHECK_RATE || "0.1") || 0));
+
+/**
+ * The speakers' published promises that are still open (No action yet or In
+ * progress) and older than the document, for status updates. At most 25,
+ * newest first.
+ */
+export async function openPromisesFor(db, speakers, docDate) {
+  if (!speakers.length) return [];
+  const { results } = await db
+    .prepare(
+      `SELECT p.id, p.official_id, p.quote, p.quote_key, p.made_on, p.status, o.name FROM promises p JOIN officials o ON o.id = p.official_id
+       WHERE p.official_id IN (${speakers.map(() => "?").join(", ")}) AND p.review IN ('auto', 'approved') AND p.status IN ('no_action', 'in_progress')
+         AND p.made_on <= ? ORDER BY p.made_on DESC LIMIT 25`
+    )
+    .bind(...speakers.map((o) => o.id), docDate || today())
+    .all();
+  return results;
+}
+
+/**
+ * Step 4: the AI's status updates, checked. In progress and Kept are recorded
+ * at once (auto = 1); Broken goes to promise_status_suggestions for a person.
+ */
+export async function applyStatusUpdates(db, doc, open, updates, model) {
+  const out = { recorded: [], queued: [], dropped: [] };
+  const seen = new Set();
+  for (const u of updates || []) {
+    const p = open.find((x) => x.id === u.promise_id);
+    if (!p) {
+      out.dropped.push("status update for a promise not in the list");
+      continue;
+    }
+    if (seen.has(p.id)) {
+      out.dropped.push("second status update for one promise");
+      continue;
+    }
+    seen.add(p.id);
+    const c = checkStatusUpdate(u, p, doc.text);
+    if (!c.ok) {
+      out.dropped.push(c.reason);
+      continue;
+    }
+    const on = doc.published_on || today();
+    if (c.to_status === "broken") {
+      const r = await db
+        .prepare(
+          `INSERT OR IGNORE INTO promise_status_suggestions (promise_id, from_status, to_status, evidence, evidence_quote, evidence_on, source_url, suggested_by)
+           VALUES (?, ?, 'broken', ?, ?, ?, ?, ?)`
+        )
+        .bind(p.id, p.status, c.evidence, c.evidence_quote, on, doc.url, model)
+        .run();
+      if (r.meta && r.meta.changes) out.queued.push(p.id);
+      else out.dropped.push("already suggested");
+      continue;
+    }
+    await db.batch([
+      db
+        .prepare(
+          `INSERT INTO promise_status_changes (promise_id, from_status, to_status, evidence, evidence_quote, evidence_on, source_url, recorded_by, auto)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)`
+        )
+        .bind(p.id, p.status, c.to_status, c.evidence, c.evidence_quote, on, doc.url, AI_LABEL),
+      db.prepare("UPDATE promises SET status = ? WHERE id = ? AND status = ?").bind(c.to_status, p.id, p.status),
+    ]);
+    p.status = c.to_status;
+    out.recorded.push(p.id);
+  }
+  return out;
+}
+
+/**
+ * Suggestions saved before promises published automatically: each one that
+ * passes today's checks (a specific commitment, a neutral note) is published
+ * as AI-identified, auto-checked. Its quote was checked word for word against
+ * the source when it was saved. The rest stay for a person, with the reason.
+ * No AI; runs every sync until none are left.
+ */
+export async function publishBacklog(env, db) {
+  const { results } = await db
+    .prepare("SELECT id, quote, check_note FROM promises WHERE review = 'suggested' AND check_reason IS NULL AND suggested_by NOT LIKE 'Added by%' LIMIT 500")
+    .all();
+  let published = 0;
+  let held = 0;
+  const rate = spotRate(env);
+  for (let i = 0; i < results.length; i += 50) {
+    const stmts = [];
+    for (const p of results.slice(i, i + 50)) {
+      const note = normalizeText(p.check_note);
+      const why = notACommitment(p.quote) || notSpecific(p.quote) || (!note ? "no note on what would show it done" : wordingProblems(note).join("; ") || null);
+      if (why) {
+        held += 1;
+        stmts.push(db.prepare("UPDATE promises SET check_reason = ? WHERE id = ?").bind(why.slice(0, 200), p.id));
+      } else {
+        published += 1;
+        stmts.push(
+          db
+            .prepare("UPDATE promises SET review = 'auto', published_at = datetime('now'), spot_check = ? WHERE id = ? AND review = 'suggested'")
+            .bind(Math.random() < rate ? 1 : 0, p.id)
+        );
+      }
+    }
+    if (stmts.length) await db.batch(stmts);
+  }
+  return { published, held };
+}
+
+/** Steps 2 to 4 for one document: candidates and status updates from the AI, checked; what passes is published. */
+export async function readDocument(env, db, doc, speakers, room, open = []) {
   const names = speakers.map((o) => o.name);
   const { data, model, usage } = await structuredCall(env, {
     model: env.PROMISE_MODEL || DEFAULT_MODEL,
     system: [INSTRUCTIONS],
-    message: documentMessage(doc, speakers),
+    message: documentMessage(doc, speakers, open),
     jsonSchema: schema(names),
     maxTokens: 4000,
   });
@@ -273,19 +387,29 @@ export async function readDocument(env, db, doc, speakers, room) {
     }
     const r = await db
       .prepare(
-        `INSERT OR IGNORE INTO promises (official_id, quote, quote_key, made_on, source_url, source_title, source_kind, check_note, due, suggested_by, prompt_version)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        `INSERT OR IGNORE INTO promises (official_id, quote, quote_key, made_on, source_url, source_title, source_kind, check_note, due, suggested_by, prompt_version,
+           review, published_at, spot_check)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'auto', datetime('now'), ?)`
       )
-      .bind(speaker.id, checked.quote, quoteKey(checked.quote), doc.published_on || today(), doc.url, doc.title, doc.kind, checked.check_note, checked.due, model, PROMISE_PROMPT_VERSION)
+      .bind(speaker.id, checked.quote, quoteKey(checked.quote), doc.published_on || today(), doc.url, doc.title, doc.kind, checked.check_note, checked.due, model, PROMISE_PROMPT_VERSION, Math.random() < spotRate(env) ? 1 : 0)
       .run();
     if (r.meta && r.meta.changes) kept.push(speaker.name);
-    else dropped.push("already suggested");
+    else dropped.push("already on record");
   }
-  return { kept, dropped, model, usage };
+  const status = await applyStatusUpdates(db, doc, open, data.status_updates, model);
+  dropped.push(...status.dropped);
+  return { kept, dropped, status, model, usage };
 }
 
 export async function runPromises(env, db, { run, deadline }) {
   const started = new Date().toISOString();
+  // Suggestions from before promises published automatically (no AI).
+  try {
+    const b = await publishBacklog(env, db);
+    if (b.published || b.held) await log(db, run, "promises", "ok", 0, `${b.published} earlier suggestion(s) published as ${AI_LABEL}; ${b.held} left for a person (not a specific commitment or the note's wording)`, started);
+  } catch (err) {
+    if (!/no such (table|column)/i.test(String(err && err.message))) throw err;
+  }
   if (!env.ANTHROPIC_API_KEY) return { suggested: 0 };
   const officials = await trackedOfficials(db);
   const anyPages = await db.prepare("SELECT 1 FROM promise_pages LIMIT 1").first().catch(() => null);
@@ -308,11 +432,16 @@ export async function runPromises(env, db, { run, deadline }) {
   let read = parseInt((await getState(db, docKey)) || "0", 10);
   if (suggested >= sugLimit || read >= docLimit) return { suggested: 0 };
   const { results: all } = await db.prepare("SELECT url, official_id, kind, title, published_on, text FROM promise_sources WHERE status = 'pending'").all();
-  // Before any AI reads them: documents with no sentence that commits to anything are skipped.
+  // Before any AI reads them: documents with no sentence that commits to anything are
+  // skipped, unless they belong to someone with open promises (a document can show one kept).
+  const { results: withOpen } = await db
+    .prepare("SELECT DISTINCT official_id FROM promises WHERE review IN ('auto', 'approved') AND status IN ('no_action', 'in_progress')")
+    .all();
+  const hasOpen = new Set(withOpen.map((r) => r.official_id));
   const pending = [];
   const none = [];
   for (const d of all) {
-    const score = commitmentScore(d);
+    const score = commitmentScore(d) || (hasOpen.has(d.official_id) || (d.official_id === COUNTY_GROUP && officials.supervisors.some((o) => hasOpen.has(o.id))) ? 1 : 0);
     if (score) pending.push({ ...d, score });
     else none.push(d);
   }
@@ -348,11 +477,13 @@ export async function runPromises(env, db, { run, deadline }) {
     let found = 0;
     try {
       if (!speakers.length) throw new Error("no current official for this source");
-      const r = await readDocument(env, db, doc, speakers, sugLimit - suggested);
+      const open = await openPromisesFor(db, speakers, doc.published_on);
+      const r = await readDocument(env, db, doc, speakers, sugLimit - suggested, open);
       found = r.kept.length;
       suggested += found;
       added += found;
-      message = `${doc.title} (${doc.url}): ${found} suggested${r.dropped.length ? `; dropped ${r.dropped.length} (${[...new Set(r.dropped)].join("; ")})` : ""}; model ${r.model}; tokens in ${r.usage.input_tokens}, out ${r.usage.output_tokens}`;
+      const moved = r.status.recorded.length + r.status.queued.length;
+      message = `${doc.title} (${doc.url}): ${found} published${moved ? `; ${r.status.recorded.length} status change(s) recorded, ${r.status.queued.length} "Broken" sent for review` : ""}${r.dropped.length ? `; dropped ${r.dropped.length} (${[...new Set(r.dropped)].join("; ")})` : ""}; model ${r.model}; tokens in ${r.usage.input_tokens}, out ${r.usage.output_tokens}`;
       await db.prepare("UPDATE promise_sources SET status = 'read', found = ?, note = ?, text = NULL, read_at = datetime('now') WHERE url = ?").bind(found, r.dropped.length ? [...new Set(r.dropped)].join("; ").slice(0, 300) : null, doc.url).run();
     } catch (err) {
       status = err instanceof DraftRefused ? "skipped" : "error";

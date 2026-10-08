@@ -6,6 +6,7 @@
 //                   President's nominations) and disclosures. The Cabinet: Votes
 //                   and Funding say they don't apply, linking to Disclosures in
 //                   More. Everyone else: More holds committees and Issues.
+// POST /reps/<slug>/promises/<id>/flag   "Something wrong?" on a published promise
 import { BODIES, LEVEL_NAME, EMPTY_REPORTS } from "../_lib/generated.js";
 import { page, notFound, notLoaded, esc, safeUrl, kv, card, section, sourceLink, fmtDate, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { officialBySlug, officialsWhere, withVoteCounts, voteCounts, votesFor, CHAMBER_NAME } from "../_lib/data.js";
@@ -15,7 +16,8 @@ import { voteRow, voteFilter } from "../_lib/votes.js";
 import { fundingFor, fundingTab } from "../_lib/funding.js";
 import { executiveMoney, executiveFundingParts, stateOfficialMoney, stateForm700 } from "../_lib/exec-funding.js";
 import { stateFundingTab } from "../_lib/state-funding.js";
-import { promisesFor, ownWordsFor, platformTab } from "../_lib/promises.js";
+import { promisesFor, ownWordsFor, platformTab, FLAG_REASONS } from "../_lib/promises.js";
+import { turnstileReady, verifyTurnstile, visitorHash, actionsToday, recordAction } from "../_lib/turnstile.js";
 import { fold } from "../_lib/summary.js";
 import { pickYear, yearBar, thisYear, FIRST_YEAR } from "../_lib/history.js";
 import { officialPastYear } from "../_lib/history-pages.js";
@@ -327,7 +329,7 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
     ${tab("about", "About")}${tab("platform", "Platform")}${tab("votes", "Votes")}${tab("funding", "Funding")}${tab("more", "More")}
   </nav>
   <div class="stack" role="tabpanel" id="about" aria-labelledby="tab-about">${overview}</div>
-  <div class="stack" role="tabpanel" id="platform" aria-labelledby="tab-platform">${promises === FAILED || ownWords === FAILED ? sectionError("") : platformTab(o, promises, ownWords)}</div>
+  <div class="stack" role="tabpanel" id="platform" aria-labelledby="tab-platform">${promises === FAILED || ownWords === FAILED ? sectionError("") : platformTab(o, promises, ownWords, { env, url })}</div>
   <div class="stack" role="tabpanel" id="votes" aria-labelledby="tab-votes">${votesHtml}</div>
   <div class="stack" role="tabpanel" id="funding" aria-labelledby="tab-funding">${fundingHtml}</div>
   <div class="stack" role="tabpanel" id="more" aria-labelledby="tab-more">${moreParts.join("")}</div>
@@ -352,3 +354,47 @@ export const onRequestGet = guard(async (context) => {
   }
   return notFound("No page at this address.", "reps", ["Reps", "/reps/"]);
 }, { tab: "reps" });
+
+// ---------------------------------------------------------------------------
+// "Something wrong?" on a promise: no account; Turnstile plus a daily limit per
+// visitor (a daily-rotating hash, never the address). The flag goes to the
+// review queue and the promise shows "Under review" until a person resolves it.
+
+const FLAGS_PER_VISITOR = 5; // per day, shared with the analysis flags
+
+async function promiseFlag(context, slug, id) {
+  const { request, env } = context;
+  const url = new URL(request.url);
+  const back = (q) => Response.redirect(`${url.origin}/reps/${encodeURIComponent(slug)}/?${q}#promise-${id}`, 303);
+  const origin = request.headers.get("Origin");
+  if (origin && origin !== url.origin) return new Response("Refused", { status: 403 });
+  if (!env.DB || !turnstileReady(env)) return back("error=closed");
+  const form = await request.formData();
+  if (!(await verifyTurnstile(env, form.get("cf-turnstile-response"), request.headers.get("CF-Connecting-IP")))) return back("error=turnstile");
+  const reason = String(form.get("reason") || "");
+  if (!FLAG_REASONS.some(([v]) => v === reason)) return back("error=invalid");
+  const db = env.DB;
+  const p = await db
+    .prepare("SELECT p.id FROM promises p JOIN officials o ON o.id = p.official_id WHERE p.id = ? AND o.slug = ? AND p.review IN ('auto', 'approved')")
+    .bind(id, slug)
+    .first();
+  if (!p) return back("error=invalid");
+  const visitor = await visitorHash(env, request);
+  if ((await actionsToday(db, "flag", visitor)) >= FLAGS_PER_VISITOR) return back("error=limit");
+  const note = String(form.get("note") || "").replace(/\s+/g, " ").trim().slice(0, 1000);
+  await db.batch([db.prepare("INSERT INTO promise_flags (promise_id, reason, note) VALUES (?, ?, ?)").bind(id, reason, note), recordAction(db, "flag", visitor)]);
+  return back("sent=promise-flag");
+}
+
+export async function onRequestPost(context) {
+  const parts = (context.params.path || []).filter(Boolean);
+  if (parts.length === 4 && parts[1] === "promises" && /^\d+$/.test(parts[2]) && parts[3] === "flag") {
+    try {
+      return await promiseFlag(context, decodeURIComponent(parts[0]), parseInt(parts[2], 10));
+    } catch (err) {
+      if (/no such table|no such column/i.test(String(err && err.message))) return new Response("Not available yet", { status: 503 });
+      throw err;
+    }
+  }
+  return new Response("Not found", { status: 404 });
+}
