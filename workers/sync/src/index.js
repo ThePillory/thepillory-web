@@ -29,6 +29,7 @@ import { withD1Retry } from "./d1retry.js";
 import { syncFederalFunding, syncFederalLobbying } from "./funding/sync.js";
 import { syncExecutiveFunding } from "./funding/executive.js";
 import { syncSummaries, buildSummaries } from "./summaries.js";
+import { syncHistoryOfficials, syncHistoryOrders, syncHistoryFunding, syncHistoryNominations, syncHistoryVotes } from "./history/sync.js";
 
 // Order matters: officials before votes; state officials first because the
 // Open States lookup also detects the U.S. House district. State hearings come
@@ -54,6 +55,13 @@ const STEPS = [
   // Paced and long-running (the first full load takes a few days): last.
   ["federal-funding", syncFederalFunding],
   ["federal-lobbying", syncFederalLobbying],
+  // The Time Machine: past officeholders, executive orders, money, confirmations
+  // and votes, a little each day (HISTORY_DAILY_REQUESTS), newest first.
+  ["history-officials", syncHistoryOfficials],
+  ["history-orders", syncHistoryOrders],
+  ["history-funding", syncHistoryFunding],
+  ["history-nominations", syncHistoryNominations],
+  ["history-votes", syncHistoryVotes],
   // What the pages show, precomputed from everything above (src/summaries.js).
   // Rebuilt only when the votes, bills, outcomes or relevance checks changed.
   ["page-summaries", syncSummaries],
