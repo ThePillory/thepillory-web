@@ -109,9 +109,18 @@ export async function ownWordsFor(db, officialId) {
     ]);
     const topics = await tagsFor(db, "platform", pages.results.map((x) => x.url));
     for (const x of pages.results) x.topics = topics.get(x.url) || [];
-    return { pages: pages.results, statements: statements.results };
+    // Pages found or listed whose excerpt hasn't been picked yet, and the last search of the official's site.
+    let waiting = [];
+    let check = null;
+    try {
+      waiting = (await db.prepare("SELECT url, kind, title FROM promise_pages WHERE official_id = ? AND excerpt IS NULL AND (excerpt_by IS NULL OR excerpt_by NOT IN ('hidden', 'none')) ORDER BY kind").bind(officialId).all()).results;
+      check = await db.prepare("SELECT site_url, result, page_url, checked_at FROM issues_page_checks WHERE official_id = ? AND site_kind = 'office_site'").bind(officialId).first();
+    } catch (err) {
+      if (!/no such (table|column)/i.test(String(err && err.message))) throw err;
+    }
+    return { pages: pages.results, statements: statements.results, waiting, check };
   } catch (err) {
-    if (/no such (table|column)/i.test(String(err && err.message))) return { pages: [], statements: [] };
+    if (/no such (table|column)/i.test(String(err && err.message))) return { pages: [], statements: [], waiting: [], check: null };
     throw err;
   }
 }
@@ -147,6 +156,34 @@ function statementCard(o, st) {
 }
 
 /**
+ * What the search of the official's own website found, when there's no
+ * excerpt to show: an issues page waiting to be read, "No issues page found"
+ * with a link to their site, or no website on file. "" when not searched yet.
+ */
+function siteNote(o, own) {
+  const waiting = (own && own.waiting) || [];
+  const check = own && own.check;
+  if (waiting.length) {
+    return `<div class="card stack-sm"><p><strong>Issues page found</strong></p>${waiting
+      .map((x) => `<p class="small">${ext(x.url, x.title || "Issues")}</p>`)
+      .join("")}<p class="hint">A short excerpt, word for word, appears here after the page is read in the next daily update.</p></div>`;
+  }
+  if (!check) return "";
+  if (check.result === "error") {
+    const link = safeUrl(check.site_url || o.website);
+    return `<div class="card stack-sm"><p><strong>No issues page found yet</strong></p><p class="small">ThePillory couldn't read ${esc(o.name)}'s website${link ? ` (${ext(link, new URL(link).hostname.replace(/^www\./, ""))})` : ""} on ${fmtDate(String(check.checked_at).slice(0, 10))}. It tries again in a few days.</p></div>`;
+  }
+  if (check.result === "none") {
+    const link = safeUrl(check.site_url || o.website);
+    return `<div class="card stack-sm"><p><strong>No issues page found</strong></p><p class="small">${esc(o.name)}'s website${link ? ` (${ext(link, new URL(link).hostname.replace(/^www\./, ""))})` : ""} has no page titled Issues, Priorities or Platform that ThePillory could find, as of ${fmtDate(String(check.checked_at).slice(0, 10))}. It's searched again every few months.</p></div>`;
+  }
+  if (check.result === "no_website") {
+    return `<div class="card stack-sm"><p><strong>No issues page found</strong></p><p class="small">There's no website on file for ${esc(o.name)}.</p></div>`;
+  }
+  return "";
+}
+
+/**
  * The Platform tab: "In their own words" at the top, then "Commitments
  * tracked" once at least one promise has been approved. `rows` is the
  * approved promises (null before the promise tables exist); `own` is
@@ -157,6 +194,11 @@ export function platformTab(o, rows, own) {
   const pages = (own && own.pages) || [];
   const statements = (own && own.statements) || [];
   const how = '<a class="inline-link" href="/about/methodology/#promises">How the platform is recorded</a>';
+  const site = siteNote(o, own);
+  if (!promises.length && !pages.length && !statements.length && site) {
+    return `${site}
+<p class="hint">This tab shows ${esc(o.name)}'s platform in their own words (a short excerpt, word for word, from their own Issues or Priorities page, and statements their office submits) and, once a person has checked them, specific commitments with a status that changes only with evidence. ${how}</p>`;
+  }
   if (!promises.length && !pages.length && !statements.length) {
     return `<div class="card empty-state stack-sm">
   <p><strong>No platform recorded yet</strong></p>
@@ -169,7 +211,7 @@ export function platformTab(o, rows, own) {
   ${
     pages.length || statements.length
       ? `${statements.map((st) => statementCard(o, st)).join("")}${pages.map((x) => excerptCard(o, x)).join("")}`
-      : `<p class="secondary small">No excerpt from ${esc(o.name)}'s own Issues page, and no statement from their office, yet.</p>`
+      : site || `<p class="secondary small">No excerpt from ${esc(o.name)}'s own Issues page, and no statement from their office, yet.</p>`
   }
 </section>`;
   if (!promises.length) return `${ownSection}${how}`;

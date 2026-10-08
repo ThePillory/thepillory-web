@@ -85,6 +85,16 @@ TOPIC_DAILY_LIMIT = "500"
 # The Time Machine: requests a day for past votes, executive orders, confirmations and FEC totals
 # (newest first; the full load back to 2001 takes weeks at this pace). See docs/history.md.
 HISTORY_DAILY_REQUESTS = "600"
+# Officials' Issues pages, found by following links from their own websites (docs/promises.md):
+# officials searched a day (Calaveras's reps first, then California, then everyone else), and
+# how often a site is searched again.
+ISSUES_PAGES_DAILY = "40"
+ISSUES_PAGES_RECHECK_DAYS = "90"
+# Promises: suggestions and documents read a day (Claude calls), and Issues pages re-read a day.
+# Suggestions keep coming however many wait for review.
+PROMISE_SUGGESTIONS_DAILY = "10"
+PROMISE_DOCS_DAILY = "15"
+PROMISE_PAGES_DAILY = "25"
 # Review load (docs/analysis.md): the relevance check (claude-haiku-4-5) runs on
 # titles before drafting; the AI reviewer (claude-sonnet-5-5) checks every draft.
 REVIEW_EFFORT = "medium"
