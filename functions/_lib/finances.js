@@ -118,6 +118,7 @@ export function californiaTerms(fin, today, legislatureMakeup = []) {
   for (const [fy, r] of Object.entries(gf)) {
     const y = parseInt(fy, 10);
     if (y > todayFy) continue; // budget-year estimates are left out
+    if (ca.general_fund.estimates_from && y >= ca.general_fund.estimates_from) continue; // so are the chart's current-year estimates
     rows.set(y, { ...r, population: (ca.population || {})[y] ?? (ca.population || {})[String(y)] ?? null, households: (ca.households || {})[y] ?? (ca.households || {})[String(y)] ?? null, gdp: null });
   }
   const latest = Math.max(...rows.keys());

@@ -255,9 +255,11 @@ def cd108_rows(st, fips):
 
 
 def county_key(name):
-    n = re.sub(r"[^a-z ]", "", name.lower().replace("saint", "st").replace("st.", "st"))
+    import unicodedata
+    n = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode().lower()
+    n = re.sub(r"[^a-z ]", "", n.replace("saint", "st").replace("st.", "st"))
     n = re.sub(r"\b(county|parish|borough|census area|city and borough|municipality)\b", "", n)
-    return re.sub(r"\s+", " ", n).strip()
+    return re.sub(r"\s+", "", n)
 
 
 def group(rows):
@@ -324,8 +326,10 @@ OFFICE_KEYS = [
     (r"^Insurance Commissioner$", "insurance-commissioner", "Insurance Commissioner"),
     (r"^Superintendent of Public Instruction$", "superintendent", "Superintendent of Public Instruction"),
 ]
+# 2010's summary pages list candidates without a party: "Steve Pougnet    87,141   42.2%".
+CAND_NO_PARTY = re.compile(r"([A-Z][A-Za-z.'\- ]{2,60}?)\*?\s{2,}([\d,]{2,})\s+([\d.]+)\s?%")
 CAND = re.compile(r"([A-Z][^,\d]{1,60}?(?:, (?:Jr|Sr|II|III)\.?)?),\s+([A-Z]{2,4})\*?\s+([\d,]{2,})\s+([\d.]+)\s?%")
-HEAD = re.compile(r"((?:Governor|Lieutenant Governor|Secretary of State|Controller|Treasurer|Attorney General|Insurance Commissioner|Superintendent of Public Instruction|Board of Equalization(?: Member)?(?: District \d+)?|State Senat(?:e|or) District \d+|Member of the State Assembly District \d+|State Assembly(?: Member)? District \d+|Member of the Assembly District \d+|United States Representative District \d+|US Senate[^V]*?|United States Senator[^V]*?))\s{2,}Votes\s+Percent")
+HEAD = re.compile(r"((?:Governor|Lieutenant Governor|Secretary of State|Controller|Treasurer|Attorney General|Insurance Commissioner|Superintendent of Public Instruction|Board of Equalization(?: Member)?(?: District \d+)?|State Senat(?:e|or) District \d+|(?:Member of (?:the )?)?(?:State )?Assembly(?: Member)?,? District \d+|United States Representative District \d+|US Senate[^V]*?|United States Senator[^V]*?))\s{2,}Votes\s+Percent")
 
 
 def contest_key(h):
@@ -365,15 +369,18 @@ def sov_summary(text):
             if boe_pending.get(col):
                 current[col] = ("boe", "Board of Equalization", m.group(1))
                 boe_pending[col] = False
-        for m in CAND.finditer(line):
-            col = 0 if m.start() < 45 else 1
+        found = [(m.start(), m.group(1), m.group(2), m.group(3)) for m in CAND.finditer(line)]
+        if not found:
+            found = [(m.start(), m.group(1), None, m.group(2)) for m in CAND_NO_PARTY.finditer(line)]
+        for start, raw, party, votes in found:
+            col = 0 if start < 45 else 1
             key = current.get(col)
             if not key:
                 continue
-            name = re.sub(r"\s+", " ", m.group(1)).strip().rstrip("*")
-            if re.search(r"Votes Not Cast|\(w/i\)", name):
+            name = re.sub(r"\s+", " ", raw).strip().rstrip("*")
+            if re.search(r"Votes Not Cast|\(w/i\)|^Total|Percent", name):
                 continue
-            contests.setdefault(key, []).append({"name": name, "party": m.group(2), "votes": int(m.group(3).replace(",", ""))})
+            contests.setdefault(key, []).append({"name": name, "party": party, "votes": int(votes.replace(",", ""))})
     return contests
 
 
@@ -409,7 +416,7 @@ def sov_elections():
                 for k, v in sov_summary(text).items():
                     contests.setdefault(k, []).extend(v)
                 if not any(k[0] == "sldl" for k in contests) or not contests:
-                    heads = [l.strip()[:140] for l in text.splitlines() if re.search(r"(?i)assembly|state senat|governor", l) and re.search(r"(?i)votes|percent|district", l)][:6]
+                    heads = [l.strip()[:140] for l in text.splitlines() if re.search(r"(?i)assembly", l)][:6]
                     cands = [l.strip()[:140] for l in text.splitlines() if re.search(r"[A-Z][a-z]+.*\b(DEM|REP|LIB|GRN|PF|AI|NPP)\b", l)][:4]
                     note(f"SOV {year} {f.rsplit('/', 1)[-1]}: headers {heads}; candidate lines {cands}")
             except Exception as e:  # noqa: BLE001
@@ -445,7 +452,8 @@ def legislature_makeup(elections):
         def tally(ws):
             t = {}
             for w in ws:
-                t[w["party"]] = t.get(w["party"], 0) + 1
+                k = w["party"] or "Party not listed"
+                t[k] = t.get(k, 0) + 1
             return dict(sorted(t.items(), key=lambda kv: -kv[1]))
         out.append({"after_election": e["year"], "assembly": tally(asm), "assembly_seats": len(asm), "senate": tally(sen.values()), "senate_seats": len(sen), "source": e["source"]})
     return out
@@ -691,7 +699,14 @@ def ca_general_fund(charts):
         note(f"CA Chart A last data lines: {last_lines}; estimate words: {est_lines}")
         note(f"CA Chart A: {len(rows)} years {min(rows) if rows else None}–{max(rows) if rows else None}; last rows {sorted(rows.items())[-4:]}; notes {tail}")
         if len(rows) >= 20:
-            return {"source": url, "rows": rows, "notes": tail}
+            # The chart's date ("July 2026") is on its last page. The current fiscal year and the
+            # budget year as of that date are the Department of Finance's estimates, not actuals.
+            dm = re.search(r"(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})\s*$", t.strip())
+            as_of = f"{dm.group(1)} {dm.group(2)}" if dm else None
+            # A chart dated in calendar year Y still estimates the fiscal year that ended in June of Y.
+            estimates_from = int(dm.group(2)) if dm else max(rows) - 1
+            note(f"CA Chart A as of {as_of}: estimates from fiscal year ending {estimates_from}")
+            return {"source": url, "rows": rows, "notes": tail, "as_of": as_of, "estimates_from": estimates_from}
     note("CA general fund: Chart A not found")
     return None
 

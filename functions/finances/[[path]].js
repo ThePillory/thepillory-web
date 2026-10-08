@@ -203,7 +203,7 @@ async function californiaPage(env, request) {
     .join("");
   const gf = fin.california.general_fund;
   const main = `${head}
-<section class="card stack-xs"><p class="small">${esc(FISCAL_NOTE_CA)}</p><p class="small">${esc(READ_NOTE.replace("Congresses", "Legislatures"))}</p><p class="small">The General Fund is the state's main operating account; special funds, bond funds and federal funds are outside it.</p></section>
+<section class="card stack-xs"><p class="small">${esc(FISCAL_NOTE_CA)}</p><p class="small">${esc(READ_NOTE.replace("Congresses", "Legislatures"))}</p><p class="small">The General Fund is the state's main operating account; special funds, bond funds and federal funds are outside it.${gf.estimates_from ? ` The Department of Finance's chart${gf.as_of ? ` (${esc(gf.as_of)})` : ""} gives estimates, not actual figures, for fiscal years from ${fy(gf.estimates_from, false)} on, so those years aren't shown. Before 2005–06, the chart shows each year's figures as first published in the Governor's Budget.` : ""}</p></section>
 ${cards}
 <section class="card stack-xs"><h2 class="label">Sources</h2><ul class="plain-list stack-xs">
   <li class="small"><a class="inline-link" href="${esc(gf.source)}" target="_blank" rel="noopener">General Fund budget summary: Department of Finance, Chart A ↗</a></li>

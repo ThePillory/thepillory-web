@@ -293,7 +293,7 @@ export function holderRow(t, { office, linked, year, note = "" }) {
 
 /** A row for a California officeholder elected in the Statement of Vote. */
 export function electedRow(w, label) {
-  return `<div class="list-row"><div><div class="list-title">${esc(w.name)}</div><div class="list-meta">${esc(label)} · Party: ${esc(w.party)} · Elected November ${w.election} · <a class="inline-link" href="${esc(w.source)}" target="_blank" rel="noopener">Statement of Vote ↗</a></div></div></div>`;
+  return `<div class="list-row"><div><div class="list-title">${esc(w.name)}</div><div class="list-meta">${esc(label)}${w.party ? ` · Party: ${esc(w.party)}` : ""} · Elected November ${w.election} · <a class="inline-link" href="${esc(w.source)}" target="_blank" rel="noopener">Statement of Vote ↗</a></div></div></div>`;
 }
 
 /** Votes in a past year: one row per position, linked to the bill page. */
