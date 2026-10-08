@@ -64,7 +64,7 @@ To test the sync and Functions locally with **fake** data: `workers/sync/test/ru
 
 ## App structure
 
-- **One header and one nav on every page:** the wordmark and search at the top (`site_header()` in `tools/build.py`), and five tabs (`.tabbar`): Home, Reps, **+ Report** (center, navy pill), Laws, You. `/home/` and `/feed/` redirect to `/`.
+- **One header and one nav on every page:** the wordmark and search at the top (`site_header()` in `tools/build.py`), and five tabs (`.tabbar`): Home, Reps, **Report** (center, a round blue button), Laws, You, each with an icon. `/home/` and `/feed/` redirect to `/`.
 - **Home (`/`, thepillory.co itself) is always the hub**: the headline, a U.S. map (tap a state for its `/explore/` page; no zooming or dragging, so scrolling always works; small-state buttons; live and waiting counts; "Explore the full map"), Find your representatives, Who represents you (the President, Vice President and Cabinet; California's Governor and statewide offices), Elections (the next election, Your ballot once districts are known, How to vote; just below the lookup until Election Day, then after Who represents you), a dismissible intro for first-time visitors (remembered in the browser), Happening now (Congress / California), Topics, Take part, Communities (Calaveras "Live", and the county waitlist), and Understand. Once a visitor's districts are known, the hub links to **their briefing at `/briefing/`**: the Calaveras County briefing (also at `/calaveras/`) in Calaveras, otherwise their reps, their reps' latest votes and Happening now. The old `/?hub=1` redirects to `/`. How it works and Principles live under About.
 - **Districts stay in the visitor's browser.** The lookup (`/api/districts`) takes an address (U.S. Census Geocoder, 119th Congress districts) or a ZIP code (`data/zip/`), answers with district IDs only, and never stores or logs the address or ZIP. The browser keeps the IDs in the `pillory_districts` cookie (`functions/_lib/districts.js`); pages that read it are served `Cache-Control: private`. When the 120th Congress starts (January 2027), set `CENSUS_VINTAGE` and rerun the ZIP workflow with the new district files.
 - **Explore by map** (`/explore/`, linked from the hub map as "Explore the full map"): a U.S. map (live community states navy, states with waitlist signups light navy), small-state buttons and a state picker; state maps with layer toggles (Counties, Congressional, and the state's legislative chambers); county pages (`/place/`: who represents it, every district that overlaps it with "covers part of this county", live communities' briefing and "Make this my place", otherwise the waitlist) and district pages (`/district/`). Shapes and overlaps come from Census Bureau files in `data/geo/` (built by `tools/build_geo.mjs`; one layer per file, loaded only when shown, cached a day via `_headers`), drawn by `assets/map.js`. **Every map has a list or search beside it**, so nothing on a map needs the map. Live communities are listed in `LIVE` (`functions/_lib/geo.js`).
@@ -103,30 +103,36 @@ To test the sync and Functions locally with **fake** data: `workers/sync/test/ru
 
 ## Design look
 
-All styling is in **`assets/pillory.css`**, with tokens on `:root`. Reuse the classes there; don't add inline styles.
+"Clean & bright" (design/Hub2_dc.pdf, Official2_dc.pdf, Topic2_dc.pdf). All styling is in **`assets/pillory.css`**, with tokens on `:root` and a dark set under `prefers-color-scheme: dark` (dark mode follows the device). Reuse the classes and tokens there; never hard-code a color. Don't add inline styles; the one exception is a chart's data-driven `width`/`height` in `functions/_lib/charts.js`.
 
-- **Fonts** (Google Fonts): Newsreader 600 for headings and titles; IBM Plex Sans 400/500/600 for everything else.
-- **Colors:**
-  - Page `#F5F2EA`; text `#1A1D21`; secondary text `#4A4F57`.
-  - Cards `#FFFFFF` with a 1px `#DDD7CA` border and 12px radius.
-  - Primary navy `#1E3A5F` (buttons, links, selected states); light navy `#E3EAF3`.
-  - Parchment `#F3E8D3` with border `#D9C39B` and text `#6B4410`, for anything constitutional.
-  - Tension red-brown `#8A3B12`.
-- **Promise statuses:** Kept = navy, Broken = `#8A3B12`, In progress / No action yet = gray.
-- **Card pattern** (`.card.issue-card`): small uppercase `LEVEL · CATEGORY` label, serif title, who's responsible, parchment constitutional chip, and a footer with status on the left and a second fact on the right.
-- **Controls:** pill-shaped chips and toggles, and every tap target at least 44px tall. Section labels (`.label`) are small, uppercase, letter-spaced and secondary-colored.
-- **Layout:** every screen is a centered app column, max 480px, with the tab bar and the footer.
-- **Checks:** before shipping, look at phone (360–390px) and desktop (1280px) widths, with no horizontal scroll.
+- **Fonts** (Google Fonts): **Figtree** 400–800 for everything, with large, bold headlines (h1 800, tight letter-spacing). **Newsreader** only for quotes and constitutional text (`.quote`, `.constitution-text`, `.promise-quote`).
+- **Colors** (light; dark values in the same tokens):
+  - Page white `#FFFFFF`; light gray panels `#F5F5F7` (`--panel`: insets, stat tiles, inputs, segmented tracks); text `#1D1D1F`; secondary `#6E6E73`.
+  - Cards white with a **soft shadow instead of a border** (`--shadow`), **20px** corners (`--radius`); inner panels 14px (`--radius-sm`).
+  - Accent blue `#0066CC` (`--navy`, kept as the variable name; `--navy-fill` behind white text); light blue `#E8F1FB`.
+  - Parchment (`--parch`, `--parch-text`) for anything constitutional; tension red-brown (`--tension`); Live green (`--live`).
+  - Charts use one blue scale plus grays (`--chart-1`…`--chart-6`, `--yes`, `--no`). Never red and blue together, and never party colors.
+- **Promise statuses:** Kept = accent, Broken = tension, In progress / No action yet = gray.
+- **Components** (`functions/_lib/charts.js`, `functions/_lib/icons.js`):
+  - Segmented switches for tabs, level filters and periods (`.segmented`, `.pill-filter`, `.tabs`): a gray track with the current option as a white pill.
+  - The tab bar: Home, Reps, Laws and You with icons, and a round blue **Report** button in the middle (`tabbar()` in `tools/build.py`).
+  - `voteBar()`: yes/no vote bars, with the counts in words.
+  - `breakdownBar()`: the funding breakdown bar with a legend of amounts and shares.
+  - `miniBars()`: small bar charts, with values below zero hanging under the line and a "Show the numbers" table.
+  - Topic tiles with line icons; stat tiles; the big-number hero card.
+- **Controls:** pill-shaped chips and buttons, and every tap target at least 44px tall. Section labels (`.label`) are small, uppercase, letter-spaced and secondary-colored; section headings (`.section-head h2`) are big and bold.
+- **Layout:** every screen is a centered app column, max 480px, with the tab bar and the footer. The header is the wordmark plus a search button that opens the search field (the field always shows without JavaScript).
+- **Checks:** before shipping, look at phone (360–390px) and desktop (1280px) widths, in light and dark mode, with no horizontal scroll.
 
 ## Logo
 
 The name is written **ThePillory**: one word, capital T and P, in every heading, title, meta tag, email and doc. The domain is written out in lowercase, `thepillory.co`, in the footer of every page (`FOOTER` in `tools/build.py`).
 
-The logo is the **Seal P**: a serif "P" (Newsreader 600) inside a double ring, like an official stamp on a public record. It sits beside "ThePillory" in Newsreader 600. The "P" is stored as vector outlines, so the icons don't depend on the web font loading. Everything lives in `assets/logo/`:
+The logo is the **Seal P**: a serif "P" (Newsreader 600) inside a double ring, like an official stamp on a public record. It sits beside the wordmark, "The" plus "Pillory" in the accent blue, in Figtree 800. The "P" is stored as vector outlines, so the icons don't depend on the web font loading. Everything lives in `assets/logo/`:
 
 - `mark.svg`: the seal on its own. CSS draws it before every `.wordmark` through `.wordmark::before` (a mask filled with navy), so the wordmark HTML stays plain text. Bump the `?v=` on the mask URL in `pillory.css` if the file changes.
 - `icon.svg` and `favicon-32.png`: the browser-tab icon, a parchment seal on a rounded navy tile. The seal fills most of the tile so the P reads at 16px, and the parchment seal reads on light and dark tab bars alike. `favicon-32.png` and `/favicon.ico` (16, 32 and 48px, for browsers and tools that ask for it directly) are rendered from `icon.svg` unchanged: browsers pick different files for different tabs, so every file must look the same (no theme-only variants).
 - `icon-square.svg`: the source for the home-screen icons (`apple-touch-icon.png` at 180px, `icon-192.png`, `icon-512.png`). It's a full-bleed square, because phones round the corners themselves, and the seal stays inside Android's safe zone, so the manifest lists the PNGs as maskable too.
 - `og-image.png` (1200×630): the image shown when a link is shared.
 
-The PNGs and `favicon.ico` were rendered from the SVGs in headless Chromium. If the SVGs change, re-render them to match and bump `ICON_VERSION` in `tools/build.py` (browsers keep icons far longer than other files). `site.webmanifest` is generated by `tools/build.py`. Every page's `<head>` carries the icon, manifest (`/site.webmanifest`) and Open Graph tags from one template, `head_tags()` in `tools/build.py`: static pages get it when they're built, and every Function (the hub, map, state, place and district pages included) gets it through `page()` in `functions/_lib/render.js`. Never write a `<head>` or send HTML any other way; `python3 tools/check_heads.py` (the "Page heads" workflow) fails if a page is missing the tags or a Function builds its own shell. Only navy and parchment are used for the logo; avoid red and blue together, which reads as partisan.
+The PNGs and `favicon.ico` were rendered from the SVGs in headless Chromium. If the SVGs change, re-render them to match and bump `ICON_VERSION` in `tools/build.py` (browsers keep icons far longer than other files). `site.webmanifest` is generated by `tools/build.py`. Every page's `<head>` carries the icon, manifest (`/site.webmanifest`) and Open Graph tags from one template, `head_tags()` in `tools/build.py`: static pages get it when they're built, and every Function (the hub, map, state, place and district pages included) gets it through `page()` in `functions/_lib/render.js`. Never write a `<head>` or send HTML any other way; `python3 tools/check_heads.py` (the "Page heads" workflow) fails if a page is missing the tags or a Function builds its own shell. The icon files use navy and parchment; on the site the mark is drawn in the accent blue. Avoid red and blue together, which reads as partisan.

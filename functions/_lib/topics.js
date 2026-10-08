@@ -9,6 +9,8 @@
 // it says one caused another.
 import { esc, fmtDate, sourceLink } from "./render.js";
 import { inChunks } from "./data.js";
+import { voteBar } from "./charts.js";
+import { icon } from "./icons.js";
 import { industryMoney, money, period, cycleOf } from "./funding.js";
 import { INDUSTRIES } from "../../workers/sync/src/funding/industry.js";
 import { TOPICS, TOPIC, topicName, industriesFor, INDUSTRY_TOPICS } from "../../workers/sync/src/topics/list.js";
@@ -59,7 +61,7 @@ export function topicChips(tags, place = null, { label = true } = {}) {
 
 /** Every topic as a chip (the hub and county pages). */
 export function topicGrid(place = null) {
-  return `<ul class="plain-list topic-grid">${TOPICS.map((t) => `<li><a class="chip chip--tap chip--topic" href="${topicHref(t.slug, place)}">${esc(t.name)}</a></li>`).join("")}</ul>`;
+  return `<ul class="plain-list topic-grid">${TOPICS.map((t) => `<li><a class="topic-tile" href="${topicHref(t.slug, place)}">${icon(t.slug)}<span>${esc(t.name)}</span></a></li>`).join("")}</ul>`;
 }
 
 /** How a tag was made, said plainly: "AI-tagged: <reason>" or "Set by <name>". */
@@ -207,10 +209,10 @@ export function billRows(bills, positions, reps) {
     .map((b) => {
       const pos = positions.get(b.final_vote_id) || new Map();
       const voted = reps ? reps.filter((r) => pos.has(r.id)) : [];
-      const totals = [b.yea != null ? `Yes ${b.yea}` : "", b.nay != null ? `No ${b.nay}` : ""].filter(Boolean).join(" · ");
       return `<li class="topic-item stack-xs">
   <a class="list-title inline-link" href="/laws/bills/${esc(b.bill_id)}/">${esc(b.bill_number)}: ${esc(b.title)}</a>
-  <p class="list-meta">Final-passage vote ${fmtDate(b.last_final)}${b.final_result ? ` · ${esc(b.final_result)}` : ""}${totals ? ` · ${esc(totals)}` : ""}</p>
+  <p class="list-meta">Final-passage vote ${fmtDate(b.last_final)}${b.final_result ? ` · ${esc(b.final_result)}` : ""}</p>
+  ${voteBar(b, { note: false })}
   ${
     reps === null
       ? ""

@@ -4,6 +4,7 @@
 // they are.
 import { esc, fmtDate, sourceLink } from "./render.js";
 import { TYPE_LABELS, CHAMBER_NAME } from "./data.js";
+import { voteBar } from "./charts.js";
 
 export function billHref(id) {
   return `/laws/bills/${encodeURIComponent(id)}/`;
@@ -51,13 +52,12 @@ export function billVote(v, { personal = false } = {}) {
     </li>`
     )
     .join("");
-  const tally = tallyText(v);
   return `
 <article class="card stack-sm bill-vote">
   <p class="label">${esc(CHAMBER_NAME[v.chamber] || v.chamber || "")} · ${fmtDate(v.vote_date)} ${typeTag(v)}</p>
   <p class="vote-question">${esc(v.question)}</p>
   <p class="small">Result: ${esc(v.result)}</p>
-  ${tally ? `<p class="tally small">${tally}</p>` : ""}
+  ${voteBar(v)}
   ${rows ? `<ul class="plain-list positions">${rows}</ul>` : personal ? '<p class="small secondary">None of your reps cast a recorded vote on this.</p>' : ""}
   ${sourceLink(v.source_url, "Official record")}
 </article>`;

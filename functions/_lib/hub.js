@@ -3,7 +3,8 @@
 // empty state.
 import { esc, fmtDate } from "./render.js";
 import { CHAMBER_NAME } from "./data.js";
-import { billHref, tallyText } from "./votes.js";
+import { billHref } from "./votes.js";
+import { voteBar } from "./charts.js";
 import { isPublic, badge, provisionsFor } from "./analysis.js";
 import { describe } from "./districts.js";
 
@@ -111,7 +112,6 @@ export function nowCard(v, { personal = false } = {}) {
     : v.bill_summary
       ? `<p class="small">${esc(v.bill_summary)}</p>`
       : '<p class="small secondary">No plain-language summary yet. The official title is above.</p>';
-  const tally = tallyText(v);
   const mine = v.positions.length
     ? `<ul class="plain-list now-positions">${v.positions
         .map((p) => `<li><a class="inline-link" href="/reps/${esc(p.slug)}/#votes">${esc(p.name)}</a><span class="position" title="Recorded as: ${esc(p.raw_position)}">${esc(p.position)}</span></li>`)
@@ -119,11 +119,11 @@ export function nowCard(v, { personal = false } = {}) {
     : "";
   return `
 <article class="card now-card stack-sm" data-level="${esc(v.level)}">
-  <div class="card-top"><span class="label">${esc(CHAMBER_NAME[v.chamber] || "")} · Final passage</span><span class="card-top-note">${esc(v.result)} · ${fmtDate(v.vote_date)}</span></div>
+  <div class="card-top"><span class="status-word">${esc(v.result)} · ${esc(CHAMBER_NAME[v.chamber] || "")}</span><span class="card-date">${fmtDate(v.vote_date)}</span></div>
   <h3><a class="now-title" href="${billHref(v.bill_id)}">${esc(v.bill_number)}: ${esc(shortTitle(v.bill_title))}</a></h3>
   ${summary}
+  ${voteBar(v)}
   <div class="chips">${chip}${a ? badge(a) : ""}</div>
-  ${tally ? `<p class="tally small">${tally}</p>` : ""}
   ${mine}
   <a class="inline-link" href="${billHref(v.bill_id)}#votes">${personal ? "All recorded votes on this bill" : "See how your rep voted"}</a>
 </article>`;

@@ -364,6 +364,32 @@
     for (var i = 0; i < boxes.length; i++) boxes[i].checked = all.checked;
   });
   // ---------------------------------------------------------------------
+  // Search opens from the magnifier in the header. Without JavaScript the
+  // field always shows (the "js" class is set in the page head).
+  document.querySelectorAll(".search-toggle").forEach(function (btn) {
+    var header = btn.closest(".site-header");
+    var input = header && header.querySelector(".search-input");
+    if (!header || !input) return;
+    btn.addEventListener("click", function () {
+      var open = !header.classList.contains("is-searching");
+      header.classList.toggle("is-searching", open);
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+      if (open) input.focus();
+    });
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !input.value) {
+        header.classList.remove("is-searching");
+        btn.setAttribute("aria-expanded", "false");
+        btn.focus();
+      }
+    });
+    // A search page (or a query already typed) keeps the field open.
+    if (input.value || /^\/search\//.test(location.pathname)) {
+      header.classList.add("is-searching");
+      btn.setAttribute("aria-expanded", "true");
+    }
+  });
+  // ---------------------------------------------------------------------
   // Time Machine year bar: a range input in a GET form. Moving it shows the
   // year; letting go with a pointer opens that year (the far right is today).
   // Keyboard users move with the arrow keys and press "Show this year".

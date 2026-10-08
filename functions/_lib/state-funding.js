@@ -102,8 +102,13 @@ export function stateFundingTab(o, m, base) {
     return `${cycleNav(base, m)}${intro}<p class="secondary small">${esc(m.committees.length ? `No campaign statements for ${span}.` : m.check.note || "No campaign statements found.")}</p>${statementsSection(o, m)}`;
   }
 
-  const totals = `<section class="card stack-sm">
-  <h3 class="label">Totals</h3>
+  const totals = `<section class="card hero-stat">
+  <p class="label">Raised · ${span}</p>
+  <p class="hero-num">${money(r.raised)}</p>
+  <p class="small secondary">Spent ${money(r.spent)}</p>
+</section>
+<section class="card stack-sm">
+  <h3>Totals</h3>
   <ul class="plain-list money-list">
     ${row("Raised", money(r.raised), `${r.statements} statement${r.statements === 1 ? "" : "s"}, Summary Page line 5`)}
     ${row("Spent", money(r.spent), "Summary Page line 11")}
@@ -117,7 +122,7 @@ export function stateFundingTab(o, m, base) {
   const all = m.industries.reduce((s, i) => s + i.total, 0);
   const classified = known.reduce((s, i) => s + i.total, 0);
   const industries = `<section class="card stack-sm">
-  <h3 class="label">Top contributing industries (approximate)</h3>
+  <h3>Top contributing industries (approximate)</h3>
   ${
     known.length
       ? `<ul class="plain-list money-list">${known.slice(0, 8).map((i) => row(esc(industryName(i.industry)), money(i.total))).join("")}</ul>
@@ -128,7 +133,7 @@ export function stateFundingTab(o, m, base) {
 </section>`;
 
   const employers = `<section class="card stack-sm">
-  <h3 class="label">Top employers of individual donors</h3>
+  <h3>Top employers of individual donors</h3>
   ${
     m.employers.length
       ? `<ul class="plain-list money-list">${m.employers.map((e) => row(esc(e.employer), money(e.total), `${e.count} donors · ${esc(industryName(e.industry))}`)).join("")}</ul>`
@@ -138,7 +143,7 @@ export function stateFundingTab(o, m, base) {
 </section>`;
 
   const orgs = `<section class="card stack-sm">
-  <h3 class="label">Committees, parties and organizations</h3>
+  <h3>Committees, parties and organizations</h3>
   ${
     m.orgs.length
       ? `<ul class="plain-list money-list">${m.orgs.map((x) => row(esc(x.name), money(x.total), `${x.count} contribution${x.count === 1 ? "" : "s"} · ${esc(x.kind)} · ${esc(industryName(x.industry))}`)).join("")}</ul>`
@@ -161,7 +166,7 @@ export function stateFundingTab(o, m, base) {
     }</div>`;
   };
   const ie = `<section class="card stack-sm">
-  <h3 class="label">Independent expenditures for and against</h3>
+  <h3>Independent expenditures for and against</h3>
   ${ieList("support", "Spent to support")}
   ${ieList("oppose", "Spent to oppose")}
   <p class="hint">Spending on ads and outreach about ${esc(o.name)} by committees that don't coordinate with the campaign; this money isn't given to the campaign. From Form 496 reports, which are filed for independent expenditures of $1,000 or more made in the 90 days before an election; spending outside that window isn't included. Each spender links to its committee record, where its own donors are listed.</p>

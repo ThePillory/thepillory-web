@@ -52,7 +52,7 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
   - About: the Time Machine year bar. `/reps/<slug>/?year=YYYY`: the office held that year (or that they didn't hold it), votes that year (final passage or all), executive orders that year (Presidents), FEC totals for the period, every term on record, Not available for YEAR. Past officeholders (Presidents and Vice Presidents since 1993, California's members of Congress since 2001) have pages only with `?year=`; their bare address redirects to their last year in office
   - Vote > Bill (under Laws)
 
-### Tab 3: + Report (`/report/`)
+### Tab 3: Report (`/report/`, the round blue button)
 - Reporting opens when accounts launch; links to what you can do now
 
 ### Tab 4: Laws (`/laws/`)
@@ -70,7 +70,7 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 
 ### Every page
 - One header: ThePillory wordmark and search (`/search/`: reps, governing bodies, bills, meetings, the Constitution)
-- One nav: Home, Reps, + Report, Laws, You (bottom on phones, top from 768px)
+- One nav: Home, Reps, Report (round blue button), Laws, You, each with an icon (bottom on phones, top from 768px)
 - Footer: About · How it works · Principles · Methodology
 
 ### Chips
@@ -81,7 +81,7 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 
 ## Opens when accounts launch
 - Join & verify (identity once, address > districts)
-- + Report flow: Details > Evidence > Perspective > Constitution > Review > Submitted
+- Report flow: Details > Evidence > Perspective > Constitution > Review > Submitted
 - Issue: evidence, constitutional baseline, responsible rep or body, agency response, record history, published record
 - Rep: promises with sources
 - You: following and notifications, my reports, civic jury, verification and districts, privacy dashboard
