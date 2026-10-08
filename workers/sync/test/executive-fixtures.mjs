@@ -241,3 +241,92 @@ export function fppcSearch(body) {
       : [];
   return JSON.stringify({ documents: docs, took: 12 });
 }
+
+// Federal Register: one document's record and its text (the order-texts step).
+export function frDocument(num) {
+  const n = String(num).replace(/^\d{4}-0/, "");
+  if (!/^9990[12]$/.test(n)) return null;
+  return {
+    raw_text_url: `http://127.0.0.1:8788/fr/raw/${num}.txt`,
+    executive_order_notes: n === "99901" ? "Revoked by: EO 99902, March 12, [FAKE]" : null,
+  };
+}
+export function frRawText(num) {
+  const n = String(num).replace(/^\d{4}-0/, "");
+  return `<html><head><title>Federal Register [FAKE]</title></head><body><pre>
+[Federal Register Volume 91, Number 50 [FAKE]]
+[Presidential Documents]
+\u0000
+[[Page 1000]]
+
+                Executive Order ${n} of March 12, [FAKE]
+
+                Testing the Federal Register Reader [FAKE]
+
+                By the authority vested in me as President by the 
+                Constitution and the laws of the United States of 
+                America, including section 301 of title 3, United States 
+                Code, it is hereby ordered:
+
+                Section 1. Purpose. This [FAKE] order tells agencies 
+                to publish the forms they use for public comments, so 
+                that \`\`residents can find them'' in one place.
+
+                Sec. 2. Policy. Each agency shall post its comment forms 
+                online within 90 days of this order.
+
+                Sec. 3. General Provisions. (a) Nothing in this order 
+                shall be construed to impair or otherwise affect the 
+                authority granted by law to an executive department.
+                <GRAPHIC(S) NOT AVAILABLE IN TIFF FORMAT>
+                
+                    (Presidential Sig.)
+
+                THE WHITE HOUSE,
+
+                    March 12, [FAKE].
+
+[FR Doc. ${num} Filed 3-14-26; 8:45 am]
+Billing code 3395-F4-P
+</pre></body></html>`;
+}
+
+/** The Governor's signed order (a text PDF's lines). */
+export const govOrderLines = [
+  "EXECUTIVE DEPARTMENT",
+  "STATE OF CALIFORNIA",
+  "EXECUTIVE ORDER N-9-26 [FAKE]",
+  "WHEREAS this is a test order for ThePillory's local run; and",
+  "WHEREAS nothing in it is real;",
+  "NOW, THEREFORE, I, TEST GOVERNOR, Governor of the State of California,",
+  "in accordance with the authority vested in me by the State Constitution and",
+  "statutes of the State of California, do hereby issue the following Order to",
+  "become effective immediately:",
+  "IT IS HEREBY ORDERED THAT:",
+  "1. The Government Operations Agency shall publish a test report by May 1.",
+  "2. This Order is not intended to, and does not, create any rights or benefits.",
+];
+
+/** CourtListener's search (type=o opinions, type=r dockets) for the fake orders. */
+export function clSearch(q) {
+  const query = q.get("q") || "";
+  const type = q.get("type");
+  if (!/Executive Order 99902/.test(query)) return { count: 0, results: [] };
+  if (type === "o") {
+    return { count: 1, results: [{ caseName: "Testplaintiff v. Testdefendant [FAKE]", court: "District Court, D. Test", dateFiled: "2026-05-01", docketNumber: "1:26-cv-00001", absolute_url: "/opinion/999001/testplaintiff-v-testdefendant/", cluster_id: 999001, status: "Published" }] };
+  }
+  return {
+    count: 2,
+    results: [
+      {
+        caseName: "State of Testland v. Example [FAKE]", court: "District Court, D. Test", dateFiled: "2026-04-02", docketNumber: "1:26-cv-00002", docket_id: 888001,
+        docket_absolute_url: "/docket/888001/state-of-testland-v-example/",
+        recap_documents: [
+          { description: "MOTION for Preliminary Injunction filed by State of Testland [FAKE]", entry_date_filed: "2026-04-03", absolute_url: "/docket/888001/5/state-of-testland-v-example/" },
+          { description: "ORDER granting in part 5 MOTION for Preliminary Injunction [FAKE]", entry_date_filed: "2026-05-01", absolute_url: "/docket/888001/31/state-of-testland-v-example/" },
+        ],
+      },
+      { caseName: "No Link Case [FAKE]", court: "District Court, D. Test", dateFiled: "2026-04-05", docket_absolute_url: "javascript:alert(1)" },
+    ],
+  };
+}

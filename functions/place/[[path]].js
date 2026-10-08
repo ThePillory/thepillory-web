@@ -7,6 +7,7 @@
 //     its state and federal reps, and Funding.
 // Then nearby counties. Data: data/geo/places/<st>.json and D1.
 import { page, notFound, esc, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
+import { summaryHead, contentsBar, fold, statusChip } from "../_lib/summary.js";
 import { EMPTY_REPORTS } from "../_lib/generated.js";
 import { recentFinalVotes } from "../_lib/data.js";
 import { voteRows } from "../_lib/briefing.js";
@@ -168,45 +169,46 @@ async function placePage({ request, env, params }) {
     .map((n) => `<a class="chip chip--tap" href="${placeHref(place.st, n.slug)}">${esc(n.name)}</a>`)
     .join("");
 
+  // Summary first: who the county is represented by, in counts; everything else opens on tap.
+  const n = (l) => (c[l] || []).length;
+  const officialCount = countyRows.length + stateRows.length + federalRows.length;
+  const sumText = [
+    n("cd") ? `${c.name} is in ${n("cd")} congressional district${n("cd") === 1 ? "" : "s"}` : `${c.name}`,
+    n("sldu") || n("sldl") ? `${n("sldu") + n("sldl")} state legislative district${n("sldu") + n("sldl") === 1 ? "" : "s"}` : "",
+  ].filter(Boolean).join(" and ") + ".";
+  const head = summaryHead({
+    kicker: `County · ${esc(place.name)}`,
+    status: live ? '<span class="live-tag">Live</span>' : statusChip("Not live yet"),
+    title: c.name,
+    summary: { text: `${sumText}${live ? " ThePillory follows its county meetings and agendas." : ""}`, source: "District overlaps from the U.S. Census Bureau." },
+    extra: districtsLine ? `<div class="stack-sm">${districtsLine}</div>` : "",
+  });
   const main = `
 ${breadcrumb([["United States", "/explore/"], [place.name, `/explore/${st}/`], [c.name, null]])}
-<header class="page-head stack-xs">
-  <h1>${esc(c.name)}${live ? ' <span class="live-tag">Live</span>' : ""}</h1>
-  <p class="secondary">${esc(place.name)}</p>
-</header>
+${contentsBar([["summary", "Summary"], ballot ? ["elections", "Ballot"] : [null], ["who", "Who represents"], live ? ["meetings", "Meetings"] : [null], ["topics", "Topics"], ["votes", "Votes"], ["funding", "Funding"], nearby ? ["nearby", "Nearby"] : [null]])}
+${head}
 ${action}
 ${electionLoaded === FAILED ? sectionError("On the ballot") : ballot}
-${yearBar(url, null, { label: `See who represented ${c.name} in an earlier year` })}
-<section class="stack" aria-labelledby="h-who">
-  <h2 class="label" id="h-who">Who represents ${esc(c.name)}</h2>
-  ${oLoaded === FAILED ? sectionError("") : ""}
-  ${districtsLine ? `<div class="card stack-sm">${districtsLine}<p class="hint">District lines don't follow county lines, so a county can be split between districts.</p></div>` : ""}
+${fold("who", `Who represents ${c.name}`, `${oLoaded === FAILED ? sectionError("") : ""}
   ${group("County", countyRows, live ? "The supervisors appear after the data sync runs." : "County officials aren't on ThePillory yet. County coverage opens when a community launches.")}
   ${group("State", stateRows, place.st === "CA" ? "State legislators appear after the data sync runs." : `${esc(place.name)}'s governor, statewide offices and state legislators aren't on ThePillory yet.`)}
   ${group("Federal", federalRows, "Members of Congress appear after the data sync runs.")}
-</section>
+  <p class="hint">District lines don't follow county lines, so a county can be split between districts.</p>`, { meta: officialCount ? `${officialCount} listed` : "" })}
 ${
   live
-    ? `<section class="stack-sm" aria-labelledby="h-meet"><div class="section-head"><h2 class="label" id="h-meet">Upcoming meetings</h2><a class="section-link" href="/meetings/?level=county">All meetings</a></div>${
+    ? fold("meetings", "Upcoming meetings", `${
         meetingsLoaded === FAILED ? sectionError("") : meetings.length ? meetings.map((m) => meetingCard(m, summaries[m.id])).join("") : '<p class="small secondary">No county meetings in the next 30 days.</p>'
-      }</section>
-<section class="stack-sm" aria-labelledby="h-issues"><h2 class="label" id="h-issues">Issues</h2>${EMPTY_REPORTS}</section>`
+      }<a class="out-link" href="/meetings/?level=county">All meetings</a>
+  <div class="stack-sm"><p class="label">Issues</p>${EMPTY_REPORTS}</div>`, { meta: meetingsLoaded === FAILED ? "" : `${meetings.length} in 30 days` })
     : ""
 }
-<section class="stack-sm" id="topics" aria-labelledby="h-topics">
-  <div class="section-head"><h2 class="label" id="h-topics">Topics</h2><a class="section-link" href="${placeTopicsHref({ st: place.st, slug: c.slug })}">All topics</a></div>
-  <p class="small secondary">One subject at a time for ${esc(c.name)}: bills and how its representatives voted, ${live ? "county meeting items, " : ""}executive actions, officials' own words, and campaign money, side by side.</p>
+${fold("topics", "Topics", `<p class="small secondary">One subject at a time for ${esc(c.name)}: bills and how its representatives voted, ${live ? "county meeting items, " : ""}executive actions, officials' own words, and campaign money, side by side.</p>
   ${topicGrid({ st: place.st, slug: c.slug })}
-</section>
-<section class="stack-sm" aria-labelledby="h-votes">
-  <h2 class="label" id="h-votes">Recent votes by ${live ? "its" : "its state and federal"} representatives</h2>
-  ${votesHtml}
-</section>
-<section class="stack-sm" aria-labelledby="h-funding">
-  <h2 class="label" id="h-funding">Funding</h2>
-  ${funding}
-</section>
-${nearby ? `<section class="stack-sm" aria-labelledby="h-near"><h2 class="label" id="h-near">Nearby counties</h2><div class="chips">${nearby}</div></section>` : ""}
+  <a class="out-link" href="${placeTopicsHref({ st: place.st, slug: c.slug })}">All topics</a>`)}
+${fold("votes", `Recent votes by ${live ? "its" : "its state and federal"} representatives`, votesHtml)}
+${fold("funding", "Funding", funding)}
+${nearby ? fold("nearby", "Nearby counties", `<div class="chips">${nearby}</div>`) : ""}
+${yearBar(url, null, { label: `See who represented ${c.name} in an earlier year` })}
 <p class="hint">County boundaries and district overlaps: U.S. Census Bureau (2024 boundaries, 2020 census blocks).</p>`;
   return page(`${c.name}, ${place.name}`, main, { tab: "home", back: [place.name, `/explore/${st}/`], partial: anyFailed(oLoaded, votes, meetingsLoaded, electionLoaded) });
 }
@@ -233,5 +235,5 @@ function countyBallot(election, c, place) {
   const intro = local
     ? ""
     : `Statewide, district and court contests. ${c.name}'s local contests are on its elections office's website and sample ballot.`;
-  return onTheBallot(election, { rows, intro, today: pacificNow().slice(0, 10) });
+  return onTheBallot(election, { rows, intro, today: pacificNow().slice(0, 10), folded: true });
 }

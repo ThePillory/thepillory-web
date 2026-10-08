@@ -140,7 +140,7 @@ IDS=$($D1 --command "SELECT id FROM promises WHERE review = 'suggested'" --json 
 curl -s -o /dev/null -w "  approve selected ($IDS): %{http_code} %{redirect_url}\n" -X POST -d "$IDS&reviewer=Test+Reviewer" localhost:8790/admin/review/promise/batch/
 curl -s -o /dev/null -w "  list a page: %{http_code} %{redirect_url}\n" -X POST -d "action=add&official=$GOV&kind=office_site&url=https%3A%2F%2Fexample.org%2Fpriorities&title=Priorities" localhost:8790/admin/review/promise/pages/
 $D1 --command "SELECT review, COUNT(*) AS n FROM promises GROUP BY review" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
-curl -s "localhost:8790/reps/test-assemblymember-delta/?fresh=empty" | grep -o 'No platform recorded yet' | sed 's/^/  empty tab: /'
+curl -s "localhost:8790/reps/test-assemblymember-delta/?fresh=empty" | grep -oE 'No platform recorded yet|No issues page found' | head -1 | sed 's/^/  empty tab: /'
 curl -s -X POST -d "action=add&official=Nobody&body=I+was+not+contacted+about+this+record.&submitted_on=2026-10-01&received_via=email&recorded_by=Test+Reviewer" localhost:8790/admin/review/promise/statements/ | grep -o 'Choose the official[^<]*\|Published[^<]*' | head -1 | sed 's/^/  statement without its official: /' || true
 curl -s -o /dev/null -w "  record a statement: %{http_code} %{redirect_url}\n" -X POST -d "action=add&official=$GOV&title=On+rural+roads&body=Our+office+will+publish+a+repaving+schedule+for+every+county+road+by+March+2027.%0D%0A%0D%0AQuestions+can+go+to+our+district+office.&submitted_on=2026-10-01&received_via=Email+from+the+office&recorded_by=Test+Reviewer" localhost:8790/admin/review/promise/statements/
 curl -s "localhost:8790/reps/gloria-testgovernor/?fresh=platform" | python3 -c "

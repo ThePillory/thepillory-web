@@ -15,7 +15,7 @@ export const VERDICTS = [
   [/\bfall(s|ing)? (squarely |comfortably |clearly |well )?(within|under|inside)\b/i, '"falls within …"'],
   [/\b(is|are|would be|remains?) (a |an )?(valid|proper|permissible|legitimate|lawful|appropriate|sound) (exercise|use)\b/i, '"a valid exercise of …"'],
   [/\b(is|are|would be) (constitutionally )?(valid|permissible|lawful|authorized|sound|proper)\b/i, '"is valid / permissible / authorized"'],
-  [/\bwithin (the )?(scope of )?(congress'?s?|the legislature'?s?|the state'?s?|the federal government'?s?|its|their)( enumerated| constitutional| legislative)? (power|powers|authority)\b/i, '"within Congress\'s power"'],
+  [/\bwithin (the )?(scope of )?(congress'?s?|the legislature'?s?|the state'?s?|the federal government'?s?|the president'?s?|the governor'?s?|the executive'?s?|its|their)( enumerated| constitutional| legislative| executive)? (power|powers|authority)\b/i, '"within Congress\'s (or the President\'s) power"'],
   [/\b(rests?|rely|relies|resting) (squarely |firmly )?on\b/i, '"rests on …"'],
   [/\bacts? (squarely |largely )?(through|under|within) (congress'?s?|its|the)\b/i, '"acts through … power"'],
   [/\b(satisf(y|ies)|compl(y|ies) with|is consistent with|conforms? to|is in keeping with|honou?rs|respects) (the )?(tenth|first|second|fourth|fifth|sixth|eighth|fourteenth|commerce|spending|supremacy|necessary|equal|due|establishment|free)/i, '"satisfies / complies with / is consistent with [a provision]"'],
@@ -34,7 +34,7 @@ const words = (s) => String(s || "").trim().split(/\s+/).filter(Boolean).length;
 /** The sentence a draft of a partly read bill must contain, by basis. */
 export function limitedSentence(basis) {
   if (basis === "summary_only") return /only (the |an )?official summary (was|of the bill was) read/i;
-  if (basis === "partial_text") return /only part of (the|this) bill'?s? text was read/i;
+  if (basis === "partial_text") return /only part of (the|this) (bill|order|executive order)'?s? text was read/i;
   return null;
 }
 
@@ -80,13 +80,34 @@ export function lintDraft(draft, { basis = "full_text", depth = "card" } = {}) {
     }
   }
 
+  // "Supporters argue" and "Critics argue": attributed, in the same form, of similar length, no verdict.
+  const sup = String(draft.supporters || "").trim();
+  const cri = String(draft.critics || "").trim();
+  if (sup || cri) {
+    if (!/^Supporters argue\b/.test(sup)) problems.push('The supporters line must be one sentence beginning "Supporters argue that".');
+    if (!/^Critics argue\b/.test(cri)) problems.push('The critics line must be one sentence beginning "Critics argue that".');
+    const [ws, wc] = [words(sup), words(cri)];
+    if (ws && wc && Math.max(ws, wc) / Math.min(ws, wc) > 1.6 && Math.abs(ws - wc) > 8) {
+      problems.push(`"Supporters argue" (${ws} words) and "Critics argue" (${wc} words) aren't of similar length. Give each side the same care: 15 to 35 words each.`);
+    }
+    for (const [text, who] of [[sup, "supporters"], [cri, "critics"]]) {
+      for (const [re, what] of VERDICTS.slice(0, 8)) {
+        const m = text.match(re);
+        if (m) {
+          problems.push(`The ${who} line states a verdict (${what}): "…${m[0]}…". Attribute the argument; don't settle it.`);
+          break;
+        }
+      }
+    }
+  }
+
   // A partly read bill says so, in the summary.
   const must = limitedSentence(basis);
   if (must && !must.test(String(draft.plain_summary || ""))) {
     problems.push(
       basis === "summary_only"
         ? 'The bill text wasn\'t available; only the official summary was read. The summary must say so in a sentence starting "Only the official summary was read".'
-        : 'Only part of the bill text was read. The summary must say so in a sentence starting "Only part of the bill text was read", and nothing may describe what sections outside the text read contain.'
+        : 'Only part of the text was read. The summary must say so in a sentence starting "Only part of the bill text was read" (or, for an order, "Only part of the order text was read"), and nothing may describe what sections outside the text read contain.'
     );
   }
   return [...new Set(problems)];

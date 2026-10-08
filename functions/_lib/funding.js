@@ -313,13 +313,15 @@ ${intro}
 }
 
 /** "Follow the money" on a bill page. `repMoney`: [{rep, vote, position, money}] for the visitor's reps. */
-export function followTheMoney(bill, l, { reps = null, repMoney = [], cycle = null } = {}) {
+export function followTheMoney(bill, l, { reps = null, repMoney = [], cycle = null, bare = false } = {}) {
   const head = '<h2 class="label" id="h-money">Follow the money</h2>';
+  // bare: the contents only, for a collapsed section that has its own heading.
+  const wrap = (inner) => (bare ? inner : `<section class="card stack-sm" id="money" aria-labelledby="h-money">${head}${inner}</section>`);
   if (bill.level !== "federal") {
-    return `<section class="card stack-sm" id="money" aria-labelledby="h-money">${head}<p class="secondary small">Lobbying reports are shown for bills in Congress (from the federal lobbying disclosure database). California lobbying comes with the state's new disclosure system.</p></section>`;
+    return wrap(`<p class="secondary small">Lobbying reports are shown for bills in Congress (from the federal lobbying disclosure database). California lobbying comes with the state's new disclosure system.</p>`);
   }
   if (!l || !l.progress) {
-    return `<section class="card stack-sm" id="money" aria-labelledby="h-money">${head}<p class="secondary small">Lobbying reports for this bill haven't been searched yet. They're searched for every bill with a final-passage vote.</p></section>`;
+    return wrap(`<p class="secondary small">Lobbying reports for this bill haven't been searched yet. They're searched for every bill with a final-passage vote.</p>`);
   }
   const searching = !l.progress.done_at;
   const first = 2 * parseInt(bill.session, 10) + 1787; // the 119th Congress: 2025–2026
@@ -368,5 +370,5 @@ export function followTheMoney(bill, l, { reps = null, repMoney = [], cycle = nu
         <p class="hint"><strong>${esc(NOT_A_CAUSE)}</strong> Industries that lobbied: ${inds.map((i) => esc(industryName(i))).join(", ") || "none classified"}.</p>`;
     }
   }
-  return `<section class="card stack-sm" id="money" aria-labelledby="h-money">${head}${orgs}${yours}</section>`;
+  return wrap(`${orgs}${yours}`);
 }

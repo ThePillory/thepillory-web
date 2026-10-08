@@ -21,6 +21,7 @@ import { page, esc, fmtDate, safeUrl, guard } from "../_lib/render.js";
 import { checkAccess } from "../_lib/access.js";
 import { inChunks } from "../_lib/data.js";
 import { parse, badge, baselineSection, provisionsFor } from "../_lib/analysis.js";
+import { orderHref } from "../_lib/orders.js";
 import { verifyQuotes } from "../../workers/sync/src/analysis/verify.js";
 import { CHECKS, CHECK_LABELS } from "../../workers/sync/src/analysis/review-checks.js";
 import { summarizeFlags } from "../../workers/sync/src/analysis/flags.js";
@@ -73,10 +74,15 @@ function missingTables() {
 // ---------------------------------------------------------------------------
 // List
 
+// A subject is a bill or an executive order (migration 0018): both are listed.
 const ROW_SQL = `SELECT a.id, a.bill_id, a.status, a.depth, a.basis, a.created_at, a.reviewer, a.reviewed_at, a.ai_review,
-    a.ai_review_detail, a.spot_check, b.bill_number, b.title, b.level,
+    a.ai_review_detail, a.spot_check,
+    COALESCE(b.bill_number, CASE WHEN x.number IS NOT NULL THEN 'Executive Order ' || x.number ELSE 'Executive order' END) AS bill_number,
+    COALESCE(b.title, x.title) AS title,
+    COALESCE(b.level, CASE WHEN x.id LIKE 'fr:%' THEN 'federal' ELSE 'state' END) AS level,
     (SELECT COUNT(*) FROM analysis_flags f WHERE f.analysis_id = a.id AND f.status = 'open') AS open_flags
-  FROM bill_analyses a JOIN bills b ON b.id = a.bill_id WHERE a.current = 1`;
+  FROM bill_analyses a LEFT JOIN bills b ON b.id = a.bill_id LEFT JOIN executive_actions x ON x.id = a.bill_id
+  WHERE a.current = 1 AND (b.id IS NOT NULL OR x.id IS NOT NULL)`;
 
 function analysisRow(r, why) {
   const meta = [
@@ -557,7 +563,10 @@ function closeFlags(db, row, resolution, email) {
 async function detail(db, env, id, { error = "", done = "", form = null, email = "" } = {}) {
   const row = await db.prepare("SELECT * FROM bill_analyses WHERE id = ?").bind(id).first();
   if (!row) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
-  const b = await db.prepare("SELECT * FROM bills WHERE id = ?").bind(row.bill_id).first();
+  const bill = await db.prepare("SELECT * FROM bills WHERE id = ?").bind(row.bill_id).first();
+  const order = bill ? null : await db.prepare("SELECT * FROM executive_actions WHERE id = ?").bind(row.bill_id).first();
+  const b = bill || (order ? { bill_number: order.number ? `Executive Order ${order.number}` : "Executive order", title: order.title } : null);
+  const publicHref = order ? orderHref(order.id) : `/laws/bills/${esc(row.bill_id)}/`;
   const a = parse(row);
   const provisions = await provisionsFor(db, a.clauses.map((c) => c.id));
   const f = form || {
@@ -571,6 +580,8 @@ async function detail(db, env, id, { error = "", done = "", form = null, email =
     citations: pretty(a.citations),
     uncertainty: a.uncertainty,
     basis_note: a.basis_note || "",
+    supporters: a.supporters || "",
+    critics: a.critics || "",
   };
   const history = (
     await db
@@ -627,14 +638,14 @@ async function detail(db, env, id, { error = "", done = "", form = null, email =
 <header class="page-head">
   <p class="label">${esc(b ? b.bill_number : row.bill_id)} · analysis ${row.id}</p>
   <h1>${esc(b ? b.title : row.bill_id)}</h1>
-  <p class="secondary"><a class="inline-link" href="/laws/bills/${esc(row.bill_id)}/">Public bill page</a></p>
+  <p class="secondary"><a class="inline-link" href="${publicHref}">Public ${order ? "order" : "bill"} page</a></p>
 </header>
 ${done ? `<p class="banner" role="status">${esc(done)}</p>` : ""}
 ${error ? `<p class="banner banner--error" role="alert">${esc(error)}</p>` : ""}
 ${whySection(a, openFlags)}
 ${actions}
 <h2 class="label">Preview</h2>
-${baselineSection(a, provisions, { underReview: openFlags.length > 0 })}
+${baselineSection(a, provisions, { underReview: openFlags.length > 0, noun: order ? "order" : "bill" })}
 ${aiReviewSection(a)}
 ${flags.length ? `<section class="card stack-sm"><h2 class="label">Reader reports</h2><ul class="panel-list small">${flags
     .map((f) => `<li><strong>${esc(FLAG_REASON_NAMES[f.reason] || f.reason)}</strong>${f.note ? `: ${esc(f.note)}` : ""} (${fmtDate(f.created_at)}; ${f.status === "open" ? "open" : `closed: ${esc(f.resolution || "")}`})</li>`)
@@ -656,6 +667,8 @@ ${
   ${field("readings", "How different approaches read it (JSON)", f.readings, { rows: 8, hint: 'A list of {"question", "original_meaning", "precedent", "evolving"}; [] for none.' })}
   ${field("citations", "Cases cited (JSON)", f.citations, { rows: 8, hint: 'A list of {"case_name", "citation", "url", "point"}; url must be a courtlistener.com page.' })}
   ${field("uncertainty", "What this analysis can't tell you", f.uncertainty, { rows: 4 })}
+  ${field("supporters", "Supporters argue", f.supporters, { rows: 2, hint: 'One sentence beginning "Supporters argue that". Shown in the Constitution section.' })}
+  ${field("critics", "Critics argue", f.critics, { rows: 2, hint: 'One sentence beginning "Critics argue that", of similar length.' })}
   <button class="btn btn--primary" type="submit">Save changes</button>
 </form>`
     : ""
@@ -716,7 +729,7 @@ async function change(db, env, id, request, email) {
         .bind(reviewer, email, agreement(row, "approve"), id),
       closeFlags(db, row, "approved", email),
     ]);
-    return back(`Approved. The bill page now shows "Reviewed by ${reviewer}".`);
+    return back(`Approved. The public page now shows "Reviewed by ${reviewer}".`);
   }
   if (action === "reject") {
     await db.batch([
@@ -726,7 +739,7 @@ async function change(db, env, id, request, email) {
         .bind(email, agreement(row, "reject"), id),
       closeFlags(db, row, "rejected", email),
     ]);
-    return back("Rejected. The bill page no longer shows this analysis.");
+    return back("Rejected. The public page no longer shows this analysis.");
   }
   if (action === "reopen") {
     await db.batch([
@@ -752,7 +765,7 @@ async function change(db, env, id, request, email) {
   if (action !== "save") return detail(db, env, id, { error: "Unknown action." });
 
   // Save edits.
-  const f = Object.fromEntries(["plain_summary", "clauses", "aligns", "tension", "departure", "article_v", "readings", "citations", "uncertainty", "basis_note"].map((k) => [k, String(form.get(k) || "")]));
+  const f = Object.fromEntries(["plain_summary", "clauses", "aligns", "tension", "departure", "article_v", "readings", "citations", "uncertainty", "basis_note", "supporters", "critics"].map((k) => [k, String(form.get(k) || "")]));
   let draft;
   try {
     draft = {
@@ -765,8 +778,13 @@ async function change(db, env, id, request, email) {
       readings: jsonList(f.readings, "Readings", ["question", "original_meaning", "precedent", "evolving"]),
       citations: jsonList(f.citations, "Cases", ["case_name", "citation", "url", "point"]),
       uncertainty: f.uncertainty.trim(),
+      supporters: f.supporters.trim(),
+      critics: f.critics.trim(),
     };
     if (!draft.plain_summary) throw new Error("What the bill does can't be empty.");
+    if ((draft.supporters && !/^Supporters argue\b/.test(draft.supporters)) || (draft.critics && !/^Critics argue\b/.test(draft.critics))) {
+      throw new Error('The two argument lines begin "Supporters argue" and "Critics argue".');
+    }
     for (const c of draft.citations) {
       if (!/^https:\/\/www\.courtlistener\.com\/.+/.test(c.url)) throw new Error(`Case "${c.case_name}": url must be its CourtListener page.`);
     }
@@ -778,12 +796,14 @@ async function change(db, env, id, request, email) {
   const unknown = draft.clauses.filter((c) => !known.has(c.id)).map((c) => c.id);
   if (unknown.length) return detail(db, env, id, { error: `No provision with ID: ${unknown.join(", ")}`, form: f, email });
   const log = verifyQuotes(draft, provisions);
+  // The argument lines exist once the sync has applied migration 0018.
+  const args = row.supporters !== undefined;
   await db.batch([
     await revision(db, row, "edited", email),
     db
       .prepare(
         `UPDATE bill_analyses SET plain_summary = ?, clauses = ?, aligns = ?, tension = ?, departure = ?, article_v = ?,
-           readings = ?, citations = ?, uncertainty = ?, basis_note = ?, edited_by = ?, edited_at = datetime('now') WHERE id = ?`
+           readings = ?, citations = ?, uncertainty = ?, basis_note = ?, ${args ? "supporters = ?, critics = ?, " : ""}edited_by = ?, edited_at = datetime('now') WHERE id = ?`
       )
       .bind(
         draft.plain_summary,
@@ -796,6 +816,7 @@ async function change(db, env, id, request, email) {
         JSON.stringify(draft.citations),
         draft.uncertainty,
         f.basis_note.trim() || null,
+        ...(args ? [draft.supporters, draft.critics] : []),
         email,
         id
       ),

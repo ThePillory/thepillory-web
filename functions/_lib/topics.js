@@ -10,6 +10,7 @@
 import { esc, fmtDate, sourceLink } from "./render.js";
 import { inChunks } from "./data.js";
 import { voteBar } from "./charts.js";
+import { orderHref } from "./orders.js";
 import { icon } from "./icons.js";
 import { industryMoney, money, period, cycleOf } from "./funding.js";
 import { INDUSTRIES } from "../../workers/sync/src/funding/industry.js";
@@ -242,7 +243,7 @@ export function executiveRows(actions) {
   return actions
     .map(
       (a) => `<li class="topic-item stack-xs">
-  <p class="list-title">${esc(a.title)}</p>
+  <a class="list-title inline-link" href="${orderHref(a.id)}">${esc(a.title)}</a>
   <p class="list-meta">${esc(a.name)} · ${esc(KIND_NAME[a.kind] || "Executive action")}${a.number ? ` ${esc(a.number)}` : ""} · ${fmtDate(a.signed_on || a.published_on)}</p>
   <p class="hint">${sourceLink(a.source_url)}</p>
   <p class="hint">${esc(tagNote(a))}</p>

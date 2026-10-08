@@ -42,6 +42,31 @@ AI reviewer ── claude-sonnet-5-5, five-point checklist against the bill text
     spot checks; agreement rate; approve, edit, reject, regenerate ──▶ "Reviewed by [name], [date]"
 ```
 
+## Executive orders
+
+The same pipeline, rules, checks, AI reviewer and review queue as bills, for
+every executive order of a President or Governor whose text the `order-texts`
+step read (docs/executive.md). The prompts are the bill prompts in the order's
+words (`instructions(kind)` and `cardInstructions(kind)` in `prompt.js`: "the
+order", "is within the President's (or the Governor's) power"); bills' wording
+is unchanged. No relevance check: every executive order is substantive. A short
+card by default, newest orders first, `ORDER_ANALYSIS_DAILY` (5) a day, after
+the day's bills; reader requests for a full analysis and redrafts after a prompt
+change come first. Analyses of orders are stored in the same tables, keyed by the
+order's id (`fr:2025-02007`, `ca-gov:123`; migration 0018 opened the tables to
+them), and show on `/laws/orders/<id>/` and in the review queue beside bills.
+
+## Supporters argue, critics argue
+
+Every draft (card or full) also has one attributed line each: "Supporters argue
+that …" and "Critics argue that …", the strongest argument each side makes, in
+neutral words, 15 to 35 words each, naming no person, party or group. The
+wording check (`lint.js`) requires both leads, similar length and no verdict; the
+AI reviewer's balance check covers them. They're shown in the collapsed
+Constitution section of a bill or order page, under the quoted clauses; drafts
+written before them show the first "Where it aligns" and "Where it may be in
+tension" points instead, under their own names.
+
 ## Which bills, and in what order
 
 - **Eligible:** bills with a final-passage vote by one of our officials, and bills an approved issue link points to. (Once residents can follow bills, followed bills join; the query has a TODO for it.)
@@ -221,13 +246,14 @@ Each analysis's page shows why it's in the queue, then:
 
 When you save an edit, Constitution quotes are checked again against the stored text, and cases must link to their CourtListener page.
 
-## Tables (workers/sync/migrations/0002_analysis.sql, 0004_review_load.sql)
+## Tables (workers/sync/migrations/0002_analysis.sql, 0004_review_load.sql, 0018_orders.sql)
 
 - `constitution_provisions`: the text, by ID.
 - `bill_analyses`: one row per draft. It holds every field, plus `model`, `prompt_version`, `quote_check` and `citation_check` (JSON logs), token counts, `status` (`ai_draft` / `reviewed` / `rejected`), `reviewer`, `reviewed_at` and `created_at`. Regenerating adds a new row and marks the old one `current = 0`.
 - `bill_analysis_revisions`: every create, edit, approval, rejection, reopen and supersede, with a snapshot of the row as it was.
 - `analysis_requests`: regeneration requests from `/admin/review`.
 - `analysis_attempts`: bills that couldn't be drafted, and when they were last tried.
+- Since migration 0018, `bill_analyses.bill_id` (and `analysis_requests.bill_id`) is the subject's id, a bill or an executive order, and `bill_analyses` has `supporters` and `critics`.
 - `bill_analyses` also has `depth` (`card` / `full`), `ai_review` (`pass` / `flag` / NULL), `ai_review_detail` (the checklist and reasons), `ai_review_model`, `ai_review_tokens`, `ai_reviewed_at`, `spot_check` and `human_agrees`. `analysis_requests` has `depth` and `source` (`admin` / `reader`).
 - `bill_relevance`: one row per checked bill: verdict, category, reason, local relevance, model, and any un-skip.
 - `analysis_flags`: reader reports: reason, note, open or resolved, and how.

@@ -124,12 +124,12 @@ const panel = (list, card) => (card && list.length === 1 ? `<p class="small">${e
  *   empty        what to say when there's no public analysis (HTML)
  *   after        extra HTML at the end (the reader forms)
  */
-export function baselineSection(a, provisions, { underReview = false, empty = "", after = "" } = {}) {
+export function baselineSection(a, provisions, { underReview = false, empty = "", after = "", noun = "bill" } = {}) {
   if (!a) {
     return `
 <section class="parchment stack-sm" id="baseline">
   <h2 class="label">Constitutional baseline</h2>
-  ${empty || "<p>Not yet mapped. The parts of the Constitution this bill touches will appear here once an analysis is written and checked.</p>"}
+  ${empty || `<p>Not yet mapped. The parts of the Constitution this ${esc(noun)} touches will appear here once an analysis is written and checked.</p>`}
   <p class="baseline-foot"><a class="inline-link" href="${METHOD_URL}">How this is made</a></p>
   ${after}
 </section>`;
@@ -193,7 +193,7 @@ export function baselineSection(a, provisions, { underReview = false, empty = ""
   ${a.basis_note ? `<p class="limited-note">${esc(a.basis_note.replace(/^limited:/i, "Limited:"))}</p>` : ""}
   ${minorNotes(a)}
   <div class="stack-sm">
-    <h3>What the bill does</h3>
+    <h3>What the ${esc(noun)} does</h3>
     <p>${esc(a.plain_summary)}</p>
   </div>
   ${clauses ? `<div class="stack-sm"><h3>Provisions it touches</h3>${clauses}</div>` : ""}
@@ -205,13 +205,70 @@ export function baselineSection(a, provisions, { underReview = false, empty = ""
   </div>
   ${readings}
   ${cases}
+  ${arguments_(a)}
   ${a.uncertainty ? `<div class="stack-sm"><h3>What this analysis can't tell you</h3><p class="small">${esc(a.uncertainty)}</p></div>` : ""}
   <p class="small baseline-foot">
-    Mapped, not ruled: this is not a finding on whether the bill is constitutional.
-    ${card ? "This is a short card: the most relevant provisions, one sentence each. " : ""}${src ? `Based on <a class="tap" href="${esc(src)}" target="_blank" rel="noopener">${esc(a.text_version || "the bill text")} ↗</a>.` : ""}
+    Mapped, not ruled: this is not a finding on whether the ${esc(noun)} is constitutional.
+    ${card ? "This is a short card: the most relevant provisions, one sentence each. " : ""}${src ? `Based on <a class="tap" href="${esc(src)}" target="_blank" rel="noopener">${esc(a.text_version || `the ${noun} text`)} ↗</a>.` : ""}
     Drafted ${fmtDate(a.created_at)} with ${esc(a.model)}${a.status !== "reviewed" && a.ai_review === "pass" ? `, checked by a separate AI reviewer${a.ai_review_model ? ` (${esc(a.ai_review_model)})` : ""}` : ""}.
     <br><a class="inline-link" href="${METHOD_URL}">How this is made</a>
   </p>
   ${after}
 </section>`;
+}
+
+// ---------------------------------------------------------------------------
+// Summary first: the short form of an analysis, for the collapsed
+// "Constitution" section and the "Touches the Constitution" chips.
+
+/** The provisions a public analysis maps, as [{id, label, text}] (only those in the stored text). */
+export function analysisClauses(a, provisions) {
+  if (!a) return [];
+  return (a.clauses || []).map((c) => provisions.get(c.id) && { ...provisions.get(c.id), quote: c.quote }).filter(Boolean);
+}
+
+/** "Supporters argue" and "Critics argue": one attributed line each, when the draft has them. */
+function arguments_(a) {
+  const s = String(a.supporters || "").trim();
+  const c = String(a.critics || "").trim();
+  if (!s && !c) return "";
+  return `<div class="stack-sm"><h3>The arguments, briefly</h3>${s ? `<p class="small">${esc(s)}</p>` : ""}${c ? `<p class="small">${esc(c)}</p>` : ""}</div>`;
+}
+
+/**
+ * The collapsed "Constitution" section's contents: each clause quoted (word for
+ * word from the stored text), one "Supporters argue" and one "Critics argue"
+ * line, how it was checked, and a link to the full analysis. Older drafts
+ * without those two lines show the first "Where it aligns" and "Where it may be
+ * in tension" points instead, under their own names.
+ */
+export function constitutionBrief(a, provisions, { fullHref, underReview = false } = {}) {
+  const clauses = analysisClauses(a, provisions)
+    .slice(0, 3)
+    .map((p) => {
+      const q = p.quote && storedQuote(p.quote, p.text);
+      return `<div class="provision-cite">
+  <a class="label" href="/laws/constitution/#${esc(p.id)}">${esc(p.label)}</a>
+  <blockquote class="quote">“${esc(q || p.text)}”</blockquote>
+</div>`;
+    })
+    .join("");
+  const line = (label, text) => (text ? `<div class="argue"><p class="label">${esc(label)}</p><p class="small">${esc(text)}</p></div>` : "");
+  // "Supporters argue that …": the lead in bold, so the line carries its own attribution.
+  const said = (lead, text) => {
+    const t = String(text || "").trim();
+    if (!t) return "";
+    const m = new RegExp(`^${lead}\\b`, "i").exec(t);
+    return `<p class="argue small">${m ? `<strong>${esc(t.slice(0, m[0].length))}</strong>${esc(t.slice(m[0].length))}` : `<strong>${esc(lead)}:</strong> ${esc(t)}`}</p>`;
+  };
+  const sup = String(a.supporters || "").trim();
+  const cri = String(a.critics || "").trim();
+  const args = sup || cri
+    ? `${said("Supporters argue", sup)}${said("Critics argue", cri)}`
+    : `${line("Where it aligns", (a.aligns || [])[0])}${line("Where it may be in tension", (a.tension || [])[0])}`;
+  return `${clauses}
+${args}
+<div class="chips">${badge(a)}${underReview ? UNDER_REVIEW : ""}</div>
+<p class="small">Mapped, not ruled: no finding on whether it is constitutional.</p>
+${fullHref ? `<a class="btn btn--block" href="${esc(fullHref)}">Read the full analysis</a>` : ""}`;
 }

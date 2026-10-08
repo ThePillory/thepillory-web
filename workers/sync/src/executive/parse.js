@@ -87,6 +87,7 @@ export function frOrder(doc) {
     citation: doc.citation || null,
     document_url: doc.pdf_url || null,
     source_url: doc.html_url,
+    notes: doc.executive_order_notes ? String(doc.executive_order_notes).slice(0, 500) : null,
   };
 }
 

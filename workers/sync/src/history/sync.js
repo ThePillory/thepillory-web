@@ -139,7 +139,7 @@ export async function syncHistoryOrders(env, db, budget) {
       const official = `exec:govtrack:${t.govtrack}`;
       if (!(await db.prepare("SELECT 1 AS x FROM officials WHERE id = ?").bind(official).first())) continue;
       const from = t.start < `${FIRST_ORDER_YEAR}-01-01` ? `${FIRST_ORDER_YEAR}-01-01` : t.start;
-      const fields = ["executive_order_number", "title", "signing_date", "publication_date", "document_number", "html_url", "pdf_url", "citation"].map((f) => `fields[]=${f}`).join("&");
+      const fields = ["executive_order_number", "title", "signing_date", "publication_date", "document_number", "html_url", "pdf_url", "citation", "executive_order_notes"].map((f) => `fields[]=${f}`).join("&");
       let url = `${(env.FR_API_BASE || FR_API).replace(/\/$/, "")}/documents.json?per_page=1000&order=oldest&conditions[type][]=PRESDOCU&conditions[presidential_document_type][]=executive_order&conditions[signing_date][gte]=${from}&conditions[signing_date][lte]=${t.end}&${fields}`;
       while (url) {
         await cap.take("Federal Register");

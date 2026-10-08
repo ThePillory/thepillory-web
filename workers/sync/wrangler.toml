@@ -77,6 +77,13 @@ CARD_TEXT_CHARS = "60000"
 # When the AI reviewer flags a draft, the drafter revises it this many times
 # (each revision is reviewed again) before it goes to the review queue.
 REVISIONS_PER_DRAFT = "1"
+# Executive orders (src/executive/orders-sync.js; docs/executive.md): order texts read a day
+# (newest first, once each), orders searched on CourtListener a day and how often again,
+# and order analyses drafted a day (the same pipeline as bills, its own cap).
+ORDER_TEXTS_DAILY = "60"
+ORDER_COURTS_DAILY = "40"
+ORDER_COURTS_RECHECK_DAYS = "14"
+ORDER_ANALYSIS_DAILY = "5"
 # Agenda watch: plain-language summaries of county agendas. Separate daily cap
 # from bill analyses (each agenda is one Claude API call).
 AGENDA_DAILY_LIMIT = "3"
