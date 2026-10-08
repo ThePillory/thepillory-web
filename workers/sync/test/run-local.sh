@@ -91,6 +91,9 @@ curl -s "localhost:8789/status?token=local-test-token" | grep -E '"message": "(u
 echo "--- a campaign Issues page listed by a person, read in the next round:"
 $D1 --command "SELECT url, fetched_at IS NOT NULL AS fetched, note, excerpt, excerpt_by FROM promise_pages" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
 $D1 --command "SELECT p.id, o.name, p.source_kind, p.quote FROM promises p JOIN officials o ON o.id = p.official_id WHERE p.source_kind = 'campaign_site'" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
+echo "--- topics: tagged after the analysis rounds (fake tagger: keywords):"
+$D1 --command "SELECT step, status, message FROM sync_log WHERE step = 'topics' ORDER BY id" --json | python3 -c "import json,sys; [print(' ', r['status'], r['message']) for r in json.load(sys.stdin)[0]['results']]"
+$D1 --command "SELECT item_kind, topic, COUNT(*) AS n FROM topic_tags WHERE removed_at IS NULL GROUP BY 1, 2 ORDER BY 1, 3 DESC" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
 kill $WK
 echo "--- California campaign finance (Cal-Access file) and Form 700s:"
 $D1 --command "SELECT step, status, message FROM sync_log WHERE message LIKE 'California campaign%' OR message LIKE 'FPPC%' OR message LIKE '%FPPC:%' ORDER BY id LIMIT 4" --json | python3 -c "import json,sys; [print(' ', r['step'], r['status'], r['message']) for r in json.load(sys.stdin)[0]['results']]"
@@ -152,5 +155,13 @@ curl -s -X POST -H "Content-Type: application/json" -d '{"q":"95249"}' localhost
 echo "--- waitlist (Turnstile is faked):"
 curl -s -o /dev/null -w "join: %{http_code} %{redirect_url}\n" -X POST -d "state=CA&county=06009&email=test%40example.org&cf-turnstile-response=ok" localhost:8790/api/waitlist
 curl -s -o /dev/null -w "county not in that state: %{http_code} %{redirect_url}\n" -X POST -d "state=NV&county=06009&email=test%40example.org&cf-turnstile-response=ok" localhost:8790/api/waitlist
+echo "--- topics: pages, chips, and a correction on the review page:"
+for path in /topics/ /topics/water/ /place/ca/calaveras/topics/ /place/ca/calaveras/topics/water/ /place/ca/calaveras/topics/agriculture/ /admin/review/topics/; do
+  curl -s -o /dev/null -w "$path %{http_code}\n" "localhost:8790$path"
+done
+BILL=$($D1 --command "SELECT item_id FROM topic_tags WHERE item_kind = 'bill' AND removed_at IS NULL LIMIT 1" --json | python3 -c "import json,sys; print(json.load(sys.stdin)[0]['results'][0]['item_id'])")
+curl -s "localhost:8790/laws/bills/$BILL/" | grep -c 'chip--topic' | sed "s/^/topic chips on $BILL's page: /"
+curl -s -o /dev/null -w "correct $BILL's topics: %{http_code} %{redirect_url}\n" -X POST -d "topics=agriculture&topics=water&note=Local+test+correction.&reviewer=Local+tester" "localhost:8790/admin/review/topics/bill/?id=$BILL"
+$D1 --command "SELECT topic, tagged_by, removed_at IS NOT NULL AS removed FROM topic_tags WHERE item_id = '$BILL' ORDER BY id" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
 echo "--- site with local data: http://localhost:8790/reps/  and  http://localhost:8790/admin/review/  (Ctrl-C to stop)"
 wait $PG

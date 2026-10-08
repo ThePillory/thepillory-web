@@ -2,6 +2,7 @@
 // California's Governor and statewide offices. What they do in office (executive
 // orders, bills signed and vetoed, nominations) and each bill's final outcome.
 // Facts with their sources; every list says where it comes from.
+import { tagsFor, topicChips } from "./topics.js";
 import { esc, safeUrl, fmtDate, linkRow, sourceLink } from "./render.js";
 import { OUTCOME_LABEL } from "../../workers/sync/src/executive/parse.js";
 
@@ -41,7 +42,10 @@ export function ordersFor(db, officialId, { offset = 0 } = {}) {
       .all();
     const n = await db.prepare("SELECT kind, COUNT(*) AS n FROM executive_actions WHERE official_id = ? GROUP BY kind").bind(officialId).all();
     const counts = Object.fromEntries(n.results.map((r) => [r.kind, r.n]));
-    return { rows: results.slice(0, PER_PAGE), more: results.length > PER_PAGE, counts };
+    const rows = results.slice(0, PER_PAGE);
+    const topics = await tagsFor(db, "executive_action", rows.map((a) => a.id));
+    for (const a of rows) a.topics = topics.get(a.id) || [];
+    return { rows, more: results.length > PER_PAGE, counts };
   }, { rows: [], more: false, counts: {} });
 }
 
@@ -116,6 +120,7 @@ export function ordersTab(o, data, base, offset) {
   <span class="label">${esc(num)}${a.citation ? ` · ${esc(a.citation)}` : ""}</span>
   <a class="exec-title" href="${esc(a.source_url)}" target="_blank" rel="noopener">${esc(a.title)}</a>
   <span class="small secondary">${esc(when)}${doc}</span>
+  ${topicChips(a.topics, null, { label: false })}
 </li>`;
     })
     .join("");

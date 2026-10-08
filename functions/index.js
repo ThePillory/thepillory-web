@@ -12,6 +12,7 @@
 //   and Cabinet; California's Governor and statewide offices);
 //   Elections (the next election; Your ballot once districts are known; How to vote);
 //   Happening now (Congress / California: latest final-passage votes, ?now=state);
+//   Topics (every topic, for the visitor's county when known);
 //   Take part (Calaveras comment deadlines, contacting your reps);
 //   Communities (Calaveras, live; the county waitlist with real counts);
 //   Understand (explainers).
@@ -19,6 +20,7 @@ import { page, esc, loadSection, FAILED, anyFailed, sectionError, guard, edgeCac
 import { listMeetings, pacificNow, addDays, deadlineParts, meetingHref, when } from "./_lib/meetings.js";
 import { districtsFromCookie, describe, STATE_NAME } from "./_lib/districts.js";
 import { happeningNow, happeningSection, lookupForm, waitlistCounts } from "./_lib/hub.js";
+import { topicGrid, placeTopicsHref } from "./_lib/topics.js";
 import { CURRENT, loadElection, ballotFor, ballotHref, electionHref, whenLine, daysUntil, contestRow, courtRow, statewideRow } from "./_lib/elections.js";
 import { LIVE, loadIndex, loadPlace, waitlistBy, usMapLinks, smallStateButtons, mapFigure } from "./_lib/geo.js";
 import { ASSET_VERSION } from "./_lib/generated.js";
@@ -206,6 +208,23 @@ function electionsSection({ election, ballot, county }, d) {
 </section>`;
 }
 
+// Topics: every topic as a chip, for the visitor's county when it's known.
+async function topicPlace(env, request, d) {
+  if (!d || !d.co) return null;
+  const place = await loadPlace(env, request, d.st.toLowerCase());
+  const c = place && place.counties.find((x) => x.fips === d.co);
+  return c ? { st: place.st, slug: c.slug, name: c.name } : null;
+}
+
+function topicsSection(place) {
+  return `
+<section class="brief-section" id="topics" aria-labelledby="h-topics">
+  <div class="section-head"><h2 class="label" id="h-topics">Topics</h2><a class="section-link" href="${place ? placeTopicsHref(place) : "/topics/"}">All topics</a></div>
+  <p class="small secondary">${place ? `One subject at a time for ${esc(place.name)}: bills and how your representatives voted, county meetings, executive actions, officials' own words and campaign money, side by side.` : "One subject at a time: bills and votes, county meetings, executive actions, officials' own words and campaign money, side by side."}</p>
+  ${topicGrid(place)}
+</section>`;
+}
+
 const UNDERSTAND = [
   ["/laws/constitution/", "The Constitution", "The full text, and how every analysis starts from it."],
   ["/about/how-a-bill-becomes-law/", "How a bill becomes law", "From introduction to signature, in Congress and in California."],
@@ -229,7 +248,7 @@ async function hub(env, request, url, d) {
   // Each section loads on its own: one that can't load shows a short note, and
   // the rest of the hub still shows.
   const start = pacificNow();
-  const [index, now, deadlines, counts, waiting, federalExec, caExec, elections] = await Promise.all([
+  const [index, now, deadlines, counts, waiting, federalExec, caExec, elections, tPlace] = await Promise.all([
     loadIndex(env, request),
     loadSection("hub happening now", db ? () => happeningNow(db, which, { limit: 4 }) : async () => [], []),
     loadSection("hub deadlines", db ? async () =>
@@ -243,6 +262,7 @@ async function hub(env, request, url, d) {
     loadSection("hub executive", db ? () => executiveOfficials(db, "us-executive") : async () => [], []),
     loadSection("hub california executive", db ? () => executiveOfficials(db, "ca-executive") : async () => [], []),
     loadSection("hub elections", () => electionsData(env, request, d), { election: null, ballot: null }),
+    loadSection("hub topic place", () => topicPlace(env, request, d), null),
   ]);
   const joined = url.searchParams.get("waitlist");
   const msg = joined === "joined" ? WAITLIST_MESSAGES.joined : "";
@@ -270,6 +290,7 @@ ${electionsLate ? "" : electionsHtml}
 ${federalExec === FAILED || caExec === FAILED ? sectionError("Who represents you") : whoRepresents(federalExec, caExec, d)}
 ${electionsLate ? electionsHtml : ""}
 ${now === FAILED ? sectionError("Happening now") : happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? "/" : "/?now=state"), loaded: !!db })}
+${topicsSection(tPlace === FAILED ? null : tPlace)}
 ${deadlines === FAILED ? sectionError("Take part") : takePart(deadlines, !!db)}
 ${communities(env, counts === FAILED ? null : counts, msg, error)}
 ${understand()}

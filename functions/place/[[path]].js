@@ -12,6 +12,8 @@ import { recentFinalVotes } from "../_lib/data.js";
 import { voteRows } from "../_lib/briefing.js";
 import { listMeetings, summariesFor, meetingCard, pacificNow, addDays } from "../_lib/meetings.js";
 import { turnstileReady, turnstileWidget } from "../_lib/turnstile.js";
+import { placeTopicsIndex, placeTopicPage } from "../_lib/topic-pages.js";
+import { topicGrid, placeTopicsHref } from "../_lib/topics.js";
 import { CURRENT, loadElection, onTheBallot, statewideRow, contestRow, measureRow, courtRow, courtGroups } from "../_lib/elections.js";
 import { LIVE, loadPlace, officialsFor, allIds, repRow, executiveRows, breadcrumb, districtLabel, districtHref, placeHref } from "../_lib/geo.js";
 
@@ -38,14 +40,16 @@ export const onRequestGet = guard((context) => edgeCached(context, PLACE_CACHE_S
 async function placePage({ request, env, params }) {
   const url = new URL(request.url);
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
-  const [st, slug, extra] = (params.path || []).filter(Boolean).map((s) => s.toLowerCase());
+  const [st, slug, extra, topic, more] = (params.path || []).filter(Boolean).map((s) => s.toLowerCase());
   if (!st) return Response.redirect(`${url.origin}/explore/`, 302);
   const place = await loadPlace(env, request, st);
   if (!place) return notFound("No state at this address.", "home", ["Explore", "/explore/"]);
   if (!slug) return Response.redirect(`${url.origin}/explore/${st}/`, 302);
-  const c = !extra && place.counties.find((x) => x.slug === slug || x.fips === slug);
+  const c = (!extra || (extra === "topics" && !more)) && place.counties.find((x) => x.slug === slug || x.fips === slug);
   if (!c) return notFound("No county at this address.", "home", [place.name, `/explore/${st}/`]);
-  if (c.slug !== slug) return Response.redirect(`${url.origin}${placeHref(place.st, c.slug)}`, 301);
+  if (c.slug !== slug) return Response.redirect(`${url.origin}${placeHref(place.st, c.slug)}${extra ? `topics/${topic ? `${topic}/` : ""}` : ""}`, 301);
+  // Topics for this county: /place/<st>/<county>/topics/ and /topics/<topic>/ (functions/_lib/topic-pages.js).
+  if (extra === "topics") return topic ? placeTopicPage(env, place, c, topic) : placeTopicsIndex(place, c);
 
   const live = LIVE[c.fips];
   const db = env.DB;
@@ -180,6 +184,11 @@ ${
 <section class="stack-sm" aria-labelledby="h-issues"><h2 class="label" id="h-issues">Issues</h2>${EMPTY_REPORTS}</section>`
     : ""
 }
+<section class="stack-sm" id="topics" aria-labelledby="h-topics">
+  <div class="section-head"><h2 class="label" id="h-topics">Topics</h2><a class="section-link" href="${placeTopicsHref({ st: place.st, slug: c.slug })}">All topics</a></div>
+  <p class="small secondary">One subject at a time for ${esc(c.name)}: bills and how its representatives voted, ${live ? "county meeting items, " : ""}executive actions, officials' own words, and campaign money, side by side.</p>
+  ${topicGrid({ st: place.st, slug: c.slug })}
+</section>
 <section class="stack-sm" aria-labelledby="h-votes">
   <h2 class="label" id="h-votes">Recent votes by ${live ? "its" : "its state and federal"} representatives</h2>
   ${votesHtml}

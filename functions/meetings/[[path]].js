@@ -3,6 +3,10 @@
 // /meetings/<id>/calendar.ics    add to calendar
 // Anything else under /meetings/ (old sample meeting pages) redirects to the calendar.
 import { page, notFound, esc, safeUrl, sourceLink, guard } from "../_lib/render.js";
+import { tagsFor, topicChips, TOPIC, topicName, topicHref } from "../_lib/topics.js";
+
+// County meetings are Calaveras County's (the live community): topic chips open its topic pages.
+const COUNTY_PLACE = { st: "CA", slug: "calaveras" };
 import {
   listMeetings,
   summariesFor,
@@ -159,6 +163,15 @@ async function meeting(env, id) {
   const items = (await db.prepare("SELECT * FROM meeting_items WHERE meeting_id = ? ORDER BY sort").bind(id).all()).results;
   const summary = (await summariesFor(db, [id]))[id] || null;
   const byKey = new Map(((summary && summary.items) || []).map((s) => [s.item_key, s]));
+  let itemTopics = new Map();
+  if (m.level === "county" && items.length) {
+    try {
+      itemTopics = await tagsFor(db, "meeting_item", items.map((it) => `${id}/${it.item_key}`));
+    } catch (err) {
+      console.error(`meeting topics: ${err && err.message}`);
+    }
+  }
+  const topicsOf = (it) => itemTopics.get(`${id}/${it.item_key}`) || [];
   const w = when(m.starts_at);
   const now = pacificNow();
   const past = m.starts_at < now;
@@ -256,6 +269,7 @@ async function meeting(env, id) {
           return `<li class="agenda-item" id="item-${esc(it.item_key)}">
         <p><strong>${esc(it.number)}.</strong> ${esc(it.title)}</p>
         ${sm && sm.summary ? `<p class="small secondary"><span class="ai-label">AI summary:</span> ${esc(sm.summary)}</p>` : ""}
+        ${topicChips(topicsOf(it), COUNTY_PLACE, { label: false })}
         ${itemDocs(it)}
       </li>`;
         })
@@ -273,9 +287,19 @@ async function meeting(env, id) {
   const agendaNote = !items.length && m.level === "county"
     ? `<div class="list-card-row"><span class="small secondary">${m.agenda_url ? "The agenda's items haven't been read yet." : "The county hasn't posted the agenda yet. Agendas are posted at least 72 hours before a regular meeting."}</span></div>`
     : "";
+  // Topics on this agenda: every topic its items are tagged with, most items first.
+  const counts = new Map();
+  for (const it of items) for (const t of topicsOf(it)) counts.set(t.topic, (counts.get(t.topic) || 0) + 1);
+  const agendaTopics = [...counts.entries()].filter(([t]) => TOPIC[t]).sort((a, b) => b[1] - a[1]);
+  const topicsRow = agendaTopics.length
+    ? `<div class="list-card-row agenda-topics"><span class="label">Topics on this agenda</span><div class="chips chips--tight">${agendaTopics
+        .map(([t, n]) => `<a class="chip chip--sm chip--topic" href="${topicHref(t, COUNTY_PLACE)}">${esc(topicName(t))} · ${n}</a>`)
+        .join("")}</div><span class="hint">AI-tagged from each item's title and summary; a person can correct any tag. <a class="inline-link" href="/about/methodology/#topics">How topics work</a></span></div>`
+    : "";
   const agenda = `
 <section class="card list-card" id="agenda" aria-labelledby="h-agenda">
   <h2 class="label list-card-head" id="h-agenda">${state ? "Hearing details" : "Full agenda"}</h2>
+  ${topicsRow}
   ${groupRows}${agendaNote}${docRows}
 </section>`;
 

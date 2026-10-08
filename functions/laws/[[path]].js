@@ -5,6 +5,7 @@
 //   Both need Turnstile and are rate-limited per visitor (functions/_lib/turnstile.js).
 // /laws/constitution/ is static and passed through. Old sample pages redirect (OLD_PAGES).
 import { CURRENT, loadElection, electionHref, whenLine } from "../_lib/elections.js";
+import { tagsFor, topicChips, tagNote } from "../_lib/topics.js";
 import { pacificNow } from "../_lib/meetings.js";
 import { page, notFound, notLoaded, esc, safeUrl, section, sourceLink, card, fmtDate, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { billList, BILLS_PER_PAGE, billById, votesOnBill, officialsWhere, CHAMBER_NAME } from "../_lib/data.js";
@@ -248,12 +249,14 @@ async function bill(env, id, url, request) {
   // the rest of the page still shows.
   const reps = districts ? await loadSection("bill reps", () => officialsWhere(db, repsWhere(districts)), []) : [];
   const repIds = reps === FAILED ? [] : reps.map((o) => o.id);
-  const [votes, analysisLoaded, lobbying, outcome] = await Promise.all([
+  const [votes, analysisLoaded, lobbying, outcome, topics] = await Promise.all([
     loadSection("bill votes", () => votesOnBill(db, id, repIds), []),
     loadSection("bill analysis", () => analysisFor(db, id)),
     b.level === "federal" ? loadSection("bill lobbying", () => lobbyingFor(db, id), null) : null,
     loadSection("bill outcome", () => outcomeFor(db, id), { outcome: null, checked: null }),
+    loadSection("bill topics", () => tagsFor(db, "bill", [id]), new Map()),
   ]);
+  const billTopics = topics === FAILED ? [] : topics.get(id) || [];
   const analysis = analysisLoaded === FAILED
     ? { a: null, row: null, provisions: new Map(), flags: 0, relevance: null, pendingFull: false, failed: true }
     : analysisLoaded;
@@ -290,6 +293,7 @@ async function bill(env, id, url, request) {
   <p class="label">${LEVELS[b.level]} · ${esc(CHAMBER_NAME[b.chamber] || "Bill")} · ${esc(b.bill_number)}</p>
   <h1>${esc(b.title)}</h1>
   <p class="secondary">${b.level === "federal" ? `${ordinal(parseInt(b.session, 10))} Congress` : `California Legislature, ${esc(b.session.slice(0, 4))}–${esc(b.session.slice(4))} session`}</p>
+  ${billTopics.length ? `${topicChips(billTopics)}<p class="hint">${esc(tagNote(billTopics[0]))} <a class="inline-link" href="/about/methodology/#topics">How topics work</a></p>` : ""}
 </header>
 <section class="card stack-sm">
   <h2 class="label">Plain-language summary</h2>
