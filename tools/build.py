@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "34"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "35"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -93,6 +93,23 @@ def _read_topics():
 
 
 TOPIC_LIST, INDUSTRY_TOPIC_MAP, INDUSTRY_NAMES = _read_topics()
+
+
+def _read_icons():
+    """Line icons, from the one copy in functions/_lib/icons.js."""
+    import re
+    src = (ROOT / "functions" / "_lib" / "icons.js").read_text(encoding="utf-8")
+    paths = {m.group(1): m.group(2) for m in re.finditer(r'^\s*"?([a-z-]+)"?: \'(.*)\',$', src, re.M)}
+    assert {"home", "reps", "laws", "you", "plus", "search"} <= set(paths), "functions/_lib/icons.js changed shape"
+    return paths
+
+
+ICON_PATHS = _read_icons()
+
+
+def icon(name):
+    return ('<svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" '
+            f'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">{ICON_PATHS[name]}</svg>')
 TOPIC_NAME = {t["slug"]: t["name"] for t in TOPIC_LIST}
 LEVEL_NAME = {"county": "County", "state": "State", "federal": "Federal"}
 
@@ -175,10 +192,12 @@ def section(label, inner, cls="card stack"):
 TABS = [
     ("home", "Home", "/"),
     ("reps", "Reps", "/reps/"),
-    ("report", "+ Report", "/report/"),
+    ("report", "Report", "/report/"),
     ("laws", "Laws", "/laws/"),
     ("you", "You", "/you/"),
 ]
+
+WORDMARK = 'The<span class="wordmark-accent">Pillory</span>'
 
 SEARCH = """
 <form class="search" action="/search/" role="search" autocomplete="off">
@@ -192,7 +211,10 @@ SEARCH = """
 # computers the wordmark moves into the top navigation bar.
 def site_header():
     return f"""<header class="site-header">
-  <a class="wordmark" href="/">ThePillory</a>
+  <div class="site-header-row">
+    <a class="wordmark" href="/" aria-label="ThePillory, home">{WORDMARK}</a>
+    <button class="search-toggle" type="button" aria-controls="q" aria-expanded="false" aria-label="Search">{icon("search")}</button>
+  </div>
   {SEARCH.strip()}
 </header>"""
 
@@ -208,11 +230,12 @@ def tabbar(current, is_root):
         if key == current:
             cls += " is-current"
             attr = ' aria-current="page"' if is_root else ' aria-current="true"'
-        links.append(f'<a class="{cls}" href="{href}"{attr}>{e(label)}</a>')
+        glyph = f'<span class="tab-icon--report">{icon("plus")}</span>' if key == "report" else icon(key)
+        links.append(f'<a class="{cls}" href="{href}"{attr}>{glyph}<span>{e(label)}</span></a>')
     return f"""
 <nav class="tabbar" aria-label="Main">
   <div class="tabbar-row">
-    <a class="wordmark tabbar-brand" href="/">ThePillory</a>
+    <a class="wordmark tabbar-brand" href="/" aria-label="ThePillory, home">{WORDMARK}</a>
     <div class="tabbar-inner">
       {"".join(links)}
     </div>
@@ -230,7 +253,9 @@ ICON_VERSION = 3
 def head_tags(title):
     """Icons, manifest, and link-share (Open Graph) tags for every page."""
     return f"""    <meta name="description" content="{SITE_DESCRIPTION}" />
-    <meta name="theme-color" content="#F5F2EA" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
     <link rel="icon" href="/assets/logo/icon.svg?v={ICON_VERSION}" type="image/svg+xml" />
     <link rel="icon" href="/assets/logo/favicon-32.png?v={ICON_VERSION}" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/assets/logo/apple-touch-icon.png?v={ICON_VERSION}" sizes="180x180" />
@@ -270,8 +295,9 @@ def shell(title, main, *, nav="", back_html="", after="", title_is_html=False):
     <title>{t} – ThePillory</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/pillory.css?v={ASSET_VERSION}" />
+    <script>document.documentElement.classList.add("js")</script>
 {head}  </head>
 
   <body class="{' '.join(body_cls)}">
@@ -965,7 +991,7 @@ def write_manifest():
     manifest = {
         "id": "/", "name": "ThePillory", "short_name": "ThePillory",
         "description": SITE_DESCRIPTION, "start_url": "/", "scope": "/", "display": "standalone",
-        "background_color": "#F5F2EA", "theme_color": "#F5F2EA",
+        "background_color": "#FFFFFF", "theme_color": "#FFFFFF",
         "icons": [png(192, "any"), png(512, "any"), png(192, "maskable"), png(512, "maskable"),
                   {"src": f"/assets/logo/icon.svg{v}", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}],
     }

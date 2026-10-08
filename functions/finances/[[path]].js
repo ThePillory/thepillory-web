@@ -7,6 +7,7 @@
 import { page, esc, fmtDate, notFound, guard, edgeCached, loadSection, FAILED, sectionError } from "../_lib/render.js";
 import { loadFinances, loadCalifornia } from "../_lib/history.js";
 import { federalTerms, californiaTerms, usd, pctText } from "../_lib/finances.js";
+import { miniBars } from "../_lib/charts.js";
 
 const CACHE_SECONDS = 300;
 const METHOD = "/about/methodology/#time-machine";
@@ -80,32 +81,26 @@ const FISCAL_NOTE_FED = "The federal fiscal year starts October 1. A President t
 const FISCAL_NOTE_CA = "California's fiscal year starts July 1. A Governor takes office in January, partway through a fiscal year whose budget was enacted under the previous Governor and Legislature, so a term's first fiscal year mostly reflects decisions made before it began.";
 const READ_NOTE = "Amounts are in dollars of each year, not adjusted for inflation; the share of GDP and the per-person figures help compare years. Many things move these numbers at once: the economy, laws passed by earlier Congresses, programs that grow on their own, emergencies. The figures show what happened during each term, not who caused it.";
 
-/** A small chart: debt as a share of GDP by fiscal year, with term boundaries. One color, no party colors. */
-function debtChart(years, terms) {
-  const pts = years.filter((r) => r.debt != null && r.gdp).map((r) => [r.fy, (r.debt / r.gdp) * 100]);
-  if (pts.length < 3) return "";
-  const W = 340, H = 150, L = 34, R = 8, T = 10, B = 24;
-  const x0 = pts[0][0], x1 = pts[pts.length - 1][0];
-  const ymax = Math.ceil(Math.max(...pts.map((p) => p[1])) / 20) * 20;
-  const X = (y) => L + ((y - x0) / (x1 - x0)) * (W - L - R);
-  const Y = (v) => T + (1 - v / ymax) * (H - T - B);
-  const line = pts.map((p, i) => `${i ? "L" : "M"}${X(p[0]).toFixed(1)},${Y(p[1]).toFixed(1)}`).join("");
-  const grid = [0, ymax / 2, ymax].map((v) => `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" class="fin-grid"/><text x="${L - 4}" y="${Y(v) + 4}" text-anchor="end" class="fin-axis">${v}%</text>`).join("");
-  const marks = terms
-    .map((t) => fiscalStart(t.start))
-    .filter((y) => y > x0 && y < x1)
-    .map((y) => `<line x1="${X(y)}" x2="${X(y)}" y1="${T}" y2="${H - B}" class="fin-termline"/>`)
-    .join("");
-  const ticks = [x0, Math.round((x0 + x1) / 2), x1].map((y) => `<text x="${X(y)}" y="${H - 6}" text-anchor="middle" class="fin-axis">FY${y}</text>`).join("");
-  const first = pts[0], last = pts[pts.length - 1];
-  return `<figure class="card stack-xs fin-chart">
-  <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Federal debt as a share of GDP, FY${first[0]} ${first[1].toFixed(1)}% to FY${last[0]} ${last[1].toFixed(1)}%. Thin lines mark where each presidential term began.">
-    ${grid}${marks}<path d="${line}" class="fin-line"/>${ticks}
-  </svg>
-  <figcaption class="xsmall secondary">Federal debt as a share of GDP at the end of each fiscal year. Thin vertical lines mark where each presidential term began. The numbers for each term are below.</figcaption>
-</figure>`;
+/** Two small bar charts by fiscal year: debt as a share of GDP, and the surplus or deficit. One color, no party colors. */
+function debtChart(years) {
+  const tick = (y, i) => (i === 0 || y % 8 === 0 ? `’${String(y).slice(2)}` : "");
+  const debt = years.filter((r) => r.debt != null && r.gdp);
+  const def = years.filter((r) => r.surplus != null);
+  const share = miniBars(debt.map((r, i, all) => ({ label: `FY${r.fy}`, value: (r.debt / r.gdp) * 100, tick: tick(r.fy, i, all) })), {
+    format: (v) => `${v.toFixed(1)}%`,
+    caption: "Federal debt as a share of GDP at the end of each fiscal year (Treasury; OMB Table 10.1).",
+    ariaLabel: `Federal debt as a share of GDP, FY${debt[0] ? debt[0].fy : ""} to FY${debt.length ? debt[debt.length - 1].fy : ""}`,
+    head: ["Fiscal year", "Debt, % of GDP"],
+  });
+  const flow = miniBars(def.map((r, i, all) => ({ label: `FY${r.fy}`, value: r.surplus, tick: tick(r.fy, i, all) })), {
+    format: (v) => usd(v),
+    caption: "Surplus (above the line) or deficit (below the line, gray) in each fiscal year (OMB Table 1.1).",
+    ariaLabel: "Federal surplus or deficit by fiscal year",
+    head: ["Fiscal year", "Surplus or deficit"],
+  });
+  if (!share && !flow) return "";
+  return `<section class="card stack">${share ? `<h2>Debt as a share of GDP</h2>${share}` : ""}${flow ? `<h2>Surplus or deficit</h2>${flow}` : ""}</section>`;
 }
-const fiscalStart = (iso) => (parseInt(iso.slice(5, 7), 10) >= 10 ? parseInt(iso.slice(0, 4), 10) + 1 : parseInt(iso.slice(0, 4), 10));
 
 async function federalPage(env, request) {
   const fin = await loadSection("finances", () => loadFinances(env, request), null);
@@ -154,7 +149,7 @@ async function federalPage(env, request) {
   const src = fin.federal.sources || {};
   const main = `${head}
 <section class="card stack-xs"><p class="small">${esc(FISCAL_NOTE_FED)}</p><p class="small">${esc(READ_NOTE)}</p></section>
-${debtChart(fin.federal.years, fin.federal.terms)}
+${debtChart(fin.federal.years)}
 <nav aria-label="Terms"><ul class="plain-list chips">${jump}</ul></nav>
 ${cards}
 <section class="card stack-xs"><h2 class="label">Sources</h2><ul class="plain-list stack-xs">${Object.values(src).map((s) => `<li class="small"><a class="inline-link" href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)} ↗</a></li>`).join("")}<li class="small"><a class="inline-link" href="${esc(fin.federal.control.house_source)}" target="_blank" rel="noopener">House party divisions: Office of the Historian ↗</a></li><li class="small"><a class="inline-link" href="${esc(fin.federal.control.senate_source)}" target="_blank" rel="noopener">Senate party division: Senate Historical Office ↗</a></li></ul><p class="hint"><a class="inline-link" href="${METHOD}">How the Time Machine works</a></p></section>`;

@@ -5,7 +5,8 @@
 //   your reps.
 import { page, notLoaded, esc, fmtDate, sourceLink, guard } from "../_lib/render.js";
 import { safe, recentFinalVotes, officialsWhere, CHAMBER_NAME } from "../_lib/data.js";
-import { billHref, tallyText } from "../_lib/votes.js";
+import { billHref } from "../_lib/votes.js";
+import { voteBar } from "../_lib/charts.js";
 import { districtsFromCookie, repsWhere, describe } from "../_lib/districts.js";
 
 const PER_PAGE = 30;
@@ -40,7 +41,6 @@ export const onRequestGet = guard(async ({ request, env }) => {
   const opt = (value, label) => `<a class="toggle" href="/votes/${value ? `?level=${value}` : ""}"${level === value ? ' aria-current="true"' : ""}>${label}</a>`;
   const rows = data.rows
     .map((v) => {
-      const tally = tallyText(v);
       const positions = v.positions.length
         ? `<ul class="plain-list positions">${v.positions
             .map((p) => `<li class="position-row"><a class="inline-link" href="/reps/${esc(p.slug)}/#votes">${esc(p.name)}</a><span class="position" title="Recorded as: ${esc(p.raw_position)}">${esc(p.position)}</span></li>`)
@@ -51,7 +51,7 @@ export const onRequestGet = guard(async ({ request, env }) => {
   <p class="label">${esc(CHAMBER_NAME[v.chamber] || (v.level === "federal" ? "Federal" : "State"))} · ${fmtDate(v.vote_date)}</p>
   ${v.bill_id && v.bill_number ? `<a class="inline-link vote-bill" href="${billHref(v.bill_id)}">${esc(v.bill_number)}</a>${v.bill_title ? `<p class="small">${esc(v.bill_title)}</p>` : ""}` : `<p class="vote-bill-text">${esc(v.subject || "")}</p>`}
   <p class="vote-question">${esc(v.question)} · Result: ${esc(v.result)}</p>
-  ${tally ? `<p class="tally small">${tally}</p>` : ""}
+  ${voteBar(v)}
   ${positions}
   ${sourceLink(v.source_url, "Official record")}
 </article>`;

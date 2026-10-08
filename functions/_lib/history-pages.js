@@ -19,7 +19,7 @@ import {
 import { holdersInYear } from "../../workers/sync/src/history/parse.js";
 
 const block = (id, label, inner, hint = "") =>
-  `<section class="stack-sm" aria-labelledby="h-${id}"><h2 class="label" id="h-${id}">${esc(label)}</h2>${inner}${hint ? `<p class="hint">${hint}</p>` : ""}</section>`;
+  `<section class="stack-sm section-block" aria-labelledby="h-${id}"><h2 id="h-${id}">${esc(label)}</h2>${inner}${hint ? `<p class="hint">${hint}</p>` : ""}</section>`;
 const rowsCard = (rows, empty) => (rows ? `<div class="card">${rows}</div>` : `<p class="small secondary">${empty}</p>`);
 const listCard = (rows, empty, cls = "plain-list") => (rows ? `<ul class="card ${cls}">${rows}</ul>` : `<p class="small secondary">${empty}</p>`);
 const FEDERAL_FISCAL = `<a class="inline-link" href="/finances/">Federal finances by presidential term</a>`;

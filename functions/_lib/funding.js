@@ -2,6 +2,7 @@
 // Facts side by side, never cause and effect: every number says what it is,
 // what period it covers and where it comes from, and nothing here says or implies
 // that money caused a vote. No individual donor is ever named.
+import { breakdownBar } from "./charts.js";
 import { esc, safeUrl, fmtDate } from "./render.js";
 import { INDUSTRIES } from "../../workers/sync/src/funding/industry.js";
 import { currentCycle } from "../../workers/sync/src/funding/fec.js";
@@ -234,7 +235,7 @@ export function fundingTab(official, f, base) {
     const rows = side(so);
     const sum = rows.reduce((s, x) => s + x.total, 0);
     const hidden = rows.filter(undisclosed).reduce((s, x) => s + x.total, 0);
-    return `<div class="stack-xs"><h4 class="money-sub">${label}: ${money(sum)}</h4>${
+    return `<div class="stack-xs"><div class="stat"><div class="stat-label">${label}</div><div class="stat-num">${money(sum)}</div></div>${
       rows.length
         ? `<ul class="plain-list money-list">${rows.slice(0, 5).map((x) => row(spenderLabel(x), money(x.total))).join("")}</ul>${rows.length > 5 ? `<p class="hint">And ${rows.length - 5} more.</p>` : ""}${
             hidden ? `<p class="hint">${money(hidden)} of this came from groups whose donors are not disclosed.</p>` : ""
@@ -270,9 +271,7 @@ export function fundingTab(official, f, base) {
     ["The candidate (own money and loans)", t.self_funding],
     ["Other (transfers, refunds, interest)", t.other],
   ];
-  const breakdown = `<ul class="plain-list money-list">${parts
-    .map(([label, v]) => row(esc(label), `${money(v)} <span class="secondary">${pct(v, t.receipts)}</span>`))
-    .join("")}</ul>`;
+  const breakdown = breakdownBar(parts.map(([label, value]) => ({ label, value })), { total: t.receipts, format: money, label: "Where the money came from" });
   const avg = f.avg && f.avg.n > 1
     ? `<p class="hint">For comparison, the average of the ${f.avg.n} ${official.chamber === "us-senate" ? "senators" : "House members"} with ${span} filings loaded: raised ${money(f.avg.receipts)}; PACs ${Math.round(100 * (f.avg.pac_share || 0))}% of money raised; small donors ${Math.round(100 * (f.avg.small_share || 0))}%; cash on hand ${money(f.avg.cash)}.${official.chamber === "us-senate" ? " A senator's fundraising varies with where they are in a six-year term." : ""}</p>`
     : "";
@@ -283,32 +282,31 @@ export function fundingTab(official, f, base) {
 
   return `
 ${cycleNav(base, f)}
+<section class="card hero-stat">
+  <p class="label">Raised · ${span}</p>
+  <p class="hero-num">${money(t.receipts)}</p>
+  <p class="small secondary">Spent ${money(t.disbursements)} · Cash on hand ${money(t.cash_on_hand)}${t.coverage_end ? ` as of ${fmtDate(t.coverage_end)}` : ""}</p>
+</section>
 ${intro}
-<section class="card stack-sm">
-  <h3 class="label">Top PAC contributors</h3>
-  ${pacs}
-</section>
-<section class="card stack-sm">
-  <h3 class="label">Outside spending for and against</h3>
-  ${outside}
-</section>
-<section class="card stack-sm">
-  <h3 class="label">Top contributing industries (approximate)</h3>
-  ${industries}
-</section>
-<section class="card stack-sm">
-  <h3 class="label">Totals</h3>
-  <div class="grid-2">
-    <div class="stat"><div class="stat-num">${money(t.receipts)}</div><div class="stat-label">Raised</div></div>
-    <div class="stat"><div class="stat-num">${money(t.disbursements)}</div><div class="stat-label">Spent</div></div>
-  </div>
-  <p class="small">Cash on hand: <strong>${money(t.cash_on_hand)}</strong>${t.coverage_end ? ` as of ${fmtDate(t.coverage_end)}` : ""}.</p>
-  <h4 class="money-sub">Where the money came from</h4>
+<section class="card stack">
+  <h3>Where it came from</h3>
   ${breakdown}
   ${avg}
 </section>
 <section class="card stack-sm">
-  <h3 class="label">Donors' employers</h3>
+  <h3>Top PACs</h3>
+  ${pacs}
+</section>
+<section class="card stack-sm">
+  <h3>Outside spending for and against</h3>
+  ${outside}
+</section>
+<section class="card stack-sm">
+  <h3>Top contributing industries <span class="secondary small">(approximate)</span></h3>
+  ${industries}
+</section>
+<section class="card stack-sm">
+  <h3>Donors' employers</h3>
   ${employers}
 </section>
 <p class="hint">Source: Federal Election Commission${fecLink ? ` (<a class="tap" href="${esc(fecLink)}" target="_blank" rel="noopener">${esc(official.name)} at the FEC ↗</a>)` : ""}, ${span}. Read ${fmtDate(f.progress.done_at)}. Federal law bars using contributor information from FEC reports to ask for contributions or for commercial purposes; ThePillory shows totals only and has no donor export. <a class="tap" href="${METHOD}">Methodology</a></p>`;

@@ -16,6 +16,7 @@ import {
   billRows, meetingRows, executiveRows, platformRows, moneyRows,
 } from "./topics.js";
 import { yearBar } from "./history.js";
+import { icon } from "./icons.js";
 import { INDUSTRIES } from "../../workers/sync/src/funding/industry.js";
 
 const BACK = ["Topics", "/topics/"];
@@ -28,7 +29,7 @@ function sideBySide() {
 }
 
 const block = (id, label, inner, hint = "") =>
-  `<section class="stack-sm" aria-labelledby="h-${id}"><h2 class="label" id="h-${id}">${esc(label)}</h2>${inner}${hint ? `<p class="hint">${hint}</p>` : ""}</section>`;
+  `<section class="stack-sm section-block" aria-labelledby="h-${id}"><h2 id="h-${id}">${esc(label)}</h2>${inner}${hint ? `<p class="hint">${hint}</p>` : ""}</section>`;
 const list = (rows, empty) => (rows ? `<ul class="card plain-list topic-list">${rows}</ul>` : `<p class="small secondary">${esc(empty)}</p>`);
 
 function industriesLine(topic) {
@@ -78,6 +79,7 @@ export async function topicPage(env, slug, url = null) {
   const section = (id, label, v, render, empty, hint = "") => (v === FAILED ? sectionError(label) : block(id, label, list(v.length ? render(v) : "", empty), hint));
   const main = `
 <header class="page-head stack-xs">
+  <span class="topic-head-icon">${icon(slug)}</span>
   <p class="label">Topic</p>
   <h1>${esc(t.name)}</h1>
   <p class="subtitle">${esc(t.about)}</p>
@@ -173,6 +175,7 @@ export async function placeTopicPage(env, place, c, slug, url = null) {
   const main = `
 ${breadcrumb([["United States", "/explore/"], [place.name, `/explore/${place.st.toLowerCase()}/`], [c.name, placeHref(place.st, c.slug)], [t.name, null]])}
 <header class="page-head stack-xs">
+  <span class="topic-head-icon">${icon(slug)}</span>
   <p class="label">Topic · ${esc(c.name)}</p>
   <h1>${esc(t.name)} in ${esc(c.name)}</h1>
   <p class="subtitle">${esc(t.about)}</p>

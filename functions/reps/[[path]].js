@@ -26,6 +26,12 @@ import {
 
 const BODY = Object.fromEntries(BODIES.map((b) => [b.slug, b]));
 
+/** "Test Representative Gamma" -> "TG": the first and last name's initials. */
+function initials(name) {
+  const parts = String(name || "").replace(/,?\s+(Jr|Sr|II|III|IV)\.?$/, "").split(/\s+/).filter((w) => /^[A-Za-z]/.test(w));
+  return parts.length ? (parts[0][0] + (parts.length > 1 ? parts[parts.length - 1][0] : "")).toUpperCase() : "";
+}
+
 function who(o) {
   // Party is plain text, identical styling for every party.
   return [o.office, o.district, o.party ? `Party: ${o.party}` : null].filter(Boolean).join(" · ");
@@ -211,12 +217,15 @@ async function profile(env, slug, url, request) {
   const photo = safeUrl(o.photo_url);
   const head = `
 <header class="page-head rep-head">
-  ${photo ? `<img class="rep-photo" src="${esc(photo)}" alt="Official photo of ${esc(o.name)}" width="72" height="88" loading="lazy" onerror="this.remove()" />` : ""}
+  ${photo
+    ? `<img class="rep-photo" src="${esc(photo)}" alt="Official photo of ${esc(o.name)}" width="88" height="88" loading="lazy" onerror="this.remove()" />`
+    : `<span class="rep-initials" aria-hidden="true">${esc(initials(o.name))}</span>`}
   <div class="stack-sm">
     <p class="label">${LEVEL_NAME[o.level]} · ${CHAMBER_NAME[o.chamber]}</p>
     <h1>${esc(o.name)}</h1>
     <p class="secondary">${esc(who(o))}</p>
     ${body ? `<div class="chips">${body.chip}</div>` : ""}
+    ${safeUrl(o.website) ? `<div class="chips"><a class="chip chip--tap" href="${esc(o.website)}" target="_blank" rel="noopener">Official site ↗</a></div>` : ""}
   </div>
 </header>`;
 

@@ -16,6 +16,7 @@
 //   Take part (Calaveras comment deadlines, contacting your reps);
 //   Communities (Calaveras, live; the county waitlist with real counts);
 //   Understand (explainers).
+import { icon } from "./_lib/icons.js";
 import { page, esc, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "./_lib/render.js";
 import { listMeetings, pacificNow, addDays, deadlineParts, meetingHref, when } from "./_lib/meetings.js";
 import { districtsFromCookie, describe, STATE_NAME } from "./_lib/districts.js";
@@ -106,11 +107,13 @@ function communities(env, counts, msg, error) {
   return `
 <section class="brief-section" id="communities" aria-labelledby="h-communities">
   <div class="section-head"><h2 class="label" id="h-communities">Communities</h2></div>
-  <a class="card community-card stack-sm" href="/calaveras/">
-    <div class="card-top"><span class="label">California</span><span class="live-tag">Live</span></div>
-    <h3>Calaveras County</h3>
-    <p class="small secondary">County meetings and agendas, comment deadlines, and every recorded vote by the officials who represent the county.</p>
-    <span class="inline-link">Open the Calaveras briefing</span>
+  <a class="card community-card icon-row" href="/calaveras/">
+    <span class="icon-badge">${icon("community")}</span>
+    <div class="stack-xs">
+      <h3>Calaveras County, CA</h3>
+      <p class="small secondary">Meetings, agenda watch, comment deadlines, and every recorded vote by the officials who represent the county.</p>
+    </div>
+    <span class="live-tag">Live</span>
   </a>
   <div class="card stack-sm">
     <h3>Bring ThePillory to your county</h3>
@@ -275,7 +278,7 @@ async function hub(env, request, url, d) {
   const electionsLate = elections === FAILED || !elections.election || daysUntil(elections.election, start.slice(0, 10)) == null;
   const main = `
 <header class="hub-head stack-sm">
-  <h1 class="hub-title">Know what your government is doing. Then take part.</h1>
+  <h1 class="hub-title">Know what your government is doing. <span class="hub-title-soft">Then take part.</span></h1>
   <p class="hub-sub">Votes, bills, and meetings in plain language, measured against the Constitution. Built on evidence, open to every point of view.</p>
 </header>
 ${usMap(index, waiting === FAILED ? { county: {}, state: {} } : waiting)}
