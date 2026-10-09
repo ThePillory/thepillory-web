@@ -133,6 +133,10 @@ class LoaderTests(unittest.TestCase):
         self.assertEqual((new_votes, new_positions), (1, 1))
         self.assertEqual(L.lit("O'Neil"), "'O''Neil'")
 
+    def test_sign_in_can_keep_cookies(self):
+        # A helper named `http` once hid the http module, and sign-in failed before any request.
+        self.assertTrue(hasattr(L.http, "cookiejar"))
+
     def test_the_signed_in_list_and_which_sessions(self):
         page = """<h2 class="heading">Texas</h2><ul>
           <li><a href="https://data.openstates.org/csv/latest/tx_88_csv_Old1.zip">

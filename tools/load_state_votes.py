@@ -147,7 +147,7 @@ def kinds_of(value):
     return re.findall(r"[a-z][a-z-]*", (value or "").lower())
 
 
-def http(u):
+def is_http(u):
     return isinstance(u, str) and re.match(r"^https?://", u) is not None
 
 
@@ -264,11 +264,11 @@ def build(st, session, tables, officials):
 
     bill_source = {}
     for s in tables["bill_sources"]:
-        if http(s.get("url")) and s["bill_id"] not in bill_source:
+        if is_http(s.get("url")) and s["bill_id"] not in bill_source:
             bill_source[s["bill_id"]] = s["url"]
     vote_source = {}
     for s in tables["vote_sources"]:
-        if http(s.get("url")) and s["vote_event_id"] not in vote_source:
+        if is_http(s.get("url")) and s["vote_event_id"] not in vote_source:
             vote_source[s["vote_event_id"]] = s["url"]
     counts = defaultdict(list)
     for c in tables["vote_counts"]:
