@@ -38,6 +38,8 @@ def fake_zip(folder):
             {"id": "ocd-bill/b3", "identifier": "HB 3", "title": "No source.", "classification": "['bill']", "subject": "[]",
              "session_identifier": "89", "jurisdiction": "Texas", "organization_classification": "lower"},
         ]),
+        # Companion bills, after the bills file: never read as the bills.
+        f"{base}_related_bills.csv": table([{"id": "r1", "bill_id": "ocd-bill/b1", "related_bill_id": "ocd-bill/b2", "identifier": "SB 2", "legislative_session": "89", "relation_type": "companion"}]),
         f"{base}_bill_sources.csv": table([
             {"id": "1", "bill_id": "ocd-bill/b1", "url": "https://capitol.example.gov/HB1", "note": ""},
             {"id": "2", "bill_id": "ocd-bill/b2", "url": "https://capitol.example.gov/SB2", "note": ""},
@@ -133,6 +135,10 @@ class LoaderTests(unittest.TestCase):
         self.assertEqual((new_votes, new_positions), (1, 1))
         self.assertEqual(L.lit("O'Neil"), "'O''Neil'")
 
+    def test_sign_in_can_keep_cookies(self):
+        # A helper named `http` once hid the http module, and sign-in failed before any request.
+        self.assertTrue(hasattr(L.http, "cookiejar"))
+
     def test_the_signed_in_list_and_which_sessions(self):
         page = """<h2 class="heading">Texas</h2><ul>
           <li><a href="https://data.openstates.org/csv/latest/tx_88_csv_Old1.zip">
@@ -146,6 +152,41 @@ class LoaderTests(unittest.TestCase):
         self.assertEqual([(x["st"], x["session"], x["updated"]) for x in links][:2], [("TX", "88", "2023-06-27"), ("TX", "89", "2025-08-05")])
         self.assertEqual([x["session"] for x in L.choose(links, ["TX"], 2025)], ["89", "892"])
         self.assertEqual([x["session"] for x in L.choose(links, ["NY", "TX"], 2025)], ["2025-2026", "89", "892"])
+
+
+class LinkingTests(unittest.TestCase):
+    def test_a_vote_linked_through_its_bill_action(self):
+        tables = {
+            "bills": [{"id": "ocd-bill/b1", "identifier": "HB 1", "title": "T", "organization_classification": "lower"}],
+            "bill_sources": [{"bill_id": "ocd-bill/b1", "url": "https://capitol.example.gov/HB1"}],
+            "bill_actions": [{"id": "act-1", "bill_id": "ocd-bill/b1"}],
+            "votes": [
+                {"id": "ocd-vote/1", "bill_id": "", "bill_action_id": "act-1", "motion_text": "Passage", "motion_classification": "['passage']",
+                 "start_date": "2025-04-01", "result": "pass", "organization_id": ""},
+                {"id": "ocd-vote/2", "bill_id": "ocd-bill/elsewhere", "bill_action_id": "", "motion_text": "Passage", "motion_classification": "[]",
+                 "start_date": "2025-04-01", "result": "pass", "organization_id": ""},
+            ],
+            "vote_people": [], "vote_counts": [], "vote_sources": [], "organizations": [],
+        }
+        rows = L.build("TX", "89", tables, {})
+        self.assertEqual([v["id"] for v in rows["votes"]], ["tx-ocd-vote/1"])
+        self.assertEqual(rows["stats"]["votes_bill_not_in_file"], 1)
+        self.assertEqual(rows["stats"]["sample_missing_bill_id"], "ocd-bill/elsewhere")
+
+    def test_table_names(self):
+        self.assertEqual(L.table_kind("tx/89R/tx_89R_bills.csv"), "bills")
+        self.assertEqual(L.table_kind("tx/89R/tx_89R_related_bills.csv"), "related_bills")
+        self.assertEqual(L.table_kind("ny/2025-2026/ny_2025-2026_vote_people.csv"), "vote_people")
+        self.assertEqual(L.table_kind("tx_89R_related_bills.csv"), "related_bills")
+        self.assertEqual(L.table_kind("tx/89R/README"), None)
+
+    def test_a_session_label_without_a_year(self):
+        links = [
+            {"st": "IL", "session": "103rd", "label": "103rd General Assembly", "updated": "2025-01-14", "url": "a"},
+            {"st": "IL", "session": "104th", "label": "104th General Assembly", "updated": "2026-10-08", "url": "b"},
+            {"st": "IL", "session": "102nd", "label": "102nd General Assembly", "updated": "2023-01-10", "url": "c"},
+        ]
+        self.assertEqual([x["session"] for x in L.choose(links, ["IL"], 2025)], ["104th"])
 
 
 if __name__ == "__main__":
