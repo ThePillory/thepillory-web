@@ -1,52 +1,21 @@
-# TEMPORARY research probe 2 (removed before merge): can the bulk session files be
-# listed and downloaded without signing in? If so, measure a few.
-import csv, io, json, os, re, time, urllib.request, zipfile
-OUT = "tmp-research/out"; os.makedirs(OUT, exist_ok=True)
+# TEMPORARY research probe 3 (removed before merge): the sign-in form's fields
+# (GET only, no credentials), and what the session CSV page links to.
+import re, urllib.request, http.cookiejar
+OUT = "tmp-research/out"
 UA = {"User-Agent": "ThePillory/1.0 (+https://thepillory.co; civic records)"}
+cj = http.cookiejar.CookieJar(); op = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
 log = []
 def note(*a):
     s = " ".join(str(x) for x in a); print(s, flush=True); log.append(s)
-def get(url):
-    with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=300) as r:
-        return r.read()
-keys = []
-for url in ["https://data.openstates.org/?list-type=2&prefix=csv/latest/&max-keys=1000",
-            "https://data.openstates.org/?prefix=csv/latest/",
-            "https://s3.amazonaws.com/data.openstates.org/?list-type=2&prefix=csv/latest/",
-            "https://data.openstates.org/csv/latest/",
-            "https://data.openstates.org/?list-type=2&prefix=json/latest/&max-keys=50"]:
+for url in ["https://open.pluralpolicy.com/accounts/login/?next=/data/session-csv/", "https://open.pluralpolicy.com/accounts/signup/"]:
     try:
-        b = get(url).decode("utf-8", "replace")
-        found = re.findall(r"<Key>([^<]+)</Key>", b)
-        note("LIST", url, len(b), "keys", len(found), b[:300].replace("\n", " "))
-        if found and not keys and "csv" in url: keys = found
-        token = re.search(r"<NextContinuationToken>([^<]+)<", b)
-        while token and "list-type=2" in url and "csv" in url:
-            b = get(url + "&continuation-token=" + urllib.parse.quote(token.group(1))).decode()
-            more = re.findall(r"<Key>([^<]+)</Key>", b); keys += more; token = re.search(r"<NextContinuationToken>([^<]+)<", b)
+        r = op.open(urllib.request.Request(url, headers=UA), timeout=60); h = r.read().decode("utf-8", "replace")
+        note("PAGE", url, r.status, r.geturl(), len(h))
+        for f in re.findall(r"<form[^>]*>.*?</form>", h, re.S):
+            note("  FORM", re.search(r"<form[^>]*>", f).group(0))
+            for i in re.findall(r"<(?:input|button|select)[^>]*>", f): note("    ", re.sub(r'value="[A-Za-z0-9]{30,}"', 'value="…"', i))
+        for a in re.findall(r'href="([^"]*(?:github|google|oauth|social|provider)[^"]*)"', h): note("  LINK", a)
     except Exception as e:
-        note("LIST FAIL", url, repr(e))
-open(f"{OUT}/csv-keys.txt", "w").write("\n".join(keys))
-note("CSV KEYS", len(keys))
-for k in keys[:5]: note("  ", k)
-# Measure the newest regular session for a few big states.
-measured = {}
-for st in ["TX", "NY", "FL", "CA", "NH", "PA"]:
-    ks = sorted(k for k in keys if k.split("/")[-1].startswith(st + "_") and k.endswith(".zip"))
-    note("STATE", st, len(ks), ks[-6:])
-    pick = [k for k in ks if re.search(r"_(2025|2025-2026|20252026|89|2025_2026|2025\d{4}|119|2025A?)_", k)] or ks[-1:]
-    for k in pick[:2]:
-        url = "https://data.openstates.org/" + k
-        try:
-            b = get(url)
-        except Exception as e:
-            note("ZIP FAIL", url, repr(e)); continue
-        zf = zipfile.ZipFile(io.BytesIO(b)); info = {"zip_bytes": len(b), "files": {}}
-        for n in zf.namelist():
-            d = zf.read(n); info["files"][n] = {"bytes": len(d), "lines": d.count(b"\n")}
-            if n.endswith(".csv"):
-                r = csv.reader(io.StringIO(d[:30000].decode("utf-8", "replace")))
-                info["files"][n]["header"] = next(r, []); info["files"][n]["sample"] = [next(r, []) for _ in range(2)]
-        measured[k] = info; note("MEASURED", k, len(b)); time.sleep(2)
-json.dump(measured, open(f"{OUT}/measured.json", "w"), indent=1)
-open(f"{OUT}/log2.txt", "w").write("\n".join(log))
+        note("FAIL", url, repr(e))
+note("COOKIES", [c.name for c in cj])
+open(f"{OUT}/log3.txt", "w").write("\n".join(log))
