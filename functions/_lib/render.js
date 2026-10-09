@@ -168,13 +168,24 @@ export function guard(handler, { tab = null } = {}) {
 // Responses marked private or no-store (personal pages, a failed section, an
 // error) are never stored.
 
-export async function edgeCached(context, seconds, render) {
+export async function edgeCached(context, seconds, render, { variant = "", clientCache = "" } = {}) {
   const { request } = context;
   const cache = typeof caches !== "undefined" ? caches.default : null;
-  if (!cache || request.method !== "GET") return render();
-  const key = new Request(new URL(request.url).toString(), { method: "GET" });
+  // A page with versions (the home page, one per state) is kept once per
+  // version, and browsers are told not to keep it, so a visitor who changes
+  // state never sees the version before.
+  const toClient = (res) => {
+    if (!clientCache) return res;
+    const r = new Response(res.body, res);
+    r.headers.set("Cache-Control", clientCache);
+    return r;
+  };
+  if (!cache || request.method !== "GET") return toClient(await render());
+  const keyUrl = new URL(request.url);
+  if (variant) keyUrl.searchParams.set("__variant", variant);
+  const key = new Request(keyUrl.toString(), { method: "GET" });
   const hit = await cache.match(key).catch(() => null);
-  if (hit) return hit;
+  if (hit) return toClient(hit);
   const res = await render();
   const cc = res.headers.get("Cache-Control") || "";
   if (res.status !== 200 || /private|no-store|no-cache/.test(cc)) return res;
@@ -182,5 +193,5 @@ export async function edgeCached(context, seconds, render) {
   out.headers.set("Cache-Control", `public, max-age=${seconds}`);
   const put = cache.put(key, out.clone()).catch((err) => console.error(`edge cache: ${err && err.message}`));
   if (context.waitUntil) context.waitUntil(put);
-  return out;
+  return toClient(out);
 }

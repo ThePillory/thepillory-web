@@ -17,6 +17,7 @@
 // vintage already shows the next Congress's districts, so the vintage is
 // chosen by name. When the 120th Congress starts (January 2027), set
 // CENSUS_VINTAGE to the vintage whose layer is "120th Congressional Districts".
+import { stateCookie } from "../_lib/visitor-state.js";
 import { STATE_BY_FIPS, CALAVERAS_FIPS, cleanDistricts, describe, legislativeSeats, COOKIE } from "../_lib/districts.js";
 import { page, esc } from "../_lib/render.js";
 
@@ -226,7 +227,11 @@ export async function onRequestPost({ request, env, waitUntil }) {
   let result = pick ? { found: true, districts: cleanDistricts(Object.fromEntries(new URLSearchParams(String(pick)))) } : await lookup(env, request, form.get("q"));
   if (result.found && result.districts) {
     if (waitUntil && !pick) waitUntil(countLookup(env, result));
-    return new Response(null, { status: 303, headers: { Location: `${url.origin}${next}`, "Set-Cookie": cookieHeader(result.districts), "Cache-Control": "no-store" } });
+    // New districts replace a state picked earlier on the home page.
+    const headers = new Headers({ Location: `${url.origin}${next}`, "Cache-Control": "no-store" });
+    headers.append("Set-Cookie", cookieHeader(result.districts));
+    headers.append("Set-Cookie", stateCookie(null));
+    return new Response(null, { status: 303, headers });
   }
   if (result.choices) return choicePage(result, next);
   return back("lookup=notfound");

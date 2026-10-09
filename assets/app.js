@@ -219,6 +219,8 @@
     Object.keys(d).forEach(function (k) { parts.push(k + "=" + encodeURIComponent(d[k])); });
     document.cookie = COOKIE + "=" + encodeURIComponent(parts.join("&")) + "; Path=/; Max-Age=31536000; SameSite=Lax" +
       (location.protocol === "https:" ? "; Secure" : "");
+    // New districts replace a state picked earlier on the home page.
+    document.cookie = "pillory_state=; Path=/; Max-Age=0; SameSite=Lax";
   }
 
   // Shared pages (kept at the edge for everyone) show links like "Your ballot"

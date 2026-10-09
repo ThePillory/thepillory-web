@@ -8,8 +8,10 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 
 ### Tab 1: Home (`/`)
 - **The hub**, at thepillory.co itself, for every visitor (the old `/?hub=1` redirects here):
+  - "Showing [State] · Change" when the visitor's state is known (picked, from saved districts, or Cloudflare's approximate state for the connection; never stored): Change > a state picker (`POST /api/state`), and "Use my connection's location instead" after picking
   - Headline and subtitle
-  - U.S. map (live community states navy, waitlist states light navy; taps only, no zooming or dragging): a state > `/explore/<st>/`; small-state buttons; "1 live community · [#] counties waiting" (real counts); Explore the full map > Explore
+  - U.S. map (the visitor's state "You're here", mid blue with an outline; live community states navy, waitlist states light navy; taps only, no zooming or dragging): a state > `/explore/<st>/`; small-state buttons; "1 live community · [#] counties waiting" (real counts); Explore the full map > Explore
+  - Your state (when known), first: In Congress (U.S. Senators > rep pages, House members > `/reps/?state=XX`, the senators' latest final-passage votes > Bill); statewide (Governor > rep page, statewide offices); the legislature (members by chamber; recent bills once its votes are loaded > Bill, or "coming soon" with Join the list for that state > #communities); statewide ballot measures for the next election (California: each measure > Measure; elsewhere "not on ThePillory yet", the state's election office via USA.gov, Join the list); Find your reps > #find; State page > `/explore/<st>/`
   - Find your representatives: address or ZIP (`/api/districts`; nothing stored; district IDs kept in the browser)
   - Your briefing link, once your districts are known > `/briefing/`
   - Elections (here, near the top, until Election Day; then after Who represents you): the next election > Election; Your ballot (once your districts are known: your district contests, courts, statewide offices and propositions, local count) > Your ballot; otherwise Find your ballot; How to vote > `/elections/#how-to-vote`
