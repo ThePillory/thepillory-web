@@ -1,0 +1,17 @@
+PAGE https://open.pluralpolicy.com/accounts/login/?next=/data/session-csv/ 200 https://open.pluralpolicy.com/accounts/login/?next=/data/session-csv/ 35651
+  FORM <form class="login" method="POST" action="/accounts/login/">
+     <input type="hidden" name="csrfmiddlewaretoken" value="…">
+     <input type="email" name="login" placeholder="E-mail address" autocomplete="email" required id="id_login">
+     <input type="password" name="password" placeholder="Password" autocomplete="current-password" required id="id_password">
+     <input type="hidden" name="next" value="/data/session-csv/" />
+     <button class="primaryAction" type="submit">
+  LINK /accounts/google/login/?process=login&next=%2Fdata%2Fsession-csv%2F
+  LINK /accounts/github/login/?process=login&next=%2Fdata%2Fsession-csv%2F
+  LINK https://github.com/openstates
+  LINK https://github.com/openstates/issues/issues/new/choose
+PAGE https://open.pluralpolicy.com/accounts/signup/ 200 https://open.pluralpolicy.com/accounts/signup/ 35118
+  LINK /accounts/google/login/?process=login
+  LINK /accounts/github/login/?process=login
+  LINK https://github.com/openstates
+  LINK https://github.com/openstates/issues/issues/new/choose
+COOKIES ['csrftoken']
