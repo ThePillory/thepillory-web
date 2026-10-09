@@ -1,10 +1,18 @@
 // D1 queries for the Pages Functions. Every query only returns rows that carry
 // a source URL (the schema requires one), so nothing unsourced can be shown.
+import { parseChamber, chamberName } from "../../workers/sync/src/states.js";
+import { STATE_NAME } from "./districts.js";
 
 export const LEVEL_ORDER = ["county", "state", "federal"];
 const CHAMBER_ORDER = ["county-board", "ca-assembly", "ca-senate", "ca-executive", "us-house", "us-senate", "us-executive"];
+// Every other state's chambers sort with California's: lower house, upper house, executive.
+const ORDER_OF_TYPE = { lower: "ca-assembly", upper: "ca-senate", legislature: "ca-senate", executive: "ca-executive" };
+const chamberRank = (chamber) => {
+  const p = parseChamber(chamber);
+  return CHAMBER_ORDER.indexOf(p && p.st !== "CA" ? ORDER_OF_TYPE[p.type] : chamber);
+};
 
-export const CHAMBER_NAME = {
+const NAMED_CHAMBERS = {
   "county-board": "Board of Supervisors",
   "ca-assembly": "State Assembly",
   "ca-senate": "State Senate",
@@ -13,6 +21,16 @@ export const CHAMBER_NAME = {
   "us-executive": "Executive Branch",
   "ca-executive": "Executive Branch",
 };
+/** A chamber's name; every state's chambers ("Texas Senate", "Massachusetts House of Representatives") without a list. */
+export const CHAMBER_NAME = new Proxy(NAMED_CHAMBERS, {
+  get(target, key) {
+    if (typeof key !== "string") return undefined;
+    if (key in target) return target[key];
+    const p = parseChamber(key);
+    if (!p) return undefined;
+    return p.type === "executive" ? "Executive Branch" : chamberName(p.st, p.type, STATE_NAME[p.st] || p.st);
+  },
+});
 
 export const TYPE_LABELS = {
   final_passage: "Final passage",
@@ -54,6 +72,29 @@ export async function officialsForBody(db, body) {
   return results;
 }
 
+/**
+ * A list's level: "federal" (Congress), "state" (California: what the pages
+ * have always meant by it) or "state:TX" (another state). Returns the level
+ * and the state (null for Congress) for the filters below.
+ */
+export function parseLevel(level) {
+  if (level === "federal") return { level: "federal", st: null };
+  const m = /^state:([A-Z]{2})$/.exec(String(level || ""));
+  if (m) return { level: "state", st: m[1] };
+  if (level === "state") return { level: "state", st: "CA" };
+  return { level: null, st: null };
+}
+/** Filter and bindings for bill_list rows (alias `l`) at a level. A state row without st was built before migration 0020: California's. */
+export function listScope(level, alias = "l") {
+  const p = parseLevel(level);
+  return { sql: `${alias}.level = ? AND (? IS NULL OR COALESCE(${alias}.st, 'CA') = ?)`, binds: [p.level, p.st, p.st] };
+}
+/** Filter and bindings for votes rows (alias `v`) at a level: a state's votes are in its chambers ('tx-upper', 'ca-senate'). */
+export function voteScope(level, alias = "v") {
+  const p = parseLevel(level);
+  return { sql: `${alias}.level = ? AND (? IS NULL OR substr(${alias}.chamber, 1, 3) = lower(?) || '-')`, binds: [p.level, p.st, p.st] };
+}
+
 export async function voteCounts(db, officialId) {
   // Counted during the sync (official_stats); counted here only before the first build.
   try {
@@ -65,7 +106,7 @@ export async function voteCounts(db, officialId) {
   return db
     .prepare(
       `SELECT COUNT(*) AS total, SUM(CASE WHEN v.vote_type = 'final_passage' THEN 1 ELSE 0 END) AS final
-       FROM vote_positions p JOIN votes v ON v.id = p.vote_id WHERE p.official_id = ?`
+       FROM all_positions p JOIN votes v ON v.id = p.vote_id WHERE p.official_id = ?`
     )
     .bind(officialId)
     .first();
@@ -75,7 +116,7 @@ export async function votesFor(db, officialId, { all = false, limit = 50, offset
   const { results } = await db
     .prepare(
       `SELECT v.*, p.position, p.raw_position, b.bill_number, b.title AS bill_title
-       FROM vote_positions p
+       FROM all_positions p
        JOIN votes v ON v.id = p.vote_id
        LEFT JOIN bills b ON b.id = v.bill_id
        WHERE p.official_id = ? AND (? = 1 OR v.vote_type = 'final_passage')
@@ -105,7 +146,7 @@ export async function votesOnBill(db, billId, officialIds = []) {
         await db
           .prepare(
             `SELECT p.vote_id, p.position, p.raw_position, o.name, o.slug, o.office, o.district
-             FROM vote_positions p JOIN officials o ON o.id = p.official_id
+             FROM all_positions p JOIN officials o ON o.id = p.official_id
              WHERE p.vote_id IN (${ids.map(() => "?").join(",")}) AND p.official_id IN (${officialIds.map(() => "?").join(",")})
              ORDER BY o.name`
           )
@@ -131,10 +172,10 @@ export async function billList(db, { level, all = false, limit = BILLS_PER_PAGE,
   try {
     const { results } = await db
       .prepare(
-        `SELECT * FROM bill_list WHERE level = ? ${all ? "" : "AND last_final IS NOT NULL"}
+        `SELECT * FROM bill_list l WHERE ${listScope(level).sql} ${all ? "" : "AND last_final IS NOT NULL"}
          ORDER BY ${order} DESC, bill_id DESC LIMIT ? OFFSET ?`
       )
-      .bind(level, limit + 1, offset)
+      .bind(...listScope(level).binds, limit + 1, offset)
       .all();
     if (results.length || offset || (await summariesBuilt(db))) return { rows: results.slice(0, limit), more: results.length > limit };
   } catch (err) {
@@ -152,11 +193,11 @@ async function billListFromVotes(db, { level, all, limit, offset }) {
          MAX(v.vote_date) AS last_vote,
          MAX(CASE WHEN v.vote_type = 'final_passage' THEN v.vote_date END) AS last_final
        FROM votes v JOIN bills b ON b.id = v.bill_id
-       WHERE v.level = ? ${all ? "" : "AND v.vote_type = 'final_passage'"}
+       WHERE ${voteScope(level).sql} ${all ? "" : "AND v.vote_type = 'final_passage'"}
        GROUP BY v.bill_id
        ORDER BY ${all ? "last_vote" : "last_final"} DESC, b.id DESC LIMIT ? OFFSET ?`
     )
-    .bind(level, limit + 1, offset)
+    .bind(...voteScope(level).binds, limit + 1, offset)
     .all();
   return { rows: results.slice(0, limit), more: results.length > limit, provisional: true };
 }
@@ -177,16 +218,18 @@ export async function recentFinalVotes(db, { level = null, limit = 3, offset = 0
       `SELECT v.*, b.bill_number, b.title AS bill_title FROM votes v
        LEFT JOIN bills b ON b.id = v.bill_id
        WHERE v.vote_type = 'final_passage' AND (? IS NULL OR v.level = ?)
-         AND EXISTS (SELECT 1 FROM vote_positions p WHERE p.vote_id = v.id AND p.official_id IN (${ids}))
+         AND (? IS NULL OR substr(v.chamber, 1, 3) = lower(?) || '-')
+         AND (EXISTS (SELECT 1 FROM vote_positions p WHERE p.vote_id = v.id AND p.official_id IN (${ids}))
+           OR EXISTS (SELECT 1 FROM state_positions sp JOIN officials so ON so.k = sp.member_k WHERE sp.vote_k = v.k AND so.id IN (${ids})))
        ORDER BY v.vote_date DESC, v.id DESC LIMIT ? OFFSET ?`
     )
-    .bind(level, level, ...officialIds, limit + 1, offset)
+    .bind(parseLevel(level).level, parseLevel(level).level, parseLevel(level).st, parseLevel(level).st, ...officialIds, ...officialIds, limit + 1, offset)
     .all();
   const rows = results.slice(0, limit);
   if (rows.length) {
     const { results: pos } = await db
       .prepare(
-        `SELECT p.vote_id, p.position, p.raw_position, o.name, o.slug, o.office, o.district FROM vote_positions p
+        `SELECT p.vote_id, p.position, p.raw_position, o.name, o.slug, o.office, o.district FROM all_positions p
          JOIN officials o ON o.id = p.official_id
          WHERE p.vote_id IN (${rows.map(() => "?").join(",")}) AND p.official_id IN (${ids}) ORDER BY o.name`
       )
@@ -232,7 +275,7 @@ export async function officialsWhere(db, where) {
   const results = await withVoteCounts(db, (counts) => `SELECT o.*${counts.select} FROM officials o ${counts.join} WHERE ${where.sql}`, where.binds);
   return results.sort(
     (a, b) =>
-      CHAMBER_ORDER.indexOf(b.chamber) - CHAMBER_ORDER.indexOf(a.chamber) ||
+      chamberRank(b.chamber) - chamberRank(a.chamber) ||
       String(a.district || "").localeCompare(String(b.district || ""), undefined, { numeric: true }) ||
       a.name.localeCompare(b.name)
   );

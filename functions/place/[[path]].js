@@ -18,7 +18,8 @@ import { topicGrid, placeTopicsHref } from "../_lib/topics.js";
 import { CURRENT, loadElection, onTheBallot, statewideRow, contestRow, measureRow, courtRow, courtGroups } from "../_lib/elections.js";
 import { pickYear, yearBar } from "../_lib/history.js";
 import { placePastYear, topicPastYear } from "../_lib/history-pages.js";
-import { LIVE, loadPlace, officialsFor, allIds, repRow, executiveRows, breadcrumb, districtLabel, districtHref, placeHref } from "../_lib/geo.js";
+import { LIVE, loadPlace, officialsFor, allIds, repRow, executiveRows, breadcrumb, districtLabel, districtHref, placeHref, loadDistrictNames } from "../_lib/geo.js";
+import { chamberIds, districtKey } from "../../workers/sync/src/states.js";
 
 const WAITLIST_MESSAGES = {
   joined: "Thank you. We'll email you only when ThePillory launches in this county.",
@@ -31,8 +32,15 @@ const WAITLIST_MESSAGES = {
 /** The district a county is entirely in, or else the first listed (the data can't say which covers more). */
 const mainDistrict = (pairs) => ((pairs || []).find((p) => p[1]) || (pairs || [])[0] || [null])[0];
 
-function districtNotes(pairs, layer, place) {
-  return (pairs || []).map(([id, full]) => ({ id, full: !!full, label: districtLabel(layer, id, place), href: districtHref(layer, id, place) }));
+// Each district a county overlaps: its map id, the key legislators are matched on
+// (districtKey of its Census name), its label and page.
+function districtNotes(pairs, layer, place, names = null) {
+  const ids = chamberIds(place.st);
+  const type = layer === "sldu" ? (ids.lower ? "upper" : "legislature") : "lower";
+  return (pairs || []).map(([id, full]) => {
+    const name = names && names[layer] && names[layer][id];
+    return { id, name, key: layer === "cd" ? id : districtKey(place.st, type, name || id), full: !!full, label: districtLabel(layer, id, place, names), href: districtHref(layer, id, place) };
+  });
 }
 
 // A county page is the same for every visitor: kept at the edge for a few minutes.
@@ -62,10 +70,11 @@ async function placePage({ request, env, params }) {
 
   const live = LIVE[c.fips];
   const db = env.DB;
+  const names = await loadDistrictNames(env, request, place.st);
   const emptyOfficials = { senators: [], house: [], upper: [], lower: [], county: [], executive: [], stateExecutive: [] };
   // Each section loads on its own: one that can't load shows a short note.
   const oLoaded = db
-    ? await loadSection("place officials", () => officialsFor(db, place.st, { cd: c.cd.map((p) => p[0]), sldu: c.sldu.map((p) => p[0]), sldl: c.sldl.map((p) => p[0]), county: c.fips }), emptyOfficials)
+    ? await loadSection("place officials", () => officialsFor(db, place.st, { cd: c.cd.map((p) => p[0]), sldu: c.sldu.map((p) => p[0]), sldl: c.sldl.map((p) => p[0]), county: c.fips }, names), emptyOfficials)
     : emptyOfficials;
   const o = oLoaded === FAILED ? emptyOfficials : oLoaded;
   const now = pacificNow();
@@ -89,30 +98,31 @@ async function placePage({ request, env, params }) {
   ${rows.length ? `<div class="card">${rows.join("")}</div>` : `<p class="small secondary">${empty}</p>`}
 </section>`;
   const byDistrict = (layer, officials) =>
-    districtNotes(c[layer], layer, place).map((d) => {
-      const reps = officials.filter((x) => String(x.district_code) === d.id);
+    districtNotes(c[layer], layer, place, names).map((d) => {
+      const reps = officials.filter((x) => String(x.district_code) === d.key);
       const note = d.full ? "" : "covers part of this county";
       return reps.length
         ? reps.map((r) => repRow(r, note)).join("")
         : `<a class="list-row link-row" href="${d.href}"><div><div class="list-title">${esc(d.label)}</div><div class="list-meta">${note ? `${note} · ` : ""}representative not loaded yet</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>`;
     });
   const countyRows = live ? o.county.map((r) => repRow(r)) : [];
-  const stateRows = place.st === "CA"
-    ? [...executiveRows(o.stateExecutive, { href: "/bodies/ca-executive/", label: "California's other statewide offices" }), ...byDistrict("sldu", o.upper), ...byDistrict("sldl", o.lower)]
-    : [];
+  const stateRows = [
+    ...(place.st === "CA" ? executiveRows(o.stateExecutive, { href: "/bodies/ca-executive/", label: "California's other statewide offices" }) : executiveRows(o.stateExecutive, { href: `/explore/${place.st.toLowerCase()}/#h-statewide`, label: `${place.name}'s other statewide offices` })),
+    ...(place.st === "DC" ? [] : [...byDistrict("sldu", o.upper), ...byDistrict("sldl", o.lower)]),
+  ];
   const federalRows = [...executiveRows(o.executive, { href: "/bodies/us-executive/", label: "The Cabinet" }), ...o.senators.map((r) => repRow(r)), ...byDistrict("cd", o.house)];
   // One compact row per chamber: the district numbers, and whether they cover all or part of the county.
   const districtsLine = ["cd", "sldu", "sldl"]
     .filter((l) => c[l] && c[l].length)
     .map((l) => {
-      const ds = districtNotes(c[l], l, place);
+      const ds = districtNotes(c[l], l, place, names);
       const allPart = ds.every((d) => !d.full);
       const name = l === "cd" ? "Congressional" : place.st === "NE" ? "Legislative" : place.chambers[l];
-      const short = (id) => (id === "0" ? "At large" : /^\d+$/.test(id) ? id : id.toUpperCase());
+      const short = (d) => d.name || (d.id === "0" ? "At large" : /^\d+$/.test(d.id) ? d.id : d.id.toUpperCase());
       return `<div class="stack-xs"><p class="small"><strong>${esc(name)} ${ds.length === 1 ? "district" : "districts"}</strong>${
         ds.length === 1 ? (ds[0].full ? " · the whole county" : " · covers part of this county") : allPart ? " · each covers part of this county" : ""
       }</p><ul class="plain-list district-grid">${ds
-        .map((d) => `<li><a class="chip chip--tap" href="${d.href}" aria-label="${esc(d.label)}${d.full ? "" : ", covers part of this county"}">${esc(short(d.id))}${!allPart && ds.length > 1 && !d.full ? " (part)" : ""}</a></li>`)
+        .map((d) => `<li><a class="chip chip--tap" href="${d.href}" aria-label="${esc(d.label)}${d.full ? "" : ", covers part of this county"}">${esc(short(d))}${!allPart && ds.length > 1 && !d.full ? " (part)" : ""}</a></li>`)
         .join("")}</ul></div>`;
     })
     .join("");
@@ -121,7 +131,9 @@ async function placePage({ request, env, params }) {
   const split = ["cd", "sldu", "sldl"]
     .filter((l) => c[l] && c[l].length > 1 && !c[l].some((p) => p[1]))
     .map((l) => c[l].map(([id]) => districtLabel(l, id, place)).join(" and "));
-  const pick = new URLSearchParams(Object.entries({ st: place.st, cd: mainDistrict(c.cd), su: mainDistrict(c.sldu), sl: mainDistrict(c.sldl), co: c.fips }).filter(([, v]) => v)).toString();
+  // The districts cookie holds a legislative district's Census name ("1st Barnstable"), not the map's id.
+  const asName = (layer, id) => (id && names && names[layer] && names[layer][id]) || id;
+  const pick = new URLSearchParams(Object.entries({ st: place.st, cd: mainDistrict(c.cd), su: asName("sldu", mainDistrict(c.sldu)), sl: asName("sldl", mainDistrict(c.sldl)), co: c.fips }).filter(([, v]) => v)).toString();
   const joined = url.searchParams.get("waitlist");
   const msg = joined === "joined" ? WAITLIST_MESSAGES.joined : "";
   const err = joined && joined !== "joined" ? WAITLIST_MESSAGES[joined] || "" : "";
@@ -191,7 +203,7 @@ ${action}
 ${electionLoaded === FAILED ? sectionError("On the ballot") : ballot}
 ${fold("who", `Who represents ${c.name}`, `${oLoaded === FAILED ? sectionError("") : ""}
   ${group("County", countyRows, live ? "The supervisors appear after the data sync runs." : "County officials aren't on ThePillory yet. County coverage opens when a community launches.")}
-  ${group("State", stateRows, place.st === "CA" ? "State legislators appear after the data sync runs." : `${esc(place.name)}'s governor, statewide offices and state legislators aren't on ThePillory yet.`)}
+  ${group("State", stateRows, `${esc(place.name)}'s governor, statewide offices and state legislators appear after the data sync loads them.`)}
   ${group("Federal", federalRows, "Members of Congress appear after the data sync runs.")}
   <p class="hint">District lines don't follow county lines, so a county can be split between districts.</p>`, { meta: officialCount ? `${officialCount} listed` : "" })}
 ${

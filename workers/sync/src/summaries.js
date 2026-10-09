@@ -7,6 +7,8 @@
 //                   the final action (bill_outcomes), and whether the relevance
 //                   check set it aside as ceremonial or routine.
 //   official_stats  each official's recorded votes, counted.
+//   state_coverage  per state: legislators and statewide officers loaded, bills
+//                   and votes, the dates and sessions they span (docs/states.md).
 //
 // Rebuilt only when something they're computed from changed (the fingerprint),
 // so the step costs one small query on a round with nothing new.
@@ -30,7 +32,7 @@ export async function fingerprint(db) {
     one("SELECT COUNT(*) AS n, MAX(updated_at) AS t FROM bills"),
     one("SELECT COUNT(*) AS n, MAX(checked_at) AS t FROM bill_outcomes"),
     one("SELECT COUNT(*) AS n, MAX(checked_at) AS t, MAX(override_at) AS o FROM bill_relevance"),
-    one("SELECT COUNT(*) AS n FROM officials"),
+    one("SELECT COUNT(*) AS n, SUM(active) AS a FROM officials"),
   ]);
   return JSON.stringify(parts);
 }
@@ -42,11 +44,12 @@ export async function fingerprint(db) {
 const BILL_LIST = `
 INSERT INTO bill_list (bill_id, level, chamber, bill_number, title, session, last_vote, vote_count,
   last_final, final_count, final_vote_id, final_result, final_chamber, yea, nay, present, not_voting,
-  outcome, outcome_date, routine)
+  outcome, outcome_date, routine, st)
 SELECT b.id, b.level, b.chamber, b.bill_number, b.title, b.session, agg.last_vote, agg.vote_count,
   agg.last_final, agg.final_count, lf.id, lf.result, lf.chamber, lf.yea, lf.nay, lf.present, lf.not_voting,
   o.outcome, o.action_date,
-  CASE WHEN r.verdict = 'skip' AND r.override IS NULL THEN 1 ELSE 0 END
+  CASE WHEN r.verdict = 'skip' AND r.override IS NULL THEN 1 ELSE 0 END,
+  CASE WHEN b.level = 'state' THEN upper(substr(b.id, 1, 2)) END
 FROM (
   SELECT bill_id, MAX(vote_date) AS last_vote, COUNT(*) AS vote_count,
     MAX(CASE WHEN vote_type = 'final_passage' THEN vote_date END) AS last_final,
@@ -66,16 +69,53 @@ const BILL_LIST_BASIC = BILL_LIST
   .replace("LEFT JOIN bill_outcomes o ON o.bill_id = b.id\nLEFT JOIN bill_relevance r ON r.bill_id = b.id", "");
 
 // Official stats, a few officials per statement, so no single statement reads
-// more than a few hundred thousand positions.
+// more than a few hundred thousand positions. Positions are in vote_positions
+// (Congress, California) or the compact state_positions (every other state),
+// each read by the member's key.
 const STATS = `
 INSERT OR REPLACE INTO official_stats (official_id, vote_count, final_count, built_at)
-SELECT o.id, COUNT(p.vote_id), COALESCE(SUM(CASE WHEN v.vote_type = 'final_passage' THEN 1 ELSE 0 END), 0), datetime('now')
+SELECT o.id,
+  (SELECT COUNT(*) FROM vote_positions p WHERE p.official_id = o.id)
+    + (SELECT COUNT(*) FROM state_positions sp WHERE o.k IS NOT NULL AND sp.member_k = o.k),
+  (SELECT COUNT(*) FROM vote_positions p JOIN votes v ON v.id = p.vote_id WHERE p.official_id = o.id AND v.vote_type = 'final_passage')
+    + (SELECT COUNT(*) FROM state_positions sp JOIN votes v ON v.k = sp.vote_k WHERE o.k IS NOT NULL AND sp.member_k = o.k AND v.vote_type = 'final_passage'),
+  datetime('now')
 FROM officials o
-LEFT JOIN vote_positions p ON p.official_id = o.id
-LEFT JOIN votes v ON v.id = p.vote_id
-WHERE o.id IN (%IDS%)
-GROUP BY o.id`;
-const STATS_CHUNK = 10;
+WHERE o.id IN (%IDS%)`;
+const STATS_CHUNK = 25;
+
+/** What's loaded for each state (state_coverage): officials, bills, votes, their dates and sessions. */
+export async function buildStateCoverage(db) {
+  const rows = new Map();
+  const at = (st) => {
+    if (!rows.has(st)) rows.set(st, { st, legislators: 0, executives: 0, bills: 0, votes: 0, first_vote: null, last_vote: null, sessions: null });
+    return rows.get(st);
+  };
+  const { results: off } = await db
+    .prepare(
+      `SELECT state AS st, SUM(CASE WHEN chamber GLOB '*-executive' THEN 0 ELSE 1 END) AS legislators, SUM(CASE WHEN chamber GLOB '*-executive' THEN 1 ELSE 0 END) AS executives
+       FROM officials WHERE active = 1 AND level = 'state' AND state IS NOT NULL GROUP BY state`
+    )
+    .all();
+  for (const r of off) Object.assign(at(r.st), { legislators: r.legislators, executives: r.executives });
+  const { results: votes } = await db
+    .prepare("SELECT upper(substr(chamber, 1, 2)) AS st, COUNT(*) AS n, MIN(vote_date) AS first, MAX(vote_date) AS last FROM votes WHERE level = 'state' GROUP BY 1")
+    .all();
+  for (const r of votes) Object.assign(at(r.st), { votes: r.n, first_vote: r.first, last_vote: r.last });
+  const { results: bills } = await db.prepare("SELECT st, COUNT(*) AS n, group_concat(DISTINCT session) AS sessions FROM bill_list WHERE level = 'state' AND st IS NOT NULL GROUP BY st").all();
+  for (const r of bills) Object.assign(at(r.st), { bills: r.n, sessions: r.sessions });
+  const list = [...rows.values()].filter((r) => /^[A-Z]{2}$/.test(r.st));
+  const stmts = [db.prepare("DELETE FROM state_coverage")];
+  for (const r of list) {
+    stmts.push(
+      db
+        .prepare("INSERT INTO state_coverage (st, legislators, executives, bills, votes, first_vote, last_vote, sessions, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))")
+        .bind(r.st, r.legislators, r.executives, r.bills, r.votes, r.first_vote, r.last_vote, r.sessions)
+    );
+  }
+  await db.batch(stmts);
+  return list.length;
+}
 
 export async function buildSummaries(db, { force = false } = {}) {
   const fp = await fingerprint(db);
@@ -97,12 +137,18 @@ export async function buildSummaries(db, { force = false } = {}) {
     await db.prepare(STATS.replace("%IDS%", chunk.map(() => "?").join(","))).bind(...chunk).run();
   }
   await db.prepare("DELETE FROM official_stats WHERE official_id NOT IN (SELECT id FROM officials)").run();
+  let states = 0;
+  try {
+    states = await buildStateCoverage(db);
+  } catch (err) {
+    if (!missing(err)) throw err;
+  }
   const bills = await db.prepare("SELECT COUNT(*) AS n FROM bill_list").first();
   const officials = await db.prepare("SELECT COUNT(*) AS n FROM official_stats").first();
   await setState(db, "summaries_fingerprint", fp);
   return {
     status: "ok",
-    message: `bill list: ${bills.n} bills; vote counts: ${officials.n} officials${basic ? " (without outcomes or relevance checks, not loaded yet)" : ""}; ${Math.round((Date.now() - started) / 100) / 10}s`,
+    message: `bill list: ${bills.n} bills; vote counts: ${officials.n} officials; coverage: ${states} states${basic ? " (without outcomes or relevance checks, not loaded yet)" : ""}; ${Math.round((Date.now() - started) / 100) / 10}s`,
   };
 }
 

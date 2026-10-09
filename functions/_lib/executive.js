@@ -9,7 +9,8 @@ import { orderHref } from "./orders.js";
 
 export { OUTCOME_LABEL };
 export const EXEC_CHAMBERS = ["us-executive", "ca-executive"];
-export const isExecutive = (o) => !!o && EXEC_CHAMBERS.includes(o.chamber);
+// Every state's statewide officers ('tx-executive', …) are executive officials too.
+export const isExecutive = (o) => !!o && (EXEC_CHAMBERS.includes(o.chamber) || /^[a-z]{2}-executive$/.test(String(o.chamber || "")));
 export const isPresident = (o) => o && o.chamber === "us-executive" && o.rank === 1;
 export const isGovernor = (o) => o && o.chamber === "ca-executive" && o.rank === 1;
 

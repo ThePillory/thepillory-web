@@ -1,0 +1,74 @@
+# Loads state bills and roll call votes from Open States' bulk session files
+# (tools/load_state_votes.py; see docs/states.md). Two kinds of run:
+#
+#   By hand (Actions -> Load state votes -> Run workflow): "measure" downloads
+#   the files and reports the bills, votes, positions and database size a load
+#   would add, writing nothing; "load" writes them to D1. States: "priority:10"
+#   (the 10 states visitors look up most), a list ("TX,NY"), or "all".
+#   Monthly: refreshes every state already loaded, adding only new votes.
+#
+# Needs these repository secrets (Settings -> Secrets and variables -> Actions):
+#   OPENSTATES_EMAIL, OPENSTATES_PASSWORD  an open.pluralpolicy.com account, to read the
+#                                          list of session files (or paste the links into "urls")
+#   CLOUDFLARE_API_TOKEN                   a token with D1 Edit permission (load mode, and priority:N)
+#   CLOUDFLARE_ACCOUNT_ID                  the Cloudflare account that has the pillory database
+name: Load state votes
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "measure (report sizes, write nothing) or load"
+        type: choice
+        options: [measure, load]
+        default: measure
+      states:
+        description: 'States: "priority:10", "TX,NY" or "all" (California is loaded by the sync)'
+        default: "priority:10"
+      since_year:
+        description: "Sessions reaching this year (blank: the current two-year session)"
+        default: ""
+      max_gb:
+        description: "Load mode stops before the database would pass this size, in GB (5 is what Workers Paid includes)"
+        default: "5"
+      urls:
+        description: "Optional: session ZIP links copied from open.pluralpolicy.com/data/session-csv/, separated by spaces"
+        default: ""
+  schedule:
+    - cron: "17 9 8 * *"   # the 8th of each month: Open States updates its files monthly
+permissions:
+  contents: read
+concurrency:
+  group: state-votes
+  cancel-in-progress: false
+jobs:
+  load:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Measure or load
+        env:
+          OPENSTATES_EMAIL: ${{ secrets.OPENSTATES_EMAIL }}
+          OPENSTATES_PASSWORD: ${{ secrets.OPENSTATES_PASSWORD }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          MODE: ${{ github.event.inputs.mode || 'load' }}
+          STATES: ${{ github.event.inputs.states || 'loaded' }}
+          SINCE: ${{ github.event.inputs.since_year }}
+          URLS: ${{ github.event.inputs.urls }}
+          MAX_GB: ${{ github.event.inputs.max_gb || '5' }}
+        run: |
+          set -euo pipefail
+          args=(--mode "$MODE" --states "$STATES" --max-gb "$MAX_GB" --work "$RUNNER_TEMP")
+          if [ -n "$SINCE" ]; then args+=(--since-year "$SINCE"); fi
+          if [ -n "$URLS" ]; then printf '%s\n' $URLS > "$RUNNER_TEMP/urls.txt"; args+=(--urls "$RUNNER_TEMP/urls.txt"); fi
+          python3 tools/load_state_votes.py "${args[@]}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: state-votes-report
+          path: ${{ runner.temp }}/state-votes-report.json
+          if-no-files-found: ignore

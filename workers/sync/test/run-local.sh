@@ -107,6 +107,18 @@ $D1 --command "SELECT step, status, message FROM sync_log WHERE message LIKE 'Ca
 $D1 --command "SELECT c.official_id, c.cycle, c.raised, c.spent, (SELECT COUNT(*) FROM state_money_ie i WHERE i.official_id = c.official_id) AS ie FROM state_money_cycles c ORDER BY 1" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
 $D1 --command "SELECT official_id, substr(note, 1, 90) AS note FROM disclosure_checks WHERE source = 'cal-access' ORDER BY 1" --json | python3 -c "import json,sys; [print(' ', r) for r in json.load(sys.stdin)[0]['results']]"
 
+echo "--- every state: another state's officials (fake Vermont file), then its bulk-loaded votes as the loader writes them:"
+$D1 --command "SELECT step, status, substr(message, 1, 160) AS message FROM sync_log WHERE step = 'all-state-officials' ORDER BY id LIMIT 1" --json | python3 -c "import json,sys; [print(' ', r['status'], r['message']) for r in json.load(sys.stdin)[0]['results']]"
+VK=$(node -e 'import("../src/states.js").then(async (m) => console.log([await m.stableKey("vt-ocd-vote/v1"), await m.stableKey("openstates:ocd-person/vt-h1"), await m.stableKey("openstates:ocd-person/vt-h2")].join(" ")))')
+read V1 H1 H2 <<<"$VK"
+$D1 --command "INSERT INTO bills (id, level, chamber, bill_number, session, title, official_url, source_url) VALUES ('vt-2025-2026-h-1', 'state', 'vt-lower', 'H 1', '2025-2026', 'An act relating to a test fund', 'https://legislature.example.gov/H1', 'https://legislature.example.gov/H1');
+  INSERT INTO votes (id, bill_id, level, chamber, vote_date, question, vote_type, result, source_url, yea, nay, present, not_voting, k) VALUES ('vt-ocd-vote/v1', 'vt-2025-2026-h-1', 'state', 'vt-lower', '2026-03-01', 'Third reading', 'final_passage', 'Passed', 'https://legislature.example.gov/journal', 90, 50, 0, 10, $V1);
+  INSERT INTO state_positions (vote_k, member_k, position, raw) VALUES ($V1, $H1, 0, NULL), ($V1, $H2, 3, 'absent');
+  INSERT INTO state_loads (st, session, file_url, generated_at, bills, votes, positions, skipped_positions) VALUES ('VT', '2025-2026', 'https://data.openstates.org/csv/latest/vt_2025-2026_csv_fake.zip', '2026-10-01 05:00:00', 1, 1, 2, 0);
+  DELETE FROM sync_state WHERE key = 'summaries_fingerprint';" >/dev/null
+curl -s "localhost:8789/run?token=local-test-token" >/dev/null
+until curl -s "localhost:8789/status?token=local-test-token" | grep -q '"status": "finished"'; do sleep 2; done
+$D1 --command "SELECT st, legislators, executives, bills, votes FROM state_coverage WHERE st IN ('VT', 'TX')" --json | python3 -c "import json,sys; [print('  coverage', r) for r in json.load(sys.stdin)[0]['results']]"
 (cd "$REPO" && $WRANGLER pages dev . --port 8790 --d1 DB=pillory-local-test --persist-to "$STATE" \
   --binding ADMIN_LOCAL_DEV=1 --binding REVIEWER_NAME="Test Reviewer" \
   --binding TURNSTILE_SITE_KEY=1x00000000000000000000AA --binding TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA \
@@ -121,10 +133,15 @@ curl -s -o /dev/null -w "report with a failed check: %{http_code} %{redirect_url
 curl -s -o /dev/null -w "full analysis of H.R. 10: %{http_code} %{redirect_url}\n" -X POST -d "cf-turnstile-response=ok" localhost:8790/laws/bills/us-119-hr-10/request-full
 curl -s -o /dev/null -w "full analysis of a skipped bill: %{http_code} %{redirect_url}\n" -X POST -d "cf-turnstile-response=ok" localhost:8790/laws/bills/us-119-hr-40/request-full
 echo "--- pages (status, and a section that couldn't load):"
-for u in / /laws/ "/laws/?votes=all" "/laws/?level=federal&offset=20" /reps/ /reps/?state=CA /explore/ /explore/ca/ /place/ca/calaveras/ /district/congressional/ca-5/ /laws/bills/us-119-hr-10/; do
+for u in / /laws/ "/laws/?votes=all" "/laws/?level=federal&offset=20" /reps/ /reps/?state=CA /explore/ /explore/ca/ /place/ca/calaveras/ /district/congressional/ca-5/ /laws/bills/us-119-hr-10/ /explore/vt/ /explore/tx/ /reps/hana-testrep/ /reps/grace-testgovernor/ "/votes/?level=state:VT" /laws/bills/vt-2025-2026-h-1/; do
   curl -s -o /tmp/pillory-page.html -w "  %{http_code} %{time_total}s $u" "localhost:8790$u"
   grep -q "Couldn't load this" /tmp/pillory-page.html && echo " (a section couldn't load)" || echo
 done
+echo "--- another state: loaded (Vermont, fake) and coming soon (Texas):"
+curl -s localhost:8790/explore/vt/ | grep -oE '2 members of the Vermont Senate|Grace Testgovernor|1 bills and 1 recorded votes|coming soon|AB 101' | sort | uniq -c | sed 's/^/  vt: /'
+curl -s localhost:8790/explore/tx/ | grep -oE "bills and roll call votes are coming soon" | head -1 | sed 's/^/  tx: /'
+curl -s localhost:8790/reps/hana-testrep/ | grep -oE 'An act relating to a test fund|Chittenden-12 House District' | sort -u | sed 's/^/  rep: /'
+curl -s "localhost:8790/laws/bills/vt-2025-2026-h-1/rollcall/?vote=vt-ocd-vote%2Fv1" | grep -oE 'Hugo Placeholder|absent' | sort -u | sed 's/^/  roll call: /'
 echo "--- promises on the site and the review page: a reader's flag, Broken confirmed, a status recorded by a person:"
 curl -s localhost:8790/admin/review/ | grep -o 'id="promise-[a-z]*">[^<]*<span class="queue-count">[0-9]*' | sed 's/<[^>]*>//g; s/id="[^"]*">//; s/^/  /'
 PID=$($D1 --command "SELECT id FROM promises WHERE review = 'auto' ORDER BY id LIMIT 1" --json | python3 -c "import json,sys; print(json.load(sys.stdin)[0]['results'][0]['id'])")

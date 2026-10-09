@@ -8,11 +8,18 @@ Downloads (about 1.4 GB, so this runs in GitHub Actions: see
 
   data/zip/<first 3 digits>.json   ZIP -> the districts it overlaps
   data/counties.json               county FIPS -> [name, state]
+  data/states/district-names/<st>.json
+                                   the map data's district id -> the Census name, for
+                                   each state whose state legislative district names
+                                   aren't just their numbers ("d39" -> "Cape and Islands")
 
 A ZIP code here is its Census ZIP Code Tabulation Area (ZCTA), the Census
 Bureau's area for a ZIP code. Each 2020 census block is assigned to a ZCTA,
-a county, a 119th Congress district and (in California) a 2024 state senate
-and assembly district. For each ZCTA the file lists every combination of
+a county, a 119th Congress district and a 2024 state senate (or upper house)
+and lower house district, in every state; a state legislative district is
+written as the Census Bureau names it ("12", "7th Middlesex", "Merrimack 06"),
+which the site matches to Open States' district names (districtKey() in
+workers/sync/src/states.js). For each ZCTA the file lists every combination of
 those districts that covers at least 1% of its land area, with that share.
 The site asks the visitor to choose, or to enter an address, whenever a ZIP
 has more than one combination.
@@ -23,6 +30,8 @@ Sources (all public, U.S. Census Bureau):
   2024 state legislative districts:
                   https://www2.census.gov/programs-surveys/decennial/rdo/mapping-files/2025/2024-state-legislative-bef/sldu24.zip
                   https://www2.census.gov/programs-surveys/decennial/rdo/mapping-files/2025/2024-state-legislative-bef/sldl24.zip
+  District names: https://www2.census.gov/geo/tiger/GENZ2024/shp/cb_2024_us_sldu_500k.zip
+                  https://www2.census.gov/geo/tiger/GENZ2024/shp/cb_2024_us_sldl_500k.zip (the .dbf table)
   Counties:       https://www2.census.gov/geo/docs/reference/codes2020/national_county2020.txt
 
 Standard library only.
@@ -31,6 +40,8 @@ Standard library only.
 import csv
 import io
 import json
+import re
+import struct
 import sys
 import urllib.request
 import zipfile
@@ -44,7 +55,7 @@ CD = f"{BEF}/119-congressional-district-befs/cd119.zip"
 SLDU = f"{BEF}/2024-state-legislative-bef/sldu24.zip"
 SLDL = f"{BEF}/2024-state-legislative-bef/sldl24.zip"
 COUNTIES = "https://www2.census.gov/geo/docs/reference/codes2020/national_county2020.txt"
-CA = "06"
+NAMES = "https://www2.census.gov/geo/tiger/GENZ2024/shp/cb_2024_us_{layer}_500k.zip"
 MIN_SHARE = 0.01
 
 STATE_BY_FIPS = {
@@ -93,6 +104,72 @@ def bef(path, only_state=None):
     return out
 
 
+def dbf_rows(b):
+    """Rows of a dBASE table (a shapefile's .dbf), as dicts of text."""
+    n = struct.unpack("<I", b[4:8])[0]
+    header_len = struct.unpack("<H", b[8:10])[0]
+    record_len = struct.unpack("<H", b[10:12])[0]
+    fields, i = [], 32
+    while b[i] != 0x0D:
+        fields.append((b[i:i + 11].split(b"\0")[0].decode(), b[i + 16]))
+        i += 32
+    for k in range(n):
+        rec, pos, row = b[header_len + k * record_len + 1: header_len + (k + 1) * record_len], 0, {}
+        for name, length in fields:
+            row[name] = rec[pos:pos + length].decode("latin-1").strip()
+            pos += length
+        yield row
+
+
+def district_names(path, code_field):
+    """(state FIPS, district code) -> the district's name, from a cartographic boundary file."""
+    with zipfile.ZipFile(path) as z:
+        dbf = z.read(next(n for n in z.namelist() if n.endswith(".dbf")))
+    out = {(r["STATEFP"], r[code_field]): r["NAME"] for r in dbf_rows(dbf)}
+    print(f"{path.name}: {len(out)} district names", flush=True)
+    return out
+
+
+def legislative_district(block, code, names):
+    """A block's state legislative district as the Census names it ("12", "7th Middlesex"); '' for none (water, "ZZZ")."""
+    if not code or set(code) == {"Z"}:
+        return ""
+    name = names.get((block[:2], code))
+    if name:
+        return str(int(name)) if name.isdigit() else name
+    return district_number(code)
+
+
+def geo_id(code):
+    """The map data's id for a district code: districtId() in tools/build_geo.mjs."""
+    c = (code or "").strip()
+    if not c or set(c.upper()) == {"Z"}:
+        return None
+    if c.isdigit():
+        n = int(c)
+        return "0" if n in (0, 98) else str(n)
+    return re.sub(r"^-|-$", "", re.sub(r"[^a-z0-9]+", "-", c.lower()))
+
+
+def write_district_names(su_names, sl_names):
+    """data/states/district-names/<st>.json, for states with named districts."""
+    out = defaultdict(lambda: {"sldu": {}, "sldl": {}})
+    for layer, names in (("sldu", su_names), ("sldl", sl_names)):
+        for (fips, code), name in names.items():
+            st, gid = STATE_BY_FIPS.get(fips), geo_id(code)
+            if st and gid and name and name != gid and not (name.isdigit() and str(int(name)) == gid):
+                out[st][layer][gid] = name
+    folder = ROOT / "data" / "states" / "district-names"
+    folder.mkdir(parents=True, exist_ok=True)
+    for old in folder.glob("*.json"):
+        old.unlink()
+    for st, layers in sorted(out.items()):
+        doc = {"_readme": "Generated by tools/build_zip_districts.py from Census Bureau files; don't edit by hand.", "st": st,
+               **{k: dict(sorted(v.items())) for k, v in layers.items() if v}}
+        (folder / f"{st.lower()}.json").write_text(json.dumps(doc, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    print(f"district names: {', '.join(sorted(out))}", flush=True)
+
+
 def district_number(code):
     """'05' -> '5'; at-large ('00') and delegate ('98') -> '0'. Non-numeric codes -> ''."""
     if not code.isdigit():
@@ -114,8 +191,11 @@ def main():
     print(f"{len(counties)} counties", flush=True)
 
     cd = bef(fetch(CD, work))
-    su = bef(fetch(SLDU, work), only_state=CA)
-    sl = bef(fetch(SLDL, work), only_state=CA)
+    su = bef(fetch(SLDU, work))
+    sl = bef(fetch(SLDL, work))
+    su_names = district_names(fetch(NAMES.format(layer="sldu"), work), "SLDUST")
+    sl_names = district_names(fetch(NAMES.format(layer="sldl"), work), "SLDLST")
+    write_district_names(su_names, sl_names)
 
     # ZCTA -> (st, cd, su, sl, county) -> land area
     area = defaultdict(lambda: defaultdict(float))
@@ -133,8 +213,8 @@ def main():
             key = (
                 st,
                 district_number(cd.get(block, "")),
-                district_number(su.get(block, "")) if block.startswith(CA) else "",
-                district_number(sl.get(block, "")) if block.startswith(CA) else "",
+                legislative_district(block, su.get(block, ""), su_names),
+                legislative_district(block, sl.get(block, ""), sl_names),
                 block[:5],
             )
             # Land area; a block with none (water) still counts a little, so a ZCTA of only water isn't lost.

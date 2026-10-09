@@ -16,6 +16,7 @@
 //   Take part (Calaveras comment deadlines, contacting your reps);
 //   Communities (Calaveras, live; the county waitlist with real counts);
 //   Understand (explainers).
+import { chamberIds } from "../workers/sync/src/states.js";
 import { icon } from "./_lib/icons.js";
 import { page, esc, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "./_lib/render.js";
 import { listMeetings, pacificNow, addDays, deadlineParts, meetingHref, when } from "./_lib/meetings.js";
@@ -146,23 +147,23 @@ function usMap(index, waiting) {
 </section>`;
 }
 
-// Who represents you: the federal executive for everyone; California's statewide
-// offices for California (and for visitors whose state isn't known yet).
-function whoRepresents(federal, ca, d) {
-  if (!federal.length && !ca.length) return "";
-  const inCA = !d || d.st === "CA";
-  const governor = ca.filter((o) => o.rank === 1);
-  const state = inCA
-    ? ca.length
-      ? `<div class="card stack-xs"><p class="label">California, statewide</p>${governor.map((o) => linkRow(`/reps/${o.slug}/`, o.name, o.office)).join("")}${linkRow("/bodies/ca-executive/", "California's statewide offices", `${ca.length} elected statewide`)}</div>`
-      : ""
-    : `<p class="small secondary">${esc(STATE_NAME[d.st] || "Your state")}'s governor and statewide offices aren't on ThePillory yet. They open as communities launch.</p>`;
+// Who represents you: the federal executive for everyone; the visitor's own
+// state's statewide offices (California's for visitors whose state isn't known yet).
+function whoRepresents(federal, stateExec, d) {
+  if (!federal.length && !stateExec.length) return "";
+  const st = d ? d.st : "CA";
+  const name = STATE_NAME[st] || "Your state";
+  const governor = stateExec.filter((o) => o.rank === 1);
+  const all = st === "CA" ? linkRow("/bodies/ca-executive/", "California's statewide offices", `${stateExec.length} elected statewide`) : linkRow(`/explore/${st.toLowerCase()}/#h-statewide`, `${name}'s statewide offices`, `${stateExec.length} listed`);
+  const state = stateExec.length
+    ? `<div class="card stack-xs"><p class="label">${esc(name)}, statewide</p>${governor.map((o) => linkRow(`/reps/${o.slug}/`, o.name, o.office)).join("")}${all}</div>`
+    : `<p class="small secondary">${esc(name)}'s governor and statewide offices appear after the data sync loads them (weekly, from Open States).</p>`;
   return `
 <section class="brief-section" id="who" aria-labelledby="h-who">
   <div class="section-head"><h2 class="label" id="h-who">Who represents you</h2><a class="section-link" href="/reps/">All reps</a></div>
   ${federal.length ? `<div class="card stack-xs"><p class="label">Everyone in the United States</p>${executiveRows(federal)}</div>` : ""}
   ${state}
-  ${d ? linkRow("/briefing/", d.st === "CA" ? "Your members of Congress and state legislators" : "Your members of Congress", describe(d)) : '<p class="small"><a class="inline-link" href="#find">Find your representatives</a> to add your members of Congress and state legislators.</p>'}
+  ${d ? linkRow("/briefing/", "Your members of Congress and state legislators", describe(d)) : '<p class="small"><a class="inline-link" href="#find">Find your representatives</a> to add your members of Congress and state legislators.</p>'}
 </section>`;
 }
 
@@ -264,7 +265,7 @@ async function hub(env, request, url, d) {
     loadSection("hub waitlist counts", db ? () => waitlistCounts(db) : async () => null, null),
     loadSection("hub waitlist map", db ? () => waitlistBy(db) : async () => ({ county: {}, state: {} }), { county: {}, state: {} }),
     loadSection("hub executive", db ? () => executiveOfficials(db, "us-executive") : async () => [], []),
-    loadSection("hub california executive", db ? () => executiveOfficials(db, "ca-executive") : async () => [], []),
+    loadSection("hub state executive", db ? () => executiveOfficials(db, chamberIds(d ? d.st : "CA").executive) : async () => [], []),
     loadSection("hub elections", () => electionsData(env, request, d), { election: null, ballot: null }),
     loadSection("hub topic place", () => topicPlace(env, request, d), null),
   ]);

@@ -7,6 +7,7 @@
 // voted, county meeting items, executive actions, what officials' own Issues
 // pages say, and campaign money from industries tied to the topic. Nothing on
 // it says one caused another.
+import { listScope } from "./data.js";
 import { esc, fmtDate, sourceLink } from "./render.js";
 import { inChunks } from "./data.js";
 import { voteBar } from "./charts.js";
@@ -83,10 +84,10 @@ export async function topicBills(db, topic, level, limit = 8) {
       `SELECT bl.bill_id, bl.bill_number, bl.title, bl.level, bl.last_final, bl.final_vote_id, bl.final_result, bl.final_chamber,
               bl.yea, bl.nay, bl.present, bl.not_voting, bl.outcome, t.reason, t.tagged_by
        FROM topic_tags t JOIN bill_list bl ON bl.bill_id = t.item_id
-       WHERE t.item_kind = 'bill' AND t.topic = ? AND t.removed_at IS NULL AND bl.level = ? AND bl.final_vote_id IS NOT NULL
+       WHERE t.item_kind = 'bill' AND t.topic = ? AND t.removed_at IS NULL AND ${listScope(level, "bl").sql} AND bl.final_vote_id IS NOT NULL
        ORDER BY bl.last_final DESC LIMIT ?`
     )
-    .bind(topic, level, limit)
+    .bind(topic, ...listScope(level, "bl").binds, limit)
     .all();
   return results;
 }
@@ -96,7 +97,7 @@ export async function positionsFor(db, voteIds, officialIds) {
   const out = new Map();
   if (!voteIds.length || !officialIds.length) return out;
   const { results } = await db
-    .prepare(`SELECT vote_id, official_id, position FROM vote_positions WHERE vote_id IN (${voteIds.map(() => "?").join(",")}) AND official_id IN (${officialIds.map(() => "?").join(",")})`)
+    .prepare(`SELECT vote_id, official_id, position FROM all_positions WHERE vote_id IN (${voteIds.map(() => "?").join(",")}) AND official_id IN (${officialIds.map(() => "?").join(",")})`)
     .bind(...voteIds, ...officialIds)
     .all();
   for (const r of results) {

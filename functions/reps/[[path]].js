@@ -90,7 +90,7 @@ async function list(env, url, request) {
   <h2 class="label">Your representatives</h2>
   <p class="small secondary">${esc(describe(d))}</p>
   ${data.mine.map(repCard).join("") || '<p class="secondary small">None loaded yet for your districts. They appear after the data sync runs.</p>'}
-  ${d.st !== "CA" ? '<p class="hint">State and local coverage comes as communities launch.</p>' : ""}
+  ${d.st !== "CA" ? '<p class="hint">Local coverage comes as communities launch.</p>' : ""}
 </section>`
     : "";
 
@@ -99,7 +99,8 @@ async function list(env, url, request) {
 <section class="stack" id="state-list">
   <h2 class="label">${esc(STATE_NAME[st])}: members of Congress</h2>
   ${data.state.map(repCard).join("") || '<p class="secondary small">None loaded yet.</p>'}
-  ${st === "CA" ? '<a class="list-row link-row card" href="/bodies/state-legislature/"><div><div class="list-title">California State Legislature</div><div class="list-meta">All 120 members</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>' : ""}
+  ${st === "CA" ? '<a class="list-row link-row card" href="/bodies/state-legislature/"><div><div class="list-title">California State Legislature</div><div class="list-meta">All 120 members</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>'
+    : `<a class="list-row link-row card" href="/explore/${st.toLowerCase()}/#h-statewide"><div><div class="list-title">${esc(STATE_NAME[st])}'s legislature and statewide offices</div><div class="list-meta">Each legislator linked from their district</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>`}
 </section>`
     : "";
 
@@ -169,7 +170,7 @@ function roleOf(o) {
   if (isPresident(o)) return "president";
   if (isGovernor(o)) return "governor";
   if (o.chamber === "us-executive") return o.rank === 2 ? "vice-president" : "appointed";
-  if (o.chamber === "ca-executive") return "statewide";
+  if (isExecutive(o)) return "statewide";
   return "legislator";
 }
 
@@ -197,11 +198,14 @@ async function profile(env, slug, url, request) {
   const status = url.searchParams.get("status") || "all";
   const exec = isExecutive(o);
   const stateLegislator = o.chamber === "ca-assembly" || o.chamber === "ca-senate";
+  // Another state's official: campaign money comes from each state's own agency, not loaded yet.
+  const otherState = o.level === "state" && o.state && o.state !== "CA";
   // Each tab loads on its own: one that can't load shows a short note there.
   const loaded = await Promise.all([
     exec ? {} : loadSection("rep vote counts", () => voteCounts(db, o.id), {}),
     exec ? { rows: [], more: false } : loadSection("rep votes", () => votesFor(db, o.id, { all, limit: 50, offset: (pageNum - 1) * 50 }), { rows: [], more: false }),
-    exec ? loadSection("rep funding", () => executiveMoney(db, o, cycle), null)
+    otherState ? null
+      : exec ? loadSection("rep funding", () => executiveMoney(db, o, cycle), null)
       : o.level === "federal" ? loadSection("rep funding", () => fundingFor(db, o, cycle), null)
       : stateLegislator ? loadSection("rep funding", () => stateOfficialMoney(db, o, cycle), null) : null,
     isPresident(o) || isGovernor(o) ? loadSection("rep orders", () => ordersFor(db, o.id, { offset }), null) : null,
@@ -282,7 +286,7 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
   // Five tabs for every official: About · Promises · Votes · Funding · More.
   // What Votes, Funding and More hold depends on the office (roleOf).
   const role = roleOf(o);
-  const money = exec && funding !== FAILED ? executiveFundingParts(o, funding, base) : null;
+  const money = exec && !otherState && funding !== FAILED ? executiveFundingParts(o, funding, base) : null;
   // More: each part collapsed until tapped (a link to its id opens it).
   const sub = (id, label, html) => fold(id, label, html);
   const appointedNote = (what) =>
@@ -295,7 +299,7 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
   } else if (role === "appointed") {
     votesHtml = appointedNote(`${esc(o.office)} is an appointed office, so there are no votes to show: votes are recorded for members of Congress and the California Legislature.`);
   } else if (exec) {
-    votesHtml = '<p class="secondary small">No votes are recorded for this office. ThePillory records votes in Congress and the California Legislature.</p>';
+    votesHtml = '<p class="secondary small">No votes are recorded for this office. ThePillory records votes in Congress and in state legislatures.</p>';
   } else {
     votesHtml = `${voteFilter(base, all, counts)}
     ${voteList}`;
@@ -304,6 +308,7 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
   let fundingHtml;
   if (funding === FAILED) fundingHtml = sectionError("");
   else if (role === "appointed") fundingHtml = appointedNote(`${esc(o.office)} is an appointed office, so there's no campaign money to show: appointed officials don't run campaigns.`);
+  else if (otherState) fundingHtml = `<section class="card stack-sm"><p class="small">Campaign money for ${esc(STATE_NAME[o.state] || o.state)}'s officials isn't on ThePillory yet. It comes from each state's own campaign finance agency, and will be added state by state.</p><p class="hint">Members of Congress: Federal Election Commission. California: Cal-Access.</p></section>`;
   else if (exec) fundingHtml = money.funding || '<p class="secondary small">No campaign money to show for this office.</p>';
   else if (stateLegislator) fundingHtml = stateFundingTab(o, funding && funding.money, base);
   else fundingHtml = fundingTab(o, funding, base);
@@ -312,7 +317,7 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
   const moreParts = [];
   if (orders) moreParts.push(sub("orders", "Executive orders", orders === FAILED ? sectionError("") : ordersTab(o, orders, base, offset)));
   if (nominations) moreParts.push(sub("nominations", "Nominations", nominations === FAILED ? sectionError("") : nominationsTab(o, nominations, base, status, offset)));
-  if (exec) moreParts.push(sub("more-disclosures", "Disclosures", funding === FAILED ? sectionError("") : money.disclosures));
+  if (exec && !otherState) moreParts.push(sub("more-disclosures", "Disclosures", funding === FAILED ? sectionError("") : money.disclosures));
   if (stateLegislator) moreParts.push(sub("more-disclosures", "Disclosures", funding === FAILED ? sectionError("") : funding ? stateForm700(funding) : ""));
   if (o.level === "state" && !exec) {
     moreParts.push(sub("committees", "Committees", committees === FAILED ? sectionError("") : committees.length

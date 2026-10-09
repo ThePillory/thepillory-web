@@ -3,6 +3,8 @@
 // 20 at a time, with the totals and their breakdown by party and by state.
 // Every query reads one vote's positions through the (vote_id, official_id)
 // key, at most a few hundred rows; nothing reads the whole positions table.
+// all_positions (migration 0020) covers vote_positions and the compact
+// state_positions; both are read by the vote's key here.
 // Positions and parties are plain text, one style for every party.
 import { esc, fmtDate, sourceLink } from "./render.js";
 import { CHAMBER_NAME, TYPE_LABELS } from "./data.js";
@@ -60,7 +62,7 @@ export async function rollCallRows(db, voteId, f) {
     where.push("o.state = ?");
     binds.push(f.state);
   }
-  const sql = `FROM vote_positions p JOIN officials o ON o.id = p.official_id WHERE ${where.join(" AND ")}`;
+  const sql = `FROM all_positions p JOIN officials o ON o.id = p.official_id WHERE ${where.join(" AND ")}`;
   const { results } = await db
     .prepare(
       `SELECT o.name, o.slug, o.party, o.state, o.district, o.chamber, p.position, p.raw_position ${sql}
@@ -77,7 +79,7 @@ export async function rollCallBreakdown(db, voteId) {
   const { results } = await db
     .prepare(
       `SELECT COALESCE(NULLIF(o.party, ''), 'Not listed') AS party, o.state, p.position, COUNT(*) AS n
-       FROM vote_positions p JOIN officials o ON o.id = p.official_id WHERE p.vote_id = ?
+       FROM all_positions p JOIN officials o ON o.id = p.official_id WHERE p.vote_id = ?
        GROUP BY 1, 2, 3`
     )
     .bind(voteId)
