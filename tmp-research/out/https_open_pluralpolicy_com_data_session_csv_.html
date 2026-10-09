@@ -1,0 +1,6579 @@
+
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-143711479-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'UA-143711479-1');
+        </script>
+        <meta charset="utf-8"><script type="text/javascript">(window.NREUM||(NREUM={})).init={ajax:{deny_list:["bam.nr-data.net"]}};(window.NREUM||(NREUM={})).loader_config={licenseKey:"8ab8eca189",applicationID:"301410610",browserID:"301410645"};;/*! For license information please see nr-loader-rum-1.323.0.min.js.LICENSE.txt */
+(()=>{var e={8122(e,t,r){"use strict";r.d(t,{a:()=>i});var n=r(944);function i(e,t){try{if(!e||"object"!=typeof e)return(0,n.R)(3);if(!t||"object"!=typeof t)return(0,n.R)(4);const r=Object.create(Object.getPrototypeOf(t),Object.getOwnPropertyDescriptors(t)),a=0===Object.keys(r).length?e:r;for(let s in a)if(void 0!==e[s])try{if(null===e[s]){r[s]=null;continue}Array.isArray(e[s])&&Array.isArray(t[s])?r[s]=Array.from(new Set([...e[s],...t[s]])):e[s]instanceof Map||e[s]instanceof Set||e[s]instanceof Date||e[s]instanceof RegExp?r[s]=e[s]:"object"==typeof e[s]&&null!==t[s]&&"object"==typeof t[s]?r[s]=i(e[s],t[s]):r[s]=e[s]}catch(e){r[s]||(0,n.R)(1,e)}return r}catch(e){(0,n.R)(2,e)}}},2555(e,t,r){"use strict";r.d(t,{f:()=>s});var n=r(384),i=r(8122);const a={beacon:n.NT.beacon,errorBeacon:n.NT.errorBeacon,licenseKey:void 0,applicationID:void 0,sa:void 0,queueTime:void 0,applicationTime:void 0,ttGuid:void 0,user:void 0,account:void 0,product:void 0,extra:void 0,jsAttributes:{},userAttributes:void 0,atts:void 0,transactionName:void 0,tNamePlain:void 0};function s(e){try{return!!e.licenseKey&&!!e.errorBeacon&&!!e.applicationID}catch(e){return!1}}r.d(t,["D",0,e=>(0,i.a)(e,a)])},7699(e,t,r){"use strict";var n=r(860);const i={[n.K7.logging]:!0,[n.K7.genericEvents]:!0,[n.K7.jserrors]:!0,[n.K7.ajax]:!0};r.d(t,["It",0,1e6,"KC",0,i,"qh",0,"SESSION_ERROR"])},9324(e,t,r){"use strict";r.d(t,["xv",0,"1.323.0"])},981(e,t,r){"use strict";r.d(t,["R",0,{AJAX:"AjaxRequest",PA:"PageAction",UA:"UserAction",BP:"BrowserPerformance",WS:"WebSocket",SPV:"SecurityPolicyViolation",JSE:"JavaScriptError",LOG:"Log",PVE:"PageView",PVT:"PageViewTiming",SR:"SessionReplay",ST:"SessionTrace",BI:"BrowserInteraction"}])},6154(e,t,r){"use strict";var n=r(1863);const i="undefined"!=typeof window&&!!window.document,a="undefined"!=typeof WorkerGlobalScope&&("undefined"!=typeof self&&self instanceof WorkerGlobalScope&&self.navigator instanceof WorkerNavigator||"undefined"!=typeof globalThis&&globalThis instanceof WorkerGlobalScope&&globalThis.navigator instanceof WorkerNavigator),s=i?window:"undefined"!=typeof WorkerGlobalScope&&("undefined"!=typeof self&&self instanceof WorkerGlobalScope&&self||"undefined"!=typeof globalThis&&globalThis instanceof WorkerGlobalScope&&globalThis),o=Boolean("hidden"===s?.document?.visibilityState),c=""+s?.location,u=/iPad|iPhone|iPod/.test(s.navigator?.userAgent),d=u&&"undefined"==typeof SharedWorker,l=((()=>{const e=s.navigator?.userAgent?.match(/Firefox[/\s](\d+\.\d+)/);Array.isArray(e)&&e.length>=2&&e[1]})(),Date.now()-(0,n.t)());r.d(t,["OF",0,u,"RI",0,i,"WN",0,l,"bv",0,a,"gm",0,s,"m",0,c,"mw",0,o,"sb",0,d,"zk",0,()=>{const e=s?.performance?.getEntriesByType?.("navigation")?.[0];if(e&&e.responseStart>0&&e.responseStart<s.performance.now())return e}])},3241(e,t,r){"use strict";r.d(t,{W:()=>i});var n=r(6154);function i(e={}){try{n.gm.dispatchEvent(new CustomEvent("newrelic",{detail:e}))}catch(e){}}},1687(e,t,r){"use strict";r.d(t,{Ak:()=>o,Ze:()=>u,x3:()=>c});var n=r(3241),i=r(3606),a=r(860),s=r(2646);function o(e,t){if(!e)return;const r={staged:!1,priority:a.P3[t]||0};e.runtime.drainRegistry.get(t)||e.runtime.drainRegistry.set(t,r)}function c(e,t){if(!e)return;const r=e.runtime.drainRegistry;r&&(r.get(t)&&r.delete(t),l(e,t,!1),r.size&&d(e))}function u(e,t="feature",r=!1){if(e){if(!e.runtime.drainRegistry.get(t)||r)return l(e,t);e.runtime.drainRegistry.get(t).staged=!0,d(e)}}function d(e){if(!e)return;const t=Array.from(e.runtime.drainRegistry);t.every(([e,t])=>t.staged)&&(t.sort((e,t)=>e[1].priority-t[1].priority),t.forEach(([t])=>{e.runtime.drainRegistry.delete(t),l(e,t)}))}function l(e,t,r=!0){if(!e)return;const a=e.ee,o=i.i.handlers;if(a&&!a.aborted&&a.backlog&&o){if((0,n.W)({type:"lifecycle",name:"drain",feature:t}),r){const e=a.backlog[t],r=o[t];if(r){for(let t=0;e&&t<e.length;++t)f(e[t],r);Object.entries(r).forEach(([e,t])=>{Object.values(t||{}).forEach(t=>{t[0]?.on&&t[0].context()instanceof s.y&&!t[0].listeners(e).includes(t[1])&&t[0].on(e,t[1])})})}}a.isolatedBacklog||delete o[t],a.backlog[t]=null,a.emit("drain-"+t,[])}}function f(e,t){var r=e[1];Object.values(t[r]||{}).forEach(t=>{var r=e[0];if(t[0]===r){var n=t[1],i=e[3],a=e[2];n.apply(i,a)}})}},7836(e,t,r){"use strict";var n=r(384),i=r(8990),a=r(2646),s=r(5607);const o="nr@context:".concat(s.W),c=function e(t,r){var n={},s={},d={},l=!1;try{l=16===r.length&&u.initializedAgents?.[r]?.runtime.isolatedBacklog}catch(e){}var f={on:p,addEventListener:p,removeEventListener:function(e,t){var r=n[e];if(!r)return;for(var i=0;i<r.length;i++)r[i]===t&&r.splice(i,1)},emit:function(e,r,n,i,a){!1!==a&&(a=!0);if(c.aborted&&!i)return;t&&a&&t.emit(e,r,n);var o=g(n);m(e).forEach(e=>{e.apply(o,r)});var u=v()[s[e]];u&&u.push([f,e,r,o]);return o},get:h,listeners:m,context:g,buffer:function(e,t){const r=v();if(t=t||"feature",f.aborted)return;Object.entries(e||{}).forEach(([e,n])=>{s[n]=t,t in r||(r[t]=[])})},abort:function(){f._aborted=!0,Object.keys(f.backlog).forEach(e=>{delete f.backlog[e]})},isBuffering:function(e){return!!v()[s[e]]},debugId:r,backlog:l?{}:t&&"object"==typeof t.backlog?t.backlog:{},isolatedBacklog:l};return Object.defineProperty(f,"aborted",{get:()=>{let e=f._aborted||!1;return e||(t&&(e=t.aborted),e)}}),f;function g(e){return e&&e instanceof a.y?e:e?(0,i.I)(e,o,()=>new a.y(o)):new a.y(o)}function p(e,t){n[e]=m(e).concat(t)}function m(e){return n[e]||[]}function h(t){return d[t]=d[t]||e(f,t)}function v(){return f.backlog}}(void 0,"globalEE"),u=(0,n.Zm)();u.ee||(u.ee=c),r.d(t,["P",0,o,"ee",0,c])},2646(e,t,r){"use strict";r.d(t,{y:()=>n});class n{constructor(e){this.contextId=e}}},9908(e,t,r){"use strict";r.d(t,{d:()=>n,p:()=>i});var n=r(7836).ee.get("handle");function i(e,t,r,i,a){a?(a.buffer([e],i),a.emit(e,t,r)):(n.buffer([e],i),n.emit(e,t,r))}},3606(e,t,r){"use strict";r.d(t,{i:()=>a});var n=r(9908);a.on=s;var i=a.handlers={};function a(e,t,r,a){s(a||n.d,i,e,t,r)}function s(e,t,r,i,a){a||(a="feature"),e||(e=n.d);var s=t[a]=t[a]||{};(s[r]=s[r]||[]).push([e,i])}},3878(e,t,r){"use strict";function n(e,t){return{capture:e,passive:!1,signal:t}}function i(e,t,r=!1,i){window.addEventListener(e,t,n(r,i))}function a(e,t,r=!1,i){document.addEventListener(e,t,n(r,i))}r.d(t,{DD:()=>a,jT:()=>n,sp:()=>i})},5607(e,t,r){"use strict";const n=(0,r(9566).bz)();r.d(t,["W",0,n])},9566(e,t,r){"use strict";r.d(t,{LA:()=>s,bz:()=>a});var n=r(6154);function i(e,t){return e?15&e[t]:16*Math.random()|0}function a(){const e=n.gm?.crypto||n.gm?.msCrypto;let t,r=0;return e&&e.getRandomValues&&(t=e.getRandomValues(new Uint8Array(30))),"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".split("").map(e=>"x"===e?i(t,r++).toString(16):"y"===e?(3&i()|8).toString(16):e).join("")}function s(e){const t=n.gm?.crypto||n.gm?.msCrypto;let r,a=0;t&&t.getRandomValues&&(r=t.getRandomValues(new Uint8Array(e)));const s=[];for(var o=0;o<e;o++)s.push(i(r,a++).toString(16));return s.join("")}},2614(e,t,r){"use strict";r.d(t,["BB",0,18e5,"Wt",0,"NRBA_SESSION::","iL",0,{SAME_TAB:"same-tab",CROSS_TAB:"cross-tab"},"tS",0,{STARTED:"session-started",PAUSE:"session-pause",RESET:"session-reset",RESUME:"session-resume",UPDATE:"session-update"},"wk",0,144e5])},1863(e,t,r){"use strict";function n(){return Math.floor(performance.now())}r.d(t,{t:()=>n})},944(e,t,r){"use strict";r.d(t,{R:()=>i});var n=r(3241);function i(e,t){"function"==typeof console.debug&&(console.debug("New Relic Warning: https://github.com/newrelic/newrelic-browser-agent/blob/main/docs/warning-codes.md#".concat(e),t),(0,n.W)({drained:null,type:"data",name:"warn",feature:"warn",data:{code:e,secondary:t}}))}},8990(e,t,r){"use strict";r.d(t,{I:()=>i});var n=Object.prototype.hasOwnProperty;function i(e,t,r){if(n.call(e,t))return e[t];var i=r();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(e,t,{value:i,writable:!0,enumerable:!1}),i}catch(e){}return e[t]=i,i}},6389(e,t,r){"use strict";function n(e,t=500,r={}){const n=r?.leading||!1;let i;return(...r)=>{n&&void 0===i&&(e.apply(this,r),i=setTimeout(()=>{i=clearTimeout(i)},t)),n||(clearTimeout(i),i=setTimeout(()=>{e.apply(this,r)},t))}}function i(e){let t=!1;return(...r)=>{t||(t=!0,e.apply(this,r))}}r.d(t,{J:()=>i,s:()=>n})},1910(e,t,r){"use strict";r.d(t,{i:()=>a});var n=r(944);const i=new Map;function a(...e){return e.every(e=>{if(i.has(e))return i.get(e);const t="function"==typeof e?e.toString():"",r=t.includes("[native code]"),a=t.includes("nrWrapper");return r||a||(0,n.R)(64,e?.name||t),i.set(e,r),r})}},5289(e,t,r){"use strict";r.d(t,{GG:()=>s,Qr:()=>c,sB:()=>o});var n=r(3878),i=r(6389);function a(){return"undefined"==typeof document||"complete"===document.readyState}function s(e,t){if(a())return e();const r=(0,i.J)(e),s=setInterval(()=>{a()&&(clearInterval(s),r())},500);(0,n.sp)("load",r,t)}function o(e){if(a())return e();(0,n.DD)("DOMContentLoaded",e)}function c(e){if(a())return e();(0,n.sp)("popstate",e)}},384(e,t,r){"use strict";r.d(t,{Zm:()=>c,bQ:()=>d,dV:()=>u,pV:()=>l});var n=r(6154),i=r(1863),a=r(944),s=r(1910);const o={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net"};function c(){return n.gm.NREUM||(n.gm.NREUM={}),void 0===n.gm.newrelic&&(n.gm.newrelic=n.gm.NREUM),n.gm.NREUM}function u(){let e=c();return e.o||(e.o={ST:n.gm.setTimeout,SI:n.gm.setImmediate||n.gm.setInterval,CT:n.gm.clearTimeout,XHR:n.gm.XMLHttpRequest,REQ:n.gm.Request,EV:n.gm.Event,PR:n.gm.Promise,MO:n.gm.MutationObserver,FETCH:n.gm.fetch,WS:n.gm.WebSocket},(0,s.i)(...Object.values(e.o))),e}function d(e,t){let r=c();r.initializedAgents??={},t.initializedAt={ms:(0,i.t)(),date:new Date},r.initializedAgents[e]=t,2===Object.keys(r.initializedAgents).length&&(0,a.R)(69)}function l(){return function(){let e=c();const t=e.info||{};e.info={beacon:o.beacon,errorBeacon:o.errorBeacon,...t}}(),function(){let e=c();const t=e.init||{};e.init={...t}}(),u(),function(){let e=c();const t=e.loader_config||{};e.loader_config={...t}}(),c()}r.d(t,["NT",0,o])},2843(e,t,r){"use strict";r.d(t,{G:()=>a,u:()=>i});var n=r(3878);function i(e,t=!1,r,i){(0,n.DD)("visibilitychange",function(){if(t)return void("hidden"===document.visibilityState&&e());e(document.visibilityState)},r,i)}function a(e,t,r){(0,n.sp)("pagehide",e,t,r)}},9300(e,t,r){"use strict";r(860).K7.ajax;r.d(t,["mo",0,{NONE:"none",FAILURES:"failures",ALL:"all"}])},3969(e,t,r){"use strict";const n=r(860).K7.metrics;r.d(t,["TZ",0,n,"XG",0,"storeEventMetrics","xV",0,"storeSupportabilityMetrics"])},6630(e,t,r){"use strict";const n=r(860).K7.pageViewEvent;r.d(t,["T",0,n])},782(e,t,r){"use strict";const n=r(860).K7.pageViewTiming;r.d(t,["T",0,n])},4234(e,t,r){"use strict";r.d(t,{W:()=>i});var n=r(1687);class i{constructor(e,t){this.agentRef=e,this.ee=e?.ee,this.featureName=t,this.blocked=!1}deregisterDrain(){(0,n.x3)(this.agentRef,this.featureName)}}},7767(e,t,r){"use strict";var n=r(6154);r.d(t,["V",0,e=>n.RI&&!0===e?.privacy.cookies_enabled])},8362(e,t,r){"use strict";r.d(t,{d:()=>a});var n=r(9566),i=r(1741);class a extends i.W{agentIdentifier=(0,n.LA)(16)}},1741(e,t,r){"use strict";r.d(t,{W:()=>a});var n=r(944),i=r(4261);class a{#e(e,...t){if(this[e]!==a.prototype[e])return this[e](...t);(0,n.R)(35,e)}addPageAction(e,t){return this.#e(i.hG,e,t)}register(e){return this.#e(i.eY,e)}recordCustomEvent(e,t){return this.#e(i.fF,e,t)}setPageViewName(e,t){return this.#e(i.Fw,e,t)}setCustomAttribute(e,t,r){return this.#e(i.cD,e,t,r)}noticeError(e,t){return this.#e(i.o5,e,t)}setUserId(e,t=!1){return this.#e(i.Dl,e,t)}setApplicationVersion(e){return this.#e(i.nb,e)}setErrorHandler(e){return this.#e(i.bt,e)}addRelease(e,t){return this.#e(i.k6,e,t)}log(e,t){return this.#e("log",e,t)}start(){return this.#e("start")}finished(e){return this.#e(i.BL,e)}recordReplay(){return this.#e(i.CH)}pauseReplay(){return this.#e(i.Tb)}addToTrace(e){return this.#e(i.U2,e)}setCurrentRouteName(e){return this.#e(i.PA,e)}interaction(e){return this.#e(i.dT,e)}wrapLogger(e,t,r){return this.#e(i.Wb,e,t,r)}measure(e,t){return this.#e(i.V1,e,t)}consent(e){return this.#e(i.Pv,e)}}},4261(e,t,r){"use strict";r.d(t,["BL",0,"finished","CH",0,"recordReplay","Dl",0,"setUserId","Fw",0,"setPageViewName","PA",0,"setCurrentRouteName","Pv",0,"consent","Tb",0,"pauseReplay","U2",0,"addToTrace","V1",0,"measure","Wb",0,"wrapLogger","bt",0,"setErrorHandler","cD",0,"setCustomAttribute","dT",0,"interaction","eY",0,"register","fF",0,"recordCustomEvent","hG",0,"addPageAction","k6",0,"addRelease","nb",0,"setApplicationVersion","o5",0,"noticeError"])},1738(e,t,r){"use strict";r.d(t,{U:()=>l,Y:()=>d});var n=r(3241),i=r(9908),a=r(1863),s=r(944),o=r(3969),c=r(8362),u=r(860);function d(e,t,r,a){const d=a||r;!d||d[e]&&d[e]!==c.d.prototype[e]||(d[e]=function(){(0,i.p)(o.xV,["API/"+e+"/called"],void 0,u.K7.metrics,r.ee),(0,n.W)({drained:!!r.runtime?.activatedFeatures,type:"data",name:"api",feature:"api-"+e,data:{}});try{return t.apply(this,arguments)}catch(e){(0,s.R)(23,e)}})}function l(e,t,r,n,s){const o=e.info;null===r?delete o.jsAttributes[t]:o.jsAttributes[t]=r,(s||null===r)&&(0,i.p)("api-"+n,[(0,a.t)(),t,r],void 0,"session",e.ee)}},8374(e,t,r){r.nc=(()=>{try{return document?.currentScript?.nonce}catch(e){}return""})()},860(e,t,r){"use strict";const n="events",i="jserrors",a="browser/blobs",s="browser/logs",o={ajax:"ajax",genericEvents:"generic_events",jserrors:i,logging:"logging",metrics:"metrics",pageAction:"page_action",pageViewEvent:"page_view_event",pageViewTiming:"page_view_timing",sessionReplay:"session_replay",sessionTrace:"session_trace",softNav:"soft_navigations"},c={[o.pageViewEvent]:1,[o.pageViewTiming]:2,[o.metrics]:3,[o.jserrors]:4,[o.softNav]:5,[o.ajax]:6,[o.sessionTrace]:7,[o.sessionReplay]:8,[o.logging]:9,[o.genericEvents]:10},u={[o.pageViewEvent]:"rum",[o.pageViewTiming]:n,[o.ajax]:n,[o.softNav]:n,[o.metrics]:i,[o.jserrors]:i,[o.sessionTrace]:a,[o.sessionReplay]:a,[o.logging]:s,[o.genericEvents]:"ins"};r.d(t,["$J",0,u,"K7",0,o,"P3",0,c,"XX",0,i,"Yy",0,s,"df",0,a,"hg",0,"connect"])}};const t={};function r(n){const i=t[n];if(void 0!==i)return i.exports;const a=t[n]={exports:{}};return e[n](a,a.exports,r),a.exports}r.m=e,r.d=(e,t)=>{if(Array.isArray(t))for(var n=0;n<t.length;){var i=t[n++],a=t[n++];r.o(e,i)?0===a&&n++:0===a?Object.defineProperty(e,i,{enumerable:!0,value:t[n++]}):Object.defineProperty(e,i,{enumerable:!0,get:a})}else for(var i in t)r.o(t,i)&&!r.o(e,i)&&Object.defineProperty(e,i,{enumerable:!0,get:t[i]})},r.f={},r.e=e=>Promise.all(Object.keys(r.f).reduce((t,n)=>(r.f[n](e,t),t),[])),r.u=e=>"nr-rum-1.323.0.min.js",r.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t),(()=>{const e={},t="NRBA-1.323.0.PROD:";r.l=(n,i,a,s)=>{if(e[n])return void e[n].push(i);let o,c;if(void 0!==a){const e=document.getElementsByTagName("script");for(var u=0;u<e.length;u++){const r=e[u];if(r.getAttribute("src")==n||r.getAttribute("data-webpack")==t+a){o=r;break}}}if(!o){c=!0;var d={296:"sha512-zhTI1o3vPu0UcYWUELiLeb9P46+LBW0K7R4KO/PafMc68L5tJ2mSHyvZtcNeG9Cw/PTZstuo62K1wwaoAsHdXQ=="};o=document.createElement("script"),o.charset="utf-8",r.nc&&o.setAttribute("nonce",r.nc),o.setAttribute("data-webpack",t+a),o.src=n,0!==o.src.indexOf(window.location.origin+"/")&&(o.crossOrigin="anonymous"),d[s]&&(o.integrity=d[s])}e[n]=[i];const l=(t,r)=>{o.onerror=o.onload=null,clearTimeout(f);const i=e[n];if(delete e[n],o.parentNode?.removeChild(o),i?.forEach(e=>e(r)),t)return t(r)},f=setTimeout(l.bind(null,void 0,{type:"timeout",target:o}),12e4);o.onerror=l.bind(null,o.onerror),o.onload=l.bind(null,o.onload),c&&document.head.appendChild(o)}})(),r.r=e=>{Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},r.p="https://js-agent.newrelic.com/",(()=>{const e={374:0,840:0};r.f.j=(t,n)=>{let i=r.o(e,t)?e[t]:void 0;if(0!==i)if(i)n.push(i[2]);else{const a=new Promise((r,n)=>i=e[t]=[r,n]);n.push(i[2]=a);const s=r.p+r.u(t),o=new Error,c=n=>{if(r.o(e,t)&&(i=e[t],0!==i&&(e[t]=void 0),i)){const e=n&&("load"===n.type?"missing":n.type),r=n&&n.target&&n.target.src;o.message="Loading chunk "+t+" failed: ("+e+": "+r+")",o.name="ChunkLoadError",o.type=e,o.request=r,i[1](o)}};r.l(s,c,"chunk-"+t,t)}};const t=(t,n)=>{let[i,a,s]=n;var o,c,u=0;if(i.some(t=>0!==e[t])){for(o in a)r.o(a,o)&&(r.m[o]=a[o]);if(s)s(r)}for(t&&t(n);u<i.length;u++)c=i[u],r.o(e,c)&&e[c]&&e[c][0](),e[c]=0},n=self["webpackChunk:NRBA-1.323.0.PROD"]=self["webpackChunk:NRBA-1.323.0.PROD"]||[];n.forEach(t.bind(null,0)),n.push=t.bind(null,n.push.bind(n))})(),(()=>{"use strict";r(8374);var e=r(8362),t=r(860);const n=Object.values(t.K7);var i=r(384),a=r(1741);var s=r(2555),o=r(981);t.K7.genericEvents,o.R.PA,o.R.UA,o.R.BP;const c={RESOURCES:"experimental.resources",REGISTER:"register"};var u=r(9300);const d=e=>{if(!e||"string"!=typeof e)return!1;try{document.createDocumentFragment().querySelector(e)}catch{return!1}return!0};var l=r(2614),f=r(944),g=r(8122);const p="[data-nr-mask]",m=e=>(0,g.a)(e,(()=>{const e={feature_flags:[],experimental:{register:!1,resources:!1,iframe_bridge:!1,iframe_domains:[]},mask_selector:"*",block_selector:"[data-nr-block]",mask_input_options:{color:!1,date:!1,"datetime-local":!1,email:!1,month:!1,number:!1,range:!1,search:!1,tel:!1,text:!1,time:!1,url:!1,week:!1,textarea:!1,select:!1,password:!0}};return{ajax:{deny_list:void 0,block_internal:!0,enabled:!0,autoStart:!0,capture_payloads:u.mo.NONE},api:{register:{get enabled(){return e.feature_flags.includes(c.REGISTER)||e.experimental.register},set enabled(t){e.experimental.register=t},duplicate_data_to_container:!1,get allow_iframe_bridge(){return e.feature_flags.includes(c.IFRAME_BRIDGE)||e.experimental.iframe_bridge},set allow_iframe_bridge(t){e.experimental.iframe_bridge=t},get iframe_domains(){return e.experimental.iframe_domains},set iframe_domains(t){Array.isArray(t)?e.experimental.iframe_domains=t:(0,f.R)(1,t)}}},browser_consent_mode:{enabled:!1},distributed_tracing:{enabled:void 0,exclude_newrelic_header:void 0,cors_use_newrelic_header:void 0,cors_use_tracecontext_headers:void 0,allowed_origins:void 0},get feature_flags(){return e.feature_flags},set feature_flags(t){e.feature_flags=t},generic_events:{enabled:!0,autoStart:!0},harvest:{interval:30},jserrors:{enabled:!0,autoStart:!0},logging:{enabled:!0,autoStart:!0},metrics:{enabled:!0,autoStart:!0},obfuscate:void 0,page_action:{enabled:!0},page_view_event:{enabled:!0,autoStart:!0},page_view_timing:{enabled:!0,autoStart:!0},performance:{capture_marks:!1,capture_measures:!1,capture_detail:!0,resources:{get enabled(){return e.feature_flags.includes(c.RESOURCES)||e.experimental.resources},set enabled(t){e.experimental.resources=t},asset_types:[],first_party_domains:[],ignore_newrelic:!0}},privacy:{cookies_enabled:!0},proxy:{assets:void 0,beacon:void 0},session:{expiresMs:l.wk,inactiveMs:l.BB},session_replay:{autoStart:!0,enabled:!1,preload:!1,sampling_rate:10,error_sampling_rate:100,collect_fonts:!1,inline_images:!1,fix_stylesheets:!0,mask_all_inputs:!0,get mask_text_selector(){return e.mask_selector},set mask_text_selector(t){d(t)?e.mask_selector="".concat(t,",").concat(p):""===t||null===t?e.mask_selector=p:(0,f.R)(5,t)},get block_class(){return"nr-block"},get ignore_class(){return"nr-ignore"},get mask_text_class(){return"nr-mask"},get block_selector(){return e.block_selector},set block_selector(t){d(t)?e.block_selector+=",".concat(t):""!==t&&(0,f.R)(6,t)},get mask_input_options(){return e.mask_input_options},set mask_input_options(t){t&&"object"==typeof t?e.mask_input_options={...t,password:!0}:(0,f.R)(7,t)}},session_trace:{enabled:!0,autoStart:!0},soft_navigations:{enabled:!0,autoStart:!0},ssl:void 0,user_actions:{enabled:!0,elementAttributes:["id","className","tagName","type"]},web_sockets:{enabled:!1}}})());var h=r(6154),v=r(9324);let b=0;const y={buildEnv:"PROD",distMethod:"CDN",version:v.xv,originTime:h.WN},_={consented:!1},w={activatedFeatures:void 0,appMetadata:{},configured:!1,get consented(){return this.session?.state?.consent||_.consented},set consented(e){_.consented=e},customTransaction:void 0,denyList:[],disabled:!1,drainRegistry:new Map,connector:void 0,harvester:void 0,v2Target:void 0,isolatedBacklog:!1,isRecording:!1,loaderType:void 0,maxBytes:3e4,obfuscator:void 0,onerror:void 0,ptid:void 0,releaseIds:{},session:void 0,timeKeeper:void 0,registeredEntities:[],jsAttributesMetadata:{bytes:0},get harvestCount(){return++b},listeningForIframeMessages:!1},R="BA";var A=r(7836),x=r(3241);const E={accountID:void 0,trustKey:void 0,agentID:void 0,licenseKey:void 0,applicationID:void 0,xpid:void 0};var S=r(9908);const k="newrelic-iframe-";function T(e,t={},n,o){let{init:c,info:u,loader_config:d,runtime:l={},exposed:f=!0}=t;if(!u){const e=(0,i.pV)();c=e.init,u=e.info,d=e.loader_config}var p;e.init=m(c||{}),e.loader_config=(p=d||{},(0,g.a)(p,E)),u.jsAttributes??={},h.bv&&(u.jsAttributes.isWorker=!0),e.info=(0,s.D)(u);const v=e.init;e.runtime??=(e=>{const t=(0,g.a)(e,w),r=Object.keys(y).reduce((e,t)=>(e[t]={value:y[t],writable:!1,configurable:!0,enumerable:!0},e),{});return Object.defineProperties(t,r)})(l),e.runtime.v2Target??={type:R,instance:e.agentIdentifier,get id(){return e.runtime.appMetadata?.agents?.[0]?.entityGuid},get attributes(){return{"entity.guid":this.id,appId:e.info.applicationID}}},v.proxy.assets&&(e=>{const t=e.startsWith("http");e+="/",r.p=t?e:"https://"+e})(v.proxy.assets),e.runtime.configured||(Object.defineProperty(e,"beacons",{get:()=>[e.info.beacon,e.info.errorBeacon,e.init.proxy.assets,e.init.proxy.beacon].filter(Boolean)}),Object.defineProperty(e.runtime,"denyList",{get:()=>[...e.init.ajax.deny_list||[],...e.init.ajax.block_internal?e.beacons:[]]}),e.runtime.ptid=e.agentIdentifier,function(e){const t=(0,i.pV)();Object.getOwnPropertyNames(a.W.prototype).forEach(r=>{const n=a.W.prototype[r];if("function"!=typeof n||"constructor"===n)return;let i=t[r];e[r]&&!1!==e.exposed&&"micro-agent"!==e.runtime?.loaderType&&(t[r]=(...t)=>{const n=e[r](...t);return i?i(...t):n})})}(e),e.runtime.loaderType=n,e.ee=A.ee.get(e.agentIdentifier),e.exposed=f,(0,x.W)({drained:!!e.runtime.activatedFeatures,type:"lifecycle",name:"initialize",feature:void 0,data:e.config}),e.init.api.register.allow_iframe_bridge&&h.gm.addEventListener("message",t=>{"string"==typeof t.data?.type&&t.data.type.startsWith(k)&&(0,S.p)("iframe-message",[t],void 0,"IFRAME",e.ee)}),e.runtime.configured=!0)}var j=r(1863),P=r(4261),N=r(1738);var O=r(1687),M=r(4234),I=r(5289),D=r(7767);function V(e){return!!(0,i.dV)().o.MO&&(0,D.V)(e)&&!0===e?.session_trace.enabled}var W=r(6389),B=r(7699);const C=new WeakSet,K=new WeakMap;class U extends M.W{constructor(e,t){super(e,t),this.abortHandler=void 0,this.featAggregate=void 0,this.loadedSuccessfully=void 0,this.onAggregateImported=new Promise(e=>{this.loadedSuccessfully=e}),this.deferred=Promise.resolve(),!1===e.init[this.featureName].autoStart?this.deferred=new Promise((t,r)=>{this.ee.on("manual-start-all",(0,W.J)(()=>{(0,O.Ak)(e,this.featureName),t()}))}):(0,O.Ak)(e,t)}importAggregator(e,t,n={}){if(this.featAggregate)return;const i=async()=>{if(await this.deferred,this.#t(e),!(0,s.f)(e.info))return(0,f.R)(43),e.ee.abort(),void this.loadedSuccessfully(!1);try{await async function(e,t,n){if(K.has(e))return K.get(e);const i=(async()=>{if((0,D.V)(e.init))try{const{setupAgentSession:t}=await r.e(296).then(r.bind(r,1768));t(e)}catch(e){(0,f.R)(20,e),t.emit("internal-error",[e]),(0,S.p)(B.qh,[e],void 0,n,t)}if(e.init.api.register.allow_iframe_bridge)try{const{setupIframeMFEMessageListener:t}=await Promise.resolve().then(function(){const e=new Error("Cannot find module '../../loaders/configure/iframe-message-handler'");throw e.code="MODULE_NOT_FOUND",e});t(e)}catch(e){(0,f.R)(23,e)}const[{Connector:i},{Harvester:a}]=await Promise.all([r.e(296).then(r.bind(r,6589)),r.e(296).then(r.bind(r,5237))]);e.runtime.connector=new i(e),e.runtime.harvester=new a(e);const s=Object.values(e.features).filter(t=>e.runtime.drainRegistry.has(t.featureName));Promise.all(s.map(e=>e.onAggregateImported)).then(()=>e.runtime.harvester.startTimer())})();K.set(e,i),await i}(e,this.ee,this.featureName)}catch(e){return(0,f.R)(79,e),this.ee.abort(),void this.loadedSuccessfully(!1)}try{if(!this.#r(this.featureName,e.runtime.session,e.init))return this.abortHandler?.(),(0,O.Ze)(this.agentRef,this.featureName),void this.loadedSuccessfully(!1);const{Aggregate:r}=await t();this.featAggregate=new r(e,n),e.runtime.harvester.initializedAggregates.push(this.featAggregate),this.loadedSuccessfully(!0)}catch(e){(0,f.R)(34,e),this.abortHandler?.(),(0,O.Ze)(this.agentRef,this.featureName,!0),this.loadedSuccessfully(!1)}};h.RI?(0,I.GG)(()=>i(),!0):i()}#r(e,r,n){if(this.blocked)return!1;switch(e){case t.K7.sessionReplay:return V(n)&&!!r;case t.K7.sessionTrace:return!!r;default:return!0}}#t(e){if(!C.has(e)&&(C.add(e),!(0,s.f)(e.info))){const t=(0,i.pV)();let r={...t.info?.jsAttributes};try{r={...r,...e.info?.jsAttributes}}catch(e){}T(e,{...t,info:{...t.info,jsAttributes:r},runtime:e.runtime},e.runtime.loaderType)}}}var L=r(6630);class F extends U{static featureName=L.T;constructor(e){var t;super(e,L.T),this.setupInspectionEvents(),t=e,(0,N.Y)(P.Fw,function(e,r){"string"==typeof e&&("/"!==e.charAt(0)&&(e="/"+e),t.runtime.customTransaction=(r||"http://custom.transaction")+e,(0,S.p)("api-"+P.Fw,[(0,j.t)()],void 0,void 0,t.ee))},t),this.importAggregator(e,()=>e.init.feature_flags.includes("rum_v2")?r.e(296).then(r.bind(r,908)):r.e(296).then(r.bind(r,7927)))}setupInspectionEvents(){const e=(e,t)=>{e&&(0,x.W)({timeStamp:e.timeStamp,loaded:"complete"===e.target.readyState,type:"window",name:t,data:e.target.location+""})};(0,I.sB)(t=>{e(t,"DOMContentLoaded")}),(0,I.GG)(t=>{e(t,"load")}),(0,I.Qr)(t=>{e(t,"navigate")}),this.ee.on(l.tS.UPDATE,(e,t)=>{(0,x.W)({type:"lifecycle",name:"session",data:t})})}}class G extends e.d{constructor(e){var t;(super(),h.gm)?(this.features={},(0,i.bQ)(this.agentIdentifier,this),this.desiredFeatures=new Set(e.features||[]),this.desiredFeatures.add(F),T(this,e,e.loaderType||"agent"),t=this,(0,N.Y)(P.cD,function(e,r,n=!1){if("string"==typeof e){if(["string","number","boolean"].includes(typeof r)||null===r)return(0,N.U)(t,e,r,P.cD,n);(0,f.R)(40,typeof r)}else(0,f.R)(39,typeof e)},t),function(e){(0,N.Y)(P.Dl,function(t,r=!1){if("string"!=typeof t&&null!==t)return void(0,f.R)(41,typeof t);const n=e.info.jsAttributes["enduser.id"];r&&null!=n&&n!==t?(0,S.p)("api-setUserIdAndResetSession",[t],void 0,"session",e.ee):(0,N.U)(e,"enduser.id",t,P.Dl,!0)},e)}(this),function(e){(0,N.Y)(P.nb,function(t){if("string"==typeof t||null===t)return(0,N.U)(e,"application.version",t,P.nb,!1);(0,f.R)(42,typeof t)},e)}(this),function(e){(0,N.Y)("start",function(){e.ee.emit("manual-start-all")},e)}(this),function(e){(0,N.Y)(P.Pv,function(t=!0){if("boolean"==typeof t){if((0,S.p)("api-"+P.Pv,[t],void 0,"session",e.ee),e.runtime.consented=t,t){const t=e.features.page_view_event;t.onAggregateImported.then(e=>{const r=t.featAggregate;e&&!r.sentRum&&r.sendRum?.()})}}else(0,f.R)(65,typeof t)},e)}(this),this.run()):(0,f.R)(21)}get config(){return{info:this.info,init:this.init,loader_config:this.loader_config,runtime:this.runtime}}get api(){return this}run(){try{const e=function(e){const t={};return n.forEach(r=>{t[r]=!!e[r]?.enabled}),t}(this.init),r=[...this.desiredFeatures],i=this.init.feature_flags.includes("rum_v2");r.sort((e,r)=>t.P3[e.featureName]-t.P3[r.featureName]),r.forEach(r=>{if(!e[r.featureName]&&(i||r.featureName!==t.K7.pageViewEvent))return;const n=function(e){switch(e){case t.K7.ajax:return[t.K7.jserrors];case t.K7.sessionTrace:return[t.K7.ajax,t.K7.pageViewEvent];case t.K7.sessionReplay:return[t.K7.sessionTrace];case t.K7.pageViewTiming:return[t.K7.pageViewEvent];default:return[]}}(r.featureName).filter(e=>!(e in this.features));n.length>0&&(0,f.R)(36,{targetFeature:r.featureName,missingDependencies:n}),this.features[r.featureName]=new r(this)})}catch(e){(0,f.R)(22,e);for(const e in this.features)this.features[e].abortHandler?.();const t=(0,i.Zm)();delete t.initializedAgents[this.agentIdentifier]?.features,delete this.sharedAggregator;return t.ee.get(this.agentIdentifier).abort(),!1}}}var H=r(2843),z=r(782);class Y extends U{static featureName=z.T;constructor(e){super(e,z.T),h.RI&&((0,H.u)(()=>(0,S.p)("docHidden",[(0,j.t)()],void 0,z.T,this.ee),!0),(0,H.G)(()=>(0,S.p)("winPagehide",[(0,j.t)()],void 0,z.T,this.ee)),this.importAggregator(e,()=>r.e(296).then(r.bind(r,9981))))}}var Z=r(3969);class q extends U{static featureName=Z.TZ;constructor(e){super(e,Z.TZ),this.importAggregator(e,()=>r.e(296).then(r.bind(r,9623)))}}new G({features:[F,Y,q],loaderType:"lite"})})()})();</script><script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","errorBeacon":"bam.nr-data.net","licenseKey":"8ab8eca189","applicationID":"301410610","transactionName":"NVRaNUpVVhZUVEMICQwefhRWV0wMWlkYAxMOWhYXUVFPFg9VQg0NPUJdEktdVwtqW14SEg==","queueTime":0,"applicationTime":245,"agent":""}</script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Open States CSV Downloads</title>
+        <meta name="description" property="og:description" content="Download bulk data from Open States">
+        
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@openstates">
+        <meta property="og:url" content="https://open.pluralpolicy.com/data/session-csv/">
+        <meta property="og:title" content="Open States CSV Downloads">
+        <meta property="og:image" content="https://open.pluralpolicy.com/static/images/openstates_icon_transparent.01ab5cbe89e4.png">
+        
+
+        <!-- Favicon -->
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/images/favicon/apple-touch-icon.186b3db6ca3b.png?v=20190106">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon/favicon-32x32.46909a47386d.png?v=20190106">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon/favicon-16x16.cea066ed0cce.png?v=20190106">
+        <link rel="manifest" href="/static/images/favicon/site.5aa8f883f7d2.webmanifest?v=20190106">
+        <link rel="mask-icon" href="/static/images/favicon/safari-pinned-tab.dbc2b8509892.svg?v=20190106" color="#233240">
+        <link rel="shortcut icon" href="/static/images/favicon/favicon.720dc2bccde4.ico?v=20190106">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-config" content="/static/images/favicon/browserconfig.0f68633a664a.xml?v=20190106">
+        <meta name="theme-color" content="#ffffff">
+
+        <style>
+form button {
+    margin-bottom: 1em;
+    background-color: #043231;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #005e5c;
+}
+	</style>
+
+        
+        
+    </head>
+
+    <body>
+        
+
+
+
+<header class="header">
+    <div class="grid-container" id="header__top">
+        <a href="/">
+            <img class="header__logo" width="300" src="/static/images/openstates_plural_logo.80156d5d548b.png" alt="OpenStates Logo">
+        </a>
+
+       <div id="header__login">
+         
+         <a href="/accounts/login/">Log In</a> /
+         <a href="/accounts/signup/">Sign Up</a>
+         
+       </div>
+    </div>
+
+    
+    <div class="navigation">
+        <div class="grid-container">
+
+        </div>
+
+    </div>
+    
+
+    <!-- <div class="donation-banner"> </div> -->
+
+    
+    <div class="notification-banner">
+      <ul>
+      
+        <li class="warning">Please log in to access download links.</li>
+      
+      </ul>
+    </div>
+    
+</header>
+
+
+        <div class="grid-container">
+            <div class="grid-x grid-padding-x">
+                <div class="cell medium-12 mt1">
+                    
+<h1 class="heading--large">Open States Bulk CSV Data</h1>
+
+<section class="mt1">
+  <p>These archives provide bulk data in an experimental CSV format.
+    Please consider providing feedback by <a href="mailto:contact@openstates.org">emailing us</a>.
+  </p>
+
+  <ul> 
+  
+  
+  </ul>
+  <a name="Alabama"></a>
+  <h2 class="heading">Alabama</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Alabama 2017 Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Alabama 2018 Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Alabama 2019 Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Alabama 2020 Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Alabama 2021 Regular Session</a> (updated 2021-09-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Alabama 2022 Regular Session</a> (updated 2023-01-30)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Alabama 2023 Regular Session</a> (updated 2023-11-17)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Alabama 2024 Regular Session</a> (updated 2024-08-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Alabama 2025 Regular Session</a> (updated 2025-07-15)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Alabama 2026 Regular Session</a> (updated 2026-09-17)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Alabama First Special Session 2019</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Alabama First Special Session 2021</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Alabama First Special Session 2022</a> (updated 2022-10-22)</li>
+  
+  
+  </ul>
+  <a name="Alaska"></a>
+  <h2 class="heading">Alaska</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Alaska 30th Legislature (2017-2018)</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Alaska 31st Legislature (2019-2020)</a> (updated 2021-03-02)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Alaska 32nd Legislature (2021-2022)</a> (updated 2023-01-16)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Alaska 33rd Legislature (2023-2024)</a> (updated 2025-01-16)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Alaska 34th Legislature (2025-2026)</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="Arizona"></a>
+  <h2 class="heading">Arizona</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arizona 53rd Legislature - 1st Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arizona 53rd Legislature - 1st Special Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arizona 53rd Legislature - 2nd Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arizona 54th Legislature - 1st Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arizona 54th Legislature - 2nd Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arizona 55th Legislature - 1st Regular Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arizona 55th Legislature - 1st Special Session</a> (updated 2021-08-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arizona 56th Legislature - First Regular Session</a> (updated 2023-11-14)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arizona 56th Legislature - Second Regular Session</a> (updated 2024-12-04)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arizona 57th Legislature - First Regular Session</a> (updated 2025-11-19)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arizona 57th Legislature - Second Regular Session</a> (updated 2026-09-08)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arizona Fifty-fifth Legislature - Second Regular Session</a> (updated 2022-12-15)</li>
+  
+  
+  </ul>
+  <a name="Arkansas"></a>
+  <h2 class="heading">Arkansas</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arkansas 2017 First Extraordinary Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arkansas 2018 Fiscal Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arkansas 2018 Second Extraordinary Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arkansas 2019 Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arkansas 2020 First Extraordinary Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arkansas 2020 Fiscal Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arkansas 2021 First Extraordinary Session</a> (updated 2021-09-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arkansas 2021 Regular Session</a> (updated 2022-01-31)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arkansas 2021 Second Extraordinary Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arkansas 2022 Fiscal Session</a> (updated 2022-05-12)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arkansas 2022 Third Extraordinary Session</a> (updated 2022-09-02)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arkansas 2023 First Extraordinary Session</a> (updated 2024-02-29)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arkansas 2023 Regular Session</a> (updated 2023-08-23)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arkansas 2024 Fiscal Session</a> (updated 2024-07-21)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arkansas 2024 Second Extraordinary Session</a> (updated 2024-07-21)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arkansas 2025 Regular Session</a> (updated 2025-08-26)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arkansas 2026 First Extraordinary Session</a> (updated 2026-05-12)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Arkansas 2026 Fiscal Session</a> (updated 2026-05-06)</li>
+  
+  
+  </ul>
+  <a name="California"></a>
+  <h2 class="heading">California</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 1989-1990 Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 1989-1990, 1st Special Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 1991-1992 Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 1991-1992, 1st Special Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 1991-1992, 2nd Special Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 1993-1994 Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 1993-1994, 1st Special Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 1995-1996 Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 1995-1996, 1st Special Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 1995-1996, 2nd Special Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 1995-1996, 3rd Special Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 1995-1996, 4th Special Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 1997-1998 Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 1997-1998, 1st Special Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 1999-2000 Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 1999-2000, 1st Special Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2001-2002 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2001-2002, 1st Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2001-2002, 2nd Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2001-2002, 3rd Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2003-2004 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2003-2004, 1st Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2003-2004, 2nd Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2003-2004, 3rd Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2003-2004, 4th Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2003-2004, 5th Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2007-2008 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2007-2008, 1st Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2007-2008, 2nd Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2007-2008, 3rd Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2007-2008, 4th Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2009-2010 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2009-2010, 1st Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2009-2010, 2nd Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2009-2010, 3rd Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2009-2010, 4th Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2009-2010, 5th Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2009-2010, 6th Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2009-2010, 7th Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2009-2010, 8th Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2011-2012 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2011-2012, 1st Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2013-2014 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2013-2014, 1st Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2013-2014, 2nd Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2015-2016 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2015-2016, 1st Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2015-2016, 2nd Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2017-2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2019-2020 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2021-2022 Regular Session</a> (updated 2022-12-07)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2023-2024 Regular Session</a> (updated 2024-11-28)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2023-2024, Special Session 1</a> (updated 2024-10-22)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2023-2024, Special Session 2</a> (updated 2024-10-31)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2025-2026 Regular Session</a> (updated 2026-10-08)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  California 2025-2026, Special Session 1</a> (updated 2026-07-15)</li>
+  
+  
+  </ul>
+  <a name="Colorado"></a>
+  <h2 class="heading">Colorado</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Colorado 2017 First Extraordinary Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Colorado 2017 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Colorado 2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Colorado 2019 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Colorado 2020 First Extraordinary Session</a> (updated 2021-03-02)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Colorado 2020 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Colorado 2021 Regular Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Colorado 2022 Regular Session</a> (updated 2022-12-20)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Colorado 2023 First Extraordinary Session</a> (updated 2024-01-04)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Colorado 2023 Regular Session</a> (updated 2023-09-13)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Colorado 2024 First Extraordinary Session</a> (updated 2024-10-09)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Colorado 2024 Regular Session</a> (updated 2025-01-13)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Colorado 2025 First Extraordinary Session</a> (updated 2026-01-13)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Colorado 2025 Regular Session</a> (updated 2025-08-26)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Colorado 2026 Regular Session</a> (updated 2026-09-02)</li>
+  
+  
+  </ul>
+  <a name="Connecticut"></a>
+  <h2 class="heading">Connecticut</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Connecticut 2017 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Connecticut 2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Connecticut 2019 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Connecticut 2020 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Connecticut 2021 Regular Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Connecticut 2022 Regular Session</a> (updated 2023-01-07)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Connecticut 2023 Regular Session</a> (updated 2023-12-28)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Connecticut 2024 Regular Session</a> (updated 2025-01-12)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Connecticut 2025 Regular Session</a> (updated 2026-02-07)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Connecticut 2026 Regular Session</a> (updated 2026-10-04)</li>
+  
+  
+  </ul>
+  <a name="Delaware"></a>
+  <h2 class="heading">Delaware</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Delaware 149th General Assembly (2017-2018)</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Delaware 150th General Assembly (2019-2020)</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Delaware 151st General Assembly (2021-2022)</a> (updated 2022-11-14)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Delaware 152nd General Assembly (2023-2024)</a> (updated 2024-11-27)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Delaware 153rd General Assembly (2025-2026)</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="District of Columbia"></a>
+  <h2 class="heading">District of Columbia</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  District of Columbia 22nd Council Period (2017-2018)</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  District of Columbia 23rd Council Period (2019-2020)</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  District of Columbia 24th Council Period (2021-2022)</a> (updated 2023-01-06)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  District of Columbia 25th Council Period (2023-2024)</a> (updated 2025-01-12)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  District of Columbia 26th Council Period (2025-2026)</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="Florida"></a>
+  <h2 class="heading">Florida</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2017 Special Session A</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2019 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2020 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2021 Regular Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2021 Special Session A</a> (updated 2021-07-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2021 Special Session B</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2022 Regular Session</a> (updated 2022-08-26)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2022 Special Session A</a> (updated 2023-01-12)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2022 Special Session C</a> (updated 2022-08-26)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2022 Special Session D</a> (updated 2022-08-26)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2023 Regular Session</a> (updated 2024-03-07)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2023 Special Session B</a> (updated 2023-05-02)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2023 Special Session C</a> (updated 2024-03-07)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2024 Regular Session</a> (updated 2024-08-16)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2025 Regular Session</a> (updated 2025-08-22)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2025 Special Session A</a> (updated 2025-03-14)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2025 Special Session B</a> (updated 2025-07-24)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2025 Special Session C</a> (updated 2025-05-26)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2026 Regular Session</a> (updated 2026-09-26)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2026 Special Session D</a> (updated 2026-05-14)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2026 Special Session E</a> (updated 2026-06-03)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Florida 2026 Special Session F</a> (updated 2026-08-06)</li>
+  
+  
+  </ul>
+  <a name="Georgia"></a>
+  <h2 class="heading">Georgia</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Georgia 2013-2014 Regular Session</a> (updated 2022-06-17)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Georgia 2015-2016 Regular Session</a> (updated 2022-06-17)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Georgia 2017-2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Georgia 2018 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Georgia 2019-2020 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Georgia 2020 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Georgia 2021 Special Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Georgia 2021-2022 Regular Session</a> (updated 2022-11-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Georgia 2023 Special Session</a> (updated 2024-01-16)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Georgia 2023-2024 Regular Session</a> (updated 2024-12-11)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Georgia 2025-2026 Regular Session</a> (updated 2026-06-21)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Georgia 2026 Special Session</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="Hawaii"></a>
+  <h2 class="heading">Hawaii</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Hawaii 2017 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Hawaii 2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Hawaii 2019 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Hawaii 2020 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Hawaii 2021 Regular Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Hawaii 2022 Regular Session</a> (updated 2023-01-12)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Hawaii 2023 Regular Session</a> (updated 2023-08-29)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Hawaii 2024 Regular Session</a> (updated 2025-01-11)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Hawaii 2025 Regular Session</a> (updated 2025-12-24)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Hawaii 2026 Regular Session</a> (updated 2026-09-18)</li>
+  
+  
+  </ul>
+  <a name="Idaho"></a>
+  <h2 class="heading">Idaho</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Idaho 64th Legislature, 1st Regular Session (2017)</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Idaho 64th Legislature, 2nd Regular Session (2018)</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Idaho 65th Legislature, 1st Regular Session (2019)</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Idaho 65th Legislature, 2nd Regular Session (2020)</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Idaho 65th Legislature, First Extraordinary Session (2020)</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Idaho 66th Legislature, 1st Regular Session (2021)</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Idaho 66th Legislature, 2nd Regular Session (2022)</a> (updated 2022-07-06)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Idaho 66th Legislature, First Extraordinary Session (2022)</a> (updated 2022-12-20)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Idaho 67th Legislature, 1st Regular Session (2023)</a> (updated 2023-05-24)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Idaho 67th Legislature, 2nd Regular Session (2024)</a> (updated 2024-06-19)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Idaho 68th Legislature, 1st Regular Session (2025)</a> (updated 2026-01-12)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Idaho 68th Legislature, 2nd Regular Session (2026)</a> (updated 2026-07-17)</li>
+  
+  
+  </ul>
+  <a name="Illinois"></a>
+  <h2 class="heading">Illinois</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Illinois 100th Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Illinois 100th Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Illinois 101st Regular Session</a> (updated 2021-03-02)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Illinois 102nd Regular Session</a> (updated 2023-03-25)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Illinois 103rd Regular Session</a> (updated 2025-01-14)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Illinois 104th Regular Session</a> (updated 2026-10-08)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Illinois 90th Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Illinois 91st Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Illinois 92nd Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Illinois 93rd Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Illinois 93rd Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Illinois 94th Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Illinois 95th Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Illinois 95th Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Illinois 96th Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Illinois 96th Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Illinois 97th Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Illinois 98th Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Illinois 99th Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+  </ul>
+  <a name="Indiana"></a>
+  <h2 class="heading">Indiana</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Indiana 2017 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Indiana 2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Indiana 2018 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Indiana 2019 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Indiana 2020 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Indiana 2021 Regular Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Indiana 2022 Regular Session</a> (updated 2022-07-28)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Indiana 2022 Special Session</a> (updated 2022-11-23)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Indiana 2023 Regular Session</a> (updated 2023-11-28)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Indiana 2024 Regular Session</a> (updated 2024-12-26)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Indiana 2025 Regular Session</a> (updated 2025-11-25)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Indiana 2026 Regular Session</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="Iowa"></a>
+  <h2 class="heading">Iowa</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Iowa 2017-2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Iowa 2019-2020 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Iowa 2021-2022 Regular Session</a> (updated 2022-11-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Iowa 2023-2024 Regular Session</a> (updated 2024-12-15)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Iowa 2025-2026 Regular Session</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="Kansas"></a>
+  <h2 class="heading">Kansas</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Kansas 2017-2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Kansas 2019-2020 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Kansas 2020 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Kansas 2021 Special Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Kansas 2021-2022 Regular Session</a> (updated 2022-11-14)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Kansas 2023-2024 Regular Session</a> (updated 2025-01-14)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Kansas 2025-2026 Regular Session</a> (updated 2026-09-20)</li>
+  
+  
+  </ul>
+  <a name="Kentucky"></a>
+  <h2 class="heading">Kentucky</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Kentucky 2017 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Kentucky 2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Kentucky 2018 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Kentucky 2019 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Kentucky 2019 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Kentucky 2020 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Kentucky 2021 Regular Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Kentucky 2021 Special Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Kentucky 2022 Regular Session</a> (updated 2022-08-29)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Kentucky 2022 Special Session</a> (updated 2022-09-02)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Kentucky 2023 Regular Session</a> (updated 2023-11-16)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Kentucky 2024 Regular Session</a> (updated 2024-11-06)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Kentucky 2025 Regular Session</a> (updated 2025-07-31)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Kentucky 2026 Regular Session</a> (updated 2026-08-26)</li>
+  
+  
+  </ul>
+  <a name="Louisiana"></a>
+  <h2 class="heading">Louisiana</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2017, 2nd Extraordinary Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2018, 1st Extraordinary Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2018, 2nd Extraordinary Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2018, 3rd Extraordinary Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2019 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2020 First Extraordinary Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2020 Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2020 Second Extraordinary Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2021 Regular Session</a> (updated 2021-11-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2022 First Extraordinary Session</a> (updated 2022-04-12)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2022 Regular Session</a> (updated 2022-06-20)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2022 Second Extraordinary Session</a> (updated 2023-01-11)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2023 First Extraordinary Session</a> (updated 2023-02-14)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2023 Regular Session</a> (updated 2024-01-17)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2024 First Extraordinary Session</a> (updated 2024-02-18)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2024 Regular Session</a> (updated 2024-11-15)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2024 Second Extraordinary Session</a> (updated 2024-08-29)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2024 Third Extraordinary Session</a> (updated 2025-02-04)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2025 First Extraordinary Session</a> (updated 2025-11-05)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2025 Regular Session</a> (updated 2025-10-12)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Louisiana 2026 Regular Session</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="Maine"></a>
+  <h2 class="heading">Maine</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Maine 128th Legislature (2017-2018)</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Maine 129th Legislature (2019-2020)</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Maine 130th Legislature (2021-2022)</a> (updated 2022-12-06)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Maine 131st Legislature (2023-2024)</a> (updated 2024-12-02)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Maine 132nd Legislature (2025-2026)</a> (updated 2026-07-16)</li>
+  
+  
+  </ul>
+  <a name="Maryland"></a>
+  <h2 class="heading">Maryland</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Maryland 2017 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Maryland 2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Maryland 2019 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Maryland 2020 Regular Session</a> (updated 2021-04-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Maryland 2021 Regular Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Maryland 2021, 1st Special Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Maryland 2022 Regular Session</a> (updated 2022-11-24)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Maryland 2023 Regular Session</a> (updated 2023-11-20)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Maryland 2024 Regular Session</a> (updated 2024-11-20)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Maryland 2025 Regular Session</a> (updated 2025-12-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Maryland 2026 Regular Session</a> (updated 2026-08-12)</li>
+  
+  
+  </ul>
+  <a name="Massachusetts"></a>
+  <h2 class="heading">Massachusetts</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Massachusetts 190th Legislature (2017-2018)</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Massachusetts 191st Legislature (2019-2020)</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Massachusetts 192nd Legislature (2021-2022)</a> (updated 2023-01-11)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Massachusetts 193rd Legislature (2023-2024)</a> (updated 2025-01-08)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Massachusetts 194th Legislature (2025-2026)</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="Michigan"></a>
+  <h2 class="heading">Michigan</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Michigan 2017-2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Michigan 2019-2020 Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Michigan 2021-2022 Regular Session</a> (updated 2023-01-18)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Michigan 2023-2024 Regular Session</a> (updated 2025-05-13)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Michigan 2025-2026 Regular Session</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="Minnesota"></a>
+  <h2 class="heading">Minnesota</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Minnesota 2013-2014 Regular Session</a> (updated 2022-06-20)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Minnesota 2017, 1st Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Minnesota 2017-2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Minnesota 2019, First Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Minnesota 2019-2020 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Minnesota 2020, Fifth Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Minnesota 2020, First Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Minnesota 2020, Fourth Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Minnesota 2020, Second Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Minnesota 2020, Seventh Special Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Minnesota 2020, Sixth Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Minnesota 2020, Third Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Minnesota 2021, First Special Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Minnesota 2021-2022 Regular Session</a> (updated 2022-12-13)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Minnesota 2023-2024 Regular Session</a> (updated 2025-01-18)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Minnesota 2025, First Special Session</a> (updated 2026-01-18)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Minnesota 2025-2026 Regular Session</a> (updated 2026-10-01)</li>
+  
+  
+  </ul>
+  <a name="Mississippi"></a>
+  <h2 class="heading">Mississippi</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Mississippi 2017 First Extraordinary Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Mississippi 2018 First Extraordinary Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Mississippi 2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Mississippi 2019 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Mississippi 2020 Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Mississippi 2021 Regular Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Mississippi 2022 First Extraordinary Session</a> (updated 2022-11-24)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Mississippi 2022 Regular Session</a> (updated 2022-09-07)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Mississippi 2023 Regular Session</a> (updated 2023-07-14)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Mississippi 2024 First Extraordinary Session</a> (updated 2024-01-30)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Mississippi 2024 Regular Session</a> (updated 2024-09-29)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Mississippi 2024 Second Extraordinary Session</a> (updated 2024-04-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Mississippi 2025 First Extraordinary Session</a> (updated 2025-07-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Mississippi 2025 Regular Session</a> (updated 2025-05-21)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Mississippi 2026 1st Extraordinary Session</a> (updated 2026-08-11)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Mississippi 2026 Regular Session</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="Missouri"></a>
+  <h2 class="heading">Missouri</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Missouri 2017 First Extraordinary Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Missouri 2017 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Missouri 2017 Second Extraordinary Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Missouri 2018 First Extraordinary Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Missouri 2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Missouri 2018 Second Extraordinary Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Missouri 2019 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Missouri 2020 First Extraordinary Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Missouri 2020 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Missouri 2020 Second Extraordinary Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Missouri 2021 1st Extraordinary Session</a> (updated 2021-08-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Missouri 2021 Regular Session</a> (updated 2021-08-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Missouri 2022 1st Extraordinary Session</a> (updated 2022-10-18)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Missouri 2022 Regular Session</a> (updated 2022-12-02)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Missouri 2023 Regular Session</a> (updated 2023-08-31)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Missouri 2024 Regular Session</a> (updated 2024-12-05)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Missouri 2025 1st Extraordinary Session</a> (updated 2025-09-08)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Missouri 2025 2nd Extraordinary Session</a> (updated 2025-11-17)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Missouri 2025 Regular Session</a> (updated 2025-06-05)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Missouri 2026 Regular Session</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="Montana"></a>
+  <h2 class="heading">Montana</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Montana 2017 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Montana 2019 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Montana 2021 Regular Session</a> (updated 2022-07-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Montana 2023 Regular Session</a> (updated 2024-12-16)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Montana 2025 Regular Session</a> (updated 2026-09-06)</li>
+  
+  
+  </ul>
+  <a name="Nebraska"></a>
+  <h2 class="heading">Nebraska</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Nebraska 105th Legislature (2017-2018)</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Nebraska 106th Legislature (2019-2020)</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Nebraska 107th Legislature (2021-2022)</a> (updated 2022-11-08)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Nebraska 107th Legislature 1st Special Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Nebraska 108th Legislature (2023-2024)</a> (updated 2024-07-16)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Nebraska 108th Legislature First Special Session</a> (updated 2024-10-02)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Nebraska 109th Legislature (2025-2026)</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="Nevada"></a>
+  <h2 class="heading">Nevada</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Nevada 2017 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Nevada 2019 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Nevada 2021 Regular Session</a> (updated 2022-08-02)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Nevada 2023 Regular Session</a> (updated 2025-01-03)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Nevada 2025 Regular Session</a> (updated 2025-11-17)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Nevada 31st (2020) Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Nevada 32nd (2020) Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Nevada 33rd (2021) Special Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Nevada 34th (2023) Special Session</a> (updated 2023-08-06)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Nevada 35th (2023) Special Session</a> (updated 2023-08-07)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Nevada 36th (2026) Special Session</a> (updated 2026-07-12)</li>
+  
+  
+  </ul>
+  <a name="New Hampshire"></a>
+  <h2 class="heading">New Hampshire</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Hampshire 2017 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Hampshire 2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Hampshire 2019 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Hampshire 2020 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Hampshire 2021 Regular Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Hampshire 2022 Regular Session</a> (updated 2022-12-17)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Hampshire 2023 Regular Session</a> (updated 2023-12-11)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Hampshire 2024 Regular Session</a> (updated 2024-12-19)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Hampshire 2025 Regular Session</a> (updated 2025-12-11)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Hampshire 2026 Regular Session</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="New Jersey"></a>
+  <h2 class="heading">New Jersey</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Jersey 2016-2017 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Jersey 2018-2019 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Jersey 2020-2021 Regular Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Jersey 2022-2023 Regular Session</a> (updated 2024-01-17)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Jersey 2024-2025 Regular Session</a> (updated 2026-01-19)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Jersey 2026-2027 Regular Session</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="New Mexico"></a>
+  <h2 class="heading">New Mexico</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Mexico 2017 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Mexico 2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Mexico 2019 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Mexico 2020 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Mexico 2020 Second Special Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Mexico 2020 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Mexico 2021 Regular Session</a> (updated 2021-06-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Mexico 2021 Second Special Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Mexico 2021 Special Session</a> (updated 2021-05-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Mexico 2022 Regular Session</a> (updated 2022-03-28)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Mexico 2022 Third Special Session</a> (updated 2022-04-14)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Mexico 2023 Regular Session</a> (updated 2024-01-11)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Mexico 2024 First Special Session</a> (updated 2024-09-20)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Mexico 2024 Regular Session</a> (updated 2024-03-25)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Mexico 2025 First Special Session</a> (updated 2025-10-15)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Mexico 2025 Regular Session</a> (updated 2025-07-03)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Mexico 2025 Second Special Session</a> (updated 2025-11-24)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New Mexico 2026 Regular Session</a> (updated 2026-05-06)</li>
+  
+  
+  </ul>
+  <a name="New York"></a>
+  <h2 class="heading">New York</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New York 2017 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New York 2019 Regular Session</a> (updated 2021-03-02)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New York 2021 Regular Session</a> (updated 2023-01-04)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New York 2023 Regular Session</a> (updated 2025-01-07)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  New York 2025 Regular Session</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="North Carolina"></a>
+  <h2 class="heading">North Carolina</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 1985-1986 Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 1986 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 1987-1988 Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 1989 Extra Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 1989-1990 Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 1990 Extra Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 1991 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 1991-1992 Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 1993-1994 Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 1994 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 1995-1996 Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 1996 Special Session 1</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 1996 Special Session 2</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 1997-1998 Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 1998 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 1999 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 1999-2000 Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2000 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2001-2002 Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2002 Extra Session on Redistricting</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2003 Extra Session on Economic Development Issues</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2003 Extra Session on Redistricting</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2003-2004 Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2004 Extra Session on Economic Development Issues</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2005-2006 Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2007 Extra Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2007-2008 Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2008 Extra Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2009-2010 Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2011-2012 Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2013-2014 Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2015-2016 Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2016 Extra Session 1</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2016 Extra Session 2</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2016 Extra Session 3</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2016 Extra Session 4</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2016 Extra Session 5</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2017-2018 Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2018 Extra Session 1</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2018 Extra Session 2</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2018 Extra Session 3</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2019-2020 Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2021-2022 Session</a> (updated 2023-01-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2023-2024 Session</a> (updated 2025-01-14)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Carolina 2025-2026 Session</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="North Dakota"></a>
+  <h2 class="heading">North Dakota</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Dakota 65th Legislative Assembly (2017-2018)</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Dakota 66th Legislative Assembly (2019-2020)</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Dakota 67th (2021) Legislative Assembly Special 2021 Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Dakota 67th Legislative Assembly (2021-2022)</a> (updated 2023-01-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Dakota 68th Legislative Assembly (2023-24)</a> (updated 2024-12-09)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  North Dakota 69th Legislative Assembly (2025-26)</a> (updated 2026-09-22)</li>
+  
+  
+  </ul>
+  <a name="Ohio"></a>
+  <h2 class="heading">Ohio</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Ohio 132st Legislature (2017-2018)</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Ohio 133rd Legislature (2019-2020)</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Ohio 134th Legislature (2021-2022)</a> (updated 2023-01-04)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Ohio 135th Legislature (2023-2024)</a> (updated 2025-01-12)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Ohio 135th Legislature, First Special Session</a> (updated 2024-12-19)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Ohio 136th Legislature (2025-2026)</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="Oklahoma"></a>
+  <h2 class="heading">Oklahoma</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oklahoma 2017 First Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oklahoma 2017-2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oklahoma 2019-2020 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oklahoma 2020 First Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oklahoma 2020 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oklahoma 2021 First Special Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oklahoma 2021 Regular Session</a> (updated 2021-11-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oklahoma 2022 Regular Session</a> (updated 2022-11-26)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oklahoma 2022 Second Special Session</a> (updated 2022-11-22)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oklahoma 2022 Third Special Session</a> (updated 2022-06-22)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oklahoma 2023 First Special Session</a> (updated 2023-09-07)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oklahoma 2023 Regular Session</a> (updated 2023-12-06)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oklahoma 2024 Fourth Special Session</a> (updated 2024-07-22)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oklahoma 2024 Regular Session</a> (updated 2024-11-11)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oklahoma 2024 Third Special Session</a> (updated 2024-02-07)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oklahoma 2025 Regular Session</a> (updated 2025-12-02)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oklahoma 2026 Regular Session</a> (updated 2026-09-16)</li>
+  
+  
+  </ul>
+  <a name="Oregon"></a>
+  <h2 class="heading">Oregon</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oregon 2017 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oregon 2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oregon 2018 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oregon 2019 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oregon 2020 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oregon 2020 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oregon 2020 Special Session 2</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oregon 2020 Special Session 3</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oregon 2021 Regular Session</a> (updated 2021-10-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oregon 2021 Special Session</a> (updated 2021-11-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oregon 2021 Special Session 2</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oregon 2022 Regular Session</a> (updated 2022-12-09)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oregon 2023 Regular Session</a> (updated 2024-01-29)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oregon 2024 Regular Session</a> (updated 2024-12-03)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oregon 2024 Special Session</a> (updated 2024-12-25)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oregon 2025 Regular Session</a> (updated 2025-10-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oregon 2025 Special Session</a> (updated 2025-11-19)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Oregon 2026 Regular Session</a> (updated 2026-08-31)</li>
+  
+  
+  </ul>
+  <a name="Pennsylvania"></a>
+  <h2 class="heading">Pennsylvania</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Pennsylvania 2017-2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Pennsylvania 2019-2020 Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Pennsylvania 2021-2022 Regular Session</a> (updated 2022-12-31)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Pennsylvania 2023-2024 Regular Session</a> (updated 2025-01-13)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Pennsylvania 2023-2024 Special Session #1</a> (updated 2024-12-09)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Pennsylvania 2025-2026 Regular Session</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="Puerto Rico"></a>
+  <h2 class="heading">Puerto Rico</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Puerto Rico 2017-2020 Session</a> (updated 2021-04-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Puerto Rico 2021-2024 Session</a> (updated 2025-01-14)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Puerto Rico 2025-2028 Session</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="Rhode Island"></a>
+  <h2 class="heading">Rhode Island</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Rhode Island 2017 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Rhode Island 2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Rhode Island 2019 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Rhode Island 2020 Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Rhode Island 2021 Regular Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Rhode Island 2022 Regular Session</a> (updated 2023-01-09)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Rhode Island 2023 Regular Session</a> (updated 2023-11-07)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Rhode Island 2024 Regular Session</a> (updated 2024-10-16)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Rhode Island 2025 Regular Session</a> (updated 2025-09-11)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Rhode Island 2026 Regular Session</a> (updated 2026-07-02)</li>
+  
+  
+  </ul>
+  <a name="South Carolina"></a>
+  <h2 class="heading">South Carolina</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  South Carolina 2017-2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  South Carolina 2019-2020 Regular Session</a> (updated 2023-06-23)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  South Carolina 2021-2022 Regular Session</a> (updated 2023-06-21)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  South Carolina 2023-2024 Regular Session</a> (updated 2024-12-11)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  South Carolina 2025-2026 Regular Session</a> (updated 2026-10-01)</li>
+  
+  
+  </ul>
+  <a name="South Dakota"></a>
+  <h2 class="heading">South Dakota</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  South Dakota 2017 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  South Dakota 2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  South Dakota 2018 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  South Dakota 2019 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  South Dakota 2020 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  South Dakota 2020 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  South Dakota 2021 Regular Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  South Dakota 2021 Second Special Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  South Dakota 2021 Special Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  South Dakota 2022 Regular Session</a> (updated 2022-11-16)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  South Dakota 2023 Regular Session</a> (updated 2023-05-04)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  South Dakota 2024 Regular Session</a> (updated 2024-11-22)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  South Dakota 2025 First Special Session</a> (updated 2025-11-19)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  South Dakota 2025 Regular Session</a> (updated 2025-06-05)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  South Dakota 2026 Regular Session</a> (updated 2026-08-04)</li>
+  
+  
+  </ul>
+  <a name="Tennessee"></a>
+  <h2 class="heading">Tennessee</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Tennessee 110th Regular Session (2017-2018)</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Tennessee 111th First Extraordinary Session (August 2019)</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Tennessee 111th Regular Session (2019-2020)</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Tennessee 111th Second Extraordinary Session (August 2020)</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Tennessee 112th Regular Session (2021-2022)</a> (updated 2022-11-21)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Tennessee 112th Second Extraordinary Session (October 2021)</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Tennessee 112th Third Extraordinary Session (October 2021)</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Tennessee 113th First Extraordinary Session (August 2023)</a> (updated 2023-11-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Tennessee 113th Regular Session (2023-2024)</a> (updated 2024-11-12)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Tennessee 114th First Extraordinary Session (January 2025)</a> (updated 2026-07-27)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Tennessee 114th Regular Session (2025-2026)</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="Texas"></a>
+  <h2 class="heading">Texas</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Texas 85nd Legislature, 1st Called Session (2017)</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Texas 86th Legislature (2019)</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Texas 87th Legislature (2021)</a> (updated 2021-10-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Texas 87th Legislature, 1st Called Session (2021)</a> (updated 2021-10-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Texas 87th Legislature, 2nd Called Session (2021)</a> (updated 2021-11-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Texas 87th Legislature, 3rd Called Session (2021)</a> (updated 2022-10-06)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Texas 88th Legislature (2023)</a> (updated 2023-06-27)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Texas 88th Legislature, 1st Called Session (2023)</a> (updated 2023-07-19)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Texas 88th Legislature, 2nd Called Session (2023)</a> (updated 2023-08-25)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Texas 88th Legislature, 3rd Called Session (2023)</a> (updated 2024-11-18)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Texas 88th Legislature, 4th Called Session (2023)</a> (updated 2024-11-18)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Texas 89th Legislature (2025)</a> (updated 2025-08-05)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Texas 89th Legislature, 1st Called Session (2025)</a> (updated 2026-06-17)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Texas 89th Legislature, 2nd Called Session (2025)</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="United States"></a>
+  <h2 class="heading">United States</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  United States 117th Congress</a> (updated 2023-01-11)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  United States 118th Congress</a> (updated 2025-01-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  United States 119th Congress</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="Utah"></a>
+  <h2 class="heading">Utah</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2017 First Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2017 General Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2018 General Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2018 Second Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2019 First Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2019 General Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2019 Second Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2020 Fifth Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2020 Fourth Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2020 General Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2020 Sixth Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2020 Third Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2021 First House Extraordinary Session</a> (updated 2021-08-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2021 First Senate Extraordinary Session</a> (updated 2021-08-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2021 First Special Session</a> (updated 2021-07-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2021 General Session</a> (updated 2021-06-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2021 Second Special Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2022 General Session</a> (updated 2022-09-16)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2022 Third Special Session</a> (updated 2022-04-06)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2023 First Special Session</a> (updated 2023-05-27)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2023 General Session</a> (updated 2023-05-04)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2023 Second Special Session</a> (updated 2023-09-04)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2024 Fourth Special Session</a> (updated 2024-08-28)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2024 General Session</a> (updated 2024-05-22)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2024 Third Special Session</a> (updated 2024-08-05)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2025 First Special Session</a> (updated 2025-11-12)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2025 General Session</a> (updated 2025-07-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2025 Second Special Session</a> (updated 2026-07-15)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Utah 2026 General Session</a> (updated 2026-07-23)</li>
+  
+  
+  </ul>
+  <a name="Vermont"></a>
+  <h2 class="heading">Vermont</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Vermont 2017-2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Vermont 2018 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Vermont 2019-2020 Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Vermont 2021 Special Session</a> (updated 2022-01-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Vermont 2021-2022 Regular Session</a> (updated 2022-11-21)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Vermont 2023-2024 Regular Session</a> (updated 2024-11-05)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Vermont 2025-2026 Regular Session</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="Virginia"></a>
+  <h2 class="heading">Virginia</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Virginia 2017 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Virginia 2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Virginia 2018, 1st Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Virginia 2018, 2nd Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Virginia 2019 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Virginia 2019, 1st Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Virginia 2020 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Virginia 2020, 1st Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Virginia 2021 Regular Session</a> (updated 2021-08-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Virginia 2021, 2nd Special Session</a> (updated 2021-10-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Virginia 2022 Regular Session</a> (updated 2022-10-05)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Virginia 2022, 1st Special Session</a> (updated 2022-10-05)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Virginia 2023 Regular Session</a> (updated 2023-09-13)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Virginia 2023, 1st Special Session</a> (updated 2023-09-13)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Virginia 2024 Regular Session</a> (updated 2024-05-16)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Virginia 2024, 1st Special Session</a> (updated 2024-09-26)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Virginia 2025 Regular Session</a> (updated 2025-11-22)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Virginia 2026 Regular Session</a> (updated 2026-04-28)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Virginia 2026, 1st Special Session</a> (updated 2026-09-18)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Virginia 2027 Regular Session</a> (updated 2026-10-08)</li>
+  
+  
+  </ul>
+  <a name="Washington"></a>
+  <h2 class="heading">Washington</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Washington 2017-2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Washington 2019-2020 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Washington 2021-2022 Regular Session</a> (updated 2022-12-08)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Washington 2023-2024 Regular Session</a> (updated 2025-06-11)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Washington 2025-2026 Regular Session</a> (updated 2026-07-21)</li>
+  
+  
+  </ul>
+  <a name="West Virginia"></a>
+  <h2 class="heading">West Virginia</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2017 First Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2017 Second Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2018 Second Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2019 First Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2019 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2020 Regular Session</a> (updated 2021-03-02)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2021 First Special Session</a> (updated 2021-08-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2021 Regular Session</a> (updated 2021-07-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2021 Second Special Session</a> (updated 2021-09-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2021 Third Special Session</a> (updated 2021-11-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2022 First Special Session</a> (updated 2022-04-14)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2022 Fourth Special Session</a> (updated 2022-12-28)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2022 Regular Session</a> (updated 2022-04-27)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2022 Second Special Session</a> (updated 2022-05-15)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2022 Third Special Session</a> (updated 2022-12-29)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2023 First Special Session</a> (updated 2024-01-04)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2023 Regular Session</a> (updated 2023-05-31)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2024 First Special Session</a> (updated 2024-09-23)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2024 Regular Session</a> (updated 2024-05-23)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2024 Second Special Session</a> (updated 2024-12-09)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2025 Regular Session</a> (updated 2025-11-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  West Virginia 2026 Regular Session</a> (updated 2026-10-01)</li>
+  
+  
+  </ul>
+  <a name="Wisconsin"></a>
+  <h2 class="heading">Wisconsin</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wisconsin 2017-2018 Regular Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wisconsin 2019-2020 Regular Session</a> (updated 2021-02-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wisconsin 2021-2022 Regular Session</a> (updated 2022-12-28)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wisconsin 2023-2024 Regular Session</a> (updated 2025-01-10)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wisconsin 2025-2026 Regular Session</a> (updated 2026-10-08)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wisconsin August 2017 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wisconsin January 2017 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wisconsin January 2018 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wisconsin January 2021 Special Session</a> (updated 2022-12-13)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wisconsin March 2018 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wisconsin May 2026 Special Session</a> (updated 2026-10-08)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wisconsin September 2023 Special Session</a> (updated 2024-08-31)</li>
+  
+  
+  </ul>
+  <a name="Wyoming"></a>
+  <h2 class="heading">Wyoming</h2>
+  <ul>
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wyoming 2017</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wyoming 2018</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wyoming 2019 General Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wyoming 2020 General Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wyoming 2020 Special Session</a> (updated 2021-02-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wyoming 2021 General Session</a> (updated 2021-07-01)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wyoming 2021 Special Session</a> (updated 2022-04-12)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wyoming 2022 Regular Session</a> (updated 2022-07-14)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wyoming 2023 Regular Session</a> (updated 2023-07-25)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wyoming 2024 Regular Session</a> (updated 2024-11-22)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wyoming 2025 Regular Session</a> (updated 2025-09-18)</li>
+  
+  
+
+  <li>
+    
+    <a href="/accounts/login/?next=/data/session-csv/">
+    
+
+  Wyoming 2026 Regular Session</a> (updated 2026-09-22)</li>
+  
+
+  </ul> 
+</section>
+
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+    <div class="grid-container">
+        <div class="grid-x grid-margin-x">
+
+            <div class="cell medium-4">
+                <h2 class="heading--xsmall">About</h2>
+                <ul class="no-bullet">
+                    <li><a href="/find_your_legislator/">Find Your Legislators</a></li>
+                    <li><a href="/about/subscriptions/">Track State Bills</a></li>
+                    <li><a href="/about/">About Open States</a></li>
+                    <li><a href="/tos/">Terms of Use &amp; Privacy</a></li>
+                </ul>
+            </div>
+
+            <div class="cell medium-4">
+                <h2 class="heading--xsmall">Code &amp; Data</h2>
+                <ul class="no-bullet">
+                    <li><a href="https://github.com/openstates">Code on GitHub</a></li>
+                    <li><a href="https://docs.openstates.org/api-v3/">API Documentation</a></li>
+                    <li><a href="/data/">Bulk Data</a></li>
+                    <li><a href="https://github.com/openstates/issues/issues/new/choose">Report an Issue</a></li>
+                    <li><a href="/about/contributing/">Contribute To Open States</a></li>
+                </ul>
+            </div>
+
+            <div class="cell medium-4">
+                <h2 class="heading--xsmall">Follow Us</h2>
+                <ul class="no-bullet">
+                    <li><a href="https://twitter.com/openstates">Twitter</a></li>
+                    <li><a href="https://blog.openstates.org/">Blog</a></li>
+                    <li><a href="https://matrix.to/#/#open-states:matrix.org">Matrix chat space</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</footer>
+
+        <script src="/static/bundles/main.eefb6cafcc61.js"></script>
+        
+        
+    </body>
+</html>
