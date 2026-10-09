@@ -1,7 +1,8 @@
 # Rebuilds data/elections/<date>.json (contests, candidates, ballot measures,
 # candidate statements and arguments) from official sources only: the
-# California Secretary of State, county elections offices and the FEC. See
-# tools/build_elections.py and docs/elections.md. Daily during election season,
+# California Secretary of State, county elections offices and the FEC; and
+# Washington's statewide measures from its Secretary of State. See
+# tools/build_elections.py, tools/build_wa_measures.py and docs/elections.md. Daily during election season,
 # and on demand (Actions -> Refresh election data -> Run workflow).
 name: Refresh election data
 on:
@@ -16,11 +17,13 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - run: sudo apt-get install -y -qq poppler-utils >/dev/null
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null
       - name: Build from official sources
         env:
           FEC_API_KEY: ${{ secrets.FEC_API_KEY }}
         run: python3 tools/build_elections.py
+      - name: Washington's statewide measures (Secretary of State, Attorney General, Office of Financial Management)
+        run: python3 tools/build_wa_measures.py
       - name: Commit the data
         run: |
           git config user.name "github-actions[bot]"

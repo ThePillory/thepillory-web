@@ -164,6 +164,8 @@ const ASSETS = {
     const path = new URL(u).pathname;
     if (path === "/data/elections/2026-11-03.json") return new Response(JSON.stringify(ELECTION));
     if (path === "/data/geo/places/ca.json") return new Response(JSON.stringify(PLACE));
+    // Washington's real file (tools/build_wa_measures.py): its three statewide measures.
+    if (path === "/data/elections/2026-11-03-wa.json") return new Response(readFileSync(new URL("../../../data/elections/2026-11-03-wa.json", import.meta.url), "utf8"));
     return new Response("not found", { status: 404 });
   },
 };
@@ -229,7 +231,7 @@ test("your ballot: private, built from the districts cookie; without it, the loo
   const none = await get("/elections/2026-11-03/ballot/");
   assert.match(none.html, /data-next="\/elections\/2026-11-03\/ballot\/"/);
   const nv = await get("/elections/2026-11-03/ballot/", `pillory_districts=${encodeURIComponent("st=NV&cd=1")}`);
-  assert.match(nv.html, /California's ballot so far/);
+  assert.match(nv.html, /California&#x27;s full ballot and Washington&#x27;s statewide measures so far/);
 });
 
 test("court page and election page", async () => {
@@ -240,4 +242,20 @@ test("court page and election page", async () => {
   assert.match(all.html, /Statewide propositions/);
   assert.equal((await get("/elections/2030-01-01/")).res.status, 404);
   assert.equal((await get("/elections/2026-11-03/contest/nope/")).res.status, 404);
+});
+
+test("Washington: the statewide measures, the pamphlet's official parts first, both sides' arguments in matching cards", async () => {
+  const all = await get("/elections/2026-11-03-wa/");
+  assert.equal(all.res.status, 200);
+  for (const n of ["IP26-645", "IL26-001", "IL26-638"]) assert.ok(all.html.includes(`Initiative Measure No. ${n}`), n);
+  assert.doesNotMatch(all.html, /Statewide offices|By district/, "no candidates or districts: measures only");
+  const { res, html } = await get("/elections/2026-11-03-wa/measure/il26-001/");
+  assert.equal(res.status, 200);
+  const order = ["Ballot title · Written by the Office of the Attorney General", "Fiscal impact · Written by the Office of Financial Management", "The law as it presently exists", "The effect of the proposed measure if approved", "Arguments from each campaign"].map((t) => html.indexOf(t));
+  assert.ok(order.every((i) => i > 0) && order.every((i, k) => !k || i > order[k - 1]), "official parts first, in the pamphlet's order, then the arguments");
+  for (const label of ["Supporters&#x27; argument", "Opponents&#x27; rebuttal", "Opponents&#x27; argument", "Supporters&#x27; rebuttal"]) assert.ok(html.includes(label), label);
+  assert.doesNotMatch(html, /Contact:|@gmail\.com|nohateinwastate\.org/, "no campaign contact details");
+  // A visitor in Washington is sent to Washington's measures from California's ballot page.
+  const wa = await get("/elections/2026-11-03/ballot/", `pillory_districts=${encodeURIComponent("st=WA&cd=7")}`);
+  assert.match(wa.html, /href="\/elections\/2026-11-03-wa\/"/);
 });

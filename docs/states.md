@@ -201,6 +201,8 @@ California's measures come from the Secretary of State's HTML voter guide (`tool
 
 Counts are from each official source where it was found. Where only press coverage was found, the official list must be checked before any build. The sandbox this was written in can't reach most Secretary of State sites, so each builder needs a probe run (as for California) before it's trusted.
 
+**Washington is built** (October 2026): its three statewide measures, from the Secretary of State's official documents (`tools/build_wa_measures.py`, see docs/elections.md).
+
 **Building the five most-visited.** Not in this change. "Most visited" needs the lookup counts this change starts collecting (`state_interest`), which are empty until it's live. Each state also needs its own reader and a part-by-part audit like the 14 California measures. The plan: after a week of lookups, take the top five states that have November measures, build the HTML states (Washington, Florida, Missouri) first, and use the same measure page layout as California. That means official content first, campaign arguments collapsed with the same note, and both sides in matching panels.
 
 ## Setup after merging

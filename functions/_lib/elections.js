@@ -13,9 +13,19 @@ import { fold } from "./summary.js";
 import { esc, safeUrl, sourceLink, fmtDate } from "./render.js";
 import { asset } from "./geo.js";
 
-// Elections ThePillory has, newest first. One file each in data/elections/.
-export const ELECTIONS = ["2026-11-03"];
+// Elections ThePillory has, newest first. One file each in data/elections/:
+// California's full ballot (tools/build_elections.py) and Washington's statewide
+// measures (tools/build_wa_measures.py).
+export const ELECTIONS = ["2026-11-03", "2026-11-03-wa"];
 export const CURRENT = ELECTIONS[0];
+/** The next election ThePillory has for each state. */
+export const ELECTION_BY_STATE = { CA: "2026-11-03", WA: "2026-11-03-wa" };
+/** The election to show for a state: its own, or California's (the default) when ThePillory has none for it. */
+export const electionIdFor = (st) => ELECTION_BY_STATE[st] || CURRENT;
+/** True for an election ThePillory has only the statewide measures of (no candidates or local contests). */
+export const measuresOnly = (election) => !!election && !(election.contests || []).length;
+/** "California's ballot and Washington's statewide measures": what ThePillory has, said plainly. */
+export const COVERAGE_NOTE = "ThePillory has California's full ballot and Washington's statewide measures so far";
 
 export const loadElection = (env, request, id) => (ELECTIONS.includes(id) ? asset(env, request, `/data/elections/${id}.json`) : null);
 
@@ -267,8 +277,10 @@ export function whenLine(election, todayIso) {
 }
 
 /** "How to vote": official pages only, linked rather than restated. */
+const STATE_TITLE = { CA: "California", WA: "Washington" };
+
 export function howToVote(election, countyFips = null, { heading = true } = {}) {
-  const groups = [["California Secretary of State", election.how_to_vote.state]];
+  const groups = [[`${STATE_TITLE[election.election.state] || election.election.state} Secretary of State`, election.how_to_vote.state]];
   const county = countyFips && election.how_to_vote[countyFips];
   if (county) groups.push([(election.counties[countyFips] || {}).name || "Your county", county]);
   return `
@@ -294,9 +306,13 @@ export function contestRow(electionId, c, note = "") {
 </a>`;
 }
 
+/** A statewide measure's name as its ballot prints it: "Proposition 1", "Initiative Measure No. IL26-001". */
+export const measureName = (m) => m.label || `Proposition ${m.number}`;
+
 export function measureRow(electionId, m, note = "") {
-  const title = m.scope === "statewide" ? `Proposition ${m.number}` : `${m.title}${m.jurisdiction ? ` · ${m.jurisdiction}` : ""}`;
-  const sub = m.scope === "statewide" ? titleCase(m.title) : note;
+  const title = m.scope === "statewide" ? measureName(m) : `${m.title}${m.jurisdiction ? ` · ${m.jurisdiction}` : ""}`;
+  // California's titles are printed in capitals; Washington's statement of subject is a sentence.
+  const sub = m.scope === "statewide" ? (m.label ? m.title : titleCase(m.title)) : note;
   return `
 <a class="list-row link-row" href="${measureHref(electionId, m.id)}">
   <div><div class="list-title">${esc(title)}</div>${sub ? `<div class="list-meta">${esc(sub)}</div>` : ""}</div>
@@ -319,15 +335,19 @@ export function courtRow(electionId, g) {
  * only covers part of it, and a "Your ballot" link that the browser shows only
  * when it has saved districts (data-if-districts, in assets/app.js).
  */
-export function onTheBallot(election, { rows, intro = "", today = null, folded = false }) {
+export function onTheBallot(election, { rows, intro = "", today = null, folded = false, ballotLinks = true }) {
   const id = election.election.id;
+  // "Your ballot" is built from districts; an election with only statewide measures has the same ballot everywhere.
+  const yours = ballotLinks
+    ? `<a class="btn btn--primary btn--block" href="${ballotHref(id)}" data-if-districts hidden>Your ballot</a>
+  <p class="small" data-unless-districts><a class="inline-link" href="${ballotHref(id)}">Find your ballot</a> by address or ZIP code.</p>`
+    : "";
   // folded: a collapsed section (summary-first pages), with the date beside its title.
   if (folded) {
     return fold("elections", "On the ballot", `<a class="out-link" href="${electionHref(id)}">Whole ballot</a>
   ${intro ? `<p class="small secondary">${esc(intro)}</p>` : ""}
   <div class="card">${rows.join("")}</div>
-  <a class="btn btn--primary btn--block" href="${ballotHref(id)}" data-if-districts hidden>Your ballot</a>
-  <p class="small" data-unless-districts><a class="inline-link" href="${ballotHref(id)}">Find your ballot</a> by address or ZIP code.</p>
+  ${yours}
   ${today ? `<p class="hint"><a class="inline-link" href="/elections/#how-to-vote">How to vote</a></p>` : ""}`, { meta: today ? whenLine(election, today) : fmtDate(election.election.date) });
   }
   return `
@@ -335,8 +355,7 @@ export function onTheBallot(election, { rows, intro = "", today = null, folded =
   <div class="section-head"><h2 class="label" id="h-elections">On the ballot · ${esc(fmtDate(election.election.date))}</h2><a class="section-link" href="${electionHref(id)}">Whole ballot</a></div>
   ${intro ? `<p class="small secondary">${esc(intro)}</p>` : ""}
   <div class="card">${rows.join("")}</div>
-  <a class="btn btn--primary btn--block" href="${ballotHref(id)}" data-if-districts hidden>Your ballot</a>
-  <p class="small" data-unless-districts><a class="inline-link" href="${ballotHref(id)}">Find your ballot</a> by address or ZIP code.</p>
+  ${yours}
   ${today ? `<p class="hint">Election Day: ${esc(whenLine(election, today))}. <a class="inline-link" href="/elections/#how-to-vote">How to vote</a></p>` : ""}
 </section>`;
 }
