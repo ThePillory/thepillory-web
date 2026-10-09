@@ -17,7 +17,7 @@
 // vintage already shows the next Congress's districts, so the vintage is
 // chosen by name. When the 120th Congress starts (January 2027), set
 // CENSUS_VINTAGE to the vintage whose layer is "120th Congressional Districts".
-import { STATE_BY_FIPS, CALAVERAS_FIPS, cleanDistricts, describe, COOKIE } from "../_lib/districts.js";
+import { STATE_BY_FIPS, CALAVERAS_FIPS, cleanDistricts, describe, legislativeSeats, COOKIE } from "../_lib/districts.js";
 import { page, esc } from "../_lib/render.js";
 
 const GEOCODER = "https://geocoding.geo.census.gov/geocoder/geographies/onelineaddress";
@@ -53,12 +53,17 @@ export function districtsFromMatch(match, congress = congressNow()) {
   const st = STATE_BY_FIPS[fips];
   if (!st) return null;
   const cdMatches = cdKey && new RegExp(`^${congress}(st|nd|rd|th) `).test(cdKey);
+  // A state legislative district's name as the Census writes it ("12", "7th Middlesex"); none for "ZZZ" (water).
+  const sld = (g) => {
+    const name = g && String(g.BASENAME || g.NAME || "").trim();
+    return name && !/^Z+$/.test(name) && !/not defined/i.test(name) ? name : null;
+  };
   const raw = {
     st,
     // BASENAME is the district number; at-large seats and delegates have none ("00", "98").
     cd: cdMatches && cd ? (/^\d+$/.test(cd.BASENAME || "") ? cd.BASENAME : "0") : null,
-    su: su && /^\d+$/.test(su.BASENAME || "") ? su.BASENAME : null,
-    sl: sl && /^\d+$/.test(sl.BASENAME || "") ? sl.BASENAME : null,
+    su: sld(su),
+    sl: sld(sl),
     co: county && /^\d{5}$/.test(county.GEOID || "") ? county.GEOID : null,
   };
   return { districts: cleanDistricts(raw), county: county ? county.NAME : null, cdChecked: !!cdMatches };
@@ -130,13 +135,14 @@ async function withNames(env, result) {
   try {
     for (const c of result.choices) {
       const d = c.districts;
+      const seats = legislativeSeats(d);
       const { results } = await env.DB
         .prepare(
           `SELECT name, chamber FROM officials WHERE active = 1 AND state = ? AND (
-             (chamber = 'us-house' AND district_code = ?) OR (chamber = 'ca-senate' AND district_code = ?) OR (chamber = 'ca-assembly' AND district_code = ?))
-           ORDER BY chamber DESC`
+             (chamber = 'us-house' AND district_code = ?)${seats.map(() => " OR (chamber = ? AND district_code = ?)").join("")})
+           ORDER BY chamber = 'us-house' DESC, name`
         )
-        .bind(d.st, d.cd || "", d.st === "CA" ? d.su || "" : "", d.st === "CA" ? d.sl || "" : "")
+        .bind(d.st, d.cd || "", ...seats.flat())
         .all();
       if (results.length) c.label += ` (${results.map((r) => r.name).join(", ")})`;
     }
@@ -186,7 +192,19 @@ function choicePage(result, next) {
   );
 }
 
-export async function onRequestPost({ request, env }) {
+// One more lookup in this state today (state_interest): which states visitors
+// look up most decides the order states are loaded in (docs/states.md). Only
+// the state is counted; the address, ZIP and visitor are never kept.
+function countLookup(env, result) {
+  const st = result && result.found && result.districts && result.districts.st;
+  if (!st || !env.DB) return Promise.resolve();
+  return env.DB.prepare("INSERT INTO state_interest (st, day, lookups) VALUES (?, date('now'), 1) ON CONFLICT (st, day) DO UPDATE SET lookups = lookups + 1")
+    .bind(st)
+    .run()
+    .catch(() => {});
+}
+
+export async function onRequestPost({ request, env, waitUntil }) {
   const url = new URL(request.url);
   const type = request.headers.get("Content-Type") || "";
   if (type.includes("application/json")) {
@@ -196,7 +214,9 @@ export async function onRequestPost({ request, env }) {
     } catch (_) {
       return reply({ found: false, error: "Send {\"q\": \"…\"}." }, 400);
     }
-    return reply(await lookup(env, request, body && (body.q || body.address)));
+    const result = await lookup(env, request, body && (body.q || body.address));
+    if (waitUntil) waitUntil(countLookup(env, result));
+    return reply(result);
   }
   // Plain form post.
   const form = await request.formData();
@@ -205,6 +225,7 @@ export async function onRequestPost({ request, env }) {
   const next = nextPath(form.get("next"));
   let result = pick ? { found: true, districts: cleanDistricts(Object.fromEntries(new URLSearchParams(String(pick)))) } : await lookup(env, request, form.get("q"));
   if (result.found && result.districts) {
+    if (waitUntil && !pick) waitUntil(countLookup(env, result));
     return new Response(null, { status: 303, headers: { Location: `${url.origin}${next}`, "Set-Cookie": cookieHeader(result.districts), "Cache-Control": "no-store" } });
   }
   if (result.choices) return choicePage(result, next);

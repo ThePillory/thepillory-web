@@ -158,16 +158,17 @@ export async function votesInYear(db, officialIds, year, { limit = 10, chambers 
     .prepare(
       `SELECT v.*, b.bill_number, b.title AS bill_title FROM votes v LEFT JOIN bills b ON b.id = v.bill_id
        WHERE v.chamber IN (${ph(chambers)}) AND v.vote_date >= ? AND v.vote_date < ? AND v.vote_type = 'final_passage'
-         AND EXISTS (SELECT 1 FROM vote_positions p WHERE p.vote_id = v.id AND p.official_id IN (${ph(officialIds)}))
+         AND (EXISTS (SELECT 1 FROM vote_positions p WHERE p.vote_id = v.id AND p.official_id IN (${ph(officialIds)}))
+           OR EXISTS (SELECT 1 FROM state_positions sp JOIN officials so ON so.k = sp.member_k WHERE sp.vote_k = v.k AND so.id IN (${ph(officialIds)})))
        ORDER BY v.vote_date DESC, v.id DESC LIMIT ?`
     )
-    .bind(...chambers, `${year}-01-01`, `${year + 1}-01-01`, ...officialIds, limit + 1)
+    .bind(...chambers, `${year}-01-01`, `${year + 1}-01-01`, ...officialIds, ...officialIds, limit + 1)
     .all();
   const rows = results.slice(0, limit);
   if (rows.length) {
     const { results: pos } = await db
       .prepare(
-        `SELECT p.vote_id, p.official_id, p.position, p.raw_position, o.name, o.slug, o.active FROM vote_positions p JOIN officials o ON o.id = p.official_id
+        `SELECT p.vote_id, p.official_id, p.position, p.raw_position, o.name, o.slug, o.active FROM all_positions p JOIN officials o ON o.id = p.official_id
          WHERE p.vote_id IN (${ph(rows)}) AND p.official_id IN (${ph(officialIds)}) ORDER BY o.name`
       )
       .bind(...rows.map((r) => r.id), ...officialIds)
@@ -181,10 +182,14 @@ export async function votesInYear(db, officialIds, year, { limit = 10, chambers 
 export async function voteCountInYear(db, officialId, year) {
   return db
     .prepare(
-      `SELECT COUNT(*) AS total, SUM(v.vote_type = 'final_passage') AS final FROM vote_positions p JOIN votes v ON v.id = p.vote_id
-       WHERE p.official_id = ? AND v.vote_date >= ? AND v.vote_date < ?`
+      `SELECT SUM(total) AS total, SUM(final) AS final FROM (
+         SELECT COUNT(*) AS total, SUM(v.vote_type = 'final_passage') AS final FROM vote_positions p JOIN votes v ON v.id = p.vote_id
+         WHERE p.official_id = ? AND v.vote_date >= ? AND v.vote_date < ?
+         UNION ALL
+         SELECT COUNT(*), SUM(v.vote_type = 'final_passage') FROM officials o JOIN state_positions sp ON sp.member_k = o.k JOIN votes v ON v.k = sp.vote_k
+         WHERE o.id = ? AND v.vote_date >= ? AND v.vote_date < ?)`
     )
-    .bind(officialId, `${year}-01-01`, `${year + 1}-01-01`)
+    .bind(officialId, `${year}-01-01`, `${year + 1}-01-01`, officialId, `${year}-01-01`, `${year + 1}-01-01`)
     .first();
 }
 
@@ -192,7 +197,7 @@ export async function voteCountInYear(db, officialId, year) {
 export async function officialVotesInYear(db, officialId, year, { all = false, limit = 30, offset = 0 } = {}) {
   const { results } = await db
     .prepare(
-      `SELECT v.*, p.position, p.raw_position, b.bill_number, b.title AS bill_title FROM vote_positions p
+      `SELECT v.*, p.position, p.raw_position, b.bill_number, b.title AS bill_title FROM all_positions p
        JOIN votes v ON v.id = p.vote_id LEFT JOIN bills b ON b.id = v.bill_id
        WHERE p.official_id = ? AND v.vote_date >= ? AND v.vote_date < ? AND (? = 1 OR v.vote_type = 'final_passage')
        ORDER BY v.vote_date DESC, v.id DESC LIMIT ? OFFSET ?`

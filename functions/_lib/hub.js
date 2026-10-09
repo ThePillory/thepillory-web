@@ -1,6 +1,7 @@
 // Pieces of the hub (/) and the briefings: Happening now, the district lookup
 // form, and the waitlist counts. Everything shown is from D1 or an honest
 // empty state.
+import { listScope, voteScope } from "./data.js";
 import { esc, fmtDate } from "./render.js";
 import { CHAMBER_NAME } from "./data.js";
 import { billHref } from "./votes.js";
@@ -28,7 +29,7 @@ export async function happeningNow(db, level, { limit = 4, officialIds = [] } = 
   const sql = (withSkip) => `
     SELECT v.*, b.bill_number, b.title AS bill_title, b.summary AS bill_summary
     FROM votes v JOIN bills b ON b.id = v.bill_id
-    WHERE v.vote_type = 'final_passage' AND v.level = ? ${withSkip ? skip : ""}
+    WHERE v.vote_type = 'final_passage' AND ${voteScope(level).sql} ${withSkip ? skip : ""}
       AND v.id = (SELECT v2.id FROM votes v2 WHERE v2.bill_id = v.bill_id AND v2.vote_type = 'final_passage'
                   ORDER BY v2.vote_date DESC, v2.id DESC LIMIT 1)
     ORDER BY v.vote_date DESC, v.id DESC LIMIT ?`;
@@ -38,21 +39,21 @@ export async function happeningNow(db, level, { limit = 4, officialIds = [] } = 
   const fromList = `
     SELECT v.*, b.bill_number, b.title AS bill_title, b.summary AS bill_summary
     FROM bill_list l JOIN votes v ON v.id = l.final_vote_id JOIN bills b ON b.id = l.bill_id
-    WHERE l.level = ? AND l.last_final IS NOT NULL AND l.routine = 0
+    WHERE ${listScope(level).sql} AND l.last_final IS NOT NULL AND l.routine = 0
     ORDER BY l.last_final DESC, v.id DESC LIMIT ?`;
   let rows = null;
   try {
-    rows = (await db.prepare(fromList).bind(level, limit).all()).results;
+    rows = (await db.prepare(fromList).bind(...listScope(level).binds, limit).all()).results;
   } catch (err) {
     if (!missingTable(err)) throw err;
   }
   // No list yet, or an empty one the sync hasn't filled: the same from the votes table.
   if (!rows || !rows.length) {
     try {
-      rows = (await db.prepare(sql(true)).bind(level, limit).all()).results;
+      rows = (await db.prepare(sql(true)).bind(...voteScope(level).binds, limit).all()).results;
     } catch (err2) {
       if (!missingTable(err2)) throw err2;
-      rows = (await db.prepare(sql(false)).bind(level, limit).all()).results;
+      rows = (await db.prepare(sql(false)).bind(...voteScope(level).binds, limit).all()).results;
     }
   }
   if (!rows.length) return rows;
@@ -85,7 +86,7 @@ export async function happeningNow(db, level, { limit = 4, officialIds = [] } = 
     positions = (
       await db
         .prepare(
-          `SELECT p.vote_id, p.position, p.raw_position, o.name, o.slug FROM vote_positions p JOIN officials o ON o.id = p.official_id
+          `SELECT p.vote_id, p.position, p.raw_position, o.name, o.slug FROM all_positions p JOIN officials o ON o.id = p.official_id
            WHERE p.vote_id IN (${rows.map(() => "?").join(",")}) AND p.official_id IN (${officialIds.map(() => "?").join(",")})
            ORDER BY o.name`
         )
@@ -130,7 +131,7 @@ export function nowCard(v, { personal = false } = {}) {
 }
 
 /** The Congress / California toggle and cards. `which`: "federal" | "state". */
-export function happeningSection(rows, which, { hrefFor, personal = false, loaded = true, id = "now" } = {}) {
+export function happeningSection(rows, which, { hrefFor, personal = false, loaded = true, id = "now", state = { value: "state", name: "California" } } = {}) {
   const opt = (value, label) =>
     `<a class="toggle" href="${esc(hrefFor(value))}#${id}"${which === value ? ' aria-current="true"' : ""}>${label}</a>`;
   const body = rows.length
@@ -138,9 +139,9 @@ export function happeningSection(rows, which, { hrefFor, personal = false, loade
     : `<p class="secondary small empty-note">${loaded ? "No final-passage votes loaded yet." : "Votes appear here once the data sync has run."}</p>`;
   return `
 <section class="brief-section" id="${id}" aria-labelledby="h-${id}">
-  <div class="section-head"><h2 class="label" id="h-${id}">Happening now</h2><a class="section-link" href="/votes/?level=${which}">All votes</a></div>
-  <nav class="segmented" aria-label="Congress or California">${opt("federal", "Congress")}${opt("state", "California")}</nav>
-  <p class="hint">The latest bills to get a final vote in ${which === "federal" ? "the House or Senate" : "the State Assembly or Senate"}, newest first. Ceremonial measures are left out.</p>
+  <div class="section-head"><h2 class="label" id="h-${id}">Happening now</h2><a class="section-link" href="/votes/?level=${esc(which)}">All votes</a></div>
+  ${state ? `<nav class="segmented" aria-label="Congress or ${esc(state.name)}">${opt("federal", "Congress")}${opt(state.value, esc(state.name))}</nav>` : ""}
+  <p class="hint">The latest bills to get a final vote in ${which === "federal" ? "the House or Senate" : state && state.value === "state" ? "the State Assembly or Senate" : `${esc(state ? state.name : "the state")}'s legislature`}, newest first. Ceremonial measures are left out.</p>
   ${body}
 </section>`;
 }

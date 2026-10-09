@@ -7,6 +7,8 @@
 //                       California, state) reps, those reps' latest votes,
 //                       and Happening now.
 // Both link back to the hub (/).
+import { coverageFor, votesLoaded } from "./coverage.js";
+import { STATE_NAME } from "./districts.js";
 import { EMPTY_REPORTS } from "./generated.js";
 import { page, esc, fmtDate, loadSection, FAILED, anyFailed, sectionError } from "./render.js";
 import { recentFinalVotes, officialsWhere, homeDistricts } from "./data.js";
@@ -140,8 +142,12 @@ ${caughtUp}`;
 
 /** The briefing for a visitor outside Calaveras County. */
 export async function personalBriefing(env, url, d) {
-  const which = url.searchParams.get("now") === "state" ? "state" : "federal";
   const db = env.DB;
+  // The visitor's state in Happening now, once its votes are loaded ("state" means California).
+  const cov = d.st === "CA" ? null : await loadSection("briefing coverage", () => coverageFor(db, d.st), null);
+  const stateLoaded = votesLoaded(d.st, cov === FAILED ? null : cov);
+  const stateOption = stateLoaded ? { value: d.st === "CA" ? "state" : `state:${d.st}`, name: STATE_NAME[d.st] || d.st } : null;
+  const which = stateOption && url.searchParams.get("now") === stateOption.value ? stateOption.value : "federal";
   const repsLoaded = db ? await loadSection("briefing reps", () => officialsWhere(db, repsWhere(d)), []) : [];
   const reps = repsLoaded === FAILED ? [] : repsLoaded;
   const ids = reps.map((o) => o.id);
@@ -161,9 +167,9 @@ export async function personalBriefing(env, url, d) {
         )
         .join("")
     : `<p class="secondary small">${db ? "Not loaded yet. Members of Congress appear after the data sync runs." : "Reps appear here once the data sync has run."}</p>`;
-  const coverage = inCA
+  const coverage = inCA || stateLoaded
     ? "State and federal coverage for your districts. County coverage comes as communities launch."
-    : "Federal coverage for now. State and local coverage comes as communities launch.";
+    : `Your members of Congress and state legislators, with Congress's votes. ${STATE_NAME[d.st] || "Your state"}'s bills and votes are coming soon, loaded state by state. County coverage comes as communities launch.`;
   const rows = votes === FAILED ? "" : voteRows(votes.rows, 5);
   const main = `
 ${briefHead("Your briefing", esc(describe(d)))}
@@ -179,7 +185,7 @@ ${briefHead("Your briefing", esc(describe(d)))}
   ${votes === FAILED ? sectionError("") : rows ? `<ul class="card plain-list brief-votes">${rows}</ul>` : `<p class="secondary small empty-note">${db ? "No final-passage votes loaded yet for your reps." : "Votes appear here once the data sync has run."}</p>`}
 </section>
 
-${now === FAILED ? sectionError("Happening now") : happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? "/briefing/" : `/briefing/?now=${v}`), personal: true, loaded: !!db })}
+${now === FAILED ? sectionError("Happening now") : happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? "/briefing/" : `/briefing/?now=${v}`), personal: true, loaded: !!db, state: stateOption })}
 ${caughtUp}`;
   return page("Your briefing", main, { tab: "home", back: ["Home", "/"], personal: true, partial: anyFailed(repsLoaded, votes, now) });
 }

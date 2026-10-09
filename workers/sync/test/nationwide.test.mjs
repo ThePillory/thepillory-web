@@ -78,10 +78,11 @@ test("cookie: only well-formed district IDs survive", () => {
 test("reps: senators, House member, state legislators, supervisors", () => {
   const w = repsWhere({ st: "CA", cd: "5", su: "4", sl: "8", co: "06009" });
   assert.match(w.sql, /us-senate/);
-  assert.match(w.sql, /ca-assembly/);
+  assert.ok(w.binds.includes("ca-assembly") && w.binds.includes("ca-senate"));
   assert.match(w.sql, /county-board/);
   const tx = repsWhere({ st: "TX", cd: "37", su: "14", sl: "49" });
-  assert.doesNotMatch(tx.sql, /ca-senate|county-board/, "state and county reps are California only for now");
+  assert.ok(tx.binds.includes("tx-upper") && tx.binds.includes("tx-lower"), "every state's legislators");
+  assert.doesNotMatch(tx.sql, /county-board/, "county reps are Calaveras only for now");
 });
 
 test("totals: House party totals are summed", () => {

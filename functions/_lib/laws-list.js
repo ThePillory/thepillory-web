@@ -17,7 +17,7 @@ const missing = (err) => /no such (table|column)/i.test(String(err && err.messag
 export const BILL_FILTERS = {
   all: ["All", ""],
   federal: ["Congress", "AND level = 'federal'"],
-  state: ["California", "AND level = 'state'"],
+  state: ["California", "AND level = 'state' AND COALESCE(st, 'CA') = 'CA'"],
   law: ["Became law", "AND outcome IN ('signed', 'without_signature', 'over_veto', 'became_law')"],
   vetoed: ["Vetoed", "AND outcome IN ('vetoed', 'pocket_vetoed')"],
   any: ["Any recorded vote", ""],

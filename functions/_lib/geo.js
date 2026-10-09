@@ -2,6 +2,7 @@
 // from Census Bureau files by tools/build_geo.mjs), the officials for a place,
 // and the shared bits of those pages. Every map has a list beside it, so
 // everything on a map can be reached without it.
+import { chamberIds, districtKey } from "../../workers/sync/src/states.js";
 import { esc } from "./render.js";
 
 // Live communities, by county FIPS. More open as communities launch.
@@ -27,9 +28,12 @@ export function typeOf(layer, chambers) {
 export function layerName(layer, chambers) {
   return layer === "cd" ? "Congressional" : layer === "county" ? "Counties" : chambers[layer];
 }
-export function districtLabel(layer, id, place) {
+export function districtLabel(layer, id, place, names = null) {
   if (layer === "cd") return id === "0" ? "At-large congressional district" : `Congressional District ${id}`;
-  const n = /^\d+$/.test(id) ? id : id.toUpperCase();
+  // The Census name where it isn't just the number ("1st Barnstable"; see loadDistrictNames).
+  const name = names && names[layer] && names[layer][id];
+  if (name && !/^\d+[A-Z]?$/i.test(name)) return place.st === "NE" ? `Legislative District ${name}` : `${name} ${place.chambers[layer]} District`;
+  const n = name || (/^\d+$/.test(id) ? id : id.toUpperCase());
   return place.st === "NE" ? `Legislative District ${n}` : `${place.chambers[layer]} District ${n}`;
 }
 export const districtHref = (layer, id, place) => `/district/${typeOf(layer, place.chambers)}/${place.st.toLowerCase()}-${id}/`;
@@ -47,6 +51,14 @@ export async function asset(env, request, path) {
 }
 export const loadIndex = (env, request) => asset(env, request, "/data/geo/index.json");
 export const loadPlace = (env, request, st) => (/^[a-z]{2}$/.test(st) ? asset(env, request, `/data/geo/places/${st}.json`) : null);
+/**
+ * The Census names of a state's legislative districts where they aren't just
+ * their numbers, by the map data's district id ({sldu: {"d39": "Cape and
+ * Islands"}, sldl: {...}}); null where every name is its number. Written by
+ * tools/build_zip_districts.py.
+ */
+export const loadDistrictNames = async (env, request, st) =>
+  /^[a-z]{2}$/i.test(st) ? (await asset(env, request, `/data/states/district-names/${String(st).toLowerCase()}.json`)) || null : null;
 
 /** Waitlist signups by county and by state (totals only). */
 export async function waitlistBy(db) {
@@ -88,14 +100,15 @@ export function smallStateButtons(index) {
 
 /**
  * Officials for districts in a state: {senators, house, upper, lower, county}.
- * `d` is {cd: [ids], sldu: [ids], sldl: [ids], county: fips?}. State
- * legislators are loaded for California only so far.
+ * `d` is {cd: [ids], sldu: [ids], sldl: [ids], county: fips?}, with the map
+ * data's district ids; `names` (loadDistrictNames) turns those into the
+ * districts' names, which are matched to legislators by districtKey().
  */
-export async function officialsFor(db, st, d) {
+export async function officialsFor(db, st, d, names = null) {
   const out = { senators: [], house: [], upper: [], lower: [], county: [], executive: [], stateExecutive: [] };
   if (!db) return out;
   // The executive branch: the President, Vice President and Cabinet for every
-  // place; California's statewide offices for California.
+  // place; the state's own statewide offices for each state.
   const exec = async (chamber) => {
     try {
       return (await db.prepare("SELECT * FROM officials WHERE chamber = ? AND active = 1 ORDER BY rank, name").bind(chamber).all()).results;
@@ -105,16 +118,25 @@ export async function officialsFor(db, st, d) {
     }
   };
   out.executive = await exec("us-executive");
-  if (st === "CA") out.stateExecutive = await exec("ca-executive");
+  const ids = chamberIds(st);
+  out.stateExecutive = await exec(ids.executive);
   const q = async (sql, binds) => (await db.prepare(`SELECT o.* FROM officials o WHERE o.active = 1 AND ${sql}`).bind(...binds).all()).results;
   const ph = (a) => a.map(() => "?").join(",");
   const sortD = (a, b) => String(a.district_code || "").localeCompare(String(b.district_code || ""), undefined, { numeric: true }) || a.name.localeCompare(b.name);
   if (d.senators !== false) out.senators = (await q("o.chamber = 'us-senate' AND o.state = ?", [st])).sort((a, b) => a.name.localeCompare(b.name));
   if (d.cd && d.cd.length) out.house = (await q(`o.chamber = 'us-house' AND o.state = ? AND o.district_code IN (${ph(d.cd)})`, [st, ...d.cd])).sort(sortD);
-  if (st === "CA") {
-    if (d.sldu && d.sldu.length) out.upper = (await q(`o.chamber = 'ca-senate' AND o.district_code IN (${ph(d.sldu)})`, d.sldu)).sort(sortD);
-    if (d.sldl && d.sldl.length) out.lower = (await q(`o.chamber = 'ca-assembly' AND o.district_code IN (${ph(d.sldl)})`, d.sldl)).sort(sortD);
-  }
+  const keys = (layer, type) =>
+    [...new Set((d[layer] || []).map((id) => districtKey(st, type, (names && names[layer] && names[layer][id]) || id)).filter(Boolean))];
+  const upperKeys = keys("sldu", ids.lower ? "upper" : "legislature");
+  const lowerKeys = ids.lower ? keys("sldl", "lower") : [];
+  // At most 90 bound values a statement (D1 allows 100).
+  const inChunks = async (chamber, list) => {
+    const rows = [];
+    for (let i = 0; i < list.length; i += 90) rows.push(...(await q(`o.chamber = ? AND o.district_code IN (${ph(list.slice(i, i + 90))})`, [chamber, ...list.slice(i, i + 90)])));
+    return rows;
+  };
+  if (upperKeys.length) out.upper = (await inChunks(ids.upper, upperKeys)).sort(sortD);
+  if (lowerKeys.length) out.lower = (await inChunks(ids.lower, lowerKeys)).sort(sortD);
   if (d.county && LIVE[d.county]) out.county = (await q("o.chamber = 'county-board'", [])).sort(sortD);
   return out;
 }
@@ -123,7 +145,7 @@ export const allIds = (o) => [...o.county, ...o.upper, ...o.lower, ...o.house, .
 
 /** The executive rows for "Who represents": the President and Vice President (or the Governor), then a link to the rest. */
 export function executiveRows(list, { href, label }) {
-  const lead = list.filter((o) => o.rank && o.rank <= (o.chamber === "ca-executive" ? 1 : 2));
+  const lead = list.filter((o) => o.rank && o.rank <= (o.chamber === "us-executive" ? 2 : 1));
   const rest = list.length - lead.length;
   return [
     ...lead.map((o) => repRow(o)),

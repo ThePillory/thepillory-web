@@ -2,6 +2,7 @@
 // its status, its two-sentence summary and where that comes from, the "Your
 // reps" card, the history timeline and the full-text links. Pure: the page
 // loads the data. Every line is a recorded fact with its source.
+import { chamberIds } from "../../workers/sync/src/states.js";
 import { esc, fmtDate, sourceLink, safeUrl } from "./render.js";
 import { CHAMBER_NAME } from "./data.js";
 import { voteBar } from "./charts.js";
@@ -10,6 +11,13 @@ import { firstSentences, statusChip, outLink } from "./summary.js";
 import { METHOD_URL } from "./analysis.js";
 
 const LEGISLATURE = { federal: ["us-house", "us-senate"], state: ["ca-assembly", "ca-senate"] };
+// A state bill's state, from its id ('ca-20252026-ab-1', 'tx-89-hb-1').
+export const billState = (b) => (b && b.level === "state" ? String(b.id || "").slice(0, 2).toUpperCase() : null);
+const legislatureOf = (b) => {
+  if (b.level !== "state") return LEGISLATURE.federal;
+  const ids = chamberIds(billState(b));
+  return [ids.upper, ids.lower].filter(Boolean);
+};
 
 /** The bill's status in a few words: its final action when recorded, else its latest final-passage vote. */
 export function billStatus(b, outcome, votes) {
@@ -72,7 +80,7 @@ export function yourRepsCard(b, { districts, reps, votes, failed = false }) {
   if (failed) rows = '<p class="small secondary">Couldn\'t load your reps right now.</p>';
   else if (!districts) rows = '<p class="small"><a class="inline-link" href="/#find">Find your representatives</a> to see how yours voted.</p>';
   else {
-    const mine = (reps || []).filter((o) => LEGISLATURE[b.level].includes(o.chamber));
+    const mine = (reps || []).filter((o) => legislatureOf(b).includes(o.chamber));
     rows = mine.length
       ? `<div class="stack-xs">${mine
           .map((o) => {
@@ -111,7 +119,7 @@ export function billFullText(b, a) {
   const official = safeUrl(b.official_url);
   let textUrl = null;
   if (b.level === "federal" && official && /congress\.gov\/bill\//.test(official)) textUrl = `${official.replace(/\/+$/, "")}/text`;
-  if (b.level === "state") {
+  if (b.level === "state" && billState(b) === "CA") {
     const id = `${b.session}0${String(b.bill_number || "").replace(/\s+/g, "")}`;
     textUrl = `https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=${encodeURIComponent(id)}`;
   }
@@ -120,6 +128,7 @@ export function billFullText(b, a) {
     : "";
   const read = a && safeUrl(a.text_source_url) ? `<p class="hint">The constitutional analysis read ${esc(a.text_version || "the bill text")} (<a class="inline-link" href="${esc(a.text_source_url)}" target="_blank" rel="noopener">source ↗</a>).</p>` : "";
   return `${textUrl ? outLink(textUrl, b.level === "federal" ? "Full text on Congress.gov" : "Full text on leginfo") : ""}
+  ${b.level === "state" && billState(b) !== "CA" ? '<p class="hint">The full text is on the legislature\'s own page for the bill (the link below).</p>' : ""}
   ${official ? outLink(official, "Official bill page") : sourceLink(b.source_url)}
   ${off}
   ${read}`;

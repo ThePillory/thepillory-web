@@ -37,6 +37,7 @@ import { withD1Retry } from "../d1retry.js";
 import { runAgendaWatch } from "./agenda.js";
 import { runPromises } from "../promises/index.js";
 import { runTopics } from "../topics/index.js";
+import { statePriority, stateBillScope } from "../state-priority.js";
 
 const RETRY_AFTER_DAYS = 7; // a bill that couldn't be drafted waits this long before another try
 const MIN_TIME_PER_BILL_MS = 4 * 60 * 1000; // don't start a bill without this much time left in the round
@@ -48,17 +49,30 @@ function day() {
 }
 
 // A final-passage vote on the bill by one of our officials.
-const FINAL_VOTE = `EXISTS (SELECT 1 FROM votes v JOIN vote_positions p ON p.vote_id = v.id JOIN officials o ON o.id = p.official_id
-                   WHERE v.bill_id = b.id AND v.vote_type = 'final_passage')`;
+const FINAL_VOTE = `EXISTS (SELECT 1 FROM votes v WHERE v.bill_id = b.id AND v.vote_type = 'final_passage'
+                   AND (EXISTS (SELECT 1 FROM vote_positions p JOIN officials o ON o.id = p.official_id WHERE p.vote_id = v.id)
+                     OR EXISTS (SELECT 1 FROM state_positions sp WHERE sp.vote_k = v.k)))`;
 // An issue on the site links to the bill (approved links only).
 const LINKED = "EXISTS (SELECT 1 FROM issue_bill_links l WHERE l.bill_id = b.id AND l.status = 'approved')";
 // TODO: once residents can follow bills, a bill with followers is eligible too
 // (OR EXISTS (SELECT 1 FROM bill_follows f WHERE f.bill_id = b.id)).
 
+// Every other state's bills (docs/states.md): within the same daily caps, only
+// bills that passed a final-passage vote, in the ANALYSIS_STATES (10) states
+// visitors look up most, ranked in that order. Congress and California as before.
+let scopeCache = null; // { at, scope }: worked out once per round
+async function billScope(db, env) {
+  if (!scopeCache || Date.now() - scopeCache.at > 10 * 60 * 1000) {
+    scopeCache = { at: Date.now(), scope: stateBillScope(await statePriority(db, env), parseInt(env.ANALYSIS_STATES || "10", 10)) };
+  }
+  return scopeCache.scope;
+}
+
 // ---------------------------------------------------------------------------
 // 1. Relevance
 
-async function uncheckedBills(db, limit) {
+async function uncheckedBills(db, limit, env = {}) {
+  const scope = await billScope(db, env);
   return (
     await db
       .prepare(
@@ -69,7 +83,8 @@ async function uncheckedBills(db, limit) {
                              AND NOT (r.verdict = 'skip' AND r.override IS NULL AND r.prompt_version != ?))
            AND (${FINAL_VOTE}
                 OR EXISTS (SELECT 1 FROM bill_analyses a WHERE a.bill_id = b.id AND a.current = 1 AND a.status = 'ai_draft' AND a.ai_review IS NULL))
-         ORDER BY (SELECT MAX(v.vote_date) FROM votes v WHERE v.bill_id = b.id) DESC, b.id LIMIT ?`
+           AND ${scope.where}
+         ORDER BY ${scope.rank}, (SELECT MAX(v.vote_date) FROM votes v WHERE v.bill_id = b.id) DESC, b.id LIMIT ?`
       )
       .bind(RELEVANCE_PROMPT_VERSION, limit)
       .all()
@@ -105,7 +120,7 @@ async function runRelevance(env, db, budget, run) {
   let checked = 0;
   let skipped = 0;
   for (let i = 0; i < MAX_RELEVANCE_BATCHES; i++) {
-    const bills = await uncheckedBills(db, BATCH);
+    const bills = await uncheckedBills(db, BATCH, env);
     if (!bills.length || budget.timeLeft() < MIN_TIME_PER_BILL_MS) break;
     const t0 = new Date().toISOString();
     let lookupFailed;
@@ -372,6 +387,7 @@ async function reviewBacklog(env, db, budget, run) {
 const RANK = "CASE r.local WHEN 'high' THEN 3 WHEN 'medium' THEN 2 WHEN 'low' THEN 1 ELSE 0 END";
 
 async function nextBills(db, limit, env = {}, redraftRoom = 0) {
+  const scope = await billScope(db, env);
   // Requests first: yours from /admin/review, then readers', oldest first.
   const requested = (
     await db
@@ -425,8 +441,8 @@ async function nextBills(db, limit, env = {}, redraftRoom = 0) {
                              AND NOT (a.status = 'rejected' AND EXISTS (SELECT 1 FROM bill_analysis_revisions v
                                        WHERE v.analysis_id = a.id AND v.action = 'rejected' AND v.actor = 'pipeline')))
            AND ${retry}
-           AND (${LINKED} OR (${FINAL_VOTE} AND (r.verdict = 'analyze' OR r.override = 'unskip')))
-         ORDER BY linked DESC, local_rank DESC, last_vote DESC, b.id LIMIT ?`
+           AND (${LINKED} OR (${FINAL_VOTE} AND (r.verdict = 'analyze' OR r.override = 'unskip') AND ${scope.where}))
+         ORDER BY linked DESC, local_rank DESC, ${scope.rank}, last_vote DESC, b.id LIMIT ?`
       )
       .bind(Math.max(0, limit - requested.length - upgrades.length))
       .all()
@@ -776,7 +792,7 @@ export async function runAnalysis(rawEnv, { deadlineMs, runId, trigger }) {
   }
 
   // More relevance checks wait only if this round's check made progress (a failing check doesn't loop).
-  const unchecked = relevance.checked > 0 && (await uncheckedBills(db, 1)).length > 0;
+  const unchecked = relevance.checked > 0 && (await uncheckedBills(db, 1, env)).length > 0;
   const waiting = (used < limit || redrafted < redraftLimit) && (stoppedEarly || unchecked || (await nextBills(db, used < limit ? 1 : 0, env, redrafted < redraftLimit ? 1 : 0)).length > 0);
   const summary =
     used >= limit

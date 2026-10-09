@@ -9,7 +9,8 @@
 // The county pages are routed from functions/place/[[path]].js.
 import { page, esc, notFound, loadSection, FAILED, anyFailed, sectionError } from "./render.js";
 import { summaryHead, contentsBar, fold } from "./summary.js";
-import { LIVE, officialsFor, breadcrumb, placeHref } from "./geo.js";
+import { LIVE, officialsFor, breadcrumb, placeHref, loadDistrictNames } from "./geo.js";
+import { STATE_NAME } from "./districts.js";
 import { pacificNow } from "./meetings.js";
 import {
   TOPICS, TOPIC, METHOD, SIDE_BY_SIDE, topicHref, placeTopicsHref, topicGrid, industriesFor,
@@ -119,8 +120,10 @@ export async function placeTopicPage(env, place, c, slug, url = null) {
   const db = env.DB;
   const live = LIVE[c.fips];
   const empty = { senators: [], house: [], upper: [], lower: [], county: [], executive: [], stateExecutive: [] };
+  // District names (where they aren't just numbers) match the county's legislators; the asset loader needs only the page's address.
+  const names = url ? await loadDistrictNames(env, { url: url.href }, place.st) : null;
   const oLoaded = db
-    ? await loadSection("topic place officials", () => officialsFor(db, place.st, { cd: c.cd.map((x) => x[0]), sldu: c.sldu.map((x) => x[0]), sldl: c.sldl.map((x) => x[0]), county: c.fips }), empty)
+    ? await loadSection("topic place officials", () => officialsFor(db, place.st, { cd: c.cd.map((x) => x[0]), sldu: c.sldu.map((x) => x[0]), sldl: c.sldl.map((x) => x[0]), county: c.fips }, names), empty)
     : empty;
   const o = oLoaded === FAILED ? empty : oLoaded;
   const fedReps = [...o.senators, ...o.house];
@@ -136,7 +139,7 @@ export async function placeTopicPage(env, place, c, slug, url = null) {
   };
   const [federal, state, upcoming, recent, exec, words, money] = await Promise.all([
     db ? loadSection("topic place federal bills", () => billsWithVotes("federal", fedReps), { bills: [], positions: new Map() }) : { bills: [], positions: new Map() },
-    db && place.st === "CA" ? loadSection("topic place state bills", () => billsWithVotes("state", stateReps), { bills: [], positions: new Map() }) : { bills: [], positions: new Map() },
+    db ? loadSection("topic place state bills", () => billsWithVotes(place.st === "CA" ? "state" : `state:${place.st}`, stateReps), { bills: [], positions: new Map() }) : { bills: [], positions: new Map() },
     db && live ? loadSection("topic place upcoming items", () => topicMeetingItems(db, slug, now, { upcoming: true }), []) : [],
     db && live ? loadSection("topic place recent items", () => topicMeetingItems(db, slug, now, { upcoming: false }), []) : [],
     db ? loadSection("topic place executive", () => topicExecutive(db, slug, [...o.executive, ...o.stateExecutive].map((x) => x.id)), []) : [],
@@ -174,20 +177,22 @@ export async function placeTopicPage(env, place, c, slug, url = null) {
           ind.length ? money.length : null
         );
 
+  // California's state bills always (an empty list says so); another state's once any are tagged with this topic.
+  const showState = place.st === "CA" || (state !== FAILED && state.bills.length > 0);
   const main = `
 ${breadcrumb([["United States", "/explore/"], [place.name, `/explore/${place.st.toLowerCase()}/`], [c.name, placeHref(place.st, c.slug)], [t.name, null]])}
-${contentsBar(TOPIC_CONTENTS.filter(([id]) => place.st === "CA" || id !== "state"))}
+${contentsBar(TOPIC_CONTENTS.filter(([id]) => showState || id !== "state"))}
 ${summaryHead({
     kicker: `<span class="kicker-icon">${icon(slug)}</span>Topic · ${esc(c.name)}`,
     title: `${t.name} in ${c.name}`,
     summary: {
-      text: `${t.about} ${topicSummary([["bills in Congress", countOf(federal)], ["in California", place.st === "CA" ? countOf(state) : null], ["county agenda items", live && upcoming !== FAILED && recent !== FAILED ? upcoming.length + recent.length : null], ["executive actions", countOf(exec)], ["excerpts in officials' own words", countOf(words)]])}`.trim(),
+      text: `${t.about} ${topicSummary([["bills in Congress", countOf(federal)], [`in ${STATE_NAME[place.st] || "the state"}`, showState ? countOf(state) : null], ["county agenda items", live && upcoming !== FAILED && recent !== FAILED ? upcoming.length + recent.length : null], ["executive actions", countOf(exec)], ["excerpts in officials' own words", countOf(words)]])}`.trim(),
       source: `${esc(SIDE_BY_SIDE)} <a href="${METHOD}">How topics work</a>`,
     },
   })}
 ${oLoaded === FAILED ? sectionError("Representatives") : ""}
 ${billBlock("fed", "Bills in Congress", federal, fedReps, noBills)}
-${place.st === "CA" ? billBlock("state", "Bills in the California Legislature", state, stateReps, noBills) : ""}
+${showState ? billBlock("state", place.st === "CA" ? "Bills in the California Legislature" : `Bills in ${STATE_NAME[place.st] || "the state"}'s legislature`, state, stateReps, noBills) : ""}
 ${meetings}
 ${exec === FAILED ? sectionError("Executive actions") : block("exec", "Executive actions", list(exec.length ? executiveRows(exec) : "", "No executive orders or proclamations on this topic yet."), "", exec.length)}
 ${words === FAILED ? sectionError("In their own words") : block("words", "In their own words", list(words.length ? platformRows(words) : "", `No excerpt from the own Issues pages of ${c.name}'s officials is tagged with this topic yet.`), "Word for word from each official's own website, the same way for every official.", words.length)}

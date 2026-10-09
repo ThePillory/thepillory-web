@@ -8,7 +8,7 @@ import { recentFinalVotes } from "../_lib/data.js";
 import { voteRows } from "../_lib/briefing.js";
 import { CURRENT, loadElection, onTheBallot, statewideRow, contestRow, electionHref } from "../_lib/elections.js";
 import { pacificNow } from "../_lib/meetings.js";
-import { LAYER_OF_TYPE, typeOf, loadPlace, officialsFor, repRow, breadcrumb, districtLabel, placeHref } from "../_lib/geo.js";
+import { LAYER_OF_TYPE, typeOf, loadPlace, officialsFor, repRow, breadcrumb, districtLabel, placeHref, loadDistrictNames } from "../_lib/geo.js";
 
 
 // A district page is the same for every visitor: kept at the edge for a few minutes.
@@ -31,21 +31,22 @@ async function districtPage({ request, env, params }) {
   const canonical = typeOf(layer, place.chambers);
   if (canonical !== type) return Response.redirect(`${url.origin}/district/${canonical}/${m[1]}-${id}/`, 301);
 
-  const label = districtLabel(layer, id, place);
+  const names = layer === "cd" ? null : await loadDistrictNames(env, request, place.st);
+  const label = districtLabel(layer, id, place, names);
   const db = env.DB;
   // Each section loads on its own: one that can't load shows a short note.
   const repsLoaded = db
     ? await loadSection("district reps", async () => {
-        const o = await officialsFor(db, place.st, { senators: false, cd: layer === "cd" ? [id] : [], sldu: layer === "sldu" ? [id] : [], sldl: layer === "sldl" ? [id] : [] });
+        const o = await officialsFor(db, place.st, { senators: false, cd: layer === "cd" ? [id] : [], sldu: layer === "sldu" ? [id] : [], sldl: layer === "sldl" ? [id] : [] }, names);
         return [...o.house, ...o.upper, ...o.lower];
       }, [])
     : [];
   const reps = repsLoaded === FAILED ? [] : repsLoaded;
   const votes = db && reps.length ? await loadSection("district votes", () => recentFinalVotes(db, { limit: 5, officialIds: reps.map((r) => r.id) }), { rows: [] }) : { rows: [] };
-  const stateLoaded = layer === "cd" || place.st === "CA";
+  // A district with no member found: a vacancy, a seat Open States lists without a district (New Hampshire's floterial seats), or not loaded yet.
   const repHtml = repsLoaded === FAILED ? sectionError("") : reps.length
     ? `<div class="card">${reps.map((r) => repRow(r)).join("")}</div>`
-    : `<p class="small secondary">${stateLoaded ? "The representative appears after the data sync runs." : `${esc(place.name)}'s state legislators aren't on ThePillory yet. State coverage opens as communities launch.`}</p>`;
+    : `<p class="small secondary">${layer === "cd" ? "The representative appears after the data sync runs." : "No member is listed for this district: the seat may be vacant, or not loaded yet (state legislators load weekly, from Open States)."}</p>`;
   const countyRows = counties
     .map(([fips, full]) => {
       const c = place.counties.find((x) => x.fips === fips);

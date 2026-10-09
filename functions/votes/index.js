@@ -3,12 +3,13 @@
 //   their reps cast, with each rep's position and the totals.
 //   Otherwise: every final-passage vote with its totals, and a link to find
 //   your reps.
+import { voteScope } from "../_lib/data.js";
 import { page, notLoaded, esc, fmtDate, guard } from "../_lib/render.js";
 import { safe, recentFinalVotes, officialsWhere, CHAMBER_NAME } from "../_lib/data.js";
 import { billHref } from "../_lib/votes.js";
 import { compactRow } from "../_lib/summary.js";
 import { firstClauses } from "../_lib/laws-list.js";
-import { districtsFromCookie, repsWhere, describe } from "../_lib/districts.js";
+import { districtsFromCookie, repsWhere, describe, STATE_NAME } from "../_lib/districts.js";
 
 const PER_PAGE = 30;
 
@@ -16,10 +17,10 @@ async function allFinalVotes(db, { level, limit, offset }) {
   const { results } = await db
     .prepare(
       `SELECT v.*, b.bill_number, b.title AS bill_title FROM votes v LEFT JOIN bills b ON b.id = v.bill_id
-       WHERE v.vote_type = 'final_passage' AND (? IS NULL OR v.level = ?)
+       WHERE v.vote_type = 'final_passage' AND (? IS NULL OR (${voteScope(level).sql}))
        ORDER BY v.vote_date DESC, v.id DESC LIMIT ? OFFSET ?`
     )
-    .bind(level, level, limit + 1, offset)
+    .bind(level, ...voteScope(level).binds, limit + 1, offset)
     .all();
   for (const r of results) r.positions = [];
   return { rows: results.slice(0, limit), more: results.length > limit };
@@ -28,7 +29,8 @@ async function allFinalVotes(db, { level, limit, offset }) {
 export const onRequestGet = guard(async ({ request, env }) => {
   const url = new URL(request.url);
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
-  const level = ["federal", "state"].includes(url.searchParams.get("level")) ? url.searchParams.get("level") : null;
+  const asked = url.searchParams.get("level") || "";
+  const level = ["federal", "state"].includes(asked) || (/^state:[A-Z]{2}$/.test(asked) && STATE_NAME[asked.slice(6)]) ? asked : null;
   const pageNo = Math.max(1, parseInt(url.searchParams.get("page") || "1", 10) || 1);
   const d = districtsFromCookie(request);
   const data = await safe(env, async (db) => {
@@ -62,11 +64,11 @@ export const onRequestGet = guard(async ({ request, env }) => {
   <p class="subtitle">${
     d
       ? `Final-passage votes by your reps (${esc(describe(d))}), newest first. Other votes are on each rep's page.`
-      : "Final-passage votes in Congress and the California Legislature, newest first, with the totals."
+      : "Final-passage votes in Congress and the state legislatures loaded so far, newest first, with the totals."
   }</p>
 </header>
 ${d ? "" : '<p class="small"><a class="inline-link" href="/#find">Find your representatives</a> to see how yours voted.</p>'}
-<nav class="filter-chips" aria-label="Show">${chip(null, "All")}${chip("federal", "Congress")}${chip("state", "California")}</nav>
+<nav class="filter-chips" aria-label="Show">${chip(null, "All")}${chip("federal", "Congress")}${chip("state", "California")}${d && d.st !== "CA" ? chip(`state:${d.st}`, esc(STATE_NAME[d.st] || d.st)) : level && level.startsWith("state:") ? chip(level, esc(STATE_NAME[level.slice(6)])) : ""}</nav>
 <section class="card compact-list" id="vote-list" data-more-list>${rows || `<p class="secondary small cr-empty">${d ? "No final-passage votes loaded yet for your reps." : "No final-passage votes loaded yet."}</p>`}</section>
 ${data.more ? `<a class="btn btn--block load-more" href="${q(pageNo + 1)}" data-load-more="vote-list">Load more</a>` : ""}
 <p class="hint">Each line opens the bill's votes, which link to the official record. County supervisors' votes will come from meeting minutes. That's coming next.</p>`;

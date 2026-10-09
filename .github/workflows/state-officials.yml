@@ -1,0 +1,30 @@
+# Rebuilds data/states/people/<st>.json, every state's current legislators and
+# statewide executive officers (California's come from their own steps), from
+# Open States' public people data (github.com/openstates/people, public domain),
+# and commits it. Weekly, and by hand (Actions -> Refresh state officials -> Run
+# workflow). The sync's all-state-officials step loads the files into D1.
+# See tools/build_state_people.py and docs/states.md.
+name: Refresh state officials
+on:
+  schedule:
+    - cron: "23 7 * * 1"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - run: git clone --depth 1 https://github.com/openstates/people "$RUNNER_TEMP/people"
+      - run: pip install pyyaml==6.0.2
+      - run: python3 tools/build_state_people.py "$RUNNER_TEMP/people"
+      - name: Commit the data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/states/people
+          git diff --cached --quiet && exit 0
+          git commit -m "Refresh state officials from Open States"
+          git push

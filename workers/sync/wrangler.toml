@@ -63,6 +63,14 @@ OPENSTATES_DAILY_LIMIT = "250"
 # Kept each day for loading state legislators while their weekly load is due.
 OPENSTATES_OFFICIALS_RESERVE = "10"
 OPENSTATES_MIN_INTERVAL_MS = "6500"
+# Every other state (docs/states.md): daily API pages for the states bulk-loaded
+# from Open States' session files, after California's; STATE_PRIORITY puts
+# states first by hand (comma-separated), ahead of visitor interest.
+STATE_VOTES_API_DAILY = "60"
+STATE_PRIORITY = ""
+# AI analysis of other states' bills: passed bills in this many of the states
+# visitors look up most (the daily caps above are unchanged).
+ANALYSIS_STATES = "10"
 # AI-drafted constitutional analysis (src/analysis/). At most this many drafts a
 # day; each costs one Claude API call. Set to "0" to pause drafting.
 ANALYSIS_DAILY_LIMIT = "5"

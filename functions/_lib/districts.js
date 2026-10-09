@@ -5,9 +5,12 @@
 // The cookie, set by assets/app.js after a lookup:
 //   pillory_districts=st=CA&cd=5&su=4&sl=8&co=06009
 //     st  state (USPS code)       cd  U.S. House district ("0" at large)
-//     su  state senate district   sl  state assembly / lower house district
+//     su  state senate (upper house) district, as the Census Bureau names it
+//     sl  state lower house district ("12", "7th Middlesex", "Merrimack 06")
 //     co  county FIPS code
-// Any part may be missing (a ZIP lookup outside California has no su/sl).
+// Any part may be missing. Districts are matched to legislators by
+// districtKey() (workers/sync/src/states.js), in every state.
+import { chamberIds, districtKey, districtLabel } from "../../workers/sync/src/states.js";
 
 export const COOKIE = "pillory_districts";
 export const CALAVERAS_FIPS = "06009";
@@ -35,14 +38,19 @@ export const STATE_NAME = {
   AS: "American Samoa", GU: "Guam", MP: "Northern Mariana Islands", PR: "Puerto Rico", VI: "U.S. Virgin Islands",
 };
 
-const RULES = { st: /^[A-Z]{2}$/, cd: /^\d{1,2}$/, su: /^\d{1,3}$/, sl: /^\d{1,3}$/, co: /^\d{5}$/ };
+// A legislative district name: letters, digits, spaces and a little punctuation ("7th Middlesex", "Norfolk, Worcester and Middlesex").
+const NAMED = /^[A-Za-z0-9][A-Za-z0-9 ,.'&-]{0,59}$/;
+const RULES = { st: /^[A-Z]{2}$/, cd: /^\d{1,2}$/, su: NAMED, sl: NAMED, co: /^\d{5}$/ };
 
 /** Keep only well-formed district IDs. Returns null if there's no state. */
 export function cleanDistricts(d) {
   const out = {};
   for (const [k, re] of Object.entries(RULES)) {
-    const v = d && d[k] != null ? String(d[k]).trim() : "";
-    if (re.test(v)) out[k] = k === "st" || k === "co" ? v : String(parseInt(v, 10));
+    const v = d && d[k] != null ? String(d[k]).replace(/\s+/g, " ").trim() : "";
+    if (!re.test(v)) continue;
+    // A district named by one letter exists only in Alaska's Senate (A to T).
+    if (/^[A-Za-z]$/.test(v) && !(k === "su" && out.st === "AK")) continue;
+    out[k] = k === "st" || k === "co" ? v : /^\d+$/.test(v) ? String(parseInt(v, 10)) : v;
   }
   if (!out.st || !STATE_NAME[out.st]) return null;
   if (out.co && STATE_BY_FIPS[out.co.slice(0, 2)] !== out.st) delete out.co;
@@ -71,17 +79,28 @@ export function describe(d) {
   if (!d) return "";
   const parts = [STATE_NAME[d.st]];
   if (d.cd) parts.push(d.cd === "0" ? "At-large House seat" : `Congressional District ${d.cd}`);
-  if (d.st === "CA" && d.su) parts.push(`Senate District ${d.su}`);
-  if (d.st === "CA" && d.sl) parts.push(`Assembly District ${d.sl}`);
+  const ids = chamberIds(d.st);
+  if (d.su) parts.push(districtLabel(d.st, ids.lower ? "upper" : "legislature", d.su));
+  if (d.sl && ids.lower) parts.push(districtLabel(d.st, "lower", d.sl));
   return parts.join(" · ");
+}
+
+/** The state legislative chambers and district keys to match, e.g. [["tx-upper", "12"], ["tx-lower", "7thmiddlesex"]]. */
+export function legislativeSeats(d) {
+  if (!d || !d.st) return [];
+  const ids = chamberIds(d.st);
+  const out = [];
+  if (d.su) out.push([ids.upper, districtKey(d.st, ids.lower ? "upper" : "legislature", d.su)]);
+  if (d.sl && ids.lower) out.push([ids.lower, districtKey(d.st, "lower", d.sl)]);
+  return out.filter(([, key]) => key);
 }
 
 /**
  * SQL (WHERE clause on officials o) and bindings for the officials who
  * represent these districts: the state's two senators, the House member for
- * the district (or the state's only member, for at-large seats), and, in
- * California, the state senator, assemblymember and (in Calaveras) the
- * county supervisors.
+ * the district (or the state's only member, for at-large seats), the state
+ * legislators for the visitor's districts (every state; some districts elect
+ * more than one), and (in Calaveras) the county supervisors.
  */
 export function repsWhere(d) {
   const clauses = ["(o.chamber = 'us-senate' AND o.state = ?)"];
@@ -92,13 +111,9 @@ export function repsWhere(d) {
     );
     binds.push(d.st, d.cd, d.st);
   }
-  if (d.st === "CA" && d.su) {
-    clauses.push("(o.chamber = 'ca-senate' AND o.district_code = ?)");
-    binds.push(d.su);
-  }
-  if (d.st === "CA" && d.sl) {
-    clauses.push("(o.chamber = 'ca-assembly' AND o.district_code = ?)");
-    binds.push(d.sl);
+  for (const [chamber, key] of legislativeSeats(d)) {
+    clauses.push("(o.chamber = ? AND o.district_code = ?)");
+    binds.push(chamber, key);
   }
   if (isCalaveras(d)) clauses.push("o.chamber = 'county-board'");
   return { sql: `o.active = 1 AND (${clauses.join(" OR ")})`, binds };

@@ -13,6 +13,8 @@
 // while a round stops at the request/time budget, and never runs two syncs at once.
 // After the sync rounds, it drafts constitutional analyses for new bills, also
 // in rounds, capped per day (ANALYSIS_DAILY_LIMIT).
+import { syncOtherStateVotes } from "./state-votes-api.js";
+import { syncAllStateOfficials } from "./states-officials.js";
 import { summarizeFlags } from "./analysis/flags.js";
 import { syncExecutiveOfficials, syncExecutiveOrders, syncBillOutcomes, syncNominations } from "./executive/sync.js";
 import { DurableObject } from "cloudflare:workers";
@@ -40,12 +42,18 @@ import { syncHistoryOfficials, syncHistoryOrders, syncHistoryFunding, syncHistor
 const STEPS = [
   ["county-officials", syncCounty],
   ["state-officials", syncStateOfficials],
+  // Every other state's legislators and statewide officers, weekly, from
+  // data/states/people/ (src/states-officials.js); no Open States API requests.
+  ["all-state-officials", syncAllStateOfficials],
   ["federal-officials", syncFederalOfficials],
   ["executive-officials", syncExecutiveOfficials],
   ["state-hearings", syncStateHearings],
   ["house-votes", syncHouseVotes],
   ["senate-votes", syncSenateVotes],
   ["state-votes", syncStateVotes],
+  // Daily updates for the states bulk-loaded from Open States' session files
+  // (src/state-votes-api.js), after California's, within STATE_VOTES_API_DAILY.
+  ["other-state-votes", syncOtherStateVotes],
   ["county-meetings", syncCountyMeetings],
   // After the votes: California outcomes are looked up for bills that passed both houses.
   ["bill-outcomes", syncBillOutcomes],
@@ -401,7 +409,7 @@ export default {
         await ensureSchema(env.DB);
         counts = await env.DB.prepare(
           "SELECT (SELECT COUNT(*) FROM officials WHERE active = 1) AS officials, (SELECT COUNT(*) FROM bills) AS bills, " +
-            "(SELECT COUNT(*) FROM votes) AS votes, (SELECT COUNT(*) FROM vote_positions) AS positions, " +
+            "(SELECT COUNT(*) FROM votes) AS votes, (SELECT COUNT(*) FROM vote_positions) + (SELECT COUNT(*) FROM state_positions) AS positions, " +
             "(SELECT COUNT(*) FROM bill_analyses WHERE current = 1 AND status = 'ai_draft' AND ai_review = 'pass') AS analyses_auto_checked, " +
             "(SELECT COUNT(*) FROM bill_analyses WHERE current = 1 AND status = 'ai_draft' AND ai_review = 'flag') AS analyses_flagged_by_ai, " +
             "(SELECT COUNT(*) FROM bill_analyses WHERE current = 1 AND status = 'ai_draft' AND ai_review IS NULL) AS analyses_awaiting_ai_review, " +

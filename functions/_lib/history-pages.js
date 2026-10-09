@@ -260,7 +260,7 @@ export async function officialPastYear(env, request, url, o, year) {
   const moneyHtml = legislator || o.chamber === "us-executive"
     ? money === FAILED ? sectionError("Campaign money") : block("money", `Campaign money, ${cycle - 1}–${cycle}`, listCard(fundingRows(money), `No FEC totals loaded for ${cycle - 1}–${cycle}.`), "Totals as the campaign reported them to the FEC for the two-year period. Contributors by industry are shown for the current period only.")
     : "";
-  if (o.level === "state" || o.level === "county") gaps.push(`Votes and campaign money for ${year}: ThePillory loads California votes and Cal-Access money for the current session and period only.`);
+  if (o.level === "state" || o.level === "county") gaps.push(`Votes and campaign money for ${year}: ThePillory loads state legislatures' votes for the current session (and California's Cal-Access money for the current period) only.`);
   gaps.push("Platform statements and promises: ThePillory shows officials' current pages, not past versions.");
 
   const crumbs = breadcrumb([["Reps", "/reps/"], [o.name, `/reps/${o.slug}/`], [String(year), null]]);

@@ -16,7 +16,8 @@ import { lobbyingFor, industryMoney, followTheMoney, cycleOf } from "../_lib/fun
 import { outcomeFor, outcomeSection } from "../_lib/executive.js";
 import { currentAnalysis, parse, provisionsFor, baselineSection, isPublic, openFlagCount, analysisClauses, constitutionBrief } from "../_lib/analysis.js";
 import { summaryHead, contentsBar, fold, clauseChips, statusChip, compactRow, shortLabel } from "../_lib/summary.js";
-import { billStatus, billSummary, yourRepsCard, billHistory, billFullText } from "../_lib/bill-page.js";
+import { billStatus, billSummary, yourRepsCard, billHistory, billFullText, billState } from "../_lib/bill-page.js";
+import { STATE_NAME } from "../_lib/districts.js";
 import { rollCallFilters, rollCallRows, rollCallBreakdown, pickVote, votePicker, voteHeading, totalsSection, rollCallFilterForm, rollCallList } from "../_lib/rollcall.js";
 import { orderById, orderHref, orderIdFromSlug, orderLabel, orderStatus, orderSummary, authoritySection, courtsSection, orderHistory, orderFullText } from "../_lib/orders.js";
 import { turnstileReady, turnstileWidget, verifyTurnstile, visitorHash, actionsToday, recordAction } from "../_lib/turnstile.js";
@@ -294,7 +295,10 @@ ${analysis.failed ? sectionError("Constitutional baseline") : baselineSection(an
   const a = analysis.a;
   const clauses = analysisClauses(a, analysis.provisions);
   const status = outcome === FAILED ? "" : billStatus(b, outcome, voteList);
-  const session = b.level === "federal" ? `${ordinal(parseInt(b.session, 10))} Congress` : `California, ${esc(b.session.slice(0, 4))}–${esc(b.session.slice(4))} session`;
+  const st = billState(b);
+  const session = b.level === "federal" ? `${ordinal(parseInt(b.session, 10))} Congress`
+    : st === "CA" ? `California, ${esc(b.session.slice(0, 4))}–${esc(b.session.slice(4))} session`
+    : `${esc(STATE_NAME[st] || st)}, session ${esc(b.session)}`;
   const head = summaryHead({
     kicker: `${LEVELS[b.level]} · ${esc(b.bill_number)} · ${session}`,
     status: statusChip(status),

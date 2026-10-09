@@ -118,6 +118,8 @@ const osBill = (identifier, title, votes) => ({
   identifier,
   title,
   updated_at: "2026-02-01T00:00:00",
+  session: "20252026",
+  jurisdiction: { id: "ocd-jurisdiction/country:us/state:ca/government", name: "California", classification: "state" },
   from_organization: { classification: identifier.startsWith("AB") ? "lower" : "upper" },
   openstates_url: `https://openstates.org/ca/bills/20252026/${identifier.replace(" ", "")}/`,
   sources: [{ url: `https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260${identifier.replace(" ", "")}` }],
@@ -645,6 +647,21 @@ function send(res, status, body, type = "application/json") {
   res.end(typeof body === "string" ? body : JSON.stringify(body));
 }
 
+// One other state's officials file (tools/build_state_people.py's shape). Invented people.
+const vtPeopleFile = {
+  st: "VT", source: "https://github.com/openstates/people", built_on: "2026-10-01",
+  legislators: [
+    { id: "ocd-person/vt-s1", name: "Vera Testsenator", family_name: "Testsenator", party: "Independent", type: "upper", district: "Chittenden-Southeast", source_url: "https://legislature.example.gov/s1" },
+    { id: "ocd-person/vt-s2", name: "Victor Sampleton", family_name: "Sampleton", party: "Progressive", type: "upper", district: "Chittenden-Southeast", source_url: "https://legislature.example.gov/s2" },
+    { id: "ocd-person/vt-h1", name: "Hana Testrep", family_name: "Testrep", party: "Independent", type: "lower", district: "Chittenden-12", source_url: "https://legislature.example.gov/h1" },
+    { id: "ocd-person/vt-h2", name: "Hugo Placeholder", family_name: "Placeholder", party: "Libertarian", type: "lower", district: "Chittenden-12", source_url: "https://legislature.example.gov/h2" },
+  ],
+  executives: [
+    { id: "ocd-person/vt-g", name: "Grace Testgovernor", family_name: "Testgovernor", party: "Independent", type: "governor", source_url: "https://governor.example.gov/" },
+    { id: "ocd-person/vt-ag", name: "Abe Testattorney", family_name: "Testattorney", party: "Independent", type: "attorney general", source_url: "https://ago.example.gov/" },
+  ],
+};
+
 http
   .createServer(async (req, res) => {
     const u = new URL(req.url, `http://localhost:${PORT}`);
@@ -771,6 +788,7 @@ http
     if (api === "site") {
       if (path === "/data/state-executive-officials.json") return send(res, 200, stateExecutiveFile);
       if (path === "/data/ca-campaign.json") return send(res, 200, caCampaignFile);
+      if (path === "/data/states/people/vt.json") return send(res, 200, vtPeopleFile);
       return county[path] ? send(res, 200, county[path]) : send(res, 404, { error: "no" });
     }
     send(res, 404, { error: "unknown api" });
