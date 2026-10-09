@@ -142,6 +142,11 @@ curl -s localhost:8790/explore/vt/ | grep -oE '2 members of the Vermont Senate|G
 curl -s localhost:8790/explore/tx/ | grep -oE "bills and roll call votes are coming soon" | head -1 | sed 's/^/  tx: /'
 curl -s localhost:8790/reps/hana-testrep/ | grep -oE 'An act relating to a test fund|Chittenden-12 House District' | sort -u | sed 's/^/  rep: /'
 curl -s "localhost:8790/laws/bills/vt-2025-2026-h-1/rollcall/?vote=vt-ocd-vote%2Fv1" | grep -oE 'Hugo Placeholder|absent' | sort -u | sed 's/^/  roll call: /'
+echo "--- the home page for a visitor's state (picked here; on the live site, Cloudflare's approximate state):"
+curl -s -o /dev/null -w "  pick Vermont: %{http_code} %{redirect_url}\n" -X POST -d "st=VT" localhost:8790/api/state
+curl -s -H "Cookie: pillory_state=VT" localhost:8790/ | grep -oE "Showing <strong>Vermont</strong>|you chose it|Grace Testgovernor|2 members of the Vermont Senate|statewide ballot measures aren't on ThePillory yet|Join the list for Vermont" | sort -u | sed 's/^/  vt: /'
+curl -s -H "Cookie: pillory_state=CA" localhost:8790/ | grep -oE "Showing <strong>California</strong>|On the ballot statewide|Statewide offices and propositions|All [0-9]+ statewide measures" | sort -u | sed 's/^/  ca: /'
+curl -s -D - -o /dev/null -H "Cookie: pillory_state=VT" localhost:8790/ | grep -i "^cache-control" | sed 's/^/  vt: /'
 echo "--- promises on the site and the review page: a reader's flag, Broken confirmed, a status recorded by a person:"
 curl -s localhost:8790/admin/review/ | grep -o 'id="promise-[a-z]*">[^<]*<span class="queue-count">[0-9]*' | sed 's/<[^>]*>//g; s/id="[^"]*">//; s/^/  /'
 PID=$($D1 --command "SELECT id FROM promises WHERE review = 'auto' ORDER BY id LIMIT 1" --json | python3 -c "import json,sys; print(json.load(sys.stdin)[0]['results'][0]['id'])")

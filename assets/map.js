@@ -73,7 +73,8 @@
             var link = links[id];
             var path = document.createElementNS(NS, "path");
             path.setAttribute("d", s.d);
-            path.setAttribute("class", "map-shape" + (status[id] ? " is-" + status[id] : ""));
+            // A state can have more than one status ("live here": a live community, and the visitor's state).
+            path.setAttribute("class", "map-shape" + (status[id] ? " is-" + String(status[id]).split(" ").join(" is-") : ""));
             if (!link) {
               svg.appendChild(path);
               return;

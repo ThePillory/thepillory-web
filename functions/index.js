@@ -16,6 +16,13 @@
 //   Take part (Calaveras comment deadlines, contacting your reps);
 //   Communities (Calaveras, live; the county waitlist with real counts);
 //   Understand (explainers).
+//
+// A visitor in a US state (one they picked, their saved districts' state, or
+// Cloudflare's approximate state for the connection, never stored) gets
+// "Showing [State] · Change" at the top, their state marked "You're here" on
+// the map, and "Your state" leading the page (functions/_lib/state-lead.js);
+// the national sections follow. Outside the US, or when the region is unknown:
+// the national hub. Kept at the edge once per state; browsers don't keep it.
 import { chamberIds } from "../workers/sync/src/states.js";
 import { icon } from "./_lib/icons.js";
 import { page, esc, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "./_lib/render.js";
@@ -29,6 +36,9 @@ import { ASSET_VERSION } from "./_lib/generated.js";
 import { executiveOfficials, executiveRows } from "./_lib/executive.js";
 import { linkRow } from "./_lib/render.js";
 import { turnstileReady, turnstileWidget } from "./_lib/turnstile.js";
+import { visitorState } from "./_lib/visitor-state.js";
+import { stateLead, stateLeadData } from "./_lib/state-lead.js";
+import { votesLoaded } from "./_lib/coverage.js";
 
 
 const WAITLIST_MESSAGES = {
@@ -78,7 +88,7 @@ function stateOptions(selected) {
     .join("");
 }
 
-function communities(env, counts, msg, error) {
+function communities(env, counts, msg, error, st = "") {
   const ready = turnstileReady(env);
   const countLine = counts
     ? counts.people
@@ -90,7 +100,7 @@ function communities(env, counts, msg, error) {
   <form class="stack-sm waitlist-form" method="post" action="/api/waitlist" data-county-picker>
     <div class="field-row">
       <label class="field"><span class="label">State</span>
-        <select class="input" name="state" required><option value="">Choose a state</option>${stateOptions("")}</select>
+        <select class="input" name="state" required><option value="">Choose a state</option>${stateOptions(st)}</select>
       </label>
       <label class="field"><span class="label">County</span>
         <select class="input" name="county" required><option value="">Choose a state first</option></select>
@@ -130,9 +140,14 @@ function communities(env, counts, msg, error) {
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 
 // The U.S. map at the top of the hub: real counts, taps only.
-function usMap(index, waiting) {
+function usMap(index, waiting, vs) {
   if (!index) return '<p class="explore-link"><a class="btn btn--block" href="/explore/">Explore the map</a></p>';
   const { links, status } = usMapLinks(index, waiting);
+  // The visitor's state, marked "You're here" (California stays a live community too).
+  if (vs && links[vs.st]) {
+    status[vs.st] = [status[vs.st], "here"].filter(Boolean).join(" ");
+    links[vs.st] = [links[vs.st][0], `${links[vs.st][1]} (you're here)`];
+  }
   const live = Object.keys(LIVE).length;
   const counties = Object.keys(waiting.county).filter((f) => !LIVE[f]).length;
   return `
@@ -141,10 +156,28 @@ function usMap(index, waiting) {
   ${mapFigure({ id: "us-map", src: "/data/geo/us.json", links, status, label: "Map of the United States: tap a state to explore it", still: true })}
   ${smallStateButtons(index)}
   <div class="hub-map-foot">
-    <p class="map-counts small"><span><span class="swatch is-live" aria-hidden="true"></span>${plural(live, "live community", "live communities")}</span><span class="dot"> · </span><span><span class="swatch is-waiting" aria-hidden="true"></span>${plural(counties, "county", "counties")} waiting</span></p>
+    <p class="map-counts small">${vs ? `<span><span class="swatch is-here" aria-hidden="true"></span>You're here</span><span class="dot"> · </span>` : ""}<span><span class="swatch is-live" aria-hidden="true"></span>${plural(live, "live community", "live communities")}</span><span class="dot"> · </span><span><span class="swatch is-waiting" aria-hidden="true"></span>${plural(counties, "county", "counties")} waiting</span></p>
     <a class="inline-link" href="/explore/">Explore the full map</a>
   </div>
 </section>`;
+}
+
+// "Showing [State] · Change": where the state came from, and a picker that
+// saves another one in this browser (POST /api/state). Works without JavaScript.
+function showingBar(vs) {
+  const why = vs.source === "picked" ? "you chose it" : vs.source === "districts" ? "from your saved districts" : "based on your connection";
+  return `
+<details class="showing-bar card">
+  <summary><span>Showing <strong>${esc(vs.name)}</strong> <span class="secondary">· ${why}</span></span><span class="inline-link">Change</span></summary>
+  <form class="stack-sm" method="post" action="/api/state">
+    <label class="field"><span class="label">State</span>
+      <select class="input" name="st" required>${stateOptions(vs.st)}</select>
+    </label>
+    <button class="btn btn--primary" type="submit">Show this state</button>
+  </form>
+  ${vs.source === "picked" ? `<form method="post" action="/api/state"><input type="hidden" name="st" value="" /><button class="btn btn--block" type="submit">Use my connection's location instead</button></form>` : ""}
+  <p class="hint">Your approximate state comes from your connection and isn't stored. A state you choose is saved only in this browser. For your exact districts, <a class="inline-link" href="#find">find your reps</a> with an address or ZIP code.</p>
+</details>`;
 }
 
 // Who represents you: the federal executive for everyone; the visitor's own
@@ -247,9 +280,18 @@ function understand() {
 </section>`;
 }
 
-async function hub(env, request, url, d) {
-  const which = url.searchParams.get("now") === "state" ? "state" : "federal";
+async function hub(env, request, url, d, vs) {
   const db = env.DB;
+  const lead = vs ? await stateLeadData(db, vs.st) : null;
+  // Happening now: Congress, or the state's legislature once its votes are loaded
+  // (California for the national hub).
+  const leadCov = lead && lead.coverage !== FAILED ? lead.coverage : null;
+  const stateOption = !vs
+    ? { value: "state", name: "California" }
+    : votesLoaded(vs.st, leadCov)
+      ? { value: vs.st === "CA" ? "state" : `state:${vs.st}`, name: vs.name }
+      : null;
+  const which = stateOption && url.searchParams.get("now") === stateOption.value ? stateOption.value : "federal";
   // Each section loads on its own: one that can't load shows a short note, and
   // the rest of the hub still shows.
   const start = pacificNow();
@@ -265,7 +307,8 @@ async function hub(env, request, url, d) {
     loadSection("hub waitlist counts", db ? () => waitlistCounts(db) : async () => null, null),
     loadSection("hub waitlist map", db ? () => waitlistBy(db) : async () => ({ county: {}, state: {} }), { county: {}, state: {} }),
     loadSection("hub executive", db ? () => executiveOfficials(db, "us-executive") : async () => [], []),
-    loadSection("hub state executive", db ? () => executiveOfficials(db, chamberIds(d ? d.st : "CA").executive) : async () => [], []),
+    // With a state shown, its statewide offices are in "Your state" above.
+    loadSection("hub state executive", db && !vs ? () => executiveOfficials(db, chamberIds(d ? d.st : "CA").executive) : async () => [], []),
     loadSection("hub elections", () => electionsData(env, request, d), { election: null, ballot: null }),
     loadSection("hub topic place", () => topicPlace(env, request, d), null),
   ]);
@@ -278,11 +321,13 @@ async function hub(env, request, url, d) {
   const electionsHtml = elections === FAILED ? sectionError("Elections") : electionsSection(elections, d);
   const electionsLate = elections === FAILED || !elections.election || daysUntil(elections.election, start.slice(0, 10)) == null;
   const main = `
+${vs ? showingBar(vs) : ""}
 <header class="hub-head stack-sm">
   <h1 class="hub-title">Know what your government is doing. <span class="hub-title-soft">Then take part.</span></h1>
   <p class="hub-sub">Votes, bills, and meetings in plain language, measured against the Constitution. Built on evidence, open to every point of view.</p>
 </header>
-${usMap(index, waiting === FAILED ? { county: {}, state: {} } : waiting)}
+${usMap(index, waiting === FAILED ? { county: {}, state: {} } : waiting, vs)}
+${vs ? stateLead(vs, lead, elections === FAILED ? FAILED : elections.election) : ""}
 ${notFound ? '<p class="banner banner--error" role="alert">We couldn\'t find districts for that. Check the address, or try your ZIP code.</p>' : ""}
 ${lookupForm(d)}
 ${d ? `<a class="card briefing-link" href="/briefing/"><span class="stack-xs"><span class="label">Your briefing</span><span class="small">${esc(describe(d))}</span></span><span class="chev" aria-hidden="true">›</span></a>` : ""}
@@ -292,12 +337,12 @@ ${electionsLate ? "" : electionsHtml}
   <p><a class="inline-link" href="/about/how-it-works/">How it works</a> · <a class="inline-link" href="/about/principles/">Principles</a></p>
   <button class="intro-dismiss" type="button" data-intro-dismiss aria-label="Dismiss this introduction">×</button>
 </aside>
-${federalExec === FAILED || caExec === FAILED ? sectionError("Who represents you") : whoRepresents(federalExec, caExec, d)}
+${federalExec === FAILED || caExec === FAILED ? sectionError("Who represents you") : whoRepresents(federalExec, vs ? [] : caExec, d)}
 ${electionsLate ? electionsHtml : ""}
-${now === FAILED ? sectionError("Happening now") : happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? "/" : "/?now=state"), loaded: !!db })}
+${now === FAILED ? sectionError("Happening now") : happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? "/" : `/?now=${v}`), loaded: !!db, state: stateOption })}
 ${topicsSection(tPlace === FAILED ? null : tPlace)}
 ${deadlines === FAILED ? sectionError("Take part") : takePart(deadlines, !!db)}
-${communities(env, counts === FAILED ? null : counts, msg, error)}
+${communities(env, counts === FAILED ? null : counts, msg, error, vs ? vs.st : "")}
 ${understand()}
 ${index ? `<script src="/assets/map.js?v=${ASSET_VERSION}" defer></script>` : ""}`;
   // Personal only once the visitor's districts are known; otherwise the same for everyone.
@@ -318,6 +363,12 @@ export const onRequestGet = guard(async (context) => {
     return Response.redirect(`${url.origin}/${url.search}${url.hash}`, 301);
   }
   const d = districtsFromCookie(request);
-  if (d) return hub(env, request, url, d);
-  return edgeCached(context, HUB_CACHE_SECONDS, () => hub(env, request, url, null));
+  const vs = visitorState(request, d);
+  if (d) return hub(env, request, url, d, vs);
+  // One copy per state (and per how the state was found, which the page says),
+  // and one national copy. Browsers don't keep it, so a change of state shows at once.
+  return edgeCached(context, HUB_CACHE_SECONDS, () => hub(env, request, url, null, vs), {
+    variant: vs ? `${vs.st}-${vs.source}` : "us",
+    clientCache: "private, no-cache",
+  });
 }, { tab: "home" });

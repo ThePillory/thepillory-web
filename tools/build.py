@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "39"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "40"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -66,7 +66,7 @@ REDIRECTS = [
     ("/report/review/", "/report/"),
     ("/report/submitted/", "/report/"),
     ("/you/jury/", "/you/"),
-    ("/you/privacy/", "/you/"),
+    ("/you/privacy/", "/you/#privacy"),
     ("/about/funding/", "/about/"),
     ("/about/advisory-group/", "/about/"),
     ("/agency", "/about/"),
@@ -634,6 +634,15 @@ def build_you():
 <section class="card stack-sm">
   <h2 class="label">Your districts</h2>
   <p class="small">To see your own reps and briefing, look up your districts with an address or ZIP code. Only the district numbers are kept, in this browser. <a class="inline-link" href="/#find">Find your representatives</a></p>
+</section>
+<section class="card stack-sm" id="privacy" aria-labelledby="h-privacy">
+  <h2 class="label" id="h-privacy">Privacy</h2>
+  <ul class="plain-list small stack-xs">
+    <li>We use your approximate state, based on your connection, to show relevant information. It is not stored.</li>
+    <li>Only your state is taken from your connection, never your county or district. A state you choose on the home page is saved only in this browser.</li>
+    <li>An address or ZIP code you look up is used only to find your districts. It isn't stored or logged; only the district numbers are kept, in this browser.</li>
+    <li>To decide which states' records to load first, ThePillory counts lookups per state and day. No address, ZIP code or visitor is kept, only the count.</li>
+  </ul>
 </section>
 {section("Elections", link_row("/elections/2026-11-03/ballot/", "Your ballot", "The contests and measures for your address") + link_row("/elections/", "Elections", "What's on the ballot, and how to vote"))}
 {section("About", f'<div>{about}</div>')}"""
