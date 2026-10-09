@@ -30,7 +30,7 @@ import { listMeetings, pacificNow, addDays, deadlineParts, meetingHref, when } f
 import { districtsFromCookie, describe, STATE_NAME } from "./_lib/districts.js";
 import { happeningNow, happeningSection, lookupForm, waitlistCounts } from "./_lib/hub.js";
 import { topicGrid, placeTopicsHref } from "./_lib/topics.js";
-import { CURRENT, loadElection, ballotFor, ballotHref, electionHref, whenLine, daysUntil, contestRow, courtRow, statewideRow } from "./_lib/elections.js";
+import { loadElection, ballotFor, ballotHref, electionHref, whenLine, daysUntil, contestRow, courtRow, statewideRow, electionIdFor, measuresOnly, COVERAGE_NOTE } from "./_lib/elections.js";
 import { LIVE, loadIndex, loadPlace, waitlistBy, usMapLinks, smallStateButtons, mapFigure } from "./_lib/geo.js";
 import { ASSET_VERSION } from "./_lib/generated.js";
 import { executiveOfficials, executiveRows } from "./_lib/executive.js";
@@ -201,9 +201,10 @@ function whoRepresents(federal, stateExec, d) {
 }
 
 // Elections: the next election, and "Your ballot" once the visitor's districts are known.
-async function electionsData(env, request, d) {
-  const election = await loadElection(env, request, CURRENT);
-  if (!election || !d || d.st !== election.election.state) return { election, ballot: null };
+async function electionsData(env, request, d, st) {
+  // The visitor's state's election when ThePillory has one; otherwise California's.
+  const election = await loadElection(env, request, electionIdFor(st));
+  if (!election || !d || d.st !== election.election.state || measuresOnly(election)) return { election, ballot: null };
   const place = d.co ? await loadPlace(env, request, d.st.toLowerCase()) : null;
   const county = place && place.counties.find((c) => c.fips === d.co);
   return { election, ballot: ballotFor(election, d, county ? county.name : null), county };
@@ -224,8 +225,10 @@ function electionsSection({ election, ballot, county }, d) {
     ${local ? `<a class="list-row link-row" href="${ballotHref(id)}#h-yl"><div><div class="list-title">Local contests and measures</div><div class="list-meta">${local} on some ballots in ${esc(county ? county.name : "your county")}</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>` : ""}
     <a class="btn btn--primary btn--block" href="${ballotHref(id)}">Open your ballot</a>
   </div>`;
-  } else if (d) {
-    yours = `<p class="small secondary">ThePillory has California's ballot so far. For elections in ${esc(STATE_NAME[d.st] || "your state")}, find your state's election office at <a class="inline-link" href="https://www.usa.gov/state-election-office" target="_blank" rel="noopener">USA.gov ↗</a>.</p>`;
+  } else if (measuresOnly(election)) {
+    yours = `<p class="small secondary">The statewide measures, on every ballot in ${esc(STATE_NAME[election.election.state])}. Your county's sample ballot has your candidates and local measures.</p>`;
+  } else if (d && d.st !== election.election.state) {
+    yours = `<p class="small secondary">${esc(COVERAGE_NOTE)}. For elections in ${esc(STATE_NAME[d.st] || "your state")}, find your state's election office at <a class="inline-link" href="https://www.usa.gov/state-election-office" target="_blank" rel="noopener">USA.gov ↗</a>.</p>`;
   } else {
     yours = `<p class="small"><a class="inline-link" href="${ballotHref(id)}">Find your ballot</a> by address or ZIP code.</p>`;
   }
@@ -309,7 +312,7 @@ async function hub(env, request, url, d, vs) {
     loadSection("hub executive", db ? () => executiveOfficials(db, "us-executive") : async () => [], []),
     // With a state shown, its statewide offices are in "Your state" above.
     loadSection("hub state executive", db && !vs ? () => executiveOfficials(db, chamberIds(d ? d.st : "CA").executive) : async () => [], []),
-    loadSection("hub elections", () => electionsData(env, request, d), { election: null, ballot: null }),
+    loadSection("hub elections", () => electionsData(env, request, d, vs ? vs.st : d ? d.st : null), { election: null, ballot: null }),
     loadSection("hub topic place", () => topicPlace(env, request, d), null),
   ]);
   const joined = url.searchParams.get("waitlist");

@@ -15,7 +15,7 @@ import { listMeetings, summariesFor, meetingCard, pacificNow, addDays } from "..
 import { turnstileReady, turnstileWidget } from "../_lib/turnstile.js";
 import { placeTopicsIndex, placeTopicPage } from "../_lib/topic-pages.js";
 import { topicGrid, placeTopicsHref } from "../_lib/topics.js";
-import { CURRENT, loadElection, onTheBallot, statewideRow, contestRow, measureRow, courtRow, courtGroups } from "../_lib/elections.js";
+import { electionIdFor, measuresOnly, loadElection, onTheBallot, statewideRow, contestRow, measureRow, courtRow, courtGroups } from "../_lib/elections.js";
 import { pickYear, yearBar } from "../_lib/history.js";
 import { placePastYear, topicPastYear } from "../_lib/history-pages.js";
 import { LIVE, loadPlace, officialsFor, allIds, repRow, executiveRows, breadcrumb, districtLabel, districtHref, placeHref, loadDistrictNames } from "../_lib/geo.js";
@@ -88,7 +88,7 @@ async function placePage({ request, env, params }) {
       : { meetings: [], summaries: {} },
   ]);
   const { meetings, summaries } = meetingsLoaded === FAILED ? { meetings: [], summaries: {} } : meetingsLoaded;
-  const electionLoaded = await loadSection("place election", () => loadElection(env, request, CURRENT), null);
+  const electionLoaded = await loadSection("place election", () => loadElection(env, request, electionIdFor(place.st)), null);
   const ballot = electionLoaded && electionLoaded !== FAILED && electionLoaded.election.state === place.st ? countyBallot(electionLoaded, c, place) : "";
 
   // Who represents this county: every district that overlaps it.
@@ -228,6 +228,11 @@ ${yearBar(url, null, { label: `See who represented ${c.name} in an earlier year`
 /** What's on the ballot in a county: statewide, every district that overlaps it, its Court of Appeal, and local contests where ThePillory has them. */
 function countyBallot(election, c, place) {
   const id = election.election.id;
+  if (measuresOnly(election)) {
+    // Washington: the statewide measures, the same on every ballot in the state.
+    const rows = election.measures.map((m) => measureRow(id, m));
+    return onTheBallot(election, { rows, intro: `The statewide measures, on every ballot in ${place.name}. ${c.name}'s candidates and local measures are on its elections office's website and sample ballot.`, today: pacificNow().slice(0, 10), folded: true, ballotLinks: false });
+  }
   const rows = [statewideRow(election)];
   for (const layer of ["cd", "sldu", "sldl"]) {
     for (const [d, full] of c[layer] || []) {

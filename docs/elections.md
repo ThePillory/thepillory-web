@@ -26,6 +26,25 @@ Rules the builder keeps:
 
 To add a county: an entry in `COUNTIES` and `HOW_TO_VOTE` in the builder (its candidate list, pamphlet, results page, elections page and Board of Equalization district), and check the log after a run. To add an election: a new `ELECTION` block, then add its id to `ELECTIONS` in `functions/_lib/elections.js` (newest first).
 
+## Washington's statewide measures
+
+`tools/build_wa_measures.py` builds `data/elections/2026-11-03-wa.json` in the same shape as California's file, with only the three statewide measures (no candidates or local contests; `measuresOnly()` in `functions/_lib/elections.js` shows those elections as a list of measures, and "Your ballot" points to the statewide list, since it's the same on every ballot). It runs in the same daily workflow, after California. Sources, all from the Secretary of State's site:
+
+| What | Source |
+|---|---|
+| Ballot title (statement of subject, concise description, the question) and the explanatory statement ("The Law as It Presently Exists", "The Effect of the Proposed Measure if Approved") | The Attorney General's letter to the Secretary for each measure (PDF) |
+| Fiscal impact statement, its summary | The Voters' Pamphlet (one English edition; its statewide section is the same in every county's). The separate fiscal PDFs drop letters where their font uses ligatures ("e ect"), so they're linked, never read |
+| Arguments for and against, each side's rebuttal, who wrote them | Each measure's Voters' Pamphlet page (two columns: supporters left, opponents right). Each side's "Contact:" line is left out |
+| How to vote | VoteWA (register, track your ballot, where to vote) and the Voters' Guide |
+
+Rules the builder keeps:
+- **Word for word or nothing:** every paragraph it writes is checked against its source document (line breaks evened out); a paragraph that isn't there stops the build, and the file stays as it was.
+- Text with a damaged ligature (`Ư`, `Ɵ`, "e ect") stops the build.
+- "Rebuttal of argument against" is the supporters' rebuttal and "Rebuttal of argument for" the opponents', so each side's argument and rebuttal sit together, as on California's pages. The pamphlet's "Written by" applies to both.
+- Paragraphs are rejoined from the PDF's lines: a paragraph ends on a short line or at a page break after a full sentence; a "Label:" line starts one; a campaign's heading (nearly every word capitalized) is its own paragraph. Tests: `tools/test_build_wa_measures.py`.
+
+The measure URLs are listed in `MEASURES` in the builder. For the next election, add its documents there (they're linked from the Secretary of State's "Proposed ballot measure information" page and the Voters' Guide).
+
 ## Ballot order
 
 California orders candidates by a randomized alphabet drawn for each election (Elections Code 13112): last name first, letter by letter, then first and middle names. `ballotOrder()` applies it:

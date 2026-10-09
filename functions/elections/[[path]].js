@@ -21,6 +21,7 @@ import {
   ballotOrder, ballotFor, courtGroups, scopeLabel, contestTitle,
   officeholders, holderFor, pollsClosed, sosResults, candidateResults, measureResult, resultsBlock,
   whenLine, howToVote, contestRow, measureRow, courtRow,
+  measuresOnly, measureName, electionIdFor, ELECTION_BY_STATE, COVERAGE_NOTE,
 } from "../_lib/elections.js";
 import { pacificNow } from "../_lib/meetings.js";
 import { fold } from "../_lib/summary.js";
@@ -60,7 +61,7 @@ async function indexPage(env, request) {
 <a class="card stack-xs" href="${electionHref(e.election.id)}">
   <p class="label">${esc(STATE_NAME[e.election.state])}</p>
   <h3>${esc(e.election.name)}</h3>
-  <p class="small secondary">${esc(whenLine(e, today()))} · ${e.contests.filter((c) => c.scope !== "judicial").length} contests and ${e.measures.length} measures</p>
+  <p class="small secondary">${esc(whenLine(e, today()))} · ${measuresOnly(e) ? `${e.measures.length} statewide ${e.measures.length === 1 ? "measure" : "measures"}` : `${e.contests.filter((c) => c.scope !== "judicial").length} contests and ${e.measures.length} measures`}</p>
   <span class="inline-link">What's on the ballot</span>
 </a>`)
     .join("");
@@ -73,7 +74,7 @@ async function indexPage(env, request) {
 <a class="card briefing-link" href="${ballotHref(CURRENT)}"><span class="stack-xs"><span class="label">Your ballot</span><span class="small">The contests and measures for your address</span></span><span class="chev" aria-hidden="true">›</span></a>
 ${current ? howToVote(current) : ""}
 <section class="card stack-xs">
-  <p class="small">ThePillory has California's ballot so far. For elections in other states, find your state's election office at <a class="inline-link" href="${STATE_ELECTION_OFFICES}" target="_blank" rel="noopener">USA.gov ↗</a>.</p>
+  <p class="small">${esc(COVERAGE_NOTE)}. For elections in other states, find your state's election office at <a class="inline-link" href="${STATE_ELECTION_OFFICES}" target="_blank" rel="noopener">USA.gov ↗</a>.</p>
 </section>
 <p class="hint">${esc(NEUTRAL)} <a class="inline-link" href="/about/methodology/#elections">How ThePillory builds this</a></p>`;
   return page("Elections", main, { tab: "home" });
@@ -83,6 +84,7 @@ ${current ? howToVote(current) : ""}
 // /elections/<id>/
 
 function electionPage(election) {
+  if (measuresOnly(election)) return measuresElectionPage(election);
   const id = election.election.id;
   const by = (scope) => election.contests.filter((c) => c.scope === scope).sort((a, b) => Number(a.district) - Number(b.district));
   const chips = (list, label) => `<ul class="plain-list district-grid">${list.map((c) => `<li><a class="chip chip--tap" href="${contestHref(id, c.id)}" aria-label="${esc(label)} ${esc(c.district)}">${esc(c.district)}</a></li>`).join("")}</ul>`;
@@ -123,8 +125,34 @@ ${sources(election)}
   return page(election.election.name, main, { tab: "home", back: BACK });
 }
 
+// An election ThePillory has only the statewide measures of (Washington's): the measures, How to vote, sources.
+function measuresElectionPage(election) {
+  const id = election.election.id;
+  const state = STATE_NAME[election.election.state];
+  const main = `
+<header class="page-head stack-xs">
+  <p class="label">${esc(state)}</p>
+  <h1>${esc(election.election.name)}</h1>
+  <p class="subtitle">${esc(whenLine(election, today()))}</p>
+</header>
+<section class="stack-sm" aria-labelledby="h-props"><h2 class="label" id="h-props">Statewide measures</h2>
+  <div class="card">${election.measures.map((m) => measureRow(id, m)).join("")}</div>
+  <p class="hint">On every ballot in ${esc(state)}, in the order the Voters' Pamphlet lists them. ThePillory has ${esc(state)}'s statewide measures for this election; candidates and local measures are in the official Voters' Guide.</p>
+</section>
+${howToVote(election)}
+${sources(election)}
+<p class="hint">${esc(NEUTRAL)}</p>`;
+  return page(`${election.election.name}, ${state}`, main, { tab: "home", back: BACK });
+}
+
 function sources(election) {
   const e = election.election;
+  if (e.sources) {
+    return `<section class="stack-sm" aria-labelledby="h-src"><h2 class="label" id="h-src">Sources</h2><div class="card stack-xs">${e.sources
+      .filter((x) => safeUrl(x.url))
+      .map((x) => `<p class="small">${sourceLink(x.url, x.label)}</p>`)
+      .join("")}</div></section>`;
+  }
   const links = [
     [e.certified_list, "Certified List of Candidates (Secretary of State)"],
     [e.guide, "Official Voter Information Guide (Secretary of State)"],
@@ -181,10 +209,16 @@ ${lookupForm(null, { id: "find", heading: "Find your ballot", next: ballotHref(i
 ${howToVote(election)}`;
     return page("Your ballot", main, { tab: "home", back: [election.election.name, electionHref(id)], personal: true });
   }
-  if (d.st !== election.election.state) {
+  if (d.st !== election.election.state || measuresOnly(election)) {
+    const theirs = ELECTION_BY_STATE[d.st] && ELECTION_BY_STATE[d.st] !== id ? electionIdFor(d.st) : null;
+    const own = d.st === election.election.state;
     const main = `${head}
 <section class="card stack-sm">
-  <p>ThePillory has California's ballot so far. For elections in ${esc(STATE_NAME[d.st])}, find your state's election office at <a class="inline-link" href="${STATE_ELECTION_OFFICES}" target="_blank" rel="noopener">USA.gov ↗</a>.</p>
+  ${own
+    ? `<p>ThePillory has ${esc(STATE_NAME[d.st])}'s statewide measures for this election, the same on every ballot in the state. Your county's sample ballot has your candidates and local measures.</p><p><a class="inline-link" href="${electionHref(id)}">${esc(STATE_NAME[d.st])}'s statewide measures</a></p>`
+    : theirs
+      ? `<p>Your districts are in ${esc(STATE_NAME[d.st])}. <a class="inline-link" href="${electionHref(theirs)}">See what's on the ballot in ${esc(STATE_NAME[d.st])}</a>.</p>`
+      : `<p>${esc(COVERAGE_NOTE)}. For elections in ${esc(STATE_NAME[d.st])}, find your state's election office at <a class="inline-link" href="${STATE_ELECTION_OFFICES}" target="_blank" rel="noopener">USA.gov ↗</a>.</p>`}
 </section>
 ${lookupForm(d, { id: "find", heading: "Use a different address", next: ballotHref(id) })}`;
     return page("Your ballot", main, { tab: "home", back: [election.election.name, electionHref(id)], personal: true });
@@ -374,11 +408,56 @@ ${source ? `<p class="small">${source}</p>` : ""}`;
   return fold("arguments", "Arguments from each campaign", inner);
 }
 
+// A Washington measure: the Voters' Pamphlet's parts in its order. The ballot title and the explanatory
+// statement are the Attorney General's, the fiscal impact statement is the Office of Financial Management's,
+// and the arguments are each campaign's, all word for word (tools/build_wa_measures.py).
+function waMeasurePage(election, m, back) {
+  const id = election.election.id;
+  const bt = m.ballot_title;
+  const paras = (list) => list.map((p) => `<p class="small">${esc(p)}</p>`).join("");
+  const results = pollsClosed(election)
+    ? `<p class="small">Results: ${sourceLink(election.election.results_page, "Washington Secretary of State, election results")}</p>`
+    : '<p class="small secondary">Results are linked here after ballots are due at 8 p.m. on Election Day.</p>';
+  const links = [
+    [m.links.pamphlet_page, "This measure's page in the Voters' Pamphlet (PDF)"],
+    [m.links.statement, "Ballot title and explanatory statement, Attorney General's letter (PDF)"],
+    [m.links.fiscal, "Full fiscal impact statement, Office of Financial Management (PDF)"],
+    [m.links.text, "Complete text of the measure (PDF)"],
+    [m.links.guide, "2026 General Election Voters' Guide (Secretary of State)"],
+  ];
+  const main = `
+<header class="page-head stack-xs">
+  <p class="label">Statewide · ${esc(fmtDate(election.election.date))} · ${esc(m.kind)}</p>
+  <h1>${esc(measureName(m))}</h1>
+</header>
+<section class="card stack-sm" aria-labelledby="h-bt">
+  <h2 class="label" id="h-bt">Ballot title · Written by the Office of the Attorney General</h2>
+  <p class="measure-title">${esc(bt.subject)}</p>
+  <p class="small">${esc(bt.description)}</p>
+  <p class="small"><strong>${esc(bt.question)}</strong> Yes · No</p>
+</section>
+<section class="card stack-sm" aria-labelledby="h-fiscal">
+  <h2 class="label" id="h-fiscal">Fiscal impact · Written by the Office of Financial Management</h2>
+  ${paras(m.fiscal_summary)}
+  <p class="hint">The summary of the fiscal impact statement, as the Voters' Pamphlet prints it. ${sourceLink(m.links.fiscal, "The full statement")}</p>
+</section>
+${fold("present", "The law as it presently exists", `<div class="statement-body stack-xs">${paras(m.explanatory.present)}</div><p class="hint">From the explanatory statement written by the Office of the Attorney General.</p>`)}
+${fold("effect", "The effect of the proposed measure if approved", `<div class="statement-body stack-xs">${paras(m.explanatory.effect)}</div><p class="hint">From the explanatory statement written by the Office of the Attorney General.</p>`)}
+<section class="stack-sm" aria-labelledby="h-res"><h2 class="label" id="h-res">Results</h2>${results}</section>
+${argumentsSection(m, `${sourceLink(m.links.pamphlet_page, "Arguments and rebuttals in the Voters' Pamphlet")} · ${esc(m.arguments_disclaimer)}`)}
+<section class="stack-sm" aria-labelledby="h-src"><h2 class="label" id="h-src">Official sources</h2>
+  <div class="card stack-xs">${links.filter(([u]) => safeUrl(u)).map(([u, l]) => `<p class="small">${sourceLink(u, l)}</p>`).join("")}</div>
+</section>
+<p class="hint">${esc(NEUTRAL)}</p>`;
+  return page(measureName(m), main, { tab: "home", back });
+}
+
 async function measurePage(election, measureId) {
   const id = election.election.id;
   const back = [election.election.name, electionHref(id)];
   const m = election.measures.find((x) => x.id === measureId);
   if (!m) return notFound("No measure at this address.", "home", back);
+  if (m.ballot_title) return waMeasurePage(election, m, back);
   const statewide = m.scope === "statewide";
   const county = m.county ? election.counties[m.county] : null;
   const feed = statewide ? await loadSection("measure results", () => sosResults(election, m.results_path), null) : null;
