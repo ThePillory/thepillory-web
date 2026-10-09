@@ -130,6 +130,8 @@ For a two-year period across all 49 other states plus DC and PR:
 | **Votes and bills** | ~0.1 GB | ~0.27 GB |
 | **Total added** | **~0.5 GB** | **~1.4 GB** |
 
+**Measured, October 9, 2026** (the 10 states first in line: TX, FL, NY, PA, IL, OH, GA, NC, MI, NJ, 21 session files reaching 2025): **20,574 bills, 48,058 votes, 2,610,983 member positions: 97.5 MB and 5,647,578 row writes.** That's well under the estimate above. These states hold about half the country's population, so all states for the period would come to roughly 0.2–0.3 GB and 12–15 million row writes, inside one month's included writes. Two files had no votes yet: New Jersey's 2026–2027 session and Texas's first called session of 2025.
+
 The range is wide because states record very differently. Some record every committee and procedural vote (hundreds of thousands of positions a session); others record only floor votes. **The measure run gives the exact number before anything is written.**
 
 With the old layout the same data would be 5–14 GB.
