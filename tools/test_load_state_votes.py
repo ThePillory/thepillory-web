@@ -38,6 +38,8 @@ def fake_zip(folder):
             {"id": "ocd-bill/b3", "identifier": "HB 3", "title": "No source.", "classification": "['bill']", "subject": "[]",
              "session_identifier": "89", "jurisdiction": "Texas", "organization_classification": "lower"},
         ]),
+        # Companion bills, after the bills file: never read as the bills.
+        f"{base}_related_bills.csv": table([{"id": "r1", "bill_id": "ocd-bill/b1", "related_bill_id": "ocd-bill/b2", "identifier": "SB 2", "legislative_session": "89", "relation_type": "companion"}]),
         f"{base}_bill_sources.csv": table([
             {"id": "1", "bill_id": "ocd-bill/b1", "url": "https://capitol.example.gov/HB1", "note": ""},
             {"id": "2", "bill_id": "ocd-bill/b2", "url": "https://capitol.example.gov/SB2", "note": ""},
@@ -170,6 +172,13 @@ class LinkingTests(unittest.TestCase):
         self.assertEqual([v["id"] for v in rows["votes"]], ["tx-ocd-vote/1"])
         self.assertEqual(rows["stats"]["votes_bill_not_in_file"], 1)
         self.assertEqual(rows["stats"]["sample_missing_bill_id"], "ocd-bill/elsewhere")
+
+    def test_table_names(self):
+        self.assertEqual(L.table_kind("tx/89R/tx_89R_bills.csv"), "bills")
+        self.assertEqual(L.table_kind("tx/89R/tx_89R_related_bills.csv"), "related_bills")
+        self.assertEqual(L.table_kind("ny/2025-2026/ny_2025-2026_vote_people.csv"), "vote_people")
+        self.assertEqual(L.table_kind("tx_89R_related_bills.csv"), "related_bills")
+        self.assertEqual(L.table_kind("tx/89R/README"), None)
 
     def test_a_session_label_without_a_year(self):
         links = [

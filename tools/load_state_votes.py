@@ -228,6 +228,25 @@ def download(url, folder):
 # ---------------------------------------------------------------------------
 # One session file -> rows.
 
+def table_kind(name):
+    """'tx/89R/tx_89R_bills.csv' -> 'bills', and 'tx/89R/tx_89R_related_bills.csv' -> 'related_bills' (not 'bills'):
+    the file name is <abbr>_<session>_<kind>.csv inside <abbr>/<session>/."""
+    parts = name.split("/")
+    base = parts[-1]
+    if not base.endswith(".csv"):
+        return None
+    if len(parts) >= 3:
+        prefix = f"{parts[-3]}_{parts[-2]}_"
+        if base.startswith(prefix):
+            return base[len(prefix):-4]
+    # No folders: the longest known kind the name ends with.
+    kinds = ("related_bills", "bill_sources", "bill_actions", "bills", "vote_people", "vote_counts", "vote_sources", "votes", "organizations")
+    for k in sorted(kinds, key=len, reverse=True):
+        if base.endswith(f"_{k}.csv"):
+            return k
+    return None
+
+
 def read_tables(path):
     """The CSV files a load needs, by kind ('bills', 'votes', 'vote_people', …), each a list of dicts."""
     want = ("bills", "bill_sources", "bill_actions", "votes", "vote_people", "vote_counts", "vote_sources", "organizations")
@@ -239,11 +258,11 @@ def read_tables(path):
                 m = re.search(r"Generated At: (.+)", z.read(name).decode("utf-8", "replace"))
                 generated = m.group(1).strip() if m else None
                 continue
-            m = re.search(r"_(bills|bill_sources|bill_actions|votes|vote_people|vote_counts|vote_sources|organizations)\.csv$", name)
-            if not m:
+            kind = table_kind(name)
+            if kind not in want:
                 continue
             with z.open(name) as f:
-                tables[m.group(1)] = list(csv.DictReader(io.TextIOWrapper(f, encoding="utf-8", newline="")))
+                tables[kind] = list(csv.DictReader(io.TextIOWrapper(f, encoding="utf-8", newline="")))
     return tables, generated
 
 
