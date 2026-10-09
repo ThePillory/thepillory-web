@@ -152,5 +152,33 @@ class LoaderTests(unittest.TestCase):
         self.assertEqual([x["session"] for x in L.choose(links, ["NY", "TX"], 2025)], ["2025-2026", "89", "892"])
 
 
+class LinkingTests(unittest.TestCase):
+    def test_a_vote_linked_through_its_bill_action(self):
+        tables = {
+            "bills": [{"id": "ocd-bill/b1", "identifier": "HB 1", "title": "T", "organization_classification": "lower"}],
+            "bill_sources": [{"bill_id": "ocd-bill/b1", "url": "https://capitol.example.gov/HB1"}],
+            "bill_actions": [{"id": "act-1", "bill_id": "ocd-bill/b1"}],
+            "votes": [
+                {"id": "ocd-vote/1", "bill_id": "", "bill_action_id": "act-1", "motion_text": "Passage", "motion_classification": "['passage']",
+                 "start_date": "2025-04-01", "result": "pass", "organization_id": ""},
+                {"id": "ocd-vote/2", "bill_id": "ocd-bill/elsewhere", "bill_action_id": "", "motion_text": "Passage", "motion_classification": "[]",
+                 "start_date": "2025-04-01", "result": "pass", "organization_id": ""},
+            ],
+            "vote_people": [], "vote_counts": [], "vote_sources": [], "organizations": [],
+        }
+        rows = L.build("TX", "89", tables, {})
+        self.assertEqual([v["id"] for v in rows["votes"]], ["tx-ocd-vote/1"])
+        self.assertEqual(rows["stats"]["votes_bill_not_in_file"], 1)
+        self.assertEqual(rows["stats"]["sample_missing_bill_id"], "ocd-bill/elsewhere")
+
+    def test_a_session_label_without_a_year(self):
+        links = [
+            {"st": "IL", "session": "103rd", "label": "103rd General Assembly", "updated": "2025-01-14", "url": "a"},
+            {"st": "IL", "session": "104th", "label": "104th General Assembly", "updated": "2026-10-08", "url": "b"},
+            {"st": "IL", "session": "102nd", "label": "102nd General Assembly", "updated": "2023-01-10", "url": "c"},
+        ]
+        self.assertEqual([x["session"] for x in L.choose(links, ["IL"], 2025)], ["104th"])
+
+
 if __name__ == "__main__":
     unittest.main()

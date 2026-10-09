@@ -177,12 +177,19 @@ def years(label):
 def choose(links, states, since_year):
     """The sessions to load: each state asked for, every session whose years reach since_year (the current one and its special sessions)."""
     keep = []
+    newest_yearless = {}
     for link in links:
         if link["st"] not in states:
             continue
         ys = years(link["label"])
         if ys and max(ys) >= since_year:
             keep.append(link)
+        elif not ys and link.get("updated", "")[:4] >= str(since_year):
+            # A label without a year ("104th General Assembly"): the state's most recently updated one.
+            cur = newest_yearless.get(link["st"])
+            if not cur or link["updated"] > cur["updated"]:
+                newest_yearless[link["st"]] = link
+    keep += newest_yearless.values()
     return sorted(keep, key=lambda x: (states.index(x["st"]), x["session"]))
 
 
@@ -223,7 +230,7 @@ def download(url, folder):
 
 def read_tables(path):
     """The CSV files a load needs, by kind ('bills', 'votes', 'vote_people', …), each a list of dicts."""
-    want = ("bills", "bill_sources", "votes", "vote_people", "vote_counts", "vote_sources", "organizations")
+    want = ("bills", "bill_sources", "bill_actions", "votes", "vote_people", "vote_counts", "vote_sources", "organizations")
     tables = {k: [] for k in want}
     generated = None
     with zipfile.ZipFile(path) as z:
@@ -232,7 +239,7 @@ def read_tables(path):
                 m = re.search(r"Generated At: (.+)", z.read(name).decode("utf-8", "replace"))
                 generated = m.group(1).strip() if m else None
                 continue
-            m = re.search(r"_(bills|bill_sources|votes|vote_people|vote_counts|vote_sources|organizations)\.csv$", name)
+            m = re.search(r"_(bills|bill_sources|bill_actions|votes|vote_people|vote_counts|vote_sources|organizations)\.csv$", name)
             if not m:
                 continue
             with z.open(name) as f:
@@ -284,10 +291,15 @@ def build(st, session, tables, officials):
     bills, votes, positions = {}, [], []
     stats = defaultdict(int)
     bill_rows = {b["id"]: b for b in tables["bills"]}
+    # Some files leave a vote's bill_id empty and link it through the bill action it was taken on.
+    action_bill = {a["id"]: a.get("bill_id") for a in tables.get("bill_actions", []) if a.get("id")}
     for v in tables["votes"]:
-        b = bill_rows.get(v.get("bill_id"))
+        b = bill_rows.get(v.get("bill_id")) or bill_rows.get(action_bill.get(v.get("bill_action_id") or ""))
         if not b:
             stats["votes_without_bill"] += 1
+            stats["votes_no_bill_id" if not v.get("bill_id") else "votes_bill_not_in_file"] += 1
+            if v.get("bill_id") and "sample_missing_bill_id" not in stats:
+                stats["sample_missing_bill_id"] = v["bill_id"][:80]
             continue
         src = bill_source.get(b["id"])
         if not src:
