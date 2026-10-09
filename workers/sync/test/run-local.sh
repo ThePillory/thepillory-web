@@ -138,7 +138,7 @@ for u in / /laws/ "/laws/?votes=all" "/laws/?level=federal&offset=20" /reps/ /re
   grep -q "Couldn't load this" /tmp/pillory-page.html && echo " (a section couldn't load)" || echo
 done
 echo "--- another state: loaded (Vermont, fake) and coming soon (Texas):"
-curl -s localhost:8790/explore/vt/ | grep -oE '2 members of the Vermont Senate|Grace Testgovernor|1 bills and 1 recorded votes|coming soon|AB 101' | sort | uniq -c | sed 's/^/  vt: /'
+curl -s localhost:8790/explore/vt/ | grep -oE '2 members of the Vermont Senate|Grace Testgovernor|1 bill and 1 recorded vote|coming soon|AB 101' | sort | uniq -c | sed 's/^/  vt: /'
 curl -s localhost:8790/explore/tx/ | grep -oE "bills and roll call votes are coming soon" | head -1 | sed 's/^/  tx: /'
 curl -s localhost:8790/reps/hana-testrep/ | grep -oE 'An act relating to a test fund|Chittenden-12 House District' | sort -u | sed 's/^/  rep: /'
 curl -s "localhost:8790/laws/bills/vt-2025-2026-h-1/rollcall/?vote=vt-ocd-vote%2Fv1" | grep -oE 'Hugo Placeholder|absent' | sort -u | sed 's/^/  roll call: /'

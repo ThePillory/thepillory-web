@@ -171,7 +171,7 @@ async function statePage(env, request, url, st) {
     ? `<p class="small">${[officials.upper.length ? members(officials.upper.length, cids.upper) : null, officials.lower.length && cids.lower ? members(officials.lower.length, cids.lower) : null].filter(Boolean).join(" and ")}, each linked from their district.</p>`
     : `<p class="small secondary">${esc(place.name)}'s state legislators appear after the data sync loads them (weekly, from Open States).</p>`;
   const legislature = !votesLoaded(place.st, coverage)
-    ? votesComingSoon(place.name)
+    ? votesComingSoon(place.name, officials.upper.length + officials.lower.length > 0)
     : activity === FAILED ? sectionError("") : activity && activity.length
       ? `<p class="small">Latest recorded floor vote on a bill: <strong>${fmtDate(activity[0].last_vote)}</strong>. Whether the legislature is in session or in recess isn't tracked yet; these are its most recent final votes.</p>
          <div class="card">${activity.map((b) => `<a class="list-row link-row" href="${billHref(b.id)}"><div><div class="list-title">${esc(b.bill_number)}: ${esc(b.title)}</div><div class="list-meta">Last final vote ${fmtDate(b.last_vote)}</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>`).join("")}</div>

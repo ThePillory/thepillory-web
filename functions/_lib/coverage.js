@@ -5,6 +5,7 @@
 // first. See docs/states.md.
 import { esc, fmtDate } from "./render.js";
 
+const count = (n, word) => `${Number(n).toLocaleString("en-US")} ${word}${n === 1 ? "" : "s"}`;
 const missing = (err) => /no such (table|column)/i.test(String(err && err.message));
 
 /** One state's coverage row, or null (nothing loaded, or before migration 0020). */
@@ -34,12 +35,12 @@ export async function allCoverage(db) {
 export const votesLoaded = (st, cov) => st === "CA" || !!(cov && cov.votes);
 
 /** "Coming soon" for a state whose votes aren't loaded, said plainly. */
-export function votesComingSoon(name) {
-  return `<p class="small secondary">${esc(name)}'s bills and roll call votes are coming soon. They're loaded state by state from Open States' public session files, the states visitors look up most first. Its legislators and statewide officers are here now.</p>`;
+export function votesComingSoon(name, officialsHere = false) {
+  return `<p class="small secondary">${esc(name)}'s bills and roll call votes are coming soon. They're loaded state by state from Open States' public session files, the states visitors look up most first.${officialsHere ? " Its legislators and statewide officers are here now." : ""}</p>`;
 }
 
 /** What's loaded for a state with votes: counts, dates and where they come from. */
 export function votesLoadedNote(st, name, cov) {
   if (st === "CA" || !cov || !cov.votes) return "";
-  return `<p class="hint">${cov.bills.toLocaleString("en-US")} bills and ${cov.votes.toLocaleString("en-US")} recorded votes in ${esc(name)}'s legislature, ${fmtDate(cov.first_vote)} to ${fmtDate(cov.last_vote)}, from Open States (public session files, refreshed monthly, with daily updates for the current session). Each vote links to its official record.</p>`;
+  return `<p class="hint">${count(cov.bills, "bill")} and ${count(cov.votes, "recorded vote")} in ${esc(name)}'s legislature, ${fmtDate(cov.first_vote)} to ${fmtDate(cov.last_vote)}, from Open States (public session files, refreshed monthly, with daily updates for the current session). Each vote links to its official record.</p>`;
 }

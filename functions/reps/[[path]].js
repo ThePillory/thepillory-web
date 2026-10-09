@@ -229,7 +229,7 @@ async function profile(env, slug, url, request) {
       ? `${ok(orders).counts.executive_order || 0} executive orders and ${ok(bills).counts.signed || 0} bills signed are on record${ok(bills).counts.vetoed ? `; ${ok(bills).counts.vetoed} vetoed` : ""}.`
       : ""
     : counts && counts.final
-      ? `${counts.final} final-passage votes on record${latest ? `; the latest, ${fmtDate(latest.vote_date)}: ${latest.position} on ${latest.bill_number || latest.question}` : ""}.`
+      ? `${counts.final} final-passage ${counts.final === 1 ? "vote" : "votes"} on record${latest ? `; the latest, ${fmtDate(latest.vote_date)}: ${latest.position} on ${latest.bill_number || latest.question}` : ""}.`
       : "";
   const head = `
 <header class="page-head rep-head">
