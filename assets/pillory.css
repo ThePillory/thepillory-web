@@ -1889,13 +1889,16 @@ article.fin-term { scroll-margin-top: 16px; }
 .tally-table thead th { border-top: 0; font-size: 0.75rem; font-weight: 600; color: var(--text-2); }
 .tally-table th[scope="row"], .tally-table thead th:first-child { text-align: left; font-weight: 600; }
 
-/* Open your ballot (/ballot/<st>/): every candidate in the same row, whatever their party. */
+/* The ballot preview (/ballot/<st>/): every candidate in the same row, whatever their party. */
 .ballot-cands > li { padding: 12px 0; border-top: 1px solid var(--border); }
 .ballot-cands > li:first-child { border-top: 0; padding-top: 4px; }
 .ballot-cands > li:last-child { padding-bottom: 0; }
 .ballot-cands p { margin: 0; }
-/* "Open your ballot" as the home page's top card, in the weeks before the state's next election. */
-.ballot-hero-when { margin: 0; font-size: 1.25rem; font-weight: 800; letter-spacing: -0.01em; }
+/* The ballot preview card under the map, in the weeks before the state's next election:
+   one line with the date and countdown, and a standard-size button. */
+.ballot-hero { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-top: 16px; padding-bottom: 16px; }
+.ballot-hero-when { margin: 0; font-size: 1.0625rem; font-weight: 800; letter-spacing: -0.01em; }
+.ballot-hero .btn { min-height: var(--tap); }
 /* A justice's page: one row of four equal tabs, About · Record · Disclosures · More. */
 .tabs--four { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); overflow: visible; }
 .tabs--four [role="tab"] { min-width: 0; min-height: var(--tap); padding: 0 2px; font-size: 0.8125rem; text-align: center; white-space: nowrap; }

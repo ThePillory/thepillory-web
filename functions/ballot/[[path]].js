@@ -1,4 +1,5 @@
-// "Open your ballot", for every state (docs/elections.md):
+// The ballot preview, for every state (docs/elections.md): "Preview [State]'s ballot"
+// before an address, "Your ballot preview" after one.
 //
 //   /ballot/        the visitor's state's ballot page, or a state picker
 //   /ballot/<st>/   before an address: the state's U.S. Senate race and, when the
@@ -25,6 +26,7 @@ import { loadElection, electionHref, ballotHref, measureHref, measureName, conte
 import { voterInfo, ballotFromVoterInfo, officialFor, measureFor, CivicError } from "../_lib/civic.js";
 import { visitorHash } from "../_lib/turnstile.js";
 import { fold } from "../_lib/summary.js";
+import { previewLabel, RESULT_HEADING } from "../_lib/election-window.js";
 import { candidateHref, raceHref, racesHref, YEAR } from "../_lib/candidates.js";
 
 const BACK = ["Elections", "/elections/"];
@@ -137,7 +139,7 @@ const ownElection = (env, request, st) => (ELECTION_BY_STATE[st] ? loadElection(
 // ---------------------------------------------------------------------------
 // Pieces
 
-function addressForm(st, { heading = "Open your ballot" } = {}) {
+function addressForm(st, { heading = "Your whole ballot" } = {}) {
   return `
 <section class="card stack-sm lookup" id="address" aria-labelledby="h-address">
   <h2 class="label" id="h-address">${esc(heading)}</h2>
@@ -146,7 +148,7 @@ function addressForm(st, { heading = "Open your ballot" } = {}) {
     <label class="visually-hidden" for="ballot-address">Street address, city and state</label>
     <div class="lookup-row">
       <input class="input" id="ballot-address" name="address" type="text" autocomplete="street-address" placeholder="Street address, city, state" minlength="5" maxlength="200" required />
-      <button class="btn btn--primary" type="submit">Open</button>
+      <button class="btn btn--primary" type="submit">Preview</button>
     </div>
     <p class="hint">Sent to Google's Civic Information API for this one lookup, which answers with what election offices publish. ThePillory never stores or logs your address.</p>
   </form>
@@ -287,12 +289,12 @@ function pickerPage() {
   const states = Object.entries(STATE_NAME).filter(([st]) => !["AS", "GU", "MP", "VI"].includes(st));
   const main = `
 <header class="page-head stack-xs">
-  <h1>Open your ballot</h1>
+  <h1>Preview your state's ballot</h1>
   <p class="subtitle">Pick your state for its federal races and official voting links, then enter your address for your whole ballot.</p>
 </header>
 <ul class="card plain-list">${states.map(([st, name]) => `<li>${linkRow(ballotPath(st), name, "")}</li>`).join("")}</ul>
 <p class="hint">${esc(CONFIRM)}</p>`;
-  return page("Open your ballot", main, { tab: "home", back: BACK });
+  return page("Preview your state's ballot", main, { tab: "home", back: BACK });
 }
 
 // ---------------------------------------------------------------------------
@@ -310,8 +312,8 @@ async function statePage(env, request, st, { message = "" } = {}) {
   const main = `
 <header class="page-head stack-xs">
   <p class="label">${esc(name)}${NO_GENERAL.has(st) ? "" : " · General election, November 3, 2026"}</p>
-  <h1>Your ballot</h1>
-  <p class="subtitle">What's on your ballot, from official sources.</p>
+  <h1>${esc(previewLabel(st, name))}</h1>
+  <p class="subtitle">What's on the ballot, from official sources.</p>
 </header>
 ${message ? `<p class="banner banner--error" role="alert">${esc(message)}</p>` : ""}
 <p class="banner">${esc(CONFIRM)}</p>
@@ -321,7 +323,7 @@ ${ownSection(st, election === FAILED ? null : election)}
 ${officialLinks(st, office === FAILED ? null : office, election === FAILED ? null : election)}
 <p class="small"><a class="inline-link" href="/ballot/?pick=1">A different state</a></p>
 <p class="hint">${esc(NEUTRAL)} <a class="inline-link" href="/about/methodology/#elections">How ThePillory builds this</a></p>`;
-  return privatePage(`Your ballot, ${name}`, main, BACK);
+  return privatePage(previewLabel(st, name), main, BACK);
 }
 
 // ---------------------------------------------------------------------------
@@ -344,7 +346,7 @@ async function noData(env, request, st, kind, ballot = null) {
   const main = `
 <header class="page-head stack-xs">
   <p class="label">${esc(name)}</p>
-  <h1>Your ballot</h1>
+  <h1>${RESULT_HEADING}</h1>
 </header>
 <p class="banner">${esc(CONFIRM)}</p>
 <section class="card stack-sm">
@@ -356,7 +358,7 @@ ${addressForm(st, { heading: "Try another address" })}
 ${ownSection(st, election === FAILED ? null : election)}
 ${officialLinks(st, o, election === FAILED ? null : election)}
 <p class="small"><a class="inline-link" href="${ballotPath(st)}">${esc(name)}'s federal races</a></p>`;
-  return privatePage("Your ballot", main, [`${name} ballot`, ballotPath(st)]);
+  return privatePage(RESULT_HEADING, main, [previewLabel(st, name), ballotPath(st)]);
 }
 
 function civicCandidate(c, officials) {
@@ -441,7 +443,7 @@ async function answerPage(env, request, st, b) {
   const main = `
 <header class="page-head stack-xs">
   <p class="label">${esc(b.election.name || "Your ballot")}${b.election.day ? ` · ${esc(fmtDate(b.election.day))}` : ""}</p>
-  <h1>Your ballot</h1>
+  <h1>${RESULT_HEADING}</h1>
   ${b.where ? `<p class="subtitle">For an address in ${esc(b.where)}</p>` : ""}
 </header>
 <p class="banner">${esc(CONFIRM)}</p>
@@ -456,5 +458,5 @@ ${b.otherElections.length ? `<p class="small secondary">Also for this address: $
 ${addressForm(st, { heading: "Look up another address" })}
 ${officialLinks(st, office === FAILED ? null : office, ctx.election)}
 <p class="hint">${esc(NEUTRAL)} <a class="inline-link" href="/about/methodology/#elections">How ThePillory builds this</a></p>`;
-  return privatePage("Your ballot", main, [`${name} ballot`, ballotPath(st)]);
+  return privatePage(RESULT_HEADING, main, [previewLabel(st, name), ballotPath(st)]);
 }

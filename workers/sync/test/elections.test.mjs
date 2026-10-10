@@ -231,7 +231,7 @@ test("your ballot: private, built from the districts cookie; without it, the loo
   const none = await get("/elections/2026-11-03/ballot/");
   assert.match(none.html, /data-next="\/elections\/2026-11-03\/ballot\/"/);
   const nv = await get("/elections/2026-11-03/ballot/", `pillory_districts=${encodeURIComponent("st=NV&cd=1")}`);
-  assert.match(nv.html, /Your districts are in Nevada\.<\/p><a class="btn btn--primary btn--block" href="\/ballot\/nv\/">Open your ballot<\/a>/);
+  assert.match(nv.html, /Your districts are in Nevada\.<\/p><a class="btn btn--primary" href="\/ballot\/nv\/">Preview Nevada&#x27;s ballot<\/a>/);
 });
 
 test("court page and election page", async () => {

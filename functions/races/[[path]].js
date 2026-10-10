@@ -7,10 +7,10 @@
 import { page, notFound, guard, edgeCached, loadSection } from "../_lib/render.js";
 import { asset } from "../_lib/geo.js";
 import { STATE_NAME } from "../_lib/districts.js";
-import { todayIn } from "../_lib/election-window.js";
+import { todayIn, previewLabel } from "../_lib/election-window.js";
 import { loadCandidates, certifiedElection, recordsFor, racePage, racesIndexPage, racesHref, YEAR } from "../_lib/candidates.js";
 
-const BACK = ["Open your ballot", "/ballot/"];
+const BACK = ["Preview your state's ballot", "/ballot/"];
 const NONE = "No race at this address.";
 const noRecords = { officials: [], byFec: {} };
 const okObj = (x, test) => (x && typeof x === "object" && test(x) ? x : null);
@@ -42,7 +42,7 @@ export const onRequestGet = guard(async (context) => {
     };
     if (!parts[2]) {
       const p = racesIndexPage(args);
-      return page(p.title, p.main, { tab: "home", back: [`Open your ballot, ${STATE_NAME[st]}`, `/ballot/${st.toLowerCase()}/`] });
+      return page(p.title, p.main, { tab: "home", back: [previewLabel(st, STATE_NAME[st]), `/ballot/${st.toLowerCase()}/`] });
     }
     const p = racePage({ ...args, key: parts[2] });
     if (!p) return notFound(NONE, "home", BACK);

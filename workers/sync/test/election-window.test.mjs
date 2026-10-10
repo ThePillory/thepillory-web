@@ -1,5 +1,5 @@
 // node --test test/election-window.test.mjs
-// When "Open your ballot" leads the home page: from 45 days before the visitor's
+// When the ballot preview card leads the home page: from 45 days before the visitor's
 // state's next election through Election Day, from that state's own dates.
 import { test } from "node:test";
 import assert from "node:assert/strict";

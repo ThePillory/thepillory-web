@@ -11,6 +11,8 @@ import { coverageFor, votesLoaded } from "./coverage.js";
 import { executiveOfficials } from "./executive.js";
 import { billHref } from "./votes.js";
 import { compactRow } from "./summary.js";
+import { previewLabel } from "./election-window.js";
+import { STATE_NAME } from "./districts.js";
 import { measureRow, electionHref } from "./elections.js";
 import { LIVE, stOfFips } from "./geo.js";
 import { chamberIds, chamberName, parseChamber } from "../../workers/sync/src/states.js";
@@ -173,14 +175,14 @@ function countiesCard(st, name) {
 
 /**
  * The section. `vs`: { st, name }; `data`: stateLeadData(); `election`: the next election (or null).
- * `ballotLink`: "Open your ballot" as a row here (false while it's the home page's top card).
+ * `ballotLink`: "Preview [State]'s ballot" as a row here (false while it's the home page's top card).
  */
 export function stateLead(vs, data, election, { ballotLink = true } = {}) {
   const { st, name } = vs;
   return `
 <section class="brief-section" id="your-state" aria-labelledby="h-your-state">
   <div class="section-head"><h2 class="label" id="h-your-state">${esc(name)}</h2><a class="section-link" href="#map">Map</a></div>
-  ${ballotLink ? `<div class="card">${linkRow(`/ballot/${st.toLowerCase()}/`, "Open your ballot", "Your federal races, then your whole ballot and where to vote")}</div>` : ""}
+  ${ballotLink ? `<div class="card">${linkRow(`/ballot/${st.toLowerCase()}/`, previewLabel(st, STATE_NAME[st]), "Your federal races, then your whole ballot and where to vote")}</div>` : ""}
   ${congressCard(st, name, data)}
   ${executiveCard(st, name, data.executive)}
   ${legislatureCard(st, name, data)}

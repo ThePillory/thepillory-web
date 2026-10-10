@@ -1542,7 +1542,7 @@ window.PILLORY_INDEX = [
  },
  {
   "type": "Elections",
-  "title": "Open your ballot",
+  "title": "Preview your state's ballot",
   "sub": "Every state: your federal races, then your whole ballot and where to vote",
   "url": "/ballot/",
   "k": "ballot sample my ballot polling place where to vote early voting candidates"

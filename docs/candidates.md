@@ -13,7 +13,7 @@ Pages for candidates, with the same layout as an official's page (About · Platf
 
 All rendering is in `functions/_lib/candidates.js`. The pages are the same for everyone and kept at the edge for five minutes (`edgeCached`).
 
-Linked from: Open your ballot (each candidate's name, "The race", "Every 2026 race in [State]"), each state page's Elections section ("Candidates in [State]"), and site search.
+Linked from: the ballot preview (each candidate's name, "The race", "Every 2026 race in [State]"), each state page's Elections section ("Candidates in [State]"), and site search.
 
 ## Who's included
 

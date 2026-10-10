@@ -1,7 +1,7 @@
 // /candidates/<FEC id>/ and /candidates/ca/<contest>/<name>/: one candidate not
 // yet in office, with the same layout as an official's page (About · Platform ·
 // Votes · Funding · More; functions/_lib/candidates.js). The same for everyone:
-// kept at the edge for a few minutes. /candidates/ goes to Open your ballot.
+// kept at the edge for a few minutes. /candidates/ goes to the ballot preview (/ballot/).
 import { page, notFound, guard, edgeCached, loadSection } from "../_lib/render.js";
 import { asset } from "../_lib/geo.js";
 import { STATE_NAME } from "../_lib/districts.js";
@@ -10,7 +10,7 @@ import {
   loadCandidates, certifiedElection, platformFor, recordsFor, fecCandidatePage, stateCandidatePage, stateOfId, nameSlug, racesHref, YEAR, STATE_SCOPES,
 } from "../_lib/candidates.js";
 
-const BACK = ["Open your ballot", "/ballot/"];
+const BACK = ["Preview your state's ballot", "/ballot/"];
 const NONE = "No candidate at this address.";
 const noRecords = { officials: [], byFec: {} };
 

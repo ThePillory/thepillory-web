@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Every state's federal election dates (primaries, runoffs, specials and the
-general; data/elections/dates.json, for when "Open your ballot" leads the home
+general; data/elections/dates.json, for when the ballot preview leads the home
 page) and each state's 2026 U.S. Senate and U.S. House candidates from the Federal
 Election Commission (api.open.fec.gov), for "Your ballot" before an address is
 entered. Writes data/elections/federal-2026/<st>.json. Standard library only;

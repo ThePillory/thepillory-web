@@ -24,6 +24,7 @@ import { INDUSTRIES } from "../../workers/sync/src/funding/industry.js";
 import { officialFor } from "./civic.js";
 import { loadElection, ballotOrder, contestHref, ELECTION_BY_STATE, measuresOnly } from "./elections.js";
 import { statePath } from "./state-paths.js";
+import { previewLabel } from "./election-window.js";
 
 export const YEAR = 2026;
 export const METHOD = "/about/methodology/#candidates";
@@ -492,7 +493,7 @@ ${fecSection}
   <p class="small">${esc(NEUTRAL)}</p>
   <a class="inline-link" href="${METHOD}">Methodology</a>
 </section>
-<div class="card">${linkRow(`/ballot/${st.toLowerCase()}/`, "Open your ballot", `Your races in ${stateName}, and where to vote`)}${linkRow(racesHref(year, st), `Every ${year} race in ${stateName}`, "")}</div>`;
+<div class="card">${linkRow(`/ballot/${st.toLowerCase()}/`, previewLabel(st, stateName), `Your races in ${stateName}, and where to vote`)}${linkRow(racesHref(year, st), `Every ${year} race in ${stateName}`, "")}</div>`;
   return { title: `${office}, ${stateName}`, main };
 }
 

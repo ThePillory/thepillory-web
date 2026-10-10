@@ -1,5 +1,5 @@
 // node --test test/ballot.test.mjs
-// "Open your ballot" (/ballot/<st>/, functions/_lib/civic.js): the Google Civic
+// The ballot preview (/ballot/<st>/, functions/_lib/civic.js): the Google Civic
 // Information API's answer as ThePillory shows it (contests in ballot order, the
 // same layout for every candidate, no contact details), links to ThePillory's
 // own pages only on a sure match, plain errors that never carry the address,

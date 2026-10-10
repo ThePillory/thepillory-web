@@ -1,4 +1,4 @@
-// When "Open your ballot" leads the home page: from WINDOW_DAYS before the next
+// When the ballot preview ("Preview [State]'s ballot") leads the home page: from WINDOW_DAYS before the next
 // election in the visitor's state through Election Day, using that state's own
 // dates (data/elections/dates.json: every federal primary, runoff, special and
 // general election the FEC lists, built by tools/build_federal_races.py).
@@ -58,6 +58,18 @@ export const onlyIfNeeded = (e) => ["R", "GR", "SR"].includes(e.type);
 export function shortDate(iso) {
   return new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", timeZone: "UTC" });
 }
+
+const POSSESSIVE = { DC: "D.C.'s" };
+/**
+ * "Preview California's ballot", "Preview D.C.'s ballot": the link to /ballot/<st>/
+ * before an address. `name` is the state's full name. Pure.
+ */
+export function previewLabel(st, name) {
+  if (!st || !name) return "Preview your state's ballot";
+  return `Preview ${POSSESSIVE[st] || `${name}'s`} ballot`;
+}
+/** After an address: the page's heading. */
+export const RESULT_HEADING = "Your ballot preview";
 
 /** "Election Day: Tue, Nov 3 · 25 days" (or "· tomorrow", "· today"). */
 export function countdownLine(e, days) {
