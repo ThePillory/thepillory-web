@@ -3,7 +3,7 @@ name: TEMPORARY research probe
 on:
   push:
     branches: [claude/pillory-mobile-screens-p5zekn]
-    paths: [tools/build_scotus.py, .github/workflows/tmp-research.yml]
+    paths: [tmp-research/probe_lineups.py, .github/workflows/tmp-research.yml]
 permissions:
   contents: write
 jobs:
@@ -12,9 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null
-      - run: python3 tools/build_scotus.py --max-pdfs 600 2>&1 | tee tmp-research/scotus-build.log
+      - run: python3 tmp-research/probe_lineups.py
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
           git add tmp-research data/scotus
-          git commit -m "TEMPORARY: Supreme Court data (rebuild)" && git pull --rebase -q origin claude/pillory-mobile-screens-p5zekn && git push
+          git commit -m "TEMPORARY: lineup probe 2" && git pull --rebase -q origin claude/pillory-mobile-screens-p5zekn && git push

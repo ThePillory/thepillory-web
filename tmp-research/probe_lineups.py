@@ -1,17 +1,12 @@
-# TEMPORARY research probe: why lineups aren't found. Remove before merge.
-import json, re, subprocess, sys, urllib.request
+# TEMPORARY research probe: incomplete lineups. Remove before merge.
+import json, sys
 sys.path.insert(0, "tools")
 import build_scotus as B
 out = []
-for term in (2024, 2022, 2025):
-    d = json.load(open(f"data/scotus/terms/{term}.json"))
-    picks = [c for c in d["cases"] if c.get("author_code") != "PC" and not c.get("lineup")][:3]
-    for c in picks:
-        raw = B.fetch(c["pdf"], binary=True)
-        for mode in (True, False):
-            t = B.pdf_text(raw, layout=mode)
-            hits = [m.start() for m in re.finditer(r"delivered the opinion|PER CURIAM", t, re.I)][:2]
-            out.append(f"===== OT{term} {c['docket']} layout={mode} chars={len(t)} hits={hits}")
-            for h in hits:
-                out.append(t[max(0, h - 400): h + 900])
-open("tmp-research/lineup-probe.txt", "w").write("\n".join(out))
+for term, dk in [(2025, "24-5774"), (2025, "25-1083"), (2025, "24-699"), (2025, "141, Orig."), (2022, "21-1086"), (2021, "21-309"), (2022, "21-476"), (2024, "24-297")]:
+    c = next(x for x in json.load(open(f"data/scotus/terms/{term}.json"))["cases"] if x["docket"] == dk)
+    t = B.pdf_text(B.fetch(c["pdf"], binary=True), layout=True)
+    p = B.lineup_paragraph(t)
+    i = t.find("delivered the opinion")
+    out.append(f"===== OT{term} {dk}\nPARA: {p}\nRAW: {t[max(0, i - 300): i + 1200] if i >= 0 else t[:1500]}")
+open("tmp-research/lineup-probe2.txt", "w").write("\n".join(out))
