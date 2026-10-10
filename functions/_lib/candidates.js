@@ -29,6 +29,8 @@ export const YEAR = 2026;
 export const METHOD = "/about/methodology/#candidates";
 export const INCLUDED =
   "Every candidate who has filed with the Federal Election Commission, passed its $5,000 threshold and is listed as active in the race, by one rule for everyone; nobody is added or left out by hand. Where a state's certified candidate list is loaded (California), the race shows that list, in ballot order.";
+export const INCLUDED_CERTIFIED =
+  "Every candidate on the Secretary of State's Certified List of Candidates for this office, in ballot order, by one rule for everyone; nobody is added or left out by hand.";
 export const NEUTRAL = "Every candidate gets the same card and the same page. ThePillory doesn't endorse candidates, and doesn't publish polls, predictions or contact details.";
 
 const industryName = (k) => INDUSTRIES[k] || INDUSTRIES.other;
@@ -247,7 +249,7 @@ const platformSoon = (name, website) => `
   ${website ? `<p class="small">${outLink(website, "Campaign website")}</p>` : ""}
 </section>`;
 
-const included = () => `<p class="hint">${esc(INCLUDED)} <a class="inline-link" href="${METHOD}">How candidates are included</a></p>`;
+const included = (text = INCLUDED) => `<p class="hint">${esc(text)} <a class="inline-link" href="${METHOD}">How candidates are included</a></p>`;
 
 function tabs(about, platform, record, funding, more) {
   const tab = (k, label) => `<a role="tab" id="tab-${k}" href="#${k}" aria-controls="${k}">${label}</a>`;
@@ -366,7 +368,7 @@ ${fold("filing", "As certified", kv([
     ["Incumbent", cand.incumbent ? "Yes" : "No"],
   ]), { meta: cand.party || "" })}
 ${fold("source", "Sources", `<p class="small">${sourceLink(contest.source_url, "Certified List of Candidates")}</p>`)}
-${included()}`;
+${included(INCLUDED_CERTIFIED)}`;
   const funding = `<section class="card stack-sm"><p class="small">Campaign money for candidates for ${esc(stateName)}'s state offices is reported to the Secretary of State (Cal-Access). ThePillory shows it for current officials and doesn't load it for other candidates yet.</p>${now ? `<p class="small"><a class="inline-link" href="/reps/${esc(now.slug)}/#funding">Funding for ${esc(now.office)}</a></p>` : ""}${outLink("https://cal-access.sos.ca.gov/Campaign/Candidates/", "Cal-Access candidate search")}</section>`;
   const more = `
 ${fold("statement", "Candidate statement", `<p class="small"><a class="inline-link" href="${contestHref(election.election.id, contest.id)}">Statements in the official voter guide, word for word</a></p>`)}
@@ -437,7 +439,7 @@ export function racePage({ st, key, data, election, records, dates, today }) {
     : "";
   const main = `
 <header class="page-head stack-xs">
-  <p class="label">${after ? "Race" : "Race · Candidates not yet in office"} · ${esc(stateName)}</p>
+  <p class="label">${after ? "Race (held)" : "Race"} · ${esc(stateName)}</p>
   <h1>${esc(office)}</h1>
   <p class="subtitle">General election, ${esc(fmtDate(date))}${after ? " (held)" : ""}.</p>
 </header>
@@ -445,7 +447,7 @@ ${ballot}
 ${fecSection}
 <section class="card stack-sm" aria-labelledby="h-included">
   <h2 class="label" id="h-included">How candidates are included</h2>
-  <p class="small">${esc(INCLUDED)}</p>
+  <p class="small">${esc(fecOffice ? INCLUDED : INCLUDED_CERTIFIED)}</p>
   <p class="small">${esc(NEUTRAL)}</p>
   <a class="inline-link" href="${METHOD}">Methodology</a>
 </section>
