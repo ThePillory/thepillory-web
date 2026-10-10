@@ -44,6 +44,7 @@ import { visitorState } from "./visitor-state.js";
 import { stateLead, stateLeadData } from "./state-lead.js";
 import { stateMapData, stateMapSection } from "./state-map.js";
 import { statePath } from "./state-paths.js";
+import { courtCard, loadJustices } from "./scotus.js";
 import { votesLoaded } from "./coverage.js";
 
 
@@ -202,8 +203,7 @@ function showingBar(vs) {
 
 // The nation: the same section in the same spot on every state's page. The
 // President, Vice President and Cabinet; Congress; the Supreme Court (coming soon).
-function nationalSection(federal, vs) {
-  const soon = vs ? `Coming soon for ${esc(vs.name)}.` : "Coming soon.";
+function nationalSection(federal, vs, justices) {
   return `
 <section class="brief-section" id="nation" aria-labelledby="h-nation">
   <div class="section-head"><h2 class="label" id="h-nation">The nation</h2><a class="section-link" href="/reps/">All reps</a></div>
@@ -217,10 +217,7 @@ function nationalSection(federal, vs) {
       ? `${linkRow(`/bodies/us-senate/?state=${vs.st}`, "U.S. Senate", `${vs.name}'s senators first, then every state`)}${linkRow(`/bodies/us-house/?state=${vs.st}`, "U.S. House", `${vs.name}'s representatives first, then every state`)}`
       : `${linkRow("/bodies/us-senate/", "U.S. Senate", "100 senators, two from each state, and their votes")}${linkRow("/bodies/us-house/", "U.S. House", "435 representatives and their votes")}`}
   </div>
-  <div class="card stack-xs">
-    <p class="label">The Supreme Court</p>
-    <p class="small secondary">${soon} Until then, the Court's own site has its justices and opinions: <a class="inline-link" href="https://www.supremecourt.gov/" target="_blank" rel="noopener">supremecourt.gov ↗</a></p>
-  </div>
+  ${justices === FAILED ? sectionError("The Supreme Court") : courtCard(justices)}
 </section>`;
 }
 
@@ -349,7 +346,7 @@ export async function hub(env, request, url, d, vs) {
   // Each section loads on its own: one that can't load shows a short note, and
   // the rest of the hub still shows.
   const start = pacificNow();
-  const [index, now, deadlines, counts, waiting, federalExec, elections, tPlace, dates, mapData] = await Promise.all([
+  const [index, now, deadlines, counts, waiting, federalExec, elections, tPlace, dates, mapData, justices] = await Promise.all([
     loadIndex(env, request),
     loadSection("hub happening now", db ? () => happeningNow(db, which, { limit: 4 }) : async () => [], []),
     loadSection("hub deadlines", db ? async () =>
@@ -366,6 +363,7 @@ export async function hub(env, request, url, d, vs) {
     loadSection("hub topic place", () => topicPlace(env, request, d && (!vs || d.st === vs.st) ? d : null), null),
     loadSection("hub election dates", () => asset(env, request, "/data/elections/dates.json"), null),
     vs ? loadSection("hub state map", () => stateMapData(env, request, vs.st, url.searchParams.get("layer")), null) : null,
+    loadSection("hub justices", () => loadJustices(env, request), null),
   ]);
   // Links within the page (Happening now's switch) stay on this page: the state's own address, or /.
   const here = vs && vs.source === "page" ? statePath(vs.st) : "/";
@@ -398,7 +396,7 @@ ${electionsLate ? "" : electionsHtml}
   <p><a class="inline-link" href="/about/how-it-works/">How it works</a> · <a class="inline-link" href="/about/principles/">Principles</a></p>
   <button class="intro-dismiss" type="button" data-intro-dismiss aria-label="Dismiss this introduction">×</button>
 </aside>
-${nationalSection(federalExec, vs)}
+${nationalSection(federalExec, vs, justices)}
 ${vs ? (mapData === FAILED ? sectionError(`${vs.name} map`) : stateMapSection(mapData)) : ""}
 ${electionsLate ? electionsHtml : ""}
 ${now === FAILED ? sectionError("Happening now") : happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? here : `${here}?now=${v}`), loaded: !!db, state: stateOption })}

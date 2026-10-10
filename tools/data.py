@@ -61,6 +61,14 @@ BODIES = [
         "clause": ("art-2-sec-1", "Executive power"),
     },
     {
+        "slug": "us-supreme-court",
+        "name": "Supreme Court of the United States",
+        "short": "Supreme Court",
+        "level": "federal",
+        "about": "The Chief Justice and eight Associate Justices. Each decision, with who wrote and who joined each opinion, as the Court's own opinions state it.",
+        "clause": ("art-3-sec-1", "Judicial power"),
+    },
+    {
         "slug": "ca-executive",
         "name": "California's statewide elected offices",
         "short": "CA Executive",

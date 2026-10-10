@@ -7,6 +7,7 @@ import { page, notFound, esc, linkRow, section, guard } from "../_lib/render.js"
 import { safe, officialsForBody, officialsWhere } from "../_lib/data.js";
 import { districtsFromCookie, repsWhere, STATE_NAME } from "../_lib/districts.js";
 import { meetingCard, summariesFor, pacificNow, addDays } from "../_lib/meetings.js";
+import { courtPage } from "../_lib/scotus.js";
 
 // Meetings upcoming and from the last 30 days, soonest first.
 async function meetingsFor(db, slug) {
@@ -32,6 +33,9 @@ export const onRequestGet = guard(async (context) => {
   const b = parts.length === 1 ? BODIES.find((x) => x.slug === parts[0]) : null;
   if (!b) return notFound("No governing body at this address.", "reps", ["Reps", "/reps/"]);
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
+
+  // The Supreme Court: its justices and terms, from data/scotus/ (functions/_lib/scotus.js).
+  if (b.slug === "us-supreme-court") return page(b.name, await courtPage(context.env, context.request, b), { tab: "reps", back: ["Reps", "/reps/"] });
 
   const county = b.level === "county";
   // Congress is too large to list here: the visitor's own members, then by state on /reps/.

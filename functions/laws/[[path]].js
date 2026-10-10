@@ -126,6 +126,7 @@ ${more}`;
   const moreLinks = [
     election && election !== FAILED ? linkRow(electionHref(election.election.id), `On the ballot: ${election.election.name}`, whenLine(election, pacificNow().slice(0, 10))) : "",
     show !== "constitution" ? linkRow("/laws/constitution/", "The Constitution", "The full text, as the National Archives transcribes it") : "",
+    linkRow("/court/term/", "This term at the Supreme Court", "Cases the Court will hear, questions presented, and its decisions"),
     linkRow("/topics/", "Laws by subject", "Bills, votes, meeting items and orders by topic"),
     linkRow("/finances/", "Public finances by term", "The Time Machine"),
   ].join("");

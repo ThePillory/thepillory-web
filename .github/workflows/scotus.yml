@@ -1,0 +1,38 @@
+# The U.S. Supreme Court from official sources: the justices (supremecourt.gov,
+# senate.gov), each term's decisions with their lineups and the constitutional
+# provisions they name (supremecourt.gov opinions), this term's cases and
+# questions presented, and the justices' financial disclosures (CourtListener).
+# Writes data/scotus/ with tools/build_scotus.py and commits it when it changes.
+name: Refresh Supreme Court data
+on:
+  schedule:
+    - cron: "17 12 * * *"
+  workflow_dispatch:
+    inputs:
+      max_pdfs:
+        description: Opinion PDFs to read this run (the rest wait for the next)
+        default: "150"
+permissions:
+  contents: write
+concurrency:
+  group: scotus
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null
+      - name: Build from official sources
+        env:
+          COURTLISTENER_API_TOKEN: ${{ secrets.COURTLISTENER_API_TOKEN }}
+        run: python3 tools/build_scotus.py --max-pdfs "${{ inputs.max_pdfs || '150' }}" --max-questions 150
+      - name: Commit the data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/scotus
+          git diff --cached --quiet && exit 0
+          git commit -m "Refresh Supreme Court data from official sources"
+          git pull --rebase -q origin "${GITHUB_REF_NAME}" && git push

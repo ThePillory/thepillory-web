@@ -1,0 +1,4611 @@
+{
+ "term": 2023,
+ "source_url": "https://www.supremecourt.gov/opinions/slipopinion/23",
+ "cases": [
+  {
+   "r": "60",
+   "date": "2024-08-16",
+   "docket": "24A78",
+   "name": "Department of Education v. Louisiana",
+   "summary": "The Government's applications for a partial stay of the preliminary injunctions issued by District Courts in Louisiana and Kentucky against the enforcement of the Department of Education's new rule implementing Title IX of the Education Amendments of 1972 are denied, as the Government has not provided the Court a sufficient basis to disturb the lower courts' interim conclusions.",
+   "author_code": "PC",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r60_32q3.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": [],
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": null
+    }
+   ]
+  },
+  {
+   "r": "59",
+   "date": "2024-07-01",
+   "docket": "22-1008",
+   "name": "Corner Post, Inc. v. Board of Governors",
+   "summary": "An Administrative Procedures Act claim does not accrue for purposes of 28 U. S. C. §2401(a)—the default 6-year statute of limitations applicable to suits against the United States—until the plaintiff is injured by final agency action.",
+   "author_code": "AB",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r59_4fci.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/22-01008qp.pdf",
+   "question_presented": [
+    "Petitioner Corner Post, Inc. is a convenience store and truck stop in North Dakota that first opened for business in 2018. In 2021, Corner Post sued the Board of Governors of the Federal Reserve System under the Administrative Procedure Act, challenging a Board rule adopted in 2011 that governs certain fees for debit-card transactions.",
+    "The Eighth Circuit held that Corner Post's APA claims were barred by 28 U.S.C. §2401 (a)'s six-year statute of limitations. In so doing, it adopted the majority position in an acknowledged circuit split on when APA claims \"first accrue[]\" under §2401(a). The Eighth Circuit held that Corner Post's APA claims \"first accrue[d]\" when the Board issued the rule in 2011-even though Corner Post did not open for business until seven years later. As a result, Corner Post's limitations period expired in 2017-a year before it opened for business. The court did not explain how Corner Post could have \"suffer[ed] legal wrong\" from or been \"adversely affected or aggrieved by\" the Board's rule-a predicate to stating an APA claim, 5 U.S.C. §702before Corner Post accepted even one debit-card payment subject to the rule.",
+    "The question presented is: Does a plaintiffs APA claim \"first accrue[]\" under 28 U.S.C. §2401(a) when an agency issues a rule-regardless of whether that rule injures the plaintiff on that date (as the Eighth Circuit and five other circuits have held)-or when the rule first causes a plaintiff to \"suffer[] legal wrong\" or be \"adversely affected or aggrieved\" (as the Sixth Circuit has held)?"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "58",
+   "date": "2024-07-01",
+   "docket": "22-277",
+   "name": "Moody v. NetChoice, LLC",
+   "summary": "The judgments are vacated, and the cases are remanded, because neither the Eleventh Circuit nor the Fifth Circuit conducted a proper analysis of the facial First Amendment challenges to the Florida and Texas laws regulating large internet platforms.",
+   "author_code": "EK",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r58_8mj9.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence in the judgment",
+       "majority in part"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": null
+    },
+    {
+     "id": "art-3",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00277qp.pdf",
+   "question_presented": [
+    "Florida has enacted a law that attempts to prevent social-media companies from abusing their enormous power to censor speech.",
+    "The questions presented are:",
+    "1. Whether the First Amendment prohibits a State from requiring that social-media companies host third-party communications, and from regulating the time, place, and manner in which they do so.",
+    "2. Whether the First Amendment prohibits a State from requiring social-media companies to notify and provide an explanation to their users when they censor the user's speech. The petitions for writs of certiorari are granted limited to Questions 1 and 2 presented by the Solicitor General in her brief for the United States as amicus curie.",
+    "1. Whether the laws’ content-moderation restrictions comply with the First Amendment. 2. Whether the laws’ individualized-explanation requirements comply with the First",
+    "Amendment."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "57",
+   "date": "2024-07-01",
+   "docket": "23-939",
+   "name": "Trump v. United States",
+   "summary": "The nature of Presidential power entitles a former President to absolute immunity from criminal prosecution for actions within his conclusive and preclusive constitutional authority; he is also entitled to at least presumptive immunity from prosecution for all his official acts; there is no immunity for unofficial acts.",
+   "author_code": "R",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r57_2dp3.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority in part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence",
+       "majority in part"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority in part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority in part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority in part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "concurring in part",
+       "majority in part"
+      ],
+      "wrote": [
+       "concurring in part"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": null
+    },
+    {
+     "id": "amend-5",
+     "quote": null
+    },
+    {
+     "id": "amend-6",
+     "quote": null
+    },
+    {
+     "id": "art-2-sec-2-cl-2",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/23-00939qp.pdf",
+   "question_presented": [
+    "THE SPECIAL COUNSEL’S REQUEST TO TREAT THE STAY APPLICATION AS A PETITION FOR A WRIT OF CERTIORARI IS GRANTED, AND THAT PETITION IS GRANTED LIMITED TO THE FOLLOWING QUESTION: WHETHER AND IF SO TO WHAT EXTENT DOES A FORMER PRESIDENT ENJOY PRESIDENTIAL IMMUNITY FROM CRIMINAL PROSECUTION FOR CONDUCT ALLEGED TO INVOLVE OFFICIAL ACTS DURING HIS TENURE IN OFFICE."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "56",
+   "date": "2024-06-28",
+   "docket": "23-175",
+   "name": "City of Grants Pass v. Johnson",
+   "summary": "The enforcement of generally applicable laws regulating camping on public property does not constitute “cruel and unusual punishment” prohibited by the Eighth Amendment.",
+   "author_code": "NG",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r56_1bo2.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": null
+    },
+    {
+     "id": "amend-4",
+     "quote": null
+    },
+    {
+     "id": "amend-8",
+     "quote": null
+    },
+    {
+     "id": "amend-14",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/23-00175qp.pdf",
+   "question_presented": [
+    "In Martin v. City of Boise, 920 F.3d 584 (9th Cir. 2019), the Ninth Circuit held that the Cruel and Unusual Punishments Clause prevents cities from enforcing criminal restrictions on public camping unless the person has \"access to adequate temporary shelter.\" Id. at 617 & n.8. In this case, the Ninth Circuit extended Martin to a classwide injunction prohibiting the City of Grants Pass from enforcing its public-camping ordinance even though civil citations. That decision cemented a conflict with the California Supreme Court and the Eleventh Circuit, which have upheld similar ordinances, and entrenched a broader split on the application of the Eighth Amendment to purportedly involuntary conduct. The Ninth Circuit nevertheless denied rehearing en banc by a 14-to-13 vote.",
+    "The question presented is:",
+    "Does the enforcement of generally applicable laws regulating camping on public property constitute \"cruel and unusual punishment\" prohibited by the Eighth Amendment?"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "55",
+   "date": "2024-06-28",
+   "docket": "23-5572",
+   "name": "Fischer v. United States",
+   "summary": "To prove a violation of 18 U. S. C. §1512(c)(2)—a provision of the Sarbanes-Oxley Act—the Government must establish that the defendant impaired the availability or integrity for use in an official proceeding of records, documents, objects, or other things used in an official proceeding, or attempted to do so.",
+   "author_code": "R",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r55_6j36.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/23-05572qp.pdf",
+   "question_presented": [
+    "Did the D.C. Circuit err in construing 18 U.S.C. § 1512(c) (“Witness, Victim, or Informant Tampering\"). Which prohibits obstruction of congressional inquiries and investigations. to include acts unrelated to investigations and evidence?"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "54",
+   "date": "2024-06-28",
+   "docket": "22-451",
+   "name": "Loper Bright Enterprises v. Raimondo",
+   "summary": "The Administrative Procedure Act requires courts to exercise their independent judgment in deciding whether an agency has acted within its statutory authority, and courts may not defer to an agency interpretation of the law simply because a statute is ambiguous; Chevron U. S. A. Inc. v. Natural Resources Defense Council, Inc., 467 U. S. 837, is overruled.",
+   "author_code": "R",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r54_o7jp.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent",
+       "took no part"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "art-3",
+     "quote": null
+    },
+    {
+     "id": "art-2",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00451qp.pdf",
+   "question_presented": [
+    "The Magnuson-Stevens Act (MSA) governs fishery management in federal waters and provides that the National Marine Fisheries Service (NMFS) may require vessels to \"carry\" federal observers onboard to enforce the agency's myriad regulations. Given that space onboard a fishing vessel is limited and valuable, that alone is an extraordinary imposition. But in three narrow circumstances not applicable here, the MSA goes further and requires vessels to pay the salaries of the federal observers who oversee their operations-although, with the exception of foreign vessels that enjoy the privilege of fishing in our waters, the MSA caps the costs of those salaries at 2-3% of the value of the vessel's haul. The statutory question underlying this petition is whether the agency can also force a wide variety of domestic vessels to foot the bill for the salaries of the monitors they must carry to the tune of 20% of their revenues. Under well-established principles of statutory construction, the answer would appear to be no, as the express grant of such a controversial power in limited circumstances forecloses a broad implied grant that would render the express grant superfluous. But a divided panel of the D.C. Circuit answered yes under Chevron on the theory that statutory silence produced an ambiguity that justified deferring to the agency.",
+    "The questions presented are:",
+    "1. Whether, under a proper application of Chevron, the MSA implicitly grants NMFS the power to force domestic vessels to pay the salaries of the monitors they must carry.",
+    "2. Whether the Court should overrule Chevron or at least clarify that statutory silence concerning controversial powers expressly but narrowly granted elsewhere in the statute does not constitute an ambiguity requiring deference to the agency."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "53",
+   "date": "2024-06-27",
+   "docket": "23-726",
+   "name": "Moyle v. United States",
+   "summary": "Certiorari dismissed as improvidently granted.",
+   "author_code": "PC",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r53_l5gm.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": [],
+   "provisions": [
+    {
+     "id": "art-1-sec-8-cl-1",
+     "quote": null
+    },
+    {
+     "id": "art-6-cl-2",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/23-00726qp.pdf",
+   "question_presented": [
+    "WHETHER EMTALA PREEMPTS STATE LAWS THAT PROTECT HUMAN LIFE AND PROHIBIT ABORTIONS, LIKE IDAHO’S DEFENSE OF LIFE ACT.",
+    "ORDER OF JANUARY 5, 2024 THE APPLICATIONS FOR STAY PRESENTED TO JUSTICE KAGAN AND BY HER REFERRED TO THE COURT ARE GRANTED. THE PRELIMINARY INJUNCTION ISSUED ON AUGUST 24, 2022, BY THE UNITED STATES DISTRICT COURT FOR THE DISTRICT OF IDAHO, CASE NO. 1:22-cv00329, IS STAYED. THE APPLICATIONS FOR STAY ARE ALSO TREATED AS PETITIONS FOR WRITS OF CERTIORARI BEFORE JUDGMENT, AND THE PETITIONS ARE GRANTED ON THE QUESTION PRESENTED IN IDAHO’S APPLICATION."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "52",
+   "date": "2024-06-27",
+   "docket": "23A349",
+   "name": "Ohio v. Environmental Protection Agency",
+   "summary": "The enforcement of the Environmental Protection Agency’s Federal Implementation Plan against the applicant States—whose own State Implementation Plans were determined by EPA to be inadequate because they failed to adequately address certain obligations under the Good Neighbor Provision—shall be stayed pending disposition of the applicants’ petition for review in the D. C. Circuit and any petition for writ of certiorari, timely sought.",
+   "author_code": "NG",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r52_d18f.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": []
+  },
+  {
+   "r": "51",
+   "date": "2024-06-27",
+   "docket": "23-124",
+   "name": "Harrington v. Purdue Pharma L.P.",
+   "summary": "The bankruptcy code does not authorize a release and injunction that, as part of a plan of reorganization under Chapter 11, effectively seek to discharge claims against a nondebtor without the consent of affected claimants.",
+   "author_code": "NG",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r51_1b8e.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/23-00124qp.pdf",
+   "question_presented": [
+    "Whether the Bankruptcy Code authorizes a court to approve, as part of a plan of reorganization under Chapter 11 of the Bankruptcy Code, a release that extinguishes claims held by nondebtors against nondebtor third parties, without the claimants’ consent."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "50",
+   "date": "2024-06-27",
+   "docket": "22-859",
+   "name": "SEC v. Jarkesy",
+   "summary": "When the Securities and Exchange Commission seeks civil penalties against a defendant for securities fraud, the Seventh Amendment entitles the defendant to a jury trial.",
+   "author_code": "R",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r50_7kh7.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": null
+    },
+    {
+     "id": "amend-2",
+     "quote": null
+    },
+    {
+     "id": "amend-4",
+     "quote": null
+    },
+    {
+     "id": "amend-5",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00859qp.pdf",
+   "question_presented": [
+    "1. Whether statutory provisions that empower the Securities and Exchange Commission (SEC) to initiate and adjudicate administrative enforcement proceedings seeking civil penalties violate the Seventh Amendment. 2. Whether statutory provisions that authorize the SEC to choose to enforce the securities laws through an agency adjudication instead of filing a district court action violate the nondelegation doctrine. 3. Whether Congress violated Article II by granting for-cause removal protection to administrative law judges in agencies whose heads enjoy for-cause removal protection."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "49",
+   "date": "2024-06-26",
+   "docket": "23-411",
+   "name": "Murthy v. Missouri",
+   "summary": "Respondents—two States and five individual social-media users who sued Executive Branch officials and agencies, alleging that the Government pressured the platforms to censor their speech in violation of the First Amendment—lack Article III standing to seek an injunction.",
+   "author_code": "AB",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r49_n6io.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": null
+    },
+    {
+     "id": "art-3",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/23-00411qp.pdf",
+   "question_presented": [
+    ". . . the government respectfully suggests the following questions presented: (1) Whether respondents have Article III standing; (2) Whether the government’s challenged conduct transformed private social-media companies’ content-moderation decisions into state action and violated respondents’ First Amendment rights; and (3) Whether the terms and breadth of the preliminary injunction are proper.",
+    "The application for stay presented to JUSTICE ALITO and by him referred to the Court is granted. The preliminary injunction issued on July 4, 2023, by the United States District Court for the Western District of Louisiana, case No. 3:22–cv–01213, as modified by the United States Court of Appeals for the Fifth Circuit on October 3, 2023, case No. 23–30445, is stayed. The application for stay is also treated as a petition for a writ of certiorari, and the petition is granted on the questions presented in the application. The stay shall terminate upon the sending down of the judgment of this Court."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "48",
+   "date": "2024-06-26",
+   "docket": "23-108",
+   "name": "Snyder v. United States",
+   "summary": "Federal law, 18 U. S. C. §666, proscribes bribes to state and local officials but does not make it a crime for those officials to accept gratuities for their past acts.",
+   "author_code": "BK",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r48_g3ci.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": [],
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/23-00108qp.pdf",
+   "question_presented": [
+    "18 U.S.C. § 666(a)(1)(B) makes it a federal crime for a state or local official to \"corruptly solicit[,] demand[,] ... or accept[] ... anything of value from any person, intending to be influenced or rewarded in connection with any\" government business \"involving any thing of value of $5,000 or more.\"",
+    "The question presented, on which the circuits are divided, is:",
+    "Whether section 666 criminalizes gratuities, i.e., payments in recognition of actions the official has already taken or committed to take, without any quid pro quo agreement to take those actions."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "47",
+   "date": "2024-06-21",
+   "docket": "141, Orig.",
+   "name": "Texas v. New Mexico",
+   "summary": "The motion to enter a proposed consent decree that would dispose of the United States’ claims in the Rio Grande Compact without its consent is denied.",
+   "author_code": "KJ",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r47_c07d.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-14",
+     "quote": null
+    }
+   ]
+  },
+  {
+   "r": "46",
+   "date": "2024-06-21",
+   "docket": "23-334",
+   "name": "Department of State v. Munoz",
+   "summary": "A U. S. citizen does not have a fundamental liberty interest in her noncitizen spouse being admitted to the country.",
+   "author_code": "AB",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r46_gfbi.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": null
+    },
+    {
+     "id": "amend-5",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/23-00334qp.pdf",
+   "question_presented": [
+    "Under the Immigration and Nationality Act (INA), 8 U.S.C. 1101 et seq., the decision to grant or deny a visa application rests with a consular officer in the Department of State. Under 8 U.S.C. 1182(a)(3)(A)(ii), any noncitizen whom a consular officer \"knows, or has reasonable ground to believe, seeks to enter the United States to engage solely, principally, or incidentally in* * * unlawful activity\" is ineligible to receive a visa or be admitted to the United States. The questions presented are: 1. Whether a consular officer's refusal of a visa to a U.S. citizen's noncitizen spouse impinges upon a constitutionally protected interest of the citizen. 2. Whether, assuming that such a constitutional interest exists, notifying a visa applicant that he was deemed inadmissible under 8 U.S.C. 1182(a)(3)(A)(ii) suffices to provide any process that is due. 3. Whether, assuming that such a constitutional interest exists and that citing Section 1182(a)(3)(A)(ii) is insufficient standing alone, due process requires the government to provide a further factual basis for the visa denial \"within a reasonable time,\" or else forfeit the ability to invoke consular nonreviewability in court.",
+    "GRANTED LIMITED TO QUESTIONS 1 AND 2 PRESENTED BY THE PETITION."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "45",
+   "date": "2024-06-21",
+   "docket": "23-370",
+   "name": "Erlinger v. United States",
+   "summary": "The Fifth and Sixth Amendments require a unanimous jury to make the determination beyond a reasonable doubt that a defendant’s past offenses were committed on separate occasions for purposes of the Armed Career Criminal Act, 18 U. S. C. § §924(e)(1).",
+   "author_code": "NG",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r45_h31i.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority in part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority in part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent",
+       "majority in part"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-5",
+     "quote": null
+    },
+    {
+     "id": "amend-6",
+     "quote": null
+    },
+    {
+     "id": "amend-8",
+     "quote": null
+    },
+    {
+     "id": "art-3",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/23-00370qp.pdf",
+   "question_presented": [
+    "Whether the Constitution requires a jury trial and proof beyond a reasonable doubt to find that a defendant's prior convictions were \"committed on occasions different from one another,\" as is necessary to impose an enhanced sentence under the Armed Career Criminal Act, 18 U.S.C. § 924(e)(1).",
+    "ORDER OF NOVEMBER 21, 2023: D. NICK HARPER, ESQUIRE, OF WASHINGTON, D. C., IS INVITED TO BRIEF AND ARGUE THIS CASE, AS AMICUS CURIAE, IN SUPPORT OF THE JUDGMENT BELOW."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "44",
+   "date": "2024-06-21",
+   "docket": "22-899",
+   "name": "Smith v. Arizona",
+   "summary": "When an expert conveys an absent lab analyst’s statements in support of the expert’s opinion, and the statements provide that support only if true, then the statements come into evidence for their truth, and thus implicate the Sixth Amendment’s Confrontation Clause.",
+   "author_code": "EK",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r44_kjfm.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurring in part",
+       "majority in part"
+      ],
+      "wrote": [
+       "concurring in part"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurring in part",
+       "majority in part"
+      ],
+      "wrote": [
+       "concurring in part"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-4",
+     "quote": null
+    },
+    {
+     "id": "amend-5",
+     "quote": null
+    },
+    {
+     "id": "amend-6",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00899qp.pdf",
+   "question_presented": [
+    "Whether the Confrontation Clause of the Sixth Amendment permits the prosecution in a criminal trial to present testimony by a substitute expert conveying the testimonial statements of a nontestifying forensic analyst, on the grounds that (a) the testifying expert offers some independent opinion and the analyst's statements are offered not for their truth but to explain the expert's opinion, and (b) the defendant did not independently seek to subpoena the analyst."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "43",
+   "date": "2024-06-21",
+   "docket": "22-915",
+   "name": "United States v. Rahimi",
+   "summary": "When an individual has been found by a court to pose a credible threat to the physical safety of another, that individual may be temporarily disarmed consistent with the Second Amendment.",
+   "author_code": "R",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r43_p860.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": null
+    },
+    {
+     "id": "amend-2",
+     "quote": null
+    },
+    {
+     "id": "amend-5",
+     "quote": null
+    },
+    {
+     "id": "amend-6",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00915qp.pdf",
+   "question_presented": [
+    "Whether 18 U.S.C. 922(g)(8), which prohibits the possession of firearms by persons subject to domestic-violence restraining orders, violates the Second Amendment on its face."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "42",
+   "date": "2024-06-20",
+   "docket": "22-1025",
+   "name": "Gonzalez v. Trevino",
+   "summary": "In requiring petitioner Sylvia Gonzalez to provide specific comparator evidence to support her retaliatory arrest claim, the Fifth Circuit did not properly apply the principles of Nieves v. Bartlett, 587 U. S. 391 (2019).",
+   "author_code": "PC",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r42_l5gm.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": [],
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-01025qp.pdf",
+   "question_presented": [
+    "In Nieves v. Bartlett, this Court held that probable cause does not bar a retaliatory arrest claim against a \"police officer\" when a plaintiff shows \"that he was arrested when otherwise similarly situated individuals not engaged in the same sort of protected speech had not been.\" 139 S. Ct. 1715, 1727 (2019).",
+    "The circuits admittedly disagree on whether only specific examples of non-arrests, Pet. App. 28-29 (5th Cir. 2022), or any \"objective proof of retaliatory treatment\" can satisfy this standard, Lund v. City of Rockford, 956 F.3d 938, 945 (7th Cir. 2020); see also Ballentine v. Tucker, 28 F.4th 54, 62 (9th Cir. 2022).",
+    "Here, a 72-year-old councilwoman organized a petition criticizing a city manager, and unwittingly placed it in her binder during a council meeting. Two months later, respondents-the city manager's allies- engineered her arrest for tampering with a government record. That charge has no precedent involving similar conduct, was supported by an affidavit based on the councilwoman's viewpoints, and skirted ordinary procedures to ensure her jailing. The councilwoman sued respondents but no arresting officer.",
+    "The questions presented are:",
+    "1. Whether the Nieves probable cause exception can be satisfied by objective evidence other than specific examples of arrests that never happened. 2. Whether the Nieves probable cause rule is limited to individual claims against arresting officers for split-second arrests."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "41",
+   "date": "2024-06-20",
+   "docket": "22-800",
+   "name": "Moore v. United States",
+   "summary": "The Mandatory Repatriation Tax—which attributes the realized and undistributed income of an American-controlled foreign corporation to the entity’s American shareholders, and then taxes the American shareholders on their portions of that income—does not exceed Congress’s constitutional authority.",
+   "author_code": "BK",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r41_h3dj.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-5",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00800qp.pdf",
+   "question_presented": [
+    "The Sixteenth Amendment authorizes Congress to lay \"taxes on incomes ... without apportionment among the several States.\" Beginning with Eisner v. Macomber, 252 U.S. 189 (1920), this Court's decisions have uniformly held \"income,\" for Sixteenth Amendment purposes, to require realization by the taxpayer. In the decision below, however, the Ninth Circuit approved taxation of a married couple on earnings that they undisputedly did not realize but were instead retained and reinvested by a corporation in which they are minority shareholders. It held that \"realization of income is not a constitutional requirement\" for Congress to lay an \"income\" tax exempt from apportionment. App.12. In so holding, the Ninth Circuit became \"the first court in the country to state that an 'income tax' doesn't require that a 'taxpayer has realized income.\"' App.38 (Bumatay, J., dissenting from denial of rehearing en banc).",
+    "The question presented is: Whether the Sixteenth Amendment authorizes Congress to tax unrealized sums without apportionment among the states."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "40",
+   "date": "2024-06-20",
+   "docket": "23-50",
+   "name": "Chiaverini v. City of Napoleon",
+   "summary": "Pursuant to the Fourth Amendment and traditional common-law practice, the presence of probable cause for one charge in a criminal proceeding does not categorically defeat a Fourth Amendment malicious-prosecution claim relating to another, baseless charge.",
+   "author_code": "EK",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r40_f20g.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-4",
+     "quote": null
+    },
+    {
+     "id": "amend-14",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/23-00050qp.pdf",
+   "question_presented": [
+    "To make out a Fourth Amendment malicious prosecution claim under 42 U.S.C. § 1983, a plaintiff must show that legal process was instituted without probable cause. Thompson v. Clark, 142 S. Ct. 1332, 1338 (2022). Under the charge-specific rule, a malicious prosecution claim can proceed as to a baseless criminal charge, even if other charges brought alongside the baseless charge are supported by probable cause. Under the \"any-crime\" rule, probable cause for even one charge defeats a plaintiff's malicious prosecution claims as to every other charge, including those lacking probable cause.",
+    "The question presented is: Whether Fourth Amendment malicious prosecution claims are governed by the charge-specific rule, as the Second, Third, and Eleventh circuits hold, or by the \"any-crime\" rule, as the Sixth Circuit holds."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "39",
+   "date": "2024-06-20",
+   "docket": "23-14",
+   "name": "Diaz v. United States",
+   "summary": "Expert testimony that “most people” in a group have a particular mental state is not an opinion about “the defendant” and thus does not violate Federal Rule of Evidence 704(b).",
+   "author_code": "T",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r39_2b8e.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/23-00014qp.pdf",
+   "question_presented": [
+    "Federal Rule of Evidence 704(b) provides: \"In a criminal case, an expert witness must not state an opinion about whether the defendant did or did not have a mental state or condition that constitutes an element of the crime charged or of a defense. Those matters are for the trier of fact alone.\" Fed. R. Evid. 704(b).",
+    "The question is: In a prosecution for drug trafficking-where an element of the offense is that the defendant knew she was carrying illegal drugs-does Rule 704(b) permit a governmental expert witness to testify that most couriers know they are carrying drugs and that drug-trafficking organizations do not entrust large quantities of drugs to unknowing transporters?"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "38",
+   "date": "2024-06-14",
+   "docket": "22-1238",
+   "name": "United States Trustee v. John Q. Hammons Fall 2006, LLC",
+   "summary": "Prospective parity—i.e., requiring equal fees for otherwise identical Chapter 11 debtors going forward—is the appropriate remedy for the short-lived and small disparity created by the fee statute held unconstitutional in Siegel v. Fitzgerald, 596 U. S. 464 (2022).",
+   "author_code": "KJ",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r38_mlho.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-14",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-01238qp.pdf",
+   "question_presented": [
+    "Section 1004(a) of the Bankruptcy Judgeship Act of 2017, Pub. L. No.115-72, Div. B, 131 Stat. 1232 (28 U.S.C. 1930(a)(6)(B) (2018)), amended the schedule of quarterly fees payable to the United States Trustee in certain pending bankruptcy cases. In Siegel v. Fitzgerald, 142 S. Ct. 1770 (2022), this Court held that that provision contravened Congress's constitutional authority to \"establish * * * uniform Laws on the subject of Bankruptcies,\" U.S. Const. Art. I, § 8, Cl. 4, because it was initially applied only in the 88 federal judicial districts that have United States Trustees but not in the 6 districts that have Bankruptcy Administrators. This Court left open the question of \"the appropriate remedy\" for the violation. Siegel, 142 S. Ct. at 1783. The question presented in this case is:",
+    "Whether the appropriate remedy for the constitutional uniformity violation found by this Court in Siegel, supra, is to require the United States Trustee to grant retrospective refunds of the increased fees paid by debtors in United States Trustee districts during the period of disuniformity, or is instead either to deem sufficient the prospective remedy adopted by Congress or to require the collection of additional fees from a much smaller number of debtors in Bankruptcy Administrator districts."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "37",
+   "date": "2024-06-14",
+   "docket": "22-674",
+   "name": "Campos-Chaves v. Garland",
+   "summary": "Because each of the aliens in this case received a proper notice for the removal hearings they missed and at which they were ordered removed from the United States, see 8 U. S. C. §1229(a)(2), they cannot seek rescission of their in absentia removal orders on the basis of defective notice under §1229a(b)(5)(C)(ii).",
+   "author_code": "A",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r37_7khn.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00674qp.pdf",
+   "question_presented": [
+    "The Immigration and Nationality Act provides that a noncitizen who does not appear at a removal hearing shall beordered removed in absentia. but only if she was provided \"written notice required under paragraph (l) or (2) of section 1229(a).'' 8 U.S.C. §1229a (b)(5)(A). The Act authorizes rescission of an in absentia order if the noncitizen \"did not receive no- tice in accordance with paragraph (1) or (2) of section 1229(a).\" Id. §1229a (b)(5)(C)(ii).",
+    "Paragraph (1) of section 1229(a) requires a single notice document that contains all the information specified in the statute, including the \"time and place\" of proceedings. See Niz-Chavez v. Garland, 141 S. Ct. 1474, 1480-1485 (2021). Paragraph (2) requires notice of the \"new time and place\" \"in the case of any change or postponement in the time and place of such pro-ceedings.\"",
+    "The question presented is:",
+    "If the government serves an initial notice document that does not include the \"time and place\" of proceedings, followed by an additional document containing that information, has the government provided notice \"required under\" and •'in accordance with para- graph (1) or (2) of section 1229(a)\" such that an immigration court must enter a removal order in absentia and deny a noncitizen's request to rescind that order?"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "36",
+   "date": "2024-06-14",
+   "docket": "22-976",
+   "name": "Garland v. Cargill",
+   "summary": "The Bureau of Alcohol, Tobacco, Firearms and Explosives exceeded its statutory authority by issuing a Rule that classifies a bump stock as a “machinegun” under 26 U. S. C. §5845(b).",
+   "author_code": "T",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r36_k537.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-2",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00976qp.pdf",
+   "question_presented": [
+    "Since 1986, Congress has prohibited the transfer or possession of any new \"machinegun.\" 18 U.S.C. 922(o)(1). The National Firearms Act, 26 U.S.C. 5801 et seq., defines a \"machinegun\" as \"any weapon which shoots, is designed to shoot, or can be readily restored to shoot, automatically more than one shot, without manual reloading, by a single function of the trigger.\" 26 U.S.C. 5845(b). The statutory definition also encompasses \"any part designed and intended solely and exclusively, or combination of parts designed and intended, for use in converting a weapon into a machinegun.\" Ibid.",
+    "A \"bump stock\" is a device designed and intended to permit users to convert a semiautomatic rifle so that the rifle can be fired continuously with a single pull of the trigger, discharging potentially hundreds of bullets per minute. In 2018, after a mass shooting in Las Vegas carried out using bump stocks, the Bureau of Alcohol, Tobacco, Firearms and Explosives (ATF) published an interpretive rule concluding that bump stocks are machineguns as defined in Section 5845(b). In the decision below, the en banc Fifth Circuit held that the ATF rule was unlawful because the statutory definition of \"machinegun\" does not encompass bump stocks. The question presented is as follows:",
+    "Whether a bump stock device is a \"machinegun\" as defined in 26 U.S.C. 5845(b) because it is designed and intended for use in converting a rifle into a machinegun, i.e., into a weapon that fires \"automatically more than one shot * * * by a single function of the trigger.\""
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "35",
+   "date": "2024-06-13",
+   "docket": "23-235",
+   "name": "FDA v. Alliance for Hippocratic Medicine",
+   "summary": "Plaintiffs lack Article III standing to challenge the Food and Drug Administration’s regulatory actions regarding mifepristone.",
+   "author_code": "BK",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r35_h3ci.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "art-3",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/23-00235qp.pdf",
+   "question_presented": [
+    "This case concerns mifepristone, a drug that the U.S. Food and Drug Administration (FDA) approved in 2000 as safe and effective for terminating early pregnancies. The Fifth Circuit held that respondents-doctors and associations of doctors who oppose abortion-have Article III standing to challenge FDA's 2016 and 2021 actions with respect to mifepristone's approved conditions of use and that those actions were likely arbitrary and capricious. The court therefore affirmed the district court's stay of the relevant agency actions. The questions presented are:",
+    "1. Whether respondents have Article III standing to challenge FDA's 2016 and 2021 actions.",
+    "2. Whether FDA's 2016 and 2021 actions were arbitrary and capricious.",
+    "3. Whether the district court properly granted preliminary relief.",
+    "Consolidated with 23-236 and a total of one hour is allotted for oral argument"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "34",
+   "date": "2024-06-13",
+   "docket": "23-367",
+   "name": "Starbucks Corp. v. McKinney",
+   "summary": "When considering the National Labor Relations Board’s request for a preliminary injunction under §10( j) of the National Labor Relations Act, district courts must apply the traditional four factors articulated in Winter v. Natural Resources Defense Council, Inc., 555 U. S. 7 (2008).",
+   "author_code": "T",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r34_e29g.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/23-00367qp.pdf",
+   "question_presented": [
+    "Under the National Labor Relations Act, the National Labor Relations Board (NLRB) issues, prosecutes, and adjudicates complaints alleging that employers committed unfair labor practices. 29 U.S.C. § 160(b). Section 10(j) of the Act authorizes federal district courts, while the NLRB adjudication remains pending, to grant preliminary injunctive relief at the NLRB's request \"as [the court] deems just and proper.\" Id. § 160(j).",
+    "The question presented, on which the courts of appeals are openly and squarely divided, is:",
+    "Whether courts must evaluate the NLRB's requests for section 10(j) injunctions under the traditional, stringent four-factor test for preliminary injunctions or under some other more lenient standard."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "33",
+   "date": "2024-06-13",
+   "docket": "22-704",
+   "name": "Vidal v. Elster",
+   "summary": "The Lanham Act’s names clause—which prohibits the registration of a mark that “[c]onsists of or comprises a name . . . identifying a particular living individual except by his written consent,” 15 U. S. C. §1052(c)—does not violate the First Amendment.",
+   "author_code": "T",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r33_qqm4.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "concurring in part"
+      ],
+      "wrote": [
+       "concurring in part"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "concurring in part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "concurring in part"
+      ],
+      "wrote": [
+       "concurring in part"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "concurrence in the judgment",
+       "concurring in part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "concurrence in the judgment",
+       "concurring in part (in part)"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence in the judgment",
+       "concurring in part (in part)"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": null
+    },
+    {
+     "id": "amend-2",
+     "quote": null
+    },
+    {
+     "id": "amend-14",
+     "quote": null
+    },
+    {
+     "id": "art-1-sec-8-cl-3",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00704qp.pdf",
+   "question_presented": [
+    "Section 1052(c) of Title 15 provides in pertinent part that a trademark shall be refused registration if it \"[c]onsists of or comprises a name * * * identifying a particular living individual except by his written consent.\" 15 U.S.C. 1052(c). The question presented is as follows:",
+    "Whether the refusal to register a mark under Section 1052(c) violates the Free Speech Clause of the First Amendment when the mark contains criticism of a government official or public figure."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "32",
+   "date": "2024-06-06",
+   "docket": "22-1079",
+   "name": "Truck Insurance Exchange v. Kaiser Gypsum Co.",
+   "summary": "An insurer with financial responsibility for bankruptcy claims is a “party in interest” under 11 U. S. C. §1109(b) that “may raise and may appear and be heard on any issue” in a Chapter 11 case.",
+   "author_code": "SS",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r32_2q24.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "took no part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     }
+    ],
+    "all_others": {
+     "author": "Sotomayor",
+     "partial": false,
+     "except": [
+      "Alito"
+     ]
+    }
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/22-01079qp.pdf",
+   "question_presented": [
+    "Asbestos claims in state court have been plagued by rampant fraud, with claimants seeking inflated recoveries against some asbestos defendants by suppressing evidence of claims against other asbestos defendants. For nearly a decade, bankruptcy courts have sought to protect debtors and their insurers by requiring fraud-prevention measures-like ensuring access to claims information-before channeling the asbestos claims against the debtor to a trust. See 11 U.S.C. § 524(g).",
+    "In this case, a Chapter 11 debtor colluded with representatives for asbestos claimants to propose and confirm a plan that includes these fraud-prevention measures only for uninsured asbestos claims-not insured asbestos claims. Petitioner is the insurer who bears the financial burden of those 14,000 insured claims.",
+    "The Bankruptcy Code's plain text empowers any \"party in interest\" to \"raise\" and \"be heard on any issue\" in a Chapter 11 proceeding. 11 U.S.C. § 1109(b). But the court of appeals refused to adjudicate petitioner's objections to the fraud and collusion, relying on judge-made limitations engrafted onto the Code.",
+    "The question presented is:",
+    "Whether an insurer with financial responsibility for a bankruptcy claim is a \"party in interest\" that may object to a Chapter 11 plan of reorganization.",
+    "Justice Alito took no part in the consideration or decision of this petition"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "31",
+   "date": "2024-06-06",
+   "docket": "23-146",
+   "name": "Connelly v. United States",
+   "summary": "A corporation’s contractual obligation to redeem shares is not necessarily a liability that reduces a corporation’s value for purposes of the federal estate tax.",
+   "author_code": "T",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r31_6537.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/23-00146qp.pdf",
+   "question_presented": [
+    "Closely held corporations often enter into agreements requiring the redemption of a shareholder's stock after the shareholder's death in order to preserve the closely held nature of the business. Corporations that enter such agreements often purchase life insurance on the shareholder in order to fund the transaction. The question presented is:",
+    "Whether the proceeds of a life-insurance policy taken out by a closely held corporation on a shareholder in order to facilitate the redemption of the shareholder's stock should be considered a corporate asset when calculating the value of the shareholder's shares for purposes of the federal estate tax."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "30",
+   "date": "2024-06-06",
+   "docket": "23-250",
+   "name": "Becerra v. San Carlos Apache Tribe",
+   "summary": "The Indian Self-Determination and Education Assistance Act requires the Indian Health Service to pay the contract support costs that a tribe incurs when it collects and spends program income—i.e., revenue from third-party payers like Medicare, Medicaid, and private insurers—to further the functions, services, activities, and programs transferred to it from IHS in a self-determination contract.",
+   "author_code": "R",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r30_g3bi.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/23-00250qp.pdf",
+   "question_presented": [
+    "The Indian Self-Determination and Education Assistance Act, 25 U.S.C. 5301 et seq., permits eligible Indian tribes to contract with the federal government to assume responsibility for federal health care programs administered for the benefit of Indians. Upon entering into the contract, a tribe is entitled to the appropriated funds that the Indian Health Service (IHS) would have otherwise allocated to the federal program. 25 U.S.C. 5325(a)(1). The Act also requires IHS to pay \"contract support costs\"-funds \"added to\" that appropriated amount to cover the costs of activities the tribe must undertake to operate the transferred program, but which either \"normally are not carried on\" by IHS when acting as program operator, or which IHS would have \"provided * * * from resources other than\" the appropriated funds transferred under the contract. 25 U.S.C. 5325(a)(2). Separately, contracting tribes are permitted to collect payment from third-party payors-like private insurers, Medicare, and Medicaid-when they provide health care services to covered individuals. The question presented is as follows:",
+    "Whether IHS must pay \"contract support costs\" not only to support IHS-funded activities, but also to support the tribe's expenditure of income collected from third parties."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "29",
+   "date": "2024-05-30",
+   "docket": "22-529",
+   "name": "Cantero v. Bank of America, N. A.",
+   "summary": "The Second Circuit failed to analyze whether New York’s interest-on-escrow law is preempted as applied to national banks in a manner consistent with the Dodd-Frank Wall Street Reform and Consumer Protection Act of 2010 and Barnett Bank of Marion Cty., N. A. v. Nelson, 517 U. S. 25.",
+   "author_code": "BK",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r29_0861.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00529qp.pdf",
+   "question_presented": [
+    "At least thirteen states have, enacted laws requiring mortgage lenders to pay a minimum interest rate on funds held in mortgage escrow accounts. Congress has since recognized the existence of these state escrow-interest laws and has expressly required national banks to comply with them where applicable. See 15 U.S.C. § 1639d(g)(3).",
+    "The question presented is:",
+    "Does the National Bank Act preempt the application of state escrow-interest laws to national banks?"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "28",
+   "date": "2024-05-30",
+   "docket": "22-842",
+   "name": "National Rifle Association of America v. Vullo",
+   "summary": "The NRA plausibly alleged that respondent violated the First Amendment by coercing regulated entities to terminate their business relationships with the NRA in order to punish or suppress the NRA’s gun-promotion advocacy.",
+   "author_code": "SS",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r28_9o6b.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": null
+    },
+    {
+     "id": "amend-2",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00842qp.pdf",
+   "question_presented": [
+    "Bantam Books v. Sullivan held that a state commission with no formal regulatory power violated the First Amendment when it \"deliberately set out to achieve the suppression of publications\" through \"informal sanctions,\" including the \"threat of invoking legal sanctions and other means of coercion, persuasion, and intimidation.\" 372 U.S. 58, 66-67 (1963). Respondent here, wielding enormous regulatory power as the head of New York's Department of Financial Services (\"DFS\"), applied similar pressure tactics-including backchannel threats, ominous guidance letters, and selective enforcement of regulatory infractions-to induce banks and insurance companies to avoid doing business with Petitioner, a gun rights advocacy group. App. 199-200 ¶ 21. Respondent targeted Petitioner explicitly based on its Second Amendment advocacy, which DFS's official regulatory guidance deemed a \"reputational risk\" to any financial institution serving the NRA. Id. at 199, n.16. The Second Circuit held such conduct permissible as a matter of law, reasoning that \"this age of enhanced corporate social responsibility\" justifies regulatory concern about \"general backlash\" against a customer's political speech. Id. at 29-30. Accordingly, the questions presented are: 1. Does the First Amendment allow a government regulator to threaten regulated entities with adverse regulatory actions if they do business with a controversial speaker, as a consequence of (a) the government's own hostility to the speaker's viewpoint or (b) a perceived \"general backlash\" against the speaker's advocacy? 2. Does such coercion violate a clearly established First Amendment right?",
+    "GRANTED LIMITED TO QUESTION 1 PRESENTED BY THE PETITION."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "27",
+   "date": "2024-05-30",
+   "docket": "22-982",
+   "name": "Thornell v. Jones",
+   "summary": "The Ninth Circuit’s grant of habeas relief on Jones’s ineffective assistance of counsel claim was based on an erroneous interpretation and application of Strickland v. Washington, 466 U. S. 668.",
+   "author_code": "A",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r27_jhek.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-6",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00982qp.pdf",
+   "question_presented": [
+    "Over thirty years ago, Respondent Danny Lee Jones beat Robert Weaver to death and also beat and strangled Weaver's 7-year-old daughter, Tisha, to death, for which he was convicted and sentenced to death. The district court denied habeas relief following an evidentiary hearing on Jones's ineffective-assistance-of-sentencing-counsel claims. But a Ninth Circuit panel reversed the district court, giving no deference to the district court's detailed factual findings. Judge Mark Bennett authored a nine-judge dissent from the denial of en banc rehearing.",
+    "The Question Presented is:",
+    "Did the Ninth Circuit violate this Court's precedents by employing a flawed methodology for assessing Strickland prejudice when it disregarded the district court's factual and credibility findings and excluded evidence in aggravation and the State's rebuttal when it reversed the district court and granted habeas relief?"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "26",
+   "date": "2024-05-23",
+   "docket": "23-3",
+   "name": "Coinbase v. Suski",
+   "summary": "Where parties have agreed to two contracts—one sending arbitrability disputes to arbitration, and the other either explicitly or implicitly sending arbitrability disputes to the courts—a court must decide which contract governs.",
+   "author_code": "KJ",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r26_k537.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/23-00003qp.pdf",
+   "question_presented": [
+    "Where parties enter into an arbitration agreement with a delegation clause, should an arbitrator or a court decide whether that arbitration agreement is narrowed by a later contract that is silent as to arbitration and delegation?"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "25",
+   "date": "2024-05-23",
+   "docket": "22-6389",
+   "name": "Brown v. United States",
+   "summary": "For purposes of the Armed Career Criminal Act’s 15-year mandatory minimum sentence on certain defendants with three or more previous convictions, a state drug conviction counts as an ACCA predicate if it involved a drug on the federal schedules at the time of that offense.",
+   "author_code": "A",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r25_p86b.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent (in part)"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/22-06389qp.pdf",
+   "question_presented": [
+    "The Armed Career Criminal Act provides that felons who possess a firearm are normally subject to a maximum 10-year sentence. But if the felon already has at least three \"serious drug offense\" convictions, then the minimum sentence is fifteen years.",
+    "Courts decide whether a prior state conviction counts as a serious drug offense using the categorical approach. That requires determining whether the elements of a state drug offense are the same as, or narrower than those of its federal counterpart. If so, the state conviction qualifies as an ACCA predicate.",
+    "But federal drug law often changes-as here, where Congress decriminalized hemp, narrowing the federal definition of marijuana. If state law doesn't follow suit, sentencing courts face a categorical conundrum. Under an earlier version of federal law, the state and federal offenses match-and the state offense is an ACCA predicate. Under the amended version, the offenses do not match-and the state offense is not an ACCA predicate. So the version of federal law that the court chooses to consult dictates the difference between serving a 10-year maximum or a 15-year minimum.",
+    "The question presented is:",
+    "Which version of federal law should a sentencing court consult under ACCA's categorical approach?"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "24",
+   "date": "2024-05-23",
+   "docket": "22-807",
+   "name": "Alexander v. South Carolina State Conference of the NAACP",
+   "summary": "Because the District Court’s finding that race predominated in the design of South Carolina’s first congressional district was clearly erroneous, the District Court’s racial-gerrymandering and vote-dilution holdings cannot stand.",
+   "author_code": "A",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r24_j4ek.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurring in part",
+       "majority in part"
+      ],
+      "wrote": [
+       "concurring in part"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-14",
+     "quote": null
+    },
+    {
+     "id": "amend-15",
+     "quote": null
+    },
+    {
+     "id": "art-1-sec-4-cl-1",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00807qp.pdf",
+   "question_presented": [
+    "The three-judge district court never mentioned the presumption of the South Carolina General Assembly's good faith, analyzed Congressional District 1 as a whole, or examined the intent of the General Assembly as a whole. It also disregarded the publicly available election data used to draw District 1 and legislator testimony demonstrating that politics and traditional districting principles better explain District 1 than race. And it never identified an alternative map that achieved the General Assembly's political objectives while similarly adhering to traditional criteria.",
+    "The court nonetheless held that a portion of District 1 is racially gerrymandered and discriminatory, and therefore permanently enjoined elections there. After an eightday trial featuring more than twenty witnesses and hundreds of exhibits, the court rested this holding on its brief questioning of the experienced nonpartisan map drawer and its conclusion that he used a racial target as a proxy for politics in District 1. Plaintiffs did not pursue that theory at trial, and the court never explained why the General Assembly would use race as a proxy to draw lines for political reasons when it could (and did) use election data directly to do the job.",
+    "The questions presented are: 1. Did the district court err when it failed to apply the presumption of good faith and to holistically analyze District 1 and the General Assembly's intent? 2. Did the district court err in failing to enforce the alternative-map requirement m this circumstantial case?",
+    "3. Did the district court err when it failed to disentangle race from politics?",
+    "4. Did the district court err in finding racial predominance when it never analyzed District l's compliance with traditional districting principles?",
+    "5. Did the district court clearly err in finding that the General Assembly used a racial target as a proxy for politics when the record showed only that the General Assembly was aware of race, that race and politics are highly correlated, and that the General Assembly drew districts based on election data?",
+    "6. Did the district court err in upholding the intentional discrimination claim when it never even considered whether-let alone found that-District 1 has a discriminatory effect?",
+    "JURISDICTION NOTED 5/15/2023"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "23",
+   "date": "2024-05-16",
+   "docket": "23-21",
+   "name": "Harrow v. Department of Defense",
+   "summary": "Title 5 U. S. C. §7703(b)(1)’s 60-day filing deadline for a federal employee to petition the Federal Circuit to review a final decision of the Merit Systems Protection Board is not jurisdictional.",
+   "author_code": "EK",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r23_khlp.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "art-3",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/23-00021qp.pdf",
+   "question_presented": [
+    "When a federal employee petitions the U.S. Court of Appeals for the Federal Circuit to review a final decision of the Merit Systems Protection Board, 5 U.S.C. § 7703(b)(1)(A) provides: \"Notwithstanding any other provision of law, any petition for review shall be filed within 60 days after the Board issues notice of the final order or decision of the Board.\" In the decision below, the Federal Circuit relied on settled circuit precedent holding this filing deadline to be jurisdictional, despite recent opinions from other Circuits and this Court holding analogous filing deadlines to be nonjurisdictional.",
+    "The question presented is whether the 60-day deadline in Section 7703(b)(1)(A) is jurisdictional."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "22",
+   "date": "2024-05-16",
+   "docket": "22-1218",
+   "name": "Smith v. Spizzirri",
+   "summary": "When a district court finds that a lawsuit involves an arbitrable dispute and a party has requested a stay of the court proceeding pending arbitration, §3 of the Federal Arbitration Act, 9 U. S. C. §3, compels the court to issue a stay, and the court lacks discretion to dismiss the suit.",
+   "author_code": "SS",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r22_o7jq.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/22-01218qp.pdf",
+   "question_presented": [
+    "This case presents a clear and intractable conflict regarding an important statutory question under the Federal Arbitration Act (FAA), 9 U.S.C.1-16.",
+    "The FAA establishes procedures for enforcing arbitration agreements in federal court. Under Section 3 of the Act, when a court finds a dispute subject to arbitration, the court \"shall on application of one of the parties stay the trial of the action until [the] arbitration\" has concluded. 9 U.S.C. 3 (emphasis added). While six circuits read Section 3's plain text as mandating a stay, four other circuits have carved out an atextual \"exception\" to Section 3's stay requirement-granting district courts discretion to dismiss (not stay) if the entire dispute is subject to arbitration. In the proceedings below, the Ninth Circuit declared itself bound by circuit precedent to affirm the district court's \"discretion to dismiss,\" despite \"the plain text of the FAA appear[ing] to mandate a stay.\"",
+    "The panel candidly acknowledged the 6-4 circuit conflict, and a two-judge concurrence emphasized \"the courts of appeals are divided,\" asserted the Ninth Circuit's position is wrong, and urged \"the Supreme Court to take up this question\"-an issue this Court has twice confronted but reserved in the past.",
+    "The question presented is:",
+    "Whether Section 3 of the FAA requires district courts to stay a lawsuit pending arbitration, or whether district courts have discretion to dismiss when all claims are subject to arbitration."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "21",
+   "date": "2024-05-16",
+   "docket": "22-448",
+   "name": "Consumer Financial Protection Bureau v. Community Financial Services Assn. of America, Ltd.",
+   "summary": "Congress’ statutory authorization allowing the Consumer Financial Protection Bureau to draw money from the earnings of the Federal Reserve System to carry out the Bureau’s duties, 12 U. S. C. §§5497(a)(1), (2), satisfies the Appropriations Clause.",
+   "author_code": "T",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r21_7648.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "art-3",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00448qp.pdf",
+   "question_presented": [
+    "Whether the court of appeals erred in holding that the statute providing funding to the Consumer Financial Protection Bureau (CFPB), 12 U.S.C. 5497, violates the Appropriations Clause, U.S. Const. Art. I,§ 9, Cl. 7, and in vacating a regulation promulgated at a time when the CFPB was receiving such funding."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "20",
+   "date": "2024-05-09",
+   "docket": "22-585",
+   "name": "Culley v. Marshall",
+   "summary": "In civil forfeiture cases involving personal property, the Due Process Clause requires a timely forfeiture hearing but does not require a separate preliminary hearing.",
+   "author_code": "BK",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r20_09m1.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-4",
+     "quote": null
+    },
+    {
+     "id": "amend-14",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00585qp.pdf",
+   "question_presented": [
+    "In determining whether the Due Process Clause requires a state or local government to provide a post seizure probable cause hearing prior to a statutory judicial forfeiture proceeding and, if so, when such a hearing must take place, should district courts apply the \"speedy trial\" test employed in United States v. $8,850, 461 U.S. 555 (1983) and Barker v. Wingo, 407 U.S. 514 (1972), as held by the Eleventh Circuit or the three-part due process analysis set forth in Mathews v. Eldridge, 424 U.S. 319 (1976) as held by at least the Second, Fifth, Seventh, and Ninth Circuits."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "19",
+   "date": "2024-05-09",
+   "docket": "22-1078",
+   "name": "Warner Chappell Music, Inc. v. Nealy",
+   "summary": "The Copyright Act entitles a copyright owner to obtain monetary relief for any timely infringement claim, no matter when the infringement occurred.",
+   "author_code": "EK",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r19_jifl.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/22-01078qp.pdf",
+   "question_presented": [
+    "Whether the Copyright Act's statute of limitations for civil actions, 17 U.S.C. 507(b), precludes retrospective relief for acts that occurred more than three years before the filing of a lawsuit.",
+    "GRANTED LIMITED TO THE FOLLOWING QUESTION: WHETHER, UNDER THE DISCOVERY ACCRUAL RULE APPLIED BY THE CIRCUIT COURTS AND THE COPYRIGHT ACT’S STATUTE OF LIMITATIONS FOR CIVIL ACTIONS, 17 U. S. C. §507(b), A COPYRIGHT PLAINTIFF CAN RECOVER DAMAGES FOR ACTS THAT ALLEGEDLY OCCURRED MORE THAN THREE YEARS BEFORE THE FILING OF A LAWSUIT."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "18",
+   "date": "2024-04-17",
+   "docket": "22-193",
+   "name": "Muldrow v. City of St. Louis",
+   "summary": "An employee challenging a job transfer under Title VII must show that the transfer brought about some harm with respect to an identifiable term or condition of employment, but that harm need not be significant.",
+   "author_code": "EK",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r18_6j37.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00193qp.pdf",
+   "question_presented": [
+    "Title VII of the Civil Rights Act of 1964 makes it unlawful for an employer \"to fail or refuse to hire or to discharge any individual, or otherwise to discriminate against any individual\" with respect to \"compensation, terms, conditions, or privileges of employment\" on the basis of race, color, religion, sex, or national origin. 42 U.S.C. § 2000e-2(a)(l). The Eighth Circuit below followed binding circuit precedent to hold that discriminatory job transfers (and denials of requested transfers) are lawful under Title VII when they do not impose \"materially significant disadvantages\" on employees.",
+    "The question presented is:",
+    "Does Title VII prohibit discrimination as to all \"terms, conditions, or privileges of employment,\" or is its reach limited to discriminatory employer conduct that courts determine causes materially significant disadvantages for employees?"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "17",
+   "date": "2024-04-17",
+   "docket": "22-7386",
+   "name": "McIntosh v. United States",
+   "summary": "A district court’s failure to comply with Federal Rule of Criminal Procedure 32.2(b)(2)(B)’s requirement to enter a preliminary order imposing criminal forfeiture before sentencing does not bar a judge from ordering forfeiture at sentencing subject to harmless-error principles on appellate review.",
+   "author_code": "SS",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r17_nmio.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/22-07386qp.pdf",
+   "question_presented": [
+    "1.Whether a district court may enter a criminal forfeiture order outside the time limitations set forth in Rule 32.2, Fed.R.Crim.P.?",
+    "The appellate courts are divided on this issue. The Court of Appeals below rejected petitioner's argument that the district court's forfeiture order was invalid where the government failed to submit a preliminary order of forfeiture until more than two- and-half years after sentencing, and the government also failed to comply with the district court's direction that it provide a formal order of forfeiture within one week of sentencing, Compare United States v. Maddux, 37 F.4th 1170 (6th Cir. 2022) (rejecting the decision below and concluding that Rule 32.2 was a mandatory claim processing rule preventing forfeiture in that case); and United States v. Shakur, 691 F.3d 979 (8th Cir. 201l)(Rule 32.2's mandates are jurisdictional, and a court lacks the \"power to enter\" forfeiture once Rule 32.2's deadlines have passed); and United States v. Martin, 662 F.3d 301 (4th Cir. 2011) (concluding that Rule 32.2's deadlines are simply \"time-related directive[s]\").",
+    "2.Is the theft of cash from an individual sufficient to satisfy the \"interstate commerce\" element of 18 U.S.C. §1951 a necessary predicate for federal jurisdiction of what is otherwise local criminal conduct that should be prosecuted by the individual states?",
+    "The Solicitor General candidly admitted in a prior case before this Court that: when there's a robbery of an individual, the links [to Commerce] are much more attenuated and there's a longer chain of causation to get to commerce. And so in those contexts, even within the depletion of assets theory that my brother espouses before the Court, the courts have said, as a normal matter, robberies of individuals just don't fall within the Commerce Clause. Taylor v. United States, 146166 (Transcript of Oral Argument, Feb, 23, 2016) at 23-24. Despite this concession, the Second Circuit upheld petitioner's conviction under the depletion of assets theory, a theory that when applied to an individual effectively eviscerates the \"interstate commerce\" element and raises serious Federalism concerns.",
+    "GRANTED LIMITED TO QUESTION 1 PRESENTED BY THE PETITION."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "16",
+   "date": "2024-04-16",
+   "docket": "22-888",
+   "name": "Rudisill v. McDonough",
+   "summary": "Servicemembers who, through separate periods of service, accrue educational benefits under both the Montgomery and Post-9/11 GI Bills may use either one, in any order, up to 38 U. S. C. §3695(a)’s 48-month aggregate-benefits cap.",
+   "author_code": "KJ",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r16_2dp3.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00888qp.pdf",
+   "question_presented": [
+    "Whether a veteran who has served two separate and distinct periods of qualifying service under the Montgomery GI Bill, 38 U.S.C. § 3001 et seq., and under the Post9/11 GI Bill, 38 U.S.C. § 3301 et seq., is entitled to receive a total of 48 months of education benefits as between both programs, without first exhausting the Montgomery benefit in order to obtain the more generous Post-9/11 benefit."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "15",
+   "date": "2024-04-16",
+   "docket": "22-913",
+   "name": "DeVillier v. Texas",
+   "summary": "Owners of property north of U. S. Interstate Highway 10 adversely affected by the flood evacuation barrier constructed by Texas should be permitted on remand to pursue their Takings Clause claims through the cause of action available under Texas law.",
+   "author_code": "T",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r15_apl1.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-5",
+     "quote": null
+    },
+    {
+     "id": "amend-14",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00913qp.pdf",
+   "question_presented": [
+    "In First English Evangelical Lutheran Church v. County of Los Angeles, this Court recognized that the Fifth Amendment's Takings Clause was \"self-executing\" and that \"[s]tatutory recognition was not necessary\" for claims for just compensation because they \"are grounded in the Constitution itself[.]\" 482 U.S. 304, 315 (1987). Since First English, several state courts of last resort have held that the self-executing nature of the Takings Clause requires them to entertain claims directly under the Clause without the need for statutory authorization. Two federal Circuits, the Fifth and the Ninth, disagree and have held that claims for just compensation are only available if they are legislatively authorized. The question presented is:",
+    "May a person whose property is taken without compensation seek redress under the self-executing Takings Clause even if the legislature has not affirmatively provided them with a cause of action?"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "14",
+   "date": "2024-04-12",
+   "docket": "22-1074",
+   "name": "Sheetz v. El Dorado County",
+   "summary": "The Fifth Amendment’s Takings Clause does not distinguish between legislative and administrative land-use permit conditions.",
+   "author_code": "AB",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r14_00m5.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-5",
+     "quote": null
+    },
+    {
+     "id": "amend-14",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-01074qp.pdf",
+   "question_presented": [
+    "George Sheetz applied, to the County of El Dorado, California, for a permit to build a modest manufactured house on his property. Pursuant to legislation enacted by the County, and as the condition of obtaining the permit, Mr. Sheetz was required to pay a monetary exaction of $23,420 to help finance unrelated road improvements. The County demanded payment in spite of the fact that it made no individualized determination that the exaction-a substantial sum for Mr. Sheetz-bore an \"essential nexus\" and \"rough proportionality\" to the purported impacts associated with his modest project as required in Nollan v. Cal. Coastal Comm'n, 483 U.S. 825, 837 (1987) and Dolan v. City of Tigard, 512 U.S. 37 4, 391 (1994).",
+    "Mr. Sheetz challenged the exaction as an unconstitutional condition under Nollan and Dolan. A California trial court upheld the exaction, holding that, because it was authorized by legislation, the exaction was immune from Nollan/Dolan review. In a published decision, the California Court of Appeal affirmed, and the California Supreme Court denied review. California's judicially-created exemption from Nollan/Dolan scrutiny for legislative exactions conflicts with the decisions of other federal and state courts across the country, and is in strong tension with this Court's more recent precedents.",
+    "The question presented is whether a permit exaction is exempt from the unconstitutional-conditions doctrine as applied in Nollan and Dolan simply because it is authorized by legislation."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "13",
+   "date": "2024-04-12",
+   "docket": "22-1165",
+   "name": "Macquarie Infrastructure Corp. v. Moab Partners, L. P.",
+   "summary": "Pure omissions are not actionable under SEC Rule 10b–5(b), which makes it unlawful to omit material facts in connection with buying or selling securities when that omission renders “statements made” misleading.",
+   "author_code": "SS",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r13_8mjp.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/22-01165qp.pdf",
+   "question_presented": [
+    "Section l0(b) of the Securities Exchange Act of 1934 prohibits deception in connection with the purchase or sale of securities. To that end, SEC Rule l0b-5 declares it unlawful to make an untrue statement or omit a material fact \"necessary\" to make an affirmative statement \"not misleading.\" 17 C.F.R. § 240.10b-5(b). A violation of this requirement can give rise to a private claim-a judicially implied private right of action that this Court has construed narrowly.",
+    "Item 303 of SEC Regulation S-K calls for additional disclosures under a different standard. Item 303 is an administrative rule that requires a company to disclose known trends or uncertainties that are likely to have a material impact on its financial position, regardless of whether the company had made any statements that would otherwise be misleading.",
+    "Against this backdrop, this case presents the following question:",
+    "Whether the Second Circuit erred in holding-in conflict with the Third, Ninth, and Eleventh Circuits- that a failure to make a disclosure required under Item 303 can support a private claim under Section l0(b), even in the absence of an otherwisemisleading statement."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "12",
+   "date": "2024-04-12",
+   "docket": "23-51",
+   "name": "Bissonnette v. LePage Bakeries Park St., LLC",
+   "summary": "A transportation worker need not work in the transportation industry to be exempt from coverage under §1 of the Federal Arbitration Act, 9 U. S. C. §1 et seq.",
+   "author_code": "R",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r12_7648.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/23-00051qp.pdf",
+   "question_presented": [
+    "The Federal Arbitration Act exempts the \"contracts of employment of seamen, railroad employees, or any other class of workers engaged in foreign or interstate commerce.\" 9 U.S.C. § 1.",
+    "The First and Seventh Circuits have held that this exemption applies to any member of a class of workers that is engaged in foreign or interstate commerce in the same way as seamen and railroad employees-that is, any worker \"actively engaged\" in the interstate transportation of goods. The Second and Eleventh Circuits have added an additional requirement: The worker's employer must also be in the \"transportation industry.\"",
+    "The question presented is:",
+    "To be exempt from the Federal Arbitration Act, must a class of workers that is actively engaged in interstate transportation also be employed by a company in the transportation industry?"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "11",
+   "date": "2024-03-19",
+   "docket": "22-1178",
+   "name": "FBI v. Fikre",
+   "summary": "The Government failed to meet its burden to demonstrate that Mr. Fikre’s removal from the Government’s No Fly List mooted his 42 U. S. C. §1983 case because its declaration did not disclose the conduct that landed Mr. Fikre on the No Fly List and did not ensure that he would not be placed back on the list for engaging in the same or similar conduct in the future.",
+   "author_code": "NG",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r11_7lh8.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "art-3",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-01178qp.pdf",
+   "question_presented": [
+    "Individuals are sometimes removed from the No Fly List during ongoing litigation about their placement on that list. The Fourth and Sixth Circuits have held that an individual's removal from the No Fly List moots a case when the government represents that the individual will not be placed back on the list based on currently available information. In conflict with those decisions, the Ninth Circuit held in this case that respondent's claims were not moot even though he was removed from the No Fly List in 2016 and the government provided a sworn declaration stating that he \"will not be placed on the No Fly List in the future based on the currently available information.\"",
+    "The question presented is whether respondent's claims challenging his placement on the No Fly List are moot."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "10",
+   "date": "2024-03-19",
+   "docket": "22-666",
+   "name": "Wilkinson v. Garland",
+   "summary": "The Immigration Judge’s discretionary decision that Mr. Wilkinson failed to satisfy 8 U. S. C. §1229b(b)(1)(D)’s “exceptional and extremely unusual” hardship standard for determining eligibility for cancellation of removal is a mixed question of law and fact, reviewable under §1252(a)(2)(D)’s jurisdiction restoring exception for “questions of law”; the Third Circuit’s holding that the IJ’s decision was unreviewable under §1252(a)(2)(B)(i) was in error.",
+   "author_code": "SS",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r10_k5fm.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00666qp.pdf",
+   "question_presented": [
+    "Under the Immigration and Nationality Act, the Attorney General has discretion to cancel removal of non-permanent residents who satisfy four eligibility criteria, including \"that removal would result in exceptional and extremely unusual hardship\" to the applicant's immediate family member who is a U.S. citizen or lawful permanent resident. 8 U.S.C. § 1229b(b)(l)(D).",
+    "Congress stripped courts of jurisdiction to review cancellation-of-removal determinations, 8 U.S.C. § 1252(a)(2)(B)(i), but expressly preserved their jurisdiction to review \"questions of law.\" Id. § 1252(a)(2)(D). And as this Court has already held, this \"statutory phrase 'questions of law' includes the application of a legal standard to undisputed or established facts\"—that is, a \"mixed question of law and fact.\" GuerreroLasprilla u. Barr, 140 S. Ct. 1062, 1068-69 (2020).",
+    "The question presented is whether an agency determination that a given set of established facts does not rise to the statutory standard of \"exceptional and extremely unusual hardship\" is a mixed question of law and fact reviewable under § 1252(a)(2)(D), as three circuits have held, or whether this determination is a discretionary judgment call unreviewable under § 1252(a)(2)(B)(i), as the court below and two other circuits have concluded."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "9",
+   "date": "2024-03-15",
+   "docket": "22-324",
+   "name": "O’Connor-Ratcliff v. Garnier",
+   "summary": "The Ninth Circuit’s judgment—that 42 U. S. C. §1983’s state-action requirement was satisfied because of the “close nexus” between petitioners’ social media pages and their positions as public officials—is vacated, and the case is remanded in light of Lindke v. Freed, 601 U. S. ___.",
+   "author_code": "PC",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r09_hgci.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": [],
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00324qp.pdf",
+   "question_presented": [
+    "Whether a public official engages in state action subject to the First Amendment by blocking an individual from the official's personal social-media account, when the official uses the account to feature their job and communicate about job-related matters with the public, but does not do so pursuant to any governmental authority or duty."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "8",
+   "date": "2024-03-15",
+   "docket": "22-611",
+   "name": "Lindke v. Freed",
+   "summary": "A public official who prevents someone from commenting on the official’s social-media page engages in state action under 42  U. S. C. §1983 only if the official both (1) possessed actual authority to speak on the State’s behalf on a particular matter, and (2) purported to exercise that authority when speaking in the relevant social-media posts.",
+   "author_code": "AB",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r08_a8cf.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": null
+    },
+    {
+     "id": "amend-14",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00611qp.pdf",
+   "question_presented": [
+    "Courts have increasingly been called upon to determine whether a public official who selectively blocks access to his or her social media account has engaged in state action subject to constitutional scrutiny. To answer that question, most circuits consider a broad range of factors, including the account's appearance and purpose. But in the decision below, the court of appeals rejected the relevance of any consideration other than whether the official was performing a \"duty of his office\" or invoking the \"authority of his office.\" App. 5a.",
+    "The question presented is:",
+    "Whether a public official's social media activity can constitute state action only if the official used the account to perform a governmental duty or under the authority of his or her office."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "7",
+   "date": "2024-03-15",
+   "docket": "22-340",
+   "name": "Pulsifer v. United States",
+   "summary": "A criminal defendant facing a mandatory minimum sentence is eligible for safety-valve relief under 18 U. S. C. §3553(f)(1) only if the defendant satisfies each of the provision’s three conditions.",
+   "author_code": "EK",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r07_19m1.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-6",
+     "quote": null
+    },
+    {
+     "id": "art-3",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00340qp.pdf",
+   "question_presented": [
+    "The \"safety valve\" provision of the federal sentencing statute requires a district court to ignore any statutory mandatory minimum and instead follow the Sentencing Guidelines if a defendant was convicted of certain nonviolent drug crimes and can meet five sets of criteria. See 18 U.S.C. § 3553(f)(1)-(5). Congress amended the first set of criteria, in§ 3553(f)(1), in the First Step Act of 2018, Pub. L. No. 115-391, § 402, 132 Stat. 5194, 5221, broad criminal justice and sentencing reform legislation designed to provide a second chance for nonviolent offenders. A defendant satisfies § 3553(f)(1), as amended, if he \"does not have-(A) more than 4 criminal history points, excluding any criminal history points resulting from a 1-point offense, as determined under the sentencing guidelines; (B) a prior 3-point offense, as determined under the sentencing guidelines; and (C) a prior 2-point violent offense, as determined under the sentencing guidelines.\" 18 U.S.C. § 3553(f)(1) (emphasis added).",
+    "The question presented is whether the \"and\" in 18 U.S.C. § 3553(f)(1) means \"and,\" so that a defendant satisfies the provision so long as he does not have (A) more than 4 criminal history points, (B) a 3-point offense, and (C) a 2-point offense (as the Ninth Circuit holds), or whether the \"and\" means \"or,\" so that a defendant satisfies the provision so long as he does not have (A) more than 4 criminal history points, (B) a 3- point offense, or (C) a 2-point violent offense (as the Seventh and Eighth Circuits hold).",
+    "ORDER OF 10/2/2023: THE MOTION OF PETITIONER FOR LEAVE TO PROCEED FURTHER HEREIN IN FORMA PAUPERIS AND FOR APPOINTMENT OF COUNSEL IS GRANTED. J. ROBERT BLACK, OF OMAHA, NEBRASKA, IS APPOINTED TO SERVE AS COUNSEL FOR THE PETITIONER IN THIS CASE."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "6",
+   "date": "2024-03-04",
+   "docket": "23-719",
+   "name": "Trump v. Anderson",
+   "summary": "Because the Constitution makes Congress, rather than the States, responsible for enforcing Section 3 of the Fourteenth Amendment against federal officeholders and candidates, the Colorado Supreme Court erred in ordering former President Trump excluded from the 2024 Presidential primary ballot.",
+   "author_code": "PC",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r06_a86c.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": [],
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": null
+    },
+    {
+     "id": "amend-14",
+     "quote": null
+    },
+    {
+     "id": "art-1-sec-4-cl-1",
+     "quote": null
+    },
+    {
+     "id": "art-2-sec-1-cl-2",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/23-00719qp.pdf",
+   "question_presented": [
+    "The Supreme Court of Colorado held that President Donald J. Trump is disqualified from holding the office of President because he \"engaged in insurrection\" against the Constitution of the United States-and that he did so after taking an oath \"as an officer of the United States\" to \"support\" the Constitution. The state supreme court ruled that the Colorado Secretary of State should not list President Trump's name on the 2024 presidential primary ballot or count any write-in votes cast for him. The state supreme court stayed its decision pending United States Supreme Court review.",
+    "The question presented is:",
+    "Did the Colorado Supreme Court err in ordering President Trump excluded from the 2024 presidential primary ballot?",
+    "ORDER OF JANUARY 5, 2024: THE CASE IS SET FOR ORAL ARGUMENT ON THURSDAY, FEBRUARY 8, 2024. EXPEDITED BRIEFING."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "5",
+   "date": "2024-02-21",
+   "docket": "22-721",
+   "name": "McElrath v. Georgia",
+   "summary": "The jury’s verdict that the defendant was not guilty by reason of insanity of malice murder constituted an acquittal for double jeopardy purposes notwithstanding any inconsistency with the jury’s other verdicts.",
+   "author_code": "KJ",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r05_1qm2.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-5",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00721qp.pdf",
+   "question_presented": [
+    "The Georgia Supreme Court held that a jury's verdict of acquittal on one criminal charge and its verdict of guilty on a different criminal charge arising from the same facts were logically and legally impossible to reconcile. It called the verdicts \"repugnant,\" vacated both of them, and subsequently held that the defendant could be prosecuted a second time on both charges. Does the Double Jeopardy Clause of the Fifth Amendment prohibit a second prosecution for a crime of which a defendant was previously acquitted?"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "4",
+   "date": "2024-02-21",
+   "docket": "22-500",
+   "name": "Great Lakes Ins. SE v. Raiders Retreat Realty Co.",
+   "summary": "Choice-of-law provisions in maritime contracts are presumptively enforceable under federal maritime law, with narrow exceptions not applicable in this case.",
+   "author_code": "BK",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r04_4g15.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "art-3",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00500qp.pdf",
+   "question_presented": [
+    "The questions presented are:",
+    "1. Under federal admiralty law, what is the standard for judging the enforcement of a choice of law clause in a maritime contract?",
+    "2. Under federal admiralty law, can a choice of law clause in a maritime contract be rendered unenforceable if enforcement is contrary to the \"strong public policy\" of the state whose law is displaced?",
+    "GRANTED LIMITED TO QUESTION 2 PRESENTED BY THE PETITION."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "3",
+   "date": "2024-02-08",
+   "docket": "22-846",
+   "name": "Department of Agriculture Rural Development Rural Housing Service v. Kirtz",
+   "summary": "A consumer may sue a federal agency under 15 U. S. C. §§1681n and 1681o for defying the terms of the Fair Credit Reporting Act.",
+   "author_code": "NG",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r03_4gcj.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-11",
+     "quote": null
+    },
+    {
+     "id": "art-1-sec-8-cl-3",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00846qp.pdf",
+   "question_presented": [
+    "Whether the civil-liability provisions of the Fair Credit Reporting Act, 15 U.S.C. 1681 et seq., unequivocally and unambiguously waive the sovereign immunity of the United States."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "2",
+   "date": "2024-02-08",
+   "docket": "22-660",
+   "name": "Murray v. UBS Securities, LLC",
+   "summary": "A whistleblower seeking to invoke the protections of the Sarbanes-Oxley Act—18 U. S. C. §1514A(a)—must prove that their protected activity was a contributing factor in the employer’s unfavorable personnel action, but need not prove that the employer acted with “retaliatory intent.”",
+   "author_code": "SS",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r02_c07d.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00660qp.pdf",
+   "question_presented": [
+    "The Sarbanes-Oxley Act of 2002 protects whistleblowers who report financial wrongdoing at publicly traded companies. 18 U.S.C. § 1514A. When a whistleblower invokes the Act and claims he was fired because of his report, his claim is \"governed by the legal burdens of proof set forth in section 42121(b) of title 49, United States Code.\" 18 U.S.C. § 1514A(b)(2)(C).",
+    "Under that incorporated framework, a whistleblowing employee meets his burden by showing that his protected activity \"was a contributing factor in the unfavorable personnel action alleged in the complaint.\" 49 U.S.C. § 42121(b)(2)(B)(iii). If the employee meets that burden, the employer can prevail only if it \"demonstrates by clear and convincing evidence that the employer would have taken the same unfavorable personnel action in the absence of that behavior.\" Id. § 42121(b)(2)(B)(iv).",
+    "The Question Presented is:",
+    "Under the burden-shifting framework that governs Sarbanes-Oxley cases, must a whistleblower prove his employer acted with a \"retaliatory intent\" as part of his case in chief, or is the lack of \"retaliatory intent\" part of the affirmative defense on which the employer bears the burden of proof?"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "1",
+   "date": "2023-12-05",
+   "docket": "22-429",
+   "name": "Acheson Hotels, LLC v. Laufer",
+   "summary": "Because Laufer voluntarily dismissed her pending suits under the Americans with Disabilities Act of 1990, Laufer’s case against Acheson is moot.",
+   "author_code": "AB",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r01_q86b.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "art-3",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/22-00429qp.pdf",
+   "question_presented": [
+    "Does a self-appointed Americans with Disabilities Act \"tester\" have Article III standing to challenge a place of public accommodation's failure to provide disability accessibility information on its website, even if she lacks any intention of visiting that place of public accommodation?"
+   ],
+   "qp_checked": true
+  }
+ ],
+ "built_on": "2026-10-10"
+}

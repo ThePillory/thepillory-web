@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "42"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "43"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -539,6 +539,19 @@ def build_methodology():
   </ul>
 </section>
 
+<section class="card stack" id="scotus">
+  <h2>The Supreme Court</h2>
+  <p>The justices, their decisions and this term's cases, from the Court's own records, with a link to each. The same layout for every justice. ThePillory doesn't label justices, score them, group them or predict outcomes.</p>
+  <ul class="plain-list small">
+    <li><strong>The justices:</strong> the Court's list of current justices and their official biographies (word for word, leaving out family details), and the Senate's record of each nomination and confirmation vote, linked to the roll call.</li>
+    <li><strong>Decisions:</strong> each opinion the Court has published on supremecourt.gov since the oldest term its site lists, with the one-line summary the site gives. Who wrote and who joined each opinion comes from the opinion's own syllabus (its last paragraph), word for word; a sentence that can't be read reliably is left out rather than guessed. Unsigned (per curiam) opinions have no such paragraph and aren't counted in a justice's record.</li>
+    <li><strong>The Constitution:</strong> each provision the opinion of the Court names by a name that points to one provision (such as "First Amendment" or "Commerce Clause"), with the first sentence that names it, quoted exactly. A name that could mean two provisions isn't linked.</li>
+    <li><strong>This term:</strong> the Court's Granted &amp; Noted list (argument dates) and each case's question presented, word for word from the Court's docket.</li>
+    <li><strong>Financial disclosures:</strong> the justices' annual reports, gifts and reimbursements as CourtListener (Free Law Project) transcribes them, each linked to the filed report. Organizations are named; a person is listed as "An individual".</li>
+    <li><strong>Refreshed daily</strong> (the "Refresh Supreme Court data" workflow).</li>
+  </ul>
+</section>
+
 <section class="card stack" id="disclosures">
   <h2>Financial disclosures</h2>
   <p>Officials' own reports of their finances, listed with a link to each document. ThePillory lists these records; it doesn't summarize, score or interpret what's in them.</p>
@@ -994,6 +1007,8 @@ def search_index():
     items.append({"type": "Laws", "title": "California's budget by governor's term", "sub": "General Fund by term", "url": "/finances/california/", "k": "california budget general fund governor finances time machine history"})
     # Elections (data/elections/, from tools/build_elections.py): the election, its statewide offices and propositions.
     items.append({"type": "Elections", "title": "Elections", "sub": "What's on the ballot, Your ballot, How to vote", "url": "/elections/", "k": "election ballot vote voting register polling"})
+    items.append({"type": "Laws", "title": "The Supreme Court", "sub": "The justices and their decisions", "url": "/bodies/us-supreme-court/", "k": "supreme court scotus justices justice court decisions opinions roberts thomas alito sotomayor kagan gorsuch kavanaugh barrett jackson"})
+    items.append({"type": "Laws", "title": "This term at the Supreme Court", "sub": "Cases the Court will hear, and its decisions", "url": "/court/term/", "k": "supreme court term cases argument docket question presented"})
     items.append({"type": "Elections", "title": "Open your ballot", "sub": "Every state: your federal races, then your whole ballot and where to vote", "url": "/ballot/", "k": "ballot sample my ballot polling place where to vote early voting candidates"})
     # Election files are named by date (2026-11-03.json); other files there (dates.json) aren't elections.
     for path in sorted((ROOT / "data" / "elections").glob("[0-9]*.json"), reverse=True)[:1]:
