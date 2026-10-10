@@ -51,6 +51,8 @@ SENATE = "https://www.senate.gov/legislative/nominations/SupremeCourtNominations
 CL = "https://www.courtlistener.com/api/rest/v4"
 UA = "ThePillory/1.0 (+https://thepillory.co; public records)"
 OLDEST_TERM = 2010  # supremecourt.gov's slip-opinion pages go back about this far
+# Bump when the opinion readers change: decisions read by an older version are read again.
+PARSER_VERSION = 2
 
 # The surname as the opinions print it (in capitals), for every justice who may
 # appear in a lineup since OLDEST_TERM. A lineup name not here stops the parse.
@@ -139,7 +141,11 @@ def parse_bios(page):
         # A sentence ends at a period before a capital, but not after an initial ("Henry J. Friendly").
         sentences = re.split(r"(?<! [A-Z]\.)(?<=[.])\s+(?=[A-Z])", m.group(3))
         keep = [s.strip() for s in sentences if s.strip() and not PERSONAL.search(s)]
-        out[anchor] = {"heading": f"{m.group(1)}, {m.group(2)}", "sentences": keep}
+        heading = f"{m.group(1)}, {m.group(2)}"
+        # The first sentence as the biography prints it: "<Name>, <Title>, was born …".
+        if keep and keep[0].startswith("was born"):
+            keep[0] = f"{heading}, {keep[0]}"
+        out[anchor] = {"heading": heading, "sentences": keep}
     return out
 
 
@@ -252,13 +258,14 @@ LINEUP_START = re.compile(rf"({NAME}, (?:C\. )?J\., delivered the opinion|PER CU
 
 def lineup_paragraph(text):
     """The syllabus's last paragraph: who delivered the opinion, and who filed or joined what."""
-    t = unwrap(text)
+    t = unwrap(without_headers(text))
     m = LINEUP_START.search(t)
     if not m:
         return None
     rest = t[m.start():]
     # It ends where the opinion itself begins (a page header or the opinion's caption).
-    end = re.search(r"\s(?:Cite as:|NOTICE:|Opinion of the Court|SUPREME COURT OF THE UNITED STATES|\(Slip Opinion\))", rest)
+    # It ends where the opinion itself begins: its caption or the slip notice (page headers are already out).
+    end = re.search(r"\s(?:NOTICE: This opinion|SUPREME COURT OF THE UNITED STATES|PRELIMINARY PRINT)", rest)
     return rest[: end.start() if end else 1200].strip()
 
 
@@ -354,13 +361,20 @@ PROVISIONS = [
 ]
 
 
+HEADER = re.compile(r"^\s*(?:Opinion of the Court|Syllabus|Cite as:.*|\(Slip Opinion\).*|\d+\s+[A-Z][A-Z .,'&\-]+ v\. [A-Z .,'&\-]+|[A-Z][A-Z .,'&\-]+ v\. [A-Z .,'&\-]+\s+\d+|\d+|(?:%s), (?:C\. )?J\., (?:concurring|dissenting).*|Opinion of (?:%s), (?:C\. )?J\.)\s*$" % ("|".join(SURNAMES), "|".join(SURNAMES)))
+
+
+def without_headers(text):
+    """The text with page headers, running case names and page numbers taken out."""
+    return "\n".join(l for l in text.splitlines() if not HEADER.match(l))
+
+
 def court_opinion_text(text):
     """The opinion of the Court: after the syllabus, before the first separate opinion's page header."""
-    t = text
-    start = re.search(r"Opinion of the Court|PER CURIAM", t)
-    t = t[start.start():] if start else t
+    start = re.search(r"Opinion of the Court|PER CURIAM", text)
+    t = text[start.end():] if start else text
     end = re.search(rf"\n\s*(?:{NAME}, (?:C\. )?J\., (?:concurring|dissenting))", t[200:])
-    return unwrap(t[: end.start() + 200] if end else t)
+    return unwrap(without_headers(t[: end.start() + 200] if end else t))
 
 
 def provisions_named(text, constitution_ids):
@@ -396,7 +410,7 @@ def build_term(term, previous, constitution_ids, budget):
     cases = []
     for row in rows:
         old = known.get(row["pdf"])
-        if old and "lineup" in old:
+        if old and old.get("parser") == PARSER_VERSION:
             cases.append({**old, **row})
             continue
         if budget <= 0:
@@ -404,7 +418,8 @@ def build_term(term, previous, constitution_ids, budget):
             continue
         budget -= 1
         try:
-            text = pdf_text(fetch(row["pdf"], binary=True))
+            # Layout mode keeps small-capital names whole ("ROBERTS, C. J."); the plain mode breaks some apart.
+            text = pdf_text(fetch(row["pdf"], binary=True), layout=True)
         except Exception as e:
             print(f"OT{term} {row['docket']}: {type(e).__name__}", file=sys.stderr)
             cases.append({**row, "pending_read": True})
@@ -412,6 +427,7 @@ def build_term(term, previous, constitution_ids, budget):
         lineup_text = lineup_paragraph(text)
         cases.append({
             **row,
+            "parser": PARSER_VERSION,
             "lineup_text": lineup_text,
             "lineup": parse_lineup(lineup_text),
             "provisions": provisions_named(text, constitution_ids),
@@ -553,7 +569,9 @@ def main():
         if term == term_now:
             decided_now = {c["docket"] for c in data["cases"]}
         unread = sum(1 for c in data["cases"] if c.get("pending_read"))
-        print(f"OT{term}: {len(data['cases'])} decisions{f', {unread} to read next run' if unread else ''}")
+        signed = [c for c in data["cases"] if c.get("author_code") != "PC" and not c.get("pending_read")]
+        lineups = sum(1 for c in signed if c.get("lineup"))
+        print(f"OT{term}: {len(data['cases'])} decisions, lineups read for {lineups} of {len(signed)} signed{f', {unread} to read next run' if unread else ''}")
     write(OUT / "index.json", {"built_on": built, "current_term": term_now, "terms": terms})
 
     try:

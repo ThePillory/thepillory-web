@@ -1896,3 +1896,7 @@ article.fin-term { scroll-margin-top: 16px; }
 .ballot-cands p { margin: 0; }
 /* "Open your ballot" as the home page's top card, in the weeks before the state's next election. */
 .ballot-hero-when { margin: 0; font-size: 1.25rem; font-weight: 800; letter-spacing: -0.01em; }
+/* A justice's page: one row of four equal tabs, About · Record · Disclosures · More. */
+.tabs--four { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); overflow: visible; }
+.tabs--four [role="tab"] { min-width: 0; min-height: var(--tap); padding: 0 2px; font-size: 0.8125rem; text-align: center; white-space: nowrap; }
+.tabs--four [role="tab"]:focus-visible { outline: 2px solid var(--navy); outline-offset: -2px; }

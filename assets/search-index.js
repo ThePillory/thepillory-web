@@ -37,6 +37,13 @@ window.PILLORY_INDEX = [
  },
  {
   "type": "Body",
+  "title": "Supreme Court of the United States",
+  "sub": "Federal · Governing body",
+  "url": "/bodies/us-supreme-court/",
+  "k": "Supreme Court"
+ },
+ {
+  "type": "Body",
   "title": "California's statewide elected offices",
   "sub": "State · Governing body",
   "url": "/bodies/ca-executive/",
@@ -1161,6 +1168,20 @@ window.PILLORY_INDEX = [
   "sub": "What's on the ballot, Your ballot, How to vote",
   "url": "/elections/",
   "k": "election ballot vote voting register polling"
+ },
+ {
+  "type": "Laws",
+  "title": "The Supreme Court",
+  "sub": "The justices and their decisions",
+  "url": "/bodies/us-supreme-court/",
+  "k": "supreme court scotus justices justice court decisions opinions roberts thomas alito sotomayor kagan gorsuch kavanaugh barrett jackson"
+ },
+ {
+  "type": "Laws",
+  "title": "This term at the Supreme Court",
+  "sub": "Cases the Court will hear, and its decisions",
+  "url": "/court/term/",
+  "k": "supreme court term cases argument docket question presented"
  },
  {
   "type": "Elections",
