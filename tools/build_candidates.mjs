@@ -101,6 +101,18 @@ export function refreshOrder(all) {
   return [...all].sort((a, b) => String(a.c.funding_checked || "").localeCompare(String(b.c.funding_checked || "")) || a.c.id.localeCompare(b.c.id));
 }
 
+/**
+ * Every listed candidate's campaign website, for the Worker's candidate-platforms
+ * step (workers/sync/src/promises/candidates-sync.js). Pure.
+ */
+export function websites(states, year, today) {
+  const candidates = [];
+  for (const [st, s] of Object.entries(states)) {
+    for (const c of Object.values(s.candidates)) if (c.listed && c.website && c.website.url) candidates.push({ id: c.id, name: c.name, st: st.toUpperCase(), url: c.website.url });
+  }
+  return { year, built_on: today, candidates: candidates.sort((a, b) => a.id.localeCompare(b.id)) };
+}
+
 class OutOfRequests extends Error {}
 
 function client(key, max) {
@@ -211,6 +223,7 @@ async function main() {
     }
   }
   for (const [st, s] of Object.entries(states)) writeFileSync(join(outDir, `${st}.json`), JSON.stringify(s, null, 1) + "\n");
+  if (!only.length) writeFileSync(join(outDir, "websites.json"), JSON.stringify(websites(states, year, today)) + "\n");
   const listed = queue.length;
   const fresh = Object.values(states).flatMap((s) => Object.values(s.candidates)).filter((c) => c.listed && c.funding_checked).length;
   console.log(`Candidates: ${listed} listed; refreshed ${done} this run (${fec.used} requests, ${failed} failed); ${fresh} of ${listed} have FEC money data.`);

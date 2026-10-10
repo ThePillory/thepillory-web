@@ -12,14 +12,16 @@ import { findQuote } from "./check.js";
 export const EXCERPT_MAX = 450; // characters, about two or three sentences
 export const EXCERPT_REFRESH_DAYS = 30;
 
-export const EXCERPT_INSTRUCTIONS = `You pick a short excerpt from an official's own Issues or Priorities web page for ThePillory, a nonpartisan civic record. Readers see it under "In their own words", with a link to the page.
+/** The same rules for officials and candidates; only the word for who it is changes. */
+export const excerptInstructions = (who = "official") => `You pick a short excerpt from a${/^[aeiou]/.test(who) ? "n" : ""} ${who}'s own Issues or Priorities web page for ThePillory, a nonpartisan civic record. Readers see it under "In their own words", with a link to the page.
 
 Rules:
 - Copy one to three consecutive sentences word for word from the page, with no changes, additions, ellipses or brackets, and no more than ${EXCERPT_MAX} characters.
-- Choose the passage that best sums up, in the official's own words, what the page says they will work on. Prefer the page's own opening summary or introduction when it has one.
-- Choose the same way for every official, whatever their office or party: never the passage most likely to make them look good or bad.
+- Choose the passage that best sums up, in the ${who}'s own words, what the page says they will work on. Prefer the page's own opening summary or introduction when it has one.
+- Choose the same way for every ${who}, whatever their office or party: never the passage most likely to make them look good or bad.
 - Leave out navigation, donation or volunteer requests, slogans on their own, and text quoted from other people.
 - If the page has no such passage, return an empty string.`;
+export const EXCERPT_INSTRUCTIONS = excerptInstructions();
 
 export const excerptSchema = {
   type: "object",

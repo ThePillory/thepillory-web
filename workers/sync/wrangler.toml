@@ -105,6 +105,10 @@ HISTORY_DAILY_REQUESTS = "600"
 # how often a site is searched again.
 ISSUES_PAGES_DAILY = "40"
 ISSUES_PAGES_RECHECK_DAYS = "90"
+# Candidates' Platform tab: campaign sites searched a day (one AI excerpt each at most), and how often again.
+CANDIDATE_PLATFORMS_DAILY = "25"
+CANDIDATE_PLATFORMS_RECHECK_DAYS = "30"
+CANDIDATE_YEAR = "2026"
 # Promises: suggestions and documents read a day (Claude calls), and Issues pages re-read a day.
 # Suggestions keep coming however many wait for review.
 PROMISE_SUGGESTIONS_DAILY = "10"

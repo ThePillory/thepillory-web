@@ -54,9 +54,19 @@ Built by `tools/build_candidates.mjs` in the "Refresh candidate data" workflow (
 
 The principal committee ID comes from the FEC candidate search (`principal_committees`, designation P) in `tools/build_federal_races.py`.
 
+## Platform tab
+
+The sync Worker's `candidate-platforms` step (`workers/sync/src/promises/candidates-sync.js`, after `issues-pages`):
+
+- reads `data/candidates/<year>/websites.json` (every listed candidate with a campaign website from their FEC filing; written by the builder) from `SITE_URL`;
+- searches each site with the officials' finder (`findOnSite()`: the home page's Issues / Priorities / Platform links, then `/issues` and `/priorities`; the page counts only when its own heading says so);
+- picks a short excerpt with the officials' instructions (`excerptInstructions("candidate")`: one to three consecutive sentences, at most 450 characters, the passage that sums up the page, chosen the same way for everyone) and keeps it only when `checkExcerpt()` finds it on the page word for word;
+- stores it in `candidate_platforms` (migration 0022). Never-searched candidates first, then the longest ago; again every `CANDIDATE_PLATFORMS_RECHECK_DAYS` (30), errors after 3 days; `CANDIDATE_PLATFORMS_DAILY` (25) sites a day, each with at most one AI call.
+
+The tab shows "In their own words" (the excerpt, the date, a link to the whole page, "Excerpt picked automatically and checked word for word against the page"), or what the search found: an issues page with no excerpt yet, "No issues page found" with the campaign website, not searched yet, or no website in the filing. A person can hide an excerpt, have it picked again, or remove a wrong page at `/admin/review/promise/candidates/`; a removed page goes into `promise_pages_removed` and is never found again. Commitments tracked (promises) stay for officials.
+
 ## Next
 
-- **Platform** for candidates: the issues-page finder (`workers/sync/src/promises/finder.js`) run on the campaign website, with the same word-for-word rules and a daily cap like the other AI steps. Until then the tab says it's not loaded yet and links the campaign website.
 - 2027–2028 candidates: run the builder with `--year 2028` once `data/elections/federal-2028/` exists.
 
 ## Tests

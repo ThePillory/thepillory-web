@@ -7,7 +7,7 @@ import { asset } from "../_lib/geo.js";
 import { STATE_NAME } from "../_lib/districts.js";
 import { todayIn } from "../_lib/election-window.js";
 import {
-  loadCandidates, certifiedElection, recordsFor, fecCandidatePage, stateCandidatePage, stateOfId, nameSlug, racesHref, YEAR, STATE_SCOPES,
+  loadCandidates, certifiedElection, platformFor, recordsFor, fecCandidatePage, stateCandidatePage, stateOfId, nameSlug, racesHref, YEAR, STATE_SCOPES,
 } from "../_lib/candidates.js";
 
 const BACK = ["Open your ballot", "/ballot/"];
@@ -42,10 +42,11 @@ export const onRequestGet = guard(async (context) => {
     const data = await loadCandidates(env, request, st, YEAR);
     const c = data && data.candidates[id];
     if (!c) return notFound(NONE, "home", BACK);
-    const [election, records, dates] = await Promise.all([
+    const [election, records, dates, platform] = await Promise.all([
       loadSection("candidate election", () => certifiedElection(env, request, st), null),
       loadSection("candidate records", () => recordsFor(env.DB, st), noRecords),
       loadSection("candidate dates", () => asset(env, request, "/data/elections/dates.json"), null),
+      loadSection("candidate platform", () => platformFor(env.DB, id), null),
     ]);
     const p = fecCandidatePage({
       c, st, data,
@@ -53,6 +54,7 @@ export const onRequestGet = guard(async (context) => {
       records: records && records.officials ? records : noRecords,
       dates: dates && dates.states ? dates : null,
       today: todayIn(st),
+      platform: platform && typeof platform === "object" ? platform : null,
     });
     return page(p.title, p.main, { tab: "home", back: [`Candidates in ${STATE_NAME[st] || st}`, racesHref(data.year, st)] });
   });

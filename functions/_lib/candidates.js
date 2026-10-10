@@ -242,12 +242,53 @@ export function candidateFunding(c, name) {
 <p class="hint">Source: Federal Election Commission (${sourceLink(t.source_url, `${name} at the FEC`)}), ${span}. Read ${fmtDate(c.funding_checked)}. Individual donors are never named; federal law bars using contributor information from FEC reports to ask for contributions or for commercial purposes. <a class="tap" href="/about/methodology/#funding">How funding is shown</a></p>`;
 }
 
-const platformSoon = (name, website) => `
-<section class="card stack-sm">
-  <p class="small">${esc(name)}'s own words, excerpted word for word from the issues page on their campaign website, appear here with the same rules as officials' Platform tabs.</p>
-  <p class="small secondary">Not loaded yet.</p>
-  ${website ? `<p class="small">${outLink(website, "Campaign website")}</p>` : ""}
-</section>`;
+/** The candidate's row in candidate_platforms (null before migration 0022 or before the first search). */
+export async function platformFor(db, candidateId) {
+  if (!db) return null;
+  try {
+    return await db
+      .prepare("SELECT site_url, result, page_url, title, excerpt, excerpt_at, excerpt_by, checked_at FROM candidate_platforms WHERE candidate_id = ?")
+      .bind(candidateId)
+      .first();
+  } catch (err) {
+    if (/no such (table|column)/i.test(String(err && err.message))) return null;
+    throw err;
+  }
+}
+
+const HOW_PLATFORM = '<a class="inline-link" href="/about/methodology/#candidates">How the platform is recorded</a>';
+
+/**
+ * The Platform tab: "In their own words", a short excerpt, word for word, from
+ * the issues page on the campaign website in the candidate's FEC filing, found
+ * and checked by the same rules as officials'. Otherwise, what the search found.
+ */
+export function candidatePlatform(name, website, row, { state = false } = {}) {
+  const site = website ? `<p class="small">${outLink(website, "Campaign website")}</p>` : "";
+  let body;
+  if (row && row.excerpt && row.excerpt_by !== "hidden" && safeUrl(row.page_url)) {
+    const by = String(row.excerpt_by || "");
+    body = `<article class="card stack-sm own-words">
+  <p class="label">Campaign website · as of ${fmtDate(String(row.excerpt_at || "").slice(0, 10))}</p>
+  <blockquote class="promise-quote">“${esc(row.excerpt)}”</blockquote>
+  <p class="hint">${outLink(row.page_url, row.title || "Issues page")}</p>
+  <p class="hint">${by.startsWith("person:") ? `Excerpt chosen by ${esc(by.slice(7))}` : "Excerpt picked automatically and checked word for word against the page"}; refreshed monthly. The whole page is at the link.</p>
+</article>`;
+  } else if (row && row.result === "found" && safeUrl(row.page_url)) {
+    body = `<div class="card stack-sm"><p class="small">An issues page was found on ${esc(name)}'s campaign website. No excerpt from it is shown yet.</p><p class="small">${outLink(row.page_url, row.title || "Issues page")}</p></div>`;
+  } else if (row && row.checked_at && row.result !== "error") {
+    body = `<div class="card stack-sm"><p class="small"><strong>No issues page found</strong> on ${esc(name)}'s campaign website (searched ${fmtDate(String(row.checked_at).slice(0, 10))}).</p>${site}</div>`;
+  } else if (website) {
+    body = `<div class="card stack-sm"><p class="small">${esc(name)}'s campaign website hasn't been searched for an issues page yet. Sites are searched a few dozen a day, in turn.</p>${site}</div>`;
+  } else {
+    body = `<div class="card stack-sm"><p class="small">${state ? "The certified candidate list doesn't include campaign websites, so there's no issues page to excerpt." : "No campaign website is listed in the campaign's FEC filing, so there's no issues page to excerpt."}</p></div>`;
+  }
+  return `<section class="stack-sm">
+  <h2 class="label">In their own words</h2>
+  ${body}
+</section>
+<p class="hint">A short excerpt, word for word, from the issues page on the campaign website listed in the candidate's filing, picked by the same rules for every candidate and official and checked word for word in code. ${HOW_PLATFORM}</p>`;
+}
 
 const included = (text = INCLUDED) => `<p class="hint">${esc(text)} <a class="inline-link" href="${METHOD}">How candidates are included</a></p>`;
 
@@ -296,7 +337,7 @@ function head({ label, name, line, chips = "" }) {
 // Pages
 
 /** An FEC candidate's page, or null when the ID isn't in the data. */
-export function fecCandidatePage({ c, st, data, election, records, dates, today }) {
+export function fecCandidatePage({ c, st, data, election, records, dates, today, platform = null }) {
   const stateName = STATE_NAME[st] || st;
   const key = raceKey(c);
   const office = officeName(st, key, data);
@@ -339,7 +380,7 @@ ${onCert ? fold("statement", "Candidate statement", `<p class="small"><a class="
 ${fold("how", "How candidates are included", `<p class="small">${esc(INCLUDED)}</p><p class="small">${esc(NEUTRAL)}</p><a class="inline-link" href="${METHOD}">Methodology</a>`)}`;
 
   const main = `${head({ label: s.label, name: display, line: s.line, chips })}
-${tabs(about, platformSoon(display, website), recordTab(display, held), candidateFunding(c, display), more)}`;
+${tabs(about, candidatePlatform(display, website, platform), recordTab(display, held), candidateFunding(c, display), more)}`;
   return { title: display, main };
 }
 
@@ -374,7 +415,7 @@ ${included(INCLUDED_CERTIFIED)}`;
 ${fold("statement", "Candidate statement", `<p class="small"><a class="inline-link" href="${contestHref(election.election.id, contest.id)}">Statements in the official voter guide, word for word</a></p>`)}
 ${fold("how", "How candidates are included", `<p class="small">Every candidate on the Secretary of State's Certified List of Candidates, in ballot order. ${esc(NEUTRAL)}</p><a class="inline-link" href="${METHOD}">Methodology</a>`)}`;
   const main = `${head({ label, name: cand.name, line: s.line, chips })}
-${tabs(about, platformSoon(cand.name, null), recordTab(cand.name, held), funding, more)}`;
+${tabs(about, candidatePlatform(cand.name, null, null, { state: true }), recordTab(cand.name, held), funding, more)}`;
   return { title: cand.name, main };
 }
 

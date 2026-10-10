@@ -54,7 +54,7 @@ export async function nextOfficials(db, { limit, recheckDays, home }) {
 }
 
 /** One fetch, or null on a 4xx (a missing page is an answer, not an error). */
-async function page(budget, url, label) {
+export async function page(budget, url, label) {
   try {
     const res = await budget.fetch(url, { headers: { Accept: "text/html,*/*" } }, label);
     const html = await res.text();
