@@ -12,6 +12,7 @@
 // Neutral by design: candidates and measures all get the same layout, in ballot
 // order; no endorsements, polls or predictions; results only from the official
 // feed, only after the polls close, and no race is called.
+import { simpleCard, plainFor, plainLead } from "../_lib/simple.js";
 import { previewLabel } from "../_lib/election-window.js";
 import { page, esc, notFound, safeUrl, sourceLink, fmtDate, kv, loadSection, FAILED, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { districtsFromCookie, describe, STATE_NAME } from "../_lib/districts.js";
@@ -44,7 +45,7 @@ export const onRequestGet = guard(async (context) => {
   if (!kind) return edgeCached(context, cacheSeconds(election), () => electionPage(election));
   if (kind === "ballot" && !item) return ballotPage(env, request, election);
   if (kind === "contest" && item) return edgeCached(context, cacheSeconds(election), () => contestPage(env, election, item));
-  if (kind === "measure" && item) return edgeCached(context, cacheSeconds(election), () => measurePage(election, item));
+  if (kind === "measure" && item) return edgeCached(context, cacheSeconds(election), () => measurePage(election, item, context.env));
   return notFound("No page at this address.", "home", [election.election.name, electionHref(id)]);
 }, { tab: "home" });
 
@@ -412,7 +413,7 @@ ${source ? `<p class="small">${source}</p>` : ""}`;
 // A Washington measure: the Voters' Pamphlet's parts in its order. The ballot title and the explanatory
 // statement are the Attorney General's, the fiscal impact statement is the Office of Financial Management's,
 // and the arguments are each campaign's, all word for word (tools/build_wa_measures.py).
-function waMeasurePage(election, m, back) {
+function waMeasurePage(election, m, back, plain = null) {
   const id = election.election.id;
   const bt = m.ballot_title;
   const paras = (list) => list.map((p) => `<p class="small">${esc(p)}</p>`).join("");
@@ -426,11 +427,23 @@ function waMeasurePage(election, m, back) {
     [m.links.text, "Complete text of the measure (PDF)"],
     [m.links.guide, "2026 General Election Voters' Guide (Secretary of State)"],
   ];
-  const main = `
+  const lead = plainLead(plain, { text: bt.description, source: "The Attorney General's ballot title." });
+  const simple = simpleCard({
+    lines: [
+      ["What it does", lead.html],
+      ["Where it stands", pollsClosed(election) ? "Voted on. Results are counted by each county and the Secretary of State." : `On the ballot on ${esc(fmtDate(election.election.date))}.`],
+      ["Money", m.fiscal_summary && m.fiscal_summary[0] ? `${esc(m.fiscal_summary[0])} <span class="secondary">(Office of Financial Management)</span>` : ""],
+      ...lead.extra,
+    ],
+    source: [lead.source, sourceLink(m.links.pamphlet_page, "Voters' Pamphlet")].filter(Boolean).join(" "),
+    jump: "h-bt",
+  });
+  const main = `<div class="simple-scope">
 <header class="page-head stack-xs">
   <p class="label">Statewide · ${esc(fmtDate(election.election.date))} · ${esc(m.kind)}</p>
   <h1>${esc(measureName(m))}</h1>
 </header>
+${simple}
 <section class="card stack-sm" aria-labelledby="h-bt">
   <h2 class="label" id="h-bt">Ballot title · Written by the Office of the Attorney General</h2>
   <p class="measure-title">${esc(bt.subject)}</p>
@@ -449,16 +462,18 @@ ${argumentsSection(m, `${sourceLink(m.links.pamphlet_page, "Arguments and rebutt
 <section class="stack-sm" aria-labelledby="h-src"><h2 class="label" id="h-src">Official sources</h2>
   <div class="card stack-xs">${links.filter(([u]) => safeUrl(u)).map(([u, l]) => `<p class="small">${sourceLink(u, l)}</p>`).join("")}</div>
 </section>
-<p class="hint">${esc(NEUTRAL)}</p>`;
+<p class="hint">${esc(NEUTRAL)}</p>
+</div>`;
   return page(measureName(m), main, { tab: "home", back });
 }
 
-async function measurePage(election, measureId) {
+async function measurePage(election, measureId, env = {}) {
   const id = election.election.id;
   const back = [election.election.name, electionHref(id)];
   const m = election.measures.find((x) => x.id === measureId);
   if (!m) return notFound("No measure at this address.", "home", back);
-  if (m.ballot_title) return waMeasurePage(election, m, back);
+  const plain = await loadSection("measure plain", () => plainFor(env.DB, "measure", `${id}:${m.id}`), null);
+  if (m.ballot_title) return waMeasurePage(election, m, back, plain === FAILED ? null : plain);
   const statewide = m.scope === "statewide";
   const county = m.county ? election.counties[m.county] : null;
   const feed = statewide ? await loadSection("measure results", () => sosResults(election, m.results_path), null) : null;
@@ -504,12 +519,28 @@ ${m.tax_rate_statement && m.tax_rate_statement.length ? `<section class="stack-s
   const links = statewide
     ? [[m.links.guide, "This proposition in the Official Voter Information Guide"], [m.links.title_summary, "Official title and summary"], [m.links.analysis, "Analysis by the Legislative Analyst"], [m.links.arguments, "Arguments and rebuttals"], [m.links.text, "Text of the proposed law (PDF)"]]
     : [[m.links.pamphlet, `${county ? county.name : "County"} Voter Information Pamphlet (PDF), the official version`], [m.links.page, `${county ? county.name : "County"} Elections: candidates and measures`]];
-  const main = `
+  const meaning = (t, prefix) => esc(String(t || "").replace(prefix, ""));
+  const lead = plainLead(plain === FAILED ? null : plain, statewide
+    ? { text: String(m.summary || "").replace(/^Put on the Ballot by (?:the Legislature|Petition Signatures)\s*/, ""), source: "The Attorney General's official summary." }
+    : { text: (m.question || ""), source: "The question as it appears on the ballot." });
+  const simple = simpleCard({
+    lines: [
+      ["What it does", lead.html],
+      ["A Yes vote means", statewide && m.yes_means ? meaning(m.yes_means, /^A YES vote on this measure means:\s*/) : ""],
+      ["A No vote means", statewide && m.no_means ? meaning(m.no_means, /^A NO vote on this measure means:\s*/) : ""],
+      ["Where it stands", r ? `Counting so far: Yes ${esc(r.yesPercent)}%, No ${esc(r.noPercent)}%. Counting continues until each county certifies its results.` : pollsClosed(election) ? "Voted on. Results are being counted." : `On the ballot on ${esc(fmtDate(election.election.date))}.`],
+      ...lead.extra,
+    ],
+    source: [lead.source, statewide ? "The Yes and No lines are word for word from the official guide." : "", sourceLink(statewide ? m.links.guide : m.links.pamphlet, statewide ? "Official guide" : "County pamphlet")].filter(Boolean).join(" "),
+    jump: statewide ? "h-ts" : "h-ia",
+  });
+  const main = `<div class="simple-scope">
 <header class="page-head stack-xs">
   <p class="label">${esc(statewide ? `Statewide · ${fmtDate(election.election.date)}` : `${m.jurisdiction || (county ? county.name : "Local")} · ${fmtDate(election.election.date)}`)}</p>
   <h1>${esc(statewide ? `Proposition ${m.number}` : m.title)}</h1>
   ${statewide ? "" : `<p class="small secondary">On ballots in ${esc(m.jurisdiction || "part of the county")}${county ? `, ${esc(county.name)}` : ""}.</p>`}
 </header>
+${simple}
 ${official}
 <section class="stack-sm" aria-labelledby="h-res"><h2 class="label" id="h-res">Results</h2>${results}</section>
 ${argumentsSection(m, statewide ? sourceLink(m.links.arguments, "Arguments and rebuttals in the official guide") : sourceLink(m.links.pamphlet, "Arguments in the county's Voter Information Pamphlet (PDF)"))}
@@ -517,7 +548,8 @@ ${argumentsSection(m, statewide ? sourceLink(m.links.arguments, "Arguments and r
   <div class="card stack-xs">${links.filter(([u]) => safeUrl(u)).map(([u, l]) => `<p class="small">${sourceLink(u, l)}</p>`).join("")}</div>
   ${m.note ? `<p class="hint">${esc(m.note)}</p>` : ""}
 </section>
-<p class="hint">${esc(NEUTRAL)}</p>`;
+<p class="hint">${esc(NEUTRAL)}</p>
+</div>`;
   return page(statewide ? `Proposition ${m.number}` : m.title, main, { tab: "home", back, partial: feed === FAILED });
 }
 

@@ -14,6 +14,7 @@
 import { esc, fmtDate, linkRow, safeUrl } from "./render.js";
 import { compactRow, clauseChips, fold, outLink } from "./summary.js";
 import { asset } from "./geo.js";
+import { simpleCard } from "./simple.js";
 
 export const COURT_HREF = "/bodies/us-supreme-court/";
 export const TERM_HREF = "/court/term/";
@@ -90,6 +91,22 @@ export function positionText(p) {
 }
 
 /** The decision's lineup, grouped: [{role label, names (writers marked)}], in a fixed order. Pure. */
+/**
+ * How the justices lined up, in plain words, only when the lineup is simple:
+ * unanimous, or every justice either in the majority or in dissent (no partial
+ * joins). Otherwise null; the full lineup is on the page. Pure.
+ */
+export function lineupPlain(c) {
+  const list = (c.lineup && c.lineup.justices) || [];
+  if (!list.length) return null;
+  if (c.lineup.unanimous) return "Unanimous: every justice joined the decision.";
+  const maj = list.filter((x) => x.roles.includes("majority") && !x.roles.includes("dissent"));
+  const dis = list.filter((x) => x.roles.includes("dissent") && !x.roles.includes("majority"));
+  const partial = list.some((x) => x.roles.some((r) => /in part/.test(r)));
+  if (partial || maj.length + dis.length !== list.length || !maj.length) return null;
+  return `${maj.length}–${dis.length}. ${dis.length ? `Disagreed: ${dis.map((x) => x.justice).join(", ")}.` : ""}`.trim();
+}
+
 export function lineupGroups(c) {
   const list = (c.lineup && c.lineup.justices) || [];
   return ROLE_ORDER.map((r) => ({
@@ -138,13 +155,23 @@ export async function courtPage(env, request, body) {
   const clauses = await constitutionLabels(env, request);
   const latest = latestTerm ? latestTerm.cases.filter((c) => !c.pending_read).slice(0, 5) : [];
   const pending = current ? current.cases.filter((c) => !c.decided).length : 0;
-  return `
+  const simple = simpleCard({
+    lines: [
+      ["What it is", "The highest court in the United States. Its justices decide cases about federal law and the Constitution, and its decisions apply across the country."],
+      ["Who's on it", `${justices ? justices.justices.length : "Nine"} justices. Each was nominated by a President and confirmed by the Senate, and can serve for life.`],
+      ["Latest decisions", latest.length ? `<ul class="simple-list">${latest.slice(0, 3).map((c) => `<li><a class="inline-link" href="${caseHref(latestTerm.term, c.docket)}">${esc(c.name)}</a> <span class="secondary">${esc(fmtDate(c.date))}</span></li>`).join("")}</ul>` : ""],
+    ],
+    source: "Each decision's page has the Court's own summary of it and who joined.",
+    jump: "h-justices",
+  });
+  return `<div class="simple-scope">
 <header class="page-head">
   <p class="label">Federal · Governing body</p>
   <h1>${esc(body.name)}</h1>
   <div class="secondary">${esc(body.about)}</div>
   <div class="chips">${body.chip}</div>
 </header>
+${simple}
 <section class="stack-sm" aria-labelledby="h-justices">
   <h2 class="label" id="h-justices">The justices</h2>
   <div class="card">${justices ? justiceRows(justices.justices) : '<p class="small secondary">Appears after the Supreme Court data refresh.</p>'}</div>
@@ -158,7 +185,8 @@ ${latest.length ? `<section class="stack-sm" aria-labelledby="h-latest">
   <h2 class="label" id="h-latest">Latest decisions</h2>
   <div class="compact-list">${latest.map((c) => caseRow(latestTerm.term, c, c.author_code === "PC" ? "Per curiam" : "", clauses)).join("")}</div>
 </section>` : ""}
-<p class="hint">From the Court's own records: its list of justices and their biographies (supremecourt.gov), the Senate's record of each confirmation (senate.gov), and each opinion as the Court published it. <a class="inline-link" href="/about/methodology/#scotus">How ThePillory builds this</a></p>`;
+<p class="hint">From the Court's own records: its list of justices and their biographies (supremecourt.gov), the Senate's record of each confirmation (senate.gov), and each opinion as the Court published it. <a class="inline-link" href="/about/methodology/#scotus">How ThePillory builds this</a></p>
+</div>`;
 }
 
 // ---------------------------------------------------------------------------
@@ -229,9 +257,19 @@ export async function casePage(env, request, term, docket) {
     const s = n.replace(" (wrote)", "");
     return slugs[s] ? `<a class="inline-link" href="${justiceHref(slugs[s])}">${esc(n)}</a>` : esc(n);
   };
+  const lined = lineupPlain(c);
+  const simple = simpleCard({
+    lines: [
+      ["What the Court decided", c.summary ? esc(c.summary) : "The Court's summary isn't loaded. It's in the opinion."],
+      ["Where it stands", `Decided ${esc(fmtDate(c.date))}.`],
+      ["How the justices lined up", lined ? esc(lined) : c.author_code === "PC" ? "An unsigned opinion of the whole Court (per curiam)." : ""],
+    ],
+    source: `The summary is the one supremecourt.gov gives with the opinion. ${outLink(c.pdf, "The opinion (PDF)")}`,
+    jump: "h-lineup",
+  });
   return {
     title: c.name,
-    main: `
+    main: `<div class="simple-scope">
 <header class="page-head stack-xs">
   <p class="label">Supreme Court · ${esc(c.docket)} · Decided ${esc(fmtDate(c.date))}</p>
   <h1>${esc(c.name)}</h1>
@@ -239,6 +277,7 @@ export async function casePage(env, request, term, docket) {
   ${clauseChips(named.map((p) => ({ id: p.id, label: clauses[p.id] })))}
   <div class="stack-xs">${outLink(c.pdf, "The opinion (PDF)")}</div>
 </header>
+${simple}
 <section class="stack-sm" aria-labelledby="h-lineup">
   <h2 class="label" id="h-lineup">Who wrote and who joined</h2>
   ${c.author_code === "PC" && !groups.length
@@ -254,7 +293,8 @@ ${named.length ? `<section class="stack-sm" aria-labelledby="h-provisions">
   ${named.map((p) => `<div class="card stack-xs"><a class="chip chip--parch chip--tap" href="/laws/constitution/#${esc(p.id)}">${esc(clauses[p.id])}</a>${p.quote ? `<blockquote class="quote">${esc(p.quote)}</blockquote>` : ""}</div>`).join("")}
   <p class="hint">Each provision the opinion of the Court names${c.exact_text === false ? "" : ", with the first sentence that names it, word for word"}. ThePillory doesn't characterize the ruling.${c.exact_text === false ? " The sentences aren't quoted here: the text of this decision's PDF (the bound volume's preliminary print) can't be copied exactly. They're in the opinion." : ""}</p>
 </section>` : ""}
-<p class="hint">From the Court's slip opinion as published on supremecourt.gov. <a class="inline-link" href="${TERM_HREF}">This term</a> · <a class="inline-link" href="${COURT_HREF}">The justices</a></p>`,
+<p class="hint">From the Court's slip opinion as published on supremecourt.gov. <a class="inline-link" href="${TERM_HREF}">This term</a> · <a class="inline-link" href="${COURT_HREF}">The justices</a></p>
+</div>`,
   };
 }
 

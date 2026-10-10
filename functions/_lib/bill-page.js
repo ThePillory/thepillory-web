@@ -13,7 +13,7 @@ import { METHOD_URL } from "./analysis.js";
 const LEGISLATURE = { federal: ["us-house", "us-senate"], state: ["ca-assembly", "ca-senate"] };
 // A state bill's state, from its id ('ca-20252026-ab-1', 'tx-89-hb-1').
 export const billState = (b) => (b && b.level === "state" ? String(b.id || "").slice(0, 2).toUpperCase() : null);
-const legislatureOf = (b) => {
+export const legislatureOf = (b) => {
   if (b.level !== "state") return LEGISLATURE.federal;
   const ids = chamberIds(billState(b));
   return [ids.upper, ids.lower].filter(Boolean);

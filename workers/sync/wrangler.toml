@@ -109,6 +109,9 @@ ISSUES_PAGES_RECHECK_DAYS = "90"
 CANDIDATE_PLATFORMS_DAILY = "25"
 CANDIDATE_PLATFORMS_RECHECK_DAYS = "30"
 CANDIDATE_YEAR = "2026"
+# Simple mode: plain rewrites of summaries a day, and the election files whose measures get one.
+PLAIN_DAILY = "40"
+PLAIN_ELECTIONS = "2026-11-03,2026-11-03-wa"
 # Promises: suggestions and documents read a day (Claude calls), and Issues pages re-read a day.
 # Suggestions keep coming however many wait for review.
 PROMISE_SUGGESTIONS_DAILY = "10"
