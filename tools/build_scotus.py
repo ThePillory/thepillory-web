@@ -231,7 +231,7 @@ def parse_slip_list(page):
             "r": r,
             "date": f"20{m.group(3)}-{int(m.group(1)):02d}-{int(m.group(2)):02d}" if m else date,
             "docket": docket,
-            "name": name,
+            "name": re.sub(r"\s*Revisions?\s*:.*$", "", name),  # the list appends "Revisions: 7/01/26" to a revised opinion
             "summary": html.unescape(link.group(2) or "").strip(),
             "author_code": author,
             "pdf": SCOTUS + link.group(1),

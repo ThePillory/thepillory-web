@@ -27,7 +27,7 @@ SENATE = """<tr><td nowrap="true">Roberts, John G., Jr.</td><td background="/x/v
 
 SLIP = """<tr>
 <td style="text-align: center;">12</td><td style="text-align: center;">1/09/26</td><td>24-5438</td>
-<td><a href='/opinions/25pdf/24-5438_o7kq.pdf' target='_blank' title="Section 2244(b)(1) does not apply to federal prisoners.">Bowe v. United States</a></td>
+<td><a href='/opinions/25pdf/24-5438_o7kq.pdf' target='_blank' title="Section 2244(b)(1) does not apply to federal prisoners.">Bowe v. United States</a> Revisions: 7/01/26</td>
 <td>SS</td><td><span>607/1</span></td></tr>"""
 
 GRANTED = """24-1016    CFX   RISEANDSHINE CORP. V. PEPSICO, INC.
