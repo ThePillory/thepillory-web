@@ -35,7 +35,6 @@ import { loadElection, ballotFor, ballotHref, electionHref, whenLine, daysUntil,
 import { LIVE, asset, loadIndex, loadPlace, waitlistBy, usMapLinks, smallStateButtons, mapFigure } from "./_lib/geo.js";
 import { ASSET_VERSION } from "./_lib/generated.js";
 import { executiveOfficials, executiveRows } from "./_lib/executive.js";
-import { linkRow } from "./_lib/render.js";
 import { turnstileReady, turnstileWidget } from "./_lib/turnstile.js";
 import { visitorState } from "./_lib/visitor-state.js";
 import { stateLead, stateLeadData } from "./_lib/state-lead.js";
