@@ -12,7 +12,7 @@
    "party": "REPUBLICAN PARTY",
    "incumbent": false,
    "url": "https://www.fec.gov/data/candidate/S6MS00109/",
-   "committee": null
+   "committee": "C00900944"
   },
   {
    "id": "S6MS00133",
@@ -20,7 +20,7 @@
    "party": "DEMOCRATIC PARTY",
    "incumbent": false,
    "url": "https://www.fec.gov/data/candidate/S6MS00133/",
-   "committee": null
+   "committee": "C00918359"
   },
   {
    "id": "S8MS00261",
@@ -28,7 +28,7 @@
    "party": "REPUBLICAN PARTY",
    "incumbent": true,
    "url": "https://www.fec.gov/data/candidate/S8MS00261/",
-   "committee": null
+   "committee": "C00675348"
   },
   {
    "id": "S4MS00187",
@@ -36,7 +36,7 @@
    "party": "INDEPENDENT",
    "incumbent": false,
    "url": "https://www.fec.gov/data/candidate/S4MS00187/",
-   "committee": null
+   "committee": "C00830554"
   },
   {
    "id": "S6MS00141",
@@ -44,7 +44,7 @@
    "party": "DEMOCRATIC PARTY",
    "incumbent": false,
    "url": "https://www.fec.gov/data/candidate/S6MS00141/",
-   "committee": null
+   "committee": "C00921445"
   },
   {
    "id": "S6MS00158",
@@ -52,7 +52,7 @@
    "party": "DEMOCRATIC PARTY",
    "incumbent": false,
    "url": "https://www.fec.gov/data/candidate/S6MS00158/",
-   "committee": null
+   "committee": "C00921445"
   }
  ],
  "house": {
@@ -63,7 +63,7 @@
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6MS01305/",
-    "committee": null
+    "committee": "C00918623"
    },
    {
     "id": "H6MS01313",
@@ -71,7 +71,7 @@
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6MS01313/",
-    "committee": null
+    "committee": "C00922039"
    },
    {
     "id": "H6MS01131",
@@ -79,7 +79,7 @@
     "party": "REPUBLICAN PARTY",
     "incumbent": true,
     "url": "https://www.fec.gov/data/candidate/H6MS01131/",
-    "committee": null
+    "committee": "C00573980"
    }
   ],
   "2": [
@@ -89,7 +89,7 @@
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H2MS02203/",
-    "committee": null
+    "committee": "C00781468"
    },
    {
     "id": "H4MS02068",
@@ -97,7 +97,7 @@
     "party": "DEMOCRATIC PARTY",
     "incumbent": true,
     "url": "https://www.fec.gov/data/candidate/H4MS02068/",
-    "committee": null
+    "committee": "C00279851"
    },
    {
     "id": "H6MS02220",
@@ -105,7 +105,7 @@
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6MS02220/",
-    "committee": null
+    "committee": "C00930982"
    },
    {
     "id": "H6MS02238",
@@ -113,7 +113,7 @@
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6MS02238/",
-    "committee": null
+    "committee": "C00931014"
    }
   ],
   "3": [
@@ -123,7 +123,7 @@
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6MS03228/",
-    "committee": null
+    "committee": "C00907386"
    },
    {
     "id": "H8MS03125",
@@ -131,7 +131,7 @@
     "party": "REPUBLICAN PARTY",
     "incumbent": true,
     "url": "https://www.fec.gov/data/candidate/H8MS03125/",
-    "committee": null
+    "committee": "C00665752"
    }
   ],
   "4": [
@@ -141,7 +141,7 @@
     "party": "INDEPENDENT",
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6MS04259/",
-    "committee": null
+    "committee": "C00937136"
    },
    {
     "id": "H2MS04258",
@@ -149,7 +149,7 @@
     "party": "REPUBLICAN PARTY",
     "incumbent": true,
     "url": "https://www.fec.gov/data/candidate/H2MS04258/",
-    "committee": null
+    "committee": "C00776393"
    },
    {
     "id": "H6MS04242",
@@ -157,7 +157,7 @@
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6MS04242/",
-    "committee": null
+    "committee": "C00931386"
    },
    {
     "id": "H6MS04275",
@@ -165,7 +165,7 @@
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6MS04275/",
-    "committee": null
+    "committee": "C00918748"
    }
   ]
  }

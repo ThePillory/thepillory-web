@@ -14,7 +14,7 @@
    "office": "H",
    "district": "1",
    "incumbent": false,
-   "committee": null,
+   "committee": "C00913897",
    "fec_url": "https://www.fec.gov/data/candidate/H6CT01206/",
    "listed": true,
    "first_listed": "2026-10-10",
@@ -27,7 +27,7 @@
    "office": "H",
    "district": "1",
    "incumbent": false,
-   "committee": null,
+   "committee": "C00785634",
    "fec_url": "https://www.fec.gov/data/candidate/H2CT03102/",
    "listed": true,
    "first_listed": "2026-10-10",
@@ -40,7 +40,7 @@
    "office": "H",
    "district": "1",
    "incumbent": false,
-   "committee": null,
+   "committee": "C00910034",
    "fec_url": "https://www.fec.gov/data/candidate/H6CT01180/",
    "listed": true,
    "first_listed": "2026-10-10",
@@ -53,7 +53,7 @@
    "office": "H",
    "district": "1",
    "incumbent": false,
-   "committee": null,
+   "committee": "C00917104",
    "fec_url": "https://www.fec.gov/data/candidate/H6CT01222/",
    "listed": true,
    "first_listed": "2026-10-10",
@@ -66,7 +66,7 @@
    "office": "H",
    "district": "1",
    "incumbent": true,
-   "committee": null,
+   "committee": "C00330142",
    "fec_url": "https://www.fec.gov/data/candidate/H8CT01046/",
    "listed": true,
    "first_listed": "2026-10-10",
@@ -79,7 +79,7 @@
    "office": "H",
    "district": "1",
    "incumbent": false,
-   "committee": null,
+   "committee": "C00912774",
    "fec_url": "https://www.fec.gov/data/candidate/H6CT01198/",
    "listed": true,
    "first_listed": "2026-10-10",
@@ -92,7 +92,7 @@
    "office": "H",
    "district": "2",
    "incumbent": false,
-   "committee": null,
+   "committee": "C00914481",
    "fec_url": "https://www.fec.gov/data/candidate/H6CT02196/",
    "listed": true,
    "first_listed": "2026-10-10",
@@ -105,7 +105,7 @@
    "office": "H",
    "district": "2",
    "incumbent": true,
-   "committee": null,
+   "committee": "C00410233",
    "fec_url": "https://www.fec.gov/data/candidate/H2CT02112/",
    "listed": true,
    "first_listed": "2026-10-10",
@@ -118,7 +118,7 @@
    "office": "H",
    "district": "2",
    "incumbent": false,
-   "committee": null,
+   "committee": "C00915322",
    "fec_url": "https://www.fec.gov/data/candidate/H2CT02161/",
    "listed": true,
    "first_listed": "2026-10-10",
@@ -131,7 +131,7 @@
    "office": "H",
    "district": "2",
    "incumbent": false,
-   "committee": null,
+   "committee": "C00899179",
    "fec_url": "https://www.fec.gov/data/candidate/H6CT02188/",
    "listed": true,
    "first_listed": "2026-10-10",
@@ -144,11 +144,217 @@
    "office": "H",
    "district": "3",
    "incumbent": true,
-   "committee": null,
+   "committee": "C00238865",
    "fec_url": "https://www.fec.gov/data/candidate/H0CT03072/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 1152006.56,
+    "disbursements": 1028036.22,
+    "cash_on_hand": 349418.43,
+    "individual_unitemized": 60127.73,
+    "individual_itemized": 458458.82,
+    "pac": 520762.12,
+    "party": 0,
+    "self_funding": 0,
+    "other": 112657.89,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H0CT03072/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00001016",
+      "name": "CARPENTERS LEGISLATIVE IMPROVEMENT COMMITTEE UNITED BROTHERHOOD OF CARPENTERS AND JOINERS",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00411553",
+      "name": "AMERICAN ACADEMY OF FAMILY PHYSICIANS PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00215285",
+      "name": "GENERAL ATOMICS POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00406801",
+      "name": "AVANGRID PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00267849",
+      "name": "ALLIED PILOTS ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00407841",
+      "name": "WESTERN ALLIANCE OF FARMWORKER ADVOCATES PAC (WAFA PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00028860",
+      "name": "AMERICAN FEDERATION OF TEACHERS, AFL-CIO COMMITTEE ON POLITICAL EDUCATION",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00078451",
+      "name": "GENERAL DYNAMICS CORPORATION POLITICAL ACTION COMMITTEE (GENERAL DYNAMICS EMPLOYEE PAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00546234",
+      "name": "LEIDOS INC. POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 6,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00011114",
+      "name": "P.E.O.P.L.E./AFSCME - AMERICAN FEDERATION OF STATE COUNTY MUNICIPAL EMPLOYEES",
+      "total": 10000,
+      "count": 4,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00088591",
+      "name": "EMPLOYEES OF NORTHRUP GRUMAN CORP PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00100321",
+      "name": "L3HARRIS TECHNOLOGIES, INC. PAC",
+      "total": 9000,
+      "count": 3,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00142711",
+      "name": "THE BOEING COMPANY PAC",
+      "total": 8500,
+      "count": 6,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00383992",
+      "name": "PERATON CORP. POLITICAL ACTION COMMITTEE (A.K.A. 'PERATON PAC')",
+      "total": 8000,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00734012",
+      "name": "ASCO ASSOCIATION POLITICAL ACTION COMMITTEE (ASCO ASSOCIATION PAC)",
+      "total": 8000,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00382424",
+      "name": "AMERICAN COLLEGE OF SURGEONS PROFESSIONAL ASSOCIATION PAC",
+      "total": 7500,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00435933",
+      "name": "AMERICAN ACADEMY OF NEUROLOGY BRAIN PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "education"
+     },
+     {
+      "committee_id": "C00238725",
+      "name": "NATIONAL AIR TRAFFIC CONTROLLERS ASSOCIATION PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00035451",
+      "name": "AIR LINE PILOTS ASSOCIATION PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00566042",
+      "name": "FRIENDS OF MEDICAL RESEARCH PAC",
+      "total": 6500,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00002972",
+      "name": "AMERICA'S ELECTRIC COOPERATIVES PAC",
+      "total": 6500,
+      "count": 3,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00364158",
+      "name": "AMERICAN COLLEGE OF OB-GYNS PAC (OB-GYN PAC)",
+      "total": 6000,
+      "count": 2,
+      "industry": "education"
+     },
+     {
+      "committee_id": "C00001636",
+      "name": "SMART TD PAC",
+      "total": 5500,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00000729",
+      "name": "AMERICAN DENTAL ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00007880",
+      "name": "AMERICA'S CREDIT UNIONS PAC OF CREDIT UNION NATIONAL ASSOCIATION, INC",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     }
+    ],
+    "count": 140,
+    "total": 520762.12,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00238865&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "http://www.rosadelauro.com/",
+    "as_filed": "HTTP://WWW.ROSADELAURO.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00238865/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6CT03186": {
    "id": "H6CT03186",
@@ -157,7 +363,7 @@
    "office": "H",
    "district": "3",
    "incumbent": false,
-   "committee": null,
+   "committee": "C00913251",
    "fec_url": "https://www.fec.gov/data/candidate/H6CT03186/",
    "listed": true,
    "first_listed": "2026-10-10",
@@ -170,7 +376,7 @@
    "office": "H",
    "district": "3",
    "incumbent": false,
-   "committee": null,
+   "committee": "C00905125",
    "fec_url": "https://www.fec.gov/data/candidate/H6CT03178/",
    "listed": true,
    "first_listed": "2026-10-10",
@@ -183,7 +389,7 @@
    "office": "H",
    "district": "3",
    "incumbent": false,
-   "committee": null,
+   "committee": "C00921460",
    "fec_url": "https://www.fec.gov/data/candidate/H6CT03194/",
    "listed": true,
    "first_listed": "2026-10-10",
@@ -196,7 +402,7 @@
    "office": "H",
    "district": "4",
    "incumbent": false,
-   "committee": null,
+   "committee": "C00935031",
    "fec_url": "https://www.fec.gov/data/candidate/H6CT04143/",
    "listed": true,
    "first_listed": "2026-10-10",
@@ -209,7 +415,7 @@
    "office": "H",
    "district": "4",
    "incumbent": true,
-   "committee": null,
+   "committee": "C00434191",
    "fec_url": "https://www.fec.gov/data/candidate/H8CT04172/",
    "listed": true,
    "first_listed": "2026-10-10",
@@ -222,7 +428,7 @@
    "office": "H",
    "district": "4",
    "incumbent": false,
-   "committee": null,
+   "committee": "C00941310",
    "fec_url": "https://www.fec.gov/data/candidate/H4CT04189/",
    "listed": true,
    "first_listed": "2026-10-10",
@@ -235,7 +441,7 @@
    "office": "H",
    "district": "4",
    "incumbent": false,
-   "committee": null,
+   "committee": "C00941310",
    "fec_url": "https://www.fec.gov/data/candidate/H6CT04150/",
    "listed": true,
    "first_listed": "2026-10-10",
@@ -248,7 +454,7 @@
    "office": "H",
    "district": "5",
    "incumbent": false,
-   "committee": null,
+   "committee": "C00792960",
    "fec_url": "https://www.fec.gov/data/candidate/H2CT05230/",
    "listed": true,
    "first_listed": "2026-10-10",
@@ -261,7 +467,7 @@
    "office": "H",
    "district": "5",
    "incumbent": false,
-   "committee": null,
+   "committee": "C00899898",
    "fec_url": "https://www.fec.gov/data/candidate/H6CT05223/",
    "listed": true,
    "first_listed": "2026-10-10",
@@ -274,7 +480,7 @@
    "office": "H",
    "district": "5",
    "incumbent": true,
-   "committee": null,
+   "committee": "C00677898",
    "fec_url": "https://www.fec.gov/data/candidate/H8CT05245/",
    "listed": true,
    "first_listed": "2026-10-10",
@@ -287,7 +493,7 @@
    "office": "H",
    "district": "5",
    "incumbent": false,
-   "committee": null,
+   "committee": "C00935692",
    "fec_url": "https://www.fec.gov/data/candidate/H6CT05231/",
    "listed": true,
    "first_listed": "2026-10-10",
