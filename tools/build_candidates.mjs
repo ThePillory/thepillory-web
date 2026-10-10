@@ -48,8 +48,24 @@ export function websiteUrl(raw) {
   }
 }
 
-/** Merge today's FEC list into last run's entries. Pure. */
-export function mergeList(prev, races, today) {
+/**
+ * Candidates for Congress on a state's certified candidate list (data/elections/<date>.json,
+ * California) with an FEC ID: { id, name, office, district }. Pure.
+ */
+export function certifiedFederal(election) {
+  const out = [];
+  for (const c of (election && election.contests) || []) {
+    const office = c.scope === "cd" ? "H" : c.scope === "statewide" && /united states senator/i.test(c.office) ? "S" : null;
+    if (!office) continue;
+    for (const x of c.candidates || []) {
+      if (x.fec && /^[HS]\d[A-Z]{2}\d{5}$/.test(x.fec.id || "")) out.push({ id: x.fec.id, name: x.name, office, district: office === "H" ? String(c.district) : null, url: x.fec.url });
+    }
+  }
+  return out;
+}
+
+/** Merge today's FEC list (and the certified list's candidates for Congress) into last run's entries. Pure. */
+export function mergeList(prev, races, today, certified = []) {
   const out = {};
   for (const [id, c] of Object.entries(prev || {})) out[id] = { ...c, listed: false };
   const add = (c, office, district) => {
@@ -71,6 +87,12 @@ export function mergeList(prev, races, today) {
   };
   for (const c of races.senate || []) add(c, "S", null);
   for (const [d, list] of Object.entries(races.house || {})) for (const c of list) add(c, "H", d);
+  // On the certified ballot but not (or not yet) on the FEC's statutory list: included too.
+  for (const c of certified) {
+    if (out[c.id] && out[c.id].listed) continue;
+    const old = out[c.id] || {};
+    out[c.id] = { ...old, id: c.id, name: old.name || c.name, party: old.party || "", office: c.office, district: c.district, incumbent: !!old.incumbent, committee: old.committee || null, fec_url: c.url, listed: true, certified_only: true, first_listed: old.first_listed || today, last_listed: today };
+  }
   return out;
 }
 
@@ -157,6 +179,11 @@ async function main() {
     const races = JSON.parse(readFileSync(join(racesDir, f), "utf8"));
     const path = join(outDir, f);
     const prev = existsSync(path) ? JSON.parse(readFileSync(path, "utf8")) : null;
+    const certified = readdirSync(join(ROOT, "data", "elections"))
+      .filter((f) => /^\d{4}-\d{2}-\d{2}\.json$/.test(f) && f.startsWith(String(year)))
+      .map((f) => JSON.parse(readFileSync(join(ROOT, "data", "elections", f), "utf8")))
+      .filter((e) => e.election && e.election.state === races.state)
+      .flatMap(certifiedFederal);
     states[st] = {
       state: races.state,
       year,
@@ -165,7 +192,7 @@ async function main() {
       list_built_on: races.built_on,
       built_on: today,
       senate_up: races.senate_up,
-      candidates: mergeList(prev && prev.candidates, races, today),
+      candidates: mergeList(prev && prev.candidates, races, today, certified),
     };
   }
 

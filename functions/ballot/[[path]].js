@@ -25,6 +25,7 @@ import { loadElection, electionHref, ballotHref, measureHref, measureName, conte
 import { voterInfo, ballotFromVoterInfo, officialFor, measureFor, CivicError } from "../_lib/civic.js";
 import { visitorHash } from "../_lib/turnstile.js";
 import { fold } from "../_lib/summary.js";
+import { candidateHref, raceHref, racesHref, YEAR } from "../_lib/candidates.js";
 
 const BACK = ["Elections", "/elections/"];
 export const CONFIRM = "Always confirm your ballot with your county election office.";
@@ -182,19 +183,20 @@ function fecCandidate(c, filed) {
   ].filter(Boolean).join(" · ");
   return `
   <li class="ballot-cand stack-xs">
-    <p class="list-title">${esc(c.name)}</p>
+    <p class="list-title"><a class="inline-link" href="${candidateHref(c.id)}">${esc(c.name)}</a></p>
     <p class="list-meta">${esc([c.party || "No party listed", c.incumbent ? "Incumbent" : ""].filter(Boolean).join(" · "))}</p>
     <p class="small">${links}</p>
   </li>`;
 }
 
-function fecRace(title, list, filed) {
+function fecRace(title, list, filed, href = null) {
   return `
   <div class="card stack-xs">
     <p class="label">${esc(title)}</p>
     ${list.length
       ? `<ul class="plain-list ballot-cands">${list.map((c) => fecCandidate(c, filed)).join("")}</ul>`
       : '<p class="small secondary">No candidates who have reached the FEC\'s filing threshold are listed yet.</p>'}
+    ${href && list.length ? `<p class="small"><a class="inline-link" href="${href}">Every candidate's page: the race</a></p>` : ""}
   </div>`;
 }
 
@@ -208,7 +210,7 @@ function certifiedCandidate(c, filed) {
   ].filter(Boolean).join(" · ");
   return `
   <li class="ballot-cand stack-xs">
-    <p class="list-title">${esc(c.name)}</p>
+    <p class="list-title">${c.fec && c.fec.id ? `<a class="inline-link" href="${candidateHref(c.fec.id)}">${esc(c.name)}</a>` : esc(c.name)}</p>
     <p class="list-meta">${esc([c.party ? `Party preference: ${c.party}` : "No party preference listed", c.designation].filter(Boolean).join(" · "))}</p>
     ${links ? `<p class="small">${links}</p>` : ""}
   </li>`;
@@ -228,7 +230,7 @@ function certifiedSection(st, election, filed, d) {
   <div class="card stack-xs">
     <p class="label">${esc(c.office)}</p>
     <ul class="plain-list ballot-cands">${candidates.map((x) => certifiedCandidate(x, filed)).join("")}</ul>
-    <p class="hint">${esc(note)} <a class="inline-link" href="${contestHref(election.election.id, c.id)}">Candidate statements</a></p>
+    <p class="hint">${esc(note)} <a class="inline-link" href="${contestHref(election.election.id, c.id)}">Candidate statements</a> · <a class="inline-link" href="${raceHref(YEAR, st, c.scope === "cd" ? `house-${c.district}` : "senate")}">The race</a></p>
   </div>`;
   };
   return `
@@ -236,6 +238,7 @@ function certifiedSection(st, election, filed, d) {
   <h2 class="label" id="h-federal">Federal races · November 3, 2026</h2>
   ${senate.length ? senate.map(race).join("") : `<div class="card"><p class="small">No U.S. Senate seat in ${esc(STATE_NAME[st])} is on this ballot.</p></div>`}
   ${contest ? race(contest) : `<div class="card"><p class="small">Your U.S. House race: enter your address above, or <a class="inline-link" href="/#find">find your district</a> by ZIP code.</p></div>`}
+  <p class="small"><a class="inline-link" href="${racesHref(YEAR, st)}">Every ${YEAR} race in ${esc(STATE_NAME[st])}, Governor and the Legislature too</a></p>
   <p class="hint">From the Secretary of State's Certified List of Candidates: only the candidates on the November ballot. <a class="inline-link" href="${esc(election.election.certified_list)}" target="_blank" rel="noopener">Certified list ↗</a></p>
 </section>`;
 }
@@ -252,12 +255,13 @@ function federalSection(st, races, filed, d, election = null) {
   const atLarge = districts.length === 1 && districts[0] === "0";
   const houseKey = atLarge ? "0" : cd;
   const houseTitle = st === "DC" ? "Delegate to the U.S. House" : atLarge ? "U.S. House, at large" : `U.S. House, District ${houseKey}`;
-  const house = houseKey != null && races.house ? fecRace(houseTitle, races.house[houseKey] || [], filedMap) : "";
+  const house = houseKey != null && races.house ? fecRace(houseTitle, races.house[houseKey] || [], filedMap, raceHref(YEAR, st, `house-${houseKey}`)) : "";
   return `
 <section class="stack-sm" id="federal" aria-labelledby="h-federal">
   <h2 class="label" id="h-federal">Federal races · November 3, 2026</h2>
-  ${races.senate_up ? fecRace(`U.S. Senate · ${name}`, races.senate || [], filedMap) : `<div class="card"><p class="small">No U.S. Senate seat in ${esc(name)} is up this year, by the FEC's list of 2026 races.</p></div>`}
+  ${races.senate_up ? fecRace(`U.S. Senate · ${name}`, races.senate || [], filedMap, raceHref(YEAR, st, "senate")) : `<div class="card"><p class="small">No U.S. Senate seat in ${esc(name)} is up this year, by the FEC's list of 2026 races.</p></div>`}
   ${house || `<div class="card"><p class="small">Your U.S. House race: enter your address above, or <a class="inline-link" href="/#find">find your district</a> by ZIP code.</p></div>`}
+  <p class="small"><a class="inline-link" href="${racesHref(YEAR, st)}">Every ${YEAR} race in ${esc(name)}</a></p>
   <p class="hint">Candidates who have filed with the Federal Election Commission and passed its $5,000 threshold, listed alphabetically, names as filed. Not everyone listed will be on your ballot (some lose a primary or withdraw); your sample ballot is final. <a class="inline-link" href="${esc(races.source_url)}" target="_blank" rel="noopener">FEC list ↗</a> · updated ${esc(fmtDate(races.built_on))}.</p>
 </section>`;
 }
