@@ -257,7 +257,7 @@
     var next = form.getAttribute("data-next");
     function done(d) {
       saveDistricts(d);
-      show([el("p", "small", next ? "Found your districts. Opening your ballot…" : "Found your districts. Opening your briefing…")]);
+      show([el("p", "small", next ? (/ballot/.test(next) ? "Found your districts. Opening your ballot…" : "Found your districts. Updating the page…") : "Found your districts. Opening your briefing…")]);
       location.href = next || "/briefing/";
     }
 

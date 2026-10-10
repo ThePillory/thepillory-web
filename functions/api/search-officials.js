@@ -1,9 +1,19 @@
 // /api/search-officials: adds current officials, recently voted bills and
 // meetings from D1 to the global search index (the static part, governing
 // bodies and the Constitution, is assets/search-index.js).
+// /api/search-officials?q=name: people by name, as JSON: officials, Supreme
+// Court justices and candidates (functions/_lib/people-search.js; the Reps tab's search).
 import { safe } from "../_lib/data.js";
+import { searchPeople } from "../_lib/people-search.js";
 
 export async function onRequestGet(context) {
+  const q = new URL(context.request.url).searchParams.get("q");
+  if (q != null) {
+    const found = await searchPeople(context.env, context.request, q).catch(() => null);
+    return new Response(JSON.stringify(found || { query: null, officials: [], justices: [], candidates: [] }), {
+      headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=300" },
+    });
+  }
   const items =
     (await safe(context.env, async (db) => {
       const officials = (await db.prepare("SELECT slug, name, office, district FROM officials WHERE active = 1").all()).results;

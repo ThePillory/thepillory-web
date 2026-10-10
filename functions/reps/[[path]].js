@@ -9,10 +9,15 @@
 // POST /reps/<slug>/promises/<id>/flag   "Something wrong?" on a published promise
 import { simpleCard, jobSentence, voteLinePlain, moneyLinePlain, sourceNote, SIMPLE_METHOD } from "../_lib/simple.js";
 import { BODIES, LEVEL_NAME, EMPTY_REPORTS } from "../_lib/generated.js";
-import { page, notFound, notLoaded, esc, safeUrl, kv, card, section, sourceLink, fmtDate, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
+import { page, notFound, notLoaded, esc, safeUrl, kv, card, section, linkRow, sourceLink, fmtDate, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { officialBySlug, officialsWhere, withVoteCounts, voteCounts, votesFor, CHAMBER_NAME } from "../_lib/data.js";
 import { districtsFromCookie, repsWhere, describe, STATE_NAME } from "../_lib/districts.js";
 import { lookupForm } from "../_lib/hub.js";
+import { BROWSE, PER_PAGE, chamberPage, personRow, yourRow, yourList, statewideList, repsHref, stateChambers, statePicker, sortSwitch, pagedList } from "../_lib/reps-index.js";
+import { searchPeople } from "../_lib/people-search.js";
+import { loadJustices } from "../_lib/scotus.js";
+import { chamberIds } from "../../workers/sync/src/states.js";
+import { visitorState } from "../_lib/visitor-state.js";
 import { voteRow, voteFilter } from "../_lib/votes.js";
 import { fundingFor, fundingTab } from "../_lib/funding.js";
 import { executiveMoney, executiveFundingParts, stateOfficialMoney, stateForm700 } from "../_lib/exec-funding.js";
@@ -42,94 +47,173 @@ function who(o) {
   return [o.office, o.district, o.party ? `Party: ${o.party}` : null].filter(Boolean).join(" · ");
 }
 
-function repCard(o) {
-  const body = BODY[o.body];
-  return card({
-    href: `/reps/${o.slug}/`,
-    label: `${LEVEL_NAME[o.level]} · ${CHAMBER_NAME[o.chamber]}`,
-    title: o.name,
-    who: who(o),
-    chips: body ? body.chip_span : "",
-    left: o.vote_count == null ? "" : `Votes recorded: <strong>${o.vote_count}</strong>`,
-    right: `Verified: <strong>${fmtDate(o.last_verified)}</strong>`,
-    level: o.level,
-  });
-}
+// ---------------------------------------------------------------------------
+// The Reps tab (functions/_lib/reps-index.js): Your representatives, Search,
+// then Browse (Federal / State / Courts). The same layout for every state.
 
-function stateChips(current) {
-  return Object.entries(STATE_NAME)
-    .sort((x, y) => x[1].localeCompare(y[1]))
-    .map(([code, name]) => `<a class="chip state-chip${code === current ? " is-current" : ""}" href="/reps/?state=${code}#state-list"${code === current ? ' aria-current="true"' : ""}>${esc(name)}</a>`)
+const SEARCH_GROUPS = [["officials", "Officials"], ["justices", "Supreme Court"], ["candidates", "Candidates"]];
+
+function searchResults(found) {
+  if (!found) return "";
+  const groups = SEARCH_GROUPS.filter(([k]) => found[k].length);
+  if (!groups.length) return `<p class="small secondary">No one named “${esc(found.query)}” found.</p>`;
+  return groups
+    .map(([k, label]) => `<p class="label">${esc(label)}</p><div class="card">${found[k].map((r) => linkRow(r.href, r.name, r.sub)).join("")}</div>`)
     .join("");
 }
 
-async function stateOfficials(db, st) {
-  return withVoteCounts(
-    db,
-    (c) => `SELECT o.*${c.select} FROM officials o ${c.join}
-       WHERE o.active = 1 AND o.state = ? AND o.chamber IN ('us-senate', 'us-house')
-       ORDER BY o.chamber DESC, CAST(o.district_code AS INTEGER), o.name`,
-    [st]
-  );
+function searchSection(q, found) {
+  return `
+<section class="stack-sm simple-keep" id="search" aria-labelledby="h-search">
+  <form class="card stack-sm lookup-form" method="get" action="/reps/" role="search" data-rollcall="people-results">
+    <h2 class="label" id="h-search">Search</h2>
+    <label class="visually-hidden" for="people-q">Name of an official, justice or candidate</label>
+    <div class="lookup-row">
+      <input class="input" id="people-q" name="q" type="search" value="${esc(q || "")}" placeholder="Name of an official, justice or candidate" autocomplete="off" />
+      <button class="btn btn--primary" type="submit">Search</button>
+    </div>
+  </form>
+  <div class="stack-sm" id="people-results" aria-live="polite">${searchResults(found)}</div>
+</section>`;
 }
 
-async function list(env, url, request) {
+function yoursSection({ d, vs, people = [], failed = false }) {
+  const rows = failed ? sectionError("") : people.length ? `<div class="card">${people.map(yourRow).join("")}</div>` : '<p class="secondary small">Not loaded yet.</p>';
+  if (d) {
+    return `
+<section class="stack-sm simple-keep" id="yours" aria-labelledby="h-yours">
+  <h2 class="label" id="h-yours">Your representatives</h2>
+  ${rows}
+  ${lookupForm(d, { heading: "Change your location", next: "/reps/" })}
+</section>`;
+  }
+  if (vs) {
+    return `
+<section class="stack-sm simple-keep" id="yours" aria-labelledby="h-yours">
+  <h2 class="label" id="h-yours">Your representatives</h2>
+  <p class="list-title">${esc(vs.name)}</p>
+  ${rows}
+  <p class="small">Add your ZIP or address to see your House member and state legislators.</p>
+  ${lookupForm(null, { next: "/reps/" })}
+</section>`;
+  }
+  return `<div class="simple-keep">${lookupForm(null, { next: "/reps/" })}</div>`;
+}
+
+const BROWSE_EMPTY = "None loaded yet.";
+
+/** Senators and House members show their state when the list covers every state. */
+const congressRow = (o) => personRow({ ...o, district: o.district || STATE_NAME[o.state] || null });
+
+async function browseSection(db, env, request, { browse, st, sort, federalExec }) {
+  const nav = `<nav class="segmented browse-switch" aria-label="Browse">${Object.entries(BROWSE)
+    .map(([k, label]) => `<a class="toggle" href="${esc(repsHref({ browse: k, state: k === "courts" ? null : st }))}#browse"${k === browse ? ' aria-current="true"' : ""}>${label}</a>`)
+    .join("")}</nav>`;
+  const list = async (name, chamber, href, row, extra = "") => {
+    const pg = await loadSection(`reps ${chamber}`, () => chamberPage(db, { chamber, state: browse === "federal" ? st : null, sort }));
+    if (pg === FAILED) return sectionError(name);
+    return `<h3 class="label">${esc(name)}</h3>${extra}${pagedList({ id: `list-${chamber}`, page: pg, href: repsHref({ ...href, chamber, offset: PER_PAGE }), empty: BROWSE_EMPTY, row })}`;
+  };
+  let body = "";
+  if (browse === "federal") {
+    const base = { browse, state: st, sort, anchor: "browse" };
+    const [senate, house] = await Promise.all([
+      list("U.S. Senate", "us-senate", base, congressRow),
+      list("U.S. House", "us-house", base, congressRow, sortSwitch(base, sort)),
+    ]);
+    body = `
+  ${statePicker({ browse, state: st, all: true, label: "Filter by state" })}
+  <h3 class="label">The President and Cabinet</h3>
+  <div class="card">${federalExec === FAILED ? sectionError("") : federalExec.map((o) => personRow(o, { office: true })).join("") || `<p class="secondary small">${BROWSE_EMPTY}</p>`}</div>
+  ${senate}
+  ${house}`;
+  } else if (browse === "state") {
+    if (!st) {
+      body = statePicker({ browse, state: null, label: "Choose a state" });
+    } else {
+      const base = { browse, state: st, sort, anchor: "browse" };
+      const exec = await loadSection("reps state executive", () => executiveOfficials(db, chamberIds(st).executive), []);
+      const chambers = stateChambers(st);
+      const lists = await Promise.all(chambers.map((c) => list(c.name, c.id, base, personRow)));
+      body = `
+  ${statePicker({ browse, state: st })}
+  <h3 class="label">Statewide offices</h3>
+  <div class="card">${exec === FAILED ? sectionError("") : exec.map((o) => personRow(o, { office: true })).join("") || `<p class="secondary small">${BROWSE_EMPTY}</p>`}</div>
+  <h3 class="label">The legislature</h3>
+  ${sortSwitch(base, sort)}
+  ${lists.join("")}
+  <p class="small"><a class="inline-link" href="${statePath(st)}">${esc(STATE_NAME[st])}'s page</a>: its map, districts, counties and recent votes.</p>`;
+    }
+  } else {
+    const justices = await loadSection("reps justices", () => loadJustices(env, request), null);
+    const rows = justices && justices !== FAILED ? justices.justices || [] : [];
+    body = `
+  <h3 class="label">The Supreme Court</h3>
+  <div class="card">${justices === FAILED ? sectionError("") : rows.map((j) => linkRow(`/justices/${j.slug}/`, j.name, j.title)).join("") || `<p class="secondary small">${BROWSE_EMPTY}</p>`}</div>
+  <p class="small"><a class="inline-link" href="/bodies/us-supreme-court/">The Court</a> · <a class="inline-link" href="/court/term/">This term</a></p>`;
+  }
+  return `
+<section class="stack-sm" id="browse" aria-labelledby="h-browse">
+  <span id="state-list"></span>
+  <h2 class="label" id="h-browse">Browse</h2>
+  ${nav}
+  ${body}
+</section>`;
+}
+
+/** Old and current addresses: ?state=XX alone means members of Congress for that state. */
+export function browseParams(url, vs, d) {
+  const p = url.searchParams;
+  const raw = String(p.get("state") || "").toUpperCase();
+  const given = STATE_NAME[raw] ? raw : null;
+  const browse = BROWSE[p.get("browse")] ? p.get("browse") : "federal";
+  const st = given || (browse === "state" ? (vs && vs.st) || (d && d.st) || null : null);
+  const sort = p.get("sort") === "district" ? "district" : "name";
+  const chamber = /^[a-z]{2}-[a-z]+$/.test(p.get("chamber") || "") ? p.get("chamber") : null;
+  const offset = Math.max(0, parseInt(p.get("offset") || "0", 10) || 0);
+  return { browse, st, sort, chamber, offset };
+}
+
+async function list(env, url, request, vs) {
   const d = districtsFromCookie(request);
-  const st = STATE_NAME[String(url.searchParams.get("state") || "").toUpperCase()] ? String(url.searchParams.get("state")).toUpperCase() : null;
   if (!env.DB) return notLoaded("Reps", "reps", true);
   const db = env.DB;
-  // Each section loads on its own: one that can't load shows a short note.
-  const [mine, state, federalExec, caExec] = await Promise.all([
-    d ? loadSection("reps mine", () => officialsWhere(db, repsWhere(d)), []) : [],
-    st ? loadSection("reps state", () => stateOfficials(db, st), []) : [],
+  const { browse, st, sort, chamber, offset } = browseParams(url, vs, d);
+
+  // "Load more": the next page of one list (app.js appends it in place).
+  if (chamber && offset) {
+    const pg = await loadSection(`reps ${chamber} more`, () => chamberPage(db, { chamber, state: browse === "federal" ? st : null, sort, offset }));
+    const name = CHAMBER_NAME[chamber] || "Members";
+    const main = `
+<header class="page-head"><h1>${esc(name)}</h1><p class="subtitle">From number ${offset + 1}${browse === "federal" && st ? `, ${esc(STATE_NAME[st])}` : ""}.</p></header>
+${pg === FAILED ? sectionError("") : pagedList({ id: `list-${chamber}`, page: pg, href: repsHref({ browse, state: st, chamber, sort, offset: offset + PER_PAGE }), row: chamber.startsWith("us-") ? congressRow : personRow })}`;
+    return page(`Reps: ${name}`, main, { tab: "reps", back: ["Reps", repsHref({ browse, state: st, sort })], partial: pg === FAILED });
+  }
+
+  const home = d ? d.st : vs ? vs.st : null;
+  const [federalExec, reps, stateExec, senators, found] = await Promise.all([
     loadSection("reps executive", () => executiveOfficials(db, "us-executive"), []),
-    loadSection("reps california executive", () => executiveOfficials(db, "ca-executive"), []),
+    d ? loadSection("reps mine", () => officialsWhere(db, repsWhere(d)), []) : [],
+    home ? loadSection("reps state executive (yours)", () => executiveOfficials(db, chamberIds(home).executive), []) : [],
+    !d && vs ? loadSection("reps senators", () => chamberPage(db, { chamber: "us-senate", state: vs.st }).then((r) => r.rows), []) : [],
+    url.searchParams.get("q") ? searchPeople(env, request, url.searchParams.get("q")).catch(() => null) : null,
   ]);
-  const data = { mine, state, federalExec, caExec };
-  const mineHtml = d
-    ? mine === FAILED ? sectionError("Your representatives") : `
-<section class="stack" id="yours">
-  <h2 class="label">Your representatives</h2>
-  <p class="small secondary">${esc(describe(d))}</p>
-  ${data.mine.map(repCard).join("") || '<p class="secondary small">None loaded yet for your districts. They appear after the data sync runs.</p>'}
-  ${d.st !== "CA" ? '<p class="hint">Local coverage comes as communities launch.</p>' : ""}
-</section>`
-    : "";
-
-  const browse = st
-    ? state === FAILED ? sectionError(`${STATE_NAME[st]}: members of Congress`) : `
-<section class="stack" id="state-list">
-  <h2 class="label">${esc(STATE_NAME[st])}: members of Congress</h2>
-  ${data.state.map(repCard).join("") || '<p class="secondary small">None loaded yet.</p>'}
-  ${st === "CA" ? '<a class="list-row link-row card" href="/bodies/state-legislature/"><div><div class="list-title">California State Legislature</div><div class="list-meta">All 120 members</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>'
-    : `<a class="list-row link-row card" href="${statePath(st)}#h-statewide"><div><div class="list-title">${esc(STATE_NAME[st])}'s legislature and statewide offices</div><div class="list-meta">Each legislator linked from their district</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>`}
-</section>`
-    : "";
-
-  const main = `
+  const ok = (x) => (x === FAILED ? [] : x);
+  const people = d
+    ? yourList({ federalExec: ok(federalExec), reps: ok(reps), stateExec: ok(stateExec) })
+    : vs ? statewideList({ federalExec: ok(federalExec), senators: ok(senators), stateExec: ok(stateExec) }) : [];
+  const main = `<div class="simple-scope">
 <header class="page-head">
   <h1>Reps</h1>
-  <p class="subtitle">The President and Cabinet, members of Congress, California's Governor, statewide officers and legislators, and Calaveras County supervisors, with the record they keep.</p>
+  <p class="subtitle">Everyone who represents you, from the President to your county, with the record they keep. The same layout for every state.</p>
 </header>
-${browse}
-${lookupForm(d, { heading: d ? "Change your location" : "Find your representatives" })}
-${mineHtml}
-<section class="stack" id="executive">
-  <h2 class="label">Executive branch</h2>
-  <div class="card">${federalExec === FAILED ? sectionError("") : executiveRows(data.federalExec) || '<p class="secondary small">The President, Vice President and Cabinet appear after the data sync runs.</p>'}</div>
-  <h3 class="label">California's statewide offices</h3>
-  <div class="card">${caExec === FAILED ? sectionError("") : executiveRows(data.caExec, { cabinetLink: false }) || '<p class="secondary small">California\'s Governor and statewide officers appear after the data sync runs.</p>'}</div>
-</section>
-<section class="stack">
-  <h2 class="label">Governing bodies</h2>
-  ${BODIES.map((b) => b.card).join("")}
-</section>
-<section class="card stack-sm" id="browse">
-  <h2 class="label">Browse members of Congress by state</h2>
-  <div class="chips">${stateChips(st)}</div>
-</section>
-<p class="hint">Every official here is loaded from an official source, linked on their page, with the date it was last checked.</p>`;
-  return page("Reps", main, { tab: "reps", root: true, personal: !!d, partial: anyFailed(mine, state, federalExec, caExec) });
+${(d || vs) ? yoursSection({ d, vs, people, failed: reps === FAILED || senators === FAILED }) : yoursSection({})}
+${searchSection(url.searchParams.get("q"), found)}
+<div class="simple-only simple-keep"><button class="btn" type="button" data-mode-set="detailed" data-mode-jump="browse">Browse all</button></div>
+${await browseSection(db, env, request, { browse, st, sort, federalExec })}
+<p class="hint">Every official here is loaded from an official source, linked on their page, with the date it was last checked.</p>
+</div>`;
+  return page("Reps", main, { tab: "reps", root: true, personal: !!d, partial: anyFailed(federalExec, reps, stateExec, senators) });
 }
 
 // The executive's "Record at a glance": what's loaded, counted, never scored.
@@ -369,8 +453,14 @@ export const onRequestGet = guard(async (context) => {
   const url = new URL(context.request.url);
   const parts = (context.params.path || []).filter(Boolean);
   if (parts.length === 0) {
-    if (districtsFromCookie(context.request)) return list(context.env, url, context.request);
-    return edgeCached(context, REPS_CACHE_SECONDS, () => list(context.env, url, context.request));
+    const d = districtsFromCookie(context.request);
+    const vs = visitorState(context.request, d);
+    if (d) return list(context.env, url, context.request, vs);
+    // One copy per state "Your representatives" shows (and one without), never kept by browsers.
+    return edgeCached(context, REPS_CACHE_SECONDS, () => list(context.env, url, context.request, vs), {
+      variant: vs ? vs.st : "none",
+      clientCache: "private, no-cache",
+    });
   }
   if (parts.length === 1) {
     if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);

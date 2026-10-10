@@ -188,6 +188,32 @@ async function readOne(fec, c, cycle, today) {
   return { ...c, totals: totals ? { ...totals, candidate_id: undefined } : null, organizations, website, funding_checked: today, cycle };
 }
 
+/**
+ * The name index search reads (functions/_lib/people-search.js): one row per
+ * candidate with a page, [id, name as the FEC lists it, state, office, district].
+ * Pure: `files` maps a state code to its file's data.
+ */
+export function nameIndex(files) {
+  const rows = [];
+  for (const [st, s] of Object.entries(files)) {
+    for (const c of Object.values((s && s.candidates) || {})) {
+      rows.push([c.id, c.name, st.toUpperCase(), c.office, c.district || ""]);
+    }
+  }
+  return rows.sort((a, b) => a[0].localeCompare(b[0]));
+}
+
+/** Writes names.json from every state file in `dir`. */
+export function writeNameIndex(dir) {
+  const files = {};
+  for (const f of readdirSync(dir)) {
+    if (/^[a-z]{2}\.json$/.test(f)) files[f.slice(0, 2)] = JSON.parse(readFileSync(join(dir, f), "utf8"));
+  }
+  const rows = nameIndex(files);
+  writeFileSync(join(dir, "names.json"), JSON.stringify({ built_on: new Date().toISOString().slice(0, 10), candidates: rows }) + "\n");
+  return rows.length;
+}
+
 async function main() {
   const year = Number(arg("year", "2026"));
   const key = process.env.FEC_API_KEY || "DEMO_KEY";
@@ -239,6 +265,7 @@ async function main() {
   }
   for (const [st, s] of Object.entries(states)) writeFileSync(join(outDir, `${st}.json`), JSON.stringify(s, null, 1) + "\n");
   if (!only.length) writeFileSync(join(outDir, "websites.json"), JSON.stringify(websites(states, year, today)) + "\n");
+  writeNameIndex(outDir);
   const listed = queue.length;
   const fresh = Object.values(states).flatMap((s) => Object.values(s.candidates)).filter((c) => c.listed && c.funding_checked).length;
   console.log(`Candidates: ${listed} listed; refreshed ${done} this run (${fec.used} requests, ${failed} failed); ${fresh} of ${listed} have FEC money data.`);
