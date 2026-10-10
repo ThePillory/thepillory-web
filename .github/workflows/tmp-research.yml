@@ -1,0 +1,22 @@
+# TEMPORARY: research probe (Supreme Court sources). Remove before merge.
+name: TEMPORARY research probe
+on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [tmp-research/probe_scotus.sh, .github/workflows/tmp-research.yml]
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - env:
+          COURTLISTENER_API_TOKEN: ${{ secrets.COURTLISTENER_API_TOKEN }}
+          CONGRESS_API_KEY: ${{ secrets.CONGRESS_API_KEY }}
+        run: bash tmp-research/probe_scotus.sh
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add tmp-research/out-scotus
+          git commit -m "TEMPORARY: Supreme Court probe output" && git push
