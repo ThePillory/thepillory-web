@@ -1,0 +1,37 @@
+# Candidate pages' data (data/candidates/<year>/<st>.json): FEC totals,
+# contributions from PACs and other committees (organizations by name; never
+# individual donors) and the campaign website from each candidate's Form 1.
+# Candidates come from data/elections/federal-<year>/ (the "Refresh election
+# data" workflow). Each run reads the candidates read longest ago, within the
+# FEC's hourly limit; see tools/build_candidates.mjs and docs/candidates.md.
+name: Refresh candidate data
+on:
+  schedule:
+    - cron: "17 3 * * *"
+    - cron: "17 19 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: candidates
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Read the FEC
+        env:
+          FEC_API_KEY: ${{ secrets.FEC_API_KEY }}
+        run: node tools/build_candidates.mjs --year 2026 --max-requests 800
+      - name: Commit the data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/candidates
+          git diff --cached --quiet && exit 0
+          git commit -m "Refresh candidate data from the FEC"
+          git pull --rebase -q origin "${GITHUB_REF_NAME}"
+          git push

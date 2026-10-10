@@ -24,7 +24,7 @@ import { getState, setState, redact } from "../util.js";
 import { structuredCall, DEFAULT_MODEL, DraftRefused } from "../analysis/claude.js";
 import { INSTRUCTIONS, schema, documentMessage, PROMISE_PROMPT_VERSION, MAX_PER_DOCUMENT } from "./prompt.js";
 import { checkCandidate, checkStatusUpdate, notACommitment, notSpecific, wordingProblems, normalizeText, quoteKey } from "./check.js";
-import { EXCERPT_INSTRUCTIONS, excerptSchema, excerptMessage, checkExcerpt, needsExcerpt } from "./excerpt.js";
+import { EXCERPT_INSTRUCTIONS, excerptInstructions, excerptSchema, excerptMessage, checkExcerpt, needsExcerpt } from "./excerpt.js";
 import { parseRssWithContent, parseWpPosts, addressPackages, whiteHouseKind, worthReading, htmlToText, clip, roundRobin, commitmentScore } from "./sources.js";
 
 const UA = "ThePillory/1.0 (+https://thepillory.co; civic records)";
@@ -226,12 +226,12 @@ export async function discover(env, db, officials) {
 }
 
 /** An excerpt for "In their own words", checked word for word against the page; never an error that stops the step. */
-export async function pickExcerpt(env, page, official) {
+export async function pickExcerpt(env, page, official, who = "official") {
   if (!env.ANTHROPIC_API_KEY) return { excerpt: null, reason: "no ANTHROPIC_API_KEY" };
   try {
     const { data, model } = await structuredCall(env, {
       model: env.PROMISE_MODEL || DEFAULT_MODEL,
-      system: [EXCERPT_INSTRUCTIONS],
+      system: [who === "official" ? EXCERPT_INSTRUCTIONS : excerptInstructions(who)],
       message: excerptMessage(page, official),
       jsonSchema: excerptSchema,
       maxTokens: 2000,

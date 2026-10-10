@@ -1,0 +1,102 @@
+{
+ "state": "AK",
+ "year": 2026,
+ "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=AK&candidate_status=C",
+ "list_built_on": "2026-10-10",
+ "built_on": "2026-10-10",
+ "senate_up": true,
+ "candidates": {
+  "S6AK00276": {
+   "id": "S6AK00276",
+   "name": "PELTOLA, MARY",
+   "party": "DEMOCRATIC PARTY",
+   "office": "S",
+   "district": null,
+   "incumbent": false,
+   "committee": "C00933978",
+   "fec_url": "https://www.fec.gov/data/candidate/S6AK00276/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "S4AK00214": {
+   "id": "S4AK00214",
+   "name": "SULLIVAN, DAN",
+   "party": "REPUBLICAN PARTY",
+   "office": "S",
+   "district": null,
+   "incumbent": true,
+   "committee": "C00570994",
+   "fec_url": "https://www.fec.gov/data/candidate/S4AK00214/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "S6AK00326": {
+   "id": "S6AK00326",
+   "name": "SULLIVAN, DANIEL J",
+   "party": "REPUBLICAN PARTY",
+   "office": "S",
+   "district": null,
+   "incumbent": false,
+   "committee": "C00956326",
+   "fec_url": "https://www.fec.gov/data/candidate/S6AK00326/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H2AK01083": {
+   "id": "H2AK01083",
+   "name": "BEGICH, NICHOLAS III",
+   "party": "REPUBLICAN PARTY",
+   "office": "H",
+   "district": "0",
+   "incumbent": true,
+   "committee": "C00792341",
+   "fec_url": "https://www.fec.gov/data/candidate/H2AK01083/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H6AK01092": {
+   "id": "H6AK01092",
+   "name": "HILL, BILL",
+   "party": "INDEPENDENT",
+   "office": "H",
+   "district": "0",
+   "incumbent": false,
+   "committee": "C00935437",
+   "fec_url": "https://www.fec.gov/data/candidate/H6AK01092/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H2AK01158": {
+   "id": "H2AK01158",
+   "name": "PELTOLA, MARY",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "0",
+   "incumbent": false,
+   "committee": "C00812388",
+   "fec_url": "https://www.fec.gov/data/candidate/H2AK01158/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H6AK01084": {
+   "id": "H6AK01084",
+   "name": "SCHULTZ, MATTHEW DAMIAN",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "0",
+   "incumbent": false,
+   "committee": null,
+   "fec_url": "https://www.fec.gov/data/candidate/H6AK01084/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  }
+ }
+}

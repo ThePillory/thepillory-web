@@ -124,3 +124,33 @@ test("/bodies/us-senate/?state=MN: Minnesota's members first, then yours from an
   assert.match(plain, /Your members/);
   assert.match(plain, /California Senator One/);
 });
+
+test("the top of every state's page: headline, map, ballot card, Find your representatives, then the rest", async () => {
+  const { ballotWindow, todayIn, previewLabel } = await import("../../../functions/_lib/election-window.js");
+  const dates = JSON.parse(readFileSync(new URL("data/elections/dates.json", ROOT), "utf8"));
+  for (const [path, st, label] of [["/states/california/", "CA", "Preview California&#x27;s ballot"], ["/states/washington/", "WA", "Preview Washington&#x27;s ballot"], ["/states/district-of-columbia/", "DC", "Preview D.C.&#x27;s ballot"]]) {
+    const { html } = await call(states, path);
+    const at = (s) => html.indexOf(s);
+    const head = at('class="hub-title"');
+    const map = at('id="us-map"');
+    const find = at('id="find"');
+    const yours = at('id="your-state"');
+    assert.ok(head > 0 && head < map && map < find && find < yours, `${st}: headline, map, Find your representatives, Your state`);
+    const win = ballotWindow(dates, st, todayIn(st));
+    if (win && win.open) {
+      const card = at('class="card ballot-hero"');
+      assert.ok(map < card && card < find, `${st}: the ballot card sits between the map and Find your representatives`);
+      const cardHtml = html.slice(card, html.indexOf("</section>", card));
+      assert.ok(cardHtml.includes(`<p class="ballot-hero-when">${win.line.replace(/'/g, "&#x27;")}`), `${st}: one line with the date and countdown`);
+      assert.ok(cardHtml.includes(`>${label}</a>`), `${st}: ${label}`);
+      assert.doesNotMatch(cardHtml, /btn--block/, "a standard-size button");
+      assert.equal((cardHtml.match(/<p\b/g) || []).length, 1, "no extra text");
+    } else {
+      assert.equal(at("ballot-hero"), -1);
+      assert.ok(html.includes(label), `${st}: ${label} as a link`);
+    }
+  }
+  assert.equal(previewLabel("CA", "California"), "Preview California's ballot");
+  assert.equal(previewLabel("DC", "District of Columbia"), "Preview D.C.'s ballot");
+  assert.equal(previewLabel(null, null), "Preview your state's ballot");
+});

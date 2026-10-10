@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Every state's federal election dates (primaries, runoffs, specials and the
-general; data/elections/dates.json, for when "Open your ballot" leads the home
+general; data/elections/dates.json, for when the ballot preview leads the home
 page) and each state's 2026 U.S. Senate and U.S. House candidates from the Federal
 Election Commission (api.open.fec.gov), for "Your ballot" before an address is
 entered. Writes data/elections/federal-2026/<st>.json. Standard library only;
@@ -28,7 +28,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "data" / "elections" / "federal-2026"
-API = "https://api.open.fec.gov/v1/candidates/"
+API = "https://api.open.fec.gov/v1/candidates/search/"  # lists each principal committee
 RACES = "https://api.open.fec.gov/v1/elections/search/"
 DATES = "https://api.open.fec.gov/v1/election-dates/"
 DATES_OUT = ROOT / "data" / "elections" / "dates.json"
@@ -64,6 +64,14 @@ def candidates(st, office, key):
         time.sleep(0.5)
 
 
+def committee(c):
+    """The candidate's principal campaign committee (FEC designation P), as listed in their filing."""
+    for m in c.get("principal_committees") or []:
+        if m.get("designation") == "P" and m.get("committee_id"):
+            return m["committee_id"]
+    return None
+
+
 def row(c):
     return {
         "id": c["candidate_id"],
@@ -71,6 +79,7 @@ def row(c):
         "party": c.get("party_full") or "",    # as filed
         "incumbent": c.get("incumbent_challenge") == "I",
         "url": f"https://www.fec.gov/data/candidate/{c['candidate_id']}/",
+        "committee": committee(c),             # principal campaign committee ID (tools/build_candidates.mjs)
     }
 
 

@@ -11,35 +11,40 @@
    "name": "APPELHANS, JEFFERY RYAN",
    "party": "DEMOCRATIC PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6DE00263/"
+   "url": "https://www.fec.gov/data/candidate/S6DE00263/",
+   "committee": "C00956466"
   },
   {
    "id": "S6DE00156",
    "name": "BEARDSLEY, CHRISTOPHER MR.",
    "party": "DEMOCRATIC PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6DE00156/"
+   "url": "https://www.fec.gov/data/candidate/S6DE00156/",
+   "committee": "C00927665"
   },
   {
    "id": "S0DE00092",
    "name": "COONS, CHRISTOPHER A.",
    "party": "DEMOCRATIC PARTY",
    "incumbent": true,
-   "url": "https://www.fec.gov/data/candidate/S0DE00092/"
+   "url": "https://www.fec.gov/data/candidate/S0DE00092/",
+   "committee": "C00475392"
   },
   {
    "id": "S6DE00206",
    "name": "KATZ, MICHAEL S DR.",
    "party": "REPUBLICAN PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6DE00206/"
+   "url": "https://www.fec.gov/data/candidate/S6DE00206/",
+   "committee": "C00935163"
   },
   {
    "id": "S6DE00198",
    "name": "SHULLI, JOHN",
    "party": "REPUBLICAN PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6DE00198/"
+   "url": "https://www.fec.gov/data/candidate/S6DE00198/",
+   "committee": "C00933663"
   }
  ],
  "house": {
@@ -49,21 +54,24 @@
     "name": "ARMINIO, JOSEPH DR. JOE PH.D.",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6DE01121/"
+    "url": "https://www.fec.gov/data/candidate/H6DE01121/",
+    "committee": "C00957365"
    },
    {
     "id": "H4DE00045",
     "name": "MCBRIDE, SARAH ELIZABETH",
     "party": "DEMOCRATIC PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H4DE00045/"
+    "url": "https://www.fec.gov/data/candidate/H4DE00045/",
+    "committee": "C00843763"
    },
    {
     "id": "H4DE00078",
     "name": "WHALEN III, JOHN J",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H4DE00078/"
+    "url": "https://www.fec.gov/data/candidate/H4DE00078/",
+    "committee": "C00883959"
    }
   ]
  }

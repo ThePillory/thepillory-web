@@ -1,0 +1,50 @@
+{
+ "state": "VT",
+ "year": 2026,
+ "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=VT&candidate_status=C",
+ "list_built_on": "2026-10-10",
+ "built_on": "2026-10-10",
+ "senate_up": false,
+ "candidates": {
+  "H2VT01076": {
+   "id": "H2VT01076",
+   "name": "BALINT, REBECCA 'BECCA'",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "0",
+   "incumbent": true,
+   "committee": "C00797175",
+   "fec_url": "https://www.fec.gov/data/candidate/H2VT01076/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H4VT01056": {
+   "id": "H4VT01056",
+   "name": "COESTER, C. MARK MR",
+   "party": "REPUBLICAN PARTY",
+   "office": "H",
+   "district": "0",
+   "incumbent": false,
+   "committee": "C00874214",
+   "fec_url": "https://www.fec.gov/data/candidate/H4VT01056/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H6VT01085": {
+   "id": "H6VT01085",
+   "name": "MALLOY, GERALD MR.",
+   "party": "REPUBLICAN PARTY",
+   "office": "H",
+   "district": "0",
+   "incumbent": false,
+   "committee": "C00950048",
+   "fec_url": "https://www.fec.gov/data/candidate/H6VT01085/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  }
+ }
+}

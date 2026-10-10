@@ -11,21 +11,24 @@
    "name": "DODSON, MATT",
    "party": "DEMOCRATIC PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6NM01145/"
+   "url": "https://www.fec.gov/data/candidate/S6NM01145/",
+   "committee": null
   },
   {
    "id": "S0NM00058",
    "name": "LUJAN, BEN RAY",
    "party": "DEMOCRATIC PARTY",
    "incumbent": true,
-   "url": "https://www.fec.gov/data/candidate/S0NM00058/"
+   "url": "https://www.fec.gov/data/candidate/S0NM00058/",
+   "committee": "C00443689"
   },
   {
    "id": "S6NM01186",
    "name": "MARKER, LARRY E",
    "party": "REPUBLICAN PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6NM01186/"
+   "url": "https://www.fec.gov/data/candidate/S6NM01186/",
+   "committee": "C00943738"
   }
  ],
  "house": {
@@ -35,21 +38,24 @@
     "name": "JONES, STEVE",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H4NM01140/"
+    "url": "https://www.fec.gov/data/candidate/H4NM01140/",
+    "committee": "C00861153"
    },
    {
     "id": "H6NM01129",
     "name": "OKPAREKE, NDIDIAMAKA",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6NM01129/"
+    "url": "https://www.fec.gov/data/candidate/H6NM01129/",
+    "committee": "C00908509"
    },
    {
     "id": "H2NM01144",
     "name": "STANSBURY, MELANIE",
     "party": "DEMOCRATIC PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H2NM01144/"
+    "url": "https://www.fec.gov/data/candidate/H2NM01144/",
+    "committee": "C00765099"
    }
   ],
   "2": [
@@ -58,21 +64,24 @@
     "name": "CUNNINGHAM, GREG",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6NM02127/"
+    "url": "https://www.fec.gov/data/candidate/H6NM02127/",
+    "committee": "C00921791"
    },
    {
     "id": "H6NM02135",
     "name": "OROZCO, JOSE",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6NM02135/"
+    "url": "https://www.fec.gov/data/candidate/H6NM02135/",
+    "committee": "C00923482"
    },
    {
     "id": "H2NM02191",
     "name": "VASQUEZ, GABRIEL",
     "party": "DEMOCRATIC PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H2NM02191/"
+    "url": "https://www.fec.gov/data/candidate/H2NM02191/",
+    "committee": "C00789404"
    }
   ],
   "3": [
@@ -81,14 +90,16 @@
     "name": "LEGER FERNANDEZ, TERESA",
     "party": "DEMOCRATIC PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H0NM03102/"
+    "url": "https://www.fec.gov/data/candidate/H0NM03102/",
+    "committee": "C00704049"
    },
    {
     "id": "H6NM03083",
     "name": "ZAMORA, MARTIN R",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6NM03083/"
+    "url": "https://www.fec.gov/data/candidate/H6NM03083/",
+    "committee": "C00914010"
    }
   ],
   "66": [
@@ -97,7 +108,8 @@
     "name": "GANDY, LEANNE",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6NM66015/"
+    "url": "https://www.fec.gov/data/candidate/H6NM66015/",
+    "committee": "C00946392"
    }
   ]
  }

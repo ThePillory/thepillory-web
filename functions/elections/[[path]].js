@@ -12,6 +12,7 @@
 // Neutral by design: candidates and measures all get the same layout, in ballot
 // order; no endorsements, polls or predictions; results only from the official
 // feed, only after the polls close, and no race is called.
+import { previewLabel } from "../_lib/election-window.js";
 import { page, esc, notFound, safeUrl, sourceLink, fmtDate, kv, loadSection, FAILED, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { districtsFromCookie, describe, STATE_NAME } from "../_lib/districts.js";
 import { loadPlace } from "../_lib/geo.js";
@@ -70,11 +71,11 @@ async function indexPage(env, request) {
   <p class="subtitle">What's on the ballot, from official sources: the Secretary of State, county elections offices and the FEC.</p>
 </header>
 <section class="stack-sm" aria-labelledby="h-up"><h2 class="label" id="h-up">Upcoming</h2>${cards || '<p class="small secondary">No upcoming elections loaded yet.</p>'}</section>
-<a class="btn btn--primary btn--block" href="/ballot/">Open your ballot</a>
+<a class="btn btn--primary" href="/ballot/">Preview your state's ballot</a>
 <p class="small secondary">For any state: your federal races, then every contest and measure for your address, with where to vote.</p>
 ${current ? howToVote(current) : ""}
 <section class="card stack-xs">
-  <p class="small">${esc(COVERAGE_NOTE)}. For every state, <a class="inline-link" href="/ballot/">Open your ballot</a> has its federal races and, for an address, the whole ballot from official data.</p>
+  <p class="small">${esc(COVERAGE_NOTE)}. For every state, <a class="inline-link" href="/ballot/">Preview your state's ballot</a> for its federal races and, for an address, the whole ballot from official data.</p>
 </section>
 <p class="hint">${esc(NEUTRAL)} <a class="inline-link" href="/about/methodology/#elections">How ThePillory builds this</a></p>`;
   return page("Elections", main, { tab: "home" });
@@ -215,10 +216,10 @@ ${howToVote(election)}`;
     const main = `${head}
 <section class="card stack-sm">
   ${own
-    ? `<p>ThePillory has ${esc(STATE_NAME[d.st])}'s statewide measures for this election, the same on every ballot in the state. <a class="inline-link" href="${electionHref(id)}">${esc(STATE_NAME[d.st])}'s statewide measures</a></p><a class="btn btn--primary btn--block" href="/ballot/${d.st.toLowerCase()}/">Open your ballot</a>`
+    ? `<p>ThePillory has ${esc(STATE_NAME[d.st])}'s statewide measures for this election, the same on every ballot in the state. <a class="inline-link" href="${electionHref(id)}">${esc(STATE_NAME[d.st])}'s statewide measures</a></p><a class="btn btn--primary" href="/ballot/${d.st.toLowerCase()}/">${esc(previewLabel(d.st, STATE_NAME[d.st]))}</a>`
     : theirs
       ? `<p>Your districts are in ${esc(STATE_NAME[d.st])}. <a class="inline-link" href="${electionHref(theirs)}">See what's on the ballot in ${esc(STATE_NAME[d.st])}</a>.</p>`
-      : `<p>Your districts are in ${esc(STATE_NAME[d.st])}.</p><a class="btn btn--primary btn--block" href="/ballot/${d.st.toLowerCase()}/">Open your ballot</a>`}
+      : `<p>Your districts are in ${esc(STATE_NAME[d.st])}.</p><a class="btn btn--primary" href="/ballot/${d.st.toLowerCase()}/">${esc(previewLabel(d.st, STATE_NAME[d.st]))}</a>`}
 </section>
 ${lookupForm(d, { id: "find", heading: "Use a different address", next: ballotHref(id) })}`;
     return page("Your ballot", main, { tab: "home", back: [election.election.name, electionHref(id)], personal: true });

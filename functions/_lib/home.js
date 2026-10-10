@@ -34,7 +34,8 @@ import { listMeetings, pacificNow, addDays, deadlineParts, meetingHref, when } f
 import { districtsFromCookie, describe, STATE_NAME } from "./districts.js";
 import { happeningNow, happeningSection, lookupForm, waitlistCounts } from "./hub.js";
 import { topicGrid, placeTopicsHref } from "./topics.js";
-import { ballotWindow, todayIn, onlyIfNeeded } from "./election-window.js";
+import { ballotWindow, todayIn, onlyIfNeeded, previewLabel, RESULT_HEADING } from "./election-window.js";
+import { racesHref, YEAR } from "./candidates.js";
 import { loadElection, ballotFor, ballotHref, electionHref, whenLine, daysUntil, contestRow, courtRow, statewideRow, electionIdFor, measuresOnly, ELECTION_BY_STATE } from "./elections.js";
 import { LIVE, asset, loadIndex, loadPlace, waitlistBy, usMapLinks, smallStateButtons, mapFigure } from "./geo.js";
 import { ASSET_VERSION } from "./generated.js";
@@ -221,18 +222,21 @@ function nationalSection(federal, vs, justices) {
 </section>`;
 }
 
-// "Open your ballot": the top card from WINDOW_DAYS before the state's next election through
-// Election Day (functions/_lib/election-window.js), a regular link the rest of the year.
+// The ballot preview ("Preview [State]'s ballot"): a card just below the map from WINDOW_DAYS
+// before the state's next election through Election Day (functions/_lib/election-window.js),
+// a regular link the rest of the year.
 const ballotLink = (st) =>
-  linkRow(st ? `/ballot/${st.toLowerCase()}/` : "/ballot/", "Open your ballot", "Your federal races, then your whole ballot and where to vote");
+  linkRow(st ? `/ballot/${st.toLowerCase()}/` : "/ballot/", previewLabel(st, STATE_NAME[st]), "Your federal races, then your whole ballot and where to vote");
 
+// Every candidate in the state's 2026 races, the same page each (functions/_lib/candidates.js).
+const racesLink = (st) => (st ? linkRow(racesHref(YEAR, st), `Candidates in ${STATE_NAME[st]}`, "Every race, the same page for every candidate") : "");
+
+// One line with the date and countdown, and a standard-size button: no more.
 function ballotHero(vs, win) {
   return `
-<section class="card stack-xs ballot-hero" aria-labelledby="h-ballot-hero">
-  <p class="label" id="h-ballot-hero">Your ballot · ${esc(vs.name)}</p>
-  <p class="ballot-hero-when">${esc(win.line)}</p>
-  ${onlyIfNeeded(win.election) ? '<p class="small secondary">Held only for races no one won outright.</p>' : ""}
-  <a class="btn btn--primary btn--block" href="/ballot/${vs.st.toLowerCase()}/">Open your ballot</a>
+<section class="card ballot-hero" aria-label="${esc(previewLabel(vs.st, vs.name))}">
+  <p class="ballot-hero-when">${esc(win.line)}${onlyIfNeeded(win.election) ? '<span class="secondary"> (if needed)</span>' : ""}</p>
+  <a class="btn btn--primary" href="/ballot/${vs.st.toLowerCase()}/">${esc(previewLabel(vs.st, vs.name))}</a>
 </section>`;
 }
 
@@ -257,7 +261,7 @@ function electionsSection({ election, ballot, county }, d, st = null) {
     <h3>General election, November 3, 2026</h3>
     <p class="small secondary">Your federal races, then every contest and measure for your address, with where to vote.</p>
   </div>
-  <div class="card">${ballotLink(st)}</div>
+  <div class="card">${ballotLink(st)}${racesLink(st)}</div>
 </section>`;
   if (!election) return "";
   const id = election.election.id;
@@ -271,7 +275,7 @@ function electionsSection({ election, ballot, county }, d, st = null) {
     <p class="label">Your ballot</p>
     ${district.map((c) => contestRow(id, c)).join("")}${ballot.courts.map((g) => courtRow(id, g)).join("")}${statewideRow(election)}
     ${local ? `<a class="list-row link-row" href="${ballotHref(id)}#h-yl"><div><div class="list-title">Local contests and measures</div><div class="list-meta">${local} on some ballots in ${esc(county ? county.name : "your county")}</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>` : ""}
-    ${linkRow(ballotHref(id), "Open your ballot", "Every contest for your districts")}
+    ${linkRow(ballotHref(id), RESULT_HEADING, "Every contest for your districts")}
   </div>`;
   } else if (measuresOnly(election)) {
     yours = `<p class="small secondary">The statewide measures, on every ballot in ${esc(STATE_NAME[election.election.state])}.</p>
@@ -292,6 +296,7 @@ function electionsSection({ election, ballot, county }, d, st = null) {
   ${yours}
   <div class="card">
     <a class="list-row link-row" href="${electionHref(id)}#how-to-vote"><div><div class="list-title">How to vote</div><div class="list-meta">Registration, deadlines and where to vote, on the official sites</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>
+    ${racesLink(st || election.election.state)}
   </div>
 </section>`;
 }
@@ -379,16 +384,16 @@ export async function hub(env, request, url, d, vs) {
   const electionsHtml = elections === FAILED ? sectionError("Elections") : electionsSection(elections, d, vs ? vs.st : d ? d.st : null);
   const electionsLate = elections === FAILED || !elections.election || daysUntil(elections.election, start.slice(0, 10)) == null;
   const main = `
-${vs ? showingBar(vs) : ""}
-${hero ? ballotHero(vs, win) : ""}
 <header class="hub-head stack-sm">
   <h1 class="hub-title">Know what your government is doing. <span class="hub-title-soft">Then take part.</span></h1>
   <p class="hub-sub">Votes, bills, and meetings in plain language, measured against the Constitution. Built on evidence, open to every point of view.</p>
 </header>
+${vs ? showingBar(vs) : ""}
 ${usMap(index, waiting === FAILED ? { county: {}, state: {} } : waiting, vs)}
-${vs ? stateLead(vs, lead, elections === FAILED ? FAILED : elections.election, { ballotLink: !hero }) : ""}
+${hero ? ballotHero(vs, win) : ""}
 ${notFound ? '<p class="banner banner--error" role="alert">We couldn\'t find districts for that. Check the address, or try your ZIP code.</p>' : ""}
 ${lookupForm(d)}
+${vs ? stateLead(vs, lead, elections === FAILED ? FAILED : elections.election, { ballotLink: !hero }) : ""}
 ${d ? `<a class="card briefing-link" href="/briefing/"><span class="stack-xs"><span class="label">Your briefing</span><span class="small">${esc(describe(d))}</span></span><span class="chev" aria-hidden="true">›</span></a>` : ""}
 ${electionsLate ? "" : electionsHtml}
 <aside class="intro-banner" data-intro hidden aria-label="Welcome">

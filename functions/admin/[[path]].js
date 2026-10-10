@@ -13,6 +13,8 @@
 // /admin/review/promise/pages/  campaign and office "Issues" or "Priorities" pages the sync reads,
 //                         and the excerpt each shows under "In their own words" (choose, hide)
 // /admin/review/promise/statements/  statements officials' offices sent in ("Submitted by the official")
+// /admin/review/promise/candidates/  candidates' issues pages found on their campaign websites, and
+//                         the excerpt each shows on the Platform tab (remove a wrong page, hide, re-pick)
 // /admin/waitlist/        "Bring ThePillory to your county": sign-ups by county (counts only)
 //
 // Protected by Cloudflare Access (see functions/_lib/access.js and docs/analysis.md).
@@ -1064,7 +1066,7 @@ async function promiseQueue(db, env, url) {
   return `<h2 class="label queue-head" id="promises">Promises</h2>
 ${done ? `<p class="banner" role="status">${esc(done)}</p>` : ""}
 <p class="hint">Found by AI in official press releases, addresses, county agendas and officials' Issues pages, up to 10 a day. Each one is checked in code (the quote word for word in its source, a specific action, vote or deadline, a neutral note) and published at once, labeled "AI-identified, auto-checked". "In progress" and "Kept" publish with their evidence the same way; "Broken" waits for you.</p>
-<p class="small"><a class="inline-link" href="/admin/review/promise/new/">Add a promise by hand</a> · <a class="inline-link" href="/admin/review/promise/pages/">Issues and priorities pages (${pages})</a> · <a class="inline-link" href="/admin/review/promise/statements/">Statements from officials</a></p>
+<p class="small"><a class="inline-link" href="/admin/review/promise/new/">Add a promise by hand</a> · <a class="inline-link" href="/admin/review/promise/pages/">Issues and priorities pages (${pages})</a> · <a class="inline-link" href="/admin/review/promise/statements/">Statements from officials</a> · <a class="inline-link" href="/admin/review/promise/candidates/">Candidates' issues pages</a></p>
 ${head("promise-broken", '"Broken": waiting for you', "broken", broken.length)}
 <section class="card">${brokenRows || '<p class="secondary small">None waiting.</p>'}</section>
 ${head("promise-flags", "Flagged by readers", "flagged", flagged.length)}
@@ -1211,6 +1213,71 @@ ${error ? `<p class="banner banner--error" role="alert">${esc(error)}</p>` : ""}
   <button class="btn btn--primary" type="submit">Add the page</button>
 </form>`
   );
+}
+
+// Candidates' issues pages (src/promises/candidates-sync.js): found automatically on the
+// campaign website in each candidate's FEC filing. The same choices as officials' pages.
+const CANDIDATE_PAGE_SIZE = 50;
+async function candidatePages(db, { done = "", offset = 0 } = {}) {
+  const [{ results: rows }, counts] = await Promise.all([
+    db
+      .prepare("SELECT candidate_id, name, state, site_url, result, page_url, title, excerpt, excerpt_at, excerpt_by, checked_at FROM candidate_platforms WHERE result = 'found' ORDER BY state, name LIMIT ? OFFSET ?")
+      .bind(CANDIDATE_PAGE_SIZE + 1, offset)
+      .all(),
+    db.prepare("SELECT result, COUNT(*) AS n FROM candidate_platforms GROUP BY result").all(),
+  ]);
+  const n = Object.fromEntries(counts.results.map((r) => [r.result || "not searched", r.n]));
+  const form = (action, id, label) =>
+    `<form method="post" action="/admin/review/promise/candidates/"><input type="hidden" name="action" value="${action}"><input type="hidden" name="id" value="${esc(id)}"><button class="btn" type="submit">${label}</button></form>`;
+  const list = rows.slice(0, CANDIDATE_PAGE_SIZE).map((r) => `
+  <article class="list-row stack-sm">
+    <div>
+      <p class="list-title"><a class="inline-link" href="/candidates/${esc(r.candidate_id)}/#platform">${esc(r.name)}</a> · ${esc(r.state)}</p>
+      <p class="list-meta">${safeUrl(r.page_url) ? `<a class="inline-link" href="${esc(r.page_url)}" target="_blank" rel="noopener">${esc(r.title || r.page_url)} ↗</a>` : ""} · site ${esc(r.site_url || "")} · searched ${fmtDate(String(r.checked_at || "").slice(0, 10))}</p>
+      ${r.excerpt ? `<blockquote class="promise-quote small">“${esc(r.excerpt)}”</blockquote><p class="hint">${r.excerpt_by === "hidden" ? "Hidden" : "Shown"} · ${esc(String(r.excerpt_by || ""))}</p>` : `<p class="hint">No excerpt (${esc(String(r.excerpt_by || "not picked yet"))})</p>`}
+    </div>
+    <div class="chips">
+      ${r.excerpt ? form(r.excerpt_by === "hidden" ? "show" : "hide", r.candidate_id, r.excerpt_by === "hidden" ? "Show the excerpt" : "Hide the excerpt") : ""}
+      ${form("repick", r.candidate_id, "Search and pick again")}
+      ${form("remove", r.candidate_id, "Remove: wrong page")}
+    </div>
+  </article>`).join("");
+  const more = rows.length > CANDIDATE_PAGE_SIZE ? `<a class="btn" href="/admin/review/promise/candidates/?offset=${offset + CANDIDATE_PAGE_SIZE}">Next ${CANDIDATE_PAGE_SIZE}</a>` : "";
+  return adminPage(
+    "Candidates' issues pages",
+    `<header class="page-head">
+  <h1>Candidates' issues pages</h1>
+  <p class="subtitle">Found automatically on the campaign website listed in each candidate's FEC filing, by the same finder as officials' pages. A short excerpt, word for word, shows on the candidate's Platform tab under "In their own words". A page you remove is never found again.</p>
+</header>
+${done ? `<p class="banner" role="status">${esc(done)}</p>` : ""}
+<p class="small">${Object.entries(n).map(([k, v]) => `${esc(k)}: ${v}`).join(" · ") || "No candidates searched yet."}</p>
+<section class="card">${list || '<p class="secondary small">No issues pages found yet.</p>'}</section>
+${more}`
+  );
+}
+
+async function candidatePagesChange(db, request, email) {
+  const form = Object.fromEntries((await request.formData()).entries());
+  const back = (t) => Response.redirect(`${new URL(request.url).origin}/admin/review/promise/candidates/?done=${encodeURIComponent(t)}`, 303);
+  const row = await db.prepare("SELECT candidate_id, page_url FROM candidate_platforms WHERE candidate_id = ?").bind(String(form.id || "")).first();
+  if (!row) return back("That candidate isn't listed.");
+  if (form.action === "hide") {
+    await db.prepare("UPDATE candidate_platforms SET excerpt_by = 'hidden' WHERE candidate_id = ?").bind(row.candidate_id).run();
+    return back("Hidden. The candidate's Platform tab no longer shows an excerpt from this page.");
+  }
+  if (form.action === "show" || form.action === "repick") {
+    // Searched again in the next sync, which picks a new excerpt.
+    await db.prepare("UPDATE candidate_platforms SET excerpt = NULL, excerpt_by = NULL, checked_at = NULL WHERE candidate_id = ?").bind(row.candidate_id).run();
+    return back("The site will be searched again, and an excerpt picked, in the next sync.");
+  }
+  if (form.action === "remove" && row.page_url) {
+    await db.batch([
+      db.prepare("INSERT OR REPLACE INTO promise_pages_removed (url, official_id, removed_by) VALUES (?, ?, ?)").bind(row.page_url, row.candidate_id, email || null),
+      db.prepare("UPDATE candidate_platforms SET result = 'none', page_url = NULL, title = NULL, excerpt = NULL, excerpt_by = NULL, page_text = NULL, note = 'the page found was removed on the review page' WHERE candidate_id = ?").bind(row.candidate_id),
+    ]);
+    return back("Removed, and it won't be found again automatically.");
+  }
+  return back("Nothing changed.");
 }
 
 async function promisePagesChange(db, env, request, email) {
@@ -1527,7 +1594,7 @@ async function handle(context) {
       throw err;
     }
   }
-  if (parts[1] === "promise" && ["new", "batch", "pages", "statements"].includes(parts[2]) && parts.length === 3) {
+  if (parts[1] === "promise" && ["new", "batch", "pages", "statements", "candidates"].includes(parts[2]) && parts.length === 3) {
     try {
       if (request.method === "POST") {
         const origin = request.headers.get("Origin");
@@ -1535,11 +1602,13 @@ async function handle(context) {
         if (parts[2] === "new") return await promiseCreate(env.DB, env, request);
         if (parts[2] === "batch") return await promiseBatch(env.DB, request);
         if (parts[2] === "statements") return await officialStatementsChange(env.DB, env, request);
+        if (parts[2] === "candidates") return await candidatePagesChange(env.DB, request, who.email);
         return await promisePagesChange(env.DB, env, request, who.email);
       }
       if (parts[2] === "new") return await promiseNew(env.DB, env);
       if (parts[2] === "statements") return await officialStatements(env.DB, env, { done: url.searchParams.get("done") || "" });
       if (parts[2] === "pages") return await promisePages(env.DB, env, { done: url.searchParams.get("done") || "" });
+      if (parts[2] === "candidates") return await candidatePages(env.DB, { done: url.searchParams.get("done") || "", offset: Math.max(0, parseInt(url.searchParams.get("offset") || "0", 10) || 0) });
       return Response.redirect(`${url.origin}/admin/review/#promises`, 302);
     } catch (err) {
       if (/no such table|no such column/i.test(String(err && err.message))) return missingTables();

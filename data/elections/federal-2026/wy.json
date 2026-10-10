@@ -11,42 +11,48 @@
    "name": "BYRD, JAMES WILLARD MR.",
    "party": "DEMOCRATIC PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6WY00217/"
+   "url": "https://www.fec.gov/data/candidate/S6WY00217/",
+   "committee": "C00938738"
   },
   {
    "id": "S6WY00209",
    "name": "HAGEMAN, HARRIET",
    "party": "REPUBLICAN PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6WY00209/"
+   "url": "https://www.fec.gov/data/candidate/S6WY00209/",
+   "committee": "C00788943"
   },
   {
    "id": "S0WY00137",
    "name": "LUMMIS, CYNTHIA MARIE MRS.",
    "party": "REPUBLICAN PARTY",
    "incumbent": true,
-   "url": "https://www.fec.gov/data/candidate/S0WY00137/"
+   "url": "https://www.fec.gov/data/candidate/S0WY00137/",
+   "committee": "C00443580"
   },
   {
    "id": "S6WY00225",
    "name": "MEAD, SAMUEL",
    "party": "REPUBLICAN PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6WY00225/"
+   "url": "https://www.fec.gov/data/candidate/S6WY00225/",
+   "committee": "C00947424"
   },
   {
    "id": "S4WY00162",
    "name": "RASNER, REID",
    "party": "REPUBLICAN PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S4WY00162/"
+   "url": "https://www.fec.gov/data/candidate/S4WY00162/",
+   "committee": null
   },
   {
    "id": "S6WY00191",
    "name": "SKOVGARD, JIMMY MR",
    "party": "REPUBLICAN PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6WY00191/"
+   "url": "https://www.fec.gov/data/candidate/S6WY00191/",
+   "committee": "C00903369"
   }
  ],
  "house": {
@@ -56,63 +62,72 @@
     "name": "BALOW, JILLIAN",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6WY00225/"
+    "url": "https://www.fec.gov/data/candidate/H6WY00225/",
+    "committee": "C00934950"
    },
    {
     "id": "H6WY00241",
     "name": "BITEMAN, DENNIS BO DEAN II",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6WY00241/"
+    "url": "https://www.fec.gov/data/candidate/H6WY00241/",
+    "committee": "C00943258"
    },
    {
     "id": "H6WY01157",
     "name": "CHAPMAN, FRANK",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6WY01157/"
+    "url": "https://www.fec.gov/data/candidate/H6WY01157/",
+    "committee": "C00945063"
    },
    {
     "id": "H6WY01140",
     "name": "CHRISTENSEN, KEVIN",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6WY01140/"
+    "url": "https://www.fec.gov/data/candidate/H6WY01140/",
+    "committee": "C00941427"
    },
    {
     "id": "H6WY01165",
     "name": "FRIESS, STEPHEN",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6WY01165/"
+    "url": "https://www.fec.gov/data/candidate/H6WY01165/",
+    "committee": "C00945980"
    },
    {
     "id": "H6WY00233",
     "name": "GIRALT, DAVID",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6WY00233/"
+    "url": "https://www.fec.gov/data/candidate/H6WY00233/",
+    "committee": "C00940320"
    },
    {
     "id": "H6WY00217",
     "name": "GRAY, CHUCK",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6WY00217/"
+    "url": "https://www.fec.gov/data/candidate/H6WY00217/",
+    "committee": "C00932244"
    },
    {
     "id": "H6WY01173",
     "name": "KINNEY, LISA",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6WY01173/"
+    "url": "https://www.fec.gov/data/candidate/H6WY01173/",
+    "committee": "C00944280"
    },
    {
     "id": "H6WY01116",
     "name": "RASNER, REID",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6WY01116/"
+    "url": "https://www.fec.gov/data/candidate/H6WY01116/",
+    "committee": null
    }
   ]
  }

@@ -20,6 +20,7 @@ import init0018 from "../migrations/0018_orders.sql";
 import init0019 from "../migrations/0019_promises_auto.sql";
 import init0020 from "../migrations/0020_all_states.sql";
 import init0021 from "../migrations/0021_ballot_lookups.sql";
+import init0022 from "../migrations/0022_candidate_platforms.sql";
 import { isHttp, today } from "./util.js";
 import { totals } from "./rollcall.js";
 
@@ -45,6 +46,7 @@ const MIGRATIONS = [
   ["0019_promises_auto.sql", init0019],
   ["0020_all_states.sql", init0020],
   ["0021_ballot_lookups.sql", init0021],
+  ["0022_candidate_platforms.sql", init0022],
 ];
 
 function statements(sql) {

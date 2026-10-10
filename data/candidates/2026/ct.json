@@ -1,0 +1,503 @@
+{
+ "state": "CT",
+ "year": 2026,
+ "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=CT&candidate_status=C",
+ "list_built_on": "2026-10-10",
+ "built_on": "2026-10-10",
+ "senate_up": false,
+ "candidates": {
+  "H6CT01206": {
+   "id": "H6CT01206",
+   "name": "BRONIN, LUKE",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "1",
+   "incumbent": false,
+   "committee": "C00913897",
+   "fec_url": "https://www.fec.gov/data/candidate/H6CT01206/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H2CT03102": {
+   "id": "H2CT03102",
+   "name": "CHAI, AMY FOGELSTROM DR",
+   "party": "REPUBLICAN PARTY",
+   "office": "H",
+   "district": "1",
+   "incumbent": false,
+   "committee": "C00785634",
+   "fec_url": "https://www.fec.gov/data/candidate/H2CT03102/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H6CT01180": {
+   "id": "H6CT01180",
+   "name": "FORTUNE, RUTH R.",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "1",
+   "incumbent": false,
+   "committee": "C00910034",
+   "fec_url": "https://www.fec.gov/data/candidate/H6CT01180/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H6CT01222": {
+   "id": "H6CT01222",
+   "name": "GILCHREST, JILLIAN",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "1",
+   "incumbent": false,
+   "committee": "C00917104",
+   "fec_url": "https://www.fec.gov/data/candidate/H6CT01222/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H8CT01046": {
+   "id": "H8CT01046",
+   "name": "LARSON, JOHN B",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "1",
+   "incumbent": true,
+   "committee": "C00330142",
+   "fec_url": "https://www.fec.gov/data/candidate/H8CT01046/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H6CT01198": {
+   "id": "H6CT01198",
+   "name": "PERRY, JACK",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "1",
+   "incumbent": false,
+   "committee": "C00912774",
+   "fec_url": "https://www.fec.gov/data/candidate/H6CT01198/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H6CT02196": {
+   "id": "H6CT02196",
+   "name": "AUSTIN, GEORGE PATRICK",
+   "party": "REPUBLICAN PARTY",
+   "office": "H",
+   "district": "2",
+   "incumbent": false,
+   "committee": "C00914481",
+   "fec_url": "https://www.fec.gov/data/candidate/H6CT02196/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H2CT02112": {
+   "id": "H2CT02112",
+   "name": "COURTNEY, JOSEPH",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "2",
+   "incumbent": true,
+   "committee": "C00410233",
+   "fec_url": "https://www.fec.gov/data/candidate/H2CT02112/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H2CT02161": {
+   "id": "H2CT02161",
+   "name": "FRANCE, MIKE",
+   "party": "REPUBLICAN PARTY",
+   "office": "H",
+   "district": "2",
+   "incumbent": false,
+   "committee": "C00915322",
+   "fec_url": "https://www.fec.gov/data/candidate/H2CT02161/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H6CT02188": {
+   "id": "H6CT02188",
+   "name": "GAUCK, KYLE",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "2",
+   "incumbent": false,
+   "committee": "C00899179",
+   "fec_url": "https://www.fec.gov/data/candidate/H6CT02188/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H0CT03072": {
+   "id": "H0CT03072",
+   "name": "DELAURO, ROSA L",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "3",
+   "incumbent": true,
+   "committee": "C00238865",
+   "fec_url": "https://www.fec.gov/data/candidate/H0CT03072/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 1152006.56,
+    "disbursements": 1028036.22,
+    "cash_on_hand": 349418.43,
+    "individual_unitemized": 60127.73,
+    "individual_itemized": 458458.82,
+    "pac": 520762.12,
+    "party": 0,
+    "self_funding": 0,
+    "other": 112657.89,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H0CT03072/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00001016",
+      "name": "CARPENTERS LEGISLATIVE IMPROVEMENT COMMITTEE UNITED BROTHERHOOD OF CARPENTERS AND JOINERS",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00411553",
+      "name": "AMERICAN ACADEMY OF FAMILY PHYSICIANS PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00215285",
+      "name": "GENERAL ATOMICS POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00406801",
+      "name": "AVANGRID PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00267849",
+      "name": "ALLIED PILOTS ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00407841",
+      "name": "WESTERN ALLIANCE OF FARMWORKER ADVOCATES PAC (WAFA PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00028860",
+      "name": "AMERICAN FEDERATION OF TEACHERS, AFL-CIO COMMITTEE ON POLITICAL EDUCATION",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00078451",
+      "name": "GENERAL DYNAMICS CORPORATION POLITICAL ACTION COMMITTEE (GENERAL DYNAMICS EMPLOYEE PAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00546234",
+      "name": "LEIDOS INC. POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 6,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00011114",
+      "name": "P.E.O.P.L.E./AFSCME - AMERICAN FEDERATION OF STATE COUNTY MUNICIPAL EMPLOYEES",
+      "total": 10000,
+      "count": 4,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00088591",
+      "name": "EMPLOYEES OF NORTHRUP GRUMAN CORP PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00100321",
+      "name": "L3HARRIS TECHNOLOGIES, INC. PAC",
+      "total": 9000,
+      "count": 3,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00142711",
+      "name": "THE BOEING COMPANY PAC",
+      "total": 8500,
+      "count": 6,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00383992",
+      "name": "PERATON CORP. POLITICAL ACTION COMMITTEE (A.K.A. 'PERATON PAC')",
+      "total": 8000,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00734012",
+      "name": "ASCO ASSOCIATION POLITICAL ACTION COMMITTEE (ASCO ASSOCIATION PAC)",
+      "total": 8000,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00382424",
+      "name": "AMERICAN COLLEGE OF SURGEONS PROFESSIONAL ASSOCIATION PAC",
+      "total": 7500,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00435933",
+      "name": "AMERICAN ACADEMY OF NEUROLOGY BRAIN PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "education"
+     },
+     {
+      "committee_id": "C00238725",
+      "name": "NATIONAL AIR TRAFFIC CONTROLLERS ASSOCIATION PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00035451",
+      "name": "AIR LINE PILOTS ASSOCIATION PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00566042",
+      "name": "FRIENDS OF MEDICAL RESEARCH PAC",
+      "total": 6500,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00002972",
+      "name": "AMERICA'S ELECTRIC COOPERATIVES PAC",
+      "total": 6500,
+      "count": 3,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00364158",
+      "name": "AMERICAN COLLEGE OF OB-GYNS PAC (OB-GYN PAC)",
+      "total": 6000,
+      "count": 2,
+      "industry": "education"
+     },
+     {
+      "committee_id": "C00001636",
+      "name": "SMART TD PAC",
+      "total": 5500,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00000729",
+      "name": "AMERICAN DENTAL ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00007880",
+      "name": "AMERICA'S CREDIT UNIONS PAC OF CREDIT UNION NATIONAL ASSOCIATION, INC",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     }
+    ],
+    "count": 140,
+    "total": 520762.12,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00238865&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "http://www.rosadelauro.com/",
+    "as_filed": "HTTP://WWW.ROSADELAURO.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00238865/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
+  },
+  "H6CT03186": {
+   "id": "H6CT03186",
+   "name": "DENOBLE, DAMJAN",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "3",
+   "incumbent": false,
+   "committee": "C00913251",
+   "fec_url": "https://www.fec.gov/data/candidate/H6CT03186/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H6CT03178": {
+   "id": "H6CT03178",
+   "name": "LANCIA, CHRISTOPHER JOHN MR.",
+   "party": "REPUBLICAN PARTY",
+   "office": "H",
+   "district": "3",
+   "incumbent": false,
+   "committee": "C00905125",
+   "fec_url": "https://www.fec.gov/data/candidate/H6CT03178/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H6CT03194": {
+   "id": "H6CT03194",
+   "name": "RICE, ANDREW JAMES MR.",
+   "party": "INDEPENDENT",
+   "office": "H",
+   "district": "3",
+   "incumbent": false,
+   "committee": "C00921460",
+   "fec_url": "https://www.fec.gov/data/candidate/H6CT03194/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H6CT04143": {
+   "id": "H6CT04143",
+   "name": "GOLDSTEIN, MICHAEL",
+   "party": "REPUBLICAN PARTY",
+   "office": "H",
+   "district": "4",
+   "incumbent": false,
+   "committee": "C00935031",
+   "fec_url": "https://www.fec.gov/data/candidate/H6CT04143/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H8CT04172": {
+   "id": "H8CT04172",
+   "name": "HIMES, JIM",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "4",
+   "incumbent": true,
+   "committee": "C00434191",
+   "fec_url": "https://www.fec.gov/data/candidate/H8CT04172/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H4CT04189": {
+   "id": "H4CT04189",
+   "name": "MIRESSI, DAN",
+   "party": "REPUBLICAN PARTY",
+   "office": "H",
+   "district": "4",
+   "incumbent": false,
+   "committee": "C00941310",
+   "fec_url": "https://www.fec.gov/data/candidate/H4CT04189/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H6CT04150": {
+   "id": "H6CT04150",
+   "name": "MIRESSI, DANIEL",
+   "party": "REPUBLICAN PARTY",
+   "office": "H",
+   "district": "4",
+   "incumbent": false,
+   "committee": "C00941310",
+   "fec_url": "https://www.fec.gov/data/candidate/H6CT04150/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H2CT05230": {
+   "id": "H2CT05230",
+   "name": "BOTELHO, MICHELE",
+   "party": "REPUBLICAN PARTY",
+   "office": "H",
+   "district": "5",
+   "incumbent": false,
+   "committee": "C00792960",
+   "fec_url": "https://www.fec.gov/data/candidate/H2CT05230/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H6CT05223": {
+   "id": "H6CT05223",
+   "name": "DE BARROS, JONATHAN",
+   "party": "REPUBLICAN PARTY",
+   "office": "H",
+   "district": "5",
+   "incumbent": false,
+   "committee": "C00899898",
+   "fec_url": "https://www.fec.gov/data/candidate/H6CT05223/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H8CT05245": {
+   "id": "H8CT05245",
+   "name": "HAYES, JAHANA",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "5",
+   "incumbent": true,
+   "committee": "C00677898",
+   "fec_url": "https://www.fec.gov/data/candidate/H8CT05245/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H6CT05231": {
+   "id": "H6CT05231",
+   "name": "SHEA, CHRIS",
+   "party": "REPUBLICAN PARTY",
+   "office": "H",
+   "district": "5",
+   "incumbent": false,
+   "committee": "C00935692",
+   "fec_url": "https://www.fec.gov/data/candidate/H6CT05231/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  }
+ }
+}

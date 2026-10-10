@@ -11,42 +11,48 @@
    "name": "ASHBY, MICAH",
    "party": "REPUBLICAN PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6AR00207/"
+   "url": "https://www.fec.gov/data/candidate/S6AR00207/",
+   "committee": "C00919803"
   },
   {
    "id": "S4AR00103",
    "name": "COTTON, THOMAS",
    "party": "REPUBLICAN PARTY",
    "incumbent": true,
-   "url": "https://www.fec.gov/data/candidate/S4AR00103/"
+   "url": "https://www.fec.gov/data/candidate/S4AR00103/",
+   "committee": "C00499988"
   },
   {
    "id": "S6AR00173",
    "name": "DUNBAR, ETHAN N SR.",
    "party": "DEMOCRATIC PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6AR00173/"
+   "url": "https://www.fec.gov/data/candidate/S6AR00173/",
+   "committee": "C00916502"
   },
   {
    "id": "S6AR00215",
    "name": "LITTLE, JEB",
    "party": "REPUBLICAN PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6AR00215/"
+   "url": "https://www.fec.gov/data/candidate/S6AR00215/",
+   "committee": "C00926568"
   },
   {
    "id": "S6AR00199",
    "name": "SHOFFNER, HALLIE",
    "party": "DEMOCRATIC PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6AR00199/"
+   "url": "https://www.fec.gov/data/candidate/S6AR00199/",
+   "committee": "C00905471"
   },
   {
    "id": "S6AR00223",
    "name": "WADLIN, JEFFREY FRANCIS",
    "party": "LIBERTARIAN PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6AR00223/"
+   "url": "https://www.fec.gov/data/candidate/S6AR00223/",
+   "committee": "C00940619"
   }
  ],
  "house": {
@@ -56,14 +62,16 @@
     "name": "CRAWFORD, ERIC ALAN RICK",
     "party": "REPUBLICAN PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H0AR01083/"
+    "url": "https://www.fec.gov/data/candidate/H0AR01083/",
+    "committee": "C00462374"
    },
    {
     "id": "H6AR01155",
     "name": "GREEN, TERRI YARBROUGH DR.",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6AR01155/"
+    "url": "https://www.fec.gov/data/candidate/H6AR01155/",
+    "committee": "C00930800"
    }
   ],
   "2": [
@@ -72,28 +80,32 @@
     "name": "HILL, JAMES FRENCH",
     "party": "REPUBLICAN PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H4AR02141/"
+    "url": "https://www.fec.gov/data/candidate/H4AR02141/",
+    "committee": "C00551275"
    },
    {
     "id": "H6AR02294",
     "name": "HUFFMAN, ZACKARY BLAKE",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6AR02294/"
+    "url": "https://www.fec.gov/data/candidate/H6AR02294/",
+    "committee": "C00912345"
    },
    {
     "id": "H6AR02286",
     "name": "JONES, CHRIS",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6AR02286/"
+    "url": "https://www.fec.gov/data/candidate/H6AR02286/",
+    "committee": "C00912899"
    },
    {
     "id": "H6AR02278",
     "name": "MCDOWELL, CHASE",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6AR02278/"
+    "url": "https://www.fec.gov/data/candidate/H6AR02278/",
+    "committee": "C00902619"
    }
   ],
   "3": [
@@ -102,21 +114,24 @@
     "name": "LAWRENCE, DIANA LYNNE",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6AR03136/"
+    "url": "https://www.fec.gov/data/candidate/H6AR03136/",
+    "committee": "C00896886"
    },
    {
     "id": "H6AR03128",
     "name": "RYERSE, ROBB",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6AR03128/"
+    "url": "https://www.fec.gov/data/candidate/H6AR03128/",
+    "committee": "C00908400"
    },
    {
     "id": "H0AR03055",
     "name": "WOMACK, STEPHEN A THE HON",
     "party": "REPUBLICAN PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H0AR03055/"
+    "url": "https://www.fec.gov/data/candidate/H0AR03055/",
+    "committee": "C00477745"
    }
   ],
   "4": [
@@ -125,14 +140,16 @@
     "name": "RUSSELL, JAMES RICHARD MR III",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6AR04084/"
+    "url": "https://www.fec.gov/data/candidate/H6AR04084/",
+    "committee": "C00924621"
    },
    {
     "id": "H4AR04048",
     "name": "WESTERMAN, BRUCE",
     "party": "REPUBLICAN PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H4AR04048/"
+    "url": "https://www.fec.gov/data/candidate/H4AR04048/",
+    "committee": "C00548180"
    }
   ]
  }
