@@ -607,6 +607,7 @@ def cl_get(path, token, tries=4):
             after = e.headers.get("Retry-After") if e.headers else None
             delay = int(after) if after and after.isdigit() else 30 * (attempt + 1)
             if delay > CL_MAX_WAIT:
+                print(f"CourtListener asked to wait {delay} s; stopping for this run", file=sys.stderr)
                 raise
             print(f"CourtListener asked to slow down; waiting {delay} s", file=sys.stderr)
             time.sleep(delay)
@@ -626,31 +627,41 @@ def build_disclosures(justices, token, previous=None):
         for r in reports:
             if r.get("id"):
                 known[r["id"]] = r
-    out = {}
+    # Justices not reached this run keep what was read before.
+    out = dict((previous or {}).get("justices") or {})
     for j in justices:
-        last = j["name"].split(",")[0].split()[-1]
-        people = cl_get(f"/people/?name_last={urllib.parse.quote(last)}&positions__court=scotus", token).get("results", [])
-        first = j["name"].split()[0]
-        person = next((p for p in people if p.get("name_first") == first), None)
-        if not person:
+        try:
+            out[j["slug"]] = disclosures_for(j, token, known)
+        except Exception as e:
+            print(f"Disclosures: stopped at {j['name']} ({type(e).__name__} {getattr(e, 'code', '')}); the rest wait for the next run", file=sys.stderr)
+            return out, False
+    return out, True
+
+
+def disclosures_for(j, token, known):
+    """One justice's reports, newest first (at most 20)."""
+    last = j["name"].split(",")[0].split()[-1]
+    people = cl_get(f"/people/?name_last={urllib.parse.quote(last)}&positions__court=scotus", token).get("results", [])
+    first = j["name"].split()[0]
+    person = next((p for p in people if p.get("name_first") == first), None)
+    if not person:
+        return []
+    reports = []
+    for fd in cl_get(f"/financial-disclosures/?person={person['id']}&order_by=-year", token).get("results", [])[:20]:
+        if fd.get("id") in known:
+            reports.append(known[fd["id"]])
             continue
-        reports = []
-        for fd in cl_get(f"/financial-disclosures/?person={person['id']}&order_by=-year", token).get("results", [])[:20]:
-            if fd.get("id") in known:
-                reports.append(known[fd["id"]])
-                continue
-            gifts = cl_get(f"/gifts/?financial_disclosure={fd['id']}", token).get("results", [])
-            reimb = cl_get(f"/reimbursements/?financial_disclosure={fd['id']}", token).get("results", [])
-            reports.append({
-                "id": fd.get("id"),
-                "year": fd.get("year"),
-                "report_url": fd.get("filepath") or fd.get("download_filepath"),
-                "gifts": [{"source": g.get("source"), "description": g.get("description"), "value": g.get("value")} for g in gifts],
-                "reimbursements": [{"source": r.get("source"), "dates": r.get("date_raw"), "location": r.get("location"), "purpose": r.get("purpose")} for r in reimb],
-                "source_url": f"https://www.courtlistener.com/person/{person['id']}/{person.get('slug', '')}/disclosures/",
-            })
-        out[j["slug"]] = reports
-    return out
+        gifts = cl_get(f"/gifts/?financial_disclosure={fd['id']}", token).get("results", [])
+        reimb = cl_get(f"/reimbursements/?financial_disclosure={fd['id']}", token).get("results", [])
+        reports.append({
+            "id": fd.get("id"),
+            "year": fd.get("year"),
+            "report_url": fd.get("filepath") or fd.get("download_filepath"),
+            "gifts": [{"source": g.get("source"), "description": g.get("description"), "value": g.get("value")} for g in gifts],
+            "reimbursements": [{"source": r.get("source"), "dates": r.get("date_raw"), "location": r.get("location"), "purpose": r.get("purpose")} for r in reimb],
+            "source_url": f"https://www.courtlistener.com/person/{person['id']}/{person.get('slug', '')}/disclosures/",
+        })
+    return reports
 
 
 # ---------------------------------------------------------------------------
@@ -710,9 +721,10 @@ def main():
         path = OUT / "disclosures.json"
         previous = json.loads(path.read_text()) if path.exists() else None
         try:
-            disclosures = build_disclosures(justices, token, previous)
-            write(path, {"built_on": built, "source": "CourtListener (Free Law Project), from the judiciary's financial disclosure reports", "justices": disclosures})
-            print(f"Disclosures: {sum(len(v) for v in disclosures.values())} reports")
+            disclosures, complete = build_disclosures(justices, token, previous)
+            if disclosures:
+                write(path, {"built_on": built, "complete": complete, "source": "CourtListener (Free Law Project), from the judiciary's financial disclosure reports", "justices": disclosures})
+            print(f"Disclosures: {sum(len(v) for v in disclosures.values())} reports for {len(disclosures)} justices{'' if complete else ' (partial; the rest next run)'}")
         except Exception as e:
             print(f"Disclosures: CourtListener {type(e).__name__} {getattr(e, 'code', '')}; disclosures.json not changed", file=sys.stderr)
     else:
