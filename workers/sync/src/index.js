@@ -74,7 +74,7 @@ const STEPS = [
   // Candidates' Platform tab: the same finder and excerpt rules on the campaign
   // website in each candidate's FEC filing (src/promises/candidates-sync.js).
   ["candidate-platforms", syncCandidatePlatforms],
-  // Simple mode's plain "What it does" lines, rewritten from summaries the site
+  // Quick mode's plain "What it does" lines, rewritten from summaries the site
   // already shows and checked in code (src/plain/), PLAIN_DAILY a day.
   ["plain-summaries", syncPlainSummaries],
   // Paced and long-running (the first full load takes a few days): last.

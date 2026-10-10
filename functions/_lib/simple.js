@@ -1,5 +1,5 @@
-// Simple mode (the Simple / Detailed switch under the header; assets/app.js):
-// a short card at the top of a page in plain words, shown only in Simple mode,
+// Quick mode (the Quick / Detailed switch under the header; assets/app.js):
+// a short card at the top of a page in plain words, shown only in Quick mode,
 // with the full page one tap away. Same rules as the rest of the site: facts
 // only, neutral wording, the source one tap away, no party colors.
 //
@@ -11,11 +11,11 @@
 //   billStands     where a bill stands, in one or two short sentences
 //   repVotesPlain  how the visitor's reps voted on a bill's final passage
 //
-// Pure except plainFor (one D1 read). See docs/simple-mode.md.
+// Pure except plainFor (one D1 read). See docs/quick-mode.md.
 import { esc, fmtDate, safeUrl } from "./render.js";
 import { firstSentences } from "./summary.js";
 
-export const SIMPLE_METHOD = "/about/methodology/#simple";
+export const SIMPLE_METHOD = "/about/methodology/#quick";
 
 /** Labeled plain lines, the source note, and the way back to the full page. `lines`: [[label, html]]. */
 export function simpleCard({ lines, source = "", jump = "summary", label = "In plain words" }) {

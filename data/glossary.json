@@ -1,5 +1,5 @@
 {
-  "_readme": "Plain words for Simple mode (assets/app.js). Terms: each gets a dotted underline the first time it appears on a page, and a tap shows its definition. Constitution: the plain name shown on a Constitution chip in Simple mode, by provision id from data/constitution.json (a clause without its own name uses its section's, then its article's or amendment's). One sentence each, neutral, no examples about real people. Anyone can suggest a change: edit this file.",
+  "_readme": "Plain words for Quick mode (assets/app.js). Terms: each gets a dotted underline the first time it appears on a page, and a tap shows its definition. Constitution: the plain name shown on a Constitution chip in Quick mode, by provision id from data/constitution.json (a clause without its own name uses its section's, then its article's or amendment's). One sentence each, neutral, no examples about real people. Anyone can suggest a change: edit this file.",
   "terms": [
     { "term": "cloture", "definition": "A Senate vote to end debate on something so it can move to a final vote. It usually takes 60 of 100 senators." },
     { "term": "filibuster", "definition": "Using long debate in the Senate to delay or block a vote. Ending one takes a cloture vote." },

@@ -494,10 +494,10 @@
     });
   });
   // ---------------------------------------------------------------------
-  // Simple / Detailed: the switch under the header. The choice is kept in this
+  // Quick / Detailed: the switch under the header. The choice is kept in this
   // browser only (localStorage "pillory_mode"); nothing goes to the server. The
   // page carries both versions; the <head> script sets data-mode before the
-  // page draws, so there's no flash. In Simple mode, glossary words get a
+  // page draws, so there's no flash. In Quick mode, glossary words get a
   // dotted underline and a tap-to-explain, and Constitution chips show their
   // plain names, both from /data/glossary.json.
   var root = document.documentElement;

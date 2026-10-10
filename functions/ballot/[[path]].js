@@ -328,7 +328,7 @@ async function statePage(env, request, st, { message = "" } = {}) {
     loadSection("ballot office", () => stateOffice(env, request, st), null),
     loadSection("ballot election", () => ownElection(env, request, st), null),
   ]);
-  // Simple mode: what's on it in a sentence, then the statewide list and the address card.
+  // Quick mode: what's on it in a sentence, then the statewide list and the address card.
   const e = election === FAILED ? null : election;
   const certified = e && e.election.state === st && !measuresOnly(e);
   const offices = certified ? e.contests.filter((c) => c.scope === "statewide").length : 0;

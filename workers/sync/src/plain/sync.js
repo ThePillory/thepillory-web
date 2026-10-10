@@ -1,4 +1,4 @@
-// The plain-summaries step: Simple mode's "What it does" lines (docs/simple-mode.md).
+// The plain-summaries step: Quick mode's "What it does" lines (docs/quick-mode.md).
 // Rewrites, in plain words, a summary the site already shows, and keeps the
 // rewrite only when the checks in check.js pass. Never a new claim.
 //

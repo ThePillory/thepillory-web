@@ -218,7 +218,7 @@ def site_header():
   </div>
   {SEARCH.strip()}
   <div class="mode-switch segmented" role="group" aria-label="How much detail" data-mode-switch hidden>
-    <button class="toggle" type="button" data-mode-set="simple" aria-pressed="false">Simple</button>
+    <button class="toggle" type="button" data-mode-set="simple" aria-pressed="false">Quick</button>
     <button class="toggle" type="button" data-mode-set="detailed" aria-pressed="true">Detailed</button>
   </div>
 </header>"""
@@ -543,9 +543,9 @@ def build_methodology():
   </ul>
 </section>
 
-<section class="card stack" id="simple">
-  <h2>Simple mode</h2>
-  <p>The Simple / Detailed switch under the header shows a short card in plain words at the top of a page, with the full page one tap away. Your choice is kept in your browser only; nothing is sent to ThePillory, and you're never asked your age. The rules don't change: facts only, neutral wording, the source one tap away.</p>
+<section class="card stack" id="quick">
+  <h2>Quick mode</h2>
+  <p>The Quick / Detailed switch under the header shows a short card in plain words at the top of a page, with the full page one tap away. Your choice is kept in your browser only; nothing is sent to ThePillory, and you're never asked your age. The rules don't change: facts only, neutral wording, the source one tap away.</p>
   <ul class="plain-list small">
     <li><strong>What it does:</strong> a plain-words rewrite of a summary the page already shows (the official summary, a person's summary, or the checked constitutional analysis), labeled "Simplified by AI from [source]". It's kept only when checks in code pass: one or two short sentences, about an 8th-grade reading level, every number and name already in the source, no loaded or judging words, and, when the source gives both sides, a supporters line and a critics line of similar length. Until a rewrite passes, the card shows the first sentence of the original summary, word for word.</li>
     <li><strong>Where it stands, and how your reps voted:</strong> written from the recorded votes and final action, the same facts as the full page.</li>

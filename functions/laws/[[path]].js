@@ -303,7 +303,7 @@ ${analysis.failed ? sectionError("Constitutional baseline") : baselineSection(an
     : st === "CA" ? `California, ${esc(b.session.slice(0, 4))}–${esc(b.session.slice(4))} session`
     : `${esc(STATE_NAME[st] || st)}, session ${esc(b.session)}`;
   const summary = billSummary(b, a);
-  // Simple mode: what it does, where it stands, how your reps voted.
+  // Quick mode: what it does, where it stands, how your reps voted.
   const chambers = legislatureOf(b);
   const lead = plainLead(plain === FAILED ? null : plain, summary);
   const simple = simpleCard({

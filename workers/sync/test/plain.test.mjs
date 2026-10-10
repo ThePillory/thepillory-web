@@ -1,8 +1,8 @@
 // node --import ./test/sql-stub.mjs --test test/plain.test.mjs
-// Simple mode: the checks every plain rewrite must pass (src/plain/check.js),
+// Quick mode: the checks every plain rewrite must pass (src/plain/check.js),
 // the step that writes them (src/plain/sync.js) with a fake model and an
 // in-memory SQLite stand-in for D1, and the plain pieces of the pages
-// (functions/_lib/simple.js), the glossary file, and the Simple cards on the
+// (functions/_lib/simple.js), the glossary file, and the Quick cards on the
 // Court, case, measure and ballot pages. Every bill, name and number here is invented.
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -122,7 +122,7 @@ test("the glossary: one reviewable file, one sentence each, every Constitution i
   assert.equal(g.constitution["amend-1"], "Speech, religion, press, assembly");
 });
 
-// The Simple cards on pages built from the site's static files.
+// The Quick cards on pages built from the site's static files.
 const ROOT = new URL("../../../", import.meta.url);
 const env = { ASSETS: { fetch: async (u) => { const f = new URL(`.${new URL(u).pathname}`, ROOT); return existsSync(f) ? new Response(readFileSync(f, "utf8")) : new Response("nf", { status: 404 }); } } };
 async function get(mod, path) {
@@ -133,7 +133,7 @@ async function get(mod, path) {
   return res.status === 200 ? res.text() : "";
 }
 
-test("Simple cards on the Supreme Court, a case, a measure and the ballot preview", async () => {
+test("Quick cards on the Supreme Court, a case, a measure and the ballot preview", async () => {
   const court = await get("../../../functions/bodies/[[path]].js", "/bodies/us-supreme-court/");
   assert.match(court, /<div class="simple-scope">/);
   assert.match(court, /simple-card simple-only[\s\S]*What it is[\s\S]*Latest decisions/);

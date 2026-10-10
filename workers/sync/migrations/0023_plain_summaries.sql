@@ -1,4 +1,4 @@
--- Simple mode (docs/simple-mode.md): a plain-words rewrite of a summary the
+-- Quick mode (docs/quick-mode.md): a plain-words rewrite of a summary the
 -- site already shows (a bill's official summary or a person's, a checked
 -- analysis's summary, an executive order's checked analysis, a ballot
 -- measure's official summary). Written by the sync's plain-summaries step and

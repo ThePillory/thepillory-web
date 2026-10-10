@@ -1,5 +1,5 @@
-// Simple mode's plain rewrites: the checks every rewrite must pass before it's
-// shown (docs/simple-mode.md). Pure; tested in test/plain.test.mjs.
+// Quick mode's plain rewrites: the checks every rewrite must pass before it's
+// shown (docs/quick-mode.md). Pure; tested in test/plain.test.mjs.
 //
 //   - short: "what" is one or two sentences, at most WHAT_MAX_WORDS words;
 //   - readable: a reading grade (Flesch-Kincaid) of at most MAX_GRADE;

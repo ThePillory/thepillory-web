@@ -1,13 +1,13 @@
-# Simple mode
+# Quick mode
 
-A **Simple / Detailed** switch under the header of every page. Simple shows a short card in plain words at the top of a page; Detailed is the site as it was. The choice is kept in the browser only (`localStorage` "pillory_mode"); nothing goes to the server, there are no accounts, and nobody is asked their age. Detailed is the default. Without JavaScript the switch doesn't show and every page is Detailed.
+A **Quick / Detailed** switch under the header of every page. Quick shows a short card in plain words at the top of a page; Detailed is the site as it was. The choice is kept in the browser only (`localStorage` "pillory_mode"); nothing goes to the server, there are no accounts, and nobody is asked their age. Detailed is the default. Without JavaScript the switch doesn't show and every page is Detailed.
 
 Same rules as everywhere else: facts only, neutral wording, no party colors, and the source one tap away. Simpler words, same truth.
 
 ## How it works
 
 - **The switch** is in `site_header()` (`tools/build.py`); `assets/app.js` sets `data-mode="simple"` on `<html>` and remembers it. A one-line script in every page's `<head>` sets it before the page draws, so there's no flash.
-- **Every page carries both versions.** A page with a Simple card wraps its sections in `.simple-scope`; in Simple mode only the title area (`.summary-head`, `.rep-head`, `.page-head`), the card (`.simple-card`) and anything marked `.simple-keep` show. "See the details" switches to Detailed and goes to the full page. The pages are the same for everyone, so they stay cached at the edge.
+- **Every page carries both versions.** A page with a Quick card wraps its sections in `.simple-scope`; in Quick mode only the title area (`.summary-head`, `.rep-head`, `.page-head`), the card (`.simple-card`) and anything marked `.simple-keep` show. "See the details" switches to Detailed and goes to the full page. The pages are the same for everyone, so they stay cached at the edge.
 - **The cards** (`functions/_lib/simple.js`):
 
 | Page | Lines |

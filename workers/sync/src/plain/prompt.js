@@ -1,4 +1,4 @@
-// The instructions for Simple mode's plain rewrites. The same instructions for
+// The instructions for Quick mode's plain rewrites. The same instructions for
 // every item, whoever wrote or sponsored it. What comes back is checked in code
 // (src/plain/check.js) before it's shown.
 import { WHAT_MAX_WORDS, SIDE_MAX_WORDS } from "./check.js";

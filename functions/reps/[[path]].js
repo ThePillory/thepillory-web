@@ -329,7 +329,7 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
   // Reports and issues open with accounts; none exist yet.
   moreParts.push(sub("issues", "Issues", EMPTY_REPORTS));
 
-  // Simple mode: who they are, the job, the latest votes, their own words, the money in one line.
+  // Quick mode: who they are, the job, the latest votes, their own words, the money in one line.
   const recent = votes !== FAILED && votes.rows ? votes.rows.slice(0, 3) : [];
   const excerpt = ownWords && ownWords !== FAILED && ownWords.pages && ownWords.pages[0];
   const fundingOk = funding && funding !== FAILED && funding.totals ? funding : null;
@@ -341,7 +341,7 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
       ["In their own words", excerpt ? `<div class="stack-xs"><p class="promise-quote">“${esc(excerpt.excerpt)}”</p><p class="small">${sourceNote(excerpt.url, excerpt.title || "Their issues page")}</p></div>` : ""],
       ["Money", moneyLine ? `${esc(moneyLine)} <a class="inline-link" href="#funding" data-mode-set="detailed">The full Funding tab</a>` : ""],
     ],
-    source: `Votes from the official record of each vote${moneyLine ? "; money from reports filed with the Federal Election Commission" : ""}. <a class="inline-link" href="${SIMPLE_METHOD}">How Simple mode works</a>`,
+    source: `Votes from the official record of each vote${moneyLine ? "; money from reports filed with the Federal Election Commission" : ""}. <a class="inline-link" href="${SIMPLE_METHOD}">How Quick mode works</a>`,
     jump: "about",
   });
   const tab = (k, label) => `<a role="tab" id="tab-${k}" href="#${k}" aria-controls="${k}">${label}</a>`;

@@ -194,7 +194,7 @@ test("contest page: every candidate gets the same card, in ballot order, with no
 
 test("measure page: official content first; then each argument and rebuttal labeled by side, in the guide's order, collapsed", async () => {
   const full = (await get("/elections/2026-11-03/measure/prop-1/")).html;
-  // The Detailed page, after the Simple card (which repeats the official Yes and No lines).
+  // The Detailed page, after the Quick card (which repeats the official Yes and No lines).
   const html = full.slice(full.indexOf("See the details"));
   const at = (t) => {
     const i = html.indexOf(t);

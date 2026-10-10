@@ -7,7 +7,7 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 ## Live now
 
 ### Tab 1: Home (`/`)
-- **Every page**: the Simple / Detailed switch under the header (docs/simple-mode.md); in Simple mode, a plain card at the top of bills, orders, officials, the Supreme Court and its cases, ballot measures and the ballot preview, with "See the details"
+- **Every page**: the Quick / Detailed switch under the header (docs/quick-mode.md); in Quick mode, a plain card at the top of bills, orders, officials, the Supreme Court and its cases, ballot measures and the ballot preview, with "See the details"
 - **The hub**, at thepillory.co itself, for every visitor (the old `/?hub=1` redirects here). **It's the one template for every state** (`functions/_lib/home.js`): with the visitor's state known it is that state's page, and `/states/<name>/` (`/states/washington/`, `/states/new-york/`; `/states/wa/` redirects) is the same page for that state, with the same sections in the same order. A section with no data for a state yet stays, with "Coming soon for [State]". Outside the US: the same page without Your state and the state map:
   - Headline and subtitle
   - "Showing [State] · Change" when the visitor's state is known (picked, from saved districts, or Cloudflare's approximate state for the connection; never stored): Change > a state picker (`POST /api/state`), and "Use my connection's location instead" after picking
