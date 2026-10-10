@@ -115,8 +115,15 @@ export function websites(states, year, today) {
 
 class OutOfRequests extends Error {}
 
+// About 1,000 requests an hour are allowed, so requests are spaced out, and a
+// "slow down" (429) is waited out a few times before the run stops cleanly.
+const GAP_MS = Number(process.env.FEC_GAP_MS || 3700);
+const WAIT_429_MS = 90000;
+
 function client(key, max) {
   let used = 0;
+  let last = 0;
+  const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
   return {
     get used() {
       return used;
@@ -125,12 +132,20 @@ function client(key, max) {
       if (used >= max) throw new OutOfRequests();
       used++;
       const url = `${API}${path}${path.includes("?") ? "&" : "?"}api_key=${key}`;
-      for (let attempt = 0; ; attempt++) {
+      for (let attempt = 0, limited = 0; ; attempt++) {
+        const gap = last + GAP_MS - Date.now();
+        if (gap > 0) await sleep(gap);
+        last = Date.now();
         const r = await fetch(url, { headers: { "User-Agent": "ThePillory/1.0 (+https://thepillory.co; public records)" } });
         if (r.ok) return r.json();
-        if (r.status === 429) throw new OutOfRequests();
+        if (r.status === 429) {
+          if (++limited > 3) throw new OutOfRequests();
+          console.error(`FEC asked to slow down; waiting ${WAIT_429_MS / 1000} s`);
+          await sleep(WAIT_429_MS);
+          continue;
+        }
         if (attempt >= 2) throw new Error(`FEC ${r.status} for ${path}`);
-        await new Promise((res) => setTimeout(res, 5000 * (attempt + 1)));
+        await sleep(5000 * (attempt + 1));
       }
     },
   };

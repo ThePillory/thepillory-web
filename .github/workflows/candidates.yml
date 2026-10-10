@@ -16,7 +16,7 @@ concurrency: candidates
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -25,7 +25,7 @@ jobs:
       - name: Read the FEC
         env:
           FEC_API_KEY: ${{ secrets.FEC_API_KEY }}
-        run: node tools/build_candidates.mjs --year 2026 --max-requests 600
+        run: node tools/build_candidates.mjs --year 2026 --max-requests 800
       - name: Commit the data
         run: |
           git config user.name "github-actions[bot]"

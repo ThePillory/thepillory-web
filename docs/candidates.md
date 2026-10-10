@@ -46,7 +46,7 @@ The general election date comes from `data/elections/dates.json`. Winners get th
 
 ## Data: `data/candidates/<year>/<st>.json`
 
-Built by `tools/build_candidates.mjs` in the "Refresh candidate data" workflow (`.github/workflows/candidates.yml`, twice a day, `FEC_API_KEY`). Each run reads up to `--max-requests` (600) FEC requests, candidates read longest ago first, and stops cleanly at the FEC's hourly limit:
+Built by `tools/build_candidates.mjs` in the "Refresh candidate data" workflow (`.github/workflows/candidates.yml`, twice a day, `FEC_API_KEY`). Each run reads up to `--max-requests` (800) FEC requests, one every 3.7 seconds (the FEC allows about 1,000 an hour), candidates read longest ago first; a "slow down" (429) is waited out up to three times, then the run stops cleanly and saves what it read:
 
 - totals: `/candidate/<id>/totals/?cycle=&election_full=false`, read with `parseTotals()` from `workers/sync/src/funding/fec.js` (the same as officials);
 - organizations: Schedule A line 11C (`F3-11C`, PACs and other committees) for the principal committee, summed by giving committee with `aggregatePacs()`, the 25 largest kept;
