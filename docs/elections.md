@@ -47,7 +47,7 @@ The measure URLs are listed in `MEASURES` in the builder. For the next election,
 
 ## The ballot preview (every state)
 
-Named "Preview [State]'s ballot" before an address, with the state's full name ("Preview California's ballot"; "Preview D.C.'s ballot"), and "Your ballot preview" once an address is entered (`previewLabel()` and `RESULT_HEADING` in `functions/_lib/election-window.js`). The URLs stay `/ballot/` and `/ballot/<st>/`.
+Every link and button to it reads "Preview [State]'s ballot", with the state's full name ("Preview California's ballot"; "Preview D.C.'s ballot"). On `/ballot/<st>/` the heading is "[State]'s ballot", with the address field and one full-width "Preview [State]'s ballot" button at the top, then "Always confirm your ballot with your county election office." Once an address is entered, the heading is "Your ballot preview" (`previewLabel()` and `RESULT_HEADING` in `functions/_lib/election-window.js`). The URLs stay `/ballot/` and `/ballot/<st>/`.
 
 `/ballot/` sends a visitor to their state's page (`functions/_lib/visitor-state.js`), or lists every state; `/ballot/<st>/` is `functions/ballot/[[path]].js`.
 

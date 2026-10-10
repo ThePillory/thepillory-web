@@ -189,7 +189,7 @@ test("before an address: FEC races, incumbents linked to Votes and Funding, offi
   assert.match(html, /PARTY TWO<\/p>/);
   assert.match(html, /href="https:\/\/www\.sos\.wa\.gov\/elections"/);
   assert.match(html, /href="https:\/\/vote\.gov\/"/);
-  assert.match(html, /<form class="lookup-form" action="\/ballot\/wa\/" method="post">/);
+  assert.match(html, /<form class="lookup-form stack-sm" action="\/ballot\/wa\/" method="post">/);
   assert.ok(html.includes(esc(CONFIRM)));
   assert.match(html, /Initiative Measure No\. IL26-001/, "ThePillory's Washington measures");
   assert.match(html, /doesn&#x27;t endorse candidates or measures, and doesn&#x27;t publish polls or predictions/);

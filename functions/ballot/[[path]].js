@@ -26,7 +26,7 @@ import { loadElection, electionHref, ballotHref, measureHref, measureName, conte
 import { voterInfo, ballotFromVoterInfo, officialFor, measureFor, CivicError } from "../_lib/civic.js";
 import { visitorHash } from "../_lib/turnstile.js";
 import { fold } from "../_lib/summary.js";
-import { previewLabel, RESULT_HEADING } from "../_lib/election-window.js";
+import { previewLabel, statePossessive, RESULT_HEADING } from "../_lib/election-window.js";
 import { candidateHref, raceHref, racesHref, YEAR } from "../_lib/candidates.js";
 
 const BACK = ["Elections", "/elections/"];
@@ -139,18 +139,17 @@ const ownElection = (env, request, st) => (ELECTION_BY_STATE[st] ? loadElection(
 // ---------------------------------------------------------------------------
 // Pieces
 
-function addressForm(st, { heading = "Your whole ballot" } = {}) {
+// The address form: the field, then one clear button ("Preview California's ballot").
+function addressForm(st, { heading = "", button = null } = {}) {
+  const label = button || previewLabel(st, STATE_NAME[st]);
   return `
-<section class="card stack-sm lookup" id="address" aria-labelledby="h-address">
-  <h2 class="label" id="h-address">${esc(heading)}</h2>
-  <p class="small">Every contest, candidate and measure on your ballot, with where to vote.</p>
-  <form class="lookup-form" action="${ballotPath(st)}" method="post">
-    <label class="visually-hidden" for="ballot-address">Street address, city and state</label>
-    <div class="lookup-row">
-      <input class="input" id="ballot-address" name="address" type="text" autocomplete="street-address" placeholder="Street address, city, state" minlength="5" maxlength="200" required />
-      <button class="btn btn--primary" type="submit">Preview</button>
-    </div>
-    <p class="hint">Sent to Google's Civic Information API for this one lookup, which answers with what election offices publish. ThePillory never stores or logs your address.</p>
+<section class="card stack-sm lookup" id="address"${heading ? ' aria-labelledby="h-address"' : ` aria-label="${esc(label)}"`}>
+  ${heading ? `<h2 class="label" id="h-address">${esc(heading)}</h2>` : ""}
+  <form class="lookup-form stack-sm" action="${ballotPath(st)}" method="post">
+    <label class="field-label" for="ballot-address">Your address, for every contest and where to vote</label>
+    <input class="input" id="ballot-address" name="address" type="text" autocomplete="street-address" placeholder="Street address, city, state" minlength="5" maxlength="200" required />
+    <button class="btn btn--primary btn--block" type="submit">${esc(label)}</button>
+    <p class="hint">Sent to Google's Civic Information API for this one lookup. ThePillory never stores or logs your address.</p>
   </form>
 </section>`;
 }
@@ -311,13 +310,12 @@ async function statePage(env, request, st, { message = "" } = {}) {
   ]);
   const main = `
 <header class="page-head stack-xs">
-  <p class="label">${esc(name)}${NO_GENERAL.has(st) ? "" : " · General election, November 3, 2026"}</p>
-  <h1>${esc(previewLabel(st, name))}</h1>
-  <p class="subtitle">What's on the ballot, from official sources.</p>
+  <p class="label">${esc(name)}${NO_GENERAL.has(st) ? "" : " · Nov 3, 2026"}</p>
+  <h1>${esc(statePossessive(st, name))} ballot</h1>
 </header>
 ${message ? `<p class="banner banner--error" role="alert">${esc(message)}</p>` : ""}
-<p class="banner">${esc(CONFIRM)}</p>
 ${addressForm(st)}
+<p class="small secondary">${esc(CONFIRM)}</p>
 ${federalSection(st, races, filed, d, election === FAILED ? null : election)}
 ${ownSection(st, election === FAILED ? null : election)}
 ${officialLinks(st, office === FAILED ? null : office, election === FAILED ? null : election)}
@@ -354,7 +352,7 @@ async function noData(env, request, st, kind, ballot = null) {
   <p class="small">Your sample ballot is on ${o ? `<a class="inline-link" href="${esc(o.url)}" target="_blank" rel="noopener">${esc(name)}'s election office website ↗</a>` : `<a class="inline-link" href="${USA_GOV}" target="_blank" rel="noopener">your state's election office ↗</a>`}, and your county election office mails it before Election Day.</p>
 </section>
 ${ballot ? placesSections(ballot) : ""}
-${addressForm(st, { heading: "Try another address" })}
+${addressForm(st, { heading: "Try another address", button: "Preview this address's ballot" })}
 ${ownSection(st, election === FAILED ? null : election)}
 ${officialLinks(st, o, election === FAILED ? null : election)}
 <p class="small"><a class="inline-link" href="${ballotPath(st)}">${esc(name)}'s federal races</a></p>`;
@@ -455,7 +453,7 @@ async function answerPage(env, request, st, b) {
 ${placesSections(b)}
 ${civicLinks(b)}
 ${b.otherElections.length ? `<p class="small secondary">Also for this address: ${esc(b.otherElections.map((e) => `${e.name}${e.day ? ` (${fmtDate(e.day)})` : ""}`).join("; "))}.</p>` : ""}
-${addressForm(st, { heading: "Look up another address" })}
+${addressForm(st, { heading: "Look up another address", button: "Preview this address's ballot" })}
 ${officialLinks(st, office === FAILED ? null : office, ctx.election)}
 <p class="hint">${esc(NEUTRAL)} <a class="inline-link" href="/about/methodology/#elections">How ThePillory builds this</a></p>`;
   return privatePage(RESULT_HEADING, main, [previewLabel(st, name), ballotPath(st)]);

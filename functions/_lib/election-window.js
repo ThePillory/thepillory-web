@@ -66,8 +66,10 @@ const POSSESSIVE = { DC: "D.C.'s" };
  */
 export function previewLabel(st, name) {
   if (!st || !name) return "Preview your state's ballot";
-  return `Preview ${POSSESSIVE[st] || `${name}'s`} ballot`;
+  return `Preview ${statePossessive(st, name)} ballot`;
 }
+/** "California's", "D.C.'s". Pure. */
+export const statePossessive = (st, name) => POSSESSIVE[st] || `${name}'s`;
 /** After an address: the page's heading. */
 export const RESULT_HEADING = "Your ballot preview";
 
