@@ -1933,6 +1933,16 @@ html[data-mode="simple"] .simple-scope .page-head .hint { display: none; }
 .simple-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
 .simple-list li { font-size: 1.0625rem; line-height: 1.4; }
 .simple-card .btn { align-self: flex-start; min-height: var(--tap); }
+/* The Quick home page (functions/_lib/quick-home.js): the headline on one line,
+   then This week, Who represents you, the ballot card, the lookup, three links. */
+html[data-mode="simple"] .hub-head .hub-sub,
+html[data-mode="simple"] .hub-head .hub-title-soft { display: none; }
+html[data-mode="simple"] .hub-title { font-size: 1.625rem; }
+.quick-week { gap: 12px; }
+.quick-week li { display: flex; flex-direction: column; gap: 2px; }
+.quick-item { color: var(--text); text-decoration: underline; text-decoration-color: var(--text-3); text-underline-offset: 3px; }
+.quick-item:hover { color: var(--navy); }
+.quick-links { padding-top: 4px; padding-bottom: 4px; }
 /* Plain names on Constitution chips in Quick mode (assets/app.js, data/glossary.json). */
 .chip .plain-name { display: none; }
 html[data-mode="simple"] .chip .plain-name { display: inline; }

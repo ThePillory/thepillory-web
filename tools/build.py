@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "46"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "47"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -549,6 +549,7 @@ def build_methodology():
   <ul class="plain-list small">
     <li><strong>What it does:</strong> a plain-words rewrite of a summary the page already shows (the official summary, a person's summary, or the checked constitutional analysis), labeled "Simplified by AI from [source]". It's kept only when checks in code pass: one or two short sentences, about an 8th-grade reading level, every number and name already in the source, no loaded or judging words, and, when the source gives both sides, a supporters line and a critics line of similar length. Until a rewrite passes, the card shows the first sentence of the original summary, word for word.</li>
     <li><strong>Where it stands, and how your reps voted:</strong> written from the recorded votes and final action, the same facts as the full page.</li>
+    <li><strong>This week in your state</strong> (Home and every state page): three to five sentences from the record (laws signed or vetoed, final votes in Congress with how the state's senators voted, final votes in the state legislature, Supreme Court decisions, executive orders, and the next election date), picked by one rule for every state: up to two laws signed or vetoed first, then the newest from the last 30 days. Never chosen by topic or side. Each links to its page.</li>
     <li><strong>Words with a dotted underline:</strong> tap for a one-sentence definition. The definitions, and the plain names on Constitution chips, are in one file anyone can review: <a class="inline-link" href="/data/glossary.json">the glossary</a>.</li>
   </ul>
 </section>

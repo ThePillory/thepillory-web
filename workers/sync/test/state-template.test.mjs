@@ -138,7 +138,7 @@ test("the top of every state's page: headline, map, ballot card, Find your repre
     assert.ok(head > 0 && head < map && map < find && find < yours, `${st}: headline, map, Find your representatives, Your state`);
     const win = ballotWindow(dates, st, todayIn(st));
     if (win && win.open) {
-      const card = at('class="card ballot-hero"');
+      const card = at('class="card ballot-hero');
       assert.ok(map < card && card < find, `${st}: the ballot card sits between the map and Find your representatives`);
       const cardHtml = html.slice(card, html.indexOf("</section>", card));
       assert.ok(cardHtml.includes(`<p class="ballot-hero-when">${win.line.replace(/'/g, "&#x27;")}`), `${st}: one line with the date and countdown`);
