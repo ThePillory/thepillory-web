@@ -301,6 +301,13 @@ function electionsSection({ election, ballot, county }, d, st = null) {
 </section>`;
 }
 
+/** "Calaveras County, CA" for saved districts (the state's name when there's no county). */
+async function placeName(env, request, d) {
+  const place = d.co ? await loadPlace(env, request, d.st.toLowerCase()) : null;
+  const c = place && place.counties.find((x) => x.fips === d.co);
+  return c ? `${c.name}, ${d.st}` : STATE_NAME[d.st];
+}
+
 // Topics: every topic as a chip, for the visitor's county when it's known.
 async function topicPlace(env, request, d) {
   if (!d || !d.co) return null;
@@ -338,6 +345,10 @@ function understand() {
 
 export async function hub(env, request, url, d, vs) {
   const db = env.DB;
+  // Saved districts in another state than the page's: the page shows only its own state,
+  // and the visitor's place is one small line at the bottom.
+  const mine = d && (!vs || d.st === vs.st) ? d : null;
+  const elsewhere = d && !mine ? d : null;
   const lead = vs ? await stateLeadData(db, vs.st) : null;
   // Happening now: Congress, or the state's legislature once its votes are loaded
   // (California for the national hub).
@@ -351,7 +362,7 @@ export async function hub(env, request, url, d, vs) {
   // Each section loads on its own: one that can't load shows a short note, and
   // the rest of the hub still shows.
   const start = pacificNow();
-  const [index, now, deadlines, counts, waiting, federalExec, elections, tPlace, dates, mapData, justices] = await Promise.all([
+  const [index, now, deadlines, counts, waiting, federalExec, elections, tPlace, dates, mapData, justices, yourPlace] = await Promise.all([
     loadIndex(env, request),
     loadSection("hub happening now", db ? () => happeningNow(db, which, { limit: 4 }) : async () => [], []),
     loadSection("hub deadlines", db ? async () =>
@@ -363,12 +374,13 @@ export async function hub(env, request, url, d, vs) {
     loadSection("hub waitlist counts", db ? () => waitlistCounts(db) : async () => null, null),
     loadSection("hub waitlist map", db ? () => waitlistBy(db) : async () => ({ county: {}, state: {} }), { county: {}, state: {} }),
     loadSection("hub executive", db ? () => executiveOfficials(db, "us-executive") : async () => [], []),
-    loadSection("hub elections", () => electionsData(env, request, d, vs ? vs.st : d ? d.st : null), { election: null, ballot: null }),
+    loadSection("hub elections", () => electionsData(env, request, mine, vs ? vs.st : d ? d.st : null), { election: null, ballot: null }),
     // Topics for the visitor's own county only on their own state's page.
     loadSection("hub topic place", () => topicPlace(env, request, d && (!vs || d.st === vs.st) ? d : null), null),
     loadSection("hub election dates", () => asset(env, request, "/data/elections/dates.json"), null),
     vs ? loadSection("hub state map", () => stateMapData(env, request, vs.st, url.searchParams.get("layer")), null) : null,
     loadSection("hub justices", () => loadJustices(env, request), null),
+    elsewhere ? loadSection("hub your place", () => placeName(env, request, elsewhere), null) : null,
   ]);
   // Links within the page (Happening now's switch) stay on this page: the state's own address, or /.
   const here = vs && vs.source === "page" ? statePath(vs.st) : "/";
@@ -381,7 +393,7 @@ export async function hub(env, request, url, d, vs) {
   const notFound = url.searchParams.get("lookup") === "notfound";
 
   // Elections sits near the top until Election Day, then moves down to its usual place.
-  const electionsHtml = elections === FAILED ? sectionError("Elections") : electionsSection(elections, d, vs ? vs.st : d ? d.st : null);
+  const electionsHtml = elections === FAILED ? sectionError("Elections") : electionsSection(elections, mine, vs ? vs.st : d ? d.st : null);
   const electionsLate = elections === FAILED || !elections.election || daysUntil(elections.election, start.slice(0, 10)) == null;
   const main = `
 <header class="hub-head stack-sm">
@@ -392,9 +404,9 @@ ${vs ? showingBar(vs) : ""}
 ${usMap(index, waiting === FAILED ? { county: {}, state: {} } : waiting, vs)}
 ${hero ? ballotHero(vs, win) : ""}
 ${notFound ? '<p class="banner banner--error" role="alert">We couldn\'t find districts for that. Check the address, or try your ZIP code.</p>' : ""}
-${lookupForm(d)}
+${lookupForm(mine)}
 ${vs ? stateLead(vs, lead, elections === FAILED ? FAILED : elections.election, { ballotLink: !hero }) : ""}
-${d ? `<a class="card briefing-link" href="/briefing/"><span class="stack-xs"><span class="label">Your briefing</span><span class="small">${esc(describe(d))}</span></span><span class="chev" aria-hidden="true">›</span></a>` : ""}
+${mine ? `<a class="card briefing-link" href="/briefing/"><span class="stack-xs"><span class="label">Your briefing</span><span class="small">${esc(describe(d))}</span></span><span class="chev" aria-hidden="true">›</span></a>` : ""}
 ${electionsLate ? "" : electionsHtml}
 <aside class="intro-banner" data-intro hidden aria-label="Welcome">
   <p><strong>New here?</strong> ThePillory keeps a public, sourced record of what your officials do: every recorded vote, the bills they vote on mapped to the Constitution, local meeting agendas, and the money around them. Facts and sources, no party labels.</p>
@@ -410,6 +422,7 @@ ${topicsSection(tPlace === FAILED ? null : tPlace)}
 ${deadlines === FAILED ? sectionError("Take part") : takePart(deadlines, !!db, vs)}
 ${communities(env, counts === FAILED ? null : counts, msg, error, vs ? vs.st : "")}
 ${understand()}
+${elsewhere ? `<p class="small secondary your-place">Your place: ${esc(typeof yourPlace === "string" ? yourPlace : STATE_NAME[elsewhere.st])} · <a class="inline-link" href="/briefing/">Your briefing</a></p>` : ""}
 ${index ? `<script src="/assets/map.js?v=${ASSET_VERSION}" defer></script>` : ""}`;
   // Personal only once the visitor's districts are known; otherwise the same for everyone.
   const title = vs && vs.source === "page" ? vs.name : "Know what your government is doing";
