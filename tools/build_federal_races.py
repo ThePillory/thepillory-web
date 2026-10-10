@@ -64,6 +64,14 @@ def candidates(st, office, key):
         time.sleep(0.5)
 
 
+def committee(c):
+    """The candidate's principal campaign committee (FEC designation P), as listed in their filing."""
+    for m in c.get("principal_committees") or []:
+        if m.get("designation") == "P" and m.get("committee_id"):
+            return m["committee_id"]
+    return None
+
+
 def row(c):
     return {
         "id": c["candidate_id"],
@@ -71,6 +79,7 @@ def row(c):
         "party": c.get("party_full") or "",    # as filed
         "incumbent": c.get("incumbent_challenge") == "I",
         "url": f"https://www.fec.gov/data/candidate/{c['candidate_id']}/",
+        "committee": committee(c),             # principal campaign committee ID (tools/build_candidates.mjs)
     }
 
 
