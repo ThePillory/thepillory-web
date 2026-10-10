@@ -10,7 +10,7 @@
    "summary": "The Government's applications for a partial stay of the preliminary injunctions issued by District Courts in Louisiana and Kentucky against the enforcement of the Department of Education's new rule implementing Title IX of the Education Amendments of 1972 are denied, as the Government has not provided the Court a sufficient basis to disturb the lower courts' interim conclusions.",
    "author_code": "PC",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r60_32q3.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": [],
@@ -29,7 +29,7 @@
    "summary": "An Administrative Procedures Act claim does not accrue for purposes of 28 U. S. C. §2401(a)—the default 6-year statute of limitations applicable to suits against the United States—until the plaintiff is injured by final agency action.",
    "author_code": "AB",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r59_4fci.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -117,7 +117,7 @@
    "summary": "The judgments are vacated, and the cases are remanded, because neither the Eleventh Circuit nor the Fifth Circuit conducted a proper analysis of the facial First Amendment challenges to the Florida and Texas laws regulating large internet platforms.",
    "author_code": "EK",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r58_8mj9.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -219,7 +219,7 @@
    "summary": "The nature of Presidential power entitles a former President to absolute immunity from criminal prosecution for actions within his conclusive and preclusive constitutional authority; he is also entitled to at least presumptive immunity from prosecution for all his official acts; there is no immunity for unofficial acts.",
    "author_code": "R",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r57_2dp3.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -228,17 +228,15 @@
      {
       "justice": "Roberts",
       "roles": [
-       "majority"
+       "majority in part"
       ],
-      "wrote": [
-       "majority"
-      ]
+      "wrote": []
      },
      {
       "justice": "Thomas",
       "roles": [
        "concurrence",
-       "majority"
+       "majority in part"
       ],
       "wrote": [
        "concurrence"
@@ -247,21 +245,21 @@
      {
       "justice": "Alito",
       "roles": [
-       "majority"
+       "majority in part"
       ],
       "wrote": []
      },
      {
       "justice": "Gorsuch",
       "roles": [
-       "majority"
+       "majority in part"
       ],
       "wrote": []
      },
      {
       "justice": "Kavanaugh",
       "roles": [
-       "majority"
+       "majority in part"
       ],
       "wrote": []
      },
@@ -269,7 +267,7 @@
       "justice": "Barrett",
       "roles": [
        "concurring in part",
-       "majority"
+       "majority in part"
       ],
       "wrote": [
        "concurring in part"
@@ -329,7 +327,7 @@
    "summary": "The enforcement of generally applicable laws regulating camping on public property does not constitute “cruel and unusual punishment” prohibited by the Eighth Amendment.",
    "author_code": "NG",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r56_1bo2.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -434,7 +432,7 @@
    "summary": "To prove a violation of 18 U. S. C. §1512(c)(2)—a provision of the Sarbanes-Oxley Act—the Government must establish that the defendant impaired the availability or integrity for use in an official proceeding of records, documents, objects, or other things used in an official proceeding, or attempted to do so.",
    "author_code": "R",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r55_6j36.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -527,7 +525,7 @@
    "summary": "The Administrative Procedure Act requires courts to exercise their independent judgment in deciding whether an agency has acted within its statutory authority, and courts may not defer to an agency interpretation of the law simply because a statute is ambiguous; Chevron U. S. A. Inc. v. Natural Resources Defense Council, Inc., 467 U. S. 837, is overruled.",
    "author_code": "R",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r54_o7jp.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -628,7 +626,7 @@
    "summary": "Certiorari dismissed as improvidently granted.",
    "author_code": "PC",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r53_l5gm.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": [],
@@ -651,7 +649,7 @@
    "summary": "The enforcement of the Environmental Protection Agency’s Federal Implementation Plan against the applicant States—whose own State Implementation Plans were determined by EPA to be inadequate because they failed to adequately address certain obligations under the Good Neighbor Provision—shall be stayed pending disposition of the applicants’ petition for review in the D. C. Circuit and any petition for writ of certiorari, timely sought.",
    "author_code": "NG",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r52_d18f.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -736,7 +734,7 @@
    "summary": "The bankruptcy code does not authorize a release and injunction that, as part of a plan of reorganization under Chapter 11, effectively seek to discharge claims against a nondebtor without the consent of affected claimants.",
    "author_code": "NG",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r51_1b8e.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -821,7 +819,7 @@
    "summary": "When the Securities and Exchange Commission seeks civil penalties against a defendant for securities fraud, the Seventh Amendment entitles the defendant to a jury trial.",
    "author_code": "R",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r50_7kh7.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -927,7 +925,7 @@
    "summary": "Respondents—two States and five individual social-media users who sued Executive Branch officials and agencies, alleging that the Government pressured the platforms to censor their speech in violation of the First Amendment—lack Article III standing to seek an injunction.",
    "author_code": "AB",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r49_n6io.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -1021,7 +1019,7 @@
    "summary": "Federal law, 18 U. S. C. §666, proscribes bribes to state and local officials but does not make it a crime for those officials to accept gratuities for their past acts.",
    "author_code": "BK",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/603us1r48_g3ci.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": [],
@@ -1035,7 +1033,7 @@
    "summary": "The motion to enter a proposed consent decree that would dispose of the United States’ claims in the Rio Grande Compact without its consent is denied.",
    "author_code": "KJ",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r47_c07d.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -1125,7 +1123,7 @@
    "summary": "A U. S. citizen does not have a fundamental liberty interest in her noncitizen spouse being admitted to the country.",
    "author_code": "AB",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r46_gfbi.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -1221,7 +1219,7 @@
    "summary": "The Fifth and Sixth Amendments require a unanimous jury to make the determination beyond a reasonable doubt that a defendant’s past offenses were committed on separate occasions for purposes of the Armed Career Criminal Act, 18 U. S. C. § §924(e)(1).",
    "author_code": "NG",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r45_h31i.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -1280,23 +1278,22 @@
      {
       "justice": "Kavanaugh",
       "roles": [
-       "dissent"
+       "majority in part"
       ],
-      "wrote": [
-       "dissent"
-      ]
+      "wrote": []
      },
      {
       "justice": "Alito",
       "roles": [
-       "dissent"
+       "majority in part"
       ],
       "wrote": []
      },
      {
       "justice": "Jackson",
       "roles": [
-       "dissent"
+       "dissent",
+       "majority in part"
       ],
       "wrote": [
        "dissent"
@@ -1331,7 +1328,7 @@
    "summary": "When an expert conveys an absent lab analyst’s statements in support of the expert’s opinion, and the statements provide that support only if true, then the statements come into evidence for their truth, and thus implicate the Sixth Amendment’s Confrontation Clause.",
    "author_code": "EK",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r44_kjfm.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -1435,7 +1432,7 @@
    "summary": "When an individual has been found by a court to pose a credible threat to the physical safety of another, that individual may be temporarily disarmed consistent with the Second Amendment.",
    "author_code": "R",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r43_p860.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -1553,7 +1550,7 @@
    "summary": "In requiring petitioner Sylvia Gonzalez to provide specific comparator evidence to support her retaliatory arrest claim, the Fifth Circuit did not properly apply the principles of Nieves v. Bartlett, 587 U. S. 391 (2019).",
    "author_code": "PC",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r42_l5gm.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": [],
@@ -1572,7 +1569,7 @@
    "summary": "The Mandatory Repatriation Tax—which attributes the realized and undistributed income of an American-controlled foreign corporation to the entity’s American shareholders, and then taxes the American shareholders on their portions of that income—does not exceed Congress’s constitutional authority.",
    "author_code": "BK",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r41_h3dj.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -1667,7 +1664,7 @@
    "summary": "Pursuant to the Fourth Amendment and traditional common-law practice, the presence of probable cause for one charge in a criminal proceeding does not categorically defeat a Fourth Amendment malicious-prosecution claim relating to another, baseless charge.",
    "author_code": "EK",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r40_f20g.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -1763,7 +1760,7 @@
    "summary": "Expert testimony that “most people” in a group have a particular mental state is not an opinion about “the defendant” and thus does not violate Federal Rule of Evidence 704(b).",
    "author_code": "T",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r39_2b8e.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -1851,7 +1848,7 @@
    "summary": "Prospective parity—i.e., requiring equal fees for otherwise identical Chapter 11 debtors going forward—is the appropriate remedy for the short-lived and small disparity created by the fee statute held unconstitutional in Siegel v. Fitzgerald, 596 U. S. 464 (2022).",
    "author_code": "KJ",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r38_mlho.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -1941,7 +1938,7 @@
    "summary": "Because each of the aliens in this case received a proper notice for the removal hearings they missed and at which they were ordered removed from the United States, see 8 U. S. C. §1229(a)(2), they cannot seek rescission of their in absentia removal orders on the basis of defective notice under §1229a(b)(5)(C)(ii).",
    "author_code": "A",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r37_7khn.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2026,7 +2023,7 @@
    "summary": "The Bureau of Alcohol, Tobacco, Firearms and Explosives exceeded its statutory authority by issuing a Rule that classifies a bump stock as a “machinegun” under 26 U. S. C. §5845(b).",
    "author_code": "T",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r36_k537.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2119,7 +2116,7 @@
    "summary": "Plaintiffs lack Article III standing to challenge the Food and Drug Administration’s regulatory actions regarding mifepristone.",
    "author_code": "BK",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r35_h3ci.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2160,7 +2157,7 @@
    "summary": "When considering the National Labor Relations Board’s request for a preliminary injunction under §10( j) of the National Labor Relations Act, district courts must apply the traditional four factors articulated in Winter v. Natural Resources Defense Council, Inc., 555 U. S. 7 (2008).",
    "author_code": "T",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r34_e29g.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2245,7 +2242,7 @@
    "summary": "The Lanham Act’s names clause—which prohibits the registration of a mark that “[c]onsists of or comprises a name . . . identifying a particular living individual except by his written consent,” 15 U. S. C. §1052(c)—does not violate the First Amendment.",
    "author_code": "T",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r33_qqm4.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2259,6 +2256,20 @@
       "wrote": [
        "majority"
       ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
      },
      {
       "justice": "Kavanaugh",
@@ -2297,7 +2308,7 @@
       "justice": "Sotomayor",
       "roles": [
        "concurrence in the judgment",
-       "concurring in part"
+       "concurring in part (in part)"
       ],
       "wrote": [
        "concurrence in the judgment"
@@ -2307,7 +2318,7 @@
       "justice": "Jackson",
       "roles": [
        "concurrence in the judgment",
-       "concurring in part"
+       "concurring in part (in part)"
       ],
       "wrote": []
      }
@@ -2340,7 +2351,7 @@
    "summary": "An insurer with financial responsibility for bankruptcy claims is a “party in interest” under 11 U. S. C. §1109(b) that “may raise and may appear and be heard on any issue” in a Chapter 11 case.",
    "author_code": "SS",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r32_2q24.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2354,8 +2365,71 @@
       "wrote": [
        "majority"
       ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "took no part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
      }
-    ]
+    ],
+    "all_others": {
+     "author": "Sotomayor",
+     "partial": false,
+     "except": [
+      "Alito"
+     ]
+    }
    },
    "provisions": []
   },
@@ -2367,7 +2441,7 @@
    "summary": "A corporation’s contractual obligation to redeem shares is not necessarily a liability that reduces a corporation’s value for purposes of the federal estate tax.",
    "author_code": "T",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r31_6537.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2394,7 +2468,7 @@
    "summary": "The Indian Self-Determination and Education Assistance Act requires the Indian Health Service to pay the contract support costs that a tribe incurs when it collects and spends program income—i.e., revenue from third-party payers like Medicare, Medicaid, and private insurers—to further the functions, services, activities, and programs transferred to it from IHS in a self-determination contract.",
    "author_code": "R",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r30_g3bi.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2479,7 +2553,7 @@
    "summary": "The Second Circuit failed to analyze whether New York’s interest-on-escrow law is preempted as applied to national banks in a manner consistent with the Dodd-Frank Wall Street Reform and Consumer Protection Act of 2010 and Barnett Bank of Marion Cty., N. A. v. Nelson, 517 U. S. 25.",
    "author_code": "BK",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r29_0861.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2506,7 +2580,7 @@
    "summary": "The NRA plausibly alleged that respondent violated the First Amendment by coercing regulated entities to terminate their business relationships with the NRA in order to punish or suppress the NRA’s gun-promotion advocacy.",
    "author_code": "SS",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r28_9o6b.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2560,7 +2634,7 @@
    "summary": "The Ninth Circuit’s grant of habeas relief on Jones’s ineffective assistance of counsel claim was based on an erroneous interpretation and application of Strickland v. Washington, 466 U. S. 668.",
    "author_code": "A",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r27_jhek.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2652,7 +2726,7 @@
    "summary": "Where parties have agreed to two contracts—one sending arbitrability disputes to arbitration, and the other either explicitly or implicitly sending arbitrability disputes to the courts—a court must decide which contract governs.",
    "author_code": "KJ",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r26_k537.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2688,7 +2762,7 @@
    "summary": "For purposes of the Armed Career Criminal Act’s 15-year mandatory minimum sentence on certain defendants with three or more previous convictions, a state drug conviction counts as an ACCA predicate if it involved a drug on the federal schedules at the time of that offense.",
    "author_code": "A",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r25_p86b.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2757,7 +2831,7 @@
      {
       "justice": "Gorsuch",
       "roles": [
-       "dissent"
+       "dissent (in part)"
       ],
       "wrote": []
      }
@@ -2773,7 +2847,7 @@
    "summary": "Because the District Court’s finding that race predominated in the design of South Carolina’s first congressional district was clearly erroneous, the District Court’s racial-gerrymandering and vote-dilution holdings cannot stand.",
    "author_code": "A",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r24_j4ek.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2874,7 +2948,7 @@
    "summary": "Title 5 U. S. C. §7703(b)(1)’s 60-day filing deadline for a federal employee to petition the Federal Circuit to review a final decision of the Merit Systems Protection Board is not jurisdictional.",
    "author_code": "EK",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r23_khlp.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2906,7 +2980,7 @@
    "summary": "When a district court finds that a lawsuit involves an arbitrable dispute and a party has requested a stay of the court proceeding pending arbitration, §3 of the Federal Arbitration Act, 9 U. S. C. §3, compels the court to issue a stay, and the court lacks discretion to dismiss the suit.",
    "author_code": "SS",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r22_o7jq.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2933,7 +3007,7 @@
    "summary": "Congress’ statutory authorization allowing the Consumer Financial Protection Bureau to draw money from the earnings of the Federal Reserve System to carry out the Bureau’s duties, 12 U. S. C. §§5497(a)(1), (2), satisfies the Appropriations Clause.",
    "author_code": "T",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r21_7648.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3032,7 +3106,7 @@
    "summary": "In civil forfeiture cases involving personal property, the Due Process Clause requires a timely forfeiture hearing but does not require a separate preliminary hearing.",
    "author_code": "BK",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r20_09m1.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3130,7 +3204,7 @@
    "summary": "The Copyright Act entitles a copyright owner to obtain monetary relief for any timely infringement claim, no matter when the infringement occurred.",
    "author_code": "EK",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r19_jifl.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3181,16 +3255,25 @@
       "wrote": []
      },
      {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
       "justice": "Thomas",
       "roles": [
-       "majority"
+       "dissent"
       ],
       "wrote": []
      },
      {
       "justice": "Alito",
       "roles": [
-       "majority"
+       "dissent"
       ],
       "wrote": []
      }
@@ -3206,7 +3289,7 @@
    "summary": "An employee challenging a job transfer under Title VII must show that the transfer brought about some harm with respect to an identifiable term or condition of employment, but that harm need not be significant.",
    "author_code": "EK",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r18_6j37.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3295,7 +3378,7 @@
    "summary": "A district court’s failure to comply with Federal Rule of Criminal Procedure 32.2(b)(2)(B)’s requirement to enter a preliminary order imposing criminal forfeiture before sentencing does not bar a judge from ordering forfeiture at sentencing subject to harmless-error principles on appellate review.",
    "author_code": "SS",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r17_nmio.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3322,7 +3405,7 @@
    "summary": "Servicemembers who, through separate periods of service, accrue educational benefits under both the Montgomery and Post-9/11 GI Bills may use either one, in any order, up to 38 U. S. C. §3695(a)’s 48-month aggregate-benefits cap.",
    "author_code": "KJ",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r16_2dp3.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3411,7 +3494,7 @@
    "summary": "Owners of property north of U. S. Interstate Highway 10 adversely affected by the flood evacuation barrier constructed by Texas should be permitted on remand to pursue their Takings Clause claims through the cause of action available under Texas law.",
    "author_code": "T",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r15_apl1.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3447,7 +3530,7 @@
    "summary": "The Fifth Amendment’s Takings Clause does not distinguish between legislative and administrative land-use permit conditions.",
    "author_code": "AB",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r14_00m5.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3524,7 +3607,7 @@
    "summary": "Pure omissions are not actionable under SEC Rule 10b–5(b), which makes it unlawful to omit material facts in connection with buying or selling securities when that omission renders “statements made” misleading.",
    "author_code": "SS",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r13_8mjp.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3551,7 +3634,7 @@
    "summary": "A transportation worker need not work in the transportation industry to be exempt from coverage under §1 of the Federal Arbitration Act, 9 U. S. C. §1 et seq.",
    "author_code": "R",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r12_7648.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3578,7 +3661,7 @@
    "summary": "The Government failed to meet its burden to demonstrate that Mr. Fikre’s removal from the Government’s No Fly List mooted his 42 U. S. C. §1983 case because its declaration did not disclose the conduct that landed Mr. Fikre on the No Fly List and did not ensure that he would not be placed back on the list for engaging in the same or similar conduct in the future.",
    "author_code": "NG",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r11_7lh8.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3626,7 +3709,7 @@
    "summary": "The Immigration Judge’s discretionary decision that Mr. Wilkinson failed to satisfy 8 U. S. C. §1229b(b)(1)(D)’s “exceptional and extremely unusual” hardship standard for determining eligibility for cancellation of removal is a mixed question of law and fact, reviewable under §1252(a)(2)(D)’s jurisdiction restoring exception for “questions of law”; the Third Circuit’s holding that the IJ’s decision was unreviewable under §1252(a)(2)(B)(i) was in error.",
    "author_code": "SS",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r10_k5fm.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3715,7 +3798,7 @@
    "summary": "The Ninth Circuit’s judgment—that 42 U. S. C. §1983’s state-action requirement was satisfied because of the “close nexus” between petitioners’ social media pages and their positions as public officials—is vacated, and the case is remanded in light of Lindke v. Freed, 601 U. S. ___.",
    "author_code": "PC",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r09_hgci.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": [],
@@ -3734,7 +3817,7 @@
    "summary": "A public official who prevents someone from commenting on the official’s social-media page engages in state action under 42  U. S. C. §1983 only if the official both (1) possessed actual authority to speak on the State’s behalf on a particular matter, and (2) purported to exercise that authority when speaking in the relevant social-media posts.",
    "author_code": "AB",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r08_a8cf.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3770,7 +3853,7 @@
    "summary": "A criminal defendant facing a mandatory minimum sentence is eligible for safety-valve relief under 18 U. S. C. §3553(f)(1) only if the defendant satisfies each of the provision’s three conditions.",
    "author_code": "EK",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r07_19m1.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3864,7 +3947,7 @@
    "summary": "Because the Constitution makes Congress, rather than the States, responsible for enforcing Section 3 of the Fourteenth Amendment against federal officeholders and candidates, the Colorado Supreme Court erred in ordering former President Trump excluded from the 2024 Presidential primary ballot.",
    "author_code": "PC",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r06_a86c.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": [],
@@ -3895,7 +3978,7 @@
    "summary": "The jury’s verdict that the defendant was not guilty by reason of insanity of malice murder constituted an acquittal for double jeopardy purposes notwithstanding any inconsistency with the jury’s other verdicts.",
    "author_code": "KJ",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r05_1qm2.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3936,7 +4019,7 @@
    "summary": "Choice-of-law provisions in maritime contracts are presumptively enforceable under federal maritime law, with narrow exceptions not applicable in this case.",
    "author_code": "BK",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r04_4g15.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3977,7 +4060,7 @@
    "summary": "A consumer may sue a federal agency under 15 U. S. C. §§1681n and 1681o for defying the terms of the Fair Credit Reporting Act.",
    "author_code": "NG",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r03_4gcj.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -4013,7 +4096,7 @@
    "summary": "A whistleblower seeking to invoke the protections of the Sarbanes-Oxley Act—18 U. S. C. §1514A(a)—must prove that their protected activity was a contributing factor in the employer’s unfavorable personnel action, but need not prove that the employer acted with “retaliatory intent.”",
    "author_code": "SS",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r02_c07d.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -4056,7 +4139,7 @@
    "summary": "Because Laufer voluntarily dismissed her pending suits under the Americans with Disabilities Act of 1990, Laufer’s case against Acheson is moot.",
    "author_code": "AB",
    "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r01_q86b.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {

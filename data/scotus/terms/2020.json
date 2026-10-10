@@ -10,7 +10,7 @@
    "summary": "The District Court’s judgment—which vacated as unlawful the Centers for Disease Control and Prevention’s imposition of a nationwide moratorium on evictions of any tenants who live in a county that is experiencing substantial or high levels of COVID–19 transmission and who make certain declarations of financial need, 86 Fed. Reg. 43244—is enforceable and the stay of that judgment is vacated.",
    "author_code": "PC",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/594us2r68_b97d.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": [],
@@ -24,7 +24,7 @@
    "summary": "In this federal habeas case, the Eleventh Circuit erred in characterizing the Alabama court’s case-specific analysis as a “categorical rule” that any prisoner will always lose an ineffective-assistance-of-trial-counsel claim if he fails to call and question trial counsel concerning his or her actions and reasoning; the Alabama court did not violate clearly established federal law when it rejected Reeves’ ineffective-assistance-of-trial-counsel claim.",
    "author_code": "PC",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/594us2r67_k537.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": [],
@@ -38,7 +38,7 @@
    "summary": "Arizona’s challenged voting regulations governing precinct-based election-day voting (rejecting ballots cast in the wrong precinct) and early mail-in voting (making it a crime for anyone other than an authorized proxy to possess the early ballot of another voter) do not violate §2 of the Voting Rights Act of 1965; Arizona House Bill 2023 (enacting the early mail-in voting regulations) was not enacted with a racially discriminatory purpose.",
    "author_code": "A",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/594us2r66_5468.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -140,7 +140,7 @@
    "summary": "The Ninth Circuit’s judgment, which vacated the District Court’s injunction of California’s compelled disclosure of Schedule Bs as not narrowly tailored to the State’s interest in investigating charitable misconduct, is reversed, and the cases are remanded.",
    "author_code": "R",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/594us2r65_2co3.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -156,18 +156,24 @@
       ]
      },
      {
-      "justice": "Thomas",
+      "justice": "Kavanaugh",
       "roles": [
-       "concurrence in the judgment"
+       "majority"
       ],
-      "wrote": [
-       "concurrence in the judgment"
-      ]
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
      },
      {
       "justice": "Alito",
       "roles": [
-       "concurrence in the judgment"
+       "concurrence in the judgment",
+       "majority in part"
       ],
       "wrote": [
        "concurrence in the judgment"
@@ -176,9 +182,20 @@
      {
       "justice": "Gorsuch",
       "roles": [
-       "concurrence in the judgment"
+       "concurrence in the judgment",
+       "majority in part"
       ],
       "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence in the judgment",
+       "majority in part"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
      },
      {
       "justice": "Sotomayor",
@@ -220,7 +237,7 @@
    "summary": "The well-grounded patent law doctrine of assignor estoppel applies only when the assignor’s claim of invalidity contradicts explicit or implicit representations the assignor made in assigning the patent.",
    "author_code": "EK",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/594us2r64_anbf.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -307,7 +324,7 @@
    "summary": "The detention of an alien ordered removed from the United States who reenters without authorization is governed by 8 U. S. C. §1231.",
    "author_code": "A",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/594us2r63_4f15.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -321,6 +338,27 @@
       "wrote": [
        "majority"
       ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
      },
      {
       "justice": "Thomas",
@@ -373,7 +411,7 @@
    "summary": "A certificate of public convenience and necessity issued by the Federal Energy Regulatory Commission pursuant to §717f(h) of the Natural Gas Act authorizes a private company to condemn all necessary rights-of-way, whether owned by private parties or States.",
    "author_code": "R",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/594us2r62_19m1.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -477,7 +515,7 @@
    "summary": "Administrative exhaustion of state remedies is not a prerequisite for a 42 U. S. C. §1983 takings claim when the government has reached a conclusive position; the Ninth Circuit’s decision in this case directly contravenes Knick v. Township of Scott, 588 U. S. ___.",
    "author_code": "PC",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/594us2r61_7m58.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": [],
@@ -496,7 +534,7 @@
    "summary": "Because it is unclear in this excessive force case whether the Eighth Circuit incorrectly thought the use of a prone restraint is per se constitutional so long as an individual appears to resist officers’ efforts to subdue him, the Eighth Circuit’s judgment is vacated, and the case is remanded to give the court the opportunity in the first instance to employ the careful, context-specific analysis required by this Court’s excessive force precedent.",
    "author_code": "PC",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/594us2r60_2c83.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": [],
@@ -515,7 +553,7 @@
    "summary": "Only a plaintiff concretely harmed by a defendant’s violation of the Fair Credit Reporting Act has Article III standing to seek damages against that private defendant in federal court.",
    "author_code": "BK",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/594us2r59_197d.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -615,7 +653,7 @@
    "summary": "Under the renewable fuel program’s fuel blending requirements for domestic refineries, a small refinery that previously received a hardship exemption may obtain an “extension” under 42 U. S. C. §7545(o)(9)(B)(i) even if the refinery did not seek a hardship exemption every year after initially doing so.",
    "author_code": "NG",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/594us2r58_6537.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -700,7 +738,7 @@
    "summary": "Alaska Native Corporations are “Indian tribe[s]” under the Indian Self-Determination and Education Assistance Act and thus eligible for funding available to “Tribal governments” under Title V of the Coronavirus Aid, Relief, and Economic Security Act.",
    "author_code": "SS",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/594us2r57_4357.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -790,7 +828,7 @@
    "summary": "Under the Fourth Amendment, pursuit of a fleeing misdemeanor suspect does not always or categorically qualify as an exigent circumstance justifying a warrantless entry into a home.",
    "author_code": "EK",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/594us1r56_7k47.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -830,7 +868,7 @@
       "justice": "Kavanaugh",
       "roles": [
        "concurrence",
-       "concurrence in the judgment",
+       "concurrence in the judgment (in part)",
        "majority"
       ],
       "wrote": [
@@ -891,7 +929,7 @@
    "summary": "Because the Federal Housing Finance Agency (FHFA) did not exceed its authority under the Housing and Economic Recovery Act of 2008 as a conservator of Fannie Mae and Freddie Mac, the anti-injunction provisions of the Recovery Act bar the statutory claim brought by shareholders of those entities; the Recovery Act’s structure, which restricts the President’s power to remove the FHFA Director, violates the separation of powers.",
    "author_code": "A",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/594us1r55_5468.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -950,7 +988,7 @@
      {
       "justice": "Breyer",
       "roles": [
-       "concurrence in the judgment",
+       "concurrence in the judgment (in part)",
        "concurring in part and dissenting in part",
        "majority in part"
       ],
@@ -969,7 +1007,7 @@
      {
       "justice": "Sotomayor",
       "roles": [
-       "concurrence in the judgment",
+       "concurrence in the judgment (in part)",
        "concurring in part and dissenting in part",
        "majority in part"
       ],
@@ -1006,7 +1044,7 @@
    "summary": "The school district’s decision to suspend student B. L. from the cheerleading team for posting to social media (outside of school hours and away from the school’s campus) vulgar language and gestures critical of the school violates the First Amendment.",
    "author_code": "B",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/594us1r54_k5gm.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -1104,7 +1142,7 @@
    "summary": "A California regulation granting labor organizations a “right to take access” to an agricultural employer’s property to solicit support for unionization constitutes a per se physical taking.",
    "author_code": "R",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/594us1r53_0pm1.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -1205,7 +1243,7 @@
    "summary": "The generic nature of a misrepresentation in connection with the sale of securities often is important evidence of price impact that courts should consider at class certification; defendants bear the burden of persuasion to prove a lack of price impact by a preponderance of the evidence at class certification.",
    "author_code": "AB",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/594us1r52_3e04.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -1296,7 +1334,7 @@
    "summary": "The district court’s injunction pertaining to certain NCAA rules limiting the education-related benefits schools may make available to student-athletes is consistent with established antitrust principles.",
    "author_code": "NG",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/594us1r51_7k47.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -1332,7 +1370,7 @@
    "summary": "The unreviewable authority wielded by Administrative Patent Judges during inter partes review is incompatible with their appointment by the Secretary of Commerce to an inferior office; the judgment of the Federal Circuit is vacated, and the case is remanded.",
    "author_code": "R",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/594us1r50_m6io.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -1382,7 +1420,7 @@
       "justice": "Breyer",
       "roles": [
        "concurrence in the judgment",
-       "dissent"
+       "dissent (in part)"
       ],
       "wrote": [
        "concurrence in the judgment"
@@ -1392,7 +1430,7 @@
       "justice": "Sotomayor",
       "roles": [
        "concurrence in the judgment",
-       "dissent"
+       "dissent (in part)"
       ],
       "wrote": []
      },
@@ -1400,7 +1438,7 @@
       "justice": "Kagan",
       "roles": [
        "concurrence in the judgment",
-       "dissent"
+       "dissent (in part)"
       ],
       "wrote": []
      },
@@ -1438,7 +1476,7 @@
    "summary": "Plaintiffs lack standing to challenge the Patient Protection and Affordable Care Act’s minimum essential coverage provision.",
    "author_code": "B",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us2r49_c0nd.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -1539,7 +1577,7 @@
    "summary": "To plead facts sufficient to support a domestic application of the Alien Tort Statute, 28 U. S. C. §1350, plaintiffs must allege more domestic conduct than general corporate activity; the Ninth Circuit’s contrary holding is reversed, and the case is remanded.",
    "author_code": "T",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us2r48_p8k0.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -1600,7 +1638,7 @@
      {
       "justice": "Kavanaugh",
       "roles": [
-       "concurrence",
+       "concurrence (in part)",
        "majority"
       ],
       "wrote": []
@@ -1615,7 +1653,7 @@
      {
       "justice": "Alito",
       "roles": [
-       "concurrence",
+       "concurrence (in part)",
        "dissent"
       ],
       "wrote": [
@@ -1634,7 +1672,7 @@
    "summary": "Philadelphia’s refusal to contract with Catholic Social Services for the provision of foster care services unless CSS agrees to certify same-sex couples as foster parents violates the Free Exercise Clause of the First Amendment.",
    "author_code": "R",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us2r47_8m59.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -1652,7 +1690,7 @@
      {
       "justice": "Breyer",
       "roles": [
-       "concurrence",
+       "concurrence (in part)",
        "majority"
       ],
       "wrote": []
@@ -1743,7 +1781,7 @@
    "summary": "In felon-in-possession cases under 18 U. S. C. §922(g)(1), an error under Rehaif v. United States, 588 U. S. ___, is not a basis for plain-error relief unless the defendant first makes a sufficient argument or representation on appeal that he would have presented evidence at trial that he did not in fact know he was a felon.",
    "author_code": "BK",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us2r46_1qm2.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -1828,7 +1866,7 @@
    "summary": "A sentence reduction under the First Step Act is available only if an offender’s prior conviction of a crack cocaine offense triggered a mandatory minimum sentence.",
    "author_code": "T",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us2r45_5ifl.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -1913,7 +1951,7 @@
    "summary": "The decision of the Sixth Circuit—holding that an offense with a mental state of recklessness may qualify as a “violent felony” under the Armed Career Criminal Act’s elements clause, 18 U. S. C. §924(e)(2)(B)(i)—is reversed, and the case is remanded.",
    "author_code": "EK",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us2r44_3eah.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2009,7 +2047,7 @@
    "summary": "An individual who entered the United States unlawfully is not eligible to become a lawful permanent resident under 8 U.S.C. §1255 even if the United States has granted the individual temporary protected status.",
    "author_code": "EK",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us2r43_22p3.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2036,7 +2074,7 @@
    "summary": "An individual “exceeds authorized access” under the Computer Fraud and Abuse Act of 1986, 18 U. S. C. §1030(a)(2), when he accesses a computer with authorization but then obtains information located in particular areas of the computer—such as files, folders, or databases—that are off-limits to him.",
    "author_code": "AB",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us2r42_n7ip.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2121,7 +2159,7 @@
    "summary": "The Ninth Circuit’s rule in immigration disputes—that in the absence of an explicit adverse credibility determination by an immigration judge or the Board of Immigration Appeals, a reviewing court must treat a petitioning noncitizen’s testimony as credible and true—cannot be reconciled with the terms of the Immigration and Nationality Act.",
    "author_code": "NG",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us2r41_9o6b.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2157,7 +2195,7 @@
    "summary": "A tribal police officer has authority to detain temporarily and to search a non-Indian traveling on a public right-of-way running through a reservation for potential violations of state or federal law.",
    "author_code": "B",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us2r40_j5fl.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2193,7 +2231,7 @@
    "summary": "Federal Rule of Appellate Procedure 39 does not permit a district court to alter a court of appeals’ allocation of the costs listed in subdivision (e) of that Rule.",
    "author_code": "A",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us2r39_j4el.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2220,7 +2258,7 @@
    "summary": "Each of 8 U. S. C. §1326(d)’s statutory requirements for bringing a collateral attack on a prior deportation order is mandatory.",
    "author_code": "SS",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us2r38_n648.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2247,7 +2285,7 @@
    "summary": "A settlement of environmental liabilities must resolve a specific liability under the Comprehensive Environmental Response, Compensation, and Liability Act of 1980 to give rise to a contribution action under that Act.",
    "author_code": "T",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us2r37_1an2.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2274,7 +2312,7 @@
    "summary": "The jury-unanimity rule announced in Ramos v. Louisiana, 590 U. S. ___, does not apply retroactively on federal collateral review.",
    "author_code": "BK",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us1r36_j4ek.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2382,7 +2420,7 @@
    "summary": "Where defendant energy companies premised 28 U. S. C. §1447(d) removal in part on the federal officer removal statute, §1442, the Fourth Circuit erred in holding that it lacked jurisdiction to consider all grounds for removal rejected by the District Court.",
    "author_code": "NG",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us1r35_i425.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2467,7 +2505,7 @@
    "summary": "A suit to enjoin IRS Notice 2016–66 does not trigger the Anti-Injunction Act even though a violation of the Notice may result in a tax penalty.",
    "author_code": "EK",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us1r34_mlho.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2512,7 +2550,7 @@
    "summary": "Neither the holding nor logic of Cady v. Dombrowski, 413 U. S. 433, justifies the removal of Caniglia’s firearms from his home by police officers under a “community caretaking exception” to the Fourth Amendment’s warrant requirement.",
    "author_code": "T",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us1r33_4i29.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2578,7 +2616,7 @@
    "summary": "A notice to appear sufficient to trigger the Illegal Immigration Reform and Immigrant Responsibility Act of 1996’s stop-time rule is a single document containing all the information about an individual’s removal hearing specified in 8 U. S. C. §1229(a)(1).",
    "author_code": "NG",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us1r32_21o3.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2663,7 +2701,7 @@
    "summary": "The requirement under 28 U. S. C. §2254(a) that a habeas petitioner be “in custody pursuant to the judgment of a State court” is not met if the state judgment is simply a necessary predicate to a federal conviction.",
    "author_code": "PC",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us1r31_g314.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": [],
@@ -2682,7 +2720,7 @@
    "summary": "A discretionary sentencing system is both constitutionally necessary and constitutionally sufficient to sentence a defendant who committed a homicide when he or she was under 18 to life without parole; a separate factual finding of permanent incorrigibility is not required.",
    "author_code": "BK",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us1r30_4315.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2782,7 +2820,7 @@
    "summary": "Principles of issue-exhaustion do not require Social Security disability claimants to argue at the agency level that the administrative law judges hearing their disability claims were unconstitutionally appointed.",
    "author_code": "SS",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us1r29_b97c.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2878,7 +2916,7 @@
    "summary": "Section 13(b) of the Federal Trade Commission Act does not authorize the Commission to seek, or a court to award, equitable monetary relief such as restitution or disgorgement.",
    "author_code": "B",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us1r28_758b.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -2905,7 +2943,7 @@
    "summary": "California is enjoined from enforcing that State’s COVID–19 restrictions on private gatherings as applied to applicants’ at-home religious exercise pending disposition of the appeal in the United States Court of Appeals for the Ninth Circuit and disposition of the petition for a writ of certiorari, if any.",
    "author_code": "PC",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us1r27_o759.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": [],
@@ -2924,7 +2962,7 @@
    "summary": "Google’s limited copying of the Java SE Application Programming Interface allowed programmers to put their accrued talents to work in a transformative program and constituted a fair use of that material under copyright law.",
    "author_code": "B",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/593us1r26_f29g.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3014,7 +3052,7 @@
    "summary": "Florida fails to establish that Georgia’s overconsumption of interstate waters was either a substantial factor contributing to, or the sole cause of, Florida’s injuries.",
    "author_code": "AB",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/592us2r25_086c.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3041,7 +3079,7 @@
    "summary": "The Federal Communications Commission’s 2017 decision to repeal or modify three of its media ownership rules was not arbitrary or capricious for purposes of the Administrative Procedure Act.",
    "author_code": "BK",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/592us2r24_19m2.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3077,7 +3115,7 @@
    "summary": "To qualify as an “automatic telephone dialing system” under the Telephone Consumer Protection Act of 1991, a device must have the capacity either to store, or to produce, a telephone number using a random or sequential number generator.",
    "author_code": "SS",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/592us2r23_1bn2.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3162,7 +3200,7 @@
    "summary": "The Sixth Circuit erred in revisiting on federal habeas review the decision of a Tennessee court supported by ample evidence that did not exceed the possibility of fairminded disagreement.",
    "author_code": "PC",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/592us2r22_jgkn.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": [],
@@ -3176,7 +3214,7 @@
    "summary": "The connection between plaintiffs’ product-liability claims arising from car accidents occurring in each plaintiff’s State of residence and Ford’s activities in those States is sufficient to support specific jurisdiction in the respective State courts even though the automobiles involved in the accidents were manufactured and sold elsewhere.",
    "author_code": "EK",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/592us2r21_p86a.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3276,7 +3314,7 @@
    "summary": "Application of physical force to the body of a person with intent to restrain is a seizure even if the person does not submit and is not subdued.",
    "author_code": "R",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/592us2r20_o759.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3374,7 +3412,7 @@
    "summary": "A request for nominal damages satisfies the redressability element necessary for Article III standing where a plaintiff’s claim is based on a completed violation of a legal right.",
    "author_code": "T",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/592us2r19_8mjp.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3471,7 +3509,7 @@
    "summary": "The deliberative process privilege protects from disclosure under FOIA in-house draft biological opinions that are both predecisional and deliberative, even if the drafts reflect the agencies’ last views about a proposal.",
    "author_code": "AB",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/592us2r18_7l48.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3556,7 +3594,7 @@
    "summary": "A nonpermanent resident seeking to cancel a lawful removal order fails to carry his burden of showing that he has not been convicted of a disqualifying offense when the statutory conviction on his record is ambiguous regarding whether a disqualifying offense formed the basis of his conviction.",
    "author_code": "NG",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/592us2r17_l537.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
@@ -3646,7 +3684,7 @@
    "summary": "The District Court’s order dismissing King’s Federal Tort Claims Act claims was a judgment on the merits that can trigger the Act’s judgment bar to block his Bivens claims.  See 28 U. S. C. §2676; Bivens v. Six Unknown Fed. Narcotics Agents, 403 U. S. 388.",
    "author_code": "T",
    "pdf": "https://www.supremecourt.gov/opinions/20pdf/592us2r16_1971.pdf",
-   "parser": 3,
+   "parser": 4,
    "exact_text": false,
    "lineup_text": null,
    "lineup": {
