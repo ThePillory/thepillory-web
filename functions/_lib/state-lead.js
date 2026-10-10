@@ -7,11 +7,12 @@
 // The same for everyone in the state: cached per state at the edge.
 import { esc, fmtDate, linkRow, loadSection, FAILED, sectionError } from "./render.js";
 import { recentFinalVotes } from "./data.js";
-import { coverageFor, votesLoaded, votesComingSoon } from "./coverage.js";
+import { coverageFor, votesLoaded } from "./coverage.js";
 import { executiveOfficials } from "./executive.js";
 import { billHref } from "./votes.js";
 import { compactRow } from "./summary.js";
 import { measureRow, electionHref } from "./elections.js";
+import { LIVE, stOfFips } from "./geo.js";
 import { chamberIds, chamberName, parseChamber } from "../../workers/sync/src/states.js";
 
 const missing = (err) => /no such (table|column)/i.test(String(err && err.message));
@@ -71,12 +72,15 @@ export async function stateLeadData(db, st) {
 
 const joinList = (name) =>
   `<a class="inline-link" href="#communities">Join the list for ${esc(name)}</a> and we'll email you when more of it opens.`;
+/** Every state's page keeps every section; one without data yet says so, the same way everywhere. */
+const comingSoon = (name, join = true) =>
+  `<p class="small secondary">Coming soon for ${esc(name)}.${join ? ` ${joinList(name)}` : ""}</p>`;
 
 function congressCard(st, name, { congress, votes }) {
   if (congress === FAILED) return sectionError("Congress");
   const { senators, house } = congress;
   if (!senators.length && !house.length) {
-    return `<div class="card"><p class="small secondary">${esc(name)}'s members of Congress appear after the data sync runs.</p></div>`;
+    return `<div class="card stack-xs"><p class="label">In Congress</p>${comingSoon(name, false)}</div>`;
   }
   const voteRows = votes === FAILED ? sectionError("Recent votes") : (votes.rows || [])
     .map((v) =>
@@ -101,10 +105,10 @@ function congressCard(st, name, { congress, votes }) {
 function executiveCard(st, name, executive) {
   if (executive === FAILED) return sectionError("Statewide offices");
   if (!executive.length) {
-    return `<div class="card"><p class="small secondary">${esc(name)}'s governor and statewide offices appear after the data sync loads them (weekly, from Open States).</p></div>`;
+    return `<div class="card stack-xs"><p class="label">${esc(name)}, statewide</p>${comingSoon(name, false)}</div>`;
   }
   const lead = executive.filter((o) => o.rank === 1);
-  const all = st === "CA" ? "/bodies/ca-executive/" : `/explore/${st.toLowerCase()}/#h-statewide`;
+  const all = st === "CA" ? "/bodies/ca-executive/" : "#h-statewide";
   return `
   <div class="card stack-xs">
     <p class="label">${esc(name)}, statewide</p>
@@ -123,12 +127,14 @@ function legislatureCard(st, name, { counts, coverage, bills }) {
   return `
   <div class="card stack-xs">
     <p class="label">${esc(st === "DC" ? "The Council" : "The legislature")}</p>
-    <p class="small">${members ? `${esc(members)}. ` : ""}${members ? "Yours are on your briefing once you find your reps." : `${esc(name)}'s legislators appear after the data sync loads them (weekly, from Open States).`}</p>
+    <p class="small">${members ? `${esc(members)}. ` : ""}${members ? "Yours are on your briefing once you find your reps." : ""}</p>
     ${loaded
       ? billRows
-        ? `<div class="compact-list">${billRows}</div>${linkRow(`/explore/${st.toLowerCase()}/#h-leg`, "More from the legislature", "")}`
+        ? `<div class="compact-list">${billRows}</div>${linkRow("#h-leg", "More from the legislature", "")}`
         : '<p class="small secondary">No final floor votes recorded yet this session.</p>'
-      : `${votesComingSoon(name, !!members)}<p class="small">${joinList(name)}</p>`}
+      : members
+        ? `<p class="small"><strong>Bills and votes:</strong></p>${comingSoon(name)}`
+        : comingSoon(name)}
   </div>`;
 }
 
@@ -147,8 +153,21 @@ function ballotCard(st, name, election) {
   return `
   <div class="card stack-xs">
     <p class="label">Ballot measures</p>
-    <p class="small secondary">${esc(name)}'s statewide ballot measures aren't on ThePillory yet. Your state's election office has the official list: <a class="inline-link" href="https://www.usa.gov/state-election-office" target="_blank" rel="noopener">find it on USA.gov ↗</a>.</p>
-    <p class="small">${joinList(name)}</p>
+    ${comingSoon(name, false)}
+    <p class="small secondary">Until then, ${esc(name)}'s election office has the official list: <a class="inline-link" href="https://www.usa.gov/state-election-office" target="_blank" rel="noopener">find it on USA.gov ↗</a>.</p>
+  </div>`;
+}
+
+/** The state's live communities, as county links (Calaveras County in California); "Coming soon" elsewhere. */
+function countiesCard(st, name) {
+  const live = Object.entries(LIVE).filter(([fips]) => stOfFips(fips) === st);
+  return `
+  <div class="card stack-xs">
+    <p class="label">Counties</p>
+    ${live.length
+      ? live.map(([, c]) => linkRow(c.briefing, c.name, "Live: meetings, agendas and local officials")).join("")
+      : comingSoon(name)}
+    ${linkRow("#map", `Every county in ${name}`, "On the map, with each one's representatives")}
   </div>`;
 }
 
@@ -160,12 +179,13 @@ export function stateLead(vs, data, election, { ballotLink = true } = {}) {
   const { st, name } = vs;
   return `
 <section class="brief-section" id="your-state" aria-labelledby="h-your-state">
-  <div class="section-head"><h2 class="label" id="h-your-state">${esc(name)}</h2><a class="section-link" href="/explore/${st.toLowerCase()}/">State page</a></div>
+  <div class="section-head"><h2 class="label" id="h-your-state">${esc(name)}</h2><a class="section-link" href="#map">Map</a></div>
   ${ballotLink ? `<div class="card">${linkRow(`/ballot/${st.toLowerCase()}/`, "Open your ballot", "Your federal races, then your whole ballot and where to vote")}</div>` : ""}
   ${congressCard(st, name, data)}
   ${executiveCard(st, name, data.executive)}
   ${legislatureCard(st, name, data)}
   ${ballotCard(st, name, election)}
+  ${countiesCard(st, name)}
   <p class="small"><a class="inline-link" href="#find">Find your reps</a> with an address or ZIP code for your own House member, state legislators and ballot.</p>
 </section>`;
 }

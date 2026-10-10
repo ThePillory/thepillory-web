@@ -17,6 +17,7 @@ import {
   pastVoteRows, orderRows, fundingRows, termText, yearOf,
 } from "./history.js";
 import { holdersInYear } from "../../workers/sync/src/history/parse.js";
+import { statePath } from "./state-paths.js";
 
 const block = (id, label, inner, hint = "") =>
   `<section class="stack-sm section-block" aria-labelledby="h-${id}"><h2 id="h-${id}">${esc(label)}</h2>${inner}${hint ? `<p class="hint">${hint}</p>` : ""}</section>`;
@@ -173,7 +174,7 @@ export async function placePastYear(env, request, url, place, c, year) {
   if (place.st === "CA") gaps.push(`California campaign money in ${year}: Cal-Access totals on ThePillory cover the current two-year period.`);
   gaps.push(`Meetings and agenda items: ThePillory reads ${esc(c.name)}'s agendas from the county's current meeting portal, from when the community launched.`);
 
-  const crumbs = breadcrumb([["United States", "/explore/"], [place.name, `/explore/${st}/`], [c.name, placeHref(place.st, c.slug)], [String(year), null]]);
+  const crumbs = breadcrumb([["United States", "/explore/"], [place.name, statePath(place.st)], [c.name, placeHref(place.st, c.slug)], [String(year), null]]);
   const main = `${pastHead(url, year, crumbs, `${esc(c.name)} in ${year}`, `Who represented ${esc(c.name)} in ${year}, how they voted, executive orders signed that year, and campaign totals for the period. ${FEDERAL_FISCAL}.`, "Move the slider to see this county in another year")}
 ${block("federal", "Federal", rowsCard(execRows + senators + house, "No federal officeholders found for this year."), d ? `Districts: ${esc(d.note || "")} Source: Census Bureau relationship files.` : "")}
 ${cabinetHtml}
@@ -319,7 +320,7 @@ export async function topicPastYear(env, url, slug, year, { place = null, c = nu
   ];
   const where = place ? ` in ${esc(c.name)}` : "";
   const crumbs = place
-    ? breadcrumb([["United States", "/explore/"], [place.name, `/explore/${place.st.toLowerCase()}/`], [c.name, placeHref(place.st, c.slug)], [t.name, topicHref(slug, { st: place.st, slug: c.slug })], [String(year), null]])
+    ? breadcrumb([["United States", "/explore/"], [place.name, statePath(place.st)], [c.name, placeHref(place.st, c.slug)], [t.name, topicHref(slug, { st: place.st, slug: c.slug })], [String(year), null]])
     : breadcrumb([["Topics", "/topics/"], [t.name, topicHref(slug)], [String(year), null]]);
   const placeNote = place
     ? `<section class="card stack-xs"><p class="small">Who represented ${esc(c.name)} in ${year}, and how they voted: <a class="inline-link" href="${placeHref(place.st, c.slug)}?year=${year}">${esc(c.name)} in ${year}</a>.</p></section>`

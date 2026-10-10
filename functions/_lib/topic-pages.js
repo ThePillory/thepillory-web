@@ -20,6 +20,7 @@ import {
 import { yearBar } from "./history.js";
 import { icon } from "./icons.js";
 import { INDUSTRIES } from "../../workers/sync/src/funding/industry.js";
+import { statePath } from "./state-paths.js";
 
 const BACK = ["Topics", "/topics/"];
 
@@ -103,7 +104,7 @@ ${url ? yearBar(url, null, { label: `See ${t.name.toLowerCase()} in an earlier y
 export function placeTopicsIndex(place, c) {
   const p = { st: place.st, slug: c.slug };
   const main = `
-${breadcrumb([["United States", "/explore/"], [place.name, `/explore/${place.st.toLowerCase()}/`], [c.name, placeHref(place.st, c.slug)], ["Topics", null]])}
+${breadcrumb([["United States", "/explore/"], [place.name, statePath(place.st)], [c.name, placeHref(place.st, c.slug)], ["Topics", null]])}
 <header class="page-head stack-xs">
   <h1>Topics in ${esc(c.name)}</h1>
   <p class="subtitle">Choose a topic to see, for ${esc(c.name)}: bills and how its representatives voted, ${LIVE[c.fips] ? "county meeting items, " : ""}executive actions, what its officials say on their own pages, and campaign money from industries tied to the topic.</p>
@@ -180,7 +181,7 @@ export async function placeTopicPage(env, place, c, slug, url = null) {
   // California's state bills always (an empty list says so); another state's once any are tagged with this topic.
   const showState = place.st === "CA" || (state !== FAILED && state.bills.length > 0);
   const main = `
-${breadcrumb([["United States", "/explore/"], [place.name, `/explore/${place.st.toLowerCase()}/`], [c.name, placeHref(place.st, c.slug)], [t.name, null]])}
+${breadcrumb([["United States", "/explore/"], [place.name, statePath(place.st)], [c.name, placeHref(place.st, c.slug)], [t.name, null]])}
 ${contentsBar(TOPIC_CONTENTS.filter(([id]) => showState || id !== "state"))}
 ${summaryHead({
     kicker: `<span class="kicker-icon">${icon(slug)}</span>Topic · ${esc(c.name)}`,

@@ -4,9 +4,10 @@
 // everything on a map can be reached without it.
 import { chamberIds, districtKey } from "../../workers/sync/src/states.js";
 import { esc } from "./render.js";
+import { statePath } from "./state-paths.js";
 
 // Live communities, by county FIPS. More open as communities launch.
-export const LIVE = { "06009": { briefing: "/calaveras/" } };
+export const LIVE = { "06009": { briefing: "/calaveras/", name: "Calaveras County" } };
 export const liveStates = () => [...new Set(Object.keys(LIVE).map((f) => FIPS_ST[f.slice(0, 2)]))];
 const FIPS_ST = {
   "01": "AL", "02": "AK", "04": "AZ", "05": "AR", "06": "CA", "08": "CO", "09": "CT", "10": "DE", "11": "DC", "12": "FL", "13": "GA", "15": "HI", "16": "ID", "17": "IL",
@@ -86,7 +87,7 @@ export function usMapLinks(index, waiting) {
   const status = {};
   for (const s of index) status[s.st] = live.includes(s.st) ? "live" : waiting.state[s.st] ? "waiting" : "";
   const note = (st) => (status[st] === "live" ? " (live community)" : status[st] === "waiting" ? ` (${waiting.state[st]} waiting)` : "");
-  const links = Object.fromEntries(index.map((s) => [s.st, [`/explore/${s.st.toLowerCase()}/`, `${s.name}${note(s.st)}`]]));
+  const links = Object.fromEntries(index.map((s) => [s.st, [statePath(s.st), `${s.name}${note(s.st)}`]]));
   return { links, status };
 }
 
@@ -94,7 +95,7 @@ export function usMapLinks(index, waiting) {
 export function smallStateButtons(index) {
   return `<div class="chips small-states">${index
     .filter((s) => SMALL_STATES.includes(s.st))
-    .map((s) => `<a class="chip chip--tap" href="/explore/${s.st.toLowerCase()}/">${esc(s.st)}<span class="visually-hidden"> ${esc(s.name)}</span></a>`)
+    .map((s) => `<a class="chip chip--tap" href="${statePath(s.st)}">${esc(s.st)}<span class="visually-hidden"> ${esc(s.name)}</span></a>`)
     .join("")}</div>`;
 }
 

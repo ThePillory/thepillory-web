@@ -109,7 +109,7 @@ campaign committees (Cal-Access) and Form 700 statements (FPPC).
   courts**; then collapsed Constitution, History and Full text. The orders lists
   (`/laws/?show=orders`, the President's and Governor's More tab, topic pages)
   link here, and each still links its source.
-- "Who represents you" on the hub (`/`), state pages (`/explore/<st>/`) and
+- "Who represents you" on the hub (`/`), state pages (`/states/<name>/`) and
   place pages (`/place/…`); `/bodies/us-executive/` and `/bodies/ca-executive/`
   list every office; `/reps/` has an Executive branch section.
 

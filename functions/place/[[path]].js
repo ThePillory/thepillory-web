@@ -20,6 +20,7 @@ import { pickYear, yearBar } from "../_lib/history.js";
 import { placePastYear, topicPastYear } from "../_lib/history-pages.js";
 import { LIVE, loadPlace, officialsFor, allIds, repRow, executiveRows, breadcrumb, districtLabel, districtHref, placeHref, loadDistrictNames } from "../_lib/geo.js";
 import { chamberIds, districtKey } from "../../workers/sync/src/states.js";
+import { statePath } from "../_lib/state-paths.js";
 
 const WAITLIST_MESSAGES = {
   joined: "Thank you. We'll email you only when ThePillory launches in this county.",
@@ -55,9 +56,9 @@ async function placePage({ request, env, params }) {
   if (!st) return Response.redirect(`${url.origin}/explore/`, 302);
   const place = await loadPlace(env, request, st);
   if (!place) return notFound("No state at this address.", "home", ["Explore", "/explore/"]);
-  if (!slug) return Response.redirect(`${url.origin}/explore/${st}/`, 302);
+  if (!slug) return Response.redirect(`${url.origin}${statePath(place.st)}#map`, 302);
   const c = (!extra || (extra === "topics" && !more)) && place.counties.find((x) => x.slug === slug || x.fips === slug);
-  if (!c) return notFound("No county at this address.", "home", [place.name, `/explore/${st}/`]);
+  if (!c) return notFound("No county at this address.", "home", [place.name, statePath(place.st)]);
   if (c.slug !== slug) return Response.redirect(`${url.origin}${placeHref(place.st, c.slug)}${extra ? `topics/${topic ? `${topic}/` : ""}` : ""}`, 301);
   // Topics for this county: /place/<st>/<county>/topics/ and /topics/<topic>/ (functions/_lib/topic-pages.js).
   // The Time Machine: ?year= shows the county (or one of its topics) as it was that year.
@@ -107,7 +108,7 @@ async function placePage({ request, env, params }) {
     });
   const countyRows = live ? o.county.map((r) => repRow(r)) : [];
   const stateRows = [
-    ...(place.st === "CA" ? executiveRows(o.stateExecutive, { href: "/bodies/ca-executive/", label: "California's other statewide offices" }) : executiveRows(o.stateExecutive, { href: `/explore/${place.st.toLowerCase()}/#h-statewide`, label: `${place.name}'s other statewide offices` })),
+    ...(place.st === "CA" ? executiveRows(o.stateExecutive, { href: "/bodies/ca-executive/", label: "California's other statewide offices" }) : executiveRows(o.stateExecutive, { href: `${statePath(place.st)}#h-statewide`, label: `${place.name}'s other statewide offices` })),
     ...(place.st === "DC" ? [] : [...byDistrict("sldu", o.upper), ...byDistrict("sldl", o.lower)]),
   ];
   const federalRows = [...executiveRows(o.executive, { href: "/bodies/us-executive/", label: "The Cabinet" }), ...o.senators.map((r) => repRow(r)), ...byDistrict("cd", o.house)];
@@ -196,7 +197,7 @@ async function placePage({ request, env, params }) {
     extra: districtsLine ? `<div class="stack-sm">${districtsLine}</div>` : "",
   });
   const main = `
-${breadcrumb([["United States", "/explore/"], [place.name, `/explore/${st}/`], [c.name, null]])}
+${breadcrumb([["United States", "/explore/"], [place.name, statePath(place.st)], [c.name, null]])}
 ${contentsBar([["summary", "Summary"], ballot ? ["elections", "Ballot"] : [null], ["who", "Who represents"], live ? ["meetings", "Meetings"] : [null], ["topics", "Topics"], ["votes", "Votes"], ["funding", "Funding"], nearby ? ["nearby", "Nearby"] : [null]])}
 ${head}
 ${action}
@@ -222,7 +223,7 @@ ${fold("funding", "Funding", funding)}
 ${nearby ? fold("nearby", "Nearby counties", `<div class="chips">${nearby}</div>`) : ""}
 ${yearBar(url, null, { label: `See who represented ${c.name} in an earlier year` })}
 <p class="hint">County boundaries and district overlaps: U.S. Census Bureau (2024 boundaries, 2020 census blocks).</p>`;
-  return page(`${c.name}, ${place.name}`, main, { tab: "home", back: [place.name, `/explore/${st}/`], partial: anyFailed(oLoaded, votes, meetingsLoaded, electionLoaded) });
+  return page(`${c.name}, ${place.name}`, main, { tab: "home", back: [place.name, statePath(place.st)], partial: anyFailed(oLoaded, votes, meetingsLoaded, electionLoaded) });
 }
 
 /** What's on the ballot in a county: statewide, every district that overlaps it, its Court of Appeal, and local contests where ThePillory has them. */
