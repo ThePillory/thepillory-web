@@ -29,12 +29,13 @@
 // the national sections follow. Outside the US, or when the region is unknown:
 // the national hub. Kept at the edge once per state; browsers don't keep it.
 import { icon } from "./icons.js";
-import { page, esc, linkRow, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "./render.js";
+import { page, esc, fmtDate, linkRow, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "./render.js";
 import { listMeetings, pacificNow, addDays, deadlineParts, meetingHref, when } from "./meetings.js";
 import { districtsFromCookie, describe, STATE_NAME } from "./districts.js";
 import { happeningNow, happeningSection, lookupForm, waitlistCounts } from "./hub.js";
 import { topicGrid, placeTopicsHref } from "./topics.js";
-import { ballotWindow, todayIn, onlyIfNeeded, previewLabel, RESULT_HEADING } from "./election-window.js";
+import { ballotWindow, todayIn, onlyIfNeeded, previewLabel, RESULT_HEADING, electionLabel } from "./election-window.js";
+import { quickHomeData, thisWeek, quickHome, quickLinks, THIS_WEEK_DAYS } from "./quick-home.js";
 import { racesHref, YEAR } from "./candidates.js";
 import { loadElection, ballotFor, ballotHref, electionHref, whenLine, daysUntil, contestRow, courtRow, statewideRow, electionIdFor, measuresOnly, ELECTION_BY_STATE } from "./elections.js";
 import { LIVE, asset, loadIndex, loadPlace, waitlistBy, usMapLinks, smallStateButtons, mapFigure } from "./geo.js";
@@ -234,7 +235,7 @@ const racesLink = (st) => (st ? linkRow(racesHref(YEAR, st), `Candidates in ${ST
 // One line with the date and countdown, and a standard-size button: no more.
 function ballotHero(vs, win) {
   return `
-<section class="card ballot-hero" aria-label="${esc(previewLabel(vs.st, vs.name))}">
+<section class="card ballot-hero simple-keep" aria-label="${esc(previewLabel(vs.st, vs.name))}">
   <p class="ballot-hero-when">${esc(win.line)}${onlyIfNeeded(win.election) ? '<span class="secondary"> (if needed)</span>' : ""}</p>
   <a class="btn btn--primary" href="/ballot/${vs.st.toLowerCase()}/">${esc(previewLabel(vs.st, vs.name))}</a>
 </section>`;
@@ -392,19 +393,48 @@ export async function hub(env, request, url, d, vs) {
   const error = joined && joined !== "joined" ? WAITLIST_MESSAGES[joined] || "" : "";
   const notFound = url.searchParams.get("lookup") === "notfound";
 
+  // Quick mode's version of this page (functions/_lib/quick-home.js): shown only in Quick.
+  const since = addDays(start.slice(0, 10), -THIS_WEEK_DAYS);
+  const senatorVotes = lead && lead.votes !== FAILED ? (lead.votes.rows || []).filter((v) => v.vote_date >= since) : [];
+  const quick = await loadSection("hub quick", () => quickHomeData(env, request, { st: vs ? vs.st : null, since, districts: mine, senatorVotes }), null);
+  const quickHtml = quick === FAILED || !quick ? "" : quickHome({
+    st: vs ? vs.st : null,
+    stateName: vs ? vs.name : null,
+    items: thisWeek({
+      stateName: vs ? vs.name : "",
+      votes: [...senatorVotes, ...quick.stateVotes],
+      outcomes: quick.outcomes,
+      decisions: quick.decisions,
+      orders: quick.orders,
+      plain: quick.plain,
+      // The ballot card, when it shows, already gives the date.
+      election: win && !hero && win.days <= 90 ? {
+        date: win.election.date,
+        href: `/ballot/${vs.st.toLowerCase()}/`,
+        text: `${electionLabel(win.election) === "Election Day" ? `Election Day in ${vs.name} is` : `${electionLabel(win.election)} in ${vs.name}:`} ${fmtDate(win.election.date)}${win.days > 0 ? `, ${win.days === 1 ? "tomorrow" : `in ${win.days} days`}` : ", today"}.${onlyIfNeeded(win.election) ? " (Held only if needed.)" : ""}`,
+      } : null,
+    }),
+    president: (federalExec === FAILED ? [] : federalExec).find((o) => o.rank === 1) || null,
+    senators: lead && lead.congress !== FAILED ? lead.congress.senators : [],
+    governor: lead && lead.executive !== FAILED ? (lead.executive.find((o) => /^governor$/i.test(o.office || "")) || lead.executive.find((o) => o.rank === 1) || null) : null,
+    house: quick.house,
+    districtsKnown: !!(mine && mine.cd),
+  });
+
   // Elections sits near the top until Election Day, then moves down to its usual place.
   const electionsHtml = elections === FAILED ? sectionError("Elections") : electionsSection(elections, mine, vs ? vs.st : d ? d.st : null);
   const electionsLate = elections === FAILED || !elections.election || daysUntil(elections.election, start.slice(0, 10)) == null;
-  const main = `
-<header class="hub-head stack-sm">
+  const main = `<div class="simple-scope">
+<header class="hub-head stack-sm simple-keep">
   <h1 class="hub-title">Know what your government is doing. <span class="hub-title-soft">Then take part.</span></h1>
   <p class="hub-sub">Votes, bills, and meetings in plain language, measured against the Constitution. Built on evidence, open to every point of view.</p>
 </header>
 ${vs ? showingBar(vs) : ""}
 ${usMap(index, waiting === FAILED ? { county: {}, state: {} } : waiting, vs)}
+${quickHtml}
 ${hero ? ballotHero(vs, win) : ""}
 ${notFound ? '<p class="banner banner--error" role="alert">We couldn\'t find districts for that. Check the address, or try your ZIP code.</p>' : ""}
-${lookupForm(mine)}
+<div class="simple-keep">${lookupForm(mine)}</div>
 ${vs ? stateLead(vs, lead, elections === FAILED ? FAILED : elections.election, { ballotLink: !hero }) : ""}
 ${mine ? `<a class="card briefing-link" href="/briefing/"><span class="stack-xs"><span class="label">Your briefing</span><span class="small">${esc(describe(d))}</span></span><span class="chev" aria-hidden="true">›</span></a>` : ""}
 ${electionsLate ? "" : electionsHtml}
@@ -423,6 +453,8 @@ ${deadlines === FAILED ? sectionError("Take part") : takePart(deadlines, !!db, v
 ${communities(env, counts === FAILED ? null : counts, msg, error, vs ? vs.st : "")}
 ${understand()}
 ${elsewhere ? `<p class="small secondary your-place">Your place: ${esc(typeof yourPlace === "string" ? yourPlace : STATE_NAME[elsewhere.st])} · <a class="inline-link" href="/briefing/">Your briefing</a></p>` : ""}
+${quickLinks()}
+</div>
 ${index ? `<script src="/assets/map.js?v=${ASSET_VERSION}" defer></script>` : ""}`;
   // Personal only once the visitor's districts are known; otherwise the same for everyone.
   const title = vs && vs.source === "page" ? vs.name : "Know what your government is doing";

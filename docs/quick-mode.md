@@ -20,6 +20,9 @@ Same rules as everywhere else: facts only, neutral wording, no party colors, and
 | Ballot measure | What it does · A Yes vote means / A No vote means (word for word from the official guide, California) · Where it stands |
 | Ballot preview | What's on it · Your exact ballot (the statewide list and the address card stay) |
 
+- **The home page and every state page** (one template, `functions/_lib/home.js`; the Quick parts in `functions/_lib/quick-home.js`) change the most. Quick shows, in order: the headline on one line (no subhead); **This week in [State]**; **Who represents you**; the ballot card (in its window); Find your representatives; then three links, Explore the map, Topics and How government works. The map, the state and national sections, Happening now, Take part, Communities and Understand stay in Detailed, unchanged. It fits about two phone screens.
+  - **This week in [State]**: three to five sentences built from recorded facts only: laws signed or vetoed (`bill_outcomes`), final-passage votes in Congress (with how the state's two senators voted) and in the state legislature (`bill_list`), Supreme Court decisions (the latest term file), executive orders (the President's; California's Governor's), and the state's next election date when it's within 90 days. One fixed rule picks them, the same for every state: up to two final actions first (`FINAL_FIRST`), then the newest, from the last 30 days (`THIS_WEEK_DAYS`), at most five (`THIS_WEEK_MAX`), the election last. Never by topic or side. A bill's checked plain line (`plain_summaries`) follows its number when it has one; otherwise its official title, word for word. Each sentence links to its page and shows its date.
+  - **Who represents you**: one row each for the President, the state's two U.S. Senators, the Governor, and the House member once the visitor's districts are known in this state, each with its job in plain words ("Writes federal laws for the whole state", "Runs the state government").
 - **Constitution chips** keep their links and show a plain name ("Speech, religion, press, assembly" for the First Amendment).
 - **The glossary**: words like cloture, veto override, committee, roll call and ballot measure get a dotted underline the first time they appear on a page; a tap shows a one-sentence definition.
 
@@ -39,4 +42,4 @@ Every rewrite is checked in code (`check.js`) and kept only when it passes: one 
 
 ## Tests
 
-`workers/sync/test/plain.test.mjs` (the checks, the step with a fake model and SQLite, the plain helpers, the glossary, and the cards on the Court, a measure and the ballot preview); `state-template.test.mjs` and the page tests still check the Detailed pages.
+`workers/sync/test/plain.test.mjs` (the checks, the step with a fake model and SQLite, the plain helpers, the glossary, and the cards on the Court, a measure and the ballot preview); `quick-home.test.mjs` (This week's rule and wording, Who represents you, and the order of the Quick home page on `/`, California and Texas); `state-template.test.mjs` and the page tests still check the Detailed pages.
