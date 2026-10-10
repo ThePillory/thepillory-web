@@ -249,7 +249,7 @@ ${qp.length ? fold("qp", "Question presented", `<div class="stack-xs">${qp.map((
 ${named.length ? `<section class="stack-sm" aria-labelledby="h-provisions">
   <h2 class="label" id="h-provisions">The Constitution, in the Court's words</h2>
   ${named.map((p) => `<div class="card stack-xs"><a class="chip chip--parch chip--tap" href="/laws/constitution/#${esc(p.id)}">${esc(clauses[p.id])}</a>${p.quote ? `<blockquote class="quote">${esc(p.quote)}</blockquote>` : ""}</div>`).join("")}
-  <p class="hint">Each provision the opinion of the Court names, with the first sentence that names it, word for word. ThePillory doesn't characterize the ruling.</p>
+  <p class="hint">Each provision the opinion of the Court names${c.exact_text === false ? "" : ", with the first sentence that names it, word for word"}. ThePillory doesn't characterize the ruling.${c.exact_text === false ? " The sentences aren't quoted here: the text of this decision's PDF (the bound volume's preliminary print) can't be copied exactly. They're in the opinion." : ""}</p>
 </section>` : ""}
 <p class="hint">From the Court's slip opinion as published on supremecourt.gov. <a class="inline-link" href="${TERM_HREF}">This term</a> · <a class="inline-link" href="${COURT_HREF}">The justices</a></p>`,
   };

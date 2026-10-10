@@ -52,7 +52,7 @@ CL = "https://www.courtlistener.com/api/rest/v4"
 UA = "ThePillory/1.0 (+https://thepillory.co; public records)"
 OLDEST_TERM = 2010  # supremecourt.gov's slip-opinion pages go back about this far
 # Bump when the opinion readers change: decisions read by an older version are read again.
-PARSER_VERSION = 2
+PARSER_VERSION = 3
 
 # The surname as the opinions print it (in capitals), for every justice who may
 # appear in a lineup since OLDEST_TERM. A lineup name not here stops the parse.
@@ -256,16 +256,33 @@ def names_in(s):
 LINEUP_START = re.compile(rf"({NAME}, (?:C\. )?J\., delivered the opinion|PER CURIAM|{NAME}, (?:C\. )?J\., announced the judgment)")
 
 
+def caps_names(t):
+    """Justices' surnames in capitals, as slip opinions print them; the bound volume's preliminary prints use "Barrett, J."."""
+    for s in SURNAMES:
+        t = re.sub(rf"\b{s.title()}\b", s, t)
+    return t
+
+
+def exact_text(text):
+    """
+    False for a PDF whose text can't be copied word for word: the preliminary prints of
+    the bound volume (which supremecourt.gov links for past terms) lose the "fi" and "fl"
+    ligatures ("filed" comes out "fled", "officials" "offcials"). Their lineups are still
+    read; nothing from them is quoted.
+    """
+    return not re.search(r"PRELIMINARY PRINT|Page Proof Pending Publication", text[:20000])
+
+
 def lineup_paragraph(text):
     """The syllabus's last paragraph: who delivered the opinion, and who filed or joined what."""
-    t = unwrap(without_headers(text))
+    t = caps_names(unwrap(without_headers(text)))
     m = LINEUP_START.search(t)
     if not m:
         return None
     rest = t[m.start():]
-    # It ends where the opinion itself begins (a page header or the opinion's caption).
-    # It ends where the opinion itself begins: its caption or the slip notice (page headers are already out).
-    end = re.search(r"\s(?:NOTICE: This opinion|SUPREME COURT OF THE UNITED STATES|PRELIMINARY PRINT)", rest)
+    # It ends where the opinion itself begins (its caption or the slip notice), or, in the bound
+    # volume, where the list of counsel begins ("… argued the cause for petitioner").
+    end = re.search(r"\s(?:NOTICE: This opinion|SUPREME COURT OF THE UNITED STATES|PRELIMINARY PRINT)|[^.]*\bargued the cause\b|[^.]*\bon the briefs?\b", rest)
     return rest[: end.start() if end else 1200].strip()
 
 
@@ -295,7 +312,7 @@ def parse_lineup(paragraph):
 
     unanimous = False
     for s in re.split(r"(?<=\.)\s+(?=[A-Z]{3,}, (?:C\. )?J\.|[A-Z]{3,} and [A-Z]{3,}|[A-Z]{3,}, [A-Z]{3,})", paragraph):
-        head = re.split(r" delivered| filed| concurred| dissented| took no part| announced", s)[0]
+        head = re.split(r" delivered| fi?led| concurred| dissented| took no part| announced", s)[0]
         authors = names_in(head)
         joined = joiners(s)
         if "unanimous Court" in s:
@@ -310,7 +327,7 @@ def parse_lineup(paragraph):
         if "took no part" in s:
             add(authors, "took no part")
             continue
-        wrote = "filed" in s
+        wrote = bool(re.search(r"\bfi?led\b", s))  # "fled": the bound volume's prints drop the "fi" ligature
         role = None
         if re.search(r"concurring in part and dissenting in part|concurred in part and dissented in part", s):
             role = "concurring in part and dissenting in part"
@@ -425,12 +442,17 @@ def build_term(term, previous, constitution_ids, budget):
             cases.append({**row, "pending_read": True})
             continue
         lineup_text = lineup_paragraph(text)
+        exact = exact_text(text)
+        provisions = provisions_named(text, constitution_ids)
+        if not exact:
+            provisions = [{**p, "quote": None} for p in provisions]
         cases.append({
             **row,
             "parser": PARSER_VERSION,
-            "lineup_text": lineup_text,
+            "exact_text": exact,
+            "lineup_text": lineup_text if exact else None,
             "lineup": parse_lineup(lineup_text),
-            "provisions": provisions_named(text, constitution_ids),
+            "provisions": provisions,
         })
         time.sleep(0.5)
     return {"term": term, "source_url": f"{SCOTUS}/opinions/slipopinion/{str(term)[2:]}", "cases": cases}, budget

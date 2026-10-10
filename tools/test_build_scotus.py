@@ -92,6 +92,23 @@ class Tests(unittest.TestCase):
         self.assertTrue(u["unanimous"])
         self.assertEqual(B.parse_lineup(""), [])
 
+    def test_bound_volume_print(self):
+        """The preliminary prints: mixed-case names, a page break inside the lineup, "fled" for "filed", counsel after it."""
+        text = ("PRELIMINARY PRINT\nApplications for partial stays granted.\n\n  Barrett, J., delivered the opinion of the Court, in which Roberts,\n"
+                "C. J., and Thomas, Alito, Gorsuch, and Kavanaugh, JJ., joined.\nThomas, J., fled a concurring opinion, in which Gorsuch, J., joined, post,\n"
+                "836                      TRUMP v. CASA, INC.\n\n                                 Syllabus\n\n"
+                "p. 862. So-\ntomayor, J., fled a dissenting opinion, in which Kagan and Jackson, JJ.,\njoined, post, p. 879.\n\n"
+                "   Solicitor General Sauer argued the cause for applicants in\nall cases.\n")
+        self.assertFalse(B.exact_text(text))
+        p = B.lineup_paragraph(text)
+        self.assertNotIn("argued", p)
+        got = {x["justice"]: (x["roles"], x["wrote"]) for x in B.parse_lineup(p)["justices"]}
+        self.assertEqual(got["Barrett"], (["majority"], ["majority"]))
+        self.assertEqual(got["Thomas"], (["concurrence", "majority"], ["concurrence"]))
+        self.assertEqual(got["Gorsuch"], (["concurrence", "majority"], []))
+        self.assertEqual(got["Sotomayor"], (["dissent"], ["dissent"]), "a name split across lines, and 'fled'")
+        self.assertEqual(got["Jackson"], (["dissent"], []))
+
     def test_lineup_paragraph_from_syllabus(self):
         text = "Held: The example rule applies.\nPp. 3-9.\n\n 1 F. 4th 1, reversed.\n\n   ROBERTS, C. J., delivered the opinion of the Court, in which all\nother Members joined.\n\nCite as: 607 U. S. ___ (2026)\n"
         self.assertEqual(B.lineup_paragraph(text), "ROBERTS, C. J., delivered the opinion of the Court, in which all other Members joined.")
