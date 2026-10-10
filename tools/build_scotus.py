@@ -52,7 +52,7 @@ CL = "https://www.courtlistener.com/api/rest/v4"
 UA = "ThePillory/1.0 (+https://thepillory.co; public records)"
 OLDEST_TERM = 2010  # supremecourt.gov's slip-opinion pages go back about this far
 # Bump when the opinion readers change: decisions read by an older version are read again.
-PARSER_VERSION = 3
+PARSER_VERSION = 4
 
 # The surname as the opinions print it (in capitals), for every justice who may
 # appear in a lineup since OLDEST_TERM. A lineup name not here stops the parse.
@@ -311,10 +311,24 @@ def parse_lineup(paragraph):
         return out
 
     unanimous = False
+    all_others = None
     for s in re.split(r"(?<=\.)\s+(?=[A-Z]{3,}, (?:C\. )?J\.|[A-Z]{3,} and [A-Z]{3,}|[A-Z]{3,}, [A-Z]{3,})", paragraph):
         head = re.split(r" delivered| fi?led| concurred| dissented| took no part| announced", s)[0]
         authors = names_in(head)
         joined = joiners(s)
+        if "all other Members joined" in s:
+            # The rest of the Court, which the term's other lineups name (build_term fills it in).
+            add(authors, "majority", True)
+            after = s.split("except", 1)[1] if "except" in s else ""
+            out_names = names_in(after) if "took no part" in after else []
+            add(out_names, "took no part")
+            all_others = {"author": authors[0] if authors else None, "partial": bool(re.search(r"except as to|except for Part", s)), "except": out_names}
+            continue
+        if "joined that opinion in full" in s or re.search(r"joined except (?:for|as to) Parts?", s):
+            # "X and Y joined that opinion in full, and Z joined except for Part III–A."
+            for m in re.finditer(r"(.*?)\bjoined (that opinion in full|except (?:for|as to) [^,.;]*)", s):
+                add(names_in(m.group(1)), "majority" if "in full" in m.group(2) else "majority in part")
+            continue
         if "unanimous Court" in s:
             add(authors, "majority", True)
             unanimous = True
@@ -343,10 +357,27 @@ def parse_lineup(paragraph):
             role = "dissent"
         if role:
             add(authors, role, wrote)
-            for names, _ in joined:
-                add(names, role)
+            for names, partial in joined:
+                # "… in which BARRETT, J., joined as to Parts II and III": part of that opinion.
+                add(names, f"{role} (in part)" if partial else role)
     out = [{"justice": j, "roles": sorted(r), "wrote": sorted(k for k, v in r.items() if v)} for j, r in roles.items()]
-    return {"unanimous": unanimous, "justices": out} if out else []
+    if not out:
+        return []
+    return {"unanimous": unanimous, "justices": out, **({"all_others": all_others} if all_others else {})}
+
+
+def fill_all_others(cases):
+    """"In which all other Members joined": the rest of the Court that term, as its other lineups name it."""
+    members = {j["justice"] for c in cases if c.get("lineup") for j in c["lineup"]["justices"]}
+    for c in cases:
+        lu = c.get("lineup")
+        if not lu or not lu.get("all_others"):
+            continue
+        ao = lu["all_others"]
+        named = {j["justice"] for j in lu["justices"]}
+        for m in sorted(members - named):
+            lu["justices"].append({"justice": m, "roles": ["majority in part" if ao["partial"] else "majority"], "wrote": []})
+    return cases
 
 
 # Provisions the opinion of the Court names, by the names opinions use. Only
@@ -382,7 +413,8 @@ HEADER = re.compile(r"^\s*(?:Opinion of the Court|Syllabus|Cite as:.*|\(Slip Opi
 
 
 def without_headers(text):
-    """The text with page headers, running case names and page numbers taken out."""
+    """The text with page headers, running case names, page numbers and the preliminary prints' watermark taken out."""
+    text = re.sub(r"Page\s*Proof\s*Pending\s*Publication", " ", text)
     return "\n".join(l for l in text.splitlines() if not HEADER.match(l))
 
 
@@ -455,7 +487,7 @@ def build_term(term, previous, constitution_ids, budget):
             "provisions": provisions,
         })
         time.sleep(0.5)
-    return {"term": term, "source_url": f"{SCOTUS}/opinions/slipopinion/{str(term)[2:]}", "cases": cases}, budget
+    return {"term": term, "source_url": f"{SCOTUS}/opinions/slipopinion/{str(term)[2:]}", "cases": fill_all_others(cases)}, budget
 
 
 # ---------------------------------------------------------------------------

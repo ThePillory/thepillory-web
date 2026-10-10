@@ -49,7 +49,9 @@ const isoOf = (s) => {
 // ---------------------------------------------------------------------------
 // Positions, as the lineup states them
 
-const ROLE_ORDER = ["majority", "majority in part", "concurrence", "concurring in part", "concurrence in the judgment", "concurring in part and dissenting in part", "dissenting in part", "dissent", "took no part"];
+const BASE_ROLES = ["majority", "majority in part", "concurrence", "concurring in part", "concurrence in the judgment", "concurring in part and dissenting in part", "dissenting in part", "dissent", "took no part"];
+// "dissent (in part)": joined part of that opinion ("… joined as to Parts II and III").
+const ROLE_ORDER = BASE_ROLES.flatMap((r) => [r, `${r} (in part)`]);
 const ROLE_LABEL = {
   majority: "Majority",
   "majority in part": "Joined the majority in part",
@@ -61,6 +63,7 @@ const ROLE_LABEL = {
   dissent: "Dissent",
   "took no part": "Took no part",
 };
+for (const r of BASE_ROLES) ROLE_LABEL[`${r} (in part)`] = `Joined ${r === "dissent" ? "a dissent" : r === "concurrence" ? "a concurrence" : `the ${r}`} in part`;
 const WROTE_LABEL = {
   majority: "the opinion of the Court",
   concurrence: "a concurrence",

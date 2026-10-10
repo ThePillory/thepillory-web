@@ -109,6 +109,29 @@ class Tests(unittest.TestCase):
         self.assertEqual(got["Sotomayor"], (["dissent"], ["dissent"]), "a name split across lines, and 'fled'")
         self.assertEqual(got["Jackson"], (["dissent"], []))
 
+    def test_other_lineup_forms(self):
+        p = ("ALITO, J., announced the judgment of the Court and delivered the opinion of the Court except as to Part III–A. ROBERTS, C. J., and THOMAS and "
+             "KAVANAUGH, JJ., joined that opinion in full, and GORSUCH and BARRETT, JJ., joined except for Part III–A. THOMAS, J., fled a concurring opinion, post, p. 350. "
+             "KAGAN, J., fled a dissenting opinion, in which SOTOMAYOR and JACKSON, JJ., joined, post, p. 357.")
+        got = {x["justice"]: x["roles"] for x in B.parse_lineup(p)["justices"]}
+        self.assertEqual(got["Roberts"], ["majority"])
+        self.assertEqual(got["Kavanaugh"], ["majority"])
+        self.assertEqual(got["Barrett"], ["majority in part"])
+        self.assertEqual(got["Thomas"], ["concurrence", "majority"])
+        self.assertEqual(got["Jackson"], ["dissent"])
+        part = B.parse_lineup("ROBERTS, C. J., delivered the opinion of the Court. THOMAS, J., filed a dissenting opinion, in which GORSUCH, J., joined, in which BARRETT, J., joined as to Parts II and III.")
+        self.assertEqual({x["justice"]: x["roles"] for x in part["justices"]}["Barrett"], ["dissent (in part)"])
+        cases = [
+            {"lineup": B.parse_lineup("THOMAS, J., delivered the opinion of the Court, in which all other Members joined, except BARRETT, J., who took no part in the consideration or decision of the case.")},
+            {"lineup": B.parse_lineup("KAGAN, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, SOTOMAYOR, GORSUCH, KAVANAUGH, BARRETT, and JACKSON, JJ., joined.")},
+        ]
+        got = {x["justice"]: x["roles"] for x in B.fill_all_others(cases)[0]["lineup"]["justices"]}
+        self.assertEqual(len(got), 9)
+        self.assertEqual(got["Barrett"], ["took no part"])
+        self.assertEqual(got["Kagan"], ["majority"])
+        self.assertEqual(B.lineup_paragraph("KAGAN, Page Proof Pending Publication J., delivered the opinion of the Court.\nCite as: 1 U. S. 1"),
+                         "KAGAN, J., delivered the opinion of the Court.", "the preliminary prints' watermark")
+
     def test_lineup_paragraph_from_syllabus(self):
         text = "Held: The example rule applies.\nPp. 3-9.\n\n 1 F. 4th 1, reversed.\n\n   ROBERTS, C. J., delivered the opinion of the Court, in which all\nother Members joined.\n\nCite as: 607 U. S. ___ (2026)\n"
         self.assertEqual(B.lineup_paragraph(text), "ROBERTS, C. J., delivered the opinion of the Court, in which all other Members joined.")
