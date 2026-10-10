@@ -539,6 +539,20 @@ def build_methodology():
   </ul>
 </section>
 
+<section class="card stack" id="candidates">
+  <h2>Candidates</h2>
+  <p>Pages for candidates who aren't in office yet, with the same layout for every candidate: the race, the election date, Platform, Votes, Funding and More. ThePillory doesn't endorse candidates, and doesn't publish polls, predictions, rankings or contact details.</p>
+  <ul class="plain-list small">
+    <li><strong>How candidates are included:</strong> every candidate the Federal Election Commission lists as an active statutory candidate for the U.S. Senate or House this cycle (registered, and past the $5,000 threshold), by one rule for everyone; nobody is added or left out by hand. Where ThePillory has a state's certified candidate list (California now; other states as their lists are added), its candidates are included too, including candidates for Governor, the other statewide offices and the Legislature.</li>
+    <li><strong>Order:</strong> in a race, candidates on a certified list are shown in official ballot order; everyone else is listed alphabetically by last name. Every candidate gets an identical card.</li>
+    <li><strong>Labels:</strong> before the election, "Candidate · Not yet in office", with "Filed for [office], [year]" where there's only the FEC's list (it doesn't record primary results). Where a certified list shows who is on the November ballot, a filer who isn't on it is labeled "Filed for [office], [year]". After the election, winners take office and get an official page; their candidate page stays. Everyone else keeps their page, marked "Ran for [office], [year]" where they were on a certified ballot, otherwise "Filed for [office], [year]". A candidate the FEC stops listing as active keeps their page, with the date they were last listed.</li>
+    <li><strong>Other offices:</strong> a candidate who holds or held an office ThePillory records (for example, a state legislator running for Congress) links to that office's record and votes. The link is made by FEC ID for members of Congress, otherwise only when exactly one official in the state has the same first and last name, and the page says it was matched by name.</li>
+    <li><strong>Money:</strong> the same totals and the same rules as officials' Funding tabs: money raised and spent in the two-year period, cash on hand, where it came from, and contributions from PACs and other committees, by name. Individual donors are never named.</li>
+    <li><strong>Campaign website:</strong> as listed in the campaign committee's FEC filing (Form 1). Nothing else from that filing is shown: no email, phone, address or treasurer.</li>
+    <li><strong>Refreshed daily:</strong> the FEC list in the "Refresh election data" workflow; money and websites in the "Refresh candidate data" workflow, a few hundred candidates a run, oldest first, within the FEC's hourly limit. Races on the November 3, 2026 ballot come first; 2027 and 2028 candidates are added as they file.</li>
+  </ul>
+</section>
+
 <section class="card stack" id="scotus">
   <h2>The Supreme Court</h2>
   <p>The justices, their decisions and this term's cases, from the Court's own records, with a link to each. The same layout for every justice. ThePillory doesn't label justices, score them, group them or predict outcomes.</p>
@@ -982,6 +996,17 @@ def build_search():
     render("search", "Search", main)
 
 
+STATE_FULL = {
+    "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware",
+    "DC": "District of Columbia", "FL": "Florida", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa",
+    "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota",
+    "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey",
+    "NM": "New Mexico", "NY": "New York", "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon",
+    "PA": "Pennsylvania", "PR": "Puerto Rico", "RI": "Rhode Island", "SC": "South Carolina", "SD": "South Dakota", "TN": "Tennessee", "TX": "Texas",
+    "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington", "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming",
+}
+
+
 def search_index():
     """Static search entries: the governing bodies and every provision of the
     Constitution. Officials, bills and meetings are added from D1 by
@@ -1009,6 +1034,12 @@ def search_index():
     items.append({"type": "Elections", "title": "Elections", "sub": "What's on the ballot, Your ballot, How to vote", "url": "/elections/", "k": "election ballot vote voting register polling"})
     items.append({"type": "Laws", "title": "The Supreme Court", "sub": "The justices and their decisions", "url": "/bodies/us-supreme-court/", "k": "supreme court scotus justices justice court decisions opinions roberts thomas alito sotomayor kagan gorsuch kavanaugh barrett jackson"})
     items.append({"type": "Laws", "title": "This term at the Supreme Court", "sub": "Cases the Court will hear, and its decisions", "url": "/court/term/", "k": "supreme court term cases argument docket question presented"})
+    for f in sorted((ROOT / "data" / "candidates" / "2026").glob("[a-z][a-z].json")):
+        d = json.loads(f.read_text(encoding="utf-8"))
+        if not any(c.get("listed") for c in d.get("candidates", {}).values()):
+            continue
+        name = STATE_FULL.get(d["state"], d["state"])
+        items.append({"type": "Elections", "title": f"Candidates in {name}", "sub": "Every 2026 race, the same page for every candidate", "url": f"/races/2026/{d['state'].lower()}/", "k": f"candidates candidate race races challenger running election 2026 {name.lower()} {d['state'].lower()}"})
     items.append({"type": "Elections", "title": "Open your ballot", "sub": "Every state: your federal races, then your whole ballot and where to vote", "url": "/ballot/", "k": "ballot sample my ballot polling place where to vote early voting candidates"})
     # Election files are named by date (2026-11-03.json); other files there (dates.json) aren't elections.
     for path in sorted((ROOT / "data" / "elections").glob("[0-9]*.json"), reverse=True)[:1]:

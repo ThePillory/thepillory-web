@@ -1,0 +1,64 @@
+# Candidates (not yet in office)
+
+Pages for candidates, with the same layout as an official's page (About · Platform · Votes · Funding · More), and a page for each race. One rule for everyone, no hand-picking; no polls, predictions, rankings or contact details; individual donors are never named.
+
+## Pages
+
+| URL | What |
+|---|---|
+| `/candidates/<FEC id>/` | A candidate for the U.S. Senate or House (`functions/candidates/`). |
+| `/candidates/ca/<contest>/<name>/` | A candidate on California's certified list for a state office: Governor, the statewide offices, Board of Equalization, State Senate, Assembly. |
+| `/races/2026/<st>/` | Every race in the state with candidates (`functions/races/`). |
+| `/races/2026/<st>/<race>/` | Every candidate in one race: `senate`, `house-<n>`, or a certified contest's id (`governor`, `state-senate-2`, …). |
+
+All rendering is in `functions/_lib/candidates.js`. The pages are the same for everyone and kept at the edge for five minutes (`edgeCached`).
+
+Linked from: Open your ballot (each candidate's name, "The race", "Every 2026 race in [State]"), each state page's Elections section ("Candidates in [State]"), and site search.
+
+## Who's included
+
+- **Congress:** every candidate in `data/elections/federal-2026/<st>.json` (`tools/build_federal_races.py`: the FEC's statutory candidates, `candidate_status=C`, active this cycle), plus every candidate for Congress on a loaded certified list with an FEC ID.
+- **State offices:** every candidate on a loaded certified list (California's, `data/elections/2026-11-03.json`). Other states' governor and state races are added as their certified lists are.
+- Once included, a candidate keeps their page. If the FEC stops listing them as active, the entry stays with `listed: false` and the date they were last listed.
+
+## Order and cards
+
+- With a certified list: the candidates on the ballot in ballot order (`ballotOrder()` in `functions/_lib/elections.js`), then "Also filed with the FEC (not on the November ballot)", alphabetically.
+- Without: alphabetically by last name as filed.
+- Every card is the same: name, party as filed (or party preference and ballot designation as certified), "Incumbent" where the source says so, and any office the candidate holds or held in ThePillory's records. No money on the cards.
+
+## Labels (`standing()`)
+
+| When | Label |
+|---|---|
+| Before the election, on the ballot or in a state with only the FEC list | Candidate · Not yet in office (line: "Filed for [office], [year]" or "Running for…" on a certified list) |
+| A certified list exists and they aren't on it | Filed for [office], [year] · Not on the November ballot |
+| The FEC no longer lists them as active | Filed for [office], [year] · last listed [date] |
+| After the election, on the certified ballot | Ran for [office], [year] |
+| After the election, FEC list only (no primary results) | Filed for [office], [year] |
+| Holds the office (an incumbent, or a winner once the sync loads them) | In office · [office], linked to the official page |
+
+The general election date comes from `data/elections/dates.json`. Winners get their official page when the sync loads new officeholders; the candidate page stays.
+
+## Other offices held
+
+`officesHeld()`: by FEC ID through `fec_candidates` (members of Congress), otherwise by name among the state's officials (current and former) only when exactly one has that first and last name (`officialFor()` in `functions/_lib/civic.js`); the Votes tab says when a link was matched by name.
+
+## Data: `data/candidates/<year>/<st>.json`
+
+Built by `tools/build_candidates.mjs` in the "Refresh candidate data" workflow (`.github/workflows/candidates.yml`, twice a day, `FEC_API_KEY`). Each run reads up to `--max-requests` (600) FEC requests, candidates read longest ago first, and stops cleanly at the FEC's hourly limit:
+
+- totals: `/candidate/<id>/totals/?cycle=&election_full=false`, read with `parseTotals()` from `workers/sync/src/funding/fec.js` (the same as officials);
+- organizations: Schedule A line 11C (`F3-11C`, PACs and other committees) for the principal committee, summed by giving committee with `aggregatePacs()`, the 25 largest kept;
+- campaign website: the principal committee's `website` from its FEC record (Form 1), refreshed every 30 days. Nothing else from the committee record is stored (no email, phone, address or treasurer).
+
+The principal committee ID comes from the FEC candidate search (`principal_committees`, designation P) in `tools/build_federal_races.py`.
+
+## Next
+
+- **Platform** for candidates: the issues-page finder (`workers/sync/src/promises/finder.js`) run on the campaign website, with the same word-for-word rules and a daily cap like the other AI steps. Until then the tab says it's not loaded yet and links the campaign website.
+- 2027–2028 candidates: run the builder with `--year 2028` once `data/elections/federal-2028/` exists.
+
+## Tests
+
+`workers/sync/test/candidates.test.mjs`.

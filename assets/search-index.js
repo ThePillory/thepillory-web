@@ -1185,6 +1185,363 @@ window.PILLORY_INDEX = [
  },
  {
   "type": "Elections",
+  "title": "Candidates in Alaska",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/ak/",
+  "k": "candidates candidate race races challenger running election 2026 alaska ak"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Alabama",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/al/",
+  "k": "candidates candidate race races challenger running election 2026 alabama al"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Arkansas",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/ar/",
+  "k": "candidates candidate race races challenger running election 2026 arkansas ar"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Arizona",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/az/",
+  "k": "candidates candidate race races challenger running election 2026 arizona az"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in California",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/ca/",
+  "k": "candidates candidate race races challenger running election 2026 california ca"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Colorado",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/co/",
+  "k": "candidates candidate race races challenger running election 2026 colorado co"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Connecticut",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/ct/",
+  "k": "candidates candidate race races challenger running election 2026 connecticut ct"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in District of Columbia",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/dc/",
+  "k": "candidates candidate race races challenger running election 2026 district of columbia dc"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Delaware",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/de/",
+  "k": "candidates candidate race races challenger running election 2026 delaware de"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Florida",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/fl/",
+  "k": "candidates candidate race races challenger running election 2026 florida fl"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Georgia",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/ga/",
+  "k": "candidates candidate race races challenger running election 2026 georgia ga"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Hawaii",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/hi/",
+  "k": "candidates candidate race races challenger running election 2026 hawaii hi"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Iowa",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/ia/",
+  "k": "candidates candidate race races challenger running election 2026 iowa ia"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Idaho",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/id/",
+  "k": "candidates candidate race races challenger running election 2026 idaho id"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Illinois",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/il/",
+  "k": "candidates candidate race races challenger running election 2026 illinois il"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Indiana",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/in/",
+  "k": "candidates candidate race races challenger running election 2026 indiana in"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Kansas",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/ks/",
+  "k": "candidates candidate race races challenger running election 2026 kansas ks"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Kentucky",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/ky/",
+  "k": "candidates candidate race races challenger running election 2026 kentucky ky"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Louisiana",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/la/",
+  "k": "candidates candidate race races challenger running election 2026 louisiana la"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Massachusetts",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/ma/",
+  "k": "candidates candidate race races challenger running election 2026 massachusetts ma"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Maryland",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/md/",
+  "k": "candidates candidate race races challenger running election 2026 maryland md"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Maine",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/me/",
+  "k": "candidates candidate race races challenger running election 2026 maine me"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Michigan",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/mi/",
+  "k": "candidates candidate race races challenger running election 2026 michigan mi"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Minnesota",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/mn/",
+  "k": "candidates candidate race races challenger running election 2026 minnesota mn"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Missouri",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/mo/",
+  "k": "candidates candidate race races challenger running election 2026 missouri mo"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Mississippi",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/ms/",
+  "k": "candidates candidate race races challenger running election 2026 mississippi ms"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Montana",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/mt/",
+  "k": "candidates candidate race races challenger running election 2026 montana mt"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in North Carolina",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/nc/",
+  "k": "candidates candidate race races challenger running election 2026 north carolina nc"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in North Dakota",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/nd/",
+  "k": "candidates candidate race races challenger running election 2026 north dakota nd"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Nebraska",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/ne/",
+  "k": "candidates candidate race races challenger running election 2026 nebraska ne"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in New Hampshire",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/nh/",
+  "k": "candidates candidate race races challenger running election 2026 new hampshire nh"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in New Jersey",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/nj/",
+  "k": "candidates candidate race races challenger running election 2026 new jersey nj"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in New Mexico",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/nm/",
+  "k": "candidates candidate race races challenger running election 2026 new mexico nm"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Nevada",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/nv/",
+  "k": "candidates candidate race races challenger running election 2026 nevada nv"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in New York",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/ny/",
+  "k": "candidates candidate race races challenger running election 2026 new york ny"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Ohio",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/oh/",
+  "k": "candidates candidate race races challenger running election 2026 ohio oh"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Oklahoma",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/ok/",
+  "k": "candidates candidate race races challenger running election 2026 oklahoma ok"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Oregon",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/or/",
+  "k": "candidates candidate race races challenger running election 2026 oregon or"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Pennsylvania",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/pa/",
+  "k": "candidates candidate race races challenger running election 2026 pennsylvania pa"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Rhode Island",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/ri/",
+  "k": "candidates candidate race races challenger running election 2026 rhode island ri"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in South Carolina",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/sc/",
+  "k": "candidates candidate race races challenger running election 2026 south carolina sc"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in South Dakota",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/sd/",
+  "k": "candidates candidate race races challenger running election 2026 south dakota sd"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Tennessee",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/tn/",
+  "k": "candidates candidate race races challenger running election 2026 tennessee tn"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Texas",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/tx/",
+  "k": "candidates candidate race races challenger running election 2026 texas tx"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Utah",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/ut/",
+  "k": "candidates candidate race races challenger running election 2026 utah ut"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Virginia",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/va/",
+  "k": "candidates candidate race races challenger running election 2026 virginia va"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Vermont",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/vt/",
+  "k": "candidates candidate race races challenger running election 2026 vermont vt"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Washington",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/wa/",
+  "k": "candidates candidate race races challenger running election 2026 washington wa"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Wisconsin",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/wi/",
+  "k": "candidates candidate race races challenger running election 2026 wisconsin wi"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in West Virginia",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/wv/",
+  "k": "candidates candidate race races challenger running election 2026 west virginia wv"
+ },
+ {
+  "type": "Elections",
+  "title": "Candidates in Wyoming",
+  "sub": "Every 2026 race, the same page for every candidate",
+  "url": "/races/2026/wy/",
+  "k": "candidates candidate race races challenger running election 2026 wyoming wy"
+ },
+ {
+  "type": "Elections",
   "title": "Open your ballot",
   "sub": "Every state: your federal races, then your whole ballot and where to vote",
   "url": "/ballot/",

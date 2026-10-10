@@ -35,6 +35,7 @@ import { districtsFromCookie, describe, STATE_NAME } from "./districts.js";
 import { happeningNow, happeningSection, lookupForm, waitlistCounts } from "./hub.js";
 import { topicGrid, placeTopicsHref } from "./topics.js";
 import { ballotWindow, todayIn, onlyIfNeeded } from "./election-window.js";
+import { racesHref, YEAR } from "./candidates.js";
 import { loadElection, ballotFor, ballotHref, electionHref, whenLine, daysUntil, contestRow, courtRow, statewideRow, electionIdFor, measuresOnly, ELECTION_BY_STATE } from "./elections.js";
 import { LIVE, asset, loadIndex, loadPlace, waitlistBy, usMapLinks, smallStateButtons, mapFigure } from "./geo.js";
 import { ASSET_VERSION } from "./generated.js";
@@ -226,6 +227,9 @@ function nationalSection(federal, vs, justices) {
 const ballotLink = (st) =>
   linkRow(st ? `/ballot/${st.toLowerCase()}/` : "/ballot/", "Open your ballot", "Your federal races, then your whole ballot and where to vote");
 
+// Every candidate in the state's 2026 races, the same page each (functions/_lib/candidates.js).
+const racesLink = (st) => (st ? linkRow(racesHref(YEAR, st), `Candidates in ${STATE_NAME[st]}`, "Every race, the same page for every candidate") : "");
+
 function ballotHero(vs, win) {
   return `
 <section class="card stack-xs ballot-hero" aria-labelledby="h-ballot-hero">
@@ -257,7 +261,7 @@ function electionsSection({ election, ballot, county }, d, st = null) {
     <h3>General election, November 3, 2026</h3>
     <p class="small secondary">Your federal races, then every contest and measure for your address, with where to vote.</p>
   </div>
-  <div class="card">${ballotLink(st)}</div>
+  <div class="card">${ballotLink(st)}${racesLink(st)}</div>
 </section>`;
   if (!election) return "";
   const id = election.election.id;
@@ -292,6 +296,7 @@ function electionsSection({ election, ballot, county }, d, st = null) {
   ${yours}
   <div class="card">
     <a class="list-row link-row" href="${electionHref(id)}#how-to-vote"><div><div class="list-title">How to vote</div><div class="list-meta">Registration, deadlines and where to vote, on the official sites</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>
+    ${racesLink(st || election.election.state)}
   </div>
 </section>`;
 }
