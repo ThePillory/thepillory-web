@@ -156,6 +156,20 @@ class Tests(unittest.TestCase):
         self.assertEqual(B.current_term(datetime.date(2026, 10, 2)), 2025)
         self.assertEqual(B.current_term(datetime.date(2026, 10, 5)), 2026)
 
+    def test_disclosures_stop_when_the_run_is_out_of_courtlistener_time(self):
+        # Pacing stays slow, and a used-up budget stops before any request,
+        # keeping what earlier runs read.
+        self.assertGreaterEqual(B.CL_GAP, 12)
+        saved = (B.CL_BUDGET, B._cl_start[0])
+        try:
+            B.CL_BUDGET, B._cl_start[0] = 0, 0.0
+            previous = {"justices": {"john-roberts": [{"id": 1, "year": 2024}]}}
+            out, complete = B.build_disclosures([{"slug": "clarence-thomas", "name": "Clarence Thomas"}], "token", previous)
+            self.assertFalse(complete)
+            self.assertEqual(out, previous["justices"])
+        finally:
+            B.CL_BUDGET, B._cl_start[0] = saved
+
 
 if __name__ == "__main__":
     unittest.main()

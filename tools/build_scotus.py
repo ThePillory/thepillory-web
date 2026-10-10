@@ -585,13 +585,24 @@ def build_current(term, decided_dockets):
 # Disclosures (CourtListener)
 
 
-CL_GAP = 1.5          # seconds between CourtListener requests
+CL_GAP = 15           # seconds between CourtListener requests: it allows only a few a minute
+                      # here, and faster requests led to multi-hour lockouts
 CL_MAX_WAIT = 300     # the longest a "slow down" (429) is waited out before giving up for this run
+CL_BUDGET = 100 * 60  # seconds of CourtListener requests per run; the rest wait for the next run
 _cl_last = [0.0]
+_cl_start = [None]
+
+
+class OutOfTime(Exception):
+    """This run's CourtListener time is used up; what was read is kept."""
 
 
 def cl_get(path, token, tries=4):
     """One CourtListener request, paced, waiting out a 429 (Retry-After) a few times."""
+    if _cl_start[0] is None:
+        _cl_start[0] = time.time()
+    if time.time() - _cl_start[0] > CL_BUDGET:
+        raise OutOfTime(f"{CL_BUDGET // 60} minutes of CourtListener requests used")
     for attempt in range(tries):
         wait = _cl_last[0] + CL_GAP - time.time()
         if wait > 0:
