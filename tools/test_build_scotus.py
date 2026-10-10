@@ -19,7 +19,7 @@ MEMBERS = """<table><tbody>
 </tbody></table>"""
 
 BIOS = """<a name="JRoberts"></a><p>John G. Roberts, Jr., Chief Justice of the United States, was born in Buffalo, New York, January 27, 1955.
-He married Jane Sullivan in 1996 and they have two children. He served as a law clerk for Judge Henry J. Friendly of the Court of Appeals.
+He married Jane Sullivan in 1996 and they have two children. He served as a law clerk for Judge Henry J. Friendly of the U.S. Court of Appeals.
 Nominated as Chief Justice of the United States by President George W. Bush, he assumed that office on September 29, 2005.</p>"""
 
 SENATE = """<tr><td nowrap="true">Roberts, John G., Jr.</td><td background="/x/vert_content_break.gif"><img src="/x/vert_content_break.gif"></td><td>O'Connor</td><td background="/x/vert_content_break.gif"><img src="/x/vert_content_break.gif"></td><td nowrap="true"><a href="https://www.congress.gov/nomination/109th-congress/786">Jul 29, 2005</a></td><td background="/x/vert_content_break.gif"><img src="/x/vert_content_break.gif"></td><td nowrap="true"></td><td>W</td></tr>
@@ -61,7 +61,7 @@ class Tests(unittest.TestCase):
 
     def test_biography_word_for_word_without_family(self):
         b = B.parse_bios(BIOS)["JRoberts"]["sentences"]
-        self.assertIn("He served as a law clerk for Judge Henry J. Friendly of the Court of Appeals.", b, "an initial doesn't end a sentence")
+        self.assertIn("He served as a law clerk for Judge Henry J. Friendly of the U.S. Court of Appeals.", b, "an initial or U.S. doesn't end a sentence")
         self.assertFalse(any("married" in s or "children" in s for s in b))
 
     def test_senate_confirmation(self):

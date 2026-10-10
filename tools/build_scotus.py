@@ -138,8 +138,8 @@ def parse_bios(page):
         m = re.search(r"([A-Z][A-Za-z.\- ]+(?:, Jr\.)?), (Chief Justice of the United States|Associate Justice),\s+(was born.*)", body)
         if not m:
             continue
-        # A sentence ends at a period before a capital, but not after an initial ("Henry J. Friendly").
-        sentences = re.split(r"(?<! [A-Z]\.)(?<=[.])\s+(?=[A-Z])", m.group(3))
+        # A sentence ends at a period before a capital, but not after an initial ("Henry J. Friendly") or "U.S."
+        sentences = re.split(r"(?<! [A-Z]\.)(?<!U\.S\.)(?<=[.])\s+(?=[A-Z])", m.group(3))
         keep = [s.strip() for s in sentences if s.strip() and not PERSONAL.search(s)]
         heading = f"{m.group(1)}, {m.group(2)}"
         # The first sentence as the biography prints it: "<Name>, <Title>, was born …".

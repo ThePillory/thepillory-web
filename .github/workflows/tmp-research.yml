@@ -1,23 +1,20 @@
-# TEMPORARY: first Supreme Court data build on this branch. Remove before merge.
+# TEMPORARY: Supreme Court research on this branch. Remove before merge.
 name: TEMPORARY research probe
 on:
   push:
     branches: [claude/pillory-mobile-screens-p5zekn]
-    paths: [tools/build_scotus.py, .github/workflows/tmp-research.yml]
+    paths: [tmp-research/probe_lineups.py, .github/workflows/tmp-research.yml]
 permissions:
   contents: write
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null
-      - env:
-          COURTLISTENER_API_TOKEN: ${{ secrets.COURTLISTENER_API_TOKEN }}
-        run: python3 tools/build_scotus.py --max-pdfs 600 2>&1 | tee tmp-research/scotus-build.log
+      - run: python3 tmp-research/probe_lineups.py
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
-          git add data/scotus tmp-research/scotus-build.log
-          git commit -m "TEMPORARY: Supreme Court data (first build)" && git pull --rebase -q origin claude/pillory-mobile-screens-p5zekn && git push
+          git add tmp-research
+          git commit -m "TEMPORARY: lineup probe output" && git pull --rebase -q origin claude/pillory-mobile-screens-p5zekn && git push
