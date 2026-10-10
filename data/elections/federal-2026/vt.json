@@ -1,0 +1,34 @@
+{
+ "state": "VT",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=VT&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": false,
+ "senate": [],
+ "house": {
+  "0": [
+   {
+    "id": "H2VT01076",
+    "name": "BALINT, REBECCA 'BECCA'",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H2VT01076/"
+   },
+   {
+    "id": "H4VT01056",
+    "name": "COESTER, C. MARK MR",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4VT01056/"
+   },
+   {
+    "id": "H6VT01085",
+    "name": "MALLOY, GERALD MR.",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VT01085/"
+   }
+  ]
+ }
+}

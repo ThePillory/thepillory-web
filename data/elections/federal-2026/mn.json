@@ -1,0 +1,308 @@
+{
+ "state": "MN",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=MN&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": true,
+ "senate": [
+  {
+   "id": "S6MN00499",
+   "name": "CRAIG, ANGIE",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6MN00499/"
+  },
+  {
+   "id": "S6MN00440",
+   "name": "FLANAGAN, MARGARET",
+   "party": "DEMOCRATIC-FARMER-LABOR",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6MN00440/"
+  },
+  {
+   "id": "S6MN00531",
+   "name": "HANN, DAVID W",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6MN00531/"
+  },
+  {
+   "id": "S6MN00465",
+   "name": "LOPEZ FRANZEN, MELISA",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6MN00465/"
+  },
+  {
+   "id": "S6MN00457",
+   "name": "SCHWARZE, ADAM",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6MN00457/"
+  },
+  {
+   "id": "S6MN00556",
+   "name": "TAFOYA, MICHELE",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6MN00556/"
+  },
+  {
+   "id": "S6MN00515",
+   "name": "WEILER, TOM",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6MN00515/"
+  },
+  {
+   "id": "S4MN00502",
+   "name": "WHITE, ROYCE",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S4MN00502/"
+  },
+  {
+   "id": "S6MN00549",
+   "name": "YORK, MARK",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6MN00549/"
+  }
+ ],
+ "house": {
+  "1": [
+   {
+    "id": "H6MN01232",
+    "name": "EATON, ALEX",
+    "party": "DEMOCRATIC-FARMER-LABOR",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN01232/"
+   },
+   {
+    "id": "H2MN01223",
+    "name": "FINSTAD, BRAD",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H2MN01223/"
+   },
+   {
+    "id": "H6MN01190",
+    "name": "JOHNSON, JACOB",
+    "party": "DEMOCRATIC-FARMER-LABOR",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN01190/"
+   }
+  ],
+  "2": [
+   {
+    "id": "H6MN02271",
+    "name": "BERG, KAELA JO",
+    "party": "DEMOCRATIC-FARMER-LABOR",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN02271/"
+   },
+   {
+    "id": "H6MN02255",
+    "name": "KISTNER, TYLER",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN02255/"
+   },
+   {
+    "id": "H6MN02248",
+    "name": "KLEIN, MATTHEW DAVID",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN02248/"
+   },
+   {
+    "id": "H6MN02230",
+    "name": "LITTLE, MATT",
+    "party": "DEMOCRATIC-FARMER-LABOR",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN02230/"
+   },
+   {
+    "id": "H6MN02297",
+    "name": "MCTAVISH, HUGH",
+    "party": "DEMOCRATIC-FARMER-LABOR",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN02297/"
+   },
+   {
+    "id": "H6MN02263",
+    "name": "PRATT, ERIC",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN02263/"
+   },
+   {
+    "id": "H6MN03162",
+    "name": "WESTBY, JEREMY",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN03162/"
+   }
+  ],
+  "3": [
+   {
+    "id": "H4MN03118",
+    "name": "MORRISON, KELLY LOUISE",
+    "party": "DEMOCRATIC-FARMER-LABOR",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H4MN03118/"
+   },
+   {
+    "id": "H6MN03188",
+    "name": "WITTROCK, QUENTIN",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN03188/"
+   }
+  ],
+  "4": [
+   {
+    "id": "H0MN04049",
+    "name": "MCCOLLUM, BETTY",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H0MN04049/"
+   },
+   {
+    "id": "H6MN04293",
+    "name": "WIKSTROM, PAUL",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN04293/"
+   },
+   {
+    "id": "H6MN04301",
+    "name": "XIONG, PAUL",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN04301/"
+   }
+  ],
+  "5": [
+   {
+    "id": "H0MN05251",
+    "name": "AL-AQIDI, DALIA",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H0MN05251/"
+   },
+   {
+    "id": "H6MN05357",
+    "name": "NAGEL, JOHN",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN05357/"
+   },
+   {
+    "id": "H8MN05239",
+    "name": "OMAR, ILHAN",
+    "party": "DEMOCRATIC-FARMER-LABOR",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H8MN05239/"
+   },
+   {
+    "id": "H6MN05365",
+    "name": "REEVES, LATONYA T",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN05365/"
+   }
+  ],
+  "6": [
+   {
+    "id": "H6MN06215",
+    "name": "CHAPIN, DOUG",
+    "party": "DEMOCRATIC-FARMER-LABOR",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN06215/"
+   },
+   {
+    "id": "H4MN06087",
+    "name": "EMMER, THOMAS EARL JR.",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H4MN06087/"
+   },
+   {
+    "id": "H6MN06223",
+    "name": "FOLEY, MICHAEL",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN06223/"
+   }
+  ],
+  "7": [
+   {
+    "id": "H0MN07091",
+    "name": "FISCHBACH, MICHELLE",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H0MN07091/"
+   },
+   {
+    "id": "H6MN07346",
+    "name": "HUGHES, DAVE",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN07346/"
+   },
+   {
+    "id": "H6MN07338",
+    "name": "KEELER, HEATHER",
+    "party": "DEMOCRATIC-FARMER-LABOR",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN07338/"
+   },
+   {
+    "id": "H6MN07312",
+    "name": "OSBERG, ERIK",
+    "party": "DEMOCRATIC-FARMER-LABOR",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN07312/"
+   }
+  ],
+  "8": [
+   {
+    "id": "H6MN08120",
+    "name": "ANASTOS, EMANUEL",
+    "party": "DEMOCRATIC-FARMER-LABOR",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN08120/"
+   },
+   {
+    "id": "H6MN08195",
+    "name": "GULBRANSON, LUKE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN08195/"
+   },
+   {
+    "id": "H6MN08161",
+    "name": "MCKENNA, CHAD",
+    "party": "DEMOCRATIC-FARMER-LABOR",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN08161/"
+   },
+   {
+    "id": "H8MN08043",
+    "name": "STAUBER, PETER ALLEN",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H8MN08043/"
+   },
+   {
+    "id": "H6MN08179",
+    "name": "SWANSON, TRINA",
+    "party": "DEMOCRATIC-FARMER-LABOR",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MN08179/"
+   }
+  ]
+ }
+}

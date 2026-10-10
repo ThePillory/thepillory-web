@@ -1,0 +1,253 @@
+{
+ "state": "OK",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=OK&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": true,
+ "senate": [
+  {
+   "id": "S6OK04288",
+   "name": "ENGLAND, GARY TY MR.",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6OK04288/"
+  },
+  {
+   "id": "S6OK04171",
+   "name": "GREEN, TROY WESLEY",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6OK04171/"
+  },
+  {
+   "id": "S6OK04247",
+   "name": "HERN, KEVIN",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6OK04247/"
+  },
+  {
+   "id": "S4OK00083",
+   "name": "INHOFE, JAMES M. SEN.",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S4OK00083/"
+  },
+  {
+   "id": "S6OK04205",
+   "name": "MEINHARDT, RON",
+   "party": "INDEPENDENT",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6OK04205/"
+  },
+  {
+   "id": "S2OK00186",
+   "name": "MULLIN, MARKWAYNE",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": true,
+   "url": "https://www.fec.gov/data/candidate/S2OK00186/"
+  },
+  {
+   "id": "S6OK04197",
+   "name": "PRIEST, JIM",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6OK04197/"
+  },
+  {
+   "id": "S6OK04262",
+   "name": "RAGAIN, BRIAN MATTHEW",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6OK04262/"
+  },
+  {
+   "id": "S6OK04148",
+   "name": "SWEARENGIN, TAMMY",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6OK04148/"
+  },
+  {
+   "id": "S6OK04163",
+   "name": "THOMAS, N'KIYLA JASMINE - ANN",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6OK04163/"
+  },
+  {
+   "id": "S6OK04270",
+   "name": "YEN, ERVIN STONE DR",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6OK04270/"
+  }
+ ],
+ "house": {
+  "1": [
+   {
+    "id": "H4OK01107",
+    "name": "BAKER, DENNIS",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4OK01107/"
+   },
+   {
+    "id": "H6OK01276",
+    "name": "BUTTERFIELD, NATHANIEL ALLEN",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OK01276/"
+   },
+   {
+    "id": "H6OK01292",
+    "name": "COCHRAN, JED",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OK01292/"
+   },
+   {
+    "id": "H6OK01201",
+    "name": "CROISANT, JOHN THOMAS",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OK01201/"
+   },
+   {
+    "id": "H6OK01250",
+    "name": "DAVID, KIM",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OK01250/"
+   },
+   {
+    "id": "H6OK01243",
+    "name": "GILL, COURTNEY",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OK01243/"
+   },
+   {
+    "id": "H6OK01284",
+    "name": "LAHMEYER, JACKSON",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OK01284/"
+   },
+   {
+    "id": "H6OK01300",
+    "name": "ROONEY, DAN",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OK01300/"
+   },
+   {
+    "id": "H6OK01268",
+    "name": "STALLINGS, JACKSON",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OK01268/"
+   },
+   {
+    "id": "H6OK01235",
+    "name": "TEDFORD, MARK",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OK01235/"
+   },
+   {
+    "id": "H6OK01227",
+    "name": "WATKINS, ERICA",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OK01227/"
+   },
+   {
+    "id": "H6OK01326",
+    "name": "WOODS, TODD",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OK01326/"
+   }
+  ],
+  "2": [
+   {
+    "id": "H2OK02315",
+    "name": "BRECHEEN, JOSH",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H2OK02315/"
+   },
+   {
+    "id": "H6OK02266",
+    "name": "TERWEY, ERIK",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OK02266/"
+   }
+  ],
+  "3": [
+   {
+    "id": "H4OK06056",
+    "name": "LUCAS, FRANK D.",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H4OK06056/"
+   }
+  ],
+  "4": [
+   {
+    "id": "H2OK04055",
+    "name": "COLE, TOM",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H2OK04055/"
+   },
+   {
+    "id": "H6OK04155",
+    "name": "JACOB, MITCHELL LEIGH",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OK04155/"
+   },
+   {
+    "id": "H6OK04163",
+    "name": "PIXLEY, JEFFREY",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OK04163/"
+   }
+  ],
+  "5": [
+   {
+    "id": "H0OK05205",
+    "name": "BICE, STEPHANIE",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H0OK05205/"
+   },
+   {
+    "id": "H6OK05301",
+    "name": "HENRI, ROBERT PATRICK",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OK05301/"
+   },
+   {
+    "id": "H6OK05319",
+    "name": "MARTIN, TREY",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OK05319/"
+   },
+   {
+    "id": "H6OK05293",
+    "name": "NELSON, JENA",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OK05293/"
+   }
+  ]
+ }
+}

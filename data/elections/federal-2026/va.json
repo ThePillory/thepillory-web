@@ -1,0 +1,636 @@
+{
+ "state": "VA",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=VA&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": true,
+ "senate": [
+  {
+   "id": "S6VA00184",
+   "name": "DANIELS, LORITA DR.",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6VA00184/"
+  },
+  {
+   "id": "S6VA00226",
+   "name": "DE PAULA, ALEX",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6VA00226/"
+  },
+  {
+   "id": "S6VA00192",
+   "name": "EICHELBERGER, GREGORY",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6VA00192/"
+  },
+  {
+   "id": "S6VA00143",
+   "name": "FARINGTON, KIM",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6VA00143/"
+  },
+  {
+   "id": "S8VA00321",
+   "name": "MIZUSAWA, BERT K",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S8VA00321/"
+  },
+  {
+   "id": "S6VA00176",
+   "name": "REEVES, BRYCE",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6VA00176/"
+  },
+  {
+   "id": "S4VA00197",
+   "name": "SMITH, C.L. CHUCK JR",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S4VA00197/"
+  },
+  {
+   "id": "S6VA00093",
+   "name": "WARNER, MARK ROBERT",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": true,
+   "url": "https://www.fec.gov/data/candidate/S6VA00093/"
+  },
+  {
+   "id": "S6VA00200",
+   "name": "WILLIAMS, DAVID EARL MR.",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6VA00200/"
+  }
+ ],
+ "house": {
+  "1": [
+   {
+    "id": "H6VA01315",
+    "name": "BEGGS, ELIZABETH DEMPSEY",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA01315/"
+   },
+   {
+    "id": "H6VA01232",
+    "name": "BHATTI, ATA-UL-SALAAM",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA01232/"
+   },
+   {
+    "id": "H6VA01273",
+    "name": "CYWINSKI, TIMOTHY STEPHEN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA01273/"
+   },
+   {
+    "id": "H6VA01190",
+    "name": "KHANNA, LISA VEDERNIKOVA",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA01190/"
+   },
+   {
+    "id": "H6VA01307",
+    "name": "KNAPP, JASON",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA01307/"
+   },
+   {
+    "id": "H6VA01240",
+    "name": "KOPP, ERICKA",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA01240/"
+   },
+   {
+    "id": "H6VA01216",
+    "name": "LUCCHETTI, ANDREW",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA01216/"
+   },
+   {
+    "id": "H6VA01182",
+    "name": "POHL, AMANDA",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA01182/"
+   },
+   {
+    "id": "H6VA01257",
+    "name": "SUBLETTE, SEAN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA01257/"
+   },
+   {
+    "id": "H6VA01299",
+    "name": "TAYLOR, SHANNON LEIGH",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA01299/"
+   },
+   {
+    "id": "H6VA01208",
+    "name": "TULL, MELVIN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA01208/"
+   },
+   {
+    "id": "H8VA01147",
+    "name": "WITTMAN, ROBERT J. MR.",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H8VA01147/"
+   }
+  ],
+  "2": [
+   {
+    "id": "H6VA02172",
+    "name": "DEVANATH, NILA",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA02172/"
+   },
+   {
+    "id": "H6VA02255",
+    "name": "FLEMING, WILLIAM WEATHERS DR.",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA02255/"
+   },
+   {
+    "id": "H2VA02064",
+    "name": "KIGGANS, JENNIFER",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H2VA02064/"
+   },
+   {
+    "id": "H6VA02198",
+    "name": "LURIA, ELAINE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA02198/"
+   },
+   {
+    "id": "H6VA02164",
+    "name": "MOSOLF, PATRICK MR.",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA02164/"
+   },
+   {
+    "id": "H6VA02149",
+    "name": "OSYF, JAMES",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA02149/"
+   },
+   {
+    "id": "H2VA02098",
+    "name": "SLEISTER, NICOLAUS",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H2VA02098/"
+   },
+   {
+    "id": "H6VA02180",
+    "name": "STRICKLER, MATT",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA02180/"
+   },
+   {
+    "id": "H6VA02156",
+    "name": "WILLIAMSON, MICHAEL",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA02156/"
+   }
+  ],
+  "3": [
+   {
+    "id": "H6VA03121",
+    "name": "RIVERA, EDWIN MR. JR.",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA03121/"
+   },
+   {
+    "id": "H6VA01117",
+    "name": "SCOTT, ROBERT C",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H6VA01117/"
+   },
+   {
+    "id": "H6VA03097",
+    "name": "VASQUEZ, DAWN E",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA03097/"
+   },
+   {
+    "id": "H6VA03139",
+    "name": "WOLL, STEPHEN C.",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA03139/"
+   }
+  ],
+  "4": [
+   {
+    "id": "H4VA04066",
+    "name": "MCCLELLAN, JENNIFER",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H4VA04066/"
+   }
+  ],
+  "5": [
+   {
+    "id": "H0VA05160",
+    "name": "GOOD, ROBERT G. HON.",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H0VA05160/"
+   },
+   {
+    "id": "H6VA05191",
+    "name": "KRZYZANOWSKI, SUZANNE K",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA05191/"
+   },
+   {
+    "id": "H6VA05233",
+    "name": "LUCERO, MELANIE VIRGINIA",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA05233/"
+   },
+   {
+    "id": "H0VA07133",
+    "name": "MCGUIRE, JOHN J. MR. III",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H0VA07133/"
+   },
+   {
+    "id": "H6VA05217",
+    "name": "PERRIELLO, THOMAS",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA05217/"
+   },
+   {
+    "id": "H6VA05167",
+    "name": "PRUITT, MIKE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA05167/"
+   },
+   {
+    "id": "H4VA05063",
+    "name": "RILEY, PAUL",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4VA05063/"
+   },
+   {
+    "id": "H6VA05183",
+    "name": "STICHEL, ADELE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA05183/"
+   },
+   {
+    "id": "H6VA05209",
+    "name": "TRACINSKI, ROBERT WILLIAM",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA05209/"
+   },
+   {
+    "id": "H6VA05175",
+    "name": "ZABRISKIE, KATHRYN (KATE) MS.",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA05175/"
+   }
+  ],
+  "6": [
+   {
+    "id": "H6VA06165",
+    "name": "BARLOW, PETE HAMILTON",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA06165/"
+   },
+   {
+    "id": "H8VA06104",
+    "name": "CLINE, BENJAMIN LEE",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H8VA06104/"
+   },
+   {
+    "id": "H6VA06181",
+    "name": "GOODITIS, WENDY",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA06181/"
+   },
+   {
+    "id": "H6VA06173",
+    "name": "MACY, BETH",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA06173/"
+   },
+   {
+    "id": "H4VA06061",
+    "name": "MITCHELL, KEN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4VA06061/"
+   }
+  ],
+  "7": [
+   {
+    "id": "H6VA00028",
+    "name": "COONEY, JOSEPH PATRICK",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA00028/"
+   },
+   {
+    "id": "H6VA07197",
+    "name": "DURANT, TARA ANNE",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA07197/"
+   },
+   {
+    "id": "H6VA07189",
+    "name": "GRAY, JOHN",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA07189/"
+   },
+   {
+    "id": "H4VA07275",
+    "name": "GUZMAN, ELIZABETH",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4VA07275/"
+   },
+   {
+    "id": "H6VA07320",
+    "name": "HARDING, PHILIP A.",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA07320/"
+   },
+   {
+    "id": "H6VA07247",
+    "name": "HELMER, DAN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA07247/"
+   },
+   {
+    "id": "H6VA07171",
+    "name": "MAYFIELD, DARIUS",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA07171/"
+   },
+   {
+    "id": "H6VA07254",
+    "name": "MCAULIFFE, DOROTHY",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA07254/"
+   },
+   {
+    "id": "H6VA07270",
+    "name": "MCCLURE, ADELE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA07270/"
+   },
+   {
+    "id": "H6VA07205",
+    "name": "OLLIVANT, DOUGLAS",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA07205/"
+   },
+   {
+    "id": "H6VA07288",
+    "name": "SALIM, SADDAM",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA07288/"
+   },
+   {
+    "id": "H6VA07296",
+    "name": "SCHIARIZZI, JOSEPH",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA07296/"
+   },
+   {
+    "id": "H4VA07234",
+    "name": "VINDMAN, YEVGENY 'EUGENE'",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H4VA07234/"
+   },
+   {
+    "id": "H6VA07239",
+    "name": "WASHINGTON, WAVERLY E. MR.",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA07239/"
+   }
+  ],
+  "8": [
+   {
+    "id": "H4VA08224",
+    "name": "BEYER, DONALD STERNOFF JR.",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H4VA08224/"
+   },
+   {
+    "id": "H6VA08286",
+    "name": "DUFFIN, MICHAEL CHRISTIAN MR.",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA08286/"
+   },
+   {
+    "id": "H6VA08328",
+    "name": "DUNIGAN, ADAM MICHAEL",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA08328/"
+   },
+   {
+    "id": "H6VA08294",
+    "name": "GRAY, DANIEL",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA08294/"
+   },
+   {
+    "id": "H6VA08252",
+    "name": "SABIO, TONY",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA08252/"
+   },
+   {
+    "id": "H6VA08278",
+    "name": "SEIFELDEIN, MO",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA08278/"
+   },
+   {
+    "id": "H6VA08336",
+    "name": "SHARMAN, TIM",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA08336/"
+   }
+  ],
+  "9": [
+   {
+    "id": "H6VA09144",
+    "name": "CROCKETT, DOUGLAS",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA09144/"
+   },
+   {
+    "id": "H0VA09055",
+    "name": "GRIFFITH, H MORGAN",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H0VA09055/"
+   },
+   {
+    "id": "H6VA09102",
+    "name": "MURPHY, ADAM",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA09102/"
+   },
+   {
+    "id": "H6VA09136",
+    "name": "POWERS, JOY",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA09136/"
+   }
+  ],
+  "10": [
+   {
+    "id": "H2VA10273",
+    "name": "BECKWITH, DAVID",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H2VA10273/"
+   },
+   {
+    "id": "H6VA10225",
+    "name": "PERRY, JULIE",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA10225/"
+   },
+   {
+    "id": "H4VA10279",
+    "name": "SUBRAMANYAM, SUHAS",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H4VA10279/"
+   },
+   {
+    "id": "H6VA10258",
+    "name": "SUTTLES, ANTHONY",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA10258/"
+   },
+   {
+    "id": "H6VA10233",
+    "name": "WONG, M. SAM",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA10233/"
+   }
+  ],
+  "11": [
+   {
+    "id": "H6VA11231",
+    "name": "FRAM, BREE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA11231/"
+   },
+   {
+    "id": "H6VA11165",
+    "name": "LEE, DANIEL",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA11165/"
+   },
+   {
+    "id": "H6VA11074",
+    "name": "PEKARSKY, STELLA",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA11074/"
+   },
+   {
+    "id": "H6VA11249",
+    "name": "PURVES, ARTHUR GRAHAME MR.",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA11249/"
+   },
+   {
+    "id": "H6VA11140",
+    "name": "ROMA, AMY",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA11140/"
+   },
+   {
+    "id": "H6VA11066",
+    "name": "WALKINSHAW, JAMES",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H6VA11066/"
+   }
+  ]
+ }
+}

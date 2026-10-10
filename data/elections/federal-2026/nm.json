@@ -1,0 +1,104 @@
+{
+ "state": "NM",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=NM&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": true,
+ "senate": [
+  {
+   "id": "S6NM01145",
+   "name": "DODSON, MATT",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6NM01145/"
+  },
+  {
+   "id": "S0NM00058",
+   "name": "LUJAN, BEN RAY",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": true,
+   "url": "https://www.fec.gov/data/candidate/S0NM00058/"
+  },
+  {
+   "id": "S6NM01186",
+   "name": "MARKER, LARRY E",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6NM01186/"
+  }
+ ],
+ "house": {
+  "1": [
+   {
+    "id": "H4NM01140",
+    "name": "JONES, STEVE",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4NM01140/"
+   },
+   {
+    "id": "H6NM01129",
+    "name": "OKPAREKE, NDIDIAMAKA",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NM01129/"
+   },
+   {
+    "id": "H2NM01144",
+    "name": "STANSBURY, MELANIE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H2NM01144/"
+   }
+  ],
+  "2": [
+   {
+    "id": "H6NM02127",
+    "name": "CUNNINGHAM, GREG",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NM02127/"
+   },
+   {
+    "id": "H6NM02135",
+    "name": "OROZCO, JOSE",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NM02135/"
+   },
+   {
+    "id": "H2NM02191",
+    "name": "VASQUEZ, GABRIEL",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H2NM02191/"
+   }
+  ],
+  "3": [
+   {
+    "id": "H0NM03102",
+    "name": "LEGER FERNANDEZ, TERESA",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H0NM03102/"
+   },
+   {
+    "id": "H6NM03083",
+    "name": "ZAMORA, MARTIN R",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NM03083/"
+   }
+  ],
+  "66": [
+   {
+    "id": "H6NM66015",
+    "name": "GANDY, LEANNE",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NM66015/"
+   }
+  ]
+ }
+}

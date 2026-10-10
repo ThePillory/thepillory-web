@@ -1,0 +1,76 @@
+{
+ "state": "DC",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=DC&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": false,
+ "senate": [],
+ "house": {
+  "0": [
+   {
+    "id": "H6DC01038",
+    "name": "CHAFFIN, GORDON",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6DC01038/"
+   },
+   {
+    "id": "H6DC01103",
+    "name": "HOLBROOK, TRENT WILLIAM",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6DC01103/"
+   },
+   {
+    "id": "H6DC01137",
+    "name": "JACZKO, GREGORY DR.",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6DC01137/"
+   },
+   {
+    "id": "H6DC01053",
+    "name": "MATTHEWS, ROBERT",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6DC01053/"
+   },
+   {
+    "id": "H6DC00196",
+    "name": "PINTO, BROOKE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6DC00196/"
+   },
+   {
+    "id": "H6DC01111",
+    "name": "ROSADO, DENISE MS.",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6DC01111/"
+   },
+   {
+    "id": "H6DC01079",
+    "name": "WHITE, ROBERT C. JR.",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6DC01079/"
+   },
+   {
+    "id": "H2DC01029",
+    "name": "WILLIAMS, KELLY",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H2DC01029/"
+   },
+   {
+    "id": "H6DC00170",
+    "name": "ZALESNE, KINNEY",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6DC00170/"
+   }
+  ]
+ }
+}

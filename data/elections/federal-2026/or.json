@@ -1,0 +1,192 @@
+{
+ "state": "OR",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=OR&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": true,
+ "senate": [
+  {
+   "id": "S8OR00207",
+   "name": "MERKLEY, JEFFREY ALAN",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": true,
+   "url": "https://www.fec.gov/data/candidate/S8OR00207/"
+  },
+  {
+   "id": "S4OR00156",
+   "name": "PERKINS, JO RAE",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S4OR00156/"
+  },
+  {
+   "id": "S6OR05218",
+   "name": "SMITH, DAVID BROCK",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6OR05218/"
+  }
+ ],
+ "house": {
+  "1": [
+   {
+    "id": "H2OR01133",
+    "name": "BONAMICI, SUZANNE MS.",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H2OR01133/"
+   },
+   {
+    "id": "H4OR01121",
+    "name": "CHAUDHRY-AHMAD, JAMIL O",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4OR01121/"
+   },
+   {
+    "id": "H6OR01308",
+    "name": "KAHL, BARBARA J DR DVM",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OR01308/"
+   }
+  ],
+  "2": [
+   {
+    "id": "H6OR02322",
+    "name": "BECK, CHRIS",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OR02322/"
+   },
+   {
+    "id": "H0OR02127",
+    "name": "BENTZ, CLIFF",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H0OR02127/"
+   },
+   {
+    "id": "H6OR02298",
+    "name": "DOYLE, MARY",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OR02298/"
+   },
+   {
+    "id": "H6OR02306",
+    "name": "LARSON, PETER JAMES",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OR02306/"
+   },
+   {
+    "id": "H6OR02280",
+    "name": "MUELLER, REBECCA MCKAY",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OR02280/"
+   },
+   {
+    "id": "H6OR02231",
+    "name": "RASMUSSEN, DAWN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OR02231/"
+   },
+   {
+    "id": "H6OR02215",
+    "name": "SNOW, PATTY",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OR02215/"
+   }
+  ],
+  "3": [
+   {
+    "id": "H4OR03192",
+    "name": "DEXTER, MAXINE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H4OR03192/"
+   },
+   {
+    "id": "H6OR03189",
+    "name": "SALAS, JESSICA",
+    "party": "NONE",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OR03189/"
+   }
+  ],
+  "4": [
+   {
+    "id": "H6OR04245",
+    "name": "BIRD, MELISSA",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OR04245/"
+   },
+   {
+    "id": "H6OR04260",
+    "name": "DESPAIN, MONIQUE",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OR04260/"
+   },
+   {
+    "id": "H2OR04095",
+    "name": "HOYLE, VALERIE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H2OR04095/"
+   }
+  ],
+  "5": [
+   {
+    "id": "H6OR05242",
+    "name": "ADAIR, PATTI",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OR05242/"
+   },
+   {
+    "id": "H4OR05304",
+    "name": "BYNUM, JANELLE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H4OR05304/"
+   },
+   {
+    "id": "H6OR05234",
+    "name": "LOCKWOOD, JONATHAN",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OR05234/"
+   }
+  ],
+  "6": [
+   {
+    "id": "H6OR06018",
+    "name": "FALER, JASON J",
+    "party": "NO PARTY AFFILIATION",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6OR06018/"
+   },
+   {
+    "id": "H2OR01240",
+    "name": "RUSS, DAVID HONORABLE",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H2OR01240/"
+   },
+   {
+    "id": "H2OR06066",
+    "name": "SALINAS, ANDREA",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H2OR06066/"
+   }
+  ]
+ }
+}

@@ -1,0 +1,325 @@
+{
+ "state": "AZ",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=AZ&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": false,
+ "senate": [],
+ "house": {
+  "0": [
+   {
+    "id": "H6AZ08210",
+    "name": null,
+    "party": "",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ08210/"
+   }
+  ],
+  "1": [
+   {
+    "id": "H6AZ01488",
+    "name": "ALPONTE, MONICA MARIA",
+    "party": "LIBERTARIAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ01488/"
+   },
+   {
+    "id": "H6AZ01454",
+    "name": "CHAPLIK, JOSEPH",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ01454/"
+   },
+   {
+    "id": "H6AZ01272",
+    "name": "DEL VECCHIO, BRIAN A",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ01272/"
+   },
+   {
+    "id": "H6AZ05190",
+    "name": "FEELY, THOMAS JAMES",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ05190/"
+   },
+   {
+    "id": "H4AZ01228",
+    "name": "GALAN-WOODS, MARLENE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4AZ01228/"
+   },
+   {
+    "id": "H6AZ01314",
+    "name": "GORDON, MARK ROBERT",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ01314/"
+   },
+   {
+    "id": "H6AZ01306",
+    "name": "MCCARTNEY, RICK",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ01306/"
+   },
+   {
+    "id": "H6AZ01389",
+    "name": "REEVS, PAUL C",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ01389/"
+   },
+   {
+    "id": "H4AZ01194",
+    "name": "SHAH, AMISH DR.",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4AZ01194/"
+   },
+   {
+    "id": "H6AZ01371",
+    "name": "SOWERS, BRANDON",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ01371/"
+   },
+   {
+    "id": "H6AZ01405",
+    "name": "SWOBODA, GINA",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ01405/"
+   },
+   {
+    "id": "H6AZ01298",
+    "name": "TREBLE, JONATHAN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ01298/"
+   },
+   {
+    "id": "H6AZ01447",
+    "name": "TROBOUGH, JOHN",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ01447/"
+   }
+  ],
+  "2": [
+   {
+    "id": "H2AZ01354",
+    "name": "CRANE, ELI",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H2AZ01354/"
+   },
+   {
+    "id": "H4AZ02184",
+    "name": "NEZ, JONATHAN MICHAEL",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4AZ02184/"
+   }
+  ],
+  "3": [
+   {
+    "id": "H4AZ03109",
+    "name": "ANSARI, YASSAMIN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H4AZ03109/"
+   }
+  ],
+  "4": [
+   {
+    "id": "H6AZ04227",
+    "name": "DAVISON, JERONE",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ04227/"
+   },
+   {
+    "id": "H4AZ04115",
+    "name": "JASSER, M. ZUHDI",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4AZ04115/"
+   },
+   {
+    "id": "H6AZ04250",
+    "name": "NEWKIRK, KAI",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ04250/"
+   },
+   {
+    "id": "H8AZ09040",
+    "name": "STANTON, GREG",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H8AZ09040/"
+   },
+   {
+    "id": "H6AZ05174",
+    "name": "STOVALL, ALEX NICOLAS",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ05174/"
+   }
+  ],
+  "5": [
+   {
+    "id": "H6AZ05208",
+    "name": "BRACHT, BLAKE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ05208/"
+   },
+   {
+    "id": "H2AZ06155",
+    "name": "GRANTHAM, TRAVIS W.",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H2AZ06155/"
+   },
+   {
+    "id": "H6AZ05224",
+    "name": "HUALDE, BRIAN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ05224/"
+   },
+   {
+    "id": "H6AZ05216",
+    "name": "JAMES, CHRISTOPHER LEE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ05216/"
+   },
+   {
+    "id": "H6AZ05182",
+    "name": "KEENAN, DANIEL",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ05182/"
+   },
+   {
+    "id": "H6AZ05265",
+    "name": "LAMB, MARK",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ05265/"
+   },
+   {
+    "id": "H6AZ05240",
+    "name": "LEE, ELIZABETH",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ05240/"
+   }
+  ],
+  "6": [
+   {
+    "id": "H2AZ02360",
+    "name": "CISCOMANI, JUAN",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H2AZ02360/"
+   },
+   {
+    "id": "H6AZ06115",
+    "name": "DICKERSON, TREVOR",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ06115/"
+   },
+   {
+    "id": "H6AZ06107",
+    "name": "DONAT, CHRIS",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ06107/"
+   },
+   {
+    "id": "H6AZ06123",
+    "name": "GOLDMAN, MO",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ06123/"
+   },
+   {
+    "id": "H6AZ06099",
+    "name": "MENDOZA, JOANNA",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ06099/"
+   },
+   {
+    "id": "H6AZ06214",
+    "name": "PETERS, JEREME LANCE",
+    "party": "LIBERTARIAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ06214/"
+   }
+  ],
+  "7": [
+   {
+    "id": "H4AZ07134",
+    "name": "BUTIEREZ, DANIEL",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4AZ07134/"
+   },
+   {
+    "id": "H6AZ07121",
+    "name": "GRIJALVA, ADELITA",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H6AZ07121/"
+   }
+  ],
+  "8": [
+   {
+    "id": "H4AZ08082",
+    "name": "GREENE PLACENTIA, BERNADETTE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4AZ08082/"
+   },
+   {
+    "id": "H4AZ08108",
+    "name": "HAMADEH, ABRAHAM",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H4AZ08108/"
+   },
+   {
+    "id": "H6AZ08269",
+    "name": "KEELER, RAYMOND CHARLES",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ08269/"
+   }
+  ],
+  "9": [
+   {
+    "id": "H0AZ01259",
+    "name": "GOSAR, PAUL DR.",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H0AZ01259/"
+   },
+   {
+    "id": "H6AZ09085",
+    "name": "STERBINSKY, DANIELLE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AZ09085/"
+   }
+  ]
+ }
+}

@@ -1,0 +1,175 @@
+{
+ "state": "CT",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=CT&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": false,
+ "senate": [],
+ "house": {
+  "1": [
+   {
+    "id": "H6CT01206",
+    "name": "BRONIN, LUKE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6CT01206/"
+   },
+   {
+    "id": "H2CT03102",
+    "name": "CHAI, AMY FOGELSTROM DR",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H2CT03102/"
+   },
+   {
+    "id": "H6CT01180",
+    "name": "FORTUNE, RUTH R.",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6CT01180/"
+   },
+   {
+    "id": "H6CT01222",
+    "name": "GILCHREST, JILLIAN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6CT01222/"
+   },
+   {
+    "id": "H8CT01046",
+    "name": "LARSON, JOHN B",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H8CT01046/"
+   },
+   {
+    "id": "H6CT01198",
+    "name": "PERRY, JACK",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6CT01198/"
+   }
+  ],
+  "2": [
+   {
+    "id": "H6CT02196",
+    "name": "AUSTIN, GEORGE PATRICK",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6CT02196/"
+   },
+   {
+    "id": "H2CT02112",
+    "name": "COURTNEY, JOSEPH",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H2CT02112/"
+   },
+   {
+    "id": "H2CT02161",
+    "name": "FRANCE, MIKE",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H2CT02161/"
+   },
+   {
+    "id": "H6CT02188",
+    "name": "GAUCK, KYLE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6CT02188/"
+   }
+  ],
+  "3": [
+   {
+    "id": "H0CT03072",
+    "name": "DELAURO, ROSA L",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H0CT03072/"
+   },
+   {
+    "id": "H6CT03186",
+    "name": "DENOBLE, DAMJAN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6CT03186/"
+   },
+   {
+    "id": "H6CT03178",
+    "name": "LANCIA, CHRISTOPHER JOHN MR.",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6CT03178/"
+   },
+   {
+    "id": "H6CT03194",
+    "name": "RICE, ANDREW JAMES MR.",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6CT03194/"
+   }
+  ],
+  "4": [
+   {
+    "id": "H6CT04143",
+    "name": "GOLDSTEIN, MICHAEL",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6CT04143/"
+   },
+   {
+    "id": "H8CT04172",
+    "name": "HIMES, JIM",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H8CT04172/"
+   },
+   {
+    "id": "H4CT04189",
+    "name": "MIRESSI, DAN",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4CT04189/"
+   },
+   {
+    "id": "H6CT04150",
+    "name": "MIRESSI, DANIEL",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6CT04150/"
+   }
+  ],
+  "5": [
+   {
+    "id": "H2CT05230",
+    "name": "BOTELHO, MICHELE",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H2CT05230/"
+   },
+   {
+    "id": "H6CT05223",
+    "name": "DE BARROS, JONATHAN",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6CT05223/"
+   },
+   {
+    "id": "H8CT05245",
+    "name": "HAYES, JAHANA",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H8CT05245/"
+   },
+   {
+    "id": "H6CT05231",
+    "name": "SHEA, CHRIS",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6CT05231/"
+   }
+  ]
+ }
+}

@@ -1,0 +1,181 @@
+{
+ "state": "KS",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=KS&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": true,
+ "senate": [
+  {
+   "id": "S6KS00247",
+   "name": "DAVIS, CHRISTY",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6KS00247/"
+  },
+  {
+   "id": "S6KS00312",
+   "name": "HAMILTON, ADAM",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6KS00312/"
+  },
+  {
+   "id": "S6KS00304",
+   "name": "HART, JASON",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6KS00304/"
+  },
+  {
+   "id": "S6KS00320",
+   "name": "LATZ, KEVIN",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6KS00320/"
+  },
+  {
+   "id": "S0KS00315",
+   "name": "MARSHALL, ROGER W",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": true,
+   "url": "https://www.fec.gov/data/candidate/S0KS00315/"
+  },
+  {
+   "id": "S6KS00270",
+   "name": "MURRAY, ERIK",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6KS00270/"
+  },
+  {
+   "id": "S6KS00239",
+   "name": "PARELKAR, LOIS ANNE ELIZABETH LEA",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6KS00239/"
+  },
+  {
+   "id": "S6KS00288",
+   "name": "SCHMIDT, PATRICK",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6KS00288/"
+  },
+  {
+   "id": "S6KS00262",
+   "name": "SPIDEL NEUMANN, SANDY",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6KS00262/"
+  },
+  {
+   "id": "S6KS00296",
+   "name": "TAYLOR, NOAH",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6KS00296/"
+  }
+ ],
+ "house": {
+  "1": [
+   {
+    "id": "H0KS01123",
+    "name": "MANN, TRACEY ROBERT",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H0KS01123/"
+   },
+   {
+    "id": "H6KS01195",
+    "name": "MCROBERTS, KENNETH COLIN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6KS01195/"
+   },
+   {
+    "id": "H6KS01211",
+    "name": "MUSSER, CRAIG A",
+    "party": "OTHER",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6KS01211/"
+   },
+   {
+    "id": "H6KS01203",
+    "name": "REINHOLD, LAUREN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6KS01203/"
+   }
+  ],
+  "2": [
+   {
+    "id": "H6KS02276",
+    "name": "COOVER, DON",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6KS02276/"
+   },
+   {
+    "id": "H4KS02164",
+    "name": "SCHMIDT, DEREK",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H4KS02164/"
+   }
+  ],
+  "3": [
+   {
+    "id": "H8KS03155",
+    "name": "DAVIDS, SHARICE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H8KS03155/"
+   },
+   {
+    "id": "H6KS03308",
+    "name": "JENKINS, ERIC",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6KS03308/"
+   },
+   {
+    "id": "H6KS03290",
+    "name": "PREU, SARAH",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6KS03290/"
+   }
+  ],
+  "4": [
+   {
+    "id": "H6KS04249",
+    "name": "CARMICHAEL, CHRIS",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6KS04249/"
+   },
+   {
+    "id": "H6KS04256",
+    "name": "CATANESE, PAUL VINCENT",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6KS04256/"
+   },
+   {
+    "id": "H8KS04112",
+    "name": "ESTES, RON",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H8KS04112/"
+   },
+   {
+    "id": "H6KS04272",
+    "name": "TYNDELL, KATY",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6KS04272/"
+   }
+  ]
+ }
+}

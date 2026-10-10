@@ -1,0 +1,153 @@
+{
+ "state": "MS",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=MS&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": true,
+ "senate": [
+  {
+   "id": "S6MS00109",
+   "name": "ADLAKHA, SARAH ANNE DR",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6MS00109/"
+  },
+  {
+   "id": "S6MS00133",
+   "name": "COLOM, SCOTT",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6MS00133/"
+  },
+  {
+   "id": "S8MS00261",
+   "name": "HYDE-SMITH, CINDY",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": true,
+   "url": "https://www.fec.gov/data/candidate/S8MS00261/"
+  },
+  {
+   "id": "S4MS00187",
+   "name": "PINKINS, TY",
+   "party": "INDEPENDENT",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S4MS00187/"
+  },
+  {
+   "id": "S6MS00141",
+   "name": "TILL, PRISCILLA WILLIAMS",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6MS00141/"
+  },
+  {
+   "id": "S6MS00158",
+   "name": "TILL, PRISCILLA WILLIAMS",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6MS00158/"
+  }
+ ],
+ "house": {
+  "1": [
+   {
+    "id": "H6MS01305",
+    "name": "BUCK, KELVIN ONEAL MR",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MS01305/"
+   },
+   {
+    "id": "H6MS01313",
+    "name": "JOHNSON, CLIFF",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MS01313/"
+   },
+   {
+    "id": "H6MS01131",
+    "name": "KELLY, JOHN TRENT",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H6MS01131/"
+   }
+  ],
+  "2": [
+   {
+    "id": "H2MS02203",
+    "name": "ELLER, RON",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H2MS02203/"
+   },
+   {
+    "id": "H4MS02068",
+    "name": "THOMPSON, BENNIE G.",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H4MS02068/"
+   },
+   {
+    "id": "H6MS02220",
+    "name": "TURNAGE, EVAN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MS02220/"
+   },
+   {
+    "id": "H6MS02238",
+    "name": "WILSON, KEVIN",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MS02238/"
+   }
+  ],
+  "3": [
+   {
+    "id": "H6MS03228",
+    "name": "CHIARADIO, MICHAEL ALEXIS",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MS03228/"
+   },
+   {
+    "id": "H8MS03125",
+    "name": "GUEST, MICHAEL PATRICK",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H8MS03125/"
+   }
+  ],
+  "4": [
+   {
+    "id": "H6MS04259",
+    "name": "CARL, BOYANTON LESTER",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MS04259/"
+   },
+   {
+    "id": "H2MS04258",
+    "name": "EZELL, WALTER MICHAEL",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H2MS04258/"
+   },
+   {
+    "id": "H6MS04242",
+    "name": "HULUM, JEFFREY III",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MS04242/"
+   },
+   {
+    "id": "H6MS04275",
+    "name": "WALTERS, SAWYER",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6MS04275/"
+   }
+  ]
+ }
+}

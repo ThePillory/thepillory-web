@@ -1,0 +1,70 @@
+{
+ "state": "SD",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=SD&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": true,
+ "senate": [
+  {
+   "id": "S6SD01125",
+   "name": "BEAUDION, JULIAN C",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6SD01125/"
+  },
+  {
+   "id": "S6SD01117",
+   "name": "BENGS, BRIAN",
+   "party": "INDEPENDENT",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6SD01117/"
+  },
+  {
+   "id": "S6SD01133",
+   "name": "MCNEAL, JUSTIN S",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6SD01133/"
+  },
+  {
+   "id": "S4SD00049",
+   "name": "ROUNDS, MIKE",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": true,
+   "url": "https://www.fec.gov/data/candidate/S4SD00049/"
+  }
+ ],
+ "house": {
+  "0": [
+   {
+    "id": "H6SD01117",
+    "name": "CRABTREE, CASEY",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6SD01117/"
+   },
+   {
+    "id": "H6SD01141",
+    "name": "GRONLI, NICOLE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6SD01141/"
+   },
+   {
+    "id": "H6SD01109",
+    "name": "JACKLEY, MARTY",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6SD01109/"
+   },
+   {
+    "id": "H6SD01133",
+    "name": "MAWHINEY, BILLY",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6SD01133/"
+   }
+  ]
+ }
+}

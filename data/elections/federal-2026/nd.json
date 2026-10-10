@@ -1,0 +1,34 @@
+{
+ "state": "ND",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=ND&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": false,
+ "senate": [],
+ "house": {
+  "0": [
+   {
+    "id": "H4ND00079",
+    "name": "BALAZS, ALEX",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4ND00079/"
+   },
+   {
+    "id": "H4ND00061",
+    "name": "FEDORCHAK, JULIE",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H4ND00061/"
+   },
+   {
+    "id": "H6ND01049",
+    "name": "HAMMER, TRYGVE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6ND01049/"
+   }
+  ]
+ }
+}

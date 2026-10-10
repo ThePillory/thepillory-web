@@ -1,0 +1,325 @@
+{
+ "state": "WA",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=WA&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": false,
+ "senate": [],
+ "house": {
+  "1": [
+   {
+    "id": "H0WA08046",
+    "name": "DELBENE, SUZAN K",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H0WA08046/"
+   },
+   {
+    "id": "H6WA01220",
+    "name": "ETZKORN, JAMES",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA01220/"
+   },
+   {
+    "id": "H6WA01212",
+    "name": "GORDON, HUNTER",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA01212/"
+   },
+   {
+    "id": "H4WA01282",
+    "name": "SILVA, MARY",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4WA01282/"
+   }
+  ],
+  "2": [
+   {
+    "id": "H0WA02080",
+    "name": "LARSEN, RICK",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H0WA02080/"
+   },
+   {
+    "id": "H6WA02202",
+    "name": "SCHEEL, TOMAS ROBERTO",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA02202/"
+   }
+  ],
+  "3": [
+   {
+    "id": "H6WA03267",
+    "name": "BARRAN, ANTONY",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA03267/"
+   },
+   {
+    "id": "H6WA03275",
+    "name": "BRAUN, JOHN",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA03275/"
+   },
+   {
+    "id": "H2WA03217",
+    "name": "GLUESENKAMP PEREZ, MARIE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H2WA03217/"
+   },
+   {
+    "id": "H2WA03134",
+    "name": "HENNRICH, BRENT WILLIAM",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H2WA03134/"
+   },
+   {
+    "id": "H6WA03317",
+    "name": "RASBAND, TROY AUSTIN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA03317/"
+   }
+  ],
+  "4": [
+   {
+    "id": "H6WA04224",
+    "name": "BOEHNKE, MATTHEW",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA04224/"
+   },
+   {
+    "id": "H6WA04190",
+    "name": "DURESKY, JOHN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA04190/"
+   },
+   {
+    "id": "H6WA04216",
+    "name": "MCKINNEY, AMANDA",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA04216/"
+   },
+   {
+    "id": "H2WA04165",
+    "name": "SESSLER, JERROD",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H2WA04165/"
+   },
+   {
+    "id": "H6WA04257",
+    "name": "VALENCIA, FAVIAN",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA04257/"
+   }
+  ],
+  "5": [
+   {
+    "id": "H4WA05234",
+    "name": "BAUMGARTNER, MICHAEL JAMES",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H4WA05234/"
+   },
+   {
+    "id": "H4WA05168",
+    "name": "CONROY, CARMELA",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4WA05168/"
+   },
+   {
+    "id": "H6WA05197",
+    "name": "CROFT, AARON MATTHEW",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA05197/"
+   },
+   {
+    "id": "H2WA05097",
+    "name": "DANIMUS, ANN MARIE",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H2WA05097/"
+   },
+   {
+    "id": "H6WA05247",
+    "name": "FAGAN, KEVIN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA05247/"
+   },
+   {
+    "id": "H6WA05288",
+    "name": "FREUDENBERG, RICHARD",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA05288/"
+   },
+   {
+    "id": "H6WA05221",
+    "name": "MAVALWALLA, BAJUN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA05221/"
+   },
+   {
+    "id": "H6WA05239",
+    "name": "POWELL, NATE",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA05239/"
+   },
+   {
+    "id": "H6WA05254",
+    "name": "USREY, KYLE B",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA05254/"
+   },
+   {
+    "id": "H6WA05213",
+    "name": "WOMACK, DAVID",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA05213/"
+   }
+  ],
+  "6": [
+   {
+    "id": "H6WA06286",
+    "name": "FOX, TERESA",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA06286/"
+   },
+   {
+    "id": "H6WA06260",
+    "name": "LAWSON, LEON",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA06260/"
+   },
+   {
+    "id": "H4WA06117",
+    "name": "RANDALL, EMILY",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H4WA06117/"
+   }
+  ],
+  "7": [
+   {
+    "id": "H6WA07458",
+    "name": "JAYAPAL, PRAMILA",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H6WA07458/"
+   },
+   {
+    "id": "H4WA08147",
+    "name": "SHETH, NIRAV",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4WA08147/"
+   }
+  ],
+  "8": [
+   {
+    "id": "H6WA08126",
+    "name": "HAGGLUND, BOB",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA08126/"
+   },
+   {
+    "id": "H6WA08159",
+    "name": "HA, TRINH DR.",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA08159/"
+   },
+   {
+    "id": "H6WA08167",
+    "name": "MELINE, SPENCER HARRISON",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA08167/"
+   },
+   {
+    "id": "H8WA08189",
+    "name": "SCHRIER, KIM DR.",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H8WA08189/"
+   },
+   {
+    "id": "H6WA08142",
+    "name": "VALLEZA, ANDRES R MR.",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA08142/"
+   }
+  ],
+  "9": [
+   {
+    "id": "H4WA09061",
+    "name": "BASLER, DOUGLAS MICHAEL",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4WA09061/"
+   },
+   {
+    "id": "H4WA09095",
+    "name": "CHAUDHRY, MELISSA",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4WA09095/"
+   },
+   {
+    "id": "H6WA09082",
+    "name": "SAWANT, KSHAMA",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA09082/"
+   },
+   {
+    "id": "H6WA09025",
+    "name": "SMITH, D. ADAM",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H6WA09025/"
+   }
+  ],
+  "10": [
+   {
+    "id": "H6WA10023",
+    "name": "SCHEEL, ALEXANDER WILLIAM",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA10023/"
+   },
+   {
+    "id": "H0WA10034",
+    "name": "STRICKLAND, MARILYN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H0WA10034/"
+   }
+  ]
+ }
+}

@@ -1,0 +1,121 @@
+{
+ "state": "ID",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=ID&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": true,
+ "senate": [
+  {
+   "id": "S6ID00146",
+   "name": "ACHILLES, TODD BAKER",
+   "party": "INDEPENDENT",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6ID00146/"
+  },
+  {
+   "id": "S6ID00120",
+   "name": "EVANS, JOE",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6ID00120/"
+  },
+  {
+   "id": "S6ID00161",
+   "name": "LAVE, DENNY",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6ID00161/"
+  },
+  {
+   "id": "S8ID00092",
+   "name": "RISCH, JAMES E MR.",
+   "party": "UNKNOWN",
+   "incumbent": true,
+   "url": "https://www.fec.gov/data/candidate/S8ID00092/"
+  },
+  {
+   "id": "S6ID00138",
+   "name": "ROTH, DAVID JORDAN",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6ID00138/"
+  },
+  {
+   "id": "S6ID00153",
+   "name": "ROY, JOSHUA S",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6ID00153/"
+  }
+ ],
+ "house": {
+  "1": [
+   {
+    "id": "H6ID01292",
+    "name": "BRUNGARDT, KENNETH FRANCIS JR",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6ID01292/"
+   },
+   {
+    "id": "H8ID01124",
+    "name": "FULCHER, RUSSELL",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H8ID01124/"
+   },
+   {
+    "id": "H2ID01192",
+    "name": "PETERSON, KAYLEE JADE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H2ID01192/"
+   },
+   {
+    "id": "H6ID01318",
+    "name": "ZABEL, SARAH",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6ID01318/"
+   }
+  ],
+  "2": [
+   {
+    "id": "H6ID02274",
+    "name": "GILBREATH, ELINOR",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6ID02274/"
+   },
+   {
+    "id": "H6ID02241",
+    "name": "HUTCHINSON, TRIPP CHARLES",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6ID02241/"
+   },
+   {
+    "id": "H6ID02233",
+    "name": "SHUMWAY, PERRY",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6ID02233/"
+   },
+   {
+    "id": "H8ID02064",
+    "name": "SIMPSON, MICHAEL",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H8ID02064/"
+   },
+   {
+    "id": "H6ID02225",
+    "name": "WILEY, JULIE MARISA",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6ID02225/"
+   }
+  ]
+ }
+}

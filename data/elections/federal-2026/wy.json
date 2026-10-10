@@ -1,0 +1,119 @@
+{
+ "state": "WY",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=WY&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": true,
+ "senate": [
+  {
+   "id": "S6WY00217",
+   "name": "BYRD, JAMES WILLARD MR.",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6WY00217/"
+  },
+  {
+   "id": "S6WY00209",
+   "name": "HAGEMAN, HARRIET",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6WY00209/"
+  },
+  {
+   "id": "S0WY00137",
+   "name": "LUMMIS, CYNTHIA MARIE MRS.",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": true,
+   "url": "https://www.fec.gov/data/candidate/S0WY00137/"
+  },
+  {
+   "id": "S6WY00225",
+   "name": "MEAD, SAMUEL",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6WY00225/"
+  },
+  {
+   "id": "S4WY00162",
+   "name": "RASNER, REID",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S4WY00162/"
+  },
+  {
+   "id": "S6WY00191",
+   "name": "SKOVGARD, JIMMY MR",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6WY00191/"
+  }
+ ],
+ "house": {
+  "0": [
+   {
+    "id": "H6WY00225",
+    "name": "BALOW, JILLIAN",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WY00225/"
+   },
+   {
+    "id": "H6WY00241",
+    "name": "BITEMAN, DENNIS BO DEAN II",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WY00241/"
+   },
+   {
+    "id": "H6WY01157",
+    "name": "CHAPMAN, FRANK",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WY01157/"
+   },
+   {
+    "id": "H6WY01140",
+    "name": "CHRISTENSEN, KEVIN",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WY01140/"
+   },
+   {
+    "id": "H6WY01165",
+    "name": "FRIESS, STEPHEN",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WY01165/"
+   },
+   {
+    "id": "H6WY00233",
+    "name": "GIRALT, DAVID",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WY00233/"
+   },
+   {
+    "id": "H6WY00217",
+    "name": "GRAY, CHUCK",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WY00217/"
+   },
+   {
+    "id": "H6WY01173",
+    "name": "KINNEY, LISA",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WY01173/"
+   },
+   {
+    "id": "H6WY01116",
+    "name": "RASNER, REID",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WY01116/"
+   }
+  ]
+ }
+}

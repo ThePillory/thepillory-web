@@ -1,0 +1,50 @@
+{
+ "state": "HI",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=HI&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": false,
+ "senate": [],
+ "house": {
+  "1": [
+   {
+    "id": "H6HI01345",
+    "name": "BELATTI, DELLA AU",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6HI01345/"
+   },
+   {
+    "id": "H2HI02128",
+    "name": "CASE, EDWARD",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H2HI02128/"
+   },
+   {
+    "id": "H6HI01311",
+    "name": "KEOHOKALOLE, JARRETT",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6HI01311/"
+   }
+  ],
+  "2": [
+   {
+    "id": "H6HI02426",
+    "name": "AWA, BRENTON",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6HI02426/"
+   },
+   {
+    "id": "H2HI02581",
+    "name": "TOKUDA, JILL NAOMI",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H2HI02581/"
+   }
+  ]
+ }
+}

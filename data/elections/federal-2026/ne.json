@@ -1,0 +1,158 @@
+{
+ "state": "NE",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=NE&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": true,
+ "senate": [
+  {
+   "id": "S6NE00145",
+   "name": "BURBANK, CINDY",
+   "party": "",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6NE00145/"
+  },
+  {
+   "id": "S6NE00152",
+   "name": "MARVIN, MIKE",
+   "party": "OTHER",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6NE00152/"
+  },
+  {
+   "id": "S4NE00207",
+   "name": "OSBORN, DAN",
+   "party": "INDEPENDENT",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S4NE00207/"
+  },
+  {
+   "id": "S6NE00129",
+   "name": "RICKETTS, PETE",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": true,
+   "url": "https://www.fec.gov/data/candidate/S6NE00129/"
+  }
+ ],
+ "house": {
+  "1": [
+   {
+    "id": "H6NE01150",
+    "name": "AHLMAN, AUSTIN LAWRENCE",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NE01150/"
+   },
+   {
+    "id": "H6NE01143",
+    "name": "BACKEMEYER, CHRISTOPHER",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NE01143/"
+   },
+   {
+    "id": "H2NE01118",
+    "name": "FLOOD, MIKE",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H2NE01118/"
+   },
+   {
+    "id": "H6NE01135",
+    "name": "MOYER, ERIC HAMILTON",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NE01135/"
+   }
+  ],
+  "2": [
+   {
+    "id": "H6NE02224",
+    "name": "ASKINS, KISHLA",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NE02224/"
+   },
+   {
+    "id": "H6NE02190",
+    "name": "CAVANAUGH, JOHN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NE02190/"
+   },
+   {
+    "id": "H6NE02208",
+    "name": "HARDING, BRINKER",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NE02208/"
+   },
+   {
+    "id": "H6NE02166",
+    "name": "JOHNSTON, MARK EDMUND",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NE02166/"
+   },
+   {
+    "id": "H6NE02240",
+    "name": "LEUSCHEN, JAMES",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NE02240/"
+   },
+   {
+    "id": "H6NE02216",
+    "name": "LINDSTROM, BRETT",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NE02216/"
+   },
+   {
+    "id": "H6NE02174",
+    "name": "POWELL, DENISE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NE02174/"
+   },
+   {
+    "id": "H6NE02257",
+    "name": "RHOADES, CRYSTAL",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NE02257/"
+   }
+  ],
+  "3": [
+   {
+    "id": "H6NE03198",
+    "name": "COHEN, MARK",
+    "party": "NON-PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NE03198/"
+   },
+   {
+    "id": "H6NE03172",
+    "name": "HUEBNER, DAVID P. MR.",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NE03172/"
+   },
+   {
+    "id": "H6NE03115",
+    "name": "SMITH, ADRIAN",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H6NE03115/"
+   },
+   {
+    "id": "H6NE03180",
+    "name": "STILLE, BECKY LYNN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NE03180/"
+   }
+  ]
+ }
+}

@@ -1,0 +1,191 @@
+{
+ "state": "ME",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=ME&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": true,
+ "senate": [
+  {
+   "id": "S6ME00456",
+   "name": "BELLOWS, SHENNA",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6ME00456/"
+  },
+  {
+   "id": "S6ME00316",
+   "name": "CALABRESE, CARMEM VINCENT MR.",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6ME00316/"
+  },
+  {
+   "id": "S6ME00324",
+   "name": "CALABRESE, CARMEN VINCENT MR.",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6ME00324/"
+  },
+  {
+   "id": "S6ME00159",
+   "name": "COLLINS, SUSAN M.",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": true,
+   "url": "https://www.fec.gov/data/candidate/S6ME00159/"
+  },
+  {
+   "id": "S4ME00113",
+   "name": "COSTELLO, DAVID",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S4ME00113/"
+  },
+  {
+   "id": "S6ME00399",
+   "name": "EVANS, DAVID ALAN",
+   "party": "INDEPENDENT",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6ME00399/"
+  },
+  {
+   "id": "S6ME00357",
+   "name": "FAVREAU, TUCKER",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6ME00357/"
+  },
+  {
+   "id": "S6ME00381",
+   "name": "KLEBAN, DAN",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6ME00381/"
+  },
+  {
+   "id": "S6ME00340",
+   "name": "LAFLAMME, ANDREA",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6ME00340/"
+  },
+  {
+   "id": "S6ME00431",
+   "name": "LOUD, PAIGE",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6ME00431/"
+  },
+  {
+   "id": "S6ME00407",
+   "name": "MILLS, JANET TRAFTON",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6ME00407/"
+  },
+  {
+   "id": "S6ME00373",
+   "name": "PLATNER, GRAHAM",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6ME00373/"
+  },
+  {
+   "id": "S6ME00282",
+   "name": "RENCH, PHILLIP",
+   "party": "INDEPENDENT",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6ME00282/"
+  },
+  {
+   "id": "S6ME00365",
+   "name": "RODRIGUEZ, DAIRA",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6ME00365/"
+  },
+  {
+   "id": "S6ME00332",
+   "name": "WOOD, JORDAN",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6ME00332/"
+  }
+ ],
+ "house": {
+  "1": [
+   {
+    "id": "H6ME01298",
+    "name": "PIETROWICZ, JOSHUA JAMES",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6ME01298/"
+   },
+   {
+    "id": "H8ME01120",
+    "name": "PINGREE, CHELLIE M",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H8ME01120/"
+   },
+   {
+    "id": "H6ME01280",
+    "name": "ROBERTS, TIFFANY DANIELLE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6ME01280/"
+   },
+   {
+    "id": "H4ME01160",
+    "name": "RUSSELL, RONALD CHARLES MR.",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4ME01160/"
+   },
+   {
+    "id": "H6ME01272",
+    "name": "SMALL, ERIC",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6ME01272/"
+   }
+  ],
+  "2": [
+   {
+    "id": "H6ME02213",
+    "name": "BALDACCI, JOSEPH",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6ME02213/"
+   },
+   {
+    "id": "H6ME02171",
+    "name": "DUNLAP, MATT",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6ME02171/"
+   },
+   {
+    "id": "H6ME02148",
+    "name": "LEPAGE, PAUL",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6ME02148/"
+   },
+   {
+    "id": "H6ME02205",
+    "name": "LOUD, PAIGE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6ME02205/"
+   },
+   {
+    "id": "H6ME02197",
+    "name": "WOOD, JORDAN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6ME02197/"
+   }
+  ]
+ }
+}

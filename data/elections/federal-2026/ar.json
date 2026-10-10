@@ -1,0 +1,139 @@
+{
+ "state": "AR",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=AR&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": true,
+ "senate": [
+  {
+   "id": "S6AR00207",
+   "name": "ASHBY, MICAH",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6AR00207/"
+  },
+  {
+   "id": "S4AR00103",
+   "name": "COTTON, THOMAS",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": true,
+   "url": "https://www.fec.gov/data/candidate/S4AR00103/"
+  },
+  {
+   "id": "S6AR00173",
+   "name": "DUNBAR, ETHAN N SR.",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6AR00173/"
+  },
+  {
+   "id": "S6AR00215",
+   "name": "LITTLE, JEB",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6AR00215/"
+  },
+  {
+   "id": "S6AR00199",
+   "name": "SHOFFNER, HALLIE",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6AR00199/"
+  },
+  {
+   "id": "S6AR00223",
+   "name": "WADLIN, JEFFREY FRANCIS",
+   "party": "LIBERTARIAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6AR00223/"
+  }
+ ],
+ "house": {
+  "1": [
+   {
+    "id": "H0AR01083",
+    "name": "CRAWFORD, ERIC ALAN RICK",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H0AR01083/"
+   },
+   {
+    "id": "H6AR01155",
+    "name": "GREEN, TERRI YARBROUGH DR.",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AR01155/"
+   }
+  ],
+  "2": [
+   {
+    "id": "H4AR02141",
+    "name": "HILL, JAMES FRENCH",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H4AR02141/"
+   },
+   {
+    "id": "H6AR02294",
+    "name": "HUFFMAN, ZACKARY BLAKE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AR02294/"
+   },
+   {
+    "id": "H6AR02286",
+    "name": "JONES, CHRIS",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AR02286/"
+   },
+   {
+    "id": "H6AR02278",
+    "name": "MCDOWELL, CHASE",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AR02278/"
+   }
+  ],
+  "3": [
+   {
+    "id": "H6AR03136",
+    "name": "LAWRENCE, DIANA LYNNE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AR03136/"
+   },
+   {
+    "id": "H6AR03128",
+    "name": "RYERSE, ROBB",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AR03128/"
+   },
+   {
+    "id": "H0AR03055",
+    "name": "WOMACK, STEPHEN A THE HON",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H0AR03055/"
+   }
+  ],
+  "4": [
+   {
+    "id": "H6AR04084",
+    "name": "RUSSELL, JAMES RICHARD MR III",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6AR04084/"
+   },
+   {
+    "id": "H4AR04048",
+    "name": "WESTERMAN, BRUCE",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H4AR04048/"
+   }
+  ]
+ }
+}

@@ -1,0 +1,177 @@
+{
+ "state": "NH",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=NH&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": true,
+ "senate": [
+  {
+   "id": "S6NH00166",
+   "name": "BROWN, SCOTT P.",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6NH00166/"
+  },
+  {
+   "id": "S6NH00174",
+   "name": "INNIS, DAN",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6NH00174/"
+  },
+  {
+   "id": "S6NH00182",
+   "name": "MANZUR, KARISHMA",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6NH00182/"
+  },
+  {
+   "id": "S6NH00141",
+   "name": "PAPPAS, CHRIS",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6NH00141/"
+  },
+  {
+   "id": "S6NH00190",
+   "name": "SULLIVAN, JARED",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6NH00190/"
+  },
+  {
+   "id": "S6NH00208",
+   "name": "SUNUNU, JOHN E",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6NH00208/"
+  }
+ ],
+ "house": {
+  "1": [
+   {
+    "id": "H6NH01438",
+    "name": "ANDERSON, LINDSEY",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NH01438/"
+   },
+   {
+    "id": "H6NH01347",
+    "name": "BAILEY, MELISSA",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NH01347/"
+   },
+   {
+    "id": "H6NH01339",
+    "name": "BERIONT, CARLEIGH",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NH01339/"
+   },
+   {
+    "id": "H4NH01276",
+    "name": "BRIGHT, CHRIS",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4NH01276/"
+   },
+   {
+    "id": "H6NH01362",
+    "name": "CHADZYNSKI, SARAH",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NH01362/"
+   },
+   {
+    "id": "H6NH01388",
+    "name": "COLE, BRIAN",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NH01388/"
+   },
+   {
+    "id": "H6NH01420",
+    "name": "DILORENZO, ANTHONY",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NH01420/"
+   },
+   {
+    "id": "H6NH01396",
+    "name": "GIRARD, ELIZABETH",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NH01396/"
+   },
+   {
+    "id": "H6NH01370",
+    "name": "HOWARD, HEATH",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NH01370/"
+   },
+   {
+    "id": "H6NH01412",
+    "name": "NOVELETSKY, HOLLIE T",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NH01412/"
+   },
+   {
+    "id": "H6NH01321",
+    "name": "SHAHEEN, STEFANY",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NH01321/"
+   },
+   {
+    "id": "H8NH01186",
+    "name": "SULLIVAN, MAURA CORBY",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H8NH01186/"
+   },
+   {
+    "id": "H6NH01354",
+    "name": "URRUTIA, CHRISTIAN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NH01354/"
+   }
+  ],
+  "2": [
+   {
+    "id": "H6NH02261",
+    "name": "BEAUCHEMIN, PAIGE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NH02261/"
+   },
+   {
+    "id": "H4NH02399",
+    "name": "GOODLANDER, MAGGIE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H4NH02399/"
+   },
+   {
+    "id": "H6NH02287",
+    "name": "ORLANDO, VICTOR D",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NH02287/"
+   },
+   {
+    "id": "H2NH02260",
+    "name": "WILLIAMS, LILY TANG",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H2NH02260/"
+   }
+  ]
+ }
+}

@@ -1,0 +1,79 @@
+{
+ "state": "RI",
+ "year": 2026,
+ "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=RI&candidate_status=C",
+ "built_on": "2026-10-10",
+ "senate_up": true,
+ "senate": [
+  {
+   "id": "S6RI00288",
+   "name": "BAHRY, MICHAEL",
+   "party": "INDEPENDENT",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6RI00288/"
+  },
+  {
+   "id": "S6RI00270",
+   "name": "BURBRIDGE, CONNOR",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6RI00270/"
+  },
+  {
+   "id": "S4RI00051",
+   "name": "MCKAY, RAYMOND TYLER MR",
+   "party": "REPUBLICAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S4RI00051/"
+  },
+  {
+   "id": "S6RI00163",
+   "name": "REED, JOHN F.",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": true,
+   "url": "https://www.fec.gov/data/candidate/S6RI00163/"
+  }
+ ],
+ "house": {
+  "1": [
+   {
+    "id": "H4RI01265",
+    "name": "AMO, GABRIEL F",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H4RI01265/"
+   },
+   {
+    "id": "H6RI01153",
+    "name": "KEENAN, KELLIE ELEANOR",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6RI01153/"
+   }
+  ],
+  "2": [
+   {
+    "id": "H2RI02184",
+    "name": "MAGAZINER, SETH",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": true,
+    "url": "https://www.fec.gov/data/candidate/H2RI02184/"
+   },
+   {
+    "id": "H6RI02318",
+    "name": "MELLOR, VICTOR G.",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6RI02318/"
+   },
+   {
+    "id": "H6RI02326",
+    "name": "SKOLY, STEPHEN T",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6RI02326/"
+   }
+  ]
+ }
+}
