@@ -58,6 +58,7 @@ The principal committee ID comes from the FEC candidate search (`principal_commi
 
 The sync Worker's `candidate-platforms` step (`workers/sync/src/promises/candidates-sync.js`, after `issues-pages`):
 
+- `data/candidates/<year>/names.json` (every candidate with a page: ID, name, state, office, district; written by the builder with `writeNameIndex()`) is what the Reps tab's search reads;
 - reads `data/candidates/<year>/websites.json` (every listed candidate with a campaign website from their FEC filing; written by the builder) from `SITE_URL`;
 - searches each site with the officials' finder (`findOnSite()`: the home page's Issues / Priorities / Platform links, then `/issues` and `/priorities`; the page counts only when its own heading says so);
 - picks a short excerpt with the officials' instructions (`excerptInstructions("candidate")`: one to three consecutive sentences, at most 450 characters, the passage that sums up the page, chosen the same way for everyone) and keeps it only when `checkExcerpt()` finds it on the page word for word;

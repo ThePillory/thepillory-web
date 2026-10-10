@@ -14,6 +14,7 @@ Same rules as everywhere else: facts only, neutral wording, no party colors, and
 |---|---|
 | Bill | What it does · Where it stands (`billStands()`: "Passed the Senate. Waiting on the House.", "Became law on …", "Vetoed by …") · How your reps voted (final passage, with saved districts) · Supporters say / Critics say when the source has both |
 | Executive order | What it does · Where it stands (signed, revoked, court records) · Who issued it |
+| Reps tab | Your representatives and Search stay; Browse (Federal / State / Courts) sits behind "Browse all" |
 | Official | Who they are · Their job (`jobSentence()`, by office) · Latest votes (three, in plain words) · In their own words (the Platform excerpt) · Money (one line from FEC totals, with a link to the Funding tab) |
 | The Supreme Court | What it is · Who's on it · Latest decisions (the Court's own one-line summaries) |
 | A decided case | What the Court decided (the Court's summary) · Where it stands · How the justices lined up (only when it's simple: unanimous, or everyone in the majority or dissent) |

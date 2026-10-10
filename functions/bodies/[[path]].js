@@ -76,7 +76,7 @@ export const onRequestGet = guard(async (context) => {
         "Members by state",
         `<div class="chips">${Object.entries(STATE_NAME)
           .sort((x, y) => x[1].localeCompare(y[1]))
-          .map(([code, name]) => `<a class="chip state-chip" href="/reps/?state=${code}#state-list">${esc(name)}</a>`)
+          .map(([code, name]) => `<a class="chip state-chip" href="/reps/?state=${code}#browse">${esc(name)}</a>`)
           .join("")}</div>`,
         "card stack-sm"
       )

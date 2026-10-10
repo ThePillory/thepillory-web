@@ -1950,3 +1950,10 @@ html[data-mode="simple"] .chip.has-plain .formal-name { display: none; }
 /* Glossary: a dotted underline; tap for a one-sentence definition. */
 .term { display: inline; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-decoration: underline dotted; text-underline-offset: 3px; cursor: help; min-height: 0; }
 .term-def { display: block; margin: 6px 0; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--panel); color: var(--text); font-size: 0.9375rem; line-height: 1.4; }
+
+/* The Reps tab (functions/_lib/reps-index.js): Your representatives, Search, Browse. */
+#browse h3.label, #people-results .label { margin-top: 12px; }
+.browse-switch { margin: 4px 0; }
+.browse-filter { display: flex; flex-direction: column; gap: 4px; }
+.browse-filter select.input { min-height: var(--tap); }
+.sort-switch { max-width: 320px; }
