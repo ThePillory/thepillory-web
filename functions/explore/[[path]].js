@@ -187,6 +187,7 @@ ${breadcrumb([["United States", "/explore/"], [place.name, null]])}
   <h1>${esc(place.name)}</h1>
   <p class="secondary">${place.counties.length} ${place.counties.length === 1 ? "county" : "counties"}. Tap a county or district, or use the lists below.</p>
 </header>
+<a class="btn btn--primary btn--block" href="/ballot/${place.st.toLowerCase()}/">Open your ballot</a>
 ${mapFigure({ id: "map", src: `/data/geo/shapes/${place.st.toLowerCase()}-{layer}.json`, links, status, layers, active: layer, label: `Map of ${place.name}`, legend })}
 <section class="stack-sm" aria-labelledby="h-find">
   <h2 class="label" id="h-find">Find a county</h2>

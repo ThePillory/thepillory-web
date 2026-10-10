@@ -24,6 +24,13 @@ jobs:
         run: python3 tools/build_elections.py
       - name: Washington's statewide measures (Secretary of State, Attorney General, Office of Financial Management)
         run: python3 tools/build_wa_measures.py
+      # A failure here (an FEC outage) still lets the steps above commit; the run is marked failed at the end.
+      - name: Every state's federal races (FEC filings, for Open your ballot)
+        id: fec
+        continue-on-error: true
+        env:
+          FEC_API_KEY: ${{ secrets.FEC_API_KEY }}
+        run: python3 tools/build_federal_races.py
       - name: Commit the data
         run: |
           git config user.name "github-actions[bot]"
@@ -32,3 +39,6 @@ jobs:
           git diff --cached --quiet && exit 0
           git commit -m "Refresh election data from official sources"
           git push
+      - name: Fail the run if the federal races didn't build
+        if: steps.fec.outcome == 'failure'
+        run: exit 1

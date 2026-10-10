@@ -1164,6 +1164,13 @@ window.PILLORY_INDEX = [
  },
  {
   "type": "Elections",
+  "title": "Open your ballot",
+  "sub": "Every state: your federal races, then your whole ballot and where to vote",
+  "url": "/ballot/",
+  "k": "ballot sample my ballot polling place where to vote early voting candidates"
+ },
+ {
+  "type": "Elections",
   "title": "November 3, 2026, General Election",
   "sub": "Everything on the ballot",
   "url": "/elections/2026-11-03/",

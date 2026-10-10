@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "40"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "41"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -534,6 +534,7 @@ def build_methodology():
     <li><strong>Your ballot:</strong> built from the district numbers saved in your browser (never your address). Local contests are for part of a county (a supervisor district, a city, or a school, fire or water district), so they're listed as "on some ballots in the county". Your official sample ballot is the final word.</li>
     <li><strong>Results:</strong> after the polls close at 8 p.m. on Election Day, from the Secretary of State's results feed, with the share of precincts reporting and the time of the update as the feed states them. Before then the feed carries test numbers, which are never shown. Local results link to the county elections office. Counts continue until each county certifies; ThePillory doesn't call races.</li>
     <li><strong>Washington:</strong> the three statewide measures, from the Secretary of State's official documents: the ballot title and explanatory statement written by the Office of the Attorney General, the summary of the fiscal impact statement written by the Office of Financial Management (as the Voters' Pamphlet prints it), and each side's argument and rebuttal from the Voters' Pamphlet, with who wrote them (contact lines left out). Every paragraph is checked word for word against its source before it's published. Candidates and local measures in Washington are in the official Voters' Guide, which each page links.</li>
+    <li><strong>Open your ballot, every state:</strong> before you enter an address, your state's U.S. Senate race (when a seat is up, by the Federal Election Commission's list of 2026 races) and, once your district is known, your U.S. House race: the candidates who have filed with the FEC and passed its $5,000 threshold, listed alphabetically with their names and parties as filed. That list is not the certified ballot (some candidates lose a primary or withdraw), and the page says so. A candidate who holds the office links to their Votes and Funding, matched by their FEC candidate ID. Your state's election office (as USA.gov lists it) and Vote.gov are linked for registration, the sample ballot, where to vote and deadlines. With an address, the page asks Google's Civic Information API, which carries what state and county election offices publish through the Voting Information Project, for every contest, candidate and measure on that ballot, with polling places, early-voting sites and drop-off locations. Contests are in ballot order and candidates in the order the official data lists them, each with the party as listed, every one in the same layout; a candidate's contact details aren't shown. A name links to an official on ThePillory only when exactly one official in the state has that first and last name, and a measure links to ThePillory's page only by its number. When there's no data for an address yet, the page says so and links the state's official sample ballot lookup. Always confirm your ballot with your county election office.</li>
     <li><strong>Refreshed daily</strong> during election season from the same sources (the "Refresh election data" workflow).</li>
   </ul>
 </section>
@@ -643,9 +644,10 @@ def build_you():
     <li>Only your state is taken from your connection, never your county or district. A state you choose on the home page is saved only in this browser.</li>
     <li>An address or ZIP code you look up is used only to find your districts. It isn't stored or logged; only the district numbers are kept, in this browser.</li>
     <li>To decide which states' records to load first, ThePillory counts lookups per state and day. No address, ZIP code or visitor is kept, only the count.</li>
+    <li>An address you enter under "Open your ballot" is sent to Google's Civic Information API for that one lookup, to find your ballot and where to vote. ThePillory doesn't store or log it, and the page with your ballot isn't saved anywhere. To keep the lookup working for everyone, each connection may make a limited number a day; only a daily-changing code for the connection is counted, never the address.</li>
   </ul>
 </section>
-{section("Elections", link_row("/elections/2026-11-03/ballot/", "Your ballot", "The contests and measures for your address") + link_row("/elections/", "Elections", "What's on the ballot, and how to vote"))}
+{section("Elections", link_row("/ballot/", "Open your ballot", "Your federal races, then your whole ballot for your address") + link_row("/elections/2026-11-03/ballot/", "Your ballot in California", "The contests and measures for your districts") + link_row("/elections/", "Elections", "What's on the ballot, and how to vote"))}
 {section("About", f'<div>{about}</div>')}"""
     render("you", "You", main, tab="you", root=True)
 
@@ -992,6 +994,7 @@ def search_index():
     items.append({"type": "Laws", "title": "California's budget by governor's term", "sub": "General Fund by term", "url": "/finances/california/", "k": "california budget general fund governor finances time machine history"})
     # Elections (data/elections/, from tools/build_elections.py): the election, its statewide offices and propositions.
     items.append({"type": "Elections", "title": "Elections", "sub": "What's on the ballot, Your ballot, How to vote", "url": "/elections/", "k": "election ballot vote voting register polling"})
+    items.append({"type": "Elections", "title": "Open your ballot", "sub": "Every state: your federal races, then your whole ballot and where to vote", "url": "/ballot/", "k": "ballot sample my ballot polling place where to vote early voting candidates"})
     for path in sorted((ROOT / "data" / "elections").glob("*.json"), reverse=True)[:1]:
         e = json.loads(path.read_text(encoding="utf-8"))
         eid = e["election"]["id"]

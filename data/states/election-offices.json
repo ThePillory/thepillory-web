@@ -1,0 +1,238 @@
+{
+ "source": "https://www.usa.gov/state-election-office",
+ "built_on": "2026-10-10",
+ "offices": {
+  "AK": {
+   "name": "Alaska",
+   "url": "https://www.elections.alaska.gov/"
+  },
+  "AL": {
+   "name": "Alabama",
+   "url": "https://www.sos.alabama.gov/alabama-votes"
+  },
+  "AR": {
+   "name": "Arkansas",
+   "url": "https://www.sos.arkansas.gov/elections"
+  },
+  "AS": {
+   "name": "American Samoa",
+   "url": "https://aselectionoffice.gov/"
+  },
+  "AZ": {
+   "name": "Arizona",
+   "url": "https://azsos.gov/elections"
+  },
+  "CA": {
+   "name": "California",
+   "url": "https://www.sos.ca.gov/elections"
+  },
+  "CO": {
+   "name": "Colorado",
+   "url": "https://www.sos.state.co.us/pubs/elections/main.html"
+  },
+  "CT": {
+   "name": "Connecticut",
+   "url": "https://portal.ct.gov/sots/common-elements/v5-template---redesign/elections--voting--home-page"
+  },
+  "DC": {
+   "name": "District of Columbia",
+   "url": "https://dcboe.org/"
+  },
+  "DE": {
+   "name": "Delaware",
+   "url": "https://elections.delaware.gov/index.shtml"
+  },
+  "FL": {
+   "name": "Florida",
+   "url": "https://www.dos.myflorida.com/elections/"
+  },
+  "FM": {
+   "name": "Federated States of Micronesia",
+   "url": "https://www.fsmned.fm/"
+  },
+  "GA": {
+   "name": "Georgia",
+   "url": "https://sos.ga.gov/elections-division-georgia-secretary-states-office"
+  },
+  "GU": {
+   "name": "Guam",
+   "url": "https://gec.guam.gov/"
+  },
+  "HI": {
+   "name": "Hawaii",
+   "url": "https://elections.hawaii.gov/"
+  },
+  "IA": {
+   "name": "Iowa",
+   "url": "https://sos.iowa.gov/elections/voterinformation/index.html"
+  },
+  "ID": {
+   "name": "Idaho",
+   "url": "https://voteidaho.gov/"
+  },
+  "IL": {
+   "name": "Illinois",
+   "url": "https://www.elections.il.gov/"
+  },
+  "IN": {
+   "name": "Indiana",
+   "url": "https://indianavoters.in.gov/"
+  },
+  "KS": {
+   "name": "Kansas",
+   "url": "https://sos.ks.gov/elections/elections.html"
+  },
+  "KY": {
+   "name": "Kentucky",
+   "url": "https://elect.ky.gov/Pages/default.aspx"
+  },
+  "LA": {
+   "name": "Louisiana",
+   "url": "https://www.sos.la.gov/ElectionsAndVoting/Pages/default.aspx"
+  },
+  "MA": {
+   "name": "Massachusetts",
+   "url": "https://www.sec.state.ma.us/divisions/elections/elections-and-voting.htm"
+  },
+  "MD": {
+   "name": "Maryland",
+   "url": "https://elections.maryland.gov/"
+  },
+  "ME": {
+   "name": "Maine",
+   "url": "https://www.maine.gov/sos/cec/elec/index.html"
+  },
+  "MI": {
+   "name": "Michigan",
+   "url": "https://www.michigan.gov/sos/elections"
+  },
+  "MN": {
+   "name": "Minnesota",
+   "url": "https://www.sos.state.mn.us/elections-voting/"
+  },
+  "MO": {
+   "name": "Missouri",
+   "url": "https://www.sos.mo.gov/elections/"
+  },
+  "MP": {
+   "name": "Northern Mariana Islands",
+   "url": "https://www.votecnmi.gov.mp/"
+  },
+  "MS": {
+   "name": "Mississippi",
+   "url": "https://www.sos.ms.gov/elections-voting"
+  },
+  "MT": {
+   "name": "Montana",
+   "url": "https://sosmt.gov/elections/"
+  },
+  "NC": {
+   "name": "North Carolina",
+   "url": "https://www.ncsbe.gov/"
+  },
+  "ND": {
+   "name": "North Dakota",
+   "url": "https://vip.sos.nd.gov/PortalList.aspx"
+  },
+  "NE": {
+   "name": "Nebraska",
+   "url": "https://www.nebraska.gov/featured/elections-voting/"
+  },
+  "NH": {
+   "name": "New Hampshire",
+   "url": "https://www.sos.nh.gov/elections/voters"
+  },
+  "NJ": {
+   "name": "New Jersey",
+   "url": "https://www.nj.gov/state/elections/vote.shtml"
+  },
+  "NM": {
+   "name": "New Mexico",
+   "url": "https://www.sos.nm.gov/voting-and-elections/voter-information-portal-nmvote-org/"
+  },
+  "NV": {
+   "name": "Nevada",
+   "url": "https://www.nvsos.gov/sos/elections"
+  },
+  "NY": {
+   "name": "New York",
+   "url": "https://www.elections.ny.gov/"
+  },
+  "OH": {
+   "name": "Ohio",
+   "url": "https://www.sos.state.oh.us/elections/voters/"
+  },
+  "OK": {
+   "name": "Oklahoma",
+   "url": "https://oklahoma.gov/elections.html"
+  },
+  "OR": {
+   "name": "Oregon",
+   "url": "https://sos.oregon.gov/voting-elections/Pages/default.aspx"
+  },
+  "PA": {
+   "name": "Pennsylvania",
+   "url": "https://www.dos.pa.gov/VotingElections/Pages/default.aspx"
+  },
+  "PR": {
+   "name": "Puerto Rico",
+   "url": "https://ww2.ceepur.org/"
+  },
+  "PW": {
+   "name": "Republic of Palau",
+   "url": "https://palauelection.org/"
+  },
+  "RI": {
+   "name": "Rhode Island",
+   "url": "https://vote.sos.ri.gov/"
+  },
+  "SC": {
+   "name": "South Carolina",
+   "url": "https://www.scvotes.org/"
+  },
+  "SD": {
+   "name": "South Dakota",
+   "url": "https://sdsos.gov/elections-voting/default.aspx"
+  },
+  "TN": {
+   "name": "Tennessee",
+   "url": "https://sos.tn.gov/elections"
+  },
+  "TX": {
+   "name": "Texas",
+   "url": "https://www.sos.state.tx.us/elections/index.shtml"
+  },
+  "UT": {
+   "name": "Utah",
+   "url": "https://vote.utah.gov/"
+  },
+  "VA": {
+   "name": "Virginia",
+   "url": "https://www.elections.virginia.gov/"
+  },
+  "VI": {
+   "name": "U.S. Virgin Islands",
+   "url": "https://vivote.gov/"
+  },
+  "VT": {
+   "name": "Vermont",
+   "url": "https://sos.vermont.gov/elections/"
+  },
+  "WA": {
+   "name": "Washington",
+   "url": "https://www.sos.wa.gov/elections"
+  },
+  "WI": {
+   "name": "Wisconsin",
+   "url": "https://myvote.wi.gov/en-us/"
+  },
+  "WV": {
+   "name": "West Virginia",
+   "url": "https://sos.wv.gov/elections/pages/default.aspx"
+  },
+  "WY": {
+   "name": "Wyoming",
+   "url": "https://sos.wyo.gov/Elections/Default.aspx"
+  }
+ }
+}

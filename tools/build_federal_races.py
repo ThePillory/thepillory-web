@@ -42,9 +42,11 @@ def get(params, key, api=API):
             with urllib.request.urlopen(urllib.request.Request(f"{api}?{q}", headers={"User-Agent": UA}), timeout=60) as r:
                 return json.loads(r.read())
         except Exception as e:
+            code = getattr(e, "code", "")
             if attempt == 3:
-                raise SystemExit(f"FEC candidates for {params}: {type(e).__name__}")
-            time.sleep(5 * (attempt + 1))
+                hint = " (rate limited: set the FEC_API_KEY secret; DEMO_KEY allows very few requests)" if code == 429 else ""
+                raise SystemExit(f"FEC {api.rsplit('/', 2)[-2]} for {params}: {type(e).__name__} {code}{hint}")
+            time.sleep(15 * (attempt + 1))
 
 
 def candidates(st, office, key):

@@ -158,6 +158,7 @@ export function stateLead(vs, data, election) {
   return `
 <section class="brief-section" id="your-state" aria-labelledby="h-your-state">
   <div class="section-head"><h2 class="label" id="h-your-state">${esc(name)}</h2><a class="section-link" href="/explore/${st.toLowerCase()}/">State page</a></div>
+  <a class="btn btn--primary btn--block" href="/ballot/${st.toLowerCase()}/">Open your ballot</a>
   ${congressCard(st, name, data)}
   ${executiveCard(st, name, data.executive)}
   ${legislatureCard(st, name, data)}

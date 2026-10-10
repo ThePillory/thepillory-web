@@ -30,7 +30,7 @@ import { listMeetings, pacificNow, addDays, deadlineParts, meetingHref, when } f
 import { districtsFromCookie, describe, STATE_NAME } from "./_lib/districts.js";
 import { happeningNow, happeningSection, lookupForm, waitlistCounts } from "./_lib/hub.js";
 import { topicGrid, placeTopicsHref } from "./_lib/topics.js";
-import { loadElection, ballotFor, ballotHref, electionHref, whenLine, daysUntil, contestRow, courtRow, statewideRow, electionIdFor, measuresOnly, COVERAGE_NOTE } from "./_lib/elections.js";
+import { loadElection, ballotFor, ballotHref, electionHref, whenLine, daysUntil, contestRow, courtRow, statewideRow, electionIdFor, measuresOnly, ELECTION_BY_STATE } from "./_lib/elections.js";
 import { LIVE, loadIndex, loadPlace, waitlistBy, usMapLinks, smallStateButtons, mapFigure } from "./_lib/geo.js";
 import { ASSET_VERSION } from "./_lib/generated.js";
 import { executiveOfficials, executiveRows } from "./_lib/executive.js";
@@ -210,7 +210,19 @@ async function electionsData(env, request, d, st) {
   return { election, ballot: ballotFor(election, d, county ? county.name : null), county };
 }
 
-function electionsSection({ election, ballot, county }, d) {
+function electionsSection({ election, ballot, county }, d, st = null) {
+  // A state ThePillory has no ballot pages for yet: its federal races and the ballot for an address.
+  if (st === "PR") return "";
+  if (st && !ELECTION_BY_STATE[st]) return `
+<section class="brief-section" id="elections" aria-labelledby="h-elections">
+  <div class="section-head"><h2 class="label" id="h-elections">Elections</h2><a class="section-link" href="/elections/">All elections</a></div>
+  <div class="card stack-xs">
+    <p class="label">${esc(STATE_NAME[st])}</p>
+    <h3>General election, November 3, 2026</h3>
+    <p class="small secondary">Your federal races, then every contest and measure for your address, with where to vote.</p>
+    <a class="btn btn--primary btn--block" href="/ballot/${st.toLowerCase()}/">Open your ballot</a>
+  </div>
+</section>`;
   if (!election) return "";
   const id = election.election.id;
   const today = pacificNow().slice(0, 10);
@@ -226,11 +238,11 @@ function electionsSection({ election, ballot, county }, d) {
     <a class="btn btn--primary btn--block" href="${ballotHref(id)}">Open your ballot</a>
   </div>`;
   } else if (measuresOnly(election)) {
-    yours = `<p class="small secondary">The statewide measures, on every ballot in ${esc(STATE_NAME[election.election.state])}. Your county's sample ballot has your candidates and local measures.</p>`;
-  } else if (d && d.st !== election.election.state) {
-    yours = `<p class="small secondary">${esc(COVERAGE_NOTE)}. For elections in ${esc(STATE_NAME[d.st] || "your state")}, find your state's election office at <a class="inline-link" href="https://www.usa.gov/state-election-office" target="_blank" rel="noopener">USA.gov ↗</a>.</p>`;
+    yours = `<p class="small secondary">The statewide measures, on every ballot in ${esc(STATE_NAME[election.election.state])}.</p>
+  <a class="btn btn--primary btn--block" href="/ballot/${election.election.state.toLowerCase()}/">Open your ballot</a>`;
   } else {
-    yours = `<p class="small"><a class="inline-link" href="${ballotHref(id)}">Find your ballot</a> by address or ZIP code.</p>`;
+    // Every state: the federal races, then the whole ballot for an address (/ballot/<st>/).
+    yours = `<a class="btn btn--primary btn--block" href="${st ? `/ballot/${st.toLowerCase()}/` : "/ballot/"}">Open your ballot</a>`;
   }
   return `
 <section class="brief-section" id="elections" aria-labelledby="h-elections">
@@ -321,7 +333,7 @@ async function hub(env, request, url, d, vs) {
   const notFound = url.searchParams.get("lookup") === "notfound";
 
   // Elections sits near the top until Election Day, then moves down to its usual place.
-  const electionsHtml = elections === FAILED ? sectionError("Elections") : electionsSection(elections, d);
+  const electionsHtml = elections === FAILED ? sectionError("Elections") : electionsSection(elections, d, vs ? vs.st : d ? d.st : null);
   const electionsLate = elections === FAILED || !elections.election || daysUntil(elections.election, start.slice(0, 10)) == null;
   const main = `
 ${vs ? showingBar(vs) : ""}

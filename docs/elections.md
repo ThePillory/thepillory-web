@@ -45,6 +45,23 @@ Rules the builder keeps:
 
 The measure URLs are listed in `MEASURES` in the builder. For the next election, add its documents there (they're linked from the Secretary of State's "Proposed ballot measure information" page and the Voters' Guide).
 
+## Open your ballot (every state)
+
+`/ballot/` sends a visitor to their state's page (`functions/_lib/visitor-state.js`), or lists every state; `/ballot/<st>/` is `functions/ballot/[[path]].js`. Buttons: Home ("Your state", and the Elections section), each state page (`/explore/<st>/`) and `/elections/`.
+
+**Before an address** (one page for the state, private because it reads the districts cookie):
+- **Federal races** from `data/elections/federal-2026/<st>.json`, built daily by `tools/build_federal_races.py` in "Refresh election data" (`FEC_API_KEY` secret; FEC's DEMO_KEY is too rate-limited for 52 places). The U.S. Senate race only when the FEC's list of 2026 races (`/v1/elections/search/`) has one for the state (a regular or special election); candidates are the FEC's statutory candidates (`candidate_status=C`: registered and past $5,000) active in 2026, alphabetical, name and party as filed. The House race shows once the visitor's district is saved. The page says plainly that this isn't the certified ballot.
+- **Incumbents** link to `/reps/<slug>/#votes` and `#funding` through `fec_candidates` (the FEC candidate ID), never by name.
+- **Official links:** the state's election office from USA.gov's directory (`data/states/election-offices.json`, built weekly by `tools/build_election_offices.py` in "Refresh state officials"; it writes nothing if it finds fewer than 50) and Vote.gov's home page (its per-state paths couldn't be checked). California and Washington add their How to vote links from their election files.
+- **ThePillory's own pages:** California's Your ballot and whole ballot; Washington's measures.
+- Puerto Rico has no general election in 2026 (it votes in presidential years), and its page says so.
+
+**With an address** (`POST /ballot/<st>/`, field `address`): `voterInfo()` in `functions/_lib/civic.js` calls Google's Civic Information API `voterinfo` with `returnAllAvailableData=true` and the `GOOGLE_CIVIC_API_KEY` secret (set on the Pages project). `ballotFromVoterInfo()` keeps contests in `ballotPlacement` order, candidates in the order listed (name and party only: no phone, email, site or social accounts), referendums (title, subtitle, brief, official link), polling places, early-voting sites, drop-off locations and the state's and county's official links (http(s) only). Only the city and state of the address are shown.
+- `officialFor()` links a candidate to an official in the same state only when exactly one has that first and last name; `measureFor()` links a measure to ThePillory's page by its number (California's "Proposition N"; Washington's measure number).
+- Errors (`CivicError`: `address`, `not-found`, `unavailable`, `no-key`) carry the HTTP status, never the request. An answer with no contests counts as no data: the page says so and links the state's official sample ballot lookup, with any polling places the answer did have.
+- **The address is never stored or logged**, and the answer is sent `Cache-Control: private, no-store`. POST keeps it out of URLs and logs. Each connection may make `LOOKUPS_PER_DAY` (20) lookups a day: `ballot_lookups` (migration 0021) keeps only the daily-rotating visitor hash and the time. Before the sync applies the migration, there's no limit.
+- Every page carries "Always confirm your ballot with your county election office." and the neutrality line.
+
 ## Ballot order
 
 California orders candidates by a randomized alphabet drawn for each election (Elections Code 13112): last name first, letter by letter, then first and middle names. `ballotOrder()` applies it:
@@ -66,4 +83,4 @@ On the official arguments page each column is an argument followed by the rebutt
 
 ## Tests
 
-`node workers/sync/test/elections.test.mjs`: name parsing, ballot order and rotation, the real file's county order, which contests are on a ballot, officeholder matching, results gating, and the pages (same card for every candidate, arguments and signers, Your ballot private).
+`node --test workers/sync/test/ballot.test.mjs`: the Civic answer as shown (ballot order, no contact details, no street address), name and measure matching, errors without the address, and the pages (redirect and picker, FEC races with incumbents' links, a lookup's page private and never cached, no data said plainly, the daily limit). `node workers/sync/test/elections.test.mjs`: name parsing, ballot order and rotation, the real file's county order, which contests are on a ballot, officeholder matching, results gating, and the pages (same card for every candidate, arguments and signers, Your ballot private).

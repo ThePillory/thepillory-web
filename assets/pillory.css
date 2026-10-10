@@ -1888,3 +1888,10 @@ article.fin-term { scroll-margin-top: 16px; }
 .tally-table th, .tally-table td { padding: 8px 6px; text-align: right; border-top: 1px solid var(--border); }
 .tally-table thead th { border-top: 0; font-size: 0.75rem; font-weight: 600; color: var(--text-2); }
 .tally-table th[scope="row"], .tally-table thead th:first-child { text-align: left; font-weight: 600; }
+
+/* Open your ballot (/ballot/<st>/): every candidate in the same row, whatever their party. */
+.ballot-cands > li { padding: 12px 0; border-top: 1px solid var(--border); }
+.ballot-cands > li:first-child { border-top: 0; padding-top: 4px; }
+.ballot-cands > li:last-child { padding-bottom: 0; }
+.ballot-cands p { margin: 0; }
+.ballot-open { margin-top: 4px; }
