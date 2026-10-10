@@ -585,11 +585,47 @@ def build_current(term, decided_dockets):
 # Disclosures (CourtListener)
 
 
-def cl_get(path, token):
-    return json.loads(fetch(f"{CL}{path}", headers={"Authorization": f"Token {token}"}))
+CL_GAP = 1.5          # seconds between CourtListener requests
+CL_MAX_WAIT = 300     # the longest a "slow down" (429) is waited out before giving up for this run
+_cl_last = [0.0]
 
 
-def build_disclosures(justices, token):
+def cl_get(path, token, tries=4):
+    """One CourtListener request, paced, waiting out a 429 (Retry-After) a few times."""
+    for attempt in range(tries):
+        wait = _cl_last[0] + CL_GAP - time.time()
+        if wait > 0:
+            time.sleep(wait)
+        _cl_last[0] = time.time()
+        try:
+            req = urllib.request.Request(f"{CL}{path}", headers={"User-Agent": UA, "Authorization": f"Token {token}"})
+            with urllib.request.urlopen(req, timeout=90) as r:
+                return json.loads(r.read().decode("utf-8", "replace"))
+        except urllib.error.HTTPError as e:
+            if e.code != 429 and e.code < 500 or attempt == tries - 1:
+                raise
+            after = e.headers.get("Retry-After") if e.headers else None
+            delay = int(after) if after and after.isdigit() else 30 * (attempt + 1)
+            if delay > CL_MAX_WAIT:
+                raise
+            print(f"CourtListener asked to slow down; waiting {delay} s", file=sys.stderr)
+            time.sleep(delay)
+        except Exception:
+            if attempt == tries - 1:
+                raise
+            time.sleep(5 * (attempt + 1))
+
+
+def build_disclosures(justices, token, previous=None):
+    """
+    Each justice's reports. A report already read (same CourtListener ID) is kept
+    as it was: filed reports don't change, so only new ones cost requests.
+    """
+    known = {}
+    for reports in ((previous or {}).get("justices") or {}).values():
+        for r in reports:
+            if r.get("id"):
+                known[r["id"]] = r
     out = {}
     for j in justices:
         last = j["name"].split(",")[0].split()[-1]
@@ -600,16 +636,19 @@ def build_disclosures(justices, token):
             continue
         reports = []
         for fd in cl_get(f"/financial-disclosures/?person={person['id']}&order_by=-year", token).get("results", [])[:20]:
+            if fd.get("id") in known:
+                reports.append(known[fd["id"]])
+                continue
             gifts = cl_get(f"/gifts/?financial_disclosure={fd['id']}", token).get("results", [])
             reimb = cl_get(f"/reimbursements/?financial_disclosure={fd['id']}", token).get("results", [])
             reports.append({
+                "id": fd.get("id"),
                 "year": fd.get("year"),
                 "report_url": fd.get("filepath") or fd.get("download_filepath"),
                 "gifts": [{"source": g.get("source"), "description": g.get("description"), "value": g.get("value")} for g in gifts],
                 "reimbursements": [{"source": r.get("source"), "dates": r.get("date_raw"), "location": r.get("location"), "purpose": r.get("purpose")} for r in reimb],
                 "source_url": f"https://www.courtlistener.com/person/{person['id']}/{person.get('slug', '')}/disclosures/",
             })
-            time.sleep(0.3)
         out[j["slug"]] = reports
     return out
 
@@ -667,9 +706,15 @@ def main():
 
     token = os.environ.get("COURTLISTENER_API_TOKEN")
     if token:
-        disclosures = build_disclosures(justices, token)
-        write(OUT / "disclosures.json", {"built_on": built, "source": "CourtListener (Free Law Project), from the judiciary's financial disclosure reports", "justices": disclosures})
-        print(f"Disclosures: {sum(len(v) for v in disclosures.values())} reports")
+        # A CourtListener problem never costs the rest of the Court's data: the old file stays.
+        path = OUT / "disclosures.json"
+        previous = json.loads(path.read_text()) if path.exists() else None
+        try:
+            disclosures = build_disclosures(justices, token, previous)
+            write(path, {"built_on": built, "source": "CourtListener (Free Law Project), from the judiciary's financial disclosure reports", "justices": disclosures})
+            print(f"Disclosures: {sum(len(v) for v in disclosures.values())} reports")
+        except Exception as e:
+            print(f"Disclosures: CourtListener {type(e).__name__} {getattr(e, 'code', '')}; disclosures.json not changed", file=sys.stderr)
     else:
         print("Disclosures: COURTLISTENER_API_TOKEN not set; skipped")
 
