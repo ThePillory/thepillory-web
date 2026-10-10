@@ -1,0 +1,19 @@
+# TEMPORARY: research probe for official voting links. Remove before merge.
+name: TEMPORARY research probe
+on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [tmp-research/probe_vote.py, .github/workflows/tmp-research.yml]
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tmp-research/probe_vote.py
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add tmp-research/out-vote
+          git commit -m "TEMPORARY: voting links probe output" && git push
