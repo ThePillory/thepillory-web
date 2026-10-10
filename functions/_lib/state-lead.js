@@ -97,7 +97,7 @@ function congressCard(st, name, { congress, votes }) {
   <div class="card stack-xs">
     <p class="label">In Congress</p>
     ${senators.map((o) => linkRow(`/reps/${o.slug}/`, o.name, "U.S. Senator")).join("")}
-    ${house.length ? linkRow(`/reps/?state=${st}#browse`, plural(house.length, "House member", "House members"), "Your own House member: find your reps below") : ""}
+    ${house.length ? linkRow(`/reps/?state=${st}#state-list`, plural(house.length, "House member", "House members"), "Your own House member: find your reps below") : ""}
     ${voteRows ? `<p class="label">Latest final-passage votes${senators.length ? `, with ${senators.length === 1 ? "the senator's position" : "both senators' positions"}` : ""}</p><div class="compact-list">${voteRows}</div>` : ""}
   </div>`;
 }

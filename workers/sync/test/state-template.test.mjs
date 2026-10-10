@@ -75,3 +75,52 @@ test("old and other addresses redirect to the state's page", async () => {
   assert.equal((await r(states, "/states/wa/")).headers.get("Location"), "https://thepillory.test/states/washington/");
   assert.equal((await r(states, "/states/atlantis/")).status, 404);
 });
+
+// A browser with California districts saved, browsing other states.
+const CA_COOKIE = `pillory_districts=${encodeURIComponent("st=CA&cd=5&su=4&sl=8&co=06009")}`;
+
+test("a state's page shows that state, whatever districts the browser has saved", async () => {
+  for (const [slug, st] of [["minnesota", "MN"], ["texas", "TX"], ["wyoming", "WY"]]) {
+    const { res, html } = await call(states, `/states/${slug}/`, { cookie: CA_COOKIE });
+    assert.equal(res.status, 200);
+    assert.match(html, new RegExp(`href="/bodies/us-senate/\\?state=${st}"`), `${st}: the Senate link is for ${st}`);
+    assert.match(html, new RegExp(`href="/bodies/us-house/\\?state=${st}"`));
+    assert.match(html, new RegExp(`href="/ballot/${st.toLowerCase()}/"`), "the ballot is the state's");
+    assert.doesNotMatch(html, /href="\/bodies\/us-senate\/"/, "never the unscoped Senate page");
+    assert.doesNotMatch(html, /\/place\/ca\/calaveras\/topics\//, "no California county topics on another state's page");
+    assert.doesNotMatch(html, /href="\/elections\/#how-to-vote"/);
+  }
+});
+
+// The Senate page with ?state=: that state's members first, then the visitor's own only when they're elsewhere.
+const bodies = (await import("../../../functions/bodies/[[path]].js")).onRequestGet;
+const SENATORS = { MN: ["Minnesota Senator One", "Minnesota Senator Two"], CA: ["California Senator One", "California Senator Two"] };
+const db = {
+  prepare(sql) {
+    let binds = [];
+    const st = () => binds.find((b) => SENATORS[b]);
+    const rows = () => (SENATORS[st()] || []).map((name, i) => ({ id: `${st()}${i}`, slug: `${st()}-${i}`.toLowerCase(), name, office: "U.S. Senator", body: "us-senate", chamber: "us-senate", state: st() }));
+    const q = { bind: (...b) => ((binds = b), q), all: async () => ({ results: /FROM officials/.test(sql) ? rows() : [] }), first: async () => null };
+    return q;
+  },
+};
+async function senate(path, cookie = "") {
+  const request = new Request(`https://thepillory.test${path}`, { headers: cookie ? { Cookie: cookie } : {} });
+  const res = await bodies({ request, env: { DB: db }, params: { path: ["us-senate"] } });
+  return res.text();
+}
+
+test("/bodies/us-senate/?state=MN: Minnesota's members first, then yours from another state", async () => {
+  const html = await senate("/bodies/us-senate/?state=MN", CA_COOKIE);
+  const at = (t) => html.indexOf(t);
+  assert.ok(at("Minnesota&#x27;s members") > 0 && at("Minnesota Senator One") > at("Minnesota&#x27;s members"));
+  assert.ok(at("Your members") > at("Minnesota Senator Two"), "yours after");
+  assert.ok(at("California Senator One") > at("Your members"));
+  assert.ok(at("Members by state") > at("California Senator One"));
+  const same = await senate("/bodies/us-senate/?state=CA", CA_COOKIE);
+  assert.match(same, /California&#x27;s members/);
+  assert.doesNotMatch(same, /Your members/, "not twice when it's the visitor's own state");
+  const plain = await senate("/bodies/us-senate/", CA_COOKIE);
+  assert.match(plain, /Your members/);
+  assert.match(plain, /California Senator One/);
+});

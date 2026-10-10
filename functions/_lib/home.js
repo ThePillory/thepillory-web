@@ -213,8 +213,9 @@ function nationalSection(federal, vs) {
   </div>
   <div class="card stack-xs">
     <p class="label">Congress</p>
-    ${linkRow("/bodies/us-senate/", "U.S. Senate", "100 senators, two from each state, and their votes")}
-    ${linkRow("/bodies/us-house/", "U.S. House", "435 representatives and their votes")}
+    ${vs
+      ? `${linkRow(`/bodies/us-senate/?state=${vs.st}`, "U.S. Senate", `${vs.name}'s senators first, then every state`)}${linkRow(`/bodies/us-house/?state=${vs.st}`, "U.S. House", `${vs.name}'s representatives first, then every state`)}`
+      : `${linkRow("/bodies/us-senate/", "U.S. Senate", "100 senators, two from each state, and their votes")}${linkRow("/bodies/us-house/", "U.S. House", "435 representatives and their votes")}`}
   </div>
   <div class="card stack-xs">
     <p class="label">The Supreme Court</p>
@@ -293,7 +294,7 @@ function electionsSection({ election, ballot, county }, d, st = null) {
   </a>
   ${yours}
   <div class="card">
-    <a class="list-row link-row" href="/elections/#how-to-vote"><div><div class="list-title">How to vote</div><div class="list-meta">Registration, deadlines and where to vote, on the official sites</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>
+    <a class="list-row link-row" href="${electionHref(id)}#how-to-vote"><div><div class="list-title">How to vote</div><div class="list-meta">Registration, deadlines and where to vote, on the official sites</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>
   </div>
 </section>`;
 }
@@ -361,7 +362,8 @@ export async function hub(env, request, url, d, vs) {
     loadSection("hub waitlist map", db ? () => waitlistBy(db) : async () => ({ county: {}, state: {} }), { county: {}, state: {} }),
     loadSection("hub executive", db ? () => executiveOfficials(db, "us-executive") : async () => [], []),
     loadSection("hub elections", () => electionsData(env, request, d, vs ? vs.st : d ? d.st : null), { election: null, ballot: null }),
-    loadSection("hub topic place", () => topicPlace(env, request, d), null),
+    // Topics for the visitor's own county only on their own state's page.
+    loadSection("hub topic place", () => topicPlace(env, request, d && (!vs || d.st === vs.st) ? d : null), null),
     loadSection("hub election dates", () => asset(env, request, "/data/elections/dates.json"), null),
     vs ? loadSection("hub state map", () => stateMapData(env, request, vs.st, url.searchParams.get("layer")), null) : null,
   ]);
