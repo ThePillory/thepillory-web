@@ -28,7 +28,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "data" / "elections" / "federal-2026"
-API = "https://api.open.fec.gov/v1/candidates/"
+API = "https://api.open.fec.gov/v1/candidates/search/"  # lists each principal committee
 RACES = "https://api.open.fec.gov/v1/elections/search/"
 DATES = "https://api.open.fec.gov/v1/election-dates/"
 DATES_OUT = ROOT / "data" / "elections" / "dates.json"
