@@ -26,7 +26,7 @@ import { loadElection, electionHref, ballotHref, measureHref, measureName, conte
 import { voterInfo, ballotFromVoterInfo, officialFor, measureFor, CivicError } from "../_lib/civic.js";
 import { visitorHash } from "../_lib/turnstile.js";
 import { fold } from "../_lib/summary.js";
-import { previewLabel, statePossessive, RESULT_HEADING } from "../_lib/election-window.js";
+import { statePossessive, RESULT_HEADING } from "../_lib/election-window.js";
 import { candidateHref, raceHref, racesHref, YEAR } from "../_lib/candidates.js";
 
 const BACK = ["Elections", "/elections/"];
@@ -139,16 +139,21 @@ const ownElection = (env, request, st) => (ELECTION_BY_STATE[st] ? loadElection(
 // ---------------------------------------------------------------------------
 // Pieces
 
-// The address form: the field, then one clear button ("Preview California's ballot").
-function addressForm(st, { heading = "", button = null } = {}) {
-  const label = button || previewLabel(st, STATE_NAME[st]);
+// "Your exact ballot": the optional next step after the statewide preview. Its own
+// wording ("Show my ballot"), never the "Preview [State]'s ballot" label that leads here.
+const EXACT = "Your exact ballot";
+const EXACT_LINE = "Add your address for local contests and where to vote.";
+function addressForm(st, { heading = EXACT } = {}) {
   return `
-<section class="card stack-sm lookup" id="address"${heading ? ' aria-labelledby="h-address"' : ` aria-label="${esc(label)}"`}>
-  ${heading ? `<h2 class="label" id="h-address">${esc(heading)}</h2>` : ""}
-  <form class="lookup-form stack-sm" action="${ballotPath(st)}" method="post">
-    <label class="field-label" for="ballot-address">Your address, for every contest and where to vote</label>
-    <input class="input" id="ballot-address" name="address" type="text" autocomplete="street-address" placeholder="Street address, city, state" minlength="5" maxlength="200" required />
-    <button class="btn btn--primary btn--block" type="submit">${esc(label)}</button>
+<section class="card stack-sm lookup" id="address" aria-labelledby="h-address">
+  <h2 class="label" id="h-address">${esc(heading)}</h2>
+  <p class="small">${esc(EXACT_LINE)}</p>
+  <form class="lookup-form" action="${ballotPath(st)}" method="post">
+    <label class="visually-hidden" for="ballot-address">Street address, city and state</label>
+    <div class="stack-sm">
+      <input class="input" id="ballot-address" name="address" type="text" autocomplete="street-address" placeholder="Street address, city, state" minlength="5" maxlength="200" required />
+      <div><button class="btn btn--primary" type="submit">Show my ballot</button></div>
+    </div>
     <p class="hint">Sent to Google's Civic Information API for this one lookup. ThePillory never stores or logs your address.</p>
   </form>
 </section>`;
@@ -234,11 +239,25 @@ function certifiedSection(st, election, filed, d) {
     <p class="hint">${esc(note)} <a class="inline-link" href="${contestHref(election.election.id, c.id)}">Candidate statements</a> · <a class="inline-link" href="${raceHref(YEAR, st, c.scope === "cd" ? `house-${c.district}` : "senate")}">The race</a></p>
   </div>`;
   };
-  return `
+  // Statewide: on every ballot in the state. Each office in ballot order (as in Assembly District 1)
+  // and each proposition, linked to its page.
+  const offices = election.contests.filter((c) => c.scope === "statewide" && !/united states senator/i.test(c.office));
+  const props = (election.measures || []).filter((m) => m.scope === "statewide");
+  const id = election.election.id;
+  const statewide = offices.length || props.length
+    ? `
+<section class="stack-sm" id="statewide" aria-labelledby="h-statewide">
+  <h2 class="label" id="h-statewide">On every ${esc(STATE_NAME[st])} ballot · November 3, 2026</h2>
+  ${offices.length ? `<div class="card">${offices.map((c) => linkRow(raceHref(YEAR, st, c.id), c.office, ballotOrder(c, election).candidates.map((x) => x.name).join(" · "))).join("")}</div>` : ""}
+  ${props.length ? `<div class="card">${props.map((m) => linkRow(measureHref(id, m.id), measureName(m), m.title || "")).join("")}</div>` : ""}
+  <p class="hint">Candidates in ballot order as on ballots in Assembly District 1 (statewide offices rotate by district). Propositions with the official summary and arguments, word for word.</p>
+</section>`
+    : "";
+  return `${statewide}
 <section class="stack-sm" id="federal" aria-labelledby="h-federal">
   <h2 class="label" id="h-federal">Federal races · November 3, 2026</h2>
   ${senate.length ? senate.map(race).join("") : `<div class="card"><p class="small">No U.S. Senate seat in ${esc(STATE_NAME[st])} is on this ballot.</p></div>`}
-  ${contest ? race(contest) : `<div class="card"><p class="small">Your U.S. House race: enter your address above, or <a class="inline-link" href="/#find">find your district</a> by ZIP code.</p></div>`}
+  ${contest ? race(contest) : `<div class="card"><p class="small">Your U.S. House race: <a class="inline-link" href="#address">add your address below</a>, or <a class="inline-link" href="/#find">find your district</a> by ZIP code.</p></div>`}
   <p class="small"><a class="inline-link" href="${racesHref(YEAR, st)}">Every ${YEAR} race in ${esc(STATE_NAME[st])}, Governor and the Legislature too</a></p>
   <p class="hint">From the Secretary of State's Certified List of Candidates: only the candidates on the November ballot. <a class="inline-link" href="${esc(election.election.certified_list)}" target="_blank" rel="noopener">Certified list ↗</a></p>
 </section>`;
@@ -247,7 +266,7 @@ function certifiedSection(st, election, filed, d) {
 function federalSection(st, races, filed, d, election = null) {
   const name = STATE_NAME[st];
   if (election && election.election.state === st && !measuresOnly(election)) return certifiedSection(st, election, filed === FAILED ? {} : filed, d);
-  if (NO_GENERAL.has(st)) return `<div class="card"><p class="small">${esc(name)} holds its general elections in presidential election years, so there's no general election on November 3, 2026. Enter your address above for anything else on a ballot for it.</p></div>`;
+  if (NO_GENERAL.has(st)) return `<div class="card"><p class="small">${esc(name)} holds its general elections in presidential election years, so there's no general election on November 3, 2026. <a class="inline-link" href="#address">Add your address below</a> for anything else on a ballot for it.</p></div>`;
   if (races === FAILED) return sectionError("Federal races");
   if (!races) return `<section class="stack-sm"><h2 class="label">Federal races</h2><div class="card"><p class="small secondary">${esc(name)}'s federal candidate lists appear after the daily election data refresh.</p></div></section>`;
   const filedMap = filed === FAILED ? {} : filed;
@@ -261,7 +280,7 @@ function federalSection(st, races, filed, d, election = null) {
 <section class="stack-sm" id="federal" aria-labelledby="h-federal">
   <h2 class="label" id="h-federal">Federal races · November 3, 2026</h2>
   ${races.senate_up ? fecRace(`U.S. Senate · ${name}`, races.senate || [], filedMap, raceHref(YEAR, st, "senate")) : `<div class="card"><p class="small">No U.S. Senate seat in ${esc(name)} is up this year, by the FEC's list of 2026 races.</p></div>`}
-  ${house || `<div class="card"><p class="small">Your U.S. House race: enter your address above, or <a class="inline-link" href="/#find">find your district</a> by ZIP code.</p></div>`}
+  ${house || `<div class="card"><p class="small">Your U.S. House race: <a class="inline-link" href="#address">add your address below</a>, or <a class="inline-link" href="/#find">find your district</a> by ZIP code.</p></div>`}
   <p class="small"><a class="inline-link" href="${racesHref(YEAR, st)}">Every ${YEAR} race in ${esc(name)}</a></p>
   <p class="hint">Candidates who have filed with the Federal Election Commission and passed its $5,000 threshold, listed alphabetically, names as filed. Not everyone listed will be on your ballot (some lose a primary or withdraw); your sample ballot is final. <a class="inline-link" href="${esc(races.source_url)}" target="_blank" rel="noopener">FEC list ↗</a> · updated ${esc(fmtDate(races.built_on))}.</p>
 </section>`;
@@ -314,14 +333,15 @@ async function statePage(env, request, st, { message = "" } = {}) {
   <h1>${esc(statePossessive(st, name))} ballot</h1>
 </header>
 ${message ? `<p class="banner banner--error" role="alert">${esc(message)}</p>` : ""}
-${addressForm(st)}
-<p class="small secondary">${esc(CONFIRM)}</p>
+<p class="small"><a class="inline-link jump-link" href="#address">Add your address for your exact ballot ↓</a></p>
 ${federalSection(st, races, filed, d, election === FAILED ? null : election)}
 ${ownSection(st, election === FAILED ? null : election)}
+${addressForm(st)}
+<p class="small secondary">${esc(CONFIRM)}</p>
 ${officialLinks(st, office === FAILED ? null : office, election === FAILED ? null : election)}
 <p class="small"><a class="inline-link" href="/ballot/?pick=1">A different state</a></p>
 <p class="hint">${esc(NEUTRAL)} <a class="inline-link" href="/about/methodology/#elections">How ThePillory builds this</a></p>`;
-  return privatePage(previewLabel(st, name), main, BACK);
+  return privatePage(`${statePossessive(st, name)} ballot`, main, BACK);
 }
 
 // ---------------------------------------------------------------------------
@@ -352,11 +372,11 @@ async function noData(env, request, st, kind, ballot = null) {
   <p class="small">Your sample ballot is on ${o ? `<a class="inline-link" href="${esc(o.url)}" target="_blank" rel="noopener">${esc(name)}'s election office website ↗</a>` : `<a class="inline-link" href="${USA_GOV}" target="_blank" rel="noopener">your state's election office ↗</a>`}, and your county election office mails it before Election Day.</p>
 </section>
 ${ballot ? placesSections(ballot) : ""}
-${addressForm(st, { heading: "Try another address", button: "Preview this address's ballot" })}
+${addressForm(st, { heading: "Try another address" })}
 ${ownSection(st, election === FAILED ? null : election)}
 ${officialLinks(st, o, election === FAILED ? null : election)}
 <p class="small"><a class="inline-link" href="${ballotPath(st)}">${esc(name)}'s federal races</a></p>`;
-  return privatePage(RESULT_HEADING, main, [previewLabel(st, name), ballotPath(st)]);
+  return privatePage(RESULT_HEADING, main, [`${statePossessive(st, name)} ballot`, ballotPath(st)]);
 }
 
 function civicCandidate(c, officials) {
@@ -453,8 +473,8 @@ async function answerPage(env, request, st, b) {
 ${placesSections(b)}
 ${civicLinks(b)}
 ${b.otherElections.length ? `<p class="small secondary">Also for this address: ${esc(b.otherElections.map((e) => `${e.name}${e.day ? ` (${fmtDate(e.day)})` : ""}`).join("; "))}.</p>` : ""}
-${addressForm(st, { heading: "Look up another address", button: "Preview this address's ballot" })}
+${addressForm(st, { heading: "Look up another address" })}
 ${officialLinks(st, office === FAILED ? null : office, ctx.election)}
 <p class="hint">${esc(NEUTRAL)} <a class="inline-link" href="/about/methodology/#elections">How ThePillory builds this</a></p>`;
-  return privatePage(RESULT_HEADING, main, [previewLabel(st, name), ballotPath(st)]);
+  return privatePage(RESULT_HEADING, main, [`${statePossessive(st, name)} ballot`, ballotPath(st)]);
 }
