@@ -26,6 +26,7 @@ import {
   isExecutive, isPresident, isGovernor, executiveOfficials, ordersFor, billsActedOn, nominationsFor,
   ordersTab, billsTab, nominationsTab, executiveRows,
 } from "../_lib/executive.js";
+import { statePath } from "../_lib/state-paths.js";
 
 const BODY = Object.fromEntries(BODIES.map((b) => [b.slug, b]));
 
@@ -100,7 +101,7 @@ async function list(env, url, request) {
   <h2 class="label">${esc(STATE_NAME[st])}: members of Congress</h2>
   ${data.state.map(repCard).join("") || '<p class="secondary small">None loaded yet.</p>'}
   ${st === "CA" ? '<a class="list-row link-row card" href="/bodies/state-legislature/"><div><div class="list-title">California State Legislature</div><div class="list-meta">All 120 members</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>'
-    : `<a class="list-row link-row card" href="/explore/${st.toLowerCase()}/#h-statewide"><div><div class="list-title">${esc(STATE_NAME[st])}'s legislature and statewide offices</div><div class="list-meta">Each legislator linked from their district</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>`}
+    : `<a class="list-row link-row card" href="${statePath(st)}#h-statewide"><div><div class="list-title">${esc(STATE_NAME[st])}'s legislature and statewide offices</div><div class="list-meta">Each legislator linked from their district</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>`}
 </section>`
     : "";
 

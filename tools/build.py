@@ -995,7 +995,8 @@ def search_index():
     # Elections (data/elections/, from tools/build_elections.py): the election, its statewide offices and propositions.
     items.append({"type": "Elections", "title": "Elections", "sub": "What's on the ballot, Your ballot, How to vote", "url": "/elections/", "k": "election ballot vote voting register polling"})
     items.append({"type": "Elections", "title": "Open your ballot", "sub": "Every state: your federal races, then your whole ballot and where to vote", "url": "/ballot/", "k": "ballot sample my ballot polling place where to vote early voting candidates"})
-    for path in sorted((ROOT / "data" / "elections").glob("*.json"), reverse=True)[:1]:
+    # Election files are named by date (2026-11-03.json); other files there (dates.json) aren't elections.
+    for path in sorted((ROOT / "data" / "elections").glob("[0-9]*.json"), reverse=True)[:1]:
         e = json.loads(path.read_text(encoding="utf-8"))
         eid = e["election"]["id"]
         items.append({"type": "Elections", "title": e["election"]["name"], "sub": "Everything on the ballot", "url": f"/elections/{eid}/", "k": "ballot candidates propositions"})

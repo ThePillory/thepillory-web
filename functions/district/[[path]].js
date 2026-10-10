@@ -9,6 +9,7 @@ import { voteRows } from "../_lib/briefing.js";
 import { CURRENT, loadElection, onTheBallot, statewideRow, contestRow, electionHref } from "../_lib/elections.js";
 import { pacificNow } from "../_lib/meetings.js";
 import { LAYER_OF_TYPE, typeOf, loadPlace, officialsFor, repRow, breadcrumb, districtLabel, placeHref, loadDistrictNames } from "../_lib/geo.js";
+import { statePath } from "../_lib/state-paths.js";
 
 
 // A district page is the same for every visitor: kept at the edge for a few minutes.
@@ -66,7 +67,7 @@ async function districtPage({ request, env, params }) {
   const federal = reps.filter((r) => r.level === "federal");
 
   const main = `
-${breadcrumb([["United States", "/explore/"], [place.name, `/explore/${m[1]}/`], [label, null]])}
+${breadcrumb([["United States", "/explore/"], [place.name, statePath(place.st)], [label, null]])}
 <header class="page-head stack-xs">
   <p class="label">${esc(layer === "cd" ? "U.S. House" : place.chambers[layer])}</p>
   <h1>${esc(label)}</h1>
@@ -87,5 +88,5 @@ ${electionLoaded === FAILED ? sectionError("Elections") : ballot}
   ${votes === FAILED ? sectionError("") : rows ? `<ul class="card plain-list brief-votes">${rows}</ul>` : `<p class="small secondary">${reps.length ? "No final-passage votes loaded yet." : "Votes appear once the representative is loaded."}</p>`}
 </section>
 ${federal.length ? `<section class="stack-sm" aria-labelledby="h-funding"><h2 class="label" id="h-funding">Funding</h2><div class="chips">${federal.map((r) => `<a class="chip chip--tap" href="/reps/${esc(r.slug)}/#funding">${esc(r.name)}</a>`).join("")}</div><p class="hint">Campaign funding, from the Federal Election Commission.</p></section>` : ""}`;
-  return page(`${label}, ${place.name}`, main, { tab: "home", back: [place.name, `/explore/${m[1]}/`], partial: anyFailed(repsLoaded, votes, electionLoaded) });
+  return page(`${label}, ${place.name}`, main, { tab: "home", back: [place.name, statePath(place.st)], partial: anyFailed(repsLoaded, votes, electionLoaded) });
 }
