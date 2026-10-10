@@ -7,6 +7,7 @@
 //                   and Funding say they don't apply, linking to Disclosures in
 //                   More. Everyone else: More holds committees and Issues.
 // POST /reps/<slug>/promises/<id>/flag   "Something wrong?" on a published promise
+import { simpleCard, jobSentence, voteLinePlain, moneyLinePlain, sourceNote, SIMPLE_METHOD } from "../_lib/simple.js";
 import { BODIES, LEVEL_NAME, EMPTY_REPORTS } from "../_lib/generated.js";
 import { page, notFound, notLoaded, esc, safeUrl, kv, card, section, sourceLink, fmtDate, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { officialBySlug, officialsWhere, withVoteCounts, voteCounts, votesFor, CHAMBER_NAME } from "../_lib/data.js";
@@ -328,8 +329,24 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
   // Reports and issues open with accounts; none exist yet.
   moreParts.push(sub("issues", "Issues", EMPTY_REPORTS));
 
+  // Quick mode: who they are, the job, the latest votes, their own words, the money in one line.
+  const recent = votes !== FAILED && votes.rows ? votes.rows.slice(0, 3) : [];
+  const excerpt = ownWords && ownWords !== FAILED && ownWords.pages && ownWords.pages[0];
+  const fundingOk = funding && funding !== FAILED && funding.totals ? funding : null;
+  const moneyLine = o.level === "federal" && !exec && fundingOk ? moneyLinePlain(fundingOk.totals, `${fundingOk.cycle - 1}–${fundingOk.cycle}`) : null;
+  const simple = simpleCard({
+    lines: [
+      ["Their job", esc(jobSentence(o, STATE_NAME[o.state] || ""))],
+      ["Latest votes", recent.length ? `<ul class="simple-list">${recent.map((v) => `<li>${voteLinePlain(v)}</li>`).join("")}</ul>` : ""],
+      ["In their own words", excerpt ? `<div class="stack-xs"><p class="promise-quote">“${esc(excerpt.excerpt)}”</p><p class="small">${sourceNote(excerpt.url, excerpt.title || "Their issues page")}</p></div>` : ""],
+      ["Money", moneyLine ? `${esc(moneyLine)} <a class="inline-link" href="#funding" data-mode-set="detailed">The full Funding tab</a>` : ""],
+    ],
+    source: `Votes from the official record of each vote${moneyLine ? "; money from reports filed with the Federal Election Commission" : ""}. <a class="inline-link" href="${SIMPLE_METHOD}">How Quick mode works</a>`,
+    jump: "about",
+  });
   const tab = (k, label) => `<a role="tab" id="tab-${k}" href="#${k}" aria-controls="${k}">${label}</a>`;
-  const main = `${head}
+  const main = `<div class="simple-scope">${head}
+${simple}
 <div class="rep-tabs stack" data-tabs>
   <nav class="tabs tabs--five" role="tablist" aria-label="Sections">
     ${tab("about", "About")}${tab("platform", "Platform")}${tab("votes", "Votes")}${tab("funding", "Funding")}${tab("more", "More")}
@@ -339,6 +356,7 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
   <div class="stack" role="tabpanel" id="votes" aria-labelledby="tab-votes">${votesHtml}</div>
   <div class="stack" role="tabpanel" id="funding" aria-labelledby="tab-funding">${fundingHtml}</div>
   <div class="stack" role="tabpanel" id="more" aria-labelledby="tab-more">${moreParts.join("")}</div>
+</div>
 </div>`;
   return page(o.name, main, { tab: "reps", back: ["Reps", "/reps/"], partial });
 }

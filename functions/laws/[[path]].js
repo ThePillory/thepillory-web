@@ -4,6 +4,7 @@
 //   POST /laws/bills/<id>/request-full   "Request full analysis"
 //   Both need Turnstile and are rate-limited per visitor (functions/_lib/turnstile.js).
 // /laws/constitution/ is static and passed through. Old sample pages redirect (OLD_PAGES).
+import { simpleCard, plainFor, plainLead, billStands, repVotesPlain, sourceNote } from "../_lib/simple.js";
 import { CURRENT, loadElection, electionHref, whenLine } from "../_lib/elections.js";
 import { tagsFor, topicChips, tagNote } from "../_lib/topics.js";
 import { pacificNow } from "../_lib/meetings.js";
@@ -16,7 +17,7 @@ import { lobbyingFor, industryMoney, followTheMoney, cycleOf } from "../_lib/fun
 import { outcomeFor, outcomeSection } from "../_lib/executive.js";
 import { currentAnalysis, parse, provisionsFor, baselineSection, isPublic, openFlagCount, analysisClauses, constitutionBrief } from "../_lib/analysis.js";
 import { summaryHead, contentsBar, fold, clauseChips, statusChip, compactRow, shortLabel } from "../_lib/summary.js";
-import { billStatus, billSummary, yourRepsCard, billHistory, billFullText, billState } from "../_lib/bill-page.js";
+import { billStatus, billSummary, yourRepsCard, billHistory, billFullText, billState, legislatureOf } from "../_lib/bill-page.js";
 import { STATE_NAME } from "../_lib/districts.js";
 import { rollCallFilters, rollCallRows, rollCallBreakdown, pickVote, votePicker, voteHeading, totalsSection, rollCallFilterForm, rollCallList } from "../_lib/rollcall.js";
 import { orderById, orderHref, orderIdFromSlug, orderLabel, orderStatus, orderSummary, authoritySection, courtsSection, orderHistory, orderFullText } from "../_lib/orders.js";
@@ -268,11 +269,12 @@ ${analysis.failed ? sectionError("Constitutional baseline") : baselineSection(an
   // the rest of the page still shows.
   const reps = districts ? await loadSection("bill reps", () => officialsWhere(db, repsWhere(districts)), []) : [];
   const repIds = reps === FAILED ? [] : reps.map((o) => o.id);
-  const [votes, lobbying, outcome, topics] = await Promise.all([
+  const [votes, lobbying, outcome, topics, plain] = await Promise.all([
     loadSection("bill votes", () => votesOnBill(db, id, repIds), []),
     b.level === "federal" ? loadSection("bill lobbying", () => lobbyingFor(db, id), null) : null,
     loadSection("bill outcome", () => outcomeFor(db, id), { outcome: null, checked: null }),
     loadSection("bill topics", () => tagsFor(db, "bill", [id]), new Map()),
+    loadSection("bill plain", () => plainFor(db, "bill", id), null),
   ]);
   const billTopics = topics === FAILED ? [] : topics.get(id) || [];
   const voteList = votes === FAILED ? [] : votes;
@@ -300,11 +302,24 @@ ${analysis.failed ? sectionError("Constitutional baseline") : baselineSection(an
   const session = b.level === "federal" ? `${ordinal(parseInt(b.session, 10))} Congress`
     : st === "CA" ? `California, ${esc(b.session.slice(0, 4))}–${esc(b.session.slice(4))} session`
     : `${esc(STATE_NAME[st] || st)}, session ${esc(b.session)}`;
+  const summary = billSummary(b, a);
+  // Quick mode: what it does, where it stands, how your reps voted.
+  const chambers = legislatureOf(b);
+  const lead = plainLead(plain === FAILED ? null : plain, summary);
+  const simple = simpleCard({
+    lines: [
+      ["What it does", lead.html || "No summary yet."],
+      ["Where it stands", esc(billStands({ federal: b.level === "federal", chambers, outcome: outcome === FAILED ? null : outcome, votes: voteList }))],
+      ["How your reps voted", reps === FAILED || votes === FAILED ? "" : repVotesPlain({ districts, reps, chambers, votes: voteList })],
+      ...lead.extra,
+    ],
+    source: [lead.source, sourceNote(b.official_url, "Official page")].filter(Boolean).join(" "),
+  });
   const head = summaryHead({
     kicker: `${LEVELS[b.level]} · ${esc(b.bill_number)} · ${session}`,
     status: statusChip(status),
     title: b.title,
-    summary: billSummary(b, a),
+    summary,
     none: "No summary yet. The official page has the bill's text and status.",
     chips: clauseChips(clauses),
   });
@@ -336,9 +351,10 @@ ${analysis.failed ? sectionError("Constitutional baseline") : baselineSection(an
   ${roll === FAILED ? '<p class="small secondary">Couldn\'t load the roll call right now.</p>' : rollCallList(id, selected, filters, roll)}
   <p class="hint">From the official record of each vote. A member who left office keeps their recorded position; their page shows the years they served.</p>`;
   const lastDate = voteList[0] ? fmtDate(voteList[0].vote_date) : "";
-  const main = `
+  const main = `<div class="simple-scope">
 ${contentsBar([["summary", "Summary"], ["your-reps", "Your reps"], ["constitution", "Constitution"], ["votes", "All votes"], ["money", "Money"], ["history", "History"], ["full-text", "Full text"]])}
 ${head}
+${simple}
 ${banners}
 ${yourRepsCard(b, { districts, reps: reps === FAILED ? [] : reps, votes: voteList, failed: reps === FAILED || votes === FAILED })}
 ${fold("constitution", "Constitution", constitution, { meta: clauses.length ? `${clauses.length} ${clauses.length === 1 ? "provision" : "provisions"}` : "", cls: "fold--parch", open: Boolean(sent || error) })}
@@ -347,7 +363,7 @@ ${fold("money", "Money", lobbying === FAILED ? '<p class="small secondary">Could
 ${fold("history", "History", `${billHistory(b, outcome === FAILED ? null : outcome, voteList)}${outcome === FAILED ? sectionError("Final action") : outcomeSection(b, outcome)}`, { meta: lastDate })}
 ${fold("full-text", "Full text", billFullText(b, analysis.row && isPublic(analysis.row) ? analysis.row : null))}
 ${billTopics.length ? `<section class="stack-sm">${topicChips(billTopics)}<p class="hint">${esc(tagNote(billTopics[0]))} <a class="inline-link" href="/about/methodology/#topics">How topics work</a></p></section>` : ""}
-`;
+</div>`;
   return page(`${b.bill_number}: ${b.title}`, main, { tab: "laws", back: ["Laws", "/laws/"], personal: true, partial: anyFailed(reps, votes, analysisLoaded, lobbying, outcome) });
 }
 
@@ -383,18 +399,34 @@ ${banners}
 ${analysis.failed ? sectionError("Constitutional baseline") : baselineSection(analysis.a, analysis.provisions, { underReview: analysis.flags > 0, empty, after: forms, noun: "order" })}`;
     return page(`${label}: constitutional analysis`, main, { tab: "laws", back: [label, href], partial: analysisLoaded === FAILED });
   }
-  const topics = await loadSection("order topics", () => tagsFor(db, "executive_action", [id]), new Map());
+  const [topics, plain] = await Promise.all([
+    loadSection("order topics", () => tagsFor(db, "executive_action", [id]), new Map()),
+    loadSection("order plain", () => plainFor(db, "order", id), null),
+  ]);
   const tags = topics === FAILED ? [] : topics.get(id) || [];
   const an = analysis.a;
   const clauses = analysisClauses(an, analysis.provisions);
   const issuer = a.official_name
     ? `${a.official_active && a.official_slug ? `<a class="inline-link" href="/reps/${esc(a.official_slug)}/">${esc(a.official_name)}</a>` : esc(a.official_name)}, ${esc(a.official_office || "")}`
     : esc(String(id).startsWith("fr:") ? "The President" : "The Governor of California");
+  const summary = orderSummary(an);
+  const lead = plainLead(plain === FAILED ? null : plain, summary);
+  const courtCount = (a.cases || []).length;
+  const stands = [...orderStatus(a).map((x) => `${x}.`), courtCount ? `${courtCount} court ${courtCount === 1 ? "record mentions" : "records mention"} it.` : ""].filter(Boolean).join(" ");
+  const simple = simpleCard({
+    lines: [
+      ["What it does", lead.html || "No summary yet."],
+      ["Where it stands", esc(stands)],
+      ["Who issued it", issuer],
+      ...lead.extra,
+    ],
+    source: [lead.source, sourceNote(a.source_url, "The order")].filter(Boolean).join(" "),
+  });
   const head = summaryHead({
     kicker: `${String(id).startsWith("fr:") ? "President" : "Governor of California"} · ${esc(label)}`,
     status: orderStatus(a).map(statusChip).join(""),
     title: a.title,
-    summary: orderSummary(an),
+    summary,
     none: "No summary yet: it's written with the order's constitutional analysis. The order's own text is under Full text.",
     chips: clauseChips(clauses),
     extra: `<p class="small secondary">Issued by ${issuer}</p>`,
@@ -404,9 +436,10 @@ ${analysis.failed ? sectionError("Constitutional baseline") : baselineSection(an
     : an
       ? constitutionBrief(an, analysis.provisions, { fullHref: `${href}analysis/`, underReview: analysis.flags > 0 })
       : `${empty || '<p class="small">Not yet mapped. The parts of the Constitution this order touches appear here once an analysis is written and checked, the same way as for bills.</p>'}${forms}`;
-  const main = `
+  const main = `<div class="simple-scope">
 ${contentsBar([["summary", "Summary"], ["authority", "Authority"], ["courts", "In the courts"], ["constitution", "Constitution"], ["history", "History"], ["full-text", "Full text"]])}
 ${head}
+${simple}
 ${banners}
 ${authoritySection(a)}
 ${courtsSection(a)}
@@ -414,7 +447,7 @@ ${fold("constitution", "Constitution", constitution, { meta: clauses.length ? `$
 ${fold("history", "History", orderHistory(a), { meta: a.signed_on ? fmtDate(a.signed_on) : "" })}
 ${fold("full-text", "Full text", orderFullText(a))}
 ${tags.length ? `<section class="stack-sm">${topicChips(tags)}<p class="hint">${esc(tagNote(tags[0]))} <a class="inline-link" href="/about/methodology/#topics">How topics work</a></p></section>` : ""}
-`;
+</div>`;
   return page(`${label}: ${a.title}`, main, { tab: "laws", back, partial: analysisLoaded === FAILED || topics === FAILED });
 }
 

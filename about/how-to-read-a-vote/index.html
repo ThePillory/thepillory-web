@@ -7,8 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/assets/pillory.css?v=45" />
-    <script>document.documentElement.classList.add("js")</script>
+    <link rel="stylesheet" href="/assets/pillory.css?v=46" />
+    <script>document.documentElement.classList.add("js");try{if(localStorage.getItem("pillory_mode")==="simple")document.documentElement.dataset.mode="simple"}catch(e){}</script>
     <meta name="description" content="Evidence-first civic accountability. Verified residents, protected identities, nonpartisan." />
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
@@ -42,6 +42,10 @@
     placeholder="Search reps, bills, meetings, the Constitution" aria-controls="search-results" aria-expanded="false" />
   <div class="search-results" id="search-results" hidden></div>
 </form>
+  <div class="mode-switch segmented" role="group" aria-label="How much detail" data-mode-switch hidden>
+    <button class="toggle" type="button" data-mode-set="simple" aria-pressed="false">Quick</button>
+    <button class="toggle" type="button" data-mode-set="detailed" aria-pressed="true">Detailed</button>
+  </div>
 </header>
 <a class="back-link" href="/about/">← About</a>
 
@@ -117,8 +121,8 @@
     </div>
   </div>
 </nav>
-    <script src="/assets/search-index.js?v=45"></script>
+    <script src="/assets/search-index.js?v=46"></script>
     <script src="/api/search-officials"></script>
-    <script src="/assets/app.js?v=45"></script>
+    <script src="/assets/app.js?v=46"></script>
   </body>
 </html>

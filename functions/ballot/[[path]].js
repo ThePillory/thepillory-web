@@ -18,6 +18,7 @@
 // logged or shown back (only the city and state are). The answer is never
 // cached (Cache-Control: no-store). Every candidate gets the same layout, in the
 // order the official data lists them; no endorsements, polls or predictions.
+import { simpleCard } from "../_lib/simple.js";
 import { page, esc, notFound, safeUrl, linkRow, loadSection, FAILED, sectionError, guard, fmtDate } from "../_lib/render.js";
 import { districtsFromCookie, STATE_NAME } from "../_lib/districts.js";
 import { visitorState } from "../_lib/visitor-state.js";
@@ -145,7 +146,7 @@ const EXACT = "Your exact ballot";
 const EXACT_LINE = "Add your address for local contests and where to vote.";
 function addressForm(st, { heading = EXACT } = {}) {
   return `
-<section class="card stack-sm lookup" id="address" aria-labelledby="h-address">
+<section class="card stack-sm lookup simple-keep" id="address" aria-labelledby="h-address">
   <h2 class="label" id="h-address">${esc(heading)}</h2>
   <p class="small">${esc(EXACT_LINE)}</p>
   <form class="lookup-form" action="${ballotPath(st)}" method="post">
@@ -246,7 +247,7 @@ function certifiedSection(st, election, filed, d) {
   const id = election.election.id;
   const statewide = offices.length || props.length
     ? `
-<section class="stack-sm" id="statewide" aria-labelledby="h-statewide">
+<section class="stack-sm simple-keep" id="statewide" aria-labelledby="h-statewide">
   <h2 class="label" id="h-statewide">On every ${esc(STATE_NAME[st])} ballot · November 3, 2026</h2>
   ${offices.length ? `<div class="card">${offices.map((c) => linkRow(raceHref(YEAR, st, c.id), c.office, ballotOrder(c, election).candidates.map((x) => x.name).join(" · "))).join("")}</div>` : ""}
   ${props.length ? `<div class="card">${props.map((m) => linkRow(measureHref(id, m.id), measureName(m), m.title || "")).join("")}</div>` : ""}
@@ -327,11 +328,29 @@ async function statePage(env, request, st, { message = "" } = {}) {
     loadSection("ballot office", () => stateOffice(env, request, st), null),
     loadSection("ballot election", () => ownElection(env, request, st), null),
   ]);
-  const main = `
+  // Quick mode: what's on it in a sentence, then the statewide list and the address card.
+  const e = election === FAILED ? null : election;
+  const certified = e && e.election.state === st && !measuresOnly(e);
+  const offices = certified ? e.contests.filter((c) => c.scope === "statewide").length : 0;
+  const props = e && e.election.state === st ? e.measures.filter((m) => m.scope === "statewide").length : 0;
+  const onIt = certified
+    ? `On every ${esc(name)} ballot: ${offices} statewide ${offices === 1 ? "office" : "offices"}${props ? ` and ${props} ${props === 1 ? "proposition" : "propositions"}` : ""}. Your races for Congress and the Legislature depend on where you live.`
+    : NO_GENERAL.has(st) ? `${esc(name)} has no general election on November 3, 2026.`
+    : `Races for Congress${props ? ` and ${props} statewide ${props === 1 ? "measure" : "measures"}` : ""}. Your exact ballot depends on where you live.`;
+  const simple = simpleCard({
+    lines: [
+      ["What's on it", onIt],
+      ["Your exact ballot", '<a class="inline-link" href="#address">Add your address below</a> to see every race for where you live, and where to vote.'],
+    ],
+    source: esc(CONFIRM),
+    jump: "federal",
+  });
+  const main = `<div class="simple-scope">
 <header class="page-head stack-xs">
   <p class="label">${esc(name)}${NO_GENERAL.has(st) ? "" : " · Nov 3, 2026"}</p>
   <h1>${esc(statePossessive(st, name))} ballot</h1>
 </header>
+${simple}
 ${message ? `<p class="banner banner--error" role="alert">${esc(message)}</p>` : ""}
 <p class="small"><a class="inline-link jump-link" href="#address">Add your address for your exact ballot ↓</a></p>
 ${federalSection(st, races, filed, d, election === FAILED ? null : election)}
@@ -340,7 +359,8 @@ ${addressForm(st)}
 <p class="small secondary">${esc(CONFIRM)}</p>
 ${officialLinks(st, office === FAILED ? null : office, election === FAILED ? null : election)}
 <p class="small"><a class="inline-link" href="/ballot/?pick=1">A different state</a></p>
-<p class="hint">${esc(NEUTRAL)} <a class="inline-link" href="/about/methodology/#elections">How ThePillory builds this</a></p>`;
+<p class="hint">${esc(NEUTRAL)} <a class="inline-link" href="/about/methodology/#elections">How ThePillory builds this</a></p>
+</div>`;
   return privatePage(`${statePossessive(st, name)} ballot`, main, BACK);
 }
 

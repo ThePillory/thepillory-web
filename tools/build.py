@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "45"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "46"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -217,6 +217,10 @@ def site_header():
     <button class="search-toggle" type="button" aria-controls="q" aria-expanded="false" aria-label="Search">{icon("search")}</button>
   </div>
   {SEARCH.strip()}
+  <div class="mode-switch segmented" role="group" aria-label="How much detail" data-mode-switch hidden>
+    <button class="toggle" type="button" data-mode-set="simple" aria-pressed="false">Quick</button>
+    <button class="toggle" type="button" data-mode-set="detailed" aria-pressed="true">Detailed</button>
+  </div>
 </header>"""
 
 
@@ -298,7 +302,7 @@ def shell(title, main, *, nav="", back_html="", after="", title_is_html=False):
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/pillory.css?v={ASSET_VERSION}" />
-    <script>document.documentElement.classList.add("js")</script>
+    <script>document.documentElement.classList.add("js");try{{if(localStorage.getItem("pillory_mode")==="simple")document.documentElement.dataset.mode="simple"}}catch(e){{}}</script>
 {head}  </head>
 
   <body class="{' '.join(body_cls)}">
@@ -536,6 +540,16 @@ def build_methodology():
     <li><strong>Washington:</strong> the three statewide measures, from the Secretary of State's official documents: the ballot title and explanatory statement written by the Office of the Attorney General, the summary of the fiscal impact statement written by the Office of Financial Management (as the Voters' Pamphlet prints it), and each side's argument and rebuttal from the Voters' Pamphlet, with who wrote them (contact lines left out). Every paragraph is checked word for word against its source before it's published. Candidates and local measures in Washington are in the official Voters' Guide, which each page links.</li>
     <li><strong>The ballot preview, every state ("Preview [State]'s ballot"):</strong> before you enter an address, your state's U.S. Senate race (when a seat is up, by the Federal Election Commission's list of 2026 races) and, once your district is known, your U.S. House race: the candidates who have filed with the FEC and passed its $5,000 threshold, listed alphabetically with their names and parties as filed. That list is not the certified ballot (some candidates lose a primary or withdraw), and the page says so. A candidate who holds the office links to their Votes and Funding, matched by their FEC candidate ID. Your state's election office (as USA.gov lists it) and Vote.gov are linked for registration, the sample ballot, where to vote and deadlines. With an address, the page asks Google's Civic Information API, which carries what state and county election offices publish through the Voting Information Project, for every contest, candidate and measure on that ballot, with polling places, early-voting sites and drop-off locations. Contests are in ballot order and candidates in the order the official data lists them, each with the party as listed, every one in the same layout; a candidate's contact details aren't shown. A name links to an official on ThePillory only when exactly one official in the state has that first and last name, and a measure links to ThePillory's page only by its number. When there's no data for an address yet, the page says so and links the state's official sample ballot lookup. Always confirm your ballot with your county election office.</li>
     <li><strong>Refreshed daily</strong> during election season from the same sources (the "Refresh election data" workflow).</li>
+  </ul>
+</section>
+
+<section class="card stack" id="quick">
+  <h2>Quick mode</h2>
+  <p>The Quick / Detailed switch under the header shows a short card in plain words at the top of a page, with the full page one tap away. Your choice is kept in your browser only; nothing is sent to ThePillory, and you're never asked your age. The rules don't change: facts only, neutral wording, the source one tap away.</p>
+  <ul class="plain-list small">
+    <li><strong>What it does:</strong> a plain-words rewrite of a summary the page already shows (the official summary, a person's summary, or the checked constitutional analysis), labeled "Simplified by AI from [source]". It's kept only when checks in code pass: one or two short sentences, about an 8th-grade reading level, every number and name already in the source, no loaded or judging words, and, when the source gives both sides, a supporters line and a critics line of similar length. Until a rewrite passes, the card shows the first sentence of the original summary, word for word.</li>
+    <li><strong>Where it stands, and how your reps voted:</strong> written from the recorded votes and final action, the same facts as the full page.</li>
+    <li><strong>Words with a dotted underline:</strong> tap for a one-sentence definition. The definitions, and the plain names on Constitution chips, are in one file anyone can review: <a class="inline-link" href="/data/glossary.json">the glossary</a>.</li>
   </ul>
 </section>
 

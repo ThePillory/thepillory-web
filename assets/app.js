@@ -494,6 +494,116 @@
     });
   });
   // ---------------------------------------------------------------------
+  // Quick / Detailed: the switch under the header. The choice is kept in this
+  // browser only (localStorage "pillory_mode"); nothing goes to the server. The
+  // page carries both versions; the <head> script sets data-mode before the
+  // page draws, so there's no flash. In Quick mode, glossary words get a
+  // dotted underline and a tap-to-explain, and Constitution chips show their
+  // plain names, both from /data/glossary.json.
+  var root = document.documentElement;
+  var glossary = null;
+  function storeMode(mode) {
+    try { localStorage.setItem("pillory_mode", mode); } catch (e) { /* private mode: this page only */ }
+  }
+  function setMode(mode) {
+    if (mode === "simple") root.dataset.mode = "simple";
+    else delete root.dataset.mode;
+    document.querySelectorAll("[data-mode-switch] [data-mode-set]").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-mode-set") === (mode === "simple" ? "simple" : "detailed")));
+    });
+    if (mode === "simple") loadGlossary();
+  }
+  document.querySelectorAll("[data-mode-switch]").forEach(function (sw) { sw.hidden = false; });
+  document.addEventListener("click", function (ev) {
+    var b = ev.target.closest && ev.target.closest("[data-mode-set]");
+    if (!b) return;
+    var mode = b.getAttribute("data-mode-set");
+    storeMode(mode);
+    setMode(mode);
+    // "See the details": open the full page where the reader is.
+    if (b.hasAttribute("data-mode-jump")) {
+      var to = document.getElementById(b.getAttribute("data-mode-jump"));
+      if (to) to.scrollIntoView({ block: "start" });
+    }
+  });
+  setMode(root.dataset.mode === "simple" ? "simple" : "detailed");
+
+  function loadGlossary() {
+    if (glossary) return;
+    glossary = {};
+    fetch("/data/glossary.json")
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (g) {
+        if (!g) return;
+        glossary = g;
+        plainChips(g.constitution || {});
+        markTerms(g.terms || []);
+      })
+      .catch(function () {});
+  }
+  function plainChips(names) {
+    document.querySelectorAll("a.chip--parch[href*='/laws/constitution/#']").forEach(function (a) {
+      if (a.classList.contains("has-plain")) return;
+      var id = decodeURIComponent(a.getAttribute("href").split("#")[1] || "");
+      var plain = names[id] || names[id.replace(/-cl-\d+$/, "")] || names[id.replace(/-sec-\d+(-cl-\d+)?$/, "")];
+      if (!plain) return;
+      var formal = el("span", "formal-name", a.textContent);
+      a.textContent = "";
+      a.appendChild(formal);
+      a.appendChild(el("span", "plain-name", plain));
+      a.classList.add("has-plain");
+      a.title = formal.textContent;
+    });
+  }
+  // Each term once per page, the first time it appears in the main content's
+  // text (never inside a link, a button, a heading or a form field).
+  function markTerms(terms) {
+    var main = document.querySelector("main") || document.body;
+    var list = terms.map(function (t) {
+      var words = [t.term].concat(t.aliases || []).map(function (w) { return w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); });
+      return { t: t, re: new RegExp("\\b(" + words.join("|") + ")\\b", "i") };
+    });
+    var walker = document.createTreeWalker(main, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        var p = n.parentElement;
+        if (!p || p.closest("a, button, h1, h2, h3, label, input, textarea, select, script, style, .label, .term-def, .search, .mode-switch, .status-chip")) return NodeFilter.FILTER_REJECT;
+        // Only words the reader can see now (not inside a hidden section).
+        if (!p.getClientRects().length) return NodeFilter.FILTER_REJECT;
+        return n.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      },
+    });
+    var nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    var done = {};
+    nodes.forEach(function (node) {
+      list.forEach(function (x) {
+        if (done[x.t.term] || !node.parentNode) return;
+        var m = x.re.exec(node.nodeValue);
+        if (!m) return;
+        done[x.t.term] = true;
+        var after = node.splitText(m.index);
+        after.nodeValue = after.nodeValue.slice(m[0].length);
+        var b = el("button", "term", m[0]);
+        b.type = "button";
+        b.setAttribute("aria-expanded", "false");
+        b.setAttribute("data-definition", x.t.definition);
+        node.parentNode.insertBefore(b, after);
+        node = after;
+      });
+    });
+  }
+  document.addEventListener("click", function (ev) {
+    var t = ev.target.closest && ev.target.closest("button.term");
+    if (!t) return;
+    var open = t.nextElementSibling && t.nextElementSibling.classList.contains("term-def");
+    if (open) { t.nextElementSibling.remove(); t.setAttribute("aria-expanded", "false"); return; }
+    var d = el("span", "term-def", t.getAttribute("data-definition"));
+    d.setAttribute("role", "note");
+    t.after(d);
+    t.setAttribute("aria-expanded", "true");
+  });
+
+  // ---------------------------------------------------------------------
   // Cloudflare Turnstile, for the forms that have a .cf-turnstile widget (the
   // waitlist, "Something wrong?", "Request full analysis"). Its script is
   // loaded only after the page has finished loading: the challenge frame it

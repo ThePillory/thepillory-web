@@ -7,8 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/assets/pillory.css?v=45" />
-    <script>document.documentElement.classList.add("js")</script>
+    <link rel="stylesheet" href="/assets/pillory.css?v=46" />
+    <script>document.documentElement.classList.add("js");try{if(localStorage.getItem("pillory_mode")==="simple")document.documentElement.dataset.mode="simple"}catch(e){}</script>
     <meta name="description" content="Evidence-first civic accountability. Verified residents, protected identities, nonpartisan." />
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
@@ -42,6 +42,10 @@
     placeholder="Search reps, bills, meetings, the Constitution" aria-controls="search-results" aria-expanded="false" />
   <div class="search-results" id="search-results" hidden></div>
 </form>
+  <div class="mode-switch segmented" role="group" aria-label="How much detail" data-mode-switch hidden>
+    <button class="toggle" type="button" data-mode-set="simple" aria-pressed="false">Quick</button>
+    <button class="toggle" type="button" data-mode-set="detailed" aria-pressed="true">Detailed</button>
+  </div>
 </header>
 <a class="back-link" href="/about/">← About</a>
 
@@ -221,6 +225,16 @@
   </ul>
 </section>
 
+<section class="card stack" id="quick">
+  <h2>Quick mode</h2>
+  <p>The Quick / Detailed switch under the header shows a short card in plain words at the top of a page, with the full page one tap away. Your choice is kept in your browser only; nothing is sent to ThePillory, and you're never asked your age. The rules don't change: facts only, neutral wording, the source one tap away.</p>
+  <ul class="plain-list small">
+    <li><strong>What it does:</strong> a plain-words rewrite of a summary the page already shows (the official summary, a person's summary, or the checked constitutional analysis), labeled "Simplified by AI from [source]". It's kept only when checks in code pass: one or two short sentences, about an 8th-grade reading level, every number and name already in the source, no loaded or judging words, and, when the source gives both sides, a supporters line and a critics line of similar length. Until a rewrite passes, the card shows the first sentence of the original summary, word for word.</li>
+    <li><strong>Where it stands, and how your reps voted:</strong> written from the recorded votes and final action, the same facts as the full page.</li>
+    <li><strong>Words with a dotted underline:</strong> tap for a one-sentence definition. The definitions, and the plain names on Constitution chips, are in one file anyone can review: <a class="inline-link" href="/data/glossary.json">the glossary</a>.</li>
+  </ul>
+</section>
+
 <section class="card stack" id="candidates">
   <h2>Candidates</h2>
   <p>Pages for candidates who aren't in office yet, with the same layout for every candidate: the race, the election date, Platform, Votes, Funding and More. ThePillory doesn't endorse candidates, and doesn't publish polls, predictions, rankings or contact details.</p>
@@ -301,8 +315,8 @@
     </div>
   </div>
 </nav>
-    <script src="/assets/search-index.js?v=45"></script>
+    <script src="/assets/search-index.js?v=46"></script>
     <script src="/api/search-officials"></script>
-    <script src="/assets/app.js?v=45"></script>
+    <script src="/assets/app.js?v=46"></script>
   </body>
 </html>

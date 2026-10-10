@@ -259,7 +259,7 @@ test("the ballot page leads with the statewide preview; the address card comes a
   assert.match(main, /<h1>Washington&#x27;s ballot<\/h1>/);
   assert.ok(at('href="#address">Add your address for your exact ballot ↓</a>') > 0, "the jump link");
   assert.ok(at('id="h-federal"') > 0 && at('id="h-federal"') < at('id="address"'), "the races before the address card");
-  assert.ok(at('id="address"') < at("Always confirm your ballot"), "the confirm line after the card");
+  assert.ok(at('id="address"') < main.lastIndexOf("Always confirm your ballot"), "the confirm line after the card");
   assert.match(main, /<h2 class="label" id="h-address">Your exact ballot<\/h2>\s*<p class="small">Add your address for local contests and where to vote\.<\/p>/);
   assert.match(main, />Show my ballot<\/button>/);
   assert.match(main, /never stores or logs your address/);
