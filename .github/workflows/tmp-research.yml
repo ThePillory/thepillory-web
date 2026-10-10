@@ -1,0 +1,24 @@
+# TEMPORARY: research probe (FEC candidate data). Remove before merge.
+name: TEMPORARY research probe
+on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [tmp-research/probe_fec.sh, .github/workflows/tmp-research.yml]
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - env:
+          FEC_API_KEY: ${{ secrets.FEC_API_KEY }}
+          COURTLISTENER_API_TOKEN: ${{ secrets.COURTLISTENER_API_TOKEN }}
+        run: |
+          bash tmp-research/probe_fec.sh
+          echo "courtlistener token length: ${#COURTLISTENER_API_TOKEN}" > tmp-research/out-fec/cl-token.txt
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add tmp-research
+          git commit -m "TEMPORARY: FEC probe output" && git pull --rebase -q origin claude/pillory-mobile-screens-p5zekn && git push
