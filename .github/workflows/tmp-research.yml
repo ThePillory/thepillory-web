@@ -3,7 +3,7 @@ name: TEMPORARY research probe
 on:
   push:
     branches: [claude/pillory-mobile-screens-p5zekn]
-    paths: [.github/workflows/tmp-research.yml]
+    paths: [.github/workflows/tmp-research.yml, tools/build_federal_races.py]
 permissions:
   contents: write
 jobs:
@@ -14,13 +14,9 @@ jobs:
       - env:
           FEC_API_KEY: ${{ secrets.FEC_API_KEY }}
         run: |
-          mkdir -p tmp-research/out-dates
-          for st in WA LA GA CA; do
-            curl -s "https://api.open.fec.gov/v1/election-dates/?election_state=$st&election_year=2026&per_page=100&api_key=$FEC_API_KEY" > tmp-research/out-dates/$st.json
-          done
-          curl -s "https://api.open.fec.gov/v1/election-dates/?election_year=2026&min_election_date=2026-10-01&per_page=100&api_key=$FEC_API_KEY" > tmp-research/out-dates/upcoming.json
+          python3 tools/build_federal_races.py
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
-          git add tmp-research/out-dates
-          git commit -m "TEMPORARY: FEC election dates probe output" && git push
+          git add data/elections
+          git commit -m "TEMPORARY: election dates from the FEC (probe run)" && git push
