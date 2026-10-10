@@ -9,19 +9,19 @@
    "name": "Goldey v. Fields",
    "summary": "The Fourth Circuit’s determination that inmate Andrew Fields could proceed with his Eighth Amendment excessive-force claim for damages under Bivens v. Six Unknown Fed. Narcotics Agents, 403 U. S. 388 (1971), is reversed, and the case is remanded.",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24-809_9o6b.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/606us2r67_8nka.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "PER CURIAM. In Bivens v. Six Unknown Fed. Narcotics Agents, 403 U. S. 388 (1971), this Court recognized an implied cause of action for damages against federal officers for certain alleged violations of the Fourth Amendment. The Court subsequently recognized two additional contexts where implied Bivens causes of action were permitted, neither of which was an Eighth Amendment excessive-force claim. After 1980, we have declined more than 10 times to extend Bivens to cover other constitutional violations. Those many post1980 Bivens “cases have made clear that, in all but the most unusual circumstances, prescribing a cause of action is a job for Congress, not the courts.” Egbert v. Boule, 596 U. S. 482, 486 (2022). Despite those precedents, the U. S. Court of Appeals for the Fourth Circuit permitted the plaintiff here to maintain an Eighth Amendment excessive-force Bivens claim for damages against federal prison officials. This case began when prison officials at the U. S. Penitentiary in Lee County, Virginia, ordered that plaintiff Andrew Fields be placed in solitary confinement. Prison officials monitored Fields while he was isolated. Fields alleges that during their periodic checks,",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": [],
    "provisions": [
     {
      "id": "amend-4",
-     "quote": "388 (1971), this Court recognized an implied cause of action for damages against federal officers for certain alleged violations of the Fourth Amendment."
+     "quote": null
     },
     {
      "id": "amend-8",
-     "quote": "The Court subsequently recognized two additional contexts where implied Bivens causes of action were permitted, neither of which was an Eighth Amendment excessive-force claim."
+     "quote": null
     }
    ],
    "qp_url": null,
@@ -35,10 +35,10 @@
    "name": "Trump v. CASA, Inc.",
    "summary": "Because universal injunctions likely exceed the equitable authority that Congress has granted to federal courts, the Court grants the Government’s applications for a partial stay of the injunctions entered below regarding the implementation and enforcement of President Trump’s Executive Order No. 14160, but only to the extent that the injunctions are broader than necessary to provide complete relief to each plaintiff with standing to sue.",
    "author_code": "AB",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24a884_new2_0pl1.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/606us2r66_j426.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "BARRETT, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, GORSUCH, and KAVANAUGH, JJ., joined. THOMAS, J., filed a concurring opinion, in which GORSUCH, J., joined. ALITO, J., filed a concurring opinion, in which THOMAS, J., joined. KAVANAUGH, J., filed a concurring opinion. SOTOMAYOR, J., filed a dissenting opinion, in which KAGAN and JACKSON, JJ., joined. JACKSON, J., filed a dissenting opinion.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -125,12 +125,16 @@
    },
    "provisions": [
     {
+     "id": "amend-2",
+     "quote": null
+    },
+    {
      "id": "amend-14",
-     "quote": "The plaintiffs filed suit, alleging that the Executive Order violates the Fourteenth Amendment’s Citizenship Clause, §1, as well as §201 of the Nationality Act of 1940, 54 Stat. 1138 (codified at 8 U."
+     "quote": null
     },
     {
      "id": "art-3",
-     "quote": "We express no view on the Government’s argument that Article III forecloses universal relief. that the High Court of Chancery in England possesses”).5 We must therefore ask whether universal injunctions are sufficiently “analogous” to the relief issued “ ‘by the High Court of Chancery in England at the time of the adoption of the Constitution and the enactment of the original Judiciary Act.’ ” Grupo Mexicano, 527 U."
+     "quote": null
     }
    ]
   },
@@ -141,10 +145,10 @@
    "name": "Kennedy v. Braidwood Management, Inc.",
    "summary": "Members of the U. S. Preventive Services Task Force are inferior officers whose appointment by the Secretary of the Department of Health and Human Services is consistent with the Appointments Clause.  Art. II, §2, cl. 2.",
    "author_code": "BK",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24-316_869d.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/606us2r65_3314.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "KAVANAUGH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and SOTOMAYOR, KAGAN, BARRETT, and JACKSON, JJ., joined. THOMAS, J., filed a dissenting opinion, in which ALITO and GORSUCH, JJ., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -220,15 +224,15 @@
    "provisions": [
     {
      "id": "art-2-sec-2-cl-2",
-     "quote": "This case concerns the Appointments Clause in Article II of the Constitution."
+     "quote": null
     },
     {
      "id": "art-3",
-     "quote": "1610.3 —————— 2 Review by an Article III court does not render the adjudicative officer inferior; it is review by a superior within the Executive Branch that does so."
+     "quote": null
     },
     {
      "id": "art-2",
-     "quote": "This case concerns the Appointments Clause in Article II of the Constitution."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/24-00316qp.pdf",
@@ -247,10 +251,10 @@
    "name": "FCC v. Consumers’ Research",
    "summary": "The universal-service contribution scheme does not violate the Constitution’s nondelegation doctrine; Congress sufficiently guided and constrained the discretion that it lodged with the Federal Communications Commission to implement that scheme, and the FCC has retained all decision-making authority within that sphere, relying on the Universal Service Administrative Company only for non-binding advice.",
    "author_code": "EK",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24-354_0861.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/606us2r64_8nj9.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "KAGAN, J., delivered the opinion of the Court, in which ROBERTS, C. J., and SOTOMAYOR, KAVANAUGH, BARRETT, and JACKSON, JJ., joined. KAVANAUGH, J., and JACKSON, J., filed concurring opinions. GORSUCH, J., filed a dissenting opinion, in which THOMAS and ALITO, JJ., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -329,7 +333,24 @@
      }
     ]
    },
-   "provisions": [],
+   "provisions": [
+    {
+     "id": "amend-5",
+     "quote": null
+    },
+    {
+     "id": "art-2-sec-2-cl-2",
+     "quote": null
+    },
+    {
+     "id": "art-3",
+     "quote": null
+    },
+    {
+     "id": "art-2",
+     "quote": null
+    }
+   ],
    "qp_url": "https://www.supremecourt.gov/qp/24-00354qp.pdf",
    "question_presented": [
     "In 47 U.S.C. 254, Congress required the Federal Communications Commission (Commission) to operate universal service subsidy programs using mandatory contributions from telecommunications carriers. The Commission has appointed a private company as the programs' Administrator, authorizing that company to perform administrative tasks such as sending out bills, collecting contributions, and disbursing funds to beneficiaries. The questions presented are as follows:",
@@ -346,93 +367,19 @@
    "name": "Mahmoud v. Taylor",
    "summary": "Parents challenging the Montgomery County Board of Education’s introduction of certain “LGBTQ+-inclusive” storybooks, along with the Board’s decision to withhold parental opt outs from that instruction, are entitled to a preliminary injunction.",
    "author_code": "A",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24-297_4f14.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/606us2r63_n648.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ALITO, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, GORSUCH, KAVANAUGH, and BARRETT, JJ., joined. THOMAS, J., filed a concurring opinion. SOTOMAYOR, J., filed a dissenting opinion, in which KAGAN and JACKSON, JJ., joined.",
-   "lineup": {
-    "unanimous": false,
-    "justices": [
-     {
-      "justice": "Alito",
-      "roles": [
-       "majority"
-      ],
-      "wrote": [
-       "majority"
-      ]
-     },
-     {
-      "justice": "Roberts",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Thomas",
-      "roles": [
-       "concurrence",
-       "majority"
-      ],
-      "wrote": [
-       "concurrence"
-      ]
-     },
-     {
-      "justice": "Gorsuch",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Kavanaugh",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Barrett",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Sotomayor",
-      "roles": [
-       "dissent"
-      ],
-      "wrote": [
-       "dissent"
-      ]
-     },
-     {
-      "justice": "Kagan",
-      "roles": [
-       "dissent"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Jackson",
-      "roles": [
-       "dissent"
-      ],
-      "wrote": []
-     }
-    ]
-   },
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": [],
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "Given the substantial burdens that Wisconsin’s compulsory-attendance law placed on the religious practices of the Amish, we held that it “carrie[d] with it precisely the kind of objective danger to the free exercise of religion that the First Amendment was designed to prevent.” Id., at 218."
+     "quote": null
     },
     {
      "id": "amend-14",
-     "quote": "That restriction applies equally to the States by way of the Fourteenth Amendment."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/24-00297qp.pdf",
@@ -451,10 +398,10 @@
    "name": "Free Speech Coalition, Inc. v. Paxton",
    "summary": "Texas law H. B. 1181—which requires certain commercial websites publishing sexually explicit content that is obscene to minors to verify that visitors are 18 or older— only incidentally burdens the protected speech of adults and survives intermediate scrutiny under the First Amendment’s Free Speech Clause.",
    "author_code": "T",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1122_3e04.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/606us2r62_986b.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "THOMAS, J., delivered the opinion of the Court, in which ROBERTS, C. J., ALITO, GORSUCH, KAVANAUGH, and BARRETT, JJ., joined. KAGAN, J., filed a dissenting opinion, in which SOTOMAYOR and JACKSON, JJ., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -530,15 +477,15 @@
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "But, it also burdens adult visitors of these websites, who all agree have a First Amendment right to access at least some of the content that the websites publish."
+     "quote": null
     },
     {
      "id": "amend-8",
-     "quote": "For example, in the Eighth Amendment context we have explained that, because “capital punishment is constitutional, . . . ‘there must be a constitutional means of carrying it out.’ ” Glossip v."
+     "quote": null
     },
     {
      "id": "amend-14",
-     "quote": "A The First Amendment, which applies to the States through the Fourteenth Amendment, prohibits laws “abridging the freedom of speech.” As “a general matter,” this provision “means that government has no power to restrict expression because of its message, its ideas, its subject matter, or its content.” Ashcroft v."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/23-01122qp.pdf",
@@ -555,10 +502,10 @@
    "name": "Hewitt v. United States",
    "summary": "Because a sentence “has . . . been imposed” for purposes of §403(b) of the First Step Act only if the sentence is extant (i.e., has not been vacated), the Act’s more lenient penalties apply to defendants whose previous 18  U. S. C. §924(c) sentences have been vacated and who need to be resentenced following the Act’s enactment; the judgment of the Fifth Circuit is reversed and the case is remanded.",
    "author_code": "KJ",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1002_1p24.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/606us1r61_2dp3.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "JACKSON, J., delivered the opinion of the Court with respect to Parts I, II, and III, in which ROBERTS, C. J., and SOTOMAYOR, KAGAN, and GORSUCH, JJ., joined, and an opinion with respect to Parts IV and V, in which SOTOMAYOR and KAGAN, JJ., joined. ALITO, J., filed a dissenting opinion, in which THOMAS, KAVANAUGH, and BARRETT, JJ., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -572,13 +519,6 @@
       ]
      },
      {
-      "justice": "Roberts",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
       "justice": "Sotomayor",
       "roles": [
        "majority"
@@ -587,13 +527,6 @@
      },
      {
       "justice": "Kagan",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Gorsuch",
       "roles": [
        "majority"
       ],
@@ -631,7 +564,12 @@
      }
     ]
    },
-   "provisions": [],
+   "provisions": [
+    {
+     "id": "amend-5",
+     "quote": null
+    }
+   ],
    "qp_url": "https://www.supremecourt.gov/qp/23-01002qp.pdf",
    "question_presented": [
     "The First Step Act (FSA) significantly reduced the mandatory minimum sentences for several federal drug and firearm offenses. First Step Act of 2018, Pub. L. No. 115391, §§ 401, 403, 132 Stat. 5194, 5220-5222. Sections 401 and 403 apply to offenses committed after the FSA's enactment on December 21, 2018, and to \"any offense that was committed before the date of enactment * * * if a sentence for the offense has not been imposed as of such date of enactment.\" FSA§§ 401(c), 403(b).",
@@ -648,10 +586,10 @@
    "name": "Medina v. Planned Parenthood South Atlantic",
    "summary": "Medicaid’s any-qualified-provider provision—42 U. S. C. §1396a(a)(23)(A)—does not clearly and unambiguously confer individual rights on Medicaid beneficiaries enforceable under 42  U. S. C. §1983.",
    "author_code": "NG",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1275_e2pg.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/606us1r60_h3ci.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "GORSUCH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, KAVANAUGH, and BARRETT, JJ., joined. THOMAS, J., filed a concurring opinion. JACKSON, J., filed a dissenting opinion, in which SOTOMAYOR and KAGAN, JJ., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -730,15 +668,19 @@
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "903 (capitalization omitted); the phrase “free choice” calls to the dissent’s mind a phrase from the First Amendment (“free exercise” of religion); that Amendment declares rights; so §1396a(a)(23)(A) likely must as well."
+     "quote": null
+    },
+    {
+     "id": "amend-14",
+     "quote": null
     },
     {
      "id": "art-1-sec-8-cl-3",
-     "quote": "When Congress passes a law, say, regulating commerce between the States or outlawing piracy, it can point for authority to the Commerce Clause, U."
+     "quote": null
     },
     {
      "id": "art-1-sec-8-cl-1",
-     "quote": "The Constitution has no “Spending Clause,” strictly speaking."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/23-01275qp.pdf",
@@ -757,10 +699,10 @@
    "name": "Gutierrez v. Saenz",
    "summary": "Petitioner Ruben Gutierrez has standing to bring his 42 U. S. C. §1983 claim challenging Texas’s postconviction DNA testing procedures under the Due Process Clause.",
    "author_code": "SS",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-7809_3e04.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/606us1r59_g31h.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "SOTOMAYOR, J., delivered the opinion of the Court, in which ROBERTS, C. J., and KAGAN, KAVANAUGH, and JACKSON, JJ., joined, and in which BARRETT, J., joined as to all but Part II.B.2. BARRETT, J., filed an opinion concurring in part and concurring in the judgment. THOMAS, J., filed a dissenting opinion. ALITO, J., filed a dissenting opinion, in which THOMAS and GORSUCH, JJ., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -840,12 +782,20 @@
    },
    "provisions": [
     {
-     "id": "amend-14",
-     "quote": "Specifically, the prosecutor asserted that a favorable court —————— 1 One of the dissents contends that this Court “ha[d] no business intervening in this case in the first place” because “Gutierrez’s suit rests on the premise that the Fourteenth Amendment’s Due Process Clause gives him a ‘liberty interest’ in Texas’s voluntarily created procedures.” Post, at 1–2 (opinion of THOMAS, J.)."
+     "id": "amend-1",
+     "quote": null
     },
     {
-     "id": "art-3",
-     "quote": "Before this Court, the local prosecutor argued that Reed lacked Article III standing."
+     "id": "amend-5",
+     "quote": null
+    },
+    {
+     "id": "amend-8",
+     "quote": null
+    },
+    {
+     "id": "amend-14",
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/23-07809qp.pdf",
@@ -864,10 +814,10 @@
    "name": "Riley v. Bondi",
    "summary": "Order from the Board of Immigration Appeals denying deferral of removal in “withholding only” proceeding is not a “final order of removal” under 8 U. S. C. §1252(b)(1); the 30-day filing deadline to challenge a final order of removal under §1252(b)(1) is a claims-processing rule, not a jurisdictional requirement.",
    "author_code": "A",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1270_new_3dq3.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/606us1r58_5h25.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ALITO, J., delivered the opinion of the Court, in which ROBERTS, C. J., THOMAS, KAVANAUGH, and BARRETT, JJ., joined in full, and in which SOTOMAYOR, KAGAN, GORSUCH, and JACKSON, JJ., joined only as to Part II–B. THOMAS, J., filed a concurring opinion. SOTOMAYOR, J., filed an opinion dissenting in part, in which KAGAN and JACKSON, JJ., joined in full, and in which GORSUCH, J., joined except as to Part IV.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -945,7 +895,12 @@
      }
     ]
    },
-   "provisions": [],
+   "provisions": [
+    {
+     "id": "amend-5",
+     "quote": null
+    }
+   ],
    "qp_url": "https://www.supremecourt.gov/qp/23-01270qp.pdf",
    "question_presented": [
     "Petitioner Pierre Riley, ineligible for cancellation of removal or discretionary relief from removal, sought deferral in withholding-only proceedings, pursuant to the Convention Against Torture and Other Cruel, Inhuman or Degrading Treatment or Punishment. After the Board of Immigration Appeals issued a decision reversing an immigration judge's grant of relief, Riley promptly petitioned for review by the U.S. Court of Appeals for the Fourth Circuit. Although both parties urged the court to decide the merits of the case, the Fourth Circuit dismissed Riley's petition for lack of jurisdiction pursuant to 8 U.S.C. 1252(b)(1), which states \"[t]he petition for review must be filed not later than 30 days after the date of the final order of removal.\"",
@@ -960,10 +915,10 @@
    "name": "FDA v. R. J. Reynolds Vapor Co.",
    "summary": "Retailers who would sell a new tobacco product if not for the FDA’s denial order may seek judicial review of that order under 21 U. S. C. §387l(a)(1).",
    "author_code": "AB",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1187_olp1.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/606us1r57_n6io.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "BARRETT, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, KAGAN, GORSUCH, and KAVANAUGH, JJ., joined. JACKSON, J., filed a dissenting opinion, in which SOTOMAYOR, J., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1039,7 +994,7 @@
    "provisions": [
     {
      "id": "art-3",
-     "quote": "Outside of limited circumstances, Article III allows this Court to exercise only “appellate jurisdiction,” not “original jurisdiction.” Marbury v."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/23-01187qp.pdf",
@@ -1056,10 +1011,10 @@
    "name": "Esteras v. United States",
    "summary": "A district court considering whether to revoke a defendant’s term of supervised release may not consider 18 U. S. C. §3553(a)(2)(A), which covers retribution vis-à-vis the defendant’s underlying criminal offense.",
    "author_code": "AB",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-7483_6k4c.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/606us1r56_bq7d.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "BARRETT, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, KAGAN, and KAVANAUGH, JJ., joined, and in which SOTOMAYOR and JACKSON, JJ., joined as to all but Part II–B. SOTOMAYOR, J., filed an opinion concurring in part and concurring in the judgment, in which JACKSON, J., joined. JACKSON, J., filed an opinion concurring in part and concurring in the judgment. ALITO, J., filed a dissenting opinion, in which GORSUCH, J., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1154,10 +1109,10 @@
    "name": "McLaughlin Chiropractic Associates, Inc. v. McKesson Corp.",
    "summary": "The Hobbs Act does not bind district courts in civil enforcement proceedings to an agency’s interpretation of a statute.  District courts must independently determine the law’s meaning under ordinary principles of statutory interpretation while affording appropriate respect to the agency’s interpretation.",
    "author_code": "BK",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1226_1a72.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/606us1r55_3d9g.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "KAVANAUGH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, GORSUCH, and BARRETT, JJ., joined. KAGAN, J., filed a dissenting opinion, in which SOTOMAYOR and JACKSON, JJ., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1244,10 +1199,10 @@
    "name": "Diamond Alternative Energy, LLC v. EPA",
    "summary": "The fuel producers have Article III standing to challenge EPA’s approval under the Clean Air Act of California regulations requiring automakers to manufacture more electric vehicles and fewer gasoline-powered vehicles.",
    "author_code": "BK",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24-7_8m58.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/606us1r54_j4ek.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "KAVANAUGH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, KAGAN, GORSUCH, and BARRETT, JJ., joined. SOTOMAYOR, J., and JACKSON, J., filed dissenting opinions.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1325,7 +1280,7 @@
    "provisions": [
     {
      "id": "art-3",
-     "quote": "To establish Article III standing for their D."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/24-00007qp.pdf",
@@ -1345,10 +1300,10 @@
    "name": "Stanley v. City of Sanford",
    "summary": "To prevail under 42 U. S. C. §12112(a), a plaintiff must plead and prove that she held or desired a job, and could perform its essential functions with or without reasonable accommodation, at the time of an employer’s alleged act of disability-based discrimination; the judgment of the Eleventh Circuit is affirmed.",
    "author_code": "NG",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-997_6579.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/606us1r53_5i36.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "GORSUCH, J., delivered the opinion of the Court with respect to Parts I and II, in which ROBERTS, C. J., and THOMAS, ALITO, KAGAN, KAVANAUGH, and BARRETT, JJ., joined, and an opinion with respect to Part III, in which ALITO, SOTOMAYOR, and KAGAN, JJ., joined. THOMAS, J., filed an opinion concurring in part and concurring in the judgment, in which BARRETT, J., joined. SOTOMAYOR, J., filed an opinion concurring in part and dissenting in part. JACKSON, J., filed a dissenting opinion, in which SOTOMAYOR, J., joined as to Parts III and IV, except for n. 12.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1432,7 +1387,7 @@
    "provisions": [
     {
      "id": "art-3",
-     "quote": "Nor does the dissent explain how, consistent with Article III, an individual can challenge a policy that she is “subject to” but that does not injure (or “impact”) her."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/23-00997qp.pdf",
@@ -1448,10 +1403,10 @@
    "name": "Fuld v. Palestine Liberation Organization",
    "summary": "The Promoting Security and Justice for Victims of Terrorism Act’s personal jurisdiction provision does not violate the Fifth Amendment’s Due Process Clause because the statute reasonably ties the assertion of jurisdiction over the PLO and PA to conduct involving the United States and implicating sensitive foreign policy matters within the prerogative of the political branches.",
    "author_code": "R",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24-20_f2bh.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/606us1r52_3eah.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ROBERTS, C. J., delivered the opinion of the Court, in which ALITO, SOTOMAYOR, KAGAN, KAVANAUGH, BARRETT, and JACKSON, JJ., joined. THOMAS, J., filed an opinion concurring in the judgment, which GORSUCH, J., joined as to Part II.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1519,12 +1474,16 @@
    },
    "provisions": [
     {
+     "id": "amend-2",
+     "quote": null
+    },
+    {
      "id": "amend-5",
-     "quote": "The question presented is whether this personal jurisdiction provision violates the Due Process Clause of the Fifth Amendment."
+     "quote": null
     },
     {
      "id": "amend-14",
-     "quote": "The dissent also disagreed that “the Due Process Clause of the Fifth Amendment imposes the same limits on the jurisdiction of the federal courts that the Due Process Clause of the Fourteenth Amendment imposes on the jurisdiction of the state courts.” Id., at 205."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/24-00020qp.pdf",
@@ -1545,10 +1504,10 @@
    "name": "NRC v. Texas",
    "summary": "Entities who were not parties to a Nuclear Regulatory Commission’s licensing proceeding are not entitled to obtain judicial review of the NRC’s licensing decision under the Hobbs Act.",
    "author_code": "BK",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1300_b97c.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us2r51_4f57.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "KAVANAUGH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and SOTOMAYOR, KAGAN, BARRETT, and JACKSON, JJ., joined. GORSUCH, J., filed a dissenting opinion, in which THOMAS and ALITO, JJ., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1635,10 +1594,10 @@
    "name": "EPA v. Calumet Shreveport Refining, L.L.C.",
    "summary": "Under the Clean Air Act, EPA’s denials of small refinery exemption petitions are locally or regionally applicable actions that fall within the “nationwide scope or effect” exception, requiring venue in the D. C. Circuit. See 42 U. S. C. §7607(b)(1).",
    "author_code": "T",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1229_c0ne.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us2r50_g2hk.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "THOMAS, J., delivered the opinion of the Court, in which ALITO, SOTOMAYOR, KAGAN, KAVANAUGH, BARRETT, and JACKSON, JJ., joined. GORSUCH, J., filed a dissenting opinion, in which ROBERTS, C. J., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1725,10 +1684,10 @@
    "name": "Oklahoma v. EPA",
    "summary": "Under the Clean Air Act, EPA’s disapprovals of the Oklahoma and Utah state implementation plans are locally or regionally applicable actions reviewable in a regional court of appeals. See 42 U. S. C. §7607(b)(1).",
    "author_code": "T",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1067_6j36.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us2r49_pok0.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "THOMAS, J., delivered the opinion of the Court, in which SOTOMAYOR, KAGAN, KAVANAUGH, BARRETT, and JACKSON, JJ., joined. GORSUCH, J., filed an opinion concurring in the judgment, in which ROBERTS, C. J., joined. ALITO, J., took no part in the consideration or decision of the case.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1818,10 +1777,10 @@
    "name": "United States v. Skrmetti",
    "summary": "Tennessee’s law prohibiting certain medical treatments for transgender minors is not subject to heightened scrutiny under the Equal Protection Clause of the Fourteenth Amendment and satisfies rational basis review.",
    "author_code": "R",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-477_2cp3.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us2r48_m648.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ROBERTS, C. J., delivered the opinion of the Court, in which THOMAS, GORSUCH, KAVANAUGH, and BARRETT, JJ., joined, and in which ALITO, J., joined as to Parts I and II–B. THOMAS, J., filed a concurring opinion. BARRETT, J., filed a concurring opinion, in which THOMAS, J., joined. ALITO, J., filed an opinion concurring in part and concurring in the judgment. SOTOMAYOR, J., filed a dissenting opinion, in which JACKSON, J., joined in full, and in which KAGAN, J., joined as to Parts I–IV. KAGAN, J., filed a dissenting opinion.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1908,8 +1867,16 @@
    },
    "provisions": [
     {
+     "id": "amend-1",
+     "quote": null
+    },
+    {
      "id": "amend-14",
-     "quote": "In this case, we consider whether a Tennessee law banning certain medical care for transgender minors violates the Equal Protection Clause of the Fourteenth Amendment."
+     "quote": null
+    },
+    {
+     "id": "art-6-cl-2",
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/23-00477qp.pdf",
@@ -1925,10 +1892,10 @@
    "name": "Perttu v. Richards",
    "summary": "Parties are entitled to a jury trial on the issue of exhaustion of remedies under The Prison Litigation Reform Act when that issue is intertwined with the merits of a claim that requires a jury trial under the Seventh Amendment.",
    "author_code": "R",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1324_2c83.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us2r47_bqm2.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ROBERTS, C. J., delivered the opinion of the Court, in which SOTOMAYOR, KAGAN, GORSUCH, and JACKSON, JJ., joined. BARRETT, J., filed a dissenting opinion, in which THOMAS, ALITO, and KAVANAUGH, JJ., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -2004,11 +1971,15 @@
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "Richards sued Perttu for violating his constitutional rights, including his First Amendment right to file grievances."
+     "quote": null
     },
     {
      "id": "amend-7",
-     "quote": "But the court held that “the Seventh Amendment requires a jury trial when the resolution of the exhaustion issue under the PLRA would also resolve a genuine dispute of material fact regarding the merits of the plaintiff ’s substantive case.” 96 F. 4th, at 923."
+     "quote": null
+    },
+    {
+     "id": "amend-8",
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/23-01324qp.pdf",
@@ -2024,10 +1995,10 @@
    "name": "Rivers v. Guerrero",
    "summary": "Once a district court enters its judgment with respect to a first-filed habeas petition, see 28 U. S. C. §2254, a second-in-time filing qualifies as a “second or successive application” under the Antiterrorism and Effective Death Penalty Act of 1996 properly subject to the requirements of §2244(b).",
    "author_code": "KJ",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1345_g3bh.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us2r46_kjfm.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "JACKSON, J., delivered the opinion for a unanimous Court.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2059,10 +2030,10 @@
    "name": "Commissioner v. Zuch",
    "summary": "The United States Tax Court lacks jurisdiction under 26 U. S. C. §6330 to resolve disputes between a taxpayer and the Internal Revenue Service when the IRS is no longer pursuing a levy.",
    "author_code": "AB",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24-416_l5gm.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us2r45_3f14.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "BARRETT, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, SOTOMAYOR, KAGAN, KAVANAUGH, and JACKSON, JJ., joined. GORSUCH, J., filed a dissenting opinion.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -2138,7 +2109,11 @@
    "provisions": [
     {
      "id": "art-3",
-     "quote": "And because the Tax Court applies principles of Article III jurisdiction to itself, this conclusion would have separately warranted dismissal."
+     "quote": null
+    },
+    {
+     "id": "art-2",
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/24-00416qp.pdf",
@@ -2154,10 +2129,10 @@
    "name": "Martin v. United States",
    "summary": "The Supremacy Clause does not afford the United States a defense in a suit against it under the Federal Tort Claims Act, 28 U. S. C. §2671 et seq., and the law enforcement proviso in §2680(h) of the FTCA overrides only the intentional-tort exception in that subsection, not the discretionary-function exception or other exceptions throughout §2680.",
    "author_code": "NG",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24-362_mjn0.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us2r44_4f57.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "GORSUCH, J., delivered the opinion for a unanimous Court. SOTOMAYOR, J., filed a concurring opinion, in which JACKSON, J., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2191,7 +2166,7 @@
    "provisions": [
     {
      "id": "art-6-cl-2",
-     "quote": "But in the Eleventh Circuit, the government may assert a particular affirmative defense under the Constitution’s Supremacy Clause."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/24-00362qp.pdf",
@@ -2211,10 +2186,10 @@
    "name": "Parrish v. United States",
    "summary": "A litigant who files a notice of appeal after the original appeal deadline but before the federal court grants reopening under 28 U. S. C. §2107(c) need not file a second notice after reopening, because the original notice relates forward to the date reopening is granted.",
    "author_code": "SS",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24-275_k6gc.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us2r43_e29g.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "SOTOMAYOR, J., delivered the opinion of the Court, in which ROBERTS, C. J., and ALITO, KAGAN, KAVANAUGH, and BARRETT, JJ., joined. JACKSON, J., filed an opinion concurring in the judgment, in which THOMAS, J., joined. GORSUCH, J., filed a dissenting opinion.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -2305,10 +2280,10 @@
    "name": "Soto v. United States",
    "summary": "The CRSC—a statute providing “combat-related special compensation” to qualifying veterans who have suffered combat-related disabilities, see 10 U. S. C. §1413a—confers authority to settle CRSC claims and thus displaces the settlement procedures and limitations period under the Barring Act, 31 U. S. C. §3702.",
    "author_code": "T",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24-320_m648.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us2r42_k5fl.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "THOMAS, J., delivered the opinion for a unanimous Court.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2341,10 +2316,10 @@
    "name": "A. J. T. v. Osseo Area Schools, Independent School Dist. No. 279",
    "summary": "Schoolchildren bringing claims related to their education under either Title II of the Americans with Disabilities Act or Section 504 of the Rehabilitation Act are not required to make a heightened showing of “bad faith or gross misjudgment” but instead are subject to the same standards that apply in other disability discrimination contexts.",
    "author_code": "R",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24-249_a86c.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us2r41_bp7c.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ROBERTS, C. J., delivered the opinion for a unanimous Court. THOMAS, J., filed a concurring opinion, in which KAVANAUGH, J., joined. SOTOMAYOR, J., filed a concurring opinion, in which JACKSON, J., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2391,7 +2366,20 @@
      }
     ]
    },
-   "provisions": [],
+   "provisions": [
+    {
+     "id": "amend-14",
+     "quote": null
+    },
+    {
+     "id": "art-1-sec-8-cl-3",
+     "quote": null
+    },
+    {
+     "id": "art-1-sec-8-cl-1",
+     "quote": null
+    }
+   ],
    "qp_url": "https://www.supremecourt.gov/qp/24-00249qp.pdf",
    "question_presented": [
     "Title II of the Americans with Disabilities Act (ADA) and Section 504 of the Rehabilitation Act (Rehabilitation Act) require public entities and organizations that receive federal funding to provide reasonable accommodations for people with disabilities. In the decision below, the Eighth Circuit held that, for discrimination claims \"based on educational services\" brought by children with disabilities, these statutes are violated only if school officials acted with ''bad faith or gross misjudgment.\" App.3a.",
@@ -2408,10 +2396,10 @@
    "name": "Laboratory Corp. of America Holdings v. Davis",
    "summary": "Certiorari dismissed as improvidently granted.",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24-304_3e04.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us1r40_f1gk.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "PER CURIAM. The writ of certiorari is dismissed as improvidently granted. It is so ordered.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": [],
    "provisions": [],
    "qp_url": "https://www.supremecourt.gov/qp/24-00304qp.pdf",
@@ -2427,10 +2415,10 @@
    "name": "Ames v. Ohio Department of Youth Services",
    "summary": "The Sixth Circuit’s “background circumstances” rule—which requires members of a majority group to satisfy a heightened evidentiary standard to prevail on a Title VII discrimination claim—cannot be squared with either the text of Title VII or the Court’s precedents.",
    "author_code": "KJ",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1039_c0n2.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us1r39_kkg1.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "JACKSON, J., delivered the opinion for a unanimous Court. THOMAS, J., filed a concurring opinion, in which GORSUCH, J., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2461,7 +2449,12 @@
      }
     ]
    },
-   "provisions": [],
+   "provisions": [
+    {
+     "id": "art-3",
+     "quote": null
+    }
+   ],
    "qp_url": "https://www.supremecourt.gov/qp/23-01039qp.pdf",
    "question_presented": [
     "Whether, in addition to pleading the other elements of Title VII, a majority-group plaintiff must show \"background circumstances to support the suspicion that the defendant is that unusual employer who discriminates against the majority.\" App. 5a."
@@ -2475,10 +2468,10 @@
    "name": "Smith & Wesson Brands, Inc. v. Estados Unidos Mexicanos",
    "summary": "Because Mexico’s complaint does not plausibly allege that the defendant gun manufacturers aided and abetted gun dealers’ unlawful sales of firearms to Mexican traffickers, the Protection of Lawful Commerce in Arms Act, 15 U. S. C. §7901(a)(3), bars the lawsuit.",
    "author_code": "EK",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1141_lkgn.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us1r38_j426.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "KAGAN, J., delivered the opinion for a unanimous Court. THOMAS, J., and JACKSON, J., filed concurring opinions.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2511,7 +2504,12 @@
      }
     ]
    },
-   "provisions": [],
+   "provisions": [
+    {
+     "id": "amend-2",
+     "quote": null
+    }
+   ],
    "qp_url": "https://www.supremecourt.gov/qp/23-01141qp.pdf",
    "question_presented": [
     "The Mexican Government has sued leading members of the American firearms industry, seeking to hold them liable for harms inflicted by Mexican drug cartels. According to Mexico, America's firearms companies have engaged in a series of business practices for decades-from selling semi-automatic rifles, to making magazines that hold over ten rounds, to failing to impose various sales restrictions-that have created a supply of firearms later smuggled across the border and ultimately used by the cartels to commit crimes. Mexico asks for billions of dollars in damages, plus extensive injunctive relief imposing new gun-control measures in the United States.",
@@ -2529,10 +2527,10 @@
    "name": "Catholic Charities Bureau, Inc. v. Wisconsin Labor and Industry Review Comm’n.",
    "summary": "The Wisconsin Supreme Court’s decision denying petitioners a tax emption available to religious entities under Wisconsin law on the grounds that petitioners were not “operated primarily for religious purposes” because they neither engaged in proselytization nor limited their charitable services to Catholics violated the First Amendment.",
    "author_code": "SS",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24-154new2_4gdj.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us1r37_986b.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "SOTOMAYOR, J., delivered the opinion for a unanimous Court. THOMAS, J., and JACKSON, J., filed concurring opinions.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2568,7 +2566,7 @@
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "The question here is whether §108.02(15)(h)(2), as applied to petitioners by the Wisconsin Supreme Court, violates the First Amendment."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/24-00154qp.pdf",
@@ -2589,10 +2587,10 @@
    "name": "CC/Devas (Mauritius) Ltd. v. Antrix Corp.",
    "summary": "To exercise personal jurisdiction over a foreign state, the Foreign Sovereign Immunities Act does not require proof of “minimum contacts” over and above the contacts already required by the Act’s enumerated exceptions to foreign sovereign immunity.",
    "author_code": "A",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1201_8759.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us1r36_4f14.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ALITO, J., delivered the opinion for a unanimous Court.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2610,7 +2608,7 @@
    "provisions": [
     {
      "id": "amend-5",
-     "quote": "Namely, Antrix contends that the Fifth Amendment’s Due Process Clause itself requires a showing of minimum contacts before a federal court can exercise personal jurisdiction over a company owned by a foreign sovereign."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/23-01201qp.pdf",
@@ -2626,10 +2624,10 @@
    "name": "BLOM Bank SAL v. Honickman",
    "summary": "Relief under Federal Rule of Civil Procedure 60(b)(6) requires extraordinary circumstances, and this standard does not become less demanding when the movant seeks to reopen a case to amend a complaint; a party must first satisfy Rule 60(b) before Rule 15(a)’s liberal amendment standard can apply.",
    "author_code": "T",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1259_9p6b.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us1r35_4f14.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "THOMAS, J., delivered the opinion of the Court, in which ROBERTS, C. J., and ALITO, SOTOMAYOR, KAGAN, GORSUCH, KAVANAUGH, and BARRETT, JJ., joined, and in which JACKSON, J., joined as to all but Part III. JACKSON, J., filed an opinion concurring in part and concurring in the judgment.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -2719,10 +2717,10 @@
    "name": "Seven County Infrastructure Coalition v. Eagle County",
    "summary": "The D. C. Circuit failed to afford the U. S. Surface Transportation Board the substantial deference required when reviewing agency action under the National Environmental Policy Act, and incorrectly interpreted NEPA to require the Board to consider in its environmental impact statement the environmental effects of temporally and geographically separate upstream and downstream projects unrelated to the Uinta Basin Railway.",
    "author_code": "BK",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-975_m648.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us1r34_h3ci.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "KAVANAUGH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, and BARRETT, JJ., joined. SOTOMAYOR, J., filed an opinion concurring in the judgment, in which KAGAN and JACKSON, JJ., joined. GORSUCH, J., took no part in the consideration or decision of the case.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -2812,22 +2810,11 @@
    "name": "OK Charter School Board v. Drummond",
    "summary": "Judgment affirmed by an equally divided Court.",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24-394_9p6b.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us1r33_5h26.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "PER CURIAM. The judgment is affirmed by an equally divided Court. JUSTICE BARRETT took no part in the consideration or decision of these cases.",
-   "lineup": {
-    "unanimous": false,
-    "justices": [
-     {
-      "justice": "Barrett",
-      "roles": [
-       "took no part"
-      ],
-      "wrote": []
-     }
-    ]
-   },
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": [],
    "provisions": [],
    "qp_url": "https://www.supremecourt.gov/qp/24-00394qp.pdf",
    "question_presented": [
@@ -2845,10 +2832,10 @@
    "name": "Kousisis v. United States",
    "summary": "A defendant who induces a victim to enter into a transaction under materially false pretenses may be convicted of federal fraud even if the defendant did not seek to cause the victim economic loss.",
    "author_code": "AB",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-909_f2q3.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us1r32_f2ah.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "BARRETT, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, KAGAN, KAVANAUGH, and JACKSON, JJ., joined. THOMAS, J., filed a concurring opinion. GORSUCH, J., filed an opinion concurring in part and concurring in the judgment. SOTOMAYOR, J., filed an opinion concurring in the judgment.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -2926,7 +2913,12 @@
      }
     ]
    },
-   "provisions": [],
+   "provisions": [
+    {
+     "id": "amend-14",
+     "quote": null
+    }
+   ],
    "qp_url": "https://www.supremecourt.gov/qp/23-00909qp.pdf",
    "question_presented": [
     "The circuits are split 6-5 on the validity of the fraudulent inducement theory of mail and wire fraud. The Questions Presented are: Whether deception to induce a commercial exchange can constitute mail or wire fraud, even if inflicting economic harm on the alleged victim was not the object of the scheme. Whether a sovereign's statutory, regulatory, or policy interest is a property interest when compliance is a material term of payment for goods or services. Whether all contract rights are \"property.\""
@@ -2940,15 +2932,15 @@
    "name": "A.A.R.P. v. Trump",
    "summary": "The Court construes the detainees’ application seeking injunctive relief against summary removal under the Alien Enemies Act, 50 U. S. C. §21, as a petition for a writ of certiorari from the decision of the Fifth Circuit.  The Court grants the petition as well as the application for injunction, vacates the judgment of the Fifth Circuit, and remands for further proceedings.",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24a1007_g2bh.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us1r31_7k47.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "PER CURIAM. The President has invoked the Alien Enemies Act (AEA), Rev. Stat. §4067, 50 U. S. C. §21, to remove Venezuelan nationals who are members of Tren de Aragua (TdA), a designated foreign terrorist organization. See Presidential Proclamation No. 10903, 90 Fed. Reg. 13033 (2025). Applicants are two detainees identified as members of TdA and a putative class of similarly situated detainees in the Northern District of Texas. All of the alleged TdA members in the putative class are currently being held in U. S. detention facilities. In the application before the Court, the detainees seek injunctive relief against summary removal under the AEA. I On April 17, 2025, the District Court denied the detainees’ motion for a temporary restraining order (TRO) against summary removal under the AEA. No. 25−cv−59, ECF Doc. 27. The detainees allege that, hours later, putative class members were served notices of AEA removal and told that they would be removed “tonight or tomorrow.” ECF Doc. 30, p. 1. On April 18 at 12:34 a.m. central time, the detainees moved for an emergency TRO. See ibid. At 12:48 p.m., the detainees moved for a ruling on that motion or a status conference by 1:30 p.m. ECF Doc. 34. At 3:02 p.m., they appealed “the constructive denia[l]” of the emergency TRO Per Curiam to the Fifth Circuit. ECF Doc. 36, p. 1. The detainees also applied to this Court for a temporary injunction. We understood the Government to assert the right to remove the detainees as soon as midnight central time on April 19. The Government addressed the detainees’ allegations on April 18 only at an evening hearing before the District Court for the District of Columbia, where the detainees had separately sought relief. The Government guaranteed that no putative class members would be removed that day. Tr. of Proceedings in J. G. G. v. Trump, No. 25−cv−766, ECF Doc. 93, p. 9. But it further represented that, in its view, removal of putative class members as soon as the next day “would be consistent with” its due process obligations, and it “reserve[d] the right” to take such action. Id., at 26; see id., at 16 (explanation by the court that “tomorrow . . . starts at 12:01 a.m.”). Evidence now in the record (although not all before us on April 18) suggests that the Government had in fact taken steps on the afternoon of April 18 toward removing detainees under the AEA—including transporting them from their detention facility to an airport and later returning them to the facility. See Supp. App. to Reply 1a−5a. Had the detainees been removed from the United States to the custody of a foreign sovereign on April 19, the Government may have argued, as it has previously argued, that no U. S. court had jurisdiction to order relief. See Application To Vacate Injunction in Noem v. Abrego Garcia, No. 24A949 (Apr. 7, 2025), pp. 11−20. At 12:52 a.m. eastern time (11:52 p.m. central time), we ordered the Government—in light of all these circumstances—“not to remove any member of the putative class of detainees” in order to preserve our jurisdiction to consider the application. 604 U. S. ___ (2025). We invited the Government to respond to that application after the Fifth Circuit ruled. The Fifth Circuit dismissed the detainees’ appeal for lack of jurisdiction and denied their motion for injunction pending appeal as premature, on the ground that Per Curiam the detainees “gave the [district] court only 42 minutes to act.” No. 25−10534, ECF Doc. 14, p. 2. We now construe the application as a petition for writ of certiorari from the decision of the Fifth Circuit. See Reply 15. We grant the petition as well as the application for injunction pending further proceedings, vacate the judgment of the Fifth Circuit, and remand for further proceedings. II The Fifth Circuit erred in dismissing the detainees’ appeal for lack of jurisdiction. Appellate courts have jurisdiction to review interlocutory orders that have “the practical effect of refusing an injunction.” Carson v. American Brands, Inc., 450 U. S. 79, 84 (1981). A district court’s inaction in the face of extreme urgency and a high risk of “serious, perhaps irreparable,” consequences may have the effect of refusing an injunction. 16 C. Wright, A. Miller, & E. Cooper, Federal Practice and Procedure §3924.1, pp. 174, 180−181 (3d ed. 2012) (quoting Baltimore Contractors, Inc. v. Bodinger, 348 U. S. 176, 181 (1955)). Here the District Court’s inaction—not for 42 minutes but for 14 hours and 28 minutes—had the practical effect of refusing an injunction to detainees facing an imminent threat of severe, irreparable harm. Accordingly, we vacate the judgment of the Court of Appeals. “[T]he Fifth Amendment entitles aliens to due process of law in the context of removal proceedings.” Trump v. J. G. G., 604 U. S. ___, ___ (2025) (per curiam) (slip op., at 3) (internal quotation marks omitted). “Procedural due process rules are meant to protect” against “the mistaken or unjustified deprivation of life, liberty, or property.” Carey v. Piphus, 435 U. S. 247, 259 (1978). We have long held that “no person shall be” removed from the United States “without opportunity, at some time, to be heard.” The Japanese Immigrant Case, 189 U. S. 86, 101 (1903). Due process requires notice that is “reasonably calculated, under all the Per Curiam circumstances, to apprise interested parties” and that “afford[s] a reasonable time . . . to make [an] appearance.” Mullane v. Central Hanover Bank & Trust Co., 339 U. S. 306, 314 (1950). Accordingly, in J. G. G., this Court explained—with all nine Justices agreeing—that “AEA detainees must receive notice . . . that they are subject to removal under the Act . . . within a reasonable time and in such a manner as will allow them to actually seek habeas relief ” before removal. 604 U. S., at ____ (slip op., at 3). In order to “actually seek habeas relief,” a detainee must have sufficient time and information to reasonably be able to contact counsel, file a petition, and pursue appropriate relief. The Government does not contest before this Court the applicants’ description of the notice afforded to AEA detainees in the Northern District of Texas, nor the assertion that the Government was poised to carry out removals imminently. The Government has represented elsewhere that it is unable to provide for the return of an individual deported in error to a prison in El Salvador, see Abrego Garcia v. Noem, No. 25−cv−951 (D Md.), ECF Docs. 74, 77, where it is alleged that detainees face indefinite detention, see Application for Injunction 11. The detainees’ interests at stake are accordingly particularly weighty. Under these circumstances, notice roughly 24 hours before removal, devoid of information about how to exercise due process rights to contest that removal, surely does not pass muster. But it is not optimal for this Court, far removed from the circumstances on the ground, to determine in the first instance the precise process necessary to satisfy the Constitution in this case. We remand the case to the Fifth Circuit for that purpose. To be clear, we decide today only that the detainees are entitled to more notice than was given on April 18, and we grant temporary injunctive relief to preserve our jurisdiction while the question of what notice is due is adjudicated. See post, at 13 (ALITO, J., dissenting). We did not on April Per Curiam 19—and do not now—address the underlying merits of the parties’ claims regarding the legality of removals under the AEA. We recognize the significance of the Government’s national security interests as well as the necessity that such interests be pursued in a manner consistent with the Constitution. In light of the foregoing, lower courts should address AEA cases expeditiously. III The dissent disputes both the Court’s jurisdiction and the availability of classwide relief. We do not find its reasoning persuasive. First, we reject the dissent’s characterization of the events that transpired on April 18, which lead it to question our jurisdiction. District courts should approach requests for preliminary relief with care and consideration, see post, at 3−4 (ALITO, J., dissenting), but exigent circumstances may impose practical constraints. Preliminary relief is “customarily granted on the basis of procedures that are less formal and evidence that is less complete than in a trial on the merits.” Lackey v. Stinnie, 604 U. S. ___, ___ (2025) (slip op., at 6) (quoting University of Tex. v. Camenisch, 451 U. S. 390, 395 (1981)). The purpose of such relief is “merely to preserve the relative positions of the parties” pending further proceedings. Lackey, 604 U. S., at ___ (slip op., at 6) (quoting Camenisch, 451 U. S., at 395). In this case, the record before the District Court, although limited, indicated that removals of putative class members were likely imminent. Contra, post, at 4−6 (ALITO, J., dissenting). The detainees attached four declarations to their emergency motion for a TRO. In one, for example, an attorney relayed a detainee’s report that immigration officers “had informed them that they will be deported either today or tomorrow.” ECF Doc. 30−1. In a second, a nonprofit director described conversations with Per Curiam family members of detainees and linked to a video of detainees holding notices of removal as evidence that detainees “were being removed.” ECF Doc. 30−2. Importantly, the relevant question for purposes of our jurisdiction is whether, at the time this Court was called upon to intervene, the District Court’s inaction had the effect of refusing an injunction. In their application to this Court, the detainees represented that “[m]any individuals [had] already been loaded on to buses, presumably headed to the airport.” Application for Injunction 1. Shortly thereafter, the Government represented on the record in federal court that it reserved the right to remove detainees after midnight. We had the power to issue injunctive relief to prevent irreparable harm to the applicants and to preserve our jurisdiction over the matter. 28 U. S. C. §1651(a). Now that the Fifth Circuit has ruled, our certiorari jurisdiction also supports review in the ordinary course. Finally, this Court may properly issue temporary injunctive relief to the putative class in order to preserve our jurisdiction pending appeal.* Named applicants A. A. R. P. and W. M. M. assert that they are at imminent risk of being classified as alien enemies and removed from the United —————— *We note that the District Court recently denied class certification as to the detainees’ underlying habeas claims challenging the validity of removal under the AEA. See ECF Doc. 67. By its own terms, the District Court’s order is “automatically vacated” by our order granting a writ of certiorari. Id., at 2. And in any event, the District Court’s order primarily addressed the detainees’ ability to challenge the validity of AEA removal on a classwide basis. The application before this Court seeks only to vindicate notice rights on a classwide basis. To the extent the District Court’s order addressed due process, see post, at 12 (ALITO, J., dissenting) (citing ECF Doc. 67, pp. 29−31, 33, 38−39), the District Court’s concerns as to the propriety of classwide relief focused on considerations downstream of the initial notice necessary for detainees to raise any substantive claims against AEA removal, see ECF Doc. 67, pp. 29−31, 33, 38−39. Per Curiam States, but the record does not indicate that they have received any formal notice of removal under the AEA. See ECF Doc. 38, pp. 5−6. The named applicants, along with putative class members, are entitled to constitutionally adequate notice prior to any removal, in order to pursue appropriate relief. Although the putative class members may ultimately take different steps to protect their own interests in response to such notice, the notice to which they are entitled is the same. And because courts may issue temporary relief to a putative class, see 2 W. Rubenstein, Newberg & Rubenstein on Class Actions §4:30 (6th ed. 2022 and Supp. 2024), we need not decide whether a class should be certified as to the detainees’ due process claims in order to temporarily enjoin the Government from removing putative class members while the question of what notice is due is adjudicated. We recognize that the Government “has agreed to forgo removing the named petitioners pursuant to the AEA while their habeas proceedings are pending.” Opposition to Emergency Application 11. But we reject the proposition that a class-action defendant may defeat class treatment, if it is otherwise proper, by promising as a matter of grace to treat named plaintiffs differently. Cf. FBI v. Fikre, 601 U. S. 234, 241 (2024) (explaining that voluntary cessation of challenged conduct does not moot a claim). And we are skeptical of the self-defeating notion that the right to the notice necessary to “actually seek habeas relief,” J. G. G., 604 U. S., at ___ (slip op., at 3), must itself be vindicated through individual habeas petitions, somehow by plaintiffs who have not received notice. * * * The application for an injunction pending further proceedings is granted. The motion for leave to file a supplemental appendix under seal is also granted. Additionally, applicants suggested this Court treat the application as a Per Curiam petition for a writ of certiorari; doing so, the petition is granted. The judgment of the Fifth Circuit is vacated, and the case is remanded to the Fifth Circuit. In resolving the detainees’ appeal, the Fifth Circuit should address (1) all the normal preliminary injunction factors, including likelihood of success on the merits, as to the named plaintiffs’ underlying habeas claims that the AEA does not authorize their removal pursuant to the President’s March 14, 2025, Proclamation, and (2) the issue of what notice is due, as to the putative class’s due process claims against summary removal. The Government is enjoined from removing the named plaintiffs or putative class members in this action under the AEA pending order by the Fifth Circuit and disposition of the petition for a writ of certiorari, if such writ is timely sought. Should the petition for a writ of certiorari be denied, this order shall terminate automatically. In the event the petition for a writ of certiorari is granted, the order shall terminate upon the sending down of the judgment of this Court. The Government may remove the named plaintiffs or putative class members under other lawful authorities. It is so ordered.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": [],
    "provisions": [
     {
      "id": "amend-5",
-     "quote": "“[T]he Fifth Amendment entitles aliens to due process of law in the context of removal proceedings.” Trump v."
+     "quote": null
     }
    ]
   },
@@ -2959,10 +2951,10 @@
    "name": "Barnes v. Felix",
    "summary": "The Fifth Circuit’s moment-of-threat rule—a framework for evaluating police shootings which requires a court to look only to the circumstances existing at the precise time an officer perceived the threat inducing him to shoot—improperly narrows the Fourth Amendment analysis of police use of force.",
    "author_code": "EK",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1239_onjq.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us1r30_h315.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "KAGAN, J., delivered the opinion for a unanimous Court. KAVANAUGH, J., filed a concurring opinion, in which THOMAS, ALITO, and BARRETT, JJ., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -3010,7 +3002,7 @@
    "provisions": [
     {
      "id": "amend-4",
-     "quote": "A police officer’s use of deadly force violates the Fourth Amendment when it is not “objectively reasonable.” Graham v."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/23-01239qp.pdf",
@@ -3028,10 +3020,10 @@
    "name": "Feliciano v. Department Of Transportation",
    "summary": "A federal civilian employee called to active duty pursuant to “any other provision of law . . . during a national emergency” as described in 10 U. S. C. §101(a)(13)(B) is entitled to differential pay if the reservist’s service temporally coincides with a declared national emergency without any showing that the service bears a substantive connection to a particular emergency.",
    "author_code": "NG",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-861_7lh8.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us1r29_bp7c.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "GORSUCH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and SOTOMAYOR, KAVANAUGH, and BARRETT, JJ., joined. THOMAS, J., filed a dissenting opinion, in which ALITO, KAGAN, and JACKSON, JJ., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -3122,10 +3114,10 @@
    "name": "Advocate Christ Medical Center v. Kennedy",
    "summary": "In calculating the Medicare fraction, an individual is “entitled to supplementary security income benefits” when she is eligible to receive an SSI cash payment during the month of her hospitalization.  42 U. S. C. §1395ww(d)(5)(F)(vi)(I).",
    "author_code": "AB",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-715_5426.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us1r28_limq.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "BARRETT, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, KAGAN, GORSUCH, and KAVANAUGH, JJ., joined. JACKSON, J., filed a dissenting opinion, in which SOTOMAYOR, J., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -3214,10 +3206,10 @@
    "name": "Monsalvo Velazquez v. Bondi",
    "summary": "Under 8 U. S. C. §1229c(b)(2), a voluntary-departure deadline that falls on a weekend or legal holiday extends to the next business day.",
    "author_code": "NG",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-929_h3ci.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us2r27_e2pg.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "GORSUCH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and SOTOMAYOR, KAGAN, and JACKSON, JJ., joined. THOMAS, J., filed a dissenting opinion, in which ALITO, J., joined, and in which KAVANAUGH and BARRETT, JJ., joined as to Parts I and II. ALITO, J., and BARRETT, J., filed dissenting opinions, in which KAVANAUGH, J., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -3312,10 +3304,10 @@
    "name": "Cunningham v. Cornell Univ.",
    "summary": "To state a prohibited-transactions claim under the Employee Retirement Income Security Act of 1974, see 29 U. S. C. §1106(a)(1)(C), a plaintiff need only plausibly allege the elements contained in that provision itself, without addressing potential §1108 exemptions.",
    "author_code": "SS",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1007_h3ci.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us2r26_7m48.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "SOTOMAYOR, J., delivered the opinion for a unanimous Court. ALITO, J., filed a concurring opinion, in which THOMAS and KAVANAUGH, JJ., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -3356,7 +3348,7 @@
    "provisions": [
     {
      "id": "art-3",
-     "quote": "District courts must also, consistent with Article III standing, dismiss suits that allege a prohibited transaction occurred but fail to identify an injury."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/23-01007qp.pdf",
@@ -3374,15 +3366,15 @@
    "name": "Trump v. J. G. G.",
    "summary": "The Government’s application to vacate the temporary restraining orders that prevented removal of Venezuelan nationals designated as alien enemies under the Alien Enemies Act is construed as an application to vacate appealable injunctions and is granted; the action should have been brought in habeas and venue for challenging removal under the Act lies in the district of confinement; and the detainees are entitled to notice and an opportunity to challenge their removal.",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24a931_2c83.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us2r25_7648.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "PER CURIAM. This matter concerns the detention and removal of Venezuelan nationals believed to be members of Tren de Aragua (TdA), an entity that the State Department has designated as a foreign terrorist organization. See 90 Fed. Reg. 10030 (2025). The President issued Proclamation No. 10903, invoking the Alien Enemies Act (AEA), Rev. Stat. §4067, 50 U. S. C. §21, to detain and remove Venezuelan nationals “who are members of TdA.” Invocation of the Alien Enemies Act Regarding the Invasion of the United States by Tren de Aragua, 90 Fed. Reg. 13034. Five detainees and a putative class sought injunctive and declaratory relief against the implementation of, and their removal under, the Proclamation. Initially, the detainees sought relief in habeas among other causes of action, but they dismissed their habeas claims. On March 15, 2025, the District Court for the District of Columbia issued two temporary restraining orders (TROs) preventing any removal of the named plaintiffs and preventing removal under the AEA of a provisionally certified class consisting of “[a]ll noncitizens in U.S. custody who are subject to” the Proclamation. Minute Order on Motion To Certify Class in No. 25−cv−00766. On March 28, the District Court extended the TROs for up to an additional 14 days. See Fed. Rule Civ. Proc. 65(b)(2). Per Curiam The D. C. Circuit denied the Government’s emergency motion to stay the orders. The Government then applied to this Court, seeking vacatur of the orders. We construe these TROs as appealable injunctions. See Carson v. American Brands, Inc., 450 U. S. 79, 84 (1981). We grant the application and vacate the TROs. The detainees seek equitable relief against the implementation of the Proclamation and against their removal under the AEA. They challenge the Government’s interpretation of the Act and assert that they do not fall within the category of removable alien enemies. But we do not reach those arguments. Challenges to removal under the AEA, a statute which largely “ ‘preclude[s] judicial review,’ ” Ludecke v. Watkins, 335 U. S. 160, 163−164, (1948), must be brought in habeas. Cf. Heikkila v. Barber, 345 U. S. 229, 234−235 (1953) (holding that habeas was the only cause of action available to challenge deportation under immigration statutes that “preclud[ed] judicial intervention” beyond what was necessary to vindicate due process rights). Regardless of whether the detainees formally request release from confinement, because their claims for relief “ ‘necessarily imply the invalidity’ ” of their confinement and removal under the AEA, their claims fall within the “core” of the writ of habeas corpus and thus must be brought in habeas. Cf. Nance v. Ward, 597 U. S. 159, 167 (2022) (quoting Heck v. Humphrey, 512 U. S. 477, 487 (1994)). And “immediate physical release [is not] the only remedy under the federal writ of habeas corpus.” Peyton v. Rowe, 391 U. S. 54, 67 (1968); see, e.g., Nance, 597 U. S., at 167 (explaining that a capital prisoner may seek “to overturn his death sentence” in habeas by “analog[y]” to seeking release); In re Bonner, 151 U. S. 242, 254, 259 (1894). For “core habeas petitions,” “jurisdiction lies in only one district: the district of confinement.” Rumsfeld v. Padilla, 542 U. S. 426, 443 (2004). The detainees are confined in Texas, so venue is improper in the District of Columbia. As a result, the Government is likely to Per Curiam succeed on the merits of this action. The detainees also sought equitable relief against summary removal. Although judicial review under the AEA is limited, we have held that an individual subject to detention and removal under that statute is entitled to “ ‘judicial review’ ” as to “questions of interpretation and constitutionality” of the Act as well as whether he or she “is in fact an alien enemy fourteen years of age or older.” Ludecke, 335 U. S., at 163−164, 172, n. 17. (Under the Proclamation, the term “alien enemy” is defined to include “all Venezuelan citizens 14 years of age or older who are members of TdA, are within the United States, and are not actually naturalized or lawful permanent residents of the United States.” 90 Fed. Reg. 13034.) The detainees’ rights against summary removal, however, are not currently in dispute. The Government expressly agrees that “TdA members subject to removal under the Alien Enemies Act get judicial review.” Reply in Support of Application To Vacate 1. “It is well established that the Fifth Amendment entitles aliens to due process of law” in the context of removal proceedings. Reno v. Flores, 507 U. S. 292, 306 (1993). So, the detainees are entitled to notice and opportunity to be heard “appropriate to the nature of the case.” Mullane v. Central Hanover Bank & Trust Co., 339 U. S. 306, 313 (1950). More specifically, in this context, AEA detainees must receive notice after the date of this order that they are subject to removal under the Act. The notice must be afforded within a reasonable time and in such a manner as will allow them to actually seek habeas relief in the proper venue before such removal occurs. For all the rhetoric of the dissents, today’s order and per curiam confirm that the detainees subject to removal orders under the AEA are entitled to notice and an opportunity to challenge their removal. The only question is which court will resolve that challenge. For the reasons set forth, we Per Curiam hold that venue lies in the district of confinement. The dissents would have the Court delay resolving that issue, requiring—given our decision today—that the process begin anew down the road. We see no benefit in such wasteful delay. The application to vacate the orders of the United States District Court for the District of Columbia presented to THE CHIEF JUSTICE and by him referred to the Court is granted. The March 15, 2025 minute orders granting a temporary restraining order and March 28, 2025 extension of the United States District Court for the District of Columbia, case No. 1:25-cv-766, are vacated. It is so ordered.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": [],
    "provisions": [
     {
      "id": "amend-5",
-     "quote": "“It is well established that the Fifth Amendment entitles aliens to due process of law” in the context of removal proceedings."
+     "quote": null
     }
    ]
   },
@@ -3393,10 +3385,10 @@
    "name": "Department of Education v. California",
    "summary": "The District Court’s order preventing the termination of education-related grants is construed as an appealable preliminary injunction. Because the Government is likely to succeed in showing that the District Court lacked jurisdiction under the Administrative Procedure Act to order monetary payments, and upon consideration of the remaining stay factors, the Government’s application for a stay pending appeal is granted.",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24a910_f2bh.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us2r24_l53m.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "PER CURIAM. On March 10, 2025, the United States District Court for the District of Massachusetts issued what it styled as a temporary restraining order (TRO) enjoining the Government from terminating various education-related grants. The order also requires the Government to pay out past-due grant obligations and to continue paying obligations as they accrue. The District Court’s conclusion rested on a finding that respondents are likely to succeed on the merits of their claims under the Administrative Procedure Act (APA), 60 Stat. 237. On March 26, the Government filed this application to vacate the District Court’s March 10 order (as extended on March 24) and requested an immediate administrative stay. The application was presented to JUSTICE JACKSON and by her referred to the Court. Although the Courts of Appeals generally lack appellate jurisdiction over appeals from TROs, several factors counsel in favor of construing the District Court’s order as an appealable preliminary injunction. Among other considerations, the District Court’s order carries many of the hallmarks of a preliminary injunction. See Sampson v. Murray, 415 U. S. 61, 87 (1974); Abbott v. Perez, 585 U. S. 579, 594 (2018). Moreover, the District Court’s “basis for issuing the order [is] strongly challenged,” as the Government is likely Per Curiam to succeed in showing the District Court lacked jurisdiction to order the payment of money under the APA. Sampson, 415 U. S., at 87. The APA’s waiver of sovereign immunity does not apply “if any other statute that grants consent to suit expressly or impliedly forbids the relief which is sought.” 5 U. S. C. §702. Nor does the waiver apply to claims seeking “money damages.” Ibid. True, a district court’s jurisdiction “is not barred by the possibility” that an order setting aside an agency’s action may result in the disbursement of funds. Bowen v. Massachusetts, 487 U. S. 879, 910 (1988). But, as we have recognized, the APA’s limited waiver of immunity does not extend to orders “to enforce a contractual obligation to pay money” along the lines of what the District Court ordered here. Great-West Life & Annuity Ins. Co. v. Knudson, 534 U. S. 204, 212 (2002). Instead, the Tucker Act grants the Court of Federal Claims jurisdiction over suits based on “any express or implied contract with the United States.” 28 U. S. C. §1491(a)(1). As for the remaining stay factors, respondents have not refuted the Government’s representation that it is unlikely to recover the grant funds once they are disbursed. No grantee “promised to return withdrawn funds should its grant termination be reinstated,” and the District Court declined to impose bond. App. to Application To Vacate Order 15a, 17a. By contrast, the Government compellingly argues that respondents would not suffer irreparable harm while the TRO is stayed. Respondents have represented in this litigation that they have the financial wherewithal to keep their programs running. So, if respondents ultimately prevail, they can recover any wrongfully withheld funds through suit in an appropriate forum. And if respondents instead decline to keep the programs operating, then any ensuing irreparable harm would be of their own making. “Such self-imposed costs are not properly the subject of inquiry on a motion for stay.” Cuomo v. NRC, 772 F. 2d 972, 977 (CADC 1985) (per curiam). Per Curiam We construe the application as seeking a stay pending appeal and grant the application. The March 10, 2025 order and March 24, 2025 extension of the United States District Court for the District of Massachusetts, case No. 1:25– cv–10548, is stayed pending the disposition of the appeal in the United States Court of Appeals for the First Circuit and disposition of a petition for a writ of certiorari, if such a writ is timely sought. Should certiorari be denied, this stay shall terminate automatically. In the event certiorari is granted, the stay shall terminate upon the sending down of the judgment of this Court. It is so ordered. THE CHIEF JUSTICE would deny the application.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": [],
    "provisions": []
   },
@@ -3407,10 +3399,10 @@
    "name": "Medical Marijuana, Inc. v. Horn",
    "summary": "Under civil RICO, see 18 U. S. C. §1964(c), a plaintiff may seek treble damages for business or property loss even if the loss resulted from a personal injury.",
    "author_code": "AB",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-365_6k47.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us2r23_3e04.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "BARRETT, J., delivered the opinion of the Court, in which SOTOMAYOR, KAGAN, GORSUCH, and JACKSON, JJ., joined. JACKSON, J., filed a concurring opinion. THOMAS, J., filed a dissenting opinion. KAVANAUGH, J., filed a dissenting opinion, in which ROBERTS, C. J., and ALITO, J., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -3504,10 +3496,10 @@
    "name": "FDA v. Wages and White Lion Investments, LLC",
    "summary": "The Fifth Circuit erred in setting aside as arbitrary and capricious the FDA’s orders denying respondents’ applications for authorization to market new e-cigarette products pursuant to The Family Smoking Prevention and Tobacco Control Act of 2009; the Fifth Circuit also relied on an incorrect standard to reject the FDA’s claim of harmless error regarding the agency’s failure to consider marketing plans submitted by respondents.",
    "author_code": "A",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1038_2d93.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us2r22_ed9g.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ALITO, J., delivered the opinion for a unanimous Court. SOTOMAYOR, J., filed a concurring opinion.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -3546,10 +3538,10 @@
    "name": "United States v. Miller",
    "summary": "Section 106(a) of the Bankruptcy Code abrogates the Government’s sovereign immunity with respect to a §544(b) claim but that waiver does not extend to state-law claims nested within that federal claim.",
    "author_code": "KJ",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-824_2d93.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us2r21_6kh7.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "JACKSON, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, SOTOMAYOR, KAGAN, KAVANAUGH, and BARRETT, JJ., joined. GORSUCH, J., filed a dissenting opinion.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -3637,10 +3629,10 @@
    "name": "Bondi v. Vanderstok",
    "summary": "ATF's 2022 Rule interpreting the Gun Control Act of 1968 to cover certain products that can readily be converted into an operational firearm or a functional frame or receiver, see 27 CFR §§478.11, 478.12(c), is not facially inconsistent with the Act.",
    "author_code": "NG",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-852_o7jp.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us2r20_q8l1.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "GORSUCH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and SOTOMAYOR, KAGAN, KAVANAUGH, BARRETT, and JACKSON, JJ., joined. SOTOMAYOR, J., KAVANAUGH, J., and JACKSON, J., each filed concurring opinions. THOMAS, J., and ALITO, J., each filed dissenting opinions.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -3740,10 +3732,10 @@
    "name": "Delligatti v. United States",
    "summary": "The knowing or intentional causation of injury or death, whether by act or omission, necessarily involves the “use” of “physical force” against another person within the meaning of 18 U. S. C. §924(c)(3)(A).",
    "author_code": "T",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-825_q713.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us2r19_i42j.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "THOMAS, J., delivered the opinion of the Court, in which ROBERTS, C. J., and ALITO, SOTOMAYOR, KAGAN, KAVANAUGH, and BARRETT, JJ., joined. GORSUCH, J., filed a dissenting opinion, in which JACKSON, J., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -3816,7 +3808,12 @@
      }
     ]
    },
-   "provisions": [],
+   "provisions": [
+    {
+     "id": "amend-6",
+     "quote": null
+    }
+   ],
    "qp_url": "https://www.supremecourt.gov/qp/23-00825qp.pdf",
    "question_presented": [
     "Under 18 U.S.C. § 924(c)(3)(A), a felony qualifies as a \"crime of violence\" if it \"has as an element the use, attempted use, or threatened use of physical force against the person or property of another.\" Courts have disagreed about how to apply use-of-force language to crimes that require proof of a victim's bodily injury or death but can be committed by failing to take action.",
@@ -3834,10 +3831,10 @@
    "name": "Thompson v. United States",
    "summary": "Title 18 U. S. C. §1014, which prohibits “knowingly mak[ing] any false statement,” does not criminalize statements that are misleading but not false.",
    "author_code": "R",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1095_8mjp.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us2r18_9p6b.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ROBERTS, C. J., delivered the opinion for a unanimous Court. ALITO, J., and JACKSON, J., filed concurring opinions.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -3884,10 +3881,10 @@
    "name": "Bufkin v. Collins",
    "summary": "The Department of Veterans Affairs’ determination that the evidence regarding a service-related disability claim is in “approximate balance” pursuant to the “benefit-of-the-doubt rule,” 38 U. S. C. §5107(b), is a predominantly factual determination reviewed only for clear error.",
    "author_code": "T",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-713_jifl.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us1r17_olp1.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "THOMAS, J., delivered the opinion of the Court, in which ROBERTS, C. J., and ALITO, SOTOMAYOR, KAGAN, KAVANAUGH, and BARRETT, JJ., joined. JACKSON, J., filed a dissenting opinion, in which GORSUCH, J., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -3916,13 +3913,6 @@
      },
      {
       "justice": "Sotomayor",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Kagan",
       "roles": [
        "majority"
       ],
@@ -3963,7 +3953,11 @@
    "provisions": [
     {
      "id": "amend-4",
-     "quote": "Probable cause is the standard by which a court assesses whether a police officer’s search or seizure was permissible under the Fourth Amendment."
+     "quote": null
+    },
+    {
+     "id": "art-3",
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/23-00713qp.pdf",
@@ -3982,10 +3976,10 @@
    "name": "City and County of San Francisco v. EPA",
    "summary": "The challenged end-result permitting provisions—which make the permittee responsible for the quality of the water in the body of water into which the permittee discharges pollutants—exceed the Environmental Protection Agency’s authority under the Clean Water Act.",
    "author_code": "A",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-753_f2bh.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us1r16_o759.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ALITO, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS and KAVANAUGH, JJ., joined, in which GORSUCH, J., joined as to all but Part II, and in which SOTOMAYOR, KAGAN, BARRETT, and JACKSON, JJ., joined as to Part II. BARRETT, J., filed an opinion dissenting in part, in which SOTOMAYOR, KAGAN, and JACKSON, JJ., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -4079,10 +4073,10 @@
    "name": "Dewberry Group, Inc. v. Dewberry Engineers Inc.",
    "summary": "In awarding the “defendant’s profits” to the prevailing plaintiff in a trademark infringement suit under the Lanham Act, 15 U. S. C. §1117(a), a court can award only profits ascribable to the “defendant” itself.",
    "author_code": "EK",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-900_19m1.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us1r15_dc8f.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "KAGAN, J., delivered the opinion for a unanimous Court. SOTOMAYOR, J., filed a concurring opinion.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -4120,10 +4114,10 @@
    "name": "Waetzig v. Halliburton Energy Services, Inc.",
    "summary": "A case voluntarily dismissed without prejudice under Federal Rule of Civil Procedure 41(a) counts as a “final proceeding” under Rule 60(b).",
    "author_code": "A",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-971_l6gn.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us1r14_6kg7.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ALITO, J., delivered the opinion for a unanimous Court.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -4153,10 +4147,10 @@
    "name": "Glossip v. Oklahoma",
    "summary": "The Court has jurisdiction to review the judgment of the Oklahoma Court of Criminal Appeals; the prosecution violated its constitutional obligation to correct false testimony under Napue v. Illinois, 360 U. S. 264.",
    "author_code": "SS",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/22-7466new_6479.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us1r13_c0n2.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "SOTOMAYOR, J., delivered the opinion of the Court, in which ROBERTS, C. J., and KAGAN, KAVANAUGH, and JACKSON, JJ., joined, and in which BARRETT, J., joined as to Part II. BARRETT, J., filed an opinion concurring in part and dissenting in part. THOMAS, J., filed a dissenting opinion, in which ALITO, J., joined, and in which BARRETT, J., joined as to Parts IV– A–1, IV–A–2, and IV–A–3. GORSUCH, J., took no part in the consideration or decision of the case.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -4236,7 +4230,7 @@
    "provisions": [
     {
      "id": "amend-14",
-     "quote": "Illinois, this Court held that a conviction knowingly “obtained through use of false evidence” violates the Fourteenth Amendment’s Due Process Clause. 360 U."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/22-07466qp.pdf",
@@ -4260,10 +4254,10 @@
    "name": "Lackey v. Stinnie",
    "summary": "Plaintiffs who gained only preliminary injunctive relief before this action became moot do not qualify as “prevailing part[ies]” eligible for attorney’s fees under 42  U. S. C. §1988(b) because no court conclusively resolved their claims by granting enduring relief on the merits that altered the legal relationship between the parties.",
    "author_code": "R",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-621_5ifl.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us1r12_8njq.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ROBERTS, C. J., delivered the opinion of the Court, in which THOMAS, ALITO, KAGAN, GORSUCH, KAVANAUGH, and BARRETT, JJ., joined. JACKSON, J., filed a dissenting opinion, in which SOTOMAYOR, J., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -4336,7 +4330,12 @@
      }
     ]
    },
-   "provisions": [],
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": null
+    }
+   ],
    "qp_url": "https://www.supremecourt.gov/qp/23-00621qp.pdf",
    "question_presented": [
     "1. Whether a party must obtain a ruling that conclusively decides the merits in its favor, as opposed to merely predicting a likelihood of later success, to prevail on the merits under 42 U.S.C. § 1988.",
@@ -4351,90 +4350,19 @@
    "name": "Williams v. Reed",
    "summary": "Where a state court’s application of a state exhaustion requirement in effect immunizes state officials from 42 U. S. C. §1983 claims challenging delays in the administrative process, state courts may not deny those claims on failure-to-exhaust grounds.",
    "author_code": "BK",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-191_q8l1.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us1r11_2b8e.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "KAVANAUGH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and SOTOMAYOR, KAGAN, and JACKSON, JJ., joined. THOMAS, J., filed a dissenting opinion, in which ALITO, GORSUCH, and BARRETT, JJ., joined as to Part II.",
-   "lineup": {
-    "unanimous": false,
-    "justices": [
-     {
-      "justice": "Kavanaugh",
-      "roles": [
-       "majority"
-      ],
-      "wrote": [
-       "majority"
-      ]
-     },
-     {
-      "justice": "Roberts",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Sotomayor",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Kagan",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Jackson",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Thomas",
-      "roles": [
-       "dissent"
-      ],
-      "wrote": [
-       "dissent"
-      ]
-     },
-     {
-      "justice": "Alito",
-      "roles": [
-       "dissent (in part)"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Gorsuch",
-      "roles": [
-       "dissent (in part)"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Barrett",
-      "roles": [
-       "dissent (in part)"
-      ],
-      "wrote": []
-     }
-    ]
-   },
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": [],
    "provisions": [
     {
      "id": "amend-14",
-     "quote": "§1983, they asserted among other things that the Department’s delays in processing their benefits claims violated the Due Process Clause of the Fourteenth Amendment and the Social Security Act of 1935."
+     "quote": null
     },
     {
      "id": "art-6-cl-2",
-     "quote": "To treat the jurisdictional label as dispositive would allow the Supremacy Clause to be “evaded.” Ibid.; see also Howlett, 496 U."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/23-00191qp.pdf",
@@ -4450,10 +4378,10 @@
    "name": "Wisconsin Bell, Inc. v. United States ex rel. Heath",
    "summary": "The E-Rate reimbursement requests at issue are “claims” under the False Claims Act because the Government “provided” (at a minimum) a “portion” of the money applied for by transferring more than $100 million from the Treasury into the Fund.  31 U. S. C. §3729(b)(2)(A)(ii)(I).",
    "author_code": "EK",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1127_k53l.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us1r10_mlio.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "KAGAN, J., delivered the opinion for a unanimous Court. THOMAS, J., filed a concurring opinion, in which KAVANAUGH, J., joined, and in which ALITO, J., joined as to Part I. KAVANAUGH, J., filed a concurring opinion, in which THOMAS, J., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -4493,7 +4421,12 @@
      }
     ]
    },
-   "provisions": [],
+   "provisions": [
+    {
+     "id": "art-2",
+     "quote": null
+    }
+   ],
    "qp_url": "https://www.supremecourt.gov/qp/23-01127qp.pdf",
    "question_presented": [
     "The Telecommunications Act of 1996 directs the FCC to further the goal of universal access to telecommunications services. In response, the FCC established what's known as the \"E-rate\" program to provide discounted services to eligible schools and libraries. The program is administered by a private, non-profit corporation and funded entirely by contributions from private telecommunications carriers. After telecommunications carriers provide services to eligible schools and libraries, either the schools and libraries or the providers can submit reimbursement requests to the private corporation for the amount of the discount. In this way, the E-rate program distributes up to $4.5 billion each year. The question presented is: Whether reimbursement requests submitted to the E-rate program are \"claims\" under the False Claims Act."
@@ -4507,10 +4440,10 @@
    "name": "Hungary v. Simon",
    "summary": "An allegation that a foreign sovereign liquidated expropriated property, commingled the proceeds with other funds, and then used some of those commingled funds for commercial activities in the United States cannot alone satisfy the commercial nexus requirement of the expropriation exception in the Foreign Sovereign Immunities Act of 1976.",
    "author_code": "SS",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-867_5h26.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us1r09_1b7d.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "SOTOMAYOR, J., delivered the opinion for a unanimous Court.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -4543,30 +4476,19 @@
    "name": "Andrew v. White",
    "summary": "At the time of the decision of the Oklahoma Court of Criminal Appeals, clearly established federal law provided that the erroneous admission of unduly prejudicial evidence could render a criminal trial fundamentally unfair in violation of due process, see Payne v. Tennessee, 501 U. S. 808, 825 (1991);  the judgment below is vacated and the case is remanded for further proceedings.",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-6573new_e1p3.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us1r08_db8e.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "PER CURIAM. An Oklahoma jury convicted Brenda Andrew of murdering her husband, Rob Andrew, and sentenced her to death. The State spent significant time at trial introducing evidence about Andrew’s sex life and about her failings as a mother and wife, much of which it later conceded was irrelevant. In a federal habeas petition, Andrew argued that this evidence had been so prejudicial as to violate the Due Process Clause. The Court of Appeals rejected that claim because, it thought, no holding of this Court established a general rule that the erroneous admission of prejudicial evidence could violate due process. That was wrong. By the time of Andrew’s trial, this Court had made clear that when “evidence is introduced that is so unduly prejudicial that it renders the trial fundamentally unfair, the Due Process Clause of the Fourteenth Amendment provides a mechanism for relief.” Payne v. Tennessee, 501 U. S. 808, 825 (1991). I A On November 20, 2001, Rob Andrew was fatally shot in his garage. Brenda Andrew, who herself had been shot in the arm during the incident, told the police that two armed assailants had committed the shooting. Andrew further explained that she had separated from her husband and was now dating James Pavatt, but that she and Rob continued to see each other as they had two children together. Per Curiam Pavatt and Andrew traveled to Mexico together after Rob Andrew’s death and soon became suspects in his murder. Eventually, Pavatt confessed to committing the shooting with a friend. Pavatt denied that Andrew had been involved. The State thereafter charged both Pavatt and Andrew with capital murder, and a jury convicted Pavatt and sentenced him to death. At Andrew’s trial, the prosecution sought to prove that Andrew had conspired with Pavatt, an insurance agent, to murder her husband for the proceeds of his life insurance policy. Among other things, the prosecution elicited testimony about Andrew’s sexual partners reaching back two decades; about the outfits she wore to dinner or during grocery runs; about the underwear she packed for vacation; and about how often she had sex in her car. At least two of the prosecution’s guilt-phase witnesses took the stand exclusively to testify about Andrew’s provocative clothing, and others were asked to comment on whether a good mother would dress or behave the way Andrew had. In its closing statement, the prosecution again invoked these themes, including by displaying Andrew’s “thong underwear” to the jury, by reminding the jury of Andrew’s alleged affairs during college, and by emphasizing that Andrew “had sex on [her husband] over and over and over” while “keeping a boyfriend on the side.” Tr. 4103, 4124–4125 (July 12, 2004). At both the guilt and sentencing phases, prosecutors contrasted Andrew with the victim, whom they asserted had been “committed to God.” Id., at 4124; see also, e.g., Tr. 4402 (July 14, 2004) (suggesting nothing could mitigate murder of Rob Andrew because he just “wanted to love God”).1 —————— 1 The dissent recites what it insists was substantial evidence of Andrew’s guilt, contending in the process that this Court “inaccurately portrays” that evidence. Post, at 2 (opinion of THOMAS, J.). In doing so, it prejudges the prejudice analysis by characterizing as fact the State’s narrative at trial. That narrative, of course, was hotly contested then and Per Curiam B The jury convicted Andrew and sentenced her to death. On appeal, Andrew argued that the introduction of irrelevant evidence, including evidence “that she had extramarital sexual affairs with two other men,” that she had “ ‘come on to’ ” another witness’s sons, and that she had dressed provocatively at a restaurant, Andrew v. State, 2007 OK CR 23, ¶¶42–59, 164 P. 3d 176, 190–193, violated Oklahoma law as well as the Federal Due Process Clause. The Oklahoma Court of Criminal Appeals (OCCA) held that admission of evidence about Andrew’s extramarital affairs had been proper because it showed that “[h]er co-defendant was just the last in a long line of men that she seduced.” Id., at 192.2 The OCCA “struggl[ed],” however, “to find any relevance . . . other than to show [Andrew’s] character” for the —————— remains so now. For example, the defense elicited testimony from multiple witnesses that Andrew knew on the day of the murder that she was not the beneficiary on the life insurance policy. The OCCA held that the court also wrongly excluded evidence Andrew argued would cast doubt on the theory that she had staged the shooting, though the OCCA held that exclusion was harmless. Andrew v. State, 2007 OK CR 23, ¶¶89– 92, 164 P. 3d 176, 197. The Court today says nothing about the strength of the evidence against Andrew because the issue of prejudice in both the guilt and sentencing phases of the trial is one for the Tenth Circuit to consider on remand. See infra, at 9. Similarly, the dissent asserts that Andrew falsely accuses the prosecution of calling her a “slut puppy” in closing argument. Post, at 7, n. 3 (opinion of THOMAS, J.). Whether the prosecution quoted something it believed Andrew once said to suggest to the jury that Andrew herself was a “slut puppy,” or simply to recite an alleged abusive phone call, is a question of fact for the Tenth Circuit to resolve. 2 The dissent asserts that the OCCA held evidence of Andrew’s “ ‘close personal relationship’ ” with two of her affair partners to be relevant because it gave credence to testimony that Andrew had “ ‘shared with both of these men her hatred for Rob Andrew and her wish that he was dead.’ ” Post, at 6 (opinion of THOMAS, J.) (quoting 164 P. 3d, at 192). Andrew never objected to evidence that she had a “close personal relationship” with these men. In fact, defense counsel stipulated that she had affairs with them. See, e.g., Tr. 338 (June 18, 2004) (“We’re not contesting the Per Curiam remaining challenged evidence. Ibid. By now, the State “agree[d] that most of this evidence was irrelevant to any issue in this case.” Ibid. The OCCA nonetheless denied relief on the ground that the trial court’s errors had been harmless. Judge Johnson dissented in part. In her view, the “egregious . . . pattern of introducing evidence that ha[d] no purpose other than to hammer home that Brenda Andrew is a bad wife, a bad mother, and a bad woman . . . trivialize[d] the value of her life in the minds of the jurors.” Id., at 206– 207. She would therefore have vacated her sentence. Judge Chapel dissented separately, indicating that he would have reversed the conviction and remanded for a new trial. Id., at 208. In federal court, Andrew reiterated her claim that the admission of this evidence rendered the guilt and penalty phases of her trial fundamentally unfair, in violation of due process. 62 F. 4th 1299, 1312–1313 (CA10 2023). The District Court denied relief. A divided Tenth Circuit affirmed because, it held, Andrew had failed to cite “clearly established federal law governing her claim.” Id., at 1314. The majority acknowledged that Andrew had cited Payne, in which this Court said that the Due Process Clause “provides a mechanism for relief ” when the introduction of unduly prejudicial evidence “renders [a] trial fundamentally unfair.” 501 U. S., at 825. According to the majority, however, that had been a “pronouncement,” not a “holding,” of this Court. 62 F. 4th, at 1314. It therefore concluded Andrew had failed to identify “clearly established federal law governing her claim,” as required under the Antiterrorism —————— affair. We have never contested the affair with Nunley or Higgins”). Andrew’s claim instead concerned the extensive testimony about how she flirted with these men, how she dressed around them, and how many times (and where) she had sex with them. That testimony appears to have no bearing on Andrew’s alleged expressions of hatred for her husband. Per Curiam and Effective Death Penalty Act of 1996 (AEDPA). Id., at 1316; 28 U. S. C. §2254(d)(1). As a result, the majority declined to consider whether the OCCA unreasonably applied Payne, i.e., whether a fairminded jurist could hold that the admission of irrelevant evidence about Andrew’s demeanor as a woman was not so prejudicial as to deprive her of a fundamentally fair trial. 62 F. 4th, at 1316 (“ ‘The absence of clearly established federal law is dispositive under §2254(d)(1)’ ” (quoting House v. Hatch, 527 F. 3d 1010, 1018 (CA10 2008))). In dissent, Judge Bacharach condemned the State’s focus “from start to finish on Ms. Andrew’s sex life,” a move he argued “portrayed Ms. Andrew as a scarlet woman, a modern Jezebel, sparking distrust based on her loose morals . . . plucking away any realistic chance that the jury would seriously consider her version of events.” 62 F. 4th, at 1366. Judge Bacharach therefore would have held that the combination of evidentiary errors “deprived Ms. Andrew of a fundamentally fair trial.” Id., at 1377. II A federal court may grant habeas relief as to a claim adjudicated on the merits in state court only if the state court relied on an unreasonable determination of the facts or unreasonably applied “clearly established Federal law, as determined by” this Court. 28 U. S. C. §§2254(d)(1)–(2). To show that a state court unreasonably applied clearly established federal law, a petitioner must show that the court unreasonably applied “ ‘the holdings, as opposed to the dicta, of this Court’s decisions.’ ” White v. Woodall, 572 U. S. 415, 419 (2014) (quoting Howes v. Fields, 565 U. S. 499, 505 (2012)). An unreasonable application, in turn, is one with which no fairminded jurist would agree. Harrington v. Richter, 562 U. S. 86, 101 (2011). Per Curiam A When this Court relies on a legal rule or principle to decide a case, that principle is a “holding” of the Court for purposes of AEDPA. Lockyer v. Andrade, 538 U. S. 63, 71–72 (2003) (“[C]learly established Federal law . . . is the governing legal principle or principles set forth by the Supreme Court at the time the state court renders its decision” (internal quotation marks omitted)). Following these principles, it is clear that Andrew properly identified clearly established federal law. In Payne, this Court considered whether to overrule a set of prior cases that had categorically barred the introduction of victim impact evidence during the sentencing phases of a capital trial. The Court noted that, in many circumstances, “victim impact evidence serves entirely legitimate purposes,” 501 U. S., at 825, even though in others it could be prejudicial. It then concluded that a categorical bar was not necessary to protect against the risk of prejudicial testimony because “the Due Process Clause of the Fourteenth Amendment provides a mechanism for relief ” against the introduction of evidence “that is so unduly prejudicial that it renders the trial fundamentally unfair.” Ibid. (citing Darden v. Wainwright, 477 U. S. 168, 179–183 (1986)). In light of that protection, the Court held, it could permit victim impact evidence where appropriate without risking undue prejudice to defendants. 501 U. S., at 825. In other words, the Court removed one protection for capital defendants (the per se bar on victim impact statements) in part because another protection (the Due Process Clause) remained available against evidence that is so unduly prejudicial that it renders the trial fundamentally unfair. The legal principle on which Andrew relies, that the Due Process Clause can in certain cases protect against the introduction of unduly prejudicial evidence at a criminal trial, was therefore indispensable to the decision in Payne. That means it was a holding of this Court for purposes of Per Curiam AEDPA. Importantly, Payne did not invent due process protections against unduly prejudicial evidence. The Court had several times before held that prosecutors’ prejudicial or misleading statements violate due process if they render a trial or capital sentencing fundamentally unfair. Donnelly v. DeChristoforo, 416 U. S. 637 (1974); Caldwell v. Mississippi, 472 U. S. 320, 338–340 (1985); Darden, 477 U. S., at 178–183. Payne thus broke little new ground in this respect. By the time of the OCCA’s decision in this case, it was clear that the introduction of unduly prejudicial evidence could, in certain cases, violate the Due Process Clause.3 B The Court of Appeals nonetheless held that Payne “merely established that the Eighth Amendment did not erect a ‘per se bar’ to the introduction of victim-impact statements in capital cases.” 62 F. 4th, at 1314 (quoting Payne, 501 U. S., at 827). As just explained, however, Payne expressly relied on the availability of relief under the Due Process Clause to reach that conclusion. This Court —————— 3 The dissent argues that Estelle v. McGuire, 502 U. S. 62 (1991), shows otherwise because it left open whether “ ‘it is a violation of the due process guaranteed by the Fourteenth Amendment for evidence that is not relevant to be received in a criminal trial.’ ” Post, at 16 (opinion of THOMAS, J.) (quoting Estelle, 502 U. S., at 70). To be sure, this Court did not hold in Payne that the introduction of all irrelevant evidence violates the Due Process Clause. Payne established, rather, that due process protects defendants from the introduction of evidence so prejudicial as to affect the fundamental fairness of their trials. This Court squarely acknowledged that rule in Estelle, explaining that “the challenged evidence” at issue there did not warrant relief because it did not “ ‘so infus[e] the trial with unfairness as to deny due process of law.’ ” 502 U. S., at 75 (quoting Lisenba v. California, 314 U. S. 219, 228 (1941), and citing Donnelly, 416 U. S., at 643). In any event, and as recounted below, this Court has continued to rely on Payne’s fundamental fairness principle since Estelle. Per Curiam has accordingly applied Payne’s framework to a claim much like Andrew’s: “that the introduction of [prejudicial] evidence” at the sentencing phases “violated the Due Process Clause of the Fourteenth Amendment.” Romano v. Oklahoma, 512 U. S. 1, 12 (1994). More recently, the Court relied on Payne in the same way that Andrew sought to rely on it here: for the proposition that “the Due Process Clause . . . wards off the introduction of unduly prejudicial evidence that would render the trial fundamentally unfair.” Kansas v. Carr, 577 U. S. 108, 123 (2016) (quoting Payne, 501 U. S., at 825; internal quotation marks and alteration omitted). This Court has also relied on the underlying fundamental fairness principle in the jury-impartiality context. See Rideau v. Louisiana, 373 U. S. 723, 726 (1963); Skilling v. United States, 561 U. S. 358, 379 (2010). To the extent that the Court of Appeals thought itself constrained by AEDPA to limit Payne to its facts, it was mistaken. General legal principles can constitute clearly established law for purposes of AEDPA so long as they are holdings of this Court. For example, the Eighth Amendment principle that a sentence may not be grossly disproportionate to the offense is “ ‘clearly established’ under §2554(d)(1),” even though it arises out of a “thicket of Eighth Amendment jurisprudence” and lacks “ ‘precise contours.’ ” Lockyer, 538 U. S., at 72. Although this Court has not previously relied on Payne to invalidate a conviction for improperly admitted prejudicial evidence, moreover, “certain principles are fundamental enough that when new factual permutations arise, the necessity to apply the earlier rule will be beyond doubt.” White, 572 U. S., at 427 (quoting Yarborough v. Alvarado, 541 U. S. 652, 666 (2004)); see also Taylor v. Riojas, 592 U. S. 7, 9 (2020) (per curiam) (“ ‘[A] general constitutional rule already identified in the decisional law may apply with obvious clarity to the specific conduct in question’ ” (quoting Hope v. Pelzer, 536 U. S. 730, 741 (2002))). The Court of Appeals thus erred by refusing Per Curiam even to consider whether the OCCA unreasonably applied established due process principles to Andrew’s case. The dissent maintains that a reasonable jurist could agree with the Tenth Circuit’s understanding of our precedent. That assertion conflates the deference federal habeas courts must extend to a state court’s “application of ” this Court’s precedent with the federal courts’ independent obligation to first identify the relevant “clearly established Federal law.” 28 U. S. C. §2254(d)(1); Lockyer, 538 U. S., at 71 (identifying clearly established law “[a]s a threshold matter”). A legal principle is clearly established for purposes of AEDPA if it is a holding of this Court. White, 572 U. S., at 419. This Court has no occasion to defer to other federal courts’ erroneous interpretations of its own precedent. Nor is such double deference necessary to prevent expansion of federal habeas relief to those who rely on “debatable” interpretations or extensions of our holdings. Post at 17–18 (opinion of THOMAS, J.). Andrew does not rely on an interpretation or extension of this Court’s cases but on a principle this Court itself has relied on over the course of decades. Because the Tenth Circuit nonetheless held that no relevant clearly established law existed (a ruling this Court reviews de novo) it never considered whether the state court’s application of that law was reasonable. On remand, the Court of Appeals should conduct that inquiry in the first instance. Specifically, the question now is whether a fairminded jurist reviewing this record could disagree with Andrew that the trial court’s mistaken admission of irrelevant evidence was so “unduly prejudicial” as to render her trial “fundamentally unfair.” Payne, 501 U. S., at 825. The Court of Appeals must ask that question separately for the guilt and sentencing phases. As to each phase, it might consider the relevance of the disputed evidence to the charges or sentencing factors, the degree of prejudice Andrew suffered from its introduction, and whether the trial Per Curiam court provided any mitigating instructions. Cf. Romano, 512 U. S., at 13. The ultimate question is whether a fairminded jurist could disagree that the evidence “so infected the trial with unfairness” as to render the resulting conviction or sentence “a denial of due process.” Ibid. * * * At the time of the OCCA’s decision, clearly established law provided that the Due Process Clause forbids the introduction of evidence so unduly prejudicial as to render a criminal trial fundamentally unfair. This Court accordingly grants the petition for certiorari and the motion for leave to proceed in forma pauperis, vacates the judgment below, and remands the case for further proceedings consistent with this opinion. It is so ordered.",
-   "lineup": {
-    "unanimous": false,
-    "justices": [
-     {
-      "justice": "Thomas",
-      "roles": [
-       "dissenting in part"
-      ],
-      "wrote": []
-     }
-    ]
-   },
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": [],
    "provisions": [
     {
      "id": "amend-8",
-     "quote": "By the time of the OCCA’s decision in this case, it was clear that the introduction of unduly prejudicial evidence could, in certain cases, violate the Due Process Clause.3 B The Court of Appeals nonetheless held that Payne “merely established that the Eighth Amendment did not erect a ‘per se bar’ to the introduction of victim-impact statements in capital cases.” 62 F. 4th, at 1314 (quoting Payne, 501 U."
+     "quote": null
     },
     {
      "id": "amend-14",
-     "quote": "By the time of Andrew’s trial, this Court had made clear that when “evidence is introduced that is so unduly prejudicial that it renders the trial fundamentally unfair, the Due Process Clause of the Fourteenth Amendment provides a mechanism for relief.” Payne v."
+     "quote": null
     }
    ],
    "qp_url": null,
@@ -4580,15 +4502,15 @@
    "name": "TikTok Inc. v. Garland",
    "summary": "The challenged provisions of the Protecting Americans from Foreign Adversary Controlled Applications Act, 138 Stat. 955, do not violate petitioners’ First Amendment rights.",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24-656_new_3dq3.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us1r07_k536.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "PER CURIAM. As of January 19, the Protecting Americans from Foreign Adversary Controlled Applications Act will make it unlawful for companies in the United States to provide services to distribute, maintain, or update the social media platform TikTok, unless U. S. operation of the platform is severed from Chinese control. Petitioners are two TikTok operating entities and a group of U. S. TikTok users. We consider whether the Act, as applied to petitioners, violates the First Amendment. In doing so, we are conscious that the cases before us involve new technologies with transformative capabilities. This challenging new context counsels caution on our part. As Justice Frankfurter advised 80 years ago in considering the application of established legal rules to the “totally new problems” raised by the airplane and radio, we should take Per Curiam care not to “embarrass the future.” Northwest Airlines, Inc. v. Minnesota, 322 U. S. 292, 300 (1944). That caution is heightened in these cases, given the expedited time allowed for our consideration.1 Our analysis must be understood to be narrowly focused in light of these circumstances. I A TikTok is a social media platform that allows users to create, publish, view, share, and interact with short videos overlaid with audio and text. Since its launch in 2017, the platform has accumulated over 170 million users in the United States and more than one billion worldwide. Those users are prolific content creators and viewers. In 2023, U. S. TikTok users uploaded more than 5.5 billion videos, which were in turn viewed more than 13 trillion times around the world. Opening the TikTok application brings a user to the “For You” page—a personalized content feed tailored to the user’s interests. TikTok generates the feed using a proprietary algorithm that recommends videos to a user based on the user’s interactions with the platform. Each interaction a user has on TikTok—watching a video, following an account, leaving a comment—enables the recommendation system to further tailor a personalized content feed. A TikTok user’s content feed is also shaped by content moderation and filtering decisions. TikTok uses automated and human processes to remove content that violates the platform’s community guidelines. See 1 App. 493–497. TikTok also promotes or demotes certain content to advance its business objectives and other goals. See id., at 499–501. TikTok is operated in the United States by TikTok Inc., —————— 1 Applications for an injunction pending review were filed on December 16, 2024; we construed the applications as petitions for a writ of certiorari and granted them on December 18, 2024; and oral argument was held on January 10, 2025. Per Curiam an American company incorporated and headquartered in California. TikTok Inc.’s ultimate parent company is ByteDance Ltd., a privately held company that has operations in China. ByteDance Ltd. owns TikTok’s proprietary algorithm, which is developed and maintained in China. The company is also responsible for developing portions of the source code that runs the TikTok platform. ByteDance Ltd. is subject to Chinese laws that require it to “assist or cooperate” with the Chinese Government’s “intelligence work” and to ensure that the Chinese Government has “the power to access and control private data” the company holds. H. R. Rep. No. 118–417, p. 4 (2024) (H. R. Rep.); see 2 App. 673–676. B In recent years, U. S. government officials have taken repeated actions to address national security concerns regarding the relationship between China and TikTok. In August 2020, President Trump issued an Executive Order finding that “the spread in the United States of mobile applications developed and owned by companies in [China] continues to threaten the national security, foreign policy, and economy of the United States.” Exec. Order No. 13942, 3 CFR 412 (2021). President Trump determined that TikTok raised particular concerns, noting that the platform “automatically captures vast swaths of information from its users” and is susceptible to being used to further the interests of the Chinese Government. Ibid. The President invoked his authority under the International Emergency Economic Powers Act (IEEPA), 50 U. S. C. §1701 et seq., and the National Emergencies Act, 50 U. S. C. §1601 et seq., to prohibit certain “transactions” involving ByteDance Ltd. or its subsidiaries, as identified by the Secretary of Commerce. 3 CFR 413. The Secretary published a list of prohibited transactions in September 2020. See 85 Per Curiam Fed. Reg. 60061 (2020). But federal courts enjoined the prohibitions before they took effect, finding that they exceeded the Executive Branch’s authority under IEEPA. See generally TikTok Inc. v. Trump, 507 F. Supp. 3d 92 (DC 2020); Marland v. Trump, 498 F. Supp. 3d 624 (ED Pa. 2020). Just days after issuing his initial Executive Order, President Trump ordered ByteDance Ltd. to divest all interests and rights in any property “used to enable or support ByteDance’s operation of the TikTok application in the United States,” along with “any data obtained or derived from” U. S. TikTok users. 85 Fed. Reg. 51297. ByteDance Ltd. and TikTok Inc. filed suit in the D. C. Circuit, challenging the constitutionality of the order. In February 2021, the D. C. Circuit placed the case in abeyance to permit the Biden administration to review the matter and to enable the parties to negotiate a non-divestiture remedy that would address the Government’s national security concerns. See Order in TikTok Inc. v. Committee on Foreign Investment, No. 20–1444 (CADC, Feb. 19, 2021). Throughout 2021 and 2022, ByteDance Ltd. negotiated with Executive Branch officials to develop a national security agreement that would resolve those concerns. Executive Branch officials ultimately determined, however, that ByteDance Ltd.’s proposed agreement did not adequately “mitigate the risks posed to U. S. national security interests.” 2 App. 686. Negotiations stalled, and the parties never finalized an agreement. Against this backdrop, Congress enacted the Protecting Americans from Foreign Adversary Controlled Applications Act. Pub. L. 118–50, div. H, 138 Stat. 955. The Act makes it unlawful for any entity to provide certain services to “distribute, maintain, or update” a “foreign adversary controlled application” in the United States. §2(a)(1). Entities that violate this prohibition are subject to civil enforcement Per Curiam actions and hefty monetary penalties. See §§2(d)(1)(A), (d)(2)(B). The Act provides two means by which an application may be designated a “foreign adversary controlled application.” First, the Act expressly designates any application that is “operated, directly or indirectly,” by “ByteDance Ltd.” or “TikTok,” or any subsidiary or successor thereof. §2(g)(3)(A). Second, the Act establishes a general designation framework for any application that is both (1) operated by a “covered company” that is “controlled by a foreign adversary,” and (2) “determined by the President to present a significant threat to the national security of the United States,” following a public notice and reporting process. §2(g)(3)(B). In broad terms, the Act defines “covered company” to include a company that operates an application that enables users to generate, share, and view content and has more than 1,000,000 monthly active users. §2(g)(2)(A). The Act excludes from that definition a company that operates an application “whose primary purpose is to allow users to post product reviews, business reviews, or travel information and reviews.” §2(g)(2)(B). The Act’s prohibitions take effect 270 days after an application is designated a foreign adversary controlled application. §2(a)(2). Because the Act itself designates applications operated by “ByteDance, Ltd.” and “TikTok,” prohibitions as to those applications take effect 270 days after the Act’s enactment—January 19, 2025. The Act exempts a foreign adversary controlled application from the prohibitions if the application undergoes a “qualified divestiture.” §2(c)(1). A “qualified divestiture” is one that the President determines will result in the application “no longer being controlled by a foreign adversary.” §2(g)(6)(A). The President must further determine that the divestiture “precludes the establishment or maintenance of any operational relationship between the United States opPer Curiam erations of the [application] and any formerly affiliated entities that are controlled by a foreign adversary, including any cooperation with respect to the operation of a content recommendation algorithm or an agreement with respect to data sharing.” §2(g)(6)(B). The Act permits the President to grant a one-time extension of no more than 90 days with respect to the prohibitions’ 270-day effective date if the President makes certain certifications to Congress regarding progress toward a qualified divestiture. §2(a)(3). C ByteDance Ltd. and TikTok Inc.—along with two sets of TikTok users and creators (creator petitioners)—filed petitions for review in the D. C. Circuit, challenging the constitutionality of the Act. As relevant here, the petitioners argued that the Act’s prohibitions, TikTok-specific foreign adversary controlled application designation, and divestiture requirement violate the First Amendment. The D. C. Circuit consolidated and denied the petitions, holding that the Act does not violate petitioners’ First Amendment rights. 122 F. 4th 930, 940, 948–965 (CADC 2024). After first concluding that the Act was subject to heightened scrutiny under the First Amendment, the court assumed without deciding that strict, rather than intermediate, scrutiny applied. Id., at 948–952. The court held that the Act satisfied that standard, finding that the Government’s national security justifications—countering China’s data collection and covert content manipulation efforts— were compelling, and that the Act was narrowly tailored to further those interests. Id., at 952–965. Chief Judge Srinivasan concurred in part and in the judgment. Id., at 970. In his view, the Act was subject to intermediate scrutiny, id., at 974–979, and was constitutional under that standard, id., at 979–983. We granted certiorari to decide whether the Act, as applied to petitioners, violates the First Amendment. 604 Per Curiam U. S. ___ (2024). II A At the threshold, we consider whether the challenged provisions are subject to First Amendment scrutiny. Laws that directly regulate expressive conduct can, but do not necessarily, trigger such review. See R. A. V. v. St. Paul, 505 U. S. 377, 382–386 (1992). We have also applied First Amendment scrutiny in “cases involving governmental regulation of conduct that has an expressive element,” and to “some statutes which, although directed at activity with no expressive component, impose a disproportionate burden upon those engaged in protected First Amendment activities.” Arcara v. Cloud Books, Inc., 478 U. S. 697, 703–704 (1986). It is not clear that the Act itself directly regulates protected expressive activity, or conduct with an expressive component. Indeed, the Act does not regulate the creator petitioners at all. And it directly regulates ByteDance Ltd. and TikTok Inc. only through the divestiture requirement. See §2(c)(1). Petitioners, for their part, have not identified any case in which this Court has treated a regulation of corporate control as a direct regulation of expressive activity or semi-expressive conduct. See Tr. of Oral Arg. 37–40. We hesitate to break that new ground in this unique case. In any event, petitioners’ arguments more closely approximate a claim that the Act’s prohibitions, TikTok-specific designation, and divestiture requirement “impose a disproportionate burden upon” their First Amendment activities. Arcara, 478 U. S., at 704. Petitioners assert—and the Government does not contest—that, because it is commercially infeasible for TikTok to be divested within the Act’s 270-day timeframe, the Act effectively bans TikTok in the United States. Petitioners argue that such a ban will burden variPer Curiam ous First Amendment activities, including content moderation, content generation, access to a distinct medium for expression, association with another speaker or preferred editor, and receipt of information and ideas. We have recognized a number of these asserted First Amendment interests. See Moody v. NetChoice, LLC, 603 U. S. 707, 731 (2024) (“An entity ‘exercising editorial discretion in the selection and presentation’ of content is ‘engaged in speech activity.’ ” (quoting Arkansas Ed. Television Comm’n v. Forbes, 523 U. S. 666, 674 (1998); alteration omitted)); City of Ladue v. Gilleo, 512 U. S. 43, 54–58 (1994) (“Our prior decisions have voiced particular concern with laws that foreclose an entire medium of expression.”); Rumsfeld v. Forum for Academic and Institutional Rights, Inc., 547 U. S. 47, 68 (2006) (“We have recognized a First Amendment right to associate for the purpose of speaking, which we have termed a ‘right of expressive association.’ ”); Martin v. City of Struthers, 319 U. S. 141, 143 (1943) (“The right of freedom of speech and press . . . embraces the right to distribute literature and necessarily protects the right to receive it.” (citation omitted)).2 And an effective ban on a social media platform with 170 million U. S. users certainly burdens those users’ expressive activity in a non-trivial way. At the same time, a law targeting a foreign adversary’s control over a communications platform is in many ways different in kind from the regulations of non-expressive activity that we have subjected to First Amendment scrutiny. Those differences—the Act’s focus on a foreign government, the congressionally determined adversary relationship between that foreign government and the United States, and —————— 2 To the extent that ByteDance Ltd.’s asserted expressive activity occurs abroad, that activity is not protected by the First Amendment. See Agency for Int’l Development v. Alliance for Open Society Int’l Inc., 591 U. S. 430, 436 (2020) (“[F]oreign organizations operating abroad have no First Amendment rights.”). Per Curiam the causal steps between the regulations and the alleged burden on protected speech—may impact whether First Amendment scrutiny applies. This Court has not articulated a clear framework for determining whether a regulation of non-expressive activity that disproportionately burdens those engaged in expressive activity triggers heightened review. We need not do so here. We assume without deciding that the challenged provisions fall within this category and are subject to First Amendment scrutiny. B “At the heart of the First Amendment lies the principle that each person should decide for himself or herself the ideas and beliefs deserving of expression, consideration, and adherence.” Turner Broadcasting System, Inc. v. FCC, 512 U. S. 622, 641 (1994) (Turner I ). Government action that suppresses speech because of its message “contravenes this essential right.” Ibid. “Content-based laws—those that target speech based on its communicative content—are presumptively unconstitutional and may be justified only if the government proves that they are narrowly tailored to serve compelling state interests.” Reed v. Town of Gilbert, 576 U. S. 155, 163 (2015). Content-neutral laws, in contrast, “are subject to an intermediate level of scrutiny because in most cases they pose a less substantial risk of excising certain ideas or viewpoints from the public dialogue.” Turner I, 512 U. S., at 642 (citation omitted). Under that standard, we will sustain a content-neutral law “if it advances important governmental interests unrelated to the suppression of free speech and does not burden substantially more speech than necessary to further those interests.” Turner Broadcasting System, Inc. v. FCC, 520 U. S. 180, 189 (1997) (Turner II ). We have identified two forms of content-based speech Per Curiam regulation. First, a law is content based on its face if it “applies to particular speech because of the topic discussed or the idea or message expressed.” Reed, 576 U. S., at 163; see id., at 163–164 (explaining that some facial distinctions define regulated speech by subject matter, others by the speech’s function or purpose). Second, a facially contentneutral law is nonetheless treated as a content-based regulation of speech if it “cannot be ‘justified without reference to the content of the regulated speech’ ” or was “adopted by the government ‘because of disagreement with the message the speech conveys.’ ” Id., at 164 (quoting Ward v. Rock Against Racism, 491 U. S. 781, 791 (1989)). As applied to petitioners, the challenged provisions are facially content neutral and are justified by a contentneutral rationale. a The challenged provisions are facially content neutral. They impose TikTok-specific prohibitions due to a foreign adversary’s control over the platform and make divestiture a prerequisite for the platform’s continued operation in the United States. They do not target particular speech based upon its content, contrast, e.g., Carey v. Brown, 447 U. S. 455, 465 (1980) (statute prohibiting all residential picketing except “peaceful labor picketing”), or regulate speech based on its function or purpose, contrast, e.g., Holder v. Humanitarian Law Project, 561 U. S. 1, 7, 27 (2010) (law prohibiting providing material support to terrorists). Nor do they impose a “restriction, penalty, or burden” by reason of content on TikTok—a conclusion confirmed by the fact that petitioners “cannot avoid or mitigate” the effects of the Act by altering their speech. Turner I, 512 U. S., at 644. As to petitioners, the Act thus does not facially regulate “particular speech because of the topic discussed or the idea or message expressed.” Reed, 576 U. S., at 163. Petitioners argue that the Act is content based on its face Per Curiam because it excludes from the definition of “covered company” any company that operates an application “whose primary purpose is to allow users to post product reviews, business reviews, or travel information and reviews.” §2(g)(2)(B); see Brief for Petitioners in No. 24–656, pp. 26– 27 (Brief for TikTok); Brief for Petitioners in No. 24–657, p. 26 (Brief for Creator Petitioners). We need not decide whether that exclusion is content based. The question before the Court is whether the Act violates the First Amendment as applied to petitioners. To answer that question, we look to the provisions of the Act that give rise to the effective TikTok ban that petitioners argue burdens their First Amendment rights. The exclusion for certain review platforms, however, applies only to the general framework for designating applications controlled by “covered compan[ies],” not to the TikTok-specific designation. §§2(g)(3)(A)–(B). As such, the exclusion is not within the scope of petitioners’ as-applied challenge. b The Government also supports the challenged provisions with a content-neutral justification: preventing China from collecting vast amounts of sensitive data from 170 million U. S. TikTok users. 2 App. 628. That rationale is decidedly content agnostic. It neither references the content of speech on TikTok nor reflects disagreement with the message such speech conveys. Cf. Ward, 491 U. S., at 792–793 (holding noise control and sound quality justifications behind city sound amplification guideline were content neutral). Because the data collection justification reflects a “purpos[e] unrelated to the content of expression,” it is content neutral. Id., at 791. The Act’s TikTok-specific distinctions, moreover, do not trigger strict scrutiny. See Brief for TikTok 26–27; Brief for Per Curiam Creator Petitioners 24–26. It is true that “[s]peech restrictions based on the identity of the speaker are all too often simply a means to control content.” Citizens United v. Federal Election Comm’n, 558 U. S. 310, 340 (2010). For that reason, “[r]egulations that discriminate among media, or among different speakers within a single medium, often present serious First Amendment concerns.” Turner I, 512 U. S., at 659. But while “laws favoring some speakers over others demand strict scrutiny when the legislature’s speaker preference reflects a content preference,” id., at 658, such scrutiny “is unwarranted when the differential treatment is ‘justified by some special characteristic of ’ the particular [speaker] being regulated,” id., at 660–661 (quoting Minneapolis Star & Tribune Co. v. Minnesota Comm’r of Revenue, 460 U. S. 575, 585 (1983)). For the reasons we have explained, requiring divestiture for the purpose of preventing a foreign adversary from accessing the sensitive data of 170 million U. S. TikTok users is not “a subtle means of exercising a content preference.” Turner I, 512 U. S., at 645. The prohibitions, TikTok-specific designation, and divestiture requirement regulate TikTok based on a content-neutral data collection interest. And TikTok has special characteristics—a foreign adversary’s ability to leverage its control over the platform to collect vast amounts of personal data from 170 million U. S. users—that justify this differential treatment. “[S]peaker distinctions of this nature are not presumed invalid under the First Amendment.” Ibid. While we find that differential treatment was justified here, however, we emphasize the inherent narrowness of our holding. Data collection and analysis is a common practice in this digital age. But TikTok’s scale and susceptibility to foreign adversary control, together with the vast swaths of sensitive data the platform collects, justify differential treatment to address the Government’s national security concerns. A law targeting any other speaker would Per Curiam by necessity entail a distinct inquiry and separate considerations. On this understanding, we cannot accept petitioners’ call for strict scrutiny. No more than intermediate scrutiny is in order. C As applied to petitioners, the Act satisfies intermediate scrutiny. The challenged provisions further an important Government interest unrelated to the suppression of free expression and do not burden substantially more speech than necessary to further that interest.3 The Act’s prohibitions and divestiture requirement are designed to prevent China—a designated foreign adversary—from leveraging its control over ByteDance Ltd. to capture the personal data of U. S. TikTok users. This objective qualifies as an important Government interest under intermediate scrutiny. Petitioners do not dispute that the Government has an important and well-grounded interest in preventing China from collecting the personal data of tens of millions of U. S. TikTok users. Nor could they. The platform collects extensive personal information from and about its users. See H. R. Rep., at 3 (Public reporting has suggested that TikTok’s “data collection practices extend to age, phone number, precise location, internet address, device used, phone contacts, social network connections, the content of private messages sent through the application, and videos watched.”); 1 App. 241 (Draft National Security Agreement noting that TikTok collects user data, user content, behavioral data (including “keystroke patterns and rhythms”), and device and network data (including device contacts and —————— 3 Our holding and analysis are based on the public record, without reference to the classified evidence the Government filed below. Per Curiam calendars)). If, for example, a user allows TikTok access to the user’s phone contact list to connect with others on the platform, TikTok can access “any data stored in the user’s contact list,” including names, contact information, contact photos, job titles, and notes. 2 id., at 659. Access to such detailed information about U. S. users, the Government worries, may enable “China to track the locations of Federal employees and contractors, build dossiers of personal information for blackmail, and conduct corporate espionage.” 3 CFR 412. And Chinese law enables China to require companies to surrender data to the government, “making companies headquartered there an espionage tool” of China. H. R. Rep., at 4. Rather than meaningfully dispute the scope of the data TikTok collects or the ends to which it may be used, petitioners contest probability, asserting that it is “unlikely” that China would “compel TikTok to turn over user data for intelligence-gathering purposes, since China has more effective and efficient means of obtaining relevant information.” Brief for TikTok 50 (internal quotation marks omitted). In reviewing the constitutionality of the Act, however, we “must accord substantial deference to the predictive judgments of Congress.” Turner I, 512 U. S., at 665 (opinion of KENNEDY, J.). “Sound policymaking often requires legislators to forecast future events and to anticipate the likely impact of these events based on deductions and inferences for which complete empirical support may be unavailable.” Ibid. Here, the Government’s TikTok-related data collection concerns do not exist in isolation. The record reflects that China “has engaged in extensive and yearslong efforts to accumulate structured datasets, in particular on U. S. persons, to support its intelligence and counterintelligence operations.” 2 App. 634. Even if China has not yet leveraged its relationship with ByteDance Ltd. to access U. S. TikTok users’ data, petitionPer Curiam ers offer no basis for concluding that the Government’s determination that China might do so is not at least a “reasonable inferenc[e] based on substantial evidence.” Turner II, 520 U. S., at 195. We are mindful that this law arises in a context in which “national security and foreign policy concerns arise in connection with efforts to confront evolving threats in an area where information can be difficult to obtain and the impact of certain conduct difficult to assess.” Humanitarian Law Project, 561 U. S., at 34. We thus afford the Government’s “informed judgment” substantial respect here. Ibid. Petitioners further argue that the Act is underinclusive as to the Government’s data protection concern, raising doubts as to whether the Government is actually pursuing that interest. In particular, petitioners argue that the Act’s focus on applications with user-generated and user-shared content, along with its exclusion for certain review platforms, exempts from regulation applications that are “as capable as TikTok of collecting Americans’ data.” Brief for TikTok 43; see Brief for Creator Petitioners 48–49. But “the First Amendment imposes no freestanding underinclusiveness limitation,” and the Government “need not address all aspects of a problem in one fell swoop.” Williams-Yulee v. Florida Bar, 575 U. S. 433, 449 (2015) (internal quotation marks omitted). Furthermore, as we have already concluded, the Government had good reason to single out TikTok for special treatment. Contrast Brown v. Entertainment Merchants Assn., 564 U. S. 786, 802 (2011) (singling out purveyors of video games for disfavored treatment without a persuasive reason “raise[d] serious doubts about whether the government [wa]s in fact pursuing the interest it invoke[d], rather than disfavoring a particular speaker or viewpoint”). On this record, Congress was justified in specifically addressing its TikTok-related national security concerns. Per Curiam As applied to petitioners, the Act is sufficiently tailored to address the Government’s interest in preventing a foreign adversary from collecting vast swaths of sensitive data about the 170 million U. S. persons who use TikTok. To survive intermediate scrutiny, “a regulation need not be the least speech-restrictive means of advancing the Government’s interests.” Turner I, 512 U. S., at 662. Rather, the standard “is satisfied ‘so long as the regulation promotes a substantial government interest that would be achieved less effectively absent the regulation’ ” and does not “burden substantially more speech than is necessary” to further that interest. Ward, 491 U. S., at 799 (quoting United States v. Albertini, 472 U. S. 675, 689 (1985); alteration omitted). The challenged provisions meet this standard. The provisions clearly serve the Government’s data collection interest “in a direct and effective way.” Ward, 491 U. S., at 800. The prohibitions account for the fact that, absent a qualified divestiture, TikTok’s very operation in the United States implicates the Government’s data collection concerns, while the requirements that make a divestiture “qualified” ensure that those concerns are addressed before TikTok resumes U. S. operations. Neither the prohibitions nor the divestiture requirement, moreover, is “substantially broader than necessary to achieve” this national security objective. Ibid. Rather than ban TikTok outright, the Act imposes a conditional ban. The prohibitions prevent China from gathering data from U. S. TikTok users unless and until a qualified divestiture severs China’s control. Petitioners parade a series of alternatives—disclosure requirements, data sharing restrictions, the proposed national security agreement, the general designation provision—that they assert would address the Government’s data collection interest in equal measure to a conditional TikTok ban. Those alternatives do not alter our tailoring analysis. Per Curiam Petitioners’ proposed alternatives ignore the “latitude” we afford the Government to design regulatory solutions to address content-neutral interests. Turner II, 520 U. S., at 213. “So long as the means chosen are not substantially broader than necessary to achieve the government’s interest, . . . the regulation will not be invalid simply because a court concludes that the government’s interest could be adequately served by some less-speech-restrictive alternative.” Ward, 491 U. S., at 800; see ibid. (regulation valid despite availability of less restrictive “alternative regulatory methods”); Albertini, 472 U. S., at 689; Clark v. Community for Creative Non-Violence, 468 U. S. 288, 299 (1984); Members of City Council of Los Angeles v. Taxpayers for Vincent, 466 U. S. 789, 815–816 (1984). For the reasons we have explained, the challenged provisions are “not substantially broader than necessary” to address the Government’s data collection concerns. Ward, 491 U. S., at 800. Nor did the Government ignore less restrictive approaches already proven effective. Contrast McCullen v. Coakley, 573 U. S. 464, 490–494 (2014) (state law burdened substantially more speech than necessary where State had not considered less restrictive measures successfully adopted by other jurisdictions). The validity of the challenged provisions does not turn on whether we agree with the Government’s conclusion that its chosen regulatory path is best or “most appropriate.” Albertini, 472 U. S., at 689. “We cannot displace [the Government’s] judgment respecting contentneutral regulations with our own, so long as its policy is grounded on reasonable factual findings supported by evidence that is substantial for a legislative determination.” Turner II, 520 U. S., at 224. Those requirements are met here. D In addition to the data collection concerns addressed above, the Government asserts an interest in preventing a Per Curiam foreign adversary from having control over the recommendation algorithm that runs a widely used U. S. communications platform, and from being able to wield that control to alter the content on the platform in an undetectable manner. See 2 App. 628. In petitioners’ view, that rationale is a content-based justification that “taint[s]” the Government’s data collection interest and triggers strict scrutiny. Brief for TikTok 41. Petitioners have not pointed to any case in which this Court has assessed the appropriate level of First Amendment scrutiny for an Act of Congress justified on both content-neutral and content-based grounds. They assert, however, that the challenged provisions are subject to—and fail—strict scrutiny because Congress would not have passed the provisions absent the foreign adversary control rationale. See Brief for TikTok 41–42; Brief for Creator Petitioners 47–50. We need not determine the proper standard for mixed-justification cases or decide whether the Government’s foreign adversary control justification is content neutral. Even assuming that rationale turns on content, petitioners’ argument fails under the counterfactual analysis they propose: The record before us adequately supports the conclusion that Congress would have passed the challenged provisions based on the data collection justification alone. To start, the House Report focuses overwhelmingly on the Government’s data collection concerns, noting the “breadth” of TikTok’s data collection, “the difficulty in assessing precisely which categories of data” the platform collects, the “tight interlinkages” between TikTok and the Chinese Government, and the Chinese Government’s ability to “coerc[e]” companies in China to “provid[e] data.” H. R. Rep., at 3; see id., at 5–12 (recounting a five-year record of Government actions raising and attempting to address those very concerns). Indeed, it does not appear that any legislator disputed the national security risks associated Per Curiam with TikTok’s data collection practices, and nothing in the legislative record suggests that data collection was anything but an overriding congressional concern. We are especially wary of parsing Congress’s motives on this record with regard to an Act passed with striking bipartisan support. See 170 Cong. Rec. H1170 (Mar. 13, 2024) (352–65); 170 Cong. Rec. S2992 (Apr. 23, 2024) (79–18). Petitioners assert that the text of the Act itself undermines this conclusion. In particular, they argue that the Government’s data collection rationale cannot justify the requirement that a qualified divestiture preclude “any operational relationship” that allows for “cooperation with respect to the operation of a content recommendation algorithm or an agreement with respect to data sharing.” §2(g)(6)(B); see Brief for Creator Petitioners 48–49. We disagree. The Government has explained that ByteDance Ltd. uses the data it collects to train the TikTok recommendation algorithm, which is developed and maintained in China. According to the Government, ByteDance Ltd. has previously declined to agree to stop collecting U. S. user data or sending that data to China to train the algorithm. See 2 App. 705–706. The Government has further noted the difficulties associated with monitoring data sharing between ByteDance Ltd. and TikTok Inc. See id., at 692–697. Under these circumstances, we find the Government’s data collection justification sufficient to sustain the challenged provisions. * * * There is no doubt that, for more than 170 million Americans, TikTok offers a distinctive and expansive outlet for expression, means of engagement, and source of community. But Congress has determined that divestiture is necessary to address its well-supported national security concerns regarding TikTok’s data collection practices and relationship with a foreign adversary. For the foregoing Per Curiam reasons, we conclude that the challenged provisions do not violate petitioners’ First Amendment rights. The judgment of the United States Court of Appeals for the District of Columbia Circuit is affirmed. It is so ordered.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": [],
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "We consider whether the Act, as applied to petitioners, violates the First Amendment."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/24-00656qp.pdf",
@@ -4604,10 +4526,10 @@
    "name": "E.M.D. Sales, Inc. v. Carrera",
    "summary": "The preponderance-of-the-evidence standard applies when an employer seeks to demonstrate that an employee is exempt from the minimum-wage and overtime-pay provisions of the Fair Labor Standards Act.",
    "author_code": "BK",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-217_9o6b.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us1r06_5ifl.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "KAVANAUGH, J., delivered the opinion for a unanimous Court. GORSUCH, J., filed a concurring opinion, in which THOMAS, J., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -4641,7 +4563,7 @@
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "For example, the Court has mandated a clear-and-convincingevidence standard in certain First Amendment cases."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/23-00217qp.pdf",
@@ -4659,10 +4581,10 @@
    "name": "Royal Canin U. S. A. v. Wullschleger",
    "summary": "When a plaintiff amends her complaint to delete the federal-law claims that enabled removal to federal court, leaving only state-law claims behind, the federal court loses supplemental jurisdiction over the state claims, and the case must be remanded to state court.",
    "author_code": "EK",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-677_6jgm.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us1r05_db8e.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "KAGAN, J., delivered the opinion for a unanimous Court.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -4680,7 +4602,7 @@
    "provisions": [
     {
      "id": "art-3",
-     "quote": "Limited first by the Constitution, to only the kinds of “Cases” and “Controversies” listed in Article III."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/23-00677qp.pdf",
@@ -4696,10 +4618,10 @@
    "name": "NVIDIA v. E. Ohman J:or Fonder AB",
    "summary": "Certiorari dismissed as improvidently granted.",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-970_2dq3.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us1r04_5i36.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "PER CURIAM. The writ of certiorari is dismissed as improvidently granted. It is so ordered.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": [],
    "provisions": [],
    "qp_url": "https://www.supremecourt.gov/qp/23-00970qp.pdf",
@@ -4718,10 +4640,10 @@
    "name": "Bouarfa v. Mayorkas",
    "summary": "Revocation of an approved visa petition under 8 U. S. C. §1155 based on a sham-marriage determination by the Secretary of Homeland Security is the kind of discretionary decision that falls within the purview of §1252(a)(2)(B)(ii), which strips federal courts of jurisdiction to review certain actions “in the discretion of ” the agency.",
    "author_code": "KJ",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-583_onjq.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us1r03_3f14.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "JACKSON, J., delivered the opinion for a unanimous Court.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -4753,10 +4675,10 @@
    "name": "Facebook, Inc. v. Amalgamated Bank",
    "summary": "Certiorari dismissed as improvidently granted.",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-980_4f14.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us1r02_j4ek.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "PER CURIAM. The writ of certiorari is dismissed as improvidently granted. It is so ordered.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": [],
    "provisions": [],
    "qp_url": "https://www.supremecourt.gov/qp/23-00980qp.pdf",
@@ -4778,10 +4700,10 @@
    "name": "Hamm v. Smith",
    "summary": "The judgment is vacated and the case is remanded to the Eleventh Circuit to clarify the basis for its decision affirming the District Court’s judgment that Smith is ineligible for the death penalty due to intellectual disability.",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-167_heim.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/604us1r01_2dq3.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "PER CURIAM. Joseph Clifton Smith was sentenced to death for the murder of Durk Van Dam. The U. S. District Court for the Southern District of Alabama vacated Smith’s death sentence after concluding that he is intellectually disabled. See Atkins v. Virginia, 536 U. S. 304 (2002). Smith has obtained five full-scale IQ scores, ranging from 72 to 78. Smith’s claim of intellectual disability depended in part on whether his IQ is 70 or below. The District Court found that Smith’s IQ could be as low as 69 given the standard error of measurement for his lowest score of 72. The District Court then vacated the death sentence, and the U. S. Court of Appeals for the Eleventh Circuit affirmed. Smith v. Commissioner, Ala. Dept. of Corrections, 67 F. 4th 1335, 1354 (2023). Analyzing Smith’s intellectual functioning requires evaluating his various IQ scores. In Hall v. Florida, 572 U. S. 701, 714 (2014), this Court stated that “when a person has taken multiple tests, each separate score must be assessed” considering the standard error of measurement. The Court further noted that “the analysis of multiple IQ scores jointly is a complicated endeavor.” Ibid. This Court has not specified how courts sh",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": [],
    "provisions": [],
    "qp_url": null,
