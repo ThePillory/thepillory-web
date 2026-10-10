@@ -304,7 +304,45 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NH02260/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 1199750.37,
+    "disbursements": 683213.38,
+    "cash_on_hand": 646016.59,
+    "individual_unitemized": 642805.63,
+    "individual_itemized": 419138.02,
+    "pac": 1500,
+    "party": 0,
+    "self_funding": 120000,
+    "other": 16306.72,
+    "coverage_end": "2026-08-19",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2NH02260/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00607374",
+      "name": "ELBERT GUILLORY'S AMERICA",
+      "total": 1500,
+      "count": 1,
+      "industry": "issue"
+     }
+    ],
+    "count": 1,
+    "total": 1500,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00800458&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.lilytangwilliams.com/",
+    "as_filed": "HTTPS://WWW.LILYTANGWILLIAMS.COM/",
+    "source_url": "https://www.fec.gov/data/committee/C00800458/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   }
  }
 }

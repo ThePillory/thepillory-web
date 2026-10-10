@@ -96,7 +96,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NE01118/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2368910.23,
+    "disbursements": 1028941.19,
+    "cash_on_hand": 1560750.81,
+    "individual_unitemized": 36064.72,
+    "individual_itemized": 1041553.35,
+    "pac": 1127179.44,
+    "party": 0,
+    "self_funding": 0,
+    "other": 164112.72,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2NE01118/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00833715",
+      "name": "MIKE FLOOD VICTORY FUND",
+      "total": 41648.94,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00066472",
+      "name": "AMERICAN PROPERTY CASUALTY INSURANCE ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 12500,
+      "count": 5,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00009985",
+      "name": "NATIONAL ASSOCIATION OF BROADCASTERS",
+      "total": 10237.5,
+      "count": 3,
+      "industry": "media"
+     },
+     {
+      "committee_id": "C00012245",
+      "name": "UBS AMERICAS INC PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00130773",
+      "name": "NMHC PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00007880",
+      "name": "AMERICA'S CREDIT UNION PAC OF CREDIT UNION NATIONAL ASSOCIATION, INC",
+      "total": 10000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00797670",
+      "name": "AMERICAN ISRAEL PUBLIC AFFAIRS COMMITTEE PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "legal"
+     },
+     {
+      "committee_id": "C00370015",
+      "name": "NELNET PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00113241",
+      "name": "NATIONAL APARTMENT ASSOCIATION",
+      "total": 10000,
+      "count": 2,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00040998",
+      "name": "NADA PAC - NATIONAL AUTOMOBILE DEALERS ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00010470",
+      "name": "UNION PACIFIC CORPORATION FUND",
+      "total": 10000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00012914",
+      "name": "TITLE INDUSTRY POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 3,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00127779",
+      "name": "PRUDENTIAL FINANCIAL, INC",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00158881",
+      "name": "NEW YORK LIFE INSURANCE COMPANY POLITICAL ACTION COMMITTEE (PAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00813063",
+      "name": "MNM PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00024968",
+      "name": "AMERICAN OPTOMETRIC ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00077321",
+      "name": "AICPA PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00068528",
+      "name": "PACIFIC LIFE INSURANCE COMPANY PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00039578",
+      "name": "COUNCIL OF INSURANCE AGENTS & BROKERS PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00411173",
+      "name": "COMMERCIAL REAL ESTATE FINANCE COUNCIL PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00313700",
+      "name": "TRANSUNION POLITICAL ACTION COMMITTEE (TU PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00833707",
+      "name": "OLSSON INC PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00821058",
+      "name": "ALABAMA FIRST PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00830083",
+      "name": "AMERICAN HOMES 4 RENT TRS, LLC PAC",
+      "total": 10000,
+      "count": 5,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00005249",
+      "name": "NATIONAL ASSOCIATION OF INSURANCE AND FINANCIAL ADVISORS  PAC",
+      "total": 10000,
+      "count": 7,
+      "industry": "finance"
+     }
+    ],
+    "count": 244,
+    "total": 1078929.44,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00801241&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00801241/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6NE01135": {
    "id": "H6NE01135",

@@ -141,7 +141,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4AR02141/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 4421509.93,
+    "disbursements": 2830320.69,
+    "cash_on_hand": 2967541.43,
+    "individual_unitemized": 28686.18,
+    "individual_itemized": 1763424.31,
+    "pac": 1457367.48,
+    "party": 0,
+    "self_funding": 0,
+    "other": 1172031.96,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4AR02141/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00773903",
+      "name": "TEAM HILL",
+      "total": 87589.82,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00938449",
+      "name": "WAGNER HILL VICTORY FUND",
+      "total": 23777.66,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00105981",
+      "name": "INVESTMENT COMPANY INSTITUTE PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00250399",
+      "name": "AUTOMOTIVE FREE INTERNATIONAL TRADE PAC (AFIT-PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00589119",
+      "name": "SYNCHRONY FINANCIAL EMPLOYEES PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00130773",
+      "name": "NATIONAL MULTIFAMILY HOUSING COUNCIL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00170258",
+      "name": "NATIONAL ASSOCIATION OF MUTUAL INSURANCE COMPANIES PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00699140",
+      "name": "LSTA INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00792127",
+      "name": "FAIR ISAAC CORPORATION POLITICAL ACTION COMMITTEE (FICO PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00364778",
+      "name": "BANK OF AMERICA CORPORATION FEDERAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00325332",
+      "name": "AMERICAN SENIORS HOUSING ASSOCIATION (SENIORS HOUSING PAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00077321",
+      "name": "AMERICAN INSTITUTE OF CERTIFIED PUBLIC ACCOUNTANTS POLITICAL",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00034157",
+      "name": "AFLAC INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00169821",
+      "name": "TYSON FOODS INC. PAC (TYPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00255877",
+      "name": "THE OPTIONS CLEARING CORPORATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00193631",
+      "name": "THE FARM CREDIT COUNCIL POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00254201",
+      "name": "NATIONAL ASSOCIATION OF MORTGAGE BROKERS PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00104299",
+      "name": "JPMORGAN CHASE & CO. FEDERAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00076299",
+      "name": "CME GROUP INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00066472",
+      "name": "AMERICAN PROPERTY CASUALTY INSURANCE ASSOCIATION PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00365122",
+      "name": "VISA INC. POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00164145",
+      "name": "UNITED SERVICES AUTOMOBILE ASSOCIATION EMPLOYEE PAC - USAA E",
+      "total": 10000,
+      "count": 2,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00313700",
+      "name": "TRANS UNION LLC PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00197095",
+      "name": "THE NORTHWESTERN MUTUAL LIFE INSURANCE COMPANY FED",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00148031",
+      "name": "THE CATERPILLAR INC. EMPLOYEE POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "manufacturing"
+     }
+    ],
+    "count": 278,
+    "total": 1456367.48,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00551275&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.electfrench.com/",
+    "as_filed": "WWW.ELECTFRENCH.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00551275/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6AR02294": {
    "id": "H6AR02294",
@@ -264,7 +470,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4AR04048/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2562973.36,
+    "disbursements": 928087.2,
+    "cash_on_hand": 4668446.56,
+    "individual_unitemized": 38087.65,
+    "individual_itemized": 825886.33,
+    "pac": 1053550,
+    "party": 0,
+    "self_funding": 0,
+    "other": 645449.38,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4AR04048/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00109546",
+      "name": "VALERO ENERGY CORPORATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00095869",
+      "name": "POWERPAC OF THE EDISON ELECTRIC INSTITUTE",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00496307",
+      "name": "MARATHON PETROLEUM CORPORATION EMPLOYEES POLITICAL ACTION COMMITTEE (MPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00096156",
+      "name": "HONEYWELL INTERNATIONAL POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 3,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00140855",
+      "name": "FIRSTENERGY CORP PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00064766",
+      "name": "UNITED PARCEL SERVICE INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00096842",
+      "name": "THE AMERICAN ELECTRIC POWER COMMITTEE FOR RESPONSIBLE GOVERNMENT",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00019653",
+      "name": "EDISON INTERNATIONAL PAC",
+      "total": 10000,
+      "count": 5,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00148031",
+      "name": "CATERPILLAR INC. PAC (CATPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00797670",
+      "name": "AMERICAN ISRAEL PUBLIC AFFAIRS COMMITTEE PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "legal"
+     },
+     {
+      "committee_id": "C00089458",
+      "name": "NATIONAL STONE, SAND & GRAVEL ASSOCIATION ROCKPAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00480863",
+      "name": "NATIONAL SHOOTING SPORTS FOUNDATION, INC. POLITICAL ACTION COMMITTEE (NSSF PAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "media"
+     },
+     {
+      "committee_id": "C00245548",
+      "name": "NATIONAL MARINE MANUFACTURERS ASSOCIATION AND MARINE RETAILERS ASSOCIATION BOAT POLITICAL ACTION",
+      "total": 10000,
+      "count": 2,
+      "industry": "retail"
+     },
+     {
+      "committee_id": "C00028787",
+      "name": "NATIONAL CATTLEMEN'S BEEF ASSOCIATION POLITICAL ACTION COMMITTEE (NCBA-PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00349373",
+      "name": "GULF STATES TOYOTA INC FEDERAL POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00363879",
+      "name": "ENTERGY CORPORATION POLITICAL ACTION COMMITTEE (ENPAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00564377",
+      "name": "CHUGACH ALASKA CORPORATION PAC (CAC PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00035006",
+      "name": "CHEVRON EMPLOYEES POLITICAL ACTION COMMITTEE - CHEVRON CORPORATION",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00249532",
+      "name": "AMERICAN SPORTFISHING ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00206136",
+      "name": "AMEREN CORPORATION FEDERAL PAC (AMEREN FEDPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00007948",
+      "name": "WEYERHAEUSER COMPANY POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00100321",
+      "name": "L3HARRIS TECHNOLOGIES, INC. PAC",
+      "total": 10000,
+      "count": 5,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00002972",
+      "name": "THE NATIONAL RURAL ELECTRIC COOPERATIVE ASSOCIATION ACTION COMMITTEE FOR RURAL ELECTRIFICATION (A",
+      "total": 10000,
+      "count": 6,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00169821",
+      "name": "TYSON FOODS INC POLITICAL ACTION COMMITTEE (TYPAC)",
+      "total": 10000,
+      "count": 5,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00469080",
+      "name": "NATIONAL ALLIANCE OF FOREST OWNERS POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 4,
+      "industry": "agriculture"
+     }
+    ],
+    "count": 270,
+    "total": 1052800,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00548180&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.brucewesterman.com/",
+    "as_filed": "HTTPS://WWW.BRUCEWESTERMAN.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00548180/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   }
  }
 }

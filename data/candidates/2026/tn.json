@@ -743,7 +743,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2TN05446/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 613134.73,
+    "disbursements": 617406.75,
+    "cash_on_hand": 57648.62,
+    "individual_unitemized": 115733.69,
+    "individual_itemized": 344201.48,
+    "pac": 135000,
+    "party": 0,
+    "self_funding": 0,
+    "other": 18199.56,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2TN05446/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00467431",
+      "name": "THE EYE OF THE TIGER PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00693796",
+      "name": "BUCKEYE LIBERTY PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00639229",
+      "name": "AMERICAN REVIVAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00692327",
+      "name": "LETS GET TO WORK PAC",
+      "total": 7000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00906669",
+      "name": "NESTPOINT PAC",
+      "total": 7000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00005249",
+      "name": "NATIONAL ASSOCIATION OF INSURANCE AND FINANCIAL ADVISORS POLITICAL ACTION COMM",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00753475",
+      "name": "BAPS PUBLIC AFFAIRS, INC. PAC (BAPS PAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "legal"
+     },
+     {
+      "committee_id": "C00336743",
+      "name": "ASIAN AMERICAN HOTEL OWNERS ASSOCIATION PAC (AAHOA PAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00749481",
+      "name": "RAPTOR PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00563726",
+      "name": "MR. SOUTHERN MISSOURIAN IN THE HOUSE PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00552851",
+      "name": "HOUSE FREEDOM FUND",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00480863",
+      "name": "NATIONAL SHOOTING SPORTS FOUNDATION, INC. PAC (NSSF PAC)",
+      "total": 5000,
+      "count": 2,
+      "industry": "media"
+     },
+     {
+      "committee_id": "C00788414",
+      "name": "ERIC BURLISON FOR CONGRESS",
+      "total": 4000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00822767",
+      "name": "RUDY FOR INDIANA",
+      "total": 4000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00394957",
+      "name": "SCALISE FOR CONGRESS",
+      "total": 4000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00869743",
+      "name": "LEAN FORWARD AMERICA FUND",
+      "total": 3500,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00816751",
+      "name": "IT MATTERS WHO LEADS PAC",
+      "total": 3500,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00000901",
+      "name": "BUILD PAC OF THE NATIONAL ASSOCIATION OF HOME BUILDERS (BUILDPAC)",
+      "total": 3000,
+      "count": 1,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00113811",
+      "name": "NATIONAL ELECTRICAL CONTRACTORS ASSOCIATION PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "construction"
+     },
+     {
+      "committee_id": "C00197228",
+      "name": "ELEVANCE HEALTH, INC. PAC (ELEVANCE HEALTH PAC)",
+      "total": 2000,
+      "count": 1,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00032698",
+      "name": "INDEPENDENT COMMUNITY BANKERS OF AMERICA PAC",
+      "total": 2000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00723916",
+      "name": "MARY MILLER FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00153445",
+      "name": "NATIONAL HEALTH CORPORATION PAC",
+      "total": 2000,
+      "count": 1,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00689208",
+      "name": "RVFPAC",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00416594",
+      "name": "JIM JORDAN FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     }
+    ],
+    "count": 39,
+    "total": 130500,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00811844&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.andyogles.com/",
+    "as_filed": "WWW.ANDYOGLES.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00811844/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6TN06247": {
    "id": "H6TN06247",
@@ -782,7 +988,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2TN05347/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 50000,
+    "disbursements": 43591.87,
+    "cash_on_hand": 6393.13,
+    "individual_unitemized": 0,
+    "individual_itemized": 0,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 50000,
+    "other": 0,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2TN05347/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00948554&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00948554/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6TN06171": {
    "id": "H6TN06171",
@@ -951,7 +1187,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2TN07103/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2232874.39,
+    "disbursements": 1285496.95,
+    "cash_on_hand": 3006838.25,
+    "individual_unitemized": 3349.63,
+    "individual_itemized": 1048279.76,
+    "pac": 1028850,
+    "party": 0,
+    "self_funding": 0,
+    "other": 152395,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2TN07103/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00039578",
+      "name": "COUNCIL OF INSURANCE AGENTS & BROKERS PAC",
+      "total": 10000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00350199",
+      "name": "MANUFACTURED HOUSING INSTITUTE PAC",
+      "total": 10000,
+      "count": 1,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00034488",
+      "name": "ANHEUSER-BUSCH COMPANIES INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00014019",
+      "name": "COTCO-ACSA PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00563726",
+      "name": "MR. SOUTHERN MISSOURIAN IN THE HOUSE PAC (MR. SMITH PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00068692",
+      "name": "FEDEX CORPORATION PAC (FEDEX PAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00005249",
+      "name": "NAIFA PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00113811",
+      "name": "NATIONAL ELECTRICAL CONTRACTORS ASSOCIATION (NECAPAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "construction"
+     },
+     {
+      "committee_id": "C00004812",
+      "name": "MORTGAGE BANKERS ASSOCIATION PAC (MORPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00161414",
+      "name": "PROTECTIVE LIFE CORPORATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00432252",
+      "name": "REGIONS FEDERAL ONLY PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00067231",
+      "name": "HCA GOOD GOVERNMENT FUND",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00085316",
+      "name": "THE CIGNA GROUP EMPLOYEE PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00060087",
+      "name": "STANLEY BLACK & DECKER INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00164145",
+      "name": "UNITED SERVICES AUTOMOBILE ASSOC. EMPLOYEE PAC (USAA  PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00064766",
+      "name": "UNITED PARCEL SERVICE PAC (UPSPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00177436",
+      "name": "UNUM GROUP PAC (UNUMPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00789602",
+      "name": "SYLVAMO CORPORATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00197095",
+      "name": "NORTHWESTERN MUTUAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00034405",
+      "name": "INTERNATIONAL PAPER PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00345132",
+      "name": "REPUBLICAN JEWISH COALITION PAC (RJC PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00763664",
+      "name": "TRACTOR SUPPLY COMPANY PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00113159",
+      "name": "EASTMAN PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00004275",
+      "name": "AMERICAN BANKER'S ASSOCIATION PAC (BANKPAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00686055",
+      "name": "JACKSON HOLDINGS NATIONAL LIFE INSURANCE COMPANY",
+      "total": 10000,
+      "count": 4,
+      "industry": "finance"
+     }
+    ],
+    "count": 251,
+    "total": 1024350,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00614826&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00614826/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H0TN09061": {
    "id": "H0TN09061",

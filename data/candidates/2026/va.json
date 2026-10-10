@@ -317,7 +317,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2VA02064/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 5954338.07,
+    "disbursements": 2608075.05,
+    "cash_on_hand": 3391740.42,
+    "individual_unitemized": 784111.87,
+    "individual_itemized": 2203352.34,
+    "pac": 1250100.68,
+    "party": 5500,
+    "self_funding": 0,
+    "other": 1711273.18,
+    "coverage_end": "2026-07-15",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2VA02064/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00639229",
+      "name": "AMERICAN REVIVAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00250399",
+      "name": "AUTOMOTIVE FREE INTERNATIONAL TRADE PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00022343",
+      "name": "INDEPENDENT INSURANCE AGENTS & BROKERS OF AMERICA INC. POLITICAL ACTION COMMITT",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00077321",
+      "name": "AICPA PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00327189",
+      "name": "VALUE IN ELECTING WOMEN POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00173153",
+      "name": "THE AMERICAN ASSOCIATION OF NURSE ANESTHETISTS CRNA PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00635367",
+      "name": "TENACIOUS PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00467431",
+      "name": "EYE OF THE TIGER PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00439521",
+      "name": "AMERICAN SECURITY PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00358903",
+      "name": "AMERICAN ASSOCIATION OF NURSE PRACTITIONERS PAC (AANP-PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00524314",
+      "name": "AMERICA'S FIRST PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00267849",
+      "name": "ALLIED PILOTS ASSOCIATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00822833",
+      "name": "DEFENDING THE AMERICAN DREAM PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00103549",
+      "name": "PARSONS CORPORATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00743435",
+      "name": "FAIRBANKS MORSE LLC PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00564377",
+      "name": "CHUGACH ALASKA CORPORATION PAC (CAC PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00017525",
+      "name": "AMERICAN NURSES ASSOCIATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00029447",
+      "name": "INTERNATIONAL ASSOCIATION OF FIREFIGHTERS INTERESTED IN REGI",
+      "total": 10000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00365502",
+      "name": "BWX TECHNOLOGIES INC PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00811034",
+      "name": "ROCKET LAB USA INC. PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00404392",
+      "name": "CONSERVATIVE OPPORTUNITY LEADERSHIP AND ENTERPRISE PAC (COLE",
+      "total": 10000,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00493221",
+      "name": "THE GUARDIAN FUND",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00570226",
+      "name": "SEAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00078451",
+      "name": "GENERAL DYNAMICS CORPORATION POLITICAL ACTION COMMITTEE (GEN",
+      "total": 10000,
+      "count": 5,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00225342",
+      "name": "MCQUIREWOODS FEDERAL PAC FUND",
+      "total": 10000,
+      "count": 4,
+      "industry": "finance"
+     }
+    ],
+    "count": 356,
+    "total": 1244850.68,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00776120&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.jenforcongress.com/",
+    "as_filed": "WWW.JENFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00776120/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6VA02198": {
    "id": "H6VA02198",
@@ -369,7 +575,45 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2VA02098/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 5426.49,
+    "disbursements": 5426.49,
+    "cash_on_hand": 0,
+    "individual_unitemized": 759,
+    "individual_itemized": 1375,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 3292.49,
+    "other": 0,
+    "coverage_end": "2026-02-20",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2VA02098/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00401224",
+      "name": "ACTBLUE",
+      "total": 1032,
+      "count": 2,
+      "industry": "other"
+     }
+    ],
+    "count": 1,
+    "total": 1032,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00901546&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.nickva2.com/",
+    "as_filed": "WWW.NICKVA2.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00901546/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6VA02180": {
    "id": "H6VA02180",
@@ -1492,7 +1736,45 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2VA10273/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 107333.72,
+    "disbursements": 53073.28,
+    "cash_on_hand": 54260.44,
+    "individual_unitemized": 6364.51,
+    "individual_itemized": 48969.21,
+    "pac": 2000,
+    "party": 0,
+    "self_funding": 50000,
+    "other": 0,
+    "coverage_end": "2026-07-15",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2VA10273/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00875047",
+      "name": "RESTORING OUR FREEDOM PAC",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     }
+    ],
+    "count": 1,
+    "total": 2000,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00944264&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://beckwithforcongress.com/",
+    "as_filed": "BECKWITHFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00944264/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6VA10225": {
    "id": "H6VA10225",

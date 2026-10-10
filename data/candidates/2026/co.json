@@ -239,7 +239,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4CO03357/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 3552599.03,
+    "disbursements": 1800885.39,
+    "cash_on_hand": 1760849.14,
+    "individual_unitemized": 76383.62,
+    "individual_itemized": 1824041.42,
+    "pac": 568600.55,
+    "party": 50,
+    "self_funding": 0,
+    "other": 1083523.44,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4CO03357/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00639229",
+      "name": "AMERICAN REVIVAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00158881",
+      "name": "NEW YORK LIFE INSURANCE COMPANY PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00032995",
+      "name": "AMALGAMATED TRANSIT UNION - COPE",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00409516",
+      "name": "DIRECT SUPPLY, INC. PARTNERS PAC (DSI PARTNERS PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00467431",
+      "name": "THE EYE OF THE TIGER PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00433060",
+      "name": "REPUBLICAN GOVERNANCE GROUP/TUESDAY GROUP PAC",
+      "total": 10000,
+      "count": 10,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00010868",
+      "name": "AMERICAN COUNCIL OF ENGINEERING COMPANIES (ACEC/PAC)",
+      "total": 8000,
+      "count": 3,
+      "industry": "construction"
+     },
+     {
+      "committee_id": "C00513549",
+      "name": "PHILLIPS 66 PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00082040",
+      "name": "CHAMBER OF COMMERCE OF THE UNITED STATES OF AMERICA PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00077321",
+      "name": "AMERICAN INSTITUTE OF CERTIFIED PUBLIC ACCOUNTANTS PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00431932",
+      "name": "OVINTIV USA INC PAC",
+      "total": 7000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00235739",
+      "name": "BNSF RAILWAY COMPANY RAILPAC (BNSF RAILPAC)",
+      "total": 7000,
+      "count": 3,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00564377",
+      "name": "CHUGACH ALASKA CORPORATION PAC (CAC PAC)",
+      "total": 6500,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00144766",
+      "name": "NATIONAL BEER WHOLESALERS ASSOCIATION PAC",
+      "total": 6500,
+      "count": 3,
+      "industry": "retail"
+     },
+     {
+      "committee_id": "C00770255",
+      "name": "SIX PAC",
+      "total": 6000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00165159",
+      "name": "REPUBLICAN MAIN STREET PARTNERSHIP POLITICAL ACTION COMMITTEE",
+      "total": 6000,
+      "count": 6,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00096156",
+      "name": "HONEYWELL INTERNATIONAL PAC",
+      "total": 5500,
+      "count": 4,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00040998",
+      "name": "NATIONAL AUTOMOBILE DEALERS ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00572271",
+      "name": "BUILDING AMERICAS REPUBLICAN REPRESENTATION PAC (BARR PAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00039578",
+      "name": "THE COUNCIL OF INSURANCE AGENTS & BROKERS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00832568",
+      "name": "HIGHWATER PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00797670",
+      "name": "AMERICAN ISRAEL PUBLIC AFFAIRS COMMITTEE PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "legal"
+     },
+     {
+      "committee_id": "C00193631",
+      "name": "THE FARM CREDIT COUNCIL PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00022343",
+      "name": "INDEPENDENT INSURANCE AGENTS AND BROKERS OF AMERICA",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00592089",
+      "name": "ELECTING MAJORITY MAKING EFFECTIVE REPUBLICANS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     }
+    ],
+    "count": 188,
+    "total": 568600.55,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00848333&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://jeffhurdforcolorado.com/",
+    "as_filed": "JEFFHURDFORCOLORADO.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00848333/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6CO03212": {
    "id": "H6CO03212",
@@ -323,7 +529,12 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4CO04280/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": null,
+   "organizations": null,
+   "website": null,
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6CO04202": {
    "id": "H6CO04202",
@@ -349,7 +560,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4CO04165/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 93969.79,
+    "disbursements": 90185.35,
+    "cash_on_hand": 7331.2,
+    "individual_unitemized": 75538.04,
+    "individual_itemized": 16687.42,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 244.33,
+    "other": 1500,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4CO04165/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00832782&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.padoraforcongress.com/",
+    "as_filed": "WWW.PADORAFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00832782/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6CO04228": {
    "id": "H6CO04228",
@@ -414,7 +655,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4CO05105/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 0,
+    "disbursements": 0,
+    "cash_on_hand": 0.38,
+    "individual_unitemized": 0,
+    "individual_itemized": 0,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 0,
+    "other": 0,
+    "coverage_end": "2025-02-04",
+    "last_report": "TERMINATION REPORT 2025",
+    "source_url": "https://www.fec.gov/data/candidate/H4CO05105/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00855312&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://riverforcolorado.com/",
+    "as_filed": "RIVERFORCOLORADO.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00855312/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6CO05308": {
    "id": "H6CO05308",
@@ -453,7 +724,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4CO05139/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 288792.7,
+    "disbursements": 269618.22,
+    "cash_on_hand": 26643.15,
+    "individual_unitemized": 40563.19,
+    "individual_itemized": 102329.51,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 145900,
+    "other": 0,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4CO05139/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00864306&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00864306/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H8CO06229": {
    "id": "H8CO06229",
@@ -649,7 +950,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4CO08034/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 5393673.36,
+    "disbursements": 1588203.24,
+    "cash_on_hand": 3880462.51,
+    "individual_unitemized": 784602.36,
+    "individual_itemized": 1314330.21,
+    "pac": 1422927,
+    "party": 5000,
+    "self_funding": 0,
+    "other": 1866813.79,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4CO08034/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00513549",
+      "name": "PHILLIPS 66 PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00639229",
+      "name": "AMERICAN REVIVAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00358663",
+      "name": "AMERICAN RESORT DEVELOPMENT ASSOCIATION RESORT OWNERS COALITION PAC (ARDA-ROC PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00404392",
+      "name": "CONSERVATIVE OPPORTUNITY LEADERSHIP AND ENTERPRISE PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00797670",
+      "name": "AMERICAN ISRAEL PUBLIC AFFAIRS COMMITTEE PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "legal"
+     },
+     {
+      "committee_id": "C00284885",
+      "name": "THE HOME DEPOT INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "retail"
+     },
+     {
+      "committee_id": "C00649525",
+      "name": "RESTORING OUR NATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00158881",
+      "name": "NEW YORK LIFE INSURANCE COMPANY PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00040998",
+      "name": "NATIONAL AUTOMOBILE DEALERS ASSOCIATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00752790",
+      "name": "JOBS AND THE ECONOMY PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00394650",
+      "name": "JBS USA FOOD COMPANY PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00022343",
+      "name": "INDEPENDENT INSURANCE AGENTS & BROKERS OF AMERICA, INC. PAC (INSURPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00809970",
+      "name": "HISPANIC LEADERSHIP TRUST",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00446674",
+      "name": "WESTERN SUGAR COOPERATIVE PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00201871",
+      "name": "NATIONAL PORK PRODUCERS COUNCIL PORK PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00764886",
+      "name": "LASTING INVESTMENTS STRENGTHENING AMERICA PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00381954",
+      "name": "ATMOS ENERGY CORPORATION PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00749481",
+      "name": "RAPTOR PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00563726",
+      "name": "MR. SOUTHERN MISSOURIAN IN THE HOUSE PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00827881",
+      "name": "CIRCLE THE WAGONS PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00035006",
+      "name": "CHEVRON EMPLOYEES PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00770297",
+      "name": "BAKER PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00267849",
+      "name": "ALLIED PILOTS ASSOCIATION PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00493221",
+      "name": "THE GUARDIAN FUND",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00525543",
+      "name": "PROJECT WEST POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     }
+    ],
+    "count": 425,
+    "total": 1422427,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00849844&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://electgabeevans.com/",
+    "as_filed": "ELECTGABEEVANS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00849844/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6CO08120": {
    "id": "H6CO08120",

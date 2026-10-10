@@ -109,7 +109,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2WI02124/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 814873.62,
+    "disbursements": 933048.01,
+    "cash_on_hand": 884042.57,
+    "individual_unitemized": 124619.75,
+    "individual_itemized": 244661.6,
+    "pac": 401660,
+    "party": 0,
+    "self_funding": 0,
+    "other": 43932.27,
+    "coverage_end": "2026-07-22",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2WI02124/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00007542",
+      "name": "INTERNATIONAL ASSOCIATION OF SHEET METAL, AIR, RAIL AND TRANSPORTATION WORKERS POLITICAL A",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00423731",
+      "name": "INTERNATIONAL UNION OF OPERATING ENGINEERS LOCAL 139 FEDERAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00004473",
+      "name": "NATIONAL TELECOMMUNICATIONS COOPERATIVE ASSOCIATION RURAL BROADBAND PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00028860",
+      "name": "AMERICAN FEDERATION OF TEACHERS, AFL-CIO COMMITTEE ON POLITICAL EDUCATION",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00110338",
+      "name": "AMERICAN CRYSTAL SUGAR COMPANY POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00032979",
+      "name": "DRIVE - DEMOCRAT, REPUBLICAN, INDEPENDENT VOTER EDUCATION (THE PAC OF THE INTERNATION",
+      "total": 10000,
+      "count": 6,
+      "industry": "education"
+     },
+     {
+      "committee_id": "C00007922",
+      "name": "LABORERS' INTERNATIONAL UNION OF NORTH AMERICA (LIUNA) PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00011114",
+      "name": "AMERICAN FEDERATION OF STATE COUNTY & MUNICIPAL EMPLOYEES P E O P L E",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00029447",
+      "name": "INTERNATIONAL ASSOCIATION OF FIREFIGHTERS INTERESTED IN REGISTRATION AND EDUCATION PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00000885",
+      "name": "INTERNATIONAL UNION OF PAINTERS AND ALLIED TRADES POLITICAL ACTION TOGETHER POLITICAL COMMITTEE",
+      "total": 7500,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00010322",
+      "name": "AMERICAN POSTAL WORKERS UNION COMMITTEE ON POLITICAL ACTION",
+      "total": 7500,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00144766",
+      "name": "NATIONAL BEER WHOLESALERS ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 3,
+      "industry": "retail"
+     },
+     {
+      "committee_id": "C00024968",
+      "name": "AMERICAN OPTOMETRIC ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 3,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00024521",
+      "name": "AMERICAN ASSOCIATION FOR JUSTICE POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00435933",
+      "name": "AMERICAN ACADEMY OF NEUROLOGY BRAINPAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "education"
+     },
+     {
+      "committee_id": "C00238725",
+      "name": "NATIONAL AIR TRAFFIC CONTROLLERS ASSOCIATION PAC",
+      "total": 7000,
+      "count": 5,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00235853",
+      "name": "HUMAN RIGHTS CAMPAIGN PAC",
+      "total": 6050,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00343137",
+      "name": "POLITICAL ACTION COMMITTEE OF THE AMERICAN ASSOCIATION OF ORTHOPAEDIC SURGEONS",
+      "total": 6000,
+      "count": 3,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00005249",
+      "name": "NATIONAL ASSOCIATION OF INSURANCE AND FINANCIAL ADVISORS POLITICAL ACTION COMM",
+      "total": 5840,
+      "count": 5,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00004861",
+      "name": "UNITE HERE TIP CAMPAIGN COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00002840",
+      "name": "UAW - V - CAP (UAW VOLUNTARY COMMUNITY ACTION PROGRAM)",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00004036",
+      "name": "SEIU COPE (SERVICE EMPLOYEES INTERNATIONAL UNION COMMITTEE ON POLITICAL EDUCATION)",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00000729",
+      "name": "AMERICAN DENTAL ASSOCIATION PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00002766",
+      "name": "UNITED FOOD & COMMERCIAL WORKERS INTERNATIONAL UNION ACTIVE BALLOT CLUB",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00002469",
+      "name": "MACHINISTS NON PARTISAN POLITICAL LEAGUE OF THE INTERNATIONAL ASSOCIATION OF MACHINISTS &",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     }
+    ],
+    "count": 103,
+    "total": 401660,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00502179&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "http://pocanforcongress.com/",
+    "as_filed": "HTTP://POCANFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00502179/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6WI03180": {
    "id": "H6WI03180",

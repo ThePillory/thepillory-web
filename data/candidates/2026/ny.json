@@ -44,7 +44,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY01190/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 3795307.23,
+    "disbursements": 1141528.37,
+    "cash_on_hand": 3329856.52,
+    "individual_unitemized": 108593.57,
+    "individual_itemized": 1056319.27,
+    "pac": 941305.09,
+    "party": 0,
+    "self_funding": 0,
+    "other": 1689089.3,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2NY01190/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00089458",
+      "name": "NATIONAL STONE, SAND & GRAVEL ASSOCIATION ROCKPAC",
+      "total": 15000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00693796",
+      "name": "BUCKEYE LIBERTY PAC",
+      "total": 10000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00411116",
+      "name": "SPACE EXPLORATION TECHNOLOGIES CORP. PAC",
+      "total": 10000,
+      "count": 1,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00785014",
+      "name": "CONQUERING CANCER PAC",
+      "total": 10000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00113811",
+      "name": "NATIONAL ELECTRICAL CONTRACTORS ASSOCIATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "construction"
+     },
+     {
+      "committee_id": "C00524314",
+      "name": "AMERICA'S FIRST PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00032995",
+      "name": "AMALGAMATED TRANSIT UNION - COPE",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00024869",
+      "name": "GENERAL ELECTRIC COMPANY AEROSPACE EMPLOYEE PAC (GE AEROSPACE PAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00503151",
+      "name": "UPPER HAND FUND",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00822833",
+      "name": "DEFENDING THE AMERICAN DREAM PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00639229",
+      "name": "AMERICAN REVIVAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00612218",
+      "name": "SUFFOLK COUNTY CORRECTION OFFICERS ASSOCIATION INC PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00467431",
+      "name": "THE EYE OF THE TIGER PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00825430",
+      "name": "DOUBLE L PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00683508",
+      "name": "FOREVER YOUTH ORGANIZATION UTILIZING A NEW GENERATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00238725",
+      "name": "NATIONAL AIR TRAFFIC CONTROLLERS ASSOCIATION PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00813063",
+      "name": "LEADERSHIP AND LOYALTY ONLY TO AMERICA PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00817338",
+      "name": "MVL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00755173",
+      "name": "HONOR COURAGE COMMITMENT PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00010322",
+      "name": "AMERICAN POSTAL WORKERS UNION COMMITTEE ON POLITICAL ACTION",
+      "total": 10000,
+      "count": 4,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00091561",
+      "name": "NATIONAL ACTIVE AND RETIRED FEDERAL EMPLOYEES ASSOCIATION POLITICAL ACTION COM (NARFE-PAC)",
+      "total": 10000,
+      "count": 5,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00013961",
+      "name": "SHEET METAL & AIR CONDITIONING CONTRACTORS' NATIONAL ASSOC., INC. PAC",
+      "total": 10000,
+      "count": 6,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00072025",
+      "name": "NATIONAL RURAL LETTER CARRIERS' ASSOCIATION PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00088591",
+      "name": "EMPLOYEES OF NORTHROP GRUMMAN CORPORATION PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00360669",
+      "name": "SOUTHWEST AIRLINES PILOTS' ASSOCIATION PAC (SWAPA PAC)",
+      "total": 10000,
+      "count": 5,
+      "industry": "transportation"
+     }
+    ],
+    "count": 232,
+    "total": 930855.09,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00806018&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://nicklalota.com/",
+    "as_filed": "NICKLALOTA.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00806018/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6NY01134": {
    "id": "H6NY01134",
@@ -625,7 +831,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY04244/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 5097222.15,
+    "disbursements": 1276601.72,
+    "cash_on_hand": 3843823.75,
+    "individual_unitemized": 325670.89,
+    "individual_itemized": 2678439.21,
+    "pac": 1027036.67,
+    "party": 5022.48,
+    "self_funding": 0,
+    "other": 1061052.9,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2NY04244/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00012245",
+      "name": "ALLIED PILOTS ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 15000,
+      "count": 4,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00360669",
+      "name": "SWAPA PAC",
+      "total": 12000,
+      "count": 6,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00158881",
+      "name": "NEW YORK LIFE INSURANCE PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00348607",
+      "name": "IMPACT",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00574970",
+      "name": "FAIR SHOT PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00573709",
+      "name": "CA LUV PAC (CALIFORNIA LEADERSHIP UNITED FOR VICTORY PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00271338",
+      "name": "AMERIPAC: THE FUND FOR A GREATER AMERICA",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00255752",
+      "name": "AMERICAN SOCIETY OF ANESTHESIOLOGISTS POLITICAL ACTION COMMITTEE (ASA PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00193433",
+      "name": "EMILYS LIST",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00525600",
+      "name": "OFF THE SIDELINES PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00629709",
+      "name": "NO LABELS PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00001016",
+      "name": "CARPENTERS LEGISLATIVE IMPROVEMENT COMMITTEE UNITED BROTHERHOOD OF CARPENTERS AND JOINERS",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00028860",
+      "name": "AMERICAN FEDERATION OF TEACHERS, AFL-CIO COMMITTEE ON POLITICAL EDUCATION",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00344234",
+      "name": "PAC TO THE FUTURE",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00029504",
+      "name": "ENGINEERS POLITICAL EDUCATION COMMITTEE (EPEC)/INTERNATIONAL UNION OF OPERATING ENGINEERS",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00892901",
+      "name": "INNOVATION FOR GOOD PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00032995",
+      "name": "AMALGAMATED TRANSIT UNION - COPE",
+      "total": 10000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00617803",
+      "name": "JOBS, EDUCATION, & FAMILIES FIRST  JEFF PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00581785",
+      "name": "SUSTAINABLE ENERGY AND ENVIRONMENT COALITION PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00884874",
+      "name": "STOP PROJECT 2025",
+      "total": 10000,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00651042",
+      "name": "MOMS FED UP",
+      "total": 10000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00685297",
+      "name": "ELECT DEMOCRATIC WOMEN",
+      "total": 10000,
+      "count": 6,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00844720",
+      "name": "DEMOCRATIC MAJORITY FUND",
+      "total": 10000,
+      "count": 4,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00035451",
+      "name": "AIR LINE PILOTS ASSOCIATION (ALPA)",
+      "total": 10000,
+      "count": 4,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00024521",
+      "name": "AAJ PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     }
+    ],
+    "count": 312,
+    "total": 1027036.67,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00840165&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://lauragillen.com/",
+    "as_filed": "HTTPS://LAURAGILLEN.COM/",
+    "source_url": "https://www.fec.gov/data/committee/C00840165/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H4NY04174": {
    "id": "H4NY04174",
@@ -703,7 +1115,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY06116/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2034044.64,
+    "disbursements": 1972862,
+    "cash_on_hand": 1030068.45,
+    "individual_unitemized": 22019.63,
+    "individual_itemized": 1321697.69,
+    "pac": 575800,
+    "party": 0,
+    "self_funding": 0,
+    "other": 114527.32,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2NY06116/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00030718",
+      "name": "NATIONAL ASSOCIATION OF REALTORS POLITICAL ACTION COMMITTEE",
+      "total": 15000,
+      "count": 5,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00158881",
+      "name": "NEW YORK LIFE INSURANCE COMPANY POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00012245",
+      "name": "UBS AMERICAS INC. POLITICAL ACTION COMMITTEE (UBS PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00104802",
+      "name": "DELTA AIR LINES PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00028860",
+      "name": "AMERICAN FEDERATION OF TEACHERS, AFL-CIO COMMITTEE ON POLITICAL EDUCATION",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00186288",
+      "name": "VERIZON COMMUNICATIONS, INC. POLITICAL ACTION COMMITTEE (VERIZON PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00211318",
+      "name": "DELOITTE POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00008268",
+      "name": "TRANSPORT WORKERS UNION OF AMERICA POLITICAL CONTRIBUTIONS COMMITTEE",
+      "total": 10000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00035451",
+      "name": "AIR LINE PILOTS ASSOCIATION PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00457234",
+      "name": "MARSH & MCLENNAN COMPANIES, INC. PAC (MMCPAC)",
+      "total": 10000,
+      "count": 5,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00011114",
+      "name": "AMERICAN FEDERATION OF STATE COUNTY & MUNICIPAL EMPLOYEES  P E O P L E",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00077321",
+      "name": "AMERICAN INSTITUTE OF CERTIFIED PUBLIC ACCOUNTANTS POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 4,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00369751",
+      "name": "DELL TECHNOLOGIES POLITICAL ACTION COMMITTEE",
+      "total": 8500,
+      "count": 4,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00248716",
+      "name": "COMCAST CORPORATION & NBCUNIVERSAL POLITICAL ACTION COMMITTEE - FEDERAL",
+      "total": 8500,
+      "count": 4,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00952515",
+      "name": "ASIAN AMERICAN POLITICAL ACTION COMMITTEE - AAPAC",
+      "total": 7500,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00293910",
+      "name": "POLITICAL ACTION COMMITTEE OF THE AMERICAN ASSOCIATION OF ORTHOPAEDIC SURGEONS--PAC OF AAO",
+      "total": 7500,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00303024",
+      "name": "LOCKHEED MARTIN CORPORATION EMPLOYEES' POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 2,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00130773",
+      "name": "NATIONAL MULTIFAMILY HOUSING COUNCIL POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 2,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00426775",
+      "name": "CHARTER COMMUNICATIONS INC. POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 3,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00024521",
+      "name": "AMERICAN ASSOCIATION FOR JUSTICE POLITICAL ACTION COMMITTEE (AAJ PAC)",
+      "total": 7500,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00383992",
+      "name": "PERATON CORP. POLITICAL ACTION COMMITTEE (A.K.A. 'PERATON PAC')",
+      "total": 7000,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00024869",
+      "name": "GENERAL ELECTRIC COMPANY AEROSPACE EMPLOYEE POLITICAL ACTION COMMITTEE (GE AEROSPACE PAC)",
+      "total": 7000,
+      "count": 4,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00279455",
+      "name": "ZENECA INC. POLITICAL ACTION COMMITTEE (AZPAC)",
+      "total": 6000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00542365",
+      "name": "TOYOTA MOTOR NORTH AMERICA, INC POLITICAL ACTION COMMITTEE (TOYOTA/LEXUS PAC)",
+      "total": 6000,
+      "count": 2,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00488387",
+      "name": "TRI-STATE MAXED OUT WOMEN PAC",
+      "total": 6000,
+      "count": 3,
+      "industry": "issue"
+     }
+    ],
+    "count": 167,
+    "total": 575550,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00516666&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.gracefornewyork.com/",
+    "as_filed": "WWW.GRACEFORNEWYORK.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00516666/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6NY06166": {
    "id": "H6NY06166",
@@ -820,7 +1438,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY10092/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 14899980.61,
+    "disbursements": 14854085.6,
+    "cash_on_hand": 5000459.66,
+    "individual_unitemized": 7235721.28,
+    "individual_itemized": 3627252.52,
+    "pac": 2079150,
+    "party": 0,
+    "self_funding": 0,
+    "other": 1957856.81,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2NY10092/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00012914",
+      "name": "AMERICAN LAND TITLE ASSOCIATION TITLE INDUSTRY PAC (TIPAC)",
+      "total": 15000,
+      "count": 3,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00002881",
+      "name": "TRUCKING POLITICAL ACTION COMMITTEE OF THE AMERICAN TRUCKING ASSOCIATIONS INC",
+      "total": 10000,
+      "count": 2,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00257329",
+      "name": "THE PROCTER & GAMBLE COMPANY GOOD GOVERNMENT FUND",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00431361",
+      "name": "TEACHERS INSURANCE ANNUITY ASSOCIATION OF AMERICA PAC (TIAA PAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00639138",
+      "name": "SAZERAC COMPANY, INC. PAC (SAZERACPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00432252",
+      "name": "REGIONS FINANCIAL CORPORATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00107235",
+      "name": "PRICEWATERHOUSECOOPERS PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00368142",
+      "name": "OFFICE OF THE COMMISSIONER OF MAJOR LEAGUE BASEBALL POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00158881",
+      "name": "NEW YORK LIFE INSURANCE COMPANY POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00238725",
+      "name": "NATIONAL AIR TRAFFIC CONTROLLERS ASSOCIATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00233304",
+      "name": "NAIOP-PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00271007",
+      "name": "HUMANA INC. POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00754648",
+      "name": "GRAIL, INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00024869",
+      "name": "GENERAL ELECTRIC COMPANY AEROSPACE EMPLOYEE POLITICAL ACTION COMMITTEE (GE AEROSPACE PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00076299",
+      "name": "CME GROUP INC. PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00109017",
+      "name": "AT&T FEDERAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00010124",
+      "name": "ASSOCIATED EQUIPMENT DISTRIBUTORS PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00012880",
+      "name": "AMERICAN PHYSICAL THERAPY ASSOCIATION PHYSICAL THERAPY POLITICAL ACTION COMMITTEE (PT-PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00017525",
+      "name": "AMERICAN NURSES ASSOCIATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00358812",
+      "name": "AMERICAN COLLEGE OF NURSE-MIDWIVES MIDWIVES-PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00358903",
+      "name": "AMERICAN ASSOCIATION OF NURSE PRACTITIONERS POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00359539",
+      "name": "AMERICAN ACADEMY OF DERMATOLOGY ASSOCIATION POLITICAL ACTION COMMITTEE (SKINPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "education"
+     },
+     {
+      "committee_id": "C00360354",
+      "name": "AMAZON.COM SERVICES, INC. SEPARATE SEGREGATED FUND (AMAZON PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00267849",
+      "name": "ALLIED PILOTS ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00186288",
+      "name": "VERIZON COMMUNICATIONS, INC. POLITICAL ACTION COMMITTEE (VERIZON PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "tech"
+     }
+    ],
+    "count": 370,
+    "total": 2079150,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00503052&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://hakeemjeffries.com/",
+    "as_filed": "HAKEEMJEFFRIES.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00503052/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6NY08147": {
    "id": "H6NY08147",
@@ -885,7 +1709,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY10308/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 8365109.43,
+    "disbursements": 8138828.03,
+    "cash_on_hand": 1158530.28,
+    "individual_unitemized": 389483.95,
+    "individual_itemized": 4608409.2,
+    "pac": 483751,
+    "party": 613,
+    "self_funding": 2125000,
+    "other": 757852.28,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2NY10308/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00139659",
+      "name": "JOINT ACTION COMMITTEE FOR POLITICAL AFFAIRS",
+      "total": 10000,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00271338",
+      "name": "AMERIPAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00344234",
+      "name": "PAC TO THE FUTURE",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00011114",
+      "name": "AMERICAN FEDERATION OF STATE COUNTY & MUNICIPAL EMPLOYEES P E O P L E",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00473249",
+      "name": "GRAND CANYON STATE CAUCUS",
+      "total": 9000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00024521",
+      "name": "AMERICAN ASSOCIATION FOR JUSTICE PAC",
+      "total": 8500,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00649772",
+      "name": "REVIVING AMERICAN JOBS AGAIN PAC",
+      "total": 7501,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00039578",
+      "name": "THE COUNCIL OF INSURANCE AGENTS & BROKERS POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00412791",
+      "name": "FORWARD TOGETHER PAC",
+      "total": 7500,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00488387",
+      "name": "TRI-STATE MAXED-OUT WOMEN",
+      "total": 7500,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00032995",
+      "name": "AMALGAMATED TRANSIT UNION - COPE",
+      "total": 7500,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00914283",
+      "name": "SQUARE DEAL PAC",
+      "total": 7000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00574970",
+      "name": "FAIR SHOT PAC",
+      "total": 7000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00683250",
+      "name": "GENERATION GO LEADERSHIP PAC",
+      "total": 7000,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00359539",
+      "name": "AMERICAN ACADEMY OF DERMATOLOGY ASSOCIATION POLITICAL ACTION COMMITTEE (SKINPAC)",
+      "total": 6000,
+      "count": 4,
+      "industry": "education"
+     },
+     {
+      "committee_id": "C00033779",
+      "name": "THE REAL ESTATE ROUNDTABLE POLITICAL ACTION COMMITTEE (REALPAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00497131",
+      "name": "PURPOSE PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00678029",
+      "name": "PARTNERSHIP FOR NEW YORK CITY, INC. FEDERAL PAC (PARTNERSHIP FOR NEW YORK CITY FEDERAL PAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00000422",
+      "name": "AMERICAN MEDICAL ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00002469",
+      "name": "MACHINISTS NON-PARTISAN POLITICAL LEAGUE",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00157545",
+      "name": "AMERICAN FEDERATION OF TEACHERS STAFF UNION COMMITTEE ON POLITICAL EDUCATION",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00447284",
+      "name": "NATIONAL ASSOCIATION OF PROFESSIONAL EMPLOYER ORGANIZATIONS (NAPEO PAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00892752",
+      "name": "JUNTOS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00797670",
+      "name": "AMERICAN ISRAEL PUBLIC AFFAIRS COMMITTEE POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "legal"
+     },
+     {
+      "committee_id": "C00378695",
+      "name": "VICTORY IN NOVEMBER ELECTION PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     }
+    ],
+    "count": 135,
+    "total": 481751,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00816660&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.dangoldmanforny.com/",
+    "as_filed": "WWW.DANGOLDMANFORNY.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00816660/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H2NY10134": {
    "id": "H2NY10134",
@@ -898,7 +1928,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY10134/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 20000,
+    "disbursements": 0,
+    "cash_on_hand": 0,
+    "individual_unitemized": 0,
+    "individual_itemized": 0,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 20000,
+    "other": 0,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2NY10134/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00780759&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.beninehamdan.com/",
+    "as_filed": "WWW.BENINEHAMDAN.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00780759/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6NY10176": {
    "id": "H6NY10176",
@@ -1455,7 +2515,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY13096/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2856233.73,
+    "disbursements": 3198111.94,
+    "cash_on_hand": 54546.48,
+    "individual_unitemized": 33302.17,
+    "individual_itemized": 2176055.26,
+    "pac": 514975,
+    "party": 0,
+    "self_funding": 0,
+    "other": 131901.3,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2NY13096/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00008268",
+      "name": "TRANSPORT WORKERS UNION OF AMERICA POLITICAL CONTRIBUTIONS COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00525600",
+      "name": "OFF THE SIDELINES PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00348607",
+      "name": "IMPACT",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00405555",
+      "name": "NATIONAL COUNCIL OF TEXTILE ORGANIZATIONS INC POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00238725",
+      "name": "NATIONAL AIR TRAFFIC CONTROLLERS ASSOCIATION PAC (NATCA)",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00028860",
+      "name": "AMERICAN FEDERATION OF TEACHERS COPE (AFT)",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00011114",
+      "name": "AMERICAN FEDERATION OF STATE, COUNTY & MUNICIPAL EMPLOYEES (AFSCME)",
+      "total": 10000,
+      "count": 4,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00880062",
+      "name": "ELECT DEMS NOW PAC",
+      "total": 8500,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00001636",
+      "name": "SMART TD PAC",
+      "total": 7500,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00621912",
+      "name": "1-800 CONTACTS, INC. PAC",
+      "total": 7500,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00077321",
+      "name": "AMERICAN INSTITUTE OF CERTIFIED PUBLIC ACCOUNTANTS POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00377143",
+      "name": "BUILD AMERICA PAC",
+      "total": 7000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00344234",
+      "name": "PAC TO THE FUTURE",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00002469",
+      "name": "MACHINISTS NON PARTISAN POLITICAL LEAGUE OF THE INTERNATIONAL ASSOCIATION OF MACHINISTS &",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00271338",
+      "name": "AMERIPAC: THE FUND FOR A GREATER AMERICA",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00012476",
+      "name": "UA UNION PLUMBERS & PIPEFITTERS VOTE! PAC (UNITED ASSOCIATION OF JOURNEYMEN AND APPRENTICES OF THE PLUMBING & PIPEFITTING INDUSTRY OF THE UNITED STATES AND CANADA)",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00517235",
+      "name": "TURQUOISE PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00497131",
+      "name": "PURPOSE PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00753947",
+      "name": "LA BAMBA PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00660613",
+      "name": "FIGHTING FOR SOUTH TEXAS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00569871",
+      "name": "DOING RIGHT - RESULTS ACTION UNITY LEADERSHIP PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00513176",
+      "name": "CONGRESSIONAL PROGRESSIVE CAUCUS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00881698",
+      "name": "REBUILD AMERICA PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00384354",
+      "name": "MICHIGAN SUGAR COMPANY GROWERS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00573709",
+      "name": "CA LUV PAC (CALIFORNIA LEADERSHIP UNITED FOR VICTORY PAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     }
+    ],
+    "count": 156,
+    "total": 508300,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00701953&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.adrianoespaillat.com/",
+    "as_filed": "WWW.ADRIANOESPAILLAT.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00701953/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6NY13253": {
    "id": "H6NY13253",
@@ -1494,7 +2760,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY14128/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 803140.69,
+    "disbursements": 882617.67,
+    "cash_on_hand": 2738.07,
+    "individual_unitemized": 570124.05,
+    "individual_itemized": 228485.59,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 0,
+    "other": 4531.05,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2NY14128/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00782581&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.tinaforteforcongress.com/",
+    "as_filed": "WWW.TINAFORTEFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00782581/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6NY14293": {
    "id": "H6NY14293",
@@ -1925,7 +3221,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY17162/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 8172045.6,
+    "disbursements": 3500108.5,
+    "cash_on_hand": 4841305.62,
+    "individual_unitemized": 425902.58,
+    "individual_itemized": 2760102.39,
+    "pac": 1920804.94,
+    "party": 5270,
+    "self_funding": 0,
+    "other": 3059965.69,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2NY17162/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00560003",
+      "name": "STRONG COUNTRY FOR TODAY AND TOMORROW",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00542431",
+      "name": "JOHN BOLTON PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00623512",
+      "name": "IN THE ARENA PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00708172",
+      "name": "DAN PA FIRST PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00572271",
+      "name": "BUILDING AMERICA'S REPUBLICAN REPRESENTATION PAC (BARR PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00770297",
+      "name": "BAKER PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00639229",
+      "name": "AMERICAN REVIVAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00022343",
+      "name": "INDEPENDENT INSURANCE AGENTS & BROKERS OF AMERICA, INC. POLITICAL ACTION COMMITTEE (INSURPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00531764",
+      "name": "ANN PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00012245",
+      "name": "UBS AMERICAS INC. POLITICAL ACTION COMMITTEE (UBS PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00877621",
+      "name": "MAINTAINING AMERICAN COMPETITIVENESS PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00540187",
+      "name": "INNOVATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00818328",
+      "name": "PAC FOR NEW LEADERSHIP",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00775999",
+      "name": "DEPENDABLE CONSERVATIVE LEADERSHIP PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00832568",
+      "name": "HIGHWATER PAC (HIGH WATER FLOOD PAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00726729",
+      "name": "BOOTS ON THE GROUND",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00300178",
+      "name": "WELLS FARGO AND COMPANY EMPLOYEES GOOD GOVERNMENT FEDERAL FUND II",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00267849",
+      "name": "ALLIED PILOTS ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00756551",
+      "name": "AMERICAN GRIT PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00914028",
+      "name": "NORTH CAROLINA FIRST",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00629709",
+      "name": "NO LABELS PROBLEM SOLVERS PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00238725",
+      "name": "NATIONAL AIR TRAFFIC CONTROLLERS ASSOCIATION PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00227744",
+      "name": "ERNST & YOUNG POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00479246",
+      "name": "BLACKROCK FUNDS SERVICES GROUP LLC POLITICAL ACTION COMMITTEE (BLACKROCK PAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00391797",
+      "name": "DIRIGO PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     }
+    ],
+    "count": 452,
+    "total": 1916704.94,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00815415&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00815415/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6NY17205": {
    "id": "H6NY17205",
@@ -2237,7 +3739,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H3NY23010/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 5434.36,
+    "disbursements": 5434.36,
+    "cash_on_hand": 0,
+    "individual_unitemized": 444.21,
+    "individual_itemized": 490.15,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 4500,
+    "other": 0,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H3NY23010/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00932442&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://king4ny23.com/",
+    "as_filed": "KING4NY23.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00932442/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H2NY23228": {
    "id": "H2NY23228",
@@ -2250,7 +3782,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY23228/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2326404.96,
+    "disbursements": 942715.25,
+    "cash_on_hand": 2477497.8,
+    "individual_unitemized": 58550.64,
+    "individual_itemized": 835243.96,
+    "pac": 1025680.01,
+    "party": 6462,
+    "self_funding": 0,
+    "other": 400468.35,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2NY23228/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00760397",
+      "name": "NO NONSENSE PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00072025",
+      "name": "NATIONAL RURAL LETTER CARRIERS' ASSOCIATION PAC (NRLCA PAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00496307",
+      "name": "MARATHON PETROLEUM CORPORATION EMPLOYEES PAC (MPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00022343",
+      "name": "INDEPENDENT INSURANCE AGENTS & BROKERS OF AMERICA, INC. PAC (INSURPAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00383976",
+      "name": "FRIENDS OF COMMUNITY ONCOLOGY PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00029504",
+      "name": "ENGINEERS POLITICAL EDUCATION COMMITTEE (EPEC) INTERNATIONAL UNION OF OPERATING ENGINEERS",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00785014",
+      "name": "CONQUERING CANCER PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00000901",
+      "name": "BUILD PAC OF THE NATIONAL ASSOCIATION OF HOME BUILDERS (BUILDPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00035451",
+      "name": "AIR LINE PILOTS ASSOCIATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00113811",
+      "name": "NATIONAL ELECTRICAL CONTRACTORS ASSOCIATION (NECAPAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "construction"
+     },
+     {
+      "committee_id": "C00426775",
+      "name": "CHARTER COMMUNICATIONS INC. PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00406801",
+      "name": "AVANGRID PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00848820",
+      "name": "SIEMENS ENERGY, INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00383489",
+      "name": "PUBLIC SERVICE ENTERPRISE GROUP INC. PAC (PEGPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00488262",
+      "name": "NETJETS ASSOCIATION OF SHARED AIRCRAFT PILOTS PAC; NJASAP PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00089458",
+      "name": "NATIONAL STONE, SAND & GRAVEL ASSOCIATION ROCKPAC (NSSGA ROCKPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00079681",
+      "name": "NATIONAL PROPANE GAS ASSOCIATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00083758",
+      "name": "NATIONAL FUEL GAS COMPANY FEDERAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00817338",
+      "name": "MVL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00033589",
+      "name": "CORNING INCORPORATED EMPLOYEES PAC (COREPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00267849",
+      "name": "ALLIED PILOTS ASSOCIATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00813063",
+      "name": "LEADERSHIP AND LOYALTY ONLY TO AMERICA (LALOTA PAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00639229",
+      "name": "AMERICAN REVIVAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00360669",
+      "name": "SOUTHWEST AIRLINES PILOTS' ASSOCIATION PAC (SWAPA PAC)",
+      "total": 10000,
+      "count": 4,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00106146",
+      "name": "AMERICAN HOSPITAL ASSOCIATION PAC",
+      "total": 9500,
+      "count": 2,
+      "industry": "health"
+     }
+    ],
+    "count": 288,
+    "total": 1001850.01,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00817932&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.nicklangworthy.com/",
+    "as_filed": "WWW.NICKLANGWORTHY.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00817932/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6NY23534": {
    "id": "H6NY23534",
@@ -2289,7 +4027,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY24127/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 66496,
+    "disbursements": 46424.5,
+    "cash_on_hand": 19631.21,
+    "individual_unitemized": 223.5,
+    "individual_itemized": 22272.5,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 44000,
+    "other": 0,
+    "coverage_end": "2026-03-31",
+    "last_report": "APRIL QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2NY24127/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00782177&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.believeinsteve.org/",
+    "as_filed": "WWW.BELIEVEINSTEVE.ORG",
+    "source_url": "https://www.fec.gov/data/committee/C00782177/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6NY27170": {
    "id": "H6NY27170",

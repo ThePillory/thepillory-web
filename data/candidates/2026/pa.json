@@ -512,7 +512,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2PA04135/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 5194925.35,
+    "disbursements": 2430868.51,
+    "cash_on_hand": 2845975.82,
+    "individual_unitemized": 1408837.67,
+    "individual_itemized": 1691380.94,
+    "pac": 650127,
+    "party": 5000,
+    "self_funding": 0,
+    "other": 1439579.74,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2PA04135/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00639229",
+      "name": "AMERICAN REVIVAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00691501",
+      "name": "REJOICE PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00040998",
+      "name": "NATIONAL AUTOMOBILE DEALERS ASSOCIATION POLITICAL ACTION COM",
+      "total": 10000,
+      "count": 2,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00022343",
+      "name": "INDEPENDENT INSURANCE AGENTS & BROKERS OF AMERICA INC",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00493221",
+      "name": "THE GUARDIAN FUND",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00570770",
+      "name": "RURAL AMERICA COUNTS PAC (RAC PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00492819",
+      "name": "CHESAPEAKE FREEDOM PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00583153",
+      "name": "VALOR PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00467431",
+      "name": "THE EYE OF THE TIGER POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00390161",
+      "name": "EUREKA POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 4,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00526715",
+      "name": "GREATER TOMORROW POLITICAL ACTION COMMITTEE",
+      "total": 9000,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00552851",
+      "name": "HOUSE FREEDOM FUND",
+      "total": 7600,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00708172",
+      "name": "PA-FIRST PAC",
+      "total": 7500,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00623512",
+      "name": "IN THE ARENA PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00692327",
+      "name": "LETS GET TO WORK PAC",
+      "total": 7000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00524603",
+      "name": "KEEP AMERICA ROLLING",
+      "total": 7000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00528075",
+      "name": "FIRST CAPITAL PAC",
+      "total": 7000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00656777",
+      "name": "JAM PAC",
+      "total": 7000,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00689208",
+      "name": "RVFPAC",
+      "total": 6500,
+      "count": 4,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00729616",
+      "name": "CITY ON A HILL PAC",
+      "total": 6000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00503151",
+      "name": "UPPER HAND FUND",
+      "total": 5500,
+      "count": 4,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00877365",
+      "name": "AMERICA'S BOLD ERA PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00814152",
+      "name": "TURNING POINT PAC INC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00363770",
+      "name": "PEOPLE FOR ENTERPRISE TRADE AND ECONOMIC GROWTH (PETE PAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00504530",
+      "name": "CLF",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     }
+    ],
+    "count": 192,
+    "total": 649127,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00510164&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://patriotsforperry.com/",
+    "as_filed": "PATRIOTSFORPERRY.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00510164/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H4PA10104": {
    "id": "H4PA10104",
@@ -616,7 +822,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2PA18200/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 1466287.27,
+    "disbursements": 828578.39,
+    "cash_on_hand": 1649287.99,
+    "individual_unitemized": 381057.79,
+    "individual_itemized": 767311.47,
+    "pac": 207104.96,
+    "party": 0,
+    "self_funding": 0,
+    "other": 110813.05,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2PA18200/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00002469",
+      "name": "MACHINIST'S NON-PARTISAN POLITICAL LEAGUE OF THE INTERNATIONAL ASSOCIATION OF MACHINISTS & AEROSPACE WORKERS",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00003590",
+      "name": "UNITED STEELWORKERS POLITICAL ACTION FUND",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00028860",
+      "name": "AMERICAN FEDERATION OF TEACHERS, AFL-CIO COMMITTEE ON POLITICAL EDUCATION",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00027623",
+      "name": "AMERICAN FEDERATION OF STATE COUNTRY & MUNICIPAL EMPLOYEES - P.E.O.P.L.E., NATIONAL",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00004861",
+      "name": "UNITE HERE TIP CAMPAIGN COMMITTEE",
+      "total": 9250,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00029447",
+      "name": "INTERNATIONAL ASSOCIATION OF FIREFIGHTERS INTERESTED IN REGISTRATION AND EDUCATION PAC",
+      "total": 6000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00004036",
+      "name": "SEIU COPE (SERVICE EMPLOYEES INTERNATIONAL UNION COMMITTEE ON POLITICAL EDUCATION)",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00040998",
+      "name": "NATIONAL AUTOMOBILE DEALERS ASSOCIATION POLITICAL ACTION COMMITTEE (NADA PAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00806893",
+      "name": "JANE FONDA CLIMATE PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00001016",
+      "name": "CARPENTERS LEGISLATIVE IMPROVEMENT COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00617803",
+      "name": "JOBS, EDUCATION, & FAMILIES FIRST JEFF PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00110338",
+      "name": "AMERICAN CRYSTAL SUGAR COMPANY PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00685552",
+      "name": "MEDICARE FOR ALL PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00630665",
+      "name": "JUSTICE DEMOCRATS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00513176",
+      "name": "CONGRESSIONAL PROGRESSIVE CAUCUS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00573261",
+      "name": "END CITIZENS UNITED",
+      "total": 5000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00002766",
+      "name": "UNITED FOOD AND COMMERCIAL WORKERS INTERNATIONAL UNION ACTIVE BALLOT CLUB",
+      "total": 5000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00430280",
+      "name": "IMMIGRANTS' LIST",
+      "total": 5000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00003251",
+      "name": "NEA FUND FOR CHILDREN AND PUBLIC EDUCATION",
+      "total": 5000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00345306",
+      "name": "NATIONAL POSTAL MAIL HANDLERS UNION PAC - DIVISION OF LABORERS' INTERNATIONAL UNION OF NORTH AMERICA",
+      "total": 5000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00024521",
+      "name": "AMERICAN ASSOCIATION FOR JUSTICE POLITICAL ACTION COMMITTEE (AAJ PAC)",
+      "total": 5000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00029504",
+      "name": "ENGINEERS POLITICAL EDUCATION COMMITTEE (EPEC)/INTERNATIONAL UNION OF OPERATING ENGINEERS",
+      "total": 5000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00032979",
+      "name": "DRIVE - DEMOCRAT, REPUBLICAN, INDEPENDENT VOTER EDUCATION (THE PAC OF THE INTERNATIONAL BROTHERHOOD OF TEAMSTERS)",
+      "total": 4000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00343459",
+      "name": "AMERICAN COLLEGE OF RADIOLOGY ASSOCIATION PAC (RADPAC)",
+      "total": 3000,
+      "count": 1,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00803742",
+      "name": "PA UNITED FEDPAC",
+      "total": 3000,
+      "count": 1,
+      "industry": "other"
+     }
+    ],
+    "count": 59,
+    "total": 206604.96,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00791780&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://summerforpa.com/",
+    "as_filed": "HTTPS://SUMMERFORPA.COM/",
+    "source_url": "https://www.fec.gov/data/committee/C00791780/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6PA12121": {
    "id": "H6PA12121",
@@ -952,7 +1364,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2PA17103/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2776943.21,
+    "disbursements": 2056640.21,
+    "cash_on_hand": 1073974.67,
+    "individual_unitemized": 749578.1,
+    "individual_itemized": 1469519.98,
+    "pac": 512350.01,
+    "party": 19.55,
+    "self_funding": 0,
+    "other": 45475.57,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2PA17103/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00003590",
+      "name": "UNITED STEELWORKERS POLITICAL ACTION FUND",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00027342",
+      "name": "INTERNATIONAL BROTHERHOOD OF ELECTRICAL WORKERS POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00115527",
+      "name": "INTERNATIONAL ASSOCIATION OF HEAT AND FROST INSULATORS AND ALLIED WORKERS POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00003632",
+      "name": "INT'L UNION OF BRICKLAYERS AND ALLIED CRAFTWORKERS",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00002469",
+      "name": "MACHINISTS NON PARTISAN POLITICAL LEAGUE OF THE INTERNATIONAL ASSOCIATION OF MACHINISTS & AEROSPACE WORKERS",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00001016",
+      "name": "CARPENTERS LEGISLATIVE IMPROVEMENT CMTE UNITED BROTHERHOOD OF CARPENTERS AND JOINERS",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00785816",
+      "name": "LIFTOFF PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00573261",
+      "name": "END CITIZENS UNITED",
+      "total": 10000,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00027359",
+      "name": "INT'L ASSOCIATION OF BRIDGE, STRUCTURAL, ORNAMENTAL AND REINFORCING IRON WORKERS (IPAL)",
+      "total": 10000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00267849",
+      "name": "ALLIED PILOTS ASSOC PAC (APA PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00035451",
+      "name": "AIR LINE PILOTS ASSOCIATION PAC (ALPA PAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00617803",
+      "name": "JOBS EDUCATION & FAMILIES FIRST (JEFFPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00008268",
+      "name": "TRANSPORT WORKERS UNION OF AMERICA PCC",
+      "total": 10000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00029447",
+      "name": "INTERNATIONAL ASSOCIATION OF FIREFIGHTERS INTERESTED IN REGISTRATION AND EDUCATION PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00418897",
+      "name": "VOTEVETS",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00011114",
+      "name": "AMERICAN FEDERATION OF STATE COUNTY & MUNICIPAL EMPLOYEES P E O P L E",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00032995",
+      "name": "AMALGAMATED TRANSIT UNION - COPE",
+      "total": 10000,
+      "count": 4,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00024521",
+      "name": "AMERICAN ASSOCIATION FOR JUSTICE POLITICAL ACTION COMMITTEE (AAJ PAC)",
+      "total": 10000,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00360669",
+      "name": "SOUTHWEST AIRLINES PILOTS' ASSOCIATION POLITICAL ACTION COMMITTEE (SWAPA PAC)",
+      "total": 7500,
+      "count": 3,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00011262",
+      "name": "BROTHERHOOD OF RAILROAD SIGNALMEN POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00099234",
+      "name": "BROTHERHOOD OF LOCOMOTIVE ENGINEERS & TRAINMEN PAC FUND",
+      "total": 7500,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00238725",
+      "name": "NATIONAL AIR TRAFFIC CONTROLLERS ASSOCIATION PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00293910",
+      "name": "AMERICAN ASSOCIATION OF ORTHODONTISTS POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00574970",
+      "name": "FAIR SHOT PAC",
+      "total": 7000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00001636",
+      "name": "SMART TD PAC",
+      "total": 7000,
+      "count": 5,
+      "industry": "other"
+     }
+    ],
+    "count": 110,
+    "total": 512250.01,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00787648&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.chrisforpa.com/",
+    "as_filed": "WWW.CHRISFORPA.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00787648/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6PA17203": {
    "id": "H6PA17203",

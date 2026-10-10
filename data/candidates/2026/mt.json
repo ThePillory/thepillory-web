@@ -187,7 +187,59 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2MT02084/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 426972.59,
+    "disbursements": 436921.66,
+    "cash_on_hand": 0,
+    "individual_unitemized": 11729.28,
+    "individual_itemized": 217292.31,
+    "pac": 16250,
+    "party": 0,
+    "self_funding": 181701,
+    "other": 0,
+    "coverage_end": "2026-06-30",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2MT02084/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00343137",
+      "name": "PAC AAOS",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00528414",
+      "name": "HEALTHCARE FREEDOM FUND",
+      "total": 5000,
+      "count": 1,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00003293",
+      "name": "MT MED PAC",
+      "total": 250,
+      "count": 1,
+      "industry": "other"
+     }
+    ],
+    "count": 3,
+    "total": 10250,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00783381&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://alformontana.com/",
+    "as_filed": "ALFORMONTANA.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00783381/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H0MT00116": {
    "id": "H0MT00116",
