@@ -25,16 +25,16 @@
 // the national hub. Kept at the edge once per state; browsers don't keep it.
 import { chamberIds } from "../workers/sync/src/states.js";
 import { icon } from "./_lib/icons.js";
-import { page, esc, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "./_lib/render.js";
+import { page, esc, linkRow, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "./_lib/render.js";
 import { listMeetings, pacificNow, addDays, deadlineParts, meetingHref, when } from "./_lib/meetings.js";
 import { districtsFromCookie, describe, STATE_NAME } from "./_lib/districts.js";
 import { happeningNow, happeningSection, lookupForm, waitlistCounts } from "./_lib/hub.js";
 import { topicGrid, placeTopicsHref } from "./_lib/topics.js";
+import { ballotWindow, todayIn, onlyIfNeeded } from "./_lib/election-window.js";
 import { loadElection, ballotFor, ballotHref, electionHref, whenLine, daysUntil, contestRow, courtRow, statewideRow, electionIdFor, measuresOnly, ELECTION_BY_STATE } from "./_lib/elections.js";
-import { LIVE, loadIndex, loadPlace, waitlistBy, usMapLinks, smallStateButtons, mapFigure } from "./_lib/geo.js";
+import { LIVE, asset, loadIndex, loadPlace, waitlistBy, usMapLinks, smallStateButtons, mapFigure } from "./_lib/geo.js";
 import { ASSET_VERSION } from "./_lib/generated.js";
 import { executiveOfficials, executiveRows } from "./_lib/executive.js";
-import { linkRow } from "./_lib/render.js";
 import { turnstileReady, turnstileWidget } from "./_lib/turnstile.js";
 import { visitorState } from "./_lib/visitor-state.js";
 import { stateLead, stateLeadData } from "./_lib/state-lead.js";
@@ -200,6 +200,21 @@ function whoRepresents(federal, stateExec, d) {
 </section>`;
 }
 
+// "Open your ballot": the top card from WINDOW_DAYS before the state's next election through
+// Election Day (functions/_lib/election-window.js), a regular link the rest of the year.
+const ballotLink = (st) =>
+  linkRow(st ? `/ballot/${st.toLowerCase()}/` : "/ballot/", "Open your ballot", "Your federal races, then your whole ballot and where to vote");
+
+function ballotHero(vs, win) {
+  return `
+<section class="card stack-xs ballot-hero" aria-labelledby="h-ballot-hero">
+  <p class="label" id="h-ballot-hero">Your ballot · ${esc(vs.name)}</p>
+  <p class="ballot-hero-when">${esc(win.line)}</p>
+  ${onlyIfNeeded(win.election) ? '<p class="small secondary">Held only for races no one won outright.</p>' : ""}
+  <a class="btn btn--primary btn--block" href="/ballot/${vs.st.toLowerCase()}/">Open your ballot</a>
+</section>`;
+}
+
 // Elections: the next election, and "Your ballot" once the visitor's districts are known.
 async function electionsData(env, request, d, st) {
   // The visitor's state's election when ThePillory has one; otherwise California's.
@@ -220,8 +235,8 @@ function electionsSection({ election, ballot, county }, d, st = null) {
     <p class="label">${esc(STATE_NAME[st])}</p>
     <h3>General election, November 3, 2026</h3>
     <p class="small secondary">Your federal races, then every contest and measure for your address, with where to vote.</p>
-    <a class="btn btn--primary btn--block" href="/ballot/${st.toLowerCase()}/">Open your ballot</a>
   </div>
+  <div class="card">${ballotLink(st)}</div>
 </section>`;
   if (!election) return "";
   const id = election.election.id;
@@ -235,14 +250,14 @@ function electionsSection({ election, ballot, county }, d, st = null) {
     <p class="label">Your ballot</p>
     ${district.map((c) => contestRow(id, c)).join("")}${ballot.courts.map((g) => courtRow(id, g)).join("")}${statewideRow(election)}
     ${local ? `<a class="list-row link-row" href="${ballotHref(id)}#h-yl"><div><div class="list-title">Local contests and measures</div><div class="list-meta">${local} on some ballots in ${esc(county ? county.name : "your county")}</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>` : ""}
-    <a class="btn btn--primary btn--block" href="${ballotHref(id)}">Open your ballot</a>
+    ${linkRow(ballotHref(id), "Open your ballot", "Every contest for your districts")}
   </div>`;
   } else if (measuresOnly(election)) {
     yours = `<p class="small secondary">The statewide measures, on every ballot in ${esc(STATE_NAME[election.election.state])}.</p>
-  <a class="btn btn--primary btn--block" href="/ballot/${election.election.state.toLowerCase()}/">Open your ballot</a>`;
+  <div class="card">${ballotLink(election.election.state)}</div>`;
   } else {
     // Every state: the federal races, then the whole ballot for an address (/ballot/<st>/).
-    yours = `<a class="btn btn--primary btn--block" href="${st ? `/ballot/${st.toLowerCase()}/` : "/ballot/"}">Open your ballot</a>`;
+    yours = `<div class="card">${ballotLink(st)}</div>`;
   }
   return `
 <section class="brief-section" id="elections" aria-labelledby="h-elections">
@@ -310,7 +325,7 @@ async function hub(env, request, url, d, vs) {
   // Each section loads on its own: one that can't load shows a short note, and
   // the rest of the hub still shows.
   const start = pacificNow();
-  const [index, now, deadlines, counts, waiting, federalExec, caExec, elections, tPlace] = await Promise.all([
+  const [index, now, deadlines, counts, waiting, federalExec, caExec, elections, tPlace, dates] = await Promise.all([
     loadIndex(env, request),
     loadSection("hub happening now", db ? () => happeningNow(db, which, { limit: 4 }) : async () => [], []),
     loadSection("hub deadlines", db ? async () =>
@@ -326,7 +341,11 @@ async function hub(env, request, url, d, vs) {
     loadSection("hub state executive", db && !vs ? () => executiveOfficials(db, chamberIds(d ? d.st : "CA").executive) : async () => [], []),
     loadSection("hub elections", () => electionsData(env, request, d, vs ? vs.st : d ? d.st : null), { election: null, ballot: null }),
     loadSection("hub topic place", () => topicPlace(env, request, d), null),
+    loadSection("hub election dates", () => asset(env, request, "/data/elections/dates.json"), null),
   ]);
+  // The state's next election (a special election too, in the visitor's own House district).
+  const win = vs && dates && dates !== FAILED ? ballotWindow(dates, vs.st, todayIn(vs.st), d && d.st === vs.st ? d.cd : null) : null;
+  const hero = !!(win && win.open);
   const joined = url.searchParams.get("waitlist");
   const msg = joined === "joined" ? WAITLIST_MESSAGES.joined : "";
   const error = joined && joined !== "joined" ? WAITLIST_MESSAGES[joined] || "" : "";
@@ -337,12 +356,13 @@ async function hub(env, request, url, d, vs) {
   const electionsLate = elections === FAILED || !elections.election || daysUntil(elections.election, start.slice(0, 10)) == null;
   const main = `
 ${vs ? showingBar(vs) : ""}
+${hero ? ballotHero(vs, win) : ""}
 <header class="hub-head stack-sm">
   <h1 class="hub-title">Know what your government is doing. <span class="hub-title-soft">Then take part.</span></h1>
   <p class="hub-sub">Votes, bills, and meetings in plain language, measured against the Constitution. Built on evidence, open to every point of view.</p>
 </header>
 ${usMap(index, waiting === FAILED ? { county: {}, state: {} } : waiting, vs)}
-${vs ? stateLead(vs, lead, elections === FAILED ? FAILED : elections.election) : ""}
+${vs ? stateLead(vs, lead, elections === FAILED ? FAILED : elections.election, { ballotLink: !hero }) : ""}
 ${notFound ? '<p class="banner banner--error" role="alert">We couldn\'t find districts for that. Check the address, or try your ZIP code.</p>' : ""}
 ${lookupForm(d)}
 ${d ? `<a class="card briefing-link" href="/briefing/"><span class="stack-xs"><span class="label">Your briefing</span><span class="small">${esc(describe(d))}</span></span><span class="chev" aria-hidden="true">›</span></a>` : ""}

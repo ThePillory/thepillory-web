@@ -1894,4 +1894,5 @@ article.fin-term { scroll-margin-top: 16px; }
 .ballot-cands > li:first-child { border-top: 0; padding-top: 4px; }
 .ballot-cands > li:last-child { padding-bottom: 0; }
 .ballot-cands p { margin: 0; }
-.ballot-open { margin-top: 4px; }
+/* "Open your ballot" as the home page's top card, in the weeks before the state's next election. */
+.ballot-hero-when { margin: 0; font-size: 1.25rem; font-weight: 800; letter-spacing: -0.01em; }

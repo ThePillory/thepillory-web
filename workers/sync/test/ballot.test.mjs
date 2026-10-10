@@ -92,9 +92,15 @@ const RACES = {
 };
 const OFFICES = { source: "https://www.usa.gov/state-election-office", offices: { WA: { name: "Washington Secretary of State", url: "https://www.sos.wa.gov/elections" }, CA: { name: "California Secretary of State", url: "https://www.sos.ca.gov/elections" } } };
 const CA_ELECTION = {
-  election: { id: "2026-11-03", name: "November 3, 2026, General Election", date: "2026-11-03", state: "CA" },
+  election: { id: "2026-11-03", name: "November 3, 2026, General Election", date: "2026-11-03", state: "CA", alphabet: "ZYXWVUTSRQPONMLKJIHGFEDCBA".split(""), certified_list: "https://sos.example.gov/certified-list.pdf" },
   how_to_vote: { state: [{ label: "Check your registration status", url: "https://voterstatus.example.gov/", by: "Secretary of State" }] },
-  counties: {}, contests: [{ id: "governor", scope: "statewide", candidates: [] }],
+  counties: {}, contests: [
+    { id: "governor", office: "Governor", scope: "statewide", candidates: [] },
+    { id: "us-rep-5", office: "United States Representative District 5", scope: "cd", district: "5", candidates: [
+      { name: "Ann Able", party: "Party One", designation: "Teacher", fec: { id: "H0CA00001", url: "https://www.fec.gov/data/candidate/H0CA00001/" } },
+      { name: "Zed Zane", party: "Party Two", designation: "United States Representative", fec: { id: "H0CA00002", url: "https://www.fec.gov/data/candidate/H0CA00002/" } },
+    ] },
+  ],
   measures: [{ id: "prop-1", number: "1", scope: "statewide", title: "EXAMPLE BONDS." }],
 };
 const ASSETS = {
@@ -118,7 +124,7 @@ function stubDb({ lookupsToday = 0 } = {}) {
       const s = {
         bind: (...a) => ((args = a), s),
         all: async () => {
-          if (/FROM fec_candidates/.test(sql)) return { results: args[0] === "WA" ? [{ candidate_id: "H0WA00001", slug: "dee-lane", name: "Dee Lane", office: "U.S. Representative" }] : [] };
+          if (/FROM fec_candidates/.test(sql)) return { results: args[0] === "WA" ? [{ candidate_id: "H0WA00001", slug: "dee-lane", name: "Dee Lane", office: "U.S. Representative" }] : args[0] === "CA" ? [{ candidate_id: "H0CA00002", slug: "zed-zane", name: "Zed Zane", office: "U.S. Representative" }] : [] };
           if (/FROM officials/.test(sql)) return { results: [{ slug: "hal-jones", name: "Hal Jones", office: "Assemblymember" }] };
           return { results: [] };
         },
@@ -189,6 +195,17 @@ test("before an address: FEC races, incumbents linked to Votes and Funding, offi
   assert.match(html, /doesn&#x27;t endorse candidates or measures, and doesn&#x27;t publish polls or predictions/);
   const noDistrict = (await get("/ballot/wa/")).html;
   assert.match(noDistrict, /Your U\.S\. House race: enter your address above/);
+});
+
+test("California: the certified candidates for the House race, in ballot order, not the FEC list", async () => {
+  const { html } = await get("/ballot/ca/", { cookie: `pillory_districts=${encodeURIComponent("st=CA&cd=5")}` });
+  assert.match(html, /United States Representative District 5/);
+  assert.ok(html.indexOf("Zed Zane") < html.indexOf("Ann Able"), "the randomized alphabet (Z first here)");
+  assert.equal((html.match(/<li class="ballot-cand stack-xs">/g) || []).length, 2, "only the two on the November ballot");
+  assert.match(html, /Party preference: Party Two · United States Representative/);
+  assert.match(html, /href="\/reps\/zed-zane\/#votes">Votes/);
+  assert.match(html, /Certified List of Candidates: only the candidates on the November ballot/);
+  assert.doesNotMatch(html, /FEC list ↗/);
 });
 
 test("with an address: every contest in ballot order, the same card for each candidate, the address nowhere", async () => {

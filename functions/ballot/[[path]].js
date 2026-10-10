@@ -21,7 +21,7 @@ import { page, esc, notFound, safeUrl, linkRow, loadSection, FAILED, sectionErro
 import { districtsFromCookie, STATE_NAME } from "../_lib/districts.js";
 import { visitorState } from "../_lib/visitor-state.js";
 import { asset } from "../_lib/geo.js";
-import { loadElection, electionHref, ballotHref, measureHref, measureName, ELECTION_BY_STATE, measuresOnly, howToVote } from "../_lib/elections.js";
+import { loadElection, electionHref, ballotHref, measureHref, measureName, contestHref, ballotOrder, ELECTION_BY_STATE, measuresOnly, howToVote } from "../_lib/elections.js";
 import { voterInfo, ballotFromVoterInfo, officialFor, measureFor, CivicError } from "../_lib/civic.js";
 import { visitorHash } from "../_lib/turnstile.js";
 import { fold } from "../_lib/summary.js";
@@ -198,8 +198,51 @@ function fecRace(title, list, filed) {
   </div>`;
 }
 
-function federalSection(st, races, filed, d) {
+/** One candidate from the certified list: the same layout for everyone, in ballot order. */
+function certifiedCandidate(c, filed) {
+  const own = c.fec && filed[c.fec.id];
+  const links = [
+    own ? `<a class="inline-link" href="/reps/${esc(own.slug)}/#votes">Votes</a>` : "",
+    own ? `<a class="inline-link" href="/reps/${esc(own.slug)}/#funding">Funding</a>` : "",
+    c.fec && safeUrl(c.fec.url) ? `<a class="inline-link" href="${esc(c.fec.url)}" target="_blank" rel="noopener">FEC filing ↗</a>` : "",
+  ].filter(Boolean).join(" · ");
+  return `
+  <li class="ballot-cand stack-xs">
+    <p class="list-title">${esc(c.name)}</p>
+    <p class="list-meta">${esc([c.party ? `Party preference: ${c.party}` : "No party preference listed", c.designation].filter(Boolean).join(" · "))}</p>
+    ${links ? `<p class="small">${links}</p>` : ""}
+  </li>`;
+}
+
+/**
+ * Where ThePillory has the state's certified candidate list (California), the U.S. House race from it:
+ * only the candidates on the November ballot, in ballot order.
+ */
+function certifiedSection(st, election, filed, d) {
+  const cd = d && d.st === st && d.cd != null ? String(Number(d.cd)) : null;
+  const contest = cd && election.contests.find((c) => c.scope === "cd" && String(c.district) === cd);
+  const senate = election.contests.filter((c) => c.scope === "statewide" && /united states senator/i.test(c.office));
+  const race = (c) => {
+    const { candidates, note } = ballotOrder(c, election);
+    return `
+  <div class="card stack-xs">
+    <p class="label">${esc(c.office)}</p>
+    <ul class="plain-list ballot-cands">${candidates.map((x) => certifiedCandidate(x, filed)).join("")}</ul>
+    <p class="hint">${esc(note)} <a class="inline-link" href="${contestHref(election.election.id, c.id)}">Candidate statements</a></p>
+  </div>`;
+  };
+  return `
+<section class="stack-sm" id="federal" aria-labelledby="h-federal">
+  <h2 class="label" id="h-federal">Federal races · November 3, 2026</h2>
+  ${senate.length ? senate.map(race).join("") : `<div class="card"><p class="small">No U.S. Senate seat in ${esc(STATE_NAME[st])} is on this ballot.</p></div>`}
+  ${contest ? race(contest) : `<div class="card"><p class="small">Your U.S. House race: enter your address above, or <a class="inline-link" href="/#find">find your district</a> by ZIP code.</p></div>`}
+  <p class="hint">From the Secretary of State's Certified List of Candidates: only the candidates on the November ballot. <a class="inline-link" href="${esc(election.election.certified_list)}" target="_blank" rel="noopener">Certified list ↗</a></p>
+</section>`;
+}
+
+function federalSection(st, races, filed, d, election = null) {
   const name = STATE_NAME[st];
+  if (election && election.election.state === st && !measuresOnly(election)) return certifiedSection(st, election, filed === FAILED ? {} : filed, d);
   if (NO_GENERAL.has(st)) return `<div class="card"><p class="small">${esc(name)} holds its general elections in presidential election years, so there's no general election on November 3, 2026. Enter your address above for anything else on a ballot for it.</p></div>`;
   if (races === FAILED) return sectionError("Federal races");
   if (!races) return `<section class="stack-sm"><h2 class="label">Federal races</h2><div class="card"><p class="small secondary">${esc(name)}'s federal candidate lists appear after the daily election data refresh.</p></div></section>`;
@@ -269,7 +312,7 @@ async function statePage(env, request, st, { message = "" } = {}) {
 ${message ? `<p class="banner banner--error" role="alert">${esc(message)}</p>` : ""}
 <p class="banner">${esc(CONFIRM)}</p>
 ${addressForm(st)}
-${federalSection(st, races, filed, d)}
+${federalSection(st, races, filed, d, election === FAILED ? null : election)}
 ${ownSection(st, election === FAILED ? null : election)}
 ${officialLinks(st, office === FAILED ? null : office, election === FAILED ? null : election)}
 <p class="small"><a class="inline-link" href="/ballot/?pick=1">A different state</a></p>

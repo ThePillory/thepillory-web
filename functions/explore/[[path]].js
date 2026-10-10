@@ -6,7 +6,7 @@
 //                    district as a list; Statewide officials; the legislature.
 // Maps are drawn by /assets/map.js from data/geo/ (Census Bureau boundaries);
 // every shape on a map is also a link in a list.
-import { page, notFound, esc, fmtDate, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
+import { page, notFound, esc, fmtDate, linkRow, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { ASSET_VERSION } from "../_lib/generated.js";
 import { billHref } from "../_lib/votes.js";
 import { CHAMBER_NAME } from "../_lib/data.js";
@@ -14,8 +14,9 @@ import { coverageFor, votesLoaded, votesComingSoon, votesLoadedNote } from "../_
 import { chamberIds } from "../../workers/sync/src/states.js";
 import {
   LIVE, usMapLinks, smallStateButtons, executiveRows, loadIndex, loadPlace, waitlistBy, officialsFor, repRow, breadcrumb, mapFigure,
-  layerName, districtLabel, districtHref, placeHref, stOfFips, loadDistrictNames,
+  layerName, districtLabel, districtHref, placeHref, stOfFips, loadDistrictNames, asset,
 } from "../_lib/geo.js";
+import { ballotWindow, todayIn } from "../_lib/election-window.js";
 
 const mapScript = `<script src="/assets/map.js?v=${ASSET_VERSION}" defer></script>`;
 const missing = (err) => /no such table|no such column/i.test(String(err && err.message));
@@ -119,11 +120,18 @@ async function statePage(env, request, url, st) {
   const ids = (l) => Object.keys((place.districts || {})[l] || {});
   const names = await loadDistrictNames(env, request, place.st);
   // Each section loads on its own: one that can't load shows a short note.
-  const [waitingLoaded, officialsLoaded, coverageLoaded] = await Promise.all([
+  const [waitingLoaded, officialsLoaded, coverageLoaded, dates] = await Promise.all([
     db ? loadSection("state waitlist", () => waitlistBy(db), { county: {} }) : { county: {} },
     db ? loadSection("state officials", () => officialsFor(db, place.st, { cd: ids("cd"), sldu: ids("sldu"), sldl: ids("sldl") }, names), emptyOfficials) : emptyOfficials,
     db ? loadSection("state coverage", () => coverageFor(db, place.st), null) : null,
+    loadSection("state election dates", () => asset(env, request, "/data/elections/dates.json"), null),
   ]);
+  // "Open your ballot": a button in the weeks before the state's next election, otherwise a link.
+  const win = dates && dates !== FAILED ? ballotWindow(dates, place.st, todayIn(place.st)) : null;
+  const ballotHref = `/ballot/${place.st.toLowerCase()}/`;
+  const ballotEntry = win && win.open
+    ? `<p class="small">${esc(win.line)}</p><a class="btn btn--primary btn--block" href="${ballotHref}">Open your ballot</a>`
+    : `<div class="card">${linkRow(ballotHref, "Open your ballot", "Federal races, then your whole ballot for your address")}</div>`;
   const coverage = coverageLoaded === FAILED ? null : coverageLoaded;
   const activity = db && votesLoaded(place.st, coverage) ? await loadSection("state legislature", () => latestStateBills(db, place.st), null) : null;
   const waiting = waitingLoaded === FAILED ? { county: {} } : waitingLoaded;
@@ -187,7 +195,7 @@ ${breadcrumb([["United States", "/explore/"], [place.name, null]])}
   <h1>${esc(place.name)}</h1>
   <p class="secondary">${place.counties.length} ${place.counties.length === 1 ? "county" : "counties"}. Tap a county or district, or use the lists below.</p>
 </header>
-<a class="btn btn--primary btn--block" href="/ballot/${place.st.toLowerCase()}/">Open your ballot</a>
+${ballotEntry}
 ${mapFigure({ id: "map", src: `/data/geo/shapes/${place.st.toLowerCase()}-{layer}.json`, links, status, layers, active: layer, label: `Map of ${place.name}`, legend })}
 <section class="stack-sm" aria-labelledby="h-find">
   <h2 class="label" id="h-find">Find a county</h2>

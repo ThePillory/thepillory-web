@@ -152,13 +152,16 @@ function ballotCard(st, name, election) {
   </div>`;
 }
 
-/** The section. `vs`: { st, name }; `data`: stateLeadData(); `election`: the next election (or null). */
-export function stateLead(vs, data, election) {
+/**
+ * The section. `vs`: { st, name }; `data`: stateLeadData(); `election`: the next election (or null).
+ * `ballotLink`: "Open your ballot" as a row here (false while it's the home page's top card).
+ */
+export function stateLead(vs, data, election, { ballotLink = true } = {}) {
   const { st, name } = vs;
   return `
 <section class="brief-section" id="your-state" aria-labelledby="h-your-state">
   <div class="section-head"><h2 class="label" id="h-your-state">${esc(name)}</h2><a class="section-link" href="/explore/${st.toLowerCase()}/">State page</a></div>
-  <a class="btn btn--primary btn--block" href="/ballot/${st.toLowerCase()}/">Open your ballot</a>
+  ${ballotLink ? `<div class="card">${linkRow(`/ballot/${st.toLowerCase()}/`, "Open your ballot", "Your federal races, then your whole ballot and where to vote")}</div>` : ""}
   ${congressCard(st, name, data)}
   ${executiveCard(st, name, data.executive)}
   ${legislatureCard(st, name, data)}

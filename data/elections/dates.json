@@ -1,0 +1,1604 @@
+{
+ "source": "Federal Election Commission, election dates",
+ "source_url": "https://www.fec.gov/data/elections/?cycle=2026",
+ "built_on": "2026-10-10",
+ "states": {
+  "AK": [
+   {
+    "date": "2026-08-18",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "AL": [
+   {
+    "date": "2026-05-19",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-05-19",
+    "type": "P",
+    "name": "Primary election",
+    "district": "3",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-05-19",
+    "type": "P",
+    "name": "Primary election",
+    "district": "4",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-05-19",
+    "type": "P",
+    "name": "Primary election",
+    "district": "5",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-06-16",
+    "type": "R",
+    "name": "Runoff",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-06-16",
+    "type": "PR",
+    "name": "Primary runoff",
+    "district": "5",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-08-11",
+    "type": "P",
+    "name": "Primary election",
+    "district": "1",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-08-11",
+    "type": "P",
+    "name": "Primary election",
+    "district": "2",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-08-11",
+    "type": "P",
+    "name": "Primary election",
+    "district": "6",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-08-11",
+    "type": "P",
+    "name": "Primary election",
+    "district": "7",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   }
+  ],
+  "AR": [
+   {
+    "date": "2026-03-03",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-03-31",
+    "type": "R",
+    "name": "Runoff",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "AS": [
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   }
+  ],
+  "AZ": [
+   {
+    "date": "2026-07-21",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   }
+  ],
+  "CA": [
+   {
+    "date": "2026-06-02",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-06-02",
+    "type": "SG",
+    "name": "Special election general",
+    "district": "1",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-06-16",
+    "type": "SG",
+    "name": "Special election general",
+    "district": "14",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-08-04",
+    "type": "SR",
+    "name": "Special runoff",
+    "district": "1",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-08-18",
+    "type": "SR",
+    "name": "Special runoff",
+    "district": "14",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   }
+  ],
+  "CO": [
+   {
+    "date": "2026-06-30",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   }
+  ],
+  "CT": [
+   {
+    "date": "2026-05-11",
+    "type": "CON",
+    "name": "",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-05-15",
+    "type": "C",
+    "name": "Convention",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-08-11",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   }
+  ],
+  "DC": [
+   {
+    "date": "2026-06-16",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   }
+  ],
+  "DE": [
+   {
+    "date": "2026-09-15",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "FL": [
+   {
+    "date": "2026-08-18",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "GA": [
+   {
+    "date": "2026-03-10",
+    "type": "SG",
+    "name": "Special election general",
+    "district": "14",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-04-07",
+    "type": "SR",
+    "name": "Special runoff",
+    "district": "14",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-05-19",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-06-16",
+    "type": "R",
+    "name": "Runoff",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-07-28",
+    "type": "SG",
+    "name": "Special election general",
+    "district": "13",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-08-25",
+    "type": "SR",
+    "name": "Special runoff",
+    "district": "13",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-12-01",
+    "type": "GR",
+    "name": "General runoff",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "GU": [
+   {
+    "date": "2026-08-01",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-17",
+    "type": "GR",
+    "name": "General runoff",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   }
+  ],
+  "HI": [
+   {
+    "date": "2026-08-08",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   }
+  ],
+  "IA": [
+   {
+    "date": "2026-06-02",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "ID": [
+   {
+    "date": "2026-05-19",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "IL": [
+   {
+    "date": "2026-03-17",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "IN": [
+   {
+    "date": "2026-03-21",
+    "type": "CON",
+    "name": "",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-05-05",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   }
+  ],
+  "KS": [
+   {
+    "date": "2026-04-25",
+    "type": "CON",
+    "name": "",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-08-04",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   }
+  ],
+  "KY": [
+   {
+    "date": "2026-05-19",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "LA": [
+   {
+    "date": "2026-05-16",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-06-27",
+    "type": "R",
+    "name": "Runoff",
+    "district": "",
+    "offices": [
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-08-07",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-12-12",
+    "type": "GR",
+    "name": "General runoff",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "MA": [
+   {
+    "date": "2026-09-01",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "MD": [
+   {
+    "date": "2026-06-23",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   }
+  ],
+  "ME": [
+   {
+    "date": "2026-06-09",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-07-25",
+    "type": "SC",
+    "name": "Special convention",
+    "district": "",
+    "offices": [
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "MI": [
+   {
+    "date": "2026-08-04",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "MN": [
+   {
+    "date": "2026-08-11",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "MO": [
+   {
+    "date": "2026-08-04",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   }
+  ],
+  "MP": [
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   }
+  ],
+  "MS": [
+   {
+    "date": "2026-03-10",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-04-07",
+    "type": "R",
+    "name": "Runoff",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "MT": [
+   {
+    "date": "2026-06-02",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "NC": [
+   {
+    "date": "2026-03-03",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-05-12",
+    "type": "R",
+    "name": "Runoff",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   }
+  ],
+  "ND": [
+   {
+    "date": "2026-06-09",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   }
+  ],
+  "NE": [
+   {
+    "date": "2026-05-12",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "NH": [
+   {
+    "date": "2026-09-08",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   }
+  ],
+  "NJ": [
+   {
+    "date": "2026-02-05",
+    "type": "SP",
+    "name": "Special primary",
+    "district": "11",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-04-16",
+    "type": "SG",
+    "name": "Special election general",
+    "district": "11",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-06-02",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "NM": [
+   {
+    "date": "2026-06-02",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "NV": [
+   {
+    "date": "2026-06-09",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   }
+  ],
+  "NY": [
+   {
+    "date": "2026-06-23",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   }
+  ],
+  "OH": [
+   {
+    "date": "2026-05-05",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "OK": [
+   {
+    "date": "2026-06-16",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-08-25",
+    "type": "R",
+    "name": "Runoff",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "OR": [
+   {
+    "date": "2026-05-19",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "PA": [
+   {
+    "date": "2026-05-19",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   }
+  ],
+  "PR": [
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   }
+  ],
+  "RI": [
+   {
+    "date": "2026-09-09",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   }
+  ],
+  "SC": [
+   {
+    "date": "2026-04-11",
+    "type": "C",
+    "name": "Convention",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-06-09",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-06-23",
+    "type": "R",
+    "name": "Runoff",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-08-11",
+    "type": "SP",
+    "name": "Special primary",
+    "district": "",
+    "offices": [
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-08-25",
+    "type": "SR",
+    "name": "Special runoff",
+    "district": "",
+    "offices": [
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   }
+  ],
+  "SD": [
+   {
+    "date": "2026-06-02",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-07-28",
+    "type": "R",
+    "name": "Runoff",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "TN": [
+   {
+    "date": "2026-08-06",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "TX": [
+   {
+    "date": "2026-01-31",
+    "type": "SGR",
+    "name": "Special election general runoff",
+    "district": "18",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-03-03",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-04-11",
+    "type": "C",
+    "name": "Convention",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-05-26",
+    "type": "R",
+    "name": "Runoff",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "UT": [
+   {
+    "date": "2026-04-10",
+    "type": "C",
+    "name": "Convention",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-04-11",
+    "type": "C",
+    "name": "Convention",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-04-18",
+    "type": "C",
+    "name": "Convention",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-04-25",
+    "type": "C",
+    "name": "Convention",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-06-23",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   }
+  ],
+  "VA": [
+   {
+    "date": "2026-08-04",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "VI": [
+   {
+    "date": "2026-08-01",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-17",
+    "type": "GR",
+    "name": "General runoff",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   }
+  ],
+  "VT": [
+   {
+    "date": "2026-08-11",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   }
+  ],
+  "WA": [
+   {
+    "date": "2026-08-04",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   }
+  ],
+  "WI": [
+   {
+    "date": "2026-08-11",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House"
+    ]
+   }
+  ],
+  "WV": [
+   {
+    "date": "2026-05-12",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. Senate",
+     "U.S. House"
+    ]
+   }
+  ],
+  "WY": [
+   {
+    "date": "2026-08-18",
+    "type": "P",
+    "name": "Primary election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   },
+   {
+    "date": "2026-11-03",
+    "type": "G",
+    "name": "General election",
+    "district": "",
+    "offices": [
+     "U.S. House",
+     "U.S. Senate"
+    ]
+   }
+  ]
+ }
+}
