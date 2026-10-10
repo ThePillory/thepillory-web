@@ -557,7 +557,73 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2CO08020/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 259154.37,
+    "disbursements": 263499.63,
+    "cash_on_hand": 0,
+    "individual_unitemized": 52716.61,
+    "individual_itemized": 141141,
+    "pac": 6500,
+    "party": 0,
+    "self_funding": 0,
+    "other": 58796.76,
+    "coverage_end": "2026-06-09",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2CO08020/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00249342",
+      "name": "AMERICAN SOCIETY OF PLASTIC SURGEONS PLASTYPAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00423228",
+      "name": "AMERICAN GASTROENTEROLOGICAL ASSOCIATION INC. PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00846071",
+      "name": "STORM PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00834515",
+      "name": "PAC A PUNCH",
+      "total": 1000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00848556",
+      "name": "MCKENZIE RIVER PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "leadership"
+     }
+    ],
+    "count": 5,
+    "total": 6500,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00787788&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.caraveoforcongress.com/",
+    "as_filed": "WWW.CARAVEOFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00787788/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6CO08138": {
    "id": "H6CO08138",

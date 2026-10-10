@@ -200,7 +200,45 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0MT00116/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 272569.44,
+    "disbursements": 238593.09,
+    "cash_on_hand": 33976.35,
+    "individual_unitemized": 99837.76,
+    "individual_itemized": 167217.42,
+    "pac": 2000,
+    "party": 0,
+    "self_funding": 0,
+    "other": 3514.26,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H0MT00116/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00195024",
+      "name": "MARYLAND ASSOCIATION FOR CONCERNED CITIZENS POLITICAL ACTION COMMITTEE",
+      "total": 2000,
+      "count": 1,
+      "industry": "issue"
+     }
+    ],
+    "count": 1,
+    "total": 2000,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00924258&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.mattrainsformontana.com/",
+    "as_filed": "HTTPS://WWW.MATTRAINSFORMONTANA.COM/",
+    "source_url": "https://www.fec.gov/data/committee/C00924258/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H4MT02098": {
    "id": "H4MT02098",

@@ -200,7 +200,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0LA01087/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 10638030.12,
+    "disbursements": 10883240.82,
+    "cash_on_hand": 3885941.87,
+    "individual_unitemized": 325922.3,
+    "individual_itemized": 1081146.74,
+    "pac": 171500,
+    "party": 0,
+    "self_funding": 0,
+    "other": 9059461.08,
+    "coverage_end": "2026-07-18",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H0LA01087/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00477653",
+      "name": "COX ENTERPRISES PAC (COXPAC) INC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00447565",
+      "name": "FINSECA PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00343459",
+      "name": "AMERICAN COLLEGE OF RADIOLOGY ASSOCIATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00147066",
+      "name": "AMERICAN COUNCIL OF LIFE INSURERS POLITICAL ACTION",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00681429",
+      "name": "MAJORITY IN ACTION",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00100321",
+      "name": "L3HARRIS TECHNOLOGIES INC PAC",
+      "total": 10000,
+      "count": 5,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00032698",
+      "name": "INDEPENDENT COMMUNITY BANKERS OF AMERICA PAC",
+      "total": 7500,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00435933",
+      "name": "AMERICAN ACADEMY OF NEUROLOGY BRAINPAC",
+      "total": 7500,
+      "count": 2,
+      "industry": "education"
+     },
+     {
+      "committee_id": "C00123612",
+      "name": "TEXTRON INC. POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00010470",
+      "name": "UNION PACIFIC CORPORATION FUND FOR EFFECTIVE GOVERNMENT",
+      "total": 6500,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00199703",
+      "name": "GLAXOSMITHKLINE PAC",
+      "total": 6000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00009985",
+      "name": "NATIONAL ASSOCIATION OF BROADCASTERS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "media"
+     },
+     {
+      "committee_id": "C00362707",
+      "name": "CISCO SYSTEMS INC. FEDERAL PAC AKA CISCO SYSTEMS",
+      "total": 5000,
+      "count": 1,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00000729",
+      "name": "AMERICAN DENTAL ASSOCIATION POLITICAL ACTION COMMI",
+      "total": 5000,
+      "count": 1,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00082917",
+      "name": "ASSOCIATED GENERAL CONTRACTORS OF AMERICA PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "construction"
+     },
+     {
+      "committee_id": "C00253468",
+      "name": "FEDERAL AGRICULTURAL MORTGAGE CORPORATION POLITICAL ACTION C",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00797670",
+      "name": "AMERICAN ISRAEL PUBLIC AFFAIRS COMMITTEE POLITICAL ACTION CO",
+      "total": 5000,
+      "count": 1,
+      "industry": "legal"
+     },
+     {
+      "committee_id": "C00144170",
+      "name": "LOUISIANANS FOR AMERICAN SECURITY PAC (LASPAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00340943",
+      "name": "DAVITA INC. POLITICAL ACTION COMMITTEE (DAPAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00004812",
+      "name": "MORTGAGE BANKERS ASSOCIATION PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00211318",
+      "name": "DELOITTE POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00760124",
+      "name": "NATIONAL VICTORY ACTION FUND",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00030718",
+      "name": "NATIONAL ASSOCIATION OF REALTORS POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 3,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00128918",
+      "name": "PRINCIPAL LIFE INSURANCE COMPANY PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00076299",
+      "name": "CME GROUP INC. PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "other"
+     }
+    ],
+    "count": 31,
+    "total": 171500,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00394957&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.stevescalise.com/",
+    "as_filed": "WWW.STEVESCALISE.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00394957/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H2LA02149": {
    "id": "H2LA02149",
@@ -213,7 +419,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2LA02149/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 1412697.07,
+    "disbursements": 1539320.56,
+    "cash_on_hand": 382785.66,
+    "individual_unitemized": 4075.19,
+    "individual_itemized": 417362.55,
+    "pac": 950716.73,
+    "party": 0,
+    "self_funding": 0,
+    "other": 40542.6,
+    "coverage_end": "2026-07-18",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2LA02149/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00111534",
+      "name": "JONES WALKER LLP PAC",
+      "total": 11000,
+      "count": 5,
+      "industry": "legal"
+     },
+     {
+      "committee_id": "C00396895",
+      "name": "GILEAD SCIENCES INC HEALTHCARE POLICY PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "pharma"
+     },
+     {
+      "committee_id": "C00284885",
+      "name": "THE HOME DEPOT INC. POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "retail"
+     },
+     {
+      "committee_id": "C00004473",
+      "name": "NATIONAL TELECOMMUNICATIONS COOPERATIVE ASSOCIATION RURAL BROADBAND PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00794198",
+      "name": "BUILD THE BENCH PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00081414",
+      "name": "AMERICAN SUGAR CANE LEAGUE PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00363879",
+      "name": "ENTERGY CORPORATION POLITICAL ACTION COMMITTEE (ENPAC)",
+      "total": 10000,
+      "count": 6,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00226472",
+      "name": "ADAMS & REESE LLP PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "legal"
+     },
+     {
+      "committee_id": "C00040253",
+      "name": "ALLSTATE INSURANCE COMPANY PAC",
+      "total": 9500,
+      "count": 4,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00029504",
+      "name": "ENGINEERS POLITICAL EDUCATION COMMITTEE (EPEC)/INTERNATIONAL UNION OF OPERATING ENGINEERS",
+      "total": 9000,
+      "count": 6,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00096156",
+      "name": "HONEYWELL INTERNATIONAL POLITICAL ACTION COMMITTEE",
+      "total": 9000,
+      "count": 5,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00199257",
+      "name": "GENENTECH INC. POLITICAL ACTION COMMITTEE (GENENPAC)",
+      "total": 8500,
+      "count": 3,
+      "industry": "pharma"
+     },
+     {
+      "committee_id": "C00084491",
+      "name": "INTERNATIONAL FRANCHISE ASSOCIATION FRANCHISING POLITICAL ACTION COMMITTEE INC",
+      "total": 8500,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00024521",
+      "name": "AMERICAN ASSOCIATION FOR JUSTICE POLITICAL ACTION COMMITTEE (AAJ PAC)",
+      "total": 8500,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00477653",
+      "name": "COX ENTERPRISES PAC (COXPAC) INC",
+      "total": 8500,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00089136",
+      "name": "ALTRIA GROUP, INC. POLITICAL ACTION COMMITTEE",
+      "total": 8500,
+      "count": 5,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00085316",
+      "name": "THE CIGNA GROUP EMPLOYEE POLITICAL ACTION COMMITTEE",
+      "total": 8500,
+      "count": 4,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00066472",
+      "name": "AMERICAN PROPERTY CASUALTY INSURANCE ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 8000,
+      "count": 6,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00123612",
+      "name": "TEXTRON INC. POLITICAL ACTION COMMITTEE",
+      "total": 8000,
+      "count": 7,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00587543",
+      "name": "ITG HOLDINGS U.S.A. INC. POLITICAL ACTION COMMITTEE (AKA ITG PAC)",
+      "total": 7500,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00144774",
+      "name": "SOUTHERN COMPANY EMPLOYEES PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00011114",
+      "name": "AMERICAN FEDERATION OF STATE COUNTY & MUNICIPAL EMPLOYEES  P E O P L E",
+      "total": 7500,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00010470",
+      "name": "UNION PACIFIC CORP. FUND FOR EFFECTIVE GOVERNMENT",
+      "total": 7500,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00763664",
+      "name": "TRACTOR SUPPLY COMPANY POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00211318",
+      "name": "DELOITTE POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 3,
+      "industry": "finance"
+     }
+    ],
+    "count": 307,
+    "total": 950716.73,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00763649&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://troycarter4congress.com/",
+    "as_filed": "HTTPS://TROYCARTER4CONGRESS.COM/",
+    "source_url": "https://www.fec.gov/data/committee/C00763649/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6LA03205": {
    "id": "H6LA03205",
@@ -252,7 +664,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2LA03105/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 6968,
+    "disbursements": 4101.79,
+    "cash_on_hand": 3465.01,
+    "individual_unitemized": 1043,
+    "individual_itemized": 3575,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 2350,
+    "other": 0,
+    "coverage_end": "2026-07-18",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2LA03105/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00819961&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://lebrun4la.com/",
+    "as_filed": "LEBRUN4LA.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00819961/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6LA04187": {
    "id": "H6LA04187",

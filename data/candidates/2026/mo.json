@@ -109,7 +109,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2MO02102/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 3528094.52,
+    "disbursements": 2411927.69,
+    "cash_on_hand": 4227396.23,
+    "individual_unitemized": 651487.08,
+    "individual_itemized": 1352398.68,
+    "pac": 1143239.36,
+    "party": 0,
+    "self_funding": 0,
+    "other": 380969.4,
+    "coverage_end": "2026-07-15",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2MO02102/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00004275",
+      "name": "AMERICAN BANKERS ASSOCIATION PAC (BANKPAC)",
+      "total": 12000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00409276",
+      "name": "MAKING A RESPONSIBLE STAND FOR HOUSEHOLDS IN AMERICA PAC",
+      "total": 10000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00524314",
+      "name": "AMERICA'S FIRST PAC",
+      "total": 10000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00817338",
+      "name": "MVL PAC",
+      "total": 10000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00770297",
+      "name": "BAKER PAC",
+      "total": 10000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00832469",
+      "name": "BUILDING A NATIONAL KNOWLEGEABLE SECURITY PAC",
+      "total": 10000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00640243",
+      "name": "LSEG US HOLDCO INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00227744",
+      "name": "ERNST & YOUNG PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00762328",
+      "name": "FIGHT ON PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00039578",
+      "name": "THE COUNCIL OF INSURANCE AGENTS & BROKERS PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00647354",
+      "name": "TEAM AMERICA - BRINGING AMERICA TOGETHER PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00327189",
+      "name": "VALUE IN ELECTING WOMEN POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00570945",
+      "name": "E-PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00253369",
+      "name": "INVESCO HOLDING COMPANY (US), INC. POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00589119",
+      "name": "SYNCHRONY FINANCIAL EMPLOYEES POLITICAL ACTION COM",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00085316",
+      "name": "THE CIGNA GROUP EMPLOYEE PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00012245",
+      "name": "UBS AMERICAS INC. POLITICAL ACTION COMMITTEE (UBS PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00874982",
+      "name": "FRANKLIN RESOURCES INC PAC (FRANKLIN TEMPLETON PAC)",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00121319",
+      "name": "THRIVENT FINANCIAL FOR LUTHERANS EMPLOYEE PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00633354",
+      "name": "STRUCTURED FINANCE COALITION POLITICAL ACTION COMMITTEE (STRUCTURED FINANCE PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00104299",
+      "name": "JPMORGAN CHASE & CO. FEDERAL POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00326595",
+      "name": "CAPITAL ONE FINANCIAL CORP. ASSOC. POLITICAL FUND",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00300178",
+      "name": "WELLS FARGO AND COMPANY EMPLOYEES GOOD GOVERNMENT FEDERAL FUND II",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00432252",
+      "name": "REGIONS FINANCIAL CORPORATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00033423",
+      "name": "HSBC TECHNOLOGY AND SERVICES USA INC. FEDERAL, STATE, AND LOCAL PAC (HSBC COMBINED PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "tech"
+     }
+    ],
+    "count": 243,
+    "total": 1143192.86,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00495846&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.annwagner.com/",
+    "as_filed": "WWW.ANNWAGNER.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00495846/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6MO02343": {
    "id": "H6MO02343",
@@ -161,7 +367,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2MO03167/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 43338.7,
+    "disbursements": 44990,
+    "cash_on_hand": 2776.04,
+    "individual_unitemized": 24958.69,
+    "individual_itemized": 18185,
+    "pac": 125,
+    "party": 0,
+    "self_funding": 0,
+    "other": 70.01,
+    "coverage_end": "2026-07-15",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2MO03167/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00806190&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.bethanymannforcongress.com/",
+    "as_filed": "WWW.BETHANYMANNFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00806190/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H8MO09146": {
    "id": "H8MO09146",
@@ -200,7 +436,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2MO04207/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 1387967.7,
+    "disbursements": 864475.14,
+    "cash_on_hand": 747400.86,
+    "individual_unitemized": 16601.24,
+    "individual_itemized": 754165.7,
+    "pac": 567060.91,
+    "party": 0,
+    "self_funding": 0,
+    "other": 50139.85,
+    "coverage_end": "2026-07-15",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2MO04207/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00339655",
+      "name": "US ONCOLOGY INC. NETWORK POLITICAL ACTION COMMITTEE",
+      "total": 15000,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00797670",
+      "name": "AIPAC",
+      "total": 15000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00833681",
+      "name": "ALFORD VICTORY FUND",
+      "total": 14000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00142711",
+      "name": "THE BOEING COMPANY PAC",
+      "total": 11000,
+      "count": 9,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00201871",
+      "name": "NATIONAL PORK PRODUCERS COUNCIL PORK PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00563726",
+      "name": "MR. SOUTHERN MISSOURIAN IN THE HOUSE PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00077321",
+      "name": "AMERICAN INSTITUTE OF CERTIFIED PUBLIC ACCOUNTANTS POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00113811",
+      "name": "NATIONAL ELECTRICAL CONTRACTORS ASSOCIATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "construction"
+     },
+     {
+      "committee_id": "C00404392",
+      "name": "CONSERVATIVE OPPORTUNITY LEADERSHIP & ENTERPRISE PAC - COLEPAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00531590",
+      "name": "PATRIOTS IN ACTION",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00088591",
+      "name": "EMPLOYEES OF NORTHROP GRUMMAN",
+      "total": 9000,
+      "count": 6,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00113241",
+      "name": "NATIONAL APARTMENT ASSOCIATION PAC",
+      "total": 8500,
+      "count": 5,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00009985",
+      "name": "NAB PAC - NATIONAL ASSOCIATION OF BROADCASTERS",
+      "total": 7880,
+      "count": 4,
+      "industry": "media"
+     },
+     {
+      "committee_id": "C00007880",
+      "name": "AMERICA'S CREDIT UNION PAC OF CREDIT UNION NATIONAL ASSOCIATION, INC",
+      "total": 6000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00004275",
+      "name": "AMERICAN BANKERS ASSOCIATION PAC (BANKPAC)",
+      "total": 5500,
+      "count": 5,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00106146",
+      "name": "AMERICAN HOSPITAL ASSOCIATION PAC",
+      "total": 5500,
+      "count": 6,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00613489",
+      "name": "MISSOURI FARM BUREAU FEDERATION FEDERAL PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00623512",
+      "name": "IN THE ARENA PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00639229",
+      "name": "AMERICAN REVIVAL PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00652529",
+      "name": "LOCKTON INC PAC POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00147173",
+      "name": "WINE AND SPIRITS WHOLESALERS OF AMERICA, INC. POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00336743",
+      "name": "ASIAN AMERICAN HOTEL OWNERS ASSOCIATION PAC (AAHOA PAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00206136",
+      "name": "AMEREN CORPORATION FEDERAL POLITICAL ACTION COMMITTEE (AMEREN FEDPAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00740605",
+      "name": "THE GUIDEHOUSE PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00411116",
+      "name": "SPACE EXPLORATION TECHNOLOGIES CORP PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "tech"
+     }
+    ],
+    "count": 175,
+    "total": 564060.91,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00792598&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00792598/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H4MO04187": {
    "id": "H4MO04187",
@@ -265,7 +707,115 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2MO04199/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 331764.08,
+    "disbursements": 109254.25,
+    "cash_on_hand": 222509.83,
+    "individual_unitemized": 4286,
+    "individual_itemized": 288391.53,
+    "pac": 39086.55,
+    "party": 0,
+    "self_funding": 0,
+    "other": 0,
+    "coverage_end": "2026-07-15",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2MO04199/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00563726",
+      "name": "MR SOUTHERN MISSOURIAN IN THE HOUSE PAC",
+      "total": 10000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00024521",
+      "name": "AAJ PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00197228",
+      "name": "ELEVANCE HEALTH PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00366781",
+      "name": "BUCKEYE LIBERTY PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00888255",
+      "name": "TIGER PAC",
+      "total": 3500,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00823914",
+      "name": "EVER RELENTLESS IN CONSERVATISM",
+      "total": 3500,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00416594",
+      "name": "JIM JORDAN FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00788414",
+      "name": "ERIC BURLISON FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00877506",
+      "name": "SPACE COAST LEADERSHIP PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00301358",
+      "name": "BLUE CROSS AND BLUE SHIELD OF KANSAS CITY FEDERAL PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00432260",
+      "name": "CLUB FOR GROWTH PAC",
+      "total": 111.55,
+      "count": 1,
+      "industry": "other"
+     }
+    ],
+    "count": 11,
+    "total": 38111.55,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00939710&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.rickbrattin.com/",
+    "as_filed": "WWW.RICKBRATTIN.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00939710/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6MO05312": {
    "id": "H6MO05312",

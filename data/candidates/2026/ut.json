@@ -187,7 +187,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0UT01205/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2536636.22,
+    "disbursements": 2183697.46,
+    "cash_on_hand": 1886961.7,
+    "individual_unitemized": 6329.18,
+    "individual_itemized": 993216.75,
+    "pac": 1421500,
+    "party": 0,
+    "self_funding": 0,
+    "other": 115590.29,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H0UT01205/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00379628",
+      "name": "NUCOR CORPORATION POLITICAL ACTION COMMITTEE",
+      "total": 15000,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00446948",
+      "name": "ENGINEERING AND SOFTWARE SOLUTIONS INC PAC (ES3 PAC)",
+      "total": 15000,
+      "count": 3,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00752766",
+      "name": "TTM TECHNOLOGIES INC PAC",
+      "total": 15000,
+      "count": 3,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00007880",
+      "name": "AMERICA'S CREDIT UNIONS PAC OF CREDIT UNION NATIONAL ASSOCIATION, INC",
+      "total": 10000,
+      "count": 4,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00035006",
+      "name": "CHEVRON EMPLOYEES PAC - CHEVRON CORPORATION",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00442913",
+      "name": "BURNS AND MCDONNELL INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00343137",
+      "name": "PAC OF THE AMERICAN ASSOCIATION OF ORTHOPAEDIC SURGEONS--PAC OF AAOS",
+      "total": 10000,
+      "count": 4,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00346353",
+      "name": "CRH AMERICAS, INC. PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00130773",
+      "name": "NATIONAL MULTIFAMILY HOUSING COUNCIL PAC (NMHC PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00040998",
+      "name": "NATIONAL AUTOMOBILE DEALERS ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 3,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00208322",
+      "name": "MANAGEMENT AND TRAINING CORPORATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00030718",
+      "name": "NATIONAL ASSOCIATION OF REALTORS POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 4,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00227744",
+      "name": "ERNST & YOUNG PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00252684",
+      "name": "CAMBIA HEALTH SOLUTIONS INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00284885",
+      "name": "THE HOME DEPOT INC. POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "retail"
+     },
+     {
+      "committee_id": "C00012245",
+      "name": "UBS AMERICAS INC. POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00740605",
+      "name": "THE GUIDEHOUSE INC. PAC (GUIDEHOUSE PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00096156",
+      "name": "HONEYWELL INTERNATIONAL PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00359539",
+      "name": "AMERICAN ACADEMY OF DERMATOLOGY ASSOCIATION PAC (SKINPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "education"
+     },
+     {
+      "committee_id": "C00089458",
+      "name": "NATIONAL STONE, SAND & GRAVEL ASSOCIATION ROCKPAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00311878",
+      "name": "MEDTRONIC PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "pharma"
+     },
+     {
+      "committee_id": "C00828996",
+      "name": "HEALTHEQUITY, INC PURPLE PAC (HEALTHEQUITY PURPLE POLITICAL ACTION COMMITTEE)",
+      "total": 10000,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00380550",
+      "name": "FMR LLC PAC (FIDELITY PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00281212",
+      "name": "BAE SYSTEMS USA PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00394650",
+      "name": "JBS USA FOOD COMPANY PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "agriculture"
+     }
+    ],
+    "count": 364,
+    "total": 1421500,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00738872&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "http://electmoore.com/",
+    "as_filed": "HTTP://ELECTMOORE.COM/",
+    "source_url": "https://www.fec.gov/data/committee/C00738872/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H4UT02395": {
    "id": "H4UT02395",

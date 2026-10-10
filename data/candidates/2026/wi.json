@@ -161,7 +161,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0WI03175/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 7526052.22,
+    "disbursements": 3365829.24,
+    "cash_on_hand": 4677029.04,
+    "individual_unitemized": 1592299.66,
+    "individual_itemized": 2811416.89,
+    "pac": 994741.95,
+    "party": 15000,
+    "self_funding": 0,
+    "other": 2112593.72,
+    "coverage_end": "2026-07-22",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H0WI03175/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00004275",
+      "name": "AMERICAN BANKERS ASSOCIATION PAC (BANKPAC)",
+      "total": 11500,
+      "count": 5,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00693796",
+      "name": "BUCKEYE LIBERTY POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00730903",
+      "name": "MISSISSIPPI FARM BUREAU FEDERATION FURTHERING AGRICULTURE FO",
+      "total": 10000,
+      "count": 1,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00697326",
+      "name": "ON WISCONSIN PAC INC",
+      "total": 10000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00610212",
+      "name": "WAGING PEACE",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00639229",
+      "name": "AMERICAN REVIVAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00493221",
+      "name": "GUARDIAN LEADERSHIP PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00634519",
+      "name": "DEFEND FREEDOM POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00404392",
+      "name": "CONSERVATIVE OPPORTUNITY LEADERSHIP AND ENTERPRISE PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00001636",
+      "name": "SMART TD PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00570226",
+      "name": "SEAL PAC SUPPORTING ELECTING AMERICAN LEADERS PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00028787",
+      "name": "NATIONAL CATTLEMEN'S BEEF ASSOCIATION POLITICAL ACTION COMMI",
+      "total": 10000,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00022343",
+      "name": "INDEPENDENT INSURANCE AGENTS & BROKERS OF AMERICA INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00563726",
+      "name": "MR. SOUTHERN MISSOURIAN IN THE HOUSE PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00813063",
+      "name": "LEADERSHIP AND LOYALTY ONLY TO AMERICA PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00832568",
+      "name": "HIGHWATER PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00439521",
+      "name": "AMERICAN SECURITY PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00173153",
+      "name": "AMERICAN ASSOCIATION OF NURSE ANESTHETISTS SEPARATE SEGREGAT",
+      "total": 10000,
+      "count": 3,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00467431",
+      "name": "THE EYE OF THE TIGER POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00526715",
+      "name": "GREATER TOMORROW POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 4,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00193631",
+      "name": "THE FARM CREDIT COUNCIL POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00390161",
+      "name": "EUREKA POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 4,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00524314",
+      "name": "AMERICA'S FIRST PAC",
+      "total": 8000,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00756551",
+      "name": "AMERICAN GRIT PAC",
+      "total": 7500,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00828426",
+      "name": "BLUE RIDGE VICTORY FUND",
+      "total": 7500,
+      "count": 2,
+      "industry": "leadership"
+     }
+    ],
+    "count": 276,
+    "total": 994241.95,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00742007&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.vanordenforcongress.com/",
+    "as_filed": "WWW.VANORDENFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00742007/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6WI04071": {
    "id": "H6WI04071",
@@ -213,7 +419,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0WI05113/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 1369100.47,
+    "disbursements": 886690.69,
+    "cash_on_hand": 1320015.58,
+    "individual_unitemized": 43400.21,
+    "individual_itemized": 442603.51,
+    "pac": 857850,
+    "party": 500,
+    "self_funding": 0,
+    "other": 24746.75,
+    "coverage_end": "2026-07-22",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H0WI05113/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00010421",
+      "name": "ASSOC. BUILDERS  CONTRACTORS, INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "construction"
+     },
+     {
+      "committee_id": "C00830208",
+      "name": "GE HEALTHCARE TECHNOLOGIES INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00121319",
+      "name": "THRIVENT FINANCIAL FOR LUTHERANS PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00623512",
+      "name": "IN THE ARENA PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00360354",
+      "name": "AMAZON PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00545194",
+      "name": "SENTRY INSURANCE A MUTUAL CO FEDERAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00697326",
+      "name": "ON WISCONSIN PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00197095",
+      "name": "NORTHWESTERN MUTAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00563726",
+      "name": "MR. SMITH PAC-MR. SOUTHERN MO IN THE HOUSE PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00012245",
+      "name": "UBS AMERICAS INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00170258",
+      "name": "NATIONAL ASSOC OF MUTUAL INSURANCE CO. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00110338",
+      "name": "AMERICAN CRYSTAL SUGAR CO. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00479246",
+      "name": "BLACKROCK FUNDS SERVICES GROUP LLC PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00714329",
+      "name": "TRANSDIGM GROUP INC. EMPLOYEE PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00196725",
+      "name": "HEWLETT PACKARD ENTERPRISE COMPANY PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00586859",
+      "name": "MORTGAGE GUARANTY INSURANCE CORPORATION PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00007880",
+      "name": "AMERICA'S CREDIT UNION PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00227744",
+      "name": "ERNST  YOUNG PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00610212",
+      "name": "WAGING PEACE",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00495002",
+      "name": "AMERICAN INVESTMENT COUNCIL PAC",
+      "total": 10000,
+      "count": 5,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00121368",
+      "name": "EXXONMOBIL PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00158881",
+      "name": "NEW YORK LIFE INSURANCE COMPANY PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00077321",
+      "name": "AICPA PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00024968",
+      "name": "AMERICAN OPTOMETRIC ASSOC. PAC",
+      "total": 10000,
+      "count": 6,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00034785",
+      "name": "ACPAC ACA INTERNATIONAL PAC",
+      "total": 9500,
+      "count": 2,
+      "industry": "other"
+     }
+    ],
+    "count": 222,
+    "total": 857500,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00720011&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.scottfitzgeraldforcongress.com/",
+    "as_filed": "WWW.SCOTTFITZGERALDFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00720011/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H4WI05115": {
    "id": "H4WI05115",
@@ -356,7 +768,129 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0WI03159/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 528022.63,
+    "disbursements": 235171.57,
+    "cash_on_hand": 294453.38,
+    "individual_unitemized": 58766.33,
+    "individual_itemized": 352301.27,
+    "pac": 25390.96,
+    "party": 0,
+    "self_funding": 91500,
+    "other": 64.07,
+    "coverage_end": "2026-07-22",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H0WI03159/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00327189",
+      "name": "VALUE IN ELECTING WOMEN POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00432260",
+      "name": "CLUB FOR GROWTH PAC",
+      "total": 2972.95,
+      "count": 5,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00758813",
+      "name": "MNM PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00653220",
+      "name": "CAROL FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00816389",
+      "name": "ELECTING REPUBLICANS INDIANA PAC",
+      "total": 2000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00788414",
+      "name": "ERIC BURLISON FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00386748",
+      "name": "VIRGINIA FOXX FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00769695",
+      "name": "FREEDOM FORCE PAC",
+      "total": 1500,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00694323",
+      "name": "WINRED",
+      "total": 1418.01,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00635367",
+      "name": "TENACIOUS PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00765578",
+      "name": "TENNESSEE TOUGH PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00834507",
+      "name": "BUILDING UP DEMOCRACY'S DREAM",
+      "total": 1000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00860064",
+      "name": "MCDOWELL FOR CONGRESS",
+      "total": 1000,
+      "count": 1,
+      "industry": "leadership"
+     }
+    ],
+    "count": 13,
+    "total": 25390.96,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00921734&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://ebbenforwisconsin.com/",
+    "as_filed": "EBBENFORWISCONSIN.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00921734/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6WI07249": {
    "id": "H6WI07249",

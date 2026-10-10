@@ -70,7 +70,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0TN01118/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 1274193.78,
+    "disbursements": 739900.04,
+    "cash_on_hand": 1985062.87,
+    "individual_unitemized": 92874.53,
+    "individual_itemized": 384291.43,
+    "pac": 683250,
+    "party": 0,
+    "self_funding": 0,
+    "other": 113777.82,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H0TN01118/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00008839",
+      "name": "AMERICAN PODIATRIC MEDICAL ASSOCIATION PAC",
+      "total": 18500,
+      "count": 5,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00389403",
+      "name": "SPECIALTY EQUIPMENT MARKET ASSOCIATION & PERFORMANCE RACING, INC. PAC (SEMA & PRI PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00612010",
+      "name": "AMERICAN CAR RENTAL ASSOCIATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00365502",
+      "name": "BWX TECHNOLOGIES, INC PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00035675",
+      "name": "BRISTOL-MYERS SQUIBB COMPANY",
+      "total": 10000,
+      "count": 2,
+      "industry": "pharma"
+     },
+     {
+      "committee_id": "C00040279",
+      "name": "ABBOTT LABORATORIES EMPLOYEE PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "pharma"
+     },
+     {
+      "committee_id": "C00693796",
+      "name": "BUCKEYE LIBERTY PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00895706",
+      "name": "TEAMHEALTH HOLDINGS INC PAC (TEAMHEALTH PROVIDERS PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00424143",
+      "name": "ALLIANCE FOR PHARMACY COMPOUNDING PAC (COMP PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "pharma"
+     },
+     {
+      "committee_id": "C00558452",
+      "name": "PROFESSIONAL COMPOUNDING CENTERS OF AMERICA POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00108035",
+      "name": "MCKESSON CORPORATION EMPLOYEES POLITICAL FUND",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00113159",
+      "name": "EASTMANPAC OF EASTMAN CHEMICAL COMPANY",
+      "total": 10000,
+      "count": 3,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00336743",
+      "name": "ASIAN AMERICAN HOTEL OWNERS ASSOCIATION PAC (AAHOA PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00077321",
+      "name": "AMERICAN INSTITUTE OF CERTIFIED PUBLIC ACCOUNTANTS PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00024968",
+      "name": "AMERICAN OPTOMETRIC ASSOCIATION PAC",
+      "total": 9000,
+      "count": 4,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00030809",
+      "name": "NATIONAL COMMUNITY PHARMACISTS ASSOCIATION - PAC",
+      "total": 8500,
+      "count": 2,
+      "industry": "pharma"
+     },
+     {
+      "committee_id": "C00882068",
+      "name": "HIMS AND HERS HEALTH , INC. PAC",
+      "total": 8000,
+      "count": 4,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00009985",
+      "name": "NATIONAL ASSOCIATION OF BROADCASTERS PAC (NABPAC)",
+      "total": 7500,
+      "count": 2,
+      "industry": "media"
+     },
+     {
+      "committee_id": "C00400929",
+      "name": "CENCORA, INC. PAC",
+      "total": 7500,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00389429",
+      "name": "CALPORTLAND COMPANY PAC (CALPORTLANDPAC)",
+      "total": 7500,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00346353",
+      "name": "CRH AMERICAS, INC PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00444885",
+      "name": "ASTELLAS US LLC PAC (ASTELLAS PAC)",
+      "total": 7000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00010983",
+      "name": "JOHNSON & JOHNSON PAC",
+      "total": 6500,
+      "count": 3,
+      "industry": "pharma"
+     },
+     {
+      "committee_id": "C00375360",
+      "name": "AMERICAN COLLEGE OF CARDIOLOGY PAC (HEARTPAC)",
+      "total": 6000,
+      "count": 3,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00374066",
+      "name": "SMITH AND NEPHEW INC. PAC",
+      "total": 6000,
+      "count": 4,
+      "industry": "other"
+     }
+    ],
+    "count": 208,
+    "total": 680250,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00741090&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.votediana.com/",
+    "as_filed": "WWW.VOTEDIANA.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00741090/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6TN02170": {
    "id": "H6TN02170",
@@ -109,7 +315,73 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0TN03254/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2330803.33,
+    "disbursements": 752330.86,
+    "cash_on_hand": 4835524.55,
+    "individual_unitemized": 4395.04,
+    "individual_itemized": 1477634.75,
+    "pac": 9500,
+    "party": 632750,
+    "self_funding": 0,
+    "other": 206523.54,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H0TN03254/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00729616",
+      "name": "CITY ON A HILL PAC",
+      "total": 5000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00030718",
+      "name": "NATIONAL ASSOCIATION OF REALTORS",
+      "total": 2000,
+      "count": 1,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00142711",
+      "name": "THE BOEING COMPANY POLITICAL ACTION COMMITTEE",
+      "total": 1000,
+      "count": 1,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00431858",
+      "name": "STEPTOE AND JOHNSON LLP POLITICAL ACTION COMMITTEE",
+      "total": 1000,
+      "count": 1,
+      "industry": "legal"
+     },
+     {
+      "committee_id": "C00099754",
+      "name": "BAKEPAC - THE POLITICAL ACTION COMMITTEE OF THE INDEPENDENT BAKERS ASSOCIATION",
+      "total": 500,
+      "count": 1,
+      "industry": "issue"
+     }
+    ],
+    "count": 5,
+    "total": 9500,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00461822&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.chuckforcongress.com/",
+    "as_filed": "WWW.CHUCKFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00461822/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6TN03228": {
    "id": "H6TN03228",
@@ -187,7 +459,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0TN04195/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 536842.93,
+    "disbursements": 407735.16,
+    "cash_on_hand": 495126.13,
+    "individual_unitemized": 1451.8,
+    "individual_itemized": 227335,
+    "pac": 307000,
+    "party": 0,
+    "self_funding": 0,
+    "other": 1056.13,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H0TN04195/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00214981",
+      "name": "TEXAS FARM BUREAU AGFUND",
+      "total": 10000,
+      "count": 3,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00215285",
+      "name": "GENERAL ATOMICS PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00366781",
+      "name": "BUCKEYE LIBERTY PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00030783",
+      "name": "LOCKHEED MARTIN PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00546234",
+      "name": "LEIDOS INC. POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 3,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00097568",
+      "name": "EMPLOYEES OF RTX CORPORATION PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00088591",
+      "name": "EMPLOYEES OF NORTHROP GRUMMAN CORPORATION PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00467431",
+      "name": "EYE OF THE TIGER PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00513523",
+      "name": "TN4UPAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00557793",
+      "name": "BLUE ORIGIN LLC PAC (BLUE ORIGIN PAC)",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00096156",
+      "name": "HONEYWELL INTERNATIONAL",
+      "total": 10000,
+      "count": 6,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00400424",
+      "name": "TORCH TECHNOLOGIES, INC PAC",
+      "total": 9000,
+      "count": 4,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00142711",
+      "name": "THE BOEING CO. PAC",
+      "total": 8500,
+      "count": 3,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00100321",
+      "name": "L3HARRIS TECHNOLOGIES, INC. PAC",
+      "total": 8000,
+      "count": 4,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00731414",
+      "name": "AMENTUM HOLDINGS, INC. PAC (AMENTUM PAC)",
+      "total": 7500,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00103549",
+      "name": "PARSONS CORPORATION POLITICAL ACTION COMMITTEE",
+      "total": 6500,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00078451",
+      "name": "GENERAL DYNAMICS CORPORATION POLITICAL ACTION COMMITTEE (GDC PAC)",
+      "total": 6500,
+      "count": 4,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00744425",
+      "name": "PEOPLETEC, INC. PAC (PEOPLETEC PAC)",
+      "total": 6000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00691972",
+      "name": "ALLISON TRANSMISSION INC. POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00411116",
+      "name": "SPACE EXPLORATION TECHNOLOGIES CORP. PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00272724",
+      "name": "MAYNARD NEXSEN PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00439521",
+      "name": "AMERICAN SECURITY PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00719971",
+      "name": "SENATE EAGLE PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00753475",
+      "name": "BAPS PUBLIC AFFAIRS, INC. PAC (BAPS PAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "legal"
+     },
+     {
+      "committee_id": "C00797670",
+      "name": "AMERICAN ISRAEL PUBLIC AFFAIRS COMMITTEE POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "legal"
+     }
+    ],
+    "count": 67,
+    "total": 307000,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00464073&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.scottdesjarlais.com/",
+    "as_filed": "WWW.SCOTTDESJARLAIS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00464073/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6TN04267": {
    "id": "H6TN04267",
@@ -486,7 +964,45 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0TN09061/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 66901.55,
+    "disbursements": 58595.41,
+    "cash_on_hand": 11746.82,
+    "individual_unitemized": 5917.17,
+    "individual_itemized": 58484.38,
+    "pac": 2500,
+    "party": 0,
+    "self_funding": 0,
+    "other": 0,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H0TN09061/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00097568",
+      "name": "EMPLOYEES OF RTX CORPORATION POLITICAL ACTION COMMITTEE",
+      "total": 2500,
+      "count": 1,
+      "industry": "defense"
+     }
+    ],
+    "count": 1,
+    "total": 2500,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00693143&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "http://bergmannforcongress.com/",
+    "as_filed": "HTTP://BERGMANNFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00693143/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6TN09068": {
    "id": "H6TN09068",

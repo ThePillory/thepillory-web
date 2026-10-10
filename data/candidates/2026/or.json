@@ -109,7 +109,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0OR02127/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 1011413.29,
+    "disbursements": 646983.4,
+    "cash_on_hand": 1420774.69,
+    "individual_unitemized": 44712.77,
+    "individual_itemized": 403813.49,
+    "pac": 561541.68,
+    "party": 0,
+    "self_funding": 0,
+    "other": 1345.35,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H0OR02127/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00040998",
+      "name": "NATIONAL AUTOMOBILE DEALERS ASSOC PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00009985",
+      "name": "NATIONAL ASSOCIATION OF BROADCASTERS PAC (NABPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "media"
+     },
+     {
+      "committee_id": "C00411116",
+      "name": "SPACE EXPLORATION TECHNOLOGIES CORP. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00024968",
+      "name": "AMERICAN OPTOMETRIC ASSOCIATION PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00006080",
+      "name": "AMERICAN HEALTH CARE ASSOC. PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00002972",
+      "name": "AMERICA'S ELECTRIC COOPERATIVES PAC",
+      "total": 10000,
+      "count": 7,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00197228",
+      "name": "ELEVANCE HEALTH, INC. PAC (ELEVANCE HEALTH PAC)",
+      "total": 8000,
+      "count": 5,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00194746",
+      "name": "BLUEPAC - BLUE CROSS BLUE SHIELD ASSOCIATION PAC",
+      "total": 8000,
+      "count": 4,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00433060",
+      "name": "REPUBLICAN GOVERNANCE GROUP TUESDAY GROUP PAC",
+      "total": 8000,
+      "count": 8,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00227744",
+      "name": "ERNST & YOUNG PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00252684",
+      "name": "CAMBIA HEALTH SOLUTIONS PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00165159",
+      "name": "REPUBLICAN MAINSTREET PARTNERSHIP PAC",
+      "total": 7000,
+      "count": 7,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00479899",
+      "name": "WOOLPERT, INC POLITICAL ACTION COMMITTEE",
+      "total": 6000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00007948",
+      "name": "WEYERHAEUSER COMPANY PAC",
+      "total": 6000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00326389",
+      "name": "AMALGAMATED SUGAR COMPANY PAC",
+      "total": 6000,
+      "count": 3,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00475350",
+      "name": "PACIFIC SEAFOOD GROUP EMPLOYEE PAC",
+      "total": 6000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00525055",
+      "name": "TRANSCANADA USA SERVICES PAC",
+      "total": 5500,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00250753",
+      "name": "AUTO CARE ASSOCIATION PAC",
+      "total": 5500,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00793711",
+      "name": "CONSTELLATION ENERGY CORPORATION EMPLOYEE PAC (CEPAC)",
+      "total": 5500,
+      "count": 4,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00000901",
+      "name": "BUILD PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00602698",
+      "name": "AMERICAN WOOD COUNCIL PAC (WOODPAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00592089",
+      "name": "ELECTING MAJORITY MAKING EFFECTIVE REPUBLICANS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00039578",
+      "name": "COUNCIL OF INSURANCE AGENTS & BROKERS",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00639229",
+      "name": "AMERICAN REVIVAL PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00110338",
+      "name": "AMERICAN CRYSTAL SUGAR COMPANY PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "agriculture"
+     }
+    ],
+    "count": 202,
+    "total": 557291.68,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00725465&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.cliffbentz.com/",
+    "as_filed": "HTTPS://WWW.CLIFFBENTZ.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00725465/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6OR02298": {
    "id": "H6OR02298",

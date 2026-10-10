@@ -57,7 +57,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2AK01083/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 5470446.24,
+    "disbursements": 2455618.51,
+    "cash_on_hand": 3119157.79,
+    "individual_unitemized": 1108896.52,
+    "individual_itemized": 1675127.24,
+    "pac": 1028577,
+    "party": 5000,
+    "self_funding": 0,
+    "other": 1652845.48,
+    "coverage_end": "2026-07-29",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2AK01083/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00112896",
+      "name": "CONOCOPHILLIPS SPIRIT PAC",
+      "total": 15000,
+      "count": 3,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00411694",
+      "name": "SALTCHUK RESOURCES, INC. PAC",
+      "total": 11000,
+      "count": 5,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00639229",
+      "name": "AMERICAN REVIVAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00040998",
+      "name": "NATIONAL AUTOMOBILE DEALERS ASSOCIATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00030718",
+      "name": "NATIONAL ASSOCIATION OF REALTORS PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00683508",
+      "name": "FOREVER YOUTH ORGANIZATION UTILIZING A NEW GENERATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00571000",
+      "name": "TRUE NORTH PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00404392",
+      "name": "CONSERVATIVE OPPORTUNITY LEADERSHIP AND ENTERPRISE PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00693796",
+      "name": "BUCKEYE LIBERTY PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00022343",
+      "name": "INDEPENDENT INSURANCE AGENTS & BROKERS OF AMERICA, INC. PAC (INSURPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00570226",
+      "name": "SEAL PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00564377",
+      "name": "CHUGACH ALASKA CORPORATION PAC (CAC PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00492819",
+      "name": "CHESAPEAKE FREEDOM PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00467431",
+      "name": "THE EYE OF THE TIGER PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00869230",
+      "name": "ROYAL CARIBBEAN GROUP USA INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00236489",
+      "name": "KOCH, INC PAC",
+      "total": 10000,
+      "count": 5,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00817338",
+      "name": "MVL PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00390161",
+      "name": "EUREKA PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00024349",
+      "name": "ALASKA AIR GROUP INC. PAC",
+      "total": 9500,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00082040",
+      "name": "CHAMBER OF COMMERCE OF THE UNITED STATES OF AMERICA PAC (US CHAMBER PAC)",
+      "total": 9500,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00883413",
+      "name": "AMERICA'S MOUNTAIN PAC",
+      "total": 9000,
+      "count": 6,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00741710",
+      "name": "NRA VICTORY FUND, INC",
+      "total": 8950,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00235739",
+      "name": "BNSF RAILWAY COMPANY RAILPAC (BNSF RAILPAC)",
+      "total": 8000,
+      "count": 4,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00267849",
+      "name": "ALLIED PILOTS ASSOCIATION PAC",
+      "total": 7500,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00007880",
+      "name": "AMERICA'S CREDIT UNIONS PAC OF CREDIT UNION NATIONAL ASSOCIATION, INC",
+      "total": 7500,
+      "count": 3,
+      "industry": "labor"
+     }
+    ],
+    "count": 300,
+    "total": 1028577,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00792341&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://alaskansfornickbegich.com/",
+    "as_filed": "ALASKANSFORNICKBEGICH.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00792341/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6AK01092": {
    "id": "H6AK01092",
@@ -83,7 +289,59 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2AK01158/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-10",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 152304.86,
+    "disbursements": 232791.29,
+    "cash_on_hand": 3483.06,
+    "individual_unitemized": 12077.17,
+    "individual_itemized": 51175,
+    "pac": 13500,
+    "party": 0,
+    "self_funding": 0,
+    "other": 75552.69,
+    "coverage_end": "2026-02-13",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H2AK01158/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00024521",
+      "name": "AMERICAN ASSOCIATION FOR JUSTICE POLITICAL ACTION COMMITTEE (AAJ PAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00757419",
+      "name": "SD PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00831545",
+      "name": "CACHE PAC",
+      "total": 3500,
+      "count": 1,
+      "industry": "leadership"
+     }
+    ],
+    "count": 3,
+    "total": 13500,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00812388&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "http://www.marypeltola.com/",
+    "as_filed": "HTTP://WWW.MARYPELTOLA.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00812388/",
+    "checked": "2026-10-10"
+   },
+   "funding_checked": "2026-10-10",
+   "cycle": 2026
   },
   "H6AK01084": {
    "id": "H6AK01084",
