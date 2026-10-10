@@ -1,9 +1,9 @@
-# TEMPORARY: research probe for official voting links. Remove before merge.
+# TEMPORARY: research probe (FEC races). Remove before merge.
 name: TEMPORARY research probe
 on:
   push:
     branches: [claude/pillory-mobile-screens-p5zekn]
-    paths: [tmp-research/probe_vote.py, .github/workflows/tmp-research.yml]
+    paths: [tools/build_federal_races.py, .github/workflows/tmp-research.yml]
 permissions:
   contents: write
 jobs:
@@ -11,9 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: python3 tmp-research/probe_vote.py
+      - env:
+          FEC_API_KEY: ${{ secrets.FEC_API_KEY }}
+        run: |
+          mkdir -p tmp-research/out-fec
+          curl -s "https://api.open.fec.gov/v1/elections/search/?state=WA&cycle=2026&per_page=100&api_key=$FEC_API_KEY" > tmp-research/out-fec/wa-elections.json
+          curl -s "https://api.open.fec.gov/v1/elections/search/?state=OH&cycle=2026&per_page=100&api_key=$FEC_API_KEY" > tmp-research/out-fec/oh-elections.json
+          python3 tools/build_federal_races.py
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
-          git add tmp-research/out-vote
-          git commit -m "TEMPORARY: voting links probe output" && git push
+          git add tmp-research/out-fec data/elections/federal-2026
+          git commit -m "TEMPORARY: FEC races probe output" && git push
