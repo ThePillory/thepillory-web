@@ -11,28 +11,32 @@
    "name": "BAHRY, MICHAEL",
    "party": "INDEPENDENT",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6RI00288/"
+   "url": "https://www.fec.gov/data/candidate/S6RI00288/",
+   "committee": null
   },
   {
    "id": "S6RI00270",
    "name": "BURBRIDGE, CONNOR",
    "party": "DEMOCRATIC PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6RI00270/"
+   "url": "https://www.fec.gov/data/candidate/S6RI00270/",
+   "committee": null
   },
   {
    "id": "S4RI00051",
    "name": "MCKAY, RAYMOND TYLER MR",
    "party": "REPUBLICAN PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S4RI00051/"
+   "url": "https://www.fec.gov/data/candidate/S4RI00051/",
+   "committee": null
   },
   {
    "id": "S6RI00163",
    "name": "REED, JOHN F.",
    "party": "DEMOCRATIC PARTY",
    "incumbent": true,
-   "url": "https://www.fec.gov/data/candidate/S6RI00163/"
+   "url": "https://www.fec.gov/data/candidate/S6RI00163/",
+   "committee": null
   }
  ],
  "house": {
@@ -42,14 +46,16 @@
     "name": "AMO, GABRIEL F",
     "party": "DEMOCRATIC PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H4RI01265/"
+    "url": "https://www.fec.gov/data/candidate/H4RI01265/",
+    "committee": null
    },
    {
     "id": "H6RI01153",
     "name": "KEENAN, KELLIE ELEANOR",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6RI01153/"
+    "url": "https://www.fec.gov/data/candidate/H6RI01153/",
+    "committee": null
    }
   ],
   "2": [
@@ -58,21 +64,24 @@
     "name": "MAGAZINER, SETH",
     "party": "DEMOCRATIC PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H2RI02184/"
+    "url": "https://www.fec.gov/data/candidate/H2RI02184/",
+    "committee": null
    },
    {
     "id": "H6RI02318",
     "name": "MELLOR, VICTOR G.",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6RI02318/"
+    "url": "https://www.fec.gov/data/candidate/H6RI02318/",
+    "committee": null
    },
    {
     "id": "H6RI02326",
     "name": "SKOLY, STEPHEN T",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6RI02326/"
+    "url": "https://www.fec.gov/data/candidate/H6RI02326/",
+    "committee": null
    }
   ]
  }

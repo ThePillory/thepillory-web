@@ -13,21 +13,24 @@
     "name": "BELATTI, DELLA AU",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6HI01345/"
+    "url": "https://www.fec.gov/data/candidate/H6HI01345/",
+    "committee": null
    },
    {
     "id": "H2HI02128",
     "name": "CASE, EDWARD",
     "party": "DEMOCRATIC PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H2HI02128/"
+    "url": "https://www.fec.gov/data/candidate/H2HI02128/",
+    "committee": null
    },
    {
     "id": "H6HI01311",
     "name": "KEOHOKALOLE, JARRETT",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6HI01311/"
+    "url": "https://www.fec.gov/data/candidate/H6HI01311/",
+    "committee": null
    }
   ],
   "2": [
@@ -36,14 +39,16 @@
     "name": "AWA, BRENTON",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6HI02426/"
+    "url": "https://www.fec.gov/data/candidate/H6HI02426/",
+    "committee": null
    },
    {
     "id": "H2HI02581",
     "name": "TOKUDA, JILL NAOMI",
     "party": "DEMOCRATIC PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H2HI02581/"
+    "url": "https://www.fec.gov/data/candidate/H2HI02581/",
+    "committee": null
    }
   ]
  }

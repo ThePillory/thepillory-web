@@ -1,0 +1,76 @@
+{
+ "state": "HI",
+ "year": 2026,
+ "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=HI&candidate_status=C",
+ "list_built_on": "2026-10-10",
+ "built_on": "2026-10-10",
+ "senate_up": false,
+ "candidates": {
+  "H6HI01345": {
+   "id": "H6HI01345",
+   "name": "BELATTI, DELLA AU",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "1",
+   "incumbent": false,
+   "committee": null,
+   "fec_url": "https://www.fec.gov/data/candidate/H6HI01345/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H2HI02128": {
+   "id": "H2HI02128",
+   "name": "CASE, EDWARD",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "1",
+   "incumbent": true,
+   "committee": null,
+   "fec_url": "https://www.fec.gov/data/candidate/H2HI02128/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H6HI01311": {
+   "id": "H6HI01311",
+   "name": "KEOHOKALOLE, JARRETT",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "1",
+   "incumbent": false,
+   "committee": null,
+   "fec_url": "https://www.fec.gov/data/candidate/H6HI01311/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H6HI02426": {
+   "id": "H6HI02426",
+   "name": "AWA, BRENTON",
+   "party": "REPUBLICAN PARTY",
+   "office": "H",
+   "district": "2",
+   "incumbent": false,
+   "committee": null,
+   "fec_url": "https://www.fec.gov/data/candidate/H6HI02426/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H2HI02581": {
+   "id": "H2HI02581",
+   "name": "TOKUDA, JILL NAOMI",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "2",
+   "incumbent": true,
+   "committee": null,
+   "fec_url": "https://www.fec.gov/data/candidate/H2HI02581/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  }
+ }
+}

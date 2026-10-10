@@ -13,21 +13,24 @@
     "name": "BALAZS, ALEX",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H4ND00079/"
+    "url": "https://www.fec.gov/data/candidate/H4ND00079/",
+    "committee": null
    },
    {
     "id": "H4ND00061",
     "name": "FEDORCHAK, JULIE",
     "party": "REPUBLICAN PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H4ND00061/"
+    "url": "https://www.fec.gov/data/candidate/H4ND00061/",
+    "committee": null
    },
    {
     "id": "H6ND01049",
     "name": "HAMMER, TRYGVE",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6ND01049/"
+    "url": "https://www.fec.gov/data/candidate/H6ND01049/",
+    "committee": null
    }
   ]
  }

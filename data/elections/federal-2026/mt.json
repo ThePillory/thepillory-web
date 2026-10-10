@@ -11,56 +11,64 @@
    "name": "ALME, KURT",
    "party": "REPUBLICAN PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6MT00295/"
+   "url": "https://www.fec.gov/data/candidate/S6MT00295/",
+   "committee": null
   },
   {
    "id": "S6MT00261",
    "name": "AUSTIN, KYLE",
    "party": "LIBERTARIAN PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6MT00261/"
+   "url": "https://www.fec.gov/data/candidate/S6MT00261/",
+   "committee": null
   },
   {
    "id": "S6MT00253",
    "name": "BANKHEAD, ALANI INES",
    "party": "DEMOCRATIC PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6MT00253/"
+   "url": "https://www.fec.gov/data/candidate/S6MT00253/",
+   "committee": null
   },
   {
    "id": "S6MT00246",
    "name": "BLACKWOLF, MICHAEL JAMES MR.",
    "party": "DEMOCRATIC PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6MT00246/"
+   "url": "https://www.fec.gov/data/candidate/S6MT00246/",
+   "committee": null
   },
   {
    "id": "S6MT00287",
    "name": "BODNAR, SETH",
    "party": "INDEPENDENT",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6MT00287/"
+   "url": "https://www.fec.gov/data/candidate/S6MT00287/",
+   "committee": null
   },
   {
    "id": "S6MT00329",
    "name": "CALHOUN, LEE",
    "party": "REPUBLICAN PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6MT00329/"
+   "url": "https://www.fec.gov/data/candidate/S6MT00329/",
+   "committee": null
   },
   {
    "id": "S4MT00217",
    "name": "HUMMERT, MICHAEL",
    "party": "DEMOCRATIC PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S4MT00217/"
+   "url": "https://www.fec.gov/data/candidate/S4MT00217/",
+   "committee": null
   },
   {
    "id": "S6MT00238",
    "name": "NEILL, REILLY",
    "party": "DEMOCRATIC PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6MT00238/"
+   "url": "https://www.fec.gov/data/candidate/S6MT00238/",
+   "committee": null
   }
  ],
  "house": {
@@ -70,49 +78,56 @@
     "name": "BUSSE, RYAN",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6MT01145/"
+    "url": "https://www.fec.gov/data/candidate/H6MT01145/",
+    "committee": null
    },
    {
     "id": "H6MT01103",
     "name": "CLEVELAND, RUSSELL TYLER",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6MT01103/"
+    "url": "https://www.fec.gov/data/candidate/H6MT01103/",
+    "committee": null
    },
    {
     "id": "H6MT01152",
     "name": "FLINT, AARON",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6MT01152/"
+    "url": "https://www.fec.gov/data/candidate/H6MT01152/",
+    "committee": null
    },
    {
     "id": "H6MT01137",
     "name": "FORSTAG, SAMUEL KELLEY",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6MT01137/"
+    "url": "https://www.fec.gov/data/candidate/H6MT01137/",
+    "committee": null
    },
    {
     "id": "H6MT01160",
     "name": "JACOBSEN, CHRISTI",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6MT01160/"
+    "url": "https://www.fec.gov/data/candidate/H6MT01160/",
+    "committee": null
    },
    {
     "id": "H2MT02084",
     "name": "OLSZEWSKI, ALBERT",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H2MT02084/"
+    "url": "https://www.fec.gov/data/candidate/H2MT02084/",
+    "committee": null
    },
    {
     "id": "H0MT00116",
     "name": "RAINS, MATTHEW",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H0MT00116/"
+    "url": "https://www.fec.gov/data/candidate/H0MT00116/",
+    "committee": null
    }
   ],
   "2": [
@@ -121,28 +136,32 @@
     "name": "DOWNING, TROY",
     "party": "REPUBLICAN PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H4MT02098/"
+    "url": "https://www.fec.gov/data/candidate/H4MT02098/",
+    "committee": null
    },
    {
     "id": "H6MT02168",
     "name": "EISENHAUER, MICHAEL D. DR.",
     "party": "INDEPENDENT",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6MT02168/"
+    "url": "https://www.fec.gov/data/candidate/H6MT02168/",
+    "committee": null
    },
    {
     "id": "H6MT02143",
     "name": "LUX, SAM",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6MT02143/"
+    "url": "https://www.fec.gov/data/candidate/H6MT02143/",
+    "committee": null
    },
    {
     "id": "H6MT02150",
     "name": "MILLER, BRIAN JAMES",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6MT02150/"
+    "url": "https://www.fec.gov/data/candidate/H6MT02150/",
+    "committee": null
    }
   ]
  }

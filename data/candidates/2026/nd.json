@@ -1,0 +1,50 @@
+{
+ "state": "ND",
+ "year": 2026,
+ "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
+ "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=ND&candidate_status=C",
+ "list_built_on": "2026-10-10",
+ "built_on": "2026-10-10",
+ "senate_up": false,
+ "candidates": {
+  "H4ND00079": {
+   "id": "H4ND00079",
+   "name": "BALAZS, ALEX",
+   "party": "REPUBLICAN PARTY",
+   "office": "H",
+   "district": "0",
+   "incumbent": false,
+   "committee": null,
+   "fec_url": "https://www.fec.gov/data/candidate/H4ND00079/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H4ND00061": {
+   "id": "H4ND00061",
+   "name": "FEDORCHAK, JULIE",
+   "party": "REPUBLICAN PARTY",
+   "office": "H",
+   "district": "0",
+   "incumbent": true,
+   "committee": null,
+   "fec_url": "https://www.fec.gov/data/candidate/H4ND00061/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  },
+  "H6ND01049": {
+   "id": "H6ND01049",
+   "name": "HAMMER, TRYGVE",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "0",
+   "incumbent": false,
+   "committee": null,
+   "fec_url": "https://www.fec.gov/data/candidate/H6ND01049/",
+   "listed": true,
+   "first_listed": "2026-10-10",
+   "last_listed": "2026-10-10"
+  }
+ }
+}

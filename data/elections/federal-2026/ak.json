@@ -11,21 +11,24 @@
    "name": "PELTOLA, MARY",
    "party": "DEMOCRATIC PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6AK00276/"
+   "url": "https://www.fec.gov/data/candidate/S6AK00276/",
+   "committee": null
   },
   {
    "id": "S4AK00214",
    "name": "SULLIVAN, DAN",
    "party": "REPUBLICAN PARTY",
    "incumbent": true,
-   "url": "https://www.fec.gov/data/candidate/S4AK00214/"
+   "url": "https://www.fec.gov/data/candidate/S4AK00214/",
+   "committee": null
   },
   {
    "id": "S6AK00326",
    "name": "SULLIVAN, DANIEL J",
    "party": "REPUBLICAN PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6AK00326/"
+   "url": "https://www.fec.gov/data/candidate/S6AK00326/",
+   "committee": null
   }
  ],
  "house": {
@@ -35,28 +38,32 @@
     "name": "BEGICH, NICHOLAS III",
     "party": "REPUBLICAN PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H2AK01083/"
+    "url": "https://www.fec.gov/data/candidate/H2AK01083/",
+    "committee": null
    },
    {
     "id": "H6AK01092",
     "name": "HILL, BILL",
     "party": "INDEPENDENT",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6AK01092/"
+    "url": "https://www.fec.gov/data/candidate/H6AK01092/",
+    "committee": null
    },
    {
     "id": "H2AK01158",
     "name": "PELTOLA, MARY",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H2AK01158/"
+    "url": "https://www.fec.gov/data/candidate/H2AK01158/",
+    "committee": null
    },
    {
     "id": "H6AK01084",
     "name": "SCHULTZ, MATTHEW DAMIAN",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6AK01084/"
+    "url": "https://www.fec.gov/data/candidate/H6AK01084/",
+    "committee": null
    }
   ]
  }

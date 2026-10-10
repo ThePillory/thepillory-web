@@ -11,21 +11,24 @@
    "name": "BREWER, MARIA A",
    "party": "DEMOCRATIC PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6TN00380/"
+   "url": "https://www.fec.gov/data/candidate/S6TN00380/",
+   "committee": null
   },
   {
    "id": "S0TN00169",
    "name": "HAGERTY, BILL",
    "party": "REPUBLICAN PARTY",
    "incumbent": true,
-   "url": "https://www.fec.gov/data/candidate/S0TN00169/"
+   "url": "https://www.fec.gov/data/candidate/S0TN00169/",
+   "committee": null
   },
   {
    "id": "S6TN00398",
    "name": "SUTMAN, DAVID JR",
    "party": "INDEPENDENT",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6TN00398/"
+   "url": "https://www.fec.gov/data/candidate/S6TN00398/",
+   "committee": null
   }
  ],
  "house": {
@@ -35,14 +38,16 @@
     "name": "BURKE, KRISTI",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN01537/"
+    "url": "https://www.fec.gov/data/candidate/H6TN01537/",
+    "committee": null
    },
    {
     "id": "H0TN01118",
     "name": "HARSHBARGER, DIANA",
     "party": "REPUBLICAN PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H0TN01118/"
+    "url": "https://www.fec.gov/data/candidate/H0TN01118/",
+    "committee": null
    }
   ],
   "2": [
@@ -51,14 +56,16 @@
     "name": "BARNETT, MICHAELA",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN02170/"
+    "url": "https://www.fec.gov/data/candidate/H6TN02170/",
+    "committee": null
    },
    {
     "id": "H8TN02119",
     "name": "BURCHETT, TIM",
     "party": "REPUBLICAN PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H8TN02119/"
+    "url": "https://www.fec.gov/data/candidate/H8TN02119/",
+    "committee": null
    }
   ],
   "3": [
@@ -67,14 +74,16 @@
     "name": "FLEISCHMANN, CHARLES J",
     "party": "REPUBLICAN PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H0TN03254/"
+    "url": "https://www.fec.gov/data/candidate/H0TN03254/",
+    "committee": null
    },
    {
     "id": "H6TN03228",
     "name": "GOLLADAY, ANNA",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN03228/"
+    "url": "https://www.fec.gov/data/candidate/H6TN03228/",
+    "committee": null
    }
   ],
   "4": [
@@ -83,49 +92,56 @@
     "name": "ANDERS, JACOB KRISTOPHER",
     "party": "INDEPENDENT",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN04242/"
+    "url": "https://www.fec.gov/data/candidate/H6TN04242/",
+    "committee": null
    },
    {
     "id": "H4TN04270",
     "name": "BRODERICK, VICTORIA",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H4TN04270/"
+    "url": "https://www.fec.gov/data/candidate/H4TN04270/",
+    "committee": null
    },
    {
     "id": "H6TN05371",
     "name": "CORTESE, MIKE",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN05371/"
+    "url": "https://www.fec.gov/data/candidate/H6TN05371/",
+    "committee": null
    },
    {
     "id": "H4TN04247",
     "name": "DAVIS, THOMAS EUGENE",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H4TN04247/"
+    "url": "https://www.fec.gov/data/candidate/H4TN04247/",
+    "committee": null
    },
    {
     "id": "H0TN04195",
     "name": "DESJARLAIS, SCOTT HON.",
     "party": "REPUBLICAN PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H0TN04195/"
+    "url": "https://www.fec.gov/data/candidate/H0TN04195/",
+    "committee": null
    },
    {
     "id": "H6TN04267",
     "name": "LANIER, TIMOTHY",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN04267/"
+    "url": "https://www.fec.gov/data/candidate/H6TN04267/",
+    "committee": null
    },
    {
     "id": "H6TN05363",
     "name": "NEAL, JOYCE ELAINE ED.D.",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN05363/"
+    "url": "https://www.fec.gov/data/candidate/H6TN05363/",
+    "committee": null
    }
   ],
   "5": [
@@ -134,28 +150,32 @@
     "name": "HATCHER, CHARLIE",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN05405/"
+    "url": "https://www.fec.gov/data/candidate/H6TN05405/",
+    "committee": null
    },
    {
     "id": "H6TN05439",
     "name": "HURLEY, RACHEL",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN05439/"
+    "url": "https://www.fec.gov/data/candidate/H6TN05439/",
+    "committee": null
    },
    {
     "id": "H6TN05397",
     "name": "MOLDER, CHAZ",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN05397/"
+    "url": "https://www.fec.gov/data/candidate/H6TN05397/",
+    "committee": null
    },
    {
     "id": "H2TN05446",
     "name": "OGLES, ANDY",
     "party": "REPUBLICAN PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H2TN05446/"
+    "url": "https://www.fec.gov/data/candidate/H2TN05446/",
+    "committee": null
    }
   ],
   "6": [
@@ -164,56 +184,64 @@
     "name": "BALLIN, CRAIG",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN06247/"
+    "url": "https://www.fec.gov/data/candidate/H6TN06247/",
+    "committee": null
    },
    {
     "id": "H6TN06239",
     "name": "BERGMAN, LORE ANN",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN06239/"
+    "url": "https://www.fec.gov/data/candidate/H6TN06239/",
+    "committee": null
    },
    {
     "id": "H2TN05347",
     "name": "BROOKS, NATISHA",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H2TN05347/"
+    "url": "https://www.fec.gov/data/candidate/H2TN05347/",
+    "committee": null
    },
    {
     "id": "H6TN06171",
     "name": "CROLEY, MIKE",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN06171/"
+    "url": "https://www.fec.gov/data/candidate/H6TN06171/",
+    "committee": null
    },
    {
     "id": "H6TN06213",
     "name": "GARRETT, JOHNNY",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN06213/"
+    "url": "https://www.fec.gov/data/candidate/H6TN06213/",
+    "committee": null
    },
    {
     "id": "H6TN06262",
     "name": "HENRY, JON",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN06262/"
+    "url": "https://www.fec.gov/data/candidate/H6TN06262/",
+    "committee": null
    },
    {
     "id": "H6TN06205",
     "name": "HILLEARY, WILLIAM V.",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN06205/"
+    "url": "https://www.fec.gov/data/candidate/H6TN06205/",
+    "committee": null
    },
    {
     "id": "H6TN06270",
     "name": "MOSLEY, CHANEY",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN06270/"
+    "url": "https://www.fec.gov/data/candidate/H6TN06270/",
+    "committee": null
    }
   ],
   "7": [
@@ -222,35 +250,40 @@
     "name": "COPELAND, DARDEN HUNTER",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN07286/"
+    "url": "https://www.fec.gov/data/candidate/H6TN07286/",
+    "committee": null
    },
    {
     "id": "H6TN07229",
     "name": "DIXIE, VINCENT",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN07229/"
+    "url": "https://www.fec.gov/data/candidate/H6TN07229/",
+    "committee": null
    },
    {
     "id": "H6TN07344",
     "name": "HOLLOWAY, SALETTA",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN07344/"
+    "url": "https://www.fec.gov/data/candidate/H6TN07344/",
+    "committee": null
    },
    {
     "id": "H6TN06288",
     "name": "KOONTZ, ANDREW",
     "party": "INDEPENDENT",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN06288/"
+    "url": "https://www.fec.gov/data/candidate/H6TN06288/",
+    "committee": null
    },
    {
     "id": "H6TN07161",
     "name": "VAN EPPS, MATTHEW ROBERT",
     "party": "REPUBLICAN PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H6TN07161/"
+    "url": "https://www.fec.gov/data/candidate/H6TN07161/",
+    "committee": null
    }
   ],
   "8": [
@@ -259,21 +292,24 @@
     "name": "BRYAN, DEWEY GORDON",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN08359/"
+    "url": "https://www.fec.gov/data/candidate/H6TN08359/",
+    "committee": null
    },
    {
     "id": "H6TN08367",
     "name": "KUHN, HEIDI",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN08367/"
+    "url": "https://www.fec.gov/data/candidate/H6TN08367/",
+    "committee": null
    },
    {
     "id": "H2TN07103",
     "name": "KUSTOFF, DAVID",
     "party": "REPUBLICAN PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H2TN07103/"
+    "url": "https://www.fec.gov/data/candidate/H2TN07103/",
+    "committee": null
    }
   ],
   "9": [
@@ -282,56 +318,64 @@
     "name": "BERGMANN, CHARLOTTE",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H0TN09061/"
+    "url": "https://www.fec.gov/data/candidate/H0TN09061/",
+    "committee": null
    },
    {
     "id": "H6TN09068",
     "name": "COHEN, STEVE I MR.",
     "party": "DEMOCRATIC PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H6TN09068/"
+    "url": "https://www.fec.gov/data/candidate/H6TN09068/",
+    "committee": null
    },
    {
     "id": "H6TN09498",
     "name": "LAMAR, LONDON",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN09498/"
+    "url": "https://www.fec.gov/data/candidate/H6TN09498/",
+    "committee": null
    },
    {
     "id": "H6TN09449",
     "name": "PEARSON, JUSTIN J.",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN09449/"
+    "url": "https://www.fec.gov/data/candidate/H6TN09449/",
+    "committee": null
    },
    {
     "id": "H6TN09464",
     "name": "TAYLOR, BRENT",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN09464/"
+    "url": "https://www.fec.gov/data/candidate/H6TN09464/",
+    "committee": null
    },
    {
     "id": "H6TN09480",
     "name": "THOMPSON, JEREMY",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN09480/"
+    "url": "https://www.fec.gov/data/candidate/H6TN09480/",
+    "committee": null
    },
    {
     "id": "H6TN05355",
     "name": "TORINO, JAMES PHD",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN05355/"
+    "url": "https://www.fec.gov/data/candidate/H6TN05355/",
+    "committee": null
    },
    {
     "id": "H6TN09472",
     "name": "WARNER, WILLIAM TODD",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TN09472/"
+    "url": "https://www.fec.gov/data/candidate/H6TN09472/",
+    "committee": null
    }
   ]
  }

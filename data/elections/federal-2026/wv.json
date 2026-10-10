@@ -11,56 +11,64 @@
    "name": "CAPITO, SHELLEY MOORE",
    "party": "REPUBLICAN PARTY",
    "incumbent": true,
-   "url": "https://www.fec.gov/data/candidate/S4WV00159/"
+   "url": "https://www.fec.gov/data/candidate/S4WV00159/",
+   "committee": null
   },
   {
    "id": "S6WV00147",
    "name": "EVANS, JONATHAN DERRICK",
    "party": "REPUBLICAN PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6WV00147/"
+   "url": "https://www.fec.gov/data/candidate/S6WV00147/",
+   "committee": null
   },
   {
    "id": "S6WV00188",
    "name": "FETTY ANDERSON, RACHEL LEE",
    "party": "DEMOCRATIC PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6WV00188/"
+   "url": "https://www.fec.gov/data/candidate/S6WV00188/",
+   "committee": null
   },
   {
    "id": "S6WV00196",
    "name": "KESSLER, JEFFREY VINCENT",
    "party": "DEMOCRATIC PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6WV00196/"
+   "url": "https://www.fec.gov/data/candidate/S6WV00196/",
+   "committee": null
   },
   {
    "id": "S4WV00407",
    "name": "MCNULTY, JANET",
    "party": "REPUBLICAN PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S4WV00407/"
+   "url": "https://www.fec.gov/data/candidate/S4WV00407/",
+   "committee": null
   },
   {
    "id": "S6WV00170",
    "name": "PHILLIPS, RIO",
    "party": "INDEPENDENT",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6WV00170/"
+   "url": "https://www.fec.gov/data/candidate/S6WV00170/",
+   "committee": null
   },
   {
    "id": "S4WV00357",
    "name": "SHREWSBURY, ZACHARY C",
    "party": "DEMOCRATIC PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S4WV00357/"
+   "url": "https://www.fec.gov/data/candidate/S4WV00357/",
+   "committee": null
   },
   {
    "id": "S6WV00162",
    "name": "WILLIS, THOMAS EDWARD II",
    "party": "REPUBLICAN PARTY",
    "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6WV00162/"
+   "url": "https://www.fec.gov/data/candidate/S6WV00162/",
+   "committee": null
   }
  ],
  "house": {
@@ -70,35 +78,40 @@
     "name": "AGUIRRE, BRITTA",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6WV01137/"
+    "url": "https://www.fec.gov/data/candidate/H6WV01137/",
+    "committee": null
    },
    {
     "id": "H4WV01058",
     "name": "EVANS, JONATHAN DERRICK",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H4WV01058/"
+    "url": "https://www.fec.gov/data/candidate/H4WV01058/",
+    "committee": null
    },
    {
     "id": "H6WV01160",
     "name": "GEORGE, VINCENT RAYMOND MR.",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6WV01160/"
+    "url": "https://www.fec.gov/data/candidate/H6WV01160/",
+    "committee": null
    },
    {
     "id": "H6WV01111",
     "name": "JACKSON, LARRY",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6WV01111/"
+    "url": "https://www.fec.gov/data/candidate/H6WV01111/",
+    "committee": null
    },
    {
     "id": "H8WV03097",
     "name": "MILLER, CAROL DEVINE",
     "party": "REPUBLICAN PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H8WV03097/"
+    "url": "https://www.fec.gov/data/candidate/H8WV03097/",
+    "committee": null
    }
   ],
   "2": [
@@ -107,28 +120,32 @@
     "name": "MOORE, RILEY",
     "party": "REPUBLICAN PARTY",
     "incumbent": true,
-    "url": "https://www.fec.gov/data/candidate/H4WV02205/"
+    "url": "https://www.fec.gov/data/candidate/H4WV02205/",
+    "committee": null
    },
    {
     "id": "H6WV02150",
     "name": "PARSI, AHSAN",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6WV02150/"
+    "url": "https://www.fec.gov/data/candidate/H6WV02150/",
+    "committee": null
    },
    {
     "id": "H6WV02184",
     "name": "TOMANA, STEPHANIE",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6WV02184/"
+    "url": "https://www.fec.gov/data/candidate/H6WV02184/",
+    "committee": null
    },
    {
     "id": "H4WV02247",
     "name": "WENDELIN, STEVEN COMMANDER USN, (RET)",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H4WV02247/"
+    "url": "https://www.fec.gov/data/candidate/H4WV02247/",
+    "committee": null
    }
   ]
  }
