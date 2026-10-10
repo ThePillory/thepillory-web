@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null
-      - run: python3 tools/build_scotus.py --max-pdfs 600 2>&1 | tee tmp-research/scotus-build.log
+      - run: python3 tools/build_scotus.py --max-pdfs 600 --max-questions 600 2>&1 | tee tmp-research/scotus-build.log
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"

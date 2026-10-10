@@ -445,6 +445,33 @@ def provisions_named(text, constitution_ids):
     return out[:4]
 
 
+def question_presented(docket):
+    """(QP document URL, its question(s) presented word for word) from the docket, or (None, [])."""
+    dj = json.loads(fetch(f"{SCOTUS}/RSS/Cases/JSON/{docket}.json"))
+    qp = dj.get("QPLink")
+    if not qp:
+        return None, []
+    url = urllib.parse.urljoin(f"{SCOTUS}/docket/", qp)
+    return url, parse_qp(pdf_text(fetch(url, binary=True), layout=True))
+
+
+def add_questions(cases, budget):
+    """The question presented for each argued case (dockets like 24-1287; not applications or original cases), read once."""
+    for c in cases:
+        if budget <= 0:
+            break
+        if "qp_checked" in c or not re.fullmatch(r"\d{2}-\d+", c.get("docket", "")):
+            continue
+        budget -= 1
+        try:
+            c["qp_url"], c["question_presented"] = question_presented(c["docket"])
+            c["qp_checked"] = True
+        except Exception as e:
+            print(f"QP {c['docket']}: {type(e).__name__}", file=sys.stderr)
+        time.sleep(0.4)
+    return budget
+
+
 def build_term(term, previous, constitution_ids, budget):
     """One term's decisions. PDFs already read (same URL) are kept from the previous file."""
     try:
@@ -460,7 +487,7 @@ def build_term(term, previous, constitution_ids, budget):
     for row in rows:
         old = known.get(row["pdf"])
         if old and old.get("parser") == PARSER_VERSION:
-            cases.append({**old, **row})
+            cases.append({**old, **row})  # (the question presented, read once, stays with it)
             continue
         if budget <= 0:
             cases.append({**row, "pending_read": True})
@@ -598,6 +625,7 @@ def write(path, data):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--max-pdfs", type=int, default=150, help="opinion PDFs to read this run (the rest wait for the next)")
+    ap.add_argument("--max-questions", type=int, default=150, help="decided cases' questions presented to read this run")
     args = ap.parse_args()
     constitution_ids = {p["id"] for p in json.loads((ROOT / "data" / "constitution.json").read_text())["provisions"]}
     built = datetime.date.today().isoformat()
@@ -608,6 +636,7 @@ def main():
 
     term_now = current_term()
     budget = args.max_pdfs
+    qp_budget = args.max_questions
     terms = []
     decided_now = set()
     for term in range(term_now, OLDEST_TERM - 1, -1):
@@ -618,6 +647,7 @@ def main():
             if term < term_now:
                 break  # past the oldest term supremecourt.gov lists
             continue
+        qp_budget = add_questions(data["cases"], qp_budget)
         write(path, {**data, "built_on": built})
         terms.append(term)
         if term == term_now:
