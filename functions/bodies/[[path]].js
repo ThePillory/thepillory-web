@@ -1,4 +1,7 @@
 // /bodies/<slug>/   a governing body: its members, and (for the Board of Supervisors) its meetings, from D1.
+// The U.S. Senate and House take ?state=XX (the links from a state's page): that
+// state's members first, then "Your members" from saved districts only when
+// they're in a different state, then Members by state.
 import { BODIES, LEVEL_NAME } from "../_lib/generated.js";
 import { page, notFound, esc, linkRow, section, guard } from "../_lib/render.js";
 import { safe, officialsForBody, officialsWhere } from "../_lib/data.js";
@@ -36,15 +39,28 @@ export const onRequestGet = guard(async (context) => {
   const executive = b.slug === "us-executive" || b.slug === "ca-executive";
   const federal = b.level === "federal" && !executive;
   const d = districtsFromCookie(context.request);
+  const asked = String(url.searchParams.get("state") || "").toUpperCase();
+  const st = federal && STATE_NAME[asked] ? asked : null;
+  // Your own members only when they aren't the state already shown.
+  const mine = federal && d && d.st !== st;
   const data = await safe(context.env, async (db) => ({
+    stateMembers: st ? await officialsWhere(db, { sql: "o.active = 1 AND o.chamber = ? AND o.state = ?", binds: [b.slug, st] }) : null,
     members: federal
-      ? d ? (await officialsWhere(db, repsWhere(d))).filter((o) => o.body === b.slug) : []
+      ? mine ? (await officialsWhere(db, repsWhere(d))).filter((o) => o.body === b.slug) : []
       : await officialsForBody(db, b.slug),
     meetings: county ? await meetingsFor(db, b.slug) : null,
   }));
   const members = data ? data.members : null;
+  const row = (o) => linkRow(`/reps/${o.slug}/`, o.name, [o.office, o.district].filter(Boolean).join(" · "));
+  const stateSection = st
+    ? section(`${STATE_NAME[st]}'s members`, `<div>${
+        data && data.stateMembers && data.stateMembers.length
+          ? data.stateMembers.map(row).join("")
+          : `<p class="secondary small">${data ? `Coming soon for ${esc(STATE_NAME[st])}.` : "Not loaded yet. Members appear after the data sync runs."}</p>`
+      }</div>`)
+    : "";
   const memberRows = members && members.length
-    ? members.map((o) => linkRow(`/reps/${o.slug}/`, o.name, [o.office, o.district].filter(Boolean).join(" · "))).join("")
+    ? members.map(row).join("")
     : `<p class="secondary small">${
         !data ? "Not loaded yet. Members appear after the data sync runs."
           : federal ? `<a class="inline-link" href="/#find">Find your representatives</a> to see yours here.`
@@ -83,7 +99,8 @@ export const onRequestGet = guard(async (context) => {
   <div class="secondary">${esc(b.about)}</div>
   <div class="chips">${b.chip}</div>
 </header>
-${section(federal ? "Your members" : "Members", `<div>${memberRows}</div>`)}
+${stateSection}
+${!federal || !st || mine ? section(federal ? "Your members" : "Members", `<div>${memberRows}</div>`) : ""}
 ${byState}
 ${meetings}
 <p class="hint">${

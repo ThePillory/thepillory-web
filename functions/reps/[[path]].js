@@ -58,7 +58,7 @@ function repCard(o) {
 function stateChips(current) {
   return Object.entries(STATE_NAME)
     .sort((x, y) => x[1].localeCompare(y[1]))
-    .map(([code, name]) => `<a class="chip state-chip${code === current ? " is-current" : ""}" href="/reps/?state=${code}#browse"${code === current ? ' aria-current="true"' : ""}>${esc(name)}</a>`)
+    .map(([code, name]) => `<a class="chip state-chip${code === current ? " is-current" : ""}" href="/reps/?state=${code}#state-list"${code === current ? ' aria-current="true"' : ""}>${esc(name)}</a>`)
     .join("");
 }
 
@@ -110,6 +110,7 @@ async function list(env, url, request) {
   <h1>Reps</h1>
   <p class="subtitle">The President and Cabinet, members of Congress, California's Governor, statewide officers and legislators, and Calaveras County supervisors, with the record they keep.</p>
 </header>
+${browse}
 ${lookupForm(d, { heading: d ? "Change your location" : "Find your representatives" })}
 ${mineHtml}
 <section class="stack" id="executive">
@@ -126,7 +127,6 @@ ${mineHtml}
   <h2 class="label">Browse members of Congress by state</h2>
   <div class="chips">${stateChips(st)}</div>
 </section>
-${browse}
 <p class="hint">Every official here is loaded from an official source, linked on their page, with the date it was last checked.</p>`;
   return page("Reps", main, { tab: "reps", root: true, personal: !!d, partial: anyFailed(mine, state, federalExec, caExec) });
 }
