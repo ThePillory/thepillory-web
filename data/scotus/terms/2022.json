@@ -10,17 +10,18 @@
    "summary": "The First Amendment prohibits Colorado from forcing a website designer to create expressive designs speaking messages with which the designer disagrees.",
    "author_code": "NG",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/600us1r58_7khn.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
    "lineup": [],
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "Ottaviano, and Nathalie Gilfoyle; for First Amendment Scholars by Elizabeth B."
+     "quote": null
     },
     {
      "id": "amend-5",
-     "quote": "In Heart of Atlanta Motel, one of several arguments made by the plaintiff motel owner was that Title II violated his Fifth Amendment due process 620 303 CREATIVE LLC v."
+     "quote": null
     }
    ]
   },
@@ -32,13 +33,27 @@
    "summary": "Respondents lack Article III standing to assert a procedural challenge to the student-loan debt-forgiveness plan adopted by the Secretary of Education pursuant to Higher Education Relief Opportunities for Students Act of 2003 (HEROES Act).",
    "author_code": "A",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/600us1r57_o7kq.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "art-3",
-     "quote": "“We have `an obligation to assure ourselves' of litigants' standing under Article III” before proceeding to the merits of a case."
+     "quote": null
     }
    ]
   },
@@ -50,17 +65,92 @@
    "summary": "The Secretary of Education does not have authority under the Higher Education Relief Opportunities for Students Act of 2003 (HEROES Act) to establish a student loan forgiveness program that will cancel roughly $430 billion in debt principal and affect nearly all borrowers.",
    "author_code": "R",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/600us1r56_1o13.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "Amtrak argued that it was not subject to the First Amendment because it was a corporation separate from the Federal Government."
+     "quote": null
     },
     {
      "id": "art-3",
-     "quote": "Under Article III of the Constitution, a plaintiff needs a “personal stake” in the case."
+     "quote": null
     }
    ]
   },
@@ -72,13 +162,43 @@
    "summary": "Title VII requires an employer that denies a religious accommodation to show that the burden of granting an accommodation would result in substantial increased costs in relation to the conduct of its particular business.",
    "author_code": "A",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/600us1r55_3dq4.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "In 1970, the Sixth Circuit held (in a Sabbath case) that Title VII as then written did not require an employer “to accede to or accommodate” religious practice because that “would raise grave” Establishment Clause questions."
+     "quote": null
     }
    ]
   },
@@ -90,13 +210,88 @@
    "summary": "Applying the presumption against extraterritoriality, two provisions of the Lanham Act that prohibit trademark infringement—15 U. S. C. §1114(1)(a) and §1125(a)(1)—are not extraterritorial and extend only to claims where the infringing “use in commerce” is domestic.",
    "author_code": "A",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/600us1r54_g3bi.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "art-1-sec-8-cl-3",
-     "quote": "First, it argues that the language naturally leads to this result because Congress can lawfully regulate foreign conduct under the Foreign Commerce Clause."
+     "quote": null
     }
    ]
   },
@@ -108,25 +303,109 @@
    "summary": "The admissions programs at Harvard College and the University of North Carolina violate the Equal Protection Clause of the Fourteenth Amendment.",
    "author_code": "R",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/600us1r53_4g15.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent",
+       "took no part"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "This compelling interest in student body diversity is grounded not only in the Court's equal protection jurisprudence but also in principles of “academic freedom,” which “ `long [have] been viewed as a special concern of the First Amendment.' ” Id., at 324 (quoting Bakke, 438 U."
+     "quote": null
     },
     {
      "id": "amend-4",
-     "quote": "873 (1975) (Fourth Amendment case), and United States v."
+     "quote": null
     },
     {
      "id": "amend-14",
-     "quote": "Rosenblum of Oregon, Josh Shapiro of PennCarolina, two of the oldest institutions of higher learning in the United States, are lawful under the Equal Protection Clause of the Fourteenth Amendment. sylvania, Peter F."
+     "quote": null
     },
     {
      "id": "art-3",
-     "quote": "Article III of the Constitution limits “[t]he judicial power of the United States” to “cases” or “controversies,” ensuring that federal courts act only “as a necessity in the determination of real, earnest and vital” disputes."
+     "quote": null
     }
    ]
   },
@@ -138,21 +417,99 @@
    "summary": "A Pennsylvania law requiring out-of-state companies that register to do business in Pennsylvania to agree to appear in Pennsylvania courts on “any cause of action” against them comports with the Due Process Clause under Pennsylvania Fire Ins. Co. of Philadelphia v. Gold Issue Mining & Milling Co., 243 U. S. 93 (1917).",
    "author_code": "NG",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/600us1r52_7l48.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "concurrence in the judgment",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-14",
-     "quote": "Everyone before us agrees a Pennsylvania court could hear that lawsuit consistent with the Due Process Clause of the Fourteenth Amendment."
+     "quote": null
     },
     {
      "id": "art-1-sec-8-cl-3",
-     "quote": "––– (2022).3 The Pennsylvania Supreme Court did not address Norfolk Southern's alternative argument that Pennsylvania's statutory scheme as applied here violates this Court's dormant Commerce Clause doctrine."
+     "quote": null
     },
     {
      "id": "art-4-sec-1",
-     "quote": "404 (1856), hardly helps—that decision approved a consent-to-suit regime for out-of-state corporations under the Full Faith and Credit Clause."
+     "quote": null
     }
    ]
   },
@@ -164,13 +521,89 @@
    "summary": "To establish that a statement is a “true threat” unprotected by the First Amendment, the State must prove that the defendant had some subjective understanding of the statements’ threatening nature, based on a showing no more demanding than recklessness.",
    "author_code": "EK",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/600us1r51_g3bi.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "True threats of violence are outside the bounds of First Amendment protection and punishable as crimes."
+     "quote": null
     }
    ]
   },
@@ -182,25 +615,100 @@
    "summary": "The Federal Elections Clause does not vest exclusive and independent authority in state legislatures to set the rules regarding federal elections and therefore did not bar the North Carolina Supreme Court from reviewing the North Carolina Legislature’s congressional districting plans for compliance with North Carolina law.",
    "author_code": "R",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/600us1r50_h3ci.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-5",
-     "quote": "As a result, States “may not sidestep the Takings Clause by disavowing traditional property interests.” Phillips v."
+     "quote": null
     },
     {
      "id": "amend-14",
-     "quote": "McPherson instead considered whether Michigan's Legislature itself directly violated the Electors Clause (by taking from the “State” the power to appoint and vesting that power in separate districts), the Fourteenth Amendment (by allowing voters to vote for only one Elector rather than “Electors”), and a particular federal statute."
+     "quote": null
     },
     {
      "id": "art-1-sec-4-cl-1",
-     "quote": "In drawing the State's congressional map, North Carolina's Legislature exercised authority under the Elections Clause of the Federal Constitution, which expressly requires “the Legislature” of each State to prescribe “[t]he Times, Places and Manner of ” federal elections."
+     "quote": null
     },
     {
      "id": "art-2-sec-1-cl-2",
-     "quote": "Turning to our precedents, the defendants quote from our analysis of the Electors Clause in McPherson v."
+     "quote": null
     }
    ]
   },
@@ -212,17 +720,92 @@
    "summary": "Title 8 U. S. C. §1324(a)(1)(A)(iv)—which criminalizes “encouraging or inducing” illegal immigration—forbids only the purposeful solicitation and facilitation of specific acts known to violate federal law and is not unconstitutionally overbroad.",
    "author_code": "AB",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r49_jgkn.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "After concluding that this statute criminalizes immigration advocacy and other protected speech, the Ninth Circuit held it unconstitutionally overbroad under the First Amendment."
+     "quote": null
     },
     {
      "id": "amend-14",
-     "quote": "762, 778 (1977) (Rehnquist, J., dissenting) (suspect classifcations under the Fourteenth Amendment); Griswold v."
+     "quote": null
     }
    ]
   },
@@ -234,9 +817,81 @@
    "summary": "A district court must stay its proceedings while an interlocutory appeal taken pursuant to 9 U. S. C. §16(a) on the question of arbitrability is ongoing.",
    "author_code": "BK",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r48_986b.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": []
   },
   {
@@ -247,25 +902,101 @@
    "summary": "Texas and Louisiana lack Article III standing to challenge immigration-enforcement guidelines promulgated by the Secretary of Homeland Security that prioritize the arrest and removal of certain noncitizens from the United States.",
    "author_code": "BK",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r47_8m58.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "And it did so, not as part of a standing analyPage Proof Pending Publication sis, but as part of its explanation for rejecting two employers' attempt to assert that seeking to have employees deported as retaliation for union activity was “an aspect of their First Amendment right `to petition the Government for a redress of grievances.' ” Id., at 896."
+     "quote": null
     },
     {
      "id": "amend-14",
-     "quote": "First, the Court has adjudicated selective-prosecution claims under the Equal Protection Clause."
+     "quote": null
     },
     {
      "id": "art-2-sec-3",
-     "quote": "The States have pleaded a claim under the Take Care Clause."
+     "quote": null
     },
     {
      "id": "art-3",
-     "quote": "Consistent with that fundamental Article III principle, we conclude that the States lack Article III standing to bring this suit."
+     "quote": null
     }
    ]
   },
@@ -277,17 +1008,18 @@
    "summary": "The admission of a nontestifying codefendant’s confession did not violate the Sixth Amendment’s Confrontation Clause where the confession as modified did not directly inculpate the defendant but used the descriptor “other person” and the jury was instructed to consider the confession only as to the codefendant.",
    "author_code": "T",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r46_dc8f.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
    "lineup": [],
    "provisions": [
     {
      "id": "amend-5",
-     "quote": "This presumption works in tandem with a defendant's Fifth Amendment right not to testify against himself, by ensuring that jurors do not draw an adverse inference from his choice not to testify."
+     "quote": null
     },
     {
      "id": "amend-6",
-     "quote": "The Confrontation Clause of the Sixth Amendment states that, “[i]n all criminal prosecutions, the accused shall enjoy the right . . . to be confronted with the witnesses against him.” And, in Bruton v."
+     "quote": null
     }
    ]
   },
@@ -299,9 +1031,84 @@
    "summary": "An offense may “relate to” obstruction of justice under the Immigration and Nationality Act’s definition of an “aggravated felony,” 8 U. S. C. §1101(a)(43)(S), even if the offense does not require that an investigation or proceeding be pending.",
    "author_code": "BK",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r45_6537.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": []
   },
   {
@@ -312,9 +1119,84 @@
    "summary": "The 1868 treaty establishing the Navajo Reservation reserved necessary water to accomplish the purpose of the Navajo Reservation but did not require the United States to take affirmative steps to secure water for the Tribe.",
    "author_code": "BK",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r44_54l8.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": []
   },
   {
@@ -325,9 +1207,81 @@
    "summary": "A plaintiff alleges a “domestic injury” as required by RJR Nabisco, Inc. v. European Community, 579 U. S. 325, for filing a private civil suit under the Racketeer Influenced and Corrupt Organizations Act, 18 U. S. C. §1964(c), when the circumstances surrounding the injury indicate it arose in the United States.",
    "author_code": "SS",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r43_jhek.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": []
   },
   {
@@ -338,17 +1292,93 @@
    "summary": "The saving clause in 28 U. S. C. §2255(e) does not allow a prisoner asserting an intervening change in the interpretation of a criminal statute to circumvent the Antiterrorism and Effective Death Penalty Act of 1996’s restrictions on second or successive §2255 motions by filing a habeas petition under §2241.",
    "author_code": "T",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r42_2b35.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-6",
-     "quote": "In the majority's view, by seeking to vindicate his Sixth Amendment rights in this way, Jones has forfeited, forever and for all time, his right to rely on any new retroactive Supreme Court opinion that suggests he is incarcerated for noncrimiPage Proof Pending Publication nal behavior."
+     "quote": null
     },
     {
      "id": "amend-8",
-     "quote": "Jones' last constitutional contention—that the Eighth Amendment's prohibition on cruel and unusual punishments may entitle him to another round of collateral review—fails similar argument for ordering pretrial release."
+     "quote": null
     }
    ]
   },
@@ -360,13 +1390,27 @@
    "summary": "The bar on imposition of concurrent sentences in 18 U. S. C. §924(c)(1)(D)(ii) does not apply to a sentence for a §924(j) conviction; a §924(j) sentence can run either concurrently with or consecutively to another sentence.",
    "author_code": "KJ",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r41_2bo2.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-5",
-     "quote": "According to the Government's brief, “Section 924( j) amounts to the `same offense' as Section 924(c) for purposes of the Double Jeopardy Clause,” so “a defendant may be punished for either a Section 924(c) offense or a Section 924( j) offense, but not both.” Brief for United States 22–26 (emphasis added; alterations and some internal quotation marks omitted)."
+     "quote": null
     }
    ]
   },
@@ -378,25 +1422,101 @@
    "summary": "In a qui tam action filed under the False Claims Act, the United States may move to dismiss under 31 U. S. C. §3730(c)(2)(A) whenever it has intervened—whether during the seal period or later on; in assessing a motion to dismiss an FCA action over a relator’s objection, district courts should apply the rule generally governing voluntary dismissal of suits in ordinary civil litigation—Federal Rule of Civil Procedure 41(a).",
    "author_code": "EK",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r40_q8l1.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "art-1-sec-8-cl-18",
-     "quote": "One candidate might be the Necessary and Proper Clause, Art."
+     "quote": null
     },
     {
      "id": "art-2-sec-2-cl-2",
-     "quote": "for vindicating public rights” of the United States is an “executive functio[n]” that “may be discharged only by persons who are `Offcers of the United States' ” under the Appointments Clause, Art."
+     "quote": null
     },
     {
      "id": "art-3",
-     "quote": "In Stevens, we read this language “as effecting a partial assignment of the Government's damages claim,” which provided “the theoretical justifcation” for our holding “that a qui tam relator under the FCA has Article III standing.” 529 U."
+     "quote": null
     },
     {
      "id": "art-2",
-     "quote": "I add only that I agree with Justice Thomas that “[t]here are substantial arguments that the qui tam device is inconsistent with Article II and that private relators may not represent the interests of the United States in litigation.” Post, at 449 (dissenting opinion)."
+     "quote": null
     }
    ]
   },
@@ -408,21 +1528,95 @@
    "summary": "The Bankruptcy Code unequivocally abrogates the sovereign immunity of all governments, including federally recognized Indian tribes.",
    "author_code": "KJ",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r39_3204.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-14",
-     "quote": "For example, while Congress has certain legislative authority over tribal lands, the Tribes themselves need not abide by the Bill of Rights or the Fourteenth Amendment."
+     "quote": null
     },
     {
      "id": "art-1-sec-8-cl-3",
-     "quote": "One is the Commerce Clause, which gives Congress the power to regulate “Commerce” “with foreign Nations,” “among the several States,” and “with the Indian Tribes.” Art."
+     "quote": null
     },
     {
      "id": "art-3",
-     "quote": "Georgia, “three distinct views of tribal sovereignty emerged” on the question whether, “for purposes of Article III,” the Cherokee Nation was a “foreign nation.” R."
+     "quote": null
     }
    ]
   },
@@ -434,25 +1628,107 @@
    "summary": "In child custody proceedings governed by the Indian Child Welfare Act, the Court affirms the Fifth Circuit’s conclusion that ICWA is consistent with Congress’s Article I authority, rejects petitioners’ anticommandeering challenges under the Tenth Amendment, and finds the parties lack standing to litigate their other challenges to ICWA’s placement preferences.",
    "author_code": "AB",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r38_khmp.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-5",
-     "quote": "In doing so, some of those criminal law cases reasoned that the Double Jeopardy Clause permits separate punishments by tribal governments and the Federal Government because of the tribe's separate sovereignty, underscoring Kagama's conceptual root."
+     "quote": null
     },
     {
      "id": "amend-10",
-     "quote": "Petitioners' Tenth Amendment arguments effectively succeeded across the board."
+     "quote": null
     },
     {
      "id": "amend-11",
-     "quote": "44 (1996), we held that Congress's power under the Indian Commerce Clause was limited by “the background principle of state sovereign immunity embodied in the Eleventh Amendment.” Id., at 72."
+     "quote": null
     },
     {
      "id": "amend-14",
-     "quote": "346, 362 (1970) (the Equal Protection Clause secures Page Proof Pending Publication the right of individuals “to be considered” for government positions and benefts “without the burden of invidiously discriminatory disqualifcations”)."
+     "quote": null
     }
    ]
   },
@@ -464,21 +1740,35 @@
    "summary": "The Constitution permits the retrial of a defendant following a trial in an improper venue conducted before a jury drawn from the wrong district.",
    "author_code": "A",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r37_8m59.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-5",
-     "quote": "improper did not adjudicate Smith's culpability, and thus does not trigger the Double Jeopardy Clause."
+     "quote": null
     },
     {
      "id": "amend-6",
-     "quote": "In all other circumstances, we have found that retrial is the strongest appropriate remedy, and we have applied this rule to every other Clause of the Sixth Amendment except for the Vicinage Clause (which we now address along with the Venue Clause).3 B Against this backdrop, we are asked to consider whether violations of the Venue and Vicinage Clauses are exceptions to the retrial rule."
+     "quote": null
     },
     {
      "id": "amend-14",
-     "quote": "400, 406 (1942) (holding that a State may fle a new indictment following the postconviction dismissal of an indictment under the Equal Protection Clause); United States v."
+     "quote": null
     }
    ]
   },
@@ -490,9 +1780,90 @@
    "summary": "The provisions of the Federal Nursing Home Reform Act at issue unambiguously create rights enforceable under 42 U. S. C. §1983, and private enforcement under §1983 is compatible with the FNHRA’s remedial scheme.",
    "author_code": "KJ",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r36_feah.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-10",
@@ -500,15 +1871,15 @@
     },
     {
      "id": "amend-11",
-     "quote": "15 (“[T]he distinction in our Eleventh Amendment jurisprudence between States and municipalities is of no relevance here”). 204 HEALTH AND HOSPITAL CORPORATION OF MARION CTY. v."
+     "quote": null
     },
     {
      "id": "amend-14",
-     "quote": "Those provisions lacked “rights-creating language,” primarily directed The Fourteenth Amendment hardly fails to secure § 1983-enforceable rights because it directs state actors not to deny equal protection. 186 HEALTH AND HOSPITAL CORPORATION OF MARION CTY. v."
+     "quote": null
     },
     {
      "id": "art-1-sec-8-cl-3",
-     "quote": "It is obvious, however, that conditional spending legislation does not function—and, in particular, does not “secure rights”—like laws enacted under Congress' enumerated legislative powers, such as the Commerce Clause."
+     "quote": null
     }
    ]
   },
@@ -520,13 +1891,66 @@
    "summary": "When a defendant in a trademark suit uses the mark as a designation of source for its own goods or services—i.e., as a trademark—the threshold Rogers test for trademark infringement claims challenging so-called expressive works, see Rogers v. Grimaldi, 875 F. 2d 994, does not apply, and the Lanham Act’s exclusion from liability for “[a]ny noncommerical use of a mark,” §1125(c)(3)(C), does not shield parody, criticism, or commentary from a claim of trademark dilution.",
    "author_code": "EK",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r35_3f14.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "On the court's view, the First Amendment compels a stringent threshold test when an infringement suit challenges a socalled expressive work—here (so said the court), the Bad and Adam G."
+     "quote": null
     }
    ]
   },
@@ -538,9 +1962,81 @@
    "summary": "Under 18 U. S. C. §1028A(a)(1)’s crime of “aggravated identity theft,” a defendant “uses” another person’s means of identification “in relation to” a predicate offense when the use is at the crux of what makes the conduct criminal.",
    "author_code": "SS",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r34_p86b.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     }
+    ]
+   },
    "provisions": []
   },
   {
@@ -551,17 +2047,63 @@
    "summary": "Plaintiffs demonstrated a reasonable likelihood of success on their claim that the districting plan adopted by the State of Alabama for its 2022 congressional elections likely violated §2 of the Voting Rights Act, 52 U. S. C. §10301.",
    "author_code": "R",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r33_dc8f.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-14",
-     "quote": "Seeking to navigate any tension between the two, the Dole Amendment borrowed language from a Fourteenth Amendment case of ours, White v."
+     "quote": null
     },
     {
      "id": "amend-15",
-     "quote": "I A Shortly after the Civil War, Congress passed and the States ratifed the Fifteenth Amendment, providing that “[t]he right of citizens of the United States to vote shall not be denied or abridged . . . on account of race, color, or previous condition of servitude.” U."
+     "quote": null
     }
    ]
   },
@@ -573,9 +2115,85 @@
    "summary": "The National Labor Relations Act did not preempt Glacier’s state tort claims related to the destruction of company property during a labor dispute where the Union failed to take reasonable precautions to avoid foreseeable and imminent danger to the property.",
    "author_code": "AB",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us2r32_ca7d.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
    "provisions": []
   },
   {
@@ -586,9 +2204,23 @@
    "summary": "To state a claim under §11(a) of the Securities Act of 1933, a plaintiff must allege the purchase of “such security” issued pursuant to a materially misleading registration statement.",
    "author_code": "NG",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us2r31_5h26.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
    "provisions": []
   },
   {
@@ -599,7 +2231,8 @@
    "summary": "The False Claims Act’s scienter element—which asks whether a defendant “knowingly” submitted a “false” claim to the Government, 31 U. S. C. §3729(a)—refers to a defendant’s knowledge and subjective beliefs—not to what an objectively reasonable person may have known or believed.",
    "author_code": "T",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us2r30_g2bh.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
    "lineup": [],
    "provisions": []
@@ -612,13 +2245,27 @@
    "summary": "A post-trial motion under Federal Rule of Civil Procedure 50 is not required to preserve for appellate review a purely legal issue resolved at summary judgment.",
    "author_code": "AB",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us2r29_k5fm.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-14",
-     "quote": "§ 1983, alleging that they had used excessive force in violation of his Fourteenth Amendment due process rights."
+     "quote": null
     }
    ]
   },
@@ -630,13 +2277,91 @@
    "summary": "The Clean Water Act extends only to wetlands that have a continuous surface connection with “waters” of the United States—i.e., with a relatively permanent body of water connected to traditional interstate navigable waters, 33 U. S. C. §1362(7)—making it difficult to determine where the water ends and the wetland begins.",
    "author_code": "A",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us2r28_hgcj.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "art-1-sec-8-cl-3",
-     "quote": "The Federal Government's authority over certain navigable waters is granted and limited by the Commerce Clause, which grants Congress power to “regulate Commerce with foreign Nations, and among the several States, and with the Indian Tribes.” Art."
+     "quote": null
     }
    ]
   },
@@ -648,21 +2373,51 @@
    "summary": "Petitioner Geraldine Tyler plausibly alleges that Hennepin County unconstitutionally retained the excess value of her home above her tax debt in violation of the Takings Clause.",
    "author_code": "R",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us2r27_aplc.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-5",
-     "quote": "The question presented is whether this constituted a taking of property without just compensation, in violation of the Fifth Amendment. et al. by Donald F."
+     "quote": null
     },
     {
      "id": "amend-8",
-     "quote": "As relevant, she brought claims under the Takings Clause of the Fifth Amendment and the Excessive Fines Clause of the Eighth Amendment."
+     "quote": null
     },
     {
      "id": "amend-14",
-     "quote": "III A The Takings Clause, applicable to the States through the Fourteenth Amendment, provides that “private property [shall not] be taken for public use, without just compensation.” U."
+     "quote": null
     }
    ]
   },
@@ -674,7 +2429,8 @@
    "summary": "After determining that the FDIC had made two legal errors in adjudicating petitioner’s case, the Sixth Circuit’s proper course was to remand the matter back to the FDIC for further consideration; the Sixth Circuit erred by conducting its own review of the record and affirming the FDIC’s sanctions against petitioner based on a legal rationale different from the one adopted by the FDIC.",
    "author_code": "PC",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us2r26_feag.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
    "lineup": [],
    "provisions": []
@@ -687,13 +2443,14 @@
    "summary": "The Ninth Circuit’s judgment—which held that plaintiffs’ complaint was barred by §230 of the Communications Decency Act—is vacated, and the case is remanded for reconsideration in light of the Court’s decision in Twitter, Inc. v. Taamneh, 598  U. S. ___.",
    "author_code": "PC",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us2r25_i32j.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
    "lineup": [],
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "Schapiro, Margret Caruso, and Rachel Herrick Kassabian; for the Knight First Amendment Institute at Columbia University by Scott Wilkens, Alex Abdo, and Jameel Jaffer; for the Marketplace Industry Association et al. by Albert Giang; for Meta Platforms, Inc., by Paul D."
+     "quote": null
     }
    ]
   },
@@ -705,9 +2462,23 @@
    "summary": "Amgen’s two patent applications—purporting to cover all antibodies that bind and block the PCSK9 receptor involved in LDL cholesterol metabolism—fail to satisfy the Patent Act’s enablement clause, see 35 U. S. C. §112(a).",
    "author_code": "NG",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us2r24_m6hn.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
    "provisions": []
   },
   {
@@ -718,9 +2489,85 @@
    "summary": "The “purpose and character” of the Andy Warhol Foundation’s particular commercial use of Lynn Goldsmith’s photograph—17 U. S. C. §107(1)—does not favor AWF’s “fair use” defense to copyright infringement.",
    "author_code": "SS",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us2r23_c0n2.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": []
   },
   {
@@ -731,13 +2578,36 @@
    "summary": "Plaintiffs’ allegations that the social-media-company defendants aided and abetted ISIS in its terrorist attack on a nightclub in Istanbul, Turkey fail to state a claim under 18 U. S. C. §2333(d)(2).",
    "author_code": "T",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us2r22_hejm.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "844, 857, 874 (1997) (holding parts of § 223 unconstitutional under the First Amendment)."
+     "quote": null
     }
    ]
   },
@@ -749,13 +2619,85 @@
    "summary": "The Federal Labor Relations Authority had jurisdiction over this labor dispute because a State National Guard acts as a federal agency for purposes of the Federal Service Labor-Management Relations Statute, 5 U. S. C. §7101 et seq., when it hires and supervises dual-status technicians serving in their civilian role.",
    "author_code": "T",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us2r21_5425.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "art-3",
-     "quote": "And the Federal Government could bring a suit against petitioners in an Article III court to enforce the technicians' bargaining rights."
+     "quote": null
     }
    ]
   },
@@ -767,9 +2709,39 @@
    "summary": "When the Internal Revenue Service issues a summons pursuant to 26 U. S. C. §7602(a) in aid of collecting a tax liability, the exception to the notice requirement in §7609(c)(2)(D)(i) applies even if the delinquent taxpayer has no legal interest in the accounts or records summoned.",
    "author_code": "R",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us2r20_b07d.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": []
   },
   {
@@ -780,9 +2752,81 @@
    "summary": "Title 8 U. S. C. §1252(d)(1)—which requires noncitizens to “exhaus[t] all administrative remedies . . . as of right” before challenging a Board of Immigration Appeals final order of removal in federal court—is not a jurisdictional provision and does not require noncitizens to request discretionary forms of review.",
    "author_code": "KJ",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us2r19_dc8f.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": []
   },
   {
@@ -793,21 +2837,102 @@
    "summary": "The judgment of the Court of Appeals for the Ninth Circuit—affirming the dismissal of a complaint challenging California’s Proposition 12 under a dormant Commerce Clause rationale not grounded in an allegation that the law purposefully discriminates against out-of-state economic interests—is affirmed.",
    "author_code": "NG",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us2r18_g2bh.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "concurring in part",
+       "majority"
+      ],
+      "wrote": [
+       "concurring in part"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "concurring in part",
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "concurring in part",
+       "majority"
+      ],
+      "wrote": [
+       "concurring in part"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "concurring in part and dissenting in part"
+      ],
+      "wrote": [
+       "concurring in part and dissenting in part"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "concurring in part and dissenting in part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "concurring in part and dissenting in part"
+      ],
+      "wrote": [
+       "concurring in part and dissenting in part"
+      ]
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "concurring in part and dissenting in part"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-4",
-     "quote": "753, 760 (1985) (“The reasonableness” under the Fourth Amendment “of surgical intrusions beneath the skin depends on a case-by-case approach, in which the individual's interests in privacy and security are weighed against society's interests in conducting the procedure.”); Addington v."
+     "quote": null
     },
     {
      "id": "art-1-sec-8-cl-3",
-     "quote": "Leitner and Joseph ducers fled this lawsuit, arguing that the law unconstitutionally interferes with their preferred way of doing business in violation of this Court's dormant Commerce Clause precedents."
+     "quote": null
     },
     {
      "id": "art-4-sec-1",
-     "quote": "This Court has invoked as well a number of the Constitution's express provisions—including “the Due Process Clause and the Full Faith and Credit Clause.” Phillips Petroleum Co. v."
+     "quote": null
     }
    ]
   },
@@ -819,17 +2944,89 @@
    "summary": "Nothing in the Puerto Rico Oversight, Management, and Economic Stability Act—including its jurisdictional provision, 48 U. S. C. §2126(a)—categorically abrogates any sovereign immunity the Financial Oversight and Management Board for Puerto Rico enjoys from legal claims.",
    "author_code": "EK",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us2r17_c0nd.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-4",
-     "quote": "For example, we explained in Grubbs that it would “mak[e] little sense to address what the Fourth Amendment requires of anticipatory search warrants if it does not allow them at all.” 547 U."
+     "quote": null
     },
     {
      "id": "amend-11",
-     "quote": "From the start, the Board has asserted only that it possesses what it has called “Eleventh Amendment immunity.” The First Circuit agreed, explaining that it “has long treated Page Proof Pending Publication Puerto Rico like a state for Eleventh Amendment purposes.” 35 F. 4th, at 14."
+     "quote": null
     }
    ]
   },
@@ -841,13 +3038,85 @@
    "summary": "Jury instructions on the legal standard for finding that a private citizen owes the government a duty of honest services based on the Second Circuit’s decision in United States v. Margiotta, 688 F. 2d 108 (1982), were erroneous.",
    "author_code": "A",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us2r16_4gdj.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority in part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "That is so, the Court reasons, because it could result in the conviction of anyone whose “clout exPage Proof Pending Publication ceeds some ill-defned threshold” and thus sweep in “effective lobbyists” exercising their First Amendment right to petition the government."
+     "quote": null
     }
    ]
   },
@@ -859,9 +3128,32 @@
    "summary": "The Second Circuit’s right-to-control theory—under which the Government can establish federal wire fraud by showing that the defendant schemed to deprive a victim of potentially valuable economic information necessary to make discretionary economic decisions—cannot form the basis for a conviction under the federal fraud statutes because the right to control is not grounded in a traditional property interest.",
    "author_code": "T",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us2r15_d1o2.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     }
+    ]
+   },
    "provisions": []
   },
   {
@@ -872,9 +3164,23 @@
    "summary": "Section 363(m) of the Bankruptcy Code—which restricts the effects of certain successful appeals of judicially authorized sales or leases of bankruptcy-estate property—is not a jurisdictional provision.",
    "author_code": "KJ",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us1r14_3e04.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
    "provisions": []
   },
   {
@@ -885,17 +3191,89 @@
    "summary": "The District Court has jurisdiction of this criminal prosecution under 18 U. S. C. §3231, and the Foreign Sovereign Immunities Act’s comprehensive scheme governing claims of immunity in civil actions against foreign states and their instrumentalities does not cover criminal cases.",
    "author_code": "BK",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us1r13_3e04.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurring in part and dissenting in part"
+      ],
+      "wrote": [
+       "concurring in part and dissenting in part"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "concurring in part and dissenting in part"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "art-6-cl-2",
-     "quote": "And if there is no federal law at work here that might apply under the Supremacy Clause, only general common-law principles, what constraints remain on state prosecutions of foreign sovereigns? * * * Today's decision overcomplicates the law for no good reason."
+     "quote": null
     },
     {
      "id": "art-3",
-     "quote": "Perhaps Article III incorporated customary international law into federal common law."
+     "quote": null
     }
    ]
   },
@@ -907,13 +3285,87 @@
    "summary": "When a prisoner pursues state post-conviction DNA testing through the state-provided litigation process, the statute of limitations for a 42  U. S. C. §1983 procedural due process claim begins to run when the state litigation ends, in this case when the Texas Court of Criminal Appeals denied Reed’s motion for rehearing.",
    "author_code": "BK",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us1r12_l5gm.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "art-3",
-     "quote": "Federal district courts lack appellate jurisdiction to review state-court judgments, and Reed's action presents no original Article III case or controversy between him and the district attorney."
+     "quote": null
     }
    ]
   },
@@ -925,9 +3377,23 @@
    "summary": "Notwithstanding opposition by the State of New York, New Jersey may unilaterally withdraw from the 1953 Waterfront Commission Compact.",
    "author_code": "BK",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us1r11_ca7d.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
    "provisions": []
   },
   {
@@ -938,25 +3404,100 @@
    "summary": "The statutory review schemes set out in the Securities Exchange Act and Federal Trade Commission Act do not displace a district court’s federal-question jurisdiction over claims challenging as unconstitutional the structure or existence of the SEC or FTC.",
    "author_code": "EK",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us1r10_febh.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-7",
-     "quote": "In the 1930s, this Court upheld the constitutionality of the appellate review model against arguments that it violated the separation of powers and Seventh Amendment."
+     "quote": null
     },
     {
      "id": "amend-14",
-     "quote": "We held that the court lacked jurisdiction even though Elgin mainly claimed that the draft law, in excluding women, violated the Equal Protection Clause."
+     "quote": null
     },
     {
      "id": "art-2-sec-2-cl-2",
-     "quote": "Lucia held that SEC ALJs are inferior offcers under the Constitution's Appointments Clause. 585 U."
+     "quote": null
     },
     {
      "id": "art-3",
-     "quote": "I A The Court correctly notes that precedent allows Congress to replace Article III district courts with “an alternative scheme of review,” as it did in the provisions of the Securities Exchange Act and the Federal Trade Commission Act at issue here."
+     "quote": null
     }
    ]
   },
@@ -968,9 +3509,81 @@
    "summary": "The Quiet Title Act’s 12-year statute of limitations, 28 U. S. C. §2409a(g), is a nonjurisdictional claims-processing rule.",
    "author_code": "SS",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us1r9_8mjp.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": []
   },
   {
@@ -981,9 +3594,23 @@
    "summary": "An Americans with Disabilities Act lawsuit seeking compensatory damages for the denial of a free and appropriate education may proceed without exhausting the administrative processes of the Individuals with Disabilities Education Act, 20 U. S. C. §1415(l), because the remedy sought is not one IDEA provides.",
    "author_code": "NG",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us1r8_limq.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
    "provisions": []
   },
   {
@@ -994,9 +3621,23 @@
    "summary": "Recommendations in the Special Master’s First Interim Report concluding that the escheatment of certain financial instruments relevant to this case should follow the Federal Disposition Act are adopted to the extent they are consistent with the Court’s opinion, and Delaware’s objections are overruled.",
    "author_code": "KJ",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us1r7_3dq4.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
    "provisions": []
   },
   {
@@ -1007,9 +3648,53 @@
    "summary": "The Bank Secrecy Act’s $10,000 maximum penalty for the nonwillful failure to file a compliant report accrues on a per-report, not a per-account, basis.",
    "author_code": "NG",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us1r6_0813.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": []
   },
   {
@@ -1020,7 +3705,8 @@
    "summary": "Pursuant to §523(a)(2)(A) of the Bankruptcy Code, a debtor like Kate Bartenwerfer who is liable for her partner’s fraud cannot discharge that debt in bankruptcy, regardless of her own culpability.",
    "author_code": "AB",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us1r5_1b72.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
    "lineup": [],
    "provisions": []
@@ -1033,9 +3719,83 @@
    "summary": "Respondent Hewitt was not an executive exempt from the FLSA’s overtime pay guarantee; daily-rate workers, of whatever income level, qualify as paid on a salary basis only if the conditions set out in 29 CFR §541.604(b) are met.",
    "author_code": "EK",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us1r4_1a7d.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": []
   },
   {
@@ -1046,17 +3806,89 @@
    "summary": "The Arizona Supreme Court’s holding below—that Lynch v. Arizona, 578 U. S. 613, did not represent a “significant change in the law” for purposes of permitting Cruz to file a successive petition for state postconviction relief under Arizona Rule of Criminal Procedure 32.1(g)—is not an adequate state-law ground supporting that judgment.",
    "author_code": "SS",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us1r3_j4ek.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
    "provisions": [
     {
      "id": "amend-8",
-     "quote": "Miller, in holding that trial courts must weigh such considerations before imposing a life sentence on juveniles, changed Eighth Amendment doctrine and therefore changed the law in Arizona. 241 Ariz., at 209, 386 P. 3d, at 395; see also Montgomery v."
+     "quote": null
     },
     {
      "id": "art-3",
-     "quote": "Second, Article III empowers federal courts to render judgments, not advisory opinions."
+     "quote": null
     }
    ]
   },
@@ -1068,7 +3900,8 @@
    "summary": "Certiorari dismissed as improvidently granted.",
    "author_code": "PC",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us1r2_d18e.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
    "lineup": [],
    "provisions": []
@@ -1081,9 +3914,23 @@
    "summary": "The effective date of an award of service-related disability compensation to a veteran of the United States military  determined pursuant to 38 U. S. C. §§5110(a)(1) and 5110(b)(1) is not subject to equitable tolling.",
    "author_code": "AB",
    "pdf": "https://www.supremecourt.gov/opinions/22pdf/598us1r1_3e04.pdf",
-   "parser": 2,
+   "parser": 3,
+   "exact_text": false,
    "lineup_text": null,
-   "lineup": [],
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Barrett",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
    "provisions": []
   }
  ],
