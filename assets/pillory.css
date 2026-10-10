@@ -1413,6 +1413,9 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 .card.briefing-link { display: flex; flex-wrap: nowrap; align-items: center; justify-content: space-between; gap: 12px; min-height: var(--tap); color: var(--text); text-decoration: none; }
 .card.briefing-link > .stack-xs { flex: 1; min-width: 0; }
 .card.briefing-link:hover { box-shadow: var(--shadow-lg); text-decoration: none; }
+/* On another state's page: the visitor's own place, one small line at the bottom. */
+.your-place { margin: 0; }
+.your-place a { display: inline-flex; align-items: center; min-height: var(--tap); }
 
 /* =========================================================================
    Explore: maps, breadcrumbs, place pages

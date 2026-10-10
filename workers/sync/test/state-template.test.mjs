@@ -154,3 +154,30 @@ test("the top of every state's page: headline, map, ballot card, Find your repre
   assert.equal(previewLabel("DC", "District of Columbia"), "Preview D.C.'s ballot");
   assert.equal(previewLabel(null, null), "Preview your state's ballot");
 });
+
+test("California districts saved: another state's page shows nothing about California but one line at the bottom", async () => {
+  for (const slug of ["minnesota", "texas"]) {
+    const { html } = await call(states, `/states/${slug}/`, { cookie: CA_COOKIE });
+    const main = html.slice(html.indexOf("<main"), html.indexOf("</main>"));
+    const line = main.match(/<p class="small secondary your-place">[\s\S]*?<\/p>/);
+    assert.ok(line, `${slug}: the "Your place" line`);
+    assert.match(line[0], /Your place: Calaveras County, CA · <a class="inline-link" href="\/briefing\/">Your briefing<\/a>/);
+    assert.ok(main.indexOf(line[0]) > main.indexOf('id="h-understand"') || main.indexOf(line[0]) > main.lastIndexOf("</section>"), "at the bottom");
+    const rest = main.replace(line[0], "");
+    // Everything else matches the page for a visitor with nothing saved (the state picker,
+    // the map and the About tiles name California for everyone).
+    const plain = (await call(states, `/states/${slug}/`)).html;
+    const plainMain = plain.slice(plain.indexOf("<main"), plain.indexOf("</main>"));
+    const mentions = (h) => [...h.matchAll(/Showing: <strong>|Forget this|briefing-link|Calaveras|California|\/place\/ca\//g)].length;
+    assert.equal(mentions(rest), mentions(plainMain), `${slug}: nothing else about the saved districts`);
+    assert.doesNotMatch(rest, /Showing: <strong>|Forget this|briefing-link/);
+    assert.match(rest, /id="find"/, "the search box stays");
+  }
+  for (const [fn, path] of [[states, "/states/california/"], [home, "/"]]) {
+    const { html } = await call(fn, path, { cookie: CA_COOKIE });
+    assert.match(html, /Showing: <strong>California/, `${path}: the saved districts in Find your representatives`);
+    assert.match(html, /Forget this/);
+    assert.match(html, /class="card briefing-link" href="\/briefing\/"/, `${path}: the briefing card`);
+    assert.doesNotMatch(html, /your-place/);
+  }
+});
