@@ -1369,10 +1369,10 @@
    "name": "Exxon Mobil Corp. v. Corporación Cimex, S. A. (Cuba)",
    "summary": "The Helms-Burton Act, formally known as the Cuban Liberty and Democratic Solidarity Act, §301, 110 Stat. 815, 22 U. S. C. §6021 et seq., abrogates the sovereign immunity of Cuban agencies and instrumentalities; plaintiffs who sue Cuban agencies or instrumentalities under the Act need not also satisfy one of the Foreign Sovereign Immunities Act’s enumerated exceptions to foreign sovereign immunity.",
    "author_code": "BK",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/609us1r56_3e04.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/24-699_f204.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "KAVANAUGH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, GORSUCH, and BARRETT, JJ., joined. KAGAN, J., filed a dissenting opinion, in which SOTOMAYOR and JACKSON, JJ., joined.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1460,10 +1460,10 @@
    "name": "Landor v. Louisiana Dept of Corrections and Public Safety",
    "summary": "State employees may not be held liable in their personal capacities under a Spending Clause statute such as the Religious Land Use and Institutionalized Persons Act of 2000 unless those individuals have voluntarily and knowingly consented to answer private suits under the statute; the individual defendants in this case did not do so here, so Landor’s case cannot proceed against them.",
    "author_code": "NG",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/609us1r55_h315.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/23-1197_new2_k5fm.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "GORSUCH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, KAVANAUGH, and BARRETT, JJ., joined. PUBLIC SAFETY JACKSON, J., filed a dissenting opinion, in which SOTOMAYOR and KAGAN, JJ., joined.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1512,25 +1512,16 @@
       "wrote": []
      },
      {
-      "justice": "Jackson",
-      "roles": [
-       "dissent"
-      ],
-      "wrote": [
-       "dissent"
-      ]
-     },
-     {
       "justice": "Sotomayor",
       "roles": [
-       "dissent"
+       "majority"
       ],
       "wrote": []
      },
      {
       "justice": "Kagan",
       "roles": [
-       "dissent"
+       "majority"
       ],
       "wrote": []
      }
@@ -1538,20 +1529,16 @@
    },
    "provisions": [
     {
-     "id": "amend-1",
-     "quote": null
-    },
-    {
-     "id": "amend-14",
-     "quote": null
-    },
-    {
      "id": "art-1-sec-8-cl-3",
-     "quote": null
+     "quote": "Federal authorities would have no need to show that their regulations represent proper exercises of Congress’s limited and enumerated powers found in the Commerce Clause, the Bankruptcy Clause, or any other."
     },
     {
      "id": "art-1-sec-8-cl-1",
-     "quote": null
+     "quote": "pursuant to what is sometimes called the Constitution’s Spending Clause."
+    },
+    {
+     "id": "art-1-sec-8-cl-18",
+     "quote": "Landor and the dissent appeal to ones construing the Necessary and Proper Clause."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/23-01197qp.pdf",
@@ -1568,10 +1555,10 @@
    "name": "Pung v. Isabella County",
    "summary": "The proper baseline for measuring “just compensation” following a fairly conducted tax sale is the auction sale price, not the property’s hypothetical fair market value; Isabella County did not violate the Eighth Amendment Excessive Fines Clause by failing to compensate the taxpayer for his property’s fair market value.",
    "author_code": "A",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/609us1r54_d18e.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25-95_dc8e.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "ALITO, J., delivered the opinion of the Court, in which ROBERTS, C. J., and SOTOMAYOR, KAGAN, GORSUCH, KAVANAUGH, BARRETT, and JACKSON, JJ., joined, and in which THOMAS, J., joined except as to Part II–B. SOTOMAYOR, J., filed a concurring opinion, in which GORSUCH and JACKSON, JJ., joined. THOMAS, J., filed an opinion concurring in part and concurring in the judgment, in which GORSUCH, J., joined except as to n. 1.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1652,15 +1639,15 @@
    "provisions": [
     {
      "id": "amend-5",
-     "quote": null
+     "quote": "631 (2023), we held that the Fifth Amendment Takings Clause requires the government to return any surplus proceeds from tax foreclosure sales, i.e., the difference between the sale price and the taxpayer’s debt."
     },
     {
      "id": "amend-8",
-     "quote": null
+     "quote": "We also hold that, following a tax sale, the Eighth Amendment Excessive Fines Clause does not require the government to return more than the surplus proceeds."
     },
     {
      "id": "amend-14",
-     "quote": null
+     "quote": "Shortly after the ratification of the Fourteenth Amendment, a leading treatise surveyed state practices and found several ways of refunding surplus funds—some did so by bond, others through the county treasury—but all refunded only the “surplus” “if the bid exceed the tax.” T."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/25-00095qp.pdf",
@@ -1679,10 +1666,10 @@
    "name": "Blanche v. Lau",
    "summary": "The Immigration and Nationality Act does not require a border officer to have clear and convincing evidence that a lawful permanent resident has committed a crime involving moral turpitude before deeming the resident an applicant for admission.",
    "author_code": "T",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/609us1r53_i4dk.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25-429_h3ci.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "THOMAS, J., delivered the opinion of the Court, in which ROBERTS, C. J., and ALITO, GORSUCH, KAVANAUGH, and BARRETT, JJ., joined. JACKSON, J., filed a dissenting opinion, in which SOTOMAYOR and KAGAN, JJ., joined.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1770,10 +1757,10 @@
    "name": "McCarthy v. Hernandez",
    "summary": "The Second Circuit exceeded its authority in holding that Hernandez is entitled to habeas relief under 28 U. S. C. §2254(d)(1); no clearly established federal law required the trial court to instruct the jury about the rule that Justice Kennedy adopted in Missouri v. Seibert, 542 U. S. 600, and the Second Circuit erred in holding otherwise.",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r52_k5fm.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25-748_4g1o.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "PER CURIAM. The Antiterrorism and Effective Death Penalty Act of 1996 (AEDPA) imposes strict limits on federal courts’ power to grant habeas relief to a prisoner convicted in state court. District courts and courts of appeals have sometimes chafed under these restraints, and when they have strayed too far from the modest role that AEDPA prescribes, we have summarily reversed their decisions. See, e.g., Klein v. Martin, 607 U. S. 213 (2026) (per curiam). We must do the same today. The Second Circuit ordered habeas relief in this case based on its holding that a state-court decision was “contrary to” and “involved an unreasonable application” of Missouri v. Seibert, 542 U. S. 600 (2004), because the decision approved a trial judge’s refusal to tell a jury how to apply Seibert—or, more precisely, how to apply what the Second Circuit understood to be the holding in that case. 28 U. S. C. §2254(d)(1). But Seibert said nothing about jury instructions. For this reason and others, the Second Circuit exceeded the role that AEDPA prescribes. I A This case concerns a tragic event that once captured the Nation’s attention. On May 25, 1979, 6-year-old Etan Patz left his family’s apartment in lo",
    "lineup": [],
    "provisions": [],
    "qp_url": null,
@@ -1787,10 +1774,10 @@
    "name": "United States v. Hemani",
    "summary": "Prosecution of Ali Hemani under 18 U. S. C. §922(g)(3)—for knowingly possessing a gun in his home while being an unlawful user of a controlled substance—is inconsistent with the Second Amendment.",
    "author_code": "NG",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r51_k4lo.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/24-1234_new_6k47.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "GORSUCH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, SOTOMAYOR, KAVANAUGH, BARRETT, and JACKSON, JJ., joined. THOMAS, J., filed a concurring opinion. JACKSON, J., filed a concurring opinion, in which SOTOMAYOR, J., joined. ALITO, J., filed an opinion concurring in the judgment, in which KAGAN, J., joined.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1872,20 +1859,16 @@
    },
    "provisions": [
     {
-     "id": "amend-1",
-     "quote": null
-    },
-    {
      "id": "amend-2",
-     "quote": null
-    },
-    {
-     "id": "amend-5",
-     "quote": null
+     "quote": "Hemani is consistent with the Second Amendment."
     },
     {
      "id": "amend-14",
-     "quote": null
+     "quote": "And, apart from pointing to habitual drunkard laws, the government has not even attempted to prove that any other specific historical principle might justify its prosecution in this case.3 —————— 3 As in Bruen, we need not decide today “whether courts should primarily rely on the prevailing understanding of an individual right when the Fourteenth Amendment was ratified in 1868” or when the Bill of Rights was ratified in 1791."
+    },
+    {
+     "id": "art-1-sec-8-cl-3",
+     "quote": "He surrendered a gun he kept in the house and —————— 1 Because Congress adopted §922(g) pursuant to the Commerce Clause, the statute requires the government to show that a firearm possessed in violation of the statute’s terms “has been shipped or transported in interstate or foreign commerce.” As that element is not in dispute here, we do not discuss it further. pointed agents to some marijuana on the property."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/24-01234qp.pdf",
@@ -1901,10 +1884,10 @@
    "name": "Hunter v. United States",
    "summary": "An agreement not to appeal a sentence is unenforceable when it would result in a miscarriage of justice—meaning, when it would leave in place the kind of egregious error that would bring the judicial system into disrepute.",
    "author_code": "EK",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r50_lkgn.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/24-1063new_l5gm.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "KAGAN, J., delivered the opinion of the Court, in which ROBERTS, C. J., and ALITO, SOTOMAYOR, GORSUCH, KAVANAUGH, BARRETT, and JACKSON, JJ., joined. GORSUCH, J., filed a concurring opinion, in which SOTOMAYOR and JACKSON, JJ., joined. KAVANAUGH, J., filed a concurring opinion, in which ALITO and BARRETT, JJ., joined. BARRETT, J., filed a concurring opinion. THOMAS, J., filed a dissenting opinion.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1989,16 +1972,7 @@
      }
     ]
    },
-   "provisions": [
-    {
-     "id": "amend-5",
-     "quote": null
-    },
-    {
-     "id": "art-3",
-     "quote": null
-    }
-   ],
+   "provisions": [],
    "qp_url": "https://www.supremecourt.gov/qp/24-01063qp.pdf",
    "question_presented": [
     "This Court has recognized that \"no appeal waiver serves as an absolute bar to all appellate claims.\" Garza v. Idaho, 586 U.S. 232, 238 (2019). But the Court has \"ma[de] no statement ... on what particular exceptions [to appeal waivers] may be required.\" Id. at 238-39 & n.6.",
@@ -2017,10 +1991,10 @@
    "name": "T. M. v. University of Md. Medical System Corporation",
    "summary": "The Rooker-Feldman doctrine bars federal district court jurisdiction over cases brought by state-court losers complaining of injuries caused by state-court judgments rendered before the district court proceedings commenced and seeking district court review and rejection of those judgments, regardless of whether the state-court judgment remains subject to further review in state appellate proceedings.",
    "author_code": "SS",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r49_mlho.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25-197_new_4g15.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "SOTOMAYOR, J., delivered the opinion of the Court, in which THOMAS, ALITO, KAVANAUGH, and JACKSON, JJ., joined. THOMAS, J., filed a concurring opinion. BARRETT, J., filed a dissenting opinion, in which ROBERTS, C. J., and KAGAN and GORSUCH, JJ., joined.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -2110,10 +2084,10 @@
    "name": "Keathley v. Buddy Ayers Construction, Inc.",
    "summary": "To determine whether an omission of a claim in the bankruptcy context was inadvertent or mistaken for purposes of the judicial estoppel doctrine, courts should look to the totality of the circumstances surrounding the omission; the Fifth Circuit erred in narrowing its inquiry in this case to whether the debtor had knowledge of the underlying facts or a potential motive to conceal the claim.",
    "author_code": "KJ",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r48_k53m.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25-6_d1o2.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "JACKSON, J., delivered the opinion for a unanimous Court. THOMAS, J., filed a concurring opinion, in which GORSUCH, J., joined. SOTOMAYOR, J., filed a concurring opinion.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2170,10 +2144,10 @@
    "name": "FS Credit Opportunities Corp. v. Saba Capital Master Fund, Ltd.",
    "summary": "Section 47(b) of the Investment Company Act does not impliedly empower private parties to sue for rescission of contracts that allegedly violate the Act.",
    "author_code": "AB",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r47_m64o.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/24-345_i42k.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "BARRETT, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, GORSUCH, and KAVANAUGH, JJ., joined. KAGAN, J., filed a dissenting opinion. JACKSON, J., filed a dissenting opinion, in which SOTOMAYOR, J., joined, and in which KAGAN, J., joined as to Parts I and II.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -2267,10 +2241,10 @@
    "name": "Abouammo v. United States",
    "summary": "A defendant charged with knowingly falsifying a document with the intent to obstruct a federal investigation in violation of 18 U. S. C. §1519 must be tried in the district where the falsification occurred; the defendant cannot be tried in a different district where the investigation was located because no “conduct constituting the offense” happened there.",
    "author_code": "EK",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r46_2c8f.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25-5146_new_kifl.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "KAGAN, J., delivered the opinion for a unanimous Court.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2288,11 +2262,11 @@
    "provisions": [
     {
      "id": "amend-6",
-     "quote": null
+     "quote": "And the Sixth Amendment reinforces that command, entitling criminal defendants to a jury “of the State and district wherein the crime shall have been committed.” To implement that constitutional rule—meaning, to decide where the crime was committed—courts generally must determine the location of the offense’s “essential conduct elements.” Rodriguez-Moreno, 526 U."
     },
     {
      "id": "art-3",
-     "quote": null
+     "quote": "Article III instructs that “Trial of all Crimes” shall “be held in the State where the said Crimes shall have been committed.” §2, cl. 3."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/25-05146qp.pdf",
@@ -2313,10 +2287,10 @@
    "name": "Hikma Pharmaceuticals USA Inc. v. Amarin Pharma, Inc.",
    "summary": "Amarin has failed to state a claim for actively inducing infringement of its brand-name drug’s patented uses in violation of 35 U. S. C. §271(b), so its complaint cannot withstand Hikma’s motion to dismiss.",
    "author_code": "KJ",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r45_i4dk.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/24-889_5i36.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "JACKSON, J., delivered the opinion for a unanimous Court.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2334,7 +2308,7 @@
    "provisions": [
     {
      "id": "amend-1",
-     "quote": null
+     "quote": "175 (2024), that, “[t]o state a claim that the government violated the First Amendment through coercion of a third party, a plaintiff must plausibly allege conduct that, viewed in context, could be reasonably understood to convey a threat of adverse government action,” id., at 191 (emphasis added)."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/24-00889qp.pdf",
@@ -2353,10 +2327,10 @@
    "name": "Sripetch v. SEC",
    "summary": "A showing of pecuniary loss to investors is not required before the SEC may obtain a disgorgement award under 15 U. S. C. §78u(d)(5) or §78u(d)(7).",
    "author_code": "NG",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r44_j42l.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25-466_5i26.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "GORSUCH, J., delivered the opinion for a unanimous Court. THOMAS, J., filed a concurring opinion.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2383,7 +2357,7 @@
    "provisions": [
     {
      "id": "amend-7",
-     "quote": null
+     "quote": "109, 123–125 (2024) (holding that, when the SEC seeks penalties, the Seventh Amendment entitles the defendant to a jury trial)."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/25-00466qp.pdf",
@@ -2403,10 +2377,10 @@
    "name": "FCC v. AT&T",
    "summary": "Because forfeiture orders issued under 47 U. S. C. §503(b)(4) do not definitively resolve the parties’ legal obligations, and the FCC’s factual findings in its forfeiture proceedings are not conclusive, it does not violate the Seventh Amendment for the FCC to issue forfeiture orders without the involvement of a jury.",
    "author_code": "R",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r43_m648.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25-406_nmip.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "ROBERTS, C. J., delivered the opinion of the Court, in which ALITO, SOTOMAYOR, KAGAN, GORSUCH, KAVANAUGH, BARRETT, and JACKSON, JJ., joined. THOMAS, J., filed a dissenting opinion.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -2482,15 +2456,11 @@
    "provisions": [
     {
      "id": "amend-6",
-     "quote": null
+     "quote": "In the Sixth Amendment context, we have upheld “the imposition of . . . difficult choices” to forgo a jury trial by pleading guilty, even where the defendant faces a “certainty or probability” that the exercise of his trial right will result in a higher sentence if he is found guilty."
     },
     {
      "id": "amend-7",
-     "quote": null
-    },
-    {
-     "id": "art-3",
-     "quote": null
+     "quote": "We decide whether that enforcement structure violates the Seventh Amendment, which provides that “[i]n Suits at common law, where the value in controversy shall exceed twenty dollars, the right of trial by jury shall be preserved.” I A The Communications Act of 1934 established the Federal Communications Commission."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/25-00406qp.pdf",
@@ -2507,15 +2477,15 @@
    "name": "Allen v. Milligan",
    "summary": "The applications for stay presented to JUSTICE THOMAS and by him referred to the Court are granted; at this preliminary stage, the State has shown that it is entitled to interim relief from the District Court’s injunction.",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r42_q8l1.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25a1314_7m58.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "PER CURIAM. In Louisiana v. Callais, 608 U. S. ___ (2026), to resolve the tension between vote-dilution claims under §2 of the Voting Rights Act of 1965 and our colorblind Constitution, we updated the standards for §2 liability established by Thornburg v. Gingles, 478 U. S. 30 (1986). Under Gingles, to prove a §2 violation, a plaintiff must first establish three preconditions. First, the minority group must be large and geographically compact enough to be a majority in a reasonably configured congressional district, meaning that the district “comports with traditional districting criteria.” Callais, 608 U. S., at ___ (slip op., at Per Curiam 8) (internal quotation marks omitted). Second, the minority group must be politically cohesive. Third, the majority group must vote enough as a bloc to defeat the minority group’s preferred candidate. Ibid. After establishing those three preconditions, the plaintiff must prove that the political process was not equally open to minority voters based on the totality of the circumstances. Ibid. Callais updated these standards. As relevant here, we held that for plaintiffs to satisfy the first Gingles precondition, a plaintiff ’s alternative map “must meet all the State’s legitimate districting objectives” “just as well” as the State’s own map. 608 U. S., at ___ (slip op., at 29) (emphasis added). Those legitimate districting objectives, we held, include “the State’s specified political goals” and “any other goal not prohibited by the Constitution.” Ibid. A plaintiff also “cannot use race as a districting criterion” in preparing the alternative map. Ibid. To prove the second and third preconditions, a plaintiff “must provide an analysis that controls for party affiliation” and “show that voters engage in racial bloc voting that cannot be explained by partisan affiliation.” Id., at ___ (slip op., at 30). These updates, we held, were necessary to avoid requiring congressional maps under §2 that would be unconstitutional racial gerrymanders. After Callais, we vacated District Court injunctions that prevented the State of Alabama from using a congressional map that it enacted in 2023. See Allen v. Caster, 608 U. S. ___ (2026). The District Court had held that the State’s map violated §2 because it had only one district in which black voters were a majority and did not include an additional “[b]lack-opportunity” district. Singleton v. Allen, 782 F. Supp. 3d 1092, 1114, 1309 (ND Ala. 2025). The District Court also concluded that the 2023 map violated the Fourteenth Amendment because it constituted a deliberate “refus[al] to satisfy the remedial requirements” it previously Per Curiam imposed and an attempt to avoid a future judgment requiring the same remedy. Id., at 1355. Two weeks after we vacated its injunction, the District Court entered another injunction on largely the same grounds. State officials immediately applied to this Court for a stay of this injunction. At this preliminary stage, the State has shown that it is entitled to interim relief from the District Court’s injunction. See Abbott v. League of United Latin American Citizens, 607 U. S. ___, ___–___ (2025) (slip op., at 1–2). The State is likely to succeed on the merits as to both claims. As to intentional vote dilution, the District Court did not heed the presumption of legislative good faith, see Alexander v. South Carolina State Conference of the NAACP, 602 U. S. 1, 10 (2024), because it interpreted the State’s legal disagreement with the court’s earlier remedial order as proof of discriminatory animus. Cf. Abbott v. Perez, 585 U. S. 579, 608–609 (2018). And, as to both claims, the District Court’s analysis departed from Callais. Under Callais, the District Court was required to deny relief unless the plaintiffs’ alternative map performed “just as well” with respect to all of the State’s constitutionally permissible districting criteria. 608 U. S., at ___ (slip op., at 29). Yet, the District Court found a violation even though the plaintiffs’ alternative map would not perform just as well as to the State’s constitutionally permissible criteria of keeping together the Gulf Coast community of interest and avoiding the pairing of incumbents. The District Court also failed to follow our instruction in Callais that the mere fact that voters of different races vote for different parties is not relevant to proving racially polarized voting patterns. See id., at ___ (slip op., at 30). The State has also made a strong showing of irreparable harm and that the equities and public interest favor it. We have repeatedly cautioned that lower federal courts should not “alter the election rules on the eve of an election.” Per Curiam Republican National Committee v. Democratic National Committee, 589 U. S. 423, 424 (2020) (per curiam). Here, the District Court interposed itself into Alabama’s ongoing efforts to conduct its imminent 2026 congressional elections under maps that its elected representatives selected. Its view that conducting the elections under court-imposed maps would be more convenient for the State was not a valid justification for that intervention. While federal courts should not impose changes close to an election, ibid., States are free to decide for themselves whether last-minute changes to an election are in their best interests. The applications for stay presented to JUSTICE THOMAS and by him referred to the Court are granted. The May 26, 2026, order of the United States District Court for the Northern District of Alabama, case Nos. 2:21–cv–1530 and 2:21–cv–1291 is stayed pending the timely docketing of the appeal in this Court. Should the jurisdictional statement be timely filed, this order shall remain in effect pending this Court’s action on the appeal. If the appeal is dismissed, or the judgment affirmed, this order shall terminate automatically. In the event jurisdiction is noted or postponed, this order will remain in effect pending the sending down of the judgment of this Court. The May 26, 2026, order of the United States District Court for the Northern District of Alabama, case No. 2:21–cv–1536, is stayed pending the timely filing of a petition for a writ of certiorari. Should the petition for a writ of certiorari be denied, this stay shall terminate automatically. In the event the petition for a writ of certiorari is granted, the stay shall terminate upon the sending down of the judgment of this Court. It is so ordered.",
    "lineup": [],
    "provisions": [
     {
      "id": "amend-14",
-     "quote": null
+     "quote": "The District Court also concluded that the 2023 map violated the Fourteenth Amendment because it constituted a deliberate “refus[al] to satisfy the remedial requirements” it previously Per Curiam imposed and an attempt to avoid a future judgment requiring the same remedy."
     }
    ]
   },
@@ -2526,10 +2496,10 @@
    "name": "Whitton v. Dixon",
    "summary": "The Court of Appeals erred in considering post-trial DNA evidence when assessing whether the Florida Supreme Court reasonably determined that jailhouse informant Ozio’s testimony was immaterial to the jury’s verdict, because evidence not presented to the jury could not have influenced the jury’s verdict and therefore sheds no light on whether Ozio’s testimony influenced that verdict.",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r41_4gc5.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25-580_08m1.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "PER CURIAM. A Florida jury convicted petitioner Gary Richard Whitton of murder and sentenced him to death. During his trial, the State called several witnesses, including a jailhouse informant named Jake Ozio. Ozio was a high school student who, on a spring-break trip in Florida, was arrested and jailed for burglary and possession of a short-barrel shotgun. Ozio testified that, while he was incarcerated with Whitton, he overheard Whitton confess to “ ‘stabb[ing] the bastard.’ ” Whitton v. Secretary, Fla. Dept. of Corrections, 2025 WL 1305158, *2 (CA11, May 6, 2025) (per curiam). Ozio also testified that he had no criminal history prior to his springbreak arrest. That last piece of testimony turned out to be false. Ozio’s juvenile records—which the State had in its possession at the time—showed that he had previously been charged with “assault with bodily injury against his father, terroristic threats against his mother, and at least one other burglary.” Id., at *15. After unsuccessfully pursuing a direct appeal and state postconviction relief, Whitton filed an application for a writ of habeas corpus in Federal District Court. Among other claims, he argued that Ozio’s criminal-history testimony was false, that the prosecution knew the testimony was false, and that there was a reasonable likelihood the testimony affected the jury’s verdict. Whitton claimed that, as a result, his due process rights had been violated under this Court’s decision in Giglio v. United States, 405 U. S. 150 Per Curiam (1972). And he contended, as was additionally necessary for federal habeas relief, that the Giglio error had a “ ‘substantial and injurious effect or influence in determining the jury’s verdict.’ ” Brecht v. Abrahamson, 507 U. S. 619, 623 (1993). The District Court denied relief, finding that any Giglio error “could not have made a difference” to the jury’s verdict because Florida juvenile criminal records are generally inadmissible to attack a witness’s credibility. App. to Pet. for Cert. 79a. The Court of Appeals for the Eleventh Circuit affirmed, but on different reasoning.1 The court agreed with Whitton that Ozio’s criminal-history testimony was false, and that the State knew it to be false. Moreover, the court disagreed with the District Court’s conclusion that any Giglio violation was harmless because of Florida evidence rules about juvenile records. That conclusion, the Court of Appeals explained, was “erroneous” because Florida courts admit such records when a witness opens the door to prior convictions—including by stating that he has none. 2025 WL 1305158, *16. And “impeachment concerning Ozio’s juvenile record,” the Court of Appeals concluded, “would have undermined [Ozio’s] credibility.” Ibid. So the court “[could not] affirm the district court’s decision on its finding of harmless error.” Ibid. The Court of Appeals then considered whether to affirm on another basis advanced by the State: that Whitton was not prejudiced by any Giglio error because Ozio’s testimony as a whole (not just the false part) was immaterial to the jury’s verdict. The court explained that the Florida Supreme Court had made a determination relevant to that issue during Whitton’s state postconviction proceedings. There, the Florida Supreme Court had stated that, even without Ozio’s testimony, the evidence against Whitton was —————— 1 We describe here only the brief part of the Court of Appeals’ lengthy opinion relevant to the issue at hand. Per Curiam “overwhelming.” Whitton v. State, 161 So. 3d 313, 334 (2014). Under the Antiterrorism and Effective Death Penalty Act of 1996, the Court of Appeals owed deference to that state court determination unless it was “ ‘based on an unreasonable determination of the facts in light of the evidence presented.’ ” 2025 WL 1305158, *7 (quoting 28 U. S. C. §2254(d)(2)); see 2025 WL 1305158, *17. That meant the key question for the Court of Appeals was whether the Florida Supreme Court’s determination about the rest of the evidence was a reasonable one. To answer that question, the Court of Appeals did something peculiar: It considered not only the evidence that was presented to the jury at Whitton’s trial, but also evidence the jury never saw. The evidence in question relates to blood stains on Whitton’s boots, which were seized the day after the murder. At Whitton’s trial, an analyst from the Florida Department of Law Enforcement testified that the DNA in the blood stains matched neither the victim’s nor Whitton’s. A decade after Whitton was convicted, however, the State ran another DNA test on the blood stains—and this time, the results revealed a match with the victim’s DNA. Even though that new DNA evidence was not presented at Whitton’s trial, the Court of Appeals took account of it when analyzing the Florida Supreme Court’s determination. In describing the evidence that supported that determination, the Court of Appeals related that Whitton’s boots “were stained with blood that, after later retesting, matched [the victim]’s DNA.” Id., at *18.2 And in rebutting —————— 2 The sentence describing the evidence refers in full to the following: “the motel clerk saw Whitton’s car parked at the motel, and Whitton admitted he was at the motel; Whitton’s boots and his car were stained with blood that, after later retesting, matched [the victim]’s DNA; the blood stains on and inside Whitton’s boots are consistent with ‘a stabbing or a beating’; Whitton could not explain the downward blood spatter on the inside of his boots; and Whitton’s car contained a power and gas receipt and a car wash ticket for 2:37 a.m. October 10, 1990, the night of the murder.” 2025 WL 1305158, *18. Per Curiam Whitton’s arguments (some of which it thought a jury “may well find” “persuasive”), the court again commented on the new DNA evidence. Ibid. Specifically, it observed that, “after retesting the DNA on Whitton’s boots,” the State “confirmed that the inside of Whitton’s right boot contained blood” with DNA “matching the DNA profile of [the victim].” Id., at *19 (internal quotation marks omitted). “In short,” the court said, “the blood-splatter evidence ties Whitton directly and firmly to [the victim]’s murder.” Ibid. After considering that post-trial DNA evidence (in addition to the trial evidence), the Court of Appeals held that it was not “unreasonable for the State court to conclude” that even without any of Ozio’s testimony “there was ‘overwhelming evidence against Whitton.’ ” Ibid. (quoting Whitton, 161 So. 3d, at 334). And so the Court of Appeals affirmed the denial of habeas relief. We vacate the Court of Appeals’ judgment because that court should not have considered the post-trial DNA evidence in assessing whether the Florida Supreme Court reasonably determined that Ozio’s testimony was immaterial to the jury’s verdict. Because the post-trial DNA evidence was not presented to the jury (indeed, did not exist at the time of the trial), that evidence could not have influenced the jury’s verdict. It therefore sheds no light on whether (or to what extent) Ozio’s testimony influenced that verdict. See Brecht, 507 U. S., at 623 (“[T]he standard for determining whether habeas relief must be granted is whether the [constitutional] error had substantial and injurious effect or influence in determining the jury’s verdict” (emphasis added; internal quotation marks omitted)). The Florida Supreme Court did not consider the post-trial DNA evidence in making its determination, and the Court of Appeals should not have done so in evaluating that determination either. We express no view on whether the Florida Supreme Court’s determination was reasonable in light of the evidence that was presented at trial. That is for the Court Per Curiam of Appeals to assess in the first instance. We likewise express no view on the State’s argument that Whitton failed to exhaust his Giglio claim in the state courts. The Court of Appeals “[did] not address” that argument because it concluded that “the claim fails on the merits,” 2025 WL 1305158, *15, n. 10, and we are “a court of review, not of first view,” Cutter v. Wilkinson, 544 U. S. 709, 718, n. 7 (2005). The Court of Appeals is of course free to address that argument on remand. We therefore grant the petition for writ of certiorari, vacate the judgment of the Court of Appeals, and remand the case for further proceedings consistent with this opinion. It is so ordered.",
    "lineup": [],
    "provisions": [],
    "qp_url": null,
@@ -4480,10 +4450,10 @@
    "name": "Klein v. Martin",
    "summary": "Because the Court of Appeals for the Fourth Circuit affirmed the award of a new trial based on reasoning that departed from the strict standards that govern the grant of federal habeas relief to prisoners convicted in state court prescribed by the Antiterrorism and Effective Death Penalty Act of 1996, the Court grants the State’s petition for a writ of certiorari and reverses the judgment below.",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/607us1r11_7l48.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25-51_4g15.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "PER CURIAM. Under the Antiterrorism and Effective Death Penalty Act of 1996 (AEDPA), strict standards govern the grant of federal habeas relief to prisoners convicted in state court. Faithful application of those standards sometimes puts federal district courts and courts of appeals in the disagreeable position of having to deny relief in cases they would have analyzed differently if they had been in the shoes of the relevant state court. But federal courts are dutybound to comply with AEDPA, and we have granted summary relief when the lower courts have departed from the role AEDPA assigns. See, e.g., Clark v. Sweeney, 607 U. S. ___ (2025) (per curiam); Dunn v. Reeves, 594 U. S. 731 (2021) (per curiam); Mays v. Hines, 592 U. S. 385 (2021) (per curiam); Virginia v. LeBlanc, 582 U. S. 91 (2017) (per curiam); White v. Wheeler, 577 U. S. 73 (2015) (per curiam). This is such a case. Respondent Charles Brandon Martin was convicted in a Maryland court for the attempted murder of one of his girlfriends, Jodi Torok. The evidence against him was strong, his conviction was affirmed on appeal, and an appellate court held in a state postconviction proceeding that the State’s failure to disclose",
    "lineup": [],
    "provisions": [],
    "qp_url": null,
@@ -4497,10 +4467,10 @@
    "name": "Berk v. Choy",
    "summary": "Delaware law requiring a plaintiff suing for medical malpractice to provide an affidavit from a medical professional attesting to the suit’s merit, Del. Code, Tit. 18, §6853(a)(1), conflicts with a valid Federal Rule of Civil Procedure and does not apply in federal court.",
    "author_code": "AB",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/607us1r10_5hek.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/24-440_1b82.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "BARRETT, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, SOTOMAYOR, KAGAN, GORSUCH, and KAVANAUGH, JJ., joined. JACKSON, J., filed an opinion concurring in the judgment.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -4592,10 +4562,10 @@
    "name": "Ellingburg v. United States",
    "summary": "Restitution under the Mandatory Victims Restitution Act of 1996 is criminal punishment for purposes of the Ex Post Facto Clause.",
    "author_code": "BK",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/607us1r09_4fb4.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/24-482_d1oe.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "KAVANAUGH, J., delivered the opinion for a unanimous Court. THOMAS, J., filed a concurring opinion, in which GORSUCH, J., joined.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -4641,10 +4611,10 @@
    "name": "Coney Island Auto Parts Unlimited, Inc. v. Burton",
    "summary": "Federal Rule of Civil Procedure 60(c)(1)’s reasonable-time limit applies to a motion alleging that a judgment is void under Rule 60(b)(4).",
    "author_code": "A",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/607us1r08_f2q3.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/24-808_lkgn.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "ALITO, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, KAGAN, GORSUCH, KAVANAUGH, BARRETT, and JACKSON, JJ., joined. SOTOMAYOR, J., filed an opinion concurring in the judgment.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -4734,10 +4704,10 @@
    "name": "Barrett v. United States",
    "summary": "Congress did not clearly authorize convictions under both 18 U. S. C. §§924(c)(1)(A)(i) and (j) for a single act that violates both provisions—therefore, one act that violates both may spawn only one conviction; the part of the Second Circuit’s judgment that held otherwise is reversed.",
    "author_code": "KJ",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/607us1r07_7647.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/24-5774new_f20h.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "JACKSON, J., delivered the opinion of the Court with respect to Parts I, II, III, IV–A, and IV–B, and an opinion with respect to Part IV–C, in which ROBERTS, C. J., and SOTOMAYOR and KAGAN, JJ., joined. GORSUCH, J., filed an opinion concurring in part.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -4785,7 +4755,7 @@
    "provisions": [
     {
      "id": "amend-5",
-     "quote": null
+     "quote": "The Court of Appeals rejected Barrett’s argument that the Double Jeopardy Clause —————— 3 The remaining five years, not relevant here, came from a consecutive mandatory minimum sentence on a different §924(c) count. required the District Court to stay that course when the case returned for resentencing."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/24-05774qp.pdf",
@@ -4807,10 +4777,10 @@
    "name": "Case v. Montana",
    "summary": "Under the standard set in Brigham City v. Stuart, 547 U. S. 398, 400, the Fourth Amendment allows police officers to enter a home without a warrant if they have an “objectively reasonable basis for believing” that someone inside needs emergency assistance; that standard was met here.",
    "author_code": "EK",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/607us1r06_19m1.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/24-624_b07d.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "KAGAN, J., delivered the opinion for a unanimous Court. SOTOMAYOR, J., and GORSUCH, J., filed concurring opinions.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -4846,7 +4816,7 @@
    "provisions": [
     {
      "id": "amend-4",
-     "quote": null
+     "quote": "Case moved to suppress all evidence obtained as a result of the home entry, arguing that the police had violated the Fourth Amendment by coming into his house without a warrant."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/24-00624qp.pdf",
@@ -4862,10 +4832,10 @@
    "name": "Bost v. Illinois Bd. of Elections",
    "summary": "As a candidate for office, Congressman Bost has standing to challenge the rules that govern the counting of votes in his election.",
    "author_code": "R",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/607us1r05_e2q3.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/24-568new_4gcj.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "ROBERTS, C. J., delivered the opinion of the Court, in which THOMAS, ALITO, GORSUCH, and KAVANAUGH, JJ., joined. BARRETT, J., filed an opinion concurring in the judgment, in which KAGAN, J., joined. JACKSON, J., filed a dissenting opinion, in which SOTOMAYOR, J., joined.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -4942,12 +4912,8 @@
    },
    "provisions": [
     {
-     "id": "amend-1",
-     "quote": null
-    },
-    {
      "id": "art-3",
-     "quote": null
+     "quote": "II Under Article III of the Constitution, plaintiffs must have a “personal stake” in a case to have standing to sue."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/24-00568qp.pdf",
@@ -4964,10 +4930,10 @@
    "name": "Bowe v. United States",
    "summary": "Title 28 U. S. C. §2244(b)(3)(E) does not bar this Court’s review of a federal prisoner’s request to file a second or successive §2255 motion for postconviction relief, and §2244(b)(1) does not apply to second or successive motions filed under §2255(h) by federal prisoners challenging their convictions or sentences.",
    "author_code": "SS",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/607us1r04_n7ip.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/24-5438_o7kq.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "SOTOMAYOR, J., delivered the opinion of the Court, in which ROBERTS, C. J., and KAGAN, KAVANAUGH and JACKSON, JJ., joined. JACKSON, J., filed a concurring opinion. GORSUCH, J., filed a dissenting opinion, in which THOMAS and ALITO, JJ., joined, and in which BARRETT, J., joined as to Part I.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -5064,10 +5030,10 @@
    "name": "Doe v. Dynamic Physical Therapy, LLC",
    "summary": "Because a State lacks the power to confer immunity from federal causes of action, the Louisiana Court of Appeal’s judgment that a plaintiff’s federal claims are barred by a Louisiana statute immunizing health care providers from civil liability during public health emergencies is reversed.",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/607us1r03_1o23.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25-180_8m59.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "PER CURIAM. Louisiana immunizes healthcare providers from civil liability during public health emergencies. La. Rev. Stat. Ann. §29:771(B)(2)(c)(i) (West 2022). Below, the Louisiana Court of Appeal held that this state statute barred plaintiff ’s federal claims. 2024–0723, pp. 11–12 (1 Cir. 12/27/24), 404 So. 3d 1008, 1017–1018, writ denied, 2025–00105 (La. 4/29/25), 407 So. 3d 623. That decision is incorrect. Defining the scope of liability under state law is the State’s prerogative. But a State has no power to confer immunity from federal causes of action. See, e.g., Howlett v. Rose, 496 U. S. 356, 383 (1990); Haywood v. Drown, 556 U. S. 729, 740 (2009); Williams v. Reed, 604 U. S. 168, 174 (2025). “[T]he Judges in every State” are bound to follow federal law, “any Thing in the Constitution or Laws of any state to the Contrary notwithstanding.” U. S. Const., Art. VI, cl. 2. Plaintiff ’s federal claims may well fail on other federal grounds. Cf. Cummings v. Premier Rehab Keller, 596 U. S. 212, 222 (2022). But that is for the Louisiana courts to decide in the first instance. The petition for certiorari is granted, the judgment of the Louisiana Court of Appeal is reversed, and the c",
    "lineup": [],
    "provisions": [],
    "qp_url": null,
@@ -5081,10 +5047,10 @@
    "name": "Clark v. Sweeney",
    "summary": "The Fourth Circuit departed from the principle of party presentation and abused its discretion in granting a new trial.",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/607us1r02_5426.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25-52_4gd5.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "PER CURIAM. A Maryland jury found Jeremiah Sweeney guilty of second-degree murder and several other crimes. Sweeney’s convictions were affirmed on appeal, and his bid for postconviction relief in state court was unsuccessful. Sweeney sought habeas relief in Federal District Court, and that court, too, denied relief. But the Fourth Circuit reversed and ordered a new trial, relying on a claim that Sweeney never asserted. Because the Court of Appeals departed dramatically from the principle of party presentation, we reverse. I According to the State’s witnesses at trial, Jeremiah Sweeney was arguing one night with neighbors about stolen marijuana. He eventually opened fire, missing his intended targets but killing a bystander who was about 75 yards away. At issue during trial was whether Sweeney could have been the shooter given his location and the angle of the bullet wound. After the State rested its case, Juror 4’s curiosity got the best of him, and he decided to check out the crime scene for himself. Shortly after jury deliberations began, Juror 4 told the jury about his visit, and the jury promptly reported his visit to the court. The parties conferred and eventually agreed that",
    "lineup": [],
    "provisions": [],
    "qp_url": null,
@@ -5098,15 +5064,15 @@
    "name": "Pitts v. Mississippi",
    "summary": "A defendant’s Sixth Amendment right to meet his accusers face to face may not be denied without case-specific findings of necessity, notwithstanding Mississippi’s right-to-screening statute, Miss. Code Ann. §99–43–101(2)(g).",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/607us1r01_kjfm.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/24-1159_k536.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "PER CURIAM. Ordinarily, the Sixth Amendment’s Confrontation Clause “guarantees the defendant a face-to-face meeting with witnesses appearing before the trier of fact.” Coy v. Iowa, 487 U. S. 1012, 1016 (1988). In child-abuse cases, however, that rule sometimes gives way. Consistent with the Sixth Amendment, a court may screen a child witness from the defendant when “necessary to protect [the child] from trauma that would be caused by testifying in the physical presence of the defendant, at least where such trauma would impair the child’s ability to communicate.” Maryland v. Craig, 497 U. S. 836, 857 (1990). Still, before invoking this procedure, a court must proceed with care. It must “hear evidence” and make a “casespecific” finding of “[t]he requisite . . . necessity.” Id., at 855. Simply pointing to a state statute that authorizes screening, even one premised on “generalized finding[s]” of necessity, will not suffice. Coy, 487 U. S., at 1021. Because the Mississippi Supreme Court departed from these principles, we reverse. I In May 2020, A. G. C. spent a weekend visiting her father, Jeffrey Pitts. After returning home, A. G. C. told her mother that she had been sexually abused.",
    "lineup": [],
    "provisions": [
     {
      "id": "amend-6",
-     "quote": null
+     "quote": "Ordinarily, the Sixth Amendment’s Confrontation Clause “guarantees the defendant a face-to-face meeting with witnesses appearing before the trier of fact.” Coy v."
     }
    ],
    "qp_url": null,
