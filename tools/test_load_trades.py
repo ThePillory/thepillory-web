@@ -145,6 +145,7 @@ class LoadTrades(unittest.TestCase):
         db = sqlite3.connect(":memory:")
         db.executescript((ROOT / "workers/sync/migrations/0024_trades.sql").read_text())
         db.executescript((ROOT / "workers/sync/migrations/0025_executive_trades.sql").read_text())
+        db.executescript((ROOT / "workers/sync/migrations/0026_trade_scans.sql").read_text())
         rep = {"id": "house:20031234", "chamber": "us-house", "official_id": "h1", "filer_name": "Jane Example", "state": "CA", "district": "CA05",
                "filed_on": "2026-09-15", "report_url": "https://example.org/r.pdf", "paper": 0, "parsed": 1, "trade_count": 4, "unmatched": None,
                "source_url": "https://example.org/r.pdf"}
@@ -186,6 +187,7 @@ class LoadTrades(unittest.TestCase):
         db = sqlite3.connect(":memory:")
         db.executescript((ROOT / "workers/sync/migrations/0024_trades.sql").read_text())
         db.executescript((ROOT / "workers/sync/migrations/0025_executive_trades.sql").read_text())
+        db.executescript((ROOT / "workers/sync/migrations/0026_trade_scans.sql").read_text())
         trades, signed = T.parse_oge_ptr_text(OGE_TEXT)
         posted = {"id": T.oge_report_id("oge:x|278 Transaction|2026-03-25"), "chamber": "us-executive", "official_id": "p1", "filer_name": "Example, Pat",
                   "state": None, "district": None, "filed_on": signed, "dated": True, "report_url": "https://extapps2.oge.gov/x.pdf", "request_url": None,

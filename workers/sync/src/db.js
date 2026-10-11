@@ -24,6 +24,7 @@ import init0022 from "../migrations/0022_candidate_platforms.sql";
 import init0023 from "../migrations/0023_plain_summaries.sql";
 import init0024 from "../migrations/0024_trades.sql";
 import init0025 from "../migrations/0025_executive_trades.sql";
+import init0026 from "../migrations/0026_trade_scans.sql";
 import { isHttp, today } from "./util.js";
 import { totals } from "./rollcall.js";
 
@@ -53,7 +54,19 @@ const MIGRATIONS = [
   ["0023_plain_summaries.sql", init0023],
   ["0024_trades.sql", init0024],
   ["0025_executive_trades.sql", init0025],
+  ["0026_trade_scans.sql", init0026],
 ];
+
+// Migrations tools/load_trades.py can also apply (the "Load stock trades"
+// workflow may run before the Worker). If the change is already there, the
+// migration is only recorded: 0025 rebuilds trade_reports and would drop the
+// columns it added, and 0026's ALTERs would fail, if run twice.
+const hasColumn = async (db, table, column) =>
+  (await db.prepare(`PRAGMA table_info(${table})`).all()).results.some((c) => c.name === column);
+const ALREADY_APPLIED = {
+  "0025_executive_trades.sql": (db) => hasColumn(db, "trade_reports", "request_url"),
+  "0026_trade_scans.sql": (db) => hasColumn(db, "trade_reports", "transcribed_by"),
+};
 
 function statements(sql) {
   return sql
@@ -79,6 +92,10 @@ export async function ensureSchema(db) {
   const done = new Set(results.map((r) => r.name));
   for (const [name, sql] of MIGRATIONS) {
     if (done.has(name)) continue;
+    if (ALREADY_APPLIED[name] && (await ALREADY_APPLIED[name](db))) {
+      await db.prepare("INSERT OR IGNORE INTO d1_migrations (name) VALUES (?)").bind(name).run();
+      continue;
+    }
     await db.batch([
       ...statements(sql).map((q) => db.prepare(q)),
       db.prepare("INSERT OR IGNORE INTO d1_migrations (name) VALUES (?)").bind(name),

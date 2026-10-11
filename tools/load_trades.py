@@ -688,6 +688,29 @@ def clean_asset(name):
     return ACCOUNT_NO.sub("", name or "").strip()
 
 
+MIGRATIONS = ROOT / "workers" / "sync" / "migrations"
+TRADE_MIGRATIONS = ("0024_trades.sql", "0025_executive_trades.sql", "0026_trade_scans.sql")
+
+
+def ensure_tables(args):
+    """
+    The trades tables, in case the sync Worker hasn't applied their migrations
+    yet; each one applied is recorded in d1_migrations, as the Worker does, so
+    the Worker never applies it a second time (0025 rebuilds trade_reports and
+    would drop the columns it added; 0026's ALTERs would fail).
+    """
+    d1(args, command="CREATE TABLE IF NOT EXISTS d1_migrations (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE, applied_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)")
+    done = {r["name"] for r in d1(args, command="SELECT name FROM d1_migrations")}
+    cols = lambda: {c["name"] for c in d1(args, command="PRAGMA table_info(trade_reports)")}
+    if TRADE_MIGRATIONS[0] not in done:
+        d1(args, file=MIGRATIONS / TRADE_MIGRATIONS[0])  # CREATE … IF NOT EXISTS
+    if TRADE_MIGRATIONS[1] not in done and "request_url" not in cols():
+        d1(args, file=MIGRATIONS / TRADE_MIGRATIONS[1])
+    if TRADE_MIGRATIONS[2] not in done and "transcribed_by" not in cols():
+        d1(args, file=MIGRATIONS / TRADE_MIGRATIONS[2])
+    d1(args, command="INSERT OR IGNORE INTO d1_migrations (name) VALUES " + ", ".join(f"('{n}')" for n in TRADE_MIGRATIONS))
+
+
 def report_sql(rep, trades):
     out = [
         "INSERT OR REPLACE INTO trade_reports (id, chamber, official_id, filer_name, state, district, filed_on, report_url, paper, parsed, trade_count, unmatched, source_url, request_url, position, agency, checked_at) VALUES ("
@@ -862,10 +885,7 @@ def main():
             say(f"  sample {rep['id']} {t['transaction_date']} {t['owner']} | {t['asset_name'][:60]} | {t['ticker']} | {t['type']} | {t['amount']} | filed {rep['filed_on']} | {t.get('sector')}")
 
     if args.mode == "load":
-        # The tables (CREATE … IF NOT EXISTS), in case the sync hasn't applied migration 0024 yet.
-        d1(args, file=ROOT / "workers" / "sync" / "migrations" / "0024_trades.sql")
-        if not any(c["name"] == "request_url" for c in d1(args, command="PRAGMA table_info(trade_reports)")):
-            d1(args, file=ROOT / "workers" / "sync" / "migrations" / "0025_executive_trades.sql")
+        ensure_tables(args)
         stmts = []
         # Rows loaded before clean_asset() existed.
         for row in d1(args, command="SELECT report_id, n, asset_name FROM trades WHERE asset_name GLOB '[0-9][0-9][0-9][0-9][0-9][0-9]* *'"):
