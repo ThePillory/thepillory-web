@@ -1,6 +1,5 @@
 """Temporary probe, round 9: are a Form 700 PDF's checked boxes readable (glyphs, form fields or drawn marks)?"""
 import json, urllib.request, urllib.parse, http.cookiejar, pathlib, subprocess, sys, collections
-subprocess.run([sys.executable, "-m", "pip", "install", "-q", "pdfplumber==0.11.4"], check=True)
 import pdfplumber
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
 OUT = pathlib.Path("tools/probe/out"); OUT.mkdir(parents=True, exist_ok=True)
