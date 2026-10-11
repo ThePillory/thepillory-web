@@ -19,7 +19,7 @@ Periodic Transaction Reports filed by members of Congress, shown as filed, side 
 
 Rules in the loader:
 - **Only what the report says.** Owner is one of Self, Spouse, Joint, Dependent child; anything else is not stored. Asset names, tickers, types and amount ranges are kept exactly as filed.
-- **Matching:** a House report needs exactly one member with the same last name, state and district (`StateDst`); a Senate report exactly one senator with the same first and last name. No unique match: the report is stored with `official_id` NULL and `unmatched` saying why, and never shown. Measure and load runs list the unmatched filers in the run summary.
+- **Matching:** a House report needs exactly one member with the same last name, state and district (`StateDst`); when no member holds that seat under that name (someone who has since moved to the Senate, or to another district after redistricting), exactly one member of Congress from the same state with the same first and last name; a Senate report exactly one senator with the same first and last name. Each load run checks the reports kept unmatched against these rules again and re-reads those that now match one member. No unique match: the report is stored with `official_id` NULL and `unmatched` saying why, and never shown. Measure and load runs list the unmatched filers in the run summary.
 - **No guessing:** an electronic report whose table can't be read with confidence (an unknown row, a range without its upper bound) is stored as a link only (`parsed = 0`).
 
 ## The Supreme Court
