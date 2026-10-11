@@ -828,7 +828,8 @@ def main():
         s_ = [f for f in queue if f["chamber"] == "us-senate"][: args.max_reports - len(x) - len(h)]
         queue = x + h + s_
     else:
-        queue = queue[: args.max_reports]
+        # The executive branch first (a few dozen reports), then newest first.
+        queue = ([f for f in queue if f["chamber"] == "us-executive"] + [f for f in queue if f["chamber"] != "us-executive"])[: args.max_reports]
     say(f"Reading {len(queue)} new reports")
 
     reports, all_trades, unreadable, unmatched = [], [], [], []
