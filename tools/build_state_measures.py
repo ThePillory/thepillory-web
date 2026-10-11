@@ -275,7 +275,7 @@ def collapse_tables(items):
 
     items = [{"h": x} if isinstance(x, str) and numeric(x) else x for x in items]
     # "Table 1 …" or "Figure 2 …" starts a table: its caption and cells, up to the next full paragraph
-    # (twenty words or more) or real subheading, are the table.
+    # (ten words or more) or real subheading, are the table.
     captioned, skipping = [], False
     for x in items:
         if isinstance(x, str):
@@ -290,7 +290,7 @@ def collapse_tables(items):
                 captioned.append({"table": True})
                 skipping = True
                 continue
-            if skipping and len(x.split()) < 20:
+            if skipping and len(x.split()) < 10:
                 continue
         elif skipping and "h" in x and tabley(x["h"]):
             continue
