@@ -19,4 +19,4 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -f tools/probe/out
-          git commit -m "Probe samples" && git push || true
+          git commit -m "Probe samples" && git pull --rebase -q origin "${GITHUB_REF_NAME}" && git push || true
