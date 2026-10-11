@@ -187,7 +187,22 @@ def co_blocks(lines, noise):
     subheading ({"h": ...})."""
     blocks, cur, broke = [], [], False
     for ln in lines + [""]:
-        s = ln.strip()
+        # List bullets ("●", "•", and "y", the bullet glyph in the Blue Book's font) aren't text.
+        raw = ln.strip()
+        s = re.sub(r"^(?:[●•▪]|y(?=\s*$))\s*|\s*[●•▪]$", "", raw)
+        if raw and s != raw:
+            # A bullet starts a new list item: whatever came before is its own paragraph.
+            if re.match(r"^[●•▪]", raw) or not s:
+                if cur:
+                    blocks.append((cur, broke))
+                    cur, broke = [], False
+                if not s:
+                    continue
+            else:  # a bullet at the end of a line: the next line starts the list
+                cur.append(s)
+                blocks.append((cur, broke))
+                cur, broke = [], False
+                continue
         if s and noise(s):
             if re.fullmatch(r"\d{1,3}", s) and blocks and not cur:
                 blocks[-1] = (blocks[-1][0], True)  # a page number after a block: the next block may continue it
@@ -241,8 +256,11 @@ def co_blocks(lines, noise):
 
 
 def tabley(h):
-    """A "heading" that is really a table cell or chart label: few words, or numbers and signs."""
+    """A "heading" that is really a table cell or chart label: few words, or numbers and signs. A question,
+    or a heading of three or more words without dollar or percent signs, is a real heading."""
     words = re.findall(r"[A-Za-z]{2,}", h)
+    if h.endswith("?") or (len(words) >= 3 and not re.search(r"[$%]|[a-z][A-Z]", h)):
+        return False
     return len(words) < 2 or bool(re.search(r"[$%]|\d", h)) or bool(re.search(r"[a-z][A-Z]", h))
 
 
