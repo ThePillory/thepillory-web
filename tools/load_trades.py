@@ -48,6 +48,7 @@ import io
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -552,6 +553,24 @@ def pdf_text(data):
         return r.stdout if r.returncode == 0 else ""
 
 
+def ocr_text(data, dpi=300):
+    """
+    The PDF read by Tesseract from page images at `dpi`, page by page, keeping
+    the spaces between columns. For scanned reports whose own text layer is too
+    poor to read. Measure mode only for now: what it reads is printed, never written.
+    """
+    with tempfile.TemporaryDirectory() as d:
+        pdf = Path(d) / "r.pdf"
+        pdf.write_bytes(data)
+        subprocess.run(["pdftoppm", "-r", str(dpi), "-gray", "-png", str(pdf), str(Path(d) / "p")], check=True, timeout=300)
+        pages = []
+        for img in sorted(Path(d).glob("p-*.png")):
+            r = subprocess.run(["tesseract", str(img), "-", "--psm", "6", "-c", "preserve_interword_spaces=1"],
+                               capture_output=True, text=True, timeout=300)
+            pages.append(r.stdout if r.returncode == 0 else "")
+        return "\n".join(pages)
+
+
 def house_filings(years):
     out = []
     for y in years:
@@ -712,6 +731,7 @@ def main():
     ap.add_argument("--mode", choices=("measure", "load"), default="measure")
     ap.add_argument("--max-reports", type=int, default=300, help="new reports read this run, newest first")
     ap.add_argument("--database", default="pillory")
+    ap.add_argument("--ocr", type=int, default=0, help="measure mode: OCR this many scanned 278-Ts and print what Tesseract reads")
     ap.add_argument("--since-year", type=int, default=FIRST_YEAR)
     args = ap.parse_args()
     have_d1 = bool(os.environ.get("CLOUDFLARE_API_TOKEN"))
@@ -823,7 +843,20 @@ def main():
             lines = [ln.rstrip() for ln in (f.get("_text") or "").splitlines() if ln.strip()]
             say(f"  --- text of {f['id']} ({len(lines)} lines):")
             for ln in lines[:70]:
-                say(f"  | {ln[:180]}")
+                say(f"  | {ln[:260]}")
+        # Scanned 278-Ts: how well Tesseract reads them, and whether the strict reader accepts it.
+        if args.ocr and shutil.which("tesseract"):
+            for f in [u for u in unreadable if u["id"].startswith("oge:")][: args.ocr]:
+                try:
+                    text = ocr_text(get(f["url"]))
+                except Exception as e:
+                    say(f"  --- OCR of {f['id']}: failed ({type(e).__name__}: {e})")
+                    continue
+                trades, signed = parse_oge_ptr_text(text)
+                lines = [ln.rstrip() for ln in text.splitlines() if ln.strip()]
+                say(f"  --- OCR of {f['id']} {f['url']}: {len(lines)} lines; strict reader: {'%d trades' % len(trades) if trades else 'not accepted'}; signed {signed}")
+                for ln in lines[:120]:
+                    say(f"  # {ln[:260]}")
     for rep, ts in reports[:60]:
         for t in ts[:2]:
             say(f"  sample {rep['id']} {t['transaction_date']} {t['owner']} | {t['asset_name'][:60]} | {t['ticker']} | {t['type']} | {t['amount']} | filed {rep['filed_on']} | {t.get('sector')}")
