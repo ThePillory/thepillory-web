@@ -44,12 +44,13 @@ export function tradeRow(t, { member = false } = {}) {
     member && t.member_name ? `${t.member_name}${t.state ? `, ${t.state}` : ""}` : "",
     t.owner && t.owner !== "Self" ? `Owner: ${t.owner}` : "",
     t.sector || "",
+    t.held_in ? `Held in ${t.held_in}` : "",
     filedLate(t),
     t.transcribed_by ? `Transcribed by AI from a scanned report · Checked by ${t.transcribed_by}` : t.transcribed_at ? "Transcribed by AI from a scanned report, auto-checked" : "",
   ].filter(Boolean);
   return `<a class="compact-row trade-row" href="${esc(t.report_url)}" target="_blank" rel="noopener">
   <span class="cr-type">${esc(t.type)}</span>
-  <span class="cr-main"><span class="cr-title">${esc(asset)}</span><span class="cr-meta">${esc(t.amount)} · ${meta.map(esc).join(" · ")}</span></span>
+  <span class="cr-main"><span class="cr-title">${esc(asset)}</span><span class="cr-meta">${esc(t.amount || "Value not given")} · ${meta.map(esc).join(" · ")}</span></span>
   <span class="chev" aria-hidden="true">↗</span>
 </a>`;
 }

@@ -699,6 +699,89 @@ def build_disclosures(justices):
 
 
 # ---------------------------------------------------------------------------
+# Trades: Part VII of the annual reports (AO Form 10), 2023 on
+#
+# Since the 2023 reports the judiciary produces them in its electronic filing
+# system (JEFS) with a text layer, and every purchase and sale is a line of
+# its own. JEFS itself admits a reader only through a registration with a
+# CAPTCHA on every visit, so the reports are read from the copies Fix the Court
+# posts, unchanged, on one page per year. tools/scotus_trades.py reads them;
+# a report not read in full is listed as a link, never guessed.
+
+TRADES_FIRST_YEAR = 2023
+FTC_YEAR_PAGE = "https://fixthecourt.com/{year}disclosures/"
+
+
+def report_justice(justices, url, text):
+    """The justice a report belongs to: the same last and first name in the report (or its file name), exactly one."""
+    import scotus_trades
+    filer = (scotus_trades.filer_name(text) or "").lower()
+    file_name = url.rsplit("/", 1)[-1].lower()
+    hits = []
+    for j in justices:
+        words = re.sub(r",?\s+(jr|sr)\.?$", "", j["name"], flags=re.I).replace(",", " ").split()
+        first, last = words[0].lower(), words[-1].lower()
+        in_filer = filer.startswith(last) and first in filer
+        in_file = file_name.startswith(f"{last}-") and f"-{first}-" in file_name
+        if in_filer or in_file:
+            hits.append(j["slug"])
+    return hits[0] if len(hits) == 1 else None
+
+
+def build_trades(justices, previous):
+    """{slug: {"reports": [...], "trades": [...]}} from every year's reports since TRADES_FIRST_YEAR."""
+    sys.path.insert(0, str(ROOT / "tools"))
+    import scotus_trades
+    seen = {r["url"]: r for v in (previous or {}).values() for r in v.get("reports", [])}
+    cached = {}
+    for v in (previous or {}).values():
+        for t in v.get("trades", []):
+            cached.setdefault(t["report_url"], []).append(t)
+    out = {j["slug"]: {"reports": [], "trades": []} for j in justices}
+    for year in range(TRADES_FIRST_YEAR, datetime.date.today().year):
+        page_url = FTC_YEAR_PAGE.format(year=year)
+        try:
+            page = fetch(page_url)
+        except Exception as e:
+            print(f"Trades {year}: the year's page not read ({type(e).__name__}); earlier reports kept", file=sys.stderr)
+            for slug, v in (previous or {}).items():
+                if slug in out:
+                    for r in v.get("reports", []):
+                        if r["year"] == year:
+                            out[slug]["reports"].append(r)
+                            out[slug]["trades"] += cached.get(r["url"], [])
+            continue
+        urls = sorted(set(re.findall(r'href="(https://fixthecourt\.com/wp-content/uploads/[^"]*-Annual-%d[^"/]*\.pdf)"' % year, page)))
+        for url in urls:
+            old = seen.get(url)
+            if old and old.get("parser") == scotus_trades.PARSER_VERSION and old["justice"] in out:
+                out[old["justice"]]["reports"].append(old)
+                out[old["justice"]]["trades"] += cached.get(url, [])
+                continue
+            try:
+                text = pdf_text(fetch(url, binary=True), layout=True)
+            except Exception as e:
+                print(f"Trades {year}: {url} not read ({type(e).__name__})", file=sys.stderr)
+                continue
+            slug = report_justice(justices, url, text)
+            if not slug:
+                continue  # a retired justice's report, or no single match
+            report = {"justice": slug, "year": year, "url": url, "source_page": page_url, "parser": scotus_trades.PARSER_VERSION}
+            try:
+                rows = scotus_trades.read_report(text)
+                report.update(status="read", trades=len(rows))
+                out[slug]["trades"] += [dict(r, year=year, report_url=url) for r in rows]
+            except scotus_trades.Unreadable as e:
+                report.update(status="link", reason=str(e)[:200])
+                print(f"Trades {year}: {url} listed as a link only ({e})", file=sys.stderr)
+            out[slug]["reports"].append(report)
+    for v in out.values():
+        v["reports"].sort(key=lambda r: -r["year"])
+        v["trades"].sort(key=lambda t: (t["date"] or f"{t['year']}-00-00"), reverse=True)
+    return out
+
+
+# ---------------------------------------------------------------------------
 
 
 def write(path, data):
@@ -761,6 +844,24 @@ def main():
         print(f"Disclosures: {sum(len(v) for v in disclosures.values())} reports for {sum(1 for v in disclosures.values() if v)} of {len(disclosures)} justices (bulk data of {date})")
     except Exception as e:
         print(f"Disclosures: CourtListener bulk data {type(e).__name__}: {e}; disclosures.json not changed", file=sys.stderr)
+
+    # Trades: same rule, a problem keeps the old file.
+    try:
+        path = OUT / "trades.json"
+        previous = json.loads(path.read_text())["justices"] if path.exists() else None
+        trades = build_trades(justices, previous)
+        reports = [r for v in trades.values() for r in v["reports"]]
+        if reports:
+            write(path, {
+                "built_on": built,
+                "source": "Annual financial disclosure reports (AO Form 10), Part VII, as produced by the Administrative Office of the U.S. Courts; copies posted by Fix the Court",
+                "justices": trades,
+            })
+        print(f"Trades: {sum(len(v['trades']) for v in trades.values())} from {sum(1 for r in reports if r['status'] == 'read')} reports read, "
+              f"{sum(1 for r in reports if r['status'] == 'link')} listed as links only")
+    except Exception as e:
+        print(f"Trades: {type(e).__name__}: {e}; trades.json not changed", file=sys.stderr)
+
 
 if __name__ == "__main__":
     main()
