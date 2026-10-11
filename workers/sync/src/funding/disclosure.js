@@ -174,10 +174,19 @@ export function ogeNameMatches(ogeName, official) {
   if (!p) return false;
   const [last, rest] = String(ogeName || "").split(",");
   if (!rest) return false;
-  const first = fold(rest.trim().split(/\s+/)[0]);
+  const given = rest.trim().split(/\s+/).filter(Boolean);
+  const first = fold(given[0]);
   const lastF = fold(last);
   const lastOk = lastF === p.last || lastF.replace(/-/g, " ").split(" ").includes(p.last) || p.last.replace(/-/g, " ").split(" ").includes(lastF);
-  return lastOk && !!first && (first === p.first || (first.length > 2 && p.first.startsWith(first)) || (p.first.length > 2 && first.startsWith(p.first)));
+  if (!lastOk || !first) return false;
+  // An official known by initials ("J.D. Vance") matches OGE's given names by
+  // their initials ("Vance, James D"); every initial must match.
+  const initials = String(official || "").trim().split(/\s+/)[0];
+  if (/^([A-Za-z]\.){2,}$/.test(initials)) {
+    const mine = initials.replace(/\./g, "").toLowerCase();
+    return given.flatMap((w) => w.split(".")).map((w) => fold(w)[0] || "").join("").startsWith(mine);
+  }
+  return first === p.first || (first.length > 2 && p.first.startsWith(first)) || (p.first.length > 2 && first.startsWith(p.first));
 }
 
 const decode = (s) =>

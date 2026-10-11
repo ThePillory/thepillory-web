@@ -110,6 +110,11 @@ test("OGE: names match by last name and first name, not by last name alone", () 
   assert.equal(ogeNameMatches("Doe, Jan", "Janet Doe"), true); // first name abbreviated
   assert.equal(ogeNameMatches("Doe", "Jane Doe"), false);
   assert.equal(ogeNameMatches("Muñoz, José", "Jose Munoz"), true);
+  assert.equal(ogeNameMatches("Vance, James D", "J.D. Vance"), true); // known by initials
+  assert.equal(ogeNameMatches("Vance, James David", "J.D. Vance"), true);
+  assert.equal(ogeNameMatches("Vance, J.D.", "J.D. Vance"), true);
+  assert.equal(ogeNameMatches("Vance, James", "J.D. Vance"), false); // one initial isn't enough
+  assert.equal(ogeNameMatches("Vance, John M", "J.D. Vance"), false);
 });
 
 test("FPPC: a Form 700 is kept when the name and the office both match", async () => {
