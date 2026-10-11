@@ -162,7 +162,8 @@ async function ogeDisclosures(env, db, budget) {
   const { results: people } = await db
     .prepare(
       `SELECT o.id, o.name FROM officials o LEFT JOIN disclosure_checks k ON k.official_id = o.id AND k.source = 'oge'
-       WHERE o.chamber = 'us-executive' AND o.active = 1 AND (k.checked_at IS NULL OR k.checked_at < datetime('now', ?))
+       WHERE o.chamber = 'us-executive' AND o.active = 1
+         AND (k.checked_at IS NULL OR k.checked_at < datetime('now', ?) OR (k.note IS NOT NULL AND k.checked_at < datetime('now', '-1 day')))
        ORDER BY k.checked_at IS NOT NULL, o.rank LIMIT 40`
     )
     .bind(`-${days} days`)
