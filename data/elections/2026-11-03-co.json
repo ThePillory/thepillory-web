@@ -261,7 +261,7 @@
    "no_means": "A “no” vote on Amendment 83 means that hunting and fishing will continue as allowed under existing state and federal law.",
    "means_by": "Legislative Council Staff, Colorado General Assembly",
    "lead": {
-    "text": "Amendment 83 proposes amending the Colorado Constitution to: establish a constitutional right to fish and hunt certain wildlife; and create a policy that states hunting and fishing are the preferred means of managing fish and wildlife populations in Colorado.",
+    "text": "Amendment 83 proposes amending the Colorado Constitution to: create a policy that states hunting and fishing are the preferred means of managing fish and wildlife populations in Colorado.",
     "source": "The Blue Book's summary, written by the Legislative Council Staff."
    },
    "sections": [
@@ -271,7 +271,10 @@
      "by": "Legislative Council Staff, Colorado General Assembly",
      "paragraphs": [
       "Amendment 83 proposes amending the Colorado Constitution to:",
-      "establish a constitutional right to fish and hunt certain wildlife; and",
+      {
+       "h": "establish a constitutional right to fish and hunt certain wildlife; and",
+       "label": true
+      },
       "create a policy that states hunting and fishing are the preferred means of managing fish and wildlife populations in Colorado."
      ]
     },
@@ -292,7 +295,8 @@
       "where and when hunting and fishing can occur;",
       "license and permit requirements;",
       {
-       "h": "methods and materials for hunters and anglers; and"
+       "h": "methods and materials for hunters and anglers; and",
+       "label": true
       },
       "limits on how many animals can be hunted, fished, or trapped.",
       "Regulations are generally guided by information on wildlife and fish populations, species and habitat management plans, and recreational opportunities and needs.",
@@ -736,16 +740,6 @@
        "h": "Taxpayer Impacts"
       },
       "Amendment 87 will decrease the amount of income tax owed by taxpayers with Colorado taxable income of less than $510,834 and increase the amount of income tax owed by taxpayers with Colorado taxable income of $510,834 and above. State law requires Legislative Council Staff to estimate the potential tax burden on affected taxpayers within specified federal adjusted gross income categories. Federal adjusted gross income is total income from all sources, with certain adjustments, as determined when filing federal income taxes. Colorado taxable income, calculated when filing state income taxes, is based on federal adjusted gross income with additional adjustments required or allowed under state law. Table 3 shows the expected change in tax burden by federal adjusted gross income category. The measure has no impact on current TABOR refunds or TABOR refund mechanisms. Table 3 Estimated Impact on Taxpayers by Income Income Category",
-      "Estimated Number of Taxpayers",
-      {
-       "h": "Total Change in"
-      },
-      {
-       "h": "Tax Burden"
-      },
-      {
-       "h": "Average Change in"
-      },
       {
        "table": true
       },
@@ -774,7 +768,7 @@
      "paragraphs": [
       "1) Amendment 87 cuts taxes for 97 percent of taxpayers, including most households and small businesses, while increasing taxes only for top earners who have the ability to pay. A graduated income tax is more equitable than a flat tax because it recognizes a fundamental economic reality: each dollar taxed on someone earning $30,000 imposes a far greater hardship than each dollar taxed on someone earning $1 million. By aligning tax rates with taxpayers’ financial means, a graduated tax distributes the burden more justly across all income levels, lowers taxes for most",
       {
-       "h": "Online at: leg.colorado.gov/bluebook"
+       "table": true
       },
       "households and small businesses, and puts more money in the hands of working families who will spend it in their local communities.",
       "2) The measure funds critical services at a time when additional funding is desperately needed. Crucial programs are at risk of further cuts because of changes in federal policy. Revenue from the graduated tax will fund education, health care, and child care, public services that many Colorado households rely on. Colorado public schools are significantly underfunded, and constraints on the state budget make Medicaid cuts increasingly likely. Additional funding will provide more security for the people who depend on these services.",
@@ -834,7 +828,8 @@
      "by": "Legislative Council Staff, Colorado General Assembly",
      "paragraphs": [
       {
-       "h": "Proposition NN proposes amending the Colorado statutes to"
+       "h": "Proposition NN proposes amending the Colorado statutes to",
+       "label": true
       },
       "allow the state to keep some or all of the revenue that the state's constitutional revenue limit, also known as the Taxpayer's Bill of Rights (TABOR), would otherwise require to be refunded to taxpayers, up to the amount the state spends on public education; and",
       "spend the retained revenue to increase funding for K-12 education and programs that support children, and, after ten years, K-12 education and any other purposes to be determined by the state legislature."
@@ -863,7 +858,10 @@
       {
        "h": "TABOR limit"
       },
-      "Estimated revenue retained under Prop. NN: $500 million in the first year",
+      {
+       "h": "Estimated revenue retained under Prop. NN: $500 million in the first year",
+       "label": true
+      },
       {
        "h": "$0"
       },
@@ -873,12 +871,13 @@
       {
        "h": "Prop. NN limit is"
       },
-      "$4.6 billion higher in the first year",
       {
-       "h": "Revenue below the"
+       "h": "$4.6 billion higher in the first year",
+       "label": true
       },
       {
-       "h": "TABOR limit"
+       "h": "Revenue below the TABOR limit",
+       "label": true
       },
       {
        "h": "First Year"
@@ -894,24 +893,13 @@
       {
        "table": true
       },
-      "Higher revenue",
-      {
-       "table": true
-      },
-      "Lower revenue",
-      {
-       "table": true
-      },
       "In years when state revenue exceeds the new Prop. NN limit, Prop. NN reduces TABOR refunds. Revenue is not likely to exceed the Prop. NN limit in the first several years, but this scenario becomes more likely over time. Scenario 2 – Revenue exceeds the TABOR limit, but not the Prop. NN limit In years when state revenue exceeds the current TABOR limit and is less than the new Prop. NN limit, Prop. NN eliminates TABOR refunds. This is the most likely scenario for the next several years, unless there is a recession. Scenario 3 – Revenue falls below the TABOR limit In years when state revenue falls below the current TABOR limit, which may happen during a recession, Prop. NN has no impact on TABOR refunds, as refunds would not be made under current law.",
       {
        "h": "How will the retained revenue be spent?"
       },
       "Proposition NN specifies how revenue retained above the current TABOR limit must be spent. The revenue must first be used to reimburse local governments for the lost tax revenue from property tax exemptions for seniors, veterans with a disability, and Gold Star surviving spouses, as is already required as a TABOR refund mechanism under current law. All remaining revenue is deposited into the newly created Children’s Account. Figure 3 shows new spending requirements under Proposition NN",
       {
-       "h": "Figure 3"
-      },
-      {
-       "h": "New Spending Requirements Under Proposition NN"
+       "table": true
       },
       {
        "h": "How will the K‑12 funding be used?"
@@ -940,30 +928,6 @@
        "h": "Taxpayer Impacts"
       },
       "Proposition NN is expected to reduce the amount refunded to taxpayers by $329.9 million in the current 2026-27 budget year, $521.0 million in the 2027-28 budget year, and by varying amounts in future years. This eliminates TABOR refunds for budget years 2026-27 and 2027-28. Table 1 shows estimated TABOR refunds under Proposition NN for certain income levels. Table 1 Estimated TABOR Refunds for Certain Income Levels Adjusted Gross Income $50,000",
-      {
-       "table": true
-      },
-      "Current Law: Single Filers",
-      {
-       "table": true
-      },
-      "Current Law: Joint Filers",
-      {
-       "table": true
-      },
-      "Prop. NN: All Filers",
-      {
-       "table": true
-      },
-      "Current Law: Single Filers",
-      {
-       "table": true
-      },
-      "Current Law: Joint Filers",
-      {
-       "table": true
-      },
-      "Prop. NN: All Filers",
       {
        "table": true
       },
@@ -1069,7 +1033,8 @@
       "The most serious fentanyl-related drug crimes mandate a minimum prison sentence of 8 years up to a maximum of 32 years. This includes offenders who:",
       "distributed to a minor;",
       {
-       "h": "distributed more than 50 grams of a substance; or"
+       "h": "distributed more than 50 grams of a substance; or",
+       "label": true
       },
       "distributed at least 4 grams of a substance that caused death.",
       "In other cases, state law allows for sentences such as probation and treatment, and prohibits state prison for offenders who either:",
@@ -1200,12 +1165,6 @@
        "table": true
       },
       {
-       "h": "Current and Proposed Penalties for Child Sex Trafficking"
-      },
-      {
-       "h": "Policy"
-      },
-      {
        "h": "Felony Classification"
       },
       {
@@ -1320,7 +1279,8 @@
       "The measure requires that any school-based team or sport be explicitly designated as being:",
       "for biological males only;",
       {
-       "h": "for biological females only; or"
+       "h": "for biological females only; or",
+       "label": true
       },
       "coeducational or mixed.",
       "Under the measure, students must compete on teams that match their biological sex or on a coeducational team. Biological females are allowed to participate on a team or sport designated for biological males if there is no equivalent female team offered for that sport. Participation on a coeducational or mixed team or sport is open to all. In addition, the measure prohibits any government entity, licensing or accrediting organization, or athletic association from investigating or penalizing a school for designating a team or sport as being only for biological females.",
@@ -1629,7 +1589,8 @@
       "wildfire risk management and mitigation, forest management and restoration, and a fund for damages that may arise from prescribed fires;",
       "watershed restoration projects;",
       {
-       "h": "outdoor education and recreation programs; and"
+       "h": "outdoor education and recreation programs; and",
+       "label": true
       },
       "outdoor access and equity improvements, which could include programs that give opportunities to underserved youth and families.",
       "The measure applies to most sporting goods categories and does not change the price of sporting goods or the amount of tax collected. Sporting goods include bicycles, golf equipment, hunting and fishing equipment, camping equipment, boats, recreational vehicles, and campers. It also includes rental services for recreational, sports, and fitness equipment. The measure exempts this portion of state sales tax revenue from the state’s constitutional revenue limit, known as the Taxpayer’s Bill of Rights (TABOR) limit. The amount directed to these efforts will be calculated by Legislative Council Staff, the nonpartisan research agency of the General Assembly. For state budget year 2027-28, this is currently estimated to be $175 million",
@@ -1652,10 +1613,6 @@
        "h": "Millions of Dollars"
       },
       "Great Outdoors Colorado (GOCO)",
-      {
-       "table": true
-      },
-      "Wildfire risk mitigation, forest management, and watershed projects",
       {
        "table": true
       },
@@ -1706,7 +1663,7 @@
       "1) Without increasing tax rates or changing the cost of sporting goods, the measure directs needed money to recreation access, protects land from development, mitigates wildfire risk, and safeguards watersheds. Competing priorities squeeze the state budget, federal support is unreliable, and the state has not kept up with necessary investments to improve the environment and outdoor economy for residents and visitors. The measure funds trusted programs like GOCO, which has supported conservation projects statewide for over 30 years.",
       "2) Colorado’s outdoor spaces are under strain with more visitors, ongoing drought, and more frequent and devastating wildfires. These pressures threaten communities, water resources, and recreational spaces. This measure provides a user-based model for supporting the outdoors, protecting our",
       {
-       "h": "Online at: leg.colorado.gov/bluebook"
+       "table": true
       },
       "communities from wildfire, and restoring watersheds. Residents and visitors who rent or buy sporting goods often use them in outdoor-related activities, making them natural stakeholders in protecting Colorado’s lands, water, and wildlife. Linking spending to conservation ensures that those who benefit most from the outdoors help sustain it."
      ]
