@@ -177,30 +177,38 @@ def co_blocks(lines, noise):
     """Paragraphs from reading-order lines: blocks split on blank lines, page furniture dropped, a
     paragraph broken by a page joined back up, and a question or short line opening a block kept as a
     subheading ({"h": ...})."""
-    blocks, cur = [], []
+    blocks, cur, broke = [], [], False
     for ln in lines + [""]:
         s = ln.strip()
         if s and noise(s):
+            if re.fullmatch(r"\d{1,3}", s) and blocks and not cur:
+                blocks[-1] = (blocks[-1][0], True)  # a page number after a block: the next block may continue it
+            elif re.fullmatch(r"\d{1,3}", s):
+                broke = True
             continue
         if not s:
             if cur:
-                blocks.append(cur)
-                cur = []
+                blocks.append((cur, broke))
+                cur, broke = [], False
             continue
         cur.append(s)
     out = []
-    for b in blocks:
+    pending_break = False
+    for b, after_break in blocks:
+        joinable = pending_break
+        pending_break = after_break
         # A subheading starts a block: a question, or a short line without a full stop followed by text.
-        while len(b) > 1 and (b[0].endswith("?") or (len(b[0]) < 70 and not re.search(r"[.;:,”\"]$", b[0]) and not b[0].startswith(("1)", "2)", "3)")))):
+        while len(b) > 1 and (b[0].endswith("?") or (len(b[0]) < 70 and not re.search(r"[.;:,”\"]$", b[0]) and not re.match(r"^\d\)", b[0]))):
             out.append({"h": b[0]})
             b = b[1:]
+            joinable = False
         text = join_lines(b)
-        if len(b) == 1 and (text.endswith("?") or (len(text) < 70 and not re.search(r"[.;:,”\"]$", text))):
+        if len(b) == 1 and (text.endswith("?") or (len(text) < 70 and not re.search(r"[.;:,”\")]$", text))):
             out.append({"h": text})
             continue
         prev = out[-1] if out else None
-        # Continued from the page before: the previous paragraph didn't end a sentence.
-        if isinstance(prev, str) and not re.search(r"[.:;?!”\")]$", prev) and not re.match(r"^\d\)", text):
+        # Continued across a page: the previous paragraph didn't end a sentence.
+        if joinable and isinstance(prev, str) and not re.search(r"[.:;?!”\")]$", prev) and not re.match(r"^\d\)", text):
             out[-1] = prev + text if prev.endswith("-") and not prev.endswith(" -") else prev + " " + text
             continue
         out.append(text)
@@ -453,7 +461,11 @@ def fl_measures():
         where = join_lines([l for l in seg[1:bt] if l])
         title = join_lines([l for l in seg[bt + 1:bs] if l])
         summary = join_lines([l for l in seg[bs + 1:tx] if l])
-        check(f"Florida Amendment {n}", text, [where, title, summary])
+        check(f"Florida Amendment {n}", text, [where, title])
+        if GARBLED.search(summary):
+            summary = None  # the booklet's font for it doesn't survive extraction: linked, never guessed
+        else:
+            check(f"Florida Amendment {n}", text, [summary])
         clean = title.rstrip("—- .").rstrip("—").strip()
         measures.append({
             "id": f"amendment-{n}",
@@ -465,9 +477,10 @@ def fl_measures():
             "requirement": "Passes with 60 percent of the vote (Florida Constitution, Article XI, Section 5)",
             "question": title,
             "question_by": FL_BY,
-            "lead": {"text": summary, "source": "The official ballot summary."},
+            "lead": {"text": summary, "source": "The official ballot summary."} if summary else None,
             "sections": [
-                section("summary", "Ballot summary", FL_BY, [summary]),
+                section("summary", "Ballot summary", FL_BY, [summary]) if summary else
+                section("summary", "Ballot summary", FL_BY, [], "The ballot summary couldn't be read from the booklet's text (its font doesn't survive extraction), so it isn't shown here. Read it in the Division of Elections' booklet."),
                 section("where", "Where it would change the constitution", FL_BY, [where]),
             ],
             "arguments": [],
