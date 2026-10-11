@@ -174,6 +174,13 @@ class LoadTrades(unittest.TestCase):
         self.assertTrue(T.is_278t("OGE Form 278-T"))
         self.assertFalse(T.is_278t("278 Annual"))
         self.assertIsNone(T.parse_oge_ptr_text("Summary of Contents\nnothing here")[0])
+        # A scanned report's text layer with a stray "$15" is not read: no guessing.
+        scanned = OGE_TEXT.replace("$1,001 - $15,000", "$15")
+        self.assertIsNone(T.parse_oge_ptr_text(scanned)[0])
+        endnote = OGE_TEXT.replace("Example Holdings LLC      ", "Example Holdings LLC See Endnote")
+        self.assertEqual(T.parse_oge_ptr_text(endnote)[0][2]["asset_name"], "Example Holdings LLC")
+        self.assertTrue(T.full_range("$1,001 - $15,000") and T.full_range("Over $50,000,000") and T.full_range("Spouse/DC Over $1,000,000"))
+        self.assertFalse(T.full_range("$15") or T.full_range("$1") or T.full_range("$15,000 - $1,001"))
 
     def test_executive_reports_and_request_only(self):
         db = sqlite3.connect(":memory:")
