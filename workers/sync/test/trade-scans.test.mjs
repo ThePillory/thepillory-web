@@ -1,8 +1,9 @@
 // node --test test/trade-scans.test.mjs
 // Scanned OGE Form 278-T reports (docs/trades.md): the checks on two AI
-// readings, the scanned-trades step with fake model answers, the admin page's
-// approve / reject / read again, the public label, and the migration guard that
-// keeps the Worker from applying 0025 or 0026 a second time. Real schema in SQLite.
+// readings, the scanned-trades step with fake model answers (agreed rows publish
+// labeled as AI), the admin page's confirm / take down / read again, the public
+// labels, and the migration guard that keeps the Worker from applying 0025 to
+// 0027 a second time. Real schema in SQLite.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { DatabaseSync } from "node:sqlite";
@@ -114,7 +115,7 @@ test("the text layer: a row it shows must be read, and its type mustn't contradi
   assert.ok(contained("Danaher Corp", "12 Danahor Coro sale") >= 0.5);
 });
 
-test("the step reads each queued report twice and records whether they agree", async () => {
+test("the step reads each queued report twice; agreed rows publish labeled as AI, the rest stay links", async () => {
   const sqlite = seeded();
   const db = d1(sqlite);
   const asked = [];
@@ -124,25 +125,40 @@ test("the step reads each queued report twice and records whether they agree", a
     if (message[0].source.url.endsWith("b.pdf") && model === "claude-opus-5-5") rows.rows[1].amount = "$50,001 - $100,000";
     return { data: rows, model };
   };
-  const r = await syncScannedTrades({ SCANNED_TRADES_DAILY: "5" }, db, null, { call });
-  assert.match(r.message, /1 scanned report\(s\) read with both readings agreeing.*1 not agreeing/);
+  const r = await syncScannedTrades({ SCANNED_TRADES_DAILY: "5" }, db, null, { call, random: () => 0.05 });
+  assert.match(r.message, /1 scanned report\(s\) published.*1 not agreeing/);
   assert.deepEqual(asked.map((x) => x[0]), ["claude-sonnet-5-5", "claude-opus-5-5", "claude-sonnet-5-5", "claude-opus-5-5"]);
   const a = sqlite.prepare("SELECT * FROM trade_scans WHERE report_id = 'oge:a'").get();
   const b = sqlite.prepare("SELECT * FROM trade_scans WHERE report_id = 'oge:b'").get();
   assert.equal(a.status, "agreed");
-  assert.equal(JSON.parse(a.reading).length, 2);
+  assert.equal(a.spot_check, 1, "picked for a spot check (random below SPOT_CHECK_RATE)");
   assert.equal(b.status, "disagree");
   assert.match(b.problems, /differ on the amount/);
-  assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM trades").get().n, 0, "nothing published before a person approves");
+  assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM trades WHERE report_id = 'oge:a'").get().n, 2);
+  assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM trades WHERE report_id = 'oge:b'").get().n, 0, "readings that disagree publish nothing");
+  const rep = sqlite.prepare("SELECT parsed, trade_count, transcribed_by, transcribed_at FROM trade_reports WHERE id = 'oge:a'").get();
+  assert.equal(rep.parsed, 1);
+  assert.equal(rep.trade_count, 2);
+  assert.equal(rep.transcribed_by, null);
+  assert.ok(rep.transcribed_at);
+  const abt = sqlite.prepare("SELECT * FROM trades WHERE report_id = 'oge:a' AND n = 2").get();
+  assert.equal(abt.sector, "Manufacturing");
+  assert.equal(abt.days_to_file, null, "no filer's date on a scan: no timeliness line");
+  const sum = sqlite.prepare("SELECT * FROM trade_summary WHERE official_id = 'p1' AND year = 2026").get();
+  assert.equal(sum.trades, 2);
+  assert.equal(sum.total_min, 1000001 + 15001);
+  const html = (await memberTrades(db, "p1")).rows.map((t) => tradeRow(t)).join("");
+  assert.match(html, /Transcribed by AI from a scanned report, auto-checked/);
   const again = await syncScannedTrades({ SCANNED_TRADES_DAILY: "5" }, db, null, { call });
   assert.equal(again.message, "no scanned reports waiting");
 });
 
-test("approving publishes the rows with who checked them; reject and read again keep it a link", async () => {
+test("a person confirms a transcription or takes it down; read again requeues", async () => {
   const sqlite = seeded();
   const db = d1(sqlite);
   const call = async (env, { model }) => ({ data: copy(ROWS), model });
-  await syncScannedTrades({ SCANNED_TRADES_DAILY: "5" }, db, null, { call });
+  await syncScannedTrades({ SCANNED_TRADES_DAILY: "5" }, db, null, { call, random: () => 0.5 });
+  assert.equal(sqlite.prepare("SELECT spot_check FROM trade_scans WHERE report_id = 'oge:a'").get().spot_check, 0);
   const form = (o) => {
     const f = new FormData();
     for (const [k, v] of Object.entries(o)) f.set(k, v);
@@ -150,37 +166,31 @@ test("approving publishes the rows with who checked them; reject and read again 
   };
   assert.match((await scanChange(db, "oge:a", form({ action: "approve", reviewer: "Rae Reviewer" }), "rae@example.org")).error, /compared every row/);
   assert.match((await scanChange(db, "oge:a", form({ action: "approve", compared: "1" }), "")).error, /Enter your name/);
-  const ok = await scanChange(db, "oge:a", form({ action: "approve", compared: "1", reviewer: "Rae Reviewer" }), "rae@example.org");
-  assert.match(ok.done, /Published 2 trades/);
-  const rep = sqlite.prepare("SELECT parsed, trade_count, transcribed_by FROM trade_reports WHERE id = 'oge:a'").get();
-  assert.deepEqual({ ...rep }, { parsed: 1, trade_count: 2, transcribed_by: "Rae Reviewer" });
-  const abt = sqlite.prepare("SELECT * FROM trades WHERE report_id = 'oge:a' AND n = 2").get();
-  assert.equal(abt.sector, "Manufacturing");
-  assert.equal(abt.days_to_file, null, "no filer's date on a scan: no timeliness line");
-  const sum = sqlite.prepare("SELECT * FROM trade_summary WHERE official_id = 'p1' AND year = 2026").get();
-  assert.equal(sum.trades, 2);
-  assert.equal(sum.total_min, 1000001 + 15001);
-  const page = await memberTrades(db, "p1");
-  const html = page.rows.map((t) => tradeRow(t)).join("");
-  assert.match(html, /Transcribed from a scanned report · Checked by Rae Reviewer/);
-  assert.match((await scanChange(db, "oge:a", form({ action: "approve", compared: "1", reviewer: "Rae Reviewer" }), "")).error, /Only rows/);
+  assert.match((await scanChange(db, "oge:a", form({ action: "approve", compared: "1", reviewer: "Rae Reviewer" }), "rae@example.org")).done, /Checked by Rae Reviewer/);
+  assert.equal(sqlite.prepare("SELECT transcribed_by FROM trade_reports WHERE id = 'oge:a'").get().transcribed_by, "Rae Reviewer");
+  const html = (await memberTrades(db, "p1")).rows.map((t) => tradeRow(t)).join("");
+  assert.match(html, /Transcribed by AI from a scanned report · Checked by Rae Reviewer/);
 
-  // oge:b agreed too here; reject it, then put it back in the queue.
+  // Take oge:b down: its trades go, the summary follows, the report is a link again.
   assert.match((await scanChange(db, "oge:b", form({ action: "reject", reviewer: "Rae Reviewer" }), "")).error, /Say what's wrong/);
-  assert.match((await scanChange(db, "oge:b", form({ action: "reject", reviewer: "Rae Reviewer", reason: "Row 2's amount is wrong on the scan" }), "")).done, /stays a link/);
-  assert.equal(sqlite.prepare("SELECT parsed FROM trade_reports WHERE id = 'oge:b'").get().parsed, 0);
+  assert.match((await scanChange(db, "oge:b", form({ action: "reject", reviewer: "Rae Reviewer", reason: "Row 2's amount is wrong on the scan" }), "")).done, /link again/);
+  assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM trades WHERE report_id = 'oge:b'").get().n, 0);
+  assert.deepEqual({ ...sqlite.prepare("SELECT parsed, transcribed_at FROM trade_reports WHERE id = 'oge:b'").get() }, { parsed: 0, transcribed_at: null });
+  assert.equal(sqlite.prepare("SELECT trades FROM trade_summary WHERE official_id = 'p1' AND year = 2026").get().trades, 2, "only oge:a's trades count");
+  assert.match((await scanChange(db, "oge:b", form({ action: "approve", compared: "1", reviewer: "Rae Reviewer" }), "")).error, /Only a transcription published by AI/);
   assert.match((await scanChange(db, "oge:b", form({ action: "reread" }), "")).done, /Back in the queue/);
   assert.equal(sqlite.prepare("SELECT status FROM trade_scans WHERE report_id = 'oge:b'").get().status, "pending");
 
   const list = await scanList(db);
-  assert.match(list.main, /Approved \(1\)/);
+  assert.match(list.main, /Confirmed by a person \(1\)/);
   assert.match(list.main, /Waiting to be read \(1\)/);
   const item = await scanItem(db, {}, "oge:a");
   assert.match(item.main, /Open the scanned report/);
-  assert.match(item.main, /Approved by Rae Reviewer/);
+  assert.match(item.main, /Confirmed by Rae Reviewer/);
+  assert.match(item.main, /Take down/);
 });
 
-test("the Worker records 0025 and 0026 instead of applying them again", async () => {
+test("the Worker records 0025 to 0027 instead of applying them again", async () => {
   const sqlite = new DatabaseSync(":memory:");
   const files = migrationFiles();
   for (const f of files) sqlite.exec(readFileSync(new URL(f, MIG), "utf8"));
@@ -194,5 +204,5 @@ test("the Worker records 0025 and 0026 instead of applying them again", async ()
   const row = sqlite.prepare("SELECT request_url, position, agency FROM trade_reports WHERE id = 'oge:r'").get();
   assert.deepEqual({ ...row }, { request_url: "https://example.org/request", position: "Secretary", agency: "Department" });
   const names = sqlite.prepare("SELECT name FROM d1_migrations").all().map((r) => r.name);
-  assert.ok(names.includes("0025_executive_trades.sql") && names.includes("0026_trade_scans.sql"));
+  assert.ok(["0025_executive_trades.sql", "0026_trade_scans.sql", "0027_trade_scans_auto.sql"].every((n) => names.includes(n)));
 });

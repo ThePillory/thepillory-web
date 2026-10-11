@@ -25,6 +25,7 @@ import init0023 from "../migrations/0023_plain_summaries.sql";
 import init0024 from "../migrations/0024_trades.sql";
 import init0025 from "../migrations/0025_executive_trades.sql";
 import init0026 from "../migrations/0026_trade_scans.sql";
+import init0027 from "../migrations/0027_trade_scans_auto.sql";
 import { isHttp, today } from "./util.js";
 import { totals } from "./rollcall.js";
 
@@ -55,6 +56,7 @@ const MIGRATIONS = [
   ["0024_trades.sql", init0024],
   ["0025_executive_trades.sql", init0025],
   ["0026_trade_scans.sql", init0026],
+  ["0027_trade_scans_auto.sql", init0027],
 ];
 
 // Migrations tools/load_trades.py can also apply (the "Load stock trades"
@@ -66,6 +68,7 @@ const hasColumn = async (db, table, column) =>
 const ALREADY_APPLIED = {
   "0025_executive_trades.sql": (db) => hasColumn(db, "trade_reports", "request_url"),
   "0026_trade_scans.sql": (db) => hasColumn(db, "trade_reports", "transcribed_by"),
+  "0027_trade_scans_auto.sql": (db) => hasColumn(db, "trade_scans", "spot_check"),
 };
 
 function statements(sql) {

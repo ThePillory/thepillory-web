@@ -45,7 +45,7 @@ export function tradeRow(t, { member = false } = {}) {
     t.owner && t.owner !== "Self" ? `Owner: ${t.owner}` : "",
     t.sector || "",
     filedLate(t),
-    t.transcribed_by ? `Transcribed from a scanned report · Checked by ${t.transcribed_by}` : "",
+    t.transcribed_by ? `Transcribed by AI from a scanned report · Checked by ${t.transcribed_by}` : t.transcribed_at ? "Transcribed by AI from a scanned report, auto-checked" : "",
   ].filter(Boolean);
   return `<a class="compact-row trade-row" href="${esc(t.report_url)}" target="_blank" rel="noopener">
   <span class="cr-type">${esc(t.type)}</span>
@@ -74,7 +74,7 @@ export const memberTrades = (db, officialId, offset = 0) =>
   soft(async () => {
     const { results } = await db
       .prepare(
-        `SELECT t.*, r.report_url, r.transcribed_by FROM trades t JOIN trade_reports r ON r.id = t.report_id
+        `SELECT t.*, r.report_url, r.transcribed_by, r.transcribed_at FROM trades t JOIN trade_reports r ON r.id = t.report_id
          WHERE t.official_id = ? ORDER BY t.transaction_date DESC, t.report_id DESC, t.n LIMIT ? OFFSET ?`
       )
       .bind(officialId, TRADES_PER_PAGE + 1, offset)
@@ -130,7 +130,7 @@ export const latestTrades = (db, f) =>
     if (f.q) (where.push("lower(o.name) LIKE ?"), binds.push(`%${f.q.toLowerCase()}%`));
     const { results } = await db
       .prepare(
-        `SELECT t.*, r.report_url, r.transcribed_by, o.name AS member_name, o.slug AS member_slug FROM trades t
+        `SELECT t.*, r.report_url, r.transcribed_by, r.transcribed_at, o.name AS member_name, o.slug AS member_slug FROM trades t
          JOIN trade_reports r ON r.id = t.report_id JOIN officials o ON o.id = t.official_id
          WHERE ${where.join(" AND ")} ORDER BY t.transaction_date DESC, t.report_id DESC, t.n LIMIT ? OFFSET ?`
       )
@@ -143,7 +143,7 @@ export const latestTrades = (db, f) =>
 // The member's "Stock trades" section (More tab)
 
 const NOTE = `Periodic Transaction Reports members file under the STOCK Act, read from the House Clerk and the Senate's eFD site. Amounts are the ranges the law requires, exactly as filed. Owner is as filed (self, spouse, joint, dependent child). These records may not be used for commercial purposes. <a class="inline-link" href="${TRADES_METHOD}">How trades are recorded</a>`;
-const OGE_NOTE = `Periodic Transaction Reports (OGE Form 278-T) filed with the Office of Government Ethics, under the same 45-day rule and amount ranges as Congress. Amounts are shown exactly as filed; owner only where the report states it. Some reports are released by OGE only on request. A report posted as a scan is transcribed only when two AI readings agree and a person has compared every row with the scan; those lines say who checked them. These records may not be used for commercial purposes. <a class="inline-link" href="${TRADES_METHOD}">How trades are recorded</a>`;
+const OGE_NOTE = `Periodic Transaction Reports (OGE Form 278-T) filed with the Office of Government Ethics, under the same 45-day rule and amount ranges as Congress. Amounts are shown exactly as filed; owner only where the report states it. Some reports are released by OGE only on request. A report posted as a scan is read by two AI models and published only when the two readings agree row for row and match the report's own text; those lines say "Transcribed by AI", and "Checked by" once a person has compared them with the scan. These records may not be used for commercial purposes. <a class="inline-link" href="${TRADES_METHOD}">How trades are recorded</a>`;
 
 export function tradesSection(o, { summary, page, reports, committees = [], post = null, offset = 0 }) {
   const exec = o.chamber === "us-executive";

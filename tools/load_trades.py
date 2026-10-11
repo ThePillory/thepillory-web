@@ -720,7 +720,7 @@ def clean_asset(name):
 
 
 MIGRATIONS = ROOT / "workers" / "sync" / "migrations"
-TRADE_MIGRATIONS = ("0024_trades.sql", "0025_executive_trades.sql", "0026_trade_scans.sql")
+TRADE_MIGRATIONS = ("0024_trades.sql", "0025_executive_trades.sql", "0026_trade_scans.sql", "0027_trade_scans_auto.sql")
 
 
 def ensure_tables(args):
@@ -728,7 +728,7 @@ def ensure_tables(args):
     The trades tables, in case the sync Worker hasn't applied their migrations
     yet; each one applied is recorded in d1_migrations, as the Worker does, so
     the Worker never applies it a second time (0025 rebuilds trade_reports and
-    would drop the columns it added; 0026's ALTERs would fail).
+    would drop the columns it added; 0026's and 0027's ALTERs would fail).
     """
     d1(args, command="CREATE TABLE IF NOT EXISTS d1_migrations (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE, applied_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)")
     done = {r["name"] for r in d1(args, command="SELECT name FROM d1_migrations")}
@@ -739,6 +739,8 @@ def ensure_tables(args):
         d1(args, file=MIGRATIONS / TRADE_MIGRATIONS[1])
     if TRADE_MIGRATIONS[2] not in done and "transcribed_by" not in cols():
         d1(args, file=MIGRATIONS / TRADE_MIGRATIONS[2])
+    if TRADE_MIGRATIONS[3] not in done and not any(c["name"] == "spot_check" for c in d1(args, command="PRAGMA table_info(trade_scans)")):
+        d1(args, file=MIGRATIONS / TRADE_MIGRATIONS[3])
     d1(args, command="INSERT OR IGNORE INTO d1_migrations (name) VALUES " + ", ".join(f"('{n}')" for n in TRADE_MIGRATIONS))
 
 

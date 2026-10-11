@@ -3,13 +3,17 @@
 // whose text layer it couldn't read, with that layer's numbered rows
 // (trade_scans, trade_scan_lines). Here each queued report is read from its
 // PDF twice, by two different models (SCAN_MODEL_A, SCAN_MODEL_B), and the
-// readings are checked in code (scan-check.js). Agreed rows wait on
-// /admin/review/trades/ for a person to compare them with the scan; nothing is
-// published until a person approves. SCANNED_TRADES_DAILY (2) reports a day.
+// readings are checked in code (scan-check.js). When they agree and the checks
+// pass, the trades publish at once, labeled "Transcribed by AI from a scanned
+// report, auto-checked" (as AI-drafted analyses are); SPOT_CHECK_RATE of them
+// are marked for a person on /admin/review/trades/, who can confirm one
+// ("Checked by [name]") or take it down. Readings that don't agree keep the
+// report a link. SCANNED_TRADES_DAILY (2) reports a day.
 import { getState, setState, today, redact, BudgetExhausted } from "../util.js";
 import { structuredCall, DraftRefused } from "../analysis/claude.js";
 import { SCAN_INSTRUCTIONS, scanSchema, scanMessage } from "./scan-prompt.js";
 import { checkReadings, blocking } from "./scan-check.js";
+import { publishStatements } from "./publish.js";
 
 const missing = (err) => /no such (table|column)/i.test(String(err && err.message));
 
@@ -38,7 +42,9 @@ export async function transcribe(env, report, lines, { call = structuredCall } =
   return { status: blocking(problems) ? "disagree" : "agreed", reading: rows, problems, models };
 }
 
-export async function syncScannedTrades(env, db, budget, { call } = {}) {
+const spotRate = (env) => Math.min(1, Math.max(0, parseFloat(env.SPOT_CHECK_RATE || "0.1") || 0));
+
+export async function syncScannedTrades(env, db, budget, { call, random = Math.random } = {}) {
   if (!env.ANTHROPIC_API_KEY && !call) return { status: "skipped", message: "no ANTHROPIC_API_KEY" };
   const limit = parseInt(env.SCANNED_TRADES_DAILY || "2", 10);
   const dayKey = `scanned_trades_${today()}`;
@@ -49,8 +55,8 @@ export async function syncScannedTrades(env, db, budget, { call } = {}) {
     queue = (
       await db
         .prepare(
-          `SELECT s.report_id, r.report_url FROM trade_scans s JOIN trade_reports r ON r.id = s.report_id
-           WHERE s.status = 'pending' AND r.report_url IS NOT NULL ORDER BY r.filed_on DESC LIMIT ?`
+          `SELECT s.report_id, r.report_url, r.official_id, r.chamber, r.state, r.filed_on FROM trade_scans s JOIN trade_reports r ON r.id = s.report_id
+           WHERE s.status = 'pending' AND r.report_url IS NOT NULL AND r.official_id IS NOT NULL ORDER BY r.filed_on DESC LIMIT ?`
         )
         .bind(limit - done)
         .all()
@@ -67,10 +73,12 @@ export async function syncScannedTrades(env, db, budget, { call } = {}) {
     const lines = Object.fromEntries(results.map((r) => [r.n, r.line]));
     try {
       const out = await transcribe(env, report, lines, { call });
-      await db
-        .prepare("UPDATE trade_scans SET status = ?, reading = ?, problems = ?, models = ?, read_at = datetime('now') WHERE report_id = ? AND status = 'pending'")
-        .bind(out.status, JSON.stringify(out.reading || []), JSON.stringify(out.problems), out.models.join(", "), report.report_id)
-        .run();
+      const spot = out.status === "agreed" && random() < spotRate(env) ? 1 : 0;
+      const record = db
+        .prepare("UPDATE trade_scans SET status = ?, reading = ?, problems = ?, models = ?, spot_check = ?, read_at = datetime('now') WHERE report_id = ? AND status = 'pending'")
+        .bind(out.status, JSON.stringify(out.reading || []), JSON.stringify(out.problems), out.models.join(", "), spot, report.report_id);
+      const publish = out.status === "agreed" ? publishStatements({ ...report, id: report.report_id }, out.reading).map((q) => db.prepare(q.sql).bind(...q.binds)) : [];
+      await db.batch([record, ...publish]);
       tally[out.status] += 1;
     } catch (err) {
       if (err instanceof BudgetExhausted) throw err;
@@ -82,6 +90,6 @@ export async function syncScannedTrades(env, db, budget, { call } = {}) {
   }
   return {
     status: "ok",
-    message: `${tally.agreed} scanned report(s) read with both readings agreeing (waiting for a person), ${tally.disagree} not agreeing (kept as links)${tally.error ? `, ${tally.error} failed` : ""}`,
+    message: `${tally.agreed} scanned report(s) published (both readings agreed), ${tally.disagree} not agreeing (kept as links)${tally.error ? `, ${tally.error} failed` : ""}`,
   };
 }
