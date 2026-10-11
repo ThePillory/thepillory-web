@@ -207,6 +207,8 @@ class LoadTrades(unittest.TestCase):
         self.assertEqual(T.clean_asset("2000140445 Alphabet Inc. - Class A Common Stock (GOOGL)"), "Alphabet Inc. - Class A Common Stock (GOOGL)")
         self.assertEqual(T.clean_asset("3M Company (MMM)"), "3M Company (MMM)")
         self.assertEqual(T.clean_asset("Indiana ST 5.00% 02/01/32"), "Indiana ST 5.00% 02/01/32")
+        self.assertEqual(T.clean_asset("Westside Link LLC See Endnote Endnotes PART #"), "Westside Link LLC")
+        self.assertEqual(T.clean_asset("REOFF XXV, LLC See Endnote"), "REOFF XXV, LLC")
 
 
     def test_text_layer_rows_of_a_scan(self):

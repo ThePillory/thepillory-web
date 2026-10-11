@@ -148,7 +148,8 @@ export function checkReadings(a, b, lines = {}) {
     if (!fullRange(x.amount)) invalid(`Row ${n}: "${x.amount}" isn't a whole amount range.`);
     if (!letters(x.description)) invalid(`Row ${n}: no description.`);
     if (!valid) continue;
-    const description = String(x.description).replace(/\s+/g, " ").trim();
+    // The form's footnote marker ("See Endnote") isn't part of the asset, as in tools/load_trades.py.
+    const description = String(x.description).replace(/\s+/g, " ").replace(/\s+(?:See\s+)?Endnotes?\b.*$/i, "").trim();
     const [lo, hi] = amountBounds(x.amount);
     rows.push({
       n,
