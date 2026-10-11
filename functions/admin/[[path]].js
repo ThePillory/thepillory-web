@@ -15,6 +15,8 @@
 // /admin/review/promise/statements/  statements officials' offices sent in ("Submitted by the official")
 // /admin/review/promise/candidates/  candidates' issues pages found on their campaign websites, and
 //                         the excerpt each shows on the Platform tab (remove a wrong page, hide, re-pick)
+// /admin/review/trades/   scanned OGE Form 278-T reports: compare the two AI readings' agreed
+//                         rows with the scan, approve (publish) or reject; read again
 // /admin/waitlist/        "Bring ThePillory to your county": sign-ups by county (counts only)
 //
 // Protected by Cloudflare Access (see functions/_lib/access.js and docs/analysis.md).
@@ -34,6 +36,7 @@ import { STATUS, STATUSES, SOURCE_KIND, statusChip, historyList, sourceHref, che
 import { checkEntry, checkPage, checkStatement, selectedIds, officialLabel, PAGE_KINDS } from "../_lib/promise-entry.js";
 import { checkExcerpt } from "../../workers/sync/src/promises/excerpt.js";
 import { wordingProblems, quoteKey } from "../../workers/sync/src/promises/check.js";
+import { scanList, scanItem, scanChange, scanHref } from "../_lib/trade-scan-review.js";
 import { KINDS as TOPIC_KINDS, itemFromLink, reviewHref, topicReviewList, topicReviewItem, topicReviewChange } from "../_lib/topic-review.js";
 
 // Browse every current analysis by where it stands.
@@ -1081,7 +1084,8 @@ ${batch}
 <details class="weigh-details"><summary>Recent activity</summary><section class="card stack-sm">${activityList}</section></details>
 <details class="weigh-details" id="promise-published"><summary>Published promises (${published.length}): record a status change</summary><section class="card">${list || '<p class="secondary small">None yet.</p>'}</section></details>
 <h2 class="label queue-head" id="topics">Topic tags</h2>
-<p class="small"><a class="inline-link" href="/admin/review/topics/">Check and correct topic tags</a> on bills, county agenda items, executive actions and Platform excerpts.</p>`;
+<p class="small"><a class="inline-link" href="/admin/review/topics/">Check and correct topic tags</a> on bills, county agenda items, executive actions and Platform excerpts.</p>
+<p class="small"><a class="inline-link" href="/admin/review/trades/">Scanned trade reports</a>: compare AI transcriptions of scanned OGE Form 278-T reports with the scan before they publish.</p>`;
 }
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -1564,6 +1568,28 @@ async function handle(context) {
     const origin = request.headers.get("Origin");
     if (origin && origin !== url.origin) return adminPage("Refused", '<header class="page-head"><h1>Refused</h1></header>', 403);
     return relevanceChange(env.DB, decodeURIComponent(parts[2]), request, who.email);
+  }
+  if (parts[1] === "trades") {
+    try {
+      if (parts.length === 2) return adminPage(...Object.values(await scanList(env.DB, { done: url.searchParams.get("done") || "" })));
+      if (parts.length !== 3) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+      const id = decodeURIComponent(parts[2]);
+      if (request.method === "POST") {
+        const origin = request.headers.get("Origin");
+        if (origin && origin !== url.origin) return adminPage("Refused", '<header class="page-head"><h1>Refused</h1></header>', 403);
+        const r = await scanChange(env.DB, id, await request.formData(), who.email);
+        if (r.error) {
+          const v = await scanItem(env.DB, env, id, { error: r.error, form: r.form });
+          return v ? adminPage(v.title, v.main) : adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+        }
+        return Response.redirect(`${url.origin}${scanHref(id)}?done=${encodeURIComponent(r.done)}`, 303);
+      }
+      const v = await scanItem(env.DB, env, id, { done: url.searchParams.get("done") || "" });
+      return v ? adminPage(v.title, v.main) : adminPage("Not found", '<header class="page-head"><h1>No such report</h1></header>', 404);
+    } catch (err) {
+      if (/no such table|no such column/i.test(String(err && err.message))) return missingTables();
+      throw err;
+    }
   }
   if (parts[1] === "topics") {
     try {
