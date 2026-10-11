@@ -117,6 +117,18 @@ OWNERS = {"": "Self", "self": "Self", "sp": "Spouse", "spouse": "Spouse", "jt": 
           "dc": "Dependent child", "child": "Dependent child", "dependent child": "Dependent child"}
 
 
+RANGE = re.compile(r"^(?:Spouse/DC )?Over \$[\d,]{5,}$|^\$[\d,]{3,} - \$[\d,]{4,}$")
+
+
+def full_range(amount):
+    """True for a whole reporting range ("$1,001 - $15,000", "Over $50,000,000"); a stray "$15" is not one."""
+    a = re.sub(r"\s*-\s*", " - ", re.sub(r"\s+", " ", str(amount or "")).strip())
+    if not RANGE.match(a):
+        return False
+    lo, hi = amount_bounds(a)
+    return hi is None or (lo is not None and lo < hi)
+
+
 def owner_label(raw):
     """Owner as filed, as one of four labels. Anything else (it could be a name) is not stored."""
     return OWNERS.get(str(raw or "").strip().lower())
@@ -231,8 +243,8 @@ def parse_house_ptr_text(text):
         asset = " ".join([r["asset"].strip(), *r["more"]]).strip()
         asset = re.sub(r"\s+", " ", asset)
         amount = re.sub(r"\s+", " ", r["amount"]).strip()
-        if amount.endswith("-"):
-            return None  # an upper bound we couldn't find: don't guess
+        if amount.endswith("-") or not full_range(amount):
+            return None  # an upper bound we couldn't find, or not a whole range: don't guess
         t = type_label(r["type"])
         tdate = iso(r["tdate"])
         if not t or not tdate:
@@ -311,7 +323,7 @@ def parse_senate_ptr_html(page):
         _, tdate, owner, ticker, asset, asset_type, ttype, amount = cells[:8]
         t = SENATE_TYPES.get(ttype.strip().lower())
         d = iso(tdate)
-        if not t or not d or "$" not in amount:
+        if not t or not d or not full_range(amount):
             return None
         lo, hi = amount_bounds(amount)
         tk = ticker.strip()
@@ -447,8 +459,9 @@ def parse_oge_ptr_text(text):
         amount = re.sub(r"\s+", " ", r["amount"]).strip()
         ttype = type_label(r["type"].replace("Partial Sale", "Sale (Partial)"))
         d = iso(r["date"])
-        if amount.endswith("-") or not ttype or not d:
+        if amount.endswith("-") or not full_range(amount) or not ttype or not d:
             return None, signed
+        desc = re.sub(r"\s+(?:See\s+)?Endnotes?\s*$", "", desc, flags=re.I).strip()
         owner = next((label for rx, label in OGE_OWNER if rx.search(desc)), None)
         lo, hi = amount_bounds(amount)
         out.append({"owner": owner, "asset_name": desc, "asset_type": None, "ticker": ticker_of(desc), "type": ttype,
@@ -470,6 +483,7 @@ def read_oge(f):
     if not f["url"]:
         return {"paper": 0, "trades": None, "request_only": True, "signed": None}
     text = pdf_text(get(f["url"]))
+    f["_text"] = text
     if len(re.sub(r"\s+", "", text)) < 40:
         return {"paper": 1, "trades": None, "request_only": False, "signed": None}
     trades, signed = parse_oge_ptr_text(text)
@@ -555,6 +569,7 @@ def house_filings(years):
 
 def read_house(f):
     text = pdf_text(get(f["url"]))
+    f["_text"] = text
     if len(re.sub(r"\s+", "", text)) < 40:
         return {"paper": 1, "trades": None}
     return {"paper": 0, "trades": parse_house_ptr_text(text)}
@@ -783,6 +798,13 @@ def main():
         say(f"  unmatched {f['id']} {f.get('first')} {f.get('last')} {f.get('state_dst') or f.get('office') or ''}: {why}")
     for f in unreadable[:30]:
         say(f"  not read: {f['url']}")
+    if args.mode == "measure":
+        # The start of a few unread reports' text, to see their layout (public records).
+        for f in unreadable[:3]:
+            lines = [ln.rstrip() for ln in (f.get("_text") or "").splitlines() if ln.strip()]
+            say(f"  --- text of {f['id']} ({len(lines)} lines):")
+            for ln in lines[:70]:
+                say(f"  | {ln[:180]}")
     for rep, ts in reports[:60]:
         for t in ts[:2]:
             say(f"  sample {rep['id']} {t['transaction_date']} {t['owner']} | {t['asset_name'][:60]} | {t['ticker']} | {t['type']} | {t['amount']} | filed {rep['filed_on']} | {t.get('sector')}")
