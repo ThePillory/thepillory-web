@@ -2306,10 +2306,10 @@
    "name": "Starbucks Corp. v. McKinney",
    "summary": "When considering the National Labor Relations Board’s request for a preliminary injunction under §10( j) of the National Labor Relations Act, district courts must apply the traditional four factors articulated in Winter v. Natural Resources Defense Council, Inc., 555 U. S. 7 (2008).",
    "author_code": "T",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r34_e29g.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/23-367_f3b7.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "THOMAS, J., delivered the opinion of the Court, in which ROBERTS, C. J., and ALITO, SOTOMAYOR, KAGAN, GORSUCH, KAVANAUGH, and BARRETT, JJ., joined. JACKSON, J., filed an opinion concurring in part, dissenting in part, and concurring in the judgment.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -2398,10 +2398,10 @@
    "name": "Vidal v. Elster",
    "summary": "The Lanham Act’s names clause—which prohibits the registration of a mark that “[c]onsists of or comprises a name . . . identifying a particular living individual except by his written consent,” 15 U. S. C. §1052(c)—does not violate the First Amendment.",
    "author_code": "T",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r33_qqm4.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-704_4246.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "THOMAS, J., announced the judgment of the Court and delivered the opinion of the Court, except as to Part III. ALITO and GORSUCH, JJ., joined that opinion in full; ROBERTS, C. J., and KAVANAUGH, J., joined all but Part III; and BARRETT, J., joined Parts I, II–A, and II–B. KAVANAUGH, J., filed an opinion concurring in part, in which ROBERTS, C. J., joined. BARRETT, J., filed an opinion concurring in part, in which KAGAN, J., joined, in which SOTOMAYOR, J., joined as to Parts I, II, and III–B, and in which JACKSON, J., joined as to Parts I and II. SOTOMAYOR, J., filed an opinion concurring in the judgment, in which KAGAN and JACKSON, JJ., joined.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -2484,19 +2484,15 @@
    "provisions": [
     {
      "id": "amend-1",
-     "quote": null
-    },
-    {
-     "id": "amend-2",
-     "quote": null
+     "quote": "Elster contends that this prohibition violates his First Amendment right to free speech."
     },
     {
      "id": "amend-14",
-     "quote": null
+     "quote": "Recorded trademark law began to take off in the last decades of the 19th century—after the ratification of the Fourteenth Amendment in 1868—and its established contentbased nature continued."
     },
     {
      "id": "art-1-sec-8-cl-3",
-     "quote": null
+     "quote": "This Court held that the law exceeded Congress’s power under the Commerce Clause."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/22-00704qp.pdf",
@@ -2513,10 +2509,10 @@
    "name": "Truck Insurance Exchange v. Kaiser Gypsum Co.",
    "summary": "An insurer with financial responsibility for bankruptcy claims is a “party in interest” under 11 U. S. C. §1109(b) that “may raise and may appear and be heard on any issue” in a Chapter 11 case.",
    "author_code": "SS",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r32_2q24.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-1079new_6536.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "SOTOMAYOR, J., delivered the opinion of the Court, in which all other Members joined, except ALITO, J., who took no part in the consideration or decision of the case.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -2613,10 +2609,10 @@
    "name": "Connelly v. United States",
    "summary": "A corporation’s contractual obligation to redeem shares is not necessarily a liability that reduces a corporation’s value for purposes of the federal estate tax.",
    "author_code": "T",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r31_6537.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/23-146_i42j.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "THOMAS, J., delivered the opinion for a unanimous Court.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2771,10 +2767,10 @@
    "name": "National Rifle Association of America v. Vullo",
    "summary": "The NRA plausibly alleged that respondent violated the First Amendment by coercing regulated entities to terminate their business relationships with the NRA in order to punish or suppress the NRA’s gun-promotion advocacy.",
    "author_code": "SS",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r28_9o6b.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-842new_e29f.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "SOTOMAYOR, J., delivered the opinion for a unanimous Court. GORSUCH, J., and JACKSON, J., each filed a concurring opinion.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2810,11 +2806,11 @@
    "provisions": [
     {
      "id": "amend-1",
-     "quote": null
+     "quote": "Six decades ago, this Court held that a government entity’s “threat of invoking legal sanctions and other means of coercion” against a third party “to achieve the suppression” of disfavored speech violates the First Amendment."
     },
     {
      "id": "amend-2",
-     "quote": null
+     "quote": "The only claims before the Court today are those against Vullo—namely, claims that Vullo violated the First Amendment by coercing DFS-regulated parties to punish or suppress “the NRA’s pro-Second Amendment viewpoint” and “core political speech.” Id., at 231, ¶91, 234, ¶101."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/22-00842qp.pdf",
@@ -2831,10 +2827,10 @@
    "name": "Thornell v. Jones",
    "summary": "The Ninth Circuit’s grant of habeas relief on Jones’s ineffective assistance of counsel claim was based on an erroneous interpretation and application of Strickland v. Washington, 466 U. S. 668.",
    "author_code": "A",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r27_jhek.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-982_bq7d.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "ALITO, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, GORSUCH, KAVANAUGH, and BARRETT, JJ., joined. SOTOMAYOR, J., filed a dissenting opinion, in which KAGAN, J., joined. JACKSON, J., filed a dissenting opinion.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -2912,7 +2908,7 @@
    "provisions": [
     {
      "id": "amend-6",
-     "quote": null
+     "quote": "The Ninth Circuit held that the defendant’s Sixth Amendment right to the effective assistance of counsel was violated during the sentencing phase of his capital trial."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/22-00982qp.pdf",
@@ -2930,10 +2926,10 @@
    "name": "Coinbase v. Suski",
    "summary": "Where parties have agreed to two contracts—one sending arbitrability disputes to arbitration, and the other either explicitly or implicitly sending arbitrability disputes to the courts—a court must decide which contract governs.",
    "author_code": "KJ",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r26_k537.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/23-3_879d.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "JACKSON, J., delivered the opinion for a unanimous Court. GORSUCH, J., filed a concurring opinion.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2971,10 +2967,10 @@
    "name": "Brown v. United States",
    "summary": "For purposes of the Armed Career Criminal Act’s 15-year mandatory minimum sentence on certain defendants with three or more previous convictions, a state drug conviction counts as an ACCA predicate if it involved a drug on the federal schedules at the time of that offense.",
    "author_code": "A",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r25_p86b.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-6389_8759.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "ALITO, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, SOTOMAYOR, KAVANAUGH, and BARRETT, JJ., joined. JACKSON, J., filed a dissenting opinion, in which KAGAN, J., joined, and in which GORSUCH, J., joined as to Parts I, II, and III.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -3065,10 +3061,10 @@
    "name": "Alexander v. South Carolina State Conference of the NAACP",
    "summary": "Because the District Court’s finding that race predominated in the design of South Carolina’s first congressional district was clearly erroneous, the District Court’s racial-gerrymandering and vote-dilution holdings cannot stand.",
    "author_code": "A",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/602us1r24_j4ek.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-807_3e04.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "ALITO, J., delivered the opinion of the Court, in which ROBERTS, C. J., and GORSUCH, KAVANAUGH, and BARRETT, JJ., joined, and in which THOMAS, J., joined as to all but Part III–C. THOMAS, J., filed an opinion concurring in part. KAGAN, J., filed a dissenting opinion, in which SOTOMAYOR and JACKSON, JJ., joined.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -3147,15 +3143,7 @@
    "provisions": [
     {
      "id": "amend-14",
-     "quote": null
-    },
-    {
-     "id": "amend-15",
-     "quote": null
-    },
-    {
-     "id": "art-1-sec-4-cl-1",
-     "quote": null
+     "quote": "The Fourteenth Amendment introduces one constraint by prohibiting a State from engaging in a racial gerrymander unless it can satisfy strict scrutiny."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/22-00807qp.pdf",
@@ -3178,10 +3166,10 @@
    "name": "Harrow v. Department of Defense",
    "summary": "Title 5 U. S. C. §7703(b)(1)’s 60-day filing deadline for a federal employee to petition the Federal Circuit to review a final decision of the Merit Systems Protection Board is not jurisdictional.",
    "author_code": "EK",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r23_khlp.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/23-21_3e04.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "KAGAN, J., delivered the opinion for a unanimous Court.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -3199,7 +3187,7 @@
    "provisions": [
     {
      "id": "art-3",
-     "quote": null
+     "quote": "Bowles governs statutory deadlines to appeal “from one Article III court to another.” Hamer v."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/23-00021qp.pdf",
@@ -3216,10 +3204,10 @@
    "name": "Smith v. Spizzirri",
    "summary": "When a district court finds that a lawsuit involves an arbitrable dispute and a party has requested a stay of the court proceeding pending arbitration, §3 of the Federal Arbitration Act, 9 U. S. C. §3, compels the court to issue a stay, and the court lacks discretion to dismiss the suit.",
    "author_code": "SS",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r22_o7jq.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-1218_5357.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "SOTOMAYOR, J., delivered the opinion for a unanimous Court.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -3252,10 +3240,10 @@
    "name": "Consumer Financial Protection Bureau v. Community Financial Services Assn. of America, Ltd.",
    "summary": "Congress’ statutory authorization allowing the Consumer Financial Protection Bureau to draw money from the earnings of the Federal Reserve System to carry out the Bureau’s duties, 12 U. S. C. §§5497(a)(1), (2), satisfies the Appropriations Clause.",
    "author_code": "T",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r21_7648.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-448_o7jp.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "THOMAS, J., delivered the opinion of the Court, in which ROBERTS, C. J., and SOTOMAYOR, KAGAN, KAVANAUGH, BARRETT, and JACKSON, JJ., joined. KAGAN, J., filed a concurring opinion, in which SOTOMAYOR, KAVANAUGH, and BARRETT, JJ., joined. JACKSON, J., filed a concurring opinion. ALITO, J., filed a dissenting opinion, in which GORSUCH, J., joined.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -3337,12 +3325,7 @@
      }
     ]
    },
-   "provisions": [
-    {
-     "id": "art-3",
-     "quote": null
-    }
-   ],
+   "provisions": [],
    "qp_url": "https://www.supremecourt.gov/qp/22-00448qp.pdf",
    "question_presented": [
     "Whether the court of appeals erred in holding that the statute providing funding to the Consumer Financial Protection Bureau (CFPB), 12 U.S.C. 5497, violates the Appropriations Clause, U.S. Const. Art. I,§ 9, Cl. 7, and in vacating a regulation promulgated at a time when the CFPB was receiving such funding."
@@ -3356,10 +3339,10 @@
    "name": "Culley v. Marshall",
    "summary": "In civil forfeiture cases involving personal property, the Due Process Clause requires a timely forfeiture hearing but does not require a separate preliminary hearing.",
    "author_code": "BK",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r20_09m1.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-585_k5fm.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "KAVANAUGH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, GORSUCH, and BARRETT, JJ., joined. GORSUCH, J., filed a concurring opinion, in which THOMAS, J., joined. SOTOMAYOR, J., filed a dissenting opinion, in which KAGAN and JACKSON, JJ., joined.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -3439,11 +3422,11 @@
    "provisions": [
     {
      "id": "amend-4",
-     "quote": null
+     "quote": "In arguing that the Constitution requires a preliminary hearing, Culley and Sutton also point to this Court’s Fourth Amendment decisions in the criminal context."
     },
     {
      "id": "amend-14",
-     "quote": null
+     "quote": "3d 40, 44 (CA2 2002).1 —————— 1 Before the entry of judgment by the Court of Appeals, Alabama amended its forfeiture laws to allow an innocent owner to request an II Under the Due Process Clause of the Fourteenth Amendment as interpreted by this Court, States ordinarily may not seize real property before providing notice and a hearing."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/22-00585qp.pdf",
@@ -3459,10 +3442,10 @@
    "name": "Warner Chappell Music, Inc. v. Nealy",
    "summary": "The Copyright Act entitles a copyright owner to obtain monetary relief for any timely infringement claim, no matter when the infringement occurred.",
    "author_code": "EK",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r19_jifl.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-1078_4gci.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "KAGAN, J., delivered the opinion of the Court, in which ROBERTS, C. J., and SOTOMAYOR, KAVANAUGH, BARRETT, and JACKSON, JJ., joined. GORSUCH, J., filed a dissenting opinion, in which THOMAS and ALITO, JJ., joined.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -3550,10 +3533,10 @@
    "name": "Muldrow v. City of St. Louis",
    "summary": "An employee challenging a job transfer under Title VII must show that the transfer brought about some harm with respect to an identifiable term or condition of employment, but that harm need not be significant.",
    "author_code": "EK",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r18_6j37.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-193_q86b.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "KAGAN, J., delivered the opinion of the Court, in which ROBERTS, C. J., and SOTOMAYOR, GORSUCH, BARRETT, and JACKSON, JJ., joined. THOMAS, J., ALITO, J., and KAVANAUGH, J., each filed an opinion concurring in the judgment.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -3646,10 +3629,10 @@
    "name": "McIntosh v. United States",
    "summary": "A district court’s failure to comply with Federal Rule of Criminal Procedure 32.2(b)(2)(B)’s requirement to enter a preliminary order imposing criminal forfeiture before sentencing does not bar a judge from ordering forfeiture at sentencing subject to harmless-error principles on appellate review.",
    "author_code": "SS",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r17_nmio.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-7386_10n2.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "SOTOMAYOR, J., delivered the opinion for a unanimous Court.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -3682,10 +3665,10 @@
    "name": "Rudisill v. McDonough",
    "summary": "Servicemembers who, through separate periods of service, accrue educational benefits under both the Montgomery and Post-9/11 GI Bills may use either one, in any order, up to 38 U. S. C. §3695(a)’s 48-month aggregate-benefits cap.",
    "author_code": "KJ",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r16_2dp3.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-888_1b8e.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "JACKSON, J., delivered the opinion of the Court, in which ROBERTS, C. J., and SOTOMAYOR, KAGAN, GORSUCH, KAVANAUGH, and BARRETT, JJ., joined. KAVANAUGH, J., filed a concurring opinion, in which BARRETT, J., joined. THOMAS, J., filed a dissenting opinion, in which ALITO, J., joined.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -3776,10 +3759,10 @@
    "name": "DeVillier v. Texas",
    "summary": "Owners of property north of U. S. Interstate Highway 10 adversely affected by the flood evacuation barrier constructed by Texas should be permitted on remand to pursue their Takings Clause claims through the cause of action available under Texas law.",
    "author_code": "T",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r15_apl1.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-913_3204.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "THOMAS, J., delivered the opinion for a unanimous Court.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -3797,11 +3780,11 @@
    "provisions": [
     {
      "id": "amend-5",
-     "quote": null
+     "quote": "He sought just compensation under the Takings Clause of the Fifth Amendment, arguing that the Constitution itself authorized him to bring suit."
     },
     {
      "id": "amend-14",
-     "quote": null
+     "quote": "In a oneparagraph opinion, it “h[eld] that the Fifth Amendment Takings Clause as applied to the states through the Fourteenth Amendment does not provide a right of action for takings claims against a state.” 53 F. 4th 904 (CA5 2023) (per curiam)."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/22-00913qp.pdf",
@@ -3818,10 +3801,10 @@
    "name": "Sheetz v. El Dorado County",
    "summary": "The Fifth Amendment’s Takings Clause does not distinguish between legislative and administrative land-use permit conditions.",
    "author_code": "AB",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r14_00m5.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-1074_bqmd.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "BARRETT, J., delivered the opinion for a unanimous Court. SOTOMAYOR, J., filed a concurring opinion, in which JACKSON, J., joined. GORSUCH, J., filed a concurring opinion. KAVANAUGH, J., filed a concurring opinion, in which KAGAN and JACKSON, JJ., joined.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -3880,11 +3863,11 @@
    "provisions": [
     {
      "id": "amend-5",
-     "quote": null
+     "quote": "374 (1994), Sheetz challenged the fee as an unlawful “exaction” of money under the Takings Clause."
     },
     {
      "id": "amend-14",
-     "quote": null
+     "quote": "Nor does the Fourteenth Amendment, which incorporates the Takings Clause against the States."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/22-01074qp.pdf",
@@ -3902,10 +3885,10 @@
    "name": "Macquarie Infrastructure Corp. v. Moab Partners, L. P.",
    "summary": "Pure omissions are not actionable under SEC Rule 10b–5(b), which makes it unlawful to omit material facts in connection with buying or selling securities when that omission renders “statements made” misleading.",
    "author_code": "SS",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r13_8mjp.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-1165_10n2.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "SOTOMAYOR, J., delivered the opinion for a unanimous Court.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -3937,10 +3920,10 @@
    "name": "Bissonnette v. LePage Bakeries Park St., LLC",
    "summary": "A transportation worker need not work in the transportation industry to be exempt from coverage under §1 of the Federal Arbitration Act, 9 U. S. C. §1 et seq.",
    "author_code": "R",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us2r12_7648.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/23-51_6647.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "ROBERTS, C. J., delivered the opinion for a unanimous Court.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -3972,10 +3955,10 @@
    "name": "FBI v. Fikre",
    "summary": "The Government failed to meet its burden to demonstrate that Mr. Fikre’s removal from the Government’s No Fly List mooted his 42 U. S. C. §1983 case because its declaration did not disclose the conduct that landed Mr. Fikre on the No Fly List and did not ensure that he would not be placed back on the list for engaging in the same or similar conduct in the future.",
    "author_code": "NG",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r11_7lh8.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-1178_p8k0.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "GORSUCH, J., delivered the opinion for a unanimous Court. ALITO, J., filed a concurring opinion, in which KAVANAUGH, J., joined.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -4009,7 +3992,7 @@
    "provisions": [
     {
      "id": "art-3",
-     "quote": null
+     "quote": "That is a possibility courts must be alive to in this (and any) case, for a federal court’s duty to ensure itself of Article III jurisdiction may begin at the inception of a lawsuit, but it persists throughout the life of the proceedings."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/22-01178qp.pdf",
@@ -4026,10 +4009,10 @@
    "name": "Wilkinson v. Garland",
    "summary": "The Immigration Judge’s discretionary decision that Mr. Wilkinson failed to satisfy 8 U. S. C. §1229b(b)(1)(D)’s “exceptional and extremely unusual” hardship standard for determining eligibility for cancellation of removal is a mixed question of law and fact, reviewable under §1252(a)(2)(D)’s jurisdiction restoring exception for “questions of law”; the Third Circuit’s holding that the IJ’s decision was unreviewable under §1252(a)(2)(B)(i) was in error.",
    "author_code": "SS",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r10_k5fm.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-666_new_7758.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "SOTOMAYOR, J., delivered the opinion of the Court, in which KAGAN, GORSUCH, KAVANAUGH, and BARRETT, JJ., joined. JACKSON, J., filed an opinion concurring in the judgment. ROBERTS, C. J., filed a dissenting opinion. ALITO, J., filed a dissenting opinion in which ROBERTS, C. J., and THOMAS, J., joined.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -4122,15 +4105,15 @@
    "name": "O’Connor-Ratcliff v. Garnier",
    "summary": "The Ninth Circuit’s judgment—that 42 U. S. C. §1983’s state-action requirement was satisfied because of the “close nexus” between petitioners’ social media pages and their positions as public officials—is vacated, and the case is remanded in light of Lindke v. Freed, 601 U. S. ___.",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r09_hgci.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-324_09m1.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "PER CURIAM. In 2014, Michelle O’Connor-Ratcliff and T. J. Zane created public Facebook pages to promote their campaigns for election to the Poway Unified School District (PUSD) Board of Trustees. While O’Connor-Ratcliff and Zane (whom we will call the Trustees) both had personal Facebook pages that they shared with friends and family, they used their public pages for campaigning and issues related to PUSD. After they won election, the Trustees continued to use their public pages to post PUSD-related content, including board-meeting recaps, application solicitations for board positions, local budget plans and surveys, and public safety updates. They also used their pages to solicit feedback and communicate with constituents. Their Facebook pages described them as “Government Official[s]” and noted their official positions. O’Connor-Ratcliff also created a public Twitter page, which she used in much the same way. Christopher and Kimberly Garnier, who have children attending PUSD schools, often criticized the board of trustees. They began posting lengthy and repetitive comments on the Trustees’ social-media posts—for instance, nearly identical 2 O’CONNOR-RATCLIFF v. GARNIER Per Curiam",
    "lineup": [],
    "provisions": [
     {
      "id": "amend-1",
-     "quote": null
+     "quote": "§1983, seeking damages and declaratory and injunctive relief for the alleged violation of their First Amendment rights."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/22-00324qp.pdf",
@@ -4146,10 +4129,10 @@
    "name": "Lindke v. Freed",
    "summary": "A public official who prevents someone from commenting on the official’s social-media page engages in state action under 42  U. S. C. §1983 only if the official both (1) possessed actual authority to speak on the State’s behalf on a particular matter, and (2) purported to exercise that authority when speaking in the relevant social-media posts.",
    "author_code": "AB",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r08_a8cf.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-611_ap6c.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "BARRETT, J., delivered the opinion for a unanimous Court.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -4167,11 +4150,11 @@
    "provisions": [
     {
      "id": "amend-1",
-     "quote": null
+     "quote": "Because the First Amendment binds only the government, this claim is a nonstarter if Freed posted as a private citizen."
     },
     {
      "id": "amend-14",
-     "quote": null
+     "quote": "This limit tracks that of the Fourteenth Amendment, which obligates States to honor the constitutional rights that §1983 protects. §1 (“No State shall . . . nor shall any State deprive . . . ” (emphasis added)); see also Lugar, 457 U."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/22-00611qp.pdf",
@@ -4189,10 +4172,10 @@
    "name": "Pulsifer v. United States",
    "summary": "A criminal defendant facing a mandatory minimum sentence is eligible for safety-valve relief under 18 U. S. C. §3553(f)(1) only if the defendant satisfies each of the provision’s three conditions.",
    "author_code": "EK",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r07_19m1.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-340_p86a.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "KAGAN, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, KAVANAUGH, and BARRETT, JJ., joined. GORSUCH, J., filed a dissenting opinion, in which SOTOMAYOR and JACKSON, JJ., joined.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -4267,12 +4250,8 @@
    },
    "provisions": [
     {
-     "id": "amend-6",
-     "quote": null
-    },
-    {
      "id": "art-3",
-     "quote": null
+     "quote": "Article III provides that “[t]he judicial Power shall extend to all Cases . . . arising under this Constitution, the Laws of the United States, and Treaties.” §2."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/22-00340qp.pdf",
@@ -4290,10 +4269,10 @@
    "name": "Trump v. Anderson",
    "summary": "Because the Constitution makes Congress, rather than the States, responsible for enforcing Section 3 of the Fourteenth Amendment against federal officeholders and candidates, the Colorado Supreme Court erred in ordering former President Trump excluded from the 2024 Presidential primary ballot.",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r06_a86c.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/23-719_19m2.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "PER CURIAM. A group of Colorado voters contends that Section 3 of the Fourteenth Amendment to the Constitution prohibits former President Donald J. Trump, who seeks the Presidential nomination of the Republican Party in this year’s election, from becoming President again. The Colorado Supreme Court agreed with that contention. It ordered the Colorado secretary of state to exclude the former President from the Republican primary ballot in the State and to disregard any write-in votes that Colorado voters might cast for him. Former President Trump challenges that decision on several grounds. Because the Constitution makes Congress, rather than the States, responsible for enforcing Section 3 against federal officeholders and candidates, we reverse. I Last September, about six months before the March 5, 2024, Colorado primary election, four Republican and two unaffiliated Colorado voters filed a petition against former President Trump and Colorado Secretary of State Jena Griswold in Colorado state court. These voters—whom we refer to as the respondents—contend that after former Per Curiam President Trump’s defeat in the 2020 Presidential election, he disrupted the peaceful transfer of power by intentionally organizing and inciting the crowd that breached the Capitol as Congress met to certify the election results on January 6, 2021. One consequence of those actions, the respondents maintain, is that former President Trump is constitutionally ineligible to serve as President again. Their theory turns on Section 3 of the Fourteenth Amendment. Section 3 provides: “No person shall be a Senator or Representative in Congress, or elector of President and Vice President, or hold any office, civil or military, under the United States, or under any State, who, having previously taken an oath, as a member of Congress, or as an officer of the United States, or as a member of any State legislature, or as an executive or judicial officer of any State, to support the Constitution of the United States, shall have engaged in insurrection or rebellion against the same, or given aid or comfort to the enemies thereof. But Congress may by a vote of two-thirds of each House, remove such disability.” According to the respondents, Section 3 applies to the former President because after taking the Presidential oath in 2017, he intentionally incited the breaching of the Capitol on January 6 in order to retain power. They claim that he is therefore not a qualified candidate, and that as a result, the Colorado secretary of state may not place him on the primary ballot. See Colo. Rev. Stat. §§1–1–113(1), 1–4– 1101(1), 1–4–1201, 1–4–1203(2)(a), 1–4–1204 (2023). After a five-day trial, the state District Court found that former President Trump had “engaged in insurrection” within the meaning of Section 3, but nonetheless denied the respondents’ petition. The court held that Section 3 did not apply because the Presidency, which Section 3 does not mention by name, is not an “office . . . under the United Per Curiam States” and the President is not an “officer of the United States” within the meaning of that provision. See App. to Pet. for Cert. 184a–284a. In December, the Colorado Supreme Court reversed in part and affirmed in part by a 4 to 3 vote. Reversing the District Court’s operative holding, the majority concluded that for purposes of Section 3, the Presidency is an office under the United States and the President is an officer of the United States. The court otherwise affirmed, holding (1) that the Colorado Election Code permitted the respondents’ challenge based on Section 3; (2) that Congress need not pass implementing legislation for disqualifications under Section 3 to attach; (3) that the political question doctrine did not preclude judicial review of former President Trump’s eligibility; (4) that the District Court did not abuse its discretion in admitting into evidence portions of a congressional Report on the events of January 6; (5) that the District Court did not err in concluding that those events constituted an “insurrection” and that former President Trump “engaged in” that insurrection; and (6) that former President Trump’s speech to the crowd that breached the Capitol on January 6 was not protected by the First Amendment. See id., at 1a–114a. The Colorado Supreme Court accordingly ordered Secretary Griswold not to “list President Trump’s name on the 2024 presidential primary ballot” or “count any write-in votes cast for him.” Id., at 114a. Chief Justice Boatright and Justices Samour and Berkenkotter each filed dissenting opinions. Id., at 115a–124a, 125a–161a, 162a–183a. Under the terms of the opinion of the Colorado Supreme Court, its ruling was automatically stayed pending this Court’s review. See id., at 114a. We granted former President Trump’s petition for certiorari, which raised a single question: “Did the Colorado Supreme Court err in ordering President Trump excluded from the 2024 presidential primary ballot?” See 601 U. S. ___ (2024). Concluding that it Per Curiam did, we now reverse. II A Proposed by Congress in 1866 and ratified by the States in 1868, the Fourteenth Amendment “expand[ed] federal power at the expense of state autonomy” and thus “fundamentally altered the balance of state and federal power struck by the Constitution.” Seminole Tribe of Fla. v. Florida, 517 U. S. 44, 59 (1996); see also Ex parte Virginia, 100 U. S. 339, 345 (1880). Section 1 of the Amendment, for instance, bars the States from “depriv[ing] any person of life, liberty, or property, without due process of law” or “deny[ing] to any person . . . the equal protection of the laws.” And Section 5 confers on Congress “power to enforce” those prohibitions, along with the other provisions of the Amendment, “by appropriate legislation.” Section 3 of the Amendment likewise restricts state autonomy, but through different means. It was designed to help ensure an enduring Union by preventing former Confederates from returning to power in the aftermath of the Civil War. See, e.g., Cong. Globe, 39th Cong., 1st Sess., 2544 (1866) (statement of Rep. Stevens, warning that without appropriate constitutional reforms “yelling secessionists and hissing copperheads” would take seats in the House); id., at 2768 (statement of Sen. Howard, lamenting prospect of a “State Legislature . . . made up entirely of disloyal elements” absent a disqualification provision). Section 3 aimed to prevent such a resurgence by barring from office “those who, having once taken an oath to support the Constitution of the United States, afterward went into rebellion against the Government of the United States.” Cong. Globe, 41st Cong., 1st Sess., 626 (1869) (statement of Sen. Trumbull). Section 3 works by imposing on certain individuals a preventive and severe penalty—disqualification from holding Per Curiam a wide array of offices—rather than by granting rights to all. It is therefore necessary, as Chief Justice Chase concluded and the Colorado Supreme Court itself recognized, to “ ‘ascertain[ ] what particular individuals are embraced’ ” by the provision. App. to Pet. for Cert. 53a (quoting Griffin’s Case, 11 F. Cas. 7, 26 (No. 5,815) (CC Va. 1869) (Chase, Circuit Justice)). Chase went on to explain that “[t]o accomplish this ascertainment and ensure effective results, proceedings, evidence, decisions, and enforcements of decisions, more or less formal, are indispensable.” Id., at 26. For its part, the Colorado Supreme Court also concluded that there must be some kind of “determination” that Section 3 applies to a particular person “before the disqualification holds meaning.” App. to Pet. for Cert. 53a. The Constitution empowers Congress to prescribe how those determinations should be made. The relevant provision is Section 5, which enables Congress, subject of course to judicial review, to pass “appropriate legislation” to “enforce” the Fourteenth Amendment. See City of Boerne v. Flores, 521 U. S. 507, 536 (1997). Or as Senator Howard put it at the time the Amendment was framed, Section 5 “casts upon Congress the responsibility of seeing to it, for the future, that all the sections of the amendment are carried out in good faith.” Cong. Globe, 39th Cong., 1st Sess., at 2768. Congress’s Section 5 power is critical when it comes to Section 3. Indeed, during a debate on enforcement legislation less than a year after ratification, Sen. Trumbull noted that “notwithstanding [Section 3] . . . hundreds of men [were] holding office” in violation of its terms. Cong. Globe, 41st Cong., 1st Sess., at 626. The Constitution, Trumbull noted, “provide[d] no means for enforcing” the disqualification, necessitating a “bill to give effect to the fundamental law embraced in the Constitution.” Ibid. The enforcement mechanism Trumbull championed was later enacted as part of the Enforcement Act of 1870, “pursuant to the power Per Curiam conferred by §5 of the [Fourteenth] Amendment.” General Building Contractors Assn., Inc. v. Pennsylvania, 458 U. S. 375, 385 (1982); see 16 Stat. 143–144. B This case raises the question whether the States, in addition to Congress, may also enforce Section 3. We conclude that States may disqualify persons holding or attempting to hold state office. But States have no power under the Constitution to enforce Section 3 with respect to federal offices, especially the Presidency. “In our federal system, the National Government possesses only limited powers; the States and the people retain the remainder.” Bond v. United States, 572 U. S. 844, 854 (2014). Among those retained powers is the power of a State to “order the processes of its own governance.” Alden v. Maine, 527 U. S. 706, 752 (1999). In particular, the States enjoy sovereign “power to prescribe the qualifications of their own officers” and “the manner of their election . . . free from external interference, except so far as plainly provided by the Constitution of the United States.” Taylor v. Beckham, 178 U. S. 548, 570–571 (1900). Although the Fourteenth Amendment restricts state power, nothing in it plainly withdraws from the States this traditional authority. And after ratification of the Fourteenth Amendment, States used this authority to disqualify state officers in accordance with state statutes. See, e.g., Worthy v. BARRETT, 63 N. C. 199, 200, 204 (1869) (elected county sheriff ); State ex rel. Sandlin v. Watkins, 21 La. Ann. 631, 631–633 (1869) (state judge). Such power over governance, however, does not extend to federal officeholders and candidates. Because federal officers “ ‘owe their existence and functions to the united voice of the whole, not of a portion, of the people,’ ” powers over their election and qualifications must be specifically “delegated to, rather than reserved by, the States.” U. S. Term Per Curiam Limits, Inc. v. Thornton, 514 U. S. 779, 803–804 (1995) (quoting 1 J. Story, Commentaries on the Constitution of the United States §627, p. 435 (3d ed. 1858)). But nothing in the Constitution delegates to the States any power to enforce Section 3 against federal officeholders and candidates. As an initial matter, not even the respondents contend that the Constitution authorizes States to somehow remove sitting federal officeholders who may be violating Section 3. Such a power would flout the principle that “the Constitution guarantees ‘the entire independence of the General Government from any control by the respective States.’ ” Trump v. Vance, 591 U. S. 786, 800 (2020) (quoting Farmers and Mechanics Sav. Bank of Minneapolis v. Minnesota, 232 U. S. 516, 521 (1914)). Indeed, consistent with that principle, States lack even the lesser powers to issue writs of mandamus against federal officials or to grant habeas corpus relief to persons in federal custody. See McClung v. Silliman, 6 Wheat. 598, 603–605 (1821); Tarble’s Case, 13 Wall. 397, 405–410 (1872). The respondents nonetheless maintain that States may enforce Section 3 against candidates for federal office. But the text of the Fourteenth Amendment, on its face, does not affirmatively delegate such a power to the States. The terms of the Amendment speak only to enforcement by Congress, which enjoys power to enforce the Amendment through legislation pursuant to Section 5. This can hardly come as a surprise, given that the substantive provisions of the Amendment “embody significant limitations on state authority.” Fitzpatrick v. Bitzer, 427 U. S. 445, 456 (1976). Under the Amendment, States cannot abridge privileges or immunities, deprive persons of life, liberty, or property without due process, deny equal protection, or deny male inhabitants the right to vote (without thereby suffering reduced representation in the House). See Amdt. 14, §§1, 2. On the other hand, the Fourteenth Amendment grants new power to Congress to enforce the Per Curiam provisions of the Amendment against the States. It would be incongruous to read this particular Amendment as granting the States the power—silently no less—to disqualify a candidate for federal office. The only other plausible constitutional sources of such a delegation are the Elections and Electors Clauses, which authorize States to conduct and regulate congressional and Presidential elections, respectively. See Art. I, §4, cl. 1; Art. II, §1, cl. 2.1 But there is little reason to think that these Clauses implicitly authorize the States to enforce Section 3 against federal officeholders and candidates. Granting the States that authority would invert the Fourteenth Amendment’s rebalancing of federal and state power. The text of Section 3 reinforces these conclusions. Its final sentence empowers Congress to “remove” any Section 3 “disability” by a two-thirds vote of each house. The text imposes no limits on that power, and Congress may exercise it any time, as the respondents concede. See Brief for Respondents 50. In fact, historically, Congress sometimes exercised this amnesty power postelection to ensure that some of the people’s chosen candidates could take office.2 But if States were free to enforce Section 3 by barring candidates from running in the first place, Congress would be —————— 1 The Elections Clause directs, in relevant part, that “[t]he Times, Places and Manner of holding Elections for Senators and Representatives, shall be prescribed in each State by the Legislature thereof.” Art. I, §4, cl. 1. The Electors Clause similarly provides that “[e]ach State shall appoint, in such Manner as the Legislature thereof may direct, a Number of Electors,” who in turn elect the President. Art. II, §1, cl. 2. 2 Shortly after the Fourteenth Amendment was ratified, for instance, Congress enacted a private bill to remove the Section 3 disability of Nelson Tift of Georgia, who had recently been elected to represent the State in Congress. See ch. 393, 15 Stat. 427. Tift took his seat in Congress immediately thereafter. See Cong. Globe, 40th Cong., 2d Sess., 4499– 4500 (1868). Congress similarly acted postelection to remove the disabilities of persons elected to state and local offices. See Cong. Globe, 40th Cong., 3d Sess., 29–30, 120–121 (1868); ch. 5, 15 Stat. 435–436. Per Curiam forced to exercise its disability removal power before voting begins if it wished for its decision to have any effect on the current election cycle. Perhaps a State may burden congressional authority in such a way when it exercises its “exclusive” sovereign power over its own state offices. Taylor, 178 U. S., at 571. But it is implausible to suppose that the Constitution affirmatively delegated to the States the authority to impose such a burden on congressional power with respect to candidates for federal office. Cf. McCulloch v. Maryland, 4 Wheat. 316, 436 (1819) (“States have no power . . . to retard, impede, burden, or in any manner control, the operations of the constitutional laws enacted by Congress”). Nor have the respondents identified any tradition of state enforcement of Section 3 against federal officeholders or candidates in the years following ratification of the Fourteenth Amendment.3 Such a lack of historical precedent is generally a “ ‘telling indication’ ” of a “ ‘severe constitutional problem’ ” with the asserted power. United States v. Texas, 599 U. S. 670, 677 (2023) (quoting Free Enterprise Fund v. Public Company Accounting Oversight Bd., 561 U. S. 477, 505 (2010)). And it is an especially telling sign here, because as noted, States did disqualify persons from holding state offices following ratification of the Fourteenth Amendment. That pattern of disqualification with respect to state, but not federal offices provides “persuasive evidence of a general understanding” that the States lacked enforcement power with respect to the latter. U. S. Term Limits, 514 —————— 3 We are aware of just one example of state enforcement against a would-be federal officer. In 1868, the Governor of Georgia refused to commission John Christy, who had won the most votes in a congressional election, because—in the Governor’s view—Section 3 made Christy ineligible to serve. But the Governor’s determination was not final; a committee of the House reviewed Christy’s qualifications itself and recommended that he not be seated. The full House never acted on the matter, and Christy was never seated. See 1 A. Hinds, Precedents of the House of Representatives §459, pp. 470–472 (1907). Per Curiam U. S., at 826. Instead, it is Congress that has long given effect to Section 3 with respect to would-be or existing federal officeholders. Shortly after ratification of the Amendment, Congress enacted the Enforcement Act of 1870. That Act authorized federal district attorneys to bring civil actions in federal court to remove anyone holding nonlegislative office—federal or state—in violation of Section 3, and made holding or attempting to hold office in violation of Section 3 a federal crime. §§14, 15, 16 Stat. 143–144 (repealed, 35 Stat. 1153–1154, 62 Stat. 992–993). In the years following ratification, the House and Senate exercised their unique powers under Article I to adjudicate challenges contending that certain prospective or sitting Members could not take or retain their seats due to Section 3. See Art. I, §5, cls. 1, 2; 1 A. Hinds, Precedents of the House of Representatives §§459–463, pp. 470–486 (1907). And the Confiscation Act of 1862, which predated Section 3, effectively provided an additional procedure for enforcing disqualification. That law made engaging in insurrection or rebellion, among other acts, a federal crime punishable by disqualification from holding office under the United States. See §§2, 3, 12 Stat. 590. A successor to those provisions remains on the books today. See 18 U. S. C. §2383. Moreover, permitting state enforcement of Section 3 against federal officeholders and candidates would raise serious questions about the scope of that power. Section 5 limits congressional legislation enforcing Section 3, because Section 5 is strictly “remedial.” City of Boerne, 521 U. S., at 520. To comply with that limitation, Congress “must tailor its legislative scheme to remedying or preventing” the specific conduct the relevant provision prohibits. Florida Prepaid Postsecondary Ed. Expense Bd. v. College Savings Bank, 527 U. S. 627, 639 (1999). Section 3, unlike other provisions of the Fourteenth Amendment, proscribes conduct of individuals. It bars persons from holding office after Per Curiam taking a qualifying oath and then engaging in insurrection or rebellion—nothing more. Any congressional legislation enforcing Section 3 must, like the Enforcement Act of 1870 and §2383, reflect “congruence and proportionality” between preventing or remedying that conduct “and the means adopted to that end.” City of Boerne, 521 U. S., at 520. Neither we nor the respondents are aware of any other legislation by Congress to enforce Section 3. See Tr. of Oral Arg. 123. Any state enforcement of Section 3 against federal officeholders and candidates, though, would not derive from Section 5, which confers power only on “[t]he Congress.” As a result, such state enforcement might be argued to sweep more broadly than congressional enforcement could under our precedents. But the notion that the Constitution grants the States freer rein than Congress to decide how Section 3 should be enforced with respect to federal offices is simply implausible. Finally, state enforcement of Section 3 with respect to the Presidency would raise heightened concerns. “[I]n the context of a Presidential election, state-imposed restrictions implicate a uniquely important national interest.” Anderson v. Celebrezze, 460 U. S. 780, 794–795 (1983) (footnote omitted). But state-by-state resolution of the question whether Section 3 bars a particular candidate for President from serving would be quite unlikely to yield a uniform answer consistent with the basic principle that “the President . . . represent[s] all the voters in the Nation.” Id., at 795 (emphasis added). Conflicting state outcomes concerning the same candidate could result not just from differing views of the merits, but from variations in state law governing the proceedings that are necessary to make Section 3 disqualification determinations. Some States might allow a Section 3 challenge to succeed based on a preponderance of the evidence, while Per Curiam others might require a heightened showing. Certain evidence (like the congressional Report on which the lower courts relied here) might be admissible in some States but inadmissible hearsay in others. Disqualification might be possible only through criminal prosecution, as opposed to expedited civil proceedings, in particular States. Indeed, in some States—unlike Colorado (or Maine, where the secretary of state recently issued an order excluding former President Trump from the primary ballot)—procedures for excluding an ineligible candidate from the ballot may not exist at all. The result could well be that a single candidate would be declared ineligible in some States, but not others, based on the same conduct (and perhaps even the same factual record). The “patchwork” that would likely result from state enforcement would “sever the direct link that the Framers found so critical between the National Government and the people of the United States” as a whole. U. S. Term Limits, 514 U. S., at 822. But in a Presidential election “the impact of the votes cast in each State is affected by the votes cast”— or, in this case, the votes not allowed to be cast—“for the various candidates in other States.” Anderson, 460 U. S., at 795. An evolving electoral map could dramatically change the behavior of voters, parties, and States across the country, in different ways and at different times. The disruption would be all the more acute—and could nullify the votes of millions and change the election result—if Section 3 enforcement were attempted after the Nation has voted. Nothing in the Constitution requires that we endure such chaos—arriving at any time or different times, up to and perhaps beyond the Inauguration. * * * For the reasons given, responsibility for enforcing Section 3 against federal officeholders and candidates rests with Congress and not the States. The judgment of the Colorado Per Curiam Supreme Court therefore cannot stand. All nine Members of the Court agree with that result. Our colleagues writing separately further agree with many of the reasons this opinion provides for reaching it. See post, Part I (joint opinion of SOTOMAYOR, KAGAN, and JACKSON, JJ.); see also post, p. 1 (opinion of BARRETT, J.). So far as we can tell, they object only to our taking into account the distinctive way Section 3 works and the fact that Section 5 vests in Congress the power to enforce it. These are not the only reasons the States lack power to enforce this particular constitutional provision with respect to federal offices. But they are important ones, and it is the combination of all the reasons set forth in this opinion—not, as some of our colleagues would have it, just one particular rationale—that resolves this case. In our view, each of these reasons is necessary to provide a complete explanation for the judgment the Court unanimously reaches. The judgment of the Colorado Supreme Court is reversed. The mandate shall issue forthwith. It is so ordered.",
    "lineup": [],
    "provisions": [
     {
@@ -4302,7 +4281,7 @@
     },
     {
      "id": "amend-14",
-     "quote": null
+     "quote": "A group of Colorado voters contends that Section 3 of the Fourteenth Amendment to the Constitution prohibits former President Donald J."
     },
     {
      "id": "art-1-sec-4-cl-1",
@@ -4310,7 +4289,7 @@
     },
     {
      "id": "art-2-sec-1-cl-2",
-     "quote": null
+     "quote": "The Electors Clause similarly provides that “[e]ach State shall appoint, in such Manner as the Legislature thereof may direct, a Number of Electors,” who in turn elect the President."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/23-00719qp.pdf",
@@ -4329,10 +4308,10 @@
    "name": "McElrath v. Georgia",
    "summary": "The jury’s verdict that the defendant was not guilty by reason of insanity of malice murder constituted an acquittal for double jeopardy purposes notwithstanding any inconsistency with the jury’s other verdicts.",
    "author_code": "KJ",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r05_1qm2.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-721_kjfl.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "JACKSON, J., delivered the opinion for a unanimous Court. ALITO, J., filed a concurring opinion.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -4359,7 +4338,7 @@
    "provisions": [
     {
      "id": "amend-5",
-     "quote": null
+     "quote": "McElrath now maintains that the Fifth Amendment’s Double Jeopardy Clause prevents the State from retrying him for the crime that had resulted in the “not guilty by reason of insanity” finding."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/22-00721qp.pdf",
@@ -4375,10 +4354,10 @@
    "name": "Great Lakes Ins. SE v. Raiders Retreat Realty Co.",
    "summary": "Choice-of-law provisions in maritime contracts are presumptively enforceable under federal maritime law, with narrow exceptions not applicable in this case.",
    "author_code": "BK",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r04_4g15.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-500_7k47.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "KAVANAUGH, J., delivered the opinion for a unanimous Court. THOMAS, J., filed a concurring opinion.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -4405,7 +4384,7 @@
    "provisions": [
     {
      "id": "art-3",
-     "quote": null
+     "quote": "Article III of the Constitution extends the federal judicial power to “all Cases of admiralty and maritime Jurisdiction.” U."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/22-00500qp.pdf",
@@ -4424,10 +4403,10 @@
    "name": "Department of Agriculture Rural Development Rural Housing Service v. Kirtz",
    "summary": "A consumer may sue a federal agency under 15 U. S. C. §§1681n and 1681o for defying the terms of the Fair Credit Reporting Act.",
    "author_code": "NG",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r03_4gcj.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-846_2co3.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "GORSUCH, J., delivered the opinion for a unanimous Court.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -4445,11 +4424,11 @@
    "provisions": [
     {
      "id": "amend-11",
-     "quote": null
+     "quote": "Here, the government acknowledges that §§1681n and 1681o expressly authorize —————— 2 Employees also appears to have rested in part on the Court’s views about the constraints Congress faces when seeking to abrogate state sovereign immunity, given the Constitution’s federal structure and the Eleventh Amendment. 411 U."
     },
     {
      "id": "art-1-sec-8-cl-3",
-     "quote": null
+     "quote": "Unthinkable because Congress enacted the FCRA pursuant to the Constitution’s Commerce Clause—a provision this Court has held does not endow Congress with the power to abrogate state sovereign immunity."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/22-00846qp.pdf",
@@ -4465,10 +4444,10 @@
    "name": "Murray v. UBS Securities, LLC",
    "summary": "A whistleblower seeking to invoke the protections of the Sarbanes-Oxley Act—18 U. S. C. §1514A(a)—must prove that their protected activity was a contributing factor in the employer’s unfavorable personnel action, but need not prove that the employer acted with “retaliatory intent.”",
    "author_code": "SS",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r02_c07d.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-660_7648.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "SOTOMAYOR, J., delivered the opinion for a unanimous Court. ALITO, J., filed a concurring opinion, in which BARRETT, J., joined.",
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -4516,10 +4495,10 @@
    "name": "Acheson Hotels, LLC v. Laufer",
    "summary": "Because Laufer voluntarily dismissed her pending suits under the Americans with Disabilities Act of 1990, Laufer’s case against Acheson is moot.",
    "author_code": "AB",
-   "pdf": "https://www.supremecourt.gov/opinions/23pdf/601us1r01_q86b.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/23pdf/22-429_h315.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "BARRETT, J., delivered the opinion of the Court, in which ROBERTS, C. J., and ALITO, SOTOMAYOR, KAGAN, GORSUCH, and KAVANAUGH, JJ., joined. THOMAS, J., and JACKSON, J., filed opinions concurring in the judgment.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -4594,12 +4573,7 @@
      }
     ]
    },
-   "provisions": [
-    {
-     "id": "art-3",
-     "quote": null
-    }
-   ],
+   "provisions": [],
    "qp_url": "https://www.supremecourt.gov/qp/22-00429qp.pdf",
    "question_presented": [
     "Does a self-appointed Americans with Disabilities Act \"tester\" have Article III standing to challenge a place of public accommodation's failure to provide disability accessibility information on its website, even if she lacks any intention of visiting that place of public accommodation?"
@@ -4607,5 +4581,5 @@
    "qp_checked": true
   }
  ],
- "built_on": "2026-10-10"
+ "built_on": "2026-10-11"
 }
