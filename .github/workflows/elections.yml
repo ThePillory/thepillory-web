@@ -1,8 +1,10 @@
 # Rebuilds data/elections/<date>.json (contests, candidates, ballot measures,
 # candidate statements and arguments) from official sources only: the
 # California Secretary of State, county elections offices and the FEC; and
-# Washington's statewide measures from its Secretary of State. See
-# tools/build_elections.py, tools/build_wa_measures.py and docs/elections.md. Daily during election season,
+# Washington's statewide measures from its Secretary of State, and Colorado's,
+# Arizona's, Florida's and Michigan's from their official guides. See
+# tools/build_elections.py, tools/build_wa_measures.py,
+# tools/build_state_measures.py and docs/elections.md. Daily during election season,
 # and on demand (Actions -> Refresh election data -> Run workflow).
 name: Refresh election data
 on:
@@ -24,6 +26,11 @@ jobs:
         run: python3 tools/build_elections.py
       - name: Washington's statewide measures (Secretary of State, Attorney General, Office of Financial Management)
         run: python3 tools/build_wa_measures.py
+      # One state's guide failing to read keeps its earlier file; the others still update. The run is marked failed at the end.
+      - name: Colorado's, Arizona's, Florida's and Michigan's statewide measures (official guides)
+        id: states
+        continue-on-error: true
+        run: python3 tools/build_state_measures.py
       # A failure here (an FEC outage) still lets the steps above commit; the run is marked failed at the end.
       - name: Every state's federal races (FEC filings, for Open your ballot)
         id: fec
@@ -39,6 +46,6 @@ jobs:
           git diff --cached --quiet && exit 0
           git commit -m "Refresh election data from official sources"
           git push
-      - name: Fail the run if the federal races didn't build
-        if: steps.fec.outcome == 'failure'
+      - name: Fail the run if the federal races or a state's measures didn't build
+        if: steps.fec.outcome == 'failure' || steps.states.outcome == 'failure'
         run: exit 1
