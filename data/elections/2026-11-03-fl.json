@@ -41,6 +41,48 @@
  "contests": [],
  "measures": [
   {
+   "id": "amendment-1",
+   "number": "1",
+   "label": "Amendment 1",
+   "kind": "Constitutional amendment",
+   "scope": "statewide",
+   "title": "Budget Stabilization Fund",
+   "requirement": "Passes with 60 percent of the vote (Florida Constitution, Article XI, Section 5)",
+   "question": "BUDGET STABILIZATION FUND.—",
+   "question_by": "Ballot title and summary, from the Florida Division of Elections' booklet of proposed constitutional amendments",
+   "lead": {
+    "text": "Proposing an amendment to the State Constitution to increase the amount of funds that may be retained in the budget stabilization fund from 10% to 25% of general revenue collections, require the legislature to transfer the lesser of $750 million or the amount required to reach 25% of the general revenue collections each year unless certain conditions are met, and allow the legislature to withdraw funds for critical state needs.",
+    "source": "The official ballot summary."
+   },
+   "sections": [
+    {
+     "id": "summary",
+     "heading": "Ballot summary",
+     "by": "Ballot title and summary, from the Florida Division of Elections' booklet of proposed constitutional amendments",
+     "paragraphs": [
+      "Proposing an amendment to the State Constitution to increase the amount of funds that may be retained in the budget stabilization fund from 10% to 25% of general revenue collections, require the legislature to transfer the lesser of $750 million or the amount required to reach 25% of the general revenue collections each year unless certain conditions are met, and allow the legislature to withdraw funds for critical state needs."
+     ]
+    },
+    {
+     "id": "where",
+     "heading": "Where it would change the constitution",
+     "by": "Ballot title and summary, from the Florida Division of Elections' booklet of proposed constitutional amendments",
+     "paragraphs": [
+      "ARTICLE III, SECTION 19"
+     ]
+    }
+   ],
+   "arguments": [],
+   "links": [
+    {
+     "url": "https://files.floridados.gov/media/711369/eng-2026-booklet-constitutional-amendpub-updated-20260903.pdf",
+     "label": "Proposed Constitutional Amendments for the General Election, with the full text of each (Division of Elections, PDF)"
+    }
+   ],
+   "source_url": "https://files.floridados.gov/media/711369/eng-2026-booklet-constitutional-amendpub-updated-20260903.pdf",
+   "source": "Proposed Constitutional Amendments for the General Election (November 3, 2026), Florida Division of Elections"
+  },
+  {
    "id": "amendment-2",
    "number": "2",
    "label": "Amendment 2",
