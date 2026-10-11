@@ -201,5 +201,11 @@ class LoadTrades(unittest.TestCase):
         self.assertEqual(db.execute("SELECT COUNT(*) FROM trades WHERE official_id = 'c1'").fetchone()[0], 0, "nothing guessed for a report on request")
 
 
+    def test_account_numbers_dropped_from_asset_names(self):
+        self.assertEqual(T.clean_asset("2000140445 Alphabet Inc. - Class A Common Stock (GOOGL)"), "Alphabet Inc. - Class A Common Stock (GOOGL)")
+        self.assertEqual(T.clean_asset("3M Company (MMM)"), "3M Company (MMM)")
+        self.assertEqual(T.clean_asset("Indiana ST 5.00% 02/01/32"), "Indiana ST 5.00% 02/01/32")
+
+
 if __name__ == "__main__":
     unittest.main()

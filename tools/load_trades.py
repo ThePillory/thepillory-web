@@ -629,10 +629,20 @@ def committees():
 # D1
 
 
+BUSY = re.compile(r"overloaded|queued for too long|too many requests|SQLITE_BUSY|timed? ?out", re.I)
+
+
 def d1(args, *, file=None, command=None):
     cmd = ["npx", "--yes", "wrangler@4", "d1", "execute", args.database, "--remote", "--yes"]
     cmd += ["--file", str(file)] if file else ["--json", "--command", command]
-    r = subprocess.run(cmd, cwd=ROOT / "workers" / "sync", capture_output=True, text=True)
+    # D1 sometimes answers "overloaded" when other work is running; each call is all or
+    # nothing and every statement can run twice, so wait and try again.
+    for wait in (30, 60, 120, 240, None):
+        r = subprocess.run(cmd, cwd=ROOT / "workers" / "sync", capture_output=True, text=True)
+        if not r.returncode or wait is None or not BUSY.search(r.stdout + r.stderr):
+            break
+        print(f"  D1 is busy; trying again in {wait} s", flush=True)
+        time.sleep(wait)
     if r.returncode:
         raise SystemExit(f"wrangler d1 execute failed:\n{r.stdout[-3000:]}\n{r.stderr[-3000:]}")
     if command:
@@ -641,13 +651,22 @@ def d1(args, *, file=None, command=None):
 
 
 def run_sql(args, statements):
-    for i in range(0, len(statements), 400):
+    for i in range(0, len(statements), 200):
         with tempfile.NamedTemporaryFile("w", suffix=".sql", delete=False) as f:
-            f.write("\n".join(statements[i:i + 400]))
+            f.write("\n".join(statements[i:i + 200]))
         try:
             d1(args, file=f.name)
         finally:
             os.unlink(f.name)
+
+
+# Some House filings put an account or holding number before the asset ("2000140445 Alphabet Inc.").
+# Account numbers are never shown: drop a leading run of 6 or more digits.
+ACCOUNT_NO = re.compile(r"^\d{6,}\s+(?=\S)")
+
+
+def clean_asset(name):
+    return ACCOUNT_NO.sub("", name or "").strip()
 
 
 def report_sql(rep, trades):
@@ -661,7 +680,7 @@ def report_sql(rep, trades):
         out.append(
             "INSERT INTO trades (report_id, n, official_id, chamber, state, transaction_date, filed_on, days_to_file, owner, asset_name, ticker, asset_type, type, amount, amount_min, amount_max, sic, sector) VALUES ("
             + ", ".join(lit(v) for v in (rep["id"], n, rep["official_id"], rep["chamber"], rep["state"], t["transaction_date"], rep["filed_on"],
-                                          days_between(t["transaction_date"], rep["filed_on"]) if rep.get("dated", True) else None, t["owner"], t["asset_name"], t["ticker"], t["asset_type"],
+                                          days_between(t["transaction_date"], rep["filed_on"]) if rep.get("dated", True) else None, t["owner"], clean_asset(t["asset_name"]), t["ticker"], t["asset_type"],
                                           t["type"], t["amount"], t["amount_min"], t["amount_max"], t.get("sic"), t.get("sector")))
             + ");")
     return out
@@ -815,6 +834,10 @@ def main():
         if not any(c["name"] == "request_url" for c in d1(args, command="PRAGMA table_info(trade_reports)")):
             d1(args, file=ROOT / "workers" / "sync" / "migrations" / "0025_executive_trades.sql")
         stmts = []
+        # Rows loaded before clean_asset() existed.
+        for row in d1(args, command="SELECT report_id, n, asset_name FROM trades WHERE asset_name GLOB '[0-9][0-9][0-9][0-9][0-9][0-9]* *'"):
+            if clean_asset(row["asset_name"]) != row["asset_name"]:
+                stmts.append(f"UPDATE trades SET asset_name = {lit(clean_asset(row['asset_name']))} WHERE report_id = {lit(row['report_id'])} AND n = {row['n']};")
         for rep, ts in reports:
             stmts += report_sql(rep, ts if rep["official_id"] else [])
         stmts += [f"INSERT OR REPLACE INTO sec_tickers (ticker, cik, company, sic, sector, checked_at) VALUES ({lit(t)}, {lit(v[0])}, {lit(v[1])}, {lit(v[2])}, {lit(v[3])}, datetime('now'));" for t, v in fresh.items()]

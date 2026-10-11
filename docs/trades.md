@@ -6,7 +6,7 @@ Periodic Transaction Reports filed by members of Congress, shown as filed, side 
 
 ## Sources and loading
 
-`tools/load_trades.py`, run by the **Load stock trades** workflow (`.github/workflows/trades.yml`): by hand until a measure run on real reports has been checked, then daily, up to 300 new reports, newest first, back to 2023; or by hand in **measure** mode (reads a sample, writes what it found to the run summary, writes nothing) or **load** mode.
+`tools/load_trades.py`, run by the **Load stock trades** workflow (`.github/workflows/trades.yml`): daily at 15:23 UTC (after the sync Worker's run, so they don't write to D1 at once), up to 300 new reports, newest first, back to 2023; or by hand in **measure** mode (reads a sample, writes what it found to the run summary, writes nothing) or **load** mode.
 
 | Source | What's read |
 |---|---|
