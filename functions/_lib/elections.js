@@ -14,18 +14,19 @@ import { esc, safeUrl, sourceLink, fmtDate } from "./render.js";
 import { asset } from "./geo.js";
 
 // Elections ThePillory has, newest first. One file each in data/elections/:
-// California's full ballot (tools/build_elections.py) and Washington's statewide
-// measures (tools/build_wa_measures.py).
-export const ELECTIONS = ["2026-11-03", "2026-11-03-wa"];
+// California's full ballot (tools/build_elections.py), Washington's statewide
+// measures (tools/build_wa_measures.py), and Colorado's, Arizona's, Florida's and
+// Michigan's statewide measures (tools/build_state_measures.py).
+export const ELECTIONS = ["2026-11-03", "2026-11-03-wa", "2026-11-03-co", "2026-11-03-az", "2026-11-03-fl", "2026-11-03-mi"];
 export const CURRENT = ELECTIONS[0];
 /** The next election ThePillory has for each state. */
-export const ELECTION_BY_STATE = { CA: "2026-11-03", WA: "2026-11-03-wa" };
+export const ELECTION_BY_STATE = { CA: "2026-11-03", WA: "2026-11-03-wa", CO: "2026-11-03-co", AZ: "2026-11-03-az", FL: "2026-11-03-fl", MI: "2026-11-03-mi" };
 /** The election to show for a state: its own, or California's (the default) when ThePillory has none for it. */
 export const electionIdFor = (st) => ELECTION_BY_STATE[st] || CURRENT;
 /** True for an election ThePillory has only the statewide measures of (no candidates or local contests). */
 export const measuresOnly = (election) => !!election && !(election.contests || []).length;
-/** "California's ballot and Washington's statewide measures": what ThePillory has, said plainly. */
-export const COVERAGE_NOTE = "ThePillory has California's full ballot and Washington's statewide measures so far";
+/** What ThePillory has, said plainly. */
+export const COVERAGE_NOTE = "ThePillory has California's full ballot, and the statewide measures for Washington, Colorado, Arizona, Florida and Michigan, so far";
 
 export const loadElection = (env, request, id) => (ELECTIONS.includes(id) ? asset(env, request, `/data/elections/${id}.json`) : null);
 

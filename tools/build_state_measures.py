@@ -274,6 +274,29 @@ def collapse_tables(items):
         return (len(re.findall(r"[A-Za-z]{2,}", x)) < 4 and re.search(r"[\d$%]", x)) or (len(tokens) >= 4 and figures * 5 >= len(tokens) * 2)
 
     items = [{"h": x} if isinstance(x, str) and numeric(x) else x for x in items]
+    # "Table 1 …" or "Figure 2 …" starts a table: its caption and cells, up to the next full paragraph
+    # (twenty words or more) or real subheading, are the table.
+    captioned, skipping = [], False
+    for x in items:
+        if isinstance(x, str):
+            cap = re.search(r"\b(?:Table|Figure)\s*\d+\b", x)
+            # A caption starts its own sentence ("… current law. Table 1 Fentanyl Offense …"); a sentence
+            # that mentions a table ("as shown in Table 1", "Table 1 shows …") is text.
+            if cap and (not x[:cap.start()].strip() or re.search(r"[.:?”]$", x[:cap.start()].strip())) \
+                    and not re.match(r"(?:Table|Figure)\s*\d+\s+(?:shows|below|above|lists|compares|summarizes|includes|provides)\b", x[cap.start():]):
+                before = x[:cap.start()].strip()
+                if before:
+                    captioned.append(before)
+                captioned.append({"table": True})
+                skipping = True
+                continue
+            if skipping and len(x.split()) < 20:
+                continue
+        elif skipping and "h" in x and tabley(x["h"]):
+            continue
+        skipping = False
+        captioned.append(x)
+    items = captioned
     out, i = [], 0
     while i < len(items):
         if isinstance(items[i], dict) and "h" in items[i]:
