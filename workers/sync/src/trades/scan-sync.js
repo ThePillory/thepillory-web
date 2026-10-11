@@ -8,7 +8,7 @@
 // report, auto-checked" (as AI-drafted analyses are); SPOT_CHECK_RATE of them
 // are marked for a person on /admin/review/trades/, who can confirm one
 // ("Checked by [name]") or take it down. Readings that don't agree keep the
-// report a link. SCANNED_TRADES_DAILY (2) reports a day.
+// report a link. SCANNED_TRADES_DAILY (5) reports a day.
 import { getState, setState, today, redact, BudgetExhausted } from "../util.js";
 import { structuredCall, DraftRefused } from "../analysis/claude.js";
 import { SCAN_INSTRUCTIONS, scanSchema, scanMessage } from "./scan-prompt.js";
@@ -46,7 +46,7 @@ const spotRate = (env) => Math.min(1, Math.max(0, parseFloat(env.SPOT_CHECK_RATE
 
 export async function syncScannedTrades(env, db, budget, { call, random = Math.random } = {}) {
   if (!env.ANTHROPIC_API_KEY && !call) return { status: "skipped", message: "no ANTHROPIC_API_KEY" };
-  const limit = parseInt(env.SCANNED_TRADES_DAILY || "2", 10);
+  const limit = parseInt(env.SCANNED_TRADES_DAILY || "5", 10);
   const dayKey = `scanned_trades_${today()}`;
   let done = parseInt((await getState(db, dayKey)) || "0", 10);
   if (done >= limit) return { status: "skipped", message: `${done} scanned reports read today (SCANNED_TRADES_DAILY ${limit})` };
