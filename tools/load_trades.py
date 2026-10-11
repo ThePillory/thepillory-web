@@ -250,6 +250,7 @@ class TableRows(html.parser.HTMLParser):
     def __init__(self):
         super().__init__()
         self.rows, self._row, self._cell, self._in_body, self._done = [], None, None, False, False
+        self._first = None  # each cell's text before its first nested <div> (the gray detail lines)
 
     def handle_starttag(self, tag, attrs):
         if self._done:
@@ -259,15 +260,18 @@ class TableRows(html.parser.HTMLParser):
         elif self._in_body and tag == "tr":
             self._row = []
         elif self._in_body and tag in ("td", "th") and self._row is not None:
-            self._cell = []
+            self._cell, self._first = [], None
         elif self._cell is not None and tag in ("br", "div", "p"):
+            if tag == "div" and self._first is None:
+                self._first = "".join(self._cell)
             self._cell.append(" ")
 
     def handle_endtag(self, tag):
         if self._done:
             return
         if tag in ("td", "th") and self._cell is not None:
-            self._row.append(re.sub(r"\s+", " ", "".join(self._cell)).strip())
+            text = self._first if self._first is not None and self._first.strip() else "".join(self._cell)
+            self._row.append(re.sub(r"\s+", " ", text).strip())
             self._cell = None
         elif tag == "tr" and self._row is not None:
             if self._row:
@@ -307,7 +311,7 @@ def parse_senate_ptr_html(page):
         lo, hi = amount_bounds(amount)
         tk = ticker.strip()
         out.append({"owner": owner_label(owner), "asset_name": asset, "asset_type": asset_type or None,
-                    "ticker": None if tk in ("", "--") else tk.upper(), "type": t, "transaction_date": d,
+                    "ticker": ticker_of(asset) if tk in ("", "--") else tk.upper(), "type": t, "transaction_date": d,
                     "amount": amount, "amount_min": lo, "amount_max": hi})
     return out
 
@@ -407,6 +411,11 @@ def match_senate(f, officials):
     if len(hits) > 1:
         active = [o for o in hits if o.get("active")]
         hits = active if len(active) == 1 else hits
+    if not hits:
+        # A filing name can differ from the familiar one ("A. Mitchell" for "Mitch"):
+        # then the last name alone, when exactly one senator has it.
+        same_last = [o for o in officials if o["chamber"] == "us-senate" and last and (norm(o.get("last_name")) == last or norm(o["name"]).endswith(" " + last))]
+        hits = same_last if len(same_last) == 1 else []
     if len(hits) == 1:
         return hits[0], None
     return None, f"{len(hits)} senators named {f['first']} {f['last']}"

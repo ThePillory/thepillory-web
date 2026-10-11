@@ -50,7 +50,7 @@ SENATE_HTML = """<html><body><h1>Periodic Transaction Report</h1>
 <table class="table table-striped"><thead><tr><th>#</th><th>Transaction Date</th><th>Owner</th><th>Ticker</th><th>Asset Name</th><th>Asset Type</th><th>Type</th><th>Amount</th><th>Comment</th></tr></thead>
 <tbody>
 <tr><td>1</td><td>08/14/2026</td><td>Spouse</td><td><a href="https://finance.yahoo.com/quote/MSFT">MSFT</a></td><td>Microsoft Corporation<div class="text-muted"><em>Rate/Coupon:</em> --</div></td><td>Stock</td><td>Purchase</td><td>$15,001 - $50,000</td><td>--</td></tr>
-<tr><td>2</td><td>08/20/2026</td><td>Self</td><td>--</td><td>Example State Bond</td><td>Municipal Security</td><td>Sale (Partial)</td><td>$1,001 - $15,000</td><td>--</td></tr>
+<tr><td>2</td><td>08/20/2026</td><td>Self</td><td>--</td><td>Example State Bond (EXB)<div class="text-muted"><em>Rate/Coupon:</em> 5.6% <em>Matures:</em> 2033-09-15</div></td><td>Municipal Security</td><td>Sale (Partial)</td><td>$1,001 - $15,000</td><td>--</td></tr>
 </tbody></table></body></html>"""
 
 
@@ -83,8 +83,9 @@ class LoadTrades(unittest.TestCase):
         rows = T.parse_senate_ptr_html(SENATE_HTML)
         self.assertEqual(len(rows), 2)
         self.assertEqual((rows[0]["owner"], rows[0]["ticker"], rows[0]["type"], rows[0]["transaction_date"]), ("Spouse", "MSFT", "Purchase", "2026-08-14"))
-        self.assertTrue(rows[0]["asset_name"].startswith("Microsoft Corporation"))
-        self.assertEqual((rows[1]["ticker"], rows[1]["type"]), (None, "Partial sale"))
+        self.assertEqual(rows[0]["asset_name"], "Microsoft Corporation", "the name without the gray detail lines")
+        self.assertEqual(rows[1]["asset_name"], "Example State Bond (EXB)")
+        self.assertEqual((rows[1]["ticker"], rows[1]["type"]), ("EXB", "Partial sale"), "a ticker in the name when the Ticker cell is empty")
         self.assertIsNone(T.parse_senate_ptr_html("<p>no table</p>"))
         self.assertEqual(T.senate_link('<a href="/search/view/paper/AB12-34/" target="_blank">Report</a>'), ("paper", "https://efdsearch.senate.gov/search/view/paper/AB12-34/"))
 
@@ -116,7 +117,8 @@ class LoadTrades(unittest.TestCase):
         self.assertIn("0 House members", why)
         self.assertEqual(T.match_senate({"first": "Ann", "last": "Nunez"}, officials)[0]["id"], "s1")
         self.assertIsNone(T.match_senate({"first": "B", "last": "Smith"}, officials)[0], "two senators: not attached")
-        self.assertEqual(T.match_senate({"first": "Robert", "last": "Smith"}, officials)[0], None, "a first name that doesn't match")
+        self.assertEqual(T.match_senate({"first": "Robert", "last": "Smith"}, officials)[0], None, "a first name that doesn't match, and two Smiths")
+        self.assertEqual(T.match_senate({"first": "A. Annette", "last": "Nunez, Jr."}, officials)[0]["id"], "s1", "the only senator with that last name")
 
     def test_sql_writes_reports_trades_and_summaries(self):
         db = sqlite3.connect(":memory:")
