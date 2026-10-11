@@ -240,7 +240,7 @@ def co_measures():
         if not hs:
             raise Unreadable(f"Colorado {label}: its header wasn't found")
         heads.append(hs[-1])
-    measures = []
+    measures, furniture, checks = [], [], []
     for k, (label, at, head) in enumerate(zip(labels, starts, heads)):
         placed = next((i for i in range(head, at) if stripped[i].startswith("Placed on the ballot")), None)
         if placed is None:
@@ -290,9 +290,9 @@ def co_measures():
         bt0 = next(j for j in range(t0, t0 + 14) if stripped[j] == "Ballot Title:")
         bt1 = next(j for j in range(bt0, len(stripped)) if stripped[j].startswith("Text of Measure"))
         ballot_title = join_lines(stripped[bt0 + 1:bt1])
-        for what, quotes in (("proposal", proposes), ("analysis", analysis), ("arguments for", pros), ("arguments against", cons), ("fiscal impact", money)):
-            check(f"Colorado {label} {what}", text, quotes)
-        check(f"Colorado {label} vote meanings", text, [yes, no, ballot_title])
+        furniture.append(noise)
+        for what, quotes in (("proposal", proposes), ("analysis", analysis), ("arguments for", pros), ("arguments against", cons), ("fiscal impact", money), ("vote meanings", [yes, no, ballot_title])):
+            checks.append((f"Colorado {label} {what}", quotes))
         if not (pros and cons and analysis and money and yes.startswith("A “yes” vote") and no.startswith("A “no” vote")):
             raise Unreadable(f"Colorado {label}: a section came out empty")
         kind = ("Citizen-initiated " if "citizen" in how_placed else "Referred by the legislature: ") + ("constitutional amendment" if label.startswith("Amendment") else "statute")
@@ -329,6 +329,11 @@ def co_measures():
             "source_url": CO_BOOK,
             "source": "2026 State Ballot Information Booklet, Legislative Council of the Colorado General Assembly",
         })
+    # Quotes are checked against the booklet's text without its page furniture (page numbers, the
+    # measure number and running title at the top of each page), which can fall mid-paragraph.
+    clean = "\n".join(l for l in lines if not (l.strip() and any(f(l.strip()) for f in furniture)))
+    for where, quotes in checks:
+        check(where, clean, quotes)
     if len(measures) != 14:
         raise Unreadable(f"Colorado: {len(measures)} measures read; the Blue Book lists 14")
     office = offices()["CO"]
