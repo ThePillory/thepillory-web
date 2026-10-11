@@ -6,8 +6,9 @@
 #   By hand (Actions -> Load stock trades -> Run workflow): "measure" reads a
 #   sample of new reports and writes what it found to the run summary, writing
 #   nothing to D1; "load" writes them.
-#   Daily (once a measure run on real reports looks right, a schedule is
-#   added here): loads up to 300 new reports, newest first, back to 2023.
+#   Daily at 15:23 UTC (well after the sync Worker's 11:00 run, so the two
+#   don't write to D1 at once): loads up to 300 new reports, newest first,
+#   back to 2023.
 #
 # These records may not be used for commercial purposes (Ethics in Government
 # Act): never sell, export or put them behind a paid plan.
@@ -17,6 +18,8 @@
 #   SEC_USER_AGENT (optional)   "Name email@example.org": EDGAR asks for a contact
 name: Load stock trades
 on:
+  schedule:
+    - cron: "23 15 * * *"
   workflow_dispatch:
     inputs:
       mode:

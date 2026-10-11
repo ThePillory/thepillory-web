@@ -660,6 +660,15 @@ def run_sql(args, statements):
             os.unlink(f.name)
 
 
+# Some House filings put an account or holding number before the asset ("2000140445 Alphabet Inc.").
+# Account numbers are never shown: drop a leading run of 6 or more digits.
+ACCOUNT_NO = re.compile(r"^\d{6,}\s+(?=\S)")
+
+
+def clean_asset(name):
+    return ACCOUNT_NO.sub("", name or "").strip()
+
+
 def report_sql(rep, trades):
     out = [
         "INSERT OR REPLACE INTO trade_reports (id, chamber, official_id, filer_name, state, district, filed_on, report_url, paper, parsed, trade_count, unmatched, source_url, request_url, position, agency, checked_at) VALUES ("
@@ -671,7 +680,7 @@ def report_sql(rep, trades):
         out.append(
             "INSERT INTO trades (report_id, n, official_id, chamber, state, transaction_date, filed_on, days_to_file, owner, asset_name, ticker, asset_type, type, amount, amount_min, amount_max, sic, sector) VALUES ("
             + ", ".join(lit(v) for v in (rep["id"], n, rep["official_id"], rep["chamber"], rep["state"], t["transaction_date"], rep["filed_on"],
-                                          days_between(t["transaction_date"], rep["filed_on"]) if rep.get("dated", True) else None, t["owner"], t["asset_name"], t["ticker"], t["asset_type"],
+                                          days_between(t["transaction_date"], rep["filed_on"]) if rep.get("dated", True) else None, t["owner"], clean_asset(t["asset_name"]), t["ticker"], t["asset_type"],
                                           t["type"], t["amount"], t["amount_min"], t["amount_max"], t.get("sic"), t.get("sector")))
             + ");")
     return out
@@ -825,6 +834,10 @@ def main():
         if not any(c["name"] == "request_url" for c in d1(args, command="PRAGMA table_info(trade_reports)")):
             d1(args, file=ROOT / "workers" / "sync" / "migrations" / "0025_executive_trades.sql")
         stmts = []
+        # Rows loaded before clean_asset() existed.
+        for row in d1(args, command="SELECT report_id, n, asset_name FROM trades WHERE asset_name GLOB '[0-9][0-9][0-9][0-9][0-9][0-9]* *'"):
+            if clean_asset(row["asset_name"]) != row["asset_name"]:
+                stmts.append(f"UPDATE trades SET asset_name = {lit(clean_asset(row['asset_name']))} WHERE report_id = {lit(row['report_id'])} AND n = {row['n']};")
         for rep, ts in reports:
             stmts += report_sql(rep, ts if rep["official_id"] else [])
         stmts += [f"INSERT OR REPLACE INTO sec_tickers (ticker, cik, company, sic, sector, checked_at) VALUES ({lit(t)}, {lit(v[0])}, {lit(v[1])}, {lit(v[2])}, {lit(v[3])}, datetime('now'));" for t, v in fresh.items()]
