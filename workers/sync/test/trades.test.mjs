@@ -61,6 +61,19 @@ function seeded() {
   sqlite.exec(`INSERT INTO congress_committees (official_id, committee_id, name, parent, title, source_url) VALUES
     ('h1', 'HSBA', 'Committee on Financial Services', NULL, NULL, 'https://theunitedstates.io/congress-legislators/committee-membership-current.json'),
     ('h1', 'HSBA16', 'Subcommittee on Capital Markets', 'Committee on Financial Services', 'Ranking Member', 'https://theunitedstates.io/congress-legislators/committee-membership-current.json')`);
+  // The executive branch: a President whose 278-T is posted, and a Cabinet member's released only on request.
+  sqlite.exec(`INSERT INTO officials (id, slug, name, last_name, office, level, chamber, body, rank, source_url, last_verified, active) VALUES
+    ('p1', 'pat-president', 'Pat President', 'President', 'President of the United States', 'federal', 'us-executive', 'us-executive', 1, 'https://example.org/o', '2026-10-01', 1),
+    ('c1', 'cam-cabinet', 'Cam Cabinet', 'Cabinet', 'Secretary of Example', 'federal', 'us-executive', 'us-executive', 12, 'https://example.org/o', '2026-10-01', 1)`);
+  sqlite.exec(`INSERT INTO disclosures (id, official_id, source, kind, doc_type, filer_name, position, agency, filed_on, document_url, request_url, source_url) VALUES
+    ('oge:p', 'p1', 'oge', 'financial', '278 Transaction', 'President, Pat', 'President', 'Executive Office of the President', '${YEAR}-03-25', 'https://extapps2.oge.gov/p.pdf', NULL, 'https://www.oge.gov/'),
+    ('oge:c', 'c1', 'oge', 'financial', '278 Transaction', 'Cabinet, Cam', 'Secretary', 'Department of Example', '${YEAR}-04-02', NULL, 'https://extapps2.oge.gov/201/request', 'https://www.oge.gov/')`);
+  sqlite.exec(`INSERT INTO trade_reports (id, chamber, official_id, filer_name, filed_on, report_url, request_url, paper, parsed, trade_count, source_url, position, agency) VALUES
+    ('oge:p1', 'us-executive', 'p1', 'President, Pat', '${YEAR}-03-20', 'https://extapps2.oge.gov/p.pdf', NULL, 0, 1, 2, 'https://extapps2.oge.gov/p.pdf', 'President', 'Executive Office of the President'),
+    ('oge:c1', 'us-executive', 'c1', 'Cabinet, Cam', '${YEAR}-04-02', NULL, 'https://extapps2.oge.gov/201/request', 0, 0, 0, 'https://extapps2.oge.gov/201/request', 'Secretary', 'Department of Example')`);
+  t.run("oge:p1", 1, "p1", "us-executive", null, `${YEAR}-02-02`, `${YEAR}-03-20`, 46, null, "Example Motors Inc. (EXM)", "EXM", "Purchase", "$1,001 - $15,000", 1001, 15000, "3711", "Manufacturing");
+  t.run("oge:p1", 2, "p1", "us-executive", null, `${YEAR}-02-10`, `${YEAR}-03-20`, 38, "Spouse", "Example Municipal Bond Fund (spouse)", null, "Sale", "$50,001 - $100,000", 50001, 100000, null, null);
+  sqlite.exec(`INSERT INTO trade_summary (official_id, year, trades, total_min, total_max, open_ended, paper) VALUES ('p1', ${YEAR}, 2, 51002, 115000, 0, 0)`);
   return d1(sqlite);
 }
 
@@ -147,4 +160,36 @@ test("wording", () => {
   assert.equal(filedLate({ days_to_file: 45 }), "");
   assert.equal(filedLate({ days_to_file: 112 }), "Filed 112 days after the trade");
   assert.deepEqual(tradeFilters(new URLSearchParams("chamber=us-senate&state=wa&sector=Nope&q=50%25")), { chamber: "us-senate", state: "", sector: "", q: "50", offset: 0 });
+});
+
+test("the President's 278-T: office and agency as facts, trades as filed, the 45-day line", async () => {
+  const { res, html } = await get(reps, "/reps/pat-president/");
+  assert.equal(res.status, 200);
+  const sec = fold(html, "more-trades");
+  assert.ok(sec, "the same Stock trades section on the More tab");
+  assert.match(sec, /<p class="label">Office<\/p>[\s\S]*?President[\s\S]*?Executive Office of the President/);
+  assert.match(sec, new RegExp(`2 trades reported in ${YEAR}, totaling \\$51,002–\\$115,000 in ranges as filed\\.`));
+  assert.match(sec, /Example Motors Inc\. \(EXM\)/);
+  assert.match(sec, /Filed 46 days after the trade/);
+  assert.match(sec, /Owner: Spouse/);
+  assert.match(sec, /Office of Government Ethics/);
+  assert.match(sec, /may not be used for commercial purposes/);
+  assert.doesNotMatch(sec, /Committee assignments/);
+});
+
+test("a Cabinet member's 278-T released only on request: the request link, nothing guessed", async () => {
+  const { html } = await get(reps, "/reps/cam-cabinet/");
+  const sec = fold(html, "more-trades");
+  assert.match(sec, /href="https:\/\/extapps2\.oge\.gov\/201\/request"[\s\S]*?Available from OGE on request/);
+  assert.match(sec, /Department of Example/);
+  assert.equal((sec.match(/class="compact-row trade-row"/g) || []).length, 0);
+});
+
+test("/trades/: the Executive branch filter", async () => {
+  const { html } = await get(trades, "/trades/?chamber=us-executive");
+  assert.match(html, /<option value="us-executive" selected>Executive branch<\/option>/);
+  assert.equal((html.match(/class="compact-row trade-row"/g) || []).length, 2);
+  assert.match(html, /Pat President/);
+  const all = await get(trades, "/trades/?chamber=us-house");
+  assert.doesNotMatch(all.html, /Pat President/);
 });

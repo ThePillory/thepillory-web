@@ -23,6 +23,7 @@ import init0021 from "../migrations/0021_ballot_lookups.sql";
 import init0022 from "../migrations/0022_candidate_platforms.sql";
 import init0023 from "../migrations/0023_plain_summaries.sql";
 import init0024 from "../migrations/0024_trades.sql";
+import init0025 from "../migrations/0025_executive_trades.sql";
 import { isHttp, today } from "./util.js";
 import { totals } from "./rollcall.js";
 
@@ -51,6 +52,7 @@ const MIGRATIONS = [
   ["0022_candidate_platforms.sql", init0022],
   ["0023_plain_summaries.sql", init0023],
   ["0024_trades.sql", init0024],
+  ["0025_executive_trades.sql", init0025],
 ];
 
 function statements(sql) {

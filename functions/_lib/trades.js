@@ -81,12 +81,19 @@ export const memberTrades = (db, officialId, offset = 0) =>
     return { rows: results.slice(0, TRADES_PER_PAGE), more: results.length > TRADES_PER_PAGE };
   }, { rows: [], more: false });
 
-/** A member's reports that are links only: filed on paper, or not read automatically. */
+/** Reports that are links only: filed on paper, not read automatically, or (OGE) released only on request. */
 export const memberReports = (db, officialId) =>
   soft(async () => (await db
-    .prepare("SELECT id, filed_on, report_url, paper FROM trade_reports WHERE official_id = ? AND parsed = 0 ORDER BY filed_on DESC LIMIT 20")
+    .prepare("SELECT id, filed_on, report_url, request_url, paper FROM trade_reports WHERE official_id = ? AND parsed = 0 ORDER BY filed_on DESC LIMIT 20")
     .bind(officialId)
     .all()).results, []);
+
+/** The President's, Vice President's or a Cabinet member's position and agency, as OGE lists them. */
+export const executivePost = (db, officialId) =>
+  soft(async () => db
+    .prepare("SELECT position, agency FROM disclosures WHERE official_id = ? AND source = 'oge' AND agency IS NOT NULL ORDER BY filed_on DESC LIMIT 1")
+    .bind(officialId)
+    .first(), null);
 
 export const memberCommittees = (db, officialId) =>
   soft(async () => (await db
@@ -96,7 +103,7 @@ export const memberCommittees = (db, officialId) =>
 
 /** /trades/: newest first, by chamber, state, sector and member name; one page. */
 export function tradeFilters(params) {
-  const chamber = ["us-house", "us-senate"].includes(params.get("chamber")) ? params.get("chamber") : "";
+  const chamber = ["us-house", "us-senate", "us-executive"].includes(params.get("chamber")) ? params.get("chamber") : "";
   const state = /^[A-Z]{2}$/.test(params.get("state") || "") ? params.get("state") : "";
   const sector = SECTORS.includes(params.get("sector")) ? params.get("sector") : "";
   const q = String(params.get("q") || "").replace(/[%_]/g, "").trim().slice(0, 60);
@@ -135,8 +142,11 @@ export const latestTrades = (db, f) =>
 // The member's "Stock trades" section (More tab)
 
 const NOTE = `Periodic Transaction Reports members file under the STOCK Act, read from the House Clerk and the Senate's eFD site. Amounts are the ranges the law requires, exactly as filed. Owner is as filed (self, spouse, joint, dependent child). These records may not be used for commercial purposes. <a class="inline-link" href="${TRADES_METHOD}">How trades are recorded</a>`;
+const OGE_NOTE = `Periodic Transaction Reports (OGE Form 278-T) filed with the Office of Government Ethics, under the same 45-day rule and amount ranges as Congress. Amounts are shown exactly as filed; owner only where the report states it. Some reports are released by OGE only on request. These records may not be used for commercial purposes. <a class="inline-link" href="${TRADES_METHOD}">How trades are recorded</a>`;
 
-export function tradesSection(o, { summary, page, reports, committees, offset = 0 }) {
+export function tradesSection(o, { summary, page, reports, committees = [], post = null, offset = 0 }) {
+  const exec = o.chamber === "us-executive";
+  const note = exec ? OGE_NOTE : NOTE;
   const yearNow = new Date().getUTCFullYear();
   const now = summary.find((s) => s.year === yearNow);
   const lines = summary.filter((s) => s.trades).slice(0, 3).map(summaryLine);
@@ -146,24 +156,28 @@ export function tradesSection(o, { summary, page, reports, committees, offset = 
     ? `<p class="label">Committee assignments now</p><div class="card"><ul class="plain-list">${committees
         .map((c) => `<li class="list-row"><span class="list-title">${esc(c.parent ? `${c.parent}: ${c.name}` : c.name)}</span>${c.title ? `<span class="row-end small secondary">${esc(c.title)}</span>` : ""}</li>`)
         .join("")}</ul></div><p class="hint">Committee assignments as listed by congress-legislators. ${sourceLink(committees[0].source_url)}</p>`
-    : "";
+    : exec
+      ? `<p class="label">Office</p><div class="card stack-xs"><p class="small">${esc((post && post.position) || o.office)}</p>${post && post.agency ? `<p class="small secondary">${esc(post.agency)}</p>` : ""}</div>`
+      : "";
   const reportLinks = reports.length
     ? `<p class="label">Reports not shown line by line</p><div class="card">${reports
-        .map((r) => linkRow(r.report_url, r.paper ? "Filed on paper: see the report" : "Not read automatically: see the report", `Filed ${fmtDate(r.filed_on)}`))
+        .map((r) => (!r.report_url && r.request_url
+          ? linkRow(r.request_url, "Available from OGE on request", `Listed ${fmtDate(r.filed_on)} · Request it with OGE Form 201`)
+          : linkRow(r.report_url, r.paper ? "Filed on paper: see the report" : "Not read automatically: see the report", `Filed ${fmtDate(r.filed_on)}`)))
         .join("")}</div>`
     : "";
   if (!page.rows.length && !reports.length) {
-    return `<p class="small secondary">No stock trades by ${esc(o.name)} are on ThePillory yet. Reports since 2023 load daily, newest first.</p>${committeeHtml}<p class="hint">${NOTE}</p>`;
+    return `<p class="small secondary">No stock trades by ${esc(o.name)} are on ThePillory yet. ${exec ? "Reports listed by the Office of Government Ethics load daily." : "Reports since 2023 load daily, newest first."}</p>${committeeHtml}<p class="hint">${note}</p>`;
   }
   return `
   ${lines.length ? `<div class="stack-xs">${lines.map((l) => `<p class="small">${esc(l)}</p>`).join("")}</div>` : ""}
-  ${now && now.paper ? `<p class="small secondary">Also ${now.paper} ${now.paper === 1 ? "report" : "reports"} filed on paper in ${yearNow}: see each report below.</p>` : ""}
+  ${now && now.paper && !exec ? `<p class="small secondary">Also ${now.paper} ${now.paper === 1 ? "report" : "reports"} filed on paper in ${yearNow}: see each report below.</p>` : ""}
   ${committeeHtml}
   <p class="label">Trades, newest first</p>
   <div class="card compact-list" id="${id}">${page.rows.map((t) => tradeRow(t)).join("") || '<p class="secondary small cr-empty">No trades read from electronic reports.</p>'}</div>
   ${more}
   ${reportLinks}
-  <p class="hint">${NOTE}</p>`;
+  <p class="hint">${note}</p>`;
 }
 
 /** Quick mode's one line: "Reported 12 stock trades this year", linking to the list. Pure. */

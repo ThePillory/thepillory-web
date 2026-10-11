@@ -46,11 +46,32 @@ I CERTIFY that the statements I have made on the attached Report are true, compl
 Digitally Signed: Hon. Jane Example , 09/15/2026
 """
 
+# pdftotext -layout output in the layout of an OGE Form 278-T (Integrity).
+OGE_TEXT = """
+OGE Form 278-T
+Example, Pat - Periodic Transaction Report
+
+Filer's Information
+Example, Pat
+President, Executive Office of the President
+Electronic Signature - I certify that the statements I have made in this form are true, complete and correct to the best of my knowledge.
+/s/ Example, Pat [electronically signed on 03/20/2026 by Example, Pat in Integrity.gov]
+
+Transactions
+#   DESCRIPTION                                   EIF   TYPE            DATE         NOTIFICATION RECEIVED OVER 30 DAYS AGO   AMOUNT
+1   Example Motors Inc. (EXM)                     N/A   Purchase        02/02/2026   No                                       $1,001 - $15,000
+2   Example Municipal Bond Fund (spouse)           N/A   Sale (Partial)  02/10/2026   No                                       $50,001 -
+    Series B                                                                                                                  $100,000
+3   Example Holdings LLC                          No    Sale            02/15/2026   No                                       $250,001 - $500,000
+
+Summary of Contents
+"""
+
 SENATE_HTML = """<html><body><h1>Periodic Transaction Report</h1>
 <table class="table table-striped"><thead><tr><th>#</th><th>Transaction Date</th><th>Owner</th><th>Ticker</th><th>Asset Name</th><th>Asset Type</th><th>Type</th><th>Amount</th><th>Comment</th></tr></thead>
 <tbody>
 <tr><td>1</td><td>08/14/2026</td><td>Spouse</td><td><a href="https://finance.yahoo.com/quote/MSFT">MSFT</a></td><td>Microsoft Corporation<div class="text-muted"><em>Rate/Coupon:</em> --</div></td><td>Stock</td><td>Purchase</td><td>$15,001 - $50,000</td><td>--</td></tr>
-<tr><td>2</td><td>08/20/2026</td><td>Self</td><td>--</td><td>Example State Bond</td><td>Municipal Security</td><td>Sale (Partial)</td><td>$1,001 - $15,000</td><td>--</td></tr>
+<tr><td>2</td><td>08/20/2026</td><td>Self</td><td>--</td><td>Example State Bond (EXB)<div class="text-muted"><em>Rate/Coupon:</em> 5.6% <em>Matures:</em> 2033-09-15</div></td><td>Municipal Security</td><td>Sale (Partial)</td><td>$1,001 - $15,000</td><td>--</td></tr>
 </tbody></table></body></html>"""
 
 
@@ -83,8 +104,9 @@ class LoadTrades(unittest.TestCase):
         rows = T.parse_senate_ptr_html(SENATE_HTML)
         self.assertEqual(len(rows), 2)
         self.assertEqual((rows[0]["owner"], rows[0]["ticker"], rows[0]["type"], rows[0]["transaction_date"]), ("Spouse", "MSFT", "Purchase", "2026-08-14"))
-        self.assertTrue(rows[0]["asset_name"].startswith("Microsoft Corporation"))
-        self.assertEqual((rows[1]["ticker"], rows[1]["type"]), (None, "Partial sale"))
+        self.assertEqual(rows[0]["asset_name"], "Microsoft Corporation", "the name without the gray detail lines")
+        self.assertEqual(rows[1]["asset_name"], "Example State Bond (EXB)")
+        self.assertEqual((rows[1]["ticker"], rows[1]["type"]), ("EXB", "Partial sale"), "a ticker in the name when the Ticker cell is empty")
         self.assertIsNone(T.parse_senate_ptr_html("<p>no table</p>"))
         self.assertEqual(T.senate_link('<a href="/search/view/paper/AB12-34/" target="_blank">Report</a>'), ("paper", "https://efdsearch.senate.gov/search/view/paper/AB12-34/"))
 
@@ -116,11 +138,13 @@ class LoadTrades(unittest.TestCase):
         self.assertIn("0 House members", why)
         self.assertEqual(T.match_senate({"first": "Ann", "last": "Nunez"}, officials)[0]["id"], "s1")
         self.assertIsNone(T.match_senate({"first": "B", "last": "Smith"}, officials)[0], "two senators: not attached")
-        self.assertEqual(T.match_senate({"first": "Robert", "last": "Smith"}, officials)[0], None, "a first name that doesn't match")
+        self.assertEqual(T.match_senate({"first": "Robert", "last": "Smith"}, officials)[0], None, "a first name that doesn't match, and two Smiths")
+        self.assertEqual(T.match_senate({"first": "A. Annette", "last": "Nunez, Jr."}, officials)[0]["id"], "s1", "the only senator with that last name")
 
     def test_sql_writes_reports_trades_and_summaries(self):
         db = sqlite3.connect(":memory:")
         db.executescript((ROOT / "workers/sync/migrations/0024_trades.sql").read_text())
+        db.executescript((ROOT / "workers/sync/migrations/0025_executive_trades.sql").read_text())
         rep = {"id": "house:20031234", "chamber": "us-house", "official_id": "h1", "filer_name": "Jane Example", "state": "CA", "district": "CA05",
                "filed_on": "2026-09-15", "report_url": "https://example.org/r.pdf", "paper": 0, "parsed": 1, "trade_count": 4, "unmatched": None,
                "source_url": "https://example.org/r.pdf"}
@@ -136,6 +160,38 @@ class LoadTrades(unittest.TestCase):
         # Loading the same report again replaces its trades.
         db.executescript("\n".join(T.report_sql(rep, trades[:1]) + T.summary_sql({"h1"})))
         self.assertEqual(db.execute("SELECT trades, total_max FROM trade_summary WHERE official_id = 'h1'").fetchone(), (1, 15000))
+
+    def test_oge_278t_rows_and_signature_date(self):
+        trades, signed = T.parse_oge_ptr_text(OGE_TEXT)
+        self.assertEqual(signed, "2026-03-20")
+        self.assertEqual(len(trades), 3)
+        a, b, c = trades
+        self.assertEqual((a["type"], a["transaction_date"], a["amount"], a["ticker"], a["owner"]), ("Purchase", "2026-02-02", "$1,001 - $15,000", "EXM", None))
+        self.assertEqual((b["type"], b["amount"], b["owner"]), ("Partial sale", "$50,001 - $100,000", "Spouse"))
+        self.assertIn("Example Municipal Bond", b["asset_name"])
+        self.assertEqual((c["type"], c["amount_min"], c["amount_max"]), ("Sale", 250001, 500000))
+        self.assertTrue(T.is_278t("278 Transaction"))
+        self.assertTrue(T.is_278t("OGE Form 278-T"))
+        self.assertFalse(T.is_278t("278 Annual"))
+        self.assertIsNone(T.parse_oge_ptr_text("Summary of Contents\nnothing here")[0])
+
+    def test_executive_reports_and_request_only(self):
+        db = sqlite3.connect(":memory:")
+        db.executescript((ROOT / "workers/sync/migrations/0024_trades.sql").read_text())
+        db.executescript((ROOT / "workers/sync/migrations/0025_executive_trades.sql").read_text())
+        trades, signed = T.parse_oge_ptr_text(OGE_TEXT)
+        posted = {"id": T.oge_report_id("oge:x|278 Transaction|2026-03-25"), "chamber": "us-executive", "official_id": "p1", "filer_name": "Example, Pat",
+                  "state": None, "district": None, "filed_on": signed, "dated": True, "report_url": "https://extapps2.oge.gov/x.pdf", "request_url": None,
+                  "paper": 0, "parsed": 1, "trade_count": 3, "unmatched": None, "source_url": "https://extapps2.oge.gov/x.pdf", "position": "President", "agency": "Executive Office of the President"}
+        request = {**posted, "id": T.oge_report_id("oge:y"), "official_id": "c1", "report_url": None, "request_url": "https://extapps2.oge.gov/201/request", "parsed": 0,
+                   "trade_count": 0, "source_url": "https://extapps2.oge.gov/201/request", "position": "Secretary", "agency": "Department of Example"}
+        undated = {**posted, "id": T.oge_report_id("oge:z"), "dated": False, "filed_on": "2026-06-01"}
+        db.executescript("\n".join(T.report_sql(posted, trades) + T.report_sql(request, []) + T.report_sql(undated, trades[:1]) + T.summary_sql({"p1", "c1"})))
+        self.assertEqual(db.execute("SELECT days_to_file FROM trades WHERE report_id = ? AND n = 1", (posted["id"],)).fetchone()[0], 46)
+        self.assertIsNone(db.execute("SELECT days_to_file FROM trades WHERE report_id = ?", (undated["id"],)).fetchone()[0], "no days without the filer's own date")
+        self.assertEqual(db.execute("SELECT report_url, request_url, agency FROM trade_reports WHERE official_id = 'c1'").fetchone(),
+                         (None, "https://extapps2.oge.gov/201/request", "Department of Example"))
+        self.assertEqual(db.execute("SELECT COUNT(*) FROM trades WHERE official_id = 'c1'").fetchone()[0], 0, "nothing guessed for a report on request")
 
 
 if __name__ == "__main__":
