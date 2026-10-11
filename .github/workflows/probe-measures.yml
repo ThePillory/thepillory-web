@@ -1,0 +1,19 @@
+# Temporary: prints the layout of states' official ballot-measure guides
+# (tools/probe_measures.py) so builders can be written. Writes nothing.
+name: Probe measure guides
+on:
+  workflow_dispatch:
+    inputs:
+      lines:
+        description: Lines to print per document
+        default: "300"
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null
+      - run: python3 tools/probe_measures.py "${{ inputs.lines }}"
