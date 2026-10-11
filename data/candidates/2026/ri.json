@@ -4,7 +4,7 @@
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=RI&candidate_status=C",
  "list_built_on": "2026-10-10",
- "built_on": "2026-10-10",
+ "built_on": "2026-10-11",
  "senate_up": true,
  "candidates": {
   "S6RI00288": {
@@ -18,7 +18,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6RI00288/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "S6RI00270": {
    "id": "S6RI00270",
@@ -31,7 +31,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6RI00270/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "S4RI00051": {
    "id": "S4RI00051",
@@ -44,7 +44,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S4RI00051/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "S6RI00163": {
    "id": "S6RI00163",
@@ -57,7 +57,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6RI00163/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H4RI01265": {
    "id": "H4RI01265",
@@ -70,7 +70,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4RI01265/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 1725081.41,
+    "disbursements": 808700.59,
+    "cash_on_hand": 1851028.31,
+    "individual_unitemized": 37178.72,
+    "individual_itemized": 1013358.34,
+    "pac": 654421.85,
+    "party": 0,
+    "self_funding": 0,
+    "other": 20122.5,
+    "coverage_end": "2026-08-20",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4RI01265/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00625988",
+      "name": "FUTURE FORUM PAC",
+      "total": 10500,
+      "count": 5,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00284885",
+      "name": "THE HOME DEPOT INC. POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "retail"
+     },
+     {
+      "committee_id": "C00110338",
+      "name": "AMERICAN CRYSTAL SUGAR COMPANY POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00431601",
+      "name": "OCEANS PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00473025",
+      "name": "IGT GLOBAL SOLUTIONS CORPORATION (IGT) PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00007542",
+      "name": "INTERNATIONAL ASSOCIATION OF SHEET METAL, AIR, RAIL AND TRANSPORTATION WORKERS POLITICAL ACTION LEAGUE",
+      "total": 10000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00005249",
+      "name": "NATIONAL ASSOCIATION OF INSURANCE AND FINANCIAL ADVISORS POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 6,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00011114",
+      "name": "AMERICAN FEDERATION OF STATE COUNTY & MUNICIPAL EMPLOYEES PEOPLE",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00360354",
+      "name": "AMAZON.COM SERVICES LLC SEPARATE SEGREGATED FUND (AMAZON PAC)",
+      "total": 9000,
+      "count": 4,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00035451",
+      "name": "AIR LINE PILOTS ASSOCIATION PAC",
+      "total": 8500,
+      "count": 4,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00307249",
+      "name": "CITIZENS FINANCIAL GROUP, INC. POLITICAL ACTION COMMITTEE (CITIZENS PAC)",
+      "total": 8000,
+      "count": 4,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00024521",
+      "name": "AMERICAN ASSOCIATION FOR JUSTICE POLITICAL ACTION COMMITTEE (AAJ PAC)",
+      "total": 7500,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00384818",
+      "name": "CVS HEALTH PAC",
+      "total": 7500,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00012245",
+      "name": "UBS AMERICAS INC. POLITICAL ACTION COMMITTEE (UBS PAC)",
+      "total": 7500,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00764233",
+      "name": "DEFEND THE VOTE",
+      "total": 7500,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00123612",
+      "name": "TEXTRON INC. POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 6,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00197228",
+      "name": "ELEVANCE HEALTH, INC. POLITICAL ACTION COMMITTEE (ELEVANCE HEALTH PAC)",
+      "total": 7500,
+      "count": 4,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00002766",
+      "name": "UNITED FOOD AND COMMERCIAL WORKERS INTERNATIONAL UNION ACTIVE BALLOT CLUB",
+      "total": 7500,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00078451",
+      "name": "GENERAL DYNAMICS CORPORATION POLITICAL ACTION COMMITTEE (GENERAL DYNAMICS EMPLOYEE PAC)",
+      "total": 7000,
+      "count": 5,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00093054",
+      "name": "WALMART INC. PAC FOR RESPONSIBLE GOVERNMENT",
+      "total": 6500,
+      "count": 4,
+      "industry": "government"
+     },
+     {
+      "committee_id": "C00238725",
+      "name": "NATIONAL AIR TRAFFIC CONTROLLERS ASSOCIATION PAC",
+      "total": 6500,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00426775",
+      "name": "CHARTER COMMUNICATIONS, INC. POLITICAL ACTION COMMITTEE",
+      "total": 6000,
+      "count": 2,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00100321",
+      "name": "L3HARRIS TECHNOLOGIES, INC. PAC",
+      "total": 6000,
+      "count": 3,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00502906",
+      "name": "META PLATFORMS INC. PAC",
+      "total": 6000,
+      "count": 2,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00033969",
+      "name": "NOVARTIS CORPORATION POLITICAL ACTION COMMITTEE",
+      "total": 6000,
+      "count": 3,
+      "industry": "pharma"
+     }
+    ],
+    "count": 222,
+    "total": 652371.85,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00838060&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.gabeamo.com/",
+    "as_filed": "WWW.GABEAMO.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00838060/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   },
   "H6RI01153": {
    "id": "H6RI01153",
@@ -83,7 +289,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6RI01153/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H2RI02184": {
    "id": "H2RI02184",
@@ -96,7 +302,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2RI02184/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 1382796.19,
@@ -315,7 +521,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6RI02318/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6RI02326": {
    "id": "H6RI02326",
@@ -328,7 +534,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6RI02326/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   }
  }
 }

@@ -4,7 +4,7 @@
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=NH&candidate_status=C",
  "list_built_on": "2026-10-10",
- "built_on": "2026-10-10",
+ "built_on": "2026-10-11",
  "senate_up": true,
  "candidates": {
   "S6NH00166": {
@@ -18,7 +18,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6NH00166/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "S6NH00174": {
    "id": "S6NH00174",
@@ -31,7 +31,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6NH00174/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "S6NH00182": {
    "id": "S6NH00182",
@@ -44,7 +44,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6NH00182/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "S6NH00141": {
    "id": "S6NH00141",
@@ -57,7 +57,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6NH00141/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "S6NH00190": {
    "id": "S6NH00190",
@@ -70,7 +70,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6NH00190/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "S6NH00208": {
    "id": "S6NH00208",
@@ -83,7 +83,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6NH00208/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NH01438": {
    "id": "H6NH01438",
@@ -96,7 +96,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NH01438/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NH01347": {
    "id": "H6NH01347",
@@ -109,7 +109,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NH01347/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NH01339": {
    "id": "H6NH01339",
@@ -122,7 +122,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NH01339/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H4NH01276": {
    "id": "H4NH01276",
@@ -135,7 +135,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4NH01276/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 24604.13,
+    "disbursements": 25381.22,
+    "cash_on_hand": 1071.14,
+    "individual_unitemized": 826.28,
+    "individual_itemized": 1770.51,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 21460.4,
+    "other": 546.94,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4NH01276/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00852053&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://chrisbright.org/",
+    "as_filed": "CHRISBRIGHT.ORG",
+    "source_url": "https://www.fec.gov/data/committee/C00852053/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   },
   "H6NH01362": {
    "id": "H6NH01362",
@@ -148,7 +178,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NH01362/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NH01388": {
    "id": "H6NH01388",
@@ -161,7 +191,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NH01388/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NH01420": {
    "id": "H6NH01420",
@@ -174,7 +204,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NH01420/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NH01396": {
    "id": "H6NH01396",
@@ -187,7 +217,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NH01396/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NH01370": {
    "id": "H6NH01370",
@@ -200,7 +230,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NH01370/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NH01412": {
    "id": "H6NH01412",
@@ -213,7 +243,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NH01412/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NH01321": {
    "id": "H6NH01321",
@@ -226,7 +256,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NH01321/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H8NH01186": {
    "id": "H8NH01186",
@@ -239,7 +269,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8NH01186/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NH01354": {
    "id": "H6NH01354",
@@ -252,7 +282,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NH01354/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NH02261": {
    "id": "H6NH02261",
@@ -265,7 +295,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NH02261/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H4NH02399": {
    "id": "H4NH02399",
@@ -278,7 +308,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4NH02399/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 4155360.22,
+    "disbursements": 1512293.54,
+    "cash_on_hand": 2701064.53,
+    "individual_unitemized": 275917.47,
+    "individual_itemized": 2674128.42,
+    "pac": 325250,
+    "party": 52.77,
+    "self_funding": 0,
+    "other": 880011.56,
+    "coverage_end": "2026-08-19",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4NH02399/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00418897",
+      "name": "VOTEVETS",
+      "total": 12500,
+      "count": 5,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00629311",
+      "name": "GRANITE VALUES PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00492983",
+      "name": "NUTMEG PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00458570",
+      "name": "A NEW DIRECTION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00007922",
+      "name": "LABORERS' INTERNATIONAL UNION OF NORTH AMERICA (LIUNA) PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00785816",
+      "name": "LIFTOFF PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00661272",
+      "name": "WITH HONOR PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00011114",
+      "name": "AMERICAN FEDERATION OF STATE COUNTY & MUNICIPAL EMPLOYEES",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00629709",
+      "name": "NO LABELS PAC",
+      "total": 7500,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00024521",
+      "name": "AMERICAN ASSOCIATION FOR JUSTICE PAC (AAJ PAC)",
+      "total": 7500,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00412791",
+      "name": "FORWARD TOGETHER PAC",
+      "total": 7000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00760009",
+      "name": "PUTTING NEW HAMPSHIRE FIRST",
+      "total": 7000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00488387",
+      "name": "TRI-STATE MAXED-OUT WOMEN",
+      "total": 6500,
+      "count": 5,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00002469",
+      "name": "MACHINIST'S NON PARTISAN POLITICAL LEAGUE",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00640490",
+      "name": "ONWARD TOGETHER COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00344234",
+      "name": "PAC TO THE FUTURE",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00271338",
+      "name": "AMERIPAC: THE FUND FOR A GREATER AMERICA",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00441949",
+      "name": "JSTREETPAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00409730",
+      "name": "NEW DEMOCRAT COALITION ACTION FUND",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00033779",
+      "name": "THE REAL ESTATE ROUNDTABLE PAC (REALPAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00493700",
+      "name": "BLUE HEN FEDERAL PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00459925",
+      "name": "AMERICAN MOBILIZATION PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00797670",
+      "name": "AMERICAN ISRAEL PUBLIC AFFAIRS COMMITTEE POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "legal"
+     },
+     {
+      "committee_id": "C00431874",
+      "name": "FOLLOW THE NORTH STAR FUND",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00001016",
+      "name": "CARPENTERS LEGISLATIVE IMPROVEMENT COMMITTEE UNITED BROTHERHOOD OF CARPENTERS AND JOINERS",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     }
+    ],
+    "count": 82,
+    "total": 322000,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00878454&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00878454/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   },
   "H6NH02287": {
    "id": "H6NH02287",
@@ -291,7 +527,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NH02287/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H2NH02260": {
    "id": "H2NH02260",
@@ -304,7 +540,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NH02260/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 1199750.37,

@@ -4,7 +4,7 @@
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=MS&candidate_status=C",
  "list_built_on": "2026-10-10",
- "built_on": "2026-10-10",
+ "built_on": "2026-10-11",
  "senate_up": true,
  "candidates": {
   "S6MS00109": {
@@ -18,7 +18,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6MS00109/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "S6MS00133": {
    "id": "S6MS00133",
@@ -31,7 +31,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6MS00133/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "S8MS00261": {
    "id": "S8MS00261",
@@ -44,7 +44,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S8MS00261/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "S4MS00187": {
    "id": "S4MS00187",
@@ -57,7 +57,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S4MS00187/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "S6MS00141": {
    "id": "S6MS00141",
@@ -70,7 +70,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6MS00141/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "S6MS00158": {
    "id": "S6MS00158",
@@ -83,7 +83,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6MS00158/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6MS01305": {
    "id": "H6MS01305",
@@ -96,7 +96,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6MS01305/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6MS01313": {
    "id": "H6MS01313",
@@ -109,7 +109,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6MS01313/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6MS01131": {
    "id": "H6MS01131",
@@ -122,7 +122,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6MS01131/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H2MS02203": {
    "id": "H2MS02203",
@@ -135,7 +135,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2MS02203/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 45389.56,
@@ -193,7 +193,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4MS02068/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 770970.73,
+    "disbursements": 947613.34,
+    "cash_on_hand": 1449521.62,
+    "individual_unitemized": 6418.53,
+    "individual_itemized": 196548.79,
+    "pac": 562244.37,
+    "party": 4500,
+    "self_funding": 0,
+    "other": 1259.04,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4MS02068/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00035451",
+      "name": "AIR LINE PILOTS ASSOCIATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00158576",
+      "name": "INTERNATIONAL LONGSHOREMEN'S ASSOCIATION COMMITTEE ON POLITICAL EDUCATION",
+      "total": 10000,
+      "count": 2,
+      "industry": "education"
+     },
+     {
+      "committee_id": "C00008268",
+      "name": "TRANSPORT WORKERS UNION POLITICAL CONTRIBUTIONS COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00414896",
+      "name": "OSI SYSTEMS, INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00287714",
+      "name": "HOLLAND AMERICA LINE INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00007542",
+      "name": "SHEET METAL AIR RAIL TRANSPORTATION POLITICAL ACTION LEAGUE",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00211318",
+      "name": "DELOITTE FEDERAL PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00011114",
+      "name": "AMERICAN FEDERATION OF STATE, COUNTY AND MUNICIPAL EMPLOYEES PEOPLE",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00381954",
+      "name": "ATMOS ENERGY CORPORATION PAC",
+      "total": 8500,
+      "count": 5,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00023028",
+      "name": "NATIONAL COTTON COUNCIL COMMITTEE FOR ADVANCEMENT OF COTTON",
+      "total": 7500,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00009936",
+      "name": "AMERICAN FEDERATION OF GOVERNMENT EMPLOYEES PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "government"
+     },
+     {
+      "committee_id": "C00451153",
+      "name": "GRIDIRON PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00186288",
+      "name": "VERIZON COMMUNICATIONS, INC PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00034157",
+      "name": "AFLAC  PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00032979",
+      "name": "DRIVE COMMITTEE",
+      "total": 7500,
+      "count": 5,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00363879",
+      "name": "ENPAC",
+      "total": 7000,
+      "count": 5,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00193631",
+      "name": "FARM CREDIT COUNCIL PAC",
+      "total": 6500,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00002089",
+      "name": "CWA-COPE PCC",
+      "total": 6000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00010470",
+      "name": "UNION PACIFIC CORPORATION FUND FOR EFFECTIVE GOVERNMENT",
+      "total": 6000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00426775",
+      "name": "CHARTER COMMUNICATIONS, INC. PAC",
+      "total": 6000,
+      "count": 4,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00441949",
+      "name": "JSTREET PAC",
+      "total": 5540.62,
+      "count": 6,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00024521",
+      "name": "AAJ PAC",
+      "total": 5500,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00039578",
+      "name": "THE COUNCIL OF INSURANCE AGENTS & BROKERS PAC",
+      "total": 5500,
+      "count": 4,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00113241",
+      "name": "NATIONAL APARTMENT ASSOCIATION PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00227546",
+      "name": "MICROSOFT CORPORATION STAKEHOLDERS VOLUNTARY PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "tech"
+     }
+    ],
+    "count": 157,
+    "total": 559744.37,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00279851&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://benniegthompson.com/",
+    "as_filed": "BENNIEGTHOMPSON.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00279851/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   },
   "H6MS02220": {
    "id": "H6MS02220",
@@ -206,7 +412,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6MS02220/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6MS02238": {
    "id": "H6MS02238",
@@ -219,7 +425,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6MS02238/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6MS03228": {
    "id": "H6MS03228",
@@ -232,7 +438,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6MS03228/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H8MS03125": {
    "id": "H8MS03125",
@@ -245,7 +451,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8MS03125/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6MS04259": {
    "id": "H6MS04259",
@@ -258,7 +464,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6MS04259/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H2MS04258": {
    "id": "H2MS04258",
@@ -271,7 +477,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2MS04258/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 990105.85,
@@ -490,7 +696,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6MS04242/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6MS04275": {
    "id": "H6MS04275",
@@ -503,7 +709,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6MS04275/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   }
  }
 }

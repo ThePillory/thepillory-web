@@ -4,7 +4,7 @@
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=NY&candidate_status=C",
  "list_built_on": "2026-10-10",
- "built_on": "2026-10-10",
+ "built_on": "2026-10-11",
  "senate_up": false,
  "candidates": {
   "H6NY01159": {
@@ -18,7 +18,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY01159/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY01209": {
    "id": "H6NY01209",
@@ -31,7 +31,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY01209/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H2NY01190": {
    "id": "H2NY01190",
@@ -44,7 +44,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY01190/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 3795307.23,
@@ -263,7 +263,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY01134/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H0NY02234": {
    "id": "H0NY02234",
@@ -276,7 +276,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0NY02234/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 3513016.04,
@@ -495,7 +495,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY02140/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY02181": {
    "id": "H6NY02181",
@@ -508,7 +508,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY02181/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY02173": {
    "id": "H6NY02173",
@@ -521,7 +521,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY02173/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H4NY03192": {
    "id": "H4NY03192",
@@ -534,7 +534,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4NY03192/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 718001.13,
+    "disbursements": 726602.23,
+    "cash_on_hand": 634.84,
+    "individual_unitemized": 2681.71,
+    "individual_itemized": 27819.42,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 687500,
+    "other": 0,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4NY03192/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00846550&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.greghach.com/",
+    "as_filed": "WWW.GREGHACH.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00846550/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   },
   "H0NY02267": {
    "id": "H0NY02267",
@@ -547,7 +577,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0NY02267/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 1666542.06,
@@ -766,7 +796,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY03247/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY03320": {
    "id": "H6NY03320",
@@ -779,7 +809,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY03320/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY04187": {
    "id": "H6NY04187",
@@ -792,7 +822,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY04187/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY04203": {
    "id": "H6NY04203",
@@ -805,7 +835,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY04203/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY04211": {
    "id": "H6NY04211",
@@ -818,7 +848,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY04211/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H2NY04244": {
    "id": "H2NY04244",
@@ -831,7 +861,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY04244/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 5097222.15,
@@ -1050,7 +1080,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4NY04174/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 7436.5,
+    "disbursements": 5337.52,
+    "cash_on_hand": 11681.9,
+    "individual_unitemized": 400,
+    "individual_itemized": 5936.5,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 1100,
+    "other": 0,
+    "coverage_end": "2026-03-31",
+    "last_report": "APRIL QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4NY04174/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00840439&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://gianjonesforcongress.com/",
+    "as_filed": "GIANJONESFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00840439/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   },
   "H6NY04179": {
    "id": "H6NY04179",
@@ -1063,7 +1123,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY04179/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY04195": {
    "id": "H6NY04195",
@@ -1076,7 +1136,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY04195/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY04237": {
    "id": "H6NY04237",
@@ -1089,7 +1149,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY04237/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H8NY06048": {
    "id": "H8NY06048",
@@ -1102,7 +1162,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8NY06048/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H2NY06116": {
    "id": "H2NY06116",
@@ -1115,7 +1175,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY06116/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 2034044.64,
@@ -1334,7 +1394,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY06166/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY07255": {
    "id": "H6NY07255",
@@ -1347,7 +1407,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY07255/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H4NY10130": {
    "id": "H4NY10130",
@@ -1360,7 +1420,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4NY10130/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 15396.57,
+    "disbursements": 15393.85,
+    "cash_on_hand": 1225.05,
+    "individual_unitemized": 5051.57,
+    "individual_itemized": 2275,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 8070,
+    "other": 0,
+    "coverage_end": "2026-03-31",
+    "last_report": "APRIL QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4NY10130/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00873315&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://votehutch.nyc/",
+    "as_filed": "VOTEHUTCH.NYC",
+    "source_url": "https://www.fec.gov/data/committee/C00873315/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   },
   "H6NY07230": {
    "id": "H6NY07230",
@@ -1373,7 +1463,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY07230/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY07164": {
    "id": "H6NY07164",
@@ -1386,7 +1476,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY07164/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY07214": {
    "id": "H6NY07214",
@@ -1399,7 +1489,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY07214/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY07248": {
    "id": "H6NY07248",
@@ -1412,7 +1502,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY07248/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY08139": {
    "id": "H6NY08139",
@@ -1425,7 +1515,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY08139/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H2NY10092": {
    "id": "H2NY10092",
@@ -1438,7 +1528,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY10092/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 14899980.61,
@@ -1657,7 +1747,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY08147/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H4NY11138": {
    "id": "H4NY11138",
@@ -1670,7 +1760,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4NY11138/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 1013953.29,
+    "disbursements": 1093029.88,
+    "cash_on_hand": 30978.15,
+    "individual_unitemized": 27671.39,
+    "individual_itemized": 399415.32,
+    "pac": 581950.78,
+    "party": 0,
+    "self_funding": 0,
+    "other": 4915.8,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4NY11138/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00039578",
+      "name": "THE COUNCIL OF INSURANCE AGENTS & BROKERS POLITICAL ACTION COMMITTEE",
+      "total": 11000,
+      "count": 4,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00186288",
+      "name": "VERIZON COMMUNICATIONS, INC. POLITICAL ACTION COMMITTEE (VERIZON PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00004473",
+      "name": "NATIONAL TELECOMMUNICATIONS COOPERATIVE ASSOCIATION RURAL BROADBAND PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00157545",
+      "name": "AMERICAN FEDERATION OF TEACHERS COPE",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00007542",
+      "name": "INTERNATIONAL ASSOCIATION OF SHEET METAL, AIR, RAIL AND TRANSPORTATION WORKERS POLITICAL A",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00008268",
+      "name": "TRANSPORT WORKERS UNION OF AMERICA POLITICAL CONTRIBUTIONS COMMITTEE",
+      "total": 10000,
+      "count": 4,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00106146",
+      "name": "AMERICAN HOSPITAL ASSOCIATION PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00024521",
+      "name": "AMERICAN ASSOCIATION FOR JUSTICE POLITICAL ACTION COMMITTEE (AAJ PAC)",
+      "total": 10000,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00011114",
+      "name": "AMERICAN FEDERATION OF STATE COUNTY & MUNICIPAL EMPLOYEES  P E O P L E",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00340943",
+      "name": "DAVITA INC. POLITICAL ACTION COMMITTEE (DAPAC)",
+      "total": 9000,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00034157",
+      "name": "AFLAC POLITICAL ACTION COMMITTEE (AFLAC PAC)",
+      "total": 8500,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00077321",
+      "name": "AMERICAN INSTITUTE OF CERTIFIED PUBLIC ACCOUNTANTS POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00002972",
+      "name": "THE NATIONAL RURAL ELECTRIC COOPERATIVE ASSOCIATION ACTION COMMITTEE FOR RURAL ELECTRIFICATION (AMERICA'S ELECTRIC COOPERATIVES PAC)",
+      "total": 7500,
+      "count": 4,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00401299",
+      "name": "FRESENIUS MEDICAL CARE HOLDINGS, INC. POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 3,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00227546",
+      "name": "MICROSOFT CORPORATION STAKEHOLDERS VOLUNTARY PAC - MSVPAC",
+      "total": 6500,
+      "count": 2,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00542365",
+      "name": "TOYOTA MOTOR NORTH AMERICA, INC POLITICAL ACTION COMMITTEE (TOYOTA/LEXUS PAC)",
+      "total": 6500,
+      "count": 3,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00073056",
+      "name": "MASTERS, MATES AND PILOTS POLITICAL CONTRIBUTION FUND",
+      "total": 5550.78,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00602805",
+      "name": "AMERICA'S ESSENTIAL HOSPITALS POLITICAL ACTION COMMITTEE, (ESSENTIAL HOSPITALS PAC)",
+      "total": 5500,
+      "count": 3,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00002469",
+      "name": "MACHINISTS NON PARTISAN POLITICAL LEAGUE OF THE INTERNATIONAL ASSOCIATION OF MACHINISTS &",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00088591",
+      "name": "EMPLOYEES OF NORTHROP GRUMMAN CORPORATION PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00369751",
+      "name": "DELL TECHNOLOGIES POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00477653",
+      "name": "COX ENTERPRISES PAC (COXPAC) INC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00012476",
+      "name": "UA UNION PLUMBERS & PIPEFITTERS VOTE! PAC (UNITED ASSOCIATION OF JOURNEYMEN AND APPRENTICES OF THE PLUMBING & PIPEFITTING INDUSTRY OF THE UNITED STATES AND CANADA)",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00572438",
+      "name": "MI14 PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00428623",
+      "name": "GOOGLE LLC NETPAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "tech"
+     }
+    ],
+    "count": 195,
+    "total": 581950.78,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00415331&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://voteyvette.com/",
+    "as_filed": "VOTEYVETTE.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00415331/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   },
   "H6NY09160": {
    "id": "H6NY09160",
@@ -1683,7 +1979,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY09160/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY09152": {
    "id": "H6NY09152",
@@ -1696,7 +1992,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY09152/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H2NY10308": {
    "id": "H2NY10308",
@@ -1709,7 +2005,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY10308/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 8365109.43,
@@ -1928,7 +2224,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY10134/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 20000,
@@ -1971,7 +2267,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY10176/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY11265": {
    "id": "H6NY11265",
@@ -1984,7 +2280,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY11265/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H0NY11078": {
    "id": "H0NY11078",
@@ -1997,7 +2293,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0NY11078/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 2750505.08,
@@ -2216,7 +2512,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY11232/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY11273": {
    "id": "H6NY11273",
@@ -2229,7 +2525,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY11273/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY12214": {
    "id": "H6NY12214",
@@ -2242,7 +2538,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY12214/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY12206": {
    "id": "H6NY12206",
@@ -2255,7 +2551,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY12206/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY12347": {
    "id": "H6NY12347",
@@ -2268,7 +2564,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY12347/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY12354": {
    "id": "H6NY12354",
@@ -2281,7 +2577,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY12354/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY12198": {
    "id": "H6NY12198",
@@ -2294,7 +2590,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY12198/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY12164": {
    "id": "H6NY12164",
@@ -2307,7 +2603,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY12164/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY12222": {
    "id": "H6NY12222",
@@ -2320,7 +2616,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY12222/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY12263": {
    "id": "H6NY12263",
@@ -2333,7 +2629,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY12263/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY12230": {
    "id": "H6NY12230",
@@ -2346,7 +2642,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY12230/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY12172": {
    "id": "H6NY12172",
@@ -2359,7 +2655,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY12172/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY12313": {
    "id": "H6NY12313",
@@ -2372,7 +2668,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY12313/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY12297": {
    "id": "H6NY12297",
@@ -2385,7 +2681,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY12297/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY12180": {
    "id": "H6NY12180",
@@ -2398,7 +2694,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY12180/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY12255": {
    "id": "H6NY12255",
@@ -2411,7 +2707,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY12255/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY12388": {
    "id": "H6NY12388",
@@ -2424,7 +2720,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY12388/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY12404": {
    "id": "H6NY12404",
@@ -2437,7 +2733,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY12404/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY12271": {
    "id": "H6NY12271",
@@ -2450,7 +2746,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY12271/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY12396": {
    "id": "H6NY12396",
@@ -2463,7 +2759,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY12396/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY12362": {
    "id": "H6NY12362",
@@ -2476,7 +2772,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY12362/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY13238": {
    "id": "H6NY13238",
@@ -2489,7 +2785,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY13238/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY13279": {
    "id": "H6NY13279",
@@ -2502,7 +2798,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY13279/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H2NY13096": {
    "id": "H2NY13096",
@@ -2515,7 +2811,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY13096/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 2856233.73,
@@ -2734,7 +3030,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY13253/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H4NY16079": {
    "id": "H4NY16079",
@@ -2747,7 +3043,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4NY16079/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 80952.65,
+    "disbursements": 78490.33,
+    "cash_on_hand": 2462.32,
+    "individual_unitemized": 0,
+    "individual_itemized": 0,
+    "pac": 0,
+    "party": 2784.11,
+    "self_funding": 78168.54,
+    "other": 0,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4NY16079/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00940445&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://martydolan.org/",
+    "as_filed": "MARTYDOLAN.ORG",
+    "source_url": "https://www.fec.gov/data/committee/C00940445/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   },
   "H2NY14128": {
    "id": "H2NY14128",
@@ -2760,7 +3086,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY14128/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 803140.69,
@@ -2803,7 +3129,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY14293/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY14251": {
    "id": "H6NY14251",
@@ -2816,7 +3142,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY14251/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H8NY15148": {
    "id": "H8NY15148",
@@ -2829,7 +3155,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8NY15148/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H0NY15194": {
    "id": "H0NY15194",
@@ -2842,7 +3168,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0NY15194/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 412122.6,
@@ -2885,7 +3211,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY15167/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY15175": {
    "id": "H6NY15175",
@@ -2898,7 +3224,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY15175/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY15191": {
    "id": "H6NY15191",
@@ -2911,7 +3237,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY15191/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H0NY15160": {
    "id": "H0NY15160",
@@ -2924,7 +3250,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0NY15160/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 6908654.83,
@@ -3143,7 +3469,45 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4NY15147/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 290836.98,
+    "disbursements": 280261.35,
+    "cash_on_hand": 11849.06,
+    "individual_unitemized": 67398.01,
+    "individual_itemized": 221938.97,
+    "pac": 1500,
+    "party": 0,
+    "self_funding": 0,
+    "other": 0,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4NY15147/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00916379",
+      "name": "ANTI-ZIONIST AMERICA PAC",
+      "total": 1500,
+      "count": 2,
+      "industry": "issue"
+     }
+    ],
+    "count": 1,
+    "total": 1500,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00867234&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://votevega.nyc/",
+    "as_filed": "VOTEVEGA.NYC",
+    "source_url": "https://www.fec.gov/data/committee/C00867234/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   },
   "H4NY16087": {
    "id": "H4NY16087",
@@ -3156,7 +3520,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4NY16087/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 513967.38,
+    "disbursements": 605959,
+    "cash_on_hand": 100662.37,
+    "individual_unitemized": 47572.13,
+    "individual_itemized": 266487,
+    "pac": 189650,
+    "party": 0,
+    "self_funding": 0,
+    "other": 10258.25,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4NY16087/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00007542",
+      "name": "INTERNATIONAL ASSOCIATION OF SHEET METAL, AIR, RAIL AND TRANSPORTATION WORKERS POLITICAL ACTION LEAGUE",
+      "total": 10000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00011114",
+      "name": "AMERICAN FEDERATION OF STATE COUNTY & MUNICIPAL EMPLOYEES  P E O P L E",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00024521",
+      "name": "AMERICAN ASSOCIATION FOR JUSTICE POLITICAL ACTION COMMITTEE (AAJ PAC)",
+      "total": 7500,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00478099",
+      "name": "ATLAS AIR WORLDWIDE HOLDINGS, INC. POLITICAL ACTION COMMITTEE",
+      "total": 7000,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00797670",
+      "name": "AMERICAN ISRAEL PUBLIC AFFAIRS COMMITTEE POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "legal"
+     },
+     {
+      "committee_id": "C00028860",
+      "name": "AMERICAN FEDERATION OF TEACHERS, AFL-CIO COMMITTEE ON POLITICAL EDUCATION",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00562264",
+      "name": "REGENERON PHARMACEUTICALS, INC. PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "pharma"
+     },
+     {
+      "committee_id": "C00002469",
+      "name": "MACHINISTS NON PARTISAN POLITICAL LEAGUE OF THE INTERNATIONAL ASSOCIATION OF MACHINISTS & AEROSPACE WORKERS",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00001016",
+      "name": "CARPENTERS LEGISLATIVE IMPROVEMENT COMMITTEE UNITED BROTHERHOOD OF CARPENTERS AND JOINERS",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00008268",
+      "name": "TRANSPORT WORKERS UNION OF AMERICA POLITICAL CONTRIBUTIONS COMMITTEE",
+      "total": 5000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00383950",
+      "name": "NATIONAL ELEVATOR CONSTRUCTORS PAC/ INTN'L  UNION OF ELEVATOR CONSTRUCTORS (NEC PAC)",
+      "total": 5000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00029504",
+      "name": "ENGINEERS POLITICAL EDUCATION COMMITTEE (EPEC)/INTERNATIONAL UNION OF OPERATING ENGINEERS",
+      "total": 5000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00005249",
+      "name": "NATIONAL ASSOCIATION OF INSURANCE AND FINANCIAL ADVISORS POLITICAL ACTION COMM",
+      "total": 5000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00158881",
+      "name": "NEW YORK LIFE INSURANCE COMPANY POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00106146",
+      "name": "AMERICAN HOSPITAL ASSOCIATION PAC",
+      "total": 4500,
+      "count": 3,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00010868",
+      "name": "AMERICAN COUNCIL OF ENGINEERING COMPANIES (ACEC/PAC)",
+      "total": 4500,
+      "count": 2,
+      "industry": "construction"
+     },
+     {
+      "committee_id": "C00035451",
+      "name": "AIR LINE PILOTS ASSOCIATION PAC",
+      "total": 4500,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C70002563",
+      "name": "NATIONAL ASSOCIATION OF REALTORS",
+      "total": 3500,
+      "count": 1,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00004036",
+      "name": "SEIU COPE (SERVICE EMPLOYEES INTERNATIONAL UNION COMMITTEE ON POLITICAL EDUCATION)",
+      "total": 2500,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00826669",
+      "name": "PAK-AMERICAN COALITION SUPER PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00299321",
+      "name": "MGM RESORTS INTERNATIONAL  PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00082040",
+      "name": "CHAMBER OF COMMERCE OF THE UNITED STATES OF AMERICA PAC (US CHAMBER PAC)",
+      "total": 2500,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00029447",
+      "name": "INTERNATIONAL ASSOCIATION OF FIRE FIGHTERS",
+      "total": 2500,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00077321",
+      "name": "AMERICAN INSTITUTE OF CERTIFIED PUBLIC ACCOUNTANTS POLITICAL ACTION COMMITTEE",
+      "total": 2500,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00893883",
+      "name": "AMERICANS FOR RESPONSIBLE INNOVATION LTD. POLITICAL ACTION COMMITTEE (ARI PAC)",
+      "total": 2500,
+      "count": 1,
+      "industry": "issue"
+     }
+    ],
+    "count": 71,
+    "total": 183000,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00859041&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00859041/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   },
   "H6NY17221": {
    "id": "H6NY17221",
@@ -3169,7 +3739,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY17221/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY17213": {
    "id": "H6NY17213",
@@ -3182,7 +3752,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY17213/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY17171": {
    "id": "H6NY17171",
@@ -3195,7 +3765,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY17171/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY17163": {
    "id": "H6NY17163",
@@ -3208,7 +3778,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY17163/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H2NY17162": {
    "id": "H2NY17162",
@@ -3221,7 +3791,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY17162/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 8172045.6,
@@ -3440,7 +4010,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY17205/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY17155": {
    "id": "H6NY17155",
@@ -3453,7 +4023,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY17155/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY17189": {
    "id": "H6NY17189",
@@ -3466,7 +4036,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY17189/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY17197": {
    "id": "H6NY17197",
@@ -3479,7 +4049,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY17197/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY18252": {
    "id": "H6NY18252",
@@ -3492,7 +4062,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY18252/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H8NY19223": {
    "id": "H8NY19223",
@@ -3505,7 +4075,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8NY19223/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY19268": {
    "id": "H6NY19268",
@@ -3518,7 +4088,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY19268/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H8NY22177": {
    "id": "H8NY22177",
@@ -3531,7 +4101,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8NY22177/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY20225": {
    "id": "H6NY20225",
@@ -3544,7 +4114,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY20225/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H8NY21203": {
    "id": "H8NY21203",
@@ -3557,7 +4127,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8NY21203/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY21223": {
    "id": "H6NY21223",
@@ -3570,7 +4140,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY21223/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H4NY21145": {
    "id": "H4NY21145",
@@ -3583,7 +4153,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4NY21145/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 13512.87,
+    "disbursements": 14267.84,
+    "cash_on_hand": 94658.15,
+    "individual_unitemized": 8827.87,
+    "individual_itemized": 3650,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 1000,
+    "other": 35,
+    "coverage_end": "2025-05-20",
+    "last_report": "TERMINATION REPORT 2025",
+    "source_url": "https://www.fec.gov/data/candidate/H4NY21145/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00869123&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.paulacollinsforcongress.com/",
+    "as_filed": "WWW.PAULACOLLINSFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00869123/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   },
   "H6NY21157": {
    "id": "H6NY21157",
@@ -3596,7 +4196,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY21157/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY21199": {
    "id": "H6NY21199",
@@ -3609,7 +4209,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY21199/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY21207": {
    "id": "H6NY21207",
@@ -3622,7 +4222,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY21207/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY21215": {
    "id": "H6NY21215",
@@ -3635,7 +4235,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY21215/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY22213": {
    "id": "H6NY22213",
@@ -3648,7 +4248,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY22213/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY22171": {
    "id": "H6NY22171",
@@ -3661,7 +4261,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY22171/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H4NY22085": {
    "id": "H4NY22085",
@@ -3674,7 +4274,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4NY22085/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2694738.65,
+    "disbursements": 979982.66,
+    "cash_on_hand": 1842997.29,
+    "individual_unitemized": 301509.56,
+    "individual_itemized": 1401539.02,
+    "pac": 826310.66,
+    "party": 5309.87,
+    "self_funding": 0,
+    "other": 160069.54,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4NY22085/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00007542",
+      "name": "INTERNATIONAL ASSOCIATION OF SHEET METAL, AIR, RAIL AND TRANSPORTATION WORKERS POLITICAL ACTION LEAGUE",
+      "total": 12500,
+      "count": 4,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00029504",
+      "name": "INTERNATIONAL UNION OF OPERATING ENGINEERS",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00574970",
+      "name": "FAIR SHOT PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00001016",
+      "name": "CARPENTERS LEGISLATIVE IMPROVEMENT COMMITTEE UNITED BROTHERHOOD OF CARPENTERS AND JOINERS",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00573709",
+      "name": "CALIFORNIA LEADERSHIP UNITED FOR VICTORY PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00271338",
+      "name": "AMERIPAC: THE FUND FOR A GREATER AMERICA",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00752766",
+      "name": "TTM TECHNOLOGIES INC. POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 3,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00344234",
+      "name": "PAC TO THE FUTURE",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00617803",
+      "name": "JOBS, EDUCATION, & FAMILIES FIRST  JEFF PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00003632",
+      "name": "INT'L UNION OF BRICKLAYERS AND ALLIED CRAFTWORKERS",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00884874",
+      "name": "STOP PROJECT 2025",
+      "total": 10000,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00892901",
+      "name": "INNOVATION FOR GOOD PAC",
+      "total": 10000,
+      "count": 5,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00431361",
+      "name": "TEACHERS INSURANCE ANNUITY ASSOCIATION OF AMERICA PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00011114",
+      "name": "AMERICAN FEDERATION OF STATE COUNTY & MUNICIPAL EMPLOYEES P E O P L E",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00110338",
+      "name": "AMERICAN CRYSTAL SUGAR COMPANY POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 4,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00024968",
+      "name": "AMERICAN OPTOMETRIC ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 5,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00106146",
+      "name": "AMERICAN HOSPITAL ASSOCIATION PAC",
+      "total": 10000,
+      "count": 7,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00158881",
+      "name": "NEW YORK LIFE INSURANCE COMPANY POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00039578",
+      "name": "THE COUNCIL OF INSURANCE AGENTS & BROKERS POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00753947",
+      "name": "LA BAMBA PAC",
+      "total": 7500,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00379628",
+      "name": "NUCOR CORPORATION POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00409730",
+      "name": "NEW DEMOCRAT COALITION ACTION FUND",
+      "total": 7500,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00383950",
+      "name": "NATIONAL ELEVATOR CONSTRUCTORS PAC/ INTN'L  UNION OF ELEVATOR CONSTRUCTORS (NEC PAC)",
+      "total": 7500,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00764233",
+      "name": "DEFEND THE VOTE",
+      "total": 7500,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00001388",
+      "name": "DAIRY FARMERS OF AMERICA, INC. POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 3,
+      "industry": "agriculture"
+     }
+    ],
+    "count": 264,
+    "total": 825166.66,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00845461&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.mannionforny.com/",
+    "as_filed": "HTTPS://WWW.MANNIONFORNY.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00845461/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   },
   "H6NY22163": {
    "id": "H6NY22163",
@@ -3687,7 +4493,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY22163/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY22197": {
    "id": "H6NY22197",
@@ -3700,7 +4506,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY22197/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY23542": {
    "id": "H6NY23542",
@@ -3713,7 +4519,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY23542/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY23559": {
    "id": "H6NY23559",
@@ -3726,7 +4532,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY23559/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H3NY23010": {
    "id": "H3NY23010",
@@ -3739,7 +4545,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H3NY23010/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 5434.36,
@@ -3782,7 +4588,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY23228/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 2326404.96,
@@ -4001,7 +4807,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY23534/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY24219": {
    "id": "H6NY24219",
@@ -4014,7 +4820,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY24219/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H2NY24127": {
    "id": "H2NY24127",
@@ -4027,7 +4833,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NY24127/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 66496,
@@ -4070,7 +4876,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY27170/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY24250": {
    "id": "H6NY24250",
@@ -4083,7 +4889,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY24250/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H4NY22051": {
    "id": "H4NY22051",
@@ -4096,7 +4902,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4NY22051/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2763138.81,
+    "disbursements": 1745054.58,
+    "cash_on_hand": 1373086.59,
+    "individual_unitemized": 296717.75,
+    "individual_itemized": 761715.67,
+    "pac": 1220160,
+    "party": 0,
+    "self_funding": 0,
+    "other": 484545.39,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4NY22051/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00411116",
+      "name": "SPACE EXPLORATION TECHNOLOGIES CORP. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00304832",
+      "name": "CONSTELLATION BRANDS INC POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00697326",
+      "name": "ON WISCONSIN PAC INC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00572271",
+      "name": "BUILDING AMERICA'S REPUBLICAN REPRESENTATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00065219",
+      "name": "WINE INSTITUTE PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00764290",
+      "name": "BLOOM ENERGY CORPORATION PAC (BE PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00647354",
+      "name": "TEAM AMERICA - BRINGING AMERICA TOGETHER PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00097865",
+      "name": "NATSO INC. NATSO PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00817338",
+      "name": "MVL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00820100",
+      "name": "HELPING EXCEPTIONAL LEADERS ORGANIZE PAC (HELO PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00793711",
+      "name": "CONSTELLATION ENERGY CORPORATION EMPLOYEE POLITICAL ACTION C",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00217638",
+      "name": "INTERNATIONAL COUNCIL OF SHOPPING CENTERS INC PAC (ICSC PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00083758",
+      "name": "NATIONAL FUEL GAS COMPANY FEDERAL POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00546119",
+      "name": "SELECT MEDICAL CORPORATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00563726",
+      "name": "MR. SOUTHERN MISSOURIAN IN THE HOUSE PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00130773",
+      "name": "NATIONAL MULTIFAMILY HOUSING COUNCIL PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00029504",
+      "name": "ENGINEERS POLITICAL EDUCATION COMMITTEE (EPEC)/INTERNATIONAL",
+      "total": 10000,
+      "count": 2,
+      "industry": "construction"
+     },
+     {
+      "committee_id": "C00039461",
+      "name": "BALL CORPORATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00693796",
+      "name": "BUCKEYE LIBERTY POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00639229",
+      "name": "AMERICAN REVIVAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00762328",
+      "name": "FIGHT ON PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00894717",
+      "name": "ANTI-WOKE FUND",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00040923",
+      "name": "METLIFE INC. EMPLOYEES' POLITICAL PARTICIPATION FUND A",
+      "total": 10000,
+      "count": 4,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00147066",
+      "name": "AMERICAN COUNCIL OF LIFE INSURERS PAC",
+      "total": 10000,
+      "count": 6,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00107235",
+      "name": "PRICEWATERHOUSECOOPERS POLITICAL ACTION COMMITTEE I",
+      "total": 10000,
+      "count": 7,
+      "industry": "issue"
+     }
+    ],
+    "count": 358,
+    "total": 1218910,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00632828&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.claudiaforcongress.com/",
+    "as_filed": "WWW.CLAUDIAFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00632828/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   },
   "H6NY25208": {
    "id": "H6NY25208",
@@ -4109,7 +5121,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY25208/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H8NY25105": {
    "id": "H8NY25105",
@@ -4122,7 +5134,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8NY25105/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NY25182": {
    "id": "H6NY25182",
@@ -4135,7 +5147,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NY25182/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H8NY25113": {
    "id": "H8NY25113",
@@ -4148,7 +5160,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8NY25113/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H4NY26078": {
    "id": "H4NY26078",
@@ -4161,7 +5173,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4NY26078/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2310288.18,
+    "disbursements": 1435474.77,
+    "cash_on_hand": 1213877.96,
+    "individual_unitemized": 57306.36,
+    "individual_itemized": 1656163.61,
+    "pac": 575739,
+    "party": 0,
+    "self_funding": 0,
+    "other": 21079.21,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4NY26078/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00028860",
+      "name": "AMERICAN FEDERATION OF TEACHERS, AFL-CIO COMMITTEE ON POLITICAL EDUCATION",
+      "total": 10000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00008268",
+      "name": "TRANSPORT WORKERS UNION OF AMERICA POLITICAL CONTRIBUTIONS COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00007542",
+      "name": "INTERNATIONAL ASSOCIATION OF SHEET METAL, AIR, RAIL AND TRANSPORTATION WORKERS POLITICAL ACTION LEAGUE",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00012245",
+      "name": "UBS AMERICAS INC. POLITICAL ACTION COMMITTEE (UBS PAC)",
+      "total": 10000,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00286807",
+      "name": "PROFESSIONAL AVIATION SAFETY SPECIALISTS PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00012880",
+      "name": "AMERICAN PHYSICAL THERAPY ASSOCIATION",
+      "total": 10000,
+      "count": 5,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00106146",
+      "name": "AMERICAN HOSPITAL ASSOCIATION PAC",
+      "total": 10000,
+      "count": 5,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00158881",
+      "name": "NEW YORK LIFE INSURANCE COMPANY POLITICAL ACTION COMMITTEE",
+      "total": 8500,
+      "count": 4,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00304832",
+      "name": "CONSTELLATION BRANDS INC POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00039578",
+      "name": "THE COUNCIL OF INSURANCE AGENTS & BROKERS POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00077321",
+      "name": "AMERICAN INSTITUTE OF CERTIFIED PUBLIC ACCOUNTANTS POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00383950",
+      "name": "NATIONAL ELEVATOR CONSTRUCTORS PAC/ INTN'L  UNION OF ELEVATOR CONSTRUCTORS (NEC PAC)",
+      "total": 7500,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00024521",
+      "name": "AMERICAN ASSOCIATION FOR JUSTICE POLITICAL ACTION COMMITTEE (AAJ PAC)",
+      "total": 7500,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00011114",
+      "name": "AMERICAN FEDERATION OF STATE, COUNTY, AND MUNICIPAL EMPLOYEES P E O P L E",
+      "total": 7500,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00035451",
+      "name": "AIR LINE PILOTS ASSOCIATION PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00096156",
+      "name": "HONEYWELL INTERNATIONAL PAC",
+      "total": 7000,
+      "count": 4,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00099234",
+      "name": "BROTHERHOOD OF LOCOMOTIVE ENGINEERS & TRAINMEN PAC FUND",
+      "total": 6500,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00625988",
+      "name": "FUTURE FORUM PAC",
+      "total": 6500,
+      "count": 7,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00406801",
+      "name": "AVANGRID POLITICAL ACTION COMMITTEE",
+      "total": 6000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00238725",
+      "name": "NATIONAL AIR TRAFFIC CONTROLLERS ASSOCIATION PAC",
+      "total": 6000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00173153",
+      "name": "AMERICAN ASSOCIATION OF NURSE ANESTHETISTS SEPARATE SEGREGATED FUND (CRNA-PAC)",
+      "total": 6000,
+      "count": 4,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00013961",
+      "name": "SHEET METAL & AIR CONDITIONING CONTRACTORS' NATIONAL ASSOC., INC. POLITICAL ACTION COMMITTEE",
+      "total": 6000,
+      "count": 4,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00030809",
+      "name": "NATIONAL COMMUNITY PHARMACISTS ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 5500,
+      "count": 5,
+      "industry": "pharma"
+     },
+     {
+      "committee_id": "C00012476",
+      "name": "UA UNION PLUMBERS & PIPEFITTERS VOTE! PAC (UNITED ASSOCIATION JOURNEYMEN AND APPRENTICES OF THE PLUMBING & PIPEFITTING INDUSTRY OF THE UNITED STATES AND CANADA)",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00280222",
+      "name": "KPMG PARTNERS/PRINCIPALS AND EMPLOYEES PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     }
+    ],
+    "count": 183,
+    "total": 567300,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00856526&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://kennedyforuscongress.com/",
+    "as_filed": "KENNEDYFORUSCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00856526/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   }
  }
 }

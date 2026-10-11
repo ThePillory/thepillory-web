@@ -4,7 +4,7 @@
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=NV&candidate_status=C",
  "list_built_on": "2026-10-10",
- "built_on": "2026-10-10",
+ "built_on": "2026-10-11",
  "senate_up": false,
  "candidates": {
   "H8NV01113": {
@@ -18,7 +18,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8NV01113/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H4NV01237": {
    "id": "H4NV01237",
@@ -31,7 +31,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4NV01237/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 77860,
+    "disbursements": 15060,
+    "cash_on_hand": 62800,
+    "individual_unitemized": 0,
+    "individual_itemized": 10860,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 67000,
+    "other": 0,
+    "coverage_end": "2026-05-20",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4NV01237/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00945279&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.michaelborisfornevada.com/",
+    "as_filed": "WWW.MICHAELBORISFORNEVADA.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00945279/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   },
   "H6NV01331": {
    "id": "H6NV01331",
@@ -44,7 +74,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV01331/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NV01349": {
    "id": "H6NV01349",
@@ -57,7 +87,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV01349/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NV01356": {
    "id": "H6NV01356",
@@ -70,7 +100,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV01356/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NV01315": {
    "id": "H6NV01315",
@@ -83,7 +113,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV01315/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NV01323": {
    "id": "H6NV01323",
@@ -96,7 +126,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV01323/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H8NV03036": {
    "id": "H8NV03036",
@@ -109,7 +139,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8NV03036/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NV02362": {
    "id": "H6NV02362",
@@ -122,7 +152,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV02362/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NV02289": {
    "id": "H6NV02289",
@@ -135,7 +165,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV02289/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H4NV04108": {
    "id": "H4NV04108",
@@ -148,7 +178,171 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4NV04108/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2275392.31,
+    "disbursements": 2172225.33,
+    "cash_on_hand": 117882.89,
+    "individual_unitemized": 16479.86,
+    "individual_itemized": 504019.65,
+    "pac": 66500,
+    "party": 0,
+    "self_funding": 1675000,
+    "other": 13392.8,
+    "coverage_end": "2026-06-30",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4NV04108/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00693796",
+      "name": "BUCKEYE LIBERTY PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00467431",
+      "name": "THE EYE OF THE TIGER PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00570226",
+      "name": "SEAL PAC SUPPORTING ELECTING AMERICAN LEADERS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00749481",
+      "name": "RAPTOR PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00592089",
+      "name": "ELECTING MAJORITY MAKING EFFECTIVE REPUBLICANS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00388223",
+      "name": "CONSERVATIVE LEADERSHIP FUND",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00639229",
+      "name": "AMERICAN REVIVAL PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00552851",
+      "name": "FREEDOM CAUCUS FUND",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00416594",
+      "name": "JIM JORDAN FOR CONGRESS",
+      "total": 4000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00925305",
+      "name": "JUST ELECT SUPER STARS PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00295527",
+      "name": "CITIZENS UNITED POLITICAL VICTORY FUND",
+      "total": 2500,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00394957",
+      "name": "SCALISE FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00558825",
+      "name": "MILLER-MEEKS FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00864488",
+      "name": "MIKE KENNEDY FOR UTAH",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00788414",
+      "name": "ERIC BURLISON FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00545749",
+      "name": "EMMER FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00492579",
+      "name": "AMERICAN PRINCIPLES",
+      "total": 1000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00830083",
+      "name": "AMERICAN HOMES 4 RENT TRS, LLC PAC (AMH PAC)",
+      "total": 1000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00481200",
+      "name": "NATIONAL ASSOCIATION FOR GUN RIGHTS INC PAC",
+      "total": 500,
+      "count": 1,
+      "industry": "issue"
+     }
+    ],
+    "count": 19,
+    "total": 66500,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00901710&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00901710/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   },
   "H6NV02297": {
    "id": "H6NV02297",
@@ -161,7 +355,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV02297/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NV02420": {
    "id": "H6NV02420",
@@ -174,7 +368,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV02420/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NV02347": {
    "id": "H6NV02347",
@@ -187,7 +381,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV02347/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H4NV02185": {
    "id": "H4NV02185",
@@ -200,7 +394,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4NV02185/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 1187973.81,
+    "disbursements": 1244363.06,
+    "cash_on_hand": 5412.39,
+    "individual_unitemized": 0,
+    "individual_itemized": 0,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 1185000,
+    "other": 2973.81,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4NV02185/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00873620&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.kiddfornevada.com/",
+    "as_filed": "WWW.KIDDFORNEVADA.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00873620/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   },
   "H6NV02396": {
    "id": "H6NV02396",
@@ -213,7 +437,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV02396/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NV02446": {
    "id": "H6NV02446",
@@ -226,7 +450,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV02446/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NV02305": {
    "id": "H6NV02305",
@@ -239,7 +463,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV02305/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NV03220": {
    "id": "H6NV03220",
@@ -252,7 +476,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV03220/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NV03196": {
    "id": "H6NV03196",
@@ -265,7 +489,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV03196/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NV03253": {
    "id": "H6NV03253",
@@ -278,7 +502,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV03253/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NV03287": {
    "id": "H6NV03287",
@@ -291,7 +515,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV03287/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NV03238": {
    "id": "H6NV03238",
@@ -304,7 +528,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV03238/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NV03246": {
    "id": "H6NV03246",
@@ -317,7 +541,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV03246/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NV04020": {
    "id": "H6NV04020",
@@ -330,7 +554,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV04020/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H4NV03175": {
    "id": "H4NV03175",
@@ -343,7 +567,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4NV03175/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 42404.45,
+    "disbursements": 42404.45,
+    "cash_on_hand": 0,
+    "individual_unitemized": 0,
+    "individual_itemized": 0,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 42404.45,
+    "other": 0,
+    "coverage_end": "2025-10-29",
+    "last_report": "TERMINATION REPORT 2025",
+    "source_url": "https://www.fec.gov/data/candidate/H4NV03175/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00845529&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://stevelondonforcongress.com/",
+    "as_filed": "STEVELONDONFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00845529/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   },
   "H6NV03212": {
    "id": "H6NV03212",
@@ -356,7 +610,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV03212/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H4NV03225": {
    "id": "H4NV03225",
@@ -369,7 +623,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4NV03225/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 4026577.61,
+    "disbursements": 1617143.37,
+    "cash_on_hand": 2409434.24,
+    "individual_unitemized": 189257,
+    "individual_itemized": 173004.08,
+    "pac": 271905.38,
+    "party": 0,
+    "self_funding": 3007000,
+    "other": 385411.15,
+    "coverage_end": "2026-06-30",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4NV03225/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00894519",
+      "name": "GTM NOMINEE FUND: NV-03",
+      "total": 140300,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00934828",
+      "name": "EMB NOMINEE FUND NV-03",
+      "total": 27830.09,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00895102",
+      "name": "NV-03 REPUBLICAN NOMINEE FUND 2026",
+      "total": 16675.29,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00467431",
+      "name": "THE EYE OF THE TIGER POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00693796",
+      "name": "BUCKEYE LIBERTY POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00762930",
+      "name": "BE VICTORIOUS OVER DEMOCRATS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00592089",
+      "name": "ELECTING MAJORITY MAKING EFFECTIVE REPUBLICANS",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00540146",
+      "name": "FIRST IN FREEDOM PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00639229",
+      "name": "AMERICAN REVIVAL PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00570226",
+      "name": "SEAL PAC SUPPORTING ELECTING AMERICAN LEADERS PAC",
+      "total": 5000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00822767",
+      "name": "RUDY FOR INDIANA",
+      "total": 4000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00898734",
+      "name": "FLORIDA FIRST PAC",
+      "total": 3000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00882332",
+      "name": "RIGHT TRACK USA PAC",
+      "total": 2600,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00631051",
+      "name": "ABRAHAM LINCOLN PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00607721",
+      "name": "LAND OF OPPORTUNITY PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00908624",
+      "name": "FRIENDS OF JIM KINGSTON",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00394957",
+      "name": "SCALISE FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00599464",
+      "name": "SMUCKER FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00482737",
+      "name": "AUSTIN SCOTT FOR CONGRESS INC",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00931709",
+      "name": "CLAY FULLER FOR CONGRESS, INC",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00416594",
+      "name": "JIM JORDAN FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00545749",
+      "name": "EMMER FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00501643",
+      "name": "DAVID ROUZER FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00483487",
+      "name": "BRETTPAC - THE LEADERSHIP PAC OF US REPRESENTATIVE BRETT GUTHRIE",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00725465",
+      "name": "CLIFF BENTZ FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     }
+    ],
+    "count": 37,
+    "total": 270905.38,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00900910&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://martyforcongress.vote/",
+    "as_filed": "MARTYFORCONGRESS.VOTE",
+    "source_url": "https://www.fec.gov/data/committee/C00900910/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   },
   "H6NV03204": {
    "id": "H6NV03204",
@@ -382,7 +842,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV03204/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NV03295": {
    "id": "H6NV03295",
@@ -395,7 +855,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV03295/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NV03261": {
    "id": "H6NV03261",
@@ -408,7 +868,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV03261/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H2NV04011": {
    "id": "H2NV04011",
@@ -421,7 +881,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2NV04011/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10",
+   "last_listed": "2026-10-11",
    "totals": {
     "cycle": 2026,
     "receipts": 3350562.82,
@@ -640,7 +1100,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV04137/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6NV04111": {
    "id": "H6NV04111",
@@ -653,7 +1113,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6NV04111/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   }
  }
 }

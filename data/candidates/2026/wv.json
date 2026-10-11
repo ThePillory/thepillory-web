@@ -4,7 +4,7 @@
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=WV&candidate_status=C",
  "list_built_on": "2026-10-10",
- "built_on": "2026-10-10",
+ "built_on": "2026-10-11",
  "senate_up": true,
  "candidates": {
   "S4WV00159": {
@@ -18,7 +18,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S4WV00159/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "S6WV00147": {
    "id": "S6WV00147",
@@ -31,7 +31,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6WV00147/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "S6WV00188": {
    "id": "S6WV00188",
@@ -44,7 +44,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6WV00188/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "S6WV00196": {
    "id": "S6WV00196",
@@ -57,7 +57,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6WV00196/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "S4WV00407": {
    "id": "S4WV00407",
@@ -70,7 +70,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S4WV00407/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "S6WV00170": {
    "id": "S6WV00170",
@@ -83,7 +83,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6WV00170/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "S4WV00357": {
    "id": "S4WV00357",
@@ -96,7 +96,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S4WV00357/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "S6WV00162": {
    "id": "S6WV00162",
@@ -109,7 +109,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6WV00162/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6WV01137": {
    "id": "H6WV01137",
@@ -122,7 +122,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WV01137/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H4WV01058": {
    "id": "H4WV01058",
@@ -135,7 +135,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4WV01058/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 1220939.72,
+    "disbursements": 1188897.71,
+    "cash_on_hand": 92972.79,
+    "individual_unitemized": 862103.98,
+    "individual_itemized": 323107.96,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 0,
+    "other": 35727.78,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4WV01058/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00832154&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00832154/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   },
   "H6WV01160": {
    "id": "H6WV01160",
@@ -148,7 +178,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WV01160/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6WV01111": {
    "id": "H6WV01111",
@@ -161,7 +191,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WV01111/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H8WV03097": {
    "id": "H8WV03097",
@@ -174,7 +204,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8WV03097/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H4WV02205": {
    "id": "H4WV02205",
@@ -187,7 +217,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4WV02205/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 1325162.29,
+    "disbursements": 697052.71,
+    "cash_on_hand": 751072.41,
+    "individual_unitemized": 204309.38,
+    "individual_itemized": 259117.53,
+    "pac": 522450,
+    "party": 0,
+    "self_funding": 0,
+    "other": 339285.38,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4WV02205/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00489336",
+      "name": "WILD AND WONDERFUL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00140855",
+      "name": "FIRSTENERGY CORP PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00029504",
+      "name": "ENGINEERS POLITICAL EDUCATION COMMITTEE (EPEC)/INTERNATIONAL UNION OF OPERATING ENGINEERS",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00077321",
+      "name": "AMERICAN INSTITUTE OF CERTIFIED PUBLIC ACCOUNTANTS PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00351270",
+      "name": "SIDLEY AUSTIN LLP GOOD GOVERNMENT FUND",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00109546",
+      "name": "VALERO ENERGY CORPORATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00328401",
+      "name": "THE LINCOLN CLUB OF ORANGE COUNTY FEDERAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00367995",
+      "name": "SIERRA NEVADA COMPANY, LLC PAC",
+      "total": 10000,
+      "count": 6,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00040998",
+      "name": "NATIONAL AUTOMOBILE DEALERS ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00496307",
+      "name": "MARATHON PETROLEUM CORPORATION EMPLOYEES PAC (MPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00088591",
+      "name": "EMPLOYEES OF NORTHROP GRUMMAN CORPORATION PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00084491",
+      "name": "INTERNATIONAL FRANCHISE ASSOCIATION FRANCHISING PAC INC",
+      "total": 10000,
+      "count": 5,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00103549",
+      "name": "PARSONS CORPORATION PAC",
+      "total": 9000,
+      "count": 6,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00113241",
+      "name": "NATIONAL APARTMENT ASSOCIATION PAC",
+      "total": 8500,
+      "count": 4,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00525071",
+      "name": "COMMERCIAL METALS COMPANY PAC (CMC PAC)",
+      "total": 8000,
+      "count": 7,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00236489",
+      "name": "KOCH INDUSTRIES INC. PAC",
+      "total": 7500,
+      "count": 4,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00749481",
+      "name": "RAPTOR PAC",
+      "total": 7000,
+      "count": 4,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00032979",
+      "name": "D.R.I.V.E. - DEMOCRAT, REPUBLICAN, INDEPENDENT VOTER EDUCATION (THE PAC OF THE INTERNATIONAL BROT",
+      "total": 6500,
+      "count": 3,
+      "industry": "education"
+     },
+     {
+      "committee_id": "C00106146",
+      "name": "AMERICAN HOSPITAL ASSOCIATION PAC",
+      "total": 6500,
+      "count": 6,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00542365",
+      "name": "TOYOTA MOTOR NORTH AMERICA, INC PAC (TOYOTA/LEXUS PAC)",
+      "total": 6000,
+      "count": 2,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00108209",
+      "name": "DOMINION ENERGY, INC. PAC - DOMINION PAC",
+      "total": 6000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00173153",
+      "name": "AMERICAN ASSOCIATION OF NURSE ANESTHETISTS SEPARATE SEGREGATED FUND (CRNA-PAC)",
+      "total": 6000,
+      "count": 3,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00325092",
+      "name": "HUNTINGTON INGALLS INDUSTRIES, INC. EMPLOYEES PAC (HIIPAC)",
+      "total": 6000,
+      "count": 4,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00013342",
+      "name": "UNITED MINE WORKERS OF AMERICA - COAL MINERS PAC",
+      "total": 6000,
+      "count": 5,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00097568",
+      "name": "EMPLOYEES OF RTX CORPORATION PAC",
+      "total": 6000,
+      "count": 6,
+      "industry": "defense"
+     }
+    ],
+    "count": 148,
+    "total": 522200,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00828947&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://mooreforwv.com/",
+    "as_filed": "MOOREFORWV.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00828947/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   },
   "H6WV02150": {
    "id": "H6WV02150",
@@ -200,7 +436,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WV02150/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H6WV02184": {
    "id": "H6WV02184",
@@ -213,7 +449,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WV02184/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11"
   },
   "H4WV02247": {
    "id": "H4WV02247",
@@ -226,7 +462,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4WV02247/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-10"
+   "last_listed": "2026-10-11",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 21594.18,
+    "disbursements": 21854.18,
+    "cash_on_hand": 0,
+    "individual_unitemized": 4231.18,
+    "individual_itemized": 10875,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 5469.88,
+    "other": 1018.12,
+    "coverage_end": "2026-06-08",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H4WV02247/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00852574&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.wendelinforcongress.com/",
+    "as_filed": "WWW.WENDELINFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00852574/",
+    "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-11",
+   "cycle": 2026
   }
  }
 }
