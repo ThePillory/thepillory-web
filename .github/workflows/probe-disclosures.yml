@@ -1,0 +1,13 @@
+# Temporary: checks which disclosure sites GitHub's servers can reach. Removed after one run.
+name: Probe disclosure sites
+on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [tools/probe/disclosures.py, .github/workflows/probe-disclosures.yml]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tools/probe/disclosures.py
