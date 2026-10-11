@@ -33,6 +33,7 @@ import { syncExecutiveFunding } from "./funding/executive.js";
 import { syncSummaries, buildSummaries } from "./summaries.js";
 import { syncCandidatePlatforms } from "./promises/candidates-sync.js";
 import { syncPlainSummaries } from "./plain/sync.js";
+import { syncScannedTrades } from "./trades/scan-sync.js";
 import { syncIssuesPages } from "./promises/finder-sync.js";
 import { syncOrderTexts, syncOrderCourts } from "./executive/orders-sync.js";
 import { syncHistoryOfficials, syncHistoryOrders, syncHistoryFunding, syncHistoryNominations, syncHistoryVotes } from "./history/sync.js";
@@ -77,6 +78,9 @@ const STEPS = [
   // Quick mode's plain "What it does" lines, rewritten from summaries the site
   // already shows and checked in code (src/plain/), PLAIN_DAILY a day.
   ["plain-summaries", syncPlainSummaries],
+  // Scanned OGE Form 278-T reports, read twice by AI and checked in code; agreed
+  // rows wait for a person on /admin/review/trades/ (src/trades/), SCANNED_TRADES_DAILY a day.
+  ["scanned-trades", syncScannedTrades],
   // Paced and long-running (the first full load takes a few days): last.
   ["federal-funding", syncFederalFunding],
   ["federal-lobbying", syncFederalLobbying],

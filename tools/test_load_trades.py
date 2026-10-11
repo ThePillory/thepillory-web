@@ -209,5 +209,26 @@ class LoadTrades(unittest.TestCase):
         self.assertEqual(T.clean_asset("Indiana ST 5.00% 02/01/32"), "Indiana ST 5.00% 02/01/32")
 
 
+    def test_text_layer_rows_of_a_scan(self):
+        text = """Fllo(s lnformaUon
+Last Name                                                    Ml
+#                 DeacrlDllon
+1                 MIAMI DADE CNTY FL AVIATION REV RFDG SER A B/E PTC 5.00 % Due Oct 1, 2031         lourchaso               717
+2                 ST LOUIS CNTY MO SCH DIST 101 AFFTON 2017 A B/E MDDP 5.00 % Due Mar 1, 2036       lourchaso              7/22
+                        ,.
+12
+                        -
+                   FLAGLER CNTY-FL SCH CTF PARTN RFDG COPS 2024 REV B/E CR ENH 5.00 % Due Aua 1, 2027    l ourchaso   7/17
+24 .               MEMPHIS TN GENL IMPT RFDG B/E 4.00 % Due May 1, 2035                            I purchase    7/1
+OGE Form 278-T (Updated February 2024)
+1                 a later page repeating number one with words on it
+"""
+        rows = T.text_layer_rows(text)
+        self.assertEqual(sorted(rows), [1, 2, 12, 24])
+        self.assertTrue(rows[1].startswith("MIAMI DADE CNTY FL AVIATION"))
+        self.assertTrue(rows[12].startswith("FLAGLER CNTY-FL"))
+        self.assertIn("lourchaso 717", rows[1])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -48,7 +48,6 @@ import io
 import json
 import os
 import re
-import shutil
 import subprocess
 import sys
 import tempfile
@@ -470,6 +469,56 @@ def parse_oge_ptr_text(text):
     return out, signed
 
 
+TEXT_ROW = re.compile(r"^\s*(\d{1,3})\s*[.,']?\s+(\S.*)$")
+TEXT_ROW_ALONE = re.compile(r"^\s*(\d{1,3})\s*[.,']?\s*$")
+
+
+def text_layer_rows(text):
+    """
+    {row number: line} from a scanned 278-T's own text layer (pdftotext
+    -layout): each numbered line with some words on it, spaces collapsed, the
+    first time each number appears. Often garbled; the sync Worker uses it only
+    to check the AI readings, never as the record.
+    """
+    out, pending = {}, None
+    for ln in str(text or "").splitlines():
+        words = len(re.findall(r"[A-Za-z]", ln))
+        m = TEXT_ROW.match(ln)
+        if m and words >= 8:
+            n, rest = int(m.group(1)), m.group(2)
+        elif pending is not None and words >= 8:
+            n, rest = pending, ln
+        else:
+            alone = TEXT_ROW_ALONE.match(ln)
+            pending = int(alone.group(1)) if alone else (pending if not ln.strip() or words < 3 else None)
+            continue
+        pending = None
+        if 0 < n <= 500 and n not in out:
+            out[n] = re.sub(r"\s+", " ", rest).strip()[:400]
+    return out
+
+
+def scan_queue_sql(args, limit=10):
+    """
+    Scanned executive-branch reports (not read, with a document) not yet queued
+    for transcription: each queued in trade_scans with its text-layer rows.
+    """
+    rows = d1(args, command="""SELECT r.id, r.report_url FROM trade_reports r LEFT JOIN trade_scans s ON s.report_id = r.id
+      WHERE r.chamber = 'us-executive' AND r.parsed = 0 AND r.report_url IS NOT NULL AND r.official_id IS NOT NULL AND s.report_id IS NULL
+      ORDER BY r.filed_on DESC LIMIT """ + str(int(limit)))
+    out, queued = [], []
+    for r in rows:
+        try:
+            lines = text_layer_rows(pdf_text(get(r["report_url"])))
+        except Exception as e:
+            print(f"  {r['id']}: not queued for transcription ({type(e).__name__})", file=sys.stderr)
+            continue
+        out.append(f"INSERT OR IGNORE INTO trade_scans (report_id, text_rows) VALUES ({lit(r['id'])}, {len(lines)});")
+        out += [f"INSERT OR REPLACE INTO trade_scan_lines (report_id, n, line) VALUES ({lit(r['id'])}, {n}, {lit(line)});" for n, line in sorted(lines.items())]
+        queued.append((r["id"], len(lines)))
+    return out, queued
+
+
 def oge_filings(args):
     """The executive branch's 278-T reports, as the executive-funding step listed them."""
     rows = d1(args, command="""SELECT d.id, d.official_id, d.doc_type, d.filed_on, d.document_url, d.request_url, d.position, d.agency, d.filer_name, o.name
@@ -551,24 +600,6 @@ def pdf_text(data):
         f.flush()
         r = subprocess.run(["pdftotext", "-layout", f.name, "-"], capture_output=True, text=True, timeout=120)
         return r.stdout if r.returncode == 0 else ""
-
-
-def ocr_text(data, dpi=300):
-    """
-    The PDF read by Tesseract from page images at `dpi`, page by page, keeping
-    the spaces between columns. For scanned reports whose own text layer is too
-    poor to read. Measure mode only for now: what it reads is printed, never written.
-    """
-    with tempfile.TemporaryDirectory() as d:
-        pdf = Path(d) / "r.pdf"
-        pdf.write_bytes(data)
-        subprocess.run(["pdftoppm", "-r", str(dpi), "-gray", "-png", str(pdf), str(Path(d) / "p")], check=True, timeout=300)
-        pages = []
-        for img in sorted(Path(d).glob("p-*.png")):
-            r = subprocess.run(["tesseract", str(img), "-", "--psm", "6", "-c", "preserve_interword_spaces=1"],
-                               capture_output=True, text=True, timeout=300)
-            pages.append(r.stdout if r.returncode == 0 else "")
-        return "\n".join(pages)
 
 
 def house_filings(years):
@@ -754,7 +785,6 @@ def main():
     ap.add_argument("--mode", choices=("measure", "load"), default="measure")
     ap.add_argument("--max-reports", type=int, default=300, help="new reports read this run, newest first")
     ap.add_argument("--database", default="pillory")
-    ap.add_argument("--ocr", type=int, default=0, help="measure mode: OCR this many scanned 278-Ts and print what Tesseract reads")
     ap.add_argument("--since-year", type=int, default=FIRST_YEAR)
     args = ap.parse_args()
     have_d1 = bool(os.environ.get("CLOUDFLARE_API_TOKEN"))
@@ -867,19 +897,6 @@ def main():
             say(f"  --- text of {f['id']} ({len(lines)} lines):")
             for ln in lines[:70]:
                 say(f"  | {ln[:260]}")
-        # Scanned 278-Ts: how well Tesseract reads them, and whether the strict reader accepts it.
-        if args.ocr and shutil.which("tesseract"):
-            for f in [u for u in unreadable if u["id"].startswith("oge:")][: args.ocr]:
-                try:
-                    text = ocr_text(get(f["url"]))
-                except Exception as e:
-                    say(f"  --- OCR of {f['id']}: failed ({type(e).__name__}: {e})")
-                    continue
-                trades, signed = parse_oge_ptr_text(text)
-                lines = [ln.rstrip() for ln in text.splitlines() if ln.strip()]
-                say(f"  --- OCR of {f['id']} {f['url']}: {len(lines)} lines; strict reader: {'%d trades' % len(trades) if trades else 'not accepted'}; signed {signed}")
-                for ln in lines[:120]:
-                    say(f"  # {ln[:260]}")
     for rep, ts in reports[:60]:
         for t in ts[:2]:
             say(f"  sample {rep['id']} {t['transaction_date']} {t['owner']} | {t['asset_name'][:60]} | {t['ticker']} | {t['type']} | {t['amount']} | filed {rep['filed_on']} | {t.get('sector')}")
@@ -908,6 +925,12 @@ def main():
             say(f"Committees: not read ({type(e).__name__}: {e})")
         run_sql(args, stmts)
         say(f"Loaded {len(reports)} reports into D1")
+        # Scanned 278-Ts, for the sync Worker's transcription step (docs/trades.md).
+        scan_stmts, queued = scan_queue_sql(args)
+        if scan_stmts:
+            run_sql(args, scan_stmts)
+        for rid, n in queued:
+            say(f"  queued for transcription: {rid} ({n} rows in its text layer)")
 
     out = os.environ.get("GITHUB_STEP_SUMMARY")
     if out:

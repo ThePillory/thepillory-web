@@ -112,6 +112,8 @@ CANDIDATE_YEAR = "2026"
 # Quick mode: plain rewrites of summaries a day, and the election files whose measures get one.
 PLAIN_DAILY = "40"
 PLAIN_ELECTIONS = "2026-11-03,2026-11-03-wa"
+# Scanned OGE Form 278-T reports transcribed a day (two model readings each; a person approves).
+SCANNED_TRADES_DAILY = "2"
 # Promises: suggestions and documents read a day (Claude calls), and Issues pages re-read a day.
 # Suggestions keep coming however many wait for review.
 PROMISE_SUGGESTIONS_DAILY = "10"
