@@ -272,7 +272,7 @@ def co_measures():
         number = label.split()[-1]
         short = re.sub(r"\s+", " ", title)
 
-        def noise(s):
+        def noise(s, number=number, short=short, label=label):
             return (re.fullmatch(r"\d{1,3}", s) is not None or s in (number, "Analysis", short, label, "y")
                     or (len(s) > 12 and short.startswith(s)) or s.startswith("Placed on the ballot"))
 
