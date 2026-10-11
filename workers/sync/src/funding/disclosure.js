@@ -260,17 +260,23 @@ const LEGISLATURE_AGENCY = { "ca-assembly": "assembly", "ca-senate": "senate" };
  * office (the position or the agency, e.g. "Governor"; for a legislator, their
  * house). Statements filed only for other boards the official sits on are left out.
  */
-export function fppcRows(documents, official) {
+export function fppcRows(documents, official, { county = "Calaveras" } = {}) {
   const p = nameParts(official.name);
   if (!p) return [];
-  const office = LEGISLATURE_AGENCY[official.chamber] || officeKey(official.office);
+  // County supervisors file as "Supervisor" with the county as the agency ("County of Calaveras").
+  const supervisor = official.chamber === "county-board";
+  const office = supervisor ? "supervisor" : LEGISLATURE_AGENCY[official.chamber] || officeKey(official.office);
   const out = [];
   for (const d of documents || []) {
     const f = d && d.filer;
     if (!f || fold(f.lastName) !== p.last) continue;
     const first = fold(String(f.firstName || "").split(/\s+/)[0]);
     if (!(first === p.first || (first.length > 2 && p.first.startsWith(first)) || (p.first.length > 2 && first.startsWith(p.first)))) continue;
-    const pos = (d.filingPositions || []).find((x) => officeKey(x.position) === office || officeKey(x.agency) === office);
+    const pos = (d.filingPositions || []).find((x) =>
+      supervisor
+        ? officeKey(x.position) === office && officeKey(x.agency) === fold(`county of ${county}`)
+        : officeKey(x.position) === office || officeKey(x.agency) === office
+    );
     if (!pos || !d.indexID) continue;
     const info = d.filingInfo || {};
     out.push({
