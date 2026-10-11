@@ -353,6 +353,13 @@ def collapse_tables(items):
                     between and isinstance(x, dict) and "h" in x and not x["h"].endswith("?")):
                 out[k] = {"table": True}
                 changed = True
+    # Between two tables, short pieces with no question and no real paragraph (ten words or more) are
+    # the tables' labels ("Millions of Dollars", "Great Outdoors Colorado (GOCO)").
+    marks = [k for k, x in enumerate(out) if is_table(x)]
+    for a, b in zip(marks, marks[1:]):
+        seg = out[a + 1:b]
+        if seg and all((isinstance(x, dict) and "h" in x and not x["h"].endswith("?")) or (isinstance(x, str) and len(x.split()) < 10) for x in seg):
+            out[a + 1:b] = [{"table": True}] * len(seg)
     # neighbouring markers are one table
     merged = []
     for x in out:
