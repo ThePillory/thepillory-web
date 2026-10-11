@@ -1,7 +1,8 @@
 {
  "built_on": "2026-10-11",
- "complete": false,
- "source": "CourtListener (Free Law Project), from the judiciary's financial disclosure reports",
+ "complete": true,
+ "bulk_date": "2026-09-30",
+ "source": "CourtListener (Free Law Project) bulk data, from the judiciary's financial disclosure reports",
  "justices": {
   "john-roberts": [
    {
@@ -29,22 +30,6 @@
     "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
    },
    {
-    "id": 31716,
-    "year": 2000,
-    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/2738/john-glover-roberts-jr-disclosure.2000_1.pdf",
-    "gifts": [],
-    "reimbursements": [],
-    "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
-   },
-   {
-    "id": 31191,
-    "year": 2000,
-    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/2738/john-glover-roberts-jr-disclosure.2000.pdf",
-    "gifts": [],
-    "reimbursements": [],
-    "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
-   },
-   {
     "id": 30714,
     "year": 2020,
     "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/2738/john-glover-roberts-jr-disclosure.2020.pdf",
@@ -59,210 +44,16 @@
     "gifts": [],
     "reimbursements": [
      {
-      "source": "Nashville School of Law; Vanderbilt University Law School",
-      "dates": "09/09-10/19",
-      "location": "Nashville, Tennessee",
-      "purpose": "Met with NSL students and faculty; and, addressed Vanderbilt Law School community"
-     },
-     {
       "source": "Belmont College of Law",
       "dates": "02/06/19",
       "location": "Nashville, Tennessee",
       "purpose": "Addressed Belmont Law community; met with students, faculty, and Federal judges"
-     }
-    ],
-    "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
-   },
-   {
-    "id": 25377,
-    "year": 2009,
-    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/2738/john-glover-roberts-jr-disclosure.2009.pdf",
-    "gifts": [],
-    "reimbursements": [
-     {
-      "source": "New England School of Law",
-      "dates": "",
-      "location": "7/13.23/09",
-      "purpose": "Taught course on the Supreme Court"
      },
      {
-      "source": "University",
-      "dates": "WAS NSN",
-      "location": "ASG TIGR, AVILA v@r VINE",
-      "purpose": "clio THAI LUMEN attended admissions ceremony for 130"
-     },
-     {
-      "source": "",
-      "dates": "",
-      "location": "",
-      "purpose": "attended College of Law Centennial events"
-     },
-     {
-      "source": "",
-      "dates": "",
-      "location": "",
-      "purpose": "to the Jaw school community:"
-     },
-     {
-      "source": "",
-      "dates": "",
-      "location": "",
-      "purpose": "Lecture; met with Federal judges;"
-     }
-    ],
-    "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
-   },
-   {
-    "id": 24236,
-    "year": 2008,
-    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/2738/john-glover-roberts-jr-disclosure.2008.pdf",
-    "gifts": [
-     {
-      "source": "University Club of Washington, DC",
-      "description": "Honorary Membership (Annual Dues) (Membership not used in any way) (See Part VIII)",
-      "value": "$3,240.00"
-     },
-     {
-      "source": "Robert Trent Jones Golf Club Gainesville, Virginia",
-      "description": "Honorary Membership (Annual Dues) (Membership not used in any way) (See Part VIII)",
-      "value": "$12,600.00"
-     }
-    ],
-    "reimbursements": [
-     {
-      "source": "28",
-      "dates": "",
-      "location": "",
-      "purpose": "District Judges"
-     },
-     {
-      "source": "27",
-      "dates": "",
-      "location": "",
-      "purpose": "Lecture: met with U.S"
-     },
-     {
-      "source": "26Drake University",
-      "dates": "10/1-3",
-      "location": "Des Moines. lowa",
-      "purpose": "Delivered the Opperman"
-     },
-     {
-      "source": "25.",
-      "dates": "",
-      "location": "",
-      "purpose": "with students"
-     },
-     {
-      "source": "24.",
-      "dates": "",
-      "location": "",
-      "purpose": "Law class for discussions"
-     },
-     {
-      "source": "23",
-      "dates": "",
-      "location": "",
-      "purpose": "visited Administrative"
-     },
-     {
-      "source": "22",
-      "dates": "",
-      "location": "",
-      "purpose": "school community,"
-     },
-     {
-      "source": "20",
-      "dates": "",
-      "location": "",
-      "purpose": "Chief Justice\""
-     },
-     {
-      "source": "19University of Notre Dame, The Law School",
-      "dates": "9/11-13",
-      "location": "South Bend, Indiana",
-      "purpose": "\"Conversation with the"
-     },
-     {
-      "source": "18",
-      "dates": "",
-      "location": "",
-      "purpose": "discussions with students"
-     },
-     {
-      "source": "17",
-      "dates": "",
-      "location": "",
-      "purpose": "School of Law for"
-     },
-     {
-      "source": "16.",
-      "dates": "",
-      "location": "",
-      "purpose": "classes at the"
-     },
-     {
-      "source": "15.",
-      "dates": "",
-      "location": "",
-      "purpose": "Finals: visited two"
-     },
-     {
-      "source": "University of Florida School of Law",
-      "dates": "9/4-7",
-      "location": "Gainesville, Florida",
-      "purpose": "Judged Moot Court"
-     },
-     {
-      "source": "12St. Mary's University School of Law",
-      "dates": "7/7-14",
-      "location": "Innsbruck, Austna",
-      "purpose": "Taught course on the"
-     },
-     {
-      "source": "",
-      "dates": "",
-      "location": "",
-      "purpose": "Law Class"
-     },
-     {
-      "source": "10.",
-      "dates": "",
-      "location": "",
-      "purpose": "Class and Constitutional"
-     },
-     {
-      "source": "9.",
-      "dates": "",
-      "location": "",
-      "purpose": "School of Business"
-     },
-     {
-      "source": "8.",
-      "dates": "",
-      "location": "",
-      "purpose": "Lecture; taught"
-     },
-     {
-      "source": "University of Kansas School of Business and School of Law",
-      "dates": "4/30-5/2",
-      "location": "Lawrence, Kansas",
-      "purpose": "Judged Moot Court"
-     }
-    ],
-    "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
-   },
-   {
-    "id": 22489,
-    "year": 2003,
-    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/2738/john-glover-roberts-jr-disclosure.2003.pdf",
-    "gifts": [],
-    "reimbursements": [
-     {
-      "source": "Washington & Lee Law School",
-      "dates": "",
-      "location": "",
-      "purpose": ""
+      "source": "Nashville School of Law; Vanderbilt University Law School",
+      "dates": "09/09-10/19",
+      "location": "Nashville, Tennessee",
+      "purpose": "Met with NSL students and faculty; and, addressed Vanderbilt Law School community"
      }
     ],
     "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
@@ -274,41 +65,18 @@
     "gifts": [],
     "reimbursements": [
      {
-      "source": "Han rr Fortn Fudsindry adit School",
-      "dates": "",
-      "location": "ih i eit",
-      "purpose": "Lecture: met with students faculty, and Federal judges"
-     },
-     {
       "source": "School of Law",
       "dates": "",
       "location": "",
       "purpose": "Distinguished Alumni Awards Dinner"
-     }
-    ],
-    "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
-   },
-   {
-    "id": 18772,
-    "year": 2013,
-    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/2738/john-glover-roberts-jr-disclosure.2013_2.pdf",
-    "gifts": [],
-    "reimbursements": [
+     },
      {
-      "source": "",
+      "source": "Han rr Fortn Fudsindry adit School",
       "dates": "",
-      "location": "Republic",
-      "purpose": "Supreme Court - Historical Perspective"
+      "location": "ih i eit",
+      "purpose": "Lecture: met with students faculty, and Federal judges"
      }
     ],
-    "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
-   },
-   {
-    "id": 18288,
-    "year": 2012,
-    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/2738/john-glover-roberts-jr-disclosure.2012_1.pdf",
-    "gifts": [],
-    "reimbursements": [],
     "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
    },
    {
@@ -324,16 +92,10 @@
     ],
     "reimbursements": [
      {
-      "source": "SS, Harvard Law School",
-      "dates": "11714-15717",
-      "location": "Cambridge, Massachusetts",
-      "purpose": "Judged moot court; met with students"
-     },
-     {
-      "source": "Harvard Law School",
-      "dates": "1026/17",
-      "location": "Cambridge, Massachusetts",
-      "purpose": "Attended Harvard Law School's Bicentennial"
+      "source": "Australia",
+      "dates": "",
+      "location": "",
+      "purpose": "Supreme Court - Historical Perspective"
      },
      {
       "source": "Wellington",
@@ -342,10 +104,16 @@
       "purpose": "Supreme Court - Historical Perspective"
      },
      {
-      "source": "Australia",
-      "dates": "",
-      "location": "",
-      "purpose": "Supreme Court - Historical Perspective"
+      "source": "Harvard Law School",
+      "dates": "1026/17",
+      "location": "Cambridge, Massachusetts",
+      "purpose": "Attended Harvard Law School's Bicentennial"
+     },
+     {
+      "source": "SS, Harvard Law School",
+      "dates": "11714-15717",
+      "location": "Cambridge, Massachusetts",
+      "purpose": "Judged moot court; met with students"
      }
     ],
     "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
@@ -366,6 +134,21 @@
     "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
    },
    {
+    "id": 3768,
+    "year": 2015,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/2738/john-glover-roberts-jr-disclosure.2015.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "TTT TE Tg yp pea",
+      "dates": "",
+      "location": "a Tg rat",
+      "purpose": "Supreme Court - Historical Perspective"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
+   },
+   {
     "id": 10530,
     "year": 2014,
     "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/2738/john-glover-roberts-jr-disclosure.2014.pdf",
@@ -381,9 +164,32 @@
     "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
    },
    {
+    "id": 18772,
+    "year": 2013,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/2738/john-glover-roberts-jr-disclosure.2013_2.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "",
+      "dates": "",
+      "location": "Republic",
+      "purpose": "Supreme Court - Historical Perspective"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
+   },
+   {
     "id": 9768,
     "year": 2013,
     "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/2738/john-glover-roberts-jr-disclosure.2013.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
+   },
+   {
+    "id": 18288,
+    "year": 2012,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/2738/john-glover-roberts-jr-disclosure.2012_1.pdf",
     "gifts": [],
     "reimbursements": [],
     "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
@@ -395,34 +201,4757 @@
     "gifts": [],
     "reimbursements": [
      {
-      "source": "",
-      "dates": "",
-      "location": "",
-      "purpose": "The LS. Supreme Court Historical Perspective"
-     },
-     {
       "source": "THREE Nd, TY pre er il",
       "dates": "",
       "location": "Bara et tT i",
       "purpose": "Moot Court; met with students in law class;"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "The LS. Supreme Court Historical Perspective"
      }
     ],
     "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
    },
    {
-    "id": 3768,
-    "year": 2015,
-    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/2738/john-glover-roberts-jr-disclosure.2015.pdf",
+    "id": 25377,
+    "year": 2009,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/2738/john-glover-roberts-jr-disclosure.2009.pdf",
     "gifts": [],
     "reimbursements": [
      {
-      "source": "TTT TE Tg yp pea",
+      "source": "",
       "dates": "",
-      "location": "a Tg rat",
-      "purpose": "Supreme Court - Historical Perspective"
+      "location": "",
+      "purpose": "Lecture; met with Federal judges;"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "to the Jaw school community:"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "attended College of Law Centennial events"
+     },
+     {
+      "source": "University",
+      "dates": "WAS NSN",
+      "location": "ASG TIGR, AVILA v@r VINE",
+      "purpose": "clio THAI LUMEN attended admissions ceremony for 130"
+     },
+     {
+      "source": "New England School of Law",
+      "dates": "",
+      "location": "7/13.23/09",
+      "purpose": "Taught course on the Supreme Court"
      }
     ],
     "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
+   },
+   {
+    "id": 24236,
+    "year": 2008,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/2738/john-glover-roberts-jr-disclosure.2008.pdf",
+    "gifts": [
+     {
+      "source": "Robert Trent Jones Golf Club Gainesville, Virginia",
+      "description": "Honorary Membership (Annual Dues) (Membership not used in any way) (See Part VIII)",
+      "value": "$12,600.00"
+     },
+     {
+      "source": "University Club of Washington, DC",
+      "description": "Honorary Membership (Annual Dues) (Membership not used in any way) (See Part VIII)",
+      "value": "$3,240.00"
+     }
+    ],
+    "reimbursements": [
+     {
+      "source": "Pepperdine University School of Law",
+      "dates": "2/14",
+      "location": "Malibu, California",
+      "purpose": "Judged the Vincent"
+     },
+     {
+      "source": "Columbia University School of Law",
+      "dates": "4/17",
+      "location": "New York. New York",
+      "purpose": "Judged Moot Court Finals"
+     },
+     {
+      "source": "University of Kansas School of Business and School of Law",
+      "dates": "4/30-5/2",
+      "location": "Lawrence, Kansas",
+      "purpose": "Judged Moot Court"
+     },
+     {
+      "source": "8.",
+      "dates": "",
+      "location": "",
+      "purpose": "Lecture; taught"
+     },
+     {
+      "source": "9.",
+      "dates": "",
+      "location": "",
+      "purpose": "School of Business"
+     },
+     {
+      "source": "10.",
+      "dates": "",
+      "location": "",
+      "purpose": "Class and Constitutional"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "Law Class"
+     },
+     {
+      "source": "12St. Mary's University School of Law",
+      "dates": "7/7-14",
+      "location": "Innsbruck, Austna",
+      "purpose": "Taught course on the"
+     },
+     {
+      "source": "University of Florida School of Law",
+      "dates": "9/4-7",
+      "location": "Gainesville, Florida",
+      "purpose": "Judged Moot Court"
+     },
+     {
+      "source": "15.",
+      "dates": "",
+      "location": "",
+      "purpose": "Finals: visited two"
+     },
+     {
+      "source": "16.",
+      "dates": "",
+      "location": "",
+      "purpose": "classes at the"
+     },
+     {
+      "source": "17",
+      "dates": "",
+      "location": "",
+      "purpose": "School of Law for"
+     },
+     {
+      "source": "18",
+      "dates": "",
+      "location": "",
+      "purpose": "discussions with students"
+     },
+     {
+      "source": "19University of Notre Dame, The Law School",
+      "dates": "9/11-13",
+      "location": "South Bend, Indiana",
+      "purpose": "\"Conversation with the"
+     },
+     {
+      "source": "20",
+      "dates": "",
+      "location": "",
+      "purpose": "Chief Justice\""
+     },
+     {
+      "source": "22",
+      "dates": "",
+      "location": "",
+      "purpose": "school community,"
+     },
+     {
+      "source": "23",
+      "dates": "",
+      "location": "",
+      "purpose": "visited Administrative"
+     },
+     {
+      "source": "24.",
+      "dates": "",
+      "location": "",
+      "purpose": "Law class for discussions"
+     },
+     {
+      "source": "25.",
+      "dates": "",
+      "location": "",
+      "purpose": "with students"
+     },
+     {
+      "source": "26Drake University",
+      "dates": "10/1-3",
+      "location": "Des Moines. lowa",
+      "purpose": "Delivered the Opperman"
+     },
+     {
+      "source": "27",
+      "dates": "",
+      "location": "",
+      "purpose": "Lecture: met with U.S"
+     },
+     {
+      "source": "28",
+      "dates": "",
+      "location": "",
+      "purpose": "District Judges"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
+   },
+   {
+    "id": 22489,
+    "year": 2003,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/2738/john-glover-roberts-jr-disclosure.2003.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Washington & Lee Law School",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
+   },
+   {
+    "id": 31716,
+    "year": 2000,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/2738/john-glover-roberts-jr-disclosure.2000_1.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
+   },
+   {
+    "id": 31191,
+    "year": 2000,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/2738/john-glover-roberts-jr-disclosure.2000.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/"
+   }
+  ],
+  "clarence-thomas": [
+   {
+    "id": 34189,
+    "year": 2022,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3200/clarence-thomas-disclosure.2022.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Harlan Crow",
+      "dates": "2/3/2022 - 2/5/2022",
+      "location": "Dallas, Texas",
+      "purpose": "Keynote Speaker at American Enterprise Institute’s Conference at Old Parkland"
+     },
+     {
+      "source": "Hatch Center",
+      "dates": "3/10/2022 - 3/12/2022",
+      "location": "Salt Lake City, Utah",
+      "purpose": "Featured Speaker"
+     },
+     {
+      "source": "Harlan Crow",
+      "dates": "5/12/2022 - 5/14/2022",
+      "location": "Dallas, Texas",
+      "purpose": "Keynote Speaker at American Enterprise Institute’s Conference at Old Parkland"
+     },
+     {
+      "source": "Harlan Crow",
+      "dates": "7/7/2022 - 7/13/2022",
+      "location": "Keese Mill, NY",
+      "purpose": "Guests of source"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3200/clarence-thomas/disclosures/"
+   },
+   {
+    "id": 34181,
+    "year": 2021,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3200/clarence-thomas-disclosure.2021.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "University of Notre Dame",
+      "dates": "9/15/2021 - 9/17/2021",
+      "location": "Notre Dame, IN",
+      "purpose": "Teaching and Guest Lecturer"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3200/clarence-thomas/disclosures/"
+   },
+   {
+    "id": 30783,
+    "year": 2020,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3200/clarence-thomas-disclosure.2020.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Levin College of Law University of Florida",
+      "dates": "1/27/2020 - 1/30/2020",
+      "location": "Gainesville, FL",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Federalist Society Florida Chapters Conference",
+      "dates": "1/31/2020",
+      "location": "Orlando, FL",
+      "purpose": "Guest speaker"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3200/clarence-thomas/disclosures/"
+   },
+   {
+    "id": 29989,
+    "year": 2019,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3200/clarence-thomas-disclosure.2019.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Creighton Law School",
+      "dates": "1/28/2019 - 2/1/2019",
+      "location": "Omaha, NE",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Mercer Law School",
+      "dates": "3/11/2019 - 3/12/2019",
+      "location": "Macon, GA",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Pepperdine Caruso School of Law",
+      "dates": "3/29/2019 - 3/30/2019",
+      "location": "Malibu, CA",
+      "purpose": "Speaking"
+     },
+     {
+      "source": "Hillsdale College",
+      "dates": "10/2/2019 - 10/3/2019",
+      "location": "Hillsdale, MI",
+      "purpose": "Speaking"
+     },
+     {
+      "source": "Yale Law School",
+      "dates": "10/20/2019 - 10/26/2019",
+      "location": "New Haven, CT",
+      "purpose": "Speaking"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3200/clarence-thomas/disclosures/"
+   },
+   {
+    "id": 20284,
+    "year": 2018,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3200/clarence-thomas-disclosure.2018.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Umversity Club of New York",
+      "dates": "R018",
+      "location": "New York, NY",
+      "purpose": "Guest speaker"
+     },
+     {
+      "source": "Federalist Society Texas : Chapters Conference",
+      "dates": "QR2018",
+      "location": "Fort Worth, TX",
+      "purpose": "Guest speaker"
+     },
+     {
+      "source": "University of Kansas School of Law",
+      "dates": "17232018",
+      "location": "Lawrence, KS",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Umvensty of Georgia School of Law",
+      "dates": "10/152018",
+      "location": "Athens, GA",
+      "purpose": "Teaching"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3200/clarence-thomas/disclosures/"
+   },
+   {
+    "id": 7079,
+    "year": 2017,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3200/clarence-thomas-disclosure.2017.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Yale Law School",
+      "dates": "2/11/2017",
+      "location": "New Haven, C1",
+      "purpose": "Guest speaker"
+     },
+     {
+      "source": "Bar Association of : Metropolitan St. Louis",
+      "dates": "5/112017",
+      "location": "St. Lows, MO",
+      "purpose": "Cruest speaker"
+     },
+     {
+      "source": "McLennan Community College",
+      "dates": "96.772017",
+      "location": "Waco, TX",
+      "purpose": "Cruest speaker"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3200/clarence-thomas/disclosures/"
+   },
+   {
+    "id": 10910,
+    "year": 2016,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3200/clarence-thomas-disclosure.2016.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "University of Florida Levin College of Law",
+      "dates": "1726-29/2016",
+      "location": "Gamesville, FL",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Georgia Law Review",
+      "dates": "2/5-6/2016",
+      "location": "Atlanta, GA",
+      "purpose": "Guest Speaker"
+     },
+     {
+      "source": "Texas Review of Law and Politics",
+      "dates": "4/7-102016",
+      "location": "Austin, TX",
+      "purpose": "Junist of the Year"
+     },
+     {
+      "source": "Hilisdale College",
+      "dates": "5/13-15°2016",
+      "location": "Hillsdale, MI",
+      "purpose": "Commencement Speaker"
+     },
+     {
+      "source": "Thomas Jefferson School of Law",
+      "dates": "7/3-14/2016",
+      "location": "Nice, France",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "University of Georgia School of Law",
+      "dates": "9/6-92016",
+      "location": "Athens, GA",
+      "purpose": "Teaching"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3200/clarence-thomas/disclosures/"
+   },
+   {
+    "id": 16212,
+    "year": 2015,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3200/clarence-thomas-disclosure.2015.pdf",
+    "gifts": [
+     {
+      "source": "Harlan Crow",
+      "description": "Bronze Bust of Fredenck Douglass",
+      "value": "$6,484.12"
+     }
+    ],
+    "reimbursements": [
+     {
+      "source": "Creighton University School of Law",
+      "dates": "22-26/15",
+      "location": "Omaha, NE",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Yale Law School",
+      "dates": "211-213/15",
+      "location": "New Haven, CT",
+      "purpose": "Meetings"
+     },
+     {
+      "source": "New York Federal Bar Council",
+      "dates": "5/3.5/6/15",
+      "location": "New York, NY",
+      "purpose": "Meetings and Award Ceremony"
+     },
+     {
+      "source": "Law -Brigham Young University",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3200/clarence-thomas/disclosures/"
+   },
+   {
+    "id": 7547,
+    "year": 2014,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3200/clarence-thomas-disclosure.2014.pdf",
+    "gifts": [
+     {
+      "source": "Yale Law School Award of Mert",
+      "description": "Stained glass medallion resting in an oak base with a brass plague",
+      "value": "$830.00"
+     }
+    ],
+    "reimbursements": [
+     {
+      "source": "Notre Dame University School of Law",
+      "dates": "22-2/8/14",
+      "location": "Notre Dame, IN",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Palm Beach Atlantic University",
+      "dates": "210-212/14",
+      "location": "West Palm Beach, FL",
+      "purpose": "Distinguished guest and meetings"
+     },
+     {
+      "source": "Vanderbilt Law School",
+      "dates": "3/17-3/19/14",
+      "location": "Nashville, TN",
+      "purpose": "Cuest speaker and meetings"
+     },
+     {
+      "source": "Lmversity of Texas at Tyler",
+      "dates": "91591714",
+      "location": "Tyler, TX",
+      "purpose": "Seminar and meeting"
+     },
+     {
+      "source": "Umversity of Georgia School } of Law",
+      "dates": "9/21-9/28/14",
+      "location": "Athens, GA",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Yale Law School",
+      "dates": "10/24-10726/ 14",
+      "location": "New Haven, CT",
+      "purpose": "Meetings and Awird of Merit Ceremony"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3200/clarence-thomas/disclosures/"
+   },
+   {
+    "id": 16265,
+    "year": 2013,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3200/clarence-thomas-disclosure.2013.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Harvard Law School",
+      "dates": "1728-1129/13",
+      "location": "Cambridge, MA",
+      "purpose": "Speech & meetings"
+     },
+     {
+      "source": "Creighton University School of Law",
+      "dates": "2/4-2/8/13",
+      "location": "Omaha, NE",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "University of Notre Dame School of Law",
+      "dates": "35-3613",
+      "location": "Notre Dame, IN",
+      "purpose": "Speech & meetings"
+     },
+     {
+      "source": "Duquesne University School } of Law",
+      "dates": "49/13",
+      "location": "Pittsburgh, PA",
+      "purpose": "Speech"
+     },
+     {
+      "source": "Mary's University Institute on World Legal Problems",
+      "dates": "71-T11/13",
+      "location": "Innsbruck. Austna",
+      "purpose": "leaching"
+     },
+     {
+      "source": "University of Portland",
+      "dates": "9/19-9200/13",
+      "location": "Portland, OR",
+      "purpose": "Speech & meetings"
+     },
+     {
+      "source": "Duke University School of Law",
+      "dates": "10/20-10°22/13",
+      "location": "Durham, NC",
+      "purpose": "Speech & meetings"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3200/clarence-thomas/disclosures/"
+   },
+   {
+    "id": 14413,
+    "year": 2012,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3200/clarence-thomas-disclosure.2012.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "College of the Holy Cross",
+      "dates": "1226/12",
+      "location": "Worcester, MA",
+      "purpose": "Speech"
+     },
+     {
+      "source": "American College of Trial Lawyers",
+      "dates": "290-2/12/12",
+      "location": "Sea Island, GA",
+      "purpose": "Speech"
+     },
+     {
+      "source": "Wake Forest School of Law",
+      "dates": "3/5-3/7/12",
+      "location": "Winston Salem, NC",
+      "purpose": "Speech & meetings"
+     },
+     {
+      "source": "University of Kentucky College of Law",
+      "dates": "45-4712",
+      "location": "Lexington, KY",
+      "purpose": "Speech & meetings"
+     },
+     {
+      "source": "Paul M. Hebert Law Center } Louisiana State University",
+      "dates": "9/5.99/12",
+      "location": "Baton Rouge, LA",
+      "purpose": "Speech & meetings"
+     },
+     {
+      "source": "University of Florida, Levin } College of Law",
+      "dates": "9/20-9/22/12",
+      "location": "Gainesville, FL",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Council of Chief Judges of g the State Courts of Appeals",
+      "dates": "114/121 1/16/12",
+      "location": "Houston, TX",
+      "purpose": "Speech"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3200/clarence-thomas/disclosures/"
+   },
+   {
+    "id": 17458,
+    "year": 2011,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3200/clarence-thomas-disclosure.2011.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Legatus and Ava Mana University",
+      "dates": "2/3-2/5/11",
+      "location": "Naples, FL",
+      "purpose": "Speech, Q&A"
+     },
+     {
+      "source": "Creighton University College ~ ofLaw",
+      "dates": "2/7-2/11/11",
+      "location": "Omaha, NE",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "University of Nebraska Co lege of Law",
+      "dates": "5/7/11",
+      "location": "Lincoln, NE",
+      "purpose": "Commencement Speech"
+     },
+     {
+      "source": "4, New York University School of Law",
+      "dates": "7/12-7/15/11",
+      "location": "Buenos Aires, Argentina",
+      "purpose": "Conterence"
+     },
+     {
+      "source": "University of Georgia School of Law",
+      "dates": "9/21-9/23/11",
+      "location": "Athens, GA",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Grove City College",
+      "dates": "11/15-11/16/11",
+      "location": "Grove City, PA",
+      "purpose": "Speech"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3200/clarence-thomas/disclosures/"
+   },
+   {
+    "id": 22733,
+    "year": 2010,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3200/clarence-thomas-disclosure.2010.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Stetson University College of Law",
+      "dates": "2/1-2/2/10",
+      "location": "Gulfport, FL",
+      "purpose": "Speech, Q&A"
+     },
+     {
+      "source": "University of Florida",
+      "dates": "2/3-2/5/10",
+      "location": "Gainsville, F1",
+      "purpose": "ch, Q&A"
+     },
+     {
+      "source": "University of Minnesota Law School",
+      "dates": "3/7-3/14/10",
+      "location": "Minneapolis, MN",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Savannah State University",
+      "dates": "5/8/10",
+      "location": "Savannah, GA",
+      "purpose": "Speech"
+     },
+     {
+      "source": "John Marshall Law School",
+      "dates": "5/15/10",
+      "location": "Atlanta, GA",
+      "purpose": "Speech"
+     },
+     {
+      "source": "University of Nebraska- Lincoln",
+      "dates": "5/25/10",
+      "location": "Lincoin, NE",
+      "purpose": "Speech"
+     },
+     {
+      "source": "Utah State Bar",
+      "dates": "7/15-7/17120",
+      "location": "Sun Valley, idaho",
+      "purpose": "Speech"
+     },
+     {
+      "source": "U.S. Embassy Port of Spain",
+      "dates": "10/18-10/21/10",
+      "location": "Trinidad and Tobago",
+      "purpose": "Speech"
+     },
+     {
+      "source": "Savannah College of Art and Design",
+      "dates": "1/4 - 1/5/10",
+      "location": "Savannah, GA",
+      "purpose": "Speech"
+     },
+     {
+      "source": "University of Tennessee College of Law",
+      "dates": "9/16-9/19/10",
+      "location": "Knoxville, TN",
+      "purpose": "Speech"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3200/clarence-thomas/disclosures/"
+   },
+   {
+    "id": 27634,
+    "year": 2009,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3200/clarence-thomas-disclosure.2009.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Creighton University",
+      "dates": "2/2 - 2/6/09",
+      "location": "Omaha, NE",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Wuhinton & Lee University",
+      "dates": "3/16/09",
+      "location": "Lexington, VA",
+      "purpose": "Speech"
+     },
+     {
+      "source": "Unversity of Minnesota",
+      "dates": "4/13 - 4/15/09",
+      "location": "Minneapolis, MN",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Chuwchill Centre",
+      "dates": "911209",
+      "location": "San Francisco, CA",
+      "purpose": "Speech"
+     },
+     {
+      "source": "Washington & Lee University",
+      "dates": "9/25/09",
+      "location": "Lexington, VA",
+      "purpose": "Speech"
+     },
+     {
+      "source": "Southern Methodist University",
+      "dates": "9/30/09",
+      "location": "Dallas, TX",
+      "purpose": "Lecture"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3200/clarence-thomas/disclosures/"
+   },
+   {
+    "id": 1974,
+    "year": 2008,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3200/clarence-thomas-disclosure.2008.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Federalist Society",
+      "dates": "1/26-1/29/08",
+      "location": "Palm Springs, CA",
+      "purpose": "Speech"
+     },
+     {
+      "source": "High Point University",
+      "dates": "5/3/08",
+      "location": "High Point, NC",
+      "purpose": "Commencement"
+     },
+     {
+      "source": "Horatio Alger Scholarship Program",
+      "dates": "5/6/08",
+      "location": "Ft. Lauderdale, FL",
+      "purpose": "Scholarship awards"
+     },
+     {
+      "source": "University of Georgia",
+      "dates": "5/10/08",
+      "location": "Athens, GA",
+      "purpose": "Commencement"
+     },
+     {
+      "source": "New York University School of Law",
+      "dates": "7/14-7/17/08",
+      "location": "Florence, Italy",
+      "purpose": "Conference"
+     },
+     {
+      "source": "Pepperdine University School",
+      "dates": "9/4-9/7/08",
+      "location": "Malibu, CA",
+      "purpose": "Speech"
+     },
+     {
+      "source": "University of Georgia School of Law",
+      "dates": "9/24-9/28/08",
+      "location": "Athens, GA",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Manhattan Institute",
+      "dates": "10/16/08",
+      "location": "New York, NY",
+      "purpose": "Speech"
+     },
+     {
+      "source": "Eleventh Circuit Appellate Practice Institute.",
+      "dates": "10/23/08",
+      "location": "Atlanta, GA",
+      "purpose": "Speech"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3200/clarence-thomas/disclosures/"
+   },
+   {
+    "id": 20762,
+    "year": 2007,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3200/clarence-thomas-disclosure.2007.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/3200/clarence-thomas/disclosures/"
+   },
+   {
+    "id": 1433,
+    "year": 2006,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3200/clarence-thomas-disclosure.2006.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Eleventh Circuit Appetlate P",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Horatio Alger (Florida)",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Drake Univers",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3200/clarence-thomas/disclosures/"
+   },
+   {
+    "id": 843,
+    "year": 2005,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3200/clarence-thomas-disclosure.2005.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/3200/clarence-thomas/disclosures/"
+   },
+   {
+    "id": 21830,
+    "year": 2004,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3200/clarence-thomas-disclosure.2004.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Cuiverdtyof Kesszs",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "New York University Schoo! of Law",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Creighton University School of Law",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Horatio Alger Florida State",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Ave Mane SShoni of Lew",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "HiDsisle Coleg",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Texas Tech School of Law",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3200/clarence-thomas/disclosures/"
+   },
+   {
+    "id": 472,
+    "year": 2003,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3200/clarence-thomas-disclosure.2003.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/3200/clarence-thomas/disclosures/"
+   }
+  ],
+  "samuel-alito": [
+   {
+    "id": 34201,
+    "year": 2022,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/77/samuel-a-alito-jr-disclosure.2022.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/77/samuel-a-alito-jr/disclosures/"
+   },
+   {
+    "id": 34190,
+    "year": 2021,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/77/samuel-a-alito-jr-disclosure.2021.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/77/samuel-a-alito-jr/disclosures/"
+   },
+   {
+    "id": 30711,
+    "year": 2020,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/77/samuel-a-alito-jr-disclosure.2020.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/77/samuel-a-alito-jr/disclosures/"
+   },
+   {
+    "id": 30805,
+    "year": 2019,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/77/samuel-a-alito-jr-disclosure.2018.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Fordham Law School",
+      "dates": "3/29/2019 to 3/31/2019",
+      "location": "New York, NY",
+      "purpose": "Moot Court"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/77/samuel-a-alito-jr/disclosures/"
+   },
+   {
+    "id": 30896,
+    "year": 2018,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/77/samuel-a-alito-jr-disclosure.2018_1.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Duke Law School",
+      "dates": "1210 1/672018",
+      "location": "Durham, NC",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Supreme Court Historical : Society",
+      "dates": "3/14/2018 to 3/1512019",
+      "location": "New York, NY",
+      "purpose": "Gala"
+     },
+     {
+      "source": "Pordham Law School",
+      "dates": "4/6/2018 to 4/8/2018",
+      "location": "New York, NY",
+      "purpose": "Moot Court"
+     },
+     {
+      "source": "Duke Law School",
+      "dates": "6/1/2018 to 622018",
+      "location": "Durham, NC",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "John's University Law ) School",
+      "dates": "12/8/2018 to 12/152018",
+      "location": "Rome, Italy",
+      "purpose": "Conference"
+     },
+     {
+      "source": "Europa Institut, University of Zurich",
+      "dates": "12/15/2018 to 12/19:2018",
+      "location": "Zunch, Switzerland",
+      "purpose": "Conference"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/77/samuel-a-alito-jr/disclosures/"
+   },
+   {
+    "id": 2711,
+    "year": 2017,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/77/samuel-a-alito-jr-disclosure.2017.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Duke Law School",
+      "dates": "0103 to 0107",
+      "location": "Durham, NC",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Chapman University Law School",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Claremont Institute",
+      "dates": "02/11 10 02/12",
+      "location": "Newport Beach, CA",
+      "purpose": "Award & Speech"
+     },
+     {
+      "source": "Veurle Payne American Inn of Court",
+      "dates": "02120 02/16",
+      "location": "Albuquerque, NM",
+      "purpose": "Speech"
+     },
+     {
+      "source": "Loyola Univeristy of Chicago : Law School",
+      "dates": "07030 07/13",
+      "location": "Rome, Italy",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Umversity of South Carolina Law School",
+      "dates": "N30 14",
+      "location": "Columbia, SC",
+      "purpose": "Building Dedication"
+     },
+     {
+      "source": "Archdiocese of Galveston } Houston Texas",
+      "dates": "09/28 to 09/29",
+      "location": "Houston, TX",
+      "purpose": "Speech"
+     },
+     {
+      "source": "Umon League Club of New York",
+      "dates": "11/14 11/15",
+      "location": "New York, NY",
+      "purpose": "Award"
+     },
+     {
+      "source": "New York Historical Society",
+      "dates": "12/8 to 12/11",
+      "location": "New York, NY",
+      "purpose": "Film/Panel Discussion"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/77/samuel-a-alito-jr/disclosures/"
+   },
+   {
+    "id": 4055,
+    "year": 2016,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/77/samuel-a-alito-jr-disclosure.2016.pdf",
+    "gifts": [
+     {
+      "source": "Bottega Mortet",
+      "description": "Bronze Cast of Hand",
+      "value": "$3,000.00"
+     }
+    ],
+    "reimbursements": [
+     {
+      "source": "Fordham Law School",
+      "dates": "401 to 403",
+      "location": "New York, NY",
+      "purpose": "Moot Court"
+     },
+     {
+      "source": "John's College Law School",
+      "dates": "MOM 1o (M06",
+      "location": "New York, NY",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Duke University Law School",
+      "dates": "M03 to 604",
+      "location": "Durham, NC",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "New York University School of Law",
+      "dates": "07170 07/23",
+      "location": "Barcelona, Spam",
+      "purpose": "Conference"
+     },
+     {
+      "source": "Tulane Law School Summer Program",
+      "dates": "07/23 to 0804",
+      "location": "Pans, France and Berlm, Germany",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Government",
+      "dates": "",
+      "location": "Shenzhen, Nan jing and Beijing, China",
+      "purpose": ""
+     },
+     {
+      "source": "American College of Trial Lawyers",
+      "dates": "0917 to 09/20",
+      "location": "Philadelphia, PA",
+      "purpose": "UK-US Legal Exchange"
+     },
+     {
+      "source": "The U.S. Courts and North Carolina Bur Found.",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "University of Buffalo School } of Law",
+      "dates": "10/19 0 10/21",
+      "location": "Buffalo. NY",
+      "purpose": "Speech/Conversation"
+     },
+     {
+      "source": "New York Historical Society",
+      "dates": "11718 to 11/20",
+      "location": "New York, NY",
+      "purpose": "Film Program & Panel Discussion"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/77/samuel-a-alito-jr/disclosures/"
+   },
+   {
+    "id": 3497,
+    "year": 2015,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/77/samuel-a-alito-jr-disclosure.2015.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Fordham Law School Moot Court",
+      "dates": "3/27 t0 3/29",
+      "location": "New York, NY",
+      "purpose": "Irving Kaufman Memorial Moot Court"
+     },
+     {
+      "source": "American College of Trial Lwyers",
+      "dates": "9410911",
+      "location": "London, bogland",
+      "purpose": "UK-US Legal Exchange"
+     },
+     {
+      "source": "University of Kentucky",
+      "dates": "9/23 to 9125",
+      "location": "Lexington, KY",
+      "purpose": "Teaching, Lecture"
+     },
+     {
+      "source": "Duke Law School",
+      "dates": "10/18 to 10/24",
+      "location": "Durham, NC",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "New York Historical Society",
+      "dates": "1/13w 111s",
+      "location": "New York, NY",
+      "purpose": "Film Program & Panel Discussion"
+     },
+     {
+      "source": "Notre Dame Law School",
+      "dates": "11/18w 11/19",
+      "location": "South Bend, IN",
+      "purpose": "Book Presentation & Discussion"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/77/samuel-a-alito-jr/disclosures/"
+   },
+   {
+    "id": 14816,
+    "year": 2014,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/77/samuel-a-alito-jr-disclosure.2014.pdf",
+    "gifts": [
+     {
+      "source": "Medal of Honor Society",
+      "description": "Patriot Award",
+      "value": "$4931.00"
+     },
+     {
+      "source": "Yale Law School",
+      "description": "Award of Merit",
+      "value": "$530.00"
+     }
+    ],
+    "reimbursements": [
+     {
+      "source": "Belmont University",
+      "dates": "59-1022014",
+      "location": "Nashville, Tennessee",
+      "purpose": "Commencement"
+     },
+     {
+      "source": "Duke University Law School",
+      "dates": "5/23-2472014",
+      "location": "Durham, North Carolina",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Medal of Honor Society",
+      "dates": "9/12-14/2014",
+      "location": "Knoxville, Tennessee",
+      "purpose": "Award Presentation"
+     },
+     {
+      "source": "Duke University Law School",
+      "dates": "9/17-24/2014",
+      "location": "Durbim, North Carolina",
+      "purpose": "Feaching"
+     },
+     {
+      "source": "Washington & Lee Law School",
+      "dates": "10/21-222014",
+      "location": "Lexmmgton, Virgima",
+      "purpose": "Moot Court"
+     },
+     {
+      "source": "National Constitution Center",
+      "dates": "10/27-28/2014",
+      "location": "Philadelphia, Pennsylvania",
+      "purpose": "Speech"
+     },
+     {
+      "source": "New York Historical Society",
+      "dates": "11/14-1672014",
+      "location": "New York, New York",
+      "purpose": "New York Historical Society Classic Film Series"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/77/samuel-a-alito-jr/disclosures/"
+   },
+   {
+    "id": 5241,
+    "year": 2013,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/77/samuel-a-alito-jr-disclosure.2013.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Dallas Bar Association",
+      "dates": "619212013",
+      "location": "Dallas, Texas",
+      "purpose": "Conterence"
+     },
+     {
+      "source": "Kellogg Institute for International Studies",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Thomas More Society of Nevada",
+      "dates": "100722-2372013",
+      "location": "South Bend, Indiana",
+      "purpose": "Speech"
+     },
+     {
+      "source": "New York Histosrical Society",
+      "dates": "1115-172012",
+      "location": "New York Historical Society",
+      "purpose": "Film Senes and American Constitution Program"
+     },
+     {
+      "source": "SE Eo ALR LORE 7. ar",
+      "dates": "",
+      "location": "",
+      "purpose": "Anniversary of The Gettysburg Address"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/77/samuel-a-alito-jr/disclosures/"
+   },
+   {
+    "id": 16708,
+    "year": 2012,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/77/samuel-a-alito-jr-disclosure.2012.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Columbia University",
+      "dates": "April 9-11, 2012",
+      "location": "New York, NY",
+      "purpose": "Conference"
+     },
+     {
+      "source": "Luhan American Nation! Hall of Fame",
+      "dates": "May 5-6, 2012",
+      "location": "Atlantic, NJ",
+      "purpose": "37th Induction Ceremony"
+     },
+     {
+      "source": "Duke Law School",
+      "dates": "Junc 1-2,2012",
+      "location": "Durham, NC",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Peon State Dickinson School of Law",
+      "dates": "July 8-20, 2012",
+      "location": "Florence, aly",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Duke University Law School",
+      "dates": "July 8-20, 2012",
+      "location": "Durham, NC",
+      "purpose": "Teaching"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/77/samuel-a-alito-jr/disclosures/"
+   },
+   {
+    "id": 22979,
+    "year": 2011,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/77/samuel-a-alito-jr-disclosure.2011_1.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "University of Hawaii",
+      "dates": "January 22-30, 2011",
+      "location": "Honolulu, Hawan",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "The Federalist Society",
+      "dates": "March 10-14,2011",
+      "location": "Menlo Park, Califorma",
+      "purpose": "Speaking Engagement"
+     },
+     {
+      "source": "Bar Association of Metropolitan St. Louis",
+      "dates": "May 15-17, 2011",
+      "location": "St. Louis, Missouri",
+      "purpose": "Speaking Engagement"
+     },
+     {
+      "source": "Duquesne University School of Law",
+      "dates": "July 5-15, 2011",
+      "location": "Rome, Italy",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Duke Law School",
+      "dates": "September 12-16, 2011",
+      "location": "Durham, North Carolina",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "with European Judges and Lawyers"
+     },
+     {
+      "source": "Rutgers University School of Law",
+      "dates": "November 15, 2011",
+      "location": "Newark, New Jersey",
+      "purpose": "Speaking Engagement"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/77/samuel-a-alito-jr/disclosures/"
+   },
+   {
+    "id": 4000,
+    "year": 2011,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/77/samuel-a-alito-jr-disclosure.2011.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "University of Hawaii",
+      "dates": "January 22-30, 2011",
+      "location": "Honolulu, Hawan",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "The Federalist Society",
+      "dates": "March 10-14, 2011",
+      "location": "Menlo Park, California",
+      "purpose": "Speaking Engagement"
+     },
+     {
+      "source": "Duquesne University School of Law",
+      "dates": "July 5-15, 2011",
+      "location": "Rome, Italy",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Duke Law School",
+      "dates": "September 2-16, 2011",
+      "location": "Durham, North Carolina",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "LR wand 2 a a a a AINA Cu il with European Judges and Lawyers"
+     },
+     {
+      "source": "Rutgers University School of Law",
+      "dates": "November 15, 2011",
+      "location": "Newark, New Jersey",
+      "purpose": "Speaking Engagement"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/77/samuel-a-alito-jr/disclosures/"
+   },
+   {
+    "id": 23169,
+    "year": 2010,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/77/samuel-a-alito-jr-disclosure.2010.pdf",
+    "gifts": [
+     {
+      "source": "Federal Bar Council",
+      "description": "[Leamed Hand Award Medallion",
+      "value": "$2,408.95"
+     }
+    ],
+    "reimbursements": [
+     {
+      "source": "Brooklyn Law School",
+      "dates": "April 10,2010",
+      "location": "New York, New York",
+      "purpose": "Moot Court"
+     },
+     {
+      "source": "Federal Bar Council",
+      "dates": "May 4-5, 2010",
+      "location": "New York, New York",
+      "purpose": "Speaking Engagement"
+     },
+     {
+      "source": "University of Pennsylvania Dickinson School of Law",
+      "dates": "July 5-21, 2010",
+      "location": "Strasbourg, France",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Duke Law School",
+      "dates": "September 12-17 2010",
+      "location": "Durham, North Carolina",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Drake University Law School",
+      "dates": "September 29- October 1, 2010",
+      "location": "Des Moines, lowa",
+      "purpose": "Speaking Engagement"
+     },
+     {
+      "source": "Notre Dame Law School",
+      "dates": "October 8, 2010",
+      "location": "South Bend, Indiana",
+      "purpose": "Speaking Engagement"
+     },
+     {
+      "source": "Manhattan Institute",
+      "dates": "October 13-14, 2010",
+      "location": "New York, New York",
+      "purpose": "Speaking Engagement"
+     },
+     {
+      "source": "Catholic Lawyers Association",
+      "dates": "October 25-26, 2010",
+      "location": "Grand Rapids, Michigan",
+      "purpose": "Speaking Engagement"
+     },
+     {
+      "source": "Federalist Society",
+      "dates": "December 10-15, 2010",
+      "location": "Paris, France",
+      "purpose": "Speaking Engagement"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/77/samuel-a-alito-jr/disclosures/"
+   },
+   {
+    "id": 25007,
+    "year": 2009,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/77/samuel-a-alito-jr-disclosure.2009.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Nauonal Catholic Bioethics Center",
+      "dates": "February 2-3, 2009",
+      "location": "Dalla:, Texas",
+      "purpose": "Speaking Engagement"
+     },
+     {
+      "source": "Federa) Bar Council",
+      "dates": "February 13-17, 2009",
+      "location": "Los Cibos, Mexico",
+      "purpose": "Speaking Engagement"
+     },
+     {
+      "source": "Alaska Bar Association",
+      "dates": "May 4.9, 2009",
+      "location": "rage & Juneau, y",
+      "purpose": "Speaking Engagement"
+     },
+     {
+      "source": "Mary's University",
+      "dates": "July 2-14, 2010",
+      "location": "uck, Austna",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Duke Law School",
+      "dates": "September 19-26 2010",
+      "location": "m, North Carolina",
+      "purpose": "Teaching"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/77/samuel-a-alito-jr/disclosures/"
+   },
+   {
+    "id": 840,
+    "year": 2008,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/77/samuel-a-alito-jr-disclosure.2008.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/77/samuel-a-alito-jr/disclosures/"
+   },
+   {
+    "id": 27084,
+    "year": 2007,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/77/samuel-a-alito-jr-disclosure.2007.pdf",
+    "gifts": [
+     {
+      "source": "Vincent Kickerillo",
+      "description": "Itahan food and wane",
+      "value": ""
+     }
+    ],
+    "reimbursements": [
+     {
+      "source": "Council of Chief Judges State Court of Appeals",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Indiana University Law School",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "St. Mary's College",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Yale Law School",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "University of Pittsburgh",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Duquesne University Law School",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Tampa Bay Bar Association",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "University of Alabama Law School",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "University of Virginia",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Palm Beach Bar Association",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/77/samuel-a-alito-jr/disclosures/"
+   },
+   {
+    "id": 26944,
+    "year": 2006,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/77/samuel-a-alito-jr-disclosure.2006.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Society of Sons of the Revolution",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/77/samuel-a-alito-jr/disclosures/"
+   },
+   {
+    "id": 2069,
+    "year": 2005,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/77/samuel-a-alito-jr-disclosure.2005.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Washington & Lee University",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Georgetown Law School",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/77/samuel-a-alito-jr/disclosures/"
+   },
+   {
+    "id": 23552,
+    "year": 2004,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/77/samuel-a-alito-jr-disclosure.2004.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "George Mason University Law & Economics Center",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "American Bar Association EE ",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Harvard Law School EE  ",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/77/samuel-a-alito-jr/disclosures/"
+   }
+  ],
+  "sonia-sotomayor": [
+   {
+    "id": 34207,
+    "year": 2022,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3045/sonia-sotomayor-disclosure.2022.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Washington University in St. Louis",
+      "dates": "April 3-5, 2022",
+      "location": "St Louis, MO",
+      "purpose": "Meeting with students, meeting with local judges"
+     },
+     {
+      "source": "New York University",
+      "dates": "July 17-22, 2022",
+      "location": "Edinburgh, Scotland",
+      "purpose": "Participation in New York University Law Leadership Conference"
+     },
+     {
+      "source": "Just the Beginning-A Pipeline Organization",
+      "dates": "October 20-21, 2022",
+      "location": "Chicago, IL",
+      "purpose": "Participation in non-profit organization National Conference"
+     },
+     {
+      "source": "Washington University in St. Louis",
+      "dates": "April 3-5, 2022",
+      "location": "St Louis, MO",
+      "purpose": "Meeting with students, meeting with local judges"
+     },
+     {
+      "source": "New York University",
+      "dates": "July 17-22, 2022",
+      "location": "Edinburgh, Scotland",
+      "purpose": "Participation in New York University Law Leadership Conference"
+     },
+     {
+      "source": "Just the Beginning-A Pipeline Organization",
+      "dates": "October 20-21, 2022",
+      "location": "Chicago, IL",
+      "purpose": "Participation in non-profit organization National Conference"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3045/sonia-sotomayor/disclosures/"
+   },
+   {
+    "id": 34200,
+    "year": 2021,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3045/sonia-sotomayor-disclosure.2021.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/3045/sonia-sotomayor/disclosures/"
+   },
+   {
+    "id": 30671,
+    "year": 2020,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3045/sonia-sotomayor-disclosure.2020.pdf",
+    "gifts": [
+     {
+      "source": "Thomas Jefferson Foundation",
+      "description": "Jefferson Medal in Law (donation to charitable organization)",
+      "value": "$10,000.00"
+     }
+    ],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/3045/sonia-sotomayor/disclosures/"
+   },
+   {
+    "id": 30528,
+    "year": 2019,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3045/sonia-sotomayor-disclosure.2019.pdf",
+    "gifts": [
+     {
+      "source": "Grateful American Foundation",
+      "description": "Grateful American Book Prize (donation to iCivics, a not for profit organization)",
+      "value": "$13,000.00"
+     }
+    ],
+    "reimbursements": [
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "Rico and Q&A with college students"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "Puerto Rico",
+      "purpose": "including the events in Item i"
+     },
+     {
+      "source": "Manhattan College",
+      "dates": "5/16-5/19/2019",
+      "location": "New York, NY",
+      "purpose": "Commencement Speech"
+     },
+     {
+      "source": "Penguin Random House, LLC",
+      "dates": "5/30-5/31/2019",
+      "location": "New York, NY",
+      "purpose": "Participation in New Y ork Book Expo"
+     },
+     {
+      "source": "Penguin Random House, LLC",
+      "dates": "6/8-6//9/2019",
+      "location": "New Y ork, NY",
+      "purpose": "Participation in Bronx Book Festival"
+     },
+     {
+      "source": "Attorney, New Y ork County",
+      "dates": "",
+      "location": "",
+      "purpose": "celebration for Robert Morgenthau"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "University Law Leadership Conference"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "Federal judges and law clerks"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "“ournal Constitution Decatur Book Festival"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "sponsored by Women and Children First Bookstore"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "and answer session with students"
+     },
+     {
+      "source": "Women's National Hall of Fame",
+      "dates": "9/13-9/17/2019",
+      "location": "Seneca Falls, NY",
+      "purpose": "Attendance at installation as a member"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "event including Women's National Hall of Fame"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "and alumni, and law school students"
+     },
+     {
+      "source": "Penguin Random House, LLC",
+      "dates": "10/18/2019",
+      "location": "Meriden, CT",
+      "purpose": "Conversation with students at Maloney High School"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "Association of Pediatrics Conference"
+     },
+     {
+      "source": "Penguin Random House, LLC",
+      "dates": "10/26-10/29/2019",
+      "location": "Austin, TX",
+      "purpose": "Participation at Texas Book Festival"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3045/sonia-sotomayor/disclosures/"
+   },
+   {
+    "id": 20040,
+    "year": 2018,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3045/sonia-sotomayor-disclosure.2018.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Public Legal Education)",
+      "dates": "",
+      "location": "",
+      "purpose": "Learning Initiative Conference"
+     },
+     {
+      "source": "Tea a Law",
+      "dates": "",
+      "location": "",
+      "purpose": "TNO MOINS. TWINS A and answer session with law school students"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "eT NG SRP a” 7 Ey Se Ty A SN th LV and answer session with students"
+     },
+     {
+      "source": "Student Personnel Adminstration",
+      "dates": "",
+      "location": "",
+      "purpose": "and answer session with conference participants"
+     },
+     {
+      "source": "Flaw",
+      "dates": "",
+      "location": "",
+      "purpose": "honoring Judge Robert A Katzmann"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "and answer session with students"
+     },
+     {
+      "source": "Law Guarini Institute for Global Legal Studies",
+      "dates": "",
+      "location": "",
+      "purpose": "South Africa Constitutional Court Judge Albie Sachs"
+     },
+     {
+      "source": "Yale Umversity School of : Law",
+      "dates": "9/13.14/2018",
+      "location": "New Haven, C1",
+      "purpose": "Participation mn Global Constitutionalism Seminar"
+     },
+     {
+      "source": "Princeton University",
+      "dates": "10/5/2018",
+      "location": "Princeton, NJ",
+      "purpose": "Speech"
+     },
+     {
+      "source": "American Academy of Arts : and Sciences",
+      "dates": "10/6-72018",
+      "location": "Cambridge, MA",
+      "purpose": "Induction as a member"
+     },
+     {
+      "source": "Comell University School of Law",
+      "dates": "10/18192018",
+      "location": "Ithaca, NY",
+      "purpose": "Judged Moot Court Competition"
+     },
+     {
+      "source": "Harvard University Law School",
+      "dates": "11/13-1472018",
+      "location": "Cambndge, MA",
+      "purpose": "Judged Moot Court Competition"
+     },
+     {
+      "source": "Gy =r aay School",
+      "dates": "",
+      "location": "",
+      "purpose": "AUT ih, Fede Schur Tatod CBMOOERT A nie Award for Distinguished Public Service"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3045/sonia-sotomayor/disclosures/"
+   },
+   {
+    "id": 18546,
+    "year": 2017,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3045/sonia-sotomayor-disclosure.2017.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "AT a Ny School",
+      "dates": "122007",
+      "location": "",
+      "purpose": "ne as I Tt Le ye A discussion with law students"
+     },
+     {
+      "source": "NER eA TE a Ce",
+      "dates": "44007",
+      "location": "VRE TTYL a",
+      "purpose": "discussion with law students"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "participation in unveiling of portrait"
+     },
+     {
+      "source": "Foundation",
+      "dates": "",
+      "location": "",
+      "purpose": "East African Judges & artys."
+     },
+     {
+      "source": "",
+      "dates": "9282017",
+      "location": "",
+      "purpose": "Judge Ralph Winer and presention of Devitt Award"
+     },
+     {
+      "source": "Law LS RES A TRE, (OE SNE TVR",
+      "dates": "",
+      "location": "",
+      "purpose": "A discussion with law students"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3045/sonia-sotomayor/disclosures/"
+   },
+   {
+    "id": 10052,
+    "year": 2016,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3045/sonia-sotomayor-disclosure.2016.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Bronx Detenders",
+      "dates": "12612016",
+      "location": "New York, NY",
+      "purpose": "Acceptance of \"Partners in Justice\" Award"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "Survey of American Law staff"
+     },
+     {
+      "source": "Supreme Court Historical Society",
+      "dates": "2/24/2016",
+      "location": "New York, NY",
+      "purpose": "Attendance at dinner"
+     },
+     {
+      "source": "New Mexico Hispanic Women's Council",
+      "dates": "44/2016",
+      "location": "Albuquerque, NM",
+      "purpose": "Question and Answer Conversation"
+     },
+     {
+      "source": "TRY HSE Joe =f aura. WaT srw ew i,",
+      "dates": "",
+      "location": "",
+      "purpose": "Conversation with Faculty and Students"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "Assocation members and reception"
+     },
+     {
+      "source": "Association of the Bar of the ) City of New York",
+      "dates": "10/25/2016",
+      "location": "New York, NY",
+      "purpose": "Panel Discussin with Justice Ginsburg"
+     },
+     {
+      "source": "Aspen Institute",
+      "dates": "1292016",
+      "location": "New York, NY",
+      "purpose": "Acceptance of Preston Tisch Award"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3045/sonia-sotomayor/disclosures/"
+   },
+   {
+    "id": 11690,
+    "year": 2015,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3045/sonia-sotomayor-disclosure.2015.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Assn. & Forum of the Palm Beaches",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Davidson College",
+      "dates": "3/12/2015 through 3/13/2015",
+      "location": "Davidson, NC",
+      "purpose": "Discussions with groups of faculty and students"
+     },
+     {
+      "source": "Law",
+      "dates": "",
+      "location": "",
+      "purpose": "Burt Neuborne's book \"Madison's Music\""
+     },
+     {
+      "source": "Law a",
+      "dates": "",
+      "location": "",
+      "purpose": "meeting with Latino Law Students Association"
+     },
+     {
+      "source": "Bryn Mawr College",
+      "dates": "4172015",
+      "location": "Bryn Mawr, PA",
+      "purpose": "Address accepting Katharine Hepburn Medal"
+     },
+     {
+      "source": "Smai Hospital School of Medicine",
+      "dates": "5/7/2015 through §/R12015",
+      "location": "New York, NY",
+      "purpose": "Address accepting honorary degree at commencement"
+     },
+     {
+      "source": "Association of the Bar of New York",
+      "dates": "5/7/2015",
+      "location": "New York, NY",
+      "purpose": "Address to New Lawyers Institute"
+     },
+     {
+      "source": "Bronx Childrens Muscum",
+      "dates": "7/23/2015",
+      "location": "Bronx, NY",
+      "purpose": "Participation in Dream Big Duy events"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "meeting with students, meeting with faculty"
+     },
+     {
+      "source": "Springfield Public Forum",
+      "dates": "9/9/2015",
+      "location": "Springfield, MA",
+      "purpose": "Moderated mterview"
+     },
+     {
+      "source": "",
+      "dates": "102272015",
+      "location": "",
+      "purpose": "conversation with faculty and students"
+     },
+     {
+      "source": "",
+      "dates": "10232015",
+      "location": "",
+      "purpose": "Women Leadership ~~ Conference"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "with Virginia Supreme Court Justices"
+     },
+     {
+      "source": "New York University School of Law",
+      "dates": "121122015",
+      "location": "New York, NY",
+      "purpose": "Address to Latino Law Students Association"
+     },
+     {
+      "source": "University Club",
+      "dates": "127212005",
+      "location": "New York, NY",
+      "purpose": "Moderated interview"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3045/sonia-sotomayor/disclosures/"
+   },
+   {
+    "id": 12685,
+    "year": 2014,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3045/sonia-sotomayor-disclosure.2014.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Yale Umversity",
+      "dates": "2/2/2014 through 2/4/2014",
+      "location": "New Haven, CT",
+      "purpose": "Delivery of James A Thomas Lecture"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "Nordingberg and Audience Q&A"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "Question and Answer Discussion"
+     },
+     {
+      "source": "Princeton University",
+      "dates": "2/21/2014 through 2/2212014",
+      "location": "Princeton. NJ",
+      "purpose": "Acceptance of Woodrow Wilson Award"
+     },
+     {
+      "source": "Mulmomah Public Library and Literary Arts, Inc.",
+      "dates": "3/1 12014 through 3/122014",
+      "location": "Portland, OR",
+      "purpose": "Informal remarks"
+     },
+     {
+      "source": "Seton Hall Lmversaty",
+      "dates": "41002014",
+      "location": "Newark, NJ",
+      "purpose": "Judgmg Law School Moot Court Final Competition"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "Distinguished Visitor\" and participate in panel"
+     },
+     {
+      "source": "Fordham University",
+      "dates": "§/172014",
+      "location": "Bronx, NY",
+      "purpose": "Acceptance of Honorary Degree"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "Question and Answer Discussion"
+     },
+     {
+      "source": "Urol RON AER Re We Ra te",
+      "dates": "7112014",
+      "location": "LL Crarise et. Bran S",
+      "purpose": "Innovative Law and Policy Conference"
+     },
+     {
+      "source": "",
+      "dates": "9/11/2014",
+      "location": "",
+      "purpose": "Question and Answer Discussion at Law School"
+     },
+     {
+      "source": "Sibi i ei A =)",
+      "dates": "",
+      "location": "",
+      "purpose": "of New School of Luw Building"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "Audience Question and Answer Discussion"
+     },
+     {
+      "source": "Women Judges",
+      "dates": "Do erin A ERR AT aus 8 10/192014",
+      "location": "",
+      "purpose": "PE oy a Eh a at iy AR na in Organization's Annual Conference"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "Southern District of New York Court"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3045/sonia-sotomayor/disclosures/"
+   },
+   {
+    "id": 6369,
+    "year": 2013,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3045/sonia-sotomayor-disclosure.2013.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Hostos Commumty College",
+      "dates": "2/213",
+      "location": "Bronx, NY",
+      "purpose": "Question and Answer Discussion"
+     },
+     {
+      "source": "Ralph L. Carr Judicial Center",
+      "dates": "5/1 - 572013",
+      "location": "Denver, CO",
+      "purpose": "Keynote Address"
+     },
+     {
+      "source": "Cardmal Spellman High School",
+      "dates": "5/30 -6/2/13",
+      "location": "Bronx, NY",
+      "purpose": "Commencement Speech and meeting with students"
+     },
+     {
+      "source": "Marymount School",
+      "dates": "611 - 6/12/13",
+      "location": "New York, NY",
+      "purpose": "Commencement Address"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "K. Gould Award and Discussion with students"
+     },
+     {
+      "source": "University of Delaware",
+      "dates": "9/19/13",
+      "location": "Wilmington, DE",
+      "purpose": "Queshon and Answer Discussin with students"
+     },
+     {
+      "source": "Harvard Umversity",
+      "dates": "10/0 «100313",
+      "location": "Cambridge, MA",
+      "purpose": "Acceptance of DuBois Medal"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3045/sonia-sotomayor/disclosures/"
+   },
+   {
+    "id": 12856,
+    "year": 2012,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3045/sonia-sotomayor-disclosure.2012.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Ilands.",
+      "dates": "",
+      "location": "",
+      "purpose": "District Courts for Guam and the NMI"
+     },
+     {
+      "source": "Umiversity of Hawan Law School",
+      "dates": "1/29-2/3/12",
+      "location": "Honolulu, Hawan",
+      "purpose": "leaching"
+     },
+     {
+      "source": "Umiversity of Pennsylvania Law School",
+      "dates": "4/5/12",
+      "location": "Philadelphia, Pennsylvama",
+      "purpose": "Question and Answer Discussion"
+     },
+     {
+      "source": "New York University School of Law",
+      "dates": "49/12",
+      "location": "New York, NY",
+      "purpose": "Moot Court Judging"
+     },
+     {
+      "source": "New York University School ) of Law",
+      "dates": "S/16/16",
+      "location": "New York, NY",
+      "purpose": "Commencement Address"
+     },
+     {
+      "source": "Foundation",
+      "dates": "",
+      "location": "",
+      "purpose": "speaking events at Annual Convention"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3045/sonia-sotomayor/disclosures/"
+   },
+   {
+    "id": 11929,
+    "year": 2011,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3045/sonia-sotomayor-disclosure.2011.pdf",
+    "gifts": [
+     {
+      "source": "Butler Family",
+      "description": "Fine China",
+      "value": "$1,400.00"
+     }
+    ],
+    "reimbursements": [
+     {
+      "source": "Kansas State University",
+      "dates": "12711",
+      "location": "Manhattan, Kansas",
+      "purpose": "Lecture"
+     },
+     {
+      "source": "University of Kansas and Washburn University",
+      "dates": "1728011",
+      "location": "Lawrence, Kansas",
+      "purpose": "Question and Answer Presentation"
+     },
+     {
+      "source": "University of Chicago",
+      "dates": "1729-17311",
+      "location": "Chicago, Hhnois",
+      "purpose": "Question and Answer Presentation, Meetings"
+     },
+     {
+      "source": "Northwestern University",
+      "dates": "27m",
+      "location": "Evanston, lino",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Umiversaty of Califor, Berkeley",
+      "dates": "2/2 - 24/11",
+      "location": "Berkeley, California",
+      "purpose": "Moot Court Competition, Meetings"
+     },
+     {
+      "source": "Philadelphia Bar Association",
+      "dates": "ni",
+      "location": "Philadelphia, Pennsylvania",
+      "purpose": "Speech"
+     },
+     {
+      "source": "Columbia University",
+      "dates": "4m",
+      "location": "New York, New York",
+      "purpose": "Moot Court Competition"
+     },
+     {
+      "source": "Princeton Umversity",
+      "dates": "420/11",
+      "location": "Princeton, New Jersey",
+      "purpose": "Alumm Women's Conference"
+     },
+     {
+      "source": "University of South Carolina",
+      "dates": "5/5-5/711",
+      "location": "Columbia, South Caroling",
+      "purpose": "Commencement Speech"
+     },
+     {
+      "source": "1. US Embassy, El Salvador",
+      "dates": "8148/1811",
+      "location": "Sun Salvador, El Salvador",
+      "purpose": "Community Meetings"
+     },
+     {
+      "source": "Leadership Institute of Santa Fe Indian School",
+      "dates": "9/5.9/811",
+      "location": "Santa Fe, New Mexico",
+      "purpose": "Community Meetings"
+     },
+     {
+      "source": "Columbia University",
+      "dates": "10/21/11",
+      "location": "New York, New York",
+      "purpose": "Question and Answer Presentation"
+     },
+     {
+      "source": "Harvard University",
+      "dates": "1/17 - 1118/11",
+      "location": "Cambridge, Massachusetts",
+      "purpose": "Moot Court Competition"
+     },
+     {
+      "source": "Vermont Women's Enonomic Opportunity Conference",
+      "dates": "129 12/1001",
+      "location": "Randolph, Vermont",
+      "purpose": "Question and Answer Presentation"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3045/sonia-sotomayor/disclosures/"
+   },
+   {
+    "id": 361,
+    "year": 2010,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3045/sonia-sotomayor-disclosure.2010.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/3045/sonia-sotomayor/disclosures/"
+   },
+   {
+    "id": 26089,
+    "year": 2009,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3045/sonia-sotomayor-disclosure.2009.pdf",
+    "gifts": [
+     {
+      "source": "Dawn Cardi",
+      "description": "Paid for services of a personal shopper",
+      "value": "$500.00"
+     },
+     {
+      "source": "Marie Antonicci",
+      "description": "Gift Certificate to Day Spa",
+      "value": "$565.00"
+     },
+     {
+      "source": "Yale Law School",
+      "description": "Judical Robe",
+      "value": "$500.00"
+     },
+     {
+      "source": "Nancy Gray",
+      "description": "Art - Water Color of Three Owls for office",
+      "value": "$1,125.00"
+     }
+    ],
+    "reimbursements": [
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "39th Annual Leadership Conference"
+     },
+     {
+      "source": "Pepperdine University",
+      "dates": "3/19/2009-3/21/2009",
+      "location": "Malibu, California",
+      "purpose": "Byrne Judicial Clerkship Institute Conference"
+     },
+     {
+      "source": "American Civil Liberties Union",
+      "dates": "4/28/2009-5/4/2009",
+      "location": "San Juan, Pucrto Rico",
+      "purpose": "Speaker at American Civil Libertizs Union Event"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3045/sonia-sotomayor/disclosures/"
+   },
+   {
+    "id": 26612,
+    "year": 2008,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3045/sonia-sotomayor-disclosure.2008.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Administrative Office of the U S Courts",
+      "dates": "1/17/2008 - 1/18/2008",
+      "location": "Burlington, Vt",
+      "purpose": "Rep Circuit at Memorial"
+     },
+     {
+      "source": "Administrative Office of the U S Courts",
+      "dates": "2/09/2008 - 2/11/2008",
+      "location": "Washington, DC",
+      "purpose": "Judicial Committee Mtg"
+     },
+     {
+      "source": "Pepperdine University School of Law",
+      "dates": "3/13/2008 - 3/15/2008",
+      "location": "Malibu, Ca",
+      "purpose": "Educational Activity"
+     },
+     {
+      "source": "Administrative Office of the U S Courts",
+      "dates": "6/5/2008 - 6/7/2008",
+      "location": "New Paltz NY",
+      "purpose": "Judicial Conference"
+     },
+     {
+      "source": "Comell Law School",
+      "dates": "10/8/2008 - 10/9/2008",
+      "location": "Ithaca, NY",
+      "purpose": "LALSA Guest Speaker"
+     },
+     {
+      "source": "University of Hartford",
+      "dates": "10/20/2008 - 10/20/20 08",
+      "location": "Hartford, Ct",
+      "purpose": "Educational Seminar"
+     },
+     {
+      "source": "Administrative Office of the U S Courts",
+      "dates": "11/19/2008",
+      "location": "Washington, DC",
+      "purpose": "Judicial Committee Mtg"
+     },
+     {
+      "source": "Administrative Office of the U S Courts",
+      "dates": "12/3/08 - 12/12/08",
+      "location": "New Orleans La",
+      "purpose": "CACM Meeting"
+     },
+     {
+      "source": "Administrative Office of the U S Counts",
+      "dates": "6/16/2008 - 6/19/2008",
+      "location": "Minnesota",
+      "purpose": "CACM Meeting"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3045/sonia-sotomayor/disclosures/"
+   },
+   {
+    "id": 906,
+    "year": 2007,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3045/sonia-sotomayor-disclosure.2007.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/3045/sonia-sotomayor/disclosures/"
+   },
+   {
+    "id": 2633,
+    "year": 2006,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3045/sonia-sotomayor-disclosure.2006.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Hofstra University School of Law, Hempstead, New York",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Yale Law School, New Haven, Connecticut",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "University of Puerto Rico School of Law, San Juan, Puerto Rico",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Pepperdine University Law School, Malibu, California",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Pricewaterhouse Coopers, Scottsdale, Arizona",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3045/sonia-sotomayor/disclosures/"
+   },
+   {
+    "id": 26659,
+    "year": 2005,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3045/sonia-sotomayor-disclosure.2005.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "“isanic Nationa” 3ar Association, Wasington, DC",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Ue aw Schoo, Duriam, NC",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3045/sonia-sotomayor/disclosures/"
+   },
+   {
+    "id": 25574,
+    "year": 2004,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3045/sonia-sotomayor-disclosure.2004.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Marge and Ralph Shishido",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "American Constitution Society, Washington. D.C. ",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "University of Olinois Law School, Champaign, filincis ",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3045/sonia-sotomayor/disclosures/"
+   },
+   {
+    "id": 1918,
+    "year": 2003,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/3045/sonia-sotomayor-disclosure.2003.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Buffale Law Schoel, Buffalo, New York",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Princeton University, Williamsburg, VA",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Women's Bar Associatiun of New Yark, Syracuse . University, Swracuse, NY",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Indiana Univarsity School of Law, Indianapolis, Indiana",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Ended ind i Georgetown University Law Center, Washington DC",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/3045/sonia-sotomayor/disclosures/"
+   }
+  ],
+  "elena-kagan": [
+   {
+    "id": 34209,
+    "year": 2022,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1691/elena-kagan-disclosure.2022.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/1691/elena-kagan/disclosures/"
+   },
+   {
+    "id": 34198,
+    "year": 2021,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1691/elena-kagan-disclosure.2021.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/1691/elena-kagan/disclosures/"
+   },
+   {
+    "id": 30700,
+    "year": 2020,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1691/elena-kagan-disclosure.2020.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "NEW YORK STATE BAR ASSOCIATION",
+      "dates": "JANUARY 30 - FEBRUARY 1, 2020",
+      "location": "NEW YORK, NY",
+      "purpose": "SPEECH"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1691/elena-kagan/disclosures/"
+   },
+   {
+    "id": 33284,
+    "year": 2019,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1691/elena-kagan-disclosure.2019.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/1691/elena-kagan/disclosures/"
+   },
+   {
+    "id": 19436,
+    "year": 2018,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1691/elena-kagan-disclosure.2018.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "HARVARD LAW SCHOOL",
+      "dates": "AUGUST 26-31, 2018",
+      "location": "CAMBRIDGE. MA",
+      "purpose": "TEACHING, SPEECH"
+     },
+     {
+      "source": "YALE LAW SCHOOL",
+      "dates": "SEPTEMBER 12-15, 2018",
+      "location": "NEW HAVEN. CT",
+      "purpose": "CONFERENCE"
+     },
+     {
+      "source": "THE CITY UNIVERSITY OF NEW YORK",
+      "dates": "2018",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "COLUMBIA LAW SCHOOL",
+      "dates": "SEPTEMBER 21-22, 2018",
+      "location": "NEW YORK. NY",
+      "purpose": "SPEECH"
+     },
+     {
+      "source": "UNIVERSITY OF TORONTO",
+      "dates": "NOVEMBER 11-12, WIR",
+      "location": "TORONTO, ONTARIO",
+      "purpose": "SPEECH"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1691/elena-kagan/disclosures/"
+   },
+   {
+    "id": 6976,
+    "year": 2017,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1691/elena-kagan-disclosure.2017.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "YALE LAW SCHOOL",
+      "dates": "SEPTEMBER 14-16, 2017",
+      "location": "NEW HAVEN. CT",
+      "purpose": "CONFERENCE"
+     },
+     {
+      "source": "ILLINOIS INSTITUTE OF TECHNOLOGY",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1691/elena-kagan/disclosures/"
+   },
+   {
+    "id": 28903,
+    "year": 2016,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1691/elena-kagan-disclosure.2016.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "NEW YORK UNIVERSITY SCHOOL OF LAW",
+      "dates": "APRIL 4-5. 2016",
+      "location": "NEW YORK. NY",
+      "purpose": "SPEECH. MOOT COURT"
+     },
+     {
+      "source": "ROGERS COLLEGE OF LAW",
+      "dates": "016",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "HARVARD LAW SCHOOL",
+      "dates": "SEPTEMBER 6-10. 2016",
+      "location": "CAMBRIDGE. MA",
+      "purpose": "TEACHING. SPEECH"
+     },
+     {
+      "source": "YALE LAW SCHOOL",
+      "dates": "SEPTEMBER 21-24, 2016",
+      "location": "NEW HAVEN. CT",
+      "purpose": "CONFERENCE"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1691/elena-kagan/disclosures/"
+   },
+   {
+    "id": 18291,
+    "year": 2015,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1691/elena-kagan-disclosure.2015.pdf",
+    "gifts": [
+     {
+      "source": "THE UNIVERSITY OF CHICAGO LAW SCHOOL.",
+      "description": "THE PUBLIC AND ITS GOVERNMENT BY FELIX FRANKFURTER (FIRST EDITION: SIGNED BY AUTHOR)",
+      "value": "$499.94"
+     }
+    ],
+    "reimbursements": [
+     {
+      "source": "THE UNIVERSITY OF CHICAGO LAW SCHOOL",
+      "dates": "FEBRUARY -2, 2015",
+      "location": "CHICAGO, IL",
+      "purpose": "SPEECH"
+     },
+     {
+      "source": "STANFORD LAW SCHOOL",
+      "dates": "FEBRUARY 4-5. 2015",
+      "location": "STANFORD. CA",
+      "purpose": "SPEECH. MOOT COURT"
+     },
+     {
+      "source": "HARVARD LAW SCHOOL",
+      "dates": "JUNE 17, 2015",
+      "location": "CAMBRIDGE, MA",
+      "purpose": "SPEECH"
+     },
+     {
+      "source": "HARVARD LAW SCHOOL",
+      "dates": "SEPTEMBER 8-12, 2015",
+      "location": "CAMBRIDGE, MA",
+      "purpose": "TEACHING, SPEECH"
+     },
+     {
+      "source": "UNIVERSITY MORITZ COLLEGE OF LAW",
+      "dates": "ws",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "HARVARD LAW SCHOOL",
+      "dates": "NOVEMBER 15-18, 2018",
+      "location": "CAMBRIDGE. MA",
+      "purpose": "MOOT COURT. SPEECH"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1691/elena-kagan/disclosures/"
+   },
+   {
+    "id": 14472,
+    "year": 2014,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1691/elena-kagan-disclosure.2014.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "NEW YORK CITY BAR ASSOCIATION",
+      "dates": "FEBRUARY 13-4, 2014",
+      "location": "NEW YORK. NY",
+      "purpose": "SPEECH"
+     },
+     {
+      "source": "COLUMBIA LAW SCHOOL",
+      "dates": "APRIL 7-8, 2014",
+      "location": "NEW YORK. NY",
+      "purpose": "MOOT COURT"
+     },
+     {
+      "source": "NEW YORK UNIVERSITY",
+      "dates": "MAY 21, 2014",
+      "location": "NEW YORK, NY",
+      "purpose": "COMMENCEMENT"
+     },
+     {
+      "source": "HARVARD LAW SCHOOL",
+      "dates": "SEPTEMBER 1-7 2014",
+      "location": "CAMBRIDGE. MA",
+      "purpose": "TEACHING, SPEECH"
+     },
+     {
+      "source": "YALE LAW SCHOOL",
+      "dates": "SEPTEMBER 17-20, 2014",
+      "location": "NEW HAVEN. CT",
+      "purpose": "CONFERENCE"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1691/elena-kagan/disclosures/"
+   },
+   {
+    "id": 14940,
+    "year": 2013,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1691/elena-kagan-disclosure.2013.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "PACIFIC MCGEORGE SCHOOL OF LAW",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "TOURO SYNAGOGUE FOUNDATION",
+      "dates": "AUGUST 17-18, 2013",
+      "location": "NEWPORT. RI",
+      "purpose": "SPEECH"
+     },
+     {
+      "source": "HARVARD LAW SCHOOL",
+      "dates": "SEPTEMBER 2-8. 2013",
+      "location": "CAMBRIDGE. MA",
+      "purpose": "TEACHING, SPEECH"
+     },
+     {
+      "source": "SUPREME COURT HISTORICAL SOCIETY",
+      "dates": "OCTOBER 24-26, 2013",
+      "location": "NEW YORK. NY",
+      "purpose": "SPEECH"
+     },
+     {
+      "source": "HISTORICAL SOCIETY OF THE NEW YORK COURTS",
+      "dates": "OCTOBER 24-26. 2013",
+      "location": "NEW YORK, NY",
+      "purpose": "SPEECH"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1691/elena-kagan/disclosures/"
+   },
+   {
+    "id": 4638,
+    "year": 2011,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1691/elena-kagan-disclosure.2011.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Harvard Law School",
+      "dates": "April 8-10, 2011",
+      "location": "Cambridge, MA",
+      "purpose": "Speech"
+     },
+     {
+      "source": "University of New Mexico School of Law",
+      "dates": "May 13-14, 2011",
+      "location": "Albuquerque, NM",
+      "purpose": "Commencement Speech"
+     },
+     {
+      "source": "New York Umiversity Law School",
+      "dates": "July 11-15, 2011",
+      "location": "Argentina",
+      "purpose": "Conference"
+     },
+     {
+      "source": "Aspen Institute",
+      "dates": "July 29-Aug 4, 2011",
+      "location": "Aspen, CO",
+      "purpose": "Speech, Conference"
+     },
+     {
+      "source": "Harvard Law School",
+      "dates": "Sept 4-11,2011",
+      "location": "Cambridge, MA",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Nanonal Conterence of Bankruptcy Judges",
+      "dates": "Oct 14-15. 2011",
+      "location": "Tampa, FL",
+      "purpose": "Speech"
+     },
+     {
+      "source": "American College of Trial Lawyers",
+      "dates": "Oct 20-23, 2011",
+      "location": "Palm Springs, CA",
+      "purpose": "Speech"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1691/elena-kagan/disclosures/"
+   }
+  ],
+  "neil-gorsuch": [
+   {
+    "id": 34202,
+    "year": 2022,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1250/neil-mcgill-gorsuch-disclosure.2022.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/1250/neil-mcgill-gorsuch/disclosures/"
+   },
+   {
+    "id": 34191,
+    "year": 2021,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1250/neil-mcgill-gorsuch-disclosure.2021.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/1250/neil-mcgill-gorsuch/disclosures/"
+   },
+   {
+    "id": 30680,
+    "year": 2020,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1250/neil-mcgill-gorsuch-disclosure.2020.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "The Federalist Society",
+      "dates": "February 16 - 17, 2020",
+      "location": "Denver, CO",
+      "purpose": "Educational program"
+     },
+     {
+      "source": "Ave Maria Law School",
+      "dates": "March 10 - 12, 2020",
+      "location": "Naples, FL",
+      "purpose": "Educational program"
+     },
+     {
+      "source": "George Mason University National Security Institute",
+      "dates": "June 12 - 24, 2020",
+      "location": "Williamsburg, VA",
+      "purpose": "Educational program"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1250/neil-mcgill-gorsuch/disclosures/"
+   },
+   {
+    "id": 29412,
+    "year": 2019,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1250/neil-mcgill-gorsuch-disclosure.2019.pdf",
+    "gifts": [
+     {
+      "source": "Bob Todd",
+      "description": "Fishing rod",
+      "value": "$500.00"
+     }
+    ],
+    "reimbursements": [
+     {
+      "source": "American College of Trial Lawyers Conference",
+      "dates": "March 1-5, 2019",
+      "location": "La Quinta, CA",
+      "purpose": "Award and speech"
+     },
+     {
+      "source": "The Colonial Williamsburg Foundation",
+      "dates": "April 26-27, 2019",
+      "location": "Williamsburg, VA",
+      "purpose": "Board meeting"
+     },
+     {
+      "source": "ABA International Law Section",
+      "dates": "June 29 - July 1, 2019",
+      "location": "Oxford, United Kingdom",
+      "purpose": "Speech and educational program"
+     },
+     {
+      "source": "The Honourable Society of the Middle Temple",
+      "dates": "July 2-3, 2019",
+      "location": "London, United Kingdom",
+      "purpose": "Speech and educational program"
+     },
+     {
+      "source": "George Mason University National Security Institute",
+      "dates": "July 19 - August 5, 2019",
+      "location": "Padua, Italy",
+      "purpose": "Educational program"
+     },
+     {
+      "source": "Penguin Random House LLC",
+      "dates": "September 6, 2019",
+      "location": "Austin, TX",
+      "purpose": "Participation in book- related event"
+     },
+     {
+      "source": "Texas Supreme Court Historical Society",
+      "dates": "September 6-7, 2019",
+      "location": "Austin, TX",
+      "purpose": "Speech and educational program"
+     },
+     {
+      "source": "Colorado Judicial Branch",
+      "dates": "September 7-9, 2019",
+      "location": "Vail, CO",
+      "purpose": "Speech and educational program"
+     },
+     {
+      "source": "Penguin Random House LLC",
+      "dates": "September 9-12, 2019",
+      "location": "Los Angeles, CA",
+      "purpose": "Participation in book- related events"
+     },
+     {
+      "source": "Penguin Random House LLC",
+      "dates": "September 17-20, 2019",
+      "location": "Philadelphia, PA; Dallas, TX; Austin, TX",
+      "purpose": "Participation in book- related events"
+     },
+     {
+      "source": "Orrin G. Hatch Foundation",
+      "dates": "September 20-21, 2019",
+      "location": "Salt Lake City, UT",
+      "purpose": "Speech and educational program"
+     },
+     {
+      "source": "Penguin Random House LLC",
+      "dates": "September 20-21, 2019",
+      "location": "Salt Lake City, UT",
+      "purpose": "Participation in book- related events"
+     },
+     {
+      "source": "National Constitution Center",
+      "dates": "October 26-27, 2019",
+      "location": "Philadelphia, PA",
+      "purpose": "Speech and board meeting"
+     },
+     {
+      "source": "The Colonial Williamsburg Foundation",
+      "dates": "November 22-23, 2019",
+      "location": "Williamsburg, VA",
+      "purpose": "Board meeting"
+     },
+     {
+      "source": "Academy of Achievement",
+      "dates": "December 14-15, 2019",
+      "location": "Washington, VA",
+      "purpose": "Educational program"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1250/neil-mcgill-gorsuch/disclosures/"
+   },
+   {
+    "id": 19414,
+    "year": 2018,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1250/neil-mcgill-gorsuch-disclosure.2018.pdf",
+    "gifts": [
+     {
+      "source": "The Hon. Terrence (YBrien",
+      "description": "Watercolor Pamting",
+      "value": "$1,000.00"
+     }
+    ],
+    "reimbursements": [
+     {
+      "source": "Hughes Center for Public Policy",
+      "dates": "01/24/2018",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "George Mason University",
+      "dates": "07/12/18 - 0802/18",
+      "location": "Padua, Ttaly",
+      "purpose": "Educational Program"
+     },
+     {
+      "source": "The Thomistic Institute",
+      "dates": "10/19/18 - 10/20/18",
+      "location": "Cambridge, MA",
+      "purpose": "Educational Program"
+     },
+     {
+      "source": "The Colonial Williamsburg Foundation",
+      "dates": "1HIIS- 11/17/18",
+      "location": "Willumsburg, VA",
+      "purpose": "Board Meeting"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1250/neil-mcgill-gorsuch/disclosures/"
+   },
+   {
+    "id": 17278,
+    "year": 2017,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1250/neil-mcgill-gorsuch-disclosure.2017.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Marshall Scholars Organization",
+      "dates": "06/02/2017 06/03:2017",
+      "location": "Boston, MA",
+      "purpose": "Educational program"
+     },
+     {
+      "source": "University of Kentucky and University of Louisville",
+      "dates": "09/21/2017 09/22/2017",
+      "location": "Louisville, KY and Lexington, KY",
+      "purpose": "Educational program"
+     },
+     {
+      "source": "Academy of Achievement Dinner",
+      "dates": "10/16:2017 10/19/2017",
+      "location": "London, bogland",
+      "purpose": "Award, speech, educational program"
+     },
+     {
+      "source": "Harvard Law School",
+      "dates": "10°26:2017",
+      "location": "Cambridge, MA",
+      "purpose": "Attended Harvard Law School's Bicentennial"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1250/neil-mcgill-gorsuch/disclosures/"
+   },
+   {
+    "id": 10329,
+    "year": 2016,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1250/neil-mcgill-gorsuch-disclosure.2016.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Case Western Education Seminar",
+      "dates": "04/06/2016 (4/08/2016",
+      "location": "Cleveland, OH",
+      "purpose": "Educational Program"
+     },
+     {
+      "source": "US/UK Legal Exchinge",
+      "dates": "09/16/2016 09/23/2016",
+      "location": "Philadelphia, PA and Washington, DC",
+      "purpose": "Educational Program"
+     },
+     {
+      "source": "Academic Exchange",
+      "dates": "12/10:2016 - 12/19/2016",
+      "location": "Israel",
+      "purpose": "Educational Program"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1250/neil-mcgill-gorsuch/disclosures/"
+   },
+   {
+    "id": 15027,
+    "year": 2015,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1250/neil-mcgill-gorsuch-disclosure.2015.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Renaissance Weekend",
+      "dates": "0702/1507/06/15",
+      "location": "Jackson Hole, WY",
+      "purpose": "educational program"
+     },
+     {
+      "source": "American College of Trial Luawyers-Legal Exchange.",
+      "dates": "0903/1500/1 1/2018",
+      "location": "London, England",
+      "purpose": "educational program"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1250/neil-mcgill-gorsuch/disclosures/"
+   },
+   {
+    "id": 6851,
+    "year": 2014,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1250/neil-mcgill-gorsuch-disclosure.2014.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "New York University",
+      "dates": "J06/14-408/14",
+      "location": "New York City, NY",
+      "purpose": "educational program"
+     },
+     {
+      "source": "Federal Judges Assoc",
+      "dates": "5/03/14-5/04/14",
+      "location": "Washington, DC",
+      "purpose": "meeting"
+     },
+     {
+      "source": "Umversity of Chicago ) Visiting Committee",
+      "dates": "10/29/15-1v31/14",
+      "location": "Chicago, IL",
+      "purpose": "educational program"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1250/neil-mcgill-gorsuch/disclosures/"
+   },
+   {
+    "id": 18789,
+    "year": 2013,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1250/neil-mcgill-gorsuch-disclosure.2013.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/1250/neil-mcgill-gorsuch/disclosures/"
+   },
+   {
+    "id": 17865,
+    "year": 2012,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1250/neil-mcgill-gorsuch-disclosure.2012.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Harvard Law School",
+      "dates": "4/3/23-4/5/12",
+      "location": "Cambridge, MA",
+      "purpose": "educational program"
+     },
+     {
+      "source": "Chaves County Bar Association",
+      "dates": "4726/12-4/27/12",
+      "location": "Roswell, N\\M",
+      "purpose": "law day lecture"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1250/neil-mcgill-gorsuch/disclosures/"
+   },
+   {
+    "id": 20700,
+    "year": 2011,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1250/neil-mcgill-gorsuch-disclosure.2011.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Federal Judges Association",
+      "dates": "4/12/11-4/14/11",
+      "location": "Washington, DC",
+      "purpose": "meeting"
+     },
+     {
+      "source": "University of Texas Law School",
+      "dates": "3/31/11-4/2/11",
+      "location": "Austin, TX",
+      "purpose": "cducational conference"
+     },
+     {
+      "source": "University of Notre Dame Law School",
+      "dates": "9/8/11-9/10/11",
+      "location": "South Bend, IN",
+      "purpose": "conference"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1250/neil-mcgill-gorsuch/disclosures/"
+   },
+   {
+    "id": 13217,
+    "year": 2011,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1250/neil-mcgill-gorsuch-disclosure.2011_1.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Federal Judges Association",
+      "dates": "12/11-4/14/11",
+      "location": "Washington, DC",
+      "purpose": "meeting"
+     },
+     {
+      "source": "University of Texas Law School",
+      "dates": "33011-42201",
+      "location": "Austin, TX",
+      "purpose": "educational conference"
+     },
+     {
+      "source": "University of Notre Dame Law School",
+      "dates": "91191011",
+      "location": "South Bend, IN",
+      "purpose": "conference"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1250/neil-mcgill-gorsuch/disclosures/"
+   },
+   {
+    "id": 22508,
+    "year": 2010,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1250/neil-mcgill-gorsuch-disclosure.2010.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Oklahoma City University School of Law",
+      "dates": "2/9/10-2/12/10",
+      "location": "Oklahoma City",
+      "purpose": "teaching"
+     },
+     {
+      "source": "University of Michigan Law School",
+      "dates": "4/6/10-4/8/10",
+      "location": "Ann Arbor",
+      "purpose": "moot court"
+     },
+     {
+      "source": "University of Chicago Law School",
+      "dates": "4/21/10-4/23/10",
+      "location": "Chicago",
+      "purpose": "moot court"
+     },
+     {
+      "source": "Federal Judges Association",
+      "dates": "5/22/10-5/26/10",
+      "location": "Washington. D.C",
+      "purpose": "conference"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1250/neil-mcgill-gorsuch/disclosures/"
+   },
+   {
+    "id": 27436,
+    "year": 2009,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1250/neil-mcgill-gorsuch-disclosure.2009.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "J]. Yale Law School Fed. Soc",
+      "dates": "2/4/09.2/5/09",
+      "location": "New Haven",
+      "purpose": "talk"
+     },
+     {
+      "source": "USC Law School",
+      "dates": "3/5/09-3/6/09",
+      "location": "Los Angeles",
+      "purpose": "moot court"
+     },
+     {
+      "source": "Princeton Univ. Witherspoon Institute",
+      "dates": "4/16/09-4/18/09",
+      "location": "Princeton",
+      "purpose": "conference"
+     },
+     {
+      "source": "4, Federal Bar Association",
+      "dates": "12/14/09-12/15/09",
+      "location": "Oklahoma City",
+      "purpose": "talk"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1250/neil-mcgill-gorsuch/disclosures/"
+   },
+   {
+    "id": 21084,
+    "year": 2008,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1250/neil-mcgill-gorsuch-disclosure.2008.pdf",
+    "gifts": [
+     {
+      "source": "Canon & Lyndia Harvey (friends)",
+      "description": "hospitality (value 1s source's estimate)",
+      "value": "$400.00"
+     }
+    ],
+    "reimbursements": [
+     {
+      "source": "Icago Law School and Univ. of Michagan Law School",
+      "dates": "",
+      "location": "fcc domeggtog © Judi nod vi dle int or Jl Sg cli",
+      "purpose": "SELF Sr"
+     },
+     {
+      "source": "Florida State University Law S chool",
+      "dates": "5/2/08-5/3/08",
+      "location": "Tallahassee, FL",
+      "purpose": "commencement speech"
+     },
+     {
+      "source": "Federal Bar Association of Okl ahoma City",
+      "dates": "10/23/08-10/23/08",
+      "location": "Oklahoma City, OK",
+      "purpose": "appellate advocacy panel"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1250/neil-mcgill-gorsuch/disclosures/"
+   },
+   {
+    "id": 27487,
+    "year": 2007,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1250/neil-mcgill-gorsuch-disclosure.2007.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Jim Weinstein",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Wake Forest Law School",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Federal Judicial Center",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "NYU program for new appellate judges",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Foundation of US Government",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     },
+     {
+      "source": "Harvard Law School",
+      "dates": "",
+      "location": "",
+      "purpose": ""
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1250/neil-mcgill-gorsuch/disclosures/"
+   },
+   {
+    "id": 23775,
+    "year": 2006,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1250/neil-mcgill-gorsuch-disclosure.2006.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/1250/neil-mcgill-gorsuch/disclosures/"
+   },
+   {
+    "id": 31697,
+    "year": 2005,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1250/neil-mcgill-gorsuch-disclosure.2005.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/1250/neil-mcgill-gorsuch/disclosures/"
+   }
+  ],
+  "brett-kavanaugh": [
+   {
+    "id": 34211,
+    "year": 2022,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1713/brett-m-kavanaugh-disclosure.2022.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Notre Dame, Kellogg Institute for International Studies",
+      "dates": "September 20-23, 2022",
+      "location": "Rome, Italy",
+      "purpose": "Speak to and participate in conference with foreign and American judges."
+     },
+     {
+      "source": "Notre Dame, Kellogg Institute for International Studies",
+      "dates": "September 20-23, 2022",
+      "location": "Rome, Italy",
+      "purpose": "Speak to and participate in conference with foreign and American judges."
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1713/brett-m-kavanaugh/disclosures/"
+   },
+   {
+    "id": 34203,
+    "year": 2021,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1713/brett-m-kavanaugh-disclosure.2021.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/1713/brett-m-kavanaugh/disclosures/"
+   },
+   {
+    "id": 30791,
+    "year": 2020,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1713/brett-m-kavanaugh-disclosure.2020.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Antonin Scalia Law School, George Mason University",
+      "dates": "August 8-15, 2020",
+      "location": "Farmington, PA",
+      "purpose": "Teach 2-credit class on the Supreme Court's 2019 Term."
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1713/brett-m-kavanaugh/disclosures/"
+   },
+   {
+    "id": 33291,
+    "year": 2019,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1713/brett-m-kavanaugh-disclosure.2019.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Seventh Circuit Bar Association",
+      "dates": "May 6-8, 2019",
+      "location": "Milwaukee, WI",
+      "purpose": "Speak at Judicial Conference of Seventh Circuit."
+     },
+     {
+      "source": "Antonin Scalia Law School, George Mason University",
+      "dates": "July 20 - August 3, 2019",
+      "location": "Egham, UK",
+      "purpose": "Teach 2-credit class on Creation of the Constitution."
+     },
+     {
+      "source": "American Academy of Achievement",
+      "dates": "September 13-15, 2019",
+      "location": "New York, NY",
+      "purpose": "Speak at Achievement Summit."
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1713/brett-m-kavanaugh/disclosures/"
+   },
+   {
+    "id": 19523,
+    "year": 2018,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1713/brett-m-kavanaugh-disclosure.2018.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Notre Dame Law School } (Federalist Society)",
+      "dates": "February 22-24, 2018",
+      "location": "South Bend, IN",
+      "purpose": "Speak to Notre Dame Federalist Society."
+     },
+     {
+      "source": "(Federalist Society)",
+      "dates": "",
+      "location": "",
+      "purpose": "speak to Harvard Black Law Students Association"
+     },
+     {
+      "source": "Society)",
+      "dates": "",
+      "location": "",
+      "purpose": "Society and to Yale Black Law Students Association"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1713/brett-m-kavanaugh/disclosures/"
+   },
+   {
+    "id": 9363,
+    "year": 2017,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1713/brett-m-kavanaugh-disclosure.2017.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Notre Dame Law School",
+      "dates": "February 2-3, 2017",
+      "location": "South Bend, IN",
+      "purpose": "Deliver speech at law review symposium."
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "Society and to Yale Black Law Students Association"
+     },
+     {
+      "source": "ER ef a naw ie",
+      "dates": "pod IH) ASS swt Sry pd",
+      "location": "vi rhea JB arena",
+      "purpose": "Society seminar with Robert Post."
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "students in conversation moderated by Dean."
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1713/brett-m-kavanaugh/disclosures/"
+   },
+   {
+    "id": 15957,
+    "year": 2016,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1713/brett-m-kavanaugh-disclosure.2016.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "a paper to Public Law Workshop class."
+     },
+     {
+      "source": "",
+      "dates": "Tih",
+      "location": "",
+      "purpose": "conference on Presidential Power."
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "to students about the Presidency."
+     },
+     {
+      "source": "Lewis and Clark Law School",
+      "dates": "October 3-5, 2016",
+      "location": "Portland, OR",
+      "purpose": "Deliver annual Anthony M Kennedy lecture."
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1713/brett-m-kavanaugh/disclosures/"
+   },
+   {
+    "id": 12600,
+    "year": 2015,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1713/brett-m-kavanaugh-disclosure.2015.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Marquette Law School",
+      "dates": "March 2-4, 2015",
+      "location": "Milwaukee, WI",
+      "purpose": "Speak to students, Deliver Hallows Lecture,"
+     },
+     {
+      "source": "NYU Law School",
+      "dates": "April 6-7, 2015",
+      "location": "New York, NY",
+      "purpose": "Judge moot court competition."
+     },
+     {
+      "source": "Constitution Society)",
+      "dates": "",
+      "location": "",
+      "purpose": "student group wi Judge Srinivasan"
+     },
+     {
+      "source": "Harvard Law School",
+      "dates": "September-October 2015",
+      "location": "Cambridge, MA",
+      "purpose": "Teach 3-credit Separation of Powers class."
+     },
+     {
+      "source": "Yale Law School Federalist Society",
+      "dates": "October 22-23, 2015",
+      "location": "New Haven, CT",
+      "purpose": "Speak to student group"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1713/brett-m-kavanaugh/disclosures/"
+   },
+   {
+    "id": 15330,
+    "year": 2014,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1713/brett-m-kavanaugh-disclosure.2014.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Harvard Law School",
+      "dates": "January 5-22, 2014",
+      "location": "Cambndge, MA",
+      "purpose": "Teach 3-credit Separation of Powers class."
+     },
+     {
+      "source": "Federalist Society/ American Constitution Society",
+      "dates": "",
+      "location": "",
+      "purpose": "with Judge Tatel at point appearance."
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "competition and give talk to students."
+     },
+     {
+      "source": "",
+      "dates": "Para Erg te SH Ton A re TRIE re Tr",
+      "location": "",
+      "purpose": "competition and give talk to students."
+     },
+     {
+      "source": "University of Chicago Law School",
+      "dates": "March 5.7, 2014",
+      "location": "Chicago, IL",
+      "purpose": "Give talks to students and faculty."
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1713/brett-m-kavanaugh/disclosures/"
+   },
+   {
+    "id": 9238,
+    "year": 2013,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1713/brett-m-kavanaugh-disclosure.2013.pdf",
+    "gifts": [
+     {
+      "source": "Notre Dame Law School",
+      "description": "$2000 to Washington Jesuit Academy, Washmgton, DC, by Law School",
+      "value": "$2,000.00"
+     }
+    ],
+    "reimbursements": [
+     {
+      "source": "Harvard Law School",
+      "dates": "January 7-23, 2013",
+      "location": "Cambndge, MA",
+      "purpose": "Teach Sepuration of Powers class."
+     },
+     {
+      "source": "Practising Law Institute",
+      "dates": "March 20, 2013",
+      "location": "New York, NY",
+      "purpose": "Speak on appellate law panel to attorneys."
+     },
+     {
+      "source": "Opperman LIA New Appellate Judges Seminar",
+      "dates": "",
+      "location": "",
+      "purpose": "federal and state appellate judges."
+     },
+     {
+      "source": "Case Western Reserve Law School",
+      "dates": "September 30- October 2, 2013",
+      "location": "Cleveland, Ohio",
+      "purpose": "Give annual Canary Lecture,"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "Assn, Law Journal, and cluss."
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1713/brett-m-kavanaugh/disclosures/"
+   },
+   {
+    "id": 13687,
+    "year": 2012,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1713/brett-m-kavanaugh-disclosure.2012.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Harvard Law School",
+      "dates": "January 3-18, 2012",
+      "location": "Cambridge, MA",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Kansas Law School and } Federalist Society",
+      "dates": "February 1-2, 2012",
+      "location": "Lawrence, KS",
+      "purpose": "Teach class, speech to students"
+     },
+     {
+      "source": "Federalist Society",
+      "dates": "",
+      "location": "",
+      "purpose": "Federalist Society Student Symposium"
+     },
+     {
+      "source": "Yale Law School",
+      "dates": "April 23.25, 2012",
+      "location": "New Haven, CT",
+      "purpose": "Moot court and speak to several student groups"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1713/brett-m-kavanaugh/disclosures/"
+   },
+   {
+    "id": 16419,
+    "year": 2011,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1713/brett-m-kavanaugh-disclosure.2011.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Harvard Law School",
+      "dates": "January 3-19, 2011",
+      "location": "Cambridge, MA",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Duke Law School",
+      "dates": "February 21-22, 2011",
+      "location": "Durham, NC",
+      "purpose": "Moot Court"
+     },
+     {
+      "source": "UCLA Law School",
+      "dates": "March 9-13, 2011",
+      "location": "Los Angeles, CA",
+      "purpose": "Moot Court"
+     },
+     {
+      "source": "Pepperdine Law School = Judicial Clerkship Institute",
+      "dates": "March 18-20, 2011",
+      "location": "Malibu, CA",
+      "purpose": "Speak to future federil judicial law clerks"
+     },
+     {
+      "source": "Fordham Law School",
+      "dates": "March 27-27, 2011",
+      "location": "New York, NY",
+      "purpose": "Moot Court"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1713/brett-m-kavanaugh/disclosures/"
+   },
+   {
+    "id": 25521,
+    "year": 2010,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1713/brett-m-kavanaugh-disclosure.2010.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Harvard Law School",
+      "dates": "Jan. 4-22, 2010",
+      "location": "Cambndge, MA",
+      "purpose": "Teaching"
+     },
+     {
+      "source": "Pepperdine Law School -- Judicial Clerkship Institute",
+      "dates": "March 19-22, 2010",
+      "location": "Malibu, CA",
+      "purpose": "Lecture to future federal law clerks"
+     },
+     {
+      "source": "Yale Law School",
+      "dates": "March 23-24, 2010",
+      "location": "New Haven, CT",
+      "purpose": "Speak on panel at Yale Law School"
+     },
+     {
+      "source": "NYU Law School",
+      "dates": "April 13-14, 2010",
+      "location": "New York, NY",
+      "purpose": "Moot Court"
+     },
+     {
+      "source": "Columbia Law School",
+      "dates": "April 14-15. 2010",
+      "location": "New York, NY",
+      "purpose": "Speak to class at Columbia Law School"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1713/brett-m-kavanaugh/disclosures/"
+   },
+   {
+    "id": 25505,
+    "year": 2009,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1713/brett-m-kavanaugh-disclosure.2009.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "At 2 {QE LAW Sev ace",
+      "dates": "OCT: is-17, 01",
+      "location": "NEW HAVEN, CT",
+      "purpose": "S PERE on ANTL"
+     },
+     {
+      "source": "HR ER",
+      "dates": "CNN",
+      "location": "",
+      "purpose": ""
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1713/brett-m-kavanaugh/disclosures/"
+   },
+   {
+    "id": 26663,
+    "year": 2008,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1713/brett-m-kavanaugh-disclosure.2008.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/1713/brett-m-kavanaugh/disclosures/"
+   },
+   {
+    "id": 26416,
+    "year": 2007,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1713/brett-m-kavanaugh-disclosure.2007.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/1713/brett-m-kavanaugh/disclosures/"
+   },
+   {
+    "id": 24902,
+    "year": 2006,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1713/brett-m-kavanaugh-disclosure.2006.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/1713/brett-m-kavanaugh/disclosures/"
+   }
+  ],
+  "amy-coney-barrett": [
+   {
+    "id": 34199,
+    "year": 2022,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/8543/amy-coney-barrett-disclosure.2022.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/8543/amy-coney-barrett/disclosures/"
+   },
+   {
+    "id": 34194,
+    "year": 2021,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/8543/amy-coney-barrett-disclosure.2021.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/8543/amy-coney-barrett/disclosures/"
+   },
+   {
+    "id": 30679,
+    "year": 2020,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/8543/amy-coney-barrett-disclosure.2020.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "George Washington University",
+      "dates": "January 29-31, 2020",
+      "location": "Washington, DC",
+      "purpose": "Moot Court Competition"
+     },
+     {
+      "source": "University of Notre Dame",
+      "dates": "February 19-23, 2020",
+      "location": "London, UK",
+      "purpose": "Notre Dame London Law Conference"
+     },
+     {
+      "source": "Shakespeare Theatre Company",
+      "dates": "February 28-29, 2020",
+      "location": "Washington, DC",
+      "purpose": "Mock Trial program"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/8543/amy-coney-barrett/disclosures/"
+   },
+   {
+    "id": 33289,
+    "year": 2019,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/8543/amy-coney-barrett-disclosure.2019.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Vanderbilt University",
+      "dates": "February 1-2. 2019",
+      "location": "Nashville. TN",
+      "purpose": "Moot Court Competition"
+     },
+     {
+      "source": "Notre Dame Club of ‘Washington",
+      "dates": "February 19-20, 2019",
+      "location": "Washington, DC",
+      "purpose": "Notre Dame alumni lecture - educational"
+     },
+     {
+      "source": "Federalist Society",
+      "dates": "April 4-5, 2019",
+      "location": "Charlottesville, VA",
+      "purpose": "Federalist Society Lecture educational"
+     },
+     {
+      "source": "Federalist Society",
+      "dates": "April 11-14, 2019",
+      "location": "New Orleans. LA",
+      "purpose": "Federalist Society Lecture educational"
+     },
+     {
+      "source": "George Mason University",
+      "dates": "April 25-26, 2019",
+      "location": "Arlington, VA",
+      "purpose": "Scalia Forum Panelist"
+     },
+     {
+      "source": "Georgetown Law School",
+      "dates": "May 21-23. 2019",
+      "location": "Washington, DC",
+      "purpose": "Lecture - educational"
+     },
+     {
+      "source": "Bngham Young University",
+      "dates": "September 4-7, 2019",
+      "location": "Salt Lake City, UT",
+      "purpose": "Reuben Clark Law School - BYU Founders Day Lecture"
+     },
+     {
+      "source": "William & Mary Law School",
+      "dates": "September 13-15 2019",
+      "location": "Williamsburg, VA",
+      "purpose": "Supreme Court Preview"
+     },
+     {
+      "source": "Case Western Law School",
+      "dates": "Sept 19-20, 2019",
+      "location": "Cleveland. OH",
+      "purpose": "Sumner Canary Lecture educational"
+     },
+     {
+      "source": "Princeton University",
+      "dates": "October 17-18. 2019",
+      "location": "Princeton. NJ",
+      "purpose": "Walter F. Murphy Lecture educational"
+     },
+     {
+      "source": "Federalist Society",
+      "dates": "November 14-16. 2019",
+      "location": "Washington, DC",
+      "purpose": "Federalist Society National Lawyers Convention Panelis'"
+     },
+     {
+      "source": "Federalist Society",
+      "dates": "February 25, 2019",
+      "location": "Philadelphia, PA",
+      "purpose": "Federalist Society Lecture >ducational"
+     },
+     {
+      "source": "Villanova Law School",
+      "dates": "-ebruary 25. 2019",
+      "location": "Villanova, PA",
+      "purpose": "ecture"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/8543/amy-coney-barrett/disclosures/"
+   },
+   {
+    "id": 18341,
+    "year": 2018,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/8543/amy-coney-barrett-disclosure.2018.pdf",
+    "gifts": [
+     {
+      "source": "LUmversity of Notre Dame Law School",
+      "description": "Judicial Robe and Shipping",
+      "value": "$570.27"
+     },
+     {
+      "source": "University of Notre Dame Law School",
+      "description": "Catering, Flowers, and Parking for Investiture Ceremony",
+      "value": "$23,793.44"
+     }
+    ],
+    "reimbursements": [
+     {
+      "source": "Federalist Society. Washington DC",
+      "dates": "March 5-6, 2018",
+      "location": "New York, NY",
+      "purpose": "Columbia Law School Educational"
+     },
+     {
+      "source": "Federalist Society, } Washington DC",
+      "dates": "March 9-11, 2018",
+      "location": "Washington, DC",
+      "purpose": "National Student Symposium"
+     },
+     {
+      "source": "Federalist Society. Washington DC",
+      "dates": "March 17-18, 2018",
+      "location": "Hillsdale, M1",
+      "purpose": "Hillsdale College Educational"
+     },
+     {
+      "source": "Harvard University",
+      "dates": "March 19-20, 2018",
+      "location": "Boston, Massachusetts",
+      "purpose": "Ames Moot Court Competition"
+     },
+     {
+      "source": "",
+      "dates": "",
+      "location": "",
+      "purpose": "C ‘onference oh Habeas in Wartime"
+     },
+     {
+      "source": "University of Notre Dame",
+      "dates": "June 2-5, 2018",
+      "location": "Seattle, WA",
+      "purpose": "Hesburgh Lecture Educational"
+     },
+     {
+      "source": "Federalist Society Washington, DC",
+      "dates": "September 26-28, 2018",
+      "location": "Palo Alto, CA",
+      "purpose": "Stanford Law School Educational activity"
+     },
+     {
+      "source": "George Mason University",
+      "dates": "October 3-4, 2018",
+      "location": "Arlington VA and Washmgton, DC",
+      "purpose": "Scalia Tribute"
+     },
+     {
+      "source": "Diocese of Dallas. ~~",
+      "dates": "",
+      "location": "",
+      "purpose": "General Assembly keynote address"
+     },
+     {
+      "source": "University of Notre Dame",
+      "dates": "October 18-19, 2018",
+      "location": "Savannah, GA",
+      "purpose": "Hesburgh Lecture Educational"
+     },
+     {
+      "source": "Federahst Society, ) Washington DC",
+      "dates": "November 14-15, 018",
+      "location": "Washingon, DC",
+      "purpose": "Federalist Society Lawyers Convention"
+     },
+     {
+      "source": "Federalist Society. Washington DC",
+      "dates": "November 29-30, 2018",
+      "location": "New Haven, CT",
+      "purpose": "Yale Law School Educational"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/8543/amy-coney-barrett/disclosures/"
+   },
+   {
+    "id": 34178,
+    "year": 2016,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/8543/amy-coney-barrett-disclosure.2016.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/8543/amy-coney-barrett/disclosures/"
+   }
+  ],
+  "ketanji-brown-jackson": [
+   {
+    "id": 34210,
+    "year": 2022,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1609/ketanji-brown-jackson-disclosure.2022.pdf",
+    "gifts": [
+     {
+      "source": "John Steele",
+      "description": "Painting",
+      "value": "$580.00"
+     },
+     {
+      "source": "Oprah Winfrey",
+      "description": "Congratulatory floral arrangement",
+      "value": "$1,200.00"
+     },
+     {
+      "source": "Advance Magazine Publishers Inc., d/b/a Condé Nast/Vogue Magazine",
+      "description": "Designer dress and jacket worn in photo shoot",
+      "value": "$6,580.00"
+     },
+     {
+      "source": "John Steele",
+      "description": "Painting",
+      "value": "$580.00"
+     },
+     {
+      "source": "Oprah Winfrey",
+      "description": "Congratulatory floral arrangement",
+      "value": "$1,200.00"
+     },
+     {
+      "source": "Advance Magazine Publishers Inc., d/b/a Condé Nast/Vogue Magazine",
+      "description": "Designer dress and jacket worn in photo shoot",
+      "value": "$6,580.00"
+     }
+    ],
+    "reimbursements": [
+     {
+      "source": "Harvard University",
+      "dates": "May 24-27, 2022",
+      "location": "Boston, MA",
+      "purpose": "Board of Overseers Meeting & Commencement"
+     },
+     {
+      "source": "Harvard University",
+      "dates": "May 24-27, 2022",
+      "location": "Boston, MA",
+      "purpose": "Board of Overseers Meeting & Commencement"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1609/ketanji-brown-jackson/disclosures/"
+   },
+   {
+    "id": 34197,
+    "year": 2021,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1609/ketanji-brown-jackson-disclosure.2021.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/1609/ketanji-brown-jackson/disclosures/"
+   },
+   {
+    "id": 34078,
+    "year": 2020,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1609/ketanji-brown-jackson-disclosure.2020_1.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "ALI",
+      "dates": "01/15/2020-01/17/2020",
+      "location": "0 Philadelphia, PA",
+      "purpose": "ALI Council Meeting"
+     },
+     {
+      "source": "University of Michigan",
+      "dates": "01/19/2020-01/21/2020",
+      "location": "0 Ann Arbor, MI",
+      "purpose": "MLK Day Event"
+     },
+     {
+      "source": "Harvard University",
+      "dates": "02/07/2020-02/10/2020",
+      "location": "0 Cambridge, MA",
+      "purpose": "Board of Overseers Meeting"
+     },
+     {
+      "source": "University of Chicago",
+      "dates": "02/24/2020-02/25/2020",
+      "location": "0 Chicago, IL",
+      "purpose": "Parsons Legacy Dinner"
+     },
+     {
+      "source": "ALI",
+      "dates": "01/15/2020-01/17/2020",
+      "location": "0 Philadelphia, PA",
+      "purpose": "ALI Council Meeting"
+     },
+     {
+      "source": "University of Michigan",
+      "dates": "01/19/2020-01/21/2020",
+      "location": "0 Ann Arbor, MI",
+      "purpose": "MLK Day Event"
+     },
+     {
+      "source": "Harvard University",
+      "dates": "02/07/2020-02/10/2020",
+      "location": "0 Cambridge, MA",
+      "purpose": "Board of Overseers Meeting"
+     },
+     {
+      "source": "University of Chicago",
+      "dates": "02/24/2020-02/25/2020",
+      "location": "0 Chicago, IL",
+      "purpose": "Parsons Legacy Dinner"
+     },
+     {
+      "source": "ALI",
+      "dates": "01/15/2020-01/17/2020",
+      "location": "0 Philadelphia, PA",
+      "purpose": "ALI Council Meeting"
+     },
+     {
+      "source": "University of Michigan",
+      "dates": "01/19/2020-01/21/2020",
+      "location": "0 Ann Arbor, MI",
+      "purpose": "MLK Day Event"
+     },
+     {
+      "source": "Harvard University",
+      "dates": "02/07/2020-02/10/2020",
+      "location": "0 Cambridge, MA",
+      "purpose": "Board of Overseers Meeting"
+     },
+     {
+      "source": "University of Chicago",
+      "dates": "02/24/2020-02/25/2020",
+      "location": "0 Chicago, IL",
+      "purpose": "Parsons Legacy Dinner"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1609/ketanji-brown-jackson/disclosures/"
+   },
+   {
+    "id": 32959,
+    "year": 2020,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1609/ketanji-brown-jackson-disclosure.2020.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "ALI",
+      "dates": "01/15/2020-01/17/2020",
+      "location": "0 Philadelphia, PA",
+      "purpose": "ALI Council Meeting"
+     },
+     {
+      "source": "University of Michigan",
+      "dates": "01/19/2020-01/21/2020",
+      "location": "0 Ann Arbor, MI",
+      "purpose": "MLK Day Event"
+     },
+     {
+      "source": "Harvard University",
+      "dates": "02/07/2020-02/10/2020",
+      "location": "0 Cambridge, MA",
+      "purpose": "Board of Overseers Meeting"
+     },
+     {
+      "source": "University of Chicago",
+      "dates": "02/24/2020-02/25/2020",
+      "location": "0 Chicago, IL",
+      "purpose": "Parsons Legacy Dinner"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1609/ketanji-brown-jackson/disclosures/"
+   },
+   {
+    "id": 30621,
+    "year": 2019,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1609/ketanji-brown-jackson-disclosure.2019.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Harvard University",
+      "dates": "1/6/19-1/11/19",
+      "location": "Cambridge, MA",
+      "purpose": "Harvard Trial Advocacy Workshop"
+     },
+     {
+      "source": "Stanford University",
+      "dates": "2/8/19-2/9/19",
+      "location": "Palo Alto, CA",
+      "purpose": "Stanford Law School Symposium"
+     },
+     {
+      "source": "Harvard University",
+      "dates": "02/9/19- 02/10/19",
+      "location": "Cambridge, MA",
+      "purpose": "Board of Overseers Meeting"
+     },
+     {
+      "source": "Harvard University",
+      "dates": "3/6/19-3/8/19",
+      "location": "Cambridge, MA",
+      "purpose": "Harvard Visiting Committee"
+     },
+     {
+      "source": "Harvard University",
+      "dates": "3/30/19-3/31/19",
+      "location": "Cambridge, MA",
+      "purpose": "Board of Overseers Meeting"
+     },
+     {
+      "source": "University of Utah Law School",
+      "dates": "4/9/19-4/10/19",
+      "location": "Salt Lake City, UT",
+      "purpose": "Utah Jurist in Residence"
+     },
+     {
+      "source": "Columbia University Law School",
+      "dates": "51/119-5/2/19",
+      "location": "NY, NY",
+      "purpose": "Visiting Scholar"
+     },
+     {
+      "source": "Harvard University",
+      "dates": "5/28/19-5/31/19",
+      "location": "Cambridge, MA",
+      "purpose": "Harvard Commencement"
+     },
+     {
+      "source": "Harvard University",
+      "dates": "9/21/19-9/23/19",
+      "location": "Cambridge, MA",
+      "purpose": "Board of Overseers Meeting"
+     },
+     {
+      "source": "Federal Judicial Center",
+      "dates": "10/28/19-10/30/19",
+      "location": "Nashville, TN",
+      "purpose": "FJC Mid-Career Serminar"
+     },
+     {
+      "source": "Harvard University",
+      "dates": "12/7/19-12/9/19",
+      "location": "Cambridge, MA",
+      "purpose": "Board of Overseers Meeting"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1609/ketanji-brown-jackson/disclosures/"
+   },
+   {
+    "id": 28539,
+    "year": 2018,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1609/ketanji-brown-jackson-disclosure.2018.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "University of Pennsylvania",
+      "dates": "1/25/18-1/26/18",
+      "location": "Philadelphia,PA",
+      "purpose": "Keedy Cup Moot Court"
+     },
+     {
+      "source": "Harvard Umiversity",
+      "dates": "02 10/18-021 1/18",
+      "location": "Cumbndge, MA",
+      "purpose": "Board of Overseers Meeting"
+     },
+     {
+      "source": "Harvard University",
+      "dates": "3/19/18-3/200/18",
+      "location": "Cambridge, MA",
+      "purpose": "Harvard Visiting Committee"
+     },
+     {
+      "source": "Harvard University",
+      "dates": "4T/18-4/8/18",
+      "location": "Cambridge, MA",
+      "purpose": "Board of Overseers Meeting"
+     },
+     {
+      "source": "ALI",
+      "dates": "VIS IS-1IV 19/18",
+      "location": "NY. NY",
+      "purpose": "Council Meeting"
+     },
+     {
+      "source": "JPML Conference",
+      "dates": "10/29/18 1V31/18",
+      "location": "Palm Beach. FL",
+      "purpose": "Muli-district Litigation Judicial Conference"
+     },
+     {
+      "source": "Drexel Umiversity",
+      "dates": "1HIS/18-1 1716/18",
+      "location": "Philadelphia, PA",
+      "purpose": "Panel Presentation at Constitution Center"
+     },
+     {
+      "source": "Harvard University",
+      "dates": "12207-12317",
+      "location": "Cambridge, MA",
+      "purpose": "Board of Overseers Meeting"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1609/ketanji-brown-jackson/disclosures/"
+   },
+   {
+    "id": 16792,
+    "year": 2017,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1609/ketanji-brown-jackson-disclosure.2017.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Harvard University",
+      "dates": "02 11/17-0212/17",
+      "location": "Cambndge, MA",
+      "purpose": "Board of Overseers Meeting"
+     },
+     {
+      "source": "University of Georgia",
+      "dates": "3217-31317",
+      "location": "Athens, GA",
+      "purpose": "Edith House Lecture"
+     },
+     {
+      "source": "ABA",
+      "dates": "3/8/17-39/17",
+      "location": "Miami, FL",
+      "purpose": "White Collar Conference"
+     },
+     {
+      "source": "Harvard University",
+      "dates": "4/R/17-4/9/17",
+      "location": "Cambridge, MA",
+      "purpose": "Harvard Law Review Spring Banquet"
+     },
+     {
+      "source": "Harvard University",
+      "dates": "420/17-4721/17",
+      "location": "Cambridge, MA",
+      "purpose": "Harvard Visiting Committee"
+     },
+     {
+      "source": "ALI",
+      "dates": "10/18/17-10720017",
+      "location": "NYC",
+      "purpose": "Council Meeting"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1609/ketanji-brown-jackson/disclosures/"
+   },
+   {
+    "id": 28889,
+    "year": 2016,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/6779/ketanji-b-jackson-disclosure.2016.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Wilham & Mary Law School",
+      "dates": "02/12/2016- 02/142016",
+      "location": "Williamsburg, VA",
+      "purpose": "Moot Court Trial Judge"
+     },
+     {
+      "source": "NAACP Annual Meeting",
+      "dates": "07/19/2016-07/20/201",
+      "location": "Cincinatti, OH",
+      "purpose": "CLE Panel"
+     },
+     {
+      "source": "ALI",
+      "dates": "10/192016- 1072172011",
+      "location": "+ NYC",
+      "purpose": "Council Meeting"
+     },
+     {
+      "source": "Yale Law School",
+      "dates": "1116720161 1182011",
+      "location": "New Haven, CT",
+      "purpose": "Yale Moot Court Competition"
+     },
+     {
+      "source": "Harvard University",
+      "dates": "12/32016-12/42016",
+      "location": "Cambridge, MA",
+      "purpose": "Board of Overseers Meeting"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1609/ketanji-brown-jackson/disclosures/"
+   },
+   {
+    "id": 28854,
+    "year": 2015,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/6779/ketanji-b-jackson-disclosure.2015.pdf",
+    "gifts": [
+     {
+      "source": "Mr Jason Lemkin (spouse's college roommate)",
+      "description": "Paid for house rental mm Hawan for las family and mvited Jacksons 10 oin",
+      "value": "S1.500.00"
+     }
+    ],
+    "reimbursements": [
+     {
+      "source": "Umversity of Pennsylvania Law School",
+      "dates": "3/26-327/2015",
+      "location": "Philadelphia, PA",
+      "purpose": "12th annual Federal Judges Panel"
+     },
+     {
+      "source": "University of Chicago Law School",
+      "dates": "4/2-4/32015",
+      "location": "Chicago, IL",
+      "purpose": "Edward H. Levi Distinguished Jurist"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1609/ketanji-brown-jackson/disclosures/"
+   },
+   {
+    "id": 28761,
+    "year": 2014,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/6779/ketanji-b-jackson-disclosure.2014.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/1609/ketanji-brown-jackson/disclosures/"
+   },
+   {
+    "id": 28610,
+    "year": 2013,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/6779/ketanji-b-jackson-disclosure.2013.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/1609/ketanji-brown-jackson/disclosures/"
+   },
+   {
+    "id": 31491,
+    "year": 2012,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1609/ketanji-brown-jackson-disclosure.2012_2.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/1609/ketanji-brown-jackson/disclosures/"
+   },
+   {
+    "id": 14192,
+    "year": 2012,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1609/ketanji-brown-jackson-disclosure.2012_1.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/1609/ketanji-brown-jackson/disclosures/"
+   },
+   {
+    "id": 13932,
+    "year": 2012,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1609/ketanji-brown-jackson-disclosure.2012.pdf",
+    "gifts": [],
+    "reimbursements": [
+     {
+      "source": "Commission on Cancer",
+      "dates": "SATR201-5/192010",
+      "location": "Chicago, IL",
+      "purpose": "medical business"
+     }
+    ],
+    "source_url": "https://www.courtlistener.com/person/1609/ketanji-brown-jackson/disclosures/"
+   },
+   {
+    "id": 31464,
+    "year": 2011,
+    "report_url": "https://storage.courtlistener.com/us/federal/judicial/financial-disclosures/1609/ketanji-brown-jackson-disclosure.2011.pdf",
+    "gifts": [],
+    "reimbursements": [],
+    "source_url": "https://www.courtlistener.com/person/1609/ketanji-brown-jackson/disclosures/"
    }
   ]
  }
