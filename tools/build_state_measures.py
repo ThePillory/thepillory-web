@@ -115,7 +115,13 @@ def check(where, source, quotes):
         if GARBLED.search(text):
             raise Unreadable(f"{where}: lost characters in {text[:80]!r}")
         if flat(text) not in src:
-            raise Unreadable(f"{where}: not word for word in its source: {text[:100]!r}")
+            # Show where the source differs, to fix the reader (the text is a public record).
+            f = flat(text)
+            n = len(f)
+            while n > 20 and f[:n] not in src:
+                n -= 10
+            at = src.find(f[:n])
+            raise Unreadable(f"{where}: not word for word in its source: {text[:100]!r}\n    read:   {f[max(0, n - 60):n + 140]!r}\n    source: {src[at + max(0, n - 60):at + n + 140] if at >= 0 else '(not found)'!r}")
 
 
 def section(sid, heading, by, paragraphs, note=""):
@@ -363,9 +369,17 @@ def az_analyses(page):
 
 def az_measures():
     text = pdf_text(AZ_LANGUAGE, layout=True)
-    sos = page_text(AZ_PAGE)
-    args = az_links(sos)
-    analyses = az_analyses(page_text(AZ_ANALYSES))
+    # The argument and analysis links are extras: a page that refuses to load leaves them out this run.
+    try:
+        args = az_links(page_text(AZ_PAGE))
+    except Exception as e:  # noqa: BLE001
+        print(f"AZ: the Secretary of State's ballot measures page wasn't read ({type(e).__name__}); argument links left out", file=sys.stderr)
+        args = {}
+    try:
+        analyses = az_analyses(page_text(AZ_ANALYSES))
+    except Exception as e:  # noqa: BLE001
+        print(f"AZ: the Legislative Council's analyses page wasn't read ({type(e).__name__}); analysis links left out", file=sys.stderr)
+        analyses = {}
     blocks = re.split(r"\n(?=\s*PROPOSITION \d{3}\s*\n)", "\n" + text)
     measures = []
     for b in blocks:
@@ -446,7 +460,7 @@ FL_BY = "Ballot title and summary, from the Florida Division of Elections' bookl
 def fl_measures():
     text = pdf_text(FL_BOOKLET, layout=True)
     ls = [l.strip() for l in text.split("\n")]
-    heads = [i for i, l in enumerate(ls) if re.fullmatch(r"No\. (\d+) Constitutional Amendment", l) and i > 30]
+    heads = [i for i, l in enumerate(ls) if re.fullmatch(r"No\. (\d+) Constitutional Amendment", l)]
     measures = []
     for k, h in enumerate(heads):
         n = re.match(r"No\. (\d+)", ls[h]).group(1)
