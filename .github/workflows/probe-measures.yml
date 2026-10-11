@@ -2,6 +2,9 @@
 # (tools/probe_measures.py) so builders can be written. Writes nothing.
 name: Probe measure guides
 on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [tools/probe_measures.py, .github/workflows/probe-measures.yml]
   workflow_dispatch:
     inputs:
       lines:
@@ -16,4 +19,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null
-      - run: python3 tools/probe_measures.py "${{ inputs.lines }}"
+      - run: python3 tools/probe_measures.py "${{ inputs.lines || '260' }}"
