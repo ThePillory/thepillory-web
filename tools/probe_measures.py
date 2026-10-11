@@ -5,23 +5,35 @@ and links), so builders can be written for them. Run in GitHub Actions (the
 import html, re, subprocess, sys, tempfile, urllib.request
 
 UA = "ThePillory/1.0 (+https://thepillory.co; public records)"
+# (state, url, pdftotext options, first page, last page)
 DOCS = [
-    ("MA", "https://www.sec.state.ma.us/divisions/elections/research-and-statistics/2026-Information-for-voters/2026-ballot-questions.htm"),
-    ("CO", "https://content.leg.colorado.gov/sites/default/files/2026-bluebook-english-accessible_1.pdf"),
-    ("AZ", "https://azsos.gov/elections/ballot-measures"),
-    ("AZ", "https://www.azleg.gov/ballot-measures-2026-analyses/"),
-    ("FL", "https://files.floridados.gov/media/711369/eng-2026-booklet-constitutional-amendpub-updated-20260903.pdf"),
-    ("MI", "https://www.michigan.gov/sos/-/media/Project/Websites/sos/BSC-Announcements/2026/Ballot-Summary-Language-MMOP-and-ConCon.pdf"),
+    ("MA", "https://www.sec.state.ma.us/divisions/elections/research-and-statistics/2026-Information-for-voters/2026-ballot-questions.htm", [], 0, 0),
+    ("MI", "https://www.michigan.gov/sos/-/media/Project/Websites/sos/BSC-Announcements/2026/Ballot-Summary-Language-MMOP-and-ConCon.pdf", ["-layout"], 0, 0),
+    ("CO", "https://content.leg.colorado.gov/sites/default/files/2026-bluebook-english-accessible_1.pdf", [], 15, 18),
+    ("CO", "https://content.leg.colorado.gov/sites/default/files/2026-bluebook-english-accessible_1.pdf", [], 69, 69),
+    ("AZ", "https://azsos.gov/media/705", ["-layout"], 0, 0),
+    ("AZ", "https://www.azleg.gov/alispdfs/Council/2026BallotMeasures/Adopted%20analysis%20HCR%202044%20-%202026.pdf", ["-layout"], 0, 0),
+    ("AZ", "https://apps.azsos.gov/election/BallotMeasures/2026/Prop-142-HCR-2044-For-Arguments.pdf", ["-layout"], 0, 0),
 ]
+BROWSER = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0 Safari/537.36"
 LIMIT = int(sys.argv[1]) if len(sys.argv) > 1 else 300
 
 
 def get(url):
-    with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": UA}), timeout=120) as r:
-        return r.read(), r.headers.get("Content-Type", "")
+    last = None
+    for ua in (UA, BROWSER):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": ua, "Accept": "text/html,application/pdf,*/*", "Accept-Language": "en-US,en;q=0.9"})
+            with urllib.request.urlopen(req, timeout=120) as r:
+                print(f"  read with {'our' if ua == UA else 'a browser'} user agent")
+                return r.read(), r.headers.get("Content-Type", "")
+        except Exception as e:
+            last = e
+            print(f"  {'our' if ua == UA else 'browser'} user agent: {type(e).__name__}: {e}")
+    raise last
 
 
-for st, url in DOCS:
+for st, url, opts, first, last in DOCS:
     print(f"\n===== {st} {url}")
     try:
         data, ctype = get(url)
@@ -34,7 +46,8 @@ for st, url in DOCS:
             f.write(data); f.flush()
             info = subprocess.run(["pdfinfo", f.name], capture_output=True, text=True).stdout
             print("  " + " | ".join(l for l in info.splitlines() if l.startswith(("Pages", "Title", "Producer"))))
-            text = subprocess.run(["pdftotext", "-layout", f.name, "-"], capture_output=True, text=True).stdout
+            pages = ["-f", str(first), "-l", str(last)] if first else []
+            text = subprocess.run(["pdftotext", *opts, *pages, f.name, "-"], capture_output=True, text=True).stdout
         lines = [l.rstrip() for l in text.splitlines() if l.strip()]
         print(f"  {len(lines)} lines")
         for l in lines[:LIMIT]:
