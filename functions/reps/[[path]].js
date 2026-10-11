@@ -15,7 +15,7 @@ import { districtsFromCookie, repsWhere, describe, STATE_NAME } from "../_lib/di
 import { lookupForm } from "../_lib/hub.js";
 import { BROWSE, PER_PAGE, chamberPage, personRow, yourRow, yourList, statewideList, repsHref, stateChambers, statePicker, sortSwitch, pagedList } from "../_lib/reps-index.js";
 import { searchPeople } from "../_lib/people-search.js";
-import { tradeSummary, memberTrades, memberReports, memberCommittees, tradesSection, quickTradesLine, tradeRow, TRADES_PER_PAGE, TRADES_METHOD } from "../_lib/trades.js";
+import { tradeSummary, memberTrades, memberReports, memberCommittees, executivePost, tradesSection, quickTradesLine, tradeRow, TRADES_PER_PAGE, TRADES_METHOD } from "../_lib/trades.js";
 import { loadJustices } from "../_lib/scotus.js";
 import { chamberIds } from "../../workers/sync/src/states.js";
 import { visitorState } from "../_lib/visitor-state.js";
@@ -290,6 +290,8 @@ async function profile(env, slug, url, request) {
   const otherState = o.level === "state" && o.state && o.state !== "CA";
   // Members of Congress file STOCK Act trade reports.
   const congress = o.chamber === "us-house" || o.chamber === "us-senate";
+  // The President, Vice President and Cabinet file OGE Form 278-T.
+  const tradesOn = congress || o.chamber === "us-executive";
   // Each tab loads on its own: one that can't load shows a short note there.
   const loaded = await Promise.all([
     exec ? {} : loadSection("rep vote counts", () => voteCounts(db, o.id), {}),
@@ -304,9 +306,12 @@ async function profile(env, slug, url, request) {
     o.level === "state" && !exec ? loadSection("rep committees", () => committeesFor(db, o.id), []) : [],
     loadSection("rep promises", () => promisesFor(db, o.id), null),
     loadSection("rep own words", () => ownWordsFor(db, o.id), null),
-    congress ? loadSection("rep trades", async () => {
-      const [summary, firstPage, reports, assignments] = await Promise.all([tradeSummary(db, o.id), memberTrades(db, o.id), memberReports(db, o.id), memberCommittees(db, o.id)]);
-      return { summary, page: firstPage, reports, committees: assignments };
+    tradesOn ? loadSection("rep trades", async () => {
+      const [summary, firstPage, reports, assignments, post] = await Promise.all([
+        tradeSummary(db, o.id), memberTrades(db, o.id), memberReports(db, o.id),
+        congress ? memberCommittees(db, o.id) : [], congress ? null : executivePost(db, o.id),
+      ]);
+      return { summary, page: firstPage, reports, committees: assignments, post };
     }, null) : null,
   ]);
   const [countsLoaded, votes, funding, orders, bills, nominations, committees, promises, ownWords, trades] = loaded;
@@ -487,7 +492,7 @@ export const onRequestGet = guard(async (context) => {
 async function tradesPage(env, slug, url) {
   if (!env.DB) return notLoaded("Stock trades", "reps");
   const o = await officialBySlug(env.DB, slug);
-  if (!o || !(o.chamber === "us-house" || o.chamber === "us-senate")) return notFound("No member of Congress at this address.", "reps", ["Reps", "/reps/"]);
+  if (!o || !["us-house", "us-senate", "us-executive"].includes(o.chamber)) return notFound("No member of Congress or the executive branch at this address.", "reps", ["Reps", "/reps/"]);
   const offset = Math.max(0, parseInt(url.searchParams.get("offset") || "0", 10) || 0);
   const pg = await loadSection("rep trades page", () => memberTrades(env.DB, o.id, offset), null);
   const more = pg && pg !== FAILED && pg.more ? `<a class="btn btn--block load-more" href="/reps/${esc(o.slug)}/trades/?offset=${offset + TRADES_PER_PAGE}" data-load-more="trade-list">Load more</a>` : "";

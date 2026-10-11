@@ -10,6 +10,10 @@ Sources
           are stored as a link only ("Filed on paper: see the report").
   Senate  eFD (efdsearch.senate.gov): the search, after accepting the site's
           terms, then each electronic report's table. Paper filings: a link only.
+  OGE     the President, Vice President and Cabinet: OGE Form 278-T reports,
+          from the disclosures the sync's executive-funding step lists
+          (D1 `disclosures`). A posted report's PDF is read; one OGE releases
+          only on request (Form 201) is stored with its request link only.
   SEC     EDGAR (company_tickers.json, then submissions/CIK…json) for a
           ticker's SIC code, grouped into the SIC divisions as the sector.
   Committees  congress-legislators' current committee membership.
@@ -36,6 +40,7 @@ Modes
 """
 import argparse
 import datetime
+import hashlib
 import html
 import html.parser
 import http.cookiejar
@@ -378,6 +383,100 @@ def senate_filings(s, since="01/01/2023", page_size=100, max_pages=60):
 
 
 # ---------------------------------------------------------------------------
+# Office of Government Ethics: Form 278-T (the executive branch)
+
+
+def is_278t(doc_type):
+    """OGE lists periodic transaction reports as "278 Transaction" (or "278-T")."""
+    return bool(re.search(r"278\s*-?\s*T\b|278 Transaction|Periodic Transaction", str(doc_type or ""), re.I))
+
+
+def oge_report_id(disclosure_id):
+    return "oge:" + hashlib.sha1(str(disclosure_id).encode()).hexdigest()[:16]
+
+
+OGE_ROW = re.compile(
+    r"^\s*(?P<n>\d{1,3})\.?\s+(?P<desc>\S.*?)(?:\s+(?:Yes|No|N/A))?\s+(?P<type>Purchase|Sale \(Partial\)|Sale \(partial\)|Partial Sale|Sale|Exchange)\s+"
+    r"(?P<date>\d{1,2}/\d{1,2}/\d{4})\s+(?:(?:Yes|No)\s+)?(?P<amount>Over \$[\d,]+|\$[\d,]+(?:\s*-\s*(?:\$[\d,]+)?)?)"
+)
+OGE_OWNER = [(re.compile(r"\((?:SP|spouse)\)|\bspouse\b", re.I), "Spouse"), (re.compile(r"\((?:DC|dependent child)\)|\bdependent child\b", re.I), "Dependent child"),
+             (re.compile(r"\((?:JT|joint)\)", re.I), "Joint")]
+OGE_STOP = re.compile(r"^\s*(Summary of Contents|Privacy Act|Public Burden|Filer's Information|Signature|Agency Ethics|Comments of Reviewing|Part \d|#\s+DESCRIPTION|DESCRIPTION|Transactions\b|\d+\s+of\s+\d+$)", re.I)
+
+
+def parse_oge_ptr_text(text):
+    """
+    Transactions from an OGE Form 278-T (pdftotext -layout), and the date the
+    filer signed it: (trades, signed_on). trades is None when the table can't
+    be read with confidence. Owner is filled only where the report states it.
+    """
+    t = str(text or "")
+    m = re.search(r"(?:electronically\s+)?signed\s+on\s+(\d{1,2}/\d{1,2}/\d{4})", t, re.I) or re.search(r"Date\s+of\s+Report[:\s]+(\d{1,2}/\d{1,2}/\d{4})", t, re.I)
+    signed = iso(m.group(1)) if m else None
+    rows, cur = [], None
+    for ln in t.splitlines():
+        mm = OGE_ROW.match(ln)
+        if mm:
+            if cur:
+                rows.append(cur)
+            cur = {**mm.groupdict(), "more": []}
+            continue
+        if cur is None:
+            continue
+        s_ = ln.strip()
+        if not s_:
+            continue
+        if OGE_STOP.match(s_):
+            rows.append(cur)
+            cur = None
+            continue
+        if cur["amount"].rstrip().endswith("-"):
+            tail = re.search(r"(\$[\d,]+)\s*$", s_)
+            if tail:
+                cur["amount"] = f"{cur['amount'].rstrip()} {tail.group(1)}"
+                s_ = s_[: tail.start()].strip()
+        if s_:
+            cur["more"].append(s_)
+    if cur:
+        rows.append(cur)
+    if not rows:
+        return None, signed
+    out = []
+    for r in rows:
+        desc = re.sub(r"\s+", " ", " ".join([r["desc"], *r["more"]])).strip()
+        amount = re.sub(r"\s+", " ", r["amount"]).strip()
+        ttype = type_label(r["type"].replace("Partial Sale", "Sale (Partial)"))
+        d = iso(r["date"])
+        if amount.endswith("-") or not ttype or not d:
+            return None, signed
+        owner = next((label for rx, label in OGE_OWNER if rx.search(desc)), None)
+        lo, hi = amount_bounds(amount)
+        out.append({"owner": owner, "asset_name": desc, "asset_type": None, "ticker": ticker_of(desc), "type": ttype,
+                    "transaction_date": d, "amount": amount, "amount_min": lo, "amount_max": hi})
+    return out, signed
+
+
+def oge_filings(args):
+    """The executive branch's 278-T reports, as the executive-funding step listed them."""
+    rows = d1(args, command="""SELECT d.id, d.official_id, d.doc_type, d.filed_on, d.document_url, d.request_url, d.position, d.agency, d.filer_name, o.name
+      FROM disclosures d JOIN officials o ON o.id = d.official_id
+      WHERE d.source = 'oge' AND o.chamber = 'us-executive' AND d.filed_on IS NOT NULL""")
+    return [{"id": oge_report_id(r["id"]), "official_id": r["official_id"], "filer": r["filer_name"] or r["name"], "filed_on": r["filed_on"],
+             "url": r["document_url"], "request_url": r["request_url"], "position": r["position"], "agency": r["agency"]}
+            for r in rows if is_278t(r["doc_type"]) and (r["document_url"] or r["request_url"])]
+
+
+def read_oge(f):
+    if not f["url"]:
+        return {"paper": 0, "trades": None, "request_only": True, "signed": None}
+    text = pdf_text(get(f["url"]))
+    if len(re.sub(r"\s+", "", text)) < 40:
+        return {"paper": 1, "trades": None, "request_only": False, "signed": None}
+    trades, signed = parse_oge_ptr_text(text)
+    return {"paper": 0, "trades": trades, "request_only": False, "signed": signed}
+
+
+# ---------------------------------------------------------------------------
 # Matching filers to officials
 
 
@@ -538,8 +637,8 @@ def run_sql(args, statements):
 
 def report_sql(rep, trades):
     out = [
-        "INSERT OR REPLACE INTO trade_reports (id, chamber, official_id, filer_name, state, district, filed_on, report_url, paper, parsed, trade_count, unmatched, source_url, checked_at) VALUES ("
-        + ", ".join(lit(rep[k]) for k in ("id", "chamber", "official_id", "filer_name", "state", "district", "filed_on", "report_url", "paper", "parsed", "trade_count", "unmatched", "source_url"))
+        "INSERT OR REPLACE INTO trade_reports (id, chamber, official_id, filer_name, state, district, filed_on, report_url, paper, parsed, trade_count, unmatched, source_url, request_url, position, agency, checked_at) VALUES ("
+        + ", ".join(lit(rep.get(k)) for k in ("id", "chamber", "official_id", "filer_name", "state", "district", "filed_on", "report_url", "paper", "parsed", "trade_count", "unmatched", "source_url", "request_url", "position", "agency"))
         + ", datetime('now'));",
         f"DELETE FROM trades WHERE report_id = {lit(rep['id'])};",
     ]
@@ -547,7 +646,7 @@ def report_sql(rep, trades):
         out.append(
             "INSERT INTO trades (report_id, n, official_id, chamber, state, transaction_date, filed_on, days_to_file, owner, asset_name, ticker, asset_type, type, amount, amount_min, amount_max, sic, sector) VALUES ("
             + ", ".join(lit(v) for v in (rep["id"], n, rep["official_id"], rep["chamber"], rep["state"], t["transaction_date"], rep["filed_on"],
-                                          days_between(t["transaction_date"], rep["filed_on"]), t["owner"], t["asset_name"], t["ticker"], t["asset_type"],
+                                          days_between(t["transaction_date"], rep["filed_on"]) if rep.get("dated", True) else None, t["owner"], t["asset_name"], t["ticker"], t["asset_type"],
                                           t["type"], t["amount"], t["amount_min"], t["amount_max"], t.get("sic"), t.get("sector")))
             + ");")
     return out
@@ -602,19 +701,45 @@ def main():
         sen = []
     say(f"Senate: {len(sen)} periodic transaction reports since {args.since_year}")
 
-    queue = [dict(f, chamber="us-house") for f in house if f["id"] not in known] + [dict(f, chamber="us-senate") for f in sen if f["id"] not in known]
+    oge = []
+    if have_d1:
+        try:
+            oge = oge_filings(args)
+        except SystemExit as e:
+            say(f"OGE: the executive branch's 278-T list not read ({str(e)[:200]})")
+    say(f"Executive branch (OGE 278-T): {len(oge)} reports listed, {sum(1 for f in oge if not f['url'])} released only on request")
+
+    queue = ([dict(f, chamber="us-house") for f in house if f["id"] not in known] + [dict(f, chamber="us-senate") for f in sen if f["id"] not in known]
+             + [dict(f, chamber="us-executive") for f in oge if f["id"] not in known])
     queue.sort(key=lambda f: f["filed_on"], reverse=True)
     if args.mode == "measure":
         # A sample of both chambers, newest first.
-        h = [f for f in queue if f["chamber"] == "us-house"][: args.max_reports // 2]
-        s_ = [f for f in queue if f["chamber"] == "us-senate"][: args.max_reports - len(h)]
-        queue = h + s_
+        x = [f for f in queue if f["chamber"] == "us-executive"][:10]
+        h = [f for f in queue if f["chamber"] == "us-house"][: (args.max_reports - len(x)) // 2]
+        s_ = [f for f in queue if f["chamber"] == "us-senate"][: args.max_reports - len(x) - len(h)]
+        queue = x + h + s_
     else:
         queue = queue[: args.max_reports]
     say(f"Reading {len(queue)} new reports")
 
     reports, all_trades, unreadable, unmatched = [], [], [], []
     for f in queue:
+        if f["chamber"] == "us-executive":
+            try:
+                got = read_oge(f)
+            except Exception as e:
+                say(f"  {f['id']}: not read ({type(e).__name__})")
+                continue
+            trades = got["trades"] or []
+            if not got["paper"] and not got["request_only"] and got["trades"] is None:
+                unreadable.append(f)
+            rep = {"id": f["id"], "chamber": "us-executive", "official_id": f["official_id"], "filer_name": f["filer"], "state": None, "district": None,
+                   "filed_on": got["signed"] or f["filed_on"], "dated": bool(got["signed"]), "report_url": f["url"], "request_url": None if f["url"] else f["request_url"],
+                   "paper": got["paper"], "parsed": 1 if got["trades"] else 0, "trade_count": len(trades), "unmatched": None,
+                   "source_url": f["url"] or f["request_url"], "position": f["position"], "agency": f["agency"]}
+            reports.append((rep, trades))
+            all_trades.extend(trades)
+            continue
         try:
             got = read_house(f) if f["chamber"] == "us-house" else read_senate(senate, f)
         except Exception as e:
@@ -649,6 +774,8 @@ def main():
             t["sic"], t["sector"] = sectors[t["ticker"]]
 
     late = sum(1 for rep, ts in reports for t in ts if (days_between(t["transaction_date"], rep["filed_on"]) or 0) > LATE_DAYS)
+    say(f"Executive branch: {sum(1 for r, _ in reports if r['chamber'] == 'us-executive' and r['parsed'])} 278-T reports read, "
+        f"{sum(len(ts) for r, ts in reports if r['chamber'] == 'us-executive')} trades; {sum(1 for r, _ in reports if r.get('request_url'))} available only on request")
     say(f"Read: {sum(1 for r, _ in reports if r['parsed'])} reports with {len(all_trades)} trades; {sum(1 for r, _ in reports if r['paper'])} filed on paper; "
         f"{len(unreadable)} electronic reports not read with confidence; {len(unmatched)} not matched to one member; "
         f"{late} trades filed more than {LATE_DAYS} days after the trade; sectors for {sum(1 for t in all_trades if t.get('sector'))} of {sum(1 for t in all_trades if t.get('ticker'))} trades with a ticker")
@@ -663,6 +790,8 @@ def main():
     if args.mode == "load":
         # The tables (CREATE … IF NOT EXISTS), in case the sync hasn't applied migration 0024 yet.
         d1(args, file=ROOT / "workers" / "sync" / "migrations" / "0024_trades.sql")
+        if not any(c["name"] == "request_url" for c in d1(args, command="PRAGMA table_info(trade_reports)")):
+            d1(args, file=ROOT / "workers" / "sync" / "migrations" / "0025_executive_trades.sql")
         stmts = []
         for rep, ts in reports:
             stmts += report_sql(rep, ts if rep["official_id"] else [])

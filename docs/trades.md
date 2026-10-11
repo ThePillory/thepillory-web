@@ -1,4 +1,4 @@
-# Stock trades (STOCK Act)
+# Stock trades (STOCK Act and OGE Form 278-T)
 
 Periodic Transaction Reports filed by members of Congress, shown as filed, side by side with the record. Same rules as [funding.md](funding.md): facts side by side, never cause; neutral wording; the same rules for every member and party.
 
@@ -13,6 +13,7 @@ Periodic Transaction Reports filed by members of Congress, shown as filed, side 
 | House Clerk (`disclosures-clerk.house.gov`) | the yearly index `<year>FD.zip` (FilingType `P`), then each report's PDF (`public_disc/ptr-pdfs/<year>/<DocID>.pdf`). Electronic reports have a text layer, read with `pdftotext -layout`; scanned paper filings have none and are stored as a link only |
 | Senate eFD (`efdsearch.senate.gov`) | the search for Periodic Transaction Reports after accepting the site's terms, then each electronic report's table. Paper filings (`/search/view/paper/…`) are stored as a link only |
 | SEC EDGAR | a ticker's CIK (`company_tickers.json`) and SIC code (`data.sec.gov/submissions/CIK….json`); the sector is the SIC division. Cached in `sec_tickers`. `SEC_USER_AGENT` (a name and contact email) is optional but EDGAR asks for one |
+| Office of Government Ethics (executive branch) | the President's, Vice President's and Cabinet's **Form 278-T** reports, from the OGE disclosures the sync's executive-funding step lists (`disclosures`, `doc_type` "278 Transaction"). A report with a posted document is read like a House PDF (`parse_oge_ptr_text()`: #, description, type, date, amount; the filer's electronic signature date is the filing date for the 45-day line, and without it no line is shown). One OGE releases only on request (Form 201) is stored with its request link, shown as "Available from OGE on request", never guessed. Already attached to the official, so no name matching. Migration 0025 |
 | congress-legislators | current committee assignments (`committees-current.json`, `committee-membership-current.json`), matched by Bioguide ID, into `congress_committees` |
 
 Rules in the loader:
@@ -26,6 +27,7 @@ Rules in the loader:
 
 ## Pages
 
+- **Executive branch** (the President, Vice President, Cabinet): the same section on their More tab, with their position and agency (as OGE lists them) above the list instead of committees, and "Available from OGE on request" for reports released only on request. `/trades/` has an "Executive branch" choice beside House and Senate.
 - **Member page, More tab → Stock trades** (`functions/_lib/trades.js`): a summary first ("[N] trades reported in 2026, totaling $X–$Y in ranges as filed"), current committee assignments as plain facts, then one compact line per trade (newest first, 25 at a time with Load more from `/reps/<slug>/trades/`), then reports filed on paper or not read automatically, each linked. No "conflict" labels or commentary.
 - **Quick mode:** one line on the member page, "Reported [N] stock trades this year", opening the list.
 - **`/trades/`** (linked from Reps → Browse → Federal and from Laws): the latest trades across Congress, newest first, filtered by chamber, state, sector and member name, 25 at a time. Ordered only by date.
