@@ -141,6 +141,20 @@ class LoadTrades(unittest.TestCase):
         self.assertEqual(T.match_senate({"first": "Robert", "last": "Smith"}, officials)[0], None, "a first name that doesn't match, and two Smiths")
         self.assertEqual(T.match_senate({"first": "A. Annette", "last": "Nunez, Jr."}, officials)[0]["id"], "s1", "the only senator with that last name")
 
+    def test_a_member_who_moved_keeps_their_old_seats_reports(self):
+        officials = [
+            {"id": "s9", "name": "Alan B. Example", "last_name": "Example", "state": "CA", "chamber": "us-senate", "active": 1},
+            {"id": "h9", "name": "Lena Other", "last_name": "Other", "state": "CA", "district_code": "30", "chamber": "us-house", "active": 1},
+            {"id": "h8", "name": "Pat Sample", "last_name": "Sample", "state": "TX", "district_code": "7", "chamber": "us-house", "active": 1},
+        ]
+        # A House report filed as CA30, now another member's seat: the senator with the same state and name.
+        self.assertEqual(T.match_house({"first": "Alan", "last": "Example", "state_dst": "CA30"}, officials)[0]["id"], "s9")
+        # Redistricted into another seat in the same state.
+        self.assertEqual(T.match_house({"first": "Pat", "last": "Sample", "state_dst": "TX09"}, officials)[0]["id"], "h8")
+        # Another state, or another first name: not attached.
+        self.assertIsNone(T.match_house({"first": "Alan", "last": "Example", "state_dst": "NV01"}, officials)[0])
+        self.assertIsNone(T.match_house({"first": "Zed", "last": "Example", "state_dst": "CA30"}, officials)[0])
+
     def test_sql_writes_reports_trades_and_summaries(self):
         db = sqlite3.connect(":memory:")
         db.executescript((ROOT / "workers/sync/migrations/0024_trades.sql").read_text())

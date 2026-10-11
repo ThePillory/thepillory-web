@@ -562,6 +562,18 @@ def match_house(f, officials):
             and last and (norm(o.get("last_name")) == last or norm(o["name"]).endswith(" " + last))]
     if len(hits) == 1:
         return hits[0], None
+    if not hits:
+        # A member who has since moved (to the Senate, or to another district after redistricting)
+        # filed under their old seat: the same state, last name and first name, exactly one.
+        first = norm(f.get("first") or "").split(" ")[0]
+        moved = [o for o in officials if o["state"] == st and last and first
+                 and (norm(o.get("last_name")) == last or norm(o["name"]).endswith(" " + last))
+                 and (norm(o["name"]).split(" ")[0] == first or norm(o["name"]).startswith(first[:3]))]
+        if len(moved) > 1:
+            active = [o for o in moved if o.get("active")]
+            moved = active if len(active) == 1 else moved
+        if len(moved) == 1:
+            return moved[0], None
     return None, f"{len(hits)} House members named {f['last']} in {sd}"
 
 
@@ -798,6 +810,21 @@ def main():
 
     officials = d1(args, command="SELECT id, name, last_name, state, district_code, chamber, bioguide_id, active FROM officials WHERE chamber IN ('us-house', 'us-senate')") if have_d1 else []
     known = {r["id"] for r in d1(args, command="SELECT id FROM trade_reports")} if have_d1 and args.mode == "load" else set()
+    # Reports kept unmatched that the matching rules now attach to one member are read again.
+    if have_d1 and args.mode == "load":
+        rematch = 0
+        for r in d1(args, command="SELECT id, chamber, filer_name, district FROM trade_reports WHERE official_id IS NULL AND chamber IN ('us-house', 'us-senate')"):
+            words = (r["filer_name"] or "").split()
+            words = [w for w in words if norm(w).rstrip(".") not in ("jr", "sr", "ii", "iii", "iv")]
+            if len(words) < 2:
+                continue
+            f = {"first": words[0], "last": words[-1], "state_dst": r["district"]}
+            o, _ = match_house(f, officials) if r["chamber"] == "us-house" else match_senate(f, officials)
+            if o:
+                known.discard(r["id"])
+                rematch += 1
+        if rematch:
+            print(f"Reports kept unmatched that now match one member, to read again: {rematch}")
     say(f"Officials to match against: {len(officials)}{'' if have_d1 else ' (no Cloudflare access: matching skipped)'}")
 
     this_year = datetime.date.today().year

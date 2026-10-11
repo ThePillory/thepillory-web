@@ -18,6 +18,7 @@ skipped, so a run reads only new ones.
 Needs CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID (wrangler), and pdfplumber.
 """
 import argparse
+import http.cookiejar
 import json
 import sys
 import tempfile
@@ -40,9 +41,20 @@ def say(*a):
     print(*a, flush=True)
 
 
+# The FPPC hands out a statement's PDF link within a browsing session: keep its cookies,
+# and open the search page first, as a reader's browser does.
+OPENER = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
+_session = []
+
+
 def get(url, *, accept="application/json"):
+    if not _session:
+        req = urllib.request.Request(f"{FPPC}/", headers={"User-Agent": UA, "Accept": "text/html"})
+        with OPENER.open(req, timeout=120) as r:
+            r.read()
+        _session.append(True)
     req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": accept})
-    with urllib.request.urlopen(req, timeout=120) as r:
+    with OPENER.open(req, timeout=120) as r:
         return r.read()
 
 
@@ -82,7 +94,7 @@ def fetch_pdf(row):
         raise RuntimeError(f"no PDF link ({link.get('Message')})")
     pdf = get(url, accept="application/pdf")
     if pdf[:4] != b"%PDF":
-        raise RuntimeError("not a PDF")
+        raise RuntimeError(f"not a PDF: {pdf[:120]!r}")
     return pdf
 
 
