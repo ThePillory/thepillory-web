@@ -629,10 +629,20 @@ def committees():
 # D1
 
 
+BUSY = re.compile(r"overloaded|queued for too long|too many requests|SQLITE_BUSY|timed? ?out", re.I)
+
+
 def d1(args, *, file=None, command=None):
     cmd = ["npx", "--yes", "wrangler@4", "d1", "execute", args.database, "--remote", "--yes"]
     cmd += ["--file", str(file)] if file else ["--json", "--command", command]
-    r = subprocess.run(cmd, cwd=ROOT / "workers" / "sync", capture_output=True, text=True)
+    # D1 sometimes answers "overloaded" when other work is running; each call is all or
+    # nothing and every statement can run twice, so wait and try again.
+    for wait in (30, 60, 120, 240, None):
+        r = subprocess.run(cmd, cwd=ROOT / "workers" / "sync", capture_output=True, text=True)
+        if not r.returncode or wait is None or not BUSY.search(r.stdout + r.stderr):
+            break
+        print(f"  D1 is busy; trying again in {wait} s", flush=True)
+        time.sleep(wait)
     if r.returncode:
         raise SystemExit(f"wrangler d1 execute failed:\n{r.stdout[-3000:]}\n{r.stderr[-3000:]}")
     if command:
@@ -641,9 +651,9 @@ def d1(args, *, file=None, command=None):
 
 
 def run_sql(args, statements):
-    for i in range(0, len(statements), 400):
+    for i in range(0, len(statements), 200):
         with tempfile.NamedTemporaryFile("w", suffix=".sql", delete=False) as f:
-            f.write("\n".join(statements[i:i + 400]))
+            f.write("\n".join(statements[i:i + 200]))
         try:
             d1(args, file=f.name)
         finally:
