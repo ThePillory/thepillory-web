@@ -310,7 +310,8 @@ def collapse_tables(items):
     def label(x):
         # A chart or table label: a few words that don't end a sentence ("Higher revenue",
         # "Current Law: Single Filers", "$4.6 billion higher in the first year").
-        return len(x.split()) < 15 and not re.search(r"[.?!:;”\")]$", x)
+        return (len(x.split()) < 15 and not re.search(r"[.?!:;”\")]$", x)
+                and not re.search(r"\b(?:to|and|or|the|of|a|an|in|for|with|by|that|which)$", x))
 
     items = [{"h": x, "label": True} if isinstance(x, str) and (numeric(x) or label(x)) else x for x in items]
     out, i = [], 0
@@ -320,8 +321,9 @@ def collapse_tables(items):
             while j < len(items) and isinstance(items[j], dict) and "h" in items[j]:
                 j += 1
             run = items[i:j]
-            cells = sum(1 for x in run if tabley(x["h"]))
-            if len(run) >= 2 and cells * 2 >= len(run):
+            cells = sum(1 for x in run if tabley(x["h"]) or x.get("label"))
+            # Mostly cells, or four or more "headings" in a row with no text and no question among them: a chart.
+            if len(run) >= 2 and (cells * 2 >= len(run) or (len(run) >= 4 and not any(x["h"].endswith("?") for x in run))):
                 # keep a real subheading that opens the run, if it isn't a cell itself
                 lead = []
                 while run and not tabley(run[0]["h"]) and len(run) > 1 and tabley(run[1]["h"]) is False:
