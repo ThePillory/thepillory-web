@@ -77,6 +77,13 @@ test("two agreeing readings that fit the text layer pass", () => {
   assert.deepEqual(rows[1], { n: 2, description: "Abbott Labs (ABT)", type: "Sale", date: "2026-05-05", amount: "$15,001 - $50,000", amount_min: 15001, amount_max: 50000, owner: null, ticker: "ABT" });
 });
 
+test("the form's endnote marker isn't kept in the description", () => {
+  const a = copy(ROWS);
+  a.rows[1].description = "Abbott Labs (ABT) See Endnote";
+  const { rows } = checkReadings(a, copy(a.rows));
+  assert.equal(rows[1].description, "Abbott Labs (ABT)");
+});
+
 test("spacing and punctuation don't count; letters, dates, types and amounts do", () => {
   const b = copy(ROWS);
   b.rows[0].description = "MIAMI DADE CNTY FL AVIATION REV RFDG SER A B/E PTC 5.00% Due Oct 1 2031";

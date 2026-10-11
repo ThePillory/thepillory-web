@@ -461,7 +461,7 @@ def parse_oge_ptr_text(text):
         d = iso(r["date"])
         if amount.endswith("-") or not full_range(amount) or not ttype or not d:
             return None, signed
-        desc = re.sub(r"\s+(?:See\s+)?Endnotes?\s*$", "", desc, flags=re.I).strip()
+        desc = ENDNOTE.sub("", desc).strip()
         owner = next((label for rx, label in OGE_OWNER if rx.search(desc)), None)
         lo, hi = amount_bounds(amount)
         out.append({"owner": owner, "asset_name": desc, "asset_type": None, "ticker": ticker_of(desc), "type": ttype,
@@ -713,10 +713,13 @@ def run_sql(args, statements):
 # Some House filings put an account or holding number before the asset ("2000140445 Alphabet Inc.").
 # Account numbers are never shown: drop a leading run of 6 or more digits.
 ACCOUNT_NO = re.compile(r"^\d{6,}\s+(?=\S)")
+# OGE 278-T rows can carry the form's footnote text after the asset
+# ("Westside Link LLC See Endnote Endnotes PART #"): drop it from "See Endnote" on.
+ENDNOTE = re.compile(r"\s+(?:See\s+)?Endnotes?\b.*$", re.I)
 
 
 def clean_asset(name):
-    return ACCOUNT_NO.sub("", name or "").strip()
+    return ENDNOTE.sub("", ACCOUNT_NO.sub("", name or "")).strip()
 
 
 MIGRATIONS = ROOT / "workers" / "sync" / "migrations"
@@ -907,8 +910,8 @@ def main():
     if args.mode == "load":
         ensure_tables(args)
         stmts = []
-        # Rows loaded before clean_asset() existed.
-        for row in d1(args, command="SELECT report_id, n, asset_name FROM trades WHERE asset_name GLOB '[0-9][0-9][0-9][0-9][0-9][0-9]* *'"):
+        # Rows loaded before clean_asset() covered them.
+        for row in d1(args, command="SELECT report_id, n, asset_name FROM trades WHERE asset_name GLOB '[0-9][0-9][0-9][0-9][0-9][0-9]* *' OR asset_name LIKE '% Endnote%'"):
             if clean_asset(row["asset_name"]) != row["asset_name"]:
                 stmts.append(f"UPDATE trades SET asset_name = {lit(clean_asset(row['asset_name']))} WHERE report_id = {lit(row['report_id'])} AND n = {row['n']};")
         for rep, ts in reports:
