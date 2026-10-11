@@ -19,22 +19,23 @@ Supreme Court data" workflow. See docs/scotus.md.
                                    word from the Court's QP document), and which
                                    are decided
     data/scotus/disclosures.json   each justice's financial disclosure reports,
-                                   gifts and reimbursements (CourtListener; only
-                                   with COURTLISTENER_API_TOKEN)
+                                   gifts and reimbursements (CourtListener's
+                                   monthly bulk data; no token needed)
 
 Sources: supremecourt.gov (justices, biographies, slip opinions, granted list,
 dockets, questions presented); senate.gov (Supreme Court nominations); and
-CourtListener for disclosures. Nothing is written for a part whose source
+CourtListener's bulk data for disclosures. Nothing is written for a part whose source
 couldn't be read; the previous file stays.
 
     python3 tools/build_scotus.py
     python3 tools/build_scotus.py --max-pdfs 40
 """
 import argparse
+import bz2
+import csv
 import datetime
 import html
 import json
-import os
 import re
 import subprocess
 import sys
@@ -48,7 +49,6 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "data" / "scotus"
 SCOTUS = "https://www.supremecourt.gov"
 SENATE = "https://www.senate.gov/legislative/nominations/SupremeCourtNominations1789present.htm"
-CL = "https://www.courtlistener.com/api/rest/v4"
 UA = "ThePillory/1.0 (+https://thepillory.co; public records)"
 OLDEST_TERM = 2010  # supremecourt.gov's slip-opinion pages go back about this far
 # Bump when the opinion readers change: decisions read by an older version are read again.
@@ -582,97 +582,120 @@ def build_current(term, decided_dockets):
 
 
 # ---------------------------------------------------------------------------
-# Disclosures (CourtListener)
+# Disclosures (CourtListener bulk data)
+#
+# Free Law Project publishes CourtListener's tables as monthly bulk files
+# (bulk-data/<table>-<date>.csv.bz2). Reading the few small tables needed here
+# replaces hundreds of API requests, which CourtListener's rate limit turned
+# into multi-hour lockouts, and needs no token. Quotes in these files are
+# escaped with a backslash, not doubled.
+
+CL_BULK = "https://com-courtlistener-storage.s3-us-west-2.amazonaws.com/"
+CL_TABLES = ["people-db-people", "people-db-positions", "financial-disclosures",
+             "financial-disclosures-gifts", "financial-disclosures-reimbursements"]
+MAX_REPORTS = 20  # a justice's newest reports shown
 
 
-CL_GAP = 15           # seconds between CourtListener requests: it allows only a few a minute
-                      # here, and faster requests led to multi-hour lockouts
-CL_MAX_WAIT = 300     # the longest a "slow down" (429) is waited out before giving up for this run
-CL_BUDGET = 100 * 60  # seconds of CourtListener requests per run; the rest wait for the next run
-_cl_last = [0.0]
-_cl_start = [None]
+def cl_bulk_date():
+    """The date of the newest published set of disclosure files (all tables share it)."""
+    dates = set()
+    token = None
+    while True:
+        q = {"list-type": "2", "prefix": "bulk-data/financial-disclosures-gifts-"}
+        if token:
+            q["continuation-token"] = token
+        req = urllib.request.Request(f"{CL_BULK}?{urllib.parse.urlencode(q)}", headers={"User-Agent": UA})
+        with urllib.request.urlopen(req, timeout=60) as r:
+            xml = r.read().decode("utf-8", "replace")
+        for key, size in re.findall(r"<Key>([^<]+)</Key>.*?<Size>(\d+)</Size>", xml):
+            m = re.search(r"-(\d{4}-\d{2}-\d{2})\.csv\.bz2$", key)
+            if m and int(size) > 0:
+                dates.add(m.group(1))
+        m = re.search(r"<NextContinuationToken>([^<]+)<", xml)
+        if not m:
+            break
+        token = m.group(1)
+    if not dates:
+        raise RuntimeError("no CourtListener bulk disclosure files listed")
+    return max(dates)
 
 
-class OutOfTime(Exception):
-    """This run's CourtListener time is used up; what was read is kept."""
+def cl_rows(path):
+    """Rows of one bulk file, as dicts."""
+    csv.field_size_limit(sys.maxsize)
+    with bz2.open(path, "rt", encoding="utf-8", newline="") as f:
+        yield from csv.DictReader(f, escapechar="\\", doublequote=False)
 
 
-def cl_get(path, token, tries=4):
-    """One CourtListener request, paced, waiting out a 429 (Retry-After) a few times."""
-    if _cl_start[0] is None:
-        _cl_start[0] = time.time()
-    if time.time() - _cl_start[0] > CL_BUDGET:
-        raise OutOfTime(f"{CL_BUDGET // 60} minutes of CourtListener requests used")
-    for attempt in range(tries):
-        wait = _cl_last[0] + CL_GAP - time.time()
-        if wait > 0:
-            time.sleep(wait)
-        _cl_last[0] = time.time()
-        try:
-            req = urllib.request.Request(f"{CL}{path}", headers={"User-Agent": UA, "Authorization": f"Token {token}"})
-            with urllib.request.urlopen(req, timeout=90) as r:
-                return json.loads(r.read().decode("utf-8", "replace"))
-        except urllib.error.HTTPError as e:
-            if e.code != 429 and e.code < 500 or attempt == tries - 1:
-                raise
-            after = e.headers.get("Retry-After") if e.headers else None
-            delay = int(after) if after and after.isdigit() else 30 * (attempt + 1)
-            if delay > CL_MAX_WAIT:
-                print(f"CourtListener asked to wait {delay} s; stopping for this run", file=sys.stderr)
-                raise
-            print(f"CourtListener asked to slow down; waiting {delay} s", file=sys.stderr)
-            time.sleep(delay)
-        except Exception:
-            if attempt == tries - 1:
-                raise
-            time.sleep(5 * (attempt + 1))
+def cl_download(table, date, folder):
+    path = Path(folder) / f"{table}.csv.bz2"
+    req = urllib.request.Request(f"{CL_BULK}bulk-data/{table}-{date}.csv.bz2", headers={"User-Agent": UA})
+    with urllib.request.urlopen(req, timeout=600) as r, open(path, "wb") as out:
+        while True:
+            chunk = r.read(1 << 20)
+            if not chunk:
+                break
+            out.write(chunk)
+    return path
 
 
-def build_disclosures(justices, token, previous=None):
+def disclosures_from_tables(justices, tables):
     """
-    Each justice's reports. A report already read (same CourtListener ID) is kept
-    as it was: filed reports don't change, so only new ones cost requests.
+    Each justice's reports, newest first (at most MAX_REPORTS), with gifts and
+    reimbursements. `tables` maps a table name to an iterable of its rows. A
+    justice is matched to CourtListener's person by a Supreme Court position
+    and the same first and last name; no match, no reports. Pure.
     """
-    known = {}
-    for reports in ((previous or {}).get("justices") or {}).values():
-        for r in reports:
-            if r.get("id"):
-                known[r["id"]] = r
-    # Justices not reached this run keep what was read before.
-    out = dict((previous or {}).get("justices") or {})
+    scotus = {r["person_id"] for r in tables["people-db-positions"] if r.get("court_id") == "scotus"}
+    people = {r["id"]: r for r in tables["people-db-people"] if r["id"] in scotus}
+    match = {}
     for j in justices:
-        try:
-            out[j["slug"]] = disclosures_for(j, token, known)
-        except Exception as e:
-            print(f"Disclosures: stopped at {j['name']} ({type(e).__name__} {getattr(e, 'code', '')}); the rest wait for the next run", file=sys.stderr)
-            return out, False
-    return out, True
+        last = j["name"].split(",")[0].split()[-1]
+        first = j["name"].split()[0]
+        hits = [p for p in people.values() if p.get("name_last") == last and p.get("name_first") == first]
+        if len(hits) == 1:
+            match[hits[0]["id"]] = j["slug"]
+    reports = {}
+    for r in tables["financial-disclosures"]:
+        if r.get("person_id") in match:
+            reports.setdefault(r["person_id"], []).append(r)
+    keep = {}
+    for pid, rows in reports.items():
+        rows.sort(key=lambda r: (-int(r["year"] or 0), -int(r["id"])))
+        for r in rows[:MAX_REPORTS]:
+            keep[r["id"]] = pid
+    gifts, reimbursements = {}, {}
+    for r in tables["financial-disclosures-gifts"]:
+        if r.get("financial_disclosure_id") in keep:
+            gifts.setdefault(r["financial_disclosure_id"], []).append(r)
+    for r in tables["financial-disclosures-reimbursements"]:
+        if r.get("financial_disclosure_id") in keep:
+            reimbursements.setdefault(r["financial_disclosure_id"], []).append(r)
+    by_id = lambda rows: sorted(rows, key=lambda r: int(r["id"]))
+    out = {j["slug"]: [] for j in justices}
+    for pid, slug in match.items():
+        person = people[pid]
+        for r in reports.get(pid, [])[:MAX_REPORTS]:
+            out[slug].append({
+                "id": int(r["id"]),
+                "year": int(r["year"]) if r["year"] else None,
+                "report_url": f"https://storage.courtlistener.com/{r['filepath']}" if r.get("filepath") else r.get("download_filepath"),
+                "gifts": [{"source": g["source"], "description": g["description"], "value": g["value"]} for g in by_id(gifts.get(r["id"], []))],
+                "reimbursements": [{"source": x["source"], "dates": x["date_raw"], "location": x["location"], "purpose": x["purpose"]} for x in by_id(reimbursements.get(r["id"], []))],
+                "source_url": f"https://www.courtlistener.com/person/{pid}/{person.get('slug', '')}/disclosures/",
+            })
+    return out
 
 
-def disclosures_for(j, token, known):
-    """One justice's reports, newest first (at most 20)."""
-    last = j["name"].split(",")[0].split()[-1]
-    people = cl_get(f"/people/?name_last={urllib.parse.quote(last)}&positions__court=scotus", token).get("results", [])
-    first = j["name"].split()[0]
-    person = next((p for p in people if p.get("name_first") == first), None)
-    if not person:
-        return []
-    reports = []
-    for fd in cl_get(f"/financial-disclosures/?person={person['id']}&order_by=-year", token).get("results", [])[:20]:
-        if fd.get("id") in known:
-            reports.append(known[fd["id"]])
-            continue
-        gifts = cl_get(f"/gifts/?financial_disclosure={fd['id']}", token).get("results", [])
-        reimb = cl_get(f"/reimbursements/?financial_disclosure={fd['id']}", token).get("results", [])
-        reports.append({
-            "id": fd.get("id"),
-            "year": fd.get("year"),
-            "report_url": fd.get("filepath") or fd.get("download_filepath"),
-            "gifts": [{"source": g.get("source"), "description": g.get("description"), "value": g.get("value")} for g in gifts],
-            "reimbursements": [{"source": r.get("source"), "dates": r.get("date_raw"), "location": r.get("location"), "purpose": r.get("purpose")} for r in reimb],
-            "source_url": f"https://www.courtlistener.com/person/{person['id']}/{person.get('slug', '')}/disclosures/",
-        })
-    return reports
+def build_disclosures(justices):
+    """({slug: reports}, bulk date) from the newest bulk files."""
+    date = cl_bulk_date()
+    with tempfile.TemporaryDirectory() as folder:
+        paths = {t: cl_download(t, date, folder) for t in CL_TABLES}
+        tables = {t: cl_rows(p) for t, p in paths.items()}
+        # Small tables first, so the large ones stream once with the matches known.
+        tables = {t: list(tables[t]) if t.startswith("people-db") else tables[t] for t in CL_TABLES}
+        return disclosures_from_tables(justices, tables), date
 
 
 # ---------------------------------------------------------------------------
@@ -726,21 +749,18 @@ def main():
     except Exception as e:
         print(f"Granted list OT{term_now}: {type(e).__name__}; current.json not changed", file=sys.stderr)
 
-    token = os.environ.get("COURTLISTENER_API_TOKEN")
-    if token:
-        # A CourtListener problem never costs the rest of the Court's data: the old file stays.
-        path = OUT / "disclosures.json"
-        previous = json.loads(path.read_text()) if path.exists() else None
-        try:
-            disclosures, complete = build_disclosures(justices, token, previous)
-            if disclosures:
-                write(path, {"built_on": built, "complete": complete, "source": "CourtListener (Free Law Project), from the judiciary's financial disclosure reports", "justices": disclosures})
-            print(f"Disclosures: {sum(len(v) for v in disclosures.values())} reports for {len(disclosures)} justices{'' if complete else ' (partial; the rest next run)'}")
-        except Exception as e:
-            print(f"Disclosures: CourtListener {type(e).__name__} {getattr(e, 'code', '')}; disclosures.json not changed", file=sys.stderr)
-    else:
-        print("Disclosures: COURTLISTENER_API_TOKEN not set; skipped")
-
+    # A CourtListener problem never costs the rest of the Court's data: the old file stays.
+    try:
+        disclosures, date = build_disclosures(justices)
+        if any(disclosures.values()):
+            write(OUT / "disclosures.json", {
+                "built_on": built, "complete": True, "bulk_date": date,
+                "source": "CourtListener (Free Law Project) bulk data, from the judiciary's financial disclosure reports",
+                "justices": disclosures,
+            })
+        print(f"Disclosures: {sum(len(v) for v in disclosures.values())} reports for {sum(1 for v in disclosures.values() if v)} of {len(disclosures)} justices (bulk data of {date})")
+    except Exception as e:
+        print(f"Disclosures: CourtListener bulk data {type(e).__name__}: {e}; disclosures.json not changed", file=sys.stderr)
 
 if __name__ == "__main__":
     main()

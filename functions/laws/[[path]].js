@@ -130,6 +130,7 @@ ${more}`;
     linkRow("/court/term/", "This term at the Supreme Court", "Cases the Court will hear, questions presented, and its decisions"),
     linkRow("/topics/", "Laws by subject", "Bills, votes, meeting items and orders by topic"),
     linkRow("/finances/", "Public finances by term", "The Time Machine"),
+    linkRow("/trades/", "Stock trades by members of Congress", "As reported under the STOCK Act, newest first"),
   ].join("");
   const main = `
 <header class="page-head">

@@ -353,6 +353,7 @@ ${j.biography.length ? `<div class="card stack-xs"><p class="label">From the off
   ${r.reimbursements.length ? `<ul class="plain-list stack-xs">${r.reimbursements.map((x) => `<li class="small">${esc(sourceName(x.source))}${x.purpose ? `: ${esc(x.purpose)}` : ""}${x.location ? `, ${esc(x.location)}` : ""}${x.dates ? ` (${esc(x.dates)})` : ""}</li>`).join("")}</ul>` : '<p class="small secondary">None reported.</p>'}
   <p class="hint">${outLink(r.source_url, "On CourtListener")}</p>`, { meta: `${r.gifts.length + r.reimbursements.length} items` }))
         .join("")
+      + `<p class="small secondary">The newest report CourtListener has for ${esc(j.name)} is for ${esc(String(Math.max(...reports.map((r) => r.year || 0))))}${disclosures.bulk_date ? `, from its data of ${esc(fmtDate(disclosures.bulk_date))}` : ""}.</p>`
       + '<p class="hint">Annual financial disclosure reports the justices file under the Ethics in Government Act, as CourtListener (Free Law Project) transcribes them, each linked to the filed report. Gifts and reimbursements from organizations are named; a person is listed as "An individual".</p>'
     : `<p class="small secondary">Coming soon for ${esc(j.name)}: the annual financial disclosure reports, gifts and reimbursements load from CourtListener.</p>`;
 

@@ -156,20 +156,46 @@ class Tests(unittest.TestCase):
         self.assertEqual(B.current_term(datetime.date(2026, 10, 2)), 2025)
         self.assertEqual(B.current_term(datetime.date(2026, 10, 5)), 2026)
 
-    def test_disclosures_stop_when_the_run_is_out_of_courtlistener_time(self):
-        # Pacing stays slow, and a used-up budget stops before any request,
-        # keeping what earlier runs read.
-        self.assertGreaterEqual(B.CL_GAP, 12)
-        saved = (B.CL_BUDGET, B._cl_start[0])
-        try:
-            B.CL_BUDGET, B._cl_start[0] = 0, 0.0
-            previous = {"justices": {"john-roberts": [{"id": 1, "year": 2024}]}}
-            out, complete = B.build_disclosures([{"slug": "clarence-thomas", "name": "Clarence Thomas"}], "token", previous)
-            self.assertFalse(complete)
-            self.assertEqual(out, previous["justices"])
-        finally:
-            B.CL_BUDGET, B._cl_start[0] = saved
+    def test_bulk_rows_read_backslash_escaped_quotes(self):
+        import bz2
+        import tempfile
+        raw = ('id,addendum_content_raw,person_id\n'
+               '"1","Changed \\"my529 cash\\" to\nanother line","2738"\n'
+               '"2","plain","77"\n')
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "t.csv.bz2"
+            path.write_bytes(bz2.compress(raw.encode("utf-8")))
+            rows = list(B.cl_rows(path))
+        self.assertEqual([r["person_id"] for r in rows], ["2738", "77"])
+        self.assertEqual(rows[0]["addendum_content_raw"], 'Changed "my529 cash" to\nanother line')
 
+    def test_disclosures_from_bulk_tables(self):
+        justices = [{"slug": "john-roberts", "name": "John G. Roberts, Jr."}, {"slug": "ketanji-brown-jackson", "name": "Ketanji Brown Jackson"}]
+        people = [
+            {"id": "2738", "name_first": "John", "name_last": "Roberts", "slug": "john-glover-roberts-jr"},
+            {"id": "2739", "name_first": "Owen", "name_last": "Roberts", "slug": "owen-josephus-roberts"},
+            {"id": "1609", "name_first": "Ketanji", "name_last": "Jackson", "slug": "ketanji-brown-jackson"},
+            {"id": "1612", "name_first": "Robert", "name_last": "Jackson", "slug": "robert-houghwout-jackson"},
+            {"id": "9", "name_first": "John", "name_last": "Roberts", "slug": "a-district-judge"},
+        ]
+        positions = [{"person_id": i, "court_id": "scotus"} for i in ("2738", "2739", "1609", "1612")] + [{"person_id": "9", "court_id": "cand"}]
+        fds = [{"id": str(100 + y), "year": str(y), "person_id": "2738", "filepath": f"us/fd/{y}.pdf", "download_filepath": ""} for y in range(2000, 2025)]
+        fds.append({"id": "5", "year": "2023", "person_id": "9", "filepath": "x.pdf", "download_filepath": ""})
+        gifts = [{"id": "2", "financial_disclosure_id": "2124", "source": "Org B", "description": "Book", "value": ""},
+                 {"id": "1", "financial_disclosure_id": "2124", "source": "Org A", "description": "Dinner", "value": "$100"}]
+        reimb = [{"id": str(i), "financial_disclosure_id": "2123", "source": "School", "date_raw": f"{i}/1", "location": "X", "purpose": "Teach"} for i in range(25)]
+        out = B.disclosures_from_tables(justices, {
+            "people-db-people": people, "people-db-positions": positions, "financial-disclosures": fds,
+            "financial-disclosures-gifts": gifts, "financial-disclosures-reimbursements": reimb,
+        })
+        r = out["john-roberts"]
+        self.assertEqual(len(r), B.MAX_REPORTS)
+        self.assertEqual([x["year"] for x in r[:3]], [2024, 2023, 2022])
+        self.assertEqual(r[0]["report_url"], "https://storage.courtlistener.com/us/fd/2024.pdf")
+        self.assertEqual([g["source"] for g in r[0]["gifts"]], ["Org A", "Org B"])
+        self.assertEqual(len(r[1]["reimbursements"]), 25, "every reimbursement, not one page")
+        self.assertEqual(r[0]["source_url"], "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/")
+        self.assertEqual(out["ketanji-brown-jackson"], [], "matched by first name too; no reports listed")
 
 if __name__ == "__main__":
     unittest.main()

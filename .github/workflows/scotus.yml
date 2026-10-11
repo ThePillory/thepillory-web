@@ -1,7 +1,7 @@
 # The U.S. Supreme Court from official sources: the justices (supremecourt.gov,
 # senate.gov), each term's decisions with their lineups and the constitutional
 # provisions they name (supremecourt.gov opinions), this term's cases and
-# questions presented, and the justices' financial disclosures (CourtListener).
+# questions presented, and the justices' financial disclosures (CourtListener bulk data).
 # Writes data/scotus/ with tools/build_scotus.py and commits it when it changes.
 name: Refresh Supreme Court data
 on:
@@ -20,13 +20,11 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 130
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null
       - name: Build from official sources
-        env:
-          COURTLISTENER_API_TOKEN: ${{ secrets.COURTLISTENER_API_TOKEN }}
         run: python3 tools/build_scotus.py --max-pdfs "${{ inputs.max_pdfs || '150' }}" --max-questions 150
       - name: Commit the data
         run: |

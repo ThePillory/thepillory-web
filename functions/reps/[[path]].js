@@ -15,6 +15,7 @@ import { districtsFromCookie, repsWhere, describe, STATE_NAME } from "../_lib/di
 import { lookupForm } from "../_lib/hub.js";
 import { BROWSE, PER_PAGE, chamberPage, personRow, yourRow, yourList, statewideList, repsHref, stateChambers, statePicker, sortSwitch, pagedList } from "../_lib/reps-index.js";
 import { searchPeople } from "../_lib/people-search.js";
+import { tradeSummary, memberTrades, memberReports, memberCommittees, tradesSection, quickTradesLine, tradeRow, TRADES_PER_PAGE, TRADES_METHOD } from "../_lib/trades.js";
 import { loadJustices } from "../_lib/scotus.js";
 import { chamberIds } from "../../workers/sync/src/states.js";
 import { visitorState } from "../_lib/visitor-state.js";
@@ -123,6 +124,7 @@ async function browseSection(db, env, request, { browse, st, sort, federalExec }
     ]);
     body = `
   ${statePicker({ browse, state: st, all: true, label: "Filter by state" })}
+  <div class="card">${linkRow("/trades/", "Stock trades", "Trades members of Congress report under the STOCK Act, newest first")}</div>
   <h3 class="label">The President and Cabinet</h3>
   <div class="card">${federalExec === FAILED ? sectionError("") : federalExec.map((o) => personRow(o, { office: true })).join("") || `<p class="secondary small">${BROWSE_EMPTY}</p>`}</div>
   ${senate}
@@ -286,6 +288,8 @@ async function profile(env, slug, url, request) {
   const stateLegislator = o.chamber === "ca-assembly" || o.chamber === "ca-senate";
   // Another state's official: campaign money comes from each state's own agency, not loaded yet.
   const otherState = o.level === "state" && o.state && o.state !== "CA";
+  // Members of Congress file STOCK Act trade reports.
+  const congress = o.chamber === "us-house" || o.chamber === "us-senate";
   // Each tab loads on its own: one that can't load shows a short note there.
   const loaded = await Promise.all([
     exec ? {} : loadSection("rep vote counts", () => voteCounts(db, o.id), {}),
@@ -300,9 +304,13 @@ async function profile(env, slug, url, request) {
     o.level === "state" && !exec ? loadSection("rep committees", () => committeesFor(db, o.id), []) : [],
     loadSection("rep promises", () => promisesFor(db, o.id), null),
     loadSection("rep own words", () => ownWordsFor(db, o.id), null),
+    congress ? loadSection("rep trades", async () => {
+      const [summary, firstPage, reports, assignments] = await Promise.all([tradeSummary(db, o.id), memberTrades(db, o.id), memberReports(db, o.id), memberCommittees(db, o.id)]);
+      return { summary, page: firstPage, reports, committees: assignments };
+    }, null) : null,
   ]);
-  const [countsLoaded, votes, funding, orders, bills, nominations, committees, promises, ownWords] = loaded;
-  const partial = anyFailed(countsLoaded, votes, funding, orders, bills, nominations, committees, promises, ownWords);
+  const [countsLoaded, votes, funding, orders, bills, nominations, committees, promises, ownWords, trades] = loaded;
+  const partial = anyFailed(countsLoaded, votes, funding, orders, bills, nominations, committees, promises, ownWords, trades);
   const counts = countsLoaded === FAILED ? null : countsLoaded || {};
   const ok = (v) => (v === FAILED ? null : v);
 
@@ -401,6 +409,7 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
 
   // More: everything else, in sections.
   const moreParts = [];
+  if (trades) moreParts.push(sub("more-trades", "Stock trades", trades === FAILED ? sectionError("") : tradesSection(o, trades)));
   if (orders) moreParts.push(sub("orders", "Executive orders", orders === FAILED ? sectionError("") : ordersTab(o, orders, base, offset)));
   if (nominations) moreParts.push(sub("nominations", "Nominations", nominations === FAILED ? sectionError("") : nominationsTab(o, nominations, base, status, offset)));
   if (exec && !otherState) moreParts.push(sub("more-disclosures", "Disclosures", funding === FAILED ? sectionError("") : money.disclosures));
@@ -423,6 +432,7 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
       ["Their job", esc(jobSentence(o, STATE_NAME[o.state] || ""))],
       ["Latest votes", recent.length ? `<ul class="simple-list">${recent.map((v) => `<li>${voteLinePlain(v)}</li>`).join("")}</ul>` : ""],
       ["In their own words", excerpt ? `<div class="stack-xs"><p class="promise-quote">“${esc(excerpt.excerpt)}”</p><p class="small">${sourceNote(excerpt.url, excerpt.title || "Their issues page")}</p></div>` : ""],
+      ["Stock trades", trades && trades !== FAILED ? quickTradesLine(trades.summary) : ""],
       ["Money", moneyLine ? `${esc(moneyLine)} <a class="inline-link" href="#funding" data-mode-set="detailed">The full Funding tab</a>` : ""],
     ],
     source: `Votes from the official record of each vote${moneyLine ? "; money from reports filed with the Federal Election Commission" : ""}. <a class="inline-link" href="${SIMPLE_METHOD}">How Quick mode works</a>`,
@@ -466,8 +476,28 @@ export const onRequestGet = guard(async (context) => {
     if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
     return edgeCached(context, REPS_CACHE_SECONDS, () => profile(context.env, parts[0], url, context.request));
   }
+  if (parts.length === 2 && parts[1] === "trades") {
+    if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
+    return edgeCached(context, REPS_CACHE_SECONDS, () => tradesPage(context.env, parts[0], url));
+  }
   return notFound("No page at this address.", "reps", ["Reps", "/reps/"]);
 }, { tab: "reps" });
+
+// /reps/<slug>/trades/?offset=N: the next page of a member's trades ("Load more" appends it in place).
+async function tradesPage(env, slug, url) {
+  if (!env.DB) return notLoaded("Stock trades", "reps");
+  const o = await officialBySlug(env.DB, slug);
+  if (!o || !(o.chamber === "us-house" || o.chamber === "us-senate")) return notFound("No member of Congress at this address.", "reps", ["Reps", "/reps/"]);
+  const offset = Math.max(0, parseInt(url.searchParams.get("offset") || "0", 10) || 0);
+  const pg = await loadSection("rep trades page", () => memberTrades(env.DB, o.id, offset), null);
+  const more = pg && pg !== FAILED && pg.more ? `<a class="btn btn--block load-more" href="/reps/${esc(o.slug)}/trades/?offset=${offset + TRADES_PER_PAGE}" data-load-more="trade-list">Load more</a>` : "";
+  const main = `
+<header class="page-head"><h1>Stock trades</h1><p class="subtitle">${esc(o.name)}${offset ? `, from number ${offset + 1}` : ""}, newest first.</p></header>
+${pg === FAILED || !pg ? sectionError("") : `<div class="card compact-list" id="trade-list">${pg.rows.map((t) => tradeRow(t)).join("") || '<p class="secondary small cr-empty">No more trades.</p>'}</div>`}
+${more}
+<p class="hint"><a class="inline-link" href="${TRADES_METHOD}">How trades are recorded</a></p>`;
+  return page(`${o.name}: stock trades`, main, { tab: "reps", back: [o.name, `/reps/${o.slug}/#more-trades`], partial: pg === FAILED });
+}
 
 // ---------------------------------------------------------------------------
 // "Something wrong?" on a promise: no account; Turnstile plus a daily limit per

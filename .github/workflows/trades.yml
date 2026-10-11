@@ -1,0 +1,52 @@
+# Stock trades by members of Congress: STOCK Act Periodic Transaction Reports
+# from the House Clerk and the Senate's eFD site, with sectors from SEC EDGAR
+# and committee assignments from congress-legislators (tools/load_trades.py;
+# see docs/trades.md). Two kinds of run:
+#
+#   By hand (Actions -> Load stock trades -> Run workflow): "measure" reads a
+#   sample of new reports and writes what it found to the run summary, writing
+#   nothing to D1; "load" writes them.
+#   Daily (once a measure run on real reports looks right, a schedule is
+#   added here): loads up to 300 new reports, newest first, back to 2023.
+#
+# These records may not be used for commercial purposes (Ethics in Government
+# Act): never sell, export or put them behind a paid plan.
+#
+# Needs these repository secrets (Settings -> Secrets and variables -> Actions):
+#   CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID   D1 access, as for "Load state votes"
+#   SEC_USER_AGENT (optional)   "Name email@example.org": EDGAR asks for a contact
+name: Load stock trades
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "measure (report what it reads, write nothing) or load"
+        type: choice
+        options: [measure, load]
+        default: measure
+      max_reports:
+        description: "New reports to read this run, newest first"
+        default: "40"
+permissions:
+  contents: read
+concurrency:
+  group: trades
+  cancel-in-progress: false
+jobs:
+  load:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null
+      - name: Measure or load
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+          MODE: ${{ github.event.inputs.mode || 'load' }}
+          MAX_REPORTS: ${{ github.event.inputs.max_reports || '300' }}
+        run: python3 tools/load_trades.py --mode "$MODE" --max-reports "$MAX_REPORTS"
