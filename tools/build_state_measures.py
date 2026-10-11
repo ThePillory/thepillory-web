@@ -348,7 +348,9 @@ def collapse_tables(items):
     while changed:
         changed = False
         for k, x in enumerate(out):
-            if short_label(x) and ((k > 0 and is_table(out[k - 1])) or (k + 1 < len(out) and is_table(out[k + 1]))):
+            between = 0 < k < len(out) - 1 and is_table(out[k - 1]) and is_table(out[k + 1])
+            if (short_label(x) and ((k > 0 and is_table(out[k - 1])) or (k + 1 < len(out) and is_table(out[k + 1])))) or (
+                    between and isinstance(x, dict) and "h" in x and not x["h"].endswith("?")):
                 out[k] = {"table": True}
                 changed = True
     # neighbouring markers are one table
