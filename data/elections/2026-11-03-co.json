@@ -116,14 +116,16 @@
      "side": "for",
      "heading": "Arguments for Amendment 81",
      "paragraphs": [
-      "1) Violent individuals and repeat offenders residing in the United States unlawfully should be reported to federal immigration authorities for further enforcement action, which could include removal from the country. The measure increases communication and coordination between Colorado law enforcement and federal immigration authorities to identify individuals who may pose a threat to public safety, without targeting those who are otherwise law-abiding and contribute positively to society. 2) The measure creates a new uniform statewide standard for cooperation with federal immigration authorities. Consistent requirements across jurisdictions improve enforcement and reduce variation among local policies, thus improving public safety and allowing the criminal justice system to work efficiently and effectively in removing potential criminals from the country."
+      "1) Violent individuals and repeat offenders residing in the United States unlawfully should be reported to federal immigration authorities for further enforcement action, which could include removal from the country. The measure increases communication and coordination between Colorado law enforcement and federal immigration authorities to identify individuals who may pose a threat to public safety, without targeting those who are otherwise law-abiding and contribute positively to society.",
+      "2) The measure creates a new uniform statewide standard for cooperation with federal immigration authorities. Consistent requirements across jurisdictions improve enforcement and reduce variation among local policies, thus improving public safety and allowing the criminal justice system to work efficiently and effectively in removing potential criminals from the country."
      ]
     },
     {
      "side": "against",
      "heading": "Arguments against Amendment 81",
      "paragraphs": [
-      "1) The measure undermines the constitutional right to due process and the presumption of innocence by requiring local law enforcement to report individuals to DHS and Immigration and Customs Enforcement (ICE) before a court determines whether the individual committed a crime. Criminal charges are allegations, not findings of guilt, and individuals should not face potentially life-altering immigration consequences, including deportation, before receiving a fair trial. People who are legally present or who are found to not have committed any crime could be swept up in immigration enforcement actions if they are unable to prove their status in the measure’s strict 72-hour timeframe. 2) The measure is too broad to be enforced equitably and consistently, which erodes trust between law enforcement and their communities. By failing to define key terms such as “reasonable effort” or “lawful presence,” enforcement is left up to the discretion of individual officers, who may rely on subjective characteristics such as language spoken or personal appearance when deciding to review a person’s legal status. This breakdown in trust may deter some individuals from reporting crimes, cooperating with investigations, or seeking assistance for fear of subjecting themselves or members of their community to immigration enforcement."
+      "1) The measure undermines the constitutional right to due process and the presumption of innocence by requiring local law enforcement to report individuals to DHS and Immigration and Customs Enforcement (ICE) before a court determines whether the individual committed a crime. Criminal charges are allegations, not findings of guilt, and individuals should not face potentially life-altering immigration consequences, including deportation, before receiving a fair trial. People who are legally present or who are found to not have committed any crime could be swept up in immigration enforcement actions if they are unable to prove their status in the measure’s strict 72-hour timeframe.",
+      "2) The measure is too broad to be enforced equitably and consistently, which erodes trust between law enforcement and their communities. By failing to define key terms such as “reasonable effort” or “lawful presence,” enforcement is left up to the discretion of individual officers, who may rely on subjective characteristics such as language spoken or personal appearance when deciding to review a person’s legal status. This breakdown in trust may deter some individuals from reporting crimes, cooperating with investigations, or seeking assistance for fear of subjecting themselves or members of their community to immigration enforcement."
      ]
     }
    ],
@@ -279,7 +281,7 @@
      "by": "Legislative Council Staff, Colorado General Assembly",
      "paragraphs": [
       {
-       "h": "What does Amendment 83 do?"
+       "table": true
       },
       "Amendment 83 establishes a right in the Colorado Constitution to fish and hunt certain wildlife, and establishes hunting and fishing as the preferred means of managing fish and wildlife populations. The right applies to traditional hunting and fishing methods. It does not apply to species that are not typically hunted or fished (nongame species), endangered species, or any species that is illegal to hunt under federal law. This measure does not change existing laws related to trespassing on private property. It allows the state to regulate hunting, fishing, and wildlife management if necessary for sound scientific reasons, public safety, or to preserve future hunting and fishing opportunities.",
       {
@@ -289,17 +291,11 @@
       "Current regulations on hunting and fishing include: ●",
       "where and when hunting and fishing can occur;",
       {
-       "h": "●"
+       "table": true
       },
       "license and permit requirements;",
       {
-       "h": "●"
-      },
-      {
-       "h": "methods and materials for hunters and anglers; and"
-      },
-      {
-       "h": "●"
+       "table": true
       },
       "limits on how many animals can be hunted, fished, or trapped.",
       "Regulations are generally guided by information on wildlife and fish populations, species and habitat management plans, and recreational opportunities and needs.",
@@ -503,7 +499,7 @@
       "A person may propose a new law or change to existing laws through the initiative process. Through this process, the change may be placed on the ballot if the person collects enough signatures from registered voters. Before collecting signatures, every initiative receives a ballot title written by the state Title Board. The board is made up of representatives from the Attorney General’s office, the Secretary of State’s office, and the legislature’s legal office. The ballot title is a brief statement intended to fairly and accurately represent the intent and meaning of an initiative. State law requires that the Title Board write ballot titles that are brief and help voters understand the effect of a “yes” or “no” vote on the measure. The board must write titles in plain language, that are understandable by the widest possible audience, and that avoid legal, technical, or specialized terminology, when possible.",
       "The state legislature may also refer measures to the ballot. When the legislature refers a measure, the legislature writes the ballot title. State law requires that bills and bill titles be written in plain, nontechnical language, use words with common meaning, and be understandable to the average reader.",
       {
-       "h": "What does Amendment 85 do?"
+       "table": true
       },
       "Amendment 85 requires that all ballot titles be in plain language, written at no more than an eighth-grade reading level. The measure does not define plain language or designate who will determine if ballot titles meet the standard. An eighth-grade reading level is described as one that is easily and fully understood by a majority of people. This typically includes short sentences, familiar words, and a conversational tone. Amendment 85 also prohibits laws requiring citizen initiatives to include language in the ballot title that may interfere with the plain language requirement. The ballot titles for measures referred by the state legislature are not subject to this prohibition. There are several current laws that require additional language in ballot titles. For example, if a citizen initiative raises or lowers state taxes, the initiative’s title must include specific language describing the changes and the impact on taxpayers. For citizen initiatives that reduce tax collections, the title must include an estimate of potential state spending reductions and how reduced revenue might impact the three largest areas of government spending."
      ]
@@ -526,7 +522,8 @@
      "side": "for",
      "heading": "Arguments for Amendment 85",
      "paragraphs": [
-      "1) While ballot titles are supposed to be written as plainly as possible, this measure provides additional guidance as to what that means by requiring an eighth-grade reading level as the standard. Providing a constitutional standard will help in crafting simple titles that voters may better understand when considering their vote, and may help them to navigate complicated and technical information when trying to understand a measure’s impact. 2) The measure creates a constitutional protection against the state legislature interfering with plain language in initiative ballot titles. Citizen initiatives are a way for the public to pass laws without restrictions created by the legislature. This measure ensures that no future legislature may add laws or change existing laws to create complicated or confusing initiative ballot titles."
+      "1) While ballot titles are supposed to be written as plainly as possible, this measure provides additional guidance as to what that means by requiring an eighth-grade reading level as the standard. Providing a constitutional standard will help in crafting simple titles that voters may better understand when considering their vote, and may help them to navigate complicated and technical information when trying to understand a measure’s impact.",
+      "2) The measure creates a constitutional protection against the state legislature interfering with plain language in initiative ballot titles. Citizen initiatives are a way for the public to pass laws without restrictions created by the legislature. This measure ensures that no future legislature may add laws or change existing laws to create complicated or confusing initiative ballot titles."
      ]
     },
     {
@@ -603,7 +600,7 @@
       },
       "Off-cycle redistricting means changing the boundaries of congressional districts between the regular redistricting periods. The current redistricting process, protected in the Colorado Constitution, is designed for redrawing congressional and legislative districts immediately following the census and does not establish a process specifically for off-cycle redistricting. Since 2025, at least ten states have changed their congressional district maps through off-cycle redistricting.",
       {
-       "h": "What does Amendment 86 do?"
+       "table": true
       },
       "Amendment 86 requires that any off-cycle redistricting, if it were to occur, be approved by the commission and adopted by the Colorado Supreme Court. Before approving any changes, the commission must hold at least three public hearings. The measure also prohibits off-cycle changes to congressional districts that intentionally favor a political party or unnecessarily divide communities of interest. Any such redistricting efforts would require the use of population figures from the most recent census or another data source."
      ]
@@ -670,7 +667,7 @@
    "no_means": "A “no” vote on Amendment 87 keeps the current constitutional requirement for a flat state income tax rate.",
    "means_by": "Legislative Council Staff, Colorado General Assembly",
    "lead": {
-    "text": "statutes to: remove the constitutional requirement that the state income tax be set at a single flat rate; replace the current flat income tax with a graduated state income tax that sets lower rates for lower incomes and higher rates for higher incomes; spend the additional revenue collected from these income tax rate changes on K-12 education, health care, and early childhood care and education; and exempt additional revenue collected under the measure from the state’s constitutional revenue limit.",
+    "text": "Amendment 87 proposes amending the Colorado Constitution and Colorado statutes to: remove the constitutional requirement that the state income tax be set at a single flat rate; replace the current flat income tax with a graduated state income tax that sets lower rates for lower incomes and higher rates for higher incomes; spend the additional revenue collected from these income tax rate changes on K-12 education, health care, and early childhood care and education; and exempt additional revenue collected under the measure from the state’s constitutional revenue limit.",
     "source": "The Blue Book's summary, written by the Legislative Council Staff."
    },
    "sections": [
@@ -679,10 +676,7 @@
      "heading": "What the measure proposes",
      "by": "Legislative Council Staff, Colorado General Assembly",
      "paragraphs": [
-      {
-       "h": "Amendment 87 proposes amending the Colorado Constitution and Colorado"
-      },
-      "statutes to:",
+      "Amendment 87 proposes amending the Colorado Constitution and Colorado statutes to:",
       "remove the constitutional requirement that the state income tax be set at a single flat rate;",
       "replace the current flat income tax with a graduated state income tax that sets lower rates for lower incomes and higher rates for higher incomes;",
       "spend the additional revenue collected from these income tax rate changes on K-12 education, health care, and early childhood care and education; and",
@@ -695,7 +689,7 @@
      "by": "Legislative Council Staff, Colorado General Assembly",
      "paragraphs": [
       {
-       "h": "What does Amendment 87 do?"
+       "table": true
       },
       "The measure replaces the state’s current flat income tax rate for individuals and businesses with a graduated income tax that lowers taxes for taxable income below $500,000 and raises taxes for taxable income above $500,000. It requires that the additional money collected from this change be spent on K-12 education, health care, and early childhood care and education, and exempts this money from the state’s constitutional revenue limit, also known as the Taxpayer’s Bill of Rights (TABOR) limit. The state must produce an audited annual report on how much additional revenue was collected and how it was spent.",
       {
@@ -703,335 +697,27 @@
       },
       "Since 1987, Colorado has had a flat income tax rate, in which all taxpayers, including individuals and businesses, pay the same income tax rate on their income. The state’s current flat income tax rate is 4.4 percent. The majority of state income tax revenue is used for general state programs and services. The TABOR amendment in the state constitution requires that income be taxed at a flat rate. Income tax is paid on a portion of a household’s or business’s income, which is called taxable income. For example, a married couple earning $42,000 in income per year may have about $10,000 in taxable income and owe $440 in taxes annually. A married couple earning $130,000 in income per year may have about $100,000 in taxable income and owe $4,400 in taxes annually.",
       {
-       "h": "What is the graduated income tax structure proposed in Amendment 87?"
+       "table": true
       },
       "Amendment 87 removes the constitutional requirement that income be taxed at a flat rate and creates a graduated income tax starting in 2027. In this graduated tax system, an individual’s or business’s income is split into six ranges—called brackets—with the lowest income tax bracket taxed at the lowest rate and each higher bracket taxed at increasing rates, as shown in Table 1. This is similar to how the federal income tax works. Unlike the federal income tax, the new state income tax brackets are not adjusted for inflation, so more of taxpayers’ incomes will fall into the higher brackets over time. Each tax rate is only applied to the portion of taxable income that falls into that bracket. Table 1 Graduated Income Tax Rates by Income Bracket Under Amendment 87 Current Tax Rate",
       {
-       "h": "Tax Rate"
-      },
-      {
-       "h": "Difference"
-      },
-      {
-       "h": "$25,001 to $100,000"
-      },
-      {
-       "h": "4.4%"
-      },
-      {
-       "h": "4.2%"
-      },
-      {
-       "h": "-0.2"
-      },
-      {
-       "h": "$500,001 to $750,000"
-      },
-      {
-       "h": "4.4%"
-      },
-      {
-       "h": "Taxable Income Bracket"
-      },
-      {
-       "h": "$25,000 or less"
-      },
-      {
-       "h": "$100,001 to $500,000"
-      },
-      {
-       "h": "$750,001 to $1,000,000"
-      },
-      {
-       "h": "More than $1,000,000"
-      },
-      {
-       "h": "4.4%"
-      },
-      {
-       "h": "4.4%"
-      },
-      {
-       "h": "4.4%"
-      },
-      {
-       "h": "4.4%"
-      },
-      {
-       "h": "3.7%"
-      },
-      {
-       "h": "4.4%"
-      },
-      {
-       "h": "-0.7"
-      },
-      {
-       "h": "0.0"
-      },
-      {
-       "h": "7.4%"
-      },
-      {
-       "h": "+3.0"
-      },
-      {
-       "h": "8.4%"
-      },
-      {
-       "h": "+4.0"
-      },
-      {
-       "h": "7.9%"
-      },
-      {
-       "h": "+3.5"
+       "table": true
       },
       "For example, as shown in Figure 1 below, an individual or business earning $125,000 a year in taxable income is taxed at a rate of 3.7 percent for the first $25,000. The next portion of taxable income between $25,000 and $100,000 is taxed at a rate of 4.2 percent. The remaining $25,000 is taxed at the rate of 4.4 percent. The total tax owed under the measure would be $5,175, or $325 less than the $5,500 they would owe under current law.",
       {
-       "h": "Figure11"
+       "table": true
       },
+      "Rates and Taxes Owed for a Taxpayer Tax Rates and Taxes Owed for a Taxpayerwith with$125,000 $125,000in inTaxable TaxableIncome Income $125,000",
       {
-       "h": "Figure"
-      },
-      {
-       "h": "Tax"
-      },
-      {
-       "h": "Rates"
-      },
-      {
-       "h": "and"
-      },
-      {
-       "h": "Taxes"
-      },
-      {
-       "h": "Owed"
-      },
-      {
-       "h": "for"
-      },
-      {
-       "h": "a"
-      },
-      {
-       "h": "Taxpayer"
-      },
-      {
-       "h": "Tax Rates and Taxes Owed for a Taxpayerwith"
-      },
-      {
-       "h": "with$125,000"
-      },
-      {
-       "h": "$125,000in"
-      },
-      {
-       "h": "inTaxable"
-      },
-      {
-       "h": "TaxableIncome"
-      },
-      {
-       "h": "Income"
-      },
-      {
-       "h": "$125,000"
-      },
-      {
-       "h": "$100,001 to"
-      },
-      {
-       "h": "$125,000"
-      },
-      {
-       "h": "$25,000 x 4.4% = $1,100"
-      },
-      {
-       "h": "x 4.4% = $5,500"
-      },
-      {
-       "h": "$25,001 to"
-      },
-      {
-       "h": "$100,000"
-      },
-      {
-       "h": "$75,000 x 4.2% = $3,150"
-      },
-      {
-       "h": "$5,500"
-      },
-      {
-       "h": "First $25,000"
-      },
-      {
-       "h": "$25,000 x 3.7% = $925"
-      },
-      {
-       "h": "$5,175"
-      },
-      {
-       "h": "Current Law"
-      },
-      {
-       "h": "Taxes Owed"
-      },
-      {
-       "h": "Taxable Income"
-      },
-      {
-       "h": "Taxes Owed"
-      },
-      {
-       "h": "$100,000"
-      },
-      {
-       "h": "$75,000"
-      },
-      {
-       "h": "$125,000"
-      },
-      {
-       "h": "$50,000"
-      },
-      {
-       "h": "$25,000"
-      },
-      {
-       "h": "$0"
-      },
-      {
-       "h": "Current Law"
-      },
-      {
-       "h": "Taxable Income"
-      },
-      {
-       "h": "How does Amendment 87 change the amount of taxes owed?"
+       "table": true
       },
       "For individuals and businesses with taxable incomes of less than $500,000, the measure decreases the amount of income taxes owed, up to a maximum reduction of $325 per taxpayer. For taxpayers with incomes of about $500,000 and above, the measure increases the amount of income taxes owed. Table 2 shows an example of taxes owed under the measure and under current law for seven hypothetical taxpayers with different levels of taxable income. Table 2 Taxes Owed Under Current Law and Amendment 87 Example Taxable Income",
       {
-       "h": "$25,000"
-      },
-      {
-       "h": "$62,500"
-      },
-      {
-       "h": "$125,000"
-      },
-      {
-       "h": "$300,000"
-      },
-      {
-       "h": "$550,000"
-      },
-      {
-       "h": "$625,000"
-      },
-      {
-       "h": "$875,000"
-      },
-      {
-       "h": "$2,000,000"
-      },
-      {
-       "h": "Current"
-      },
-      {
-       "h": "Income Tax Owed"
-      },
-      {
-       "h": "Income Tax Owed"
-      },
-      {
-       "h": "Difference in"
-      },
-      {
-       "h": "Income Tax Owed"
-      },
-      {
-       "h": "$2,750"
-      },
-      {
-       "h": "$2,500"
-      },
-      {
-       "h": "-$250"
-      },
-      {
-       "h": "$1,100"
-      },
-      {
-       "h": "$925"
-      },
-      {
-       "h": "$5,500"
-      },
-      {
-       "h": "$5,175"
-      },
-      {
-       "h": "$13,200"
-      },
-      {
-       "h": "$12,875"
-      },
-      {
-       "h": "$24,200"
-      },
-      {
-       "h": "$25,375"
-      },
-      {
-       "h": "$27,500"
-      },
-      {
-       "h": "$30,925"
-      },
-      {
-       "h": "$38,500"
-      },
-      {
-       "h": "$50,050"
-      },
-      {
-       "h": "$88,000"
-      },
-      {
-       "h": "$143,925"
-      },
-      {
-       "h": "-1-"
-      },
-      {
-       "h": "-$175"
-      },
-      {
-       "h": "-$325"
-      },
-      {
-       "h": "-$325"
-      },
-      {
-       "h": "+$1,175"
-      },
-      {
-       "h": "+$3,425"
-      },
-      {
-       "h": "+$11,550"
-      },
-      {
-       "h": "+$55,925"
-      },
-      {
-       "h": "How does Amendment 87 change state revenue?"
+       "table": true
       },
       "By changing tax rates for individuals and businesses, Amendment 87 is expected to increase state income tax revenue by an estimated $2 billion in the first full year and more in later years. However, actual revenue collections may be more or less than this estimate depending on economic conditions and other factors. The change in state revenue under the measure is calculated as the difference between the actual income tax revenue collected under the measure’s graduated income tax rates and the income tax revenue that would have been collected under the state’s current rate of 4.4 percent. See the Fiscal Impact section below for additional detail.",
       {
-       "h": "Does Amendment 87 impact TABOR refunds?"
+       "table": true
       },
       "The measure has no impact on current TABOR refunds or TABOR refund mechanisms. Under current law, the state is expected to collect $15 billion in income tax revenue in 2028. Under this measure, it is expected to collect $2 billion more in income tax revenue, for a total of $17 billion. The additional $2 billion is exempt from the TABOR limit. The TABOR limit and the amount of revenue subject to the limit remain the same, and estimated TABOR refunds will not change. For additional information, see the LCS memorandum titled, “A Brief Overview of the TABOR Revenue Limit.”1",
       {
@@ -1039,7 +725,7 @@
       },
       "The increased revenue collected under Amendment 87 must be spent on K-12 education, health care, and early childhood care and education. It must add to, and not replace, spending on those services. The state legislature will decide what specific programs will receive additional funding and how much.",
       {
-       "h": "What happens if Amendment 87 and Proposition 136 both pass?"
+       "table": true
       },
       "Proposition 136 limits the state income tax rate at the current law rate of 4.4 percent. If both Amendment 87 and Proposition 136 are approved by voters, the proposed tax rates for income over $500,000 in Amendment 87 would be higher than the 4.4 percent limit in Proposition 136. Generally, when parts of voter-approved measures conflict, the policy outcome is determined by the measure that received more votes. However, if both measures are approved by voters, the exact outcome is unclear. The state legislature or a court will need to determine how to resolve any conflicts."
      ]
@@ -1053,12 +739,7 @@
        "h": "Taxpayer Impacts"
       },
       "Amendment 87 will decrease the amount of income tax owed by taxpayers with Colorado taxable income of less than $510,834 and increase the amount of income tax owed by taxpayers with Colorado taxable income of $510,834 and above. State law requires Legislative Council Staff to estimate the potential tax burden on affected taxpayers within specified federal adjusted gross income categories. Federal adjusted gross income is total income from all sources, with certain adjustments, as determined when filing federal income taxes. Colorado taxable income, calculated when filing state income taxes, is based on federal adjusted gross income with additional adjustments required or allowed under state law. Table 3 shows the expected change in tax burden by federal adjusted gross income category. The measure has no impact on current TABOR refunds or TABOR refund mechanisms. Table 3 Estimated Impact on Taxpayers by Income Income Category",
-      {
-       "h": "Estimated Number"
-      },
-      {
-       "h": "of Taxpayers"
-      },
+      "Estimated Number of Taxpayers",
       {
        "h": "Total Change in"
       },
@@ -1069,151 +750,7 @@
        "h": "Average Change in"
       },
       {
-       "h": "Tax Burden"
-      },
-      {
-       "h": "$15,000 to $29,999"
-      },
-      {
-       "h": "408,924"
-      },
-      {
-       "h": "-$16,093,434"
-      },
-      {
-       "h": "-$39"
-      },
-      {
-       "h": "$14,999 or less"
-      },
-      {
-       "h": "$30,000 to $39,999"
-      },
-      {
-       "h": "$40,000 to $49,999"
-      },
-      {
-       "h": "$50,000 to $69,999"
-      },
-      {
-       "h": "$70,000 to $99,999"
-      },
-      {
-       "h": "$100,000 to $149,999"
-      },
-      {
-       "h": "$150,000 to $199,999"
-      },
-      {
-       "h": "$200,000 to $249,000"
-      },
-      {
-       "h": "579,309"
-      },
-      {
-       "h": "272,616"
-      },
-      {
-       "h": "238,539"
-      },
-      {
-       "h": "443,000"
-      },
-      {
-       "h": "408,912"
-      },
-      {
-       "h": "-$29,611,480"
-      },
-      {
-       "h": "-$38,651,945"
-      },
-      {
-       "h": "-$85,925,358"
-      },
-      {
-       "h": "-$93,232,609"
-      },
-      {
-       "h": "408,912"
-      },
-      {
-       "h": "-$115,554,178"
-      },
-      {
-       "h": "102,228"
-      },
-      {
-       "h": "-$33,224,100"
-      },
-      {
-       "h": "238,532"
-      },
-      {
-       "h": "$250,000 to $499,999"
-      },
-      {
-       "h": "204,456"
-      },
-      {
-       "h": "$1,000,000 or more"
-      },
-      {
-       "h": "46,328"
-      },
-      {
-       "h": "$500,000 to $999,999"
-      },
-      {
-       "h": "-$638,951"
-      },
-      {
-       "h": "55,900"
-      },
-      {
-       "h": "-$77,522,900"
-      },
-      {
-       "h": "-$66,448,200"
-      },
-      {
-       "h": "-$15,893,609"
-      },
-      {
-       "h": "$1,208,468,497"
-      },
-      {
-       "h": "-$1"
-      },
-      {
-       "h": "-$109"
-      },
-      {
-       "h": "-$162"
-      },
-      {
-       "h": "-$194"
-      },
-      {
-       "h": "-$228"
-      },
-      {
-       "h": "-$283"
-      },
-      {
-       "h": "-$325"
-      },
-      {
-       "h": "-$325"
-      },
-      {
-       "h": "-$325"
-      },
-      {
-       "h": "-$284"
-      },
-      {
-       "h": "+$26,085"
+       "table": true
       },
       "Income is federal adjusted gross income, not Colorado taxable income; therefore, the income ranges and tax rates do not align with those in Table 2. The estimated number of taxpayers column counts joint filers as one taxpayer. Estimates are based on Colorado Department of Revenue data for all residents for tax year 2023 and Legislative Council Staff estimates.",
       {
@@ -1242,14 +779,18 @@
       {
        "h": "Online at: leg.colorado.gov/bluebook"
       },
-      "households and small businesses, and puts more money in the hands of working families who will spend it in their local communities. 2) The measure funds critical services at a time when additional funding is desperately needed. Crucial programs are at risk of further cuts because of changes in federal policy. Revenue from the graduated tax will fund education, health care, and child care, public services that many Colorado households rely on. Colorado public schools are significantly underfunded, and constraints on the state budget make Medicaid cuts increasingly likely. Additional funding will provide more security for the people who depend on these services. 3) The graduated income tax is not an experiment, but a proven approach for funding essential public services. The federal government and 27 other states already have a graduated income tax. This tax structure lessens rising wealth inequality and increases funding for state programs. Sales and property taxes place greater burdens on lower-income households, and a graduated income tax corrects for this inequity while also funding services for all Coloradans."
+      "households and small businesses, and puts more money in the hands of working families who will spend it in their local communities.",
+      "2) The measure funds critical services at a time when additional funding is desperately needed. Crucial programs are at risk of further cuts because of changes in federal policy. Revenue from the graduated tax will fund education, health care, and child care, public services that many Colorado households rely on. Colorado public schools are significantly underfunded, and constraints on the state budget make Medicaid cuts increasingly likely. Additional funding will provide more security for the people who depend on these services.",
+      "3) The graduated income tax is not an experiment, but a proven approach for funding essential public services. The federal government and 27 other states already have a graduated income tax. This tax structure lessens rising wealth inequality and increases funding for state programs. Sales and property taxes place greater burdens on lower-income households, and a graduated income tax corrects for this inequity while also funding services for all Coloradans."
      ]
     },
     {
      "side": "against",
      "heading": "Arguments against Amendment 87",
      "paragraphs": [
-      "1) The measure is a multibillion-dollar tax increase, and hiking taxes on higher incomes will harm Colorado’s economy. Higher tax rates make Colorado a less competitive place to start and grow a business, and may encourage some high earners to leave the state entirely. When businesses and high-earning individuals relocate, people at all income levels may lose their jobs. Further, because the brackets do not increase with inflation, more and more taxpayers will pay these higher taxes each year. Colorado cannot risk employers and jobs fleeing the state because our taxes are too high. Keeping taxes competitive for everyone fuels economic activity and builds a stronger, more prosperous Colorado for all. 2) The measure is an attack on the fair and predictable tax system that TABOR currently guarantees. The state’s current flat tax is fair because everyone has equal access to state services, high-income earners already pay more taxes, and low-income earners qualify for more tax deductions and credits. The state should better prioritize the tens of billions of dollars it already collects, rather than switch to a new, complicated tax system. 3) The measure will permanently expand the size of government, increase careless and wasteful spending of taxpayer dollars, and hinder economic growth. Instead of spending billions of dollars more on broadly defined government services, state policy should focus on lowering taxes for everyone or funding specific programs that are proven to help Colorado’s residents."
+      "1) The measure is a multibillion-dollar tax increase, and hiking taxes on higher incomes will harm Colorado’s economy. Higher tax rates make Colorado a less competitive place to start and grow a business, and may encourage some high earners to leave the state entirely. When businesses and high-earning individuals relocate, people at all income levels may lose their jobs. Further, because the brackets do not increase with inflation, more and more taxpayers will pay these higher taxes each year. Colorado cannot risk employers and jobs fleeing the state because our taxes are too high. Keeping taxes competitive for everyone fuels economic activity and builds a stronger, more prosperous Colorado for all.",
+      "2) The measure is an attack on the fair and predictable tax system that TABOR currently guarantees. The state’s current flat tax is fair because everyone has equal access to state services, high-income earners already pay more taxes, and low-income earners qualify for more tax deductions and credits. The state should better prioritize the tens of billions of dollars it already collects, rather than switch to a new, complicated tax system.",
+      "3) The measure will permanently expand the size of government, increase careless and wasteful spending of taxpayer dollars, and hinder economic growth. Instead of spending billions of dollars more on broadly defined government services, state policy should focus on lowering taxes for everyone or funding specific programs that are proven to help Colorado’s residents."
      ]
     }
    ],
@@ -1325,13 +866,7 @@
       {
        "h": "TABOR limit"
       },
-      {
-       "h": "Estimated revenue"
-      },
-      {
-       "h": "retained under"
-      },
-      "Prop. NN: $500 million in the first year",
+      "Estimated revenue retained under Prop. NN: $500 million in the first year",
       {
        "h": "$0"
       },
@@ -1341,12 +876,7 @@
       {
        "h": "Prop. NN limit is"
       },
-      {
-       "h": "$4.6 billion higher"
-      },
-      {
-       "h": "in the first year"
-      },
+      "$4.6 billion higher in the first year",
       {
        "h": "Revenue below the"
       },
@@ -1365,64 +895,15 @@
       },
       "Proposition NN’s impact on TABOR refunds depends on how much money the state collects above the current TABOR limit in a given year, and how much the state spent on public education in prior years. Figure 2 shows the range of possible TABOR refund impacts, which will vary from year to year. Under current estimates, revenue in the next several years is expected to exceed the current TABOR limit but not the new Proposition NN limit, which would eliminate TABOR refunds in these years, as described in Scenario 2 in the figure below.",
       {
-       "h": "Figure 2"
+       "table": true
       },
+      "Higher revenue",
       {
-       "h": "Figure 2"
+       "table": true
       },
+      "Lower revenue",
       {
-       "h": "Scenarios for TABOR Refund Changes"
-      },
-      {
-       "h": "Scenarios for TABOR Refund Changes"
-      },
-      {
-       "h": "Higher"
-      },
-      {
-       "h": "revenue"
-      },
-      {
-       "h": "30.0"
-      },
-      {
-       "h": "25.0"
-      },
-      {
-       "h": "Prop. NN"
-      },
-      {
-       "h": "Limit"
-      },
-      {
-       "h": "20.0"
-      },
-      {
-       "h": "15.0"
-      },
-      {
-       "h": "TABOR"
-      },
-      {
-       "h": "Limit"
-      },
-      {
-       "h": "10.0"
-      },
-      {
-       "h": "5.0"
-      },
-      {
-       "h": "Lower"
-      },
-      {
-       "h": "revenue"
-      },
-      {
-       "h": "0.0"
-      },
-      {
-       "h": "Scenario 1 – Revenue exceeds the Prop. NN limit"
+       "table": true
       },
       "In years when state revenue exceeds the new Prop. NN limit, Prop. NN reduces TABOR refunds. Revenue is not likely to exceed the Prop. NN limit in the first several years, but this scenario becomes more likely over time. Scenario 2 – Revenue exceeds the TABOR limit, but not the Prop. NN limit In years when state revenue exceeds the current TABOR limit and is less than the new Prop. NN limit, Prop. NN eliminates TABOR refunds. This is the most likely scenario for the next several years, unless there is a recession. Scenario 3 – Revenue falls below the TABOR limit In years when state revenue falls below the current TABOR limit, which may happen during a recession, Prop. NN has no impact on TABOR refunds, as refunds would not be made under current law.",
       {
@@ -1430,13 +911,7 @@
       },
       "Proposition NN specifies how revenue retained above the current TABOR limit must be spent. The revenue must first be used to reimburse local governments for the lost tax revenue from property tax exemptions for seniors, veterans with a disability, and Gold Star surviving spouses, as is already required as a TABOR refund mechanism under current law. All remaining revenue is deposited into the newly created Children’s Account. Figure 3 shows new spending requirements under Proposition NN",
       {
-       "h": "Figure 3"
-      },
-      {
-       "h": "New Spending Requirements Under Proposition NN"
-      },
-      {
-       "h": "How will the K‑12 funding be used?"
+       "table": true
       },
       "Money in the Children’s Account must first be used for increased teacher pay and retention, access to career and technical courses, and smaller class sizes. This money will be distributed to school districts and charter schools that then decide how to spend this money within allowable uses. They must post downloadable, sortable information online about how they spent the money. The amount required to be spent for these purposes will grow each year for ten years, and then remain flat in later years. The amount is expected to be about $110 million in the first year, $220 million in the second year, and may grow to between $1 billion and $2 billion per year by the end of ten years. These amounts are only paid if enough revenue is retained. For the first ten years, if the amount spent on teacher pay and retention, career and technical courses, and smaller class sizes is less than half the amount in the account, then the measure requires additional spending on disability services, school services, and increasing instructional hours, such that at least half the amount in the account is spent on K-12 education overall. Funding for disability services, school services, and increasing instructional hours is estimated at about $130 million in the first year and $20 million in the second year. The state legislature will determine how to allocate these funds to schools and districts.",
       {
@@ -1463,130 +938,31 @@
       },
       "Proposition NN is expected to reduce the amount refunded to taxpayers by $329.9 million in the current 2026-27 budget year, $521.0 million in the 2027-28 budget year, and by varying amounts in future years. This eliminates TABOR refunds for budget years 2026-27 and 2027-28. Table 1 shows estimated TABOR refunds under Proposition NN for certain income levels. Table 1 Estimated TABOR Refunds for Certain Income Levels Adjusted Gross Income $50,000",
       {
-       "h": "2027 Refund"
+       "table": true
       },
       "Current Law: Single Filers",
       {
-       "h": "2027 Refund"
+       "table": true
       },
       "Current Law: Joint Filers",
       {
-       "h": "2027 Refund"
+       "table": true
       },
       "Prop. NN: All Filers",
       {
-       "h": "2028 Refund"
+       "table": true
       },
       "Current Law: Single Filers",
       {
-       "h": "2028 Refund"
+       "table": true
       },
       "Current Law: Joint Filers",
       {
-       "h": "2028 Refund"
+       "table": true
       },
       "Prop. NN: All Filers",
       {
-       "h": "$28"
-      },
-      {
-       "h": "$56"
-      },
-      {
-       "h": "$0"
-      },
-      {
-       "h": "$58"
-      },
-      {
-       "h": "$86"
-      },
-      {
-       "h": "$0"
-      },
-      {
-       "h": "$75,000"
-      },
-      {
-       "h": "$100,000"
-      },
-      {
-       "h": "$200,000"
-      },
-      {
-       "h": "$500,000"
-      },
-      {
-       "h": "$21"
-      },
-      {
-       "h": "$28"
-      },
-      {
-       "h": "$38"
-      },
-      {
-       "h": "$65"
-      },
-      {
-       "h": "$42"
-      },
-      {
-       "h": "$56"
-      },
-      {
-       "h": "$76"
-      },
-      {
-       "h": "$130"
-      },
-      {
-       "h": "$0"
-      },
-      {
-       "h": "$0"
-      },
-      {
-       "h": "$0"
-      },
-      {
-       "h": "$0"
-      },
-      {
-       "h": "$39"
-      },
-      {
-       "h": "$68"
-      },
-      {
-       "h": "$121"
-      },
-      {
-       "h": "$276"
-      },
-      {
-       "h": "$58"
-      },
-      {
-       "h": "$96"
-      },
-      {
-       "h": "$162"
-      },
-      {
-       "h": "$352"
-      },
-      {
-       "h": "$0"
-      },
-      {
-       "h": "$0"
-      },
-      {
-       "h": "$0"
-      },
-      {
-       "h": "$0"
+       "table": true
       },
       "Note: This table assumes that taxpayers claim the standard deduction and no other deductions. This table shows TABOR refunds for individual taxpayers, not corporations. Corporations are not expected to receive TABOR refunds in 2027, and are expected to receive smaller TABOR refunds than individuals at the same income level in 2028.",
       "A forecast of state revenue subject to TABOR is not available beyond budget year 2027-28. The impact of Proposition NN on TABOR refunds will vary significantly across different years, such that it could have no impact on TABOR refunds in some years and reduce them by over $1,000 per taxpayer in other years. The actual amount that the measure reduces TABOR refunds will depend on how much money the state collects above the current TABOR limit in future years.",
@@ -1595,79 +971,7 @@
       },
       "The measure increases state spending by an estimated $329.9 million in budget year 2026-27 and $521.0 million in budget year 2027-28 on net, and by varying amounts in future years. Changes in state spending are shown in Table 2.",
       {
-       "h": "Table 2"
-      },
-      {
-       "h": "Changes in State Spending Under Proposition NN"
-      },
-      {
-       "h": "Use"
-      },
-      {
-       "h": "Current Year"
-      },
-      {
-       "h": "2026‑27"
-      },
-      {
-       "h": "K-12 Education"
-      },
-      {
-       "h": "$241.5 million"
-      },
-      {
-       "h": "General Government Purposes"
-      },
-      {
-       "h": "-$153.1 million"
-      },
-      {
-       "h": "-$153.1 million"
-      },
-      {
-       "h": "Total Change in Spending"
-      },
-      {
-       "h": "$329.9 million"
-      },
-      {
-       "h": "$521.0 million"
-      },
-      {
-       "h": "Property Tax Reimbursements"
-      },
-      {
-       "h": "Programs That Support Children"
-      },
-      {
-       "h": "Office of State Auditor"
-      },
-      {
-       "h": "Budget Year"
-      },
-      {
-       "h": "2027‑28"
-      },
-      {
-       "h": "$0"
-      },
-      {
-       "h": "$206.1 million"
-      },
-      {
-       "h": "$241.5 million"
-      },
-      {
-       "h": "$234.0 million"
-      },
-      {
-       "h": "$0"
-      },
-      {
-       "h": "$234.0 million"
-      },
-      {
-       "h": "$20,000"
+       "table": true
       },
       "As shown in Table 2, $153.1 million that would be available for the general state budget under current law is instead deposited in the Children’s Account for budget years 2026-27 and 2027-28 only. This reduces General Fund spending in each of these two years. Long‑term spending. After ten years, there is no longer a requirement for half of the money in the account to be spent on K-12 education and half on children’s programs. Beginning in the 2036-37 budget year, the measure increases state spending for property tax reimbursements and funding for teacher pay and retention, smaller class sizes, and career and technical education. Any remaining funds may be used for any purposes as determined by the state legislature.",
       {
@@ -1683,14 +987,16 @@
      "side": "for",
      "heading": "Arguments for Proposition NN",
      "paragraphs": [
-      "1) Proposition NN raises teacher pay, reduces class sizes, and improves career and technical education, benefitting every school district in the state. A state study found that Colorado’s schools face a funding shortfall of $3.5 billion, or about $4,000 per pupil. Proposition NN redirects money the state already collects to Colorado’s kids and classrooms, keeping experienced teachers in the classroom and expanding course options and support. The measure pairs the investment schools need with the accountability taxpayers deserve. 2) Proposition NN frees up funds that should already be supporting Colorado’s children. The price of educating and caring for a child grows year after year, and the current revenue limit does not keep pace. As a result, the state is falling behind on the services that families depend on most. Permanent relief from this limit is long overdue. Proposition NN uses existing revenue to address the real and rising costs of child care, universal preschool, and other early childhood needs."
+      "1) Proposition NN raises teacher pay, reduces class sizes, and improves career and technical education, benefitting every school district in the state. A state study found that Colorado’s schools face a funding shortfall of $3.5 billion, or about $4,000 per pupil. Proposition NN redirects money the state already collects to Colorado’s kids and classrooms, keeping experienced teachers in the classroom and expanding course options and support. The measure pairs the investment schools need with the accountability taxpayers deserve.",
+      "2) Proposition NN frees up funds that should already be supporting Colorado’s children. The price of educating and caring for a child grows year after year, and the current revenue limit does not keep pace. As a result, the state is falling behind on the services that families depend on most. Permanent relief from this limit is long overdue. Proposition NN uses existing revenue to address the real and rising costs of child care, universal preschool, and other early childhood needs."
      ]
     },
     {
      "side": "against",
      "heading": "Arguments against Proposition NN",
      "paragraphs": [
-      "1) Proposition NN is essentially a tax increase, permanently eliminating or reducing TABOR refunds. TABOR refunds are a taxpayer right. Eliminating or sharply reducing those refunds means that government will keep more of the money that families earn. For households already stretched thin, losing TABOR refunds is a significant financial hit. TABOR was enshrined in the state constitution to protect taxpayers against unchecked government growth. 2) Proposition NN eventually hands the state over $5 billion per year at the expense of Colorado families. Funding for Colorado schools has increased 25 percent over the last five years, while enrollment continues to decline. Before reaching deeper into taxpayers' pockets, the government should demonstrate it has exhausted every avenue to reduce wasteful spending, eliminate redundant programs, and deliver existing services more efficiently."
+      "1) Proposition NN is essentially a tax increase, permanently eliminating or reducing TABOR refunds. TABOR refunds are a taxpayer right. Eliminating or sharply reducing those refunds means that government will keep more of the money that families earn. For households already stretched thin, losing TABOR refunds is a significant financial hit. TABOR was enshrined in the state constitution to protect taxpayers against unchecked government growth.",
+      "2) Proposition NN eventually hands the state over $5 billion per year at the expense of Colorado families. Funding for Colorado schools has increased 25 percent over the last five years, while enrollment continues to decline. Before reaching deeper into taxpayers' pockets, the government should demonstrate it has exhausted every avenue to reduce wasteful spending, eliminate redundant programs, and deliver existing services more efficiently."
      ]
     }
    ],
@@ -1760,97 +1066,40 @@
       "The most serious fentanyl-related drug crimes mandate a minimum prison sentence of 8 years up to a maximum of 32 years. This includes offenders who: ●",
       "distributed to a minor;",
       {
-       "h": "●"
-      },
-      {
-       "h": "distributed more than 50 grams of a substance; or"
-      },
-      {
-       "h": "●"
+       "table": true
       },
       "distributed at least 4 grams of a substance that caused death.",
       "In other cases, state law allows for sentences such as probation and treatment, and prohibits state prison for offenders who either: ●",
       "possessed less than 1 gram of a substance with no intent to distribute and do not have multiple past fentanyl convictions;",
       {
-       "h": "●"
+       "table": true
       },
       "possessed between 1 to 4 grams of a substance with no intent to distribute and provided evidence they were unaware the substance contained fentanyl; or",
       {
-       "h": "●"
+       "table": true
       },
       "distributed less than 4 grams and were eligible for “Good Samaritan” protections that reduce criminal penalties for reporting an overdose and staying until help arrives.",
       "When prison time is neither mandated nor prohibited by state law, a judge may determine a sentence within a penalty range. In these scenarios, the judge may consider the unique circumstances of the case, including if the offender was aware of fentanyl in the substance, criminal history, risk to public safety, acceptance of responsibility, or any other circumstance that is relevant to consider at sentencing. Judges may also reduce or modify a penalty in exchange for successful completion of treatment.",
       {
-       "h": "How will penalties change under Proposition 132?"
+       "table": true
       },
       "Proposition 132 increases criminal penalties for fentanyl offenses by expanding felony charges for possession and distribution, imposing longer prison sentences, and limiting judicial discretion. For those convicted of distributing any amount of fentanyl, the measure requires a prison sentence of between 8 and 32 years. It eliminates the possibility for reduced penalties in “Good Samaritan” cases involving distribution. The measure also makes possession of any amount of fentanyl a felony. However, if a person possesses less than one gram and successfully completes court-ordered drug rehabilitation treatment, the felony charge may be reduced to a misdemeanor. Individuals charged with a felony for possessing more than one gram are no longer eligible for this reduction, but the measure keeps \"Good Samaritan\" penalty reductions for other low-level possession offenses. Although not mandated, the measure permits varying lengths of imprisonment for possession.",
       "Judicial discretion is limited by imposing mandatory minimum prison sentences for fentanyl distribution cases. Additionally, courts must order treatment for individuals charged with possessing less than one gram of a substance containing fentanyl, regardless of the circumstances. Finally, judges may not consider mitigating factors, such as whether an offender reasonably believed the substance did not contain fentanyl. Table 1 compares fentanyl offense sentencing between current law and Proposition 132. Table 1 Fentanyl Offense Prison Sentencing under Current Law and Proposition 132 Offense",
       {
-       "h": "Distribution over 50g"
-      },
-      {
-       "h": "Distribution 4-50g"
-      },
-      {
-       "h": "Distribution under 4g"
-      },
-      {
-       "h": "Possession 1-4g"
-      },
-      {
-       "h": "Possession under 1g"
-      },
-      {
-       "h": "Sentencing under Current Law"
+       "table": true
       },
       "Mandatory, 8-32 years in prison.",
+      "Possible, 4-8 years in prison. Increased charges for distribution resulting in death or distribution to a minor.",
+      "Possible, 2-4 years in prison. Increased charges for distribution to a minor; reduced charges for “Good Samaritan” actions.",
+      "Possible, 0.5-1 year in prison. Reduced charges for reasonable deniability or completing alternative sentencing, such as treatment.",
+      "No prison time. Increased charges for multiple past convictions; reduced charges for reasonable deniability or completing alternative sentencing, such as treatment.",
       {
-       "h": "Possible, 4-8 years in prison. Increased"
-      },
-      {
-       "h": "charges for distribution resulting in death"
-      },
-      "or distribution to a minor.",
-      {
-       "h": "Possible, 2-4 years in prison. Increased"
-      },
-      "charges for distribution to a minor; reduced charges for “Good Samaritan” actions.",
-      {
-       "h": "Possible, 0.5-1 year in prison. Reduced"
-      },
-      {
-       "h": "charges for reasonable deniability or"
-      },
-      {
-       "h": "completing alternative sentencing, such"
-      },
-      "as treatment.",
-      {
-       "h": "No prison time. Increased charges for"
-      },
-      {
-       "h": "multiple past convictions; reduced"
-      },
-      {
-       "h": "charges for reasonable deniability or"
-      },
-      {
-       "h": "completing alternative sentencing, such"
-      },
-      "as treatment.",
-      {
-       "h": "Sentencing under Proposition 132"
+       "table": true
       },
       "Mandatory, 8-32 years in prison. Mandatory, 8-32 years in prison.",
       "Mandatory, 8-32 years in prison.",
       "Possible, 2-4 years in prison.",
-      {
-       "h": "Possible, 0.5-1 year in prison. Eligible"
-      },
-      {
-       "h": "for reduced charges for completing"
-      },
-      "mandatory treatment."
+      "Possible, 0.5-1 year in prison. Eligible for reduced charges for completing mandatory treatment."
      ]
     },
     {
@@ -1947,38 +1196,11 @@
       },
       "Under Colorado law, human trafficking of a minor for sexual servitude, or child sex trafficking, occurs when an adult forces or makes a minor available for commercial sexual activity in exchange for money or other compensation. Child sex trafficking is one of many sex crimes with which a buyer or seller may be charged. Legally, a minor cannot consent to commercial sexual activity. Current law provides legal defenses and protections for individuals charged with this crime who are victims of sex trafficking.",
       {
-       "h": "How does Proposition 133 change the crime of child sex trafficking?"
+       "table": true
       },
       "Proposition 133 increases the penalty for child sex trafficking to life in prison without the possibility of parole, and removes judicial discretion in sentencing. It also adds exchanging anything of value to buy or sell sexual activity to the list of acts included in child sex trafficking. If convicted of this crime, buyers and sellers will receive a life sentence. Table 1 outlines the current penalties for those convicted of child sex trafficking and the penalties if Proposition 133 is approved. The table reflects the range of potential penalties under current law, but the actual sentence would depend on the specifics of the crime and the outcome of the trial.",
       {
-       "h": "Table 1"
-      },
-      {
-       "h": "Current and Proposed Penalties for Child Sex Trafficking"
-      },
-      {
-       "h": "Policy"
-      },
-      {
-       "h": "Felony Classification"
-      },
-      {
-       "h": "Penalties"
-      },
-      {
-       "h": "Class 1 felony"
-      },
-      {
-       "h": "Life in prison without parole"
-      },
-      {
-       "h": "Current Law"
-      },
-      {
-       "h": "Class 2 felony"
-      },
-      {
-       "h": "8 to 48 years in prison and mandatory 5 years parole"
+       "table": true
       }
      ]
     },
@@ -2074,13 +1296,7 @@
       "The measure requires that any school-based team or sport be explicitly designated as being: ●",
       "for biological males only;",
       {
-       "h": "●"
-      },
-      {
-       "h": "for biological females only; or"
-      },
-      {
-       "h": "●"
+       "table": true
       },
       "coeducational or mixed.",
       "Under the measure, students must compete on teams that match their biological sex or on a coeducational team. Biological females are allowed to participate on a team or sport designated for biological males if there is no equivalent female team offered for that sport. Participation on a coeducational or mixed team or sport is open to all. In addition, the measure prohibits any government entity, licensing or accrediting organization, or athletic association from investigating or penalizing a school for designating a team or sport as being only for biological females.",
@@ -2124,14 +1340,16 @@
      "side": "for",
      "heading": "Arguments for Proposition 134",
      "paragraphs": [
-      "1) Females should be able to compete against other females. Allowing biological males to participate on female teams creates an unfair advantage for the males and can prevent female athletes from achieving wins, records, podium spots, and scholarship opportunities. The measure protects the accomplishments of female athletes and creates a consistent, statewide standard for participation on female teams. Without uniform rules, female athletes across the state compete under different policies and conditions, resulting in an uneven playing field. The measure ensures that all female athletes can compete fairly no matter where they live. 2) Allowing biological males to participate on female teams or in female sports jeopardizes the safety and physical and emotional boundaries of female athletes. Regardless of one’s gender identity, genetic differences between biological males and biological females can affect physical strength, stature, lung capacity, muscle tone, and growth. Males and females are separated in certain sports due to the physical differences between the sexes and the risk for injury. Beyond the field of play, shared locker rooms raise privacy concerns. The measure creates a reasonable policy grounded in biological sex that promotes the safety of all participants."
+      "1) Females should be able to compete against other females. Allowing biological males to participate on female teams creates an unfair advantage for the males and can prevent female athletes from achieving wins, records, podium spots, and scholarship opportunities. The measure protects the accomplishments of female athletes and creates a consistent, statewide standard for participation on female teams. Without uniform rules, female athletes across the state compete under different policies and conditions, resulting in an uneven playing field. The measure ensures that all female athletes can compete fairly no matter where they live.",
+      "2) Allowing biological males to participate on female teams or in female sports jeopardizes the safety and physical and emotional boundaries of female athletes. Regardless of one’s gender identity, genetic differences between biological males and biological females can affect physical strength, stature, lung capacity, muscle tone, and growth. Males and females are separated in certain sports due to the physical differences between the sexes and the risk for injury. Beyond the field of play, shared locker rooms raise privacy concerns. The measure creates a reasonable policy grounded in biological sex that promotes the safety of all participants."
      ]
     },
     {
      "side": "against",
      "heading": "Arguments against Proposition 134",
      "paragraphs": [
-      "1) The measure does not protect fairness; it turns athletic eligibility into a body inspection and manufactures new grounds for discrimination. It could subject many athletes, not just those who are transgender, to uncomfortable physical inspections. Mandating a statewide eligibility standard, but not a clear method for determining eligibility, will require schools and districts to create their own separate policies, which will likely lead to unfair and uneven treatment of student athletes across the state. Some athletes may be forced to undergo invasive or expensive testing to prove their biological sex, while others may be able to simply provide a note from a doctor. Certain athletes could even be targeted for additional testing based on their physical strength, appearance, or athletic success. 2) School sports should be a space where all kids can build confidence, health, and belonging and have the opportunity to learn teamwork, leadership, and goal setting. Targeting an at-risk group of students by preventing them from playing on teams with their peers and instead requiring them to play on teams that do not match their gender identity leads to harassment, shame, embarrassment, and feelings of isolation and exclusion. The measure’s rigid participation standards apply to kids of all ages and abilities, affecting even young children who just want to play on teams with their friends and peers and are not competing for championships or scholarships."
+      "1) The measure does not protect fairness; it turns athletic eligibility into a body inspection and manufactures new grounds for discrimination. It could subject many athletes, not just those who are transgender, to uncomfortable physical inspections. Mandating a statewide eligibility standard, but not a clear method for determining eligibility, will require schools and districts to create their own separate policies, which will likely lead to unfair and uneven treatment of student athletes across the state. Some athletes may be forced to undergo invasive or expensive testing to prove their biological sex, while others may be able to simply provide a note from a doctor. Certain athletes could even be targeted for additional testing based on their physical strength, appearance, or athletic success.",
+      "2) School sports should be a space where all kids can build confidence, health, and belonging and have the opportunity to learn teamwork, leadership, and goal setting. Targeting an at-risk group of students by preventing them from playing on teams with their peers and instead requiring them to play on teams that do not match their gender identity leads to harassment, shame, embarrassment, and feelings of isolation and exclusion. The measure’s rigid participation standards apply to kids of all ages and abilities, affecting even young children who just want to play on teams with their friends and peers and are not competing for championships or scholarships."
      ]
     }
    ],
@@ -2188,11 +1406,11 @@
      "by": "Legislative Council Staff, Colorado General Assembly",
      "paragraphs": [
       {
-       "h": "What medical treatments are prohibited by Proposition 135?"
+       "table": true
       },
       "The measure prohibits surgery on minors for the purpose of altering biological sex characteristics as a treatment in response to a minor’s perception of sex or gender. The measure does not list specific surgical procedures that are prohibited; instead, the prohibition is based on the reason that a surgery is performed on a minor. The prohibition includes gender-affirming surgeries, which are a range of procedures that may be provided to transgender individuals to make their physical appearance match their gender identity. Examples include altering, removing, or reconstructing sexual and reproductive organs; modifying body shape; changing facial appearance; or altering vocal characteristics. The measure may also limit other surgeries for minors, including non-transgender minors, if the treatment is interpreted as being in response to the minor’s sex or gender perception. Proposition 135 allows male circumcision and treatments for medically verifiable disorders of sex development or acquired physical or chemical abnormalities. Non-surgical gender-related treatments, such as social transition options and counseling, are also not restricted by the measure.",
       {
-       "h": "How does Proposition 135 change coverage for these procedures?"
+       "table": true
       },
       "Currently in Colorado, gender- and sex-based surgeries that are medically necessary may be covered by private health insurance or a public health care program, or be paid for out-of-pocket. The measure bans the use of state or federal money, Medicaid reimbursements, and private health insurance to pay for the prohibited surgeries.",
       {
@@ -2219,14 +1437,16 @@
      "side": "for",
      "heading": "Arguments for Proposition 135",
      "paragraphs": [
-      "1) Minors lack the maturity to make permanent, life-altering medical decisions. Like many other age-restricted rights and activities, gender-affirming surgeries should require a heightened level of maturity and the ability to make fully informed decisions. Until an individual is a legal adult, less invasive, non-surgical methods of providing gender-related care should be used. This ensures that the most permanent interventions are reserved for when a person is able to fully understand the risks and benefits of surgery as an adult. 2) More long-term data is needed to determine whether gender-affirming surgery is a necessary treatment option prior to adulthood. Some minors may regret undergoing irreversible gender-affirming surgical procedures. Surgeries have risks, and surgery on minors should only be contemplated if there are no other viable treatment options. Other states have limited gender-related treatment options available to minors, including surgical care."
+      "1) Minors lack the maturity to make permanent, life-altering medical decisions. Like many other age-restricted rights and activities, gender-affirming surgeries should require a heightened level of maturity and the ability to make fully informed decisions. Until an individual is a legal adult, less invasive, non-surgical methods of providing gender-related care should be used. This ensures that the most permanent interventions are reserved for when a person is able to fully understand the risks and benefits of surgery as an adult.",
+      "2) More long-term data is needed to determine whether gender-affirming surgery is a necessary treatment option prior to adulthood. Some minors may regret undergoing irreversible gender-affirming surgical procedures. Surgeries have risks, and surgery on minors should only be contemplated if there are no other viable treatment options. Other states have limited gender-related treatment options available to minors, including surgical care."
      ]
     },
     {
      "side": "against",
      "heading": "Arguments against Proposition 135",
      "paragraphs": [
-      "1) The measure creates an overly broad ban on gender- and sex-based surgeries that interferes with needed care for both transgender and non-transgender minors. In addition to banning gender-affirming surgeries, the narrow exceptions under the measure could limit the ability of any youths to have surgeries for a range of reasons, both medical and cosmetic. The measure’s ban is based on a minor’s purpose in seeking treatment, which could lead to uncertainty for patients, physicians, and insurers. Insurers may use this ban to limit their coverage for a wide variety of treatments, and medical professionals may reduce the care they are willing to provide for fear of legal repercussions. 2) The measure delays medically recommended care, even when parents, patients, and medical providers all agree the care is necessary. Medical care decisions for minors should be individualized based on a patient’s unique needs and well-established standards of care. Transgender youth already face stigmatization, harassment, and discrimination, and restricting gender-affirming surgical care may worsen mental health outcomes for minors, including anxiety, depression, social isolation, eating disorders, and risk for self-harm and suicide. Important medical decisions should be left to patients, families, and health care providers, not legislated at the ballot box."
+      "1) The measure creates an overly broad ban on gender- and sex-based surgeries that interferes with needed care for both transgender and non-transgender minors. In addition to banning gender-affirming surgeries, the narrow exceptions under the measure could limit the ability of any youths to have surgeries for a range of reasons, both medical and cosmetic. The measure’s ban is based on a minor’s purpose in seeking treatment, which could lead to uncertainty for patients, physicians, and insurers. Insurers may use this ban to limit their coverage for a wide variety of treatments, and medical professionals may reduce the care they are willing to provide for fear of legal repercussions.",
+      "2) The measure delays medically recommended care, even when parents, patients, and medical providers all agree the care is necessary. Medical care decisions for minors should be individualized based on a patient’s unique needs and well-established standards of care. Transgender youth already face stigmatization, harassment, and discrimination, and restricting gender-affirming surgical care may worsen mental health outcomes for minors, including anxiety, depression, social isolation, eating disorders, and risk for self-harm and suicide. Important medical decisions should be left to patients, families, and health care providers, not legislated at the ballot box."
      ]
     }
    ],
@@ -2282,19 +1502,19 @@
      "by": "Legislative Council Staff, Colorado General Assembly",
      "paragraphs": [
       {
-       "h": "What does Proposition 136 do?"
+       "table": true
       },
       "The measure limits the state income tax rate for individuals and corporations to the current rate of 4.4 percent of taxable income beginning on January 1, 2027.",
       {
-       "h": "Does Proposition 136 change the current income tax rate?"
+       "table": true
       },
       "No, the measure does not alter the current 4.4 percent state income tax rate. It creates a state law setting this rate as the maximum beginning on January 1, 2027.",
       {
-       "h": "Does Proposition 136 prevent any future changes to the state income tax rate?"
+       "table": true
       },
       "No, Proposition 136 will not change the process for adjusting Colorado’s income tax rate. The state legislature or a citizen initiative may reduce the state income tax rate. The Colorado Constitution already requires that any tax rate increases be approved by voters.",
       {
-       "h": "What happens if Proposition 136 and Amendment 87 both pass?"
+       "table": true
       },
       "Amendment 87 creates a graduated income tax, where higher tax rates are applied to higher incomes and lower tax rates are applied to lower incomes earned by a household or business. If both Amendment 87 and Proposition 136 are approved by voters, the proposed rate for incomes over $500,000 in Amendment 87 would be higher than the 4.4 percent limit in Proposition 136. Generally, when parts of voter-approved measures conflict, the policy outcome is determined by the measure that receives more votes. However, if both measures are approved by voters, the exact outcome is unclear. The state legislature or a court will determine how to resolve any conflicts."
      ]
@@ -2378,26 +1598,20 @@
      "by": "Legislative Council Staff, Colorado General Assembly",
      "paragraphs": [
       {
-       "h": "What does Proposition 137 do?"
+       "table": true
       },
       "The measure requires that state sales tax revenue collected from purchases and rentals of sporting goods be spent on certain programs. These include: ●",
       "conservation programs that support parks, open spaces, and wildlife;",
       {
-       "h": "●"
+       "table": true
       },
       "wildfire risk management and mitigation, forest management and restoration, and a fund for damages that may arise from prescribed fires;",
       {
-       "h": "●"
+       "table": true
       },
       "watershed restoration projects;",
       {
-       "h": "●"
-      },
-      {
-       "h": "outdoor education and recreation programs; and"
-      },
-      {
-       "h": "●"
+       "table": true
       },
       "outdoor access and equity improvements, which could include programs that give opportunities to underserved youth and families.",
       "The measure applies to most sporting goods categories and does not change the price of sporting goods or the amount of tax collected. Sporting goods include bicycles, golf equipment, hunting and fishing equipment, camping equipment, boats, recreational vehicles, and campers. It also includes rental services for recreational, sports, and fitness equipment. The measure exempts this portion of state sales tax revenue from the state’s constitutional revenue limit, known as the Taxpayer’s Bill of Rights (TABOR) limit. The amount directed to these efforts will be calculated by Legislative Council Staff, the nonpartisan research agency of the General Assembly. For state budget year 2027-28, this is currently estimated to be $175 million",
@@ -2418,41 +1632,11 @@
       },
       "Great Outdoors Colorado (GOCO)",
       {
-       "h": "47.5%"
-      },
-      {
-       "h": "$83.1 million"
+       "table": true
       },
       "Wildfire risk mitigation, forest management, and watershed projects",
       {
-       "h": "47.5%"
-      },
-      {
-       "h": "$83.1 million"
-      },
-      {
-       "h": "Outdoor recreation and equity programs"
-      },
-      {
-       "h": "5.0% $8.7 million"
-      },
-      {
-       "h": "$0"
-      },
-      {
-       "h": "$20"
-      },
-      {
-       "h": "$40"
-      },
-      {
-       "h": "$60"
-      },
-      {
-       "h": "$80"
-      },
-      {
-       "h": "How does the measure affect TABOR refunds?"
+       "table": true
       },
       "TABOR limits state government revenue available for spending to an amount adjusted annually for inflation and population growth. Revenue collected over the limit must be refunded to taxpayers unless voters approve a measure to allow the government to keep and spend it. Under this measure, the dedicated sales tax revenue would be exempt from the TABOR limit. In years where state revenue exceeds the limit, the measure reduces TABOR refunds by the amount of sporting goods sales tax revenue the state is allowed to keep. In years where state revenue is below the TABOR limit, the measure does not impact TABOR refunds, but it may reduce the amount of money available for other general budget priorities. For more information, see the Legislative Council Staff memorandum titled “A Brief Overview of the TABOR Revenue Limit.”1"
      ]
@@ -2478,73 +1662,7 @@
        "h": "Colorado State Forest Service"
       },
       {
-       "h": "Budget Year"
-      },
-      {
-       "h": "2027‑28"
-      },
-      {
-       "h": "up to $83.1 million"
-      },
-      {
-       "h": "up to $36.5 million"
-      },
-      {
-       "h": "Future Year"
-      },
-      {
-       "h": "2028‑29"
-      },
-      {
-       "h": "up to $85.6 million"
-      },
-      {
-       "h": "up to $42.8 million"
-      },
-      {
-       "h": "Department of Natural Resources"
-      },
-      {
-       "h": "up to $36.6 million"
-      },
-      {
-       "h": "up to $42.8 million"
-      },
-      {
-       "h": "Colorado Parks and Wildlife"
-      },
-      {
-       "h": "up to $4.4 million"
-      },
-      {
-       "h": "up to $4.5 million"
-      },
-      {
-       "h": "up to $175.0 million"
-      },
-      {
-       "h": "up to $180.2 million"
-      },
-      {
-       "h": "Department of Public Safety"
-      },
-      {
-       "h": "Office of Economic Development & International Trade"
-      },
-      {
-       "h": "Total Spending"
-      },
-      {
-       "h": "$10.0 million"
-      },
-      {
-       "h": "up to $4.4 million"
-      },
-      {
-       "h": "$0"
-      },
-      {
-       "h": "up to $4.5 million"
+       "table": true
       },
       "In years where state revenue collections are below the TABOR limit, the measure will reduce state money available for other uses (the three largest of which are health care, education, and human services); however, the exact effect of the measure on other programs will depend on budgeting decisions by the state legislature. In years where state revenue collections are above the TABOR limit, the measure has no impact on other state spending, but has impacts to taxpayers as described below.",
       {
@@ -2564,7 +1682,8 @@
      "side": "for",
      "heading": "Arguments for Proposition 137",
      "paragraphs": [
-      "1) Without increasing tax rates or changing the cost of sporting goods, the measure directs needed money to recreation access, protects land from development, mitigates wildfire risk, and safeguards watersheds. Competing priorities squeeze the state budget, federal support is unreliable, and the state has not kept up with necessary investments to improve the environment and outdoor economy for residents and visitors. The measure funds trusted programs like GOCO, which has supported conservation projects statewide for over 30 years. 2) Colorado’s outdoor spaces are under strain with more visitors, ongoing drought, and more frequent and devastating wildfires. These pressures threaten communities, water resources, and recreational spaces. This measure provides a user-based model for supporting the outdoors, protecting our",
+      "1) Without increasing tax rates or changing the cost of sporting goods, the measure directs needed money to recreation access, protects land from development, mitigates wildfire risk, and safeguards watersheds. Competing priorities squeeze the state budget, federal support is unreliable, and the state has not kept up with necessary investments to improve the environment and outdoor economy for residents and visitors. The measure funds trusted programs like GOCO, which has supported conservation projects statewide for over 30 years.",
+      "2) Colorado’s outdoor spaces are under strain with more visitors, ongoing drought, and more frequent and devastating wildfires. These pressures threaten communities, water resources, and recreational spaces. This measure provides a user-based model for supporting the outdoors, protecting our",
       {
        "h": "Online at: leg.colorado.gov/bluebook"
       },
@@ -2575,7 +1694,8 @@
      "side": "against",
      "heading": "Arguments against Proposition 137",
      "paragraphs": [
-      "1) This measure is a tax increase in disguise because it reduces or eliminates future TABOR refunds. Keeping state revenue subject to the current constitutional limit is a critical taxpayer protection that is continuously being undermined. Allowing the state to keep even more taxpayer money has the same effect as taxpayers paying higher taxes. Every dollar retained under this measure is a dollar less in either tax refunds or spending on other critical state priorities like health care and education. 2) This measure directs more money to organizations and government entities with specific interests and limited accountability to the legislature or voters. As many of these programs already have dedicated, reliable funding sources, siphoning additional state dollars to these programs reduces the ability of the state to respond to changing conservation needs as best practices evolve. State legislators already have the power to spend money to meet these needs and should have the flexibility to balance their budget priorities without being constrained by this measure."
+      "1) This measure is a tax increase in disguise because it reduces or eliminates future TABOR refunds. Keeping state revenue subject to the current constitutional limit is a critical taxpayer protection that is continuously being undermined. Allowing the state to keep even more taxpayer money has the same effect as taxpayers paying higher taxes. Every dollar retained under this measure is a dollar less in either tax refunds or spending on other critical state priorities like health care and education.",
+      "2) This measure directs more money to organizations and government entities with specific interests and limited accountability to the legislature or voters. As many of these programs already have dedicated, reliable funding sources, siphoning additional state dollars to these programs reduces the ability of the state to respond to changing conservation needs as best practices evolve. State legislators already have the power to spend money to meet these needs and should have the flexibility to balance their budget priorities without being constrained by this measure."
      ]
     }
    ],
