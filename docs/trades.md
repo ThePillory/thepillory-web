@@ -22,6 +22,10 @@ Rules in the loader:
 - **Matching:** a House report needs exactly one member with the same last name, state and district (`StateDst`); a Senate report exactly one senator with the same first and last name. No unique match: the report is stored with `official_id` NULL and `unmatched` saying why, and never shown. Measure and load runs list the unmatched filers in the run summary.
 - **No guessing:** an electronic report whose table can't be read with confidence (an unknown row, a range without its upper bound) is stored as a link only (`parsed = 0`).
 
+## The Supreme Court
+
+Justices report purchases and sales once a year, in Part VII of the annual report (AO Form 10), not within 45 days. They're read from the reports' text layer (2023 on) by `tools/scotus_trades.py` in the daily Supreme Court refresh, into `data/scotus/trades.json` (not D1), and shown on the justice's Disclosures tab with the same row as everyone else's trades (`tradeRow()`), "Held in" the account the report names. See [scotus.md](scotus.md).
+
 ## Tables (migration 0024)
 
 `trade_reports` (one per filed report), `trades` (one per transaction: dates, `days_to_file`, owner, asset, ticker, type, the range as filed with its bounds, SIC and sector), `trade_summary` (per member and year, precomputed after each load: count, total range, open-ended ranges, paper reports), `sec_tickers`, `congress_committees`.

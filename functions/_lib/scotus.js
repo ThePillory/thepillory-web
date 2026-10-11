@@ -15,6 +15,7 @@ import { esc, fmtDate, linkRow, safeUrl } from "./render.js";
 import { compactRow, clauseChips, fold, outLink } from "./summary.js";
 import { asset } from "./geo.js";
 import { simpleCard } from "./simple.js";
+import { tradeRow, TRADES_PER_PAGE, TRADES_METHOD } from "./trades.js";
 
 export const COURT_HREF = "/bodies/us-supreme-court/";
 export const TERM_HREF = "/court/term/";
@@ -27,6 +28,7 @@ export const loadIndex = (env, request) => asset(env, request, "/data/scotus/ind
 export const loadTerm = (env, request, term) => (/^\d{4}$/.test(String(term)) ? asset(env, request, `/data/scotus/terms/${term}.json`) : null);
 export const loadCurrent = (env, request) => asset(env, request, "/data/scotus/current.json");
 export const loadDisclosures = (env, request) => asset(env, request, "/data/scotus/disclosures.json");
+export const loadTrades = (env, request) => asset(env, request, "/data/scotus/trades.json");
 
 /** {id: label} for every provision in data/constitution.json. */
 export async function constitutionLabels(env, request) {
@@ -299,6 +301,34 @@ ${named.length ? `<section class="stack-sm" aria-labelledby="h-provisions">
 }
 
 // ---------------------------------------------------------------------------
+// One justice's purchases and sales (Part VII of the annual reports, 2023 on)
+
+/** The Disclosures tab's "Purchases and sales": each line exactly as filed, newest first, 25 at a time. Pure. */
+export function justiceTrades(j, data, offset = 0) {
+  const mine = data && data.justices && data.justices[j.slug];
+  const head = '<div class="section-head"><h2>Purchases and sales</h2></div>';
+  if (!mine || !mine.reports.length) {
+    return `${head}<p class="small secondary">Coming soon for ${esc(j.name)}: purchases and sales from the annual financial disclosure reports.</p>`;
+  }
+  const rows = mine.trades;
+  const shown = rows.slice(0, offset + TRADES_PER_PAGE);
+  const years = mine.reports.map((r) => {
+    const n = rows.filter((t) => t.report_url === r.url).length;
+    return r.status === "read"
+      ? `<li class="small">${outLink(r.url, `${r.year} report`)}: ${n ? `${n} ${n === 1 ? "purchase or sale" : "purchases and sales"}` : "none listed"}</li>`
+      : `<li class="small">${outLink(r.url, `${r.year} report`)}: not read in full, so its lines aren't shown here; see the report</li>`;
+  }).join("");
+  const list = rows.length
+    ? `<div class="compact-list">${shown.map((t) => tradeRow({ type: t.type, asset_name: t.asset, amount: t.amount, transaction_date: t.date, report_url: t.report_url, held_in: t.account })).join("")}</div>
+  ${rows.length > shown.length ? `<a class="btn btn--block" href="?toffset=${offset + TRADES_PER_PAGE}#disclosures">Load more</a>` : ""}`
+    : `<p class="small secondary">No purchases or sales are listed in ${esc(j.name)}'s reports since ${esc(String(Math.min(...mine.reports.map((r) => r.year))))}.</p>`;
+  return `${head}
+${list}
+<ul class="plain-list stack-xs">${years}</ul>
+<p class="hint">From Part VII of each annual financial disclosure report (AO Form 10), exactly as filed: the asset as described, the type ("Buy (add'l)" is an additional purchase; "Sold (part)" a partial sale), the date and the value range. Justices list purchases and sales once a year in this report, not within 45 days as members of Congress do. Reports are read from the copies Fix the Court posts unchanged, since the judiciary's own site requires a registration on every visit. <a href="${TRADES_METHOD}">How trades are recorded</a></p>`;
+}
+
+// ---------------------------------------------------------------------------
 // One justice (/justices/<slug>/)
 
 const ORG = /\b(University|College|School|Society|Institute|Foundation|Association|Bar|Court|Council|Academy|Library|Museum|Law|Government|Department|Federal|State|Bank|Group|Trust|Press|Inc|LLC|Corp|Corporation|Company|Club|Fund|Center|Centre|Society|Federalist|Commission|Committee|Conference|Church|Synagogue|Embassy|Ministry|Office|Agency|Republic|Kingdom|City|County|Hotel|Publishing|Publishers|Books)\b/i;
@@ -309,7 +339,7 @@ export async function justicePage(env, request, slug, url) {
   const justices = await loadJustices(env, request);
   const j = justices && justices.justices.find((x) => x.slug === slug);
   if (!j) return null;
-  const [index, disclosures, clauses] = await Promise.all([loadIndex(env, request), loadDisclosures(env, request), constitutionLabels(env, request)]);
+  const [index, disclosures, clauses, tradesData] = await Promise.all([loadIndex(env, request), loadDisclosures(env, request), constitutionLabels(env, request), loadTrades(env, request)]);
   const since = isoOf(j.oath_date);
 
   // Record: every decision in the loaded terms where the lineup names this justice, newest first.
@@ -357,6 +387,8 @@ ${j.biography.length ? `<div class="card stack-xs"><p class="label">From the off
       + '<p class="hint">Annual financial disclosure reports the justices file under the Ethics in Government Act, as CourtListener (Free Law Project) transcribes them, each linked to the filed report. Gifts and reimbursements from organizations are named; a person is listed as "An individual".</p>'
     : `<p class="small secondary">Coming soon for ${esc(j.name)}: the annual financial disclosure reports, gifts and reimbursements load from CourtListener.</p>`;
 
+  const tradesHtml = justiceTrades(j, tradesData, Math.max(0, Number(url.searchParams.get("toffset")) || 0));
+
   const more = `
 <div class="card">
   ${linkRow(COURT_HREF, "The Supreme Court", "Every justice")}
@@ -380,7 +412,7 @@ ${j.biography.length ? `<div class="card stack-xs"><p class="label">From the off
   </nav>
   <div class="stack" role="tabpanel" id="about" aria-labelledby="tab-about">${about}</div>
   <div class="stack" role="tabpanel" id="record" aria-labelledby="tab-record">${record}</div>
-  <div class="stack" role="tabpanel" id="disclosures" aria-labelledby="tab-disclosures">${disclosureHtml}</div>
+  <div class="stack" role="tabpanel" id="disclosures" aria-labelledby="tab-disclosures">${tradesHtml}<div class="section-head"><h2>Annual reports</h2></div>${disclosureHtml}</div>
   <div class="stack" role="tabpanel" id="more" aria-labelledby="tab-more">${more}</div>
 </div>`,
   };

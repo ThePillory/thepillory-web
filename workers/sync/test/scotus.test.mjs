@@ -32,6 +32,16 @@ const DATA = {
   "/data/scotus/current.json": { term: 2026, built_on: "2026-10-10", source_url: "https://www.supremecourt.gov/orders/grantednotedlists.aspx", cases: [
     { dockets: ["25-200"], name: "PENDING V. CASE", lower_court: "USCA-9", granted: "6/1/26", argument_date: "11/2/26", decided: false, question_presented: ["Whether the example applies."], qp_url: "https://www.supremecourt.gov/qp/25-00200qp.pdf" },
   ] },
+  "/data/scotus/trades.json": { justices: {
+    "ann-able": { reports: [
+      { justice: "ann-able", year: 2025, url: "https://fixthecourt.com/wp-content/uploads/2026/06/Able-Ann-Annual-2025.pdf", status: "read", trades: 2 },
+      { justice: "ann-able", year: 2024, url: "https://fixthecourt.com/wp-content/uploads/2025/06/Able-Ann-Annual-2024.pdf", status: "link", reason: "3 transaction dates, 2 read" },
+    ], trades: [
+      { asset: "Example Index Fund", account: "(H) IRA #1", type: "Sold (part)", date: "2025-10-02", amount: "$15,000 or less", year: 2025, report_url: "https://fixthecourt.com/wp-content/uploads/2026/06/Able-Ann-Annual-2025.pdf" },
+      { asset: "Example Bond Fund", account: null, type: "Donated (part)", date: null, amount: null, year: 2025, report_url: "https://fixthecourt.com/wp-content/uploads/2026/06/Able-Ann-Annual-2025.pdf" },
+    ] },
+    "bo-baker": { reports: [{ justice: "bo-baker", year: 2025, url: "https://fixthecourt.com/wp-content/uploads/2026/06/Baker-Bo-Annual-2025.pdf", status: "read", trades: 0 }], trades: [] },
+  } },
   "/data/scotus/disclosures.json": { justices: { "ann-able": [{ year: 2024, report_url: "https://storage.courtlistener.com/x.pdf", gifts: [{ source: "Jane Example", description: "Book", value: "$100" }, { source: "Example University", description: "Plaque", value: "" }], reimbursements: [], source_url: "https://www.courtlistener.com/person/1/x/disclosures/" }] } },
 };
 const ASSETS = {
@@ -98,4 +108,18 @@ test("this term: pending cases with argument dates and the question presented; n
   assert.match(html, /Argument: Nov 2, 2026/);
   assert.match(html, /Whether the example applies\./);
   assert.match(html, /doesn't predict outcomes/);
+});
+
+test("a justice's purchases and sales: each line as filed, unread reports as links, the same for every justice", async () => {
+  const { html } = await call("../../../functions/justices/[[path]].js", "/justices/ann-able/");
+  assert.match(html, /Purchases and sales/);
+  assert.match(html, /Example Index Fund/);
+  assert.match(html, /Sold \(part\)/);
+  assert.match(html, /\$15,000 or less · Oct 2, 2025 · Held in \(H\) IRA #1/);
+  assert.match(html, /Value not given · Date not given/);
+  assert.match(html, /2024 report ↗<\/a>: not read in full/);
+  assert.match(html, /not within 45 days/);
+  assert.doesNotMatch(html, /conflict/i);
+  const other = (await call("../../../functions/justices/[[path]].js", "/justices/bo-baker/")).html;
+  assert.match(other, /No purchases or sales are listed in Bo Baker's reports since 2025/);
 });
