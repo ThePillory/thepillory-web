@@ -289,7 +289,9 @@ def co_measures():
             raise Unreadable(f"Colorado {label}: its ballot title wasn't found")
         bt0 = next(j for j in range(t0, t0 + 14) if stripped[j] == "Ballot Title:")
         bt1 = next(j for j in range(bt0, len(stripped)) if stripped[j].startswith("Text of Measure"))
-        ballot_title = join_lines(stripped[bt0 + 1:bt1])
+        # A ballot title is a question: it ends at its question mark (a table can follow it, as for Amendment 87).
+        q = next((j for j in range(bt0 + 1, bt1) if stripped[j].endswith("?")), bt1 - 1)
+        ballot_title = join_lines(stripped[bt0 + 1:q + 1])
         furniture.append(noise)
         for what, quotes in (("proposal", proposes), ("analysis", analysis), ("arguments for", pros), ("arguments against", cons), ("fiscal impact", money), ("vote meanings", [yes, no, ballot_title])):
             checks.append((f"Colorado {label} {what}", quotes))
