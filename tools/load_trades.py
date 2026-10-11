@@ -69,7 +69,7 @@ HOUSE = "https://disclosures-clerk.house.gov"
 SENATE = "https://efdsearch.senate.gov"
 FIRST_YEAR = 2023
 LATE_DAYS = 45
-LEGISLATORS = "https://theunitedstates.io/congress-legislators"
+LEGISLATORS = "https://unitedstates.github.io/congress-legislators"  # as the sync Worker reads it; theunitedstates.io times out
 
 # ---------------------------------------------------------------------------
 # Small pure helpers
