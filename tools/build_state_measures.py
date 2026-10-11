@@ -111,6 +111,8 @@ def check(where, source, quotes):
     """Every paragraph must be in its source word for word, with no lost characters."""
     src = flat(source)
     for q in quotes:
+        if isinstance(q, dict) and q.get("table"):
+            continue
         text = q if isinstance(q, str) else q.get("h", "")
         if GARBLED.search(text):
             raise Unreadable(f"{where}: lost characters in {text[:80]!r}")
@@ -198,18 +200,35 @@ def co_blocks(lines, noise):
                 cur, broke = [], False
             continue
         cur.append(s)
+    # Numbered arguments ("1) …", "2) …") run on without a blank line: each is its own paragraph.
+    split = []
+    for b, after_break in blocks:
+        cut = [i for i, l in enumerate(b) if re.match(r"^\d{1,2}\)\s", l)]
+        if len(cut) > 1 or (cut and cut[0] > 0):
+            edges = ([0] if cut[0] > 0 else []) + cut + [len(b)]
+            parts = [b[x:y] for x, y in zip(edges, edges[1:]) if b[x:y]]
+            split += [(p, after_break if k == len(parts) - 1 else False) for k, p in enumerate(parts)]
+        else:
+            split.append((b, after_break))
+
+    def heading_like(line, following):
+        # A question, or a short line without a full stop followed by a line that starts a sentence.
+        if line.endswith("?"):
+            return True
+        return (len(line) < 70 and not re.search(r"[.;:,”\")]$", line) and not re.match(r"^\d{1,2}\)", line)
+                and (following is None or re.match(r"^[A-Z0-9“\"$(]", following)))
+
     out = []
     pending_break = False
-    for b, after_break in blocks:
+    for b, after_break in split:
         joinable = pending_break
         pending_break = after_break
-        # A subheading starts a block: a question, or a short line without a full stop followed by text.
-        while len(b) > 1 and (b[0].endswith("?") or (len(b[0]) < 70 and not re.search(r"[.;:,”\"]$", b[0]) and not re.match(r"^\d\)", b[0]))):
+        while len(b) > 1 and heading_like(b[0], b[1]):
             out.append({"h": b[0]})
             b = b[1:]
             joinable = False
         text = join_lines(b)
-        if len(b) == 1 and (text.endswith("?") or (len(text) < 70 and not re.search(r"[.;:,”\")]$", text))):
+        if len(b) == 1 and heading_like(text, None):
             out.append({"h": text})
             continue
         prev = out[-1] if out else None
@@ -218,7 +237,54 @@ def co_blocks(lines, noise):
             out[-1] = prev + text if prev.endswith("-") and not prev.endswith(" -") else prev + " " + text
             continue
         out.append(text)
-    return out
+    return collapse_tables(out)
+
+
+def tabley(h):
+    """A "heading" that is really a table cell or chart label: few words, or numbers and signs."""
+    words = re.findall(r"[A-Za-z]{2,}", h)
+    return len(words) < 2 or bool(re.search(r"[$%]|\d", h)) or bool(re.search(r"[a-z][A-Z]", h))
+
+
+def collapse_tables(items):
+    """A run of table cells and chart labels (two or more short pieces, mostly numbers or single words)
+    becomes one {"table": true} marker: the page says a table is in the source document and links it."""
+    # A "paragraph" of numbers with hardly a word ("4.4% -0.2") is a table row too.
+    def numeric(x):
+        tokens = x.split()
+        figures = sum(1 for t in tokens if re.search(r"\d", t))
+        return (len(re.findall(r"[A-Za-z]{2,}", x)) < 4 and re.search(r"[\d$%]", x)) or (len(tokens) >= 4 and figures * 5 >= len(tokens) * 2)
+
+    items = [{"h": x} if isinstance(x, str) and numeric(x) else x for x in items]
+    out, i = [], 0
+    while i < len(items):
+        if isinstance(items[i], dict) and "h" in items[i]:
+            j = i
+            while j < len(items) and isinstance(items[j], dict) and "h" in items[j]:
+                j += 1
+            run = items[i:j]
+            cells = sum(1 for x in run if tabley(x["h"]))
+            if len(run) >= 2 and cells * 2 >= len(run):
+                # keep a real subheading that opens the run, if it isn't a cell itself
+                lead = []
+                while run and not tabley(run[0]["h"]) and len(run) > 1 and tabley(run[1]["h"]) is False:
+                    lead.append(run.pop(0))
+                out += lead + [{"table": True}]
+            elif len(run) == 1 and tabley(run[0]["h"]):
+                out.append({"table": True})
+            else:
+                out += run
+            i = j
+            continue
+        out.append(items[i])
+        i += 1
+    # neighbouring markers are one table
+    merged = []
+    for x in out:
+        if isinstance(x, dict) and x.get("table") and merged and isinstance(merged[-1], dict) and merged[-1].get("table"):
+            continue
+        merged.append(x)
+    return merged
 
 
 def co_measures():
