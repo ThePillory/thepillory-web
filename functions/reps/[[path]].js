@@ -21,7 +21,7 @@ import { chamberIds } from "../../workers/sync/src/states.js";
 import { visitorState } from "../_lib/visitor-state.js";
 import { voteRow, voteFilter } from "../_lib/votes.js";
 import { fundingFor, fundingTab } from "../_lib/funding.js";
-import { executiveMoney, executiveFundingParts, stateOfficialMoney, stateForm700 } from "../_lib/exec-funding.js";
+import { executiveMoney, executiveFundingParts, stateOfficialMoney, stateForm700, form700For } from "../_lib/exec-funding.js";
 import { stateFundingTab } from "../_lib/state-funding.js";
 import { promisesFor, ownWordsFor, platformTab, FLAG_REASONS } from "../_lib/promises.js";
 import { turnstileReady, verifyTurnstile, visitorHash, actionsToday, recordAction } from "../_lib/turnstile.js";
@@ -286,6 +286,8 @@ async function profile(env, slug, url, request) {
   const status = url.searchParams.get("status") || "all";
   const exec = isExecutive(o);
   const stateLegislator = o.chamber === "ca-assembly" || o.chamber === "ca-senate";
+  // County supervisors file Form 700s too (the county forwards them to the FPPC).
+  const supervisor = o.chamber === "county-board";
   // Another state's official: campaign money comes from each state's own agency, not loaded yet.
   const otherState = o.level === "state" && o.state && o.state !== "CA";
   // Members of Congress file STOCK Act trade reports.
@@ -299,7 +301,8 @@ async function profile(env, slug, url, request) {
     otherState ? null
       : exec ? loadSection("rep funding", () => executiveMoney(db, o, cycle), null)
       : o.level === "federal" ? loadSection("rep funding", () => fundingFor(db, o, cycle), null)
-      : stateLegislator ? loadSection("rep funding", () => stateOfficialMoney(db, o, cycle), null) : null,
+      : stateLegislator ? loadSection("rep funding", () => stateOfficialMoney(db, o, cycle), null)
+      : supervisor ? loadSection("rep form 700", async () => ({ kind: "county", form700: await form700For(db, o.id) }), null) : null,
     isPresident(o) || isGovernor(o) ? loadSection("rep orders", () => ordersFor(db, o.id, { offset }), null) : null,
     isPresident(o) || isGovernor(o) ? loadSection("rep bills", () => billsActedOn(db, o.id, { show, offset }), null) : null,
     isPresident(o) ? loadSection("rep nominations", () => nominationsFor(db, o.id, { status, offset }), null) : null,
@@ -410,7 +413,7 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
   else if (otherState) fundingHtml = `<section class="card stack-sm"><p class="small">Campaign money for ${esc(STATE_NAME[o.state] || o.state)}'s officials isn't on ThePillory yet. It comes from each state's own campaign finance agency, and will be added state by state.</p><p class="hint">Members of Congress: Federal Election Commission. California: Cal-Access.</p></section>`;
   else if (exec) fundingHtml = money.funding || '<p class="secondary small">No campaign money to show for this office.</p>';
   else if (stateLegislator) fundingHtml = stateFundingTab(o, funding && funding.money, base);
-  else fundingHtml = fundingTab(o, funding, base);
+  else fundingHtml = fundingTab(o, supervisor ? null : funding, base);
 
   // More: everything else, in sections.
   const moreParts = [];
@@ -418,7 +421,7 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
   if (orders) moreParts.push(sub("orders", "Executive orders", orders === FAILED ? sectionError("") : ordersTab(o, orders, base, offset)));
   if (nominations) moreParts.push(sub("nominations", "Nominations", nominations === FAILED ? sectionError("") : nominationsTab(o, nominations, base, status, offset)));
   if (exec && !otherState) moreParts.push(sub("more-disclosures", "Disclosures", funding === FAILED ? sectionError("") : money.disclosures));
-  if (stateLegislator) moreParts.push(sub("more-disclosures", "Disclosures", funding === FAILED ? sectionError("") : funding ? stateForm700(funding) : ""));
+  if (stateLegislator || supervisor) moreParts.push(sub("more-disclosures", "Disclosures", funding === FAILED ? sectionError("") : funding ? stateForm700(funding) : ""));
   if (o.level === "state" && !exec) {
     moreParts.push(sub("committees", "Committees", committees === FAILED ? sectionError("") : committees.length
       ? `<div class="card"><ul class="plain-list">${committees.map((c) => `<li class="list-row"><span class="list-title">${esc(c.name)}</span><span class="row-end">${sourceLink(c.source_url)}</span></li>`).join("")}</ul></div><p class="hint">From Open States, refreshed weekly.</p>`

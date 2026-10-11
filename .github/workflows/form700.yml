@@ -1,0 +1,46 @@
+# California officials' investments acquired and disposed of, from Schedule A-1
+# of their annual Form 700 (tools/load_form700.py, tools/form700.py; see
+# docs/trades.md). The sync Worker lists each official's Form 700s; this reads
+# the annual statements since 2023 that haven't been read yet.
+#
+#   By hand (Actions -> Load Form 700 lines -> Run workflow): "measure" reads
+#   statements and writes what it found to the log, writing nothing to D1; "load" writes them.
+#   Weekly on Mondays at 16:07 UTC (after the sync Worker's 11:00 run).
+#
+# Needs CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID (as for "Load stock trades").
+name: Load Form 700 lines
+on:
+  schedule:
+    - cron: "7 16 * * 1"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "measure (report what it reads, write nothing) or load"
+        type: choice
+        options: [measure, load]
+        default: measure
+      max:
+        description: "Statements to read this run"
+        default: "30"
+permissions:
+  contents: read
+concurrency:
+  group: form700
+  cancel-in-progress: false
+jobs:
+  load:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: python3 -m pip install -q pdfplumber==0.11.4 pillow
+      - name: Measure or load
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          MODE: ${{ github.event.inputs.mode || 'load' }}
+          MAX: ${{ github.event.inputs.max || '200' }}
+        run: python3 tools/load_form700.py --mode "$MODE" --max "$MAX"

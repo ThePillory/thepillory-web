@@ -54,8 +54,31 @@ export async function inauguralFor(db, presidentId) {
 
 /** A California official's money (Cal-Access) and Form 700s (FPPC): the Governor, statewide officers and legislators alike. */
 export async function stateOfficialMoney(db, o, cycle) {
-  const [money_, form700] = await Promise.all([stateMoneyFor(db, o.id, cycle), disclosuresFor(db, o.id, "fppc")]);
+  const [money_, form700] = await Promise.all([stateMoneyFor(db, o.id, cycle), form700For(db, o.id)]);
   return { kind: "state", money: money_, form700 };
+}
+
+/**
+ * Form 700s (FPPC) and, from the statements read (tools/load_form700.py), the
+ * Schedule A-1 investments acquired or disposed of in each year, newest first.
+ * A county supervisor has only this; there's no campaign money for them here yet.
+ */
+export async function form700For(db, officialId) {
+  const f = await disclosuresFor(db, officialId, "fppc");
+  if (!f) return f;
+  const soft = async (q, fallback) => {
+    try {
+      return (await q).results;
+    } catch (err) {
+      if (/no such table/i.test(String(err && err.message))) return fallback;
+      throw err;
+    }
+  };
+  const [lines, reads] = await Promise.all([
+    soft(db.prepare("SELECT * FROM form700_lines WHERE official_id = ? ORDER BY COALESCE(disposed, acquired) DESC, n LIMIT 200").bind(officialId).all(), []),
+    soft(db.prepare("SELECT * FROM form700_reads WHERE official_id = ? ORDER BY period DESC").bind(officialId).all(), []),
+  ]);
+  return { ...f, lines, reads };
 }
 
 /**
@@ -172,16 +195,48 @@ function ogeSection(d, name) {
 </section>`;
 }
 
+const f700Link = (disclosureId, label) => `<a class="tap" href="/api/form700/${esc(String(disclosureId).replace(/^fppc:/, ""))}" target="_blank" rel="noopener">${esc(label)} ↗</a>`;
+
+/** Schedule A-1 investments acquired or disposed of, one line each, exactly as filed. Pure. */
+export function form700Lines(f) {
+  const reads = (f && f.reads) || [];
+  if (!reads.length) return "";
+  const lines = f.lines || [];
+  const head = '<h4 class="money-sub">Bought and sold (Schedule A-1)</h4>';
+  const rows = lines
+    .map((l) => {
+      const when = l.disposed || l.acquired;
+      const meta = [l.value ? `Value ${l.value}` : "", fmtDate(when), l.description || "", l.nature && l.nature !== "Stock" ? l.nature : "", `${l.period} statement`].filter(Boolean);
+      return `<a class="compact-row trade-row" href="/api/form700/${esc(String(l.disclosure_id).replace(/^fppc:/, ""))}" target="_blank" rel="noopener">
+  <span class="cr-type">${l.disposed ? "Disposed" : "Acquired"}</span>
+  <span class="cr-main"><span class="cr-title">${esc(l.entity)}</span><span class="cr-meta">${meta.map(esc).join(" · ")}</span></span>
+  <span class="chev" aria-hidden="true">↗</span>
+</a>`;
+    })
+    .join("");
+  const status = reads
+    .map((r) =>
+      r.status === "read"
+        ? `<li class="small">${f700Link(r.disclosure_id, `${r.period} statement`)}: ${r.lines ? `${r.lines} of ${r.entries} investments acquired or disposed of` : r.entries ? `none of ${r.entries} investments acquired or disposed of` : "no Schedule A-1 investments"}</li>`
+        : `<li class="small">${f700Link(r.disclosure_id, `${r.period} statement`)}: not read in full, so its lines aren't shown here; see the statement</li>`
+    )
+    .join("");
+  return `${head}
+  ${lines.length ? `<div class="compact-list">${rows}</div>` : '<p class="secondary small">No investments acquired or disposed of in the statements read.</p>'}
+  <ul class="plain-list stack-xs">${status}</ul>
+  <p class="hint">From Schedule A-1 (stocks, bonds and other interests under 10%) of each annual statement, exactly as filed: the investment, the fair market value box checked and the date it was acquired or disposed of. A Form 700 gives the investment's value, not the size of a purchase or sale, and is filed once a year, so these aren't trade reports like Congress's. Where the statement doesn't say whose investment it is, ThePillory doesn't either. <a href="/about/methodology/#trades">How these are read</a></p>`;
+}
+
 /** Form 700s (FPPC), for More. */
 export function stateForm700(m) {
   const f = m.form700;
   const head7 = '<h3 class="label" id="disclosures">Statements of economic interests (Form 700)</h3>';
-  const intro7 = `<p class="small">California officials file a Statement of Economic Interests (Form 700) each year: their investments, real property, income and gifts. Statewide officers and members of the Legislature file theirs with the Fair Political Practices Commission (FPPC), which publishes them.</p>`;
+  const intro7 = `<p class="small">California officials file a Statement of Economic Interests (Form 700) each year: their investments, real property, income and gifts. Statewide officers, members of the Legislature and county supervisors file theirs with, or through, the Fair Political Practices Commission (FPPC), which publishes them.</p>`;
   let form700;
   if (!f || !f.check) form700 = `<section class="card stack-sm" aria-labelledby="disclosures">${head7}${intro7}<p class="secondary small">Not loaded yet. The FPPC's Form 700 records are searched in the daily data sync.</p></section>`;
   else if (!f.rows.length) form700 = `<section class="card stack-sm" aria-labelledby="disclosures">${head7}${intro7}<p class="secondary small">${esc(f.check.note || "No statements listed.")}</p></section>`;
   else
-    form700 = `<section class="card stack-sm" aria-labelledby="disclosures">${head7}${intro7}<ul class="plain-list exec-list">${disclosureRows(f.rows.slice(0, 10))}</ul><p class="hint">Source: ${ext("https://form700search.fppc.ca.gov/", "FPPC Form 700 search")}, searched ${fmtDate(String(f.check.checked_at).slice(0, 10))}. <a class="tap" href="${DISCLOSURES}">How</a></p></section>`;
+    form700 = `<section class="card stack-sm" aria-labelledby="disclosures">${head7}${intro7}${form700Lines(f)}<h4 class="money-sub">Statements</h4><ul class="plain-list exec-list">${disclosureRows(f.rows.slice(0, 10))}</ul><p class="hint">Source: ${ext("https://form700search.fppc.ca.gov/", "FPPC Form 700 search")}, searched ${fmtDate(String(f.check.checked_at).slice(0, 10))}. <a class="tap" href="${DISCLOSURES}">How</a></p></section>`;
   return form700;
 }
 
