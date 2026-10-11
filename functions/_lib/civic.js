@@ -139,6 +139,7 @@ export function officialFor(name, officials) {
 /**
  * ThePillory's page for a measure on the ballot, matched by its number, only when exactly one fits. Pure.
  * California: "Proposition 1" / "Prop. 1". Washington: "Initiative Measure No. IP26-645" or "... No. 645".
+ * Colorado, Arizona, Florida, Michigan: the label ("Amendment 81", "Prop. 141", "Proposal 26-1").
  */
 export function measureFor(ref, election) {
   if (!ref || !election) return null;
@@ -148,6 +149,12 @@ export function measureFor(ref, election) {
   if (st === "CA") {
     const m = /\bprop(?:osition|\.)?\s*(\d{1,3})\b/i.exec(t);
     if (m) hits = election.measures.filter((x) => x.scope === "statewide" && String(x.number) === String(Number(m[1])));
+  } else if (election.election.format === "sections") {
+    // Colorado, Arizona, Florida, Michigan: "Amendment 81", "Proposition NN", "Prop. 141", "Proposal 26-1".
+    const esc = (v) => String(v).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    // Michigan's "26-2" is also written "2026-2" and "2026-02".
+    const num = (n) => (/^\d\d-\d+$/.test(n) ? `(?:20)?${n.split("-")[0]}-0?${n.split("-")[1]}` : esc(n));
+    hits = election.measures.filter((x) => x.scope === "statewide" && new RegExp(`\\b(?:amendment|proposition|prop\\.?|proposal|question)\\s*(?:no\\.\\s*)?${num(String(x.number))}\\b`, "i").test(t));
   } else {
     hits = election.measures.filter((x) => x.scope === "statewide" && (t.includes(x.number) || new RegExp(`\\b(?:no\\.|number|measure|initiative)\\s*${String(x.number).split("-").pop()}\\b`, "i").test(t)));
   }

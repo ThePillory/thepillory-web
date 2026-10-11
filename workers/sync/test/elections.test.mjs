@@ -166,6 +166,9 @@ const ASSETS = {
     if (path === "/data/geo/places/ca.json") return new Response(JSON.stringify(PLACE));
     // Washington's real file (tools/build_wa_measures.py): its three statewide measures.
     if (path === "/data/elections/2026-11-03-wa.json") return new Response(readFileSync(new URL("../../../data/elections/2026-11-03-wa.json", import.meta.url), "utf8"));
+    // Colorado's, Arizona's, Florida's and Michigan's real files (tools/build_state_measures.py).
+    const st = path.match(/^\/data\/elections\/(2026-11-03-(?:co|az|fl|mi))\.json$/);
+    if (st) return new Response(readFileSync(new URL(`../../../data/elections/${st[1]}.json`, import.meta.url), "utf8"));
     return new Response("not found", { status: 404 });
   },
 };
@@ -260,4 +263,40 @@ test("Washington: the statewide measures, the pamphlet's official parts first, b
   // A visitor in Washington is sent to Washington's measures from California's ballot page.
   const wa = await get("/elections/2026-11-03/ballot/", `pillory_districts=${encodeURIComponent("st=WA&cd=7")}`);
   assert.match(wa.html, /href="\/elections\/2026-11-03-wa\/"/);
+});
+
+test("Colorado, Arizona, Florida, Michigan: one measure layout, official parts word for word with who wrote them", async () => {
+  const states = { co: ["Amendment 81", 14], az: ["Proposition 141", 8], fl: ["Amendment 1", 3], mi: ["Proposal 26-1", 2] };
+  for (const [st, [first, count]] of Object.entries(states)) {
+    const data = JSON.parse(readFileSync(new URL(`../../../data/elections/2026-11-03-${st}.json`, import.meta.url), "utf8"));
+    assert.equal(data.election.format, "sections", st);
+    assert.equal(data.measures.length, count, `${st}: ${count} statewide measures`);
+    const all = await get(`/elections/2026-11-03-${st}/`);
+    assert.equal(all.res.status, 200, st);
+    assert.ok(all.html.includes(first), `${st} lists ${first}`);
+    assert.doesNotMatch(all.html, /Statewide offices|By district/, `${st}: measures only`);
+    for (const m of data.measures) {
+      const { res, html } = await get(`/elections/2026-11-03-${st}/measure/${m.id}/`);
+      assert.equal(res.status, 200, `${st} ${m.id}`);
+      assert.ok(html.includes("The question on the ballot"), `${st} ${m.id}: the question`);
+      assert.ok(html.includes("Official sources"), `${st} ${m.id}: sources`);
+      for (const sec of m.sections) assert.ok(html.includes(sec.heading.replace(/'/g, "&#x27;")), `${st} ${m.id}: ${sec.heading}`);
+    }
+  }
+  // Colorado: what your vote means, then the Legislative Council Staff's analysis, both sides' arguments in matching cards.
+  const co = await get("/elections/2026-11-03-co/measure/amendment-81/");
+  for (const t of ["What your vote means", "Summary and analysis", "Arguments for and against", "Fiscal impact", "Legislative Council Staff"]) assert.ok(co.html.includes(t), t);
+  assert.equal(co.html.split('class="card stack-sm argument-card"').length - 1, 2, "one card for each side");
+  // Arizona: the arguments filed are linked, never summarized.
+  const az = await get("/elections/2026-11-03-az/measure/prop-141/");
+  assert.ok(az.html.includes("What your vote means"));
+  // Florida: a summary that couldn't be read says so and links the booklet instead of guessing.
+  const fl = JSON.parse(readFileSync(new URL("../../../data/elections/2026-11-03-fl.json", import.meta.url), "utf8"));
+  for (const m of fl.measures.filter((x) => !x.sections[0].paragraphs.length)) {
+    const { html } = await get(`/elections/2026-11-03-fl/measure/${m.id}/`);
+    assert.match(html, /couldn&#x27;t be read from the booklet/);
+  }
+  // A visitor in Colorado is sent to Colorado's measures from California's ballot page.
+  const v = await get("/elections/2026-11-03/ballot/", `pillory_districts=${encodeURIComponent("st=CO&cd=1")}`);
+  assert.match(v.html, /href="\/elections\/2026-11-03-co\/"/);
 });

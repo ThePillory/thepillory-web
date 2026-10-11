@@ -230,6 +230,8 @@ def co_blocks(lines, noise):
         # A question, or a short line without a full stop followed by a line that starts a sentence.
         if line.endswith("?"):
             return True
+        if re.search(r"\b(?:to|and|or|the|of|a|an|in|for|with|by|that|which)$", line):
+            return False  # a sentence that runs on ("… amending the Colorado statutes to")
         return (len(line) < 70 and not re.search(r"[.;:,”\")]$", line) and not re.match(r"^\d{1,2}\)", line)
                 and (following is None or re.match(r"^[A-Z0-9“\"$(]", following)))
 
@@ -259,6 +261,8 @@ def tabley(h):
     """A "heading" that is really a table cell or chart label: few words, or numbers and signs. A question,
     or a heading of three or more words without dollar or percent signs, is a real heading."""
     words = re.findall(r"[A-Za-z]{2,}", h)
+    if re.search(r"www\.|\.gov\b|/|^(?:Table|Figure)\s*\d", h):
+        return True  # a web address or a table's caption in a chart
     if h.endswith("?") or (len(words) >= 3 and not re.search(r"[$%]|[a-z][A-Z]", h)):
         return False
     return len(words) < 2 or bool(re.search(r"[$%]|\d", h)) or bool(re.search(r"[a-z][A-Z]", h))
@@ -268,12 +272,6 @@ def collapse_tables(items):
     """A run of table cells and chart labels (two or more short pieces, mostly numbers or single words)
     becomes one {"table": true} marker: the page says a table is in the source document and links it."""
     # A "paragraph" of numbers with hardly a word ("4.4% -0.2") is a table row too.
-    def numeric(x):
-        tokens = x.split()
-        figures = sum(1 for t in tokens if re.search(r"\d", t))
-        return (len(re.findall(r"[A-Za-z]{2,}", x)) < 4 and re.search(r"[\d$%]", x)) or (len(tokens) >= 4 and figures * 5 >= len(tokens) * 2)
-
-    items = [{"h": x} if isinstance(x, str) and numeric(x) else x for x in items]
     # "Table 1 …" or "Figure 2 …" starts a table: its caption and cells, up to the next full paragraph
     # (ten words or more) or real subheading, are the table.
     captioned, skipping = [], False
@@ -292,11 +290,29 @@ def collapse_tables(items):
                 continue
             if skipping and len(x.split()) < 10:
                 continue
+        elif "h" in x and re.match(r"(?:Table|Figure)\s*\d+\b", x["h"]):
+            captioned.append({"table": True})
+            skipping = True
+            continue
         elif skipping and "h" in x and tabley(x["h"]):
             continue
+        elif (skipping and "h" in x and not x["h"].endswith("?") and len(x["h"].split()) >= 4
+              and captioned and isinstance(captioned[-1], dict) and captioned[-1].get("table")):
+            continue  # the figure's own title, right after "Figure 3"
         skipping = False
         captioned.append(x)
     items = captioned
+    def numeric(x):
+        tokens = x.split()
+        figures = sum(1 for t in tokens if re.search(r"\d", t))
+        return (len(re.findall(r"[A-Za-z]{2,}", x)) < 4 and re.search(r"[\d$%]", x)) or (len(tokens) >= 4 and figures * 5 >= len(tokens) * 2)
+
+    def label(x):
+        # A chart or table label: a few words that don't end a sentence ("Higher revenue",
+        # "Current Law: Single Filers", "$4.6 billion higher in the first year").
+        return len(x.split()) < 15 and not re.search(r"[.?!:;”\")]$", x)
+
+    items = [{"h": x, "label": True} if isinstance(x, str) and (numeric(x) or label(x)) else x for x in items]
     out, i = [], 0
     while i < len(items):
         if isinstance(items[i], dict) and "h" in items[i]:
@@ -319,6 +335,20 @@ def collapse_tables(items):
             continue
         out.append(items[i])
         i += 1
+    # A short label right against a table ("Higher revenue", "Current Law: Single Filers") is part of it.
+    def is_table(x):
+        return isinstance(x, dict) and x.get("table")
+
+    def short_label(x):
+        return isinstance(x, dict) and x.get("label") and not x["h"].endswith("?") and len(x["h"].split()) < 15
+
+    changed = True
+    while changed:
+        changed = False
+        for k, x in enumerate(out):
+            if short_label(x) and ((k > 0 and is_table(out[k - 1])) or (k + 1 < len(out) and is_table(out[k + 1]))):
+                out[k] = {"table": True}
+                changed = True
     # neighbouring markers are one table
     merged = []
     for x in out:
