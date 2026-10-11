@@ -220,7 +220,7 @@ async function fppcStatements(env, db, budget) {
   const { results: people } = await db
     .prepare(
       `SELECT o.id, o.name, o.office, o.chamber FROM officials o LEFT JOIN disclosure_checks k ON k.official_id = o.id AND k.source = 'fppc'
-       WHERE o.chamber IN ('ca-executive', 'ca-assembly', 'ca-senate') AND o.active = 1 AND (k.checked_at IS NULL OR k.checked_at < datetime('now', ?))
+       WHERE o.chamber IN ('ca-executive', 'ca-assembly', 'ca-senate', 'county-board') AND o.active = 1 AND (k.checked_at IS NULL OR k.checked_at < datetime('now', ?))
        ORDER BY k.checked_at IS NOT NULL, o.chamber <> 'ca-executive', (o.chamber || ':' || o.district_code) NOT IN (${firstSeats.map(() => "?").join(",") || "''"}), o.rank, o.name LIMIT ?`
     )
     .bind(`-${days} days`, ...firstSeats, parseInt(env.FPPC_PER_RUN || "30", 10))
@@ -236,7 +236,7 @@ async function fppcStatements(env, db, budget) {
       body: JSON.stringify(fppcSearchBody(p.name.replace(/,? (Jr|Sr|II|III)\.?$/, "").split(/\s+/).pop())),
     }, `FPPC Form 700s ${p.name}`);
     const docs = fppcParse(await res.text()).documents || [];
-    const mine = fppcRows(docs, p);
+    const mine = fppcRows(docs, p, { county: env.FORM700_COUNTY || "Calaveras" });
     const stmts = [db.prepare("DELETE FROM disclosures WHERE official_id = ? AND source = 'fppc'").bind(p.id)];
     for (const x of mine) {
       stmts.push(

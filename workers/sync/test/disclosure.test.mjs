@@ -139,6 +139,12 @@ test("FPPC: a Form 700 is kept when the name and the office both match", async (
   const both = [doc("State Assembly", "Assembly Member"), doc("State Senate", "Senator"), doc("City of Example", "City/Town Council Member")];
   assert.deepEqual(fppcRows(both, { name: "Jan Doe", office: "State Assemblymember", chamber: "ca-assembly" }).map((r) => r.agency), ["State Assembly"]);
   assert.deepEqual(fppcRows(both, { name: "Jan Doe", office: "State Senator", chamber: "ca-senate" }).map((r) => r.agency), ["State Senate"]);
+  // A county supervisor: position "Supervisor" with the county as the agency; another county's board doesn't count.
+  const sup = [
+    { indexID: "S1", filer: { lastName: "Doe", firstName: "Jan" }, filingInfo: {}, filingPositions: [{ agency: "County of Calaveras", position: "Supervisor", filingType: "Annual", filingYear: 2025 }] },
+    { indexID: "S2", filer: { lastName: "Doe", firstName: "Jan" }, filingInfo: {}, filingPositions: [{ agency: "County of Example", position: "Supervisor", filingType: "Annual", filingYear: 2025 }] },
+  ];
+  assert.deepEqual(fppcRows(sup, { name: "Jan Doe", office: "Supervisor, District 1", chamber: "county-board" }).map((r) => r.index_id), ["S1"]);
   const url = fppcPdfUrl(rows[0].index_id, rows[0].pdf);
   assert.match(url, /^https:\/\/form700search\.fppc\.ca\.gov\/Home\/GetRedactedFormPdf\?indexID=C5CCD568-/);
   assert.match(url, /fileNameInfo\.Position=Governor/);
