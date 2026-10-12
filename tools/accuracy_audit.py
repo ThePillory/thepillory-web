@@ -82,7 +82,8 @@ NICK = {"bill": "william", "bob": "robert", "jim": "james", "mike": "michael", "
 
 
 def parts(name):
-    n = norm(name)
+    n = norm(re.sub(r"\([^)]*\)", " ", str(name or "")))
+    n = re.sub(r"\b(congressman|congresswoman|congressmember|assemblymember|assembly member|delegate|senator|sen|rep)\b", " ", n)
     n = re.sub(r"\b(jr|sr|ii|iii|iv|hon|honorable|rep|sen|senator|representative|mr|mrs|ms|dr)\b", " ", n)
     w = [x for x in n.replace(",", " ").split() if len(x) > 1 or x.isalpha()]
     return w
@@ -189,7 +190,7 @@ def matching(args):
             for c in (o or {}).get("committees") or []:
                 pairs.append((o.get("name"), c.get("name"), c.get("source_url")))
     sample = random.sample(pairs, min(50, len(pairs)))
-    bad = [p for p in sample if not (parts(p[0]) and parts(p[0])[-1] in parts(p[1]))]
+    bad = [p for p in sample if not (parts(p[0]) and set(parts(p[0])[1:]) & set(parts(p[1])))]
     summary.append(("Cal-Access committees → California officials", len(sample), len(bad), len(pairs)))
     say(f"### Cal-Access committees ({len(pairs)} matched; {len(sample)} checked)")
     say(f"Committee name doesn't contain the official's last name: {rate(len(bad), len(sample))}.")
@@ -226,13 +227,14 @@ def matching(args):
         by_state.setdefault(o["state"], []).append(o)
     cands = []
     for f in sorted((ROOT / "data" / "candidates" / "2026").glob("*.json")):
-        if f.name == "names.json":
+        if f.name in ("names.json", "websites.json"):
             continue
         try:
             d = json.loads(f.read_text())
         except ValueError:
             continue
-        for c in (d.get("candidates") or {}).values():
+        cs = d.get("candidates") or {}
+        for c in (cs.values() if isinstance(cs, dict) else cs):
             cands.append((d.get("state") or f.stem.upper(), c))
     hits = []
     for st, c in cands:
@@ -309,7 +311,7 @@ def summaries(args):
     counts, examples = {}, {}
     offset, step = 0, 2000
     while True:
-        rows = q(args, f"""SELECT b.id, b.level, b.title, substr(b.summary, 1, 600) AS summary, substr(b.official_summary, 1, 1500) AS official_summary,
+        rows = q(args, f"""SELECT b.id, b.level, b.title, substr(b.summary, 1, 600) AS summary, CASE WHEN instr(b.official_summary, 'This bill') > 0 THEN substr(b.official_summary, instr(b.official_summary, 'This bill'), 800) ELSE substr(b.official_summary, 1, 800) END AS official_summary,
                  b.official_summary_label, substr(a.plain_summary, 1, 600) AS plain_summary, l.st
           FROM bill_list l JOIN bills b ON b.id = l.bill_id
           LEFT JOIN bill_analyses a ON a.bill_id = b.id AND a.current = 1 AND (a.status = 'reviewed' OR (a.status = 'ai_draft' AND a.ai_review = 'pass'))
@@ -321,6 +323,8 @@ def summaries(args):
             counts[key] = counts.get(key, 0) + 1
             if k != "ok" and k != "empty" and len(examples.setdefault(k, [])) < 8:
                 examples[k].append((b["id"], src, text[:160]))
+            if k == "ok" and b["level"] == "federal" and random.random() < 0.02 and len(examples.setdefault("federal, shown", [])) < 12:
+                examples["federal, shown"].append((b["id"], src, text[:200]))
         if len(rows) < step:
             break
         offset += step
@@ -365,7 +369,8 @@ def constitution_text():
 
 
 def contained(quote, text):
-    nq, nt = norm(quote), norm(text)
+    strip = lambda t: re.sub(r"[\"']", "", norm(t))
+    nq, nt = strip(quote), strip(text)
     return bool(nq) and nq in nt
 
 
@@ -397,7 +402,11 @@ def ai_content(args):
     rows = q(args, "SELECT p.id, p.quote, p.source_url, p.review, o.name FROM promises p JOIN officials o ON o.id = p.official_id WHERE p.review IN ('auto', 'approved') ORDER BY random() LIMIT 20")
     bad_list = []
     for r in rows:
-        page = fetch(r["source_url"])
+        url = r["source_url"] or ""
+        m = re.match(r"https?://www\.govinfo\.gov/app/details/([A-Z]+-\d+)", url)
+        if m:  # the detail page is built in the browser; the document's text is here
+            url = f"https://www.govinfo.gov/content/pkg/{m.group(1)}/html/{m.group(1)}.htm"
+        page = fetch(url)
         time.sleep(0.5)
         if page.startswith("__FETCH_FAILED__"):
             bad_list.append((r, "source didn't load"))
@@ -422,6 +431,8 @@ def ai_content(args):
     out["excerpts"] = (len(rows), len(stored_bad), len(live_bad))
     say(f"### Platform excerpts (\"In their own words\"): {len(rows)} shown")
     say(f"Not word for word in the page as it was read: {rate(len(stored_bad), len(rows))}. Not on the live page today: {rate(len(live_bad), len(rows))} (pages change; the excerpt is refreshed monthly).")
+    for r in stored_bad:
+        say(f"- As read: {r['name']}: \"{(r['excerpt'] or '')[:160]}\" {r['url']}")
     for r, why in live_bad:
         say(f"- {r['name']} ({why}): \"{(r['excerpt'] or '')[:140]}\" {r['url']}")
     say()
@@ -439,12 +450,17 @@ def freshness(args):
     ours = {r["chamber"]: r["last"] for r in fed}
     senate = fetch("https://www.senate.gov/legislative/LIS/roll_call_lists/vote_menu_119_2.xml")
     m = re.search(r"<vote_date>([^<]+)</vote_date>", senate)
-    house = fetch("https://clerk.house.gov/evs/2026/index.asp")
-    hm = re.findall(r"(\d{1,2}-[A-Za-z]{3}-\d{4})", house)
+    key = os.environ.get("CONGRESS_API_KEY", "")
+    house = fetch(f"https://api.congress.gov/v3/house-vote/119/2?format=json&limit=250&api_key={key}") if key else "__FETCH_FAILED__ no key"
+    try:
+        hv = json.loads(house).get("houseRollCallVotes") or []
+        hm = sorted((v.get("startDate") or "")[:10] for v in hv)[-1:]
+    except ValueError:
+        hm = []
     say("| | Newest on ThePillory | Newest at the source |")
     say("|---|---|---|")
     say(f"| U.S. Senate roll calls | {ours.get('us-senate', '—')} | {m.group(1) + ' (senate.gov, day-month)' if m else 'source didn’t load'} |")
-    say(f"| U.S. House roll calls | {ours.get('us-house', '—')} | {hm[0] + ' (House Clerk)' if hm else 'source didn’t load'} |")
+    say(f"| U.S. House roll calls | {ours.get('us-house', '—')} | {hm[0] + ' (Congress.gov, first 250 roll calls of the session)' if hm else 'source didn’t load'} |")
     say()
     rows = q(args, "SELECT st, bills, votes, last_vote, updated_at FROM state_coverage ORDER BY st")
     say("Each state's newest recorded vote on ThePillory. Comparing with each legislature's own site isn't automated (50 different sites; Open States' API key isn't available to GitHub Actions); a state's legislature may simply be out of session.")
