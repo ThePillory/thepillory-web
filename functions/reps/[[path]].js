@@ -15,6 +15,7 @@ import { districtsFromCookie, repsWhere, describe, STATE_NAME } from "../_lib/di
 import { lookupForm } from "../_lib/hub.js";
 import { BROWSE, PER_PAGE, chamberPage, personRow, yourRow, yourList, statewideList, repsHref, stateChambers, statePicker, sortSwitch, pagedList } from "../_lib/reps-index.js";
 import { searchPeople } from "../_lib/people-search.js";
+import { networthFor, networthPoints, networthLine, networthSection } from "../_lib/networth.js";
 import { tradeSummary, memberTrades, memberReports, memberCommittees, executivePost, tradesSection, quickTradesLine, tradeRow, committeesList, TRADES_PER_PAGE, TRADES_METHOD } from "../_lib/trades.js";
 import { loadJustices } from "../_lib/scotus.js";
 import { chamberIds } from "../../workers/sync/src/states.js";
@@ -320,9 +321,11 @@ async function profile(env, slug, url, request) {
     }, null) : null,
     stateLegislator ? loadSection("rep California lobbying", () => caLobbyingForOfficial(db, o.id), null) : null,
     congress ? loadSection("rep government money", () => memberGovMoney(db, o.id), null) : null,
+    // Annual financial disclosure reports: the same people who file trade reports.
+    tradesOn ? loadSection("rep net worth", async () => networthPoints(await networthFor(db, o.id)), null) : null,
   ]);
-  const [countsLoaded, votes, funding, orders, bills, nominations, committees, promises, ownWords, trades, caLobbying, govMoney] = loaded;
-  const partial = anyFailed(countsLoaded, votes, funding, orders, bills, nominations, committees, promises, ownWords, trades, caLobbying, govMoney);
+  const [countsLoaded, votes, funding, orders, bills, nominations, committees, promises, ownWords, trades, caLobbying, govMoney, networth] = loaded;
+  const partial = anyFailed(countsLoaded, votes, funding, orders, bills, nominations, committees, promises, ownWords, trades, caLobbying, govMoney, networth);
   const counts = countsLoaded === FAILED ? null : countsLoaded || {};
   const ok = (v) => (v === FAILED ? null : v);
 
@@ -346,6 +349,7 @@ async function profile(env, slug, url, request) {
     <p class="label">${LEVEL_NAME[o.level]} · ${CHAMBER_NAME[o.chamber]}</p>
     <h1>${esc(o.name)}</h1>
     <p class="secondary">${esc(who(o))}</p>
+    ${networth && networth !== FAILED ? networthLine(networth) : ""}
     ${glanceLine ? `<p class="summary-text small">${esc(glanceLine)}</p>` : ""}
     ${body ? `<div class="chips">${body.chip}</div>` : ""}
     ${safeUrl(o.website) ? `<div class="chips"><a class="chip chip--tap" href="${esc(o.website)}" target="_blank" rel="noopener">Official site ↗</a></div>` : ""}
@@ -423,6 +427,7 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
   // More: everything else, in sections.
   const moreParts = [];
   if (trades) moreParts.push(sub("more-trades", "Stock trades", trades === FAILED ? sectionError("") : tradesSection(o, trades)));
+  if (networth) moreParts.push(sub("more-networth", "Net worth, as reported", networth === FAILED ? sectionError("") : networthSection(o.name, networth)));
   if (congress) {
     const gm = govMoney === FAILED ? null : govMoney;
     moreParts.push(sub("more-earmarks", "Earmarks", govMoney === FAILED ? sectionError("") : earmarksSection(o, gm)));

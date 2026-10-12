@@ -1695,6 +1695,17 @@ article.fin-term { scroll-margin-top: 16px; }
 .mini-bars-table table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; font-variant-numeric: tabular-nums; }
 .mini-bars-table td, .mini-bars-table th { padding: 4px 0; border-top: 1px solid var(--border); text-align: right; }
 .mini-bars-table th { text-align: left; font-weight: 600; }
+/* Range bands ("Net worth, as reported"): one band per year, low to high. */
+.range-bands { display: flex; flex-direction: column; gap: 8px; margin: 0; }
+.range-bands-plot { position: relative; display: flex; gap: 2px; height: 140px; }
+.range-bands-plot > a, .range-bands-plot > span { position: relative; flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: flex-end; height: 100%; }
+.range-bands-plot b { display: block; }
+.range-bands-plot i.band { display: block; min-height: 2px; border-radius: 3px; background: var(--chart-1); }
+.range-bands-plot i.band.is-before { background: var(--chart-3); }
+.range-bands-plot i.band.is-open { border-top: 2px dashed var(--text); border-radius: 0 0 3px 3px; }
+.range-bands-plot > a:hover i.band, .range-bands-plot > a:focus-visible i.band { outline: 2px solid var(--navy); outline-offset: 1px; }
+.range-bands-zero { position: absolute; left: 0; right: 0; bottom: 0; border-top: 1px solid var(--text-3); pointer-events: none; }
+.networth-line .inline-link { display: inline-flex; align-items: center; min-height: var(--tap); font-weight: 400; color: var(--text); text-decoration: underline; text-decoration-color: var(--text-3); text-underline-offset: 3px; }
 
 /* Big number cards and stat tiles */
 .hero-stat { display: flex; flex-direction: column; gap: 4px; }

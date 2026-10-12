@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "51"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "52"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -615,6 +615,21 @@ def build_methodology():
     <li><strong>Sector</strong> comes from the company's Standard Industrial Classification code at the SEC (EDGAR), by ticker, grouped into the SIC divisions. It's approximate, and blank when there's no ticker.</li>
     <li><strong>Side by side, never cause.</strong> Committee assignments are listed as plain facts beside the trades. ThePillory doesn't label conflicts, score members, or order trades by anything but date.</li>
     <li><strong>No commercial use.</strong> The Ethics in Government Act forbids using these reports for commercial purposes, so trades are free to read on ThePillory and are never sold, exported, offered through an API or put behind a paid plan.</li>
+  </ul>
+</section>
+
+<section class="card stack" id="net-worth">
+  <h2>Net worth, as reported</h2>
+  <p>An estimate of each person's net worth from their own annual financial disclosure reports, for members of Congress, the President, Vice President, Cabinet and the Supreme Court justices. The same method for everyone, whatever their party: facts from the reports, no commentary.</p>
+  <ul class="plain-list small">
+    <li><strong>Sources.</strong> Members of Congress: the annual reports (and candidate reports filed before taking office) on the House Clerk's financial disclosure site, back to 2008, and the Senate's eFD site, back to 2012. The executive branch: OGE Form 278e reports (annual, nominee and candidate reports) as the Office of Government Ethics posts them. The justices: their annual reports (AO Form 10), from the unchanged copies Fix the Court posts. Each year links to its report.</li>
+    <li><strong>What's read.</strong> Every asset and every liability in the report, from its text: the House and Senate schedules of assets and liabilities, the 278e's assets (Parts 2, 5 and 6) and liabilities (Part 8), and the justices' investments (Part VII) and liabilities (Part VI). A report is used only when every line in it is accounted for. An account or fund that lists its holdings under it is counted once. A report that is a scan, was filed on paper, is released only on request, or doesn't read in full is listed as a link, and its figures aren't guessed.</li>
+    <li><strong>The range.</strong> Reports give each value as a range. The low end is the sum of every asset's minimum, minus the sum of every liability's maximum. The high end is the sum of every asset's maximum, minus the sum of every liability's minimum. An open-ended range ("Over $50,000,000", or a spouse's "Over $1,000,000") is counted at its stated minimum, and the high end is marked "or more".</li>
+    <li><strong>A personal home.</strong> A home that doesn't earn income isn't reported, and some filers list its mortgage while others don't have to. So, to treat everyone the same way, a mortgage on a personal residence is left out of every estimate.</li>
+    <li><strong>The summary line.</strong> "Net worth, as reported: [range] ([first year], [label]) → [range] ([latest year])". The first is the report filed as a candidate or nominee before taking office, labeled "before taking office"; otherwise the earliest annual report online, labeled "earliest report online" (or "earliest report read", when an earlier report exists but couldn't be read). The latest is the most recent annual report. With one report, only that one is shown; with none read, there's no line. When an annual report was amended, the last one filed is used.</li>
+    <li><strong>The limits.</strong> Reports use value ranges, not exact amounts. A personal home that doesn't earn income isn't reported, and neither are some government retirement accounts. An asset held only by a spouse and worth over $1,000,000 can be reported only as "Over $1,000,000". So this is an estimate, not an exact figure.</li>
+    <li><strong>Facts only.</strong> No rankings, no "richest" lists, no comparisons with salaries, and no "grew by" percentages.</li>
+    <li><strong>No commercial use.</strong> The Ethics in Government Act forbids using these reports for commercial purposes, so this is free to read on ThePillory and is never sold, exported, offered through an API or put behind a paid plan.</li>
   </ul>
 </section>
 

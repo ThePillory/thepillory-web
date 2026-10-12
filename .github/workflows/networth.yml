@@ -1,0 +1,57 @@
+# "Net worth, as reported": annual financial disclosure reports of members of
+# Congress (House Clerk, Senate eFD), the executive branch (OGE 278e) and the
+# justices, read line by line into D1's networth_reports (tools/load_networth.py;
+# see docs/funding.md, "Net worth"). Two kinds of run:
+#
+#   By hand (Actions -> Load net worth reports -> Run workflow): "measure" reads
+#   reports and writes what it found to the run summary, writing nothing to D1
+#   ("names" limits it to some last names); "load" writes them.
+#   Daily at 16:41 UTC (after the sync Worker's run and the stock trades load,
+#   so they don't write to D1 at once): up to 800 reports not read yet, the
+#   executive branch and the justices first, then newest first.
+#
+# These records may not be used for commercial purposes (Ethics in Government
+# Act): never sell, export or put them behind a paid plan.
+#
+# Needs these repository secrets (Settings -> Secrets and variables -> Actions):
+#   CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID   D1 access, as for "Load stock trades"
+name: Load net worth reports
+on:
+  schedule:
+    - cron: "41 16 * * *"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "measure (report what it reads, write nothing) or load"
+        type: choice
+        options: [measure, load]
+        default: measure
+      max_reports:
+        description: "Reports to read this run"
+        default: "100"
+      names:
+        description: "Measure only: last names to read (comma-separated), blank for all"
+        default: ""
+permissions:
+  contents: read
+concurrency:
+  group: networth
+  cancel-in-progress: false
+jobs:
+  load:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null
+      - name: Measure or load
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          MODE: ${{ github.event.inputs.mode || 'load' }}
+          MAX_REPORTS: ${{ github.event.inputs.max_reports || '800' }}
+          NAMES: ${{ github.event.inputs.names || '' }}
+        run: python3 tools/load_networth.py --mode "$MODE" --max-reports "$MAX_REPORTS" --names "$NAMES"

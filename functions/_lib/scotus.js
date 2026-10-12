@@ -11,11 +11,12 @@
 // The same layout for every justice. No ideology labels, scores, voting blocs or
 // predictions: each decision shows who wrote and who joined each opinion, as the
 // opinion's own syllabus states it, and links to the opinion.
-import { esc, fmtDate, linkRow, safeUrl } from "./render.js";
+import { esc, fmtDate, linkRow, safeUrl, sectionError } from "./render.js";
 import { compactRow, clauseChips, fold, outLink } from "./summary.js";
 import { asset } from "./geo.js";
 import { simpleCard } from "./simple.js";
 import { tradeRow, TRADES_PER_PAGE, TRADES_METHOD } from "./trades.js";
+import { networthFor, networthPoints, networthLine, networthSection } from "./networth.js";
 
 export const COURT_HREF = "/bodies/us-supreme-court/";
 export const TERM_HREF = "/court/term/";
@@ -388,8 +389,22 @@ ${j.biography.length ? `<div class="card stack-xs"><p class="label">From the off
     : `<p class="small secondary">Coming soon for ${esc(j.name)}: the annual financial disclosure reports, gifts and reimbursements load from CourtListener.</p>`;
 
   const tradesHtml = justiceTrades(j, tradesData, Math.max(0, Number(url.searchParams.get("toffset")) || 0));
+  // Net worth, as reported, from the same annual reports (read by tools/load_networth.py): one failing section shows a short note.
+  let networth = null;
+  if (env.DB) {
+    try {
+      networth = networthPoints(await networthFor(env.DB, `justice:${slug}`));
+    } catch (err) {
+      console.error("justice net worth", err);
+      networth = "failed";
+    }
+  }
+  const networthHtml = networth === "failed"
+    ? sectionError("")
+    : networth ? networthSection(j.name, networth) : "";
 
   const more = `
+${networthHtml ? fold("more-networth", "Net worth, as reported", networthHtml) : ""}
 <div class="card">
   ${linkRow(COURT_HREF, "The Supreme Court", "Every justice")}
   ${linkRow(TERM_HREF, "This term", "Cases the Court will hear, and its decisions")}
@@ -405,6 +420,7 @@ ${j.biography.length ? `<div class="card stack-xs"><p class="label">From the off
   <p class="label">The Supreme Court</p>
   <h1>${esc(j.name)}</h1>
   <p class="subtitle">${esc(j.title)} since ${esc(j.oath_date)}</p>
+  ${networth && networth !== "failed" ? networthLine(networth) : ""}
 </header>
 <div class="rep-tabs stack" data-tabs>
   <nav class="tabs tabs--four" role="tablist" aria-label="Sections">
