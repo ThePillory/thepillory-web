@@ -1,0 +1,811 @@
+Part 3. Assets</h3>
+			<p>
+				Did you, your spouse, or dependent child own any asset that had a value of more than $1,000 or generated income of more than $200?
+				<strong>
+					
+						Yes
+					
+				</strong>
+			</p>
+		</div>
+		
+			<div class="table-responsive">
+				<table id="grid_items" class="table dataTable">
+					<caption class="sr-only">List of assets added to this report</caption>
+					<thead>
+					<tr class="header">
+						<th scope="col"></th>
+						<th scope="col">Asset</th>
+						<th scope="col">Asset Type</th>
+						<th scope="col">Owner</th>
+						<th scope="col">Value</th>
+						<th scope="col">Income Type</th>
+						<th scope="col">Income</th>
+					</tr>
+					</thead>
+					<tbody>
+					
+						<tr class="nowrap">
+							<td>1</td>
+							<td class="span4">
+								<strong>Payflex Systems USA INC</strong><div class="muted noWrap">(Omaha, NE)</div><div class="muted"><div class="muted"><em>Type: </em>Savings</div></div>
+							</td>
+							<td>Bank Deposit</td>
+							<td>Self</td>
+							<td>$15,001 - $50,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>2</td>
+							<td class="span4">
+								<strong class="marginit-right">Strategic Sales Tactics Inc.</strong><div class="muted"><em>Company:</em> Strategic Sales Tactics Inc (Brentwood, TN)&nbsp;<em>Description:</em>&nbsp;Marketing Consulting&nbsp;</div>
+							</td>
+							<td>Corporate Securities<div class="muted">Non-Public Stock</div></td>
+							<td>Spouse</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>3</td>
+							<td class="span4">
+								<strong class="marginit-right">American Funds Brokerage Account</strong><div class="addUnderlyingAssets noWrap"></div><div class="muted"></div>
+							</td>
+							<td>Brokerage/Managed Account</td>
+							<td>Self</td>
+							<td>--</td>
+							<td>
+								
+							</td>
+							<td></td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>3.1</td>
+							<td class="span4">
+								<strong class="marginit-right"><a href="http://finance.yahoo.com/q?s=ABALX" target="_blank">ABALX</a> - American Funds American Balanced Fund Class A</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Self</td>
+							<td>$15,001 - $50,000</td>
+							<td>
+								Dividends, Capital Gains
+							</td>
+							<td>$1,001 - $2,500</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>3.2</td>
+							<td class="span4">
+								<strong class="marginit-right"><a href="http://finance.yahoo.com/q?s=AIVSX" target="_blank">AIVSX</a> - American Funds Investment Company of America Class</strong><div class="muted"><em>Filer comment:  </em>Capital gains and dividend reinvestment increased value above $15,000</div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Self</td>
+							<td>$15,001 - $50,000</td>
+							<td>
+								Dividends, Capital Gains
+							</td>
+							<td>$1,001 - $2,500</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>3.3</td>
+							<td class="span4">
+								<strong class="marginit-right"><a href="http://finance.yahoo.com/q?s=ANWPX" target="_blank">ANWPX</a> - American Funds New Perspective Fund Class A</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Self</td>
+							<td>$100,001 - $250,000</td>
+							<td>
+								Dividends, Capital Gains
+							</td>
+							<td>$5,001 - $15,000</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>4</td>
+							<td class="span4">
+								<strong class="marginit-right">MetLife IRA</strong><div class="addUnderlyingAssets noWrap"></div><div class="muted"></div>
+							</td>
+							<td>Brokerage/Managed Account</td>
+							<td>Spouse</td>
+							<td>--</td>
+							<td>
+								
+							</td>
+							<td></td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>4.1</td>
+							<td class="span4">
+								<strong class="marginit-right">AB Global Dynamic Allocation Portfolio</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Spouse</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>4.2</td>
+							<td class="span4">
+								<strong class="marginit-right">Invesco Balanced Risk Allocation Portfolio</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Spouse</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>4.3</td>
+							<td class="span4">
+								<strong class="marginit-right">Blackrock Global Tactical Strategies Portfolio</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Spouse</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>4.4</td>
+							<td class="span4">
+								<strong class="marginit-right">JP Morgan Global Active Allocation Portfolio</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Spouse</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>4.5</td>
+							<td class="span4">
+								<strong class="marginit-right">BHLife Balanced Plus Portfolio</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Spouse</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>4.6</td>
+							<td class="span4">
+								<strong class="marginit-right">Schroeders Global Multi-Asset Portfolio</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Spouse</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>5</td>
+							<td class="span4">
+								<strong class="marginit-right">State of Tennessee Pension</strong><div class="muted"></div>
+							</td>
+							<td>Retirement Plans<div class="muted">Defined Benefit Pension Plan</div></td>
+							<td>Self</td>
+							<td>Unascertainable</td>
+							<td>
+								Other (Annual Pension Payment)
+							</td>
+							<td><br/>Other $5,138.46</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>6</td>
+							<td class="span4">
+								<strong>Pinnacle Bank</strong><div class="muted noWrap">(Nashville, TN)</div><div class="muted"><div class="muted"><em>Type: </em>Checking</div></div>
+							</td>
+							<td>Bank Deposit</td>
+							<td>Self</td>
+							<td>$100,001 - $250,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>7</td>
+							<td class="span4">
+								<strong>First Horizon</strong><div class="muted noWrap">(Memphis, TN)</div><div class="muted"><div class="muted"><em>Type: </em>Checking</div></div>
+							</td>
+							<td>Bank Deposit</td>
+							<td>Spouse</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								Interest
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>8</td>
+							<td class="span4">
+								<strong class="marginit-right">529 Account - grandchild 1</strong><div class="muted"><em>Institution:</em> Capital Group College America</div><div class="addUnderlyingAssets noWrap"></div><div class="muted"></div>
+							</td>
+							<td>Education Savings Plans<div class="muted">529 College Savings Plan</div></td>
+							<td>Self</td>
+							<td>--</td>
+							<td>
+								
+							</td>
+							<td></td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>8.1</td>
+							<td class="span4">
+								<strong class="marginit-right"><a href="http://finance.yahoo.com/q?s=CLBAX" target="_blank">CLBAX</a> - American Balanced Fund Class 529-A Shares</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Self</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>8.2</td>
+							<td class="span4">
+								<strong class="marginit-right"><a href="http://finance.yahoo.com/q?s=CICAX" target="_blank">CICAX</a> - The Investment Company of America Class 529-A S</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Self</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>9</td>
+							<td class="span4">
+								<strong class="marginit-right">529 Account - grandchild 3</strong><div class="muted"><em>Institution:</em> Capital Group College America</div><div class="addUnderlyingAssets noWrap"></div><div class="muted"></div>
+							</td>
+							<td>Education Savings Plans<div class="muted">529 College Savings Plan</div></td>
+							<td>Self</td>
+							<td>--</td>
+							<td>
+								
+							</td>
+							<td></td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>9.1</td>
+							<td class="span4">
+								<strong class="marginit-right"><a href="http://finance.yahoo.com/q?s=CCFAX" target="_blank">CCFAX</a> - American Funds College Fund 2036 Class 529-A</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Self</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>10</td>
+							<td class="span4">
+								<strong class="marginit-right">M Financial Group</strong><div class="addUnderlyingAssets noWrap"></div><div class="muted"></div>
+							</td>
+							<td>Brokerage/Managed Account</td>
+							<td>Self</td>
+							<td>--</td>
+							<td>
+								
+							</td>
+							<td></td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>10.1</td>
+							<td class="span4">
+								<strong class="marginit-right"><a href="http://finance.yahoo.com/q?s=QQQ" target="_blank">QQQ</a> - Invesco QQQ Trust, Series 1</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Exchange Traded Fund/Note</div></td>
+							<td>Self</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								Dividends, Capital Gains
+							</td>
+							<td>$1,001 - $2,500</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>10.2</td>
+							<td class="span4">
+								<strong class="marginit-right"><a href="http://finance.yahoo.com/q?s=IWM" target="_blank">IWM</a> - iShares Russell 2000 ETF</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Exchange Traded Fund/Note</div></td>
+							<td>Self</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								Dividends, Capital Gains
+							</td>
+							<td>$201 - $1,000</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>10.3</td>
+							<td class="span4">
+								<strong class="marginit-right"><a href="http://finance.yahoo.com/q?s=IWP" target="_blank">IWP</a> - iShares Russell Mid-Cap Growth ETF</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Exchange Traded Fund/Note</div></td>
+							<td>Self</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								Dividends, Capital Gains
+							</td>
+							<td>$201 - $1,000</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>10.4</td>
+							<td class="span4">
+								<strong class="marginit-right"><a href="http://finance.yahoo.com/q?s=IWO" target="_blank">IWO</a> - iShares Russell 2000 Growth ETF</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Exchange Traded Fund/Note</div></td>
+							<td>Self</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								Dividends, Capital Gains
+							</td>
+							<td>$201 - $1,000</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>10.5</td>
+							<td class="span4">
+								<strong class="marginit-right"><a href="http://finance.yahoo.com/q?s=SPY" target="_blank">SPY</a> - State Street SPDR S&P 500 ETF Trust</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Exchange Traded Fund/Note</div></td>
+							<td>Self</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								Dividends, Capital Gains
+							</td>
+							<td>$201 - $1,000</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>10.6</td>
+							<td class="span4">
+								<strong class="marginit-right"><a href="http://finance.yahoo.com/q?s=SPYD" target="_blank">SPYD</a> - SPDR(R) Portfolio S&P 500 High Dividend ETF</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Exchange Traded Fund/Note</div></td>
+							<td>Self</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								Dividends, Capital Gains
+							</td>
+							<td>$201 - $1,000</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>10.7</td>
+							<td class="span4">
+								<strong class="marginit-right"><a href="http://finance.yahoo.com/q?s=VUG" target="_blank">VUG</a> - Vanguard Growth Index Fund - ETF Shares</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Exchange Traded Fund/Note</div></td>
+							<td>Self</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								Dividends, Capital Gains
+							</td>
+							<td>$1,001 - $2,500</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>10.8</td>
+							<td class="span4">
+								<strong class="marginit-right"><a href="http://finance.yahoo.com/q?s=MGK" target="_blank">MGK</a> - Vanguard Mega Cap Growth Index Fund - ETF Shares</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Exchange Traded Fund/Note</div></td>
+							<td>Self</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								Dividends, Capital Gains
+							</td>
+							<td>$1,001 - $2,500</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>10.9</td>
+							<td class="span4">
+								<strong class="marginit-right"><a href="http://finance.yahoo.com/q?s=VOOV" target="_blank">VOOV</a> - Vanguard S&P 500 Value Index Fund - ETF Shares</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Exchange Traded Fund/Note</div></td>
+							<td>Self</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								Dividends, Capital Gains
+							</td>
+							<td>$201 - $1,000</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>10.10</td>
+							<td class="span4">
+								<strong class="marginit-right"><a href="http://finance.yahoo.com/q?s=VYM" target="_blank">VYM</a> - Vanguard High Dividend Yield Index Fund - ETF Shares</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Exchange Traded Fund/Note</div></td>
+							<td>Self</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								Dividends, Capital Gains
+							</td>
+							<td>$201 - $1,000</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>10.11</td>
+							<td class="span4">
+								<strong class="marginit-right"><a href="http://finance.yahoo.com/q?s=VGT" target="_blank">VGT</a> - Vanguard Information Technology Index Fund - ETF Shares</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Exchange Traded Fund/Note</div></td>
+							<td>Self</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								Dividends, Capital Gains
+							</td>
+							<td>$1,001 - $2,500</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>10.12</td>
+							<td class="span4">
+								<strong>M Financial Group</strong><div class="muted noWrap">(Portland, OR)</div><div class="muted"><div class="muted"><em>Type: </em>Money Market Account</div></div>
+							</td>
+							<td>Bank Deposit</td>
+							<td>Self</td>
+							<td>$100,001 - $250,000</td>
+							<td>
+								Interest
+							</td>
+							<td>$2,501 - $5,000</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>11</td>
+							<td class="span4">
+								<strong class="marginit-right">Jackson National Life Insurance Perspective II Variable and Fixed Annuity</strong><div class="addUnderlyingAssets noWrap"></div><div class="muted"></div>
+							</td>
+							<td>Life Insurance<div class="muted">Variable</div></td>
+							<td>Self</td>
+							<td>--</td>
+							<td>
+								
+							</td>
+							<td></td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>11.1</td>
+							<td class="span4">
+								<strong class="marginit-right">JNL/American Funds Growth A</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Self</td>
+							<td>$100,001 - $250,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>11.2</td>
+							<td class="span4">
+								<strong class="marginit-right">JNL/Mellon Nasdaq 100 Index A</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Self</td>
+							<td>$100,001 - $250,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>11.3</td>
+							<td class="span4">
+								<strong class="marginit-right">JNL/Newton Equity Income A</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Self</td>
+							<td>$100,001 - $250,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>11.4</td>
+							<td class="span4">
+								<strong class="marginit-right">JNL/Mellon Dow Index A</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Self</td>
+							<td>$50,001 - $100,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>11.5</td>
+							<td class="span4">
+								<strong class="marginit-right">JNL/JPMorgan MidCap Growth A</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Self</td>
+							<td>$15,001 - $50,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>11.6</td>
+							<td class="span4">
+								<strong class="marginit-right">JNL/T. Rowe Price Established Growth A</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Self</td>
+							<td>$15,001 - $50,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>11.7</td>
+							<td class="span4">
+								<strong class="marginit-right">JNL/Mellon Information Technology Sector A</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Self</td>
+							<td>$50,001 - $100,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>11.8</td>
+							<td class="span4">
+								<strong class="marginit-right">JNL/Mellon Healthcare Sector A</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Self</td>
+							<td>$15,001 - $50,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>11.9</td>
+							<td class="span4">
+								<strong class="marginit-right">JNL/T.Rowe Price Capital Appreciation A</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Self</td>
+							<td>$15,001 - $50,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>12</td>
+							<td class="span4">
+								<strong class="marginit-right">529 Account - grandchild 2</strong><div class="muted"><em>Institution:</em> Capital Group College America</div><div class="addUnderlyingAssets noWrap"></div><div class="muted"></div>
+							</td>
+							<td>Education Savings Plans<div class="muted">529 College Savings Plan</div></td>
+							<td>Self</td>
+							<td>--</td>
+							<td>
+								
+							</td>
+							<td></td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>12.1</td>
+							<td class="span4">
+								<strong class="marginit-right"><a href="http://finance.yahoo.com/q?s=CLBAX" target="_blank">CLBAX</a> - American Balanced Fund Class 529-A Shares</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Self</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>12.2</td>
+							<td class="span4">
+								<strong class="marginit-right"><a href="http://finance.yahoo.com/q?s=CICAX" target="_blank">CICAX</a> - The Investment Company of America Class 529-A S</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Self</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>12.3</td>
+							<td class="span4">
+								<strong class="marginit-right"><a href="http://finance.yahoo.com/q?s=CNPAX" target="_blank">CNPAX</a> - NEW PERSPECTIVE FUND - Class 529-A</strong><div class="muted"></div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Self</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>13</td>
+							<td class="span4">
+								<strong class="marginit-right">529 Account - grandchild 4</strong><div class="muted"><em>Institution:</em> Capital Group College America</div><div class="addUnderlyingAssets noWrap"></div><div class="muted"></div>
+							</td>
+							<td>Education Savings Plans<div class="muted">529 College Savings Plan</div></td>
+							<td>Self</td>
+							<td>--</td>
+							<td>
+								
+							</td>
+							<td></td>
+						</tr>
+					
+						<tr class="nowrap">
+							<td>13.1</td>
+							<td class="span4">
+								<strong class="marginit-right"><a href="http://finance.yahoo.com/q?s=CDJAX" target="_blank">CDJAX</a> - American Funds College 2039 Fund Class 529-A</strong><div class="muted"><em>Filer comment:  </em>mulitple purchases below $1,000</div>
+							</td>
+							<td>Mutual Funds<div class="muted">Mutual Fund</div></td>
+							<td>Self</td>
+							<td>$1,001 - $15,000</td>
+							<td>
+								None
+							</td>
+							<td>None (or less than $201)</td>
+						</tr>
+					
+					</tbody>
+				</table>
+			</div>
+		
+	</section>
+
+	<section class="card mb-2">
+		<div class="card-body">
+			<h3 class="h4">
+<!--SPLIT-->
+Part 7. Liabilities</h3>
+			<p>
+				Did you, your spouse, or dependent child have a reportable, non-revolving charge account liability worth more than $10,000 at any time or a revolving charge account whose value exceeded $10,000 as of the last day of the reporting period?
+				<strong>
+					
+						Yes
+					
+				</strong>
+			</p>
+		</div>
+		
+			<div class="table-responsive">
+				<table class="table table-striped">
+					<caption class="sr-only">List of liabilities added to this report</caption>
+					<thead>
+					<tr class="header">
+						<th scope="col"></th>
+						<th scope="col">&#35;</th>
+						<th scope="col">Incurred</th>
+						<th scope="col">Debtor</th>
+						<th scope="col">Type</th>
+						<th scope="col">Points</th>
+						<th scope="col">Rate<br>(Term)</th>
+						<th scope="col">Amount</th>
+						<th scope="col">Creditor</th>
+						<th scope="col" width="350">Comments</th>
+					</tr>
+					</thead>
+					<tbody>
+					
+						<tr class="nowrap">
+							<td>
+							</td>
+							<td>
+								1</td>
+							<td>
+								2020
+							</td>
+							<td>Spouse</td>
+							<td>Mortgage
+								</td>
+							<td>
+								None</td>
+							<td>
+								2.5%<br>
+								
+														(30 year fixed)
+								
+							</td>
+							<td>$250,001 - $500,000</td>
+							<td>
+								JPMorgan Chase Bank, NA
+								<div class="muted">Monroe, LA</div>
+							</td>
+              <td>
+                <div class="mb-2">
+                  <small>
+                    
+                      <span class="text-muted">n/a</span>
+                    
+                  </small>
+                </div>
+              </td>
+						</tr>
+					
+					</tbody>
+				</table>
+			</div>
+		
+	</section>
+
+	<section class="card mb-2">
+		<div class="card-body">
+			<h3 class="h4">

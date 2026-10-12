@@ -77,3 +77,43 @@ export function miniBars(points, { format = (n) => String(n), caption = "", aria
     .join("")}</tbody></table></details>
 </figure>`;
 }
+
+/**
+ * Range bands: one shaded band per point, from its low to its high (a value
+ * range, not a single number), on one scale from the lowest low (or zero) to
+ * the highest high. Each band links to its source (href); an open-ended high
+ * ("or more") gets a dashed top, a marked point (before) a lighter band. With
+ * a "Show the numbers" table. Returns "" with no points.
+ *   points: [{label, tick, low, high, lowOpen, highOpen, href, before}]
+ */
+export function rangeBands(points, { format = (n) => String(n), scale = format, caption = "", ariaLabel = "", head = ["Year", "Low", "High"] } = {}) {
+  const pts = points.filter((p) => num(p.low) != null && num(p.high) != null);
+  if (!pts.length) return "";
+  const min = Math.min(0, ...pts.map((p) => p.low));
+  const max = Math.max(0, ...pts.map((p) => p.high));
+  const range = max - min;
+  if (!(range > 0)) return "";
+  const pct = (v) => `${Math.max(0, (v / range) * 100).toFixed(2)}%`;
+  const cols = pts
+    .map((p) => {
+      const cls = ["band", p.highOpen ? "is-open" : "", p.before ? "is-before" : ""].filter(Boolean).join(" ");
+      const body = `<i class="${cls}" style="height:${pct(p.high - p.low)}"></i><b style="height:${pct(p.low - min)}"></b>`;
+      const title = `${esc(p.label)}: ${esc(format(p.low))}${p.lowOpen ? " or less" : ""} to ${esc(format(p.high))}${p.highOpen ? " or more" : ""}`;
+      return p.href
+        ? `<a href="${esc(p.href)}" target="_blank" rel="noopener" title="${title}" aria-label="${title}, the report">${body}</a>`
+        : `<span title="${title}">${body}</span>`;
+    })
+    .join("");
+  const zero = min < 0 ? `<div class="range-bands-zero" style="height:${pct(-min)}" aria-hidden="true"></div>` : "";
+  const axis = pts.map((p) => `<span>${esc(p.tick ?? "")}</span>`).join("");
+  const cell = (v, open, word) => `${esc(format(v))}${open ? ` ${word}` : ""}`;
+  return `<figure class="range-bands">
+  <div class="range-bands-plot" role="img" aria-label="${esc(ariaLabel || caption)}">${zero}${cols}</div>
+  <div class="mini-bars-axis" aria-hidden="true">${axis}</div>
+  <p class="xsmall secondary">Scale: ${esc(scale(min))} at the bottom, ${esc(scale(max))} at the top${min < 0 ? `; the line is ${esc(scale(0))}` : ""}.</p>
+  ${caption ? `<figcaption class="xsmall secondary">${caption}</figcaption>` : ""}
+  <details class="mini-bars-table"><summary>Show the numbers</summary><table><thead><tr>${head.map((h) => `<th scope="col">${esc(h)}</th>`).join("")}</tr></thead><tbody>${pts
+    .map((p) => `<tr><th scope="row">${p.href ? `<a class="inline-link" href="${esc(p.href)}" target="_blank" rel="noopener">${esc(p.label)}</a>` : esc(p.label)}</th><td>${cell(p.low, p.lowOpen, "or less")}</td><td>${cell(p.high, p.highOpen, "or more")}</td></tr>`)
+    .join("")}</tbody></table></details>
+</figure>`;
+}
