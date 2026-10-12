@@ -12,7 +12,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - run: python3 -m pip install -q pdfplumber==0.11.4 openpyxl==3.1.5
+      - run: python3 -m pip install -q pdfplumber==0.11.4 openpyxl==3.1.5 pypdf==5.1.0
       - run: python3 tools/probe/govmoney.py
       - run: python3 -c "import pdfplumber,re;p=pdfplumber.open('tools/probe/out/fara.pdf');t=chr(10).join((pg.extract_text() or '') for pg in p.pages);open('tools/probe/out/fara.txt','w').write(t)" || true
       - run: |
