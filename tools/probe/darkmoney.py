@@ -1,46 +1,46 @@
-"""Temporary probe: FEC Schedule A (organizations), committee totals, electioneering (Form 9), ProPublica Nonprofit Explorer."""
-import json, os, urllib.request, urllib.parse, urllib.error
+"""Temporary probe round 2: line 17 rows in full, ProPublica full-filing pages (Schedule C political spending), IRS e-file index."""
+import json, os, re, urllib.request, urllib.parse, urllib.error
 from pathlib import Path
 OUT = Path("tools/probe/out"); OUT.mkdir(parents=True, exist_ok=True)
 K = os.environ.get("FEC_API_KEY") or "DEMO_KEY"
-UA = {"User-Agent": "ThePillory/1.0 (+https://thepillory.co)", "Accept": "application/json"}
-def get(url):
+UA = {"User-Agent": "ThePillory/1.0 (+https://thepillory.co)"}
+def raw(url, method="GET"):
     try:
-        with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=60) as r:
-            return json.loads(r.read())
+        with urllib.request.urlopen(urllib.request.Request(url, headers=UA, method=method), timeout=90) as r:
+            return r.status, dict(r.headers), (r.read() if method == "GET" else b"")
     except urllib.error.HTTPError as e:
-        return {"error": e.code, "body": e.read()[:500].decode("utf-8", "replace")}
+        return e.code, dict(e.headers), e.read()[:400]
+    except Exception as e:
+        return 0, {}, repr(e).encode()
 def fec(path, **p):
     p["api_key"] = K
-    return get(f"https://api.open.fec.gov/v1{path}?{urllib.parse.urlencode(p, doseq=True)}")
-res = {"keylen": len(K)}
-# Senate Leadership Fund (super PAC), 2026 cycle and 2024.
-for cid in ("C00571703", "C00484642"):
-    for cyc in (2024, 2026):
-        d = fec("/schedules/schedule_a/", committee_id=cid, two_year_transaction_period=cyc, is_individual="false", sort="-contribution_receipt_amount", per_page=30)
-        rows = d.get("results", [])
-        res[f"a_{cid}_{cyc}"] = {"pagination": d.get("pagination"), "err": d.get("error"), "body": d.get("body"),
-            "rows": [{k: r.get(k) for k in ("contributor_name", "entity_type", "entity_type_desc", "contributor_id", "contribution_receipt_amount", "contribution_receipt_date", "memo_code", "memo_text", "receipt_type", "receipt_type_desc", "line_number", "contributor_employer", "contributor_occupation", "pdf_url", "is_individual", "contributor_aggregate_ytd")} for r in rows]}
-        t = fec(f"/committee/{cid}/totals/", cycle=cyc)
-        res[f"t_{cid}_{cyc}"] = (t.get("results") or [{}])[:1] and {k: v for k, v in (t.get("results") or [{}])[0].items() if any(w in k for w in ("receipt", "contribution", "transfer", "coverage", "cycle", "individual", "other_political", "loan"))}
-e = fec("/electioneering/", min_date="2024-08-01", per_page=5, sort="-disbursement_date")
-res["ec"] = e.get("results", [])[:5]; res["ec_pag"] = e.get("pagination")
-e2 = fec("/electioneering/aggregates/", cycle=2024, per_page=5)
-res["ec_agg"] = e2.get("results", [])[:3]
-f9 = fec("/filings/", form_type="F9", per_page=3, sort="-receipt_date")
-res["f9"] = [{k: r.get(k) for k in ("committee_id", "committee_name", "form_type", "receipt_date", "pdf_url", "fec_url", "total_receipts", "file_number", "amendment_indicator")} for r in f9.get("results", [])]
-# Schedule A on a Form 9 filer (donors to the communication), if any.
-if res["ec"]:
-    cid = res["ec"][0].get("committee_id")
-    res["ec_donors"] = fec("/schedules/schedule_a/", committee_id=cid, per_page=5)
-pp = "https://projects.propublica.org/nonprofits/api/v2"
-for q in ("One Nation", "Majority Forward", "Chamber of Commerce of the United States of America", "Americans for Prosperity"):
-    s = get(f"{pp}/search.json?q={urllib.parse.quote(q)}")
-    res[f"pp_search_{q}"] = {"total": s.get("total_results"), "orgs": [{k: o.get(k) for k in ("ein", "strein", "name", "sub_name", "subseccd", "ntee_code", "state", "city")} for o in s.get("organizations", [])[:6]], "err": s.get("error")}
-s = res["pp_search_One Nation"]["orgs"]
-ein = s[0]["ein"] if s else 834567890
-o = get(f"{pp}/organizations/{ein}.json")
-res["pp_org"] = {"organization": {k: v for k, v in (o.get("organization") or {}).items() if k in ("ein", "name", "subsection_code", "ntee_code", "state", "tax_period", "revenue_amount")},
-                 "filings_with_data": (o.get("filings_with_data") or [])[:2], "filings_without_data": (o.get("filings_without_data") or [])[:2]}
-(OUT / "darkmoney.json").write_text(json.dumps(res, indent=1, default=str))
-print(json.dumps(res, default=str)[:4000])
+    return json.loads(raw(f"https://api.open.fec.gov/v1{path}?{urllib.parse.urlencode(p, doseq=True)}")[2])
+res = {}
+d = fec("/schedules/schedule_a/", committee_id="C00571703", two_year_transaction_period=2024, is_individual="false", sort="-contribution_receipt_amount", per_page=12)
+res["rows"] = d.get("results", [])[:12]
+# Line-number filter works?
+d = fec("/schedules/schedule_a/", committee_id="C00484642", two_year_transaction_period=2024, is_individual="false", line_number=["F3X-11AI", "F3X-11C"], sort="-contribution_receipt_amount", per_page=5)
+res["line_filter"] = {"pagination": d.get("pagination"), "first": [(r.get("contributor_name"), r.get("line_number"), r.get("contribution_receipt_amount")) for r in d.get("results", [])], "err": d.get("message") or d.get("error")}
+d = fec("/schedules/schedule_a/by_size/", committee_id="C00571703", cycle=2024)
+res["by_size"] = d.get("results", [])[:3]
+# ProPublica org HTML: links to full filings
+s, h, b = raw("https://projects.propublica.org/nonprofits/organizations/271937961")
+html = b.decode("utf-8", "replace")
+res["pp_html_status"] = s
+res["pp_links"] = sorted(set(re.findall(r'href="([^"]*(?:full|xml|object)[^"]*)"', html)))[:20]
+full = [l for l in res["pp_links"] if "/full" in l]
+if full:
+    u = full[0] if full[0].startswith("http") else "https://projects.propublica.org" + full[0]
+    s, h, b = raw(u)
+    t = re.sub(r"<[^>]+>", " ", b.decode("utf-8", "replace"))
+    t = re.sub(r"\s+", " ", t)
+    res["pp_full_status"] = s
+    res["pp_full_political"] = [t[max(0, m.start() - 200): m.start() + 300] for m in re.finditer(r"(?i)political", t)][:12]
+# IRS e-file index
+for y in (2024, 2025):
+    s, h, b = raw(f"https://apps.irs.gov/pub/epostcard/990/xml/{y}/index_{y}.csv", method="HEAD")
+    res[f"irs_index_{y}"] = [s, h.get("Content-Length"), h.get("Last-Modified")]
+s, h, b = raw("https://www.irs.gov/charities-non-profits/form-990-series-downloads")
+res["irs_page"] = re.findall(r'href="([^"]+\.zip)"', b.decode("utf-8", "replace"))[:30]
+(OUT / "darkmoney2.json").write_text(json.dumps(res, indent=1, default=str))
+print("ok")
