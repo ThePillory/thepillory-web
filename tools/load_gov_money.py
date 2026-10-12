@@ -471,6 +471,7 @@ AWARD_NAMES = [
     ("earmark recipients", "SELECT DISTINCT recipient AS name FROM earmarks WHERE recipient IS NOT NULL"),
     ("earmark request recipients", "SELECT DISTINCT recipient AS name FROM earmark_requests WHERE recipient IS NOT NULL"),
 ]
+AWARDS_MINUTES = 95  # then stop starting lookups (the workflow times out at 120)
 AWARDS_REFRESH_DAYS = 30
 # Employer entries that aren't organizations: nothing to look up.
 NOT_AN_ORG = re.compile(r"^(retired|self[ -]?employed|not employed|unemployed|none|n/?a|homemaker|student|information requested.*|requested|self|disabled)$", re.I)
@@ -515,9 +516,16 @@ def awards(args):
         f"looking up {min(len(queue), args.max_names)} this run")
     queue = queue[: args.max_names]
 
+    # USAspending drops connections under 8 parallel lookups (980 of 3,500 failed on the first run),
+    # so 4 at a time with longer waits; and stop starting lookups before the workflow's 120-minute
+    # timeout, since everything is written to D1 at the end.
+    deadline = time.monotonic() + AWARDS_MINUTES * 60
+
     def one(item):
         k, n = item
-        for wait in (5, 20, None):
+        if time.monotonic() > deadline:
+            return k, None, "skipped"
+        for wait in (10, 30, 90, None):
             try:
                 return k, U.lookup(n), None
             except Exception as e:  # noqa: BLE001 - kept for the summary; the name is tried again next run
@@ -525,9 +533,12 @@ def awards(args):
                     return k, None, f"{type(e).__name__}: {e}"
                 time.sleep(wait)
 
-    sql, done, failed, with_awards = [], 0, [], 0
-    with ThreadPoolExecutor(max_workers=8) as pool:
+    sql, done, failed, skipped, with_awards = [], 0, [], 0, 0
+    with ThreadPoolExecutor(max_workers=4) as pool:
         for k, got, err in pool.map(one, queue):
+            if err == "skipped":
+                skipped += 1
+                continue
             if err:
                 failed.append((k, err))
                 continue
@@ -538,7 +549,8 @@ def awards(args):
             if args.mode == "measure" and done <= 8:
                 say(f"    {got['name']}: {len(got['recipients'])} recipient(s) of {got['total_found']}; "
                     + "; ".join(f"{r['name']} ({r['location']}) " + ", ".join(f"FY{y['fy']} ${y['total']:,.0f}" for y in r["years"]) for r in got["recipients"]))
-    say(f"Looked up {done}; with awards in the last {U.YEARS} fiscal years: {with_awards}; failed: {len(failed)} {failed[:5]}")
+    say(f"Looked up {done}; with awards in the last {U.YEARS} fiscal years: {with_awards}; failed: {len(failed)} {failed[:5]}"
+        + (f"; left for the next run (time limit): {skipped}" if skipped else ""))
     if failed and not done:
         args.failed.append("USAspending")
     return sql
