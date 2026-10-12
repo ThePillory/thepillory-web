@@ -1,0 +1,101 @@
+{
+ "xml_271937961": {
+  "status": 403,
+  "ctype": "text/html; charset=UTF-8",
+  "len": 398,
+  "returntype": [],
+  "taxyr": [],
+  "taxperiod": [],
+  "schedules": [],
+  "rev": [],
+  "exp": [],
+  "politicalTags": [],
+  "schedC": "",
+  "flags": []
+ },
+ "ids_530045720": [
+  "201403169349302935",
+  "201533169349304028",
+  "201633149349301323",
+  "201723179349303267",
+  "201813149349300711",
+  "201903159349302415",
+  "202033169349302913",
+  "202143139349303054",
+  "202233159349302828",
+  "202333179349309013",
+  "202443189349304654",
+  "202543179349303374"
+ ],
+ "xml_530045720": {
+  "status": 403,
+  "ctype": "text/html; charset=UTF-8",
+  "len": 398,
+  "returntype": [],
+  "taxyr": [],
+  "taxperiod": [],
+  "schedules": [],
+  "rev": [],
+  "exp": [],
+  "politicalTags": [],
+  "schedC": "",
+  "flags": []
+ },
+ "ids_833690373": [
+  "202241369349313109",
+  "202321319349304022",
+  "202441369349306974",
+  "202541339349303434",
+  "202601359349310865"
+ ],
+ "xml_833690373": {
+  "status": 403,
+  "ctype": "text/html; charset=UTF-8",
+  "len": 398,
+  "returntype": [],
+  "taxyr": [],
+  "taxperiod": [],
+  "schedules": [],
+  "rev": [],
+  "exp": [],
+  "politicalTags": [],
+  "schedC": "",
+  "flags": []
+ },
+ "ec_2024": {
+  "count": 3062,
+  "is_count_exact": true,
+  "pages": 3062,
+  "per_page": 1
+ },
+ "ec_dates_2024": {
+  "count": 69,
+  "is_count_exact": true,
+  "pages": 69,
+  "per_page": 1
+ },
+ "ec_2026": {
+  "count": 3062,
+  "is_count_exact": true,
+  "pages": 3062,
+  "per_page": 1
+ },
+ "ec_dates_2026": {
+  "count": 33,
+  "is_count_exact": true,
+  "pages": 33,
+  "per_page": 1
+ },
+ "f9_file": [
+  {
+   "committee_id": "C30003628",
+   "form_type": "F9",
+   "total_receipts": 0.0,
+   "total_disbursements": 1065046.0,
+   "pdf_url": "https://docquery.fec.gov/pdf/596/202609189904416596/202609189904416596.pdf",
+   "receipt_date": "2026-09-18T00:00:00",
+   "coverage_start_date": "2026-09-19",
+   "coverage_end_date": "2026-09-19"
+  }
+ ]
+}
