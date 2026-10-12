@@ -22,6 +22,7 @@ import { visitorState } from "../_lib/visitor-state.js";
 import { voteRow, voteFilter } from "../_lib/votes.js";
 import { fundingFor, fundingTab } from "../_lib/funding.js";
 import { executiveMoney, executiveFundingParts, stateOfficialMoney, stateForm700, form700For } from "../_lib/exec-funding.js";
+import { caLobbyingForOfficial, caLegislatorLobbying } from "../_lib/ca-lobbying.js";
 import { stateFundingTab } from "../_lib/state-funding.js";
 import { promisesFor, ownWordsFor, platformTab, FLAG_REASONS } from "../_lib/promises.js";
 import { turnstileReady, verifyTurnstile, visitorHash, actionsToday, recordAction } from "../_lib/turnstile.js";
@@ -316,9 +317,10 @@ async function profile(env, slug, url, request) {
       ]);
       return { summary, page: firstPage, reports, committees: assignments, post };
     }, null) : null,
+    stateLegislator ? loadSection("rep California lobbying", () => caLobbyingForOfficial(db, o.id), null) : null,
   ]);
-  const [countsLoaded, votes, funding, orders, bills, nominations, committees, promises, ownWords, trades] = loaded;
-  const partial = anyFailed(countsLoaded, votes, funding, orders, bills, nominations, committees, promises, ownWords, trades);
+  const [countsLoaded, votes, funding, orders, bills, nominations, committees, promises, ownWords, trades, caLobbying] = loaded;
+  const partial = anyFailed(countsLoaded, votes, funding, orders, bills, nominations, committees, promises, ownWords, trades, caLobbying);
   const counts = countsLoaded === FAILED ? null : countsLoaded || {};
   const ok = (v) => (v === FAILED ? null : v);
 
@@ -421,6 +423,7 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
   if (orders) moreParts.push(sub("orders", "Executive orders", orders === FAILED ? sectionError("") : ordersTab(o, orders, base, offset)));
   if (nominations) moreParts.push(sub("nominations", "Nominations", nominations === FAILED ? sectionError("") : nominationsTab(o, nominations, base, status, offset)));
   if (exec && !otherState) moreParts.push(sub("more-disclosures", "Disclosures", funding === FAILED ? sectionError("") : money.disclosures));
+  if (stateLegislator) moreParts.push(sub("more-lobbying", "Lobbying", caLobbying === FAILED ? sectionError("") : caLegislatorLobbying(o, caLobbying)));
   if (stateLegislator || supervisor) moreParts.push(sub("more-disclosures", "Disclosures", funding === FAILED ? sectionError("") : funding ? stateForm700(funding) : ""));
   if (o.level === "state" && !exec) {
     moreParts.push(sub("committees", "Committees", committees === FAILED ? sectionError("") : committees.length

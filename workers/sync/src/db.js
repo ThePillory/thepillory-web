@@ -27,6 +27,7 @@ import init0025 from "../migrations/0025_executive_trades.sql";
 import init0026 from "../migrations/0026_trade_scans.sql";
 import init0027 from "../migrations/0027_trade_scans_auto.sql";
 import init0028 from "../migrations/0028_form700_lines.sql";
+import init0029 from "../migrations/0029_lobbying_more.sql";
 import { isHttp, today } from "./util.js";
 import { totals } from "./rollcall.js";
 
@@ -59,6 +60,7 @@ const MIGRATIONS = [
   ["0026_trade_scans.sql", init0026],
   ["0027_trade_scans_auto.sql", init0027],
   ["0028_form700_lines.sql", init0028],
+  ["0029_lobbying_more.sql", init0029],
 ];
 
 // Migrations tools/load_trades.py can also apply (the "Load stock trades"

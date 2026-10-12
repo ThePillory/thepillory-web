@@ -28,7 +28,7 @@ import { runAnalysis } from "./analysis/index.js";
 import { syncCountyMeetings } from "./meetings/county.js";
 import { syncStateHearings } from "./meetings/state.js";
 import { withD1Retry } from "./d1retry.js";
-import { syncFederalFunding, syncFederalLobbying } from "./funding/sync.js";
+import { syncFederalFunding, syncFederalLobbying, syncCommitteeBills, syncLobbyContributions } from "./funding/sync.js";
 import { syncExecutiveFunding } from "./funding/executive.js";
 import { syncSummaries, buildSummaries } from "./summaries.js";
 import { syncCandidatePlatforms } from "./promises/candidates-sync.js";
@@ -83,6 +83,11 @@ const STEPS = [
   ["scanned-trades", syncScannedTrades],
   // Paced and long-running (the first full load takes a few days): last.
   ["federal-funding", syncFederalFunding],
+  // Bills a committee acted on (Congress.gov), so federal-lobbying searches them
+  // too, then LD-203 contributions to members (LDA_CONTRIB_DAILY), then the
+  // bill searches.
+  ["committee-bills", syncCommitteeBills],
+  ["lobbying-contributions", syncLobbyContributions],
   ["federal-lobbying", syncFederalLobbying],
   // The Time Machine: past officeholders, executive orders, money, confirmations
   // and votes, a little each day (HISTORY_DAILY_REQUESTS), newest first.
@@ -152,7 +157,7 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId }) {
     summary.push({ step, ...result, requests: budget.used - before });
   }
   const temporary = summary.filter((s) => s.status === "partial" && /^temporary error/.test(s.message || ""));
-  const partialVotes = summary.filter((s) => (s.step.endsWith("-votes") || ["county-meetings", "bill-outcomes", "executive-orders", "nominations", "order-texts", "order-courts", "executive-funding", "federal-funding", "federal-lobbying"].includes(s.step)) && s.status === "partial");
+  const partialVotes = summary.filter((s) => (s.step.endsWith("-votes") || ["county-meetings", "bill-outcomes", "executive-orders", "nominations", "order-texts", "order-courts", "executive-funding", "federal-funding", "committee-bills", "lobbying-contributions", "federal-lobbying"].includes(s.step)) && s.status === "partial");
   return {
     run_id: run.id,
     trigger,
