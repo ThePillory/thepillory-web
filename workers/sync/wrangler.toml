@@ -161,6 +161,13 @@ LOBBYING_REFRESH_DAYS = "30"
 LDA_CONTRIB_DAILY = "400"
 LOBBY_CONTRIB_REFRESH_DAYS = "45"
 COMMITTEE_BILLS_DAILY = "400"
+# Dark money (src/funding/darkmoney-sync.js): FEC requests a day for it, pages of
+# 100 Schedule A receipts read per spender and period (largest first), and
+# ProPublica Nonprofit Explorer pacing and daily cap.
+DARK_MONEY_FEC_DAILY = "400"
+DARK_MONEY_MAX_PAGES = "10"
+PROPUBLICA_MIN_INTERVAL_MS = "1000"
+PROPUBLICA_DAILY_LIMIT = "300"
 # The executive branch (src/executive/; docs/executive.md). The Governor's site
 # and leginfo have no API: one request every 2 seconds, capped per day.
 GOVCA_MIN_INTERVAL_MS = "2000"

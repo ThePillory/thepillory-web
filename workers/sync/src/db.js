@@ -28,6 +28,7 @@ import init0026 from "../migrations/0026_trade_scans.sql";
 import init0027 from "../migrations/0027_trade_scans_auto.sql";
 import init0028 from "../migrations/0028_form700_lines.sql";
 import init0029 from "../migrations/0029_lobbying_more.sql";
+import init0030 from "../migrations/0030_dark_money.sql";
 import { isHttp, today } from "./util.js";
 import { totals } from "./rollcall.js";
 
@@ -61,6 +62,7 @@ const MIGRATIONS = [
   ["0027_trade_scans_auto.sql", init0027],
   ["0028_form700_lines.sql", init0028],
   ["0029_lobbying_more.sql", init0029],
+  ["0030_dark_money.sql", init0030],
 ];
 
 // Migrations tools/load_trades.py can also apply (the "Load stock trades"
@@ -73,6 +75,7 @@ const ALREADY_APPLIED = {
   "0025_executive_trades.sql": (db) => hasColumn(db, "trade_reports", "request_url"),
   "0026_trade_scans.sql": (db) => hasColumn(db, "trade_reports", "transcribed_by"),
   "0027_trade_scans_auto.sql": (db) => hasColumn(db, "trade_scans", "spot_check"),
+  "0030_dark_money.sql": (db) => hasColumn(db, "fec_committees", "ein"),
 };
 
 function statements(sql) {

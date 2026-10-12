@@ -7,6 +7,7 @@ import { esc, safeUrl, fmtDate } from "./render.js";
 import { INDUSTRIES } from "../../workers/sync/src/funding/industry.js";
 import { currentCycle } from "../../workers/sync/src/funding/fec.js";
 import { donorsDisclosed, isPersonName } from "../../workers/sync/src/funding/disclosure.js";
+import { darkMoneyFor, electioneeringFor, spenderDetails, electioneeringSection } from "./dark-money.js";
 
 export const METHOD = "/about/methodology/#funding";
 export const NOT_A_CAUSE =
@@ -69,7 +70,12 @@ export async function fundingFor(db, official, cycle) {
         .first();
     }
     const lobby = await lobbyContributionsFor(db, official.id, c);
-    return { fec: fecRow, cycles, cycle: c, totals, progress, loadedCount, pacs: pacs.results, outside: outside.results, employers: employers.results, industries: industries.results, avg, lobby };
+    // Who funds the outside spenders, and electioneering communications naming the member.
+    const [dark, electioneering] = await Promise.all([
+      darkMoneyFor(db, [...new Set(outside.results.map((x) => x.committee_id))], c),
+      electioneeringFor(db, [fecRow && fecRow.candidate_id], c),
+    ]);
+    return { fec: fecRow, cycles, cycle: c, totals, progress, loadedCount, pacs: pacs.results, outside: outside.results, employers: employers.results, industries: industries.results, avg, lobby, dark, electioneering };
   } catch (err) {
     if (missing(err)) return null;
     throw err;
@@ -361,7 +367,13 @@ export function fundingTab(official, f, base) {
     const hidden = rows.filter(undisclosed).reduce((s, x) => s + x.total, 0);
     return `<div class="stack-xs"><div class="stat"><div class="stat-label">${label}</div><div class="stat-num">${money(sum)}</div></div>${
       rows.length
-        ? `<ul class="plain-list money-list">${rows.slice(0, 5).map((x) => row(spenderLabel(x), money(x.total))).join("")}</ul>${rows.length > 5 ? `<p class="hint">And ${rows.length - 5} more.</p>` : ""}${
+        ? `<ul class="plain-list money-list">${rows
+            .slice(0, 5)
+            .map((x) => {
+              const more = isPersonName(x.name) ? "" : spenderDetails(x, f.dark, f.cycle);
+              return `${row(spenderLabel(x), money(x.total))}${more ? `<li class="money-detail">${more}</li>` : ""}`;
+            })
+            .join("")}</ul>${rows.length > 5 ? `<p class="hint">And ${rows.length - 5} more.</p>` : ""}${
             hidden ? `<p class="hint">${money(hidden)} of this came from groups whose donors are not disclosed.</p>` : ""
           }`
         : '<p class="secondary small">None reported.</p>'
@@ -425,6 +437,7 @@ ${intro}
   <h3>Outside spending for and against</h3>
   ${outside}
 </section>
+${electioneeringSection(f.electioneering, official.name)}
 <section class="card stack-sm">
   <h3>Top contributing industries <span class="secondary small">(approximate)</span></h3>
   ${industries}

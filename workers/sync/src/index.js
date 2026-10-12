@@ -30,6 +30,7 @@ import { syncStateHearings } from "./meetings/state.js";
 import { withD1Retry } from "./d1retry.js";
 import { syncFederalFunding, syncFederalLobbying, syncCommitteeBills, syncLobbyContributions } from "./funding/sync.js";
 import { syncExecutiveFunding } from "./funding/executive.js";
+import { syncDarkMoney } from "./funding/darkmoney-sync.js";
 import { syncSummaries, buildSummaries } from "./summaries.js";
 import { syncCandidatePlatforms } from "./promises/candidates-sync.js";
 import { syncPlainSummaries } from "./plain/sync.js";
@@ -69,6 +70,9 @@ const STEPS = [
   // Executive money and disclosures: small, so they run before federal-funding
   // rather than wait behind its first load.
   ["executive-funding", syncExecutiveFunding],
+  // Dark money (src/funding/darkmoney-sync.js): outside spenders' donors that are
+  // organizations, nonprofits' IRS records, and electioneering communications.
+  ["dark-money", syncDarkMoney],
   // Officials' Issues and Priorities pages, found by following links from their
   // own websites (src/promises/finder-sync.js), a few dozen officials a day.
   ["issues-pages", syncIssuesPages],
@@ -157,7 +161,7 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId }) {
     summary.push({ step, ...result, requests: budget.used - before });
   }
   const temporary = summary.filter((s) => s.status === "partial" && /^temporary error/.test(s.message || ""));
-  const partialVotes = summary.filter((s) => (s.step.endsWith("-votes") || ["county-meetings", "bill-outcomes", "executive-orders", "nominations", "order-texts", "order-courts", "executive-funding", "federal-funding", "committee-bills", "lobbying-contributions", "federal-lobbying"].includes(s.step)) && s.status === "partial");
+  const partialVotes = summary.filter((s) => (s.step.endsWith("-votes") || ["county-meetings", "bill-outcomes", "executive-orders", "nominations", "order-texts", "order-courts", "executive-funding", "dark-money", "federal-funding", "committee-bills", "lobbying-contributions", "federal-lobbying"].includes(s.step)) && s.status === "partial");
   return {
     run_id: run.id,
     trigger,
