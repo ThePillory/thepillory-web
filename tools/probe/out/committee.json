@@ -1,0 +1,50 @@
+{
+ "hc_raw": {
+  "error": 403,
+  "body": "{\n  \"error\": {\n    \"code\": \"API_KEY_MISSING\",\n    \"message\": \"No api_key was supplied. Get one at https://api.congress.gov:443\"\n  }\n}",
+  "keylen": 0
+ },
+ "house_committees": [],
+ "senate_committees": [],
+ "hsif00": {
+  "keys": [
+   "error",
+   "body",
+   "keylen"
+  ],
+  "count": null,
+  "pagination": null,
+  "rel": [],
+  "congress": [],
+  "first": [],
+  "last": []
+ },
+ "ssfi00": {
+  "keys": [
+   "error",
+   "body",
+   "keylen"
+  ],
+  "count": null,
+  "pagination": null,
+  "rel": [],
+  "congress": [],
+  "first": [],
+  "last": []
+ },
+ "hsju00": {
+  "keys": [
+   "error",
+   "body",
+   "keylen"
+  ],
+  "count": null,
+  "pagination": null,
+  "rel": [],
+  "congress": [],
+  "first": [],
+  "last": []
+ },
+ "actions": [],
+ "bill_list": []
+}
