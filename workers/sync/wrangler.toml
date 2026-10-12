@@ -155,6 +155,12 @@ FUNDING_REFRESH_DAYS = "7"
 LDA_MIN_INTERVAL_MS = "3000"
 LDA_DAILY_LIMIT = "1200"
 LOBBYING_REFRESH_DAYS = "30"
+# LD-203 contributions to members of Congress (lda.gov), on their own daily cap,
+# each member-year read again after this many days. Bills a committee acted on
+# (Congress.gov committee lists): new bills added per day.
+LDA_CONTRIB_DAILY = "400"
+LOBBY_CONTRIB_REFRESH_DAYS = "45"
+COMMITTEE_BILLS_DAILY = "150"
 # The executive branch (src/executive/; docs/executive.md). The Governor's site
 # and leginfo have no API: one request every 2 seconds, capped per day.
 GOVCA_MIN_INTERVAL_MS = "2000"

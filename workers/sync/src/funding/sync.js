@@ -9,10 +9,20 @@
 //                     period is read again every FUNDING_REFRESH_DAYS (7), the
 //                     previous one every 90 days.
 //   federal-lobbying  lda.gov lobbying reports that mention each bill of the
-//                     current Congress with a final-passage vote, searched again
-//                     every LOBBYING_REFRESH_DAYS (30): reports are quarterly.
+//                     current Congress with a final-passage vote or committee
+//                     action, newest activity first, searched again every
+//                     LOBBYING_REFRESH_DAYS (30): reports are quarterly.
+//   committee-bills   Congress.gov's bill list for each full committee: bills a
+//                     committee reported, marked up, held hearings on or was
+//                     discharged from (not referral alone), so federal-lobbying
+//                     searches them too.
+//   lobbying-contributions
+//                     lda.gov LD-203 reports: contributions from registered
+//                     lobbyists and lobbying organizations honoring each member
+//                     of Congress, searched by the member's last name and kept
+//                     only on an exact name match; LDA_CONTRIB_DAILY (400) a day.
 //
-// Both are paced and capped per day (FEC: an api.data.gov key allows 1,000
+// All are paced and capped per day (FEC: an api.data.gov key allows 1,000
 // requests an hour), keep their place across rounds and days, and stop with
 // "partial" when a round's time or the day's cap runs out.
 //
@@ -21,9 +31,12 @@
 // delegations, then everyone else; each member is matched to FEC IDs and read
 // in turn. While lobbying has bills waiting, funding leaves it
 // LOBBYING_ROUND_SHARE (0.4) of the round's remaining time.
-import { getState, setState, BudgetExhausted, UpstreamError, isHttp } from "../util.js";
+import { getState, setState, BudgetExhausted, UpstreamError, isHttp, currentCongress } from "../util.js";
 import { API as FEC_API, currentCycle, candidateIdsFor, candidatePage, parseTotals, aggregatePacs, parseEmployers, parseOutside } from "./fec.js";
-import { API as LDA_API, congressYears, billQueries, mentionsIn, filingRow } from "./lobbying.js";
+import { API as LDA_API, congressYears, billQueries, mentionsIn, filingRow, memberIndex, honoreeQuery, contribFilingRow, contributionItems, committeeActed } from "./lobbying.js";
+import { api as congressApi } from "../congress-api.js";
+import { federalBill } from "../congress.js";
+import { upsertBill } from "../db.js";
 
 const CROSSWALK = "https://unitedstates.github.io/congress-legislators/legislators-current.json";
 const MAX_PAC_PAGES = 40;
@@ -228,8 +241,13 @@ async function readOne(db, fec, m, cycle, current) {
 // Bills whose lobbying search is due (see syncFederalLobbying).
 const LOBBYING_DUE = `b.level = 'federal'
   AND b.session = (SELECT MAX(session) FROM bills WHERE level = 'federal')
-  AND EXISTS (SELECT 1 FROM votes v WHERE v.bill_id = b.id AND v.vote_type = 'final_passage')
+  AND (EXISTS (SELECT 1 FROM votes v WHERE v.bill_id = b.id AND v.vote_type = 'final_passage')
+       OR EXISTS (SELECT 1 FROM bill_committee_actions c WHERE c.bill_id = b.id))
   AND (p.bill_id IS NULL OR p.done_at IS NULL OR p.done_at < datetime('now', ?))`;
+
+// A bill's latest activity: its newest final-passage vote or committee action. Newest first.
+const LOBBYING_LATEST = `MAX(COALESCE((SELECT MAX(v.vote_date) FROM votes v WHERE v.bill_id = b.id AND v.vote_type = 'final_passage'), ''),
+  COALESCE((SELECT MAX(c.action_date) FROM bill_committee_actions c WHERE c.bill_id = b.id), ''))`;
 
 async function lobbyingWaiting(env, db) {
   const days = `-${parseInt(env.LOBBYING_REFRESH_DAYS || "30", 10)} days`;
@@ -400,7 +418,7 @@ export async function syncFederalLobbying(env, db, budget) {
             `SELECT b.*, p.cursor, p.done_at, p.searched, p.matched FROM bills b
              LEFT JOIN bill_lobbying_progress p ON p.bill_id = b.id
              WHERE ${LOBBYING_DUE}
-             ORDER BY p.cursor IS NULL, (SELECT MAX(v.vote_date) FROM votes v WHERE v.bill_id = b.id) DESC LIMIT 10`
+             ORDER BY p.cursor IS NULL, ${LOBBYING_LATEST} DESC LIMIT 10`
           )
           .bind(`-${o.refreshDays} days`)
           .all()
@@ -447,6 +465,192 @@ export async function syncFederalLobbying(env, db, budget) {
     if (!(err instanceof BudgetExhausted)) throw err;
     return { status: "partial", message: `${summary()}; ${err.message}` };
   }
-  if (!pages) return { status: "skipped", message: "every voted bill's lobbying reports are up to date" };
+  if (!pages) return { status: "skipped", message: "every bill's lobbying reports are up to date (bills with a final-passage vote or committee action)" };
+  return { status: "ok", message: summary() };
+}
+
+// ---------------------------------------------------------------------------
+// Committee action (Congress.gov)
+
+// Bills a full committee acted on, from each committee's bill list: only
+// relationships that are the committee acting (committeeActed), only the
+// current Congress. Each committee's list is read in full the first time, then
+// only what changed since the last read. A bill not loaded yet is added with
+// its title from Congress.gov, up to COMMITTEE_BILLS_DAILY (150) a day.
+export async function syncCommitteeBills(env, db, budget) {
+  if (!env.CONGRESS_API_KEY) return { status: "skipped", message: "CONGRESS_API_KEY is not set" };
+  const congress = currentCongress();
+  const newBillCap = parseInt(env.COMMITTEE_BILLS_DAILY || "150", 10);
+  const dayKey = `committee_new_bills_${new Date().toISOString().slice(0, 10)}`;
+  let added = parseInt((await getState(db, dayKey)) || "0", 10);
+  let read = 0;
+  let actions = 0;
+  let waiting = 0;
+  const summary = () => `${read} committee list page(s) read, ${actions} committee action(s) saved, ${added} bill(s) added today${waiting ? `, ${waiting} bill(s) waiting for tomorrow's cap` : ""}`;
+  try {
+    let committees = JSON.parse((await getState(db, `committees_${congress}`)) || "null");
+    if (!committees || committees.read < new Date(Date.now() - 30 * DAY).toISOString()) {
+      const list = [];
+      for (const chamber of ["house", "senate"]) {
+        let offset = 0;
+        for (;;) {
+          const d = await budget.json(congressApi(env, `/committee/${congress}/${chamber}`, { limit: 250, offset }), {}, `committees ${chamber}`);
+          for (const c of d.committees || []) if (!c.parent && c.systemCode) list.push({ code: c.systemCode, chamber, name: c.name || null });
+          if ((d.committees || []).length < 250) break;
+          offset += 250;
+        }
+      }
+      committees = { read: new Date().toISOString(), list };
+      await setState(db, `committees_${congress}`, JSON.stringify(committees));
+    }
+    for (const c of committees.list) {
+      const key = `committee_bills_${congress}_${c.code}`;
+      const saved = JSON.parse((await getState(db, key)) || "{}");
+      if (saved.done && saved.done > new Date(Date.now() - DAY / 2).toISOString()) continue;
+      const started = saved.started || new Date().toISOString().replace(/\.\d+Z$/, "Z");
+      let offset = saved.offset || 0;
+      const since = saved.since || `${2 * congress + 1787}-01-03T00:00:00Z`;
+      for (;;) {
+        const d = await budget.json(congressApi(env, `/committee/${c.chamber}/${c.code}/bills`, { limit: 250, offset, fromDateTime: since }), {}, `${c.code} bills offset ${offset}`);
+        read += 1;
+        const bills = (d["committee-bills"] && d["committee-bills"].bills) || [];
+        for (const b of bills) {
+          if (Number(b.congress) !== congress || !committeeActed(b.relationshipType)) continue;
+          const row = federalBill(congress, b.type, b.number);
+          if (!row) continue;
+          const have = await db.prepare("SELECT 1 AS x FROM bills WHERE id = ?").bind(row.id).first();
+          if (!have) {
+            if (added >= newBillCap) {
+              waiting += 1;
+              continue;
+            }
+            const detail = await budget.json(congressApi(env, `/bill/${congress}/${row.id.split("-")[2]}/${b.number}`), {}, `bill ${row.id}`);
+            const title = detail.bill && (detail.bill.title || "").trim();
+            if (!title) continue;
+            await upsertBill(db, { ...row, title });
+            added += 1;
+            await setState(db, dayKey, String(added));
+          }
+          await db
+            .prepare(
+              `INSERT INTO bill_committee_actions (bill_id, committee_code, committee_name, relationship, action_date, source_url) VALUES (?, ?, ?, ?, ?, ?)
+               ON CONFLICT(bill_id, committee_code, relationship) DO UPDATE SET committee_name = excluded.committee_name, action_date = excluded.action_date`
+            )
+            .bind(row.id, c.code, c.name, b.relationshipType, b.actionDate ? String(b.actionDate).slice(0, 10) : null, `${row.official_url}/committees`)
+            .run();
+          actions += 1;
+        }
+        offset += bills.length;
+        await setState(db, key, JSON.stringify({ ...saved, since, offset, started }));
+        if (bills.length < 250) break;
+      }
+      // Bills held back by the cap are picked up on a later full pass: keep the old
+      // "since" until nothing waits.
+      await setState(db, key, JSON.stringify({ since: waiting ? since : started, offset: 0, done: new Date().toISOString() }));
+    }
+  } catch (err) {
+    if (!(err instanceof BudgetExhausted)) throw err;
+    return { status: "partial", message: `${summary()}; ${err.message}` };
+  }
+  if (!read) return { status: "skipped", message: "every committee's bill list was read in the last 12 hours" };
+  return { status: "ok", message: summary() };
+}
+
+// ---------------------------------------------------------------------------
+// LD-203 contributions (lda.gov)
+
+// Members of Congress, each searched by last name for each year of the current
+// Congress (so far); each report found is checked item by item against every
+// member (matchHonoree), so one search can fill in other members too. A year
+// already read is read again after LOBBY_CONTRIB_REFRESH_DAYS (45): LD-203s are
+// filed in July and January.
+export async function syncLobbyContributions(env, db, budget) {
+  const o = ldaOptions(env);
+  const pace = { intervalMs: o.pace.intervalMs, dailyLimit: parseInt(env.LDA_CONTRIB_DAILY || "400", 10) };
+  const refresh = `-${parseInt(env.LOBBY_CONTRIB_REFRESH_DAYS || "45", 10)} days`;
+  const thisYear = new Date().getUTCFullYear();
+  const years = congressYears(currentCongress()).filter((y) => y <= thisYear);
+  const { results: members } = await db.prepare("SELECT id, name, last_name FROM officials WHERE chamber IN ('us-house', 'us-senate') AND active = 1").all();
+  if (!members.length) return { status: "skipped", message: "no members of Congress loaded" };
+  const index = memberIndex(members);
+  let pages = 0;
+  let saved = 0;
+  let finished = 0;
+  const summary = () => `${pages} page(s) read, ${saved} contribution(s) matched to members, ${finished} member-year(s) finished`;
+  try {
+    for (;;) {
+      const due = (
+        await db
+          .prepare(
+            `SELECT o.id, o.name, o.last_name, y.year, p.page, p.searched, p.matched, p.done_at FROM officials o
+             JOIN (${years.map(() => "SELECT ? AS year").join(" UNION ALL ")}) y
+             LEFT JOIN lobby_contrib_progress p ON p.official_id = o.id AND p.year = y.year
+             WHERE o.chamber IN ('us-house', 'us-senate') AND o.active = 1
+               AND (p.official_id IS NULL OR p.done_at IS NULL OR p.done_at < datetime('now', ?))
+             ORDER BY p.done_at IS NOT NULL, p.official_id IS NULL, y.year DESC, p.done_at, o.id LIMIT 20`
+          )
+          .bind(...years, refresh)
+          .all()
+      ).results;
+      if (!due.length) break;
+      for (const m of due) {
+        const q = honoreeQuery(m);
+        let page = m.done_at || !m.page ? 1 : m.page;
+        let searched = m.done_at ? 0 : m.searched || 0;
+        let matched = m.done_at ? 0 : m.matched || 0;
+        await db
+          .prepare(
+            `INSERT INTO lobby_contrib_progress (official_id, year, page, searched, matched, done_at, started_at) VALUES (?, ?, ?, ?, ?, NULL, datetime('now'))
+             ON CONFLICT(official_id, year) DO UPDATE SET page = excluded.page, searched = excluded.searched, matched = excluded.matched, done_at = NULL`
+          )
+          .bind(m.id, m.year, page, searched, matched)
+          .run();
+        for (;;) {
+          const url = `${o.base}/contributions/?contribution_honoree=${encodeURIComponent(q)}&filing_year=${m.year}&page_size=25&page=${page}`;
+          const res = await budget.paced(db, "lda_contrib", pace, url, { headers: o.headers }, `LD-203 "${q}" ${m.year} page ${page}`);
+          const d = await res.json();
+          pages += 1;
+          const stmts = [];
+          for (const f of d.results || []) {
+            searched += 1;
+            const items = contributionItems(f, index);
+            const row = contribFilingRow(f);
+            if (!items.length || !row.filing_uuid || !row.registrant_name || !isHttp(row.source_url)) continue;
+            stmts.push(
+              db
+                .prepare(
+                  `INSERT INTO lobby_contrib_filings (filing_uuid, filer_type, registrant_id, registrant_name, lobbyist_id, filing_year, filing_period, filing_type, posted_at, source_url, updated_at)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+                   ON CONFLICT(filing_uuid) DO UPDATE SET registrant_name = excluded.registrant_name, posted_at = excluded.posted_at, source_url = excluded.source_url, updated_at = excluded.updated_at`
+                )
+                .bind(row.filing_uuid, row.filer_type, row.registrant_id, row.registrant_name, row.lobbyist_id, row.filing_year, row.filing_period, row.filing_type, row.posted_at, row.source_url)
+            );
+            for (const it of items) {
+              stmts.push(
+                db
+                  .prepare(
+                    `INSERT OR REPLACE INTO lobby_contributions (filing_uuid, n, official_id, contribution_type, contributor_name, payee_name, honoree_name, amount, date)
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+                  )
+                  .bind(row.filing_uuid, it.n, it.official_id, it.contribution_type, it.contributor_name, it.payee_name, it.honoree_name, it.amount, it.date)
+              );
+              if (it.official_id === m.id) matched += 1;
+              saved += 1;
+            }
+          }
+          await inBatches(db, stmts);
+          page = d.next ? page + 1 : 0;
+          await db.prepare("UPDATE lobby_contrib_progress SET page = ?, searched = ?, matched = ? WHERE official_id = ? AND year = ?").bind(page || 1, searched, matched, m.id, m.year).run();
+          if (!page) break;
+        }
+        await db.prepare("UPDATE lobby_contrib_progress SET done_at = datetime('now') WHERE official_id = ? AND year = ?").bind(m.id, m.year).run();
+        finished += 1;
+      }
+    }
+  } catch (err) {
+    if (!(err instanceof BudgetExhausted)) throw err;
+    return { status: "partial", message: `${summary()}; ${err.message}` };
+  }
+  if (!pages) return { status: "skipped", message: "every member's LD-203 contributions are up to date" };
   return { status: "ok", message: summary() };
 }

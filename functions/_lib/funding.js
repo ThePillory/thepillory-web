@@ -68,7 +68,8 @@ export async function fundingFor(db, official, cycle) {
         .bind(cycle)
         .first();
     }
-    return { fec: fecRow, cycles, cycle: c, totals, progress, loadedCount, pacs: pacs.results, outside: outside.results, employers: employers.results, industries: industries.results, avg };
+    const lobby = await lobbyContributionsFor(db, official.id, c);
+    return { fec: fecRow, cycles, cycle: c, totals, progress, loadedCount, pacs: pacs.results, outside: outside.results, employers: employers.results, industries: industries.results, avg, lobby };
   } catch (err) {
     if (missing(err)) return null;
     throw err;
@@ -131,13 +132,136 @@ export async function lobbyingFor(db, billId) {
       orgs.set(k, o);
     }
     const list = [...orgs.values()].sort((a, b) => b.amount - a.amount || b.reports - a.reports);
+    // The registrants (lobbying firms, or the organization itself) that filed them.
+    const registrants = new Map();
+    for (const r of latest.values()) {
+      if (r.registrant_id == null) continue;
+      const g = registrants.get(r.registrant_id) || { name: r.registrant_name, reports: 0, clients: new Set(), latest: r };
+      g.reports += 1;
+      if (r.client_name && r.client_name !== r.registrant_name) g.clients.add(r.client_name);
+      registrants.set(r.registrant_id, g);
+    }
     return {
       progress,
+      registrants,
       orgs: list,
       reports: latest.size,
       amount: list.reduce((s, o) => s + o.amount, 0),
       industries: [...new Set(list.map((o) => o.industry).filter((i) => i !== "other"))],
     };
+  } catch (err) {
+    if (missing(err)) return null;
+    throw err;
+  }
+}
+
+// LD-203: an amended report replaces the one it amends (the newest posted wins).
+function latestContribReports(rows) {
+  const keep = new Map();
+  for (const r of rows) {
+    const k = `${r.registrant_id}|${r.lobbyist_id || 0}|${r.filing_year}|${r.filing_period}`;
+    const have = keep.get(k);
+    if (!have || String(r.posted_at || "") > String(have)) keep.set(k, r.posted_at || "");
+  }
+  return rows.filter((r) => keep.get(`${r.registrant_id}|${r.lobbyist_id || 0}|${r.filing_year}|${r.filing_period}`) === (r.posted_at || ""));
+}
+
+const dateSpan = (dates) => {
+  const d = dates.filter(Boolean).sort();
+  if (!d.length) return "";
+  return d[0] === d[d.length - 1] ? fmtDate(d[0]) : `${fmtDate(d[0])} – ${fmtDate(d[d.length - 1])}`;
+};
+
+/**
+ * LD-203 contributions honoring one member in a two-year period: organizations
+ * by name, lobbyists' own reports only as counts and totals. Null before the
+ * tables exist.
+ */
+export async function lobbyContributionsFor(db, officialId, cycle) {
+  try {
+    const years = [cycle - 1, cycle];
+    const [{ results }, progress] = await Promise.all([
+      db
+        .prepare(
+          `SELECT c.*, f.filer_type, f.registrant_id, f.registrant_name, f.lobbyist_id, f.filing_year, f.filing_period, f.posted_at, f.source_url
+           FROM lobby_contributions c JOIN lobby_contrib_filings f ON f.filing_uuid = c.filing_uuid
+           WHERE c.official_id = ? AND f.filing_year IN (?, ?)`
+        )
+        .bind(officialId, ...years)
+        .all(),
+      db.prepare("SELECT COUNT(*) AS n, SUM(done_at IS NOT NULL) AS done, MAX(done_at) AS read_at FROM lobby_contrib_progress WHERE official_id = ? AND year IN (?, ?)").bind(officialId, ...years).first(),
+    ]);
+    const rows = latestContribReports(results).filter((r) => !r.date || (r.date >= `${years[0]}-01-01` && r.date <= `${years[1]}-12-31`));
+    const orgs = new Map();
+    const lobbyists = { people: new Set(), count: 0, total: 0, dates: [] };
+    for (const r of rows) {
+      if (r.filer_type === "lobbyist") {
+        lobbyists.people.add(r.lobbyist_id || r.filing_uuid);
+        lobbyists.count += 1;
+        lobbyists.total += r.amount || 0;
+        lobbyists.dates.push(r.date);
+        continue;
+      }
+      const k = r.registrant_id || r.registrant_name;
+      const o = orgs.get(k) || { name: r.registrant_name, contributors: new Set(), count: 0, total: 0, dates: [], types: new Set(), latest: r };
+      if (r.contributor_name && !/^self$/i.test(r.contributor_name)) o.contributors.add(r.contributor_name);
+      o.count += 1;
+      o.total += r.amount || 0;
+      o.dates.push(r.date);
+      o.types.add(r.contribution_type);
+      if (String(r.posted_at || "") > String(o.latest.posted_at || "")) o.latest = r;
+      orgs.set(k, o);
+    }
+    return {
+      years,
+      progress: progress && progress.n ? progress : null,
+      orgs: [...orgs.values()].sort((a, b) => b.total - a.total || b.count - a.count),
+      lobbyists: { people: lobbyists.people.size, count: lobbyists.count, total: lobbyists.total, span: dateSpan(lobbyists.dates) },
+    };
+  } catch (err) {
+    if (missing(err)) return null;
+    throw err;
+  }
+}
+
+/**
+ * Organizations that filed lobbying reports mentioning a bill and also reported
+ * contributions (LD-203) to members of Congress in the same Congress, matched by
+ * their lobbying registration ID. Per organization: [{member, slug, total, count, dates}].
+ */
+export async function lobbyGiversFor(db, l, congress) {
+  if (!l || !l.registrants || !l.registrants.size) return null;
+  try {
+    const first = 2 * parseInt(congress, 10) + 1787;
+    const ids = [...l.registrants.keys()].filter((x) => x != null);
+    const rows = [];
+    for (let i = 0; i < ids.length; i += 90) {
+      const part = ids.slice(i, i + 90);
+      const { results } = await db
+        .prepare(
+          `SELECT c.official_id, c.amount, c.date, c.contribution_type, f.registrant_id, f.registrant_name, f.lobbyist_id, f.filing_year, f.filing_period, f.posted_at, f.source_url, o.name AS member, o.slug
+           FROM lobby_contrib_filings f JOIN lobby_contributions c ON c.filing_uuid = f.filing_uuid JOIN officials o ON o.id = c.official_id
+           WHERE f.filer_type = 'organization' AND f.filing_year IN (?, ?) AND f.registrant_id IN (${part.map(() => "?").join(",")})`
+        )
+        .bind(first, first + 1, ...part)
+        .all();
+      rows.push(...results);
+    }
+    const out = new Map();
+    for (const r of latestContribReports(rows)) {
+      const g = out.get(r.registrant_id) || { registrant_id: r.registrant_id, name: r.registrant_name, total: 0, members: new Map(), latest: r };
+      const m = g.members.get(r.official_id) || { member: r.member, slug: r.slug, total: 0, count: 0, dates: [] };
+      m.total += r.amount || 0;
+      m.count += 1;
+      if (r.date) m.dates.push(r.date);
+      g.members.set(r.official_id, m);
+      g.total += r.amount || 0;
+      if (String(r.posted_at || "") > String(g.latest.posted_at || "")) g.latest = r;
+      out.set(r.registrant_id, g);
+    }
+    return [...out.values()]
+      .map((g) => ({ ...g, lobbied: l.registrants.get(g.registrant_id), members: [...g.members.values()].sort((a, b) => b.total - a.total) }))
+      .sort((a, b) => b.total - a.total);
   } catch (err) {
     if (missing(err)) return null;
     throw err;
@@ -220,7 +344,7 @@ export function fundingTab(official, f, base) {
   const intro = `<p class="small">Money raised by ${esc(official.name)}'s campaign committees in ${span}${asOf ? `, ${asOf}` : ""}, as reported to the Federal Election Commission. ${
     official.chamber === "us-executive" ? "These are facts about money; they don't explain any action in office." : "These are facts about money, shown beside the voting record; they don't explain any vote."
   }</p>`;
-  if (!t) return `${cycleNav(base, f)}${intro}<p class="secondary small">${esc((f.progress && f.progress.note) || `No FEC totals for ${span}.`)}</p>`;
+  if (!t) return `${cycleNav(base, f)}${intro}<p class="secondary small">${esc((f.progress && f.progress.note) || `No FEC totals for ${span}.`)}</p>${lobbyContribSection(official, f.lobby)}`;
 
   // 1. PAC and special-interest money
   const pacs = f.pacs.length
@@ -309,11 +433,74 @@ ${intro}
   <h3>Donors' employers</h3>
   ${employers}
 </section>
+${lobbyContribSection(official, f.lobby)}
 <p class="hint">Source: Federal Election Commission${fecLink ? ` (<a class="tap" href="${esc(fecLink)}" target="_blank" rel="noopener">${esc(official.name)} at the FEC ↗</a>)` : ""}, ${span}. Read ${fmtDate(f.progress.done_at)}. Federal law bars using contributor information from FEC reports to ask for contributions or for commercial purposes; ThePillory shows totals only and has no donor export. <a class="tap" href="${METHOD}">Methodology</a></p>`;
 }
 
+const LD203_SEARCH = "https://lda.gov/filings/public/contribution/search/";
+const CONTRIB_TYPES = { feca: "campaign contributions", he: "honorary expenses", me: "meeting expenses", ple: "presidential library", pic: "inaugural committee" };
+const plural = (n, one, many = `${one}s`) => `${n.toLocaleString("en-US")} ${n === 1 ? one : many}`;
+
+/** "From lobbyists and lobbying organizations" on a member's Funding tab (LD-203). */
+export function lobbyContribSection(official, l) {
+  const head = '<h3>From lobbyists and lobbying organizations</h3>';
+  if (!l) return "";
+  const yrs = `${l.years[0]}–${l.years[1]}`;
+  if (!l.progress) {
+    return `<section class="card stack-sm">${head}<p class="secondary small">Contribution reports from lobbyists and lobbying organizations (Form LD-203) haven't been searched for ${esc(official.name)} yet. They're searched a few hundred at a time each day.</p></section>`;
+  }
+  const searching = l.progress.done < l.progress.n;
+  const orgRow = (o) =>
+    row(
+      `<a class="inline-link" href="${esc(safeUrl(o.latest.source_url) || LD203_SEARCH)}" target="_blank" rel="noopener">${esc(o.name)}</a>`,
+      money(o.total),
+      [plural(o.count, "contribution"), dateSpan(o.dates), o.contributors.size ? `through ${[...o.contributors].slice(0, 2).map(esc).join(", ")}` : "", [...o.types].filter((t) => t && t !== "feca").map((t) => CONTRIB_TYPES[t] || t).join(", ")]
+        .filter(Boolean)
+        .join(" · ")
+    );
+  const orgs = l.orgs.length
+    ? `<ul class="plain-list money-list">${l.orgs.slice(0, 10).map(orgRow).join("")}</ul>${
+        l.orgs.length > 10 ? `<details class="weigh-details"><summary>${l.orgs.length - 10} more organizations</summary><ul class="plain-list money-list">${l.orgs.slice(10).map(orgRow).join("")}</ul></details>` : ""
+      }
+       <p class="hint">${plural(l.orgs.length, "lobbying organization")} reported ${money(l.orgs.reduce((x, o) => x + o.total, 0))} honoring ${esc(official.name)} in ${yrs}: their own contributions and their PACs', by name.</p>`
+    : `<p class="secondary small">No lobbying organization reported a contribution honoring ${esc(official.name)} in ${yrs}${searching ? " so far" : ""}.</p>`;
+  const lob = l.lobbyists.count
+    ? `<div class="stat"><div class="stat-label">Registered lobbyists, giving personally</div><div class="stat-num">${money(l.lobbyists.total)}</div></div>
+       <p class="small">${plural(l.lobbyists.count, "contribution")} from ${plural(l.lobbyists.people, "lobbyist")}${l.lobbyists.span ? `, ${l.lobbyists.span}` : ""}. Individual lobbyists aren't named.</p>`
+    : `<p class="secondary small">No registered lobbyist reported a personal contribution honoring ${esc(official.name)} in ${yrs}${searching ? " so far" : ""}.</p>`;
+  return `<section class="card stack-sm">
+  ${head}
+  ${orgs}
+  ${lob}
+  <p class="hint">From Form LD-203, which registered lobbyists and lobbying organizations file with Congress twice a year (January to June, July to December), ${yrs}${searching ? "; still searching" : `; read ${fmtDate(l.progress.read_at)}`}. Each report lists contributions to federal candidates and their committees and money for events honoring them; it's shown here when the person it honors matches ${esc(official.name)}'s name exactly, so a report that writes the name differently can be missed. Some of this also appears above as PAC contributions reported to the FEC: the two come from different reports, so don't add them together. These are facts about money; they don't explain any vote. <a class="tap" href="${LD203_SEARCH}" target="_blank" rel="noopener">LD-203 reports at lda.gov ↗</a> · <a class="tap" href="${METHOD.replace("#funding", "#lobbying")}">How</a></p>
+</section>`;
+}
+
+/** Organizations that lobbied on a bill and also gave to members: both facts, side by side, with dates. */
+export function giversSideBySide(bill, givers) {
+  if (!givers || !givers.length) return "";
+  const item = (g) => {
+    const lob = g.lobbied;
+    const clients = lob ? [...lob.clients] : [];
+    const members = g.members;
+    const memberLine = (m) =>
+      `<li><a class="inline-link" href="/reps/${esc(m.slug)}/#funding">${esc(m.member)}</a>: ${money(m.total)} (${plural(m.count, "contribution")}${m.dates.length ? `; ${[...new Set(m.dates)].sort().slice(-3).map(fmtDate).join(", ")}${m.dates.length > 3 ? ", …" : ""}` : ""})</li>`;
+    return `<div class="card-inset stack-xs">
+      <p class="small"><strong>${esc(g.name)}</strong></p>
+      <p class="small"><span class="label">Lobbying</span> ${plural(lob.reports, "report")} that mention ${esc(bill.bill_number)}${clients.length ? `, for ${clients.slice(0, 3).map(esc).join(", ")}${clients.length > 3 ? ` and ${clients.length - 3} more` : ""}` : ""}; latest ${esc(lob.latest.filing_period || "")} ${esc(String(lob.latest.filing_year || ""))}, filed ${fmtDate(lob.latest.posted_at)}. <a class="tap" href="${esc(safeUrl(lob.latest.source_url) || "#")}" target="_blank" rel="noopener">Report ↗</a></p>
+      <p class="small"><span class="label">Contributions</span> ${money(g.total)} honoring ${plural(members.length, "member")} of Congress, reported on Form LD-203. <a class="tap" href="${esc(safeUrl(g.latest.source_url) || LD203_SEARCH)}" target="_blank" rel="noopener">Latest report ↗</a></p>
+      <ul class="plain-list small">${members.slice(0, 5).map(memberLine).join("")}</ul>
+      ${members.length > 5 ? `<details class="weigh-details"><summary>${members.length - 5} more members</summary><ul class="plain-list small">${members.slice(5).map(memberLine).join("")}</ul></details>` : ""}
+    </div>`;
+  };
+  return `<h3 class="money-sub">Organizations that lobbied on this bill and also gave to members of Congress</h3>
+    ${givers.slice(0, 8).map(item).join("")}
+    ${givers.length > 8 ? `<details class="weigh-details"><summary>${givers.length - 8} more organizations</summary>${givers.slice(8).map(item).join("")}</details>` : ""}
+    <p class="hint">Two separate facts from two kinds of report, in the same Congress: lobbying reports (Form LD-2) that mention this bill, and contribution reports (Form LD-203) from the same registered organization, matched by its lobbying registration number. They don't show that one led to the other, what position anyone took, or how anyone voted. A lobbying firm reports its own and its PAC's contributions, not its clients'. Contributions from individual lobbyists aren't included here.</p>`;
+}
+
 /** "Follow the money" on a bill page. `repMoney`: [{rep, vote, position, money}] for the visitor's reps. */
-export function followTheMoney(bill, l, { reps = null, repMoney = [], cycle = null, bare = false } = {}) {
+export function followTheMoney(bill, l, { reps = null, repMoney = [], cycle = null, bare = false, givers = null } = {}) {
   const head = '<h2 class="label" id="h-money">Follow the money</h2>';
   // bare: the contents only, for a collapsed section that has its own heading.
   const wrap = (inner) => (bare ? inner : `<section class="card stack-sm" id="money" aria-labelledby="h-money">${head}${inner}</section>`);
@@ -321,7 +508,7 @@ export function followTheMoney(bill, l, { reps = null, repMoney = [], cycle = nu
     return wrap(`<p class="secondary small">Lobbying reports are shown for bills in Congress (from the federal lobbying disclosure database). California lobbying comes with the state's new disclosure system.</p>`);
   }
   if (!l || !l.progress) {
-    return wrap(`<p class="secondary small">Lobbying reports for this bill haven't been searched yet. They're searched for every bill with a final-passage vote.</p>`);
+    return wrap(`<p class="secondary small">Lobbying reports for this bill haven't been searched yet. They're searched for every bill in this Congress with a final-passage vote or committee action, newest first.</p>`);
   }
   const searching = !l.progress.done_at;
   const first = 2 * parseInt(bill.session, 10) + 1787; // the 119th Congress: 2025–2026
@@ -370,5 +557,5 @@ export function followTheMoney(bill, l, { reps = null, repMoney = [], cycle = nu
         <p class="hint"><strong>${esc(NOT_A_CAUSE)}</strong> Industries that lobbied: ${inds.map((i) => esc(industryName(i))).join(", ") || "none classified"}.</p>`;
     }
   }
-  return wrap(`${orgs}${yours}`);
+  return wrap(`${orgs}${giversSideBySide(bill, givers)}${yours}`);
 }
