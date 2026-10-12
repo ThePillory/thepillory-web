@@ -20,6 +20,7 @@ import { STATE_NAME } from "./districts.js";
 import { fold, outLink } from "./summary.js";
 import { breakdownBar } from "./charts.js";
 import { money, period } from "./funding.js";
+import { electioneeringSection } from "./dark-money.js";
 import { INDUSTRIES } from "../../workers/sync/src/funding/industry.js";
 import { officialFor } from "./civic.js";
 import { loadElection, ballotOrder, contestHref, ELECTION_BY_STATE, measuresOnly } from "./elections.js";
@@ -202,14 +203,14 @@ function moneyRow(left, right, meta = "") {
 }
 
 /** The Funding tab for an FEC candidate: totals and organizations by name. Never individual donors. */
-export function candidateFunding(c, name) {
+export function candidateFunding(c, name, { electioneering = null } = {}) {
   const cycle = c.cycle || YEAR;
   const span = period(cycle);
   const t = c.totals;
   if (!c.funding_checked) {
     return `<div class="card empty-state stack-sm"><p>Funding data is loading.</p><p class="small secondary">FEC reports are read for a few hundred candidates a day, oldest first, so every candidate is refreshed in turn. This candidate's appear here once they're read.</p>${sourceLink(c.fec_url, "This candidate at the FEC")}</div>`;
   }
-  if (!t) return `<p class="secondary small">No FEC financial reports for ${span} yet.</p>${sourceLink(c.fec_url, "This candidate at the FEC")}`;
+  if (!t) return `<p class="secondary small">No FEC financial reports for ${span} yet.</p>${sourceLink(c.fec_url, "This candidate at the FEC")}${electioneeringSection(electioneering, name)}`;
   const parts = [
     ["Small individual donors ($200 or less)", t.individual_unitemized],
     ["Larger individual donors (more than $200)", t.individual_itemized],
@@ -240,6 +241,7 @@ export function candidateFunding(c, name) {
   <h3>From PACs and other committees</h3>
   ${orgs}
 </section>
+${electioneeringSection(electioneering, name)}
 <p class="hint">Source: Federal Election Commission (${sourceLink(t.source_url, `${name} at the FEC`)}), ${span}. Read ${fmtDate(c.funding_checked)}. Individual donors are never named; federal law bars using contributor information from FEC reports to ask for contributions or for commercial purposes. <a class="tap" href="/about/methodology/#funding">How funding is shown</a></p>`;
 }
 
@@ -338,7 +340,7 @@ function head({ label, name, line, chips = "" }) {
 // Pages
 
 /** An FEC candidate's page, or null when the ID isn't in the data. */
-export function fecCandidatePage({ c, st, data, election, records, dates, today, platform = null }) {
+export function fecCandidatePage({ c, st, data, election, records, dates, today, platform = null, electioneering = null }) {
   const stateName = STATE_NAME[st] || st;
   const key = raceKey(c);
   const office = officeName(st, key, data);
@@ -381,7 +383,7 @@ ${onCert ? fold("statement", "Candidate statement", `<p class="small"><a class="
 ${fold("how", "How candidates are included", `<p class="small">${esc(INCLUDED)}</p><p class="small">${esc(NEUTRAL)}</p><a class="inline-link" href="${METHOD}">Methodology</a>`)}`;
 
   const main = `${head({ label: s.label, name: display, line: s.line, chips })}
-${tabs(about, candidatePlatform(display, website, platform), recordTab(display, held), candidateFunding(c, display), more)}`;
+${tabs(about, candidatePlatform(display, website, platform), recordTab(display, held), candidateFunding(c, display, { electioneering }), more)}`;
   return { title: display, main };
 }
 

@@ -2,7 +2,8 @@
 // yet in office, with the same layout as an official's page (About · Platform ·
 // Votes · Funding · More; functions/_lib/candidates.js). The same for everyone:
 // kept at the edge for a few minutes. /candidates/ goes to the ballot preview (/ballot/).
-import { page, notFound, guard, edgeCached, loadSection } from "../_lib/render.js";
+import { page, notFound, guard, edgeCached, loadSection, FAILED } from "../_lib/render.js";
+import { electioneeringFor } from "../_lib/dark-money.js";
 import { asset } from "../_lib/geo.js";
 import { STATE_NAME } from "../_lib/districts.js";
 import { todayIn } from "../_lib/election-window.js";
@@ -48,6 +49,7 @@ export const onRequestGet = guard(async (context) => {
       loadSection("candidate dates", () => asset(env, request, "/data/elections/dates.json"), null),
       loadSection("candidate platform", () => platformFor(env.DB, id), null),
     ]);
+    const electioneering = await loadSection("candidate electioneering", () => (env.DB ? electioneeringFor(env.DB, [id], data.year || YEAR) : null), null);
     const p = fecCandidatePage({
       c, st, data,
       election: election && election.contests ? election : null,
@@ -55,6 +57,7 @@ export const onRequestGet = guard(async (context) => {
       dates: dates && dates.states ? dates : null,
       today: todayIn(st),
       platform: platform && typeof platform === "object" ? platform : null,
+      electioneering: electioneering === FAILED ? null : electioneering,
     });
     return page(p.title, p.main, { tab: "home", back: [`Candidates in ${STATE_NAME[st] || st}`, racesHref(data.year, st)] });
   });

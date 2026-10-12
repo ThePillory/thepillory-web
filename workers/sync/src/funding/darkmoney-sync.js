@@ -197,6 +197,9 @@ async function spenderDonors(env, db, fec, propublica, counts) {
     }
     const dark = donors.filter((d) => DARK_KINDS.has(d.kind)).reduce((sum, d) => sum + d.total, 0);
     const keep = donors.slice(0, TOP_DONORS);
+    // Only the largest are looked up in IRS records: past them, or past the pages
+    // read, a 501(c)(4) or (c)(6) could be missed, so the share is "at least".
+    if (donors.length > TOP_DONORS) truncated = true;
     const stmts = [
       db.prepare("DELETE FROM outside_donors WHERE committee_id = ? AND cycle = ?").bind(s.committee_id, s.cycle),
       ...keep.map((d) =>

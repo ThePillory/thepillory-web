@@ -1408,6 +1408,9 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 .money-amt { flex: none; font-weight: 700; font-variant-numeric: tabular-nums; text-align: right; }
 .money-amt .secondary { font-weight: 400; margin-left: 4px; }
 .money-sub { font-size: 0.9375rem; font-weight: 600; margin: 4px 0 0; }
+/* Who funds an outside spender: under its row, inside the same list. */
+.money-detail { padding: 0 0 10px; }
+.money-detail .money-list { padding-left: 12px; border-left: 2px solid var(--border); }
 .card-inset { padding: 14px; border: 0; border-radius: var(--radius-sm); background: var(--panel); }
 
 .card.briefing-link { display: flex; flex-wrap: nowrap; align-items: center; justify-content: space-between; gap: 12px; min-height: var(--tap); color: var(--text); text-decoration: none; }
