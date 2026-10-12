@@ -1,23 +1,24 @@
-# Temporary: checks earmark tables, USAspending, FARA and gift travel sources. Removed after use.
+# Temporary: a measure run of tools/load_gov_money.py (reads, writes nothing). Removed after use.
 name: Probe government money sources
 on:
   push:
     branches: [claude/pillory-mobile-screens-p5zekn]
-    paths: [tools/probe/govmoney.py, .github/workflows/probe-govmoney.yml]
-permissions:
-  contents: write
+    paths: [tools/load_gov_money.py, tools/govmoney.py, .github/workflows/probe-govmoney.yml]
 jobs:
-  probe:
+  measure:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        what: [earmarks, travel, fara]
     steps:
       - uses: actions/checkout@v4
-      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null
-      - run: python3 -m pip install -q pdfplumber==0.11.4 openpyxl==3.1.5 pypdf==5.1.0
-      - run: python3 tools/probe/govmoney.py
-      - run: python3 -c "import pdfplumber,re;p=pdfplumber.open('tools/probe/out/fara.pdf');t=chr(10).join((pg.extract_text() or '') for pg in p.pages);open('tools/probe/out/fara.txt','w').write(t)" || true
-      - run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f tools/probe/out
-          git commit -m "Probe samples" && for i in 1 2 3 4; do git pull --rebase && git push && break; sleep 7; done || true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null && python3 -m pip install -q openpyxl==3.1.5
+      - run: python3 tools/load_gov_money.py ${{ matrix.what }} --mode measure --max-docs 40
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
