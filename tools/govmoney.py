@@ -328,7 +328,7 @@ def house_awards(rows, fy, source_url):
 
 
 def fold(s):
-    s = unicodedata.normalize("NFKD", s or "")
+    s = unicodedata.normalize("NFKD", (s or "").replace("ı", "i"))
     s = "".join(c for c in s if not unicodedata.combining(c))
     return re.sub(r"[^a-z\- ]", "", s.lower().replace("’", "").replace("'", "")).strip()
 

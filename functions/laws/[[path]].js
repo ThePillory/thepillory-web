@@ -20,6 +20,7 @@ import { currentAnalysis, parse, provisionsFor, baselineSection, isPublic, openF
 import { summaryHead, contentsBar, fold, clauseChips, statusChip, compactRow, shortLabel } from "../_lib/summary.js";
 import { billStatus, billSummary, yourRepsCard, billHistory, billFullText, billState, legislatureOf } from "../_lib/bill-page.js";
 import { STATE_NAME } from "../_lib/districts.js";
+import { appropriationsOf, billEarmarks, officialNames, billEarmarksSection, earmarkRows, SUBCOMMITTEE, HOW as GOV_MONEY_HOW } from "../_lib/gov-money.js";
 import { rollCallFilters, rollCallRows, rollCallBreakdown, pickVote, votePicker, voteHeading, totalsSection, rollCallFilterForm, rollCallList } from "../_lib/rollcall.js";
 import { orderById, orderHref, orderIdFromSlug, orderLabel, orderStatus, orderSummary, authoritySection, courtsSection, orderHistory, orderFullText } from "../_lib/orders.js";
 import { turnstileReady, turnstileWidget, verifyTurnstile, visitorHash, actionsToday, recordAction } from "../_lib/turnstile.js";
@@ -281,6 +282,13 @@ ${analysis.failed ? sectionError("Constitutional baseline") : baselineSection(an
   // Organizations that lobbied on it and also reported contributions to members (LD-203).
   const givers = lobbying && lobbying !== FAILED && b.level === "federal" ? await loadSection("bill lobbying givers", () => lobbyGiversFor(db, lobbying, b.session), null) : null;
   const caLobbying = String(b.id).startsWith("ca-") ? await loadSection("bill California lobbying", () => caLobbyingFor(db, id), null) : null;
+  // An appropriations act: the earmarks in the committees' tables for its fiscal year.
+  const approps = b.level === "federal" ? appropriationsOf(b.title) : null;
+  const earmarks = approps ? await loadSection("bill earmarks", async () => {
+    const data = await billEarmarks(db, { fy: approps.fy, subcommittees: approps.subcommittees, limit: 10 });
+    const ids = data ? data.rows.flatMap((r) => String(r.who || "").split(";").map((w) => w.split("|")[2])) : [];
+    return { data, names: await officialNames(db, ids) };
+  }, null) : null;
   const billTopics = topics === FAILED ? [] : topics.get(id) || [];
   const voteList = votes === FAILED ? [] : votes;
   // Each rep's latest final-passage position on this bill, beside contributions in
@@ -357,7 +365,7 @@ ${analysis.failed ? sectionError("Constitutional baseline") : baselineSection(an
   <p class="hint">From the official record of each vote. A member who left office keeps their recorded position; their page shows the years they served.</p>`;
   const lastDate = voteList[0] ? fmtDate(voteList[0].vote_date) : "";
   const main = `<div class="simple-scope">
-${contentsBar([["summary", "Summary"], ["your-reps", "Your reps"], ["constitution", "Constitution"], ["votes", "All votes"], ["money", "Money"], ["history", "History"], ["full-text", "Full text"]])}
+${contentsBar([["summary", "Summary"], ["your-reps", "Your reps"], ["constitution", "Constitution"], ["votes", "All votes"], ["money", "Money"], ...(approps ? [["earmarks", "Earmarks"]] : []), ["history", "History"], ["full-text", "Full text"]])}
 ${head}
 ${simple}
 ${banners}
@@ -365,6 +373,7 @@ ${yourRepsCard(b, { districts, reps: reps === FAILED ? [] : reps, votes: voteLis
 ${fold("constitution", "Constitution", constitution, { meta: clauses.length ? `${clauses.length} ${clauses.length === 1 ? "provision" : "provisions"}` : "", cls: "fold--parch", open: Boolean(sent || error) })}
 ${fold("votes", "All votes", votesInner, { meta: votes === FAILED ? "" : `${voteList.length} recorded`, open: Boolean(url.searchParams.get("vote")) })}
 ${fold("money", "Money", lobbying === FAILED ? '<p class="small secondary">Couldn\'t load this section right now.</p>' : followTheMoney(b, lobbying, { reps: districts && reps !== FAILED ? reps : null, repMoney, cycle, bare: true, givers: givers === FAILED ? null : givers, california: caLobbying === FAILED ? '<p class="small secondary">Couldn\'t load California lobbying right now.</p>' : caFollowTheMoney(b, caLobbying) }))}
+${approps ? fold("earmarks", "Earmarks", earmarks === FAILED ? '<p class="small secondary">Couldn\'t load this section right now.</p>' : billEarmarksSection(b, approps, earmarks && earmarks.data, earmarks ? earmarks.names : {}), { meta: `FY${approps.fy}` }) : ""}
 ${fold("history", "History", `${billHistory(b, outcome === FAILED ? null : outcome, voteList)}${outcome === FAILED ? sectionError("Final action") : outcomeSection(b, outcome)}`, { meta: lastDate })}
 ${fold("full-text", "Full text", billFullText(b, analysis.row && isPublic(analysis.row) ? analysis.row : null))}
 ${billTopics.length ? `<section class="stack-sm">${topicChips(billTopics)}<p class="hint">${esc(tagNote(billTopics[0]))} <a class="inline-link" href="/about/methodology/#topics">How topics work</a></p></section>` : ""}
@@ -483,6 +492,42 @@ ${rollCallList(id, v, f, roll)}`;
   return page(`${b.bill_number}: roll call`, main, { tab: "laws", back: [b.bill_number, `${billHref(id)}?vote=${encodeURIComponent(v.id)}#votes`] });
 }
 
+// Every earmark in an appropriations act's tables, 50 at a time, by state
+// (/laws/bills/<id>/earmarks/?state=XX&offset=N). The same for every visitor.
+
+async function earmarksPage(env, id, url) {
+  if (!env.DB) return notLoaded("Laws", "laws", false, ["Laws", "/laws/"]);
+  const db = env.DB;
+  const b = await billById(db, id);
+  if (!b) return notFound("No bill at this address.", "laws", ["Laws", "/laws/"]);
+  const ap = b.level === "federal" ? appropriationsOf(b.title) : null;
+  if (!ap) return Response.redirect(`${url.origin}${billHref(id)}`, 302);
+  const state = /^[A-Z]{2}$/.test(url.searchParams.get("state") || "") ? url.searchParams.get("state") : null;
+  const offset = Math.max(0, parseInt(url.searchParams.get("offset") || "0", 10) || 0);
+  const data = await billEarmarks(db, { fy: ap.fy, subcommittees: ap.subcommittees, state, offset, limit: 50 });
+  const names = data ? await officialNames(db, data.rows.flatMap((r) => String(r.who || "").split(";").map((w) => w.split("|")[2]))) : {};
+  const base = `${billHref(id)}earmarks/`;
+  const q = (o) => `${base}?${new URLSearchParams({ ...(state ? { state } : {}), ...(o ? { offset: String(o) } : {}) })}`;
+  const chips = data && data.states.length
+    ? `<nav class="filter-chips" aria-label="State"><a href="${base}"${state ? "" : ' aria-current="true"'}>All</a>${data.states.map((s) => `<a href="${base}?state=${esc(s.state)}"${s.state === state ? ' aria-current="true"' : ""}>${esc(s.state)} · ${s.n}</a>`).join("")}</nav>`
+    : "";
+  const list = !data || !data.rows.length
+    ? '<p class="secondary small">No projects in the loaded tables for this selection.</p>'
+    : `<section class="card"><ul class="plain-list money-list">${earmarkRows(data.rows, names)}</ul></section>`;
+  const nav = `${offset ? `<a class="tap" href="${q(Math.max(0, offset - 50))}">Previous 50</a> ` : ""}${data && data.more ? `<a class="tap" href="${q(offset + 50)}">Next 50</a>` : ""}`;
+  const main = `
+<header class="page-head">
+  <p class="label">${esc(b.bill_number)} · Earmarks, FY${ap.fy}</p>
+  <h1>${esc(b.title)}</h1>
+</header>
+<p class="small">${ap.subcommittees.length ? esc(ap.subcommittees.map((x) => SUBCOMMITTEE[x] || x).join("; ")) : "Every subcommittee"}, largest first${state ? `, in ${esc(state)}` : ""}${offset ? `, from ${offset + 1}` : ""}.</p>
+${chips}
+${list}
+${nav ? `<p>${nav}</p>` : ""}
+<p class="hint">As the Appropriations Committees' tables list them. The state is the table's own, where it gives one. <a class="tap" href="${GOV_MONEY_HOW}">How this works</a></p>`;
+  return page(`${b.bill_number}: earmarks`, main, { tab: "laws", back: [b.bill_number, `${billHref(id)}#earmarks`] });
+}
+
 // The Laws list is the same for every visitor: kept at the edge for a few minutes.
 const LAWS_CACHE_SECONDS = 300;
 
@@ -503,6 +548,10 @@ export const onRequestGet = guard(async (context) => {
   if (parts[0] === "bills" && parts.length === 3 && parts[2] === "rollcall") {
     if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
     return edgeCached(context, LAWS_CACHE_SECONDS, () => rollCallPage(context.env, decodeURIComponent(parts[1]), url));
+  }
+  if (parts[0] === "bills" && parts.length === 3 && parts[2] === "earmarks") {
+    if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
+    return edgeCached(context, LAWS_CACHE_SECONDS, () => earmarksPage(context.env, decodeURIComponent(parts[1]), url));
   }
   if (parts[0] === "bills" && (parts.length === 2 || (parts.length === 3 && parts[2] === "analysis"))) {
     if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);

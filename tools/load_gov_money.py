@@ -411,6 +411,8 @@ def fara(args):
         for i, c in enumerate(rows):
             hit = G.contact_member(c["contact"], m)
             if hit:
+                if args.mode == "measure":
+                    say(f"    {c['contact'][:70]!r} -> {hit[0]} ({hit[1]})")
                 keep_rows.append({"doc_url": d["url"], "n": i, "registration_number": d["reg"], "official_id": hit[0], "contact_kind": hit[1],
                                   "principal": c["principal"] or None, "contact_date": c["date"], "method": c["method"], "filed_on": d["filed"]})
         matched += len(keep_rows)

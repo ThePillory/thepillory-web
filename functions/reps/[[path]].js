@@ -23,6 +23,7 @@ import { voteRow, voteFilter } from "../_lib/votes.js";
 import { fundingFor, fundingTab } from "../_lib/funding.js";
 import { executiveMoney, executiveFundingParts, stateOfficialMoney, stateForm700, form700For } from "../_lib/exec-funding.js";
 import { caLobbyingForOfficial, caLegislatorLobbying } from "../_lib/ca-lobbying.js";
+import { memberGovMoney, earmarksSection, travelSection, faraSection } from "../_lib/gov-money.js";
 import { stateFundingTab } from "../_lib/state-funding.js";
 import { promisesFor, ownWordsFor, platformTab, FLAG_REASONS } from "../_lib/promises.js";
 import { turnstileReady, verifyTurnstile, visitorHash, actionsToday, recordAction } from "../_lib/turnstile.js";
@@ -318,9 +319,10 @@ async function profile(env, slug, url, request) {
       return { summary, page: firstPage, reports, committees: assignments, post };
     }, null) : null,
     stateLegislator ? loadSection("rep California lobbying", () => caLobbyingForOfficial(db, o.id), null) : null,
+    congress ? loadSection("rep government money", () => memberGovMoney(db, o.id), null) : null,
   ]);
-  const [countsLoaded, votes, funding, orders, bills, nominations, committees, promises, ownWords, trades, caLobbying] = loaded;
-  const partial = anyFailed(countsLoaded, votes, funding, orders, bills, nominations, committees, promises, ownWords, trades, caLobbying);
+  const [countsLoaded, votes, funding, orders, bills, nominations, committees, promises, ownWords, trades, caLobbying, govMoney] = loaded;
+  const partial = anyFailed(countsLoaded, votes, funding, orders, bills, nominations, committees, promises, ownWords, trades, caLobbying, govMoney);
   const counts = countsLoaded === FAILED ? null : countsLoaded || {};
   const ok = (v) => (v === FAILED ? null : v);
 
@@ -421,6 +423,12 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
   // More: everything else, in sections.
   const moreParts = [];
   if (trades) moreParts.push(sub("more-trades", "Stock trades", trades === FAILED ? sectionError("") : tradesSection(o, trades)));
+  if (congress) {
+    const gm = govMoney === FAILED ? null : govMoney;
+    moreParts.push(sub("more-earmarks", "Earmarks", govMoney === FAILED ? sectionError("") : earmarksSection(o, gm)));
+    moreParts.push(sub("more-travel", "Privately paid travel", govMoney === FAILED ? sectionError("") : travelSection(o, gm)));
+    moreParts.push(sub("more-foreign-agents", "Contacts reported by foreign agents", govMoney === FAILED ? sectionError("") : faraSection(o, gm)));
+  }
   if (orders) moreParts.push(sub("orders", "Executive orders", orders === FAILED ? sectionError("") : ordersTab(o, orders, base, offset)));
   if (nominations) moreParts.push(sub("nominations", "Nominations", nominations === FAILED ? sectionError("") : nominationsTab(o, nominations, base, status, offset)));
   if (exec && !otherState) moreParts.push(sub("more-disclosures", "Disclosures", funding === FAILED ? sectionError("") : money.disclosures));
