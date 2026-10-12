@@ -49,7 +49,7 @@ const TITLE_SUBS = [
   ["energy-water", /energy and water/i],
   ["fsgg", /financial services and general government/i],
   ["homeland", /homeland security appropriations/i],
-  ["interior", /interior,? environment/i],
+  ["interior", /interior,? (and )?environment/i],
   ["lhhs", /labor,? health and human services/i],
   ["legislative", /legislative branch appropriations/i],
   ["milcon-va", /military construction/i],
@@ -171,7 +171,7 @@ export function earmarksSection(o, g) {
         r.state ? esc(r.state) : "",
       ].filter(Boolean).join(" · ");
       const who = r.recipient ? `${esc(r.recipient)}${awardsLink(r.recipient)}` : "";
-      items.push(row(`${esc(r.project)}${who ? `<div class="small">${who}</div>` : ""}`, money(r.amount), meta));
+      items.push(row(`${esc(r.project)}${who ? `<div class="small">${who}</div>` : ""}`, `${money(r.amount)}<div class="list-meta">${r.stage === "enacted" ? "enacted" : "in House bill"}</div>`, meta));
     }
     const loose = reqs.filter((q) => !q.enacted_id || !rows.some((r) => r.id === q.enacted_id));
     const status = enactedRead(fy)
@@ -181,7 +181,7 @@ export function earmarksSection(o, g) {
         : `the enacted tables for FY${fy} aren't loaded`;
     for (const q of loose.slice(0, 40)) {
       const who = q.recipient ? `${esc(q.recipient)}${awardsLink(q.recipient)}` : "";
-      items.push(row(`${esc(q.project || q.recipient || "Project")}${who && q.project ? `<div class="small">${who}</div>` : ""}`, money(q.amount_requested),
+      items.push(row(`${esc(q.project || q.recipient || "Project")}${who && q.project ? `<div class="small">${who}</div>` : ""}`, `${money(q.amount_requested)}<div class="list-meta">requested</div>`,
         `Requested${q.subcommittee ? `, ${esc(subName(q.subcommittee))}` : ""} · ${status}${q.member_url ? ` · ${out(q.member_url, "The member's list ↗")}` : ""}`));
     }
     const enactedTotal = rows.reduce((s, r) => s + (r.amount || 0), 0);
@@ -210,7 +210,7 @@ export function earmarksSection(o, g) {
 export function travelSection(o, g) {
   if (!g) return '<p class="secondary small">Privately paid travel hasn\'t been loaded yet.</p>';
   const senate = o.chamber === "us-senate";
-  const note = `Trips paid for by an outside organization rather than with public money, which members and their staff must disclose${senate ? " to the Secretary of the Senate" : " to the Clerk of the House, with the Ethics Committee's approval beforehand"}. Since 2023. Staff aren't named.${senate ? " The Senate's reports are scanned forms: the sponsor and destination are on each report." : ""} <a class="tap" href="${HOW}">How this works</a>`;
+  const note = `Trips whose costs an outside organization covered instead of public funds, which members and their staff must disclose${senate ? " to the Secretary of the Senate" : " to the Clerk of the House, with the Ethics Committee's approval beforehand"}. Since 2023. Staff aren't named.${senate ? " The Senate's reports are scanned forms: the sponsor and destination are on each report." : ""} <a class="tap" href="${HOW}">How this works</a>`;
   if (!g.travel.length) return `<p class="secondary small">No privately paid trips disclosed for ${esc(o.name)} or their staff since 2023.</p><p class="hint">${note}</p>`;
   const items = g.travel.slice(0, 50).map((t) => {
     const title = t.sponsor ? esc(t.sponsor) : "Sponsor on the report";

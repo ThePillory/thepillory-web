@@ -77,7 +77,7 @@ async function cached(db, name) {
   return got;
 }
 
-function recipientBlock(r) {
+export function recipientBlock(r) {
   const profile = `https://www.usaspending.gov/recipient/${encodeURIComponent(r.id)}/latest`;
   const rows = r.years
     .map((y) => `<details class="weigh-details"><summary>Fiscal year ${y.fy} · ${y.total ? money(y.total) : "none reported"}</summary>${
