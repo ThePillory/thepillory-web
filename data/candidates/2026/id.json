@@ -4,7 +4,7 @@
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=ID&candidate_status=C",
  "list_built_on": "2026-10-11",
- "built_on": "2026-10-11",
+ "built_on": "2026-10-12",
  "senate_up": true,
  "candidates": {
   "S6ID00146": {
@@ -18,7 +18,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6ID00146/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-11"
+   "last_listed": "2026-10-12"
   },
   "S6ID00120": {
    "id": "S6ID00120",
@@ -31,7 +31,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6ID00120/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-11"
+   "last_listed": "2026-10-12"
   },
   "S6ID00161": {
    "id": "S6ID00161",
@@ -44,7 +44,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6ID00161/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-11"
+   "last_listed": "2026-10-12"
   },
   "S8ID00092": {
    "id": "S8ID00092",
@@ -57,7 +57,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S8ID00092/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-11"
+   "last_listed": "2026-10-12"
   },
   "S6ID00138": {
    "id": "S6ID00138",
@@ -70,7 +70,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6ID00138/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-11"
+   "last_listed": "2026-10-12"
   },
   "S6ID00153": {
    "id": "S6ID00153",
@@ -83,7 +83,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6ID00153/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-11"
+   "last_listed": "2026-10-12"
   },
   "H6ID01292": {
    "id": "H6ID01292",
@@ -96,7 +96,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6ID01292/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-11"
+   "last_listed": "2026-10-12",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 60086.48,
+    "disbursements": 60086.48,
+    "cash_on_hand": 0,
+    "individual_unitemized": 24045.96,
+    "individual_itemized": 2940.52,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 33100,
+    "other": 0,
+    "coverage_end": "2026-07-08",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6ID01292/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00909853&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "http://www.kenbrungardt.com/",
+    "as_filed": "HTTP://WWW.KENBRUNGARDT.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00909853/",
+    "checked": "2026-10-12"
+   },
+   "funding_checked": "2026-10-12",
+   "cycle": 2026
   },
   "H8ID01124": {
    "id": "H8ID01124",
@@ -109,7 +139,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8ID01124/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-11"
+   "last_listed": "2026-10-12"
   },
   "H2ID01192": {
    "id": "H2ID01192",
@@ -122,7 +152,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2ID01192/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-11",
+   "last_listed": "2026-10-12",
    "totals": {
     "cycle": 2026,
     "receipts": 181023.63,
@@ -180,7 +210,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6ID01318/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-11"
+   "last_listed": "2026-10-12",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 81497.46,
+    "disbursements": 57024.36,
+    "cash_on_hand": 24473.1,
+    "individual_unitemized": 6374.8,
+    "individual_itemized": 11202.26,
+    "pac": 500,
+    "party": 0,
+    "self_funding": 63419.89,
+    "other": 0.51,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6ID01318/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00926105&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://zabelforcongress.com/",
+    "as_filed": "ZABELFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00926105/",
+    "checked": "2026-10-12"
+   },
+   "funding_checked": "2026-10-12",
+   "cycle": 2026
   },
   "H6ID02274": {
    "id": "H6ID02274",
@@ -193,7 +253,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6ID02274/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-11"
+   "last_listed": "2026-10-12",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 106892.02,
+    "disbursements": 35728.94,
+    "cash_on_hand": 71163.08,
+    "individual_unitemized": 20551.02,
+    "individual_itemized": 86341,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 0,
+    "other": 0,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6ID02274/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00940247&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://ellieforidaho.com/",
+    "as_filed": "ELLIEFORIDAHO.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00940247/",
+    "checked": "2026-10-12"
+   },
+   "funding_checked": "2026-10-12",
+   "cycle": 2026
   },
   "H6ID02241": {
    "id": "H6ID02241",
@@ -206,7 +296,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6ID02241/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-11"
+   "last_listed": "2026-10-12",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 7565,
+    "disbursements": 1578.36,
+    "cash_on_hand": 6963.48,
+    "individual_unitemized": 815,
+    "individual_itemized": 6750,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 0,
+    "other": 0,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6ID02241/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00928408&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00928408/",
+    "checked": "2026-10-12"
+   },
+   "funding_checked": "2026-10-12",
+   "cycle": 2026
   },
   "H6ID02233": {
    "id": "H6ID02233",
@@ -219,7 +339,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6ID02233/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-11"
+   "last_listed": "2026-10-12",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 5391.98,
+    "disbursements": 5669.24,
+    "cash_on_hand": -4742.97,
+    "individual_unitemized": 350.96,
+    "individual_itemized": 4541.02,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 500,
+    "other": 0,
+    "coverage_end": "2026-08-02",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6ID02233/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00917328&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://shumwayforcongress.com/",
+    "as_filed": "HTTPS://SHUMWAYFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00917328/",
+    "checked": "2026-10-12"
+   },
+   "funding_checked": "2026-10-12",
+   "cycle": 2026
   },
   "H8ID02064": {
    "id": "H8ID02064",
@@ -232,7 +382,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8ID02064/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-11"
+   "last_listed": "2026-10-12"
   },
   "H6ID02225": {
    "id": "H6ID02225",
@@ -245,7 +395,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6ID02225/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-11"
+   "last_listed": "2026-10-12",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 30477.4,
+    "disbursements": 30477.4,
+    "cash_on_hand": 0,
+    "individual_unitemized": 5925,
+    "individual_itemized": 3950,
+    "pac": 550,
+    "party": 0,
+    "self_funding": 17552.4,
+    "other": 2500,
+    "coverage_end": "2026-05-17",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6ID02225/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00911115&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.julieforcongress.org/",
+    "as_filed": "WWW.JULIEFORCONGRESS.ORG",
+    "source_url": "https://www.fec.gov/data/committee/C00911115/",
+    "checked": "2026-10-12"
+   },
+   "funding_checked": "2026-10-12",
+   "cycle": 2026
   }
  }
 }

@@ -4,7 +4,7 @@
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=HI&candidate_status=C",
  "list_built_on": "2026-10-11",
- "built_on": "2026-10-11",
+ "built_on": "2026-10-12",
  "senate_up": false,
  "candidates": {
   "H6HI01345": {
@@ -18,7 +18,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6HI01345/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-11"
+   "last_listed": "2026-10-12",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 173602.85,
+    "disbursements": 173602.85,
+    "cash_on_hand": 0,
+    "individual_unitemized": 22775.91,
+    "individual_itemized": 97839,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 51843.32,
+    "other": 1144.62,
+    "coverage_end": "2026-08-28",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6HI01345/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00920884&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00920884/",
+    "checked": "2026-10-12"
+   },
+   "funding_checked": "2026-10-12",
+   "cycle": 2026
   },
   "H2HI02128": {
    "id": "H2HI02128",
@@ -31,7 +61,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2HI02128/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-11",
+   "last_listed": "2026-10-12",
    "totals": {
     "cycle": 2026,
     "receipts": 1093795.44,
@@ -250,7 +280,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6HI01311/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-11"
+   "last_listed": "2026-10-12",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 1142928.44,
+    "disbursements": 1121379.5,
+    "cash_on_hand": 21548.94,
+    "individual_unitemized": 132846.35,
+    "individual_itemized": 917488.73,
+    "pac": 90548.36,
+    "party": 0,
+    "self_funding": 0,
+    "other": 2045,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6HI01311/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00024752",
+      "name": "MATSON, INC. FEDERAL ELECTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00017681",
+      "name": "ALEXANDER AND BALDWIN INC FEDPAC",
+      "total": 7000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00002766",
+      "name": "UNITED FOOD AND COMMERCIAL WORKERS INTERNATIONAL UNION ACTIVE BALLOT CLUB",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00032979",
+      "name": "D.R.I.V.E. - DEM, REP, IND VOTER ED (THE PAC OF THE INT'L BRHD OF TEAMSTERS)",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00142315",
+      "name": "BOYD GAMING CORPORATION POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00027342",
+      "name": "INTERNATIONAL BROTHERHOOD OF ELECTRICAL WORKERS POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00173096",
+      "name": "SERVICE CORPORATION INTERNATIONAL PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00176214",
+      "name": "INTERNATIONAL LONGSHORE AND WAREHOUSE UNION -- POLITICAL ACTION FUND",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00001016",
+      "name": "CARPENTERS LEGISLATIVE IMPROVEMENT COMMITTEE UNITED BROTHERHOOD OF CARPENTERS AND JOINERS",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00025668",
+      "name": "BANK OF HAWAII CORPORATION SPECIAL POLITICAL EDUCATION COMMITTEE",
+      "total": 5000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00411694",
+      "name": "SALTCHUK RESOURCES, INC. PAC",
+      "total": 5000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00004861",
+      "name": "UNITE HERE TIP CAMPAIGN COMMITTEE",
+      "total": 5000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00003251",
+      "name": "NEA FUND FOR CHILDREN AND PUBLIC EDUCATION",
+      "total": 3000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00000885",
+      "name": "INTERNATIONAL UNION OF PAINTERS AND ALLIED TRADES POLITICAL ACTION TOGETHER POLITICAL COMMITTEE",
+      "total": 2500,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00003632",
+      "name": "INT'L UNION OF BRICKLAYERS AND ALLIED CRAFTWORKERS",
+      "total": 2500,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00007922",
+      "name": "LABORERS' INTERNATIONAL UNION OF NORTH AMERICA (LIUNA) PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00777771",
+      "name": "WORKERS FIRST PAC",
+      "total": 2000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00356261",
+      "name": "WATANABE ING LLP PAC",
+      "total": 1500,
+      "count": 2,
+      "industry": "legal"
+     },
+     {
+      "committee_id": "C00678839",
+      "name": "INDIVISIBLE ACTION",
+      "total": 1048.36,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00011338",
+      "name": "SAILORS' POLITICAL FUND",
+      "total": 1000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00279380",
+      "name": "DISTRICT NO. 1-PCD, MARINE ENGINEERS' BENEFICIAL ASSOC. - POLITICAL ACTION FUND (MEBA-PAF)",
+      "total": 1000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00004325",
+      "name": "SEAFARERS POLITICAL ACTIVITY DONATION - SEAFARERS INTERNATIONAL UNION OF NA-AGLIW",
+      "total": 1000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00017244",
+      "name": "MARINE FIREMAN'S UNION POLITICAL ACTION FUND",
+      "total": 1000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00522094",
+      "name": "PSYCHOLOGY PAC OF AMERICAN PSYCHOLOGICAL ASSOCIATION SERVICES INC",
+      "total": 1000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00401380",
+      "name": "MAUI LAND AND PINEAPPLE COMPANY INC FEDERAL PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "other"
+     }
+    ],
+    "count": 29,
+    "total": 90548.36,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00913848&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.jarrettforcongress.com/",
+    "as_filed": "WWW.JARRETTFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00913848/",
+    "checked": "2026-10-12"
+   },
+   "funding_checked": "2026-10-12",
+   "cycle": 2026
   },
   "H6HI02426": {
    "id": "H6HI02426",
@@ -263,7 +499,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6HI02426/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-11"
+   "last_listed": "2026-10-12",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 122614.57,
+    "disbursements": 106513.77,
+    "cash_on_hand": 16100.8,
+    "individual_unitemized": 12812,
+    "individual_itemized": 90477.97,
+    "pac": 1000,
+    "party": 0,
+    "self_funding": 0,
+    "other": 18324.6,
+    "coverage_end": "2026-07-19",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6HI02426/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00923854&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://secure.winred.com/SENATOR-AWA-FOR-CONGRESS/DONATE-HERE",
+    "as_filed": "HTTPS://SECURE.WINRED.COM/SENATOR-AWA-FOR-CONGRESS/DONATE-HERE",
+    "source_url": "https://www.fec.gov/data/committee/C00923854/",
+    "checked": "2026-10-12"
+   },
+   "funding_checked": "2026-10-12",
+   "cycle": 2026
   },
   "H2HI02581": {
    "id": "H2HI02581",
@@ -276,7 +542,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2HI02581/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-11",
+   "last_listed": "2026-10-12",
    "totals": {
     "cycle": 2026,
     "receipts": 820678.15,
