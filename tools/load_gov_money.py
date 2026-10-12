@@ -49,7 +49,6 @@ from load_trades import d1, lit, run_sql, MIGRATIONS  # noqa: E402
 UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36"
 SINCE = datetime.date(2023, 1, 1)
 
-SENATE_TABLES = "https://www.appropriations.senate.gov/download/fy{yy}-{name}-cds-public-law"
 SENATE_NAMES = {"ag": "agriculture", "cjs": "cjs", "ewd": "energy-water", "fsgg": "fsgg", "interior": "interior", "lhhs": "lhhs", "mcva": "milcon-va", "thud": "thud"}
 HOUSE_FILES = "https://appropriations.house.gov/sites/evo-subsites/republicans-appropriations.house.gov/files/evo-media-document/"
 HOUSE_REQUESTS = {
@@ -73,16 +72,36 @@ _jar = http.cookiejar.CookieJar()
 _open = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(_jar)).open
 
 
-def get(url, data=None, headers=None, timeout=300):
+def get(url, data=None, headers=None, timeout=300, waits=(5, 20)):
+    """GET (or POST) with retries on server errors, 429 and 403 (some sites refuse a burst for a while)."""
     h = {"User-Agent": UA, **(headers or {})}
-    for wait in (5, 20, None):
+    for wait in (*waits, None):
         try:
             with _open(urllib.request.Request(url, data=data, headers=h), timeout=timeout) as r:
                 return r.read()
         except (urllib.error.URLError, TimeoutError) as e:
-            if wait is None or (isinstance(e, urllib.error.HTTPError) and e.code < 500 and e.code != 429):
+            if wait is None or (isinstance(e, urllib.error.HTTPError) and e.code < 500 and e.code not in (403, 429)):
                 raise
             time.sleep(wait)
+
+
+SENATE_FY_PAGE = "https://www.appropriations.senate.gov/fy-{fy}-congressionally-directed-spending"
+
+
+def senate_tables(fy):
+    """{subcommittee: table URL} from the committee's page for this fiscal year; {} when there's no page."""
+    try:
+        page = get(SENATE_FY_PAGE.format(fy=fy), waits=(30, 90)).decode("utf-8", "replace")
+    except urllib.error.HTTPError as e:
+        if e.code in (404, 410):
+            return {}
+        raise
+    out = {}
+    for href in set(re.findall(r'href="([^"]*/download/fy\d{2}-([a-z]+)-cds-public-law)[^"]*"', page)):
+        url, short = href
+        if short in SENATE_NAMES:
+            out[SENATE_NAMES[short]] = urllib.parse.urljoin("https://www.appropriations.senate.gov/", url)
+    return out
 
 
 def pdf_text(data):
@@ -199,13 +218,19 @@ def earmarks(args):
     sql, tables = [], []
     this_fy = datetime.date.today().year + (1 if datetime.date.today().month >= 10 else 0)
     for fy in range(2024, this_fy + 2):
-        for short, sub in SENATE_NAMES.items():
-            url = SENATE_TABLES.format(yy=str(fy)[2:], name=short)
+        try:
+            found = senate_tables(fy)
+        except urllib.error.URLError as e:
+            say(f"  FY{fy}: the Senate committee's page wasn't fetched ({getattr(e, 'code', e)})")
+            args.failed.append(f"Senate FY{fy} page")
+            continue
+        for sub, url in sorted(found.items()):
+            time.sleep(3)
             try:
-                data = get(url + "&download=1")
-            except urllib.error.HTTPError as e:
-                if e.code not in (404, 410):
-                    say(f"  FY{fy} {sub}: not fetched ({e.code})")
+                data = get(url + "&download=1", waits=(30, 90))
+            except urllib.error.URLError as e:
+                say(f"  FY{fy} {sub}: not fetched ({getattr(e, 'code', e)})")
+                args.failed.append(f"Senate FY{fy} {sub}")
                 continue
             if data[:4] != b"%PDF":
                 continue
@@ -432,6 +457,7 @@ def main():
     ap.add_argument("--max-docs", type=int, default=150, help="FARA statements read this run, newest first")
     ap.add_argument("--database", default="pillory")
     args = ap.parse_args()
+    args.failed = []
     if args.mode == "load":
         ensure_tables(args)
     sql = {"earmarks": earmarks, "travel": travel, "fara": fara}[args.what](args)
@@ -439,6 +465,9 @@ def main():
     if args.mode == "load" and sql:
         run_sql(args, sql)
         say("Written to D1")
+    if args.failed:
+        # Everything else is written; the run shows red so a source that refused us isn't missed.
+        raise SystemExit(f"Not fetched: {', '.join(args.failed)}")
 
 
 if __name__ == "__main__":
