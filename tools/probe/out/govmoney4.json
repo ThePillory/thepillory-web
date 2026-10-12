@@ -1,0 +1,243 @@
+{
+ "senate_gt_page": {
+  "status": 200,
+  "links": [
+   "https://giftrule-disclosure.senate.gov/",
+   "https://giftrule-disclosure.senate.gov/media/giftruledownloads/giftruledata.zip"
+  ]
+ },
+ "senate_zip": [
+  "https://giftrule-disclosure.senate.gov/media/giftruledownloads/giftruledata.zip",
+  200,
+  "application/zip",
+  93967
+ ],
+ "senate_zip_names": [
+  "giftrule.xml"
+ ],
+ "senate_xml_head": "\ufeff<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<GiftRule>\r\n  <dbo.filer LastName=\"ABBOTT\" FirstName=\"STEVEN\">\r\n    <dbo.Office OfficeName=\"COLLINS, SUSAN\">\r\n      <dbo.Document ReportingYear=\"2023\" BeginTravelDate=\"04/27/2023\" EndTravelDate=\"04/29/2023\" DateReceived=\"05/16/2023\" TransactionDate=\"05/16/2023\" Pages=\"21\">\r\n        <dbo.Reports ReportTitle=\"Employee Reimbursed Travel\" DocURL=\"https://giftrule-disclosure.senate.gov/media/2023/Gu8ctTadEEawDvmk4PqQUQ.pdf\" />\r\n      </dbo.Document>\r\n      <dbo.Document ReportingYear=\"2024\" BeginTravelDate=\"05/02/2024\" EndTravelDate=\"05/04/2024\" DateReceived=\"05/31/2024\" TransactionDate=\"05/31/2024\" Pages=\"18\">\r\n        <dbo.Reports ReportTitle=\"Employee Reimbursed Travel\" DocURL=\"https://giftrule-disclosure.senate.gov/media/2024/8srdZv480WnjnXN25rwg.pdf\" />\r\n      </dbo.Document>\r\n    </dbo.Office>\r\n  </dbo.filer>\r\n  <dbo.filer LastName=\"ABDELHAQ\" FirstName=\"YAZEED\">\r\n    <dbo.Office OfficeName=\"SCHUMER, CHUCK\">\r\n      <dbo.Document ReportingYear=\"2022\" BeginTravelDate=\"10/10/2022\" EndTravelDate=\"10/15/2022\" DateReceived=\"11/17/2022\" TransactionDate=\"11/17/2022\" Pages=\"40\">\r\n        <dbo.Reports ReportTitle=\"Employee Reimbursed Travel\" DocURL=\"https://giftrule-disclosure.senate.gov/media/2022/whrhxrx4W0GBAGPcXPt3Ng.pdf\" />\r\n      </dbo.Document>\r\n    </dbo.Office>\r\n  </dbo.filer>\r\n  <dbo.filer LastName=\"ABRAHAM\" FirstName=\"BRIAN\">\r\n    <dbo.Office OfficeName=\"JUSTICE, JIM\">\r\n      <dbo.Document ReportingYear=\"2025\" BeginTravelDate=\"05/27/2025\" EndTravelDate=\"05/29/2025\" DateReceived=\"07/08/2025\" TransactionDate=\"07/08/2025\" Pages=\"19\">\r\n        <dbo.Reports ReportTitle=\"Employee Reimbursed Travel\" DocURL=\"https://giftrule-disclosure.senate.gov/media/2025/fqSbxZbtuE6eFNrLwTunxA.pdf\" />\r\n      </dbo.Document>\r\n    </dbo.Office>\r\n  </dbo.filer>\r\n  <dbo.filer LastName=\"ACUNA\" FirstName=\"KENNETH\">\r\n    <dbo.Office OfficeName=\"JOHNSON, RON\">\r\n      <dbo.Document ReportingYear=\"2026\" BeginTravelDate=\"08/23/2026\" EndTravelDate=\"08/26/2026\" DateReceived=\"09/17/2026\" TransactionDate=\"09/17/2026\" Pages=\"17\">\r\n        <dbo.Reports ReportTitle=\"Employee Reimbursed Travel\" DocURL=\"https://giftrule-disclosure.senate.gov/media/2026/B7ZA5jI0K2X8o9iNISjQ.pdf\" />\r\n      </dbo.Document>\r\n    </dbo.Office>\r\n  </dbo.filer>\r\n  <dbo.filer LastName=\"ADAM\" FirstName=\"RYAN\">\r\n    <dbo.Office OfficeName=\"TILLIS, THOM\">\r\n      <dbo.Document ReportingYear=\"2022\" BeginTravelDate=\"09/29/2022\" EndTravelDate=\"09/30/2022\" DateReceived=\"10/24/2022\" TransactionDate=\"10/24/2022\" Pages=\"14\">\r\n        <dbo.Reports ReportTitle=\"Employee Reimbursed Travel\" DocURL=\"https://giftrule-disclosure.senate.gov/media/2022/rxtvrrCV0KWZa3efrA0iQ.pdf\" />\r\n      </dbo.Document>\r\n      <dbo.Document ReportingYear=\"2023\" BeginTravelDate=\"09/29/2022\" EndTravelDate=\"09/30/2022\" DateReceived=\"06/09/2023\" TransactionDate=\"06/09/2023\" Pages=\"3\">\r\n        <dbo.Reports ReportTitle=\"Employee Reimbursed Travel\" DocURL=\"https://giftrule-disclosure.senate.gov/media/2023/GI6rUdiozEC6yXdpvru0tw.pdf\" />\r\n      </dbo.Document>\r\n    </dbo.Office>\r\n  </dbo.filer>\r\n  <dbo.filer LastName=\"ADAME\" FirstName=\"JON\">\r\n    <dbo.Office OfficeName=\"BLACKBURN, MARSHA\">\r\n      <dbo.Document ReportingYear=\"2023\" BeginTravelDate=\"10/26/2022\" EndTravelDate=\"10/28/2022\" DateReceived=\"06/06/2023\" TransactionDate=\"06/06/2023\" Pages=\"19\">\r\n        <dbo.Reports ReportTitle=\"Employee Reimbursed Travel\" DocURL=\"https://giftrule-disclosure.senate.gov/media/2023/3nk0xtFa0OptPgP1WgMng.pdf\" />\r\n      </dbo.Document>\r\n    </dbo.Office>\r\n  </dbo.filer>\r\n  <dbo.filer LastName=\"ADAMS\" FirstName=\"CHARLES\">\r\n    <dbo.Office OfficeName=\"RISCH, JAMES E\">\r\n      <dbo.Document ReportingYear=\"2024\" BeginTravelDate=\"09/13/2024\" EndTravelDate=\"09/15/2024\" DateReceived=\"10/03/2024\" TransactionDate=\"10/04/2024\" Pages=\"17\">\r\n        <dbo.Reports ReportTitle=\"Employee Reimbursed Travel\" DocURL=\"https://giftrule-disclosure.senate.gov/media/2024/CIUUg1id3EiIcTknowAlng.pdf\" />\r\n      </dbo.Document>\r\n    </d",
+ "senate_xml_len": 807759,
+ "house_gt_result": {
+  "status": 200,
+  "len": 5527,
+  "rows": [
+   "<tr>\r\n                <th>Member Name</th>\r\n                <th>Filer Name</th>\r\n                <th>Destination</th>\r\n                <th>Travel Dates</th>\r\n                <th>Sponsor</th>\r\n            </tr>",
+   "<tr>\r\n                        <td data-label=\"Member Name\">\r\n                            <a href=\"gtimages/ST/2021/500023307.pdf\" target=\"_blank\">\r\n                                Pelosi, Nancy\r\n                            </a>\r\n                        </td>\r\n                        <td data-label=\"Filter Name\">Jason Smith</td>\r\n                        <td data-label=\"Destination\">                       \r\nMonterey, CA <br />\r\n                        </td>\r\n                        <td data-label=\"Travel Dates\" data-sort=\"2021/08/16\">08/16/2021 - 08/18/2021</td>\r\n                        <td data-label=\"Sponsor\">The Panetta Institute for Public Policy</td>\r\n                    </tr>",
+   "<tr>\r\n                        <td data-label=\"Member Name\">\r\n                            <a href=\"gtimages/ST/2021/500023676.pdf\" target=\"_blank\">\r\n                                Pelosi, Nancy\r\n                            </a>\r\n                        </td>\r\n                        <td data-label=\"Filter Name\">Robert Edmonson</td>\r\n                        <td data-label=\"Destination\">                       \r\nPhiladelphia, PA <br />\r\n                        </td>\r\n                        <td data-label=\"Travel Dates\" data-sort=\"2021/10/15\">10/15/2021 - 10/16/2021</td>\r\n                        <td data-label=\"Sponsor\">Democracy Fund&#xA;&#xA;Pew Charitable Trusts&#xA;&#xA;William and Flora Hewlett Foundation</td>\r\n                    </tr>",
+   "<tr>\r\n                        <td data-label=\"Member Name\">\r\n                            <a href=\"gtimages/ST/2021/500023846.pdf\" target=\"_blank\">\r\n                                Pelosi, Nancy\r\n                            </a>\r\n                        </td>\r\n                        <td data-label=\"Filter Name\">Karen Bronson</td>\r\n                        <td data-label=\"Destination\">                       \r\nWarrenton, VA <br />\r\n                        </td>\r\n                        <td data-label=\"Travel Dates\" data-sort=\"2021/10/29\">10/29/2021 - 10/31/2021</td>\r\n                        <td data-label=\"Sponsor\">Faith and Law Project&#xA;The Clapham Group</td>\r\n                    </tr>"
+  ],
+  "links": [
+   "gtimages/ST/2021/500023307.pdf",
+   "gtimages/ST/2021/500023676.pdf",
+   "gtimages/ST/2021/500023846.pdf",
+   "gtimages/ST/2022/500025293.pdf",
+   "gtimages/ST/2022/500025431.pdf",
+   "gtimages/ST/2022/500025432.pdf",
+   "gtimages/ST/2022/500025563.pdf"
+  ]
+ },
+ "house_gt_dates": {
+  "status": 200,
+  "rows": 423
+ },
+ "consolidated-table-of-fy27-cpf-awards.xlsx": {
+  "sheets": [
+   "FY27"
+  ],
+  "FY27": [
+   [
+    "Appropriations Bill",
+    "Agency",
+    "Account",
+    "State/Location",
+    "Project",
+    "Location/Recipient",
+    "House Amount",
+    "House Requestor(s)",
+    "Party"
+   ],
+   [
+    "Agriculture",
+    "Agricultural Research Service",
+    "Buildings and Facilities",
+    "Lincoln, NE",
+    "USDA  ARS  National  Center  for  Resilient and Re",
+    "USDA Agricultural Research Service co-lo-cated  fa",
+    "5000000",
+    "Flood",
+    "R"
+   ],
+   [
+    "Agriculture",
+    "Agricultural Research Service",
+    "Buildings and Facilities",
+    "Beltsville, MD",
+    "BARC Building 307B Renovation and Mod-ernization",
+    "USDA Agricultural Research Service",
+    "2003000",
+    "Hoyer, Ivey",
+    "D"
+   ],
+   [
+    "Agriculture",
+    "Agricultural Research Service",
+    "Buildings and Facilities",
+    "Clayton, NC",
+    "USDA ARS Central Crops Research NC",
+    "North Carolina State University",
+    "2000000",
+    "Knott",
+    "R"
+   ],
+   [
+    "Agriculture",
+    "Agricultural Research Service",
+    "Buildings and Facilities",
+    "El Reno, OK",
+    "USDA  ARS  Oklahoma  and  Central  Plains Agricult",
+    "Oklahoma  and  Central  Plains  Agricultural Resea",
+    "2000000",
+    "Lucas",
+    "R"
+   ]
+  ],
+  "FY27_rows": 6693
+ },
+ "consolidated-table-of-fy27-cpf-requests.xlsx": {
+  "sheets": [
+   "asRequestedCPFs_FY27"
+  ],
+  "asRequestedCPFs_FY27": [
+   [
+    "Member Lastname",
+    "Member Firstname",
+    "District",
+    "Party",
+    "Subcommittee",
+    "Recipient",
+    "Project Description",
+    "Recipient Address",
+    "Amount Requested",
+    "Member URL",
+    null
+   ],
+   [
+    "Adams",
+    "Alma",
+    "NC12",
+    "D",
+    "Commerce Justice Science",
+    "Johnson C. Smith University",
+    "Machine Learning and Innovation Hub",
+    "100 Beatties Ford Rd,Charlotte,North Carolina,2821",
+    "1300000",
+    "https://adams.house.gov/serving-you/fiscal-year-20",
+    null
+   ],
+   [
+    "Adams",
+    "Alma",
+    "NC12",
+    "D",
+    "Commerce Justice Science",
+    "Elon University",
+    "Precision Research Instruments Supporting Elon Uni",
+    "100 Campus Drive,Elon,North Carolina,27244",
+    "1008820",
+    "https://adams.house.gov/serving-you/fiscal-year-20",
+    null
+   ],
+   [
+    "Adams",
+    "Alma",
+    "NC12",
+    "D",
+    "Commerce Justice Science",
+    "R Bruce Irons Camp Fund DBA Wayfinders",
+    "Wayfinders Youth Mentorship Program",
+    "809 Westmere Ave, C190,Charlotte,North Carolina,28",
+    "100000",
+    "https://adams.house.gov/serving-you/fiscal-year-20",
+    null
+   ],
+   [
+    "Adams",
+    "Alma",
+    "NC12",
+    "D",
+    "Commerce Justice Science",
+    "Safe House Project",
+    "North Carolina Simply Report Statewide Rollout for",
+    "1340 N. Great Neck Road STE 1272-162,Virginia Beac",
+    "600000",
+    "https://adams.house.gov/serving-you/fiscal-year-20",
+    null
+   ]
+  ],
+  "asRequestedCPFs_FY27_rows": 7341
+ },
+ "https://appropriations.house.gov/committee-activity/enacted-legislation/fiscal-year-2026-enacted-legislation": [
+  "//appropriations.house.gov/sites/evo-subsites/republicans-appropriations.house.gov/files/evo-media-document/fy26-agriculture%2C-rural-development%2C-fda-cpf-table-with-technical-and-conforming-changes.pdf",
+  "//appropriations.house.gov/sites/evo-subsites/republicans-appropriations.house.gov/files/evo-media-document/fy26-energy-and-water-development-and-related-agencies-cpf-table.pdf",
+  "//appropriations.house.gov/sites/evo-subsites/republicans-appropriations.house.gov/files/evo-media-document/fy26-military-construction%2C-veterans-affairs-cpf-table.pdf"
+ ],
+ "https://appropriations.house.gov/committee-activity/enacted-legislation/fiscal-year-2025-enacted-legislation": [],
+ "https://appropriations.house.gov/committee-activity/fy25-community-project-funding": [
+  "//appropriations.house.gov/sites/evo-subsites/republicans-appropriations.house.gov/files/evo-media-document/fy25-agriculture-fda-cpf-table-final-with-technical-conforming-changes.pdf",
+  "//appropriations.house.gov/sites/evo-subsites/republicans-appropriations.house.gov/files/evo-media-document/fy25-agriculture-fda-cpf-table-final.pdf",
+  "//appropriations.house.gov/sites/evo-subsites/republicans-appropriations.house.gov/files/evo-media-document/fy25-cjs-cpf-table-final.pdf",
+  "//appropriations.house.gov/sites/evo-subsites/republicans-appropriations.house.gov/files/evo-media-document/fy25-energy-water-cpf-table-final.pdf",
+  "//appropriations.house.gov/sites/evo-subsites/republicans-appropriations.house.gov/files/evo-media-document/fy25-homeland-security-cpf-table-final-with-technical-conforming-change.pdf",
+  "//appropriations.house.gov/sites/evo-subsites/republicans-appropriations.house.gov/files/evo-media-document/fy25-homeland-security-cpf-table-final.pdf",
+  "//appropriations.house.gov/sites/evo-subsites/republicans-appropriations.house.gov/files/evo-media-document/fy25-house-cpfs-as-requested-06.28.2024.xlsx",
+  "//appropriations.house.gov/sites/evo-subsites/republicans-appropriations.house.gov/files/evo-media-document/fy25-interior-cpf-table-final-with-technical-conforming-change.pdf",
+  "//appropriations.house.gov/sites/evo-subsites/republicans-appropriations.house.gov/files/evo-media-document/fy25-interior-cpf-table-final.pdf",
+  "//appropriations.house.gov/sites/evo-subsites/republicans-appropriations.house.gov/files/evo-media-document/fy25-military-construction-veterans-affairs-and-related-agencies-cpf-table-final.pdf",
+  "//appropriations.house.gov/sites/evo-subsites/republicans-appropriations.house.gov/files/evo-media-document/fy25-thud-cpf-table-final-with-managers-amendment.pdf",
+  "//appropriations.house.gov/sites/evo-subsites/republicans-appropriations.house.gov/files/evo-media-document/fy25-thud-cpf-table.pdf"
+ ],
+ "https://www.appropriations.senate.gov/fy-2026-congressionally-directed-spending": [
+  "../../../../../download/fy26-ag-cds-public-law",
+  "https://www.appropriations.senate.gov/../../../congressionally-directed-spending-requests-fy2026",
+  "https://www.appropriations.senate.gov/download/fy26-cjs-cds-public-law",
+  "https://www.appropriations.senate.gov/download/fy26-ewd-cds",
+  "https://www.appropriations.senate.gov/download/fy26-ewd-cds-public-law",
+  "https://www.appropriations.senate.gov/download/fy26-fsgg-cds",
+  "https://www.appropriations.senate.gov/download/fy26-fsgg-cds-public-law",
+  "https://www.appropriations.senate.gov/download/fy26-hls-cds",
+  "https://www.appropriations.senate.gov/download/fy26-homeland-security-cds",
+  "https://www.appropriations.senate.gov/download/fy26-interior-cds-public-law",
+  "https://www.appropriations.senate.gov/download/fy26-lhhs-cds-public-law",
+  "https://www.appropriations.senate.gov/download/fy26-mcva-cds-public-law",
+  "https://www.appropriations.senate.gov/download/fy26-thud-cds-public-law",
+  "https://www.appropriations.senate.gov/fy27-appropriations-requests-and-congressionally-directed-spending",
+  "https://www.appropriations.senate.gov/imo/media/doc/ag_fy26_cds.pdf",
+  "https://www.appropriations.senate.gov/imo/media/doc/cjs_fy26_cds.pdf",
+  "https://www.appropriations.senate.gov/imo/media/doc/fy26_interior_cds.pdf",
+  "https://www.appropriations.senate.gov/imo/media/doc/fy26_lhhs_cds.pdf",
+  "https://www.appropriations.senate.gov/imo/media/doc/fy26_thud_cds.pdf",
+  "https://www.appropriations.senate.gov/imo/media/doc/milcon-va_fy26_cds.pdf"
+ ],
+ "fara_docs_7766": "{\"ROWSET\":{\"ROW\":[{\"DATE_STAMPED\":\"2026-09-04T00:00:00\",\"REGISTRATION_NUMBER\":7766,\"FOREIGN_PRINCIPAL_COUNTRY\":\"BRAZIL\",\"DOCUMENT_TYPE\":\"Informational Materials\",\"REGISTRANT_NAME\":\"TSG Advocates DC, LLC\",\"URL\":\"https://efile.fara.gov/docs/7766-Informational-Materials-20260904-1.pdf\",\"SHORT_FORM_NAME\":\"\",\"FOREIGN_PRINCIPAL_NAME\":\"AG\ufffdNCIA DE PROMO\ufffd\ufffdO DE EXPORTA\ufffd\ufffdES DO BRASIL \\u2013 APEX-BRASIL CORPORATION (EA AM\ufffdRICA DO NORTE)\"},{\"DATE_STAMPED\":\"2026-09-03T00:00:00\",\"REGISTRATION_NUMBER\":7766,\"FOREIGN_PRINCIPAL_COUNTRY\":\"\",\"DOCUMENT_TYPE\":\"Exhibit C\",\"REGISTRANT_NAME\":\"TSG Advocates DC, LLC\",\"URL\":\"https://efile.fara.gov/docs/7766-Exhibit-C-20260903-1.pdf\",\"SHORT_FORM_NAME\":\"\",\"FOREIGN_PRINCIPAL_NAME\":\"\"},{\"DATE_STAMPED\":\"2026-09-03T00:00:00\",\"REGISTRATION_NUMBER\":7766,\"FOREIGN_PRINCIPAL_COUNTRY\":\"\",\"DOCUMENT_TYPE\":\"Registration Statement\",\"REGISTRANT_NAME\":\"TSG Advocates DC, LLC\",\"URL\":\"https://efile.fara.gov/docs/7766-Registration-Statement-20260903-1.pdf\",\"SHORT_FORM_NAME\":\"\",\"FOREIGN_PRINCIPAL_NAME\":\"\"},{\"DATE_STAMPED\":\"2026-09-03T00:00:00\",\"REGISTRATION_NUMBER\":7766,\"FOREIGN_PRINCIPAL_COUNTRY\":\"\",\"DOCUMENT_TYPE\":\"Short-Form\",\"REGISTRANT_NAME\":\"TSG Advocates DC, LLC\",\"URL\":\"https://efile.fara.gov/docs/7766-Short-Form-20260903-5.pdf\",\"SHORT_FORM_NAME\":\"Weeks, Haley\",\"FOREIGN_PRINCIPAL_NAME\":\"\"},{\"DATE_STAMPED\":\"2026-09-03T00:00:00\",\"REGISTRATION_NUMBER\":7766,\"FOREIGN_PRINCIPAL_COUNTRY\":\"\",\"DOCUMENT_TYPE\":\"Short-Form\",\"REGISTRANT_NAME\":\"TSG Advocates DC, LLC\",\"URL\":\"https://e",
+ "fara_docs_csv": [
+  "FARA_All_RegistrantDocs.csv",
+  154573,
+  [
+   "\"Date Stamped\",\"Registrant Name\",\"Registration Number\",\"Document Type\",\"Short Form Name\",\"Foreign Principal Name\",\"Foreign Principal Country\",\"URL\"",
+   "\"10/08/2026\",\"NRW Global Business North America LLC\",\"6645\",\"Supplemental Statement\",\"\",\"\",\"\",\"https://efile.fara.gov/docs/6645-Supplemental-Statement-20261008-17.pdf\"",
+   "\"10/08/2026\",\"The Brooks Law Firm PC\",\"7178\",\"Supplemental Statement\",\"\",\"\",\"\",\"https://efile.fara.gov/docs/7178-Supplemental-Statement-20261008-8.pdf\""
+  ]
+ ],
+ "fara_sup_recent": [
+  "\"10/08/2026\",\"NRW Global Business North America LLC\",\"6645\",\"Supplemental Statement\",\"\",\"\",\"\",\"https://efile.fara.gov/docs/6645-Supplemental-Statement-20261008-17.pdf\"",
+  "\"10/08/2026\",\"The Brooks Law Firm PC\",\"7178\",\"Supplemental Statement\",\"\",\"\",\"\",\"https://efile.fara.gov/docs/7178-Supplemental-Statement-20261008-8.pdf\"",
+  "\"10/06/2026\",\"Svensson, Bengt Allan \",\"7259\",\"Supplemental Statement\",\"\",\"\",\"\",\"https://efile.fara.gov/docs/7259-Supplemental-Statement-20261006-6.pdf\"",
+  "\"10/06/2026\",\"Neale Creek, LLC\",\"6723\",\"Supplemental Statement\",\"\",\"\",\"\",\"https://efile.fara.gov/docs/6723-Supplemental-Statement-0-0.pdf\"",
+  "\"10/06/2026\",\"GS2 Law PLLC\",\"7630\",\"Supplemental Statement\",\"\",\"\",\"\",\"https://efile.fara.gov/docs/7630-Supplemental-Statement-20261006-2.pdf\""
+ ],
+ "fara_pdf": [
+  "https://efile.fara.gov/docs/6645-Supplemental-Statement-20261008-17.pdf",
+  200,
+  3762865
+ ]
+}
