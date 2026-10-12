@@ -10,6 +10,7 @@ Rules:
 - The date as printed (for example 7/22/2026). The amount as printed (for example "$1,001 - $15,000" or "Over $50,000,000").
 - If any cell is hard to read (blurred, cut off, overwritten, stamped over), still give your best reading, set "uncertain" to true for that row and say which cell in "note". Never guess silently.
 - Leave out the "Notification Received Over 30 Days Ago" column, signatures, stamps, instructions and page headers.
+- You are asked for a range of row numbers. Return only the rows numbered in that range, as numbered on the form; if the table ends before the range does, stop at the last row. If no row in the range exists, return an empty list.
 - If there is no transactions table, return an empty list.`;
 
 export const scanSchema = {
@@ -37,8 +38,12 @@ export const scanSchema = {
   },
 };
 
-/** The user message: the report's PDF, by its OGE link, and the request. */
-export const scanMessage = (url) => [
-  { type: "document", source: { type: "url", url } },
-  { type: "text", text: "Transcribe every row of this report's Transactions table, following the rules." },
+/**
+ * The user message: the report's PDF, by its OGE link, and the rows asked for.
+ * The document is cached, so reading a long report in several chunks pays for
+ * it in full only once per model.
+ */
+export const scanMessage = (url, first, last) => [
+  { type: "document", source: { type: "url", url }, cache_control: { type: "ephemeral" } },
+  { type: "text", text: `Transcribe rows ${first} to ${last} of this report's Transactions table, following the rules.` },
 ];

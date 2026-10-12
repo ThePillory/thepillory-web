@@ -83,12 +83,54 @@ export const memberTrades = (db, officialId, offset = 0) =>
     return { rows: results.slice(0, TRADES_PER_PAGE), more: results.length > TRADES_PER_PAGE };
   }, { rows: [], more: false });
 
-/** Reports that are links only: filed on paper, not read automatically, or (OGE) released only on request. */
+/**
+ * Reports that are links, in whole or in part: filed on paper, not read
+ * automatically, (OGE) released only on request, or a scan transcribed only in
+ * part (rows_total, unread_rows; migration 0035).
+ */
 export const memberReports = (db, officialId) =>
-  soft(async () => (await db
-    .prepare("SELECT id, filed_on, report_url, request_url, paper FROM trade_reports WHERE official_id = ? AND parsed = 0 ORDER BY filed_on DESC LIMIT 20")
-    .bind(officialId)
-    .all()).results, []);
+  soft(async () => {
+    try {
+      return (await db
+        .prepare(
+          `SELECT id, filed_on, report_url, request_url, paper, parsed, trade_count, rows_total, unread_rows FROM trade_reports
+           WHERE official_id = ? AND (parsed = 0 OR (rows_total IS NOT NULL AND COALESCE(unread_rows, '[]') != '[]')) ORDER BY filed_on DESC LIMIT 20`
+        )
+        .bind(officialId)
+        .all()).results;
+    } catch (err) {
+      if (!missing(err)) throw err;
+      return (await db
+        .prepare("SELECT id, filed_on, report_url, request_url, paper FROM trade_reports WHERE official_id = ? AND parsed = 0 ORDER BY filed_on DESC LIMIT 20")
+        .bind(officialId)
+        .all()).results;
+    }
+  }, []);
+
+/** [3, 4, 5, 9] -> "3–5 and 9". Pure. */
+export function rowRanges(ns) {
+  const sorted = [...new Set(ns.map(Number).filter(Number.isFinite))].sort((a, b) => a - b);
+  const parts = [];
+  for (let i = 0; i < sorted.length; i++) {
+    let j = i;
+    while (j + 1 < sorted.length && sorted[j + 1] === sorted[j] + 1) j++;
+    parts.push(j > i ? `${sorted[i]}–${sorted[j]}` : String(sorted[i]));
+    i = j;
+  }
+  return parts.length > 1 ? `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}` : parts[0] || "";
+}
+
+/** A scan transcribed in part: "84 of 90 rows transcribed" and the rows that weren't. Pure. */
+export function partialReport(r) {
+  let unread = [];
+  try {
+    unread = JSON.parse(r.unread_rows || "[]");
+  } catch (_) {}
+  const read = r.trade_count || 0;
+  const total = r.rows_total || read + unread.length;
+  const which = unread.length === 1 ? `Row ${unread[0]} couldn't be read with confidence` : `Rows ${rowRanges(unread)} couldn't be read with confidence`;
+  return { title: `${read} of ${total} ${total === 1 ? "row" : "rows"} transcribed: see the report`, meta: `${which} · Filed ${fmtDate(r.filed_on)}` };
+}
 
 /** The President's, Vice President's or a Cabinet member's position and agency, as OGE lists them. */
 export const executivePost = (db, officialId) =>
@@ -162,7 +204,7 @@ export const latestTrades = (db, f) =>
 // The member's "Stock trades" section (More tab)
 
 const NOTE = `Periodic Transaction Reports members file under the STOCK Act, read from the House Clerk and the Senate's eFD site. Amounts are the ranges the law requires, exactly as filed. Owner is as filed (self, spouse, joint, dependent child). These records may not be used for commercial purposes. <a class="inline-link" href="${TRADES_METHOD}">How trades are recorded</a>`;
-const OGE_NOTE = `Periodic Transaction Reports (OGE Form 278-T) filed with the Office of Government Ethics, under the same 45-day rule and amount ranges as Congress. Amounts are shown exactly as filed; owner only where the report states it. Some reports are released by OGE only on request. A report posted as a scan is read by two AI models and published only when the two readings agree row for row and match the report's own text; those lines say "Transcribed by AI", and "Checked by" once a person has compared them with the scan. These records may not be used for commercial purposes. <a class="inline-link" href="${TRADES_METHOD}">How trades are recorded</a>`;
+const OGE_NOTE = `Periodic Transaction Reports (OGE Form 278-T) filed with the Office of Government Ethics, under the same 45-day rule and amount ranges as Congress. Amounts are shown exactly as filed; owner only where the report states it. Some reports are released by OGE only on request. A report posted as a scan is read by two AI models, and each row is published only when both readings agree on it exactly and the report's own text doesn't contradict it; rows that couldn't be read with confidence stay linked to the scan. Those lines say "Transcribed by AI", and "Checked by" once a person has compared them with the scan. These records may not be used for commercial purposes. <a class="inline-link" href="${TRADES_METHOD}">How trades are recorded</a>`;
 
 export function tradesSection(o, { summary, page, reports, committees = [], post = null, offset = 0 }) {
   const exec = o.chamber === "us-executive";
@@ -181,10 +223,15 @@ export function tradesSection(o, { summary, page, reports, committees = [], post
       ? `<p class="small secondary trades-reference">Office, for reference: ${esc((post && post.position) || o.office)}${post && post.agency ? `, ${esc(post.agency)}` : ""}.</p>`
       : "";
   const reportLinks = reports.length
-    ? `<p class="label">Reports not shown line by line</p><div class="card">${reports
-        .map((r) => (!r.report_url && r.request_url
-          ? linkRow(r.request_url, "Available from OGE on request", `Listed ${fmtDate(r.filed_on)} · Request it with OGE Form 201`)
-          : linkRow(r.report_url, r.paper ? "Filed on paper: see the report" : "Not read automatically: see the report", `Filed ${fmtDate(r.filed_on)}`)))
+    ? `<p class="label">Reports not shown line by line, or only in part</p><div class="card">${reports
+        .map((r) => {
+          if (!r.report_url && r.request_url) return linkRow(r.request_url, "Available from OGE on request", `Listed ${fmtDate(r.filed_on)} · Request it with OGE Form 201`);
+          if (r.parsed && r.rows_total) {
+            const p = partialReport(r);
+            return linkRow(r.report_url, p.title, p.meta);
+          }
+          return linkRow(r.report_url, r.paper ? "Filed on paper: see the report" : "Not read automatically: see the report", `Filed ${fmtDate(r.filed_on)}`);
+        })
         .join("")}</div>`
     : "";
   if (!page.rows.length && !reports.length) {

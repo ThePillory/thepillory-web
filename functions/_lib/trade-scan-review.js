@@ -23,27 +23,46 @@ const json = (s, fallback) => {
 
 const SECTIONS = [
   ["spot", "Spot checks", "Picked at random from published transcriptions. Compare every row with the scan, then confirm it or take it down."],
-  ["agreed", "Published by AI", "Both readings agreed and the checks passed; public as \"Transcribed by AI from a scanned report, auto-checked\"."],
-  ["disagree", "Readings didn't agree", "Kept as links to the report on public pages. The notes say why."],
+  ["agreed", "Published by AI", "The rows both readings agreed on are public as \"Transcribed by AI from a scanned report, auto-checked\"; the rest are linked to the scan."],
+  ["disagree", "Held", "Nothing published: the readings couldn't be trusted as a set, or the report couldn't be read. Kept as links to the report. The notes say why."],
   ["pending", "Waiting to be read", "The sync Worker reads these, a few a day."],
   ["approved", "Confirmed by a person", "Public with \"Checked by [name]\"."],
   ["rejected", "Taken down", "Kept as links to the report."],
 ];
+const missingColumn = (err) => /no such (table|column)/i.test(String(err && err.message));
 const sectionOf = (s) => (s.status === "agreed" && s.spot_check ? "spot" : s.status);
 
 const BASE = `SELECT s.report_id, s.status, s.spot_check, s.text_rows, s.reading, s.problems, s.models, s.read_at, s.reviewed_by, s.reviewed_at, s.reject_reason,
   r.report_url, r.filed_on, r.official_id, r.chamber, r.state, r.filer_name, o.name AS official_name, o.slug
   FROM trade_scans s JOIN trade_reports r ON r.id = s.report_id LEFT JOIN officials o ON o.id = r.official_id`;
 
+// Migration 0035's columns (row by row), when it's applied; the list works without them.
+const ROWS_COLS = ", s.unread, s.rows_total, s.error, s.tries";
+async function withRows(run) {
+  try {
+    return await run(BASE.replace("s.reject_reason,", `s.reject_reason${ROWS_COLS},`));
+  } catch (err) {
+    if (missingColumn(err)) return run(BASE);
+    throw err;
+  }
+}
+
 function lineFor(s) {
   const rows = json(s.reading, []).length;
-  const meta = [`Filed ${fmtDate(s.filed_on)}`, s.status === "pending" ? `${s.text_rows} rows in its text layer` : `${rows} agreed rows`];
+  const meta = [
+    `Filed ${fmtDate(s.filed_on)}`,
+    s.status === "pending"
+      ? `${s.text_rows} rows in its text layer${s.tries ? ` · ${s.tries} failed ${s.tries === 1 ? "try" : "tries"}: ${clean(s.error, 120)}` : ""}`
+      : s.rows_total
+        ? `${rows} of ${s.rows_total} rows agreed`
+        : `${rows} agreed rows`,
+  ];
   if (s.reviewed_by) meta.push(`${s.status === "approved" ? "Confirmed" : "Taken down"} by ${s.reviewed_by}`);
   return `<a class="compact-row" href="${scanHref(s.report_id)}"><span class="cr-main"><span class="cr-title">${esc(s.official_name || s.filer_name)}</span><span class="cr-meta">${esc(meta.join(" · "))}</span></span><span class="chev" aria-hidden="true">›</span></a>`;
 }
 
 export async function scanList(db, { done = "" } = {}) {
-  const { results } = await db.prepare(`${BASE} ORDER BY r.filed_on DESC LIMIT 400`).all();
+  const { results } = await withRows((base) => db.prepare(`${base} ORDER BY r.filed_on DESC LIMIT 400`).all());
   const sections = SECTIONS.map(([status, title, note]) => {
     const rows = results.filter((s) => sectionOf(s) === status);
     return `<h2 class="label queue-head">${esc(title)} (${rows.length})</h2><p class="hint">${esc(note)}</p>${rows.length ? `<div class="card compact-list">${rows.map(lineFor).join("")}</div>` : '<p class="small secondary">None.</p>'}`;
@@ -63,9 +82,10 @@ function rowsTable(rows) {
 }
 
 export async function scanItem(db, env, id, { error = "", done = "", form = null } = {}) {
-  const s = await db.prepare(`${BASE} WHERE s.report_id = ?`).bind(id).first();
+  const s = await withRows((base) => db.prepare(`${base} WHERE s.report_id = ?`).bind(id).first());
   if (!s) return null;
   const rows = json(s.reading, []);
+  const unread = json(s.unread, []);
   const problems = json(s.problems, []);
   const blocks = problems.filter((p) => p.kind === "block");
   const looks = problems.filter((p) => p.kind === "look");
@@ -99,10 +119,12 @@ ${post('<input type="hidden" name="action" value="reread"><button class="btn" ty
 ${error ? `<p class="banner banner--error" role="alert">${esc(error)}</p>` : ""}${done ? `<p class="banner" role="status">${esc(done)}</p>` : ""}
 <section class="card stack-sm">
   <p>${url ? `<a class="inline-link" href="${esc(url)}" target="_blank" rel="noopener">Open the scanned report</a> ↗` : "No document link."}</p>
-  <p class="small secondary">Read by ${esc(s.models || "—")}${s.read_at ? ` on ${esc(fmtDate(s.read_at.slice(0, 10)))}` : ""}. Its own text layer shows ${s.text_rows} numbered rows.</p>
+  <p class="small secondary">Read by ${esc(s.models || "—")}${s.read_at ? ` on ${esc(fmtDate(s.read_at.slice(0, 10)))}` : ""}. Its own text layer shows ${s.text_rows} numbered rows.${s.rows_total ? ` The readings found ${s.rows_total} rows; ${rows.length} agreed.` : ""}</p>
+  ${s.error ? `<p class="small">Last error reading it${s.tries ? ` (${s.tries} ${s.tries === 1 ? "try" : "tries"})` : ""}: ${esc(s.error)}</p>` : ""}
   ${s.reviewed_by ? `<p class="small">${s.status === "approved" ? "Confirmed" : "Taken down"} by ${esc(s.reviewed_by)}${s.reviewed_at ? `, ${esc(fmtDate(s.reviewed_at.slice(0, 10)))}` : ""}${s.reject_reason ? `: ${esc(s.reject_reason)}` : ""}</p>` : ""}
 </section>
 ${blocks.length ? `<section class="card stack-sm"><h2 class="label">Why it wasn't published</h2><ul class="plain-list">${blocks.map((p) => `<li class="small">${esc(p.text)}</li>`).join("")}</ul></section>` : ""}
+${unread.length ? `<section class="card stack-sm"><h2 class="label">Rows not published (${unread.length})</h2><p class="small secondary">Public pages say these rows couldn't be read with confidence and link the scan.</p><ul class="plain-list">${unread.map((u) => `<li class="small">Row ${esc(String(u.n))}: ${esc(u.reason)}</li>`).join("")}</ul></section>` : ""}
 ${looks.length ? `<section class="card stack-sm"><h2 class="label">Check these closely</h2><ul class="plain-list">${looks.map((p) => `<li class="small">${esc(p.text)}</li>`).join("")}</ul></section>` : ""}
 ${rows.length ? `<section class="stack-sm"><h2 class="label">${s.status === "disagree" ? "Rows both readings agreed on" : "The rows"} (${rows.length})</h2>${rowsTable(rows)}</section>` : ""}
 ${actions}`,
@@ -117,7 +139,10 @@ export async function scanChange(db, id, rawForm, email) {
   if (!s) return { error: "No such report.", form };
   if (action === "reread") {
     if (!["disagree", "rejected"].includes(s.status)) return { error: "Only a report that didn't agree or was rejected can be read again.", form };
-    await db.prepare("UPDATE trade_scans SET status = 'pending', reading = NULL, problems = NULL, reviewed_by = NULL, reviewer_email = NULL, reviewed_at = NULL, reject_reason = NULL WHERE report_id = ?").bind(id).run();
+    await db.batch([
+      db.prepare("UPDATE trade_scans SET status = 'pending', reading = NULL, problems = NULL, unread = NULL, rows_total = NULL, error = NULL, tries = 0, reviewed_by = NULL, reviewer_email = NULL, reviewed_at = NULL, reject_reason = NULL WHERE report_id = ?").bind(id),
+      db.prepare("DELETE FROM trade_scan_chunks WHERE report_id = ?").bind(id),
+    ]);
     return { done: "Back in the queue: it's read again on a later sync run." };
   }
   if (!form.reviewer) return { error: "Enter your name.", form };

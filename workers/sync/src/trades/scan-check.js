@@ -1,19 +1,24 @@
 // Checks on the transcription of a scanned OGE Form 278-T (docs/trades.md).
 // Pure: no I/O, so the admin page can use them too.
 //
-// A scanned report is read twice, by two different models, from the PDF. The
-// rows count as read only when:
-//   - both readings list the same numbered rows, 1 to N with none missing;
-//   - they agree on every row: the date, the type, the amount range exactly,
-//     and the description letter for letter (spaces and punctuation aside);
-//   - neither model marked a cell as hard to read;
-//   - every date is a whole date, every amount a whole range, every type one
-//     of the form's;
-//   - every row the report's own text layer shows is there, and no row's
-//     type contradicts it (the text layer is too garbled to be the record, but
-//     it was made from the same scan independently).
-// A problem of kind "block" keeps the report a link; "look" is shown to the
-// person who checks the rows against the scan.
+// A scanned report is read twice, by two different models, from the PDF, and
+// each row is judged on its own. A row is published only when:
+//   - it's in both readings, under the same row number;
+//   - they agree on it exactly: the date, the type, the amount range, and the
+//     description letter for letter (spaces and punctuation aside);
+//   - neither model marked a cell in it as hard to read;
+//   - its date is a whole date, its amount a whole range, its type one of the form's;
+//   - the report's own text layer (too garbled to be the record, but made from
+//     the same scan independently) doesn't show a different type for it.
+// Every other row is "unread": the page says it couldn't be read with
+// confidence and links the scan. Rows are numbered 1 to the highest number
+// either reading found; a number neither reading has is unread too.
+// The whole report is held for a person (nothing published) only when the
+// readings can't be trusted as a set: a reading found nothing, or the text
+// layer suggests both readings shifted the rows (each description matching the
+// neighboring row's line better than its own).
+// Problems of kind "block" are those report-level holds; "look" is shown to
+// the person who checks the rows against the scan.
 
 const RANGE = /^(?:Spouse\/DC )?Over \$[\d,]{5,}$|^\$[\d,]{3,} - \$[\d,]{4,}$/;
 
@@ -98,33 +103,41 @@ export function textLayerType(line) {
 
 /**
  * Compare two readings ({rows: [{n, description, type, date, amount, uncertain, note}]})
- * and the text layer ({n: line}). Returns {rows, problems}: rows are the agreed
- * rows ready to store, problems [{n, kind: 'block'|'look', text}].
+ * and the text layer ({n: line}). Returns {rows, unread, total, problems}:
+ * rows are the agreed rows ready to store, unread [{n, reason}] the rest,
+ * total the report's row count as read, problems [{n, kind: 'block'|'look', text}].
  */
 export function checkReadings(a, b, lines = {}) {
   const problems = [];
   const block = (n, text) => problems.push({ n, kind: "block", text });
   const look = (n, text) => problems.push({ n, kind: "look", text });
-  const byN = (r) => new Map((r && Array.isArray(r.rows) ? r.rows : []).map((x) => [Number(x.n), x]));
+  const byN = (r) => new Map((r && Array.isArray(r.rows) ? r.rows : []).filter((x) => Number.isInteger(Number(x.n)) && Number(x.n) > 0).map((x) => [Number(x.n), x]));
   const A = byN(a);
   const B = byN(b);
   if (!A.size || !B.size) {
     block(null, `${!A.size ? "The first reading" : "The second reading"} found no transactions.`);
-    return { rows: [], problems };
+    return { rows: [], unread: [], total: 0, problems };
   }
-  const ns = [...new Set([...A.keys(), ...B.keys()])].sort((x, y) => x - y);
-  ns.forEach((n, i) => {
-    if (n !== i + 1) block(n, `Rows aren't numbered 1 to ${ns.length} without gaps (row ${i + 1} expected, ${n} found).`);
-  });
+  const total = Math.max(...A.keys(), ...B.keys());
   const rows = [];
-  for (const n of ns) {
+  const unread = [];
+  const skip = (n, reason) => unread.push({ n, reason });
+  for (let n = 1; n <= total; n++) {
     const x = A.get(n);
     const y = B.get(n);
-    if (!x || !y) {
-      block(n, `Row ${n} is in only ${x ? "the first" : "the second"} reading.`);
+    if (!x && !y) {
+      skip(n, "Not found in either reading.");
       continue;
     }
-    if (x.uncertain || y.uncertain) block(n, `Row ${n}: marked hard to read${[x.note, y.note].filter(Boolean).length ? ` (${[x.note, y.note].filter(Boolean).join("; ")})` : ""}.`);
+    if (!x || !y) {
+      skip(n, `Only in ${x ? "the first" : "the second"} reading.`);
+      continue;
+    }
+    if (x.uncertain || y.uncertain) {
+      const notes = [x.note, y.note].filter(Boolean);
+      skip(n, `Marked hard to read${notes.length ? ` (${notes.join("; ")})` : ""}.`);
+      continue;
+    }
     const dateKey = (v) => isoDate(v) || `as printed: ${String(v || "").trim()}`;
     const typeKey = (v) => typeLabel(v) || `as printed: ${String(v || "").trim().toLowerCase()}`;
     const fields = [
@@ -133,21 +146,27 @@ export function checkReadings(a, b, lines = {}) {
       ["amount", normAmount(x.amount), normAmount(y.amount), x.amount, y.amount],
       ["description", letters(x.description), letters(y.description), x.description, y.description],
     ];
-    let same = true;
-    for (const [field, p, q, rawP, rawQ] of fields) {
-      if (p !== q) {
-        same = false;
-        block(n, `Row ${n}: the readings differ on the ${field} ("${rawP ?? ""}" and "${rawQ ?? ""}").`);
-      }
+    const differ = fields.filter(([, p, q]) => p !== q);
+    if (differ.length) {
+      skip(n, differ.map(([field, , , rawP, rawQ]) => `The readings differ on the ${field} ("${rawP ?? ""}" and "${rawQ ?? ""}").`).join(" "));
+      continue;
     }
-    if (!same) continue;
-    let valid = true;
-    const invalid = (text) => ((valid = false), block(n, text));
-    if (!isoDate(x.date)) invalid(`Row ${n}: "${x.date}" isn't a whole date.`);
-    if (!typeLabel(x.type)) invalid(`Row ${n}: "${x.type}" isn't one of the form's transaction types.`);
-    if (!fullRange(x.amount)) invalid(`Row ${n}: "${x.amount}" isn't a whole amount range.`);
-    if (!letters(x.description)) invalid(`Row ${n}: no description.`);
-    if (!valid) continue;
+    if (!isoDate(x.date)) {
+      skip(n, `"${x.date}" isn't a whole date.`);
+      continue;
+    }
+    if (!typeLabel(x.type)) {
+      skip(n, `"${x.type}" isn't one of the form's transaction types.`);
+      continue;
+    }
+    if (!fullRange(x.amount)) {
+      skip(n, `"${x.amount}" isn't a whole amount range.`);
+      continue;
+    }
+    if (!letters(x.description)) {
+      skip(n, "No description.");
+      continue;
+    }
     // The form's footnote marker ("See Endnote") isn't part of the asset, as in tools/load_trades.py.
     const description = String(x.description).replace(/\s+/g, " ").replace(/\s+(?:See\s+)?Endnotes?\b.*$/i, "").trim();
     const [lo, hi] = amountBounds(x.amount);
@@ -165,26 +184,46 @@ export function checkReadings(a, b, lines = {}) {
   }
   const textNs = Object.keys(lines).map(Number).sort((p, q) => p - q);
   if (!textNs.length) {
-    look(null, "The report has no usable text layer, so only the two readings were compared: check every row against the scan.");
+    look(null, "The report has no usable text layer, so only the two readings were compared: check the rows against the scan.");
   } else {
-    let weak = 0;
+    // The text layer's row numbers are themselves read from the scan, so a
+    // line it can't place is a note for the person, never a reason on its own.
+    const at = new Map(rows.map((r) => [r.n, r]));
+    const desc = (n) => (A.get(n) && B.get(n) ? A.get(n).description : null);
+    let checked = 0;
+    let shifted = 0;
     for (const n of textNs) {
-      const r = rows.find((z) => z.n === n);
-      if (!A.has(n) || !B.has(n)) {
-        block(n, `Row ${n} is in the report's text layer but not in both readings.`);
+      const line = lines[n];
+      if (n > total) {
+        if (/\$\s?[\d,]{3,}|\d{1,2}\/\d{1,2}\/\d{2,4}/.test(line)) look(n, `The text layer shows a row ${n}, past the last row either reading found (${total}): check that the readings reached the end of the table ("${line.slice(0, 120)}").`);
         continue;
       }
-      if (!r) continue;
-      const t = textLayerType(lines[n]);
-      if (t && t !== (r.type === "Partial sale" ? "Sale" : r.type)) block(n, `Row ${n}: the text layer reads "${lines[n].slice(0, 120)}", which looks like a ${t.toLowerCase()}, not a ${r.type.toLowerCase()}.`);
-      if (contained(r.description, lines[n]) < 0.5) {
-        weak += 1;
-        look(n, `Row ${n}: the text layer's version is too garbled to confirm the description ("${lines[n].slice(0, 120)}"). Check it against the scan.`);
+      const r = at.get(n);
+      if (r) {
+        const t = textLayerType(line);
+        if (t && t !== (r.type === "Partial sale" ? "Sale" : r.type)) {
+          rows.splice(rows.indexOf(r), 1);
+          at.delete(n);
+          skip(n, `The report's text layer reads "${line.slice(0, 120)}", which looks like a ${t.toLowerCase()}, not a ${r.type.toLowerCase()}.`);
+          continue;
+        }
       }
+      const own = desc(n) ? contained(desc(n), line) : null;
+      if (own == null) continue;
+      checked += 1;
+      const neighbor = Math.max(desc(n - 1) ? contained(desc(n - 1), line) : 0, desc(n + 1) ? contained(desc(n + 1), line) : 0);
+      if (neighbor >= 0.5 && neighbor > own + 0.15) shifted += 1;
+      if (r && own < 0.5) look(n, `Row ${n}: the text layer's version is too garbled to confirm the description ("${line.slice(0, 120)}"). Check it against the scan.`);
     }
-    if (weak > textNs.length * 0.2) block(null, `For ${weak} of the ${textNs.length} rows in the text layer, the descriptions couldn't be matched; too many to trust.`);
+    if (checked >= 5 && shifted > Math.max(3, checked * 0.3)) {
+      block(null, `For ${shifted} of the ${checked} rows the text layer could place, the description matches the next or previous row's line better than its own: the readings may have shifted the rows.`);
+    }
   }
-  return { rows, problems };
+  unread.sort((p, q) => p.n - q.n);
+  return { rows, unread, total, problems };
 }
+
+/** "84 of 90 rows transcribed." Pure. */
+export const rowsLine = (read, total) => (total ? `${read} of ${total} ${total === 1 ? "row" : "rows"} transcribed.` : "");
 
 export const blocking = (problems) => (problems || []).some((p) => p.kind === "block");

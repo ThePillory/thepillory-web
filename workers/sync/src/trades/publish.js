@@ -21,7 +21,7 @@ export function publishStatements(r, rows) {
 export function takeDownStatements(r) {
   return [
     { sql: "DELETE FROM trades WHERE report_id = ?", binds: [r.id] },
-    { sql: "UPDATE trade_reports SET parsed = 0, trade_count = 0, transcribed_by = NULL, transcribed_at = NULL WHERE id = ?", binds: [r.id] },
+    { sql: "UPDATE trade_reports SET parsed = 0, trade_count = 0, transcribed_by = NULL, transcribed_at = NULL, rows_total = NULL, unread_rows = NULL WHERE id = ?", binds: [r.id] },
     ...summaryStatements([r.official_id]),
   ];
 }
