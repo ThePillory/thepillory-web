@@ -1,0 +1,41 @@
+# Earmarks (the Appropriations Committees' tables and the House's tables of
+# members' requests), privately paid travel (House and Senate gift travel
+# filings) and FARA (foreign agents, their principals, and contacts with
+# members of Congress their statements report) into D1, weekly and on demand
+# (Actions -> Refresh government money -> Run workflow). See
+# tools/load_gov_money.py and docs/funding.md.
+name: Refresh government money
+on:
+  schedule:
+    - cron: "17 14 * * 3"  # Wednesdays
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "measure (read, write nothing) or load"
+        default: load
+      what:
+        description: "earmarks, travel, fara, or all"
+        default: all
+jobs:
+  load:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        what: [earmarks, travel, fara]
+    steps:
+      - uses: actions/checkout@v4
+        if: github.event.inputs.what == '' || github.event.inputs.what == 'all' || github.event.inputs.what == matrix.what
+      - uses: actions/setup-node@v4
+        if: github.event.inputs.what == '' || github.event.inputs.what == 'all' || github.event.inputs.what == matrix.what
+        with:
+          node-version: 22
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null && python3 -m pip install -q openpyxl==3.1.5
+        if: github.event.inputs.what == '' || github.event.inputs.what == 'all' || github.event.inputs.what == matrix.what
+      - run: python3 tools/load_gov_money.py ${{ matrix.what }} --mode "${{ github.event.inputs.mode || 'load' }}"
+        if: github.event.inputs.what == '' || github.event.inputs.what == 'all' || github.event.inputs.what == matrix.what
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

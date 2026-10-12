@@ -6,6 +6,7 @@
 import { esc, safeUrl, fmtDate } from "./render.js";
 import { money, METHOD } from "./funding.js";
 import { billHref } from "./votes.js";
+import { awardsLink } from "./gov-money.js";
 
 const missing = (err) => /no such table|no such column/i.test(String(err && err.message));
 const CAL_ACCESS = "https://cal-access.sos.ca.gov/Lobbying/";
@@ -223,7 +224,7 @@ export function caLegislatorLobbying(official, l) {
     ]
       .filter(Boolean)
       .join(" · ");
-    return row(`<a class="inline-link" href="${esc(safeUrl(o.latest.source_url) || CAL_ACCESS)}" target="_blank" rel="noopener">${esc(o.name)}</a>`, money(o.total), meta);
+    return row(`<a class="inline-link" href="${esc(safeUrl(o.latest.source_url) || CAL_ACCESS)}" target="_blank" rel="noopener">${esc(o.name)}</a>${awardsLink(o.name)}`, money(o.total), meta);
   };
   const orgs = l.orgs.length
     ? `<ul class="plain-list money-list">${l.orgs.slice(0, 10).map(org).join("")}</ul>${
