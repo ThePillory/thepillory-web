@@ -1,0 +1,341 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>API | LDA.gov</title>
+  <link href="https://cdn.datatables.net/2.3.2/css/dataTables.bootstrap5.css" rel="stylesheet">
+  
+
+  
+<link rel="stylesheet" media="all" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.14.1/themes/smoothness/jquery-ui.min.css" 
+      integrity="sha512-hQrNVZL4jUAHcqbF25UiEFZ/NGCbhAWI9aVAUfI5H+sG17C1Lc4Tm4HpU5A69E1jquKr3f0LnxD3uzfoCj/koQ==" 
+      crossorigin="anonymous" 
+      referrerpolicy="no-referrer" />
+<link rel="stylesheet" media="all" href="/static/shared/timepicker/jquery.timepicker.css">
+<link rel="stylesheet" media="all" href="/static/shared/css/bootstrap-fileupload.css">
+<link rel="stylesheet" href="/static/shared/selectWoo/selectWoo.min.css"/>
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+		  integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+		  crossorigin="anonymous">
+
+<link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.4.0/css/rowGroup.bootstrap5.min.css"/>
+
+<link rel="stylesheet" media="all" href="/static/shared/css/main.css"><!-- includes bootstrap and theme-starter-site -->
+
+  
+
+  
+
+  <script>window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" 
+          integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" 
+          crossorigin="anonymous" 
+          referrerpolicy="no-referrer"></script>
+  <script src="/static/shared/base.js"></script>
+  
+  <script src="/static/shared/lobby-disclosure.js"></script>
+  
+  
+    <script>
+    </script>
+
+
+  <!-- Fav and touch icons -->
+  <link rel="apple-touch-icon" sizes="144x144" href="/static/shared/images/touch-icon-144.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/static/shared/images/touch-icon-114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/static/shared/images/touch-icon-72.png">
+  <link rel="apple-touch-icon" href="/static/shared/images/touch-icon-57.png">
+  <link rel="shortcut icon" type="image/x-icon" href="/static/shared/images/favicon.ico">
+</head>
+
+<body role="document">
+<div class="container-wrap" id="top">
+  <div class="navbar navbar-inverse navbar-fixed-top" role="banner">
+    <nav
+        class="navbar navbar-expand-xl navbar-dark bg-primary fixed-top">
+      <div class="container">
+        <a href="#content" class="visually-hidden visually-hidden-focusable skipLink">Skip to main content</a>
+
+        
+            <a class="navbar-brand"
+    href="/system/public/">
+    
+    <span class="navbar-brand-type">
+        <small class="d-none d-md-block d-xl-none d-xxl-block">United States Congress</small>
+        <small class="d-block d-md-none d-xl-block d-xxl-none">U.S. Congress</small>
+        <br />
+        <span class="d-block">LDA.gov</span>
+    </span>
+</a>
+        
+
+        <button class="navbar-toggler navbar-toggler-right"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse" style="align-items:stretch">
+          
+            <ul class="navbar-nav navbar-nav--public w-100">
+              <li class="nav-item">
+                <a class="nav-link" href="/filings/public/filing/search/">
+                  <i class="fas fa-search me-1" aria-hidden="true"></i>
+                  <strong class="nav-link-text">
+                    Registrations &
+                    <span class="d-inline d-xl-block d-xxl-inline"> Quarterly Activity</span>
+                  </strong>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/filings/public/contribution/search/">
+                  <i class="fas fa-search me-1" aria-hidden="true"></i>
+                  <strong class="nav-link-text">
+                    Contributions
+                  </strong>
+                </a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link" href="/api/">
+                  <i class="fas fa-download me-1" aria-hidden="true"></i>
+                  <strong class="nav-link-text">
+                    Download API
+                  </strong>
+                </a>
+              </li>
+
+              <li class="nav-item ms-xl-auto">
+                <a class="nav-link" href="/registrants/public/registrant-client/lookup/">
+                  <i class="far fa-address-card me-2" aria-hidden="true"></i>
+                  <strong class="nav-link-text">
+                    Lookup
+                    <span class="d-inline d-xl-block d-xxl-block d-xxxl-inline">
+                      Registrant & Client
+                      <abbr class='abbr-id' title='Identification Number'>ID</abbr>s
+                    </span>
+                   
+                  </strong>
+                </a>
+              </li>
+            </ul>
+          
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <div id="content" class="container">
+    
+    <main class="pgContent" role="main">
+      
+      
+      <!--MESSAGE BLOCK-->
+      
+      <!--END MESSAGE BLOCK-->
+
+
+      
+    <h1>
+        Download API
+    </h1>
+    <hr/>
+
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-lg-7">
+                <p class="lead">
+                    A researcher who is interested in downloading the 
+                    lobbying documents database may do so by utilizing our REST API.
+                </p>
+            </div>
+            <div class="col-lg-4 offset-lg-1 mt-3 mt-lg-0">
+                <nav class="nav flex-column">
+                    <a class="nav-link" href="/api/register/">
+                        <i class="fa fa-fw fa-key me-1"></i>Register for API Key
+                    </a>
+                    <a class="nav-link" href="/api/auth/password/reset/">
+                        <i class="fa fa-fw fa-unlock me-1"></i>Reset Password
+                    </a>
+                    <a class="nav-link" href="/api/redoc/v1/">
+                        <i class="fa fa-fw fa-info-circle me-1"></i>API Documentation - V1
+                    </a>
+                    <a class="nav-link" href="/api/tos/">
+                        <i class="fa fa-fw fa-file-signature me-1"></i>API Terms of Service
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <h3>LD-1 / LD-2</h3>
+    <p>
+        Section 209 of HLOGA requires the Clerk of the House of Representatives and the Secretary of 
+        the Senate to make all documents filed under the LDA, as
+        amended, available to the public over the Internet. The information and documents may be accessed in two
+        ways. A researcher with a specific query in mind may use the query system, which has been expanded from
+        that available prior to January 1, 2008.
+    </p>
+
+    <h3>LD-203</h3>
+    <p>The contributions database is limited to the documents filed under section 203 of HLOGA (LD-203), the first of
+        which is required to be filed by registrants and lobbyists by July 30, 2008.</p>
+
+
+
+      <a href="#" class="back-to-top"><i class="fas fa-3x fa-arrow-circle-up" title="Back to top"></i><span class="visually-hidden">Back to Top</span></a>
+
+
+
+    </main>
+  </div>
+</div>
+
+
+    <footer id="footer" class="p-4">
+  <div class="container">
+    <div class="row gx-5 text-body-secondary text-muted">
+      <div class="col-12 col-xl-3 d-flex align-items-center mb-3 mb-xl-0">
+        <h2 class="h5 fw-medium">
+          For more about the Lobbying Disclosure Act (LDA)
+        </h2>
+        <div class="vr d-none d-xl-inline-block"></div>
+      </div>
+
+      <div class="col-12 col-lg-6 col-xl-4">
+        <address>
+          <strong class="d-block fw-semibold"
+            >House Legislative Resource Center (LRC)</strong
+          >
+          <div class="d-block">
+            B-81 Cannon House Office Building, Washington, DC 20515
+          </div>
+          <div class="d-flex flex-wrap">
+            <span class="text-nowrap me-4"> Phone: (202) 226-5200 </span>
+            <span class="text-nowrap">
+              Email:
+              <a href="mailto:lobbyinfo@mail.house.gov"
+                >lobbyinfo@mail.house.gov</a
+              >
+            </span>
+          </div>
+          <div class="d-block">
+            Website:
+            <a href="https://lobbyingdisclosure.house.gov" target="_blank"
+              >lobbyingdisclosure.house.gov</a
+            >
+          </div>
+        </address>
+      </div>
+
+      <div class="col-12 col-lg-6 col-xl-4">
+        <address>
+          <strong class="d-block">Senate Office of Public Records (OPR)</strong>
+          <div class="d-block">
+            144 Hart Senate Office Building, Washington, DC 20510
+          </div>
+          <div class="d-flex flex-wrap">
+            <span class="text-nowrap me-4"> Phone: (202) 224-0758 </span>
+            <span class="text-nowrap">
+              Email:
+              <a href="mailto:lobby@sec.senate.gov">lobby@sec.senate.gov</a>
+            </span>
+          </div>
+          <div class="d-block">
+            Website:
+            <a href="https://disclosure.senate.gov" target="_blank"
+              >disclosure.senate.gov</a
+            >
+          </div>
+        </address>
+      </div>
+    </div>
+    
+    </div>
+  </div>
+</footer>
+
+
+
+
+
+<!-- Jquery UI -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.14.1/jquery-ui.min.js" 
+        integrity="sha512-MSOo1aY+3pXCOCdGAYoBZ6YGI0aragoQsg1mKKBHXCYPIWxamwOE7Drh+N5CPgGI5SA9IEKJiPjdfqWFWmZtRA==" 
+        crossorigin="anonymous" 
+        referrerpolicy="no-referrer"></script>
+<!-- plugins -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"
+        integrity="sha256-1A78rJEdiWTzco6qdn3igTBv9VupN3Q1ozZNTR4WE/Y="
+        crossorigin="anonymous"></script>
+<script src="/static/shared/timepicker/jquery.timepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"
+        integrity="sha256-u7MY6EG5ass8JhTuxBek18r5YG6pllB9zLqE4vZyTn4="
+        crossorigin="anonymous"></script>
+
+<script src="/static/shared/selectWoo/selectWoo.full.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.datatables.net/2.3.2/js/dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/2.3.2/js/dataTables.bootstrap5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/rowgroup/1.5.1/js/dataTables.rowGroup.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.print.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/select/3.0.1/js/dataTables.select.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/fixedcolumns/5.0.4/js/dataTables.fixedColumns.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"
+        integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ="
+        crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.8/sorting/datetime-moment.js"
+        integrity="sha384-fHYStNRCRyY7W3cTlelGvbP20FYYQ8sdkAKFZn/nSh7LVbplxsBJ5pptaNluip5E"
+        crossorigin="anonymous"></script>
+
+<!-- Bootstrap -->
+ <script src="/static/shared/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Plugins -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-filestyle/2.1.0/bootstrap-filestyle.min.js"
+        integrity="sha256-b/0VIRZZWI4ziE8r1Zz0S9Q3otdXV3uCLab9Inhb6q4="
+        crossorigin="anonymous"></script>
+
+<script>
+$.extend( $.fn.dataTable.defaults, {
+    pageLength: 100
+});
+
+
+
+var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+  return new bootstrap.Popover(popoverTriggerEl)
+})
+
+document.addEventListener("DOMContentLoaded", function () {
+        const triggers = document.querySelectorAll('[rel="popover"]');
+        triggers.forEach(el => bootstrap.Popover.getOrCreateInstance(el));
+        document.addEventListener('click', function (e) {
+                const popover = document.querySelector('.popover');
+
+                triggers.forEach(trigger => {
+                        const instance = bootstrap.Popover.getInstance(trigger);
+                        const isClickInside =
+                                trigger.contains(e.target) ||
+                                (popover && popover.contains(e.target));
+
+                        if (instance && !isClickInside) {
+                                instance.hide();
+                        }
+                });
+        });
+});
+</script>
+</body>
+</html>
+
