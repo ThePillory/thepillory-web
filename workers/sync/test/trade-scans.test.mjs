@@ -8,11 +8,11 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { DatabaseSync } from "node:sqlite";
 import { readFileSync, readdirSync } from "node:fs";
-import { checkReadings, blocking, contained, textLayerType } from "../src/trades/scan-check.js";
-import { syncScannedTrades } from "../src/trades/scan-sync.js";
+import { checkReadings, blocking, contained, textLayerType, rowsLine } from "../src/trades/scan-check.js";
+import { syncScannedTrades, mergeChunks, accountError } from "../src/trades/scan-sync.js";
 import { ensureSchema } from "../src/db.js";
 import { scanChange, scanItem, scanList } from "../../../functions/_lib/trade-scan-review.js";
-import { memberTrades, tradeRow } from "../../../functions/_lib/trades.js";
+import { memberTrades, memberReports, tradeRow, tradesSection } from "../../../functions/_lib/trades.js";
 
 function d1(sqlite) {
   const stmt = (sql, binds = []) => ({
@@ -70,11 +70,21 @@ const ROWS = [
 ];
 const copy = (rows) => ({ rows: rows.map((r) => ({ ...r })) });
 
-test("two agreeing readings that fit the text layer pass", () => {
-  const { rows, problems } = checkReadings(copy(ROWS), copy(ROWS), { 1: "MIAMI DADE CNTY FL AVIATION REV RFDG lourchaso 717", 2: "Abbott labs sale 5/512026" });
+// A fake model: answers each chunk ("rows 81 to 160") with the rows in that range.
+const ranged = (rowsFor) => async (env, { model, message }) => {
+  const [, first, last] = message[1].text.match(/rows (\d+) to (\d+)/).map(Number);
+  const rows = rowsFor(model, message[0].source.url).filter((r) => r.n >= first && r.n <= last);
+  return { data: { rows }, model };
+};
+
+test("two agreeing readings that fit the text layer: every row publishes", () => {
+  const { rows, unread, total, problems } = checkReadings(copy(ROWS), copy(ROWS), { 1: "MIAMI DADE CNTY FL AVIATION REV RFDG lourchaso 717", 2: "Abbott labs sale 5/512026" });
   assert.equal(blocking(problems), false, JSON.stringify(problems));
   assert.equal(rows.length, 2);
+  assert.deepEqual(unread, []);
+  assert.equal(total, 2);
   assert.deepEqual(rows[1], { n: 2, description: "Abbott Labs (ABT)", type: "Sale", date: "2026-05-05", amount: "$15,001 - $50,000", amount_min: 15001, amount_max: 50000, owner: null, ticker: "ABT" });
+  assert.equal(rowsLine(84, 90), "84 of 90 rows transcribed.");
 });
 
 test("the form's endnote marker isn't kept in the description", () => {
@@ -84,86 +94,184 @@ test("the form's endnote marker isn't kept in the description", () => {
   assert.equal(rows[1].description, "Abbott Labs (ABT)");
 });
 
-test("spacing and punctuation don't count; letters, dates, types and amounts do", () => {
+test("one row the readings differ on stays unread; the other rows still publish", () => {
   const b = copy(ROWS);
   b.rows[0].description = "MIAMI DADE CNTY FL AVIATION REV RFDG SER A B/E PTC 5.00% Due Oct 1 2031";
-  assert.equal(blocking(checkReadings(copy(ROWS), b).problems), false);
+  assert.equal(checkReadings(copy(ROWS), b).rows.length, 2, "spacing and punctuation don't count");
   for (const [field, value] of [["amount", "$1,000,001 - $5,000,001"], ["date", "7/1/2026"], ["type", "Sale"], ["description", "MIAMI DADE CNTY FL AVIATION REV RFDG SER A B/E PTC 5.00 % Due Oct 1, 2032"]]) {
     const c = copy(ROWS);
     c.rows[0][field] = value;
-    const { problems } = checkReadings(copy(ROWS), c);
-    assert.ok(problems.some((p) => p.kind === "block" && p.text.includes(`differ on the ${field}`)), field);
+    const { rows, unread, problems } = checkReadings(copy(ROWS), c);
+    assert.deepEqual(rows.map((r) => r.n), [2], field);
+    assert.equal(unread[0].n, 1);
+    assert.match(unread[0].reason, new RegExp(`differ on the ${field}`));
+    assert.equal(blocking(problems), false, "a row, not the report");
   }
 });
 
-test("a cell marked hard to read, a gap, a half range or a partial date blocks", () => {
+test("a cell marked hard to read, a missing row, a half range or a partial date: that row only", () => {
   const u = copy(ROWS);
   u.rows[1].uncertain = true;
   u.rows[1].note = "amount blurred";
-  assert.ok(checkReadings(copy(ROWS), u).problems.some((p) => p.kind === "block" && /hard to read \(amount blurred\)/.test(p.text)));
+  assert.match(checkReadings(copy(ROWS), u).unread[0].reason, /hard to read \(amount blurred\)/);
   const gap = { rows: [ROWS[0], { ...ROWS[1], n: 3 }] };
-  assert.ok(blocking(checkReadings(gap, gap).problems));
+  const g = checkReadings(gap, copy(gap.rows));
+  assert.equal(g.total, 3);
+  assert.deepEqual(g.rows.map((r) => r.n), [1, 3]);
+  assert.deepEqual(g.unread, [{ n: 2, reason: "Not found in either reading." }]);
+  const only = checkReadings(copy(ROWS), { rows: [ROWS[0]] });
+  assert.match(only.unread[0].reason, /Only in the first reading/);
   const half = copy(ROWS);
   half.rows[1].amount = "$15,001 -";
-  assert.ok(checkReadings(half, copy(half.rows)).problems.some((p) => /whole amount range/.test(p.text)));
+  assert.match(checkReadings(half, copy(half.rows)).unread[0].reason, /whole amount range/);
   const day = copy(ROWS);
   day.rows[0].date = "7/7";
-  assert.ok(checkReadings(day, copy(day.rows)).problems.some((p) => /whole date/.test(p.text)));
-  assert.ok(blocking(checkReadings({ rows: [] }, copy(ROWS)).problems));
+  assert.match(checkReadings(day, copy(day.rows)).unread[0].reason, /whole date/);
+  assert.ok(blocking(checkReadings({ rows: [] }, copy(ROWS)).problems), "a reading that found nothing holds the report");
 });
 
-test("the text layer: a row it shows must be read, and its type mustn't contradict", () => {
-  assert.ok(checkReadings(copy(ROWS), copy(ROWS), { 3: "Some Company Inc purchase 5/5/2026" }).problems.some((p) => p.kind === "block" && /Row 3 is in the report's text layer/.test(p.text)));
-  assert.ok(checkReadings(copy(ROWS), copy(ROWS), { 2: "Abbott labs lourchaso 5/512026" }).problems.some((p) => p.kind === "block" && /looks like a purchase, not a sale/.test(p.text)));
+test("the text layer: a contradicting type unreads the row; a row past the end is a note; a shift holds the report", () => {
+  const t = checkReadings(copy(ROWS), copy(ROWS), { 2: "Abbott labs lourchaso 5/512026" });
+  assert.deepEqual(t.rows.map((r) => r.n), [1]);
+  assert.match(t.unread[0].reason, /looks like a purchase, not a sale/);
+  const past = checkReadings(copy(ROWS), copy(ROWS), { 3: "Some Company Inc purchase 5/5/2026 $1,001 - $15,000" });
+  assert.equal(past.rows.length, 2);
+  assert.ok(past.problems.some((p) => p.kind === "look" && /past the last row/.test(p.text)));
   const none = checkReadings(copy(ROWS), copy(ROWS), {});
   assert.equal(blocking(none.problems), false);
   assert.ok(none.problems.some((p) => p.kind === "look" && /no usable text layer/.test(p.text)));
+  // Ten rows whose descriptions each match the next line: both readings shifted by one.
+  const names = ["Apple Inc", "Boeing Company", "Chevron Corp", "Danaher Corp", "Exxon Mobil", "Ford Motor", "General Mills", "Honeywell Intl", "Intel Corp", "Johnson Controls", "Kellogg Company"];
+  const shifted = { rows: names.slice(0, 10).map((d, i) => ({ ...ROWS[1], n: i + 1, description: d })) };
+  const lines = Object.fromEntries(names.slice(0, 10).map((d, i) => [i + 2, `${d} sale`]));
+  assert.ok(blocking(checkReadings(shifted, copy(shifted.rows), lines).problems));
+  const aligned = Object.fromEntries(names.slice(0, 10).map((d, i) => [i + 1, `${d} sale`]));
+  assert.equal(blocking(checkReadings(shifted, copy(shifted.rows), aligned).problems), false);
   assert.equal(textLayerType("Ipurchase 7/16"), "Purchase");
   assert.ok(contained("Danaher Corp", "12 Danahor Coro sale") >= 0.5);
 });
 
-test("the step reads each queued report twice; agreed rows publish labeled as AI, the rest stay links", async () => {
+test("chunks merge in order and end where a chunk ends short", () => {
+  const c = (first_n, last_n, ns) => ({ first_n, last_n, reading: { rows: ns.map((n) => ({ n })) } });
+  assert.deepEqual(mergeChunks([]), { rows: [], done: false, next: 1 });
+  const m = mergeChunks([c(11, 20, [11, 12]), c(1, 10, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 99])]);
+  assert.equal(m.done, true);
+  assert.deepEqual(m.rows.map((r) => r.n), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "a row outside its chunk's range is dropped");
+  assert.equal(mergeChunks([c(1, 10, [1, 10])]).next, 11);
+  assert.equal(accountError(new Error('400 {"message":"Your credit balance is too low to access the Anthropic API."}')), true);
+  assert.equal(accountError(new Error("answer cut off at the output limit")), false);
+});
+
+test("the step publishes agreed rows report by report; a row they differ on stays linked", async () => {
   const sqlite = seeded();
   const db = d1(sqlite);
   const asked = [];
-  const call = async (env, { model, message }) => {
-    asked.push([model, message[0].source.url]);
-    const rows = copy(ROWS);
-    if (message[0].source.url.endsWith("b.pdf") && model === "claude-opus-5-5") rows.rows[1].amount = "$50,001 - $100,000";
-    return { data: rows, model };
+  const call = async (env, args) => {
+    asked.push([args.model, args.message[0].source.url, args.message[1].text]);
+    assert.deepEqual(args.message[0].cache_control, { type: "ephemeral" }, "the document is cached across chunks");
+    return ranged((model, url) => {
+      const rows = copy(ROWS).rows;
+      if (url.endsWith("b.pdf") && model === "claude-opus-5-5") rows[1].amount = "$50,001 - $100,000";
+      return rows;
+    })(env, args);
   };
   const r = await syncScannedTrades({ SCANNED_TRADES_DAILY: "5" }, db, null, { call, random: () => 0.05 });
-  assert.match(r.message, /1 scanned report\(s\) published.*1 not agreeing/);
+  assert.match(r.message, /2 scanned report\(s\) published \(3 of 4 rows transcribed\), 0 held/);
   assert.deepEqual(asked.map((x) => x[0]), ["claude-sonnet-5-5", "claude-opus-5-5", "claude-sonnet-5-5", "claude-opus-5-5"]);
+  assert.match(asked[0][2], /rows 1 to 80/);
   const a = sqlite.prepare("SELECT * FROM trade_scans WHERE report_id = 'oge:a'").get();
   const b = sqlite.prepare("SELECT * FROM trade_scans WHERE report_id = 'oge:b'").get();
   assert.equal(a.status, "agreed");
   assert.equal(a.spot_check, 1, "picked for a spot check (random below SPOT_CHECK_RATE)");
-  assert.equal(b.status, "disagree");
-  assert.match(b.problems, /differ on the amount/);
+  assert.equal(b.status, "agreed");
+  assert.equal(b.rows_total, 2);
+  assert.match(b.unread, /differ on the amount/);
   assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM trades WHERE report_id = 'oge:a'").get().n, 2);
-  assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM trades WHERE report_id = 'oge:b'").get().n, 0, "readings that disagree publish nothing");
+  assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM trades WHERE report_id = 'oge:b'").get().n, 1, "only the row both readings agree on");
   const rep = sqlite.prepare("SELECT parsed, trade_count, transcribed_by, transcribed_at FROM trade_reports WHERE id = 'oge:a'").get();
   assert.equal(rep.parsed, 1);
   assert.equal(rep.trade_count, 2);
   assert.equal(rep.transcribed_by, null);
   assert.ok(rep.transcribed_at);
+  assert.deepEqual({ ...sqlite.prepare("SELECT rows_total, unread_rows FROM trade_reports WHERE id = 'oge:b'").get() }, { rows_total: 2, unread_rows: "[2]" });
   const abt = sqlite.prepare("SELECT * FROM trades WHERE report_id = 'oge:a' AND n = 2").get();
   assert.equal(abt.sector, "Manufacturing");
   assert.equal(abt.days_to_file, null, "no filer's date on a scan: no timeliness line");
   const sum = sqlite.prepare("SELECT * FROM trade_summary WHERE official_id = 'p1' AND year = 2026").get();
-  assert.equal(sum.trades, 2);
-  assert.equal(sum.total_min, 1000001 + 15001);
+  assert.equal(sum.trades, 3);
   const html = (await memberTrades(db, "p1")).rows.map((t) => tradeRow(t)).join("");
   assert.match(html, /Transcribed by AI from a scanned report, auto-checked/);
+  const reports = await memberReports(db, "p1");
+  assert.deepEqual(reports.map((x) => x.id), ["oge:b"], "the partly read report is linked; the fully read one isn't");
+  const section = tradesSection({ chamber: "us-executive", name: "Pat President", slug: "the-president", office: "President" }, { summary: [], page: { rows: [], more: false }, reports });
+  assert.match(section, /1 of 2 rows transcribed: see the report/);
+  assert.match(section, /Row 2 couldn&#x27;t be read with confidence · Filed Aug 12, 2026/);
   const again = await syncScannedTrades({ SCANNED_TRADES_DAILY: "5" }, db, null, { call });
   assert.equal(again.message, "no scanned reports waiting");
+});
+
+test("a long report is read in chunks that resume in the next round; the President's reports go first", async () => {
+  const sqlite = seeded();
+  sqlite
+    .prepare(
+      `INSERT INTO officials (id, slug, name, last_name, office, level, chamber, body, party, state, source_url, last_verified, active)
+       VALUES ('c1', 'cab', 'Casey Cabinet', 'Cabinet', 'Secretary of Commerce', 'federal', 'us-executive', 'us-executive', 'Party A', NULL, 'https://example.org/o', '2026-10-01', 1)`
+    )
+    .run();
+  sqlite.exec(`INSERT INTO trade_reports (id, chamber, official_id, filer_name, filed_on, report_url, paper, parsed, trade_count, source_url) VALUES ('oge:c', 'us-executive', 'c1', 'Casey Cabinet', '2026-10-01', 'https://example.org/c.pdf', 0, 0, 0, 'https://example.org/c.pdf')`);
+  sqlite.exec(`INSERT INTO trade_scans (report_id, text_rows) VALUES ('oge:c', 0)`);
+  const db = d1(sqlite);
+  const many = Array.from({ length: 25 }, (_, i) => ({ ...ROWS[1], n: i + 1, description: `Company ${String.fromCharCode(65 + i)} Inc` }));
+  const asked = [];
+  const call = async (env, args) => {
+    asked.push(`${args.message[0].source.url.slice(-5)} ${args.model} ${args.message[1].text.match(/rows \d+ to \d+/)[0]}`);
+    return ranged(() => copy(many).rows)(env, args);
+  };
+  let left = 3;
+  const budget = { timeLeft: () => (left-- > 0 ? 10 * 60 * 1000 : 1000) };
+  const env = { SCANNED_TRADES_DAILY: "1", SCAN_CHUNK_ROWS: "10" };
+  await assert.rejects(syncScannedTrades(env, db, budget, { call }), /run time limit/);
+  assert.deepEqual(asked, ["a.pdf claude-sonnet-5-5 rows 1 to 10", "a.pdf claude-sonnet-5-5 rows 11 to 20", "a.pdf claude-sonnet-5-5 rows 21 to 30"], "the President's newest report first");
+  assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM trade_scan_chunks WHERE report_id = 'oge:a'").get().n, 3);
+  asked.length = 0;
+  const r = await syncScannedTrades(env, db, null, { call, random: () => 0.5 });
+  assert.deepEqual(asked, ["a.pdf claude-opus-5-5 rows 1 to 10", "a.pdf claude-opus-5-5 rows 11 to 20", "a.pdf claude-opus-5-5 rows 21 to 30"], "resumes: the first model's chunks aren't read again");
+  // Row 1 is a sale in both readings, but the seeded text layer's row 1 reads "lourchaso": that row stays linked.
+  assert.match(r.message, /1 scanned report\(s\) published \(24 of 25 rows transcribed\)/);
+  assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM trades WHERE report_id = 'oge:a'").get().n, 24);
+  assert.equal(sqlite.prepare("SELECT status FROM trade_scans WHERE report_id = 'oge:c'").get().status, "pending", "the daily limit: one report");
+});
+
+test("errors are recorded, don't count against the limit, and an account error stops the step", async () => {
+  const sqlite = seeded();
+  const db = d1(sqlite);
+  const credit = async () => {
+    throw new Error('400 {"type":"error","error":{"type":"invalid_request_error","message":"Your credit balance is too low to access the Anthropic API."}}');
+  };
+  const r = await syncScannedTrades({ SCANNED_TRADES_DAILY: "5" }, db, null, { call: credit });
+  assert.equal(r.status, "error");
+  assert.match(r.message, /credit balance/);
+  assert.equal(sqlite.prepare("SELECT value FROM sync_state WHERE key LIKE 'scanned_trades_%'").get(), undefined, "nothing counted");
+  assert.equal(sqlite.prepare("SELECT tries FROM trade_scans WHERE report_id = 'oge:a'").get().tries, 0);
+  const flaky = async () => {
+    throw new Error("answer cut off at the output limit");
+  };
+  for (let i = 1; i <= 3; i++) {
+    const out = await syncScannedTrades({ SCANNED_TRADES_DAILY: "5" }, db, null, { call: flaky });
+    assert.match(out.message, /failed: oge:a: answer cut off/);
+  }
+  const a = sqlite.prepare("SELECT status, tries, error, problems FROM trade_scans WHERE report_id = 'oge:a'").get();
+  assert.equal(a.status, "disagree", "held after three tries");
+  assert.equal(a.tries, 3);
+  assert.match(a.problems, /Couldn't be read after 3 tries/);
+  const item = await scanItem(db, {}, "oge:a");
+  assert.match(item.main, /Last error reading it \(3 tries\): answer cut off/);
 });
 
 test("a person confirms a transcription or takes it down; read again requeues", async () => {
   const sqlite = seeded();
   const db = d1(sqlite);
-  const call = async (env, { model }) => ({ data: copy(ROWS), model });
+  const call = ranged(() => copy(ROWS).rows);
   await syncScannedTrades({ SCANNED_TRADES_DAILY: "5" }, db, null, { call, random: () => 0.5 });
   assert.equal(sqlite.prepare("SELECT spot_check FROM trade_scans WHERE report_id = 'oge:a'").get().spot_check, 0);
   const form = (o) => {
@@ -185,8 +293,10 @@ test("a person confirms a transcription or takes it down; read again requeues", 
   assert.deepEqual({ ...sqlite.prepare("SELECT parsed, transcribed_at FROM trade_reports WHERE id = 'oge:b'").get() }, { parsed: 0, transcribed_at: null });
   assert.equal(sqlite.prepare("SELECT trades FROM trade_summary WHERE official_id = 'p1' AND year = 2026").get().trades, 2, "only oge:a's trades count");
   assert.match((await scanChange(db, "oge:b", form({ action: "approve", compared: "1", reviewer: "Rae Reviewer" }), "")).error, /Only a transcription published by AI/);
+  assert.ok(sqlite.prepare("SELECT COUNT(*) AS n FROM trade_scan_chunks WHERE report_id = 'oge:b'").get().n > 0);
   assert.match((await scanChange(db, "oge:b", form({ action: "reread" }), "")).done, /Back in the queue/);
   assert.equal(sqlite.prepare("SELECT status FROM trade_scans WHERE report_id = 'oge:b'").get().status, "pending");
+  assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM trade_scan_chunks WHERE report_id = 'oge:b'").get().n, 0, "read again from the start");
 
   const list = await scanList(db);
   assert.match(list.main, /Confirmed by a person \(1\)/);

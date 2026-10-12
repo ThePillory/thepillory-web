@@ -33,6 +33,7 @@ import init0031 from "../migrations/0031_gov_money.sql";
 import init0032 from "../migrations/0032_bill_number_search.sql";
 import init0033 from "../migrations/0033_awards_queue.sql";
 import init0034 from "../migrations/0034_source_health.sql";
+import init0035 from "../migrations/0035_trade_scan_rows.sql";
 import { isHttp, today } from "./util.js";
 import { totals } from "./rollcall.js";
 
@@ -71,6 +72,7 @@ const MIGRATIONS = [
   ["0032_bill_number_search.sql", init0032],
   ["0033_awards_queue.sql", init0033],
   ["0034_source_health.sql", init0034],
+  ["0035_trade_scan_rows.sql", init0035],
 ];
 
 // Migrations tools/load_trades.py can also apply (the "Load stock trades"
@@ -84,6 +86,7 @@ const ALREADY_APPLIED = {
   "0026_trade_scans.sql": (db) => hasColumn(db, "trade_reports", "transcribed_by"),
   "0027_trade_scans_auto.sql": (db) => hasColumn(db, "trade_scans", "spot_check"),
   "0030_dark_money.sql": (db) => hasColumn(db, "fec_committees", "ein"),
+  "0035_trade_scan_rows.sql": (db) => hasColumn(db, "trade_scans", "rows_total"),
 };
 
 function statements(sql) {

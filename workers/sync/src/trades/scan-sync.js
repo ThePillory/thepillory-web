@@ -2,44 +2,102 @@
 // (docs/trades.md). tools/load_trades.py queues each executive-branch report
 // whose text layer it couldn't read, with that layer's numbered rows
 // (trade_scans, trade_scan_lines). Here each queued report is read from its
-// PDF twice, by two different models (SCAN_MODEL_A, SCAN_MODEL_B), and the
-// readings are checked in code (scan-check.js). When they agree and the checks
-// pass, the trades publish at once, labeled "Transcribed by AI from a scanned
-// report, auto-checked" (as AI-drafted analyses are); SPOT_CHECK_RATE of them
-// are marked for a person on /admin/review/trades/, who can confirm one
-// ("Checked by [name]") or take it down. Readings that don't agree keep the
-// report a link. SCANNED_TRADES_DAILY (5) reports a day.
+// PDF twice, by two different models (SCAN_MODEL_A, SCAN_MODEL_B), in chunks
+// of SCAN_CHUNK_ROWS rows so a long report's answer isn't cut off; each chunk
+// is kept (trade_scan_chunks), so a reading resumes in the next round. The
+// readings are then checked row by row in code (scan-check.js): rows both
+// agree on publish at once, labeled "Transcribed by AI from a scanned report,
+// auto-checked" (as AI-drafted analyses are), and the rest stay linked to the
+// scan ("[N] of [M] rows transcribed"). SPOT_CHECK_RATE of the published
+// reports are marked for a person on /admin/review/trades/, who can confirm
+// one ("Checked by [name]") or take it down. The President's reports go
+// first, newest first, then the rest of the executive branch.
+// SCANNED_TRADES_DAILY reports are finished a day; a report that fails to
+// read is tried again (SCAN_TRIES times), and failures don't count.
 import { getState, setState, today, redact, BudgetExhausted } from "../util.js";
 import { structuredCall, DraftRefused } from "../analysis/claude.js";
 import { SCAN_INSTRUCTIONS, scanSchema, scanMessage } from "./scan-prompt.js";
-import { checkReadings, blocking } from "./scan-check.js";
+import { checkReadings, blocking, rowsLine } from "./scan-check.js";
 import { publishStatements } from "./publish.js";
 
 const missing = (err) => /no such (table|column)/i.test(String(err && err.message));
+const MAX_ROWS = 1500; // no 278-T is near this long; a reading past it is a runaway
+const CALL_MS = 5 * 60 * 1000; // leave this much of the round for each chunk
+const SCAN_TRIES = 3;
 
-/** Read one report twice and check the readings. Returns {status, reading, problems, models}. */
-export async function transcribe(env, report, lines, { call = structuredCall } = {}) {
-  const models = [env.SCAN_MODEL_A || "claude-sonnet-5-5", env.SCAN_MODEL_B || "claude-opus-5-5"];
+export const scanModels = (env) => [env.SCAN_MODEL_A || "claude-sonnet-5-5", env.SCAN_MODEL_B || "claude-opus-5-5"];
+const chunkRows = (env) => Math.max(10, parseInt(env.SCAN_CHUNK_ROWS || "80", 10) || 80);
+
+/** An error that stops the whole step for today (the account, not the report): no credit, a bad key. */
+export const accountError = (err) =>
+  /credit balance|billing|\b401\b|authentication|invalid x-api-key|permission_error/i.test(String((err && err.message) || err));
+
+/** Chunks of one model's reading, merged: {rows, done} (done: the table ended). Pure. */
+export function mergeChunks(chunks) {
+  const rows = new Map();
+  let done = false;
+  let next = 1;
+  for (const c of [...chunks].sort((a, b) => a.first_n - b.first_n)) {
+    if (c.first_n !== next) break; // chunks are read in order; anything after a gap is ignored
+    const got = (c.reading && Array.isArray(c.reading.rows) ? c.reading.rows : []).filter((r) => Number(r.n) >= c.first_n && Number(r.n) <= c.last_n);
+    for (const r of got) if (!rows.has(Number(r.n))) rows.set(Number(r.n), { ...r, n: Number(r.n) });
+    next = c.last_n + 1;
+    // A chunk that didn't reach its last row means the table ended there.
+    if (!got.some((r) => Number(r.n) === c.last_n)) {
+      done = true;
+      break;
+    }
+  }
+  if (next > MAX_ROWS) done = true;
+  return { rows: [...rows.values()].sort((a, b) => a.n - b.n), done, next };
+}
+
+/**
+ * One model's reading of one report, chunk by chunk, resuming from what's
+ * stored. Returns {rows} once the table has ended. Throws BudgetExhausted when
+ * the round has no time left for another chunk (the next round resumes).
+ */
+export async function readReport(env, db, report, model, { call = structuredCall, budget = null } = {}) {
+  const size = chunkRows(env);
+  for (;;) {
+    const { results } = await db.prepare("SELECT first_n, last_n, reading FROM trade_scan_chunks WHERE report_id = ? AND model = ?").bind(report.report_id, model).all();
+    const merged = mergeChunks(results.map((c) => ({ ...c, reading: JSON.parse(c.reading) })));
+    if (merged.done) return { rows: merged.rows };
+    if (budget && budget.timeLeft() < CALL_MS) throw new BudgetExhausted(`run time limit reached before reading rows ${merged.next}+ of ${report.report_id}`);
+    const first = merged.next;
+    const last = first + size - 1;
+    const { data } = await call(env, {
+      model,
+      system: [SCAN_INSTRUCTIONS],
+      message: scanMessage(report.report_url, first, last),
+      jsonSchema: scanSchema,
+      maxTokens: 64000,
+    });
+    await db
+      .prepare("INSERT OR REPLACE INTO trade_scan_chunks (report_id, model, first_n, last_n, reading) VALUES (?, ?, ?, ?, ?)")
+      .bind(report.report_id, model, first, last, JSON.stringify({ rows: Array.isArray(data && data.rows) ? data.rows : [] }))
+      .run();
+  }
+}
+
+/** Read one report with both models and check the readings row by row. Returns {status, rows, unread, total, problems, models}. */
+export async function transcribe(env, db, report, lines, { call = structuredCall, budget = null } = {}) {
+  const models = scanModels(env);
   const readings = [];
   for (const model of models) {
     try {
-      const { data } = await call(env, {
-        model,
-        system: [SCAN_INSTRUCTIONS],
-        message: scanMessage(report.report_url),
-        jsonSchema: scanSchema,
-        maxTokens: 64000,
-      });
-      readings.push(data);
+      readings.push(await readReport(env, db, report, model, { call, budget }));
     } catch (err) {
       if (err instanceof DraftRefused) {
-        return { status: "disagree", reading: null, problems: [{ n: null, kind: "block", text: `${model} declined to read it.` }], models };
+        return { status: "disagree", rows: [], unread: [], total: 0, problems: [{ n: null, kind: "block", text: `${model} declined to read it.` }], models };
       }
       throw err;
     }
   }
-  const { rows, problems } = checkReadings(readings[0], readings[1], lines);
-  return { status: blocking(problems) ? "disagree" : "agreed", reading: rows, problems, models };
+  const { rows, unread, total, problems } = checkReadings(readings[0], readings[1], lines);
+  const status = blocking(problems) || !rows.length ? "disagree" : "agreed";
+  if (!rows.length && !blocking(problems)) problems.push({ n: null, kind: "block", text: "No row was read the same way by both readings." });
+  return { status, rows: status === "agreed" ? rows : [], agreedRows: rows, unread, total, problems, models };
 }
 
 const spotRate = (env) => Math.min(1, Math.max(0, parseFloat(env.SPOT_CHECK_RATE || "0.1") || 0));
@@ -52,13 +110,18 @@ export async function syncScannedTrades(env, db, budget, { call, random = Math.r
   if (done >= limit) return { status: "skipped", message: `${done} scanned reports read today (SCANNED_TRADES_DAILY ${limit})` };
   let queue;
   try {
+    // A reading already under way first, then the President's reports, newest first, then the rest.
     queue = (
       await db
         .prepare(
-          `SELECT s.report_id, r.report_url, r.official_id, r.chamber, r.state, r.filed_on FROM trade_scans s JOIN trade_reports r ON r.id = s.report_id
-           WHERE s.status = 'pending' AND r.report_url IS NOT NULL AND r.official_id IS NOT NULL ORDER BY r.filed_on DESC LIMIT ?`
+          `SELECT s.report_id, s.tries, r.report_url, r.official_id, r.chamber, r.state, r.filed_on FROM trade_scans s
+           JOIN trade_reports r ON r.id = s.report_id LEFT JOIN officials o ON o.id = r.official_id
+           WHERE s.status = 'pending' AND r.report_url IS NOT NULL AND r.official_id IS NOT NULL
+           ORDER BY EXISTS (SELECT 1 FROM trade_scan_chunks c WHERE c.report_id = s.report_id) DESC,
+                    COALESCE(o.office, '') LIKE 'President of the United States%' DESC, r.filed_on DESC
+           LIMIT ?`
         )
-        .bind(limit - done)
+        .bind(limit - done + SCAN_TRIES)
         .all()
     ).results;
   } catch (err) {
@@ -66,30 +129,61 @@ export async function syncScannedTrades(env, db, budget, { call, random = Math.r
     throw err;
   }
   if (!queue.length) return { status: "ok", message: "no scanned reports waiting" };
-  const tally = { agreed: 0, disagree: 0, error: 0 };
+  const tally = { agreed: 0, disagree: 0, rows: 0, total: 0 };
+  const failed = [];
+  const note = () =>
+    [
+      `${tally.agreed} scanned report(s) published (${rowsLine(tally.rows, tally.total).replace(/\.$/, "") || "no rows"})`,
+      `${tally.disagree} held (nothing published)`,
+      failed.length ? `${failed.length} failed: ${failed.join("; ")}` : "",
+    ].filter(Boolean).join(", ");
   for (const report of queue) {
     if (done >= limit) break;
     const { results } = await db.prepare("SELECT n, line FROM trade_scan_lines WHERE report_id = ?").bind(report.report_id).all();
     const lines = Object.fromEntries(results.map((r) => [r.n, r.line]));
+    let out;
     try {
-      const out = await transcribe(env, report, lines, { call });
-      const spot = out.status === "agreed" && random() < spotRate(env) ? 1 : 0;
-      const record = db
-        .prepare("UPDATE trade_scans SET status = ?, reading = ?, problems = ?, models = ?, spot_check = ?, read_at = datetime('now') WHERE report_id = ? AND status = 'pending'")
-        .bind(out.status, JSON.stringify(out.reading || []), JSON.stringify(out.problems), out.models.join(", "), spot, report.report_id);
-      const publish = out.status === "agreed" ? publishStatements({ ...report, id: report.report_id }, out.reading).map((q) => db.prepare(q.sql).bind(...q.binds)) : [];
-      await db.batch([record, ...publish]);
-      tally[out.status] += 1;
+      out = await transcribe(env, db, report, lines, { call, budget });
     } catch (err) {
       if (err instanceof BudgetExhausted) throw err;
-      tally.error += 1;
-      console.warn(`scanned trades ${report.report_id}: ${redact(String(err.message || err))}`);
+      const msg = redact(String(err.message || err)).slice(0, 300);
+      // The account can't read anything today (no credit, a bad key): stop, count nothing.
+      if (accountError(err)) return { status: "error", message: `${note()}; stopped: ${msg}` };
+      const tries = (report.tries || 0) + 1;
+      failed.push(`${report.report_id}: ${msg}`);
+      if (tries >= SCAN_TRIES) {
+        await db
+          .prepare("UPDATE trade_scans SET status = 'disagree', tries = ?, error = ?, problems = ?, read_at = datetime('now') WHERE report_id = ? AND status = 'pending'")
+          .bind(tries, msg, JSON.stringify([{ n: null, kind: "block", text: `Couldn't be read after ${tries} tries: ${msg}` }]), report.report_id)
+          .run();
+      } else {
+        await db.prepare("UPDATE trade_scans SET tries = ?, error = ? WHERE report_id = ?").bind(tries, msg, report.report_id).run();
+      }
+      continue;
+    }
+    const pastEnd = out.problems.some((p) => p.kind === "look" && /past the last row/.test(p.text));
+    const spot = out.status === "agreed" && (pastEnd || random() < spotRate(env)) ? 1 : 0;
+    const record = db
+      .prepare(
+        `UPDATE trade_scans SET status = ?, reading = ?, problems = ?, unread = ?, rows_total = ?, models = ?, spot_check = ?, error = NULL, read_at = datetime('now')
+         WHERE report_id = ? AND status = 'pending'`
+      )
+      .bind(out.status, JSON.stringify(out.agreedRows || out.rows), JSON.stringify(out.problems), JSON.stringify(out.unread), out.total || null, out.models.join(", "), spot, report.report_id);
+    const publish =
+      out.status === "agreed"
+        ? [
+            ...publishStatements({ ...report, id: report.report_id }, out.rows).map((q) => db.prepare(q.sql).bind(...q.binds)),
+            db.prepare("UPDATE trade_reports SET rows_total = ?, unread_rows = ? WHERE id = ?").bind(out.total, JSON.stringify(out.unread.map((u) => u.n)), report.report_id),
+          ]
+        : [];
+    await db.batch([record, ...publish]);
+    tally[out.status] += 1;
+    if (out.status === "agreed") {
+      tally.rows += out.rows.length;
+      tally.total += out.total;
     }
     done += 1;
     await setState(db, dayKey, String(done));
   }
-  return {
-    status: "ok",
-    message: `${tally.agreed} scanned report(s) published (both readings agreed), ${tally.disagree} not agreeing (kept as links)${tally.error ? `, ${tally.error} failed` : ""}`,
-  };
+  return { status: failed.length && !tally.agreed && !tally.disagree ? "error" : failed.length ? "partial" : "ok", message: note() };
 }
