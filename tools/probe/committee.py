@@ -1,14 +1,19 @@
 """Temporary probe: Congress.gov committee bills (relationship types) and bill actions."""
-import json, os, urllib.request, collections
+import json, os, urllib.request, urllib.error, collections
 from pathlib import Path
 OUT = Path("tools/probe/out"); OUT.mkdir(parents=True, exist_ok=True)
 K = os.environ["CONGRESS_API_KEY"]
 def get(path, **p):
     q = "&".join(f"{k}={v}" for k, v in {"format": "json", "api_key": K, **p}.items())
-    with urllib.request.urlopen(f"https://api.congress.gov/v3{path}?{q}", timeout=60) as r:
-        return json.loads(r.read())
+    req = urllib.request.Request(f"https://api.congress.gov/v3{path}?{q}", headers={"User-Agent": "ThePillory/1.0 (+https://thepillory.co)", "Accept": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            return json.loads(r.read())
+    except urllib.error.HTTPError as e:
+        return {"error": e.code, "body": e.read()[:300].decode("utf-8", "replace"), "keylen": len(K)}
 res = {}
 c = get("/committee/119/house", limit=250)
+res["hc_raw"] = {k: v for k, v in c.items() if k != "committees"}
 res["house_committees"] = [(x["systemCode"], x["name"], x.get("committeeTypeCode"), bool(x.get("parent"))) for x in c.get("committees", [])][:80]
 c = get("/committee/119/senate", limit=250)
 res["senate_committees"] = [(x["systemCode"], x["name"], x.get("committeeTypeCode"), bool(x.get("parent"))) for x in c.get("committees", [])][:80]
