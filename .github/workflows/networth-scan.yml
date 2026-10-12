@@ -1,0 +1,58 @@
+# "Net worth, as reported" from a scanned annual report (OGE Form 278e): reads
+# the report's asset and liability pages twice, with two AI models, and
+# publishes only what both read the same way (tools/networth_scan.py; see
+# docs/funding.md, "Net worth"). By hand only (Actions -> Read a scanned net
+# worth report -> Run workflow), because it costs money:
+#
+#   estimate  counts the tokens and prints the expected cost; spends nothing
+#   read      reads it, stopping before it would pass max_dollars; run again to resume
+#   publish   applies the lines a person settled on /admin/review/networth/ and publishes
+#
+# The report: the President's newest annual report, unless report_id names
+# another (a networth_reports id, "oge:…").
+#
+# These records may not be used for commercial purposes (Ethics in Government
+# Act): never sell, export or put them behind a paid plan.
+#
+# Needs these repository secrets (Settings -> Secrets and variables -> Actions):
+#   ANTHROPIC_API_KEY                              the Claude API key
+#   CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID   D1 access, as for "Load net worth reports"
+name: Read a scanned net worth report
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "estimate (spends nothing), read, or publish"
+        type: choice
+        options: [estimate, read, publish]
+        default: estimate
+      max_dollars:
+        description: "Stop before spending more than this (dollars)"
+        default: "15"
+      report_id:
+        description: "A networth_reports id (blank: the President's newest annual report)"
+        default: ""
+permissions:
+  contents: read
+concurrency:
+  group: networth-scan
+  cancel-in-progress: false
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null && pip install -q anthropic
+      - name: Estimate, read or publish
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          MODE: ${{ github.event.inputs.mode }}
+          MAX_DOLLARS: ${{ github.event.inputs.max_dollars }}
+          REPORT_ID: ${{ github.event.inputs.report_id }}
+        run: python3 tools/networth_scan.py --mode "$MODE" --max-dollars "$MAX_DOLLARS" --report-id "$REPORT_ID"

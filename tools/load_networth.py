@@ -267,7 +267,7 @@ def main():
     known = {}
     if args.mode == "load":
         try:
-            known = {r["id"]: r for r in T.d1(args, command="SELECT id, status, parser FROM networth_reports")}
+            known = {r["id"]: r for r in T.d1(args, command="SELECT id, status, parser, method, reason FROM networth_reports")}
         except SystemExit:
             known = {}
     starts = first_starts()
@@ -315,6 +315,8 @@ def main():
         k = known.get(f["id"])
         if not k:
             return False
+        if k.get("method") == "ai" or (k["status"] == "scan" and (k.get("reason") or "").startswith("Read by AI")):
+            return True  # read by tools/networth_scan.py: never overwritten here
         if k["status"] == "request":
             return not f.get("url")
         return k["status"] in ("scan", "paper") or k["parser"] == N.PARSER_VERSION

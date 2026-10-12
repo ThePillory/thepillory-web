@@ -117,6 +117,7 @@ def net_range(assets, liabilities):
     }
 
 
+NRA = re.compile(r"not\s+rea\w*\s+ascertainable", re.I)  # "Value not readily ascertainable" in a description
 PERSONAL_RESIDENCE = re.compile(r"\b(?:personal|primary|principal)\s+residence\b", re.I)
 
 
@@ -431,6 +432,9 @@ def oge_assets(sections):
             desc = " ".join(t for ln, (x_val, _) in block for s, t in _tokens(ln) if s < x_val - 3)
             has_children = any(m.startswith(n + ".") for m in nums)
             v = first_value(val)
+            if v is None and (not val.strip() or val.strip() == "N/A") and NRA.search(desc) and not has_children:
+                out.append({"part": part, "n": n, "name": re.sub(r"^\d+(?:\.\d+)*\s+", "", desc), "value": "Value not readily ascertainable", "bounds": (0, None, True)})
+                continue
             if v is None and (not val.strip() or val.strip() == "N/A"):
                 # An account (lines under it), income only, or a line whose value is reported on another line.
                 if has_children or income.strip() or re.search(r"\b(?:reported|included|listed)\s+(?:at|in|on|under)\s+(?:Part\s+\d+,?\s+)?line\b|\bsee\s+line\b", desc, re.I):
@@ -736,6 +740,106 @@ def read_judiciary(text):
                     raise Unreadable(f"Part VI: no value on {ln.strip()[:80]!r}")
                 liabs.append({"name": ln.strip()[:120], "value": m.group(1), "bounds": value_bounds(m.group(1))})
     return {"meta": {"year": y.group(1) if y else None}, "assets": assets_rows, "liabilities": liabs}
+
+
+# ---------------------------------------------------------------------------
+# Scanned OGE 278e reports, read by AI (tools/networth_scan.py): each line as
+# {page, sec, grp, n, v, inc, elsewhere, nra, cred, unsure, note}. Two
+# readings are compared line by line; only lines both read the same way count.
+
+def _norm_value(v):
+    return re.sub(r"\s+", " ", str(v or "")).replace(" -$", " - $").strip()
+
+
+def line_key(ln):
+    """What two readings must agree on for a line to count."""
+    return (ln["sec"].strip().upper(), _norm_value(ln.get("n")), _norm_value(ln.get("v")), bool(ln.get("inc")), bool(ln.get("elsewhere")), bool(ln.get("nra")))
+
+
+def compare_readings(a, b):
+    """
+    a, b: each model's lines, in reading order. Compared page by page, in
+    order: a line counts when both readings have it, the same way, and
+    neither marked it unsure. -> {lines: agreed lines, disagreements: [...]}.
+    """
+    by_page = lambda lines: {p: [x for x in lines if x["page"] == p] for p in sorted({x["page"] for x in lines})}
+    pa, pb = by_page(a), by_page(b)
+    agreed, dis = [], []
+    for page in sorted(set(pa) | set(pb)):
+        la, lb = pa.get(page, []), pb.get(page, [])
+        if len(la) != len(lb):
+            dis.append({"key": f"p{page}", "page": page, "a": f"{len(la)} lines", "b": f"{len(lb)} lines", "lines_a": la, "lines_b": lb})
+            continue
+        for i, (x, y) in enumerate(zip(la, lb)):
+            if line_key(x) == line_key(y) and not x.get("unsure") and not y.get("unsure"):
+                agreed.append({**x, "idx": i})
+            else:
+                dis.append({"key": f"p{page}.{i}", "page": page, "idx": i, "a": x, "b": y})
+    return {"lines": agreed, "disagreements": dis}
+
+
+def report_from_lines(lines):
+    """
+    Agreed lines -> {assets, liabilities}, by the same rules as the text
+    reader: a line with a value counts once and covers the lines numbered
+    under it; one without either holds the lines under it, is income only, or
+    is reported elsewhere ("See attached Schedule 1"); a value "not readily
+    ascertainable" counts as open-ended. Raises Unreadable otherwise.
+    """
+    assets, liabs = [], []
+    seq = [ln for ln in lines if ln["sec"].strip().upper() != "8"]
+    covered = None
+    for i, ln in enumerate(seq):
+        scope = (ln["sec"].strip().upper(), (ln.get("grp") or "").strip().upper())
+        n = _norm_value(ln.get("n"))
+        if covered and covered[0] == scope and n.startswith(covered[1] + "."):
+            continue
+        covered = None
+        has_children = bool(n) and any(
+            (x["sec"].strip().upper(), (x.get("grp") or "").strip().upper()) == scope and _norm_value(x.get("n")).startswith(n + ".") for x in seq[i + 1:])
+        v = _norm_value(ln.get("v"))
+        if not v or v.upper() in ("N/A", "NA"):
+            if ln.get("nra"):
+                assets.append({"page": ln["page"], "n": n, "value": "Value not readily ascertainable", "bounds": (0, None, True)})
+            elif has_children or ln.get("inc") or ln.get("elsewhere"):
+                continue
+            else:
+                raise Unreadable(f"page {ln['page']}, Part {ln['sec']} line {n or '?'}: no value")
+            continue
+        b = value_bounds(first_value(v) or v)
+        if b is None:
+            raise Unreadable(f"page {ln['page']}, Part {ln['sec']} line {n or '?'}: value {v[:40]!r}")
+        if has_children:
+            covered = (scope, n)
+        assets.append({"page": ln["page"], "n": n, "value": v, "bounds": b})
+    for ln in lines:
+        if ln["sec"].strip().upper() != "8":
+            continue
+        v = _norm_value(ln.get("v"))
+        if not v:
+            if ln.get("elsewhere"):
+                continue
+            raise Unreadable(f"page {ln['page']}, Part 8 line {ln.get('n') or '?'}: no amount")
+        b = value_bounds(first_value(v) or v)
+        if b is None:
+            raise Unreadable(f"page {ln['page']}, Part 8 line {ln.get('n') or '?'}: amount {v[:40]!r}")
+        liabs.append({"page": ln["page"], "n": _norm_value(ln.get("n")), "name": ln.get("cred") or "", "value": v, "bounds": b})
+    return {"assets": assets, "liabilities": liabs}
+
+
+def ocr_misses(lines, page_text):
+    """Agreed values the page's own OCR text layer doesn't show anywhere (a check, not a source): [(page, value)]."""
+    squash = lambda t: re.sub(r"[^0-9$]", "", t)
+    out = []
+    for ln in lines:
+        v = _norm_value(ln.get("v"))
+        nums = re.findall(r"\$[\d,]+", v)
+        if not nums:
+            continue
+        text = squash(page_text.get(ln["page"], ""))
+        if not all(squash(x) in text for x in nums):
+            out.append((ln["page"], v))
+    return out
 
 
 # ---------------------------------------------------------------------------
