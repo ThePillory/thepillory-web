@@ -20,7 +20,7 @@ jobs:
           for i in $(seq 1 30); do code=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/reps/"); [ "$code" = 200 ] && break; sleep 20; done
           node tools/probe/schiff.mjs "$BASE"
         env:
-          BASE: https://1af4df4d.thepillory-web.pages.dev
+          BASE: https://thepillory.co
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

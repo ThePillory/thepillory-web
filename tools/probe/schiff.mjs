@@ -6,7 +6,7 @@ mkdirSync("tools/probe/out", { recursive: true });
 const found = await (await fetch(`${base}/api/search-officials?q=schiff`)).json().catch(() => null);
 writeFileSync("tools/probe/out/search.json", JSON.stringify(found, null, 1));
 const list = (found && (found.results || found.officials || found)) || [];
-const hit = (Array.isArray(list) ? list : []).find((x) => /schiff/i.test(x.name || ""));
+const hit = (found && found.officials || []).find((x) => /schiff/i.test(x.name || ""));
 const slug = hit ? hit.slug || String(hit.url || "").split("/").filter(Boolean).pop() : "adam-b-schiff";
 const b = await chromium.launch();
 for (const scheme of ["light", "dark"]) {
@@ -17,11 +17,12 @@ for (const scheme of ["light", "dark"]) {
     const sec = document.getElementById("more-trades");
     if (!sec) return { error: "no #more-trades" };
     sec.open = true;
+    const all = [...sec.querySelectorAll(".fold-body > *")].map((e) => `${e.tagName}.${e.className}${e.id ? "#" + e.id : ""}: ${e.innerText.slice(0, 80).replace(/\n/g, " | ")}`);
     const list = document.getElementById("trade-list");
     const kids = list ? [...list.children].map((c) => c.className) : [];
     const text = sec.innerText;
-    const order = ["trades reported in", "Trades, newest first", "Load more", "Committee assignments, for reference"].map((s) => text.indexOf(s));
-    return { scrollWidth: document.documentElement.scrollWidth, rows: kids.length, nonTrade: kids.filter((c) => !/trade-row/.test(c)), order, reference: (text.match(/Committee assignments, for reference[^\n]*/) || [""])[0], about: !!document.getElementById("congress-committees") };
+    const order = ["trades reported in", "Committee assignments now", "Trades, newest first", "Load more", "Committee assignments, for reference"].map((s) => text.indexOf(s));
+    return { scrollWidth: document.documentElement.scrollWidth, rows: kids.length, nonTrade: kids.filter((c) => !/trade-row/.test(c)), order, reference: (text.match(/Committee assignments, for reference[^\n]*/) || [""])[0], about: !!document.getElementById("congress-committees"), all };
   });
   writeFileSync(`tools/probe/out/schiff-${scheme}.json`, JSON.stringify({ slug, ...info }, null, 1));
   const el = await p.$("#more-trades");
