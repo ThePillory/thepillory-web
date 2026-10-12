@@ -60,7 +60,7 @@ def read_export(zip_path):
     """The latest amendment of each lobbying filing since C.SINCE: reports (with bills) and contributions."""
     zf = zipfile.ZipFile(zip_path)
     covers = C.latest_amendments(
-        r for r in rows(zf, "CVR_LOBBY_DISCLOSURE_CD") if r["FORM_TYPE"] in C.FORMS and C.iso(r.get("FROM_DATE")) >= C.SINCE
+        r for r in rows(zf, "CVR_LOBBY_DISCLOSURE_CD") if r["FORM_TYPE"] in C.FORMS and C.in_range(r)
     )
     keep = {(fid, r["AMEND_ID"]) for fid, r in covers.items()}
     totals = collections.defaultdict(dict)

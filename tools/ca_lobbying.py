@@ -109,6 +109,12 @@ def amount(x):
         return None
 
 
+def in_range(cover, today=None):
+    """A cover whose quarter starts on or after SINCE, ends after it starts, and isn't in the future (filers mistype years: '2101')."""
+    start, end = iso(cover.get("FROM_DATE")), iso(cover.get("THRU_DATE"))
+    return bool(start and end) and SINCE <= start <= end <= (today or date.today().isoformat())
+
+
 def latest_amendments(covers):
     """Cover rows → the latest amendment of each filing: {filing_id: row}."""
     out = {}

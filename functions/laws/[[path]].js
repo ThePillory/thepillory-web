@@ -14,6 +14,7 @@ import { billRows, orderRows, constitutionRows, topClauses, BILL_FILTERS, ORDER_
 import { districtsFromCookie, repsWhere, describe } from "../_lib/districts.js";
 import { billHref } from "../_lib/votes.js";
 import { lobbyingFor, lobbyGiversFor, industryMoney, followTheMoney, cycleOf } from "../_lib/funding.js";
+import { caLobbyingFor, caFollowTheMoney } from "../_lib/ca-lobbying.js";
 import { outcomeFor, outcomeSection } from "../_lib/executive.js";
 import { currentAnalysis, parse, provisionsFor, baselineSection, isPublic, openFlagCount, analysisClauses, constitutionBrief } from "../_lib/analysis.js";
 import { summaryHead, contentsBar, fold, clauseChips, statusChip, compactRow, shortLabel } from "../_lib/summary.js";
@@ -279,6 +280,7 @@ ${analysis.failed ? sectionError("Constitutional baseline") : baselineSection(an
   ]);
   // Organizations that lobbied on it and also reported contributions to members (LD-203).
   const givers = lobbying && lobbying !== FAILED && b.level === "federal" ? await loadSection("bill lobbying givers", () => lobbyGiversFor(db, lobbying, b.session), null) : null;
+  const caLobbying = String(b.id).startsWith("ca-") ? await loadSection("bill California lobbying", () => caLobbyingFor(db, id), null) : null;
   const billTopics = topics === FAILED ? [] : topics.get(id) || [];
   const voteList = votes === FAILED ? [] : votes;
   // Each rep's latest final-passage position on this bill, beside contributions in
@@ -362,7 +364,7 @@ ${banners}
 ${yourRepsCard(b, { districts, reps: reps === FAILED ? [] : reps, votes: voteList, failed: reps === FAILED || votes === FAILED })}
 ${fold("constitution", "Constitution", constitution, { meta: clauses.length ? `${clauses.length} ${clauses.length === 1 ? "provision" : "provisions"}` : "", cls: "fold--parch", open: Boolean(sent || error) })}
 ${fold("votes", "All votes", votesInner, { meta: votes === FAILED ? "" : `${voteList.length} recorded`, open: Boolean(url.searchParams.get("vote")) })}
-${fold("money", "Money", lobbying === FAILED ? '<p class="small secondary">Couldn\'t load this section right now.</p>' : followTheMoney(b, lobbying, { reps: districts && reps !== FAILED ? reps : null, repMoney, cycle, bare: true, givers: givers === FAILED ? null : givers }))}
+${fold("money", "Money", lobbying === FAILED ? '<p class="small secondary">Couldn\'t load this section right now.</p>' : followTheMoney(b, lobbying, { reps: districts && reps !== FAILED ? reps : null, repMoney, cycle, bare: true, givers: givers === FAILED ? null : givers, california: caLobbying === FAILED ? '<p class="small secondary">Couldn\'t load California lobbying right now.</p>' : caFollowTheMoney(b, caLobbying) }))}
 ${fold("history", "History", `${billHistory(b, outcome === FAILED ? null : outcome, voteList)}${outcome === FAILED ? sectionError("Final action") : outcomeSection(b, outcome)}`, { meta: lastDate })}
 ${fold("full-text", "Full text", billFullText(b, analysis.row && isPublic(analysis.row) ? analysis.row : null))}
 ${billTopics.length ? `<section class="stack-sm">${topicChips(billTopics)}<p class="hint">${esc(tagNote(billTopics[0]))} <a class="inline-link" href="/about/methodology/#topics">How topics work</a></p></section>` : ""}

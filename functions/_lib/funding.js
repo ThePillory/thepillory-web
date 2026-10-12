@@ -500,12 +500,13 @@ export function giversSideBySide(bill, givers) {
 }
 
 /** "Follow the money" on a bill page. `repMoney`: [{rep, vote, position, money}] for the visitor's reps. */
-export function followTheMoney(bill, l, { reps = null, repMoney = [], cycle = null, bare = false, givers = null } = {}) {
+export function followTheMoney(bill, l, { reps = null, repMoney = [], cycle = null, bare = false, givers = null, california = null } = {}) {
   const head = '<h2 class="label" id="h-money">Follow the money</h2>';
   // bare: the contents only, for a collapsed section that has its own heading.
   const wrap = (inner) => (bare ? inner : `<section class="card stack-sm" id="money" aria-labelledby="h-money">${head}${inner}</section>`);
+  if (bill.level !== "federal" && String(bill.id).startsWith("ca-")) return wrap(california || "");
   if (bill.level !== "federal") {
-    return wrap(`<p class="secondary small">Lobbying reports are shown for bills in Congress (from the federal lobbying disclosure database). California lobbying comes with the state's new disclosure system.</p>`);
+    return wrap(`<p class="secondary small">Lobbying reports are shown for bills in Congress (from the federal lobbying disclosure database) and in California (from Cal-Access). Other states' lobbying records are kept by each state, and will be added state by state.</p>`);
   }
   if (!l || !l.progress) {
     return wrap(`<p class="secondary small">Lobbying reports for this bill haven't been searched yet. They're searched for every bill in this Congress with a final-passage vote or committee action, newest first.</p>`);

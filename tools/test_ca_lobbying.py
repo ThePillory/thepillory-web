@@ -68,6 +68,11 @@ class Rows(unittest.TestCase):
         c = C.contribution_row(item, {"FILER_ID": "C1", "FILER_NAML": "EXAMPLE UTILITY CO", "FILER_NAMF": ""})
         self.assertEqual((c["filer_kind"], c["filer_name"], c["recipient_id"], c["date"], c["amount"], c["n"]), ("employer", "EXAMPLE UTILITY CO", "1477498", "2026-07-09", 2200.0, 2))
 
+    def test_mistyped_quarters_left_out(self):
+        self.assertTrue(C.in_range(COVER, "2026-10-12"))
+        self.assertFalse(C.in_range({**COVER, "FROM_DATE": "7/1/2101 12:00:00 AM", "THRU_DATE": "9/30/2013 12:00:00 AM"}, "2026-10-12"))
+        self.assertFalse(C.in_range({**COVER, "FROM_DATE": "1/1/2024 12:00:00 AM", "THRU_DATE": "3/31/2024 12:00:00 AM"}, "2026-10-12"))
+
     def test_latest_amendment(self):
         got = C.latest_amendments([{**COVER, "AMEND_ID": "0"}, {**COVER, "AMEND_ID": "2"}, {**COVER, "AMEND_ID": "1"}])
         self.assertEqual(got["3066461"]["AMEND_ID"], "2")

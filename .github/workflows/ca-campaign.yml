@@ -2,8 +2,9 @@
 # officers and every legislative candidate since 2025: committees, statement
 # totals, contributions by industry and employer, organizations, and Form 496
 # independent expenditures) from the Secretary of State's Cal-Access export and
-# commits it, weekly and on demand (Actions -> Refresh California campaign data
-# -> Run workflow). See tools/build_ca_campaign.py and
+# commits it, then loads California lobbying reports from the same export into
+# D1 (tools/load_ca_lobbying.py), weekly and on demand (Actions -> Refresh
+# California campaign data -> Run workflow). See tools/build_ca_campaign.py and
 # tools/ca_campaign_finish.mjs. The sync Worker loads the file when it changes. Cal-Access is replaced by CARS after the November 2026
 # election; this workflow then needs the new system's data access.
 name: Refresh California campaign data
@@ -35,3 +36,10 @@ jobs:
           git diff --cached --quiet && exit 0
           git commit -m "Refresh California campaign data from the Cal-Access export"
           git push
+      # Lobbying (Forms 635, 645, 625 and 615) from the same export, straight into D1:
+      # only filings new or amended since the last run (tools/load_ca_lobbying.py).
+      - name: Load California lobbying into D1
+        run: python3 tools/load_ca_lobbying.py /tmp/cabuild/dbwebexport.zip --mode load
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

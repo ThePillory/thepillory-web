@@ -159,12 +159,17 @@ const NICK = [
 const NICKS = new Map();
 for (const group of NICK) for (const a of group) NICKS.set(a, new Set([...(NICKS.get(a) || []), ...group]));
 
-/** Do two given names name the same person? Equal, a nickname pair, or one a 3+ letter start of the other. */
+/**
+ * Do two given names name the same person? Equal, a nickname pair, or a short
+ * form that starts the longer one and is at least 3 letters shorter ("Alex",
+ * "Alexander"); "Dan" and "Dana" are different people.
+ */
 export function sameFirst(a, b) {
   if (!a || !b) return false;
   if (a === b) return true;
   if (NICKS.get(a)?.has(b)) return true;
-  return (a.length > 2 && b.startsWith(a)) || (b.length > 2 && a.startsWith(b));
+  const [short, long] = a.length < b.length ? [a, b] : [b, a];
+  return short.length > 2 && long.length - short.length >= 3 && long.startsWith(short);
 }
 
 /**
