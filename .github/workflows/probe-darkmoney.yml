@@ -12,6 +12,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+      - run: python3 -m pip install -q zipfile-deflate64==0.2.0
       - run: python3 tools/probe/darkmoney.py
         env:
           FEC_API_KEY: ${{ secrets.FEC_API_KEY }}

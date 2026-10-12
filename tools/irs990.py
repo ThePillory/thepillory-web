@@ -14,12 +14,18 @@ organization's political campaign activity expenditures (None when the return
 has no Schedule C, which the page says). Public copies of these returns don't
 list donors (Schedule B's names are withheld from public inspection).
 
-Standard library only; tested in tools/test_irs990.py.
+Standard library, plus zipfile-deflate64 for the batches compressed with
+Deflate64; tested in tools/test_irs990.py.
 """
 import io
 import re
 import urllib.request
 import xml.etree.ElementTree as ET
+
+try:  # some IRS batches are compressed with Deflate64, which zipfile can't read on its own
+    import zipfile_deflate64  # noqa: F401
+except ImportError:
+    pass
 
 BASE = "https://apps.irs.gov/pub/epostcard/990/xml"
 UA = "ThePillory/1.0 (+https://thepillory.co; public records)"
