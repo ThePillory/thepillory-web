@@ -177,6 +177,20 @@ LEGINFO_DAILY_LIMIT = "1500"
 # Meetings from this many days back are read once (agenda and agenda watch), so
 # recent agendas are filled in even when no new meetings are posted.
 MEETING_BACKFILL_DAYS = "30"
+# Source health (src/health/; docs/data-sync.md "Source health"): records
+# re-fetched per source and random stored links checked each day; source links
+# saved to the Internet Archive a day (and the pause between saves); documents
+# copied to R2 a day, and the largest copied. The alert email goes to ALERT_TO,
+# from ALERT_FROM (an address on the domain with Email Routing).
+HEALTH_SPOT_CHECKS = "5"
+LINK_CHECKS_DAILY = "100"
+ARCHIVE_DAILY = "100"
+ARCHIVE_INTERVAL_MS = "6000"
+SOURCE_COPIES_DAILY = "50"
+SOURCE_COPY_MAX_MB = "30"
+ALERT_TO = "bendimmitt@hotmail.com"
+ALERT_FROM = "data-health@thepillory.co"
+GITHUB_REPO = "ThePillory/thepillory-web"
 
 # Secrets (set with `npx wrangler secret put NAME` or in the dashboard):
 #   CONGRESS_API_KEY    api.congress.gov key
@@ -184,3 +198,17 @@ MEETING_BACKFILL_DAYS = "30"
 #   SYNC_TOKEN          any long random string; required to run the sync manually
 #   ANTHROPIC_API_KEY   Claude API key, for drafting analyses (without it that step is skipped)
 #   COURTLISTENER_API_TOKEN  courtlistener.com API token, for checking case citations
+#   GITHUB_TOKEN        optional: a GitHub token that can read this repository's Actions runs
+#                       (needed only if the repository is private), for the health check
+
+# The alert email (Cloudflare Email Routing must be on for thepillory.co, with
+# ALERT_TO verified as a destination address; docs/data-sync.md "Source health").
+[[send_email]]
+name = "ALERT_EMAIL"
+destination_address = "bendimmitt@hotmail.com"
+
+# ThePillory's own copies of key source documents (create the bucket first:
+# Cloudflare → R2 → Create bucket → "pillory-sources"; docs/data-sync.md).
+[[r2_buckets]]
+binding = "SOURCES"
+bucket_name = "pillory-sources"

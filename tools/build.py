@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "50"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "51"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -524,6 +524,18 @@ def build_methodology():
     <li><strong>Foreign agents (FARA).</strong> People and firms working in the United States for a foreign government, party or organization register with the Justice Department under the Foreign Agents Registration Act and report their work. ThePillory lists registrants active since 2023 and the foreign principals they represent, from the Justice Department's own files. Their supplemental statements list political activities, including contacts with officials: from statements filed since 2025 that have a text layer, ThePillory reads each contact that names a member of Congress (with their title) or a member's office, matched to exactly one member. Scanned statements stay links. A reported contact is the agent's own account: it doesn't say what the member did, said or thought. Staff contacted aren't named.</li>
     <li><strong>Sources:</strong> the House and Senate Appropriations Committees' tables, USAspending.gov, the Clerk of the House's gift travel filings, the Senate's gift rule disclosures, and the Justice Department's FARA eFile records. Refreshed weekly. Every item links to the record it came from.</li>
   </ul>
+</section>
+
+<section class="card stack" id="data-status">
+  <h2>Keeping records current, and checkable</h2>
+  <p>Government websites move, change format and sometimes disappear. ThePillory checks every source each day, and keeps copies so that every source link still leads somewhere.</p>
+  <ul class="plain-list small">
+    <li><strong>Did it update on time?</strong> Each source has an expected rhythm (roll call votes while Congress is in session, weekly campaign filings). A source that misses it is flagged for a person to look at.</li>
+    <li><strong>Did its shape change?</strong> A source that suddenly returns nothing, half as much as usual, refuses requests, or stops including fields it always had has usually moved or changed format. It's flagged before anything is shown from it.</li>
+    <li><strong>Does it still match?</strong> Each day a few stored records are read again from their source and compared with what ThePillory shows, and a sample of source links is checked to see that they still open.</li>
+    <li><strong>Copies.</strong> New source pages are saved to the Internet Archive, and an "Archived copy" link appears beside the source. Key documents (financial disclosures, stock trade reports, agendas, earmark tables, travel reports) are also kept by ThePillory. When an original disappears, the copy is shown first, with the original still linked.</li>
+  </ul>
+  <p><a class="inline-link" href="/about/data-status/">Data status: each source and when it last updated</a></p>
 </section>
 
 <section class="card stack" id="topics">

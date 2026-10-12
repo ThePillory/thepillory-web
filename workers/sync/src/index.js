@@ -37,6 +37,7 @@ import { syncPlainSummaries } from "./plain/sync.js";
 import { syncScannedTrades } from "./trades/scan-sync.js";
 import { syncIssuesPages } from "./promises/finder-sync.js";
 import { syncOrderTexts, syncOrderCourts } from "./executive/orders-sync.js";
+import { syncSourceHealth, syncArchiveSources, syncSourceCopies } from "./health/sync.js";
 import { syncHistoryOfficials, syncHistoryOrders, syncHistoryFunding, syncHistoryNominations, syncHistoryVotes } from "./history/sync.js";
 
 // Order matters: officials before votes; state officials first because the
@@ -103,6 +104,14 @@ const STEPS = [
   // What the pages show, precomputed from everything above (src/summaries.js).
   // Rebuilt only when the votes, bills, outcomes or relevance checks changed.
   ["page-summaries", syncSummaries],
+  // Last: every source's health once a day (did it run, is it fresh, did its
+  // shape change, do re-fetched records still match, do links still open), with
+  // an email only when one isn't healthy; then source links saved to the
+  // Internet Archive and key documents copied to R2, each capped per day
+  // (src/health/, docs/data-sync.md "Source health").
+  ["source-health", syncSourceHealth],
+  ["archive-sources", syncArchiveSources],
+  ["source-copies", syncSourceCopies],
 ];
 
 const ROUND_MS = 12 * 60 * 1000; // stop starting new requests after this; the alarm limit is 15 minutes

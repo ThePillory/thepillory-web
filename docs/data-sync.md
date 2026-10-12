@@ -142,3 +142,45 @@ The site's lookup (`/api/districts`, a Pages Function) doesn't touch D1 or the W
 ```sql
 SELECT email FROM waitlist WHERE county_fips = '06009';
 ```
+
+## Source health
+
+Government sites move, change format and disappear. The last three steps of every sync watch for that and keep copies (`workers/sync/src/health/`, migration 0034). The list of sources is `src/health/sources.js`. Each source names its sync steps or GitHub workflow, how often it should update, its rows in D1, and what to spot-check.
+
+- **`source-health`**, once a day. For every source:
+  - **Did it run?** The last successful pull, from `sync_log` or the workflow's last runs on GitHub (`GITHUB_TOKEN` is needed only if the repository is private).
+  - **Is it fresh?** The newest record's own date against `freshDays`. Congress's votes aren't flagged during a recess: August, the new year, and an election year's October.
+  - **Did the shape change?** Zero rows; under half the usual count (the median of the last week); a 403, 404 or 410 in a step's error; recent rows missing fields they always have.
+  - **Is it still accurate?** `HEALTH_SPOT_CHECKS` (5) random records are re-fetched from their `source_url` and checked to still contain what's stored, such as a vote's question or an order's title. A refusal or a document that isn't text doesn't count against a source.
+  - **Links.** `LINK_CHECKS_DAILY` (100) random stored source links are checked: HEAD, then GET when HEAD isn't allowed. A link is called gone after two checks in a row (404, 410, no such host).
+  - **Status.** Red, yellow, green, or unknown (not set up yet). Written to `source_health`.
+  - **Email.** Sent to `ALERT_TO` only when a source is yellow or red, at most once a day (`health_alerts`), listing what failed and since when.
+- **`archive-sources`.** New source links are sent to the Internet Archive's Save Page Now, `ARCHIVE_DAILY` (100) a day, `ARCHIVE_INTERVAL_MS` (6 s) apart. An existing Wayback copy is used when there is one.
+- **`source-copies`.** ThePillory's own copy of key documents goes into the R2 bucket bound as `SOURCES`, `SOURCE_COPIES_DAILY` (50) a day, up to `SOURCE_COPY_MAX_MB` (30) each. Each copy is stored with its source URL and download date. The documents: OGE financial disclosures, stock trade reports, county agendas, earmark tables, and gift travel reports.
+
+Each step stops at its daily cap and at the round's request budget, so none of them crowds out the regular sync.
+
+**On the site:**
+- **Source links.** `functions/_middleware.js` (with `functions/_lib/source-links.js`) adds "Archived copy ↗" beside each source link that has one. When the original is gone, the page leads with the archived copy, or "Saved copy ↗" (`/saved/<hash>`), and keeps the original linked beside it.
+- **`/admin/health/`** (behind Cloudflare Access) shows every source with what failed and 30 days of history, plus the dead links and their copies.
+- **`/about/data-status/`** (public, linked from the Methodology page) shows each source, what it provides, and when it last updated. It has no error details.
+
+**One-time setup (Cloudflare dashboard).** Do steps 1 and 2 before the change that adds the bindings to `wrangler.toml` is deployed, or the Worker's deploy fails.
+
+1. **R2 bucket.**
+   - Go to R2 Object Storage → Create bucket.
+   - Name it `pillory-sources`, leave the location on Automatic, and create it.
+   - If R2 asks you to turn it on, add a payment method; nothing is charged within the free tier.
+2. **Alert email.**
+   - Go to the thepillory.co zone → Email → Email Routing.
+   - Turn it on, and accept the DNS records it adds.
+   - Under Destination addresses, add the alert address and click the link in the verification email it sends.
+3. **Pages binding, for "Saved copy" links.**
+   - Go to Workers & Pages → thepillory-web → Settings → Bindings → Add → R2 bucket.
+   - Set the variable name to `SOURCES` and the bucket to `pillory-sources`.
+   - Do this for Production and Preview, then redeploy (or wait for the next merge).
+
+**Cost.** R2's free tier is 10 GB of storage, 1 million writes and 10 million reads a month, and downloads are free.
+- 50 documents a day at a few hundred KB each is about 5 to 6 GB a year, so the first year is very likely free.
+- After that, storage is $0.015 per GB a month: 20 GB is about $0.15 a month.
+- Email Routing and the Internet Archive are free.
