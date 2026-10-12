@@ -35,6 +35,7 @@ import init0033 from "../migrations/0033_awards_queue.sql";
 import init0034 from "../migrations/0034_source_health.sql";
 import init0035 from "../migrations/0035_trade_scan_rows.sql";
 import init0036 from "../migrations/0036_networth.sql";
+import init0037 from "../migrations/0037_networth_scans.sql";
 import { isHttp, today } from "./util.js";
 import { totals } from "./rollcall.js";
 
@@ -75,6 +76,7 @@ const MIGRATIONS = [
   ["0034_source_health.sql", init0034],
   ["0035_trade_scan_rows.sql", init0035],
   ["0036_networth.sql", init0036],
+  ["0037_networth_scans.sql", init0037],
 ];
 
 // Migrations tools/load_trades.py can also apply (the "Load stock trades"

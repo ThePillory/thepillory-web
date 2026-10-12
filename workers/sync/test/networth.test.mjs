@@ -78,6 +78,15 @@ function seeded({ withTable = true } = {}) {
   // The President: scanned reports, and a candidate report released only on request.
   not("oge:1", "p1", "oge", "annual", 2024, "2025-06-13", "scan");
   not("oge:2", "p1", "oge", "candidate", 2023, "2023-04-14", "request", { before: 1 });
+  // The Vice President: a scanned report read by AI (both readings agreed), and an earlier one held.
+  off.run("v1", "vee-pee", "Example Vice", "Vice", "Vice President of the United States", "us-executive", "us-executive", null, null, null, null);
+  r.run("oge:v25", "v1", "oge", "annual", 0, 2025, "2026-06-01", 0, "read", null, "ai", 60, 1, 2000000, 7000000, 0, 0, "https://example.org/oge:v25.pdf");
+  not("oge:v24", "v1", "oge", "annual", 2024, "2025-06-01", "scan");
+  sqlite.exec(`UPDATE networth_reports SET reason = 'Read by AI: 3 lines read differently; waiting for a person' WHERE id = 'oge:v24'`);
+  const scan = sqlite.prepare(`INSERT INTO networth_scans (report_id, official_id, report_url, year, status, lines_total, disagreements, reading, problems, models, cost_cents, spot_check)
+    VALUES (?, 'v1', ?, ?, ?, ?, ?, ?, '[]', 'claude-sonnet-5-5, claude-opus-5-5', 1234, 1)`);
+  scan.run("oge:v25", "https://example.org/oge:v25.pdf", 2025, "agreed", 2, "[]", JSON.stringify([{ page: 7, sec: "6", grp: "", n: "1", v: "$1,000,001 - $5,000,000", inc: false, elsewhere: false, nra: false, unsure: false, cred: "", idx: 0 }]));
+  scan.run("oge:v24", "https://example.org/oge:v24.pdf", 2024, "disagree", 3, JSON.stringify([{ key: "p7.0", page: 7, idx: 0, a: { n: "1", v: "$1,001 - $15,000", sec: "6" }, b: { n: "1", v: "$15,001 - $50,000", sec: "6" } }]), "[]");
   // A justice.
   read("judiciary:ann-able:2024", "justice:ann-able", "judiciary", "annual", 2024, null, 13965036, 50979999);
   return d1(sqlite);
@@ -99,6 +108,35 @@ const fold = (html, id) => {
 };
 const head = (html) => html.slice(html.indexOf('<header class="page-head'), html.indexOf("</header>", html.indexOf('<header class="page-head')));
 const line = (html) => (head(html).match(/<p class="small networth-line">.*?<\/p>/) || [""])[0];
+
+test("a report read by AI from a scan: labeled under the chart; a held one waits for a person", async () => {
+  const { html } = await get(reps, "/reps/vee-pee/");
+  assert.match(line(html), /Net worth, as reported: \$2M–\$7M \(2025, earliest report read\)/);
+  const sec = fold(html, "more-networth");
+  assert.match(sec, /2025: Transcribed by AI from a scanned report, auto-checked\./);
+  assert.match(sec, /2024: Scanned report: read by AI, waiting for a person(?:'|&#39;|&#x27;)s check/);
+});
+
+test("the review page: settle lines, confirm, take down", async () => {
+  const { networthScanList, networthScanItem, networthScanChange } = await import("../../../functions/_lib/networth-review.js");
+  const db = seeded();
+  const list = (await networthScanList(db)).main;
+  assert.match(list, /Published by AI: check these \(1\)/);
+  assert.match(list, /Held \(1\)/);
+  const held = (await networthScanItem(db, {}, "oge:v24")).main;
+  assert.match(held, /Read differently \(1\)/);
+  assert.match(held, /Reading A: Line 1: \$1,001 - \$15,000/);
+  assert.match(held, /#page=7/);
+  const form = (o) => ({ get: (k) => o[k] ?? null });
+  assert.match((await networthScanChange(db, "oge:v24", form({ action: "settle", reviewer: "A. Reviewer", "p7.0": "b" }))).done, /Every line is settled/);
+  // Confirming the published one shows "checked by" on the page.
+  assert.match((await networthScanChange(db, "oge:v25", form({ action: "approve", reviewer: "A. Reviewer" }))).error, /Tick the box/);
+  assert.match((await networthScanChange(db, "oge:v25", form({ action: "approve", reviewer: "A. Reviewer", compared: "1" }))).done, /Checked by A\. Reviewer/);
+  assert.match(fold((await get(reps, "/reps/vee-pee/", db)).html, "more-networth"), /Transcribed by AI from a scanned report, checked by A\. Reviewer/);
+  // Taking it down removes it from the line.
+  assert.match((await networthScanChange(db, "oge:v25", form({ action: "reject", reviewer: "A. Reviewer", reason: "A value doesn't match the scan" }))).done, /Taken down/);
+  assert.equal(line((await get(reps, "/reps/vee-pee/", db)).html), "");
+});
 
 test("money in short form, and ranges with open ends", () => {
   assert.equal(compactMoney(3193041), "$3.2M");

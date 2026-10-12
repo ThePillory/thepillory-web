@@ -17,6 +17,9 @@
 //                         the excerpt each shows on the Platform tab (remove a wrong page, hide, re-pick)
 // /admin/review/trades/   scanned OGE Form 278-T reports: compare the two AI readings' agreed
 //                         rows with the scan, approve (publish) or reject; read again
+// /admin/review/networth/ scanned annual financial disclosure reports read by AI ("Net worth,
+//                         as reported"): settle lines the two readings read differently,
+//                         confirm or take down
 // /admin/waitlist/        "Bring ThePillory to your county": sign-ups by county (counts only)
 // /admin/health/          every data source green, yellow or red, with 30 days of history (functions/_lib/health-pages.js)
 //
@@ -25,6 +28,7 @@
 import { page, esc, fmtDate, safeUrl, guard } from "../_lib/render.js";
 import { checkAccess } from "../_lib/access.js";
 import { healthData, adminHealthMain, deadLinks } from "../_lib/health-pages.js";
+import { networthScanList, networthScanItem, networthScanChange, networthReviewHref } from "../_lib/networth-review.js";
 import { inChunks } from "../_lib/data.js";
 import { parse, badge, baselineSection, provisionsFor } from "../_lib/analysis.js";
 import { orderHref } from "../_lib/orders.js";
@@ -1087,7 +1091,8 @@ ${batch}
 <details class="weigh-details" id="promise-published"><summary>Published promises (${published.length}): record a status change</summary><section class="card">${list || '<p class="secondary small">None yet.</p>'}</section></details>
 <h2 class="label queue-head" id="topics">Topic tags</h2>
 <p class="small"><a class="inline-link" href="/admin/review/topics/">Check and correct topic tags</a> on bills, county agenda items, executive actions and Platform excerpts.</p>
-<p class="small"><a class="inline-link" href="/admin/review/trades/">Scanned trade reports</a>: compare AI transcriptions of scanned OGE Form 278-T reports with the scan before they publish.</p>`;
+<p class="small"><a class="inline-link" href="/admin/review/trades/">Scanned trade reports</a>: compare AI transcriptions of scanned OGE Form 278-T reports with the scan before they publish.</p>
+<p class="small"><a class="inline-link" href="/admin/review/networth/">Scanned net worth reports</a>: check AI transcriptions of scanned annual financial disclosure reports, and settle lines the two readings read differently.</p>`;
 }
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -1592,6 +1597,29 @@ async function handle(context) {
         return Response.redirect(`${url.origin}${scanHref(id)}?done=${encodeURIComponent(r.done)}`, 303);
       }
       const v = await scanItem(env.DB, env, id, { done: url.searchParams.get("done") || "" });
+      return v ? adminPage(v.title, v.main) : adminPage("Not found", '<header class="page-head"><h1>No such report</h1></header>', 404);
+    } catch (err) {
+      if (/no such table|no such column/i.test(String(err && err.message))) return missingTables();
+      throw err;
+    }
+  }
+  if (parts[1] === "networth") {
+    try {
+      if (parts.length === 2) return adminPage(...Object.values(await networthScanList(env.DB, { done: url.searchParams.get("done") || "" })));
+      if (parts.length !== 3) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+      const id = decodeURIComponent(parts[2]);
+      if (request.method === "POST") {
+        const origin = request.headers.get("Origin");
+        if (origin && origin !== url.origin) return adminPage("Refused", '<header class="page-head"><h1>Refused</h1></header>', 403);
+        const r = await networthScanChange(env.DB, id, await request.formData(), who.email);
+        if (r.error) {
+          const v = await networthScanItem(env.DB, env, id, { error: r.error, form: r.form });
+          return v ? adminPage(v.title, v.main) : adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+        }
+        return Response.redirect(`${url.origin}${networthReviewHref(id)}?done=${encodeURIComponent(r.done)}`, 303);
+      }
+      const pg = parseInt(url.searchParams.get("page") || "", 10);
+      const v = await networthScanItem(env.DB, env, id, { done: url.searchParams.get("done") || "", page: Number.isFinite(pg) ? pg : null });
       return v ? adminPage(v.title, v.main) : adminPage("Not found", '<header class="page-head"><h1>No such report</h1></header>', 404);
     } catch (err) {
       if (/no such table|no such column/i.test(String(err && err.message))) return missingTables();

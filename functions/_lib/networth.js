@@ -20,20 +20,30 @@ export const NETWORTH_METHOD = "/about/methodology/#net-worth";
 const missing = (err) => /no such table|no such column/i.test(String(err && err.message));
 
 export async function networthFor(db, officialId) {
+  const cols = `r.id, r.source, r.kind, r.amended, r.year, r.filed_on, r.before_office, r.status, r.reason, r.method, r.assets, r.liabilities,
+                r.low, r.high, r.low_open, r.high_open, r.residence_mortgages, r.report_url`;
+  const run = (sql) => db.prepare(sql).bind(officialId).all().then((x) => x.results);
   try {
-    const { results } = await db
-      .prepare(
-        `SELECT id, source, kind, amended, year, filed_on, before_office, status, reason, method, assets, liabilities,
-                low, high, low_open, high_open, residence_mortgages, report_url
-         FROM networth_reports WHERE official_id = ? ORDER BY year, filed_on`
-      )
-      .bind(officialId)
-      .all();
-    return results;
+    // A report read by AI from a scan carries its review (migration 0037).
+    return await run(`SELECT ${cols}, s.status AS scan_status, s.reviewed_by FROM networth_reports r
+      LEFT JOIN networth_scans s ON s.report_id = r.id WHERE r.official_id = ? ORDER BY r.year, r.filed_on`);
+  } catch (err) {
+    if (!missing(err)) throw err;
+  }
+  try {
+    return await run(`SELECT ${cols} FROM networth_reports r WHERE r.official_id = ? ORDER BY r.year, r.filed_on`);
   } catch (err) {
     if (missing(err)) return [];
     throw err;
   }
+}
+
+/** "Transcribed by AI from a scanned report, auto-checked" or "…, checked by [name]" for a report read by AI; "" otherwise. Pure. */
+export function aiLabel(r) {
+  if (r.method !== "ai") return "";
+  return r.scan_status === "approved" && r.reviewed_by
+    ? `Transcribed by AI from a scanned report, checked by ${r.reviewed_by}`
+    : "Transcribed by AI from a scanned report, auto-checked";
 }
 
 const later = (a, b) => ((a.filed_on || "") > (b.filed_on || "") || ((a.filed_on || "") === (b.filed_on || "") && a.amended > b.amended) ? a : b);
@@ -109,6 +119,7 @@ export function networthLine(points) {
 
 const UNREAD = {
   scan: "Scanned report: not read yet",
+  ai_held: "Scanned report: read by AI, waiting for a person's check",
   paper: "Filed on paper: see the report",
   request: "Available from OGE on request",
   unreadable: "Not read automatically: see the report",
@@ -123,7 +134,7 @@ export function networthSection(name, points) {
   const legal = `From annual financial disclosure reports, read line by line. These records may not be used for commercial purposes. <a class="inline-link" href="${NETWORTH_METHOD}">How net worth is estimated</a>`;
   const unreadList = unread.length
     ? `<p class="label">Reports not read</p><div class="card">${unread
-        .map((r) => linkRow(r.report_url, `${yearLabel(r)}: ${UNREAD[r.status] || UNREAD.unreadable}`, r.filed_on ? `Filed ${fmtDate(r.filed_on)}` : ""))
+        .map((r) => linkRow(r.report_url, `${yearLabel(r)}: ${r.status === "scan" && /^Read by AI:/.test(r.reason || "") ? UNREAD.ai_held : UNREAD[r.status] || UNREAD.unreadable}`, r.filed_on ? `Filed ${fmtDate(r.filed_on)}` : ""))
         .join("")}</div>`
     : "";
   if (!end) {
@@ -147,9 +158,14 @@ export function networthSection(name, points) {
       caption: `Each band runs from the low end to the high end of one report's ranges; tap a year for its report.${points.before ? " The lighter band is the report filed before taking office." : ""}${shown.some((r) => r.high_open) ? " A dashed top means the high end is “or more”." : ""}`,
     }
   );
+  const ai = shown.filter((r) => r.method === "ai");
+  const aiNote = ai.length
+    ? `<p class="small">${ai.map((r) => `${esc(yearLabel(r))}: ${esc(aiLabel(r))}.`).join(" ")} <a class="inline-link" href="${NETWORTH_METHOD}">How scanned reports are read</a></p>`
+    : "";
   return `
   <p class="small">Estimated net worth: ${esc(rangeText(end, fullMoney))} (${esc(String(end.year))}), as reported in ranges.</p>
   ${chart}
+  ${aiNote}
   <p class="hint">${LIMITS}</p>
   ${unreadList}
   <p class="hint">${legal}</p>`;
