@@ -15,7 +15,7 @@ import { districtsFromCookie, repsWhere, describe, STATE_NAME } from "../_lib/di
 import { lookupForm } from "../_lib/hub.js";
 import { BROWSE, PER_PAGE, chamberPage, personRow, yourRow, yourList, statewideList, repsHref, stateChambers, statePicker, sortSwitch, pagedList } from "../_lib/reps-index.js";
 import { searchPeople } from "../_lib/people-search.js";
-import { tradeSummary, memberTrades, memberReports, memberCommittees, executivePost, tradesSection, quickTradesLine, tradeRow, TRADES_PER_PAGE, TRADES_METHOD } from "../_lib/trades.js";
+import { tradeSummary, memberTrades, memberReports, memberCommittees, executivePost, tradesSection, quickTradesLine, tradeRow, committeesList, TRADES_PER_PAGE, TRADES_METHOD } from "../_lib/trades.js";
 import { loadJustices } from "../_lib/scotus.js";
 import { chamberIds } from "../../workers/sync/src/states.js";
 import { visitorState } from "../_lib/visitor-state.js";
@@ -370,6 +370,7 @@ ${fold("office", "Office", kv([
     ["Body", body ? `<a class="inline-link" href="/bodies/${esc(body.slug)}/">${esc(body.name)}</a>` : null],
     ["Website", safeUrl(o.website) ? `<a class="inline-link" href="${esc(o.website)}" target="_blank" rel="noopener">Official site ↗</a>` : null],
   ]), { meta: o.party || "" })}
+${congress && trades && trades !== FAILED && trades.committees.length ? fold("congress-committees", "Committee assignments", committeesList(trades.committees), { meta: `${trades.committees.filter((c) => !c.parent).length} committees` }) : ""}
 ${fold("source", "Source", `<p class="small">Last verified ${fmtDate(o.last_verified)}.</p>
   ${sourceLink(o.source_url, "Official source")}
   ${o.photo_credit ? `<p class="hint">Photo: ${esc(o.photo_credit)}</p>` : ""}`, { meta: fmtDate(o.last_verified) })}

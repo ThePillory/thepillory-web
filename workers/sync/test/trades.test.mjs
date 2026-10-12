@@ -96,8 +96,23 @@ test("a member who files electronically: summary, committees as facts, spouse tr
   const sec = fold(html, "more-trades");
   assert.ok(sec, "a Stock trades section on the More tab");
   assert.match(sec, new RegExp(`30 trades reported in ${YEAR}, totaling \\$30,030–\\$450,000 in ranges as filed\\.`));
-  assert.match(sec, /Committee on Financial Services: Subcommittee on Capital Markets/);
-  assert.match(sec, /Ranking Member/);
+  // The order: the summary, then every trade in one list, then one committees line.
+  const list = sec.slice(sec.indexOf('id="trade-list"'), sec.indexOf("</div>", sec.indexOf('id="trade-list"')));
+  assert.equal((list.match(/<a class="compact-row trade-row"/g) || []).length, 25);
+  assert.match(list.replace(/<a class="compact-row trade-row"[\s\S]*?<\/a>/g, ""), /^id="trade-list">\s*$/, "nothing but trades inside the list");
+  assert.doesNotMatch(list, /ommittee/);
+  const at = (re) => sec.search(re);
+  assert.ok(at(/trades reported in/) < at(/id="trade-list"/), "summary first");
+  assert.ok(at(/id="trade-list"/) < at(/data-load-more="trade-list"/), "Load more after the list");
+  assert.ok(at(/data-load-more="trade-list"/) < at(/Committee assignments, for reference/), "committees after the whole list");
+  assert.match(sec, /<p class="small secondary trades-reference">Committee assignments, for reference: Financial Services\. <a class="inline-link" href="#congress-committees">All committee assignments<\/a><\/p>/);
+  assert.equal((sec.match(/Committee assignments/g) || []).length, 1, "one line, full committees only");
+  assert.doesNotMatch(sec, /Subcommittee/);
+  // Every assignment, subcommittees too, on the About tab.
+  const about = fold(html, "congress-committees");
+  assert.match(about, /Committee on Financial Services/);
+  assert.match(about, /Subcommittee: Subcommittee on Capital Markets[\s\S]*?Ranking Member/);
+  assert.ok(html.indexOf('id="congress-committees"') < html.indexOf('role="tabpanel" id="platform"'), "in the About panel");
   assert.match(sec, /Owner: Spouse/);
   assert.match(sec, /Filed 49 days after the trade/);
   assert.equal((sec.match(/Filed \d+ days after/g) || []).length, 1, "only the trade past 45 days");
@@ -134,6 +149,9 @@ test("/trades/: newest first, filters, paging, member names; unmatched reports n
   assert.ok(all.html.indexOf("Bank of Example") < all.html.indexOf("Example Company 28"), "newest first: the August trade, then July");
   assert.match(all.html, /Erin Electronic, CA/);
   assert.match(all.html, /href="\/trades\/\?offset=25" data-load-more="trade-list"/);
+  const list = all.html.slice(all.html.indexOf('id="trade-list"'), all.html.indexOf("</div>", all.html.indexOf('id="trade-list"')));
+  assert.match(list.replace(/<a class="compact-row trade-row"[\s\S]*?<\/a>/g, ""), /^id="trade-list">\s*$/, "nothing but trades inside the list");
+  assert.doesNotMatch(all.html, /ommittee assignments/);
   const senate = await get(trades, "/trades/?chamber=us-senate");
   assert.equal((senate.html.match(/class="compact-row trade-row"/g) || []).length, 1);
   assert.match(senate.html, /Bank of Example \(BEX\)/);
@@ -167,7 +185,8 @@ test("the President's 278-T: office and agency as facts, trades as filed, the 45
   assert.equal(res.status, 200);
   const sec = fold(html, "more-trades");
   assert.ok(sec, "the same Stock trades section on the More tab");
-  assert.match(sec, /<p class="label">Office<\/p>[\s\S]*?President[\s\S]*?Executive Office of the President/);
+  assert.match(sec, /<p class="small secondary trades-reference">Office, for reference: President, Executive Office of the President\.<\/p>/);
+  assert.ok(sec.indexOf('id="trade-list"') < sec.indexOf("Office, for reference"), "after the list");
   assert.match(sec, new RegExp(`2 trades reported in ${YEAR}, totaling \\$51,002–\\$115,000 in ranges as filed\\.`));
   assert.match(sec, /Example Motors Inc\. \(EXM\)/);
   assert.match(sec, /Filed 46 days after the trade/);
