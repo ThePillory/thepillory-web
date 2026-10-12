@@ -11,7 +11,8 @@ that file (RangeFile).
 read_return(xml) -> the figures ThePillory shows, exactly as filed: tax year and
 period, total revenue, total expenses, and from Schedule C Part I-A the
 organization's political campaign activity expenditures (None when the return
-has no Schedule C, which the page says). Public copies of these returns don't
+has no Schedule C, which the page says) and the political organizations it
+paid, by name. Public copies of these returns don't
 list donors (Schedule B's names are withheld from public inspection).
 
 Standard library, plus zipfile-deflate64 for the batches compressed with
@@ -67,19 +68,28 @@ def read_return(xml):
     rtype = _first(root, "ReturnTypeCd")
     sched_c = next((el for el in root.iter() if _local(el.tag) == "IRS990ScheduleC"), None)
     political = None
+    recipients = []
     if sched_c is not None:
         political = _num(_first(sched_c, "PoliticalExpendituresAmt"))
+        # Part I-C line 5: political organizations the filer paid, by name and EIN.
+        for g in (el for el in sched_c.iter() if _local(el.tag) == "Section527PoliticalOrgGrp"):
+            name = _first(g, "BusinessNameLine1Txt")
+            if name:
+                recipients.append({"name": " ".join(name.split()), "ein": _first(g, "EIN"),
+                                   "amount": _num(_first(g, "PaidInternalFundsAmt", "ContributionsRcvdDeliveredAmt"))})
+    filer = next((el for el in root.iter() if _local(el.tag) == "Filer"), root)
     return {
         "return_type": rtype,
         "tax_year": int(_first(root, "TaxYr") or 0) or None,
         "period_end": _first(root, "TaxPeriodEndDt"),
-        "name": _first(root, "BusinessNameLine1Txt"),
-        "ein": _first(root, "EIN"),
+        "name": _first(filer, "BusinessNameLine1Txt"),
+        "ein": _first(filer, "EIN"),
         # Form 990 Part I line 12 / 18 (current year); 990-EZ lines 9 and 17.
         "revenue": _num(_first(root, "CYTotalRevenueAmt", "TotalRevenueAmt")),
         "expenses": _num(_first(root, "CYTotalExpensesAmt", "TotalExpensesAmt")),
         "schedule_c": sched_c is not None,
         "political": political,
+        "recipients": recipients,
         # Part IV line 3: did the organization report political campaign activity?
         "political_activity": _first(root, "PoliticalCampaignActyInd"),
     }
