@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=WA&candidate_status=C",
- "built_on": "2026-10-11",
+ "built_on": "2026-10-12",
  "senate_up": false,
  "senate": [],
  "house": {
@@ -42,6 +42,14 @@
    }
   ],
   "2": [
+   {
+    "id": "H6WA02228",
+    "name": "FELLER, EDWIN HAROLD",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WA02228/",
+    "committee": "C00951129"
+   },
    {
     "id": "H0WA02080",
     "name": "LARSEN, RICK",

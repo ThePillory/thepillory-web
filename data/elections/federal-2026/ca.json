@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=CA&candidate_status=C",
- "built_on": "2026-10-11",
+ "built_on": "2026-10-12",
  "senate_up": false,
  "senate": [],
  "house": {
@@ -1535,6 +1535,22 @@
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6CA41257/",
     "committee": "C00900860"
+   },
+   {
+    "id": "H2CA38260",
+    "name": "CLEMMONS, MITCHELL",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H2CA38260/",
+    "committee": "C00946038"
+   },
+   {
+    "id": "H6CA41380",
+    "name": "CLEMMONS, MITCHELL LEE",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6CA41380/",
+    "committee": "C00946038"
    },
    {
     "id": "H2CA39086",
