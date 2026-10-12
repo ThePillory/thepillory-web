@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { DatabaseSync } from "node:sqlite";
 import { appropriationsOf, memberGovMoney, earmarksSection, travelSection, faraSection, billEarmarks, billEarmarksSection, officialNames, awardsLink } from "../../../functions/_lib/gov-money.js";
-import { nameKey, fiscalYears, lookUp } from "../../../functions/awards/index.js";
+import { nameKey, storedAwards } from "../../../functions/awards/index.js";
 
 function d1() {
   const sqlite = new DatabaseSync(":memory:");
@@ -95,26 +95,25 @@ test("a bill's earmarks: the tables' list for its fiscal year and subcommittee, 
   assert.deepEqual(nv.rows.map((r) => r.id), ["e2"]);
 });
 
-test("federal awards: only recipients with exactly the name, each separately, by fiscal year", async () => {
+test("federal awards: read from what the daily lookup stored; an organization not looked up yet is queued", async () => {
   assert.equal(nameKey("The Example Co., Inc."), "example");
+  assert.equal(nameKey("Example & Sons"), "example and sons");
   assert.equal(awardsLink("Example Water District"), ' <a class="tap small awards-link" href="/awards/?name=Example%20Water%20District">Federal awards</a>');
   assert.equal(awardsLink(" "), "");
-  assert.deepEqual(fiscalYears(new Date("2026-10-12T00:00:00Z"), 2), [{ fy: 2027, start: "2026-10-01", end: "2027-09-30" }, { fy: 2026, start: "2025-10-01", end: "2026-09-30" }]);
-  const calls = [];
-  globalThis.fetch = async (url, init = {}) => {
-    calls.push(String(url));
-    const body = init.body ? JSON.parse(init.body) : null;
-    const json = (o) => ({ ok: true, json: async () => o });
-    if (String(url).endsWith("/recipient/") && body) return json({ results: [
-      { id: "r1-C", name: "EXAMPLE WATER DISTRICT", uei: "U1", recipient_level: "C", amount: 5 },
-      { id: "r2-C", name: "EXAMPLE WATER DISTRICT OF NEVADA", uei: "U2", recipient_level: "C", amount: 9 },
-    ] });
-    if (String(url).includes("/recipient/r1-C/")) return json({ location: { city_name: "Exampletown", state_code: "CA" } });
-    if (String(url).includes("spending_by_category")) return json({ results: body.filters.time_period[0].start_date.startsWith("2025") ? [{ name: "Department of Example", amount: 1200 }] : [] });
-    throw new Error(`unexpected ${url}`);
-  };
-  const got = await lookUp("Example Water District", new Date("2026-10-12T00:00:00Z"));
-  assert.equal(got.recipients.length, 1);
-  assert.equal(got.recipients[0].location, "Exampletown, CA");
-  assert.deepEqual(got.recipients[0].years.map((y) => [y.fy, y.total]), [[2027, 0], [2026, 1200], [2025, 0], [2024, 0]]);
+  const sqlite = new DatabaseSync(":memory:");
+  sqlite.exec(readFileSync(new URL("../migrations/0031_gov_money.sql", import.meta.url), "utf8"));
+  sqlite.exec(readFileSync(new URL("../migrations/0033_awards_queue.sql", import.meta.url), "utf8"));
+  const result = { name: "Example Water District", total_found: 1, recipients: [{ id: "r1-C", name: "EXAMPLE WATER DISTRICT", years: [{ fy: 2026, total: 1200, agencies: [] }] }], checked: "2026-10-12" };
+  sqlite.prepare("INSERT INTO federal_awards_cache (name_key, result) VALUES (?, ?)").run("example water district", JSON.stringify(result));
+  const stmt = (sql, args = []) => ({
+    bind: (...a) => stmt(sql, a),
+    first: async () => sqlite.prepare(sql).get(...args) || null,
+    run: async () => sqlite.prepare(sql).run(...args),
+  });
+  const db = { prepare: (sql) => stmt(sql) };
+  const got = await storedAwards(db, "The Example Water District, Inc.");
+  assert.equal(got.result.recipients[0].id, "r1-C");
+  assert.deepEqual(await storedAwards(db, "Example Library"), { queued: true });
+  assert.deepEqual(sqlite.prepare("SELECT name_key, name FROM federal_awards_wanted").all().map((r) => ({ ...r })), [{ name_key: "example library", name: "Example Library" }]);
+  assert.equal(await storedAwards({ prepare: () => ({ bind: () => ({ first: async () => { throw new Error("no such table: federal_awards_cache"); } }) }) }, "X Y Z"), null);
 });

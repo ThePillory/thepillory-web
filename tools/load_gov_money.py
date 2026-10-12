@@ -30,6 +30,7 @@ import argparse
 import datetime
 import http.cookiejar
 import io
+import json
 import os
 import re
 import subprocess
@@ -44,6 +45,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import govmoney as G  # noqa: E402
+import usaspending as U  # noqa: E402
 from load_trades import d1, lit, run_sql, MIGRATIONS  # noqa: E402
 
 UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36"
@@ -124,10 +126,11 @@ def xlsx_rows(data, must):
 
 def ensure_tables(args):
     d1(args, command="CREATE TABLE IF NOT EXISTS d1_migrations (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE, applied_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)")
-    if not d1(args, command="SELECT 1 AS x FROM d1_migrations WHERE name = '0031_gov_money.sql'"):
-        d1(args, file=MIGRATIONS / "0031_gov_money.sql")  # CREATE … IF NOT EXISTS only
-        d1(args, command="INSERT OR IGNORE INTO d1_migrations (name) VALUES ('0031_gov_money.sql')")
-        say("Applied migration 0031_gov_money.sql")
+    for name in ("0031_gov_money.sql", "0033_awards_queue.sql"):  # CREATE … IF NOT EXISTS only
+        if not d1(args, command=f"SELECT 1 AS x FROM d1_migrations WHERE name = '{name}'"):
+            d1(args, file=MIGRATIONS / name)
+            d1(args, command=f"INSERT OR IGNORE INTO d1_migrations (name) VALUES ('{name}')")
+            say(f"Applied migration {name}")
 
 
 def members(args):
@@ -450,9 +453,101 @@ def fara(args):
     return sql
 
 
+# ---------------------------------------------------------------------------
+# Federal awards (USAspending.gov), for every organization the site names with a "Federal awards" link
+
+
+# Each source of organization names shown with a "Federal awards" link (functions/_lib/*.js awardsLink()).
+AWARD_NAMES = [
+    # The Funding tab shows each member's top 10 per period with MIN_EMPLOYER_DONORS (functions/_lib/funding.js) or more donors.
+    ("donors' employers", """SELECT DISTINCT employer AS name FROM (
+        SELECT employer, ROW_NUMBER() OVER (PARTITION BY official_id, cycle ORDER BY total DESC) AS n
+        FROM funding_employers WHERE count >= 3) WHERE n <= 10"""),
+    ("bill lobbying clients", "SELECT DISTINCT f.client_name AS name FROM lobbying_filings f JOIN bill_lobbying b ON b.filing_uuid = f.filing_uuid"),
+    ("lobbying organizations' contributions", "SELECT DISTINCT registrant_name AS name FROM lobby_contrib_filings WHERE filer_type = 'organization'"),
+    ("outside spenders' organization donors", "SELECT DISTINCT name FROM outside_donors WHERE kind != 'committee'"),
+    ("California lobbying organizations", "SELECT DISTINCT filer_name AS name FROM ca_lobby_contributions WHERE filer_kind != 'lobbyist' AND filer_name IS NOT NULL"),
+    ("California lobbying employers", "SELECT DISTINCT employer_name AS name FROM ca_lobby_reports"),
+    ("earmark recipients", "SELECT DISTINCT recipient AS name FROM earmarks WHERE recipient IS NOT NULL"),
+    ("earmark request recipients", "SELECT DISTINCT recipient AS name FROM earmark_requests WHERE recipient IS NOT NULL"),
+]
+AWARDS_REFRESH_DAYS = 30
+# Employer entries that aren't organizations: nothing to look up.
+NOT_AN_ORG = re.compile(r"^(retired|self[ -]?employed|not employed|unemployed|none|n/?a|homemaker|student|information requested.*|requested|self|disabled)$", re.I)
+
+
+def award_names(args):
+    """{name_key: name} for every organization shown with a "Federal awards" link."""
+    names = {}
+    for label, sql in AWARD_NAMES:
+        try:
+            rows = d1(args, command=sql)
+        except SystemExit as e:  # a table not created yet
+            say(f"  {label}: not read ({str(e).splitlines()[-1][:120]})")
+            continue
+        n = 0
+        for r in rows:
+            k = U.name_key(r.get("name"))
+            if len(k) >= 3 and k not in names and not NOT_AN_ORG.match(r["name"].strip()):
+                names[k] = " ".join(r["name"].split())
+                n += 1
+        say(f"  {label}: {len(rows)} names, {n} new")
+    return names
+
+
+def awards(args):
+    if not os.environ.get("CLOUDFLARE_API_TOKEN"):
+        raise SystemExit("awards needs Cloudflare access (the names come from D1)")
+    from concurrent.futures import ThreadPoolExecutor
+
+    names = award_names(args)
+    try:
+        wanted = {r["name_key"]: r["name"] for r in d1(args, command="SELECT name_key, name FROM federal_awards_wanted ORDER BY asked_at")}
+    except SystemExit:  # migration 0033 not applied yet (a measure run before the first load)
+        wanted = {}
+    fetched = {r["name_key"]: r["fetched_at"] for r in d1(args, command="SELECT name_key, fetched_at FROM federal_awards_cache")}
+    stale = (datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=AWARDS_REFRESH_DAYS)).strftime("%Y-%m-%d %H:%M:%S")
+    # Asked for on the site first, then never looked up, then the oldest past the refresh age.
+    queue = list(wanted.items())
+    queue += [(k, n) for k, n in names.items() if k not in fetched and k not in wanted]
+    queue += sorted(((k, n) for k, n in names.items() if k in fetched and k not in wanted and fetched[k] < stale), key=lambda x: fetched[x[0]])
+    say(f"Organizations: {len(names)} named on the site; {len(wanted)} asked for; {sum(1 for k in names if k not in fetched)} never looked up; "
+        f"looking up {min(len(queue), args.max_names)} this run")
+    queue = queue[: args.max_names]
+
+    def one(item):
+        k, n = item
+        for wait in (5, 20, None):
+            try:
+                return k, U.lookup(n), None
+            except Exception as e:  # noqa: BLE001 - kept for the summary; the name is tried again next run
+                if wait is None:
+                    return k, None, f"{type(e).__name__}: {e}"
+                time.sleep(wait)
+
+    sql, done, failed, with_awards = [], 0, [], 0
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        for k, got, err in pool.map(one, queue):
+            if err:
+                failed.append((k, err))
+                continue
+            done += 1
+            with_awards += any(y["total"] for r in got["recipients"] for y in r["years"])
+            sql.append(f"INSERT OR REPLACE INTO federal_awards_cache (name_key, result, fetched_at) VALUES ({lit(k)}, {lit(json.dumps(got, separators=(',', ':')))}, datetime('now'));")
+            sql.append(f"DELETE FROM federal_awards_wanted WHERE name_key = {lit(k)};")
+            if args.mode == "measure" and done <= 8:
+                say(f"    {got['name']}: {len(got['recipients'])} recipient(s) of {got['total_found']}; "
+                    + "; ".join(f"{r['name']} ({r['location']}) " + ", ".join(f"FY{y['fy']} ${y['total']:,.0f}" for y in r["years"]) for r in got["recipients"]))
+    say(f"Looked up {done}; with awards in the last {U.YEARS} fiscal years: {with_awards}; failed: {len(failed)} {failed[:5]}")
+    if failed and not done:
+        args.failed.append("USAspending")
+    return sql
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("what", choices=("earmarks", "travel", "fara"))
+    ap.add_argument("what", choices=("earmarks", "travel", "fara", "awards"))
+    ap.add_argument("--max-names", type=int, default=3500, help="organizations looked up on USAspending this run")
     ap.add_argument("--mode", choices=("measure", "load"), default="measure")
     ap.add_argument("--max-docs", type=int, default=150, help="FARA statements read this run, newest first")
     ap.add_argument("--database", default="pillory")
@@ -460,7 +555,7 @@ def main():
     args.failed = []
     if args.mode == "load":
         ensure_tables(args)
-    sql = {"earmarks": earmarks, "travel": travel, "fara": fara}[args.what](args)
+    sql = {"earmarks": earmarks, "travel": travel, "fara": fara, "awards": awards}[args.what](args)
     say(f"{len(sql)} SQL statements")
     if args.mode == "load" and sql:
         run_sql(args, sql)

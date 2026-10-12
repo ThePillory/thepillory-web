@@ -1,0 +1,31 @@
+# Federal awards (USAspending.gov contracts and grants) for every organization
+# the site shows with a "Federal awards" link, into D1, daily and on demand
+# (Actions -> Refresh federal awards -> Run workflow). Cloudflare's servers
+# can't reach USAspending, so the lookups run here; /awards/ reads what's
+# stored. Names someone opened first, then never looked up, then the oldest.
+# See tools/usaspending.py and docs/funding.md.
+name: Refresh federal awards
+on:
+  schedule:
+    - cron: "23 13 * * *"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "measure (read, write nothing) or load"
+        default: load
+      max_names:
+        description: "organizations looked up this run"
+        default: "3500"
+jobs:
+  load:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: python3 tools/load_gov_money.py awards --mode "${{ github.event.inputs.mode || 'load' }}" --max-names "${{ github.event.inputs.max_names || '3500' }}"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
