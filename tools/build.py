@@ -20,6 +20,7 @@ Standard library only; no install step.
 
 import html
 import json
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -32,7 +33,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "49"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "50"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -288,8 +289,9 @@ def shell(title, main, *, nav="", back_html="", after="", title_is_html=False):
     if after:
         body_cls.append("has-action-bar")
     header = site_header()
+    # Officials, bills and meetings are searched only as someone types (assets/app.js
+    # asks /api/search-officials?q=), so no page downloads a full list.
     scripts = (f'<script src="/assets/search-index.js?v={ASSET_VERSION}"></script>\n'
-               '    <script src="/api/search-officials"></script>\n'
                f'    <script src="/assets/app.js?v={ASSET_VERSION}"></script>')
     head = head_tags(f"{t} – ThePillory") if title_is_html else head_tags(f"{title} – ThePillory")
     return f"""<!DOCTYPE html>
@@ -1058,7 +1060,8 @@ def build_search():
   <h1>Search</h1>
   <p class="subtitle">Reps, governing bodies, bills, meetings, and the Constitution.</p>
 </header>
-<div id="search-page-results" class="stack" aria-live="polite"></div>"""
+<div id="search-page-results" class="stack" aria-live="polite"></div>
+<noscript><section class="card stack-sm"><p class="small">Search here needs JavaScript. Without it, find an official, justice or candidate by name on the <a class="inline-link" href="/reps/#search">Reps tab</a>, bills and executive orders on <a class="inline-link" href="/laws/">Laws</a>, and every provision on <a class="inline-link" href="/laws/constitution/">the Constitution</a>.</p></section></noscript>"""
     render("search", "Search", main)
 
 
@@ -1073,10 +1076,29 @@ STATE_FULL = {
 }
 
 
+ORDINALS = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth",
+            "thirteenth", "fourteenth", "fifteenth", "sixteenth", "seventeenth", "eighteenth", "nineteenth", "twentieth",
+            "twenty-first", "twenty-second", "twenty-third", "twenty-fourth", "twenty-fifth", "twenty-sixth", "twenty-seventh"]
+ROMAN = {"I": 1, "V": 5, "X": 10}
+
+
+def amendment_name(label):
+    """'Amendment XIV' or 'Amendment XIV, Section 1' → 'fourteenth amendment 14th ' (so "first amendment" finds Amendment I)."""
+    m = re.match(r"Amendment ([IVX]+)\b", label)
+    if not m:
+        return ""
+    n, prev = 0, 0
+    for ch in reversed(m.group(1)):
+        v = ROMAN[ch]
+        n, prev = (n - v, prev) if v < prev else (n + v, v)
+    suffix = "th" if 10 <= n % 100 <= 20 else {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+    return f"{ORDINALS[n - 1]} amendment {n}{suffix} " if 1 <= n <= len(ORDINALS) else ""
+
+
 def search_index():
     """Static search entries: the governing bodies and every provision of the
-    Constitution. Officials, bills and meetings are added from D1 by
-    /api/search-officials."""
+    Constitution. Officials, bills and meetings are searched in D1 as someone
+    types (/api/search-officials?q=)."""
     items = []
     for b in D.BODIES:
         items.append({"type": "Body", "title": b["name"], "sub": LEVEL_NAME[b["level"]] + " · Governing body",
@@ -1088,7 +1110,7 @@ def search_index():
             continue
         text = p["text"]
         items.append({"type": "Constitution", "title": p["label"], "sub": text[:90] + ("…" if len(text) > 90 else ""),
-                      "url": f"/laws/constitution/#{p['id']}", "k": text})
+                      "url": f"/laws/constitution/#{p['id']}", "k": amendment_name(p["label"]) + text})
     # Topics (workers/sync/src/topics/list.js).
     items.append({"type": "Topics", "title": "Topics", "sub": "One subject at a time, side by side", "url": "/topics/", "k": "topic topics subject issue"})
     for t in TOPIC_LIST:
