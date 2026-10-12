@@ -25,6 +25,9 @@ for name, url in [
     ("api_home", "https://lda.gov/api/"),
     ("register", "https://lda.gov/api/register/"),
     ("auth", "https://lda.gov/api/auth/login/"),
+    ("contrib_lobbyist", "https://lda.gov/api/v1/contributions/?filing_year=2025&filer_type=lobbyist&page_size=2"),
+    ("contrib_org", "https://lda.gov/api/v1/contributions/?filing_year=2025&filer_type=organization&page_size=2"),
+    ("contrib_big", "https://lda.gov/api/v1/contributions/?filing_year=2025&page_size=100"),
     ("constants", "https://lda.gov/api/v1/constants/contribution/itemtypes/"),
 ]:
     s, h, b = get(url)
