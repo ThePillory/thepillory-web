@@ -1,46 +1,11 @@
-"""Temporary probe: lda.gov contributions API and Cal-Access lobbying tables."""
-import csv, io, json, re, sys, urllib.request, zipfile, collections
+"""Temporary probe, round 2: Cal-Access Form 635/645 summary lines, contributions, activity text."""
+import csv, io, json, re, urllib.request, zipfile, collections, random
 from pathlib import Path
 OUT = Path("tools/probe/out"); OUT.mkdir(parents=True, exist_ok=True)
-UA = "ThePillory/1.0 (+https://thepillory.co; public records)"
-def get(url, accept="application/json"):
-    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": accept})
-    try:
-        with urllib.request.urlopen(req, timeout=120) as r:
-            return r.status, dict(r.headers), r.read()
-    except urllib.error.HTTPError as e:
-        return e.code, dict(e.headers), e.read()
-    except Exception as e:
-        return 0, {}, repr(e).encode()
-log = {}
-for name, url in [
-    ("contrib_2025", "https://lda.gov/api/v1/contributions/?filing_year=2025&page_size=3"),
-    ("contrib_honoree", "https://lda.gov/api/v1/contributions/?contribution_honoree=Schiff&filing_year=2025&page_size=3"),
-    ("contrib_payee", "https://lda.gov/api/v1/contributions/?contribution_payee=Schiff&filing_year=2025&page_size=3"),
-    ("root", "https://lda.gov/api/v1/"),
-    ("schema", "https://lda.gov/api/v1/schema/"),
-    ("redoc", "https://lda.gov/api/redoc/v1/"),
-    ("openapi", "https://lda.gov/api/redoc/v1/?format=openapi"),
-    ("swagger", "https://lda.gov/api/swagger.json"),
-    ("api_home", "https://lda.gov/api/"),
-    ("register", "https://lda.gov/api/register/"),
-    ("auth", "https://lda.gov/api/auth/login/"),
-    ("contrib_lobbyist", "https://lda.gov/api/v1/contributions/?filing_year=2025&filer_type=lobbyist&page_size=2"),
-    ("contrib_org", "https://lda.gov/api/v1/contributions/?filing_year=2025&filer_type=organization&page_size=2"),
-    ("contrib_big", "https://lda.gov/api/v1/contributions/?filing_year=2025&page_size=100"),
-    ("constants", "https://lda.gov/api/v1/constants/contribution/itemtypes/"),
-]:
-    s, h, b = get(url)
-    log[name] = {"status": s, "headers": {k: v for k, v in h.items() if k.lower().startswith(("x-", "retry", "ratelimit", "content-type", "allow"))}, "len": len(b)}
-    (OUT / f"lda_{name}.txt").write_bytes(b[:400000])
-(OUT / "lda_log.json").write_text(json.dumps(log, indent=1))
-print(json.dumps(log, indent=1))
-
 zp = Path("/tmp/cal.zip")
 urllib.request.urlretrieve("https://campaignfinance.cdn.sos.ca.gov/dbwebexport.zip", zp)
 zf = zipfile.ZipFile(zp)
 names = zf.namelist()
-(OUT / "cal_names.txt").write_text("\n".join(f"{n} {zf.getinfo(n).file_size}" for n in names))
 def rows(table):
     member = next(n for n in names if n.upper().endswith(f"/{table}.TSV"))
     with zf.open(member) as f:
@@ -48,34 +13,45 @@ def rows(table):
         header = next(rd)
         for r in rd:
             yield dict(zip(header, r))
-rep = {}
-for t in ["CVR_LOBBY_DISCLOSURE_CD", "LPAY_CD", "LEXP_CD", "LOTH_CD", "LCCM_CD", "LEMP_CD", "LATT_CD", "LOBBY_AMENDMENTS_CD", "CVR_REGISTRATION_CD", "FILER_FILINGS_CD", "SMRY_CD", "TEXT_MEMO_CD", "LOBBYIST_EMPLOYER1_CD", "LOBBYIST_EMPLOYER2_CD", "LOBBYIST_EMPLOYER3_CD", "LOBBYING_CHG_LOG_CD", "LOBBYIST_FIRM1_CD", "LOBBYIST_EMP_LOBBYIST1_CD", "LOBBYIST_CONTRIBUTIONS1_CD", "FILERNAME_CD"]:
-    try:
-        it = rows(t)
-        samples = []
-        n = 0
-        forms = collections.Counter()
-        recent = []
-        for r in it:
-            n += 1
-            ft = r.get("FORM_TYPE") or r.get("FORM_ID") or r.get("REC_TYPE") or ""
-            forms[ft] += 1
-            if len(samples) < 4: samples.append(r)
-            d = r.get("RPT_DATE") or r.get("FILING_DATE") or r.get("FROM_DATE") or ""
-            if len(recent) < 6 and re.search(r"202[56]", d) and ft not in ("",):
-                recent.append(r)
-        rep[t] = {"rows": n, "forms": forms.most_common(25), "samples": samples, "recent": recent}
-    except StopIteration:
-        rep[t] = "missing"
-    except Exception as e:
-        rep[t] = repr(e)
-(OUT / "cal_lobby.json").write_text(json.dumps(rep, indent=1)[:3000000])
-# Lobbying activity descriptions with bill numbers, recent F635
-acts = []
+def ymd(s):
+    m = re.match(r"(\d+)/(\d+)/(\d{4})", s or "")
+    return f"{m[3]}-{int(m[1]):02d}-{int(m[2]):02d}" if m else ""
+covers = {}
 for r in rows("CVR_LOBBY_DISCLOSURE_CD"):
-    a = r.get("LBY_ACTVTY") or ""
-    if r.get("FORM_TYPE") in ("F635", "F625") and re.search(r"\b(AB|SB)\s?\d", a) and "2025" in (r.get("RPT_DATE") or ""):
-        acts.append({k: r[k] for k in r})
-        if len(acts) >= 40: break
-(OUT / "cal_acts.json").write_text(json.dumps(acts, indent=1))
+    if r["FORM_TYPE"] in ("F635", "F645", "F625", "F615") and ymd(r["FROM_DATE"]) >= "2025-01-01":
+        covers[(r["FILING_ID"], r["AMEND_ID"])] = r
+print(len(covers), collections.Counter(r["FORM_TYPE"] for r in covers.values()))
+pick = {}
+for ft in ("F635", "F645", "F625", "F615"):
+    ids = [k for k, r in covers.items() if r["FORM_TYPE"] == ft]
+    random.seed(1)
+    pick[ft] = random.sample(ids, min(4, len(ids)))
+want = {k for v in pick.values() for k in v}
+smry = collections.defaultdict(list)
+for r in rows("SMRY_CD"):
+    if (r["FILING_ID"], r["AMEND_ID"]) in want:
+        smry[f'{r["FILING_ID"]}-{r["AMEND_ID"]}'].append({k: v for k, v in r.items() if v})
+# Line items across all 2025+ F635: which lines exist
+lines = collections.Counter()
+for r in rows("SMRY_CD"):
+    if r["FORM_TYPE"].startswith("F635") and (r["FILING_ID"], r["AMEND_ID"]) in covers:
+        lines[(r["FORM_TYPE"], r["LINE_ITEM"])] += 1
+lccm = collections.Counter(); lccm_s = []
+for r in rows("LCCM_CD"):
+    if (r["FILING_ID"], r["AMEND_ID"]) in covers:
+        lccm[r["FORM_TYPE"]] += 1
+        if len(lccm_s) < 12 and random.random() < 0.01: lccm_s.append({k: v for k, v in r.items() if v})
+acts = [covers[k]["LBY_ACTVTY"] for k in covers if covers[k]["FORM_TYPE"] in ("F635", "F645")]
+random.seed(2)
+out = {
+    "covers_sample": {ft: [{k: v for k, v in covers[k].items() if v} for k in ks] for ft, ks in pick.items()},
+    "smry": smry,
+    "f635_lines": sorted([[a, b, n] for (a, b), n in lines.items()]),
+    "lccm_forms": lccm.most_common(), "lccm_samples": lccm_s,
+    "acts": random.sample(acts, 300),
+    "acts_none": sum(1 for a in acts if a.strip().upper() in ("", "NONE", "N/A")),
+    "acts_n": len(acts),
+    "amends": collections.Counter(k[1] for k in covers).most_common(6),
+}
+(OUT / "cal2.json").write_text(json.dumps(out, indent=1))
 print("done")
