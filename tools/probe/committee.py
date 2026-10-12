@@ -2,7 +2,7 @@
 import json, os, urllib.request, urllib.error, collections
 from pathlib import Path
 OUT = Path("tools/probe/out"); OUT.mkdir(parents=True, exist_ok=True)
-K = os.environ["CONGRESS_API_KEY"]
+K = os.environ.get("CONGRESS_API_KEY") or "DEMO_KEY"
 def get(path, **p):
     q = "&".join(f"{k}={v}" for k, v in {"format": "json", "api_key": K, **p}.items())
     req = urllib.request.Request(f"https://api.congress.gov/v3{path}?{q}", headers={"User-Agent": "ThePillory/1.0 (+https://thepillory.co)", "Accept": "application/json"})
