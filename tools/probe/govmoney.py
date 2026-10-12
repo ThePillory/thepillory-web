@@ -1,75 +1,68 @@
-"""Temporary probe round 4: Senate gift travel XML, House gift travel search results, FY27 CPF awards xlsx, enacted CPF/CDS tables, a FARA supplemental statement's text."""
-import io, json, re, sys, zipfile, http.cookiejar, urllib.request, urllib.error, urllib.parse
+"""Temporary probe round 5: Senate public-law CDS table text, FARA supplemental statements' text layers, Senate travel PDF text."""
+import io, json, re, zipfile, urllib.request, urllib.error
 from pathlib import Path
+import pdfplumber
 OUT = Path("tools/probe/out"); OUT.mkdir(parents=True, exist_ok=True)
 UA = {"User-Agent": "ThePillory/1.0 (+https://thepillory.co; public records)", "Accept": "*/*"}
-jar = http.cookiejar.CookieJar(); op = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
-def get(url, data=None, headers=None, n=60000000):
-    h = dict(UA); h.update(headers or {})
+def get(url, n=60000000):
     try:
-        with op.open(urllib.request.Request(url, data=data, headers=h), timeout=180) as r:
-            return r.status, r.headers.get("Content-Type"), r.read()[:n]
+        with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=180) as r:
+            return r.status, r.headers.get("Content-Type"), r.read()[:n], r.geturl()
     except urllib.error.HTTPError as e:
-        return e.code, e.headers.get("Content-Type"), e.read()[:3000]
+        return e.code, e.headers.get("Content-Type"), e.read()[:3000], url
     except Exception as e:
-        return 0, None, repr(e).encode()
-def links(b, pat):
-    return sorted(set(re.findall(r'href="([^"]*(?:%s)[^"]*)"' % pat, b.decode("utf-8", "replace"), re.I)))[:80]
+        return 0, None, repr(e).encode(), url
+def text(b, pages=None):
+    with pdfplumber.open(io.BytesIO(b)) as p:
+        return [(pg.extract_text() or "") for pg in (p.pages if pages is None else p.pages[:pages])]
+def upright_rows(b, page=0):
+    with pdfplumber.open(io.BytesIO(b)) as p:
+        pg = p.pages[page]
+        chars = pg.chars
+        up = sum(1 for c in chars if c.get("upright"))
+        return {"chars": len(chars), "upright": up, "rotation": pg.rotation, "size": [pg.width, pg.height]}
 res = {}
-s, ct, b = get("https://www.senate.gov/legislative/Public_Disclosure/gift-rule-travel.htm")
-res["senate_gt_page"] = {"status": s, "links": links(b, r"zip|xml|gift|travel|search")}
-z = next((l for l in res["senate_gt_page"]["links"] if l.lower().endswith(".zip")), None)
-if z:
-    url = z if z.startswith("http") else urllib.parse.urljoin("https://www.senate.gov/legislative/Public_Disclosure/", z)
-    s, ct, b = get(url)
-    res["senate_zip"] = [url, s, ct, len(b)]
+s, ct, b, u = get("https://www.appropriations.senate.gov/download/fy26-thud-cds-public-law")
+res["pl"] = [s, ct, u, len(b)]
+if b[:4] == b"%PDF":
+    res["pl_layout"] = upright_rows(b)
+    t = text(b, 2); res["pl_text"] = t[0][:2500]
+    # Rotated pages: try rotating the page's chars by reading with a derotated crop.
+    with pdfplumber.open(io.BytesIO(b)) as p:
+        pg = p.pages[1]
+        words = pg.extract_words(keep_blank_chars=False, use_text_flow=False, extra_attrs=["upright"])
+        res["pl_words_sample"] = [(w["text"], round(w["x0"]), round(w["top"]), w["upright"]) for w in words[:60]]
+# FARA: text-layer prevalence in 25 recent supplemental statements
+s, ct, b, u = get("https://efile.fara.gov/bulk/zip/FARA_All_RegistrantDocs.csv.zip")
+zf = zipfile.ZipFile(io.BytesIO(b)); lines = zf.read(zf.namelist()[0]).decode("latin-1").splitlines()
+sup = [re.search(r"https://efile\.fara\.gov/docs/[^\",]+\.pdf", l).group(0) for l in lines if "Supplemental Statement" in l and re.search(r'"\d\d/\d\d/2026"', l)][:25]
+stats = []
+for url in sup:
+    s, ct, pdf, u = get(url)
     try:
-        zf = zipfile.ZipFile(io.BytesIO(b)); names = zf.namelist(); res["senate_zip_names"] = names[:10]
-        x = zf.read(names[0]).decode("utf-8", "replace"); res["senate_xml_head"] = x[:4000]; res["senate_xml_len"] = len(x)
+        t = "\n".join(text(pdf))
     except Exception as e:
-        res["senate_zip_err"] = repr(e)
-# House gift travel: token, then search a member
-s, ct, b = get("https://disclosures-clerk.house.gov/GiftTravelFilings/ViewSearch")
-tok = (re.search(r'name="__RequestVerificationToken"[^>]*value="([^"]+)"', b.decode("utf-8", "replace")) or [None, ""])[1]
-data = urllib.parse.urlencode({"MemberLastName": "Pelosi", "StaffLastName": "", "TravelDateFrom": "", "TravelDateTo": "", "Sponsor": "", "Destination": "", "__RequestVerificationToken": tok}).encode()
-s, ct, b = get("https://disclosures-clerk.house.gov/GiftTravelFilings/ViewSearchResult", data=data, headers={"Content-Type": "application/x-www-form-urlencoded", "X-Requested-With": "XMLHttpRequest", "Referer": "https://disclosures-clerk.house.gov/GiftTravelFilings"})
-h = b.decode("utf-8", "replace")
-res["house_gt_result"] = {"status": s, "len": len(h), "rows": re.findall(r"<tr[\s\S]*?</tr>", h)[:4], "links": links(b, r"pdf|travel")[:10]}
-data = urllib.parse.urlencode({"MemberLastName": "", "StaffLastName": "", "TravelDateFrom": "01/01/2026", "TravelDateTo": "03/31/2026", "Sponsor": "", "Destination": "", "__RequestVerificationToken": tok}).encode()
-s, ct, b = get("https://disclosures-clerk.house.gov/GiftTravelFilings/ViewSearchResult", data=data, headers={"Content-Type": "application/x-www-form-urlencoded", "X-Requested-With": "XMLHttpRequest", "Referer": "https://disclosures-clerk.house.gov/GiftTravelFilings"})
-res["house_gt_dates"] = {"status": s, "rows": len(re.findall(r"<tr", b.decode("utf-8", "replace")))}
-# FY27 CPF awards
-try:
-    import openpyxl
-    for name in ("consolidated-table-of-fy27-cpf-awards.xlsx", "consolidated-table-of-fy27-cpf-requests.xlsx"):
-        s, ct, b = get("https://appropriations.house.gov/sites/evo-subsites/republicans-appropriations.house.gov/files/evo-media-document/" + name)
-        wb = openpyxl.load_workbook(io.BytesIO(b), read_only=True)
-        out = {"sheets": wb.sheetnames}
-        for ws in wb.worksheets[:2]:
-            out[ws.title] = [[str(c)[:50] if c is not None else None for c in row] for i, row in enumerate(ws.iter_rows(values_only=True)) if i < 5]
-            out[ws.title + "_rows"] = ws.max_row
-        res[name] = out
-except Exception as e:
-    res["xlsx_err"] = repr(e)
-for url in ("https://appropriations.house.gov/committee-activity/enacted-legislation/fiscal-year-2026-enacted-legislation",
-            "https://appropriations.house.gov/committee-activity/enacted-legislation/fiscal-year-2025-enacted-legislation",
-            "https://appropriations.house.gov/committee-activity/fy25-community-project-funding",
-            "https://www.appropriations.senate.gov/fy-2026-congressionally-directed-spending"):
-    s, ct, b = get(url)
-    res[url] = links(b, r"\.xlsx|\.xls|\.csv|cpf|cds|directed|explanatory|joint")
-# FARA: a recent supplemental statement's text
-s, ct, b = get("https://efile.fara.gov/api/v1/RegDocs/json/7766")
-res["fara_docs_7766"] = b.decode("utf-8", "replace")[:1500]
-s, ct, b = get("https://efile.fara.gov/bulk/zip/FARA_All_RegistrantDocs.csv.zip")
-try:
-    zf = zipfile.ZipFile(io.BytesIO(b)); n = zf.namelist()[0]
-    t = zf.read(n).decode("latin-1")
-    lines = t.splitlines(); res["fara_docs_csv"] = [n, len(lines), lines[:3]]
-    sup = [l for l in lines if "Supplemental Statement" in l and "/2026" in l][:5]
-    res["fara_sup_recent"] = sup
-    m = re.search(r"https://efile\.fara\.gov/docs/[^\",]+\.pdf", sup[0]) if sup else None
-    if m:
-        s, ct, pdf = get(m.group(0)); (OUT / "fara.pdf").write_bytes(pdf); res["fara_pdf"] = [m.group(0), s, len(pdf)]
-except Exception as e:
-    res["fara_err"] = repr(e)
-(OUT / "govmoney4.json").write_text(json.dumps(res, indent=1, default=str))
+        stats.append([url, "err", repr(e)[:80]]); continue
+    hits = re.findall(r"(?:Senator|Sen\.|Rep\.|Representative|Congressman|Congresswoman)\s+[A-Z][a-zA-Z'\-]+(?:\s+[A-Z][a-zA-Z'\-]+)?", t)
+    stats.append([url, len(t), len(hits), hits[:6]])
+res["fara_stats"] = stats
+good = next((x for x in stats if isinstance(x[1], int) and x[2] > 0), None)
+if good:
+    s, ct, pdf, u = get(good[0]); t = "\n".join(text(pdf))
+    i = t.find(good[3][0]); res["fara_excerpt"] = t[max(0, i - 1500): i + 800]
+# Senate travel PDFs
+s, ct, b, u = get("https://giftrule-disclosure.senate.gov/media/giftruledownloads/giftruledata.zip")
+x = zipfile.ZipFile(io.BytesIO(b)).read("giftrule.xml").decode("utf-8-sig")
+docs = re.findall(r'ReportingYear="2026"[^>]*>\s*<dbo\.Reports ReportTitle="([^"]+)" DocURL="([^"]+)"', x)[:6]
+res["titles"] = sorted(set(re.findall(r'ReportTitle="([^"]+)"', x)))
+res["filer_offices_sample"] = re.findall(r'<dbo\.filer LastName="([^"]+)" FirstName="([^"]+)">\s*<dbo\.Office OfficeName="([^"]+)"', x)[:5]
+tt = []
+for title, url in docs[:4]:
+    s, ct, pdf, u = get(url)
+    try:
+        t = "\n".join(text(pdf, 3))
+    except Exception as e:
+        t = repr(e)
+    tt.append([title, url, len(t), t[:1800]])
+res["senate_travel_text"] = tt
+(OUT / "govmoney5.json").write_text(json.dumps(res, indent=1, default=str))
