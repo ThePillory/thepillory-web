@@ -97,6 +97,24 @@ export const executivePost = (db, officialId) =>
     .bind(officialId)
     .first(), null);
 
+/** "Senate Committee on the Judiciary" → "Judiciary"; other names as listed ("Senate Special Committee on Aging" → "Special Committee on Aging"). Pure. */
+export function committeeShortName(name) {
+  const n = String(name || "").trim();
+  const m = /^(?:(?:Senate|House|Joint)\s+)?Committee\s+on\s+(?:the\s+)?(.+)$/i.exec(n);
+  return m ? m[1] : n.replace(/^(?:Senate|House)\s+/i, "");
+}
+
+/** Every current committee assignment, full committees first, each followed by its subcommittees. */
+export function committeesList(committees) {
+  const full = committees.filter((c) => !c.parent);
+  const subs = (name) => committees.filter((c) => c.parent === name);
+  const orphans = committees.filter((c) => c.parent && !full.some((f) => f.name === c.parent));
+  const item = (c, sub = false) =>
+    `<li class="list-row"><span class="list-title${sub ? " small" : ""}">${sub ? "Subcommittee: " : ""}${esc(c.name)}</span>${c.title ? `<span class="row-end small secondary">${esc(c.title)}</span>` : ""}</li>`;
+  return `<div class="card"><ul class="plain-list">${[...full.flatMap((c) => [item(c), ...subs(c.name).map((x) => item(x, true))]), ...orphans.map((c) => item({ ...c, name: `${c.parent}: ${c.name}` }, true))].join("")}</ul></div>
+  <p class="hint">Committee assignments as listed by congress-legislators. ${sourceLink(committees[0].source_url)}</p>`;
+}
+
 export const memberCommittees = (db, officialId) =>
   soft(async () => (await db
     .prepare("SELECT committee_id, name, parent, title, source_url FROM congress_committees WHERE official_id = ? ORDER BY COALESCE(parent, name), parent IS NOT NULL, name")
@@ -154,12 +172,13 @@ export function tradesSection(o, { summary, page, reports, committees = [], post
   const lines = summary.filter((s) => s.trades).slice(0, 3).map(summaryLine);
   const id = "trade-list";
   const more = page.more ? `<a class="btn btn--block load-more" href="/reps/${esc(o.slug)}/trades/?offset=${offset + TRADES_PER_PAGE}" data-load-more="${id}">Load more</a>` : "";
-  const committeeHtml = committees.length
-    ? `<p class="label">Committee assignments now</p><div class="card"><ul class="plain-list">${committees
-        .map((c) => `<li class="list-row"><span class="list-title">${esc(c.parent ? `${c.parent}: ${c.name}` : c.name)}</span>${c.title ? `<span class="row-end small secondary">${esc(c.title)}</span>` : ""}</li>`)
-        .join("")}</ul></div><p class="hint">Committee assignments as listed by congress-legislators. ${sourceLink(committees[0].source_url)}</p>`
+  // One compact line after the list, never inside it: full committees only, for
+  // reference, with every assignment (subcommittees too) on the About tab.
+  const full = committees.filter((c) => !c.parent);
+  const reference = full.length
+    ? `<p class="small secondary trades-reference">Committee assignments, for reference: ${full.map((c) => esc(committeeShortName(c.name))).join("; ")}. <a class="inline-link" href="#congress-committees">All committee assignments</a></p>`
     : exec
-      ? `<p class="label">Office</p><div class="card stack-xs"><p class="small">${esc((post && post.position) || o.office)}</p>${post && post.agency ? `<p class="small secondary">${esc(post.agency)}</p>` : ""}</div>`
+      ? `<p class="small secondary trades-reference">Office, for reference: ${esc((post && post.position) || o.office)}${post && post.agency ? `, ${esc(post.agency)}` : ""}.</p>`
       : "";
   const reportLinks = reports.length
     ? `<p class="label">Reports not shown line by line</p><div class="card">${reports
@@ -169,15 +188,15 @@ export function tradesSection(o, { summary, page, reports, committees = [], post
         .join("")}</div>`
     : "";
   if (!page.rows.length && !reports.length) {
-    return `<p class="small secondary">No stock trades by ${esc(o.name)} are on ThePillory yet. ${exec ? "Reports listed by the Office of Government Ethics load daily." : "Reports since 2023 load daily, newest first."}</p>${committeeHtml}<p class="hint">${note}</p>`;
+    return `<p class="small secondary">No stock trades by ${esc(o.name)} are on ThePillory yet. ${exec ? "Reports listed by the Office of Government Ethics load daily." : "Reports since 2023 load daily, newest first."}</p>${reference}<p class="hint">${note}</p>`;
   }
   return `
   ${lines.length ? `<div class="stack-xs">${lines.map((l) => `<p class="small">${esc(l)}</p>`).join("")}</div>` : ""}
-  ${now && now.paper && !exec ? `<p class="small secondary">Also ${now.paper} ${now.paper === 1 ? "report" : "reports"} filed on paper in ${yearNow}: see each report below.</p>` : ""}
-  ${committeeHtml}
+  ${now && now.paper && !exec ? `<p class="small secondary">Also ${now.paper} ${now.paper === 1 ? "report" : "reports"} filed on paper in ${yearNow}, linked after the list.</p>` : ""}
   <p class="label">Trades, newest first</p>
   <div class="card compact-list" id="${id}">${page.rows.map((t) => tradeRow(t)).join("") || '<p class="secondary small cr-empty">No trades read from electronic reports.</p>'}</div>
   ${more}
+  ${reference}
   ${reportLinks}
   <p class="hint">${note}</p>`;
 }
