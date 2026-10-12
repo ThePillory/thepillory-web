@@ -476,11 +476,11 @@ export async function syncFederalLobbying(env, db, budget) {
 // relationships that are the committee acting (committeeActed), only the
 // current Congress. Each committee's list is read in full the first time, then
 // only what changed since the last read. A bill not loaded yet is added with
-// its title from Congress.gov, up to COMMITTEE_BILLS_DAILY (150) a day.
+// its title from Congress.gov, up to COMMITTEE_BILLS_DAILY (400) a day.
 export async function syncCommitteeBills(env, db, budget) {
   if (!env.CONGRESS_API_KEY) return { status: "skipped", message: "CONGRESS_API_KEY is not set" };
   const congress = currentCongress();
-  const newBillCap = parseInt(env.COMMITTEE_BILLS_DAILY || "150", 10);
+  const newBillCap = parseInt(env.COMMITTEE_BILLS_DAILY || "400", 10);
   const dayKey = `committee_new_bills_${new Date().toISOString().slice(0, 10)}`;
   let added = parseInt((await getState(db, dayKey)) || "0", 10);
   let read = 0;

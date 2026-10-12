@@ -160,7 +160,7 @@ LOBBYING_REFRESH_DAYS = "30"
 # (Congress.gov committee lists): new bills added per day.
 LDA_CONTRIB_DAILY = "400"
 LOBBY_CONTRIB_REFRESH_DAYS = "45"
-COMMITTEE_BILLS_DAILY = "150"
+COMMITTEE_BILLS_DAILY = "400"
 # The executive branch (src/executive/; docs/executive.md). The Governor's site
 # and leginfo have no API: one request every 2 seconds, capped per day.
 GOVCA_MIN_INTERVAL_MS = "2000"
