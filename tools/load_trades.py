@@ -691,13 +691,14 @@ def committees():
 # D1
 
 
-BUSY = re.compile(r"overloaded|queued for too long|too many requests|SQLITE_BUSY|timed? ?out", re.I)
+BUSY = re.compile(r"overloaded|queued for too long|too many requests|SQLITE_BUSY|timed? ?out|Not currently importing anything", re.I)
 
 
 def d1(args, *, file=None, command=None):
     cmd = ["npx", "--yes", "wrangler@4", "d1", "execute", args.database, "--remote", "--yes"]
     cmd += ["--file", str(file)] if file else ["--json", "--command", command]
-    # D1 sometimes answers "overloaded" when other work is running; each call is all or
+    # D1 sometimes answers "overloaded" when other work is running, and a file import can
+    # lose track of itself ("Not currently importing anything"); each call is all or
     # nothing and every statement can run twice, so wait and try again.
     for wait in (30, 60, 120, 240, None):
         r = subprocess.run(cmd, cwd=ROOT / "workers" / "sync", capture_output=True, text=True)
