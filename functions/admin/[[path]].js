@@ -18,11 +18,13 @@
 // /admin/review/trades/   scanned OGE Form 278-T reports: compare the two AI readings' agreed
 //                         rows with the scan, approve (publish) or reject; read again
 // /admin/waitlist/        "Bring ThePillory to your county": sign-ups by county (counts only)
+// /admin/health/          every data source green, yellow or red, with 30 days of history (functions/_lib/health-pages.js)
 //
 // Protected by Cloudflare Access (see functions/_lib/access.js and docs/analysis.md).
 // Every change writes a bill_analysis_revisions row with the row as it was before.
 import { page, esc, fmtDate, safeUrl, guard } from "../_lib/render.js";
 import { checkAccess } from "../_lib/access.js";
+import { healthData, adminHealthMain, deadLinks } from "../_lib/health-pages.js";
 import { inChunks } from "../_lib/data.js";
 import { parse, badge, baselineSection, provisionsFor } from "../_lib/analysis.js";
 import { orderHref } from "../_lib/orders.js";
@@ -218,7 +220,7 @@ async function list(db, url, env) {
     `<header class="page-head">
   <h1>Review queue</h1>
   <p class="subtitle">What needs a person. Drafts the AI reviewer passes are published as "AI-drafted, auto-checked"; the rest wait here.</p>
-  <p class="small"><a class="inline-link" href="/admin/waitlist/">County waitlist</a></p>
+  <p class="small"><a class="inline-link" href="/admin/waitlist/">County waitlist</a> · <a class="inline-link" href="/admin/health/">Data sources</a></p>
 </header>
 ${await waitingSummary(db)}
 ${await promiseQueue(db, env, url)}
@@ -1556,9 +1558,14 @@ async function handle(context) {
   if (!who.ok) return locked(who.reason);
   const parts = (context.params.path || []).filter(Boolean);
   if (parts.length === 0) return Response.redirect(`${url.origin}/admin/review/`, 302);
-  if (parts[0] !== "review" && parts[0] !== "waitlist") return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+  if (parts[0] !== "review" && parts[0] !== "waitlist" && parts[0] !== "health") return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
   if (!env.DB) return missingTables();
+  if (parts[0] === "health") {
+    if (parts.length !== 1 || request.method !== "GET") return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+    const [data, dead] = await Promise.all([healthData(env.DB), deadLinks(env.DB)]);
+    return adminPage("Data sources", adminHealthMain(data, dead));
+  }
   if (parts[0] === "waitlist") {
     if (parts.length !== 1 || request.method !== "GET") return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
     return waitlist(env.DB);

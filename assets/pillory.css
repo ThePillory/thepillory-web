@@ -1960,3 +1960,24 @@ html[data-mode="simple"] .chip.has-plain .formal-name { display: none; }
 .browse-filter { display: flex; flex-direction: column; gap: 4px; }
 .browse-filter select.input { min-height: var(--tap); }
 .sort-switch { max-width: 320px; }
+
+/* ---------------------------------------------------------------------------
+   Data source health (/admin/health/, /about/data-status/) and source copies */
+.health-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.health-head .h3 { margin: 0; font-size: 1.0625rem; }
+.health-chip {
+  display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 700;
+  background: var(--panel); color: var(--text-2); white-space: nowrap;
+}
+.health-chip--green { color: var(--live); }
+.health-chip--yellow { color: var(--parch-text); background: var(--parch); }
+.health-chip--red { color: var(--tension); background: var(--tension-light); }
+.health-problems li { margin: 4px 0; }
+.health-dots { display: flex; flex-wrap: wrap; gap: 3px; }
+.health-dot { width: 10px; height: 10px; border-radius: 3px; background: var(--neutral); }
+.health-dot--green { background: var(--live); }
+.health-dot--yellow { background: var(--parch-text); }
+.health-dot--red { background: var(--tension); }
+.data-status-row { flex-direction: column; align-items: flex-start; gap: 2px; }
+.archived { font-size: 0.8125rem; }
+.archived-link { color: var(--text-2); }
