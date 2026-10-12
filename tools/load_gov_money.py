@@ -152,11 +152,19 @@ def who(rows, m):
     for r in rows:
         r["_who"], seen = [], set()
         for ch in ("house", "senate"):
-            for n in r[ch]:
+            names = list(r[ch])
+            # "Scott, Austin (GA)": a table can write a first name after the last, split at the comma.
+            for i in range(len(names) - 1, 0, -1):
+                f = re.match(r"^([A-Z]\.?|[A-Z][a-z]+)\s*\(([A-Z]{2})\)$", names[i])
+                if f and "(" not in names[i - 1] and " " not in names[i - 1] and not m.match_requester(names[i], ch, r.get("state")):
+                    if m.match_full(f.group(1), names[i - 1], "us-" + ch, f.group(2)):
+                        names[i - 1:i + 1] = [f"{names[i - 1]}, {names[i]}"]
+            for n in names:
                 if (n, ch) in seen:
                     continue
                 seen.add((n, ch))
-                oid = m.match_requester(n, ch, r.get("state"))
+                full = re.match(r"^([^,(]+),\s*([^,(]+?)\s*\(([A-Z]{2})\)$", n)
+                oid = m.match_full(full.group(2), full.group(1), "us-" + ch, full.group(3)) if full else m.match_requester(n, ch, r.get("state"))
                 if not oid:
                     unmatched.add(f"{n} ({ch})")
                 r["_who"].append((ch, n, oid))
@@ -196,7 +204,7 @@ def earmarks(args):
             try:
                 data = get(url + "&download=1")
             except urllib.error.HTTPError as e:
-                if e.code != 404:
+                if e.code not in (404, 410):
                     say(f"  FY{fy} {sub}: not fetched ({e.code})")
                 continue
             if data[:4] != b"%PDF":
@@ -303,7 +311,8 @@ def travel(args):
             oid = m.match_full(r["filer_first"], r["filer_last"], "us-senate")
         else:
             o = SENATOR_OFFICE.match((r["office"] or "").strip())
-            name = o.group(1) if o else ""
+            # The office is "Senator Name" or the senator's own "LAST, FIRST"; committee offices aren't matched.
+            name = o.group(1) if o else ((r["office"] or "").strip() if re.fullmatch(r"[A-Za-z.'\- ]+,\s*[A-Za-z.'\- ]+", (r["office"] or "").strip()) else "")
             if "," in name:
                 last, _, first = name.partition(",")
             else:
@@ -356,6 +365,12 @@ def fara(args):
         "registration_number": int(p["Registration Number"]), "principal": p["Foreign Principal"].strip(), "country": p.get("Country/Location Represented", "").strip() or None,
         "registration_date": G._iso(p.get("Foreign Principal Registration Date")), "termination_date": G._iso(p.get("Foreign Principal Termination Date"))}
         for p in principals if (p.get("Registration Number") or "").strip().isdigit() and p.get("Foreign Principal", "").strip() and keep(p.get("Foreign Principal Termination Date"))}.values())
+    if args.mode == "measure" and reg_rows:
+        try:
+            page = get(reg_rows[0]["source_url"], timeout=60).decode("utf-8", "replace")
+            say(f"Registrant page {reg_rows[0]['source_url']}: {len(page)} bytes, names the registrant: {reg_rows[0]['name'][:20].lower() in page.lower()}")
+        except Exception as e:
+            say(f"Registrant page not reachable ({type(e).__name__}: {e})")
     say(f"FARA: {len(reg_rows)} registrants active since {SINCE} (of {len(regs)}), {len(prin_rows)} foreign principals")
     sql = inserts("fara_registrants", list(reg_rows[0].keys()), reg_rows) if reg_rows else []
     sql += inserts("fara_principals", list(prin_rows[0].keys()), prin_rows) if prin_rows else []

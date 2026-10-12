@@ -27,6 +27,7 @@ import hashlib
 import html
 import io
 import re
+import unicodedata
 import xml.etree.ElementTree as ET
 
 STATES = {
@@ -118,7 +119,8 @@ def _join(a, b):
 
 def _names(text):
     """'Blunt Rochester, Coons' → ['Blunt Rochester', 'Coons']; 'Torres (CA)' stays whole."""
-    return [n.strip() for n in re.split(r",(?![^()]*\))", text or "") if n.strip()]
+    text = re.sub(r"(\w)- (\w)", r"\1-\2", text or "")  # "Cherfilus- McCormick", wrapped at the hyphen
+    return [n.strip() for n in re.split(r",(?![^()]*\))", text) if n.strip()]
 
 
 class Unreadable(Exception):
@@ -326,7 +328,9 @@ def house_awards(rows, fy, source_url):
 
 
 def fold(s):
-    return re.sub(r"[^a-z\- ]", "", (s or "").lower().replace("’", "").replace("'", "")).strip()
+    s = unicodedata.normalize("NFKD", s or "")
+    s = "".join(c for c in s if not unicodedata.combining(c))
+    return re.sub(r"[^a-z\- ]", "", s.lower().replace("’", "").replace("'", "")).strip()
 
 
 class Members:
@@ -353,16 +357,37 @@ class Members:
         return hits[0]["id"] if len(hits) == 1 else None
 
     def match_full(self, first, last, chamber=None, district=None):
-        hits = [r for r in self.by_last.get(fold(last), []) if not chamber or r["chamber"] == chamber]
-        if len(hits) > 1 and district:
-            hits = [r for r in hits if (r.get("district_code") or "").replace("-", "").upper() == district.replace("-", "").upper()]
-        if len(hits) > 1 and first:
-            f = fold(first).split(" ")[0]
-            hits = [r for r in hits if fold(r["name"]).split(" ")[0][:3] == f[:3]]
-        if len(hits) > 1:
-            active = [r for r in hits if r.get("active")]
-            hits = active if len(active) == 1 else hits
-        return hits[0]["id"] if len(hits) == 1 else None
+        """
+        A member by first and last name: in this chamber (and district, 'WA09' or
+        'WA-AL', when given), else (a member who has since changed chambers) in
+        any chamber with the same first name and state. One match only.
+        """
+        st = code = None
+        m = re.match(r"^([A-Z]{2})(?:-?(\d{1,2}|AL))?$", (district or "").upper().strip())
+        if m:
+            st, code = m.group(1), m.group(2)
+        f = fold(first).split(" ")[0] if first and len(fold(first).rstrip(".")) > 1 else ""
+        same = lambda r: not f or fold(r["name"]).split(" ")[0][:3] == f[:3] or f in fold(r["name"]).split(" ")
+        pool = self.by_last.get(fold(last), [])
+
+        def one(hits):
+            if len(hits) > 1:
+                active = [r for r in hits if r.get("active")]
+                hits = active if len(active) == 1 else hits
+            return hits[0]["id"] if len(hits) == 1 else None
+
+        hits = [r for r in pool if not chamber or r["chamber"] == chamber]
+        if len(hits) > 1 and st:
+            def dist(r):
+                c = str(r.get("district_code") or "").upper().lstrip("0")
+                return c == code.lstrip("0") or (code in ("AL", "0", "00") and c in ("", "AL", "0"))
+            hits = (code and [r for r in hits if r.get("state") == st and dist(r)]) or [r for r in hits if r.get("state") == st]
+        if len(hits) > 1 and f:
+            hits = [r for r in hits if same(r)]
+        got = one(hits)
+        if got or hits or not (f or st):
+            return got
+        return one([r for r in pool if same(r) and (not st or r.get("state") == st)]) if f else None
 
 
 def org_key(name):
