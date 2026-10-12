@@ -89,8 +89,11 @@ const RACES = {
       { id: "H0WA00002", name: "MOSS, KIT", party: "PARTY TWO", incumbent: false, url: "https://www.fec.gov/data/candidate/H0WA00002/" },
     ] } },
   CA: { state: "CA", year: 2026, source_url: "https://www.fec.gov/data/candidates/?election_year=2026&state=CA", built_on: "2026-10-10", senate_up: false, senate: [], house: {} },
+  OR: { state: "OR", year: 2026, source_url: "https://www.fec.gov/data/candidates/?election_year=2026&state=OR", built_on: "2026-10-10", senate_up: true,
+    senate: [{ id: "S0OR00001", name: "LOST, PRIMARY", party: "PARTY ONE", incumbent: false, url: "https://www.fec.gov/data/candidate/S0OR00001/" }],
+    house: { 2: [{ id: "H0OR00002", name: "FILED, ALSO", party: "PARTY TWO", incumbent: false, url: "https://www.fec.gov/data/candidate/H0OR00002/" }] } },
 };
-const OFFICES = { source: "https://www.usa.gov/state-election-office", offices: { WA: { name: "Washington Secretary of State", url: "https://www.sos.wa.gov/elections" }, CA: { name: "California Secretary of State", url: "https://www.sos.ca.gov/elections" } } };
+const OFFICES = { source: "https://www.usa.gov/state-election-office", offices: { OR: { name: "Oregon Secretary of State", url: "https://sos.oregon.gov/voting-elections/" }, WA: { name: "Washington Secretary of State", url: "https://www.sos.wa.gov/elections" }, CA: { name: "California Secretary of State", url: "https://www.sos.ca.gov/elections" } } };
 const CA_ELECTION = {
   election: { id: "2026-11-03", name: "November 3, 2026, General Election", date: "2026-11-03", state: "CA", alphabet: "ZYXWVUTSRQPONMLKJIHGFEDCBA".split(""), certified_list: "https://sos.example.gov/certified-list.pdf" },
   how_to_vote: { state: [{ label: "Check your registration status", url: "https://voterstatus.example.gov/", by: "Secretary of State" }] },
@@ -103,9 +106,16 @@ const CA_ELECTION = {
   ],
   measures: [{ id: "prop-1", number: "1", scope: "statewide", title: "EXAMPLE BONDS." }],
 };
+// Washington's House primary is still ahead in this file (a made-up late date: the FEC list may stand
+// for the field); Oregon's has passed (it may not).
+const datesFile = () => ({ states: {
+  WA: [{ date: "2026-12-30", type: "P", district: "", offices: ["U.S. House"] }, { date: "2026-11-03", type: "G", district: "", offices: ["U.S. House"] }],
+  OR: [{ date: "2026-05-19", type: "P", district: "", offices: ["U.S. Senate", "U.S. House"] }, { date: "2026-11-03", type: "G", district: "", offices: ["U.S. Senate", "U.S. House"] }],
+} });
 const ASSETS = {
   fetch: async (u) => {
     const path = new URL(u).pathname;
+    if (path === "/data/elections/dates.json") return new Response(JSON.stringify(datesFile()));
     const m = /^\/data\/elections\/federal-2026\/([a-z]{2})\.json$/.exec(path);
     if (m && RACES[m[1].toUpperCase()]) return new Response(JSON.stringify(RACES[m[1].toUpperCase()]));
     if (path === "/data/states/election-offices.json") return new Response(JSON.stringify(OFFICES));
@@ -195,6 +205,18 @@ test("before an address: FEC races, incumbents linked to Votes and Funding, offi
   assert.match(html, /doesn&#x27;t endorse candidates or measures, and doesn&#x27;t publish polls or predictions/);
   const noDistrict = (await get("/ballot/wa/")).html;
   assert.match(noDistrict, /Your U\.S\. House race: <a class="inline-link" href="#address">add your address below<\/a>/);
+});
+
+test("after the primary: no FEC list as the ballot; the address, the official list, and the FEC list behind its own link", async () => {
+  const { html } = await get("/ballot/or/", { cookie: `pillory_districts=${encodeURIComponent("st=OR&cd=2")}` });
+  assert.equal((html.match(/<li class="ballot-cand stack-xs">/g) || []).length, 0, "no names under the ballot heading");
+  assert.doesNotMatch(html, /LOST, PRIMARY|FILED, ALSO|Primary Lost|Also Filed/);
+  assert.equal((html.match(/Oregon chose its nominees for this office in the primary on May 19, 2026\. Enter your address to see the candidates on your ballot\./g) || []).length, 2, "the Senate and House races");
+  assert.match(html, /<a class="btn btn--primary" href="#address">Enter your address<\/a>/);
+  assert.match(html, /Official candidate list: <a class="inline-link" href="https:\/\/sos\.oregon\.gov\/voting-elections\/"/);
+  assert.match(html, /<a class="inline-link" href="\/races\/2026\/or\/senate\/">Filed with the FEC in 2026<\/a>: everyone who filed, including candidates who lost a primary or withdrew\. Not the ballot\./);
+  assert.match(html, /href="\/races\/2026\/or\/house-2\/">Filed with the FEC in 2026<\/a>/);
+  assert.doesNotMatch(html, /Before the primary: everyone who has filed/);
 });
 
 test("California: the certified candidates for the House race, in ballot order, not the FEC list", async () => {

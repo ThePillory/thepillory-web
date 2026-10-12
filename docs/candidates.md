@@ -31,7 +31,8 @@ Linked from: the ballot preview (each candidate's name, "The race", "Every 2026 
 
 | When | Label |
 |---|---|
-| Before the election, on the ballot or in a state with only the FEC list | Candidate · Not yet in office (line: "Filed for [office], [year]" or "Running for…" on a certified list) |
+| Before the primary (FEC list only), or on a certified list before the election | Candidate · Not yet in office (line: "Filed for [office], [year]" or "Running for…" on a certified list) |
+| FEC list only, after the office's primary (and runoff or convention) has passed (`nominations()` in `functions/_lib/election-window.js`, from `data/elections/dates.json`) | Filed for [office], [year] · "[State] chose its nominees in the primary on [date]. Whether this filer is on the November ballot: see the state's official candidate list." The FEC list doesn't say who won a primary, so nobody is called a candidate then. The race page says the list isn't the ballot and links the address lookup; search results say "Filed with the FEC" |
 | A certified list exists and they aren't on it | Filed for [office], [year] · Not on the November ballot |
 | The FEC no longer lists them as active | Filed for [office], [year] · last listed [date] |
 | After the election, on the certified ballot | Ran for [office], [year] |

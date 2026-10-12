@@ -10,6 +10,11 @@
 //                   the sample ballot and where to vote (the state's election
 //                   office from USA.gov, and Vote.gov); ThePillory's own ballot
 //                   pages for the state where it has them.
+//                   Once an office's primary (and its runoff or convention) has
+//                   passed, the FEC list isn't the ballot (it still holds people who
+//                   lost a primary or withdrew): that race asks for the address and
+//                   links the state's official candidate list instead, with the FEC
+//                   list only behind a separate "Filed with the FEC in 2026" link.
 //                   POST with an address: every contest, candidate and measure on
 //                   that ballot, with polling places and early-voting sites, from
 //                   the Google Civic Information API (functions/_lib/civic.js).
@@ -27,7 +32,7 @@ import { loadElection, electionHref, ballotHref, measureHref, measureName, conte
 import { voterInfo, ballotFromVoterInfo, officialFor, measureFor, CivicError } from "../_lib/civic.js";
 import { visitorHash } from "../_lib/turnstile.js";
 import { fold } from "../_lib/summary.js";
-import { statePossessive, RESULT_HEADING } from "../_lib/election-window.js";
+import { statePossessive, RESULT_HEADING, nominations, nominationWords, todayIn } from "../_lib/election-window.js";
 import { candidateHref, raceHref, racesHref, YEAR } from "../_lib/candidates.js";
 
 const BACK = ["Elections", "/elections/"];
@@ -264,7 +269,23 @@ function certifiedSection(st, election, filed, d) {
 </section>`;
 }
 
-function federalSection(st, races, filed, d, election = null) {
+/**
+ * A race whose nominees are settled: no list of names (the FEC's includes people who lost a primary
+ * or withdrew), the address box, the state's official candidate list, and the FEC list behind its own link.
+ */
+function settledRace(title, st, events, office, fecHref) {
+  const name = STATE_NAME[st];
+  return `
+  <div class="card stack-sm">
+    <h3>${esc(title)}</h3>
+    <p class="small">${esc(name)} chose its nominees for this office in ${esc(nominationWords(events))}. Enter your address to see the candidates on your ballot.</p>
+    <a class="btn btn--primary" href="#address">Enter your address</a>
+    <p class="small">Official candidate list: ${office ? `<a class="inline-link" href="${esc(office.url)}" target="_blank" rel="noopener">${esc(name)}'s election office ↗</a>` : `<a class="inline-link" href="${USA_GOV}" target="_blank" rel="noopener">your state's election office ↗</a>`}</p>
+    <p class="small secondary"><a class="inline-link" href="${esc(fecHref)}">Filed with the FEC in 2026</a>: everyone who filed, including candidates who lost a primary or withdrew. Not the ballot.</p>
+  </div>`;
+}
+
+function federalSection(st, races, filed, d, election = null, { dates = null, office = null, today = todayIn(st) } = {}) {
   const name = STATE_NAME[st];
   if (election && election.election.state === st && !measuresOnly(election)) return certifiedSection(st, election, filed === FAILED ? {} : filed, d);
   if (NO_GENERAL.has(st)) return `<div class="card"><p class="small">${esc(name)} holds its general elections in presidential election years, so there's no general election on November 3, 2026. <a class="inline-link" href="#address">Add your address below</a> for anything else on a ballot for it.</p></div>`;
@@ -276,14 +297,24 @@ function federalSection(st, races, filed, d, election = null) {
   const atLarge = districts.length === 1 && districts[0] === "0";
   const houseKey = atLarge ? "0" : cd;
   const houseTitle = st === "DC" ? "Delegate to the U.S. House" : atLarge ? "U.S. House, at large" : `U.S. House, District ${houseKey}`;
-  const house = houseKey != null && races.house ? fecRace(houseTitle, races.house[houseKey] || [], filedMap, raceHref(YEAR, st, `house-${houseKey}`)) : "";
+  // The FEC list stands for the field only while the office's primary is still ahead.
+  const senateNom = nominations(dates, st, "U.S. Senate", today, YEAR);
+  const houseNom = nominations(dates, st, "U.S. House", today, YEAR);
+  const senateTitle = `U.S. Senate · ${name}`;
+  const senate = !races.senate_up
+    ? `<div class="card"><p class="small">No U.S. Senate seat in ${esc(name)} is up this year, by the FEC's list of 2026 races.</p></div>`
+    : senateNom.open ? fecRace(senateTitle, races.senate || [], filedMap, raceHref(YEAR, st, "senate"))
+    : settledRace(senateTitle, st, senateNom.events, office, raceHref(YEAR, st, "senate"));
+  const house = houseKey == null || !races.house ? ""
+    : houseNom.open ? fecRace(houseTitle, races.house[houseKey] || [], filedMap, raceHref(YEAR, st, `house-${houseKey}`))
+    : settledRace(houseTitle, st, houseNom.events, office, raceHref(YEAR, st, `house-${houseKey}`));
+  const anyOpen = (races.senate_up && senateNom.open) || (house && houseNom.open);
   return `
 <section class="stack-sm" id="federal" aria-labelledby="h-federal">
   <h2 class="label" id="h-federal">Federal races · November 3, 2026</h2>
-  ${races.senate_up ? fecRace(`U.S. Senate · ${name}`, races.senate || [], filedMap, raceHref(YEAR, st, "senate")) : `<div class="card"><p class="small">No U.S. Senate seat in ${esc(name)} is up this year, by the FEC's list of 2026 races.</p></div>`}
+  ${senate}
   ${house || `<div class="card"><p class="small">Your U.S. House race: <a class="inline-link" href="#address">add your address below</a>, or <a class="inline-link" href="/#find">find your district</a> by ZIP code.</p></div>`}
-  <p class="small"><a class="inline-link" href="${racesHref(YEAR, st)}">Every ${YEAR} race in ${esc(name)}</a></p>
-  <p class="hint">Candidates who have filed with the Federal Election Commission and passed its $5,000 threshold, listed alphabetically, names as filed. Not everyone listed will be on your ballot (some lose a primary or withdraw); your sample ballot is final. <a class="inline-link" href="${esc(races.source_url)}" target="_blank" rel="noopener">FEC list ↗</a> · updated ${esc(fmtDate(races.built_on))}.</p>
+  ${anyOpen ? `<p class="hint">Before the primary: everyone who has filed with the Federal Election Commission and passed its $5,000 threshold, listed alphabetically, names as filed. Not everyone listed will be on the November ballot (some lose the primary or withdraw). <a class="inline-link" href="${esc(races.source_url)}" target="_blank" rel="noopener">FEC list ↗</a> · updated ${esc(fmtDate(races.built_on))}.</p>` : ""}
 </section>`;
 }
 
@@ -322,11 +353,12 @@ function pickerPage() {
 async function statePage(env, request, st, { message = "" } = {}) {
   const d = districtsFromCookie(request);
   const name = STATE_NAME[st];
-  const [races, filed, office, election] = await Promise.all([
+  const [races, filed, office, election, dates] = await Promise.all([
     loadSection("ballot races", () => loadRaces(env, request, st), null),
     loadSection("ballot filed officials", () => filedOfficials(env.DB, st), {}),
     loadSection("ballot office", () => stateOffice(env, request, st), null),
     loadSection("ballot election", () => ownElection(env, request, st), null),
+    loadSection("ballot dates", () => asset(env, request, "/data/elections/dates.json"), null),
   ]);
   // Quick mode: what's on it in a sentence, then the statewide list and the address card.
   const e = election === FAILED ? null : election;
@@ -353,7 +385,7 @@ async function statePage(env, request, st, { message = "" } = {}) {
 ${simple}
 ${message ? `<p class="banner banner--error" role="alert">${esc(message)}</p>` : ""}
 <p class="small"><a class="inline-link jump-link" href="#address">Add your address for your exact ballot ↓</a></p>
-${federalSection(st, races, filed, d, election === FAILED ? null : election)}
+${federalSection(st, races, filed, d, election === FAILED ? null : election, { dates: dates === FAILED ? null : dates, office: office === FAILED ? null : office })}
 ${ownSection(st, election === FAILED ? null : election)}
 ${addressForm(st)}
 <p class="small secondary">${esc(CONFIRM)}</p>

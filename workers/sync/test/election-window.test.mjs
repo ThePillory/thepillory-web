@@ -44,3 +44,21 @@ test("today is the state's own date", () => {
   assert.equal(daysBetween("2026-10-09", "2026-11-03"), 25);
   assert.equal(countdownLine({ date: "2026-11-03", type: "G", district: "" }, 25), "Election Day: Tue, Nov 3 · 25 days");
 });
+
+test("nominations: the FEC list stands for the field only while the office's primary, runoff or convention is ahead", async () => {
+  const { nominations, nominationWords } = await import("../../../functions/_lib/election-window.js");
+  const dates = { states: { TX: [
+    { date: "2026-03-03", type: "P", district: "", offices: ["U.S. House", "U.S. Senate"] },
+    { date: "2026-04-11", type: "C", district: "", offices: ["U.S. Senate", "U.S. House"] },
+    { date: "2026-05-26", type: "R", district: "", offices: ["U.S. Senate", "U.S. House"] },
+    { date: "2026-08-01", type: "SG", district: "18", offices: ["U.S. House"] },
+    { date: "2026-11-03", type: "G", district: "", offices: ["U.S. Senate", "U.S. House"] },
+  ], AZ: [{ date: "2026-07-21", type: "P", district: "", offices: ["U.S. House"] }] } };
+  assert.equal(nominations(dates, "TX", "U.S. Senate", "2026-03-02").open, true, "before the primary");
+  assert.equal(nominations(dates, "TX", "U.S. Senate", "2026-05-01").open, true, "the runoff is still ahead");
+  assert.equal(nominations(dates, "TX", "U.S. Senate", "2026-05-26").open, true, "runoff day");
+  assert.equal(nominations(dates, "TX", "U.S. Senate", "2026-10-12").open, false, "all passed");
+  assert.equal(nominationWords(nominations(dates, "TX", "U.S. Senate", "2026-10-12").events), "the primary on March 3, 2026 (convention April 11, 2026; runoff May 26, 2026)");
+  assert.equal(nominations(dates, "AZ", "U.S. Senate", "2026-01-01").open, false, "no listed primary: never shown as the ballot");
+  assert.equal(nominations(null, "TX", "U.S. House", "2026-01-01").open, false, "no dates loaded: never shown as the ballot");
+});

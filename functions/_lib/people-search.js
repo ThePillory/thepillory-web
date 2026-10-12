@@ -31,7 +31,8 @@ export function matchCandidates(rows, q, limit = SEARCH_LIMIT) {
     const name = fecDisplayName(raw);
     if (!nameMatches(name, q)) continue;
     const where = office === "H" ? `${st}${district && district !== "00" && district !== "0" ? `-${Number(district)}` : ""}` : st;
-    out.push({ type: "Candidate", name, sub: `${CANDIDATE_OFFICE[office] || "Office"} · ${where}`, href: candidateHref(id) });
+    // "Filed with the FEC", not "Candidate": the list holds people who lost a primary or withdrew too.
+    out.push({ type: "Filed with the FEC", name, sub: `${CANDIDATE_OFFICE[office] || "Office"}, ${YEAR} · ${where}`, href: candidateHref(id) });
     if (out.length >= limit) break;
   }
   return out.sort((a, b) => a.name.localeCompare(b.name));
