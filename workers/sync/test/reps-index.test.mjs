@@ -160,7 +160,7 @@ test("search: officials, justices and candidates by name; never every official",
   assert.equal(cleanQuery("  Ann   Lee "), "Ann Lee");
   assert.ok(nameMatches("Jane Q. Example", "jane example"));
   const cands = matchCandidates([["H6CA01251", "EXAMPLE, JANE", "CA", "H", "01"], ["S6TX00001", "OTHER, PAT", "TX", "S", ""]], "jane");
-  assert.deepEqual(cands, [{ type: "Candidate", name: "Jane Example", sub: "U.S. House · CA-1", href: "/candidates/H6CA01251/" }]);
+  assert.deepEqual(cands, [{ type: "Filed with the FEC", name: "Jane Example", sub: "U.S. House, 2026 · CA-1", href: "/candidates/H6CA01251/" }]);
   assert.deepEqual(matchJustices([{ slug: "a-b", name: "A B", title: "Associate Justice" }], "b").map((x) => x.href), ["/justices/a-b/"]);
   // Every query that reads officials is narrowed (a chamber, a state, districts) or capped.
   for (const sql of queries.filter((s) => /FROM officials/.test(s))) assert.match(sql, /LIMIT|chamber = \?|o\.active = 1 AND \(/, sql);

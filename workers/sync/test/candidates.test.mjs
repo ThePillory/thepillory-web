@@ -133,12 +133,22 @@ test("offices held: by FEC ID, or by a name only one official in the state has",
   assert.deepEqual(officesHeld({ id: "X" }, twins, "Dana Delta"), [], "two officials with the name: no link");
 });
 
+test("before the primary, a filer is a candidate; after it, only a certified list says who's on the ballot", () => {
+  const base = { office: "U.S. Senate", year: 2026, state: "Texas", certified: false, onBallot: false, after: false, inOffice: null };
+  assert.deepEqual(standing(base), { label: "Candidate · Not yet in office", line: "Filed for U.S. Senate, 2026 · Texas" });
+  assert.equal(standing({ ...base, settled: "the primary on March 3, 2026" }).label, "Filed for U.S. Senate, 2026");
+  assert.equal(standing({ ...base, settled: "the primary on March 3, 2026", inOffice: { office: "U.S. Senator" } }).line, "Filed with the FEC for U.S. Senate, 2026 · Texas");
+  assert.equal(standing({ ...base, certified: true, onBallot: true, settled: "the primary on March 3, 2026" }).label, "Candidate · Not yet in office");
+});
+
 test("a candidate's page: the official layout, labeled, with money and no contact details", async () => {
   const { res, html } = await call(CANDIDATES, "/candidates/S6TX00001/");
   assert.equal(res.status, 200);
-  assert.match(html, /<p class="label">Candidate · Not yet in office<\/p>/);
+  // Texas's primary (March 3) has passed and there's no certified list: the FEC filing doesn't say who won it.
+  assert.match(html, /<p class="label">Filed for U\.S\. Senate, 2026<\/p>/);
   assert.match(html, /<h1>Anna Zulu<\/h1>/);
-  assert.match(html, /Filed for U\.S\. Senate, 2026 · Texas/);
+  assert.match(html, /Texas chose its nominees in the primary on March 3, 2026\. Whether this filer is on the November ballot: see the state&#x27;s official candidate list\./);
+  assert.doesNotMatch(html, /Candidate · Not yet in office/);
   for (const t of ["About", "Platform", "Votes", "Funding", "More"]) assert.match(html, new RegExp(`role="tab"[^>]*>${t}<`));
   assert.match(html, /href="\/races\/2026\/tx\/senate\/"/);
   assert.match(html, /\$1,000/);
@@ -178,6 +188,11 @@ test("a race without a certified list: alphabetical, the same card each", async 
   const cards = [...html.matchAll(/<li class="ballot-cand">/g)].length;
   assert.equal(cards, 3);
   assert.doesNotMatch(html, /\$1,000/, "no money on the cards");
+  // The primary has passed: the page says the list isn't the ballot, and points to the address lookup.
+  assert.match(html, /Who(?:'|&#x27;)s on the November ballot/);
+  assert.match(html, /chose its nominees for this office in the primary on March 3, 2026\. The list below is everyone who filed with the FEC in 2026, including candidates who lost the primary or withdrew: it isn(?:'|&#x27;)t the ballot\./);
+  assert.match(html, /href="\/ballot\/tx\/#address"/);
+  assert.match(html, /Filed with the FEC in 2026 · Texas/);
 });
 
 test("a race with a certified list: ballot order, then other FEC filers", async () => {

@@ -25,7 +25,7 @@ import { INDUSTRIES } from "../../workers/sync/src/funding/industry.js";
 import { officialFor } from "./civic.js";
 import { loadElection, ballotOrder, contestHref, ELECTION_BY_STATE, measuresOnly } from "./elections.js";
 import { statePath } from "./state-paths.js";
-import { previewLabel } from "./election-window.js";
+import { previewLabel, nominations, nominationWords } from "./election-window.js";
 
 export const YEAR = 2026;
 export const METHOD = "/about/methodology/#candidates";
@@ -129,11 +129,16 @@ export function generalDate(dates, st, year = YEAR) {
  *   certified:     the state's certified list is loaded; onBallot: they're on it
  *   after:         the general election has passed
  *   inOffice:      { slug, office } when they hold office now (from ThePillory's records)
+ *   settled:       the passed primary in words ("the primary on March 3, 2026") once the office's nominees
+ *                  are chosen; with no certified list, the FEC filing doesn't say who won it
  * Returns { label, line }: the label above the name, and the line under it.
  */
-export function standing({ office, year, state, certified, onBallot, after, inOffice, listed = true, lastListed = null }) {
+export function standing({ office, year, state, certified, onBallot, after, inOffice, listed = true, lastListed = null, settled = null }) {
   const where = `${office}, ${year}${state ? ` · ${state}` : ""}`;
-  if (inOffice) return { label: `In office · ${inOffice.office}`, line: `Candidate for ${where}` };
+  // The primary has passed and there's no certified list here: the FEC filing doesn't say who won it.
+  const unknownNominee = settled && !certified && !after;
+  if (inOffice) return { label: `In office · ${inOffice.office}`, line: unknownNominee ? `Filed with the FEC for ${where}` : `Candidate for ${where}` };
+  if (unknownNominee) return { label: `Filed for ${office}, ${year}`, line: `${state ? `${state} chose its nominees in ${settled}` : `Nominees chosen in ${settled}`}. Whether this filer is on the November ballot: see the state's official candidate list.` };
   if (after) {
     if (certified && onBallot) return { label: `Ran for ${office}, ${year}`, line: state || "" };
     return { label: `Filed for ${office}, ${year}`, line: state || "" };
@@ -350,7 +355,8 @@ export function fecCandidatePage({ c, st, data, election, records, dates, today,
   const held = officesHeld(c, records, display);
   const now = held.find((h) => h.active && h.how === "fec");
   const after = today > generalDate(dates, st);
-  const s = standing({ office, year: data.year, state: stateName, certified: !!contest, onBallot: !!onCert, after, inOffice: now, listed: c.listed, lastListed: c.last_listed });
+  const nom = nominations(dates, st, key === "senate" ? "U.S. Senate" : "U.S. House", today, data.year);
+  const s = standing({ office, year: data.year, state: stateName, certified: !!contest, onBallot: !!onCert, after, inOffice: now, listed: c.listed, lastListed: c.last_listed, settled: nom.open ? null : nominationWords(nom.events) });
   const website = c.website && safeUrl(c.website.url);
   const race = raceHref(data.year, st, key);
   const chips = [
@@ -472,13 +478,24 @@ export function racePage({ st, key, data, election, records, dates, today }) {
   }
   const listed = inOrder(rest.filter((c) => c.listed));
   const gone = inOrder(rest.filter((c) => !c.listed));
+  // Once the office's primary has passed, the FEC list isn't the field: it still holds people who lost or withdrew.
+  const nom = fecOffice ? nominations(dates, st, key === "senate" ? "U.S. Senate" : "U.S. House", today, year) : { open: true, events: [] };
+  const settled = !contest && !after && !nom.open;
+  const settledNote = settled
+    ? `
+<section class="card stack-sm" aria-labelledby="h-nominees">
+  <h2 class="label" id="h-nominees">Who's on the November ballot</h2>
+  <p class="small">${esc(stateName)} chose its nominees for this office in ${esc(nominationWords(nom.events))}. The list below is everyone who filed with the FEC in ${year}, including candidates who lost the primary or withdrew: it isn't the ballot.</p>
+  <p class="small"><a class="inline-link" href="/ballot/${st.toLowerCase()}/#address">Enter your address for the candidates on your ballot</a>, or check ${esc(stateName)}'s official candidate list with its election office.</p>
+</section>`
+    : "";
   const fecSection = listed.length || gone.length
     ? `
 <section class="stack-sm" aria-labelledby="h-fec">
-  <h2 class="label" id="h-fec">${contest ? "Also filed with the FEC (not on the November ballot)" : `Filed with the FEC · ${esc(stateName)}`}</h2>
+  <h2 class="label" id="h-fec">${contest ? "Also filed with the FEC (not on the November ballot)" : `Filed with the FEC in ${year} · ${esc(stateName)}`}</h2>
   ${listed.length ? `<ul class="card plain-list ballot-cands">${listed.map(fecCard).join("")}</ul>` : ""}
   ${gone.length ? fold("gone", "No longer listed as active by the FEC", `<ul class="card plain-list ballot-cands">${gone.map(fecCard).join("")}</ul>`, { meta: String(gone.length) }) : ""}
-  <p class="hint">Alphabetical by last name, names as filed. ${contest ? "" : "Not everyone listed will be on the November ballot (some lose a primary or withdraw); your sample ballot is final. "}${data ? `${sourceLink(data.source_url, "FEC list")} · read ${esc(fmtDate(data.list_built_on || data.built_on))}.` : ""}</p>
+  <p class="hint">Alphabetical by last name, names as filed. ${contest || settled ? "" : "Not everyone listed will be on the November ballot (some lose a primary or withdraw); your sample ballot is final. "}${data ? `${sourceLink(data.source_url, "FEC list")} · read ${esc(fmtDate(data.list_built_on || data.built_on))}.` : ""}</p>
 </section>`
     : "";
   const main = `
@@ -488,6 +505,7 @@ export function racePage({ st, key, data, election, records, dates, today }) {
   <p class="subtitle">General election, ${esc(fmtDate(date))}${after ? " (held)" : ""}.</p>
 </header>
 ${ballot}
+${settledNote}
 ${fecSection}
 <section class="card stack-sm" aria-labelledby="h-included">
   <h2 class="label" id="h-included">How candidates are included</h2>

@@ -86,3 +86,34 @@ export function ballotWindow(dates, st, today, cd = null) {
   const days = daysBetween(today, election.date);
   return { election, days, open: days <= WINDOW_DAYS, line: countdownLine(election, days) };
 }
+
+// ---------------------------------------------------------------------------
+// Nominations: whether a state's party nominees for an office are settled.
+// FEC candidate filings list everyone who filed, including people who later
+// lost a primary or withdrew, so the FEC list may stand for "the candidates"
+// only while the office's primary (and its runoff or convention) is still ahead.
+
+const NOMINATING = new Set(["P", "R", "C"]); // primary, primary runoff, nominating convention
+
+/**
+ * The state's regular nominating events for an office ("U.S. Senate", "U.S. House") in `year`, and
+ * whether every one of them has passed. Pure.
+ *   { open: true }          a primary, runoff or convention for it is today or later: the field isn't settled
+ *   { open: false, events } they've all passed: the nominees are settled
+ *   { open: false, events: [] } none listed: treated as settled (the FEC list is never shown as the ballot then)
+ */
+export function nominations(dates, st, office, today, year = 2026) {
+  const list = ((dates && dates.states && dates.states[st]) || []).filter(
+    (e) => NOMINATING.has(e.type) && !e.district && String(e.date).startsWith(String(year)) && (!e.offices || !e.offices.length || e.offices.includes(office))
+  );
+  return { open: list.some((e) => e.date >= today), events: list };
+}
+
+/** "the primary on March 3, 2026 (runoff May 26, 2026)": the passed events in words. Pure. */
+export function nominationWords(events) {
+  const fmt = (iso) => new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
+  const p = events.find((e) => e.type === "P");
+  const extra = events.filter((e) => e !== p).map((e) => `${e.type === "R" ? "runoff" : "convention"} ${fmt(e.date)}`);
+  if (!p) return extra.length ? `the ${extra.join(", ")}` : "the nominating process";
+  return `the primary on ${fmt(p.date)}${extra.length ? ` (${extra.join("; ")})` : ""}`;
+}
