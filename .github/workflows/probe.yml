@@ -2,18 +2,20 @@ name: Probe
 on:
   push:
     branches: [claude/pillory-mobile-screens-p5zekn]
-    paths: [.github/workflows/probe.yml, tools/networth_scan.py]
+    paths: [.github/workflows/probe.yml]
 jobs:
   q:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null
       - env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: python3 tools/networth_scan.py --mode diagnose 2>&1 | tail -120
+        run: |
+          cd workers/sync
+          npx --yes wrangler@4 d1 execute pillory --remote --json --command "SELECT id, name, office, state, chamber, source_url FROM officials WHERE active=1 AND (name LIKE '%Graham%' OR name LIKE '%Gallagher%' OR name LIKE '%Menefee%') " | head -80
+          npx --yes wrangler@4 d1 execute pillory --remote --json --command "SELECT state, office, COUNT(*) n FROM officials WHERE active=1 AND office LIKE 'U.S. Sen%' GROUP BY state, office HAVING n<>2" | head -40
