@@ -7,7 +7,7 @@ const found = await (await fetch(`${base}/api/search-officials?q=schiff`)).json(
 writeFileSync("tools/probe/out/search.json", JSON.stringify(found, null, 1));
 const list = (found && (found.results || found.officials || found)) || [];
 const hit = (found && found.officials || []).find((x) => /schiff/i.test(x.name || ""));
-const slug = hit ? hit.slug || String(hit.url || "").split("/").filter(Boolean).pop() : "adam-b-schiff";
+const slug = hit && hit.href ? hit.href.split("/").filter(Boolean).pop() : "adam-b-schiff";
 const b = await chromium.launch();
 for (const scheme of ["light", "dark"]) {
   const p = await b.newPage({ viewport: { width: 390, height: 844 }, colorScheme: scheme, deviceScaleFactor: 1 });
