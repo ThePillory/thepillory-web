@@ -12,7 +12,9 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+      - run: python3 -m pip install -q pdfplumber==0.11.4
       - run: python3 tools/probe/govmoney.py
+      - run: python3 -c "import pdfplumber;p=pdfplumber.open('tools/probe/out/cds.pdf');open('tools/probe/out/cds.txt','w').write(chr(10).join((pg.extract_text() or '') for pg in p.pages[:3]))" || true
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
