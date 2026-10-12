@@ -2,21 +2,18 @@ name: Probe
 on:
   push:
     branches: [claude/pillory-mobile-screens-p5zekn]
-    paths: [.github/workflows/probe.yml, tools/accuracy_audit.py]
+    paths: [.github/workflows/probe.yml, tools/networth_scan.py]
 jobs:
   q:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null
       - env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CONGRESS_API_KEY: ${{ secrets.CONGRESS_API_KEY }}
-        run: |
-          python3 tools/accuracy_audit.py --only 2,3,4,5 > audit.md 2> audit.err || true
-          tail -5 audit.err
-          for i in 1 2 3; do cat audit.md; done
+        run: python3 tools/networth_scan.py --mode diagnose 2>&1 | tail -120
