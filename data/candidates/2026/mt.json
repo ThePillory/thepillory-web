@@ -1111,7 +1111,45 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6MT02168/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 296252.93,
+    "disbursements": 164059.59,
+    "cash_on_hand": 140121.56,
+    "individual_unitemized": 2734.42,
+    "individual_itemized": 40964.9,
+    "pac": 2500,
+    "party": 0,
+    "self_funding": 250000,
+    "other": 53.61,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6MT02168/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00412304",
+      "name": "MONTANANS FOR TESTER",
+      "total": 2500,
+      "count": 1,
+      "industry": "leadership"
+     }
+    ],
+    "count": 1,
+    "total": 2500,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00930750&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.eisenhauerforcongress.com/",
+    "as_filed": "WWW.EISENHAUERFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00930750/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6MT02143": {
    "id": "H6MT02143",
@@ -1175,7 +1213,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6MT02150/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 19173.73,
+    "disbursements": 14573,
+    "cash_on_hand": 3165.53,
+    "individual_unitemized": 4916.09,
+    "individual_itemized": 8422.82,
+    "pac": 1000,
+    "party": 0,
+    "self_funding": 4831.64,
+    "other": 3.18,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6MT02150/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00922831&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.miller4congress.com/",
+    "as_filed": "WWW.MILLER4CONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00922831/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   }
  }
 }

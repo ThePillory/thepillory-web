@@ -280,7 +280,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6ND01049/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 190063.55,
+    "disbursements": 122672.28,
+    "cash_on_hand": 67391.27,
+    "individual_unitemized": 98864.43,
+    "individual_itemized": 87384,
+    "pac": 2900,
+    "party": 0,
+    "self_funding": 15,
+    "other": 900.12,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6ND01049/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00935494&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://hammerfornd.com/",
+    "as_filed": "HAMMERFORND.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00935494/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   }
  }
 }
