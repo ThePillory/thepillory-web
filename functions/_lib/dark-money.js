@@ -8,6 +8,12 @@ import { esc, safeUrl, fmtDate } from "./render.js";
 import { awardsLink } from "./gov-money.js";
 import { SUBSECTIONS, irsRecord, fecCommitteePage } from "../../workers/sync/src/funding/darkmoney.js";
 
+// Paused (October 2026) while the labels are checked against their public
+// records: no donor labels, "don't disclose" share, Form 990 facts or Form 9
+// sections on any page, and nothing is read for them. The data stays in D1;
+// set `on` back to true to show it again (tests switch it on to check the pages).
+export const darkMoney = { on: false };
+
 // Kept here rather than imported from funding.js, which imports this module.
 const HOW = "/about/methodology/#dark-money";
 const money = (n) => (n == null ? "—" : `$${Math.round(Number(n)).toLocaleString("en-US")}`);
@@ -26,7 +32,7 @@ const KIND_LABEL = { committee: "Political committee", llc: "LLC", c4: "501(c)(4
 
 /** For these outside spenders and this period: {committee_id: {read, donors, nonprofit}}, and donors' nonprofits by EIN. */
 export async function darkMoneyFor(db, committeeIds, cycle) {
-  if (!committeeIds.length) return { spenders: {}, nonprofits: {} };
+  if (!darkMoney.on || !committeeIds.length) return { spenders: {}, nonprofits: {} };
   try {
     const [reads, donors, spenders] = await Promise.all([
       db.prepare(`SELECT * FROM outside_donor_reads WHERE cycle = ? AND committee_id IN (${ph(committeeIds)})`).bind(cycle, ...committeeIds).all(),
@@ -58,7 +64,7 @@ export async function darkMoneyFor(db, committeeIds, cycle) {
  */
 export async function electioneeringFor(db, candidateIds, cycle) {
   const ids = (candidateIds || []).filter(Boolean);
-  if (!ids.length) return null;
+  if (!darkMoney.on || !ids.length) return null;
   try {
     const { results } = await db
       .prepare(
@@ -123,6 +129,7 @@ export function nonprofitFacts(n) {
 
 /** Details under one outside spender: its largest donors that are organizations, or its IRS filing. */
 export function spenderDetails(x, dm, cycle) {
+  if (!darkMoney.on) return "";
   const s = dm && dm.spenders && dm.spenders[x.committee_id];
   if (!s) return "";
   const parts = [];
@@ -149,7 +156,7 @@ export function spenderDetails(x, dm, cycle) {
 
 /** Electioneering communications (FEC Form 9) naming the candidate, under outside spending. */
 export function electioneeringSection(e, name) {
-  if (!e) return "";
+  if (!darkMoney.on || !e) return "";
   const span = period(e.cycle);
   const head = `<h3>Electioneering communications</h3>`;
   if (!e.read) return `<section class="card stack-sm">${head}<p class="secondary small">Electioneering communications (FEC Form 9) haven't been loaded yet.</p></section>`;

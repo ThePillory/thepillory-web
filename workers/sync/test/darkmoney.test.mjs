@@ -9,7 +9,7 @@ import { DatabaseSync } from "node:sqlite";
 import { isContribution, namesAPerson, isLLC, orgKey, aggregateDonors, pickNonprofit, nonprofitRow, electioneeringRows, darkShare } from "../src/funding/darkmoney.js";
 import { syncDarkMoney } from "../src/funding/darkmoney-sync.js";
 import { currentCycle } from "../src/funding/fec.js";
-import { darkMoneyFor, electioneeringFor, spenderDetails, electioneeringSection, nonprofitFacts } from "../../../functions/_lib/dark-money.js";
+import { darkMoneyFor, electioneeringFor, spenderDetails, electioneeringSection, nonprofitFacts, darkMoney } from "../../../functions/_lib/dark-money.js";
 
 const CYCLE = currentCycle();
 const SPENDER = "C00000001";
@@ -121,7 +121,16 @@ function fake(url) {
 
 const budget = { paced: async (db, key, pace, url) => ({ json: async () => fake(url) }) };
 
+test("dark money is paused: no labels, share, 990s or Form 9 on any page, and nothing read for them", async () => {
+  assert.equal(darkMoney.on, false);
+  assert.deepEqual(await darkMoneyFor(d1(), ["C90000001"], CYCLE), { spenders: {}, nonprofits: {} });
+  assert.equal(await electioneeringFor(d1(), ["S0ZZ00009"], CYCLE), null);
+  assert.equal(spenderDetails({ committee_id: "C90000001", name: "X" }, { spenders: { C90000001: { read: { receipts: 1 }, donors: [] } } }, CYCLE), "");
+  assert.equal(electioneeringSection({ read: true, cycle: CYCLE, spenders: [] }, "X"), "");
+});
+
 test("dark-money step: electioneering, IRS records, donors labeled, the share, nonprofits", async () => {
+  darkMoney.on = true; // the pages, as they show once it's switched back on
   const db = d1();
   const r = await syncDarkMoney({ FEC_API_KEY: "test", FEC_API_BASE: "https://api.open.fec.gov/v1", PROPUBLICA_API_BASE: "https://projects.propublica.org/nonprofits/api/v2" }, db, budget);
   assert.equal(r.status, "ok", r.message);
@@ -165,6 +174,7 @@ test("dark-money step: electioneering, IRS records, donors labeled, the share, n
   assert.match(ec, /aired (Sep|September) 19, \d{4}/);
   assert.doesNotMatch(ec, /\b(supports?|opposes?|attacks?)\b/i, "no side is assigned to an ad");
   assert.match(electioneeringSection(await electioneeringFor(db, ["S0ZZ00009"], CYCLE), "Robin Example"), /No electioneering communications naming Robin Example/);
+  darkMoney.on = false;
 });
 
 test("a nonprofit's Schedule C: political spending as filed and the political organizations it paid", () => {
