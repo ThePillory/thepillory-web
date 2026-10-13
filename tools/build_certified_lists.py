@@ -213,6 +213,8 @@ def parse_fl(text):
         office = (r.get("OfficeCode") or "").strip().upper()
         if office not in ("USS", "USR") or (r.get("StatusDesc") or "").strip() != "Qualified":
             continue  # Defeated (lost the primary), Withdrawn, Did not qualify
+        if (r.get("PartyDesc") or "").strip().lower() == "write-in":
+            continue  # a qualified write-in candidate's name isn't printed on the ballot
         name = " ".join(x for x in ((r.get("NameFirst") or "").strip(), (r.get("NameMiddle") or "").strip(), (r.get("NameLast") or "").strip()) if x)
         cand = {"name": name, "party": (r.get("PartyDesc") or "").strip() or None}
         if office == "USS":
@@ -234,7 +236,7 @@ def build_fl():
     got = parse_fl(text)
     if not got.get("house"):
         raise Unreadable("no House candidates read")
-    return {"source": {"name": "Florida Division of Elections, candidate list for the 2026 General Election (status Qualified)", "url": FL_LIST, "page": FL_PAGE}, "contests": got}
+    return {"source": {"name": "Florida Division of Elections, candidate list for the 2026 General Election (qualified candidates; write-in candidates, whose names aren't printed on the ballot, left out)", "url": FL_LIST, "page": FL_PAGE}, "contests": got}
 
 
 BUILDERS = {"NC": build_nc, "NJ": build_nj, "FL": build_fl}
