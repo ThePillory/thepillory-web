@@ -77,6 +77,9 @@ test("the wording check: attributed lines of similar length, no verdicts", () =>
 test("summary-first pieces: sentences, clause labels, folds, contents, compact rows", () => {
   assert.equal(firstSentences("This bill requires the U.S. Postal Service to act. It sets a deadline. It also does more."), "This bill requires the U.S. Postal Service to act. It sets a deadline.");
   assert.equal(firstSentences("One sentence only"), "One sentence only");
+  // Ranks, titles and initials in names don't end a sentence.
+  assert.equal(firstSentences("This bill names it the Lt. Gen. Example A. Person Post Office. It sets a date. More."), "This bill names it the Lt. Gen. Example A. Person Post Office. It sets a date.");
+  assert.equal(firstSentences("This bill designates it as the Col. Example S. Person Center. It sets a date. More."), "This bill designates it as the Col. Example S. Person Center. It sets a date.");
   assert.equal(shortLabel("Article I, Section 8, Clause 3"), "Art. I, §8, cl. 3");
   assert.equal(shortLabel("Amendment XIV, Section 1"), "14th Amendment, §1");
   assert.equal(shortLabel("Amendment I"), "1st Amendment");

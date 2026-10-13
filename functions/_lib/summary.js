@@ -42,7 +42,7 @@ export function clauseChips(items, { label = true } = {}) {
 
 /**
  * The first `n` sentences of a text, word for word (a sentence ends at ". ",
- * "? " or "! " before a capital letter or a quote; "U.S." and "Sec." don't end one).
+ * "? " or "! " before a capital letter or a quote; "U.S.", "Sec.", "Col." and initials don't end one).
  */
 export function firstSentences(text, n = 2) {
   const t = String(text || "").replace(/\s+/g, " ").trim();
@@ -55,7 +55,7 @@ export function firstSentences(text, n = 2) {
     const end = m.index + m[0].trimEnd().length;
     const piece = t.slice(start, end);
     // Abbreviations that don't end a sentence.
-    if (/\b(?:U\.S|Sec|No|Nos|Mr|Mrs|Ms|Dr|St|Jr|Sr|Inc|Co|Corp|Gov|Rep|Sen|Stat|Pub|L|U\.S\.C|e\.g|i\.e|etc|vs|v|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sept|Sep|Oct|Nov|Dec|[A-Z])\.$/.test(piece)) continue;
+    if (/\b(?:U\.S|Sec|No|Nos|Mr|Mrs|Ms|Dr|St|Jr|Sr|Inc|Co|Corp|Gov|Rep|Sen|Hon|Rev|Lt|Gen|Col|Maj|Capt|Cpt|Sgt|Adm|Cmdr|Ft|Mt|Stat|Pub|L|U\.S\.C|e\.g|i\.e|etc|vs|v|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sept|Sep|Oct|Nov|Dec|[A-Z])\.$/.test(piece)) continue;
     out.push(piece.trim());
     start = m.index + m[0].length;
   }

@@ -266,9 +266,24 @@ SHORT_TITLE = re.compile(r"may be cited as|\bshort title\b", re.I)
 HEADING = re.compile(r"^\s*(SECTION|SEC\.)\s*\d|^\s*(TITLE|DIVISION)\s+[IVX\d]+\b", re.I)
 
 
+# firstSentences() in functions/_lib/summary.js, line for line.
+ABBREV = re.compile(r"\b(?:U\.S|Sec|No|Nos|Mr|Mrs|Ms|Dr|St|Jr|Sr|Inc|Co|Corp|Gov|Rep|Sen|Hon|Rev|Lt|Gen|Col|Maj|Capt|Cpt|Sgt|Adm|Cmdr|Ft|Mt|Stat|Pub|L|U\.S\.C|e\.g|i\.e|etc|vs|v|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sept|Sep|Oct|Nov|Dec|[A-Z])\.$")
+
+
 def first_sentences(t, n=2):
-    s = re.split(r"(?<=[.!?])\s+(?=[A-Z])", re.sub(r"\s+", " ", t or "").strip())
-    return " ".join(s[:n])
+    t = re.sub(r"\s+", " ", t or "").strip()
+    out, start = [], 0
+    for m in re.finditer(r"[.!?][\"”’)]?\s+(?=[\"“(]?[A-Z0-9])", t):
+        if len(out) >= n:
+            break
+        piece = t[start:m.start() + len(m.group(0).rstrip())]
+        if ABBREV.search(piece):
+            continue
+        out.append(piece.strip())
+        start = m.end()
+    if len(out) < n and start < len(t):
+        out.append(t[start:].strip())
+    return " ".join(out)
 
 
 def shown_summary(b):
