@@ -14,11 +14,11 @@ trade reports are read:
   3. Code compares the readings line by line (networth.compare_readings),
      applies the same rules as the text reader (networth.report_from_lines)
      and checks every value against the page's OCR text.
-  4. All lines agree: the report publishes into networth_reports (method
-     'ai'), labeled "Transcribed by AI from a scanned report, auto-checked",
-     and goes on /admin/review/networth/ for a person to check. Any line
-     that doesn't: nothing publishes; a person settles each line there, and
-     the next run (--mode publish) publishes with "Checked by [name]".
+  4. All lines agree: the report is written into networth_reports (method
+     'ai') but public pages show it only once a person confirms it on
+     /admin/review/networth/ ("checked by [name]"; a link until then). Any
+     line that doesn't: a person settles each line there, and the next run
+     (--mode publish) publishes with "Checked by [name]".
 
 Spending is capped: --max-dollars stops the run before a call that could go
 past it. --mode estimate counts the input tokens (free) and prints the

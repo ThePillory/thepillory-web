@@ -9,7 +9,7 @@ import assert from "node:assert/strict";
 import { DatabaseSync } from "node:sqlite";
 import { readFileSync, readdirSync } from "node:fs";
 import { checkReadings, blocking, contained, textLayerType, rowsLine } from "../src/trades/scan-check.js";
-import { syncScannedTrades, mergeChunks, accountError } from "../src/trades/scan-sync.js";
+import { syncScannedTrades, mergeChunks, accountError, holdUnchecked } from "../src/trades/scan-sync.js";
 import { ensureSchema } from "../src/db.js";
 import { scanChange, scanItem, scanList } from "../../../functions/_lib/trade-scan-review.js";
 import { memberTrades, memberReports, tradeRow, tradesSection } from "../../../functions/_lib/trades.js";
@@ -162,7 +162,7 @@ test("chunks merge in order and end where a chunk ends short", () => {
   assert.equal(accountError(new Error("answer cut off at the output limit")), false);
 });
 
-test("the step publishes agreed rows report by report; a row they differ on stays linked", async () => {
+test("the step reads reports and holds them for a person; confirming publishes the agreed rows; a row they differ on stays linked", async () => {
   const sqlite = seeded();
   const db = d1(sqlite);
   const asked = [];
@@ -175,14 +175,23 @@ test("the step publishes agreed rows report by report; a row they differ on stay
       return rows;
     })(env, args);
   };
-  const r = await syncScannedTrades({ SCANNED_TRADES_DAILY: "5" }, db, null, { call, random: () => 0.05 });
-  assert.match(r.message, /2 scanned report\(s\) published \(3 of 4 rows transcribed\), 0 held/);
+  const r = await syncScannedTrades({ SCANNED_TRADES_DAILY: "5" }, db, null, { call });
+  assert.match(r.message, /2 scanned report\(s\) read and waiting for a person \(3 of 4 rows transcribed\), 0 didn't agree/);
   assert.deepEqual(asked.map((x) => x[0]), ["claude-sonnet-5-5", "claude-opus-5-5", "claude-sonnet-5-5", "claude-opus-5-5"]);
   assert.match(asked[0][2], /rows 1 to 80/);
   const a = sqlite.prepare("SELECT * FROM trade_scans WHERE report_id = 'oge:a'").get();
   const b = sqlite.prepare("SELECT * FROM trade_scans WHERE report_id = 'oge:b'").get();
   assert.equal(a.status, "agreed");
-  assert.equal(a.spot_check, 1, "picked for a spot check (random below SPOT_CHECK_RATE)");
+  // Nothing is public until a person confirms it: both reports are links.
+  assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM trades").get().n, 0);
+  assert.equal(sqlite.prepare("SELECT parsed FROM trade_reports WHERE id = 'oge:a'").get().parsed, 0);
+  assert.deepEqual((await memberReports(db, "p1")).map((x) => x.id).sort(), ["oge:a", "oge:b"]);
+  const form = (o) => {
+    const f = new FormData();
+    for (const [k, v] of Object.entries(o)) f.set(k, v);
+    return f;
+  };
+  for (const id of ["oge:a", "oge:b"]) assert.match((await scanChange(db, id, form({ action: "approve", compared: "1", reviewer: "Rae Reviewer" }), "")).done, /Confirmed and published/);
   assert.equal(b.status, "agreed");
   assert.equal(b.rows_total, 2);
   assert.match(b.unread, /differ on the amount/);
@@ -191,7 +200,7 @@ test("the step publishes agreed rows report by report; a row they differ on stay
   const rep = sqlite.prepare("SELECT parsed, trade_count, transcribed_by, transcribed_at FROM trade_reports WHERE id = 'oge:a'").get();
   assert.equal(rep.parsed, 1);
   assert.equal(rep.trade_count, 2);
-  assert.equal(rep.transcribed_by, null);
+  assert.equal(rep.transcribed_by, "Rae Reviewer");
   assert.ok(rep.transcribed_at);
   assert.deepEqual({ ...sqlite.prepare("SELECT rows_total, unread_rows FROM trade_reports WHERE id = 'oge:b'").get() }, { rows_total: 2, unread_rows: "[2]" });
   const abt = sqlite.prepare("SELECT * FROM trades WHERE report_id = 'oge:a' AND n = 2").get();
@@ -200,7 +209,7 @@ test("the step publishes agreed rows report by report; a row they differ on stay
   const sum = sqlite.prepare("SELECT * FROM trade_summary WHERE official_id = 'p1' AND year = 2026").get();
   assert.equal(sum.trades, 3);
   const html = (await memberTrades(db, "p1")).rows.map((t) => tradeRow(t)).join("");
-  assert.match(html, /Transcribed by AI from a scanned report, auto-checked/);
+  assert.match(html, /Transcribed by AI from a scanned report · Checked by Rae Reviewer/);
   const reports = await memberReports(db, "p1");
   assert.deepEqual(reports.map((x) => x.id), ["oge:b"], "the partly read report is linked; the fully read one isn't");
   const section = tradesSection({ chamber: "us-executive", name: "Pat President", slug: "the-president", office: "President" }, { summary: [], page: { rows: [], more: false }, reports });
@@ -237,9 +246,28 @@ test("a long report is read in chunks that resume in the next round; the Preside
   const r = await syncScannedTrades(env, db, null, { call, random: () => 0.5 });
   assert.deepEqual(asked, ["a.pdf claude-opus-5-5 rows 1 to 10", "a.pdf claude-opus-5-5 rows 11 to 20", "a.pdf claude-opus-5-5 rows 21 to 30"], "resumes: the first model's chunks aren't read again");
   // Row 1 is a sale in both readings, but the seeded text layer's row 1 reads "lourchaso": that row stays linked.
-  assert.match(r.message, /1 scanned report\(s\) published \(24 of 25 rows transcribed\)/);
-  assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM trades WHERE report_id = 'oge:a'").get().n, 24);
+  assert.match(r.message, /1 scanned report\(s\) read and waiting for a person \(24 of 25 rows transcribed\)/);
+  assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM trades WHERE report_id = 'oge:a'").get().n, 0, "nothing public until a person confirms");
+  assert.equal(JSON.parse(sqlite.prepare("SELECT reading FROM trade_scans WHERE report_id = 'oge:a'").get().reading).length, 24);
   assert.equal(sqlite.prepare("SELECT status FROM trade_scans WHERE report_id = 'oge:c'").get().status, "pending", "the daily limit: one report");
+});
+
+test("a transcription published before a person checked it goes back to a link; a checked one stays", async () => {
+  const sqlite = seeded();
+  const db = d1(sqlite);
+  const call = ranged(() => copy(ROWS).rows);
+  await syncScannedTrades({ SCANNED_TRADES_DAILY: "5" }, db, null, { call });
+  const form = new FormData();
+  for (const [k, v] of Object.entries({ action: "approve", compared: "1", reviewer: "Rae Reviewer" })) form.set(k, v);
+  await scanChange(db, "oge:a", form, "");
+  // As the old rule left it: oge:b public, auto-checked, with no person's name.
+  sqlite.exec("INSERT INTO trades (report_id, n, official_id, chamber, transaction_date, filed_on, asset_name, type, amount) VALUES ('oge:b', 1, 'p1', 'us-executive', '2026-07-01', '2026-08-12', 'Example Co', 'Purchase', '$1,001 - $15,000')");
+  sqlite.exec("UPDATE trade_reports SET parsed = 1, trade_count = 1, transcribed_at = datetime('now') WHERE id = 'oge:b'");
+  assert.equal(await holdUnchecked(db), 1);
+  assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM trades WHERE report_id = 'oge:b'").get().n, 0);
+  assert.equal(sqlite.prepare("SELECT parsed FROM trade_reports WHERE id = 'oge:b'").get().parsed, 0);
+  assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM trades WHERE report_id = 'oge:a'").get().n, 2, "the checked one stays");
+  assert.equal(await holdUnchecked(db), 0);
 });
 
 test("errors are recorded, don't count against the limit, and an account error stops the step", async () => {
@@ -292,7 +320,7 @@ test("a person confirms a transcription or takes it down; read again requeues", 
   assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM trades WHERE report_id = 'oge:b'").get().n, 0);
   assert.deepEqual({ ...sqlite.prepare("SELECT parsed, transcribed_at FROM trade_reports WHERE id = 'oge:b'").get() }, { parsed: 0, transcribed_at: null });
   assert.equal(sqlite.prepare("SELECT trades FROM trade_summary WHERE official_id = 'p1' AND year = 2026").get().trades, 2, "only oge:a's trades count");
-  assert.match((await scanChange(db, "oge:b", form({ action: "approve", compared: "1", reviewer: "Rae Reviewer" }), "")).error, /Only a transcription published by AI/);
+  assert.match((await scanChange(db, "oge:b", form({ action: "approve", compared: "1", reviewer: "Rae Reviewer" }), "")).error, /Only a transcription waiting for a person/);
   assert.ok(sqlite.prepare("SELECT COUNT(*) AS n FROM trade_scan_chunks WHERE report_id = 'oge:b'").get().n > 0);
   assert.match((await scanChange(db, "oge:b", form({ action: "reread" }), "")).done, /Back in the queue/);
   assert.equal(sqlite.prepare("SELECT status FROM trade_scans WHERE report_id = 'oge:b'").get().status, "pending");

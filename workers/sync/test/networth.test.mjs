@@ -109,19 +109,25 @@ const fold = (html, id) => {
 const head = (html) => html.slice(html.indexOf('<header class="page-head'), html.indexOf("</header>", html.indexOf('<header class="page-head')));
 const line = (html) => (head(html).match(/<p class="small networth-line">.*?<\/p>/) || [""])[0];
 
-test("a report read by AI from a scan: labeled under the chart; a held one waits for a person", async () => {
-  const { html } = await get(reps, "/reps/vee-pee/");
-  assert.match(line(html), /Net worth, as reported: \$2M–\$7M \(2025, earliest report read\)/);
-  const sec = fold(html, "more-networth");
-  assert.match(sec, /2025: Transcribed by AI from a scanned report, auto-checked\./);
+test("a report read by AI from a scan isn't shown until a person checks it; then it's labeled with their name", async () => {
+  const db = seeded();
+  let { html } = await get(reps, "/reps/vee-pee/", db);
+  assert.equal(line(html), "", "no net worth line from an unchecked AI reading");
+  let sec = fold(html, "more-networth");
+  assert.match(sec, /2025: Scanned report: read by AI, waiting for a person(?:'|&#39;|&#x27;)s check/);
   assert.match(sec, /2024: Scanned report: read by AI, waiting for a person(?:'|&#39;|&#x27;)s check/);
+  await db.prepare("UPDATE networth_scans SET status = 'approved', reviewed_by = 'Rae Reviewer' WHERE status = 'agreed'").run();
+  ({ html } = await get(reps, "/reps/vee-pee/", db));
+  assert.match(line(html), /Net worth, as reported: \$2M–\$7M \(2025, earliest report read\)/);
+  sec = fold(html, "more-networth");
+  assert.match(sec, /2025: Transcribed by AI from a scanned report, checked by Rae Reviewer\./);
 });
 
 test("the review page: settle lines, confirm, take down", async () => {
   const { networthScanList, networthScanItem, networthScanChange } = await import("../../../functions/_lib/networth-review.js");
   const db = seeded();
   const list = (await networthScanList(db)).main;
-  assert.match(list, /Published by AI: check these \(1\)/);
+  assert.match(list, /Waiting for a person \(1\)/);
   assert.match(list, /Held \(1\)/);
   const held = (await networthScanItem(db, {}, "oge:v24")).main;
   assert.match(held, /Read differently \(1\)/);

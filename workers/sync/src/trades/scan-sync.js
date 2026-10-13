@@ -5,20 +5,21 @@
 // PDF twice, by two different models (SCAN_MODEL_A, SCAN_MODEL_B), in chunks
 // of SCAN_CHUNK_ROWS rows so a long report's answer isn't cut off; each chunk
 // is kept (trade_scan_chunks), so a reading resumes in the next round. The
-// readings are then checked row by row in code (scan-check.js): rows both
-// agree on publish at once, labeled "Transcribed by AI from a scanned report,
-// auto-checked" (as AI-drafted analyses are), and the rest stay linked to the
-// scan ("[N] of [M] rows transcribed"). SPOT_CHECK_RATE of the published
-// reports are marked for a person on /admin/review/trades/, who can confirm
-// one ("Checked by [name]") or take it down. The President's reports go
-// first, newest first, then the rest of the executive branch.
+// readings are then checked row by row in code (scan-check.js). Nothing is
+// published here: a report whose readings agree waits on
+// /admin/review/trades/ until a person compares it with the scan and confirms
+// it ("Checked by [name]"), and stays a link to the report on public pages
+// until then. A transcription published without a person's check (before
+// this rule) is taken back to a link at the start of each run. The
+// President's reports go first, newest first, then the rest of the executive
+// branch.
 // SCANNED_TRADES_DAILY reports are finished a day; a report that fails to
 // read is tried again (SCAN_TRIES times), and failures don't count.
 import { getState, setState, today, redact, BudgetExhausted } from "../util.js";
 import { structuredCall, DraftRefused } from "../analysis/claude.js";
 import { SCAN_INSTRUCTIONS, scanSchema, scanMessage } from "./scan-prompt.js";
 import { checkReadings, blocking, rowsLine } from "./scan-check.js";
-import { publishStatements } from "./publish.js";
+import { takeDownStatements } from "./publish.js";
 
 const missing = (err) => /no such (table|column)/i.test(String(err && err.message));
 const MAX_ROWS = 1500; // no 278-T is near this long; a reading past it is a runaway
@@ -100,14 +101,27 @@ export async function transcribe(env, db, report, lines, { call = structuredCall
   return { status, rows: status === "agreed" ? rows : [], agreedRows: rows, unread, total, problems, models };
 }
 
-const spotRate = (env) => Math.min(1, Math.max(0, parseFloat(env.SPOT_CHECK_RATE || "0.1") || 0));
+/** Takes every AI transcription no person has confirmed back to a link to its report; returns how many. */
+export async function holdUnchecked(db) {
+  let rows;
+  try {
+    rows = (await db.prepare("SELECT id, official_id FROM trade_reports WHERE transcribed_at IS NOT NULL AND transcribed_by IS NULL").all()).results;
+  } catch (err) {
+    if (missing(err)) return 0;
+    throw err;
+  }
+  for (const r of rows) await db.batch(takeDownStatements(r).map((q) => db.prepare(q.sql).bind(...q.binds)));
+  return rows.length;
+}
 
-export async function syncScannedTrades(env, db, budget, { call, random = Math.random } = {}) {
-  if (!env.ANTHROPIC_API_KEY && !call) return { status: "skipped", message: "no ANTHROPIC_API_KEY" };
+export async function syncScannedTrades(env, db, budget, { call } = {}) {
+  const held = await holdUnchecked(db);
+  const heldNote = held ? `${held} transcription(s) published before a person checked them taken back to links; ` : "";
+  if (!env.ANTHROPIC_API_KEY && !call) return { status: "skipped", message: `${heldNote}no ANTHROPIC_API_KEY` };
   const limit = parseInt(env.SCANNED_TRADES_DAILY || "5", 10);
   const dayKey = `scanned_trades_${today()}`;
   let done = parseInt((await getState(db, dayKey)) || "0", 10);
-  if (done >= limit) return { status: "skipped", message: `${done} scanned reports read today (SCANNED_TRADES_DAILY ${limit})` };
+  if (done >= limit) return { status: "skipped", message: `${heldNote}${done} scanned reports read today (SCANNED_TRADES_DAILY ${limit})` };
   let queue;
   try {
     // A reading already under way first, then the President's reports, newest first, then the rest.
@@ -128,13 +142,14 @@ export async function syncScannedTrades(env, db, budget, { call, random = Math.r
     if (missing(err)) return { status: "skipped", message: "tables not created yet" };
     throw err;
   }
-  if (!queue.length) return { status: "ok", message: "no scanned reports waiting" };
+  if (!queue.length) return { status: "ok", message: `${heldNote}no scanned reports waiting` };
   const tally = { agreed: 0, disagree: 0, rows: 0, total: 0 };
   const failed = [];
   const note = () =>
     [
-      `${tally.agreed} scanned report(s) published (${rowsLine(tally.rows, tally.total).replace(/\.$/, "") || "no rows"})`,
-      `${tally.disagree} held (nothing published)`,
+      heldNote.replace(/; $/, ""),
+      `${tally.agreed} scanned report(s) read and waiting for a person (${rowsLine(tally.rows, tally.total).replace(/\.$/, "") || "no rows"})`,
+      `${tally.disagree} didn't agree (kept as links)`,
       failed.length ? `${failed.length} failed: ${failed.join("; ")}` : "",
     ].filter(Boolean).join(", ");
   for (const report of queue) {
@@ -161,22 +176,14 @@ export async function syncScannedTrades(env, db, budget, { call, random = Math.r
       }
       continue;
     }
-    const pastEnd = out.problems.some((p) => p.kind === "look" && /past the last row/.test(p.text));
-    const spot = out.status === "agreed" && (pastEnd || random() < spotRate(env)) ? 1 : 0;
-    const record = db
+    // Agreed readings wait for a person (/admin/review/trades/); nothing is public yet.
+    await db
       .prepare(
-        `UPDATE trade_scans SET status = ?, reading = ?, problems = ?, unread = ?, rows_total = ?, models = ?, spot_check = ?, error = NULL, read_at = datetime('now')
+        `UPDATE trade_scans SET status = ?, reading = ?, problems = ?, unread = ?, rows_total = ?, models = ?, spot_check = 0, error = NULL, read_at = datetime('now')
          WHERE report_id = ? AND status = 'pending'`
       )
-      .bind(out.status, JSON.stringify(out.agreedRows || out.rows), JSON.stringify(out.problems), JSON.stringify(out.unread), out.total || null, out.models.join(", "), spot, report.report_id);
-    const publish =
-      out.status === "agreed"
-        ? [
-            ...publishStatements({ ...report, id: report.report_id }, out.rows).map((q) => db.prepare(q.sql).bind(...q.binds)),
-            db.prepare("UPDATE trade_reports SET rows_total = ?, unread_rows = ? WHERE id = ?").bind(out.total, JSON.stringify(out.unread.map((u) => u.n)), report.report_id),
-          ]
-        : [];
-    await db.batch([record, ...publish]);
+      .bind(out.status, JSON.stringify(out.agreedRows || out.rows), JSON.stringify(out.problems), JSON.stringify(out.unread), out.total || null, out.models.join(", "), report.report_id)
+      .run();
     tally[out.status] += 1;
     if (out.status === "agreed") {
       tally.rows += out.rows.length;
