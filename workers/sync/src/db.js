@@ -38,6 +38,7 @@ import init0036 from "../migrations/0036_networth.sql";
 import init0037 from "../migrations/0037_networth_scans.sql";
 import init0038 from "../migrations/0038_corrections.sql";
 import init0039 from "../migrations/0039_networth_scan_pages.sql";
+import init0040 from "../migrations/0040_dark_money_reread.sql";
 import { isHttp, today } from "./util.js";
 import { totals } from "./rollcall.js";
 
@@ -81,6 +82,7 @@ const MIGRATIONS = [
   ["0037_networth_scans.sql", init0037],
   ["0038_corrections.sql", init0038],
   ["0039_networth_scan_pages.sql", init0039],
+  ["0040_dark_money_reread.sql", init0040],
 ];
 
 // Migrations tools/load_trades.py can also apply (the "Load stock trades"

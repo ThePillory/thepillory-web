@@ -26,11 +26,12 @@ import { officialFor } from "./civic.js";
 import { loadElection, ballotOrder, contestHref, ELECTION_BY_STATE, measuresOnly } from "./elections.js";
 import { statePath } from "./state-paths.js";
 import { previewLabel, nominations, nominationWords } from "./election-window.js";
+import { certifiedRace, certifiedMeta } from "./certified.js";
 
 export const YEAR = 2026;
 export const METHOD = "/about/methodology/#candidates";
 export const INCLUDED =
-  "Every candidate who has filed with the Federal Election Commission, passed its $5,000 threshold and is listed as active in the race, by one rule for everyone; nobody is added or left out by hand. Where a state's certified candidate list is loaded (California), the race shows that list, in ballot order.";
+  "Every candidate who has filed with the Federal Election Commission, passed its $5,000 threshold and is listed as active in the race, by one rule for everyone; nobody is added or left out by hand. Where a state's certified candidate list is loaded (California, North Carolina, New Jersey, Florida), the race shows that list: in ballot order where the list gives it, otherwise as the state lists it.";
 export const INCLUDED_CERTIFIED =
   "Every candidate on the Secretary of State's Certified List of Candidates for this office, in ballot order, by one rule for everyone; nobody is added or left out by hand.";
 export const NEUTRAL = "Every candidate gets the same card and the same page. ThePillory doesn't endorse candidates, and doesn't publish polls, predictions or contact details.";
@@ -129,11 +130,12 @@ export function generalDate(dates, st, year = YEAR) {
  *   certified:     the state's certified list is loaded; onBallot: they're on it
  *   after:         the general election has passed
  *   inOffice:      { slug, office } when they hold office now (from ThePillory's records)
+ *   byName:        the certified list is a state's own (data/elections/certified-2026/), tied to filings by name
  *   settled:       the passed primary in words ("the primary on March 3, 2026") once the office's nominees
  *                  are chosen; with no certified list, the FEC filing doesn't say who won it
  * Returns { label, line }: the label above the name, and the line under it.
  */
-export function standing({ office, year, state, certified, onBallot, after, inOffice, listed = true, lastListed = null, settled = null }) {
+export function standing({ office, year, state, certified, onBallot, after, inOffice, listed = true, lastListed = null, settled = null, byName = false }) {
   const where = `${office}, ${year}${state ? ` · ${state}` : ""}`;
   // The primary has passed and there's no certified list here: the FEC filing doesn't say who won it.
   const unknownNominee = settled && !certified && !after;
@@ -143,6 +145,7 @@ export function standing({ office, year, state, certified, onBallot, after, inOf
     if (certified && onBallot) return { label: `Ran for ${office}, ${year}`, line: state || "" };
     return { label: `Filed for ${office}, ${year}`, line: state || "" };
   }
+  if (certified && !onBallot && byName) return { label: `Filed for ${office}, ${year}`, line: `This filing's name doesn't match a name on ${state ? `${state}'s` : "the state's"} certified candidate list for November` };
   if (certified && !onBallot) return { label: `Filed for ${office}, ${year}`, line: `Not on the November ballot (Secretary of State's certified list)${state ? ` · ${state}` : ""}` };
   if (!listed) return { label: `Filed for ${office}, ${year}`, line: `No longer on the FEC's list of active candidates${lastListed ? ` (last listed ${fmtDate(lastListed)})` : ""}` };
   return { label: "Candidate · Not yet in office", line: `${certified ? "Running for" : "Filed for"} ${where}` };
@@ -349,18 +352,19 @@ function head({ label, name, line, chips = "" }) {
 // Pages
 
 /** An FEC candidate's page, or null when the ID isn't in the data. */
-export function fecCandidatePage({ c, st, data, election, records, dates, today, platform = null, electioneering = null }) {
+export function fecCandidatePage({ c, st, data, election, records, dates, today, platform = null, electioneering = null, certified = null }) {
   const stateName = STATE_NAME[st] || st;
   const key = raceKey(c);
   const office = officeName(st, key, data);
   const contest = certifiedContest(election, key);
-  const onCert = contest ? contest.candidates.find((x) => x.fec && x.fec.id === c.id) : null;
+  const stateList = contest ? null : certifiedRace(certified, key, Object.values(data.candidates).filter((x) => raceKey(x) === key));
+  const onCert = contest ? contest.candidates.find((x) => x.fec && x.fec.id === c.id) : stateList ? stateList.candidates.find((x) => x.fec && x.fec.id === c.id) || null : null;
   const display = onCert ? onCert.name : fecDisplayName(c.name);
   const held = officesHeld(c, records, display, { incumbent: !!c.incumbent });
   const now = held.find((h) => h.active && h.how === "fec");
   const after = today > generalDate(dates, st);
   const nom = nominations(dates, st, key === "senate" ? "U.S. Senate" : "U.S. House", today, data.year);
-  const s = standing({ office, year: data.year, state: stateName, certified: !!contest, onBallot: !!onCert, after, inOffice: now, listed: c.listed, lastListed: c.last_listed, settled: nom.open ? null : nominationWords(nom.events) });
+  const s = standing({ office, year: data.year, state: stateName, certified: !!(contest || stateList), onBallot: !!onCert, after, inOffice: now, listed: c.listed, lastListed: c.last_listed, settled: nom.open ? null : nominationWords(nom.events), byName: !!stateList });
   const website = c.website && safeUrl(c.website.url);
   const race = raceHref(data.year, st, key);
   const chips = [
@@ -380,16 +384,17 @@ ${fold("filing", "As filed", kv([
     ["Name as filed", esc(c.name)],
     ["Party", c.party ? esc(c.party) : "None listed"],
     ["Incumbent", c.incumbent ? "Yes" : "No"],
-    onCert ? ["On the ballot as", esc([onCert.party ? `Party preference: ${onCert.party}` : "", onCert.designation].filter(Boolean).join(" · ") || onCert.name)] : null,
+    onCert && stateList ? ["On the state's certified list as", esc(`${onCert.name} · ${certifiedMeta(onCert)}`)] : null,
+    onCert && !stateList ? ["On the ballot as", esc([onCert.party ? `Party preference: ${onCert.party}` : "", onCert.designation].filter(Boolean).join(" · ") || onCert.name)] : null,
     ["Campaign website", website ? `${outLink(website, website.replace(/^https?:\/\//, "").replace(/\/$/, ""))} <span class="secondary small">(as listed in the campaign's FEC filing)</span>` : c.website ? "None listed in the FEC filing" : null],
     ["First listed", c.first_listed ? esc(fmtDate(c.first_listed)) : null],
   ].filter(Boolean)), { meta: c.party || "" })}
-${fold("source", "Sources", `<p class="small">${sourceLink(c.fec_url, "FEC candidate record")}${c.website && c.website.source_url ? ` · ${sourceLink(c.website.source_url, "Campaign committee at the FEC")}` : ""}${contest ? ` · ${sourceLink(contest.source_url, "Certified List of Candidates")}` : ""}</p>
+${fold("source", "Sources", `<p class="small">${sourceLink(c.fec_url, "FEC candidate record")}${c.website && c.website.source_url ? ` · ${sourceLink(c.website.source_url, "Campaign committee at the FEC")}` : ""}${contest ? ` · ${sourceLink(contest.source_url, "Certified List of Candidates")}` : ""}${stateList && stateList.source.url ? ` · ${sourceLink(stateList.source.url, `${stateName}'s certified candidate list`)}` : ""}</p>
   <p class="hint">FEC list read ${fmtDate(data.list_built_on || data.built_on)}.</p>`)}
 ${included()}`;
 
   const more = `
-${onCert ? fold("statement", "Candidate statement", `<p class="small"><a class="inline-link" href="${contestHref(election.election.id, contest.id)}">Statements in the official voter guide, word for word</a></p>`) : ""}
+${onCert && contest ? fold("statement", "Candidate statement", `<p class="small"><a class="inline-link" href="${contestHref(election.election.id, contest.id)}">Statements in the official voter guide, word for word</a></p>`) : ""}
 ${fold("how", "How candidates are included", `<p class="small">${esc(INCLUDED)}</p><p class="small">${esc(NEUTRAL)}</p><a class="inline-link" href="${METHOD}">Methodology</a>`)}`;
 
   const main = `${head({ label: s.label, name: display, line: s.line, chips })}
@@ -433,7 +438,7 @@ ${tabs(about, candidatePlatform(cand.name, null, null, { state: true }), recordT
 }
 
 /** A race page: every candidate, the same card each, in ballot order or alphabetically. */
-export function racePage({ st, key, data, election, records, dates, today }) {
+export function racePage({ st, key, data, election, records, dates, today, certified = null }) {
   const stateName = STATE_NAME[st] || st;
   const year = data ? data.year : YEAR;
   const contest = certifiedContest(election, key);
@@ -444,7 +449,8 @@ export function racePage({ st, key, data, election, records, dates, today }) {
   const after = today > date;
   const fecList = data ? Object.values(data.candidates).filter((c) => raceKey(c) === key) : [];
   const byFec = Object.fromEntries(fecList.map((c) => [c.id, c]));
-  if (!contest && !fecList.length) return null;
+  const stateList = contest ? null : certifiedRace(certified, key, fecList);
+  if (!contest && !stateList && !fecList.length) return null;
 
   const fecCard = (c) => {
     const name = fecDisplayName(c.name);
@@ -479,12 +485,34 @@ export function racePage({ st, key, data, election, records, dates, today }) {
 </section>`;
     const onList = new Set(contest.candidates.map((x) => x.fec && x.fec.id).filter(Boolean));
     rest = fecList.filter((c) => !onList.has(c.id));
+  } else if (stateList) {
+    // The state's own certified list: who the state certified, as it lists them. A name links to an
+    // FEC filing only when exactly one filer in this race has that name.
+    const items = stateList.candidates.map((x) => {
+      const f = x.fec && byFec[x.fec.id];
+      const held = f ? officesHeld(f, records, x.name, { incumbent: !!(x.incumbent || f.incumbent) }) : [];
+      const meta = certifiedMeta(x);
+      const heldText = held[0] ? heldLine(held[0]) : "";
+      return f
+        ? candidateCard({ href: candidateHref(f.id), name: x.name, meta, held: heldText })
+        : `
+  <li class="ballot-cand list-row"><div><div class="list-title">${esc(x.name)}</div><div class="list-meta">${esc(meta)}</div></div></li>`;
+    });
+    const src = stateList.source;
+    ballot = `
+<section class="stack-sm" aria-labelledby="h-ballot">
+  <h2 class="label" id="h-ballot">On the ballot · ${esc(fmtDate(date))}</h2>
+  <ul class="card plain-list ballot-cands">${items.join("")}</ul>
+  <p class="hint">From ${esc(src.name || `${stateName}'s certified candidate list`)}${safeUrl(src.url) ? ` (${sourceLink(src.url, "official list")})` : ""}${stateList.read_on ? `, read ${esc(fmtDate(stateList.read_on))}` : ""}. Names and parties as the state lists them; the order on your ballot may differ. A name links to its FEC filing only when exactly one filer in this race has that name.</p>
+</section>`;
+    const onList = new Set(stateList.candidates.map((x) => x.fec && x.fec.id).filter(Boolean));
+    rest = fecList.filter((c) => !onList.has(c.id));
   }
   const listed = inOrder(rest.filter((c) => c.listed));
   const gone = inOrder(rest.filter((c) => !c.listed));
   // Once the office's primary has passed, the FEC list isn't the field: it still holds people who lost or withdrew.
   const nom = fecOffice ? nominations(dates, st, key === "senate" ? "U.S. Senate" : "U.S. House", today, year) : { open: true, events: [] };
-  const settled = !contest && !after && !nom.open;
+  const settled = !contest && !stateList && !after && !nom.open;
   const settledNote = settled
     ? `
 <section class="card stack-sm" aria-labelledby="h-nominees">
@@ -496,10 +524,10 @@ export function racePage({ st, key, data, election, records, dates, today }) {
   const fecSection = listed.length || gone.length
     ? `
 <section class="stack-sm" aria-labelledby="h-fec">
-  <h2 class="label" id="h-fec">${contest ? "Also filed with the FEC (not on the November ballot)" : `Filed with the FEC in ${year} · ${esc(stateName)}`}</h2>
+  <h2 class="label" id="h-fec">${contest ? "Also filed with the FEC (not on the November ballot)" : stateList ? `Also filed with the FEC in ${year}` : `Filed with the FEC in ${year} · ${esc(stateName)}`}</h2>
   ${listed.length ? `<ul class="card plain-list ballot-cands">${listed.map(fecCard).join("")}</ul>` : ""}
   ${gone.length ? fold("gone", "No longer listed as active by the FEC", `<ul class="card plain-list ballot-cands">${gone.map(fecCard).join("")}</ul>`, { meta: String(gone.length) }) : ""}
-  <p class="hint">Alphabetical by last name, names as filed. ${contest || settled ? "" : "Not everyone listed will be on the November ballot (some lose a primary or withdraw); your sample ballot is final. "}${data ? `${sourceLink(data.source_url, "FEC list")} · read ${esc(fmtDate(data.list_built_on || data.built_on))}.` : ""}</p>
+  <p class="hint">Alphabetical by last name, names as filed. ${stateList ? `Filers whose name doesn't match exactly one name on ${esc(stateName)}'s certified list: most lost a primary or withdrew, but check the official list. ` : ""}${contest || stateList || settled ? "" : "Not everyone listed will be on the November ballot (some lose a primary or withdraw); your sample ballot is final. "}${data ? `${sourceLink(data.source_url, "FEC list")} · read ${esc(fmtDate(data.list_built_on || data.built_on))}.` : ""}</p>
 </section>`
     : "";
   const main = `
