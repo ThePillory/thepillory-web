@@ -320,6 +320,23 @@
   },
   {
    "dockets": [
+    "25-1103"
+   ],
+   "name": "U.S. DOGE SERVICE V. UNITED STATES DIST. COURT FOR D. C.",
+   "lower_court": "USCA-DC",
+   "granted": "10/13/26",
+   "argument_date": "",
+   "docket_url": "https://www.supremecourt.gov/search.aspx?filename=/docket/docketfiles/html/public/25-1103.html",
+   "decided": false,
+   "qp_url": "https://www.supremecourt.gov/qp/25-01103qp.pdf",
+   "question_presented": [
+    "The district court in this case entered a wide-ranging and intrusive discovery order against the U.S. DOGE Service (USDS)-a body within the Executive Office of the President tasked with advising the President-to determine whether that body's influence renders it an \"agency\" subject to the Freedom of Information Act (FOIA), 5 U.S.C. 552. This Court previously granted certiorari, vacated the court of appeals' denial of a writ of mandamus, and remanded for the court of appeals to \"narrow\" discovery in light of \"separation of powers concerns.\" On remand, respondent withdrew several of its discovery requests, and the court of appeals again denied the government's mandamus petition without any new analysis regarding the remaining discovery, which includes numerous requests for internal communications and a deposition of USDS's head. The questions presented are:",
+    "1. Whether the court of appeals' order departed from this Court's instructions and the separation-of-powers principles that this Court articulated in Cheney v. United States District Court, 542 U.S. 367 (2004).",
+    "2. Whether a court may order broad discovery against an Executive Office advisory body-potentially providing much information sought on the merits of a plaintiffs FOIA claims-to determine whether FOIA's disclosure requirements apply in the first place."
+   ]
+  },
+  {
+   "dockets": [
     "25-1131"
    ],
    "name": "MISSIONARIES OF ST. JOHN THE BAPTIST, INC. V. FREDERIC",
@@ -366,6 +383,21 @@
     "1. Whether a court may hold a party in civil contempt based on a violation of an injunction's \"spirit\" where the injunction is silent as to the conduct upon which contempt is based, as the Ninth Circuit holds; or, instead, whether a court must ground a finding of civil contempt on the violation of an order that clearly and unambiguously proscribes the precise conduct at issue, as other circuits hold.",
     "2. Whether the Ninth Circuit has properly created an \"antitrust\" or \"competition\" exception to Trump v. CASA, Inc., 606 U.S. 831 (2025), and the longstanding equitable principles on which CASA rests, or otherwise disregarded CASA's limits.",
     "GRANTED LIMITED TO QUESTION 1 PRESENTED BY THE PETITION."
+   ]
+  },
+  {
+   "dockets": [
+    "25-1343"
+   ],
+   "name": "BLANCHE, ATT’Y GEN. V. OZURUMBA",
+   "lower_court": "USCA-4",
+   "granted": "10/13/26",
+   "argument_date": "",
+   "docket_url": "https://www.supremecourt.gov/search.aspx?filename=/docket/docketfiles/html/public/25-1343.html",
+   "decided": false,
+   "qp_url": "https://www.supremecourt.gov/qp/25-01343qp.pdf",
+   "question_presented": [
+    "An alien is removable and ineligible for various immigration benefits if he has provided material support to a terrorist organization. The question presented is whether, under 8 U.S.C. 1182(a)(3)(B)(iv)(Vl), such support must advance the organization's actual commission of terrorism to qualify for that bar."
    ]
   },
   {
@@ -436,6 +468,23 @@
   },
   {
    "dockets": [
+    "25-7026"
+   ],
+   "name": "BERRY V. UNITED STATES",
+   "lower_court": "USCA-11",
+   "granted": "10/13/26",
+   "argument_date": "",
+   "docket_url": "https://www.supremecourt.gov/search.aspx?filename=/docket/docketfiles/html/public/25-7026.html",
+   "decided": false,
+   "qp_url": "https://www.supremecourt.gov/qp/25-07026qp.pdf",
+   "question_presented": [
+    "Under the Antiterrorism and Effective Death Penalty Act of 1996 (AEDPA), an appeal may not be taken from a final order in a federal habeas proceeding unless a circuit judge or justice issues a \"certificate of appealability\" (COA). 28 U.S.C.§ 2253(c (1). A COA may issue only if the prisoner makes a \"substantial showing of the denial of a constitutional right.\" 28 U.S.C. § 2253(c)(2). To do so, the prisoner must show that \"reasonable jurists could debate\" whether the petition should have been resolved in a different manner. Slack v. McDaniel, 529 U.S. 473, A484 (2000).",
+    "The question presented is:",
+    "Whether a certificate of appealability under 28 U.S.C. § 2253 should be granted where the issue that the petitioner seeks to raise on appeal has been resolved against him by binding circuit precedent but has been resolved in his favor by another circuit."
+   ]
+  },
+  {
+   "dockets": [
     "26-104"
    ],
    "name": "RHONEY V. BARBOSA DA CUNHA",
@@ -482,5 +531,5 @@
    ]
   }
  ],
- "built_on": "2026-10-12"
+ "built_on": "2026-10-13"
 }
