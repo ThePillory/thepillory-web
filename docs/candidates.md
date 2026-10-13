@@ -43,7 +43,7 @@ The general election date comes from `data/elections/dates.json`. Winners get th
 
 ## Other offices held
 
-`officesHeld()`: by FEC ID through `fec_candidates` (members of Congress), otherwise by name among the state's officials (current and former) only when exactly one has that first and last name (`officialFor()` in `functions/_lib/civic.js`); the Votes tab says when a link was matched by name.
+`officesHeld()`: by FEC ID through `fec_candidates` (members of Congress), otherwise, only for a candidate the filing marks as this race's incumbent, by name among the state's current officials when exactly one has that first and last name (`officialFor()` in `functions/_lib/civic.js`). A name alone never links a candidate to an office: the Votes tab says "No office matched yet". The address ballot preview doesn't link candidates to officials at all (the Civic Information API gives a name only).
 
 ## Data: `data/candidates/<year>/<st>.json`
 

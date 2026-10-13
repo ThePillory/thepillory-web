@@ -239,7 +239,7 @@ test("with an address: every contest in ballot order, the same card for each can
   assert.ok(at("<h3>Governor</h3>") > 0 && at("<h3>Governor</h3>") < at("<h3>Member of the State Assembly</h3>") && at("<h3>Member of the State Assembly</h3>") < at("<h3>Proposition 1</h3>"));
   assert.equal((html.match(/<li class="ballot-cand stack-xs">/g) || []).length, 5, "one row per candidate");
   assert.match(html, /Cy Kemp<\/p>\s*<p class="list-meta">No party listed/);
-  assert.match(html, /href="\/reps\/hal-jones\/">Assemblymember now · on ThePillory/);
+  assert.doesNotMatch(html, /href="\/reps\/hal-jones\/"/, "a name alone doesn't link a candidate to an official");
   assert.match(html, /href="\/elections\/2026-11-03\/measure\/prop-1\/">Official arguments for and against, on ThePillory/);
   assert.match(html, /href="https:\/\/sos\.example\.gov\/prop1"/);
   assert.match(html, /For an address in Exampleville, CA/);

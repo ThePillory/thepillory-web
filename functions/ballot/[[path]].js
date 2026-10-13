@@ -29,7 +29,7 @@ import { districtsFromCookie, STATE_NAME } from "../_lib/districts.js";
 import { visitorState } from "../_lib/visitor-state.js";
 import { asset } from "../_lib/geo.js";
 import { loadElection, electionHref, ballotHref, measureHref, measureName, contestHref, ballotOrder, ELECTION_BY_STATE, measuresOnly, howToVote } from "../_lib/elections.js";
-import { voterInfo, ballotFromVoterInfo, officialFor, measureFor, CivicError } from "../_lib/civic.js";
+import { voterInfo, ballotFromVoterInfo, measureFor, CivicError } from "../_lib/civic.js";
 import { visitorHash } from "../_lib/turnstile.js";
 import { fold } from "../_lib/summary.js";
 import { statePossessive, RESULT_HEADING, nominations, nominationWords, todayIn } from "../_lib/election-window.js";
@@ -131,12 +131,6 @@ async function filedOfficials(db, st) {
     .bind(st)
     .all();
   return Object.fromEntries(results.map((r) => [r.candidate_id, r]));
-}
-
-/** The state's current officials, to link names on an address's ballot to their pages. */
-async function stateOfficials(db, st) {
-  if (!db) return [];
-  return (await db.prepare("SELECT slug, name, last_name, office FROM officials WHERE active = 1 AND state = ?").bind(st).all()).results;
 }
 
 /** ThePillory's election for the state, when it has one (California's full ballot, Washington's measures). */
@@ -431,17 +425,17 @@ ${officialLinks(st, o, election === FAILED ? null : election)}
   return privatePage(RESULT_HEADING, main, [`${statePossessive(st, name)} ballot`, ballotPath(st)]);
 }
 
-function civicCandidate(c, officials) {
-  const own = officialFor(c.name, officials);
+// No link to an official's page: the Civic Information API gives a name only,
+// and a name alone isn't enough to say it's the same person.
+function civicCandidate(c) {
   return `
   <li class="ballot-cand stack-xs">
     <p class="list-title">${esc(c.name)}</p>
     <p class="list-meta">${esc(c.party || "No party listed")}</p>
-    ${own ? `<p class="small"><a class="inline-link" href="/reps/${esc(own.slug)}/">${esc(own.office)} now · on ThePillory</a></p>` : ""}
   </li>`;
 }
 
-function civicContest(c, { officials, election }) {
+function civicContest(c, { election }) {
   if (c.kind === "referendum") {
     const r = c.referendum;
     const ours = measureFor(r, election);
@@ -461,7 +455,7 @@ function civicContest(c, { officials, election }) {
     <h3>${esc(c.title)}</h3>
     ${meta ? `<p class="small secondary">${esc(meta)}</p>` : ""}
     ${c.candidates.length
-      ? `<ul class="plain-list ballot-cands">${c.candidates.map((x) => civicCandidate(x, officials)).join("")}</ul>`
+      ? `<ul class="plain-list ballot-cands">${c.candidates.map((x) => civicCandidate(x)).join("")}</ul>`
       : '<p class="small secondary">No candidates listed in the official data.</p>'}
   </div>`;
 }
@@ -503,12 +497,11 @@ function civicLinks(b) {
 async function answerPage(env, request, st, b) {
   if (!b.contests.length) return noData(env, request, st, "not-found", b);
   const name = STATE_NAME[st];
-  const [officials, election, office] = await Promise.all([
-    loadSection("ballot officials", () => stateOfficials(env.DB, st), []),
+  const [election, office] = await Promise.all([
     loadSection("ballot election", () => ownElection(env, request, st), null),
     loadSection("ballot office", () => stateOffice(env, request, st), null),
   ]);
-  const ctx = { officials: officials === FAILED ? [] : officials, election: election === FAILED ? null : election };
+  const ctx = { election: election === FAILED ? null : election };
   const sourceNames = [...new Set(b.contests.flatMap((c) => c.sources.map((s) => s.name)).filter(Boolean))];
   const main = `
 <header class="page-head stack-xs">

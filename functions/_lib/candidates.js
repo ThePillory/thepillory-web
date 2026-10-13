@@ -173,15 +173,19 @@ export async function recordsFor(db, st) {
 }
 
 /**
- * The offices a candidate holds or held in ThePillory's records: by their FEC ID
- * (members of Congress) and by name among the state's officials, only when
- * exactly one official in the state has that first and last name. Pure.
+ * The offices a candidate holds or held in ThePillory's records, only when the
+ * records tie them together: by their FEC ID (members of Congress), or, for a
+ * candidate the filing marks as this race's incumbent, the one current
+ * official in the state with that first and last name. A name alone is never
+ * enough: a candidate who isn't matched this way shows "No office matched
+ * yet". Pure.
  */
-export function officesHeld(c, records, displayName) {
+export function officesHeld(c, records, displayName, { incumbent = false } = {}) {
   const out = [];
   const byId = c.id && records.byFec[c.id];
   if (byId) out.push({ ...byId, how: "fec" });
-  const others = records.officials.filter((o) => !byId || o.slug !== byId.slug);
+  if (!incumbent) return out;
+  const others = records.officials.filter((o) => o.active && (!byId || o.slug !== byId.slug));
   const hit = officialFor(displayName, others);
   if (hit && !out.some((x) => x.slug === hit.slug)) out.push({ ...hit, how: "name" });
   return out;
@@ -317,11 +321,11 @@ function tabs(about, platform, record, funding, more) {
 
 function recordTab(name, held) {
   if (!held.length) {
-    return `<p class="secondary small">${esc(name)} doesn't hold, and hasn't held, an office in ThePillory's records, so there are no votes to show. ThePillory records votes in Congress and state legislatures, and the actions of executive offices.</p>`;
+    return `<p class="secondary small">No office matched yet. ThePillory links a candidate to an office only when the records tie them together (the same FEC ID, or the incumbent in this race), never by name alone, so any votes ${esc(name)} has cast in another office aren't shown here.</p>`;
   }
   return `
 <div class="card">${held.map((h) => linkRow(`/reps/${h.slug}/#votes`, `${h.active ? "" : "Former "}${h.office}${h.district ? `, ${h.district}` : ""}`, `${h.name}: record and votes on ThePillory`)).join("")}</div>
-${held.some((h) => h.how === "name") ? `<p class="hint">Matched by name: the only official in ThePillory's records for this state with this first and last name.</p>` : ""}`;
+${held.some((h) => h.how === "name") ? `<p class="hint">The incumbent in this race, matched to the only current official in ThePillory's records for this state with this first and last name.</p>` : ""}`;
 }
 
 function initialsOf(name) {
@@ -352,7 +356,7 @@ export function fecCandidatePage({ c, st, data, election, records, dates, today,
   const contest = certifiedContest(election, key);
   const onCert = contest ? contest.candidates.find((x) => x.fec && x.fec.id === c.id) : null;
   const display = onCert ? onCert.name : fecDisplayName(c.name);
-  const held = officesHeld(c, records, display);
+  const held = officesHeld(c, records, display, { incumbent: !!c.incumbent });
   const now = held.find((h) => h.active && h.how === "fec");
   const after = today > generalDate(dates, st);
   const nom = nominations(dates, st, key === "senate" ? "U.S. Senate" : "U.S. House", today, data.year);
@@ -397,7 +401,7 @@ ${tabs(about, candidatePlatform(display, website, platform), recordTab(display, 
 export function stateCandidatePage({ cand, contest, election, records, today }) {
   const st = election.election.state;
   const stateName = STATE_NAME[st];
-  const held = officesHeld({}, records, cand.name);
+  const held = officesHeld({}, records, cand.name, { incumbent: !!cand.incumbent });
   const now = held.find((h) => h.active);
   const after = today > election.election.date;
   const office = contest.office;
@@ -444,7 +448,7 @@ export function racePage({ st, key, data, election, records, dates, today }) {
 
   const fecCard = (c) => {
     const name = fecDisplayName(c.name);
-    const held = officesHeld(c, records, name);
+    const held = officesHeld(c, records, name, { incumbent: !!c.incumbent });
     const now = held.find((h) => h.active && h.how === "fec");
     return candidateCard({
       href: candidateHref(c.id),
@@ -459,7 +463,7 @@ export function racePage({ st, key, data, election, records, dates, today }) {
     const { candidates, note } = ballotOrder(contest, election);
     const cards = candidates.map((x) => {
       const f = x.fec && byFec[x.fec.id];
-      const held = officesHeld(f || {}, records, x.name);
+      const held = officesHeld(f || {}, records, x.name, { incumbent: !!(x.incumbent || (f && f.incumbent)) });
       return candidateCard({
         href: f ? candidateHref(f.id) : stateCandidateHref(contest.id, nameSlug(x.name)),
         name: x.name,
