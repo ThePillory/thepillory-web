@@ -54,8 +54,31 @@ ${SECTIONS.map(([status, title, note]) => {
   };
 }
 
+/**
+ * A report's reading: the lines both readings agreed on (networth_scan_pages,
+ * a page per row) and the lines still read differently (networth_scan_open),
+ * or, for a report stored before migration 0039, the old JSON columns.
+ */
+async function storedReading(db, id, s) {
+  try {
+    const [pages, open] = await Promise.all([
+      db.prepare("SELECT page, lines FROM networth_scan_pages WHERE report_id = ? ORDER BY page").bind(id).all(),
+      db.prepare("SELECT key, page, idx, a, b FROM networth_scan_open WHERE report_id = ? ORDER BY page, idx").bind(id).all(),
+    ]);
+    if (pages.results.length || open.results.length) {
+      return {
+        lines: pages.results.flatMap((r) => json(r.lines, []).map((x) => ({ ...x, page: r.page }))),
+        dis: open.results.map((r) => ({ key: r.key, page: r.page, idx: r.idx, a: json(r.a, null), b: json(r.b, null) })),
+      };
+    }
+  } catch (err) {
+    if (!/no such table/i.test(String(err && err.message))) throw err;
+  }
+  return { lines: json(s.reading, []), dis: json(s.disagreements, []).filter((d) => d && typeof d === "object") };
+}
+
 const flags = (x) => [x.inc ? "income" : "", x.elsewhere ? "reported elsewhere" : "", x.nra ? "not readily ascertainable" : "", x.unsure ? "hard to read" : ""].filter(Boolean).join(", ");
-const lineText = (x) => (x && typeof x === "object" ? `${x.n ? `Line ${x.n}: ` : ""}${x.v || "(no value)"}${flags(x) ? ` (${flags(x)})` : ""}${x.cred ? ` · ${x.cred}` : ""}` : String(x || ""));
+const lineText = (x) => (x && typeof x === "object" ? `${x.n ? `Line ${x.n}: ` : ""}${x.v || "(no value)"}${flags(x) ? ` (${flags(x)})` : ""}${x.cred ? ` · ${x.cred}` : ""}` : "(this reading has no such line)");
 
 function linesTable(lines) {
   return `<div class="table-scroll"><table class="tally-table"><thead><tr><th scope="col">Section</th><th scope="col">Heading</th><th scope="col">Line</th><th scope="col">Value</th><th scope="col">Notes</th></tr></thead><tbody>${lines
@@ -68,8 +91,7 @@ export async function networthScanItem(db, env, id, { error = "", done = "", for
   if (!s) return null;
   const url = safeUrl(s.report_url);
   const scanAt = (p) => (url ? `<a class="inline-link" href="${esc(url)}#page=${p}" target="_blank" rel="noopener">page ${p} of the scan ↗</a>` : `page ${p}`);
-  const lines = json(s.reading, []);
-  const dis = json(s.disagreements, []);
+  const { lines, dis } = await storedReading(db, id, s);
   const problems = json(s.problems, []);
   const settled = json(s.settled, {});
   const f = form || {};
@@ -93,9 +115,9 @@ ${here.length ? linesTable(here) : '<p class="small secondary">No lines from thi
   const settleForm = dis.length && ["disagree"].includes(s.status)
     ? `<section class="card stack-sm"><h2 class="label">Read differently (${dis.length})</h2><p class="small">For each, open the scan at that page and pick the reading that matches it exactly. If neither does, leave it: the report stays a link.</p>
 ${post(`<input type="hidden" name="action" value="settle">
-${dis.map((d) => `<fieldset class="stack-xs settle-line"><legend class="small">${scanAt(d.page)}${"idx" in d ? `, line ${d.idx + 1} on the page` : ": the readings found a different number of lines"}</legend>
-  <label class="check-row"><input type="radio" name="${esc(d.key)}" value="a"${settled[d.key] === "a" ? " checked" : ""}> <span class="small">Reading A: ${esc("idx" in d ? lineText(d.a) : `${d.a}: ${(d.lines_a || []).map(lineText).join("; ")}`)}</span></label>
-  <label class="check-row"><input type="radio" name="${esc(d.key)}" value="b"${settled[d.key] === "b" ? " checked" : ""}> <span class="small">Reading B: ${esc("idx" in d ? lineText(d.b) : `${d.b}: ${(d.lines_b || []).map(lineText).join("; ")}`)}</span></label>
+${dis.map((d) => `<fieldset class="stack-xs settle-line"><legend class="small">${scanAt(d.page)}, line ${d.idx + 1} on the page</legend>
+  <label class="check-row"><input type="radio" name="${esc(d.key)}" value="a"${settled[d.key] === "a" ? " checked" : ""}> <span class="small">Reading A: ${esc(lineText(d.a))}</span></label>
+  <label class="check-row"><input type="radio" name="${esc(d.key)}" value="b"${settled[d.key] === "b" ? " checked" : ""}> <span class="small">Reading B: ${esc(lineText(d.b))}</span></label>
   <label class="check-row"><input type="radio" name="${esc(d.key)}" value=""${!settled[d.key] ? " checked" : ""}> <span class="small">Neither matches the scan</span></label>
 </fieldset>`).join("")}
   <label class="field"><span class="field-label">Your name, as shown with this report ("Checked by")</span><input class="input" name="reviewer" required autocomplete="name" value="${reviewer}"></label>
@@ -142,7 +164,7 @@ export async function networthScanChange(db, id, rawForm, email) {
   if (!form.reviewer) return { error: "Enter your name.", form };
   if (action === "settle") {
     if (s.status !== "disagree") return { error: "Only a held report has lines to settle.", form };
-    const dis = json(s.disagreements, []);
+    const { dis } = await storedReading(db, id, s);
     const settled = {};
     for (const d of dis) {
       const v = String(rawForm.get(d.key) || "");

@@ -142,6 +142,17 @@ test("the review page: settle lines, confirm, take down", async () => {
   // Taking it down removes it from the line.
   assert.match((await networthScanChange(db, "oge:v25", form({ action: "reject", reviewer: "A. Reviewer", reason: "A value doesn't match the scan" }))).done, /Taken down/);
   assert.equal(line((await get(reps, "/reps/vee-pee/", db)).html), "");
+
+  // A reading stored a page at a time (migration 0039): pages and open lines in their own rows.
+  await db.prepare("INSERT INTO networth_scan_pages (report_id, page, lines) VALUES ('oge:v24', 9, ?)").bind(JSON.stringify([{ sec: "6", n: "4", v: "$15,001 - $50,000", idx: 0 }])).run();
+  await db.prepare("INSERT INTO networth_scan_open (report_id, key, page, idx, a, b) VALUES ('oge:v24', 'p9.1', 9, 1, ?, NULL)").bind(JSON.stringify({ sec: "6", n: "5", v: "$1,001 - $15,000" })).run();
+  await db.prepare("UPDATE networth_scans SET status = 'disagree', settled = NULL WHERE report_id = 'oge:v24'").run();
+  const paged = (await networthScanItem(db, {}, "oge:v24")).main;
+  assert.match(paged, /Read differently \(1\)/);
+  assert.match(paged, /Reading A: Line 5: \$1,001 - \$15,000/);
+  assert.match(paged, /Reading B: \(this reading has no such line\)/);
+  assert.match(paged, /Page 9<\/span><span class="cr-meta">1 lines/);
+  assert.match((await networthScanChange(db, "oge:v24", form({ action: "settle", reviewer: "A. Reviewer", "p9.1": "b" }))).done, /Every line is settled/);
 });
 
 test("money in short form, and ranges with open ends", () => {
