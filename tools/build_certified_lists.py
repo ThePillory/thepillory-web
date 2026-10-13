@@ -206,8 +206,9 @@ def parse_fl(text):
     """Florida's tab-delimited extract -> contests. Only candidates whose status is Qualified."""
     out = {}
     rows = list(csv.DictReader(io.StringIO(text), delimiter="\t"))
-    if not rows or "OfficeCode" not in rows[0]:
-        raise Unreadable("the extract isn't the documented tab-delimited file")
+    need = ("OfficeCode", "Juris1num", "StatusDesc", "PartyName", "NameLast", "NameFirst")
+    if not rows or any(k not in rows[0] for k in need):
+        raise Unreadable(f"the extract isn't the documented tab-delimited file (columns: {list(rows[0])[:20] if rows else None})")
     for r in rows:
         office = (r.get("OfficeCode") or "").strip().upper()
         if office not in ("USS", "USR") or (r.get("StatusDesc") or "").strip() != "Qualified":
