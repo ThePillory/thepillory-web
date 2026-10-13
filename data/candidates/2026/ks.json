@@ -3,8 +3,8 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=KS&candidate_status=C",
- "list_built_on": "2026-10-11",
- "built_on": "2026-10-12",
+ "list_built_on": "2026-10-12",
+ "built_on": "2026-10-13",
  "senate_up": true,
  "candidates": {
   "S6KS00247": {
@@ -18,7 +18,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6KS00247/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12"
+   "last_listed": "2026-10-13"
   },
   "S6KS00312": {
    "id": "S6KS00312",
@@ -31,7 +31,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6KS00312/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12"
+   "last_listed": "2026-10-13"
   },
   "S6KS00304": {
    "id": "S6KS00304",
@@ -44,7 +44,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6KS00304/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12"
+   "last_listed": "2026-10-13"
   },
   "S6KS00320": {
    "id": "S6KS00320",
@@ -57,7 +57,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6KS00320/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12"
+   "last_listed": "2026-10-13"
   },
   "S0KS00315": {
    "id": "S0KS00315",
@@ -70,7 +70,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S0KS00315/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12"
+   "last_listed": "2026-10-13"
   },
   "S6KS00270": {
    "id": "S6KS00270",
@@ -83,7 +83,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6KS00270/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12"
+   "last_listed": "2026-10-13"
   },
   "S6KS00239": {
    "id": "S6KS00239",
@@ -96,7 +96,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6KS00239/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12"
+   "last_listed": "2026-10-13"
   },
   "S6KS00288": {
    "id": "S6KS00288",
@@ -109,7 +109,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6KS00288/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12"
+   "last_listed": "2026-10-13"
   },
   "S6KS00262": {
    "id": "S6KS00262",
@@ -122,7 +122,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6KS00262/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12"
+   "last_listed": "2026-10-13"
   },
   "S6KS00296": {
    "id": "S6KS00296",
@@ -135,7 +135,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6KS00296/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12"
+   "last_listed": "2026-10-13"
   },
   "H0KS01123": {
    "id": "H0KS01123",
@@ -148,7 +148,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0KS01123/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12",
+   "last_listed": "2026-10-13",
    "totals": {
     "cycle": 2026,
     "receipts": 1488464.99,
@@ -367,7 +367,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6KS01195/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 113992.57,
+    "disbursements": 82535.94,
+    "cash_on_hand": 31456.63,
+    "individual_unitemized": 45049.68,
+    "individual_itemized": 68275,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 348.6,
+    "other": 319.29,
+    "coverage_end": "2026-07-15",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6KS01195/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00919860&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.colinforkansas.com/",
+    "as_filed": "WWW.COLINFORKANSAS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00919860/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6KS01211": {
    "id": "H6KS01211",
@@ -380,7 +410,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6KS01211/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 0,
+    "disbursements": 24035.6,
+    "cash_on_hand": -6454.3,
+    "individual_unitemized": 0,
+    "individual_itemized": 0,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 0,
+    "other": 0,
+    "coverage_end": "2026-07-15",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6KS01211/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00952374&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://musserforuscongress.com/",
+    "as_filed": "MUSSERFORUSCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00952374/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6KS01203": {
    "id": "H6KS01203",
@@ -393,7 +453,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6KS01203/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 48261.35,
+    "disbursements": 43477.51,
+    "cash_on_hand": 4783.84,
+    "individual_unitemized": 13201,
+    "individual_itemized": 30457,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 4600.8,
+    "other": 2.55,
+    "coverage_end": "2026-07-15",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6KS01203/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00932855&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.laurenforkansas.com/",
+    "as_filed": "WWW.LAURENFORKANSAS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00932855/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6KS02276": {
    "id": "H6KS02276",
@@ -406,7 +496,94 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6KS02276/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 758823.24,
+    "disbursements": 514537.24,
+    "cash_on_hand": 244286,
+    "individual_unitemized": 240191.71,
+    "individual_itemized": 478099.55,
+    "pac": 33500,
+    "party": 0,
+    "self_funding": 7000,
+    "other": 31.98,
+    "coverage_end": "2026-07-15",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6KS02276/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00824342",
+      "name": "WAY BACK PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00002840",
+      "name": "UAW - V - CAP (UAW VOLUNTARY COMMUNITY ACTION PROGRAM) 'INT'L UNION UNITED AUTOMOBILE AEROSPACE & AGRICULTURAL IMPLEMENT WORKERS OF AMERICA UAW",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00001016",
+      "name": "CARPENTERS LEGISLATIVE IMPROVEMENT COMMITTEE UNITED BROTHERHOOD OF CARPENTERS AND JOINERS",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00012476",
+      "name": "UA UNION PLUMBERS & PIPEFITTERS VOTE! PAC (UNITED ASSOCIATION OF JOURNEYMEN AND APPRENTICES OF THE PLUMBING & PIPEFITTING INDUSTRY OF THE UNITED STATES AND CANADA)",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00002469",
+      "name": "MACHINISTS NON PARTISAN POLITICAL LEAGUE OF THE INTERNATIONAL ASSOCIATION OF MACHINISTS & AEROSPACE WORKERS",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00001636",
+      "name": "SMART TD PAC",
+      "total": 5000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00099234",
+      "name": "BROTHERHOOD OF LOCOMOTIVE ENGINEERS & TRAINMEN PAC FUND",
+      "total": 2500,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00027342",
+      "name": "INTERNATIONAL BROTHERHOOD OF ELECTRICAL WORKERS POLITICAL ACTION COMMITTEE",
+      "total": 1000,
+      "count": 1,
+      "industry": "labor"
+     }
+    ],
+    "count": 8,
+    "total": 33500,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00917088&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://doncooverforcongress.com/",
+    "as_filed": "HTTPS://DONCOOVERFORCONGRESS.COM/",
+    "source_url": "https://www.fec.gov/data/committee/C00917088/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H4KS02164": {
    "id": "H4KS02164",
@@ -419,7 +596,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4KS02164/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12",
+   "last_listed": "2026-10-13",
    "totals": {
     "cycle": 2026,
     "receipts": 1457604.99,
@@ -638,7 +815,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8KS03155/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12"
+   "last_listed": "2026-10-13"
   },
   "H6KS03308": {
    "id": "H6KS03308",
@@ -651,7 +828,45 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6KS03308/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 18916.39,
+    "disbursements": 6632.79,
+    "cash_on_hand": 12283.6,
+    "individual_unitemized": 985.66,
+    "individual_itemized": 6140.73,
+    "pac": 10000,
+    "party": 0,
+    "self_funding": 1790,
+    "other": 0,
+    "coverage_end": "2026-07-15",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6KS03308/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00649525",
+      "name": "RESTORING OUR NATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     }
+    ],
+    "count": 1,
+    "total": 10000,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00951632&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://ericjenkinsforkansas.com/",
+    "as_filed": "ERICJENKINSFORKANSAS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00951632/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6KS03290": {
    "id": "H6KS03290",
@@ -664,7 +879,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6KS03290/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 24631.97,
+    "disbursements": 8817.6,
+    "cash_on_hand": 15815.37,
+    "individual_unitemized": 7482.97,
+    "individual_itemized": 14172,
+    "pac": 0,
+    "party": 1237,
+    "self_funding": 1740,
+    "other": 0,
+    "coverage_end": "2026-07-15",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6KS03290/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00940874&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://sarahpreu2026.com/",
+    "as_filed": "SARAHPREU2026.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00940874/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6KS04249": {
    "id": "H6KS04249",
@@ -677,7 +922,26 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6KS04249/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 97577.81,
+    "disbursements": 94059.44,
+    "cash_on_hand": 3518.37,
+    "individual_unitemized": 22126.08,
+    "individual_itemized": 69113.61,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 2542.96,
+    "other": 3795.16,
+    "coverage_end": "2026-07-15",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6KS04249/?cycle=2026&election_full=false"
+   },
+   "organizations": null,
+   "website": null,
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6KS04256": {
    "id": "H6KS04256",
@@ -690,7 +954,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6KS04256/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 6040,
+    "disbursements": 1055.26,
+    "cash_on_hand": 4984.74,
+    "individual_unitemized": 40,
+    "individual_itemized": 0,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 6000,
+    "other": 0,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6KS04256/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00927962&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://paulforkansas.com/",
+    "as_filed": "PAULFORKANSAS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00927962/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H8KS04112": {
    "id": "H8KS04112",
@@ -703,7 +997,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8KS04112/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12"
+   "last_listed": "2026-10-13"
   },
   "H6KS04272": {
    "id": "H6KS04272",
@@ -716,7 +1010,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6KS04272/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-12"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 234454.92,
+    "disbursements": 161558.49,
+    "cash_on_hand": 72896.43,
+    "individual_unitemized": 38412.31,
+    "individual_itemized": 195216.8,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 600,
+    "other": 225.81,
+    "coverage_end": "2026-07-15",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6KS04272/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00941658&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://katyforkansas.com/",
+    "as_filed": "HTTPS://KATYFORKANSAS.COM/",
+    "source_url": "https://www.fec.gov/data/committee/C00941658/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   }
  }
 }
