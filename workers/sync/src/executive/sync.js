@@ -17,13 +17,14 @@
 import { getState, setState, BudgetExhausted, UpstreamError, isHttp, isTemporary, redact, slugify, today } from "../util.js";
 import { upsertOfficial, deactivateOthers, upsertBill } from "../db.js";
 import {
-  executiveOn, personName, parseCabinet, frOrder, federalOutcome, federalWorthChecking, presentableFederal,
+  namesOnPage, executiveOn, personName, parseCabinet, frOrder, federalOutcome, federalWorthChecking, presentableFederal,
   parseLeginfoHistory, californiaOutcome, leginfoBillId, presentableCalifornia, leginfoHistoryUrl,
   parseGovFeed, govOrderFromPost, nominationRow, currentCongress,
 } from "./parse.js";
 
 const EXECUTIVE_URL = "https://unitedstates.github.io/congress-legislators/executive.json";
-const EXECUTIVE_SOURCE = "https://github.com/unitedstates/congress-legislators#executive";
+// The data file executive.json is built from, where each entry can be read by name.
+const EXECUTIVE_SOURCE = "https://github.com/unitedstates/congress-legislators/blob/main/executive.yaml";
 const CABINET_URL = "https://www.whitehouse.gov/administration/cabinet/";
 const FR_API = "https://www.federalregister.gov/api/v1";
 const CONGRESS_API = "https://api.congress.gov/v3";
@@ -50,6 +51,16 @@ async function loadExecutive(env, db, budget) {
 export async function syncExecutiveOfficials(env, db, budget) {
   const notes = [];
   const kept = [];
+  // The Cabinet page is read first: it is also the President's and Vice
+  // President's source link when it names them.
+  const cabinetUrl = env.CABINET_URL || CABINET_URL;
+  let cabinetHtml = "";
+  try {
+    cabinetHtml = await budget.text(cabinetUrl, {}, "whitehouse.gov Cabinet page");
+  } catch (err) {
+    notes.push(`the Cabinet page didn't load: ${err.message}`);
+  }
+
   // 1. The President and Vice President.
   const data = await loadExecutive(env, db, budget);
   const now = executiveOn(data, today());
@@ -67,7 +78,7 @@ export async function syncExecutiveOfficials(env, db, budget) {
       id, slug: slugify(name), claimSlug: true, name, last_name: (p.name || {}).last || name.split(/\s+/).pop(),
       office: OFFICE[type], level: "federal", chamber: "us-executive", body: "us-executive",
       party: cur.term.party || null, term_start: cur.term.start, term_end: cur.term.end,
-      website: "https://www.whitehouse.gov/", source_url: EXECUTIVE_SOURCE, last_verified: today(),
+      website: "https://www.whitehouse.gov/", source_url: namesOnPage(cabinetHtml, name) ? cabinetUrl : EXECUTIVE_SOURCE, last_verified: today(),
       bioguide_id: p.id.bioguide || null, state: null, rank,
     });
     fec[id] = (p.id.fec || []).filter((x) => /^P\d/.test(x));
@@ -76,8 +87,7 @@ export async function syncExecutiveOfficials(env, db, budget) {
   await setState(db, "executive_fec", JSON.stringify(fec));
 
   // 2. The Cabinet, as whitehouse.gov lists it.
-  const cabinetUrl = env.CABINET_URL || CABINET_URL;
-  const members = parseCabinet(await budget.text(cabinetUrl, {}, "whitehouse.gov Cabinet page"));
+  const members = parseCabinet(cabinetHtml);
   let cabinetOk = members.length >= MIN_CABINET;
   if (cabinetOk) {
     members.forEach((m, i) => kept.push(`exec:cabinet:${slugify(m.name)}`));

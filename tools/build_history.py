@@ -62,7 +62,7 @@ CHECK = "--check" in sys.argv
 
 LEGISLATORS = "https://unitedstates.github.io/congress-legislators/"
 BIOGUIDE = "https://bioguide.congress.gov/"
-EXECUTIVE_SRC = "https://github.com/unitedstates/congress-legislators#executive-branch"
+EXECUTIVE_SRC = "https://github.com/unitedstates/congress-legislators/blob/main/executive.yaml"
 FISCAL = "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/"
 OMB_PAGE = "https://www.whitehouse.gov/omb/information-resources/budget/historical-tables/"
 SOV_INDEX = "https://www.sos.ca.gov/elections/prior-elections/statewide-election-results"
