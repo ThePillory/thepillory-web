@@ -93,6 +93,17 @@ const RACES = {
     senate: [{ id: "S0OR00001", name: "LOST, PRIMARY", party: "PARTY ONE", incumbent: false, url: "https://www.fec.gov/data/candidate/S0OR00001/" }],
     house: { 2: [{ id: "H0OR00002", name: "FILED, ALSO", party: "PARTY TWO", incumbent: false, url: "https://www.fec.gov/data/candidate/H0OR00002/" }] } },
 };
+// New Mexico (invented names): its primary has passed and its certified list covers House District 1
+// only, as when a state's amended Senate certification can't be read: the Senate race keeps the address.
+RACES.NM = { state: "NM", year: 2026, source_url: "https://www.fec.gov/data/candidates/?election_year=2026&state=NM", built_on: "2026-10-10", senate_up: true,
+  senate: [{ id: "S0NM00001", name: "GONE, GUS", party: "PARTY ONE", incumbent: false, url: "https://www.fec.gov/data/candidate/S0NM00001/" }],
+  house: { 1: [
+    { id: "H0NM00001", name: "ROWE, JEFFERSON H.", party: "PARTY ONE", incumbent: true, url: "https://www.fec.gov/data/candidate/H0NM00001/" },
+    { id: "H0NM00002", name: "LOST, LENA", party: "PARTY TWO", incumbent: false, url: "https://www.fec.gov/data/candidate/H0NM00002/" },
+  ] } };
+const NM_CERTIFIED = { state: "NM", election: "2026-11-03", read_on: "2026-10-12",
+  source: { name: "New Mexico Secretary of State, certified candidate list", url: "https://sos.example.gov/nm-certified.pdf" },
+  contests: { house: { 1: [{ name: "JEFF ROWE", party: "Party One", incumbent: true }, { name: "Mia Novak", party: "Party Three" }] } } };
 const OFFICES = { source: "https://www.usa.gov/state-election-office", offices: { OR: { name: "Oregon Secretary of State", url: "https://sos.oregon.gov/voting-elections/" }, WA: { name: "Washington Secretary of State", url: "https://www.sos.wa.gov/elections" }, CA: { name: "California Secretary of State", url: "https://www.sos.ca.gov/elections" } } };
 const CA_ELECTION = {
   election: { id: "2026-11-03", name: "November 3, 2026, General Election", date: "2026-11-03", state: "CA", alphabet: "ZYXWVUTSRQPONMLKJIHGFEDCBA".split(""), certified_list: "https://sos.example.gov/certified-list.pdf" },
@@ -111,6 +122,7 @@ const CA_ELECTION = {
 const datesFile = () => ({ states: {
   WA: [{ date: "2026-12-30", type: "P", district: "", offices: ["U.S. House"] }, { date: "2026-11-03", type: "G", district: "", offices: ["U.S. House"] }],
   OR: [{ date: "2026-05-19", type: "P", district: "", offices: ["U.S. Senate", "U.S. House"] }, { date: "2026-11-03", type: "G", district: "", offices: ["U.S. Senate", "U.S. House"] }],
+  NM: [{ date: "2026-06-02", type: "P", district: "", offices: ["U.S. Senate", "U.S. House"] }, { date: "2026-11-03", type: "G", district: "", offices: ["U.S. Senate", "U.S. House"] }],
 } });
 const ASSETS = {
   fetch: async (u) => {
@@ -119,6 +131,7 @@ const ASSETS = {
     const m = /^\/data\/elections\/federal-2026\/([a-z]{2})\.json$/.exec(path);
     if (m && RACES[m[1].toUpperCase()]) return new Response(JSON.stringify(RACES[m[1].toUpperCase()]));
     if (path === "/data/states/election-offices.json") return new Response(JSON.stringify(OFFICES));
+    if (path === "/data/elections/certified-2026/nm.json") return new Response(JSON.stringify(NM_CERTIFIED));
     if (path === "/data/elections/2026-11-03.json") return new Response(JSON.stringify(CA_ELECTION));
     if (path === "/data/elections/2026-11-03-wa.json") return new Response(readFileSync(new URL("../../../data/elections/2026-11-03-wa.json", import.meta.url), "utf8"));
     return new Response("not found", { status: 404 });
@@ -216,6 +229,20 @@ test("after the primary: no FEC list as the ballot; the address, the official li
   assert.match(html, /Official candidate list: <a class="inline-link" href="https:\/\/sos\.oregon\.gov\/voting-elections\/"/);
   assert.match(html, /<a class="inline-link" href="\/races\/2026\/or\/senate\/">Filed with the FEC in 2026<\/a>: everyone who filed, including candidates who lost a primary or withdrew\. Not the ballot\./);
   assert.match(html, /href="\/races\/2026\/or\/house-2\/">Filed with the FEC in 2026<\/a>/);
+  assert.doesNotMatch(html, /Before the primary: everyone who has filed/);
+});
+
+test("a state's own certified list: its names under the ballot heading, never the FEC list; a race it doesn't cover keeps the address", async () => {
+  const { html } = await get("/ballot/nm/", { cookie: `pillory_districts=${encodeURIComponent("st=NM&cd=1")}` });
+  assert.equal((html.match(/<li class="ballot-cand stack-xs">/g) || []).length, 2, "the two certified House candidates");
+  assert.match(html, /JEFF ROWE/);
+  assert.match(html, /Mia Novak/);
+  assert.match(html, /Party One · Incumbent/);
+  assert.match(html, /href="\/candidates\/H0NM00001\/">JEFF ROWE<\/a>/, "one filer in the race has that name: linked");
+  assert.doesNotMatch(html, /href="\/candidates\/[^"]*">Mia Novak/, "no filing matches: no link");
+  assert.doesNotMatch(html, /LOST, LENA|Lena Lost|GONE, GUS|Gus Gone/);
+  assert.match(html, /From New Mexico Secretary of State, certified candidate list <a class="inline-link" href="https:\/\/sos\.example\.gov\/nm-certified\.pdf"/);
+  assert.match(html, /New Mexico chose its nominees for this office in the primary on June 2, 2026\. Enter your address/, "the Senate race isn't in the file");
   assert.doesNotMatch(html, /Before the primary: everyone who has filed/);
 });
 

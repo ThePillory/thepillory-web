@@ -10,6 +10,7 @@ import {
   fecDisplayName, stateOfId, standing, officesHeld, raceKey, officeName, generalDate, raceList,
 } from "../../../functions/_lib/candidates.js";
 import { websiteUrl, mergeList, certifiedFederal, refreshOrder } from "../../../tools/build_candidates.mjs";
+import { sameCandidate, matchFec, certifiedRace } from "../../../functions/_lib/certified.js";
 
 const totals = { receipts: 1000, disbursements: 400, cash_on_hand: 600, individual_unitemized: 300, individual_itemized: 500, pac: 200, party: 0, self_funding: 0, other: 0, coverage_end: "2026-06-30", last_report: null, source_url: "https://www.fec.gov/data/candidate/S6ZZ00001/?cycle=2026&election_full=false" };
 const cand = (id, name, office, district, extra = {}) => ({
@@ -53,12 +54,26 @@ const ELECTION = {
   ],
   measures: [],
 };
-const DATES = { states: { TX: [{ date: "2026-03-03", type: "P", district: "" }, { date: "2026-11-03", type: "G", district: "" }], CA: [{ date: "2026-11-03", type: "G", district: "" }] } };
+// North Carolina (invented names): primary passed, and the state's own certified list is loaded.
+const NC = {
+  state: "NC", year: 2026, built_on: "2026-10-10", senate_up: true, source_url: "https://www.fec.gov/data/candidates/?state=NC",
+  candidates: {
+    S6NC00001: cand("S6NC00001", "OAK, ROBERT", "S", null),
+    S6NC00002: cand("S6NC00002", "PINE, PAT", "S", null),
+    S6NC00003: cand("S6NC00003", "LOST, LOU", "S", null),
+  },
+};
+const NC_CERTIFIED = { state: "NC", election: "2026-11-03", read_on: "2026-10-12",
+  source: { name: "North Carolina State Board of Elections, candidate list", url: "https://elections.example/nc.csv" },
+  contests: { senate: [{ name: "Pat Pine", party: "Party P" }, { name: "Bob Oak", party: "Party O" }, { name: "Val Vine", party: "Party V" }] } };
+const DATES = { states: { NC: [{ date: "2026-03-03", type: "P", district: "" }, { date: "2026-11-03", type: "G", district: "" }], TX: [{ date: "2026-03-03", type: "P", district: "" }, { date: "2026-11-03", type: "G", district: "" }], CA: [{ date: "2026-11-03", type: "G", district: "" }] } };
 const DATA = {
   "/data/candidates/2026/tx.json": ZZ,
   "/data/candidates/2026/ca.json": CA,
   "/data/elections/2026-11-03.json": ELECTION,
   "/data/elections/dates.json": DATES,
+  "/data/candidates/2026/nc.json": NC,
+  "/data/elections/certified-2026/nc.json": NC_CERTIFIED,
 };
 const ASSETS = { fetch: async (u) => { const p = new URL(u).pathname; return DATA[p] ? new Response(JSON.stringify(DATA[p])) : new Response("nf", { status: 404 }); } };
 
@@ -239,4 +254,42 @@ test("builder: websites, the list kept over time, certified candidates, refresh 
   assert.equal(merged.H6CA05002.certified_only, true);
   const order = refreshOrder([{ c: { id: "B", funding_checked: "2026-10-09" } }, { c: { id: "A" } }, { c: { id: "C", funding_checked: "2026-10-01" } }]);
   assert.deepEqual(order.map((x) => x.c.id), ["A", "C", "B"]);
+});
+
+test("certified lists: a name ties to an FEC filing only on one sure match in the same race", () => {
+  assert.equal(sameCandidate("Roy Cooper", "COOPER, ROY"), true);
+  assert.equal(sameCandidate("JEFF VAN DREW", "VAN DREW, JEFFERSON H."), true, "Jeff/Jefferson, a two-word last name");
+  assert.equal(sameCandidate("FRANK PALLONE JR.", "PALLONE, FRANK JR"), true);
+  assert.equal(sameCandidate("Mahesh (Max) Ganorkar", "GANORKAR, MAX"), true, "the nickname in parentheses");
+  assert.equal(sameCandidate("Mario Diaz-Balart", "DIAZ-BALART, MARIO"), true);
+  assert.equal(sameCandidate("Bob Oak", "OAK, ROBERT"), false, "a nickname that isn't a prefix: no match, never a guess");
+  assert.equal(sameCandidate("Dan Green", "GREENE, DAN"), false);
+  assert.equal(sameCandidate("Ann Lee", "LEE, ANNA"), true);
+  // Two filers with the same name in the race: neither is linked.
+  const twins = matchFec([{ name: "Sam Lee" }], [{ id: "A", name: "LEE, SAM" }, { id: "B", name: "LEE, SAMUEL" }]);
+  assert.equal(twins[0].fec, null);
+  // Two certified names claiming one filer: neither is linked.
+  const both = matchFec([{ name: "Alan Day" }, { name: "Alan B. Day" }], [{ id: "A", name: "DAY, ALAN" }]);
+  assert.deepEqual(both.map((x) => x.fec), [null, null]);
+  assert.equal(certifiedRace(NC_CERTIFIED, "house-3"), null, "a race the list doesn't cover");
+  assert.equal(certifiedRace(NC_CERTIFIED, "senate").candidates.length, 3);
+});
+
+test("a race with a state's own certified list: its names on the ballot, the other FEC filers apart", async () => {
+  const { html } = await call(RACES, "/races/2026/nc/senate/");
+  const ballot = html.slice(html.indexOf('id="h-ballot"'), html.indexOf("</section>", html.indexOf('id="h-ballot"')));
+  assert.match(ballot, /Pat Pine/);
+  assert.match(ballot, /href="\/candidates\/S6NC00002\/"/);
+  assert.match(ballot, /Bob Oak/);
+  assert.match(ballot, /Val Vine/);
+  assert.doesNotMatch(ballot, /S6NC00001|S6NC00003|Lou Lost/, "Bob Oak isn't tied to ROBERT OAK by a guess; LOST isn't on the list");
+  assert.match(ballot, /North Carolina State Board of Elections, candidate list/);
+  assert.match(html, /Also filed with the FEC in 2026/);
+  assert.doesNotMatch(html, /Who(?:'|&#x27;)s on the November ballot/);
+  const lost = await call(CANDIDATES, "/candidates/S6NC00003/");
+  assert.match(lost.html, /<p class="label">Filed for U\.S\. Senate, 2026<\/p>/);
+  assert.match(lost.html, /doesn(?:'|&#x27;)t match a name on North Carolina(?:'|&#x27;)s certified candidate list/);
+  const on = await call(CANDIDATES, "/candidates/S6NC00002/");
+  assert.match(on.html, /Candidate · Not yet in office/);
+  assert.match(on.html, /On the state(?:'|&#x27;)s certified list as/);
 });

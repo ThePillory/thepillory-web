@@ -38,6 +38,12 @@ jobs:
         env:
           FEC_API_KEY: ${{ secrets.FEC_API_KEY }}
         run: python3 tools/build_federal_races.py
+      # Each state's own certified candidate list for the U.S. Senate and House (North Carolina,
+      # New Jersey, Florida). A state that doesn't read keeps its earlier file.
+      - name: States' certified candidate lists (tools/build_certified_lists.py)
+        id: certified
+        continue-on-error: true
+        run: python3 tools/build_certified_lists.py
       - name: Commit the data
         run: |
           git config user.name "github-actions[bot]"
@@ -46,6 +52,6 @@ jobs:
           git diff --cached --quiet && exit 0
           git commit -m "Refresh election data from official sources"
           git push
-      - name: Fail the run if the federal races or a state's measures didn't build
-        if: steps.fec.outcome == 'failure' || steps.states.outcome == 'failure'
+      - name: Fail the run if the federal races, a state's measures or a certified list didn't build
+        if: steps.fec.outcome == 'failure' || steps.states.outcome == 'failure' || steps.certified.outcome == 'failure'
         run: exit 1

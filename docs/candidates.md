@@ -24,6 +24,7 @@ Linked from: the ballot preview (each candidate's name, "The race", "Every 2026 
 ## Order and cards
 
 - With a certified list: the candidates on the ballot in ballot order (`ballotOrder()` in `functions/_lib/elections.js`), then "Also filed with the FEC (not on the November ballot)", alphabetically.
+- With a state's own certified list (below): its candidates as the state lists them, then "Also filed with the FEC in 2026", alphabetically, with a note that these filers' names don't match exactly one name on the list.
 - Without: alphabetically by last name as filed.
 - Every card is the same: name, party as filed (or party preference and ballot designation as certified), "Incumbent" where the source says so, and any office the candidate holds or held in ThePillory's records. No money on the cards.
 
@@ -34,12 +35,29 @@ Linked from: the ballot preview (each candidate's name, "The race", "Every 2026 
 | Before the primary (FEC list only), or on a certified list before the election | Candidate · Not yet in office (line: "Filed for [office], [year]" or "Running for…" on a certified list) |
 | FEC list only, after the office's primary (and runoff or convention) has passed (`nominations()` in `functions/_lib/election-window.js`, from `data/elections/dates.json`) | Filed for [office], [year] · "[State] chose its nominees in the primary on [date]. Whether this filer is on the November ballot: see the state's official candidate list." The FEC list doesn't say who won a primary, so nobody is called a candidate then. The race page says the list isn't the ballot and links the address lookup; search results say "Filed with the FEC" |
 | A certified list exists and they aren't on it | Filed for [office], [year] · Not on the November ballot |
+| A state's own certified list exists and their filing's name matches no name on it | Filed for [office], [year] · "This filing's name doesn't match a name on [State]'s certified candidate list for November" |
 | The FEC no longer lists them as active | Filed for [office], [year] · last listed [date] |
 | After the election, on the certified ballot | Ran for [office], [year] |
 | After the election, FEC list only (no primary results) | Filed for [office], [year] |
 | Holds the office (an incumbent, or a winner once the sync loads them) | In office · [office], linked to the official page |
 
 The general election date comes from `data/elections/dates.json`. Winners get their official page when the sync loads new officeholders; the candidate page stays.
+
+## Certified lists: other states (`data/elections/certified-2026/<st>.json`)
+
+**The FEC filing list never stands for the ballot once a state's primary has passed.** Each state's own official list of who's on the November ballot does, once ThePillory reads it. `tools/build_certified_lists.py` (daily, in the "Refresh election data" workflow) reads:
+
+| State | Source | What's read |
+|---|---|---|
+| NC | State Board of Elections, `Candidate_Listing_2026.csv` | The rows for the 11/03/2026 election; names as on the ballot |
+| NJ | Division of Elections, Certification of General Election Nominees (U.S. Senate & House) and each Amended Certification | The latest certification for each race; an amendment the state links but doesn't serve leaves that race out (in October 2026: the Senate and the 9th and 10th districts) |
+| FL | Division of Elections candidate download (`extractCanList.asp`, 2026 General Election) | U.S. Senate and House candidates with the status Qualified; write-in candidates (not printed on the ballot) left out |
+
+Only names, parties as written and the incumbent mark (where the list has one) are kept; never the addresses, phone numbers or email addresses some lists include. A list that doesn't read cleanly isn't written (the earlier file stays). California's certified list comes with its full election (`data/elections/2026-11-03.json`).
+
+Not read yet: Texas (the list is behind a JavaScript app), Pennsylvania (a form), Illinois (the page errors); New York, Ohio, Georgia and Michigan refuse GitHub's servers. Their races keep the address lookup and the link to the state's official list.
+
+Pages (`functions/_lib/certified.js`): the ballot preview and race pages show a race's certified candidates with the source and the date read, "Names and parties as the state lists them; the order on your ballot may differ." A race the file doesn't cover keeps the address lookup. A certified name links to an FEC filing (candidate page, Votes and Funding) only when exactly one filer in the same race has the same last name and a matching first name or nickname (`sameCandidate()`, `matchFec()`), and that filer matches no other name; the same person filed under two FEC IDs is linked to neither. Otherwise the name shows without a link, never a guess.
 
 ## Other offices held
 

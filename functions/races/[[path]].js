@@ -8,6 +8,7 @@ import { page, notFound, guard, edgeCached, loadSection } from "../_lib/render.j
 import { asset } from "../_lib/geo.js";
 import { STATE_NAME } from "../_lib/districts.js";
 import { todayIn, previewLabel } from "../_lib/election-window.js";
+import { loadCertified } from "../_lib/certified.js";
 import { loadCandidates, certifiedElection, recordsFor, racePage, racesIndexPage, racesHref, YEAR } from "../_lib/candidates.js";
 
 const BACK = ["Preview your state's ballot", "/ballot/"];
@@ -26,11 +27,12 @@ export const onRequestGet = guard(async (context) => {
   if (year !== YEAR || !STATE_NAME[st] || parts.length > 3 || (parts[2] && !/^[a-z0-9-]+$/.test(parts[2]))) return notFound(NONE, "home", BACK);
   if (parts.length === 1) return Response.redirect(`${url.origin}/ballot/`, 302);
   return edgeCached(context, 300, async () => {
-    const [data, election, records, dates] = await Promise.all([
+    const [data, election, records, dates, certified] = await Promise.all([
       loadSection("race candidates", () => loadCandidates(env, request, st, year), null),
       loadSection("race election", () => certifiedElection(env, request, st), null),
       parts[2] ? loadSection("race records", () => recordsFor(env.DB, st), noRecords) : noRecords,
       loadSection("race dates", () => asset(env, request, "/data/elections/dates.json"), null),
+      parts[2] ? loadSection("race certified list", () => loadCertified(env, request, st), null) : null,
     ]);
     const args = {
       st,
@@ -39,6 +41,7 @@ export const onRequestGet = guard(async (context) => {
       records: okObj(records, (x) => x.officials) || noRecords,
       dates: okObj(dates, (x) => x.states),
       today: todayIn(st),
+      certified: okObj(certified, (x) => x.contests),
     };
     if (!parts[2]) {
       const p = racesIndexPage(args);

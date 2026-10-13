@@ -7,6 +7,7 @@ import { electioneeringFor } from "../_lib/dark-money.js";
 import { asset } from "../_lib/geo.js";
 import { STATE_NAME } from "../_lib/districts.js";
 import { todayIn } from "../_lib/election-window.js";
+import { loadCertified } from "../_lib/certified.js";
 import {
   loadCandidates, certifiedElection, platformFor, recordsFor, fecCandidatePage, stateCandidatePage, stateOfId, nameSlug, racesHref, YEAR, STATE_SCOPES,
 } from "../_lib/candidates.js";
@@ -49,6 +50,7 @@ export const onRequestGet = guard(async (context) => {
       loadSection("candidate dates", () => asset(env, request, "/data/elections/dates.json"), null),
       loadSection("candidate platform", () => platformFor(env.DB, id), null),
     ]);
+    const certified = await loadSection("candidate certified list", () => loadCertified(env, request, st), null);
     const electioneering = await loadSection("candidate electioneering", () => (env.DB ? electioneeringFor(env.DB, [id], data.year || YEAR) : null), null);
     const p = fecCandidatePage({
       c, st, data,
@@ -58,6 +60,7 @@ export const onRequestGet = guard(async (context) => {
       today: todayIn(st),
       platform: platform && typeof platform === "object" ? platform : null,
       electioneering: electioneering === FAILED ? null : electioneering,
+      certified: certified && certified.contests ? certified : null,
     });
     return page(p.title, p.main, { tab: "home", back: [`Candidates in ${STATE_NAME[st] || st}`, racesHref(data.year, st)] });
   });
