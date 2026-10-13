@@ -41,6 +41,9 @@ export function namesAPerson(name, entityType) {
   return isPersonName(n) || (/\bTRUST\b/i.test(n) && /\b(FAMILY|REVOCABLE|LIVING|IRREVOCABLE|DECLARATION)\b/i.test(n));
 }
 
+/** A Schedule A row from an organization (not a person or a candidate), whatever line it's on. */
+export const isOrganizationRow = (r) => !["IND", "CAN", ""].includes(String((r && r.entity_type) || "").toUpperCase());
+
 export const isLLC = (name) => /\bL\.?\s?L\.?\s?C\.?(?=$|[\s,.)])/i.test(String(name || ""));
 
 /** A name for matching: upper case, punctuation and "Inc", "The", "Corp" dropped. */
@@ -63,7 +66,9 @@ export function aggregateDonors(rows, spenderId, cycle) {
   const by = new Map();
   let counted = 0;
   for (const r of rows || []) {
-    if (r.is_individual === true || !isContribution(r) || r.memo_code === "X") continue;
+    // The FEC's is_individual flag follows the line, not the giver (a company's
+    // gift to a super PAC is on line 11AI), so the giver's entity type decides.
+    if (!isContribution(r) || r.memo_code === "X") continue;
     const name = String(r.contributor_name || "").replace(/\s+/g, " ").trim();
     if (!name || namesAPerson(name, r.entity_type)) continue;
     const amount = Number(r.contribution_receipt_amount) || 0;

@@ -20,7 +20,7 @@
 import { getState, setState, BudgetExhausted, UpstreamError, isHttp } from "../util.js";
 import { fecOptions } from "./sync.js";
 import { currentCycle } from "./fec.js";
-import { FEC_LINES, PROPUBLICA, aggregateDonors, pickNonprofit, nonprofitRow, electioneeringRows, orgKey, DARK_KINDS } from "./darkmoney.js";
+import { FEC_LINES, PROPUBLICA, aggregateDonors, pickNonprofit, nonprofitRow, electioneeringRows, orgKey, DARK_KINDS, isOrganizationRow } from "./darkmoney.js";
 
 const TOP_DONORS = 15; // saved per spender and period, and the most looked up in IRS records
 async function inBatches(db, stmts, size = 50) {
@@ -173,17 +173,24 @@ async function spenderDonors(env, db, fec, propublica, counts) {
     const t = await fec(`/committee/${s.committee_id}/totals/?cycle=${s.cycle}`, `totals ${s.committee_id} ${s.cycle}`);
     const receipts = t.results && t.results[0] ? Number(t.results[0].receipts ?? t.results[0].fed_receipts) || null : null;
     const rows = [];
-    let last = null;
     let truncated = false;
-    for (let page = 0; page < maxPages; page += 1) {
-      const q = new URLSearchParams({ committee_id: s.committee_id, two_year_transaction_period: String(s.cycle), is_individual: "false", sort: "-contribution_receipt_amount", per_page: "100" });
-      for (const l of FEC_LINES) q.append("line_number", l);
-      if (last) for (const [k, v] of Object.entries(last)) q.set(k, v);
-      const d = await fec(`/schedules/schedule_a/?${q}`, `Schedule A ${s.committee_id} ${s.cycle} page ${page + 1}`);
-      rows.push(...(d.results || []));
-      last = d.pagination && d.pagination.last_indexes;
-      if (!last || (d.results || []).length < 100) break;
-      if (page === maxPages - 1) truncated = true;
+    // Two reads, largest first: receipts the FEC marks as not from individuals,
+    // and those it marks as from individuals. The FEC files a company's or a
+    // nonprofit's gift to a super PAC on the individual line (11AI), so the
+    // second read keeps only rows whose entity is an organization.
+    for (const individual of ["false", "true"]) {
+      let last = null;
+      for (let page = 0; page < maxPages; page += 1) {
+        const q = new URLSearchParams({ committee_id: s.committee_id, two_year_transaction_period: String(s.cycle), is_individual: individual, sort: "-contribution_receipt_amount", per_page: "100" });
+        for (const l of FEC_LINES) q.append("line_number", l);
+        if (last) for (const [k, v] of Object.entries(last)) q.set(k, v);
+        const d = await fec(`/schedules/schedule_a/?${q}`, `Schedule A ${s.committee_id} ${s.cycle}${individual === "true" ? " (individual lines)" : ""} page ${page + 1}`);
+        const got = d.results || [];
+        rows.push(...(individual === "true" ? got.filter((r) => isOrganizationRow(r)) : got));
+        last = d.pagination && d.pagination.last_indexes;
+        if (!last || got.length < 100) break;
+        if (page === maxPages - 1) truncated = true;
+      }
     }
     const { donors } = aggregateDonors(rows, s.committee_id, s.cycle);
     // Look the largest organizations up in IRS records (committees and LLCs are known by their filing and name).

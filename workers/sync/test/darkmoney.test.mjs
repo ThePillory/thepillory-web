@@ -20,7 +20,9 @@ const ROWS = [
   r({ contributor_name: "EXAMPLE MEDIA GROUP", contributor_state: "VA", line_number: "15", receipt_type_full: "MEDIA REFUND", contribution_receipt_amount: 900000 }),
   r({ contributor_name: "EXAMPLE CAPITAL LLC", contributor_state: "CA", line_number: "11AI", contribution_receipt_amount: 1000000 }),
   r({ contributor_name: "EXAMPLE CAPITAL LLC", contributor_state: "CA", line_number: "11AI", contribution_receipt_amount: 500000, contribution_receipt_date: `${CYCLE - 1}-09-01` }),
-  r({ contributor_name: "EXAMPLE TRADE COUNCIL", contributor_state: "DC", line_number: "11AI", contribution_receipt_amount: 750000 }),
+  // The FEC marks a company's or nonprofit's gift on line 11AI as individual: it still counts.
+  r({ contributor_name: "EXAMPLE TRADE COUNCIL", contributor_state: "DC", line_number: "11AI", is_individual: true, receipt_type: "10", contribution_receipt_amount: 750000 }),
+  r({ contributor_name: "ROE, JANE", entity_type: "IND", contributor_state: "DC", line_number: "11AI", is_individual: true, contribution_receipt_amount: 2000000 }),
   r({ contributor_name: "EXAMPLE PAC", contributor_id: "C00000009", entity_type: "PAC", line_number: "11C", contribution_receipt_amount: 400000 }),
   r({ contributor_name: "EXAMPLE CONDUIT PAC", contributor_id: "C00000010", entity_type: "PAC", line_number: "11AI", memo_code: "X", contribution_receipt_amount: 999999 }),
   r({ contributor_name: "DOE FAMILY REVOCABLE TRUST", contributor_state: "TX", line_number: "11AI", contribution_receipt_amount: 250000 }),
@@ -106,7 +108,7 @@ function fake(url) {
   if (p === "/filings/") return { results: [{ file_number: 77, committee_id: "C30000001", total_receipts: 0, pdf_url: "https://docquery.fec.gov/pdf/77.pdf" }] };
   if (p.startsWith("/committee/") && p.endsWith("/totals/")) return { results: [{ receipts: 10000000 }] };
   if (p.startsWith("/committee/")) return { results: [{ state: p.includes("C90000002") ? "DC" : "VA", name: null }] };
-  if (p === "/schedules/schedule_a/") return { results: ROWS, pagination: { last_indexes: null } };
+  if (p === "/schedules/schedule_a/") return { results: ROWS.filter((x) => String(x.is_individual) === u.searchParams.get("is_individual")), pagination: { last_indexes: null } };
   if (p === "/search.json") {
     const q = u.searchParams.get("q");
     if (q === "EXAMPLE SOCIAL WELFARE FUND") return { organizations: [{ ein: 111, name: "Example Social Welfare Fund", state: "VA", subseccd: 4 }] };
