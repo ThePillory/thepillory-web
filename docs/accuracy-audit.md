@@ -4,6 +4,17 @@ Read-only: `tools/accuracy_audit.py` read D1 and the sources and changed nothing
 
 Ranked by how many people see it, then how wrong it is.
 
+## Rerun, October 13 (after PR #103)
+
+The "Accuracy audit" workflow, run on `main`:
+
+- **Hand-entered data:** 0 of 35 need a look. The President's and Vice President's source link now names them.
+- **Name matching:** 0 real errors in 150 sampled matches. Two were flagged, and each was the same person under another form of the name: "Elizabeth Fletcher" for Lizzie Fletcher, and "Rep. Jayapal" for Pramila Jayapal.
+- **Candidates' offices held:** 131 links rest on a name alone. With this PR they're no longer shown: a link needs the FEC ID, or the candidate must be the race's incumbent and the only current official in the state with that name. Otherwise the page says "No office matched yet".
+- **Summaries:** enacted laws now start at "This act …". Laws whose CRS summary is split into titles ("TITLE I--…", for example us-118-hr-9076) still open with the law's title and a heading. 73,872 bills with votes have no summary, almost all of them state bills outside California.
+- **AI content:** 0 of 91 constitutional quotes and 0 of 16 Platform excerpts differ from their source. Promise #8 is still the one to check (a dash).
+- **Freshness:** New Jersey's newest vote is still 2025-12-22, so the daily state step's new reading hadn't run yet. The House check needs a `CONGRESS_API_KEY` repository secret for Actions (it's empty there).
+
 ## Already fixed
 
 **Ballot preview listed every FEC filer as the ballot** (Texas showed 16 U.S. Senate candidates). Fixed in PR #102: after a state's primary (and runoff), the preview, race pages and candidate pages no longer present the FEC list as the ballot; it's a separate "Filed with the FEC in 2026" list that says it's not the ballot. Finding a source for nominees in every state is still open (see the options already sent).
