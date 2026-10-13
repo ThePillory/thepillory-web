@@ -108,6 +108,9 @@ test("order pages: addresses, status, authority and courts say only what the sou
 test("a bill's summary comes from the official summary's 'This bill' sentences, else the checked analysis", () => {
   const crs = { official_summary: "Test Act of 2026 This bill requires agencies to post forms. It sets a deadline. It does more.", official_summary_label: "CRS summary, Introduced in House", official_summary_url: "https://www.congress.gov/x" };
   assert.equal(billSummary({ summary: "", ...crs }, null).text, "This bill requires agencies to post forms. It sets a deadline.");
+  // Once enacted, the CRS summary says "This act …" after the law's title.
+  const law = { ...crs, official_summary: "Test Act of 2026 This act requires agencies to post forms. It sets a deadline. More.", official_summary_label: "CRS summary, Public Law" };
+  assert.equal(billSummary({ summary: "", ...law }, null).text, "This act requires agencies to post forms. It sets a deadline.");
   const digest = { official_summary: "Existing law does X. This bill would require forms. It would also do more. Other.", official_summary_label: "Legislative Counsel's Digest" };
   assert.equal(billSummary({ summary: "", ...digest }, null).text, "This bill would require forms. It would also do more.");
   assert.equal(billSummary({ summary: "", official_summary: "Existing law only.", official_summary_label: "Legislative Counsel's Digest" }, null), null);

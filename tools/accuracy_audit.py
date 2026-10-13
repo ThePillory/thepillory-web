@@ -261,7 +261,7 @@ def matching(args):
 # 3. Bill summaries
 
 
-THIS_BILL = re.compile(r"\bThis (bill|measure|joint resolution|concurrent resolution|resolution) (would |)[a-z]")
+THIS_BILL = re.compile(r"\bThis (bill|act|measure|joint resolution|concurrent resolution|resolution) (would |)[a-z]")
 SHORT_TITLE = re.compile(r"may be cited as|\bshort title\b", re.I)
 HEADING = re.compile(r"^\s*(SECTION|SEC\.)\s*\d|^\s*(TITLE|DIVISION)\s+[IVX\d]+\b", re.I)
 

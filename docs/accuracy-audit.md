@@ -20,8 +20,9 @@ Of 76,673 bill pages with a recorded vote (every bill a list can reach):
 
 - **Every state but California has no summary source loaded** (TN 6,857, HI 5,255, NY 4,666, IL 4,653, VA 4,259, OK 2,451, MD 2,413, TX 2,345 …). Open States' session files carry titles and sometimes an abstract; we don't show either as a summary.
 - **California: 2,585 empty**, plus 2 whose "This bill …" sentence means nothing alone ("This bill would repeal that prohibition.", AB 1912, AB 264).
-- **Federal: 4 too short.** One is a real error: us-118-hr-4984's summary reads "D.C. Robert F." because the sentence splitter stops at an initial. The same cut shows up among the summaries counted as fine: us-117-s-2514 ends "… as the Col. Gail S." Two of the 12 federal examples the audit printed were cut this way, so there are likely more.
-- The other 3 short federal ones are complete sentences ("This resolution censures Representative …") and are fine.
+- **Federal: 3 short**, each a complete sentence ("This resolution censures Representative …"), so they're fine.
+- **Corrected, October 13:** the first version of this report said some federal summaries were cut off at a middle initial ("D.C. Robert F."). That came from the audit's own sentence splitter, not the page's. The page's splitter keeps those names whole, and the audit now uses the same rule. Military ranks ("Lt. Gen.") did end a sentence on the page; they no longer do.
+- **Found on the rerun, fixed:** once a bill becomes law, the CRS summary opens with the law's title and then "This act …". The page looked only for "This bill …", so the title ran into the first sentence ("Never Again Education Reauthorization Act of 2023 This act extends …"). The page now starts at "This act" too.
 
 ## 2. State votes lag or are missing (visible on state pages; stale, not wrong)
 
@@ -39,9 +40,9 @@ States that need a look (a legislature out of session is normal; these aren't ex
 
 Texas (newest 2025-09-04), Montana (2025-04-30) and Nevada (2025-11-19) meet in odd years, so those dates are expected. Comparing each state against its own legislature's site isn't automated (50 different sites); this table compares against what a session normally holds.
 
-## 3. Weak source link for the President and Vice President (visible on two of the most-viewed pages)
+## 3. Weak source link for the President and Vice President (fixed)
 
-Hand-entered and synced officials: 33 of 35 found by name on the page their entry cites. The two not found are the President and Vice President, whose source link is the congress-legislators README on GitHub, which doesn't name them. The data is right; the link a reader clicks doesn't show it. Their whitehouse.gov or Bioguide pages would.
+Hand-entered and synced officials: 33 of 35 found by name on the page their entry cites. The two not found are the President and Vice President, whose source link is the congress-legislators README on GitHub, which doesn't name them. The data is right; the link a reader clicks didn't show it. Fixed: the link is now whitehouse.gov's Cabinet page when that page names them, otherwise the `executive.yaml` data file the entry comes from. It changes on the next daily sync.
 
 ## 4. Doubled quotation marks in one analysis (visible on one bill)
 
@@ -76,9 +77,9 @@ Candidates' offices held is matched by first and last name among the state's cur
 
 ## Suggested order
 
-1. Summaries cut at an initial (small code fix, then re-run over federal summaries).
-2. New Jersey's 2026 session, then AL, AR, KS, PR, and the thin MA, VT, MN loads.
-3. Source links for the President and Vice President.
+1. ~~Source links for the President and Vice President~~ (done).
+2. ~~Summaries that run a law's title into its first sentence~~ (done).
+3. New Jersey's 2026 session, then AL, AR, KS, PR, and the thin MA, VT, MN loads.
 4. Strip stored quotation marks from analysis quotes (one bill now; a guard for the future).
 5. Promise #8: a person checks the dash.
 6. State bill summaries: decide whether Open States' abstracts (where a state publishes one) count as a summary, labeled with their source.

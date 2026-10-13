@@ -32,7 +32,7 @@ export function billStatus(b, outcome, votes) {
 
 /** Where an official summary's "what it does" begins ("This bill …"), or -1. */
 function whatItDoes(text) {
-  return String(text || "").search(/\bThis (bill|measure|joint resolution|concurrent resolution|resolution) (would |)[a-z]/);
+  return String(text || "").search(/\bThis (bill|act|measure|joint resolution|concurrent resolution|resolution) (would |)[a-z]/);
 }
 
 /**
