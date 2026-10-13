@@ -15,8 +15,9 @@ jobs:
       - env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CONGRESS_API_KEY: ${{ secrets.CONGRESS_API_KEY }}
         run: |
-          python3 tools/accuracy_audit.py --only 3 > audit.md 2> audit.err || true
-          tail -5 audit.err
-          cat audit.md
+          cd workers/sync
+          q() { npx --yes wrangler@4 d1 execute pillory --remote --json --command "$1" | python3 -c "import sys,json; [print(json.dumps(r)) for r in json.load(sys.stdin)[0]['results']]"; }
+          q "SELECT st, session, bills, votes, generated_at, loaded_at FROM state_loads WHERE st IN ('NJ','KS','PR','UT','AL','AR','VA') ORDER BY st, loaded_at"
+          q "SELECT key, value FROM sync_state WHERE key LIKE 'votes_since_%' OR key LIKE 'votes_page_%' ORDER BY key"
+          q "SELECT started_at, status, substr(message,1,600) m FROM sync_log WHERE step='other-state-votes' ORDER BY started_at DESC LIMIT 6"
