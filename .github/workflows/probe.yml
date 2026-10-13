@@ -18,6 +18,6 @@ jobs:
         run: |
           cd workers/sync
           q() { npx --yes wrangler@4 d1 execute pillory --remote --json --command "$1" | python3 -c "import sys,json; [print(json.dumps(r)) for r in json.load(sys.stdin)[0]['results']]"; }
-          q "SELECT st, session, bills, votes, generated_at, loaded_at FROM state_loads WHERE st IN ('NJ','KS','PR','UT','AL','AR','VA') ORDER BY st, loaded_at"
-          q "SELECT key, value FROM sync_state WHERE key LIKE 'votes_since_%' OR key LIKE 'votes_page_%' ORDER BY key"
-          q "SELECT started_at, status, substr(message,1,600) m FROM sync_log WHERE step='other-state-votes' ORDER BY started_at DESC LIMIT 6"
+          q "SELECT st, session, bills, votes, substr(generated_at,1,10) g, substr(loaded_at,1,16) l FROM state_loads ORDER BY st, loaded_at"
+          q "SELECT session, COUNT(*) n FROM bills WHERE id LIKE 'nj-%' GROUP BY session"
+          q "SELECT b.session, COUNT(*) n, MAX(v.vote_date) newest FROM votes v JOIN bills b ON b.id = v.bill_id WHERE b.id LIKE 'nj-%' GROUP BY b.session"
