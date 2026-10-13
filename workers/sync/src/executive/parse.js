@@ -73,6 +73,15 @@ export function parseCabinet(html) {
   return out;
 }
 
+// True when the page's text carries the person's last name (so a reader who
+// opens the source link finds them there).
+export function namesOnPage(html, name) {
+  const last = String(name || "").replace(/,? (Jr|Sr|II|III)\.?$/, "").trim().split(/\s+/).pop();
+  if (!last) return false;
+  const text = String(html || "").replace(/<[^>]+>/g, " ");
+  return new RegExp(`\\b${last.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(text);
+}
+
 // ---------------------------------------------------------------------------
 // Executive orders: the Federal Register API
 

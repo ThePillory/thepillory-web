@@ -9,7 +9,7 @@ as everywhere else: facts with sources, no commentary, no scores.
 
 | Office | Source | How |
 |---|---|---|
-| President, Vice President | [congress-legislators `executive.json`](https://github.com/unitedstates/congress-legislators) | Automatic, daily: whoever's term covers today. Terms, party (plain text) and FEC IDs come with it. |
+| President, Vice President | [congress-legislators `executive.json`](https://github.com/unitedstates/congress-legislators) | Automatic, daily: whoever's term covers today. Terms, party (plain text) and FEC IDs come with it. The source link is whitehouse.gov's Cabinet page when that page names them, otherwise the `executive.yaml` data file (both show the name). |
 | The Cabinet | [whitehouse.gov/administration/cabinet](https://www.whitehouse.gov/administration/cabinet/) | Automatic, daily: each member's `<h2>` name and `<h3>` office. If the page lists fewer than 8, the shape changed: the current list is kept and the step logs an error. |
 | California's statewide offices | `data/state-executive-officials.json`, entered by hand from each office's official site | Like the county supervisors (see `data/README.md`). An entry missing its name, source or check date is skipped and logged. |
 
