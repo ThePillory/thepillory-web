@@ -27,7 +27,7 @@ async function sha256(text) {
 }
 
 /** Where a bill's "what it does" begins in its official summary, or -1. Pure. */
-const whatItDoes = (text) => String(text || "").search(/\bThis (bill|measure|joint resolution|concurrent resolution|resolution) (would |)[a-z]/);
+const whatItDoes = (text) => String(text || "").search(/\bThis (bill|act|measure|joint resolution|concurrent resolution|resolution) (would |)[a-z]/);
 
 /** The source a bill's plain line is written from, as the bill page shows it; null when there's none. Pure. */
 export function billSource(b, analysis) {
