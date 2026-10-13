@@ -1,15 +1,16 @@
 // Scanned net worth reports on /admin/review/networth/ (routed from
 // functions/admin/[[path]].js; docs/funding.md "Net worth"):
-//   /admin/review/networth/              every report read by AI: published (to check),
+//   /admin/review/networth/              every report read by AI: waiting for a person,
 //                                        held (lines read differently), confirmed, taken down
 //   /admin/review/networth/<id>/         one report: the totals, the lines the two readings
 //                                        read differently (pick one for each), the lines page
 //                                        by page beside the scan; confirm or take down
 //   /admin/review/networth/<id>/?page=N  the lines read from one page of the scan
-// tools/networth_scan.py reads the reports and publishes a report whose two
-// readings agree on every line ("Transcribed by AI from a scanned report,
-// auto-checked"). Lines a person settles here are applied by its next run in
-// "publish" mode, which publishes with "Checked by [name]".
+// tools/networth_scan.py reads the reports. Nothing it reads is public until a
+// person checks it here: a report whose two readings agree on every line waits
+// for a person's confirmation (public pages list it as a link until then);
+// lines a person settles are applied by the script's next run in "publish"
+// mode. Either way the public label is "Checked by [name]".
 import { esc, fmtDate, safeUrl } from "./render.js";
 
 export const networthReviewHref = (id) => `/admin/review/networth/${encodeURIComponent(id)}/`;
@@ -24,7 +25,7 @@ const json = (s, fallback) => {
 const money = (n) => (n == null ? "" : `${n < 0 ? "−" : ""}$${Math.abs(Math.round(n)).toLocaleString("en-US")}`);
 
 const SECTIONS = [
-  ["agreed", "Published by AI: check these", "Both readings agreed on every line and the checks passed. Public as \"Transcribed by AI from a scanned report, auto-checked\". Compare the lines with the scan, then confirm or take it down."],
+  ["agreed", "Waiting for a person", "Both readings agreed on every line and the checks passed. Not public yet: a link to the report until a person compares the lines with the scan and confirms it."],
   ["disagree", "Held", "Nothing public: some lines were read differently (or a check failed). Pick the right reading for each; the next run of the \"Read a scanned net worth report\" workflow (mode: publish) publishes it."],
   ["approved", "Confirmed by a person", "Public with \"Checked by [name]\"."],
   ["rejected", "Taken down", "A link to the report again."],
@@ -53,8 +54,31 @@ ${SECTIONS.map(([status, title, note]) => {
   };
 }
 
+/**
+ * A report's reading: the lines both readings agreed on (networth_scan_pages,
+ * a page per row) and the lines still read differently (networth_scan_open),
+ * or, for a report stored before migration 0039, the old JSON columns.
+ */
+async function storedReading(db, id, s) {
+  try {
+    const [pages, open] = await Promise.all([
+      db.prepare("SELECT page, lines FROM networth_scan_pages WHERE report_id = ? ORDER BY page").bind(id).all(),
+      db.prepare("SELECT key, page, idx, a, b FROM networth_scan_open WHERE report_id = ? ORDER BY page, idx").bind(id).all(),
+    ]);
+    if (pages.results.length || open.results.length) {
+      return {
+        lines: pages.results.flatMap((r) => json(r.lines, []).map((x) => ({ ...x, page: r.page }))),
+        dis: open.results.map((r) => ({ key: r.key, page: r.page, idx: r.idx, a: json(r.a, null), b: json(r.b, null) })),
+      };
+    }
+  } catch (err) {
+    if (!/no such table/i.test(String(err && err.message))) throw err;
+  }
+  return { lines: json(s.reading, []), dis: json(s.disagreements, []).filter((d) => d && typeof d === "object") };
+}
+
 const flags = (x) => [x.inc ? "income" : "", x.elsewhere ? "reported elsewhere" : "", x.nra ? "not readily ascertainable" : "", x.unsure ? "hard to read" : ""].filter(Boolean).join(", ");
-const lineText = (x) => (x && typeof x === "object" ? `${x.n ? `Line ${x.n}: ` : ""}${x.v || "(no value)"}${flags(x) ? ` (${flags(x)})` : ""}${x.cred ? ` · ${x.cred}` : ""}` : String(x || ""));
+const lineText = (x) => (x && typeof x === "object" ? `${x.n ? `Line ${x.n}: ` : ""}${x.v || "(no value)"}${flags(x) ? ` (${flags(x)})` : ""}${x.cred ? ` · ${x.cred}` : ""}` : "(this reading has no such line)");
 
 function linesTable(lines) {
   return `<div class="table-scroll"><table class="tally-table"><thead><tr><th scope="col">Section</th><th scope="col">Heading</th><th scope="col">Line</th><th scope="col">Value</th><th scope="col">Notes</th></tr></thead><tbody>${lines
@@ -67,8 +91,7 @@ export async function networthScanItem(db, env, id, { error = "", done = "", for
   if (!s) return null;
   const url = safeUrl(s.report_url);
   const scanAt = (p) => (url ? `<a class="inline-link" href="${esc(url)}#page=${p}" target="_blank" rel="noopener">page ${p} of the scan ↗</a>` : `page ${p}`);
-  const lines = json(s.reading, []);
-  const dis = json(s.disagreements, []);
+  const { lines, dis } = await storedReading(db, id, s);
   const problems = json(s.problems, []);
   const settled = json(s.settled, {});
   const f = form || {};
@@ -92,9 +115,9 @@ ${here.length ? linesTable(here) : '<p class="small secondary">No lines from thi
   const settleForm = dis.length && ["disagree"].includes(s.status)
     ? `<section class="card stack-sm"><h2 class="label">Read differently (${dis.length})</h2><p class="small">For each, open the scan at that page and pick the reading that matches it exactly. If neither does, leave it: the report stays a link.</p>
 ${post(`<input type="hidden" name="action" value="settle">
-${dis.map((d) => `<fieldset class="stack-xs settle-line"><legend class="small">${scanAt(d.page)}${"idx" in d ? `, line ${d.idx + 1} on the page` : ": the readings found a different number of lines"}</legend>
-  <label class="check-row"><input type="radio" name="${esc(d.key)}" value="a"${settled[d.key] === "a" ? " checked" : ""}> <span class="small">Reading A: ${esc("idx" in d ? lineText(d.a) : `${d.a}: ${(d.lines_a || []).map(lineText).join("; ")}`)}</span></label>
-  <label class="check-row"><input type="radio" name="${esc(d.key)}" value="b"${settled[d.key] === "b" ? " checked" : ""}> <span class="small">Reading B: ${esc("idx" in d ? lineText(d.b) : `${d.b}: ${(d.lines_b || []).map(lineText).join("; ")}`)}</span></label>
+${dis.map((d) => `<fieldset class="stack-xs settle-line"><legend class="small">${scanAt(d.page)}, line ${d.idx + 1} on the page</legend>
+  <label class="check-row"><input type="radio" name="${esc(d.key)}" value="a"${settled[d.key] === "a" ? " checked" : ""}> <span class="small">Reading A: ${esc(lineText(d.a))}</span></label>
+  <label class="check-row"><input type="radio" name="${esc(d.key)}" value="b"${settled[d.key] === "b" ? " checked" : ""}> <span class="small">Reading B: ${esc(lineText(d.b))}</span></label>
   <label class="check-row"><input type="radio" name="${esc(d.key)}" value=""${!settled[d.key] ? " checked" : ""}> <span class="small">Neither matches the scan</span></label>
 </fieldset>`).join("")}
   <label class="field"><span class="field-label">Your name, as shown with this report ("Checked by")</span><input class="input" name="reviewer" required autocomplete="name" value="${reviewer}"></label>
@@ -106,7 +129,7 @@ ${dis.map((d) => `<fieldset class="stack-xs settle-line"><legend class="small">$
 ${post(`<input type="hidden" name="action" value="approve">
   <label class="check-row"><input type="checkbox" name="compared" value="1" required> <span class="small">I compared the lines with the scan, page by page.</span></label>
   <label class="field"><span class="field-label">Your name, as shown with this report</span><input class="input" name="reviewer" required autocomplete="name" value="${reviewer}"></label>
-  <button class="btn btn--primary" type="submit">Confirm: show "Checked by"</button>`)}</section>`;
+  <button class="btn btn--primary" type="submit">Confirm and publish with "Checked by"</button>`)}</section>`;
   }
   if (["agreed", "approved"].includes(s.status)) {
     actions += `<section class="card stack-sm"><h2 class="label">Take down</h2><p class="small">Removes this report from "Net worth, as reported"; it shows as a link again.</p>
@@ -141,7 +164,7 @@ export async function networthScanChange(db, id, rawForm, email) {
   if (!form.reviewer) return { error: "Enter your name.", form };
   if (action === "settle") {
     if (s.status !== "disagree") return { error: "Only a held report has lines to settle.", form };
-    const dis = json(s.disagreements, []);
+    const { dis } = await storedReading(db, id, s);
     const settled = {};
     for (const d of dis) {
       const v = String(rawForm.get(d.key) || "");
@@ -162,8 +185,8 @@ export async function networthScanChange(db, id, rawForm, email) {
     return { done: "Taken down. The report is a link again on public pages." };
   }
   if (action !== "approve") return { error: "Unknown action.", form };
-  if (s.status !== "agreed") return { error: "Only a report published by AI can be confirmed.", form };
+  if (s.status !== "agreed") return { error: "Only a report waiting for a person can be confirmed.", form };
   if (rawForm.get("compared") !== "1") return { error: "Tick the box once you've compared the lines with the scan.", form };
   await db.prepare("UPDATE networth_scans SET status = 'approved', reviewed_by = ?, reviewer_email = ?, reviewed_at = datetime('now') WHERE report_id = ?").bind(form.reviewer, email || null, id).run();
-  return { done: `Confirmed. The report now shows "Checked by ${form.reviewer}".` };
+  return { done: `Confirmed and published with "Checked by ${form.reviewer}".` };
 }

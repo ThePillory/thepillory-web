@@ -1,15 +1,16 @@
 // Scanned OGE Form 278-T reports on /admin/review/trades/ (routed from
 // functions/admin/[[path]].js; docs/trades.md):
-//   /admin/review/trades/          spot checks; published by AI; not agreeing (kept as
+//   /admin/review/trades/          waiting for a person; not agreeing (kept as
 //                                  links); waiting to be read; confirmed; taken down
 //   /admin/review/trades/<id>/     one report: the scan's link, what the checks noted,
 //                                  the rows; confirm, take down, read again
-// A transcription publishes on its own once both AI readings agree and the
-// checks pass ("Transcribed by AI from a scanned report, auto-checked").
-// Confirming adds "Checked by [name]" after a person compares every row with
-// the scan; taking down removes the trades and makes the report a link again.
+// Nothing an AI reads is public until a person checks it: a report whose two
+// readings agree and pass the checks waits here, a link to the report on
+// public pages. Confirming (after comparing every row with the scan)
+// publishes the agreed rows with "Checked by [name]"; taking down keeps it a
+// link.
 import { esc, fmtDate, safeUrl } from "./render.js";
-import { takeDownStatements } from "../../workers/sync/src/trades/publish.js";
+import { publishStatements, takeDownStatements } from "../../workers/sync/src/trades/publish.js";
 
 export const scanHref = (id) => `/admin/review/trades/${encodeURIComponent(id)}/`;
 const clean = (v, max) => String(v == null ? "" : v).replace(/\s+/g, " ").trim().slice(0, max);
@@ -22,8 +23,8 @@ const json = (s, fallback) => {
 };
 
 const SECTIONS = [
-  ["spot", "Spot checks", "Picked at random from published transcriptions. Compare every row with the scan, then confirm it or take it down."],
-  ["agreed", "Published by AI", "The rows both readings agreed on are public as \"Transcribed by AI from a scanned report, auto-checked\"; the rest are linked to the scan."],
+  ["spot", "Spot checks", "Picked at random before checks were required for every report. Compare every row with the scan, then confirm it or take it down."],
+  ["agreed", "Waiting for a person", "Both readings agreed and the checks passed. Not public yet: the report is a link until a person compares every row with the scan and confirms it."],
   ["disagree", "Held", "Nothing published: the readings couldn't be trusted as a set, or the report couldn't be read. Kept as links to the report. The notes say why."],
   ["pending", "Waiting to be read", "The sync Worker reads these, a few a day."],
   ["approved", "Confirmed by a person", "Public with \"Checked by [name]\"."],
@@ -98,15 +99,15 @@ export async function scanItem(db, env, id, { error = "", done = "", form = null
 ${post(`<input type="hidden" name="action" value="approve">
   <label class="check-row"><input type="checkbox" name="compared" value="1" required> <span class="small">I compared every row above with the scan: the dates, types, descriptions and amounts.</span></label>
   <label class="field"><span class="field-label">Your name, as shown with these trades</span><input class="input" name="reviewer" required autocomplete="name" value="${reviewer}"></label>
-  <button class="btn btn--primary" type="submit">Confirm: show "Checked by" with these ${rows.length} trades</button>`)}
+  <button class="btn btn--primary" type="submit">Confirm and publish these ${rows.length} trades with "Checked by"</button>`)}
 </section>`;
   }
   if (["agreed", "approved"].includes(s.status)) {
-    actions += `<section class="card stack-sm"><h2 class="label">Take down</h2><p class="small">Removes these trades from public pages; the report shows as a link again.</p>
+    actions += `<section class="card stack-sm"><h2 class="label">${s.status === "approved" ? "Take down" : "Don't publish"}</h2><p class="small">${s.status === "approved" ? "Removes these trades from public pages; the report shows as a link again." : "Keeps the report a link on public pages."}</p>
 ${post(`<input type="hidden" name="action" value="reject">
   <label class="field"><span class="field-label">What's wrong (kept with the report)</span><input class="input" name="reason" required value="${esc(f.reason || "")}"></label>
   <label class="field"><span class="field-label">Your name</span><input class="input" name="reviewer" required autocomplete="name" value="${reviewer}"></label>
-  <button class="btn" type="submit">Take down</button>`)}
+  <button class="btn" type="submit">${s.status === "approved" ? "Take down" : "Don't publish"}</button>`)}
 </section>`;
   } else if (["disagree", "rejected"].includes(s.status)) {
     actions = `<section class="card stack-sm"><h2 class="label">Read again</h2><p class="small">Puts it back in the queue: both models read it again on a later sync run.</p>
@@ -135,7 +136,7 @@ ${actions}`,
 export async function scanChange(db, id, rawForm, email) {
   const action = String(rawForm.get("action") || "");
   const form = { reviewer: clean(rawForm.get("reviewer"), 80), reason: clean(rawForm.get("reason"), 300) };
-  const s = await db.prepare(`${BASE} WHERE s.report_id = ?`).bind(id).first();
+  const s = await withRows((sql) => db.prepare(`${sql} WHERE s.report_id = ?`).bind(id).first());
   if (!s) return { error: "No such report.", form };
   if (action === "reread") {
     if (!["disagree", "rejected"].includes(s.status)) return { error: "Only a report that didn't agree or was rejected can be read again.", form };
@@ -148,7 +149,7 @@ export async function scanChange(db, id, rawForm, email) {
   if (!form.reviewer) return { error: "Enter your name.", form };
   const report = { id, official_id: s.official_id };
   if (action === "reject") {
-    if (!["agreed", "approved"].includes(s.status)) return { error: "Only a published transcription can be taken down.", form };
+    if (!["agreed", "approved"].includes(s.status)) return { error: "Only a transcription waiting for a person or confirmed can be taken down.", form };
     if (!form.reason) return { error: "Say what's wrong: it's kept with the report.", form };
     await db.batch([
       db.prepare("UPDATE trade_scans SET status = 'rejected', reviewed_by = ?, reviewer_email = ?, reviewed_at = datetime('now'), reject_reason = ? WHERE report_id = ?").bind(form.reviewer, email || null, form.reason, id),
@@ -157,11 +158,16 @@ export async function scanChange(db, id, rawForm, email) {
     return { done: "Taken down. The report is a link again on public pages." };
   }
   if (action !== "approve") return { error: "Unknown action.", form };
-  if (s.status !== "agreed") return { error: "Only a transcription published by AI can be confirmed.", form };
+  if (s.status !== "agreed") return { error: "Only a transcription waiting for a person can be confirmed.", form };
   if (rawForm.get("compared") !== "1") return { error: "Tick the box once you've compared every row with the scan.", form };
+  const rows = json(s.reading, []);
+  if (!rows.length) return { error: "This reading has no rows to publish.", form };
+  const unread = json(s.unread, []).map((u) => u.n).filter((n) => n != null);
   await db.batch([
+    // Publish the agreed rows, then record who checked them (publishing clears the name).
+    ...publishStatements({ id, official_id: s.official_id, chamber: s.chamber, state: s.state, filed_on: s.filed_on }, rows).map((q) => db.prepare(q.sql).bind(...q.binds)),
+    db.prepare("UPDATE trade_reports SET transcribed_by = ?, rows_total = ?, unread_rows = ? WHERE id = ?").bind(form.reviewer, s.rows_total || rows.length, JSON.stringify(unread), id),
     db.prepare("UPDATE trade_scans SET status = 'approved', reviewed_by = ?, reviewer_email = ?, reviewed_at = datetime('now') WHERE report_id = ?").bind(form.reviewer, email || null, id),
-    db.prepare("UPDATE trade_reports SET transcribed_by = ? WHERE id = ?").bind(form.reviewer, id),
   ]);
-  return { done: `Confirmed. These trades now show "Checked by ${form.reviewer}".` };
+  return { done: `Confirmed and published. These trades show "Checked by ${form.reviewer}".` };
 }

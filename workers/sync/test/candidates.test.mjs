@@ -125,12 +125,15 @@ test("standing: one rule for everyone, before and after the election", () => {
   assert.match(standing({ ...base, listed: false, lastListed: "2026-09-01" }).line, /No longer on the FEC's list/);
 });
 
-test("offices held: by FEC ID, or by a name only one official in the state has", () => {
+test("offices held: by FEC ID, or for this race's incumbent by a name only one current official in the state has; never by name alone", () => {
   const records = { officials: OFFICIALS.filter((o) => o.state === "TX"), byFec: { H6TX07002: FEC[0] } };
-  assert.deepEqual(officesHeld({ id: "H6TX07001" }, records, "Dana Delta").map((h) => [h.slug, h.how]), [["dana-delta", "name"]]);
+  assert.deepEqual(officesHeld({ id: "H6TX07001" }, records, "Dana Delta"), [], "a name alone: not matched");
+  assert.deepEqual(officesHeld({ id: "H6TX07001" }, records, "Dana Delta", { incumbent: true }).map((h) => [h.slug, h.how]), [["dana-delta", "name"]]);
   assert.deepEqual(officesHeld({ id: "H6TX07002" }, records, "Ed Echo").map((h) => [h.slug, h.how]), [["ed-echo", "fec"]]);
   const twins = { officials: [...records.officials, { ...OFFICIALS[0], slug: "dana-delta-2" }], byFec: {} };
-  assert.deepEqual(officesHeld({ id: "X" }, twins, "Dana Delta"), [], "two officials with the name: no link");
+  assert.deepEqual(officesHeld({ id: "X" }, twins, "Dana Delta", { incumbent: true }), [], "two officials with the name: no link");
+  const former = { officials: records.officials.map((o) => ({ ...o, active: 0 })), byFec: {} };
+  assert.deepEqual(officesHeld({ id: "X" }, former, "Dana Delta", { incumbent: true }), [], "only a current official");
 });
 
 test("before the primary, a filer is a candidate; after it, only a certified list says who's on the ballot", () => {
@@ -160,10 +163,10 @@ test("a candidate's page: the official layout, labeled, with money and no contac
   assert.doesNotMatch(main.replace(/publish polls, predictions|predict the race/g, ""), /\b(polls?|predict\w*|frontrunner|rising star|favorite)\b/i);
 });
 
-test("a candidate who holds another office links to that record", async () => {
+test("a candidate whose only tie to an office is a name isn't linked to it: \"No office matched yet\"", async () => {
   const { html } = await call(CANDIDATES, "/candidates/H6TX07001/");
-  assert.match(html, /href="\/reps\/dana-delta\/#votes"/);
-  assert.match(html, /Matched by name/);
+  assert.doesNotMatch(html, /href="\/reps\/dana-delta\//);
+  assert.match(html, /No office matched yet\. ThePillory links a candidate to an office only when the records tie them together/);
   assert.match(html, /Funding data is loading/);
   const lower = await call(CANDIDATES, "/candidates/h6tx07001/");
   assert.equal(lower.res.status, 301);
@@ -203,7 +206,7 @@ test("a race with a certified list: ballot order, then other FEC filers", async 
   assert.match(html, /Also filed with the FEC \(not on the November ballot\)/);
   const gov = await call(RACES, "/races/2026/ca/governor/");
   assert.match(gov.html, /href="\/candidates\/ca\/governor\/gail-golf\/"/);
-  assert.match(gov.html, /Holds: State Senator, District 9/);
+  assert.doesNotMatch(gov.html, /Holds: State Senator/, "a state senator running for governor: a name alone doesn't tie the two");
 });
 
 test("a certified state candidate's page, and the state's race list", async () => {

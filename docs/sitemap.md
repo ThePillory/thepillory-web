@@ -102,13 +102,13 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 ### Every page
 - One header: ThePillory wordmark and search (`/search/`: reps, governing bodies, bills, meetings, the Constitution)
 - One nav: Home, Reps, Report (round blue button), Laws, You, each with an icon (bottom on phones, top from 768px)
-- Footer: About · How it works · Principles · Methodology
+- Footer: the beta line ("ThePillory is in beta. Every fact links to its source. Found an error? Report it" > Report an error, `/corrections/`, under About), then About · How it works · Principles · Methodology
 
 ### Chips
 - Topic chips on bill pages, each meeting agenda item (and "Topics on this agenda"), executive orders and Platform excerpts on officials' pages
 
 ### Private
-- Review queue (`/admin/review/`) and county waitlist counts (`/admin/waitlist/`), behind Cloudflare Access
+- Review queue (`/admin/review/`), readers' error reports (`/admin/corrections/`) and county waitlist counts (`/admin/waitlist/`), behind Cloudflare Access
 
 ## Opens when accounts launch
 - Join & verify (identity once, address > districts)

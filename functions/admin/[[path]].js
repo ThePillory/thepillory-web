@@ -21,6 +21,7 @@
 //                         as reported"): settle lines the two readings read differently,
 //                         confirm or take down
 // /admin/waitlist/        "Bring ThePillory to your county": sign-ups by county (counts only)
+// /admin/corrections/     readers' error reports ("Report an error"): record fixed, not an error, or duplicate
 // /admin/health/          every data source green, yellow or red, with 30 days of history (functions/_lib/health-pages.js)
 //
 // Protected by Cloudflare Access (see functions/_lib/access.js and docs/analysis.md).
@@ -29,6 +30,7 @@ import { page, esc, fmtDate, safeUrl, guard } from "../_lib/render.js";
 import { checkAccess } from "../_lib/access.js";
 import { healthData, adminHealthMain, deadLinks } from "../_lib/health-pages.js";
 import { networthScanList, networthScanItem, networthScanChange, networthReviewHref } from "../_lib/networth-review.js";
+import { correctionsList, correctionChange } from "../_lib/corrections-review.js";
 import { inChunks } from "../_lib/data.js";
 import { parse, badge, baselineSection, provisionsFor } from "../_lib/analysis.js";
 import { orderHref } from "../_lib/orders.js";
@@ -224,7 +226,7 @@ async function list(db, url, env) {
     `<header class="page-head">
   <h1>Review queue</h1>
   <p class="subtitle">What needs a person. Drafts the AI reviewer passes are published as "AI-drafted, auto-checked"; the rest wait here.</p>
-  <p class="small"><a class="inline-link" href="/admin/waitlist/">County waitlist</a> · <a class="inline-link" href="/admin/health/">Data sources</a></p>
+  <p class="small"><a class="inline-link" href="/admin/corrections/">Error reports</a> · <a class="inline-link" href="/admin/waitlist/">County waitlist</a> · <a class="inline-link" href="/admin/health/">Data sources</a></p>
 </header>
 ${await waitingSummary(db)}
 ${await promiseQueue(db, env, url)}
@@ -1563,13 +1565,29 @@ async function handle(context) {
   if (!who.ok) return locked(who.reason);
   const parts = (context.params.path || []).filter(Boolean);
   if (parts.length === 0) return Response.redirect(`${url.origin}/admin/review/`, 302);
-  if (parts[0] !== "review" && parts[0] !== "waitlist" && parts[0] !== "health") return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+  if (!["review", "waitlist", "health", "corrections"].includes(parts[0])) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
   if (!env.DB) return missingTables();
   if (parts[0] === "health") {
     if (parts.length !== 1 || request.method !== "GET") return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
     const [data, dead] = await Promise.all([healthData(env.DB), deadLinks(env.DB)]);
     return adminPage("Data sources", adminHealthMain(data, dead));
+  }
+  if (parts[0] === "corrections") {
+    try {
+      if (parts.length === 1 && request.method === "GET") return adminPage(...Object.values(await correctionsList(env.DB, { done: url.searchParams.get("done") || "" })));
+      if (parts.length === 2 && request.method === "POST" && /^\d+$/.test(parts[1])) {
+        const origin = request.headers.get("Origin");
+        if (origin && origin !== url.origin) return adminPage("Refused", '<header class="page-head"><h1>Refused</h1></header>', 403);
+        const r = await correctionChange(env.DB, Number(parts[1]), await request.formData());
+        if (r.error) return adminPage(...Object.values(await correctionsList(env.DB, { error: r.error })));
+        return Response.redirect(`${url.origin}/admin/corrections/?done=${encodeURIComponent(r.done)}`, 303);
+      }
+      return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+    } catch (err) {
+      if (/no such table|no such column/i.test(String(err && err.message))) return missingTables();
+      throw err;
+    }
   }
   if (parts[0] === "waitlist") {
     if (parts.length !== 1 || request.method !== "GET") return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);

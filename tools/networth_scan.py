@@ -14,11 +14,11 @@ trade reports are read:
   3. Code compares the readings line by line (networth.compare_readings),
      applies the same rules as the text reader (networth.report_from_lines)
      and checks every value against the page's OCR text.
-  4. All lines agree: the report publishes into networth_reports (method
-     'ai'), labeled "Transcribed by AI from a scanned report, auto-checked",
-     and goes on /admin/review/networth/ for a person to check. Any line
-     that doesn't: nothing publishes; a person settles each line there, and
-     the next run (--mode publish) publishes with "Checked by [name]".
+  4. All lines agree: the report is written into networth_reports (method
+     'ai') but public pages show it only once a person confirms it on
+     /admin/review/networth/ ("checked by [name]"; a link until then). Any
+     line that doesn't: a person settles each line there, and the next run
+     (--mode publish) publishes with "Checked by [name]".
 
 Spending is capped: --max-dollars stops the run before a call that could go
 past it. --mode estimate counts the input tokens (free) and prints the
@@ -198,6 +198,15 @@ def find_report(args):
     return hit[0]
 
 
+def empty_beside(have, ms, model, first):
+    """True when this model's chunk came back with no lines, the other model's
+    has some, and it hasn't been read again yet (a chunk is read again once)."""
+    mine = json.loads(have[(model, first)]["reading"])
+    if mine.get("retry") or mine.get("lines"):
+        return False
+    return any(json.loads(have[(m, first)]["reading"]).get("lines") for m in ms if m != model and (m, first) in have)
+
+
 def stored_chunks(args, report_id):
     try:
         rows = T.d1(args, command=f"SELECT model, first_page, last_page, reading, cost_cents FROM networth_scan_chunks WHERE report_id = {L.lit(report_id)}")
@@ -207,7 +216,7 @@ def stored_chunks(args, report_id):
 
 
 def apply_migrations(args):
-    for name in ("0036_networth.sql", "0037_networth_scans.sql"):
+    for name in ("0036_networth.sql", "0037_networth_scans.sql", "0039_networth_scan_pages.sql"):
         T.d1(args, file=MIGRATIONS / name)
         T.d1(args, command=f"INSERT OR IGNORE INTO d1_migrations (name) VALUES ('{name}')")
 
@@ -286,7 +295,7 @@ def main():
     if args.mode == "read":
         for model in ms:
             for first, last in plan:
-                if (model, first) in have:
+                if (model, first) in have and not empty_beside(have, ms, model, first):
                     continue
                 # Stop before a call that could go past the cap (input counted, output at its likely size).
                 pdf_b64 = chunk_pdf(pdf, first, last, work)
@@ -295,7 +304,10 @@ def main():
                 if spent + likely > args.max_dollars:
                     say(f"Stopped before pages {first}-{last} ({model}): ${spent:.2f} spent, the cap is ${args.max_dollars:.2f}. Run again to resume.")
                     return summary(log)
+                retry = (model, first) in have
                 data, i_tok, o_tok = read_chunk(client, model, pdf_b64, first, last, sections)
+                if retry:
+                    data["retry"] = 1  # read again once because the first answer was empty
                 c = cost(model, i_tok, o_tok)
                 spent += c
                 T.run_sql(args, [
@@ -326,12 +338,11 @@ def main():
     lines, open_dis = list(cmp["lines"]), []
     for d in cmp["disagreements"]:
         choice = settled.get(d["key"])
-        if choice in ("a", "b") and isinstance(d.get(choice), dict):
-            lines.append({**d[choice], "idx": d["idx"], "unsure": False})
-        elif choice == "a" and "lines_a" in d:
-            lines += [{**x, "idx": i, "unsure": False} for i, x in enumerate(d["lines_a"])]
-        elif choice == "b" and "lines_b" in d:
-            lines += [{**x, "idx": i, "unsure": False} for i, x in enumerate(d["lines_b"])]
+        if choice in ("a", "b"):
+            # A person picked the reading that matches the scan; a side with no
+            # such line means the line isn't on the page.
+            if isinstance(d.get(choice), dict):
+                lines.append({**d[choice], "idx": d["idx"], "unsure": False})
         else:
             open_dis.append(d)
     lines.sort(key=lambda x: (x["page"], x["idx"]))
@@ -341,7 +352,7 @@ def main():
         problems.append({"kind": "look", "text": f"{len(misses)} agreed values aren't in the page's OCR text, for example page {misses[0][0]}: {misses[0][1]}"})
     if len(misses) > max(3, 0.02 * len(lines)):
         problems.append({"kind": "block", "text": f"{len(misses)} of {len(lines)} values aren't in the pages' OCR text: the readings may have shifted."})
-    total_lines = len(lines) + sum(1 for d in open_dis if "idx" in d) + sum(max(len(d.get("lines_a", [])), len(d.get("lines_b", []))) for d in open_dis if "idx" not in d)
+    total_lines = len(lines) + len(open_dis)
     say(f"Compared: {len(cmp['lines'])} lines agreed, {len(cmp['disagreements'])} not ({len(open_dis)} still open after a person's choices)")
     summ, read_err = None, None
     if not open_dis:
@@ -357,9 +368,13 @@ def main():
         say("Nothing to publish.")
     pages_json = json.dumps({s: [min(v), max(v)] for s, v in by_sec.items()})
     stmts = [
+        # The lines and the open disagreements go in their own rows (one JSON
+        # column ran past D1's 100 KB statement limit); networth_scans keeps
+        # only the keys of the lines still open.
         "INSERT INTO networth_scans (report_id, official_id, report_url, year, status, pages, lines_total, disagreements, reading, problems, models, cost_cents, spot_check, read_at) VALUES ("
-        + ", ".join(L.lit(v) for v in (f["id"], f["official_id"], f["url"], f["year"], status, pages_json, total_lines, json.dumps(open_dis), json.dumps(lines), json.dumps(problems), ", ".join(ms), round(spent * 100), 1))
-        + ", datetime('now')) ON CONFLICT(report_id) DO UPDATE SET status = excluded.status, pages = excluded.pages, lines_total = excluded.lines_total, disagreements = excluded.disagreements, reading = excluded.reading, problems = excluded.problems, models = excluded.models, cost_cents = excluded.cost_cents, read_at = excluded.read_at;"
+        + ", ".join(L.lit(v) for v in (f["id"], f["official_id"], f["url"], f["year"], status, pages_json, total_lines, json.dumps([d["key"] for d in open_dis]), "[]", json.dumps(problems), ", ".join(ms), round(spent * 100), 1))
+        + ", datetime('now')) ON CONFLICT(report_id) DO UPDATE SET status = excluded.status, pages = excluded.pages, lines_total = excluded.lines_total, disagreements = excluded.disagreements, reading = excluded.reading, problems = excluded.problems, models = excluded.models, cost_cents = excluded.cost_cents, read_at = excluded.read_at;",
+        *storage_sql(f["id"], lines, open_dis),
     ]
     if publish:
         rec = {**f, "kind": f["kind"]}
@@ -377,30 +392,49 @@ def main():
     return summary(log)
 
 
+KEEP = ("sec", "grp", "n", "v", "inc", "elsewhere", "nra", "unsure", "cred", "idx", "page")
+
+
+def storage_sql(report_id, lines, open_dis):
+    """Statements that replace a report's stored reading: the agreed lines a
+    page per row, and one row per line still read differently. Each statement
+    stays far under D1's 100 KB limit."""
+    rid = L.lit(report_id)
+    slim = lambda x: None if x is None else {k: x[k] for k in KEEP if k in x and x[k] is not None and x[k] != "" and x[k] is not False}
+    out = [f"DELETE FROM networth_scan_pages WHERE report_id = {rid};", f"DELETE FROM networth_scan_open WHERE report_id = {rid};"]
+    by_page = {}
+    for x in lines:
+        by_page.setdefault(x["page"], []).append(slim(x))
+    for page, xs in sorted(by_page.items()):
+        out.append(f"INSERT INTO networth_scan_pages (report_id, page, lines) VALUES ({rid}, {int(page)}, {L.lit(json.dumps(xs, separators=(',', ':')))});")
+    for d in open_dis:
+        a, b = slim(d.get("a")), slim(d.get("b"))
+        out.append(f"INSERT INTO networth_scan_open (report_id, key, page, idx, a, b) VALUES ({rid}, {L.lit(d['key'])}, {int(d['page'])}, {int(d['idx'])}, "
+                   f"{'NULL' if a is None else L.lit(json.dumps(a, separators=(',', ':')))}, {'NULL' if b is None else L.lit(json.dumps(b, separators=(',', ':')))});")
+    return out
+
+
 def diagnose(cmp, readings, texts, log):
     """The disagreements by kind, with examples; writes nothing."""
     say = lambda s: (print(s, flush=True), log.append(s))
     kinds = {}
     for d in cmp["disagreements"]:
-        if "idx" not in d:
-            k = "a different number of lines on the page"
+        a, b = d.get("a"), d.get("b")
+        if a is None or b is None:
+            k = "a line only one reading has"
         else:
-            a, b = d["a"], d["b"]
             diff = [f for f in ("sec", "n", "v", "inc", "elsewhere", "nra") if str(a.get(f)) != str(b.get(f))]
             if a.get("unsure") or b.get("unsure"):
                 diff.append("marked unsure")
             k = "differ in " + ", ".join(diff) if diff else "same fields (case/space only)"
         kinds.setdefault(k, []).append(d)
     say(f"{len(cmp['lines'])} lines agreed; {len(cmp['disagreements'])} not. By kind:")
+    show = lambda x: json.dumps(None if x is None else {f: x.get(f) for f in ("n", "v", "inc", "elsewhere", "nra", "unsure")})
     for k, ds in sorted(kinds.items(), key=lambda x: -len(x[1])):
         say(f"  {len(ds)}: {k}")
         for d in ds[:6]:
-            if "idx" in d:
-                ocr = N._norm_value(d["a"].get("v")) in texts[d["page"] - 1] or N._norm_value(d["b"].get("v")) in texts[d["page"] - 1]
-                say(f"    page {d['page']} #{d['idx']}: A {json.dumps({x: d['a'].get(x) for x in ('n', 'v', 'inc', 'elsewhere', 'nra', 'unsure')})}")
-                say(f"    {' ' * (len(str(d['page'])) + len(str(d['idx'])) + 8)}B {json.dumps({x: d['b'].get(x) for x in ('n', 'v', 'inc', 'elsewhere', 'nra', 'unsure')})}")
-            else:
-                say(f"    page {d['page']}: A {d['a']}, B {d['b']}; A first/last n: {[x.get('n') for x in d['lines_a'][:1] + d['lines_a'][-1:]]}, B: {[x.get('n') for x in d['lines_b'][:1] + d['lines_b'][-1:]]}")
+            say(f"    page {d['page']} #{d['idx']}: A {show(d.get('a'))}")
+            say(f"    {' ' * (len(str(d['page'])) + len(str(d['idx'])) + 8)}B {show(d.get('b'))}")
     return summary(log)
 
 

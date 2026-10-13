@@ -1315,6 +1315,8 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 .app-footer a { display: inline-flex; align-items: center; min-height: var(--tap); color: var(--text-2); text-decoration: none; }
 .app-footer a:hover { color: var(--navy); text-decoration: underline; }
 .app-footer-domain { flex-basis: 100%; margin: 0; padding: 4px 0 12px; color: var(--text-2); }
+.app-footer-beta { flex-basis: 100%; margin: 8px 0 0; color: var(--text-2); }
+.app-footer-beta a { color: var(--navy); text-decoration: underline; }
 
 /* =========================================================================
    The hub (/), briefings, lookup, communities, explainers

@@ -56,7 +56,12 @@ const later = (a, b) => ((a.filed_on || "") > (b.filed_on || "") || ((a.filed_on
  *   first, latest: the line's two ends, with first's label
  *   unread: reports not read (linked, with why)
  */
-export function networthPoints(rows) {
+export function networthPoints(allRows) {
+  // A report transcribed by AI counts only once a person has checked it against
+  // the scan; until then it's listed as a link, like any report not read.
+  const rows = allRows.map((r) =>
+    r.method === "ai" && r.status === "read" && !(r.scan_status === "approved" && r.reviewed_by) ? { ...r, status: "scan", reason: "Read by AI: waiting for a person's check" } : r
+  );
   const byYear = new Map();
   for (const r of rows.filter((r) => r.kind === "annual")) byYear.set(r.year, byYear.has(r.year) ? later(byYear.get(r.year), r) : r);
   const annual = [...byYear.values()].sort((a, b) => a.year - b.year);

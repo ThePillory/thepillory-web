@@ -107,6 +107,26 @@ class Comparing(unittest.TestCase):
         self.assertEqual(N.value_bounds(N.first_value("$1,001 to $15,000")), (1001, 15000, False))
 
 
+class Storing(unittest.TestCase):
+    def test_a_page_per_row_and_each_open_line(self):
+        lines = [dict(L(3, "2", "1", "", "E"), idx=0), dict(L(4, "6", "1", "$1,001 - $15,000"), idx=0), dict(L(4, "6", "2", "$15,001 - $50,000"), idx=1)]
+        open_dis = [{"key": "p4.2", "page": 4, "idx": 2, "a": L(4, "6", "3", "$1,001 - $15,000"), "b": None}]
+        sql = S.storage_sql("oge:x", lines, open_dis)
+        self.assertEqual(len(sql), 2 + 2 + 1)
+        self.assertTrue(sql[0].startswith("DELETE FROM networth_scan_pages"))
+        self.assertIn("VALUES ('oge:x', 4, ", sql[3])
+        self.assertIn('"idx":0', sql[3], "a line's place on the page is kept, even the first")
+        self.assertTrue(sql[4].endswith(", NULL);"), "a reading without the line stores NULL")
+        self.assertNotIn('"inc"', sql[3], "false flags aren't stored")
+        self.assertLess(max(len(x) for x in sql), 100_000)
+
+    def test_an_empty_chunk_is_read_again_once(self):
+        have = {("a", 1): {"reading": '{"lines": []}'}, ("b", 1): {"reading": '{"lines": ["1|L|1|$1|"]}'}, ("a", 7): {"reading": '{"lines": [], "retry": 1}'}, ("b", 7): {"reading": '{"lines": ["7|L|1|$1|"]}'}}
+        self.assertTrue(S.empty_beside(have, ["a", "b"], "a", 1))
+        self.assertFalse(S.empty_beside(have, ["a", "b"], "b", 1))
+        self.assertFalse(S.empty_beside(have, ["a", "b"], "a", 7), "already read again")
+
+
 class Adding(unittest.TestCase):
     def test_rules(self):
         lines = [
