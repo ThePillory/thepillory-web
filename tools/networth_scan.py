@@ -231,7 +231,7 @@ def read_chunk(client, model, pdf_b64, first, last, sections):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--mode", choices=("estimate", "read", "publish"), default="estimate")
+    ap.add_argument("--mode", choices=("estimate", "read", "publish", "diagnose"), default="estimate")
     ap.add_argument("--report-id", default="", help="a networth_reports id; default: the President's newest annual report")
     ap.add_argument("--max-dollars", type=float, default=15.0)
     ap.add_argument("--chunk-pages", type=int, default=6)
@@ -254,11 +254,12 @@ def main():
     say(f"{len(texts)} pages; reading {len(sections)}: " + "; ".join(f"{s} (pages {min(v)}-{max(v)})" for s, v in by_sec.items()))
     est_lines = sum(len(re.findall(r"(?m)^\s*\d+(?:\.\d+)*\.?\s{2,}\S", texts[p - 1])) for p in sections)
 
-    if not os.environ.get("ANTHROPIC_API_KEY"):
+    if args.mode != "diagnose" and not os.environ.get("ANTHROPIC_API_KEY"):
         raise SystemExit("ANTHROPIC_API_KEY isn't set: add it under the repository's Settings -> Secrets and variables -> Actions")
-    import anthropic  # only this tool needs it (pip install anthropic in the workflow)
-    client = anthropic.Anthropic()
     ms = models()
+    if args.mode != "diagnose":
+        import anthropic  # only this tool needs it (pip install anthropic in the workflow)
+        client = anthropic.Anthropic()
 
     if args.mode == "estimate":
         total = 0.0
@@ -273,7 +274,8 @@ def main():
         say(f"Estimated total: ${total:.2f} for both readings, in {len(plan)} chunks of up to {args.chunk_pages} pages")
         return summary(log)
 
-    apply_migrations(args)
+    if args.mode != "diagnose":
+        apply_migrations(args)
     prior = T.d1(args, command=f"SELECT status FROM networth_scans WHERE report_id = {L.lit(f['id'])}")
     if prior and prior[0]["status"] in ("approved", "rejected"):
         say(f"A person already {'confirmed' if prior[0]['status'] == 'approved' else 'took down'} this report on /admin/review/networth/: nothing to do.")
@@ -312,6 +314,8 @@ def main():
             lines += parse_lines(json.loads(have[(model, first)]["reading"]).get("lines", []), sections, first, last, grp)
         readings.append(lines)
     cmp = N.compare_readings(*readings)
+    if args.mode == "diagnose":
+        return diagnose(cmp, readings, texts, log)
     settled = {}
     try:
         row = T.d1(args, command=f"SELECT settled, reviewed_by, status FROM networth_scans WHERE report_id = {L.lit(f['id'])}")
@@ -370,6 +374,33 @@ def main():
     for p in problems:
         say(f"  {p['kind']}: {p['text']}")
     T.run_sql(args, stmts)
+    return summary(log)
+
+
+def diagnose(cmp, readings, texts, log):
+    """The disagreements by kind, with examples; writes nothing."""
+    say = lambda s: (print(s, flush=True), log.append(s))
+    kinds = {}
+    for d in cmp["disagreements"]:
+        if "idx" not in d:
+            k = "a different number of lines on the page"
+        else:
+            a, b = d["a"], d["b"]
+            diff = [f for f in ("sec", "n", "v", "inc", "elsewhere", "nra") if str(a.get(f)) != str(b.get(f))]
+            if a.get("unsure") or b.get("unsure"):
+                diff.append("marked unsure")
+            k = "differ in " + ", ".join(diff) if diff else "same fields (case/space only)"
+        kinds.setdefault(k, []).append(d)
+    say(f"{len(cmp['lines'])} lines agreed; {len(cmp['disagreements'])} not. By kind:")
+    for k, ds in sorted(kinds.items(), key=lambda x: -len(x[1])):
+        say(f"  {len(ds)}: {k}")
+        for d in ds[:6]:
+            if "idx" in d:
+                ocr = N._norm_value(d["a"].get("v")) in texts[d["page"] - 1] or N._norm_value(d["b"].get("v")) in texts[d["page"] - 1]
+                say(f"    page {d['page']} #{d['idx']}: A {json.dumps({x: d['a'].get(x) for x in ('n', 'v', 'inc', 'elsewhere', 'nra', 'unsure')})}")
+                say(f"    {' ' * (len(str(d['page'])) + len(str(d['idx'])) + 8)}B {json.dumps({x: d['b'].get(x) for x in ('n', 'v', 'inc', 'elsewhere', 'nra', 'unsure')})}")
+            else:
+                say(f"    page {d['page']}: A {d['a']}, B {d['b']}; A first/last n: {[x.get('n') for x in d['lines_a'][:1] + d['lines_a'][-1:]]}, B: {[x.get('n') for x in d['lines_b'][:1] + d['lines_b'][-1:]]}")
     return summary(log)
 
 
