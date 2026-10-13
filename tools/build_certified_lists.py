@@ -189,15 +189,17 @@ FL_EXTRACT = "https://dos.elections.myflorida.com/candidates/extractCanList.asp"
 FL_LIST = "https://dos.elections.myflorida.com/candidates/canlist.asp?elecid=20261103-GEN&cantype=FED"
 
 
-def fl_option(page, select, want):
-    """The value of the option in <select name=select> whose text is `want` (case-insensitive)."""
+def fl_option(page, select, *wants):
+    """The value of the first option in <select name=select> whose value or text matches one of `wants` (case-insensitive)."""
     m = re.search(rf'<select[^>]*name="{select}"[^>]*>(.*?)</select>', page, re.S | re.I)
     if not m:
         raise Unreadable(f"the download form has no {select} field")
-    for value, text in re.findall(r'<option[^>]*value\s*=\s*"?([^"> ]*)"?[^>]*>\s*([^<]*?)\s*<', m.group(1), re.S):
-        if text.strip().upper() == want.upper():
-            return value
-    raise Unreadable(f"the download form's {select} field has no {want!r} choice")
+    opts = [(v.strip(), html.unescape(t).strip()) for v, t in re.findall(r'<option[^>]*value\s*=\s*"([^"]*)"[^>]*>\s*([^<]*)', m.group(1), re.S | re.I)]
+    for want in wants:
+        for value, text in opts:
+            if want.upper() in (value.upper(), text.upper()):
+                return value
+    raise Unreadable(f"the download form's {select} field has none of {wants}: {opts[:12]}")
 
 
 def parse_fl(text):
@@ -224,7 +226,7 @@ def parse_fl(text):
 
 def build_fl():
     page = get(FL_PAGE).decode("latin-1", "replace")
-    form = {"elecID": "20261103-GEN", "office": fl_option(page, "office", "ALL"), "status": fl_option(page, "status", "ALL"), "cantype": fl_option(page, "cantype", "ALL"), "FormSubmit": "Download Candidate List"}
+    form = {"elecID": "20261103-GEN", "office": fl_option(page, "office", "ALL", "All Offices", ""), "status": fl_option(page, "status", "ALL", "All", ""), "cantype": fl_option(page, "cantype", "FED", "Federal", "ALL", "All", ""), "FormSubmit": "Download Candidate List"}
     req = urllib.request.Request(FL_EXTRACT, data=urllib.parse.urlencode(form).encode(), headers={"User-Agent": UA})
     with urllib.request.urlopen(req, timeout=120) as r:
         text = r.read().decode("latin-1", "replace")

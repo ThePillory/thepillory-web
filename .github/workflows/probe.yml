@@ -11,4 +11,4 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null; python3 tools/build_certified_lists.py --dry-run
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null; python3 tools/build_certified_lists.py --dry-run --states FL
