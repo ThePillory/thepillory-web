@@ -206,7 +206,7 @@ def parse_fl(text):
     """Florida's tab-delimited extract -> contests. Only candidates whose status is Qualified."""
     out = {}
     rows = list(csv.DictReader(io.StringIO(text), delimiter="\t"))
-    need = ("OfficeCode", "Juris1num", "StatusDesc", "PartyName", "NameLast", "NameFirst")
+    need = ("OfficeCode", "Juris1num", "StatusDesc", "PartyDesc", "NameLast", "NameFirst")
     if not rows or any(k not in rows[0] for k in need):
         raise Unreadable(f"the extract isn't the documented tab-delimited file (columns: {list(rows[0])[:20] if rows else None})")
     for r in rows:
@@ -214,7 +214,7 @@ def parse_fl(text):
         if office not in ("USS", "USR") or (r.get("StatusDesc") or "").strip() != "Qualified":
             continue  # Defeated (lost the primary), Withdrawn, Did not qualify
         name = " ".join(x for x in ((r.get("NameFirst") or "").strip(), (r.get("NameMiddle") or "").strip(), (r.get("NameLast") or "").strip()) if x)
-        cand = {"name": name, "party": (r.get("PartyName") or "").strip() or None}
+        cand = {"name": name, "party": (r.get("PartyDesc") or "").strip() or None}
         if office == "USS":
             contest(out, "senate", None, cand)
         else:
@@ -273,7 +273,8 @@ def main():
         }
         print(f"{st}: U.S. Senate {len(c.get('senate') or [])} candidates; U.S. House {len(c.get('house') or {})} districts, {sum(len(v) for v in (c.get('house') or {}).values())} candidates", flush=True)
         if args.dry_run:
-            print(json.dumps(doc, indent=1)[:3000])
+            for key, lst in [("senate", c.get("senate") or [])] + sorted((c.get("house") or {}).items(), key=lambda x: int(x[0])):
+                print(f"  {key}: " + "; ".join(f"{x['name']} ({x['party']})" + (" *" if x.get("incumbent") else "") for x in lst))
             continue
         OUT.mkdir(parents=True, exist_ok=True)
         (OUT / f"{st.lower()}.json").write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
