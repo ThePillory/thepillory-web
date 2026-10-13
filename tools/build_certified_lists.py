@@ -34,6 +34,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import date
@@ -152,12 +153,29 @@ def build_nj():
         raise Unreadable("no general election certification linked from the election information page")
     merged, sources = {}, []
     for label, url in sorted(links, key=lambda x: "Amended" in x[0]):  # the original first, then each amendment
-        day, got = parse_nj(pdf_text(get(url)))
+        try:
+            day, got = parse_nj(pdf_text(get(url)))
+        except urllib.error.HTTPError as e:
+            if "Amended" not in label:
+                raise
+            # An amendment the state links but doesn't serve: what it covers can't be confirmed, so it's left out.
+            m = re.search(r"(\d+)(?:st|nd|rd|th) Cong", label)
+            if m:
+                merged.setdefault("_unconfirmed", []).append(str(int(m.group(1))))
+            elif "Senate" in label:
+                merged.setdefault("_unconfirmed", []).append("senate")
+            print(f"NJ: {label}: {e}; that race is left out", flush=True)
+            continue
         sources.append({"name": label, "url": url, "dated": day})
         if "senate" in got:
             merged["senate"] = got["senate"]
         for d, lst in got.get("house", {}).items():
             merged.setdefault("house", {})[d] = lst
+    for key in merged.pop("_unconfirmed", []):
+        if key == "senate":
+            merged.pop("senate", None)
+        else:
+            merged.get("house", {}).pop(key, None)
     if not merged.get("house"):
         raise Unreadable("no House candidates read")
     return {"source": {"name": "New Jersey Division of Elections, Certification of General Election Nominees", "url": sources[0]["url"], "page": NJ_PAGE, "files": sources}, "contests": merged}
@@ -166,69 +184,54 @@ def build_nj():
 # ---------------------------------------------------------------------------
 # Florida
 
-FL_URL = "https://dos.elections.myflorida.com/candidates/canlist.asp?elecid=20261103-GEN&cantype=FED"
+FL_PAGE = "https://dos.elections.myflorida.com/candidates/downloadcanlist.asp"
+FL_EXTRACT = "https://dos.elections.myflorida.com/candidates/extractCanList.asp"
+FL_LIST = "https://dos.elections.myflorida.com/candidates/canlist.asp?elecid=20261103-GEN&cantype=FED"
 
 
-def fl_name(cell):
-    """'Moody , Ashley  J. (REP) *Incumbent' -> ('Ashley J. Moody', 'REP', True)."""
-    t = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", cell)).replace("\xa0", " ")).strip()
-    m = re.match(r"^(.+?) , (.+?) \((\w+)\)( \*Incumbent)?$", t)
+def fl_option(page, select, want):
+    """The value of the option in <select name=select> whose text is `want` (case-insensitive)."""
+    m = re.search(rf'<select[^>]*name="{select}"[^>]*>(.*?)</select>', page, re.S | re.I)
     if not m:
-        raise Unreadable(f"a candidate cell that doesn't read: {t!r}")
-    last, first = m.group(1).strip(), m.group(2).strip()
-    return f"{first} {last}", m.group(3), bool(m.group(4))
+        raise Unreadable(f"the download form has no {select} field")
+    for value, text in re.findall(r'<option[^>]*value\s*=\s*"?([^"> ]*)"?[^>]*>\s*([^<]*?)\s*<', m.group(1), re.S):
+        if text.strip().upper() == want.upper():
+            return value
+    raise Unreadable(f"the download form's {select} field has no {want!r} choice")
 
 
-FL_PARTY = {"REP": "Republican", "DEM": "Democratic", "NPA": "No Party Affiliation", "LPF": "Libertarian", "GRE": "Green", "IND": "Independent", "CPF": "Constitution", "WRI": "Write-in"}
-
-
-def parse_fl(page):
+def parse_fl(text):
+    """Florida's tab-delimited extract -> contests. Only candidates whose status is Qualified."""
     out = {}
-    office, district = None, None
-    for chunk in re.split(r"(?=<tr[\s>])", page):
-        cells = re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", chunk, re.S)
-        texts = [re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", c)).replace("\xa0", " ")).strip() for c in cells]
-        # Each office's table is introduced by its own heading row.
-        joined = " ".join(texts)
-        if re.fullmatch(r"(?:United States Senator)", joined):
-            office = "senate"
-            continue
-        if re.fullmatch(r"(?:United States Representative)", joined):
-            office = "house"
-            continue
-        if texts[:4] == ["Candidate", "Status", "Primary", "General"]:
-            office = office or "senate"
-            continue
-        if texts[:2] == ["District", "Candidate"]:
-            office = "house"
-            continue
-        if office is None or len(texts) < 4 or not re.search(r"\(\w+\)", joined):
-            continue
-        if office == "house":
-            if texts[0] and texts[0] != "":
-                district = texts[0]
-            cell, status = cells[1], texts[2]
-        else:
-            cell, status = cells[0], texts[1]
-        if status != "Qualified":
+    rows = list(csv.DictReader(io.StringIO(text), delimiter="\t"))
+    if not rows or "OfficeCode" not in rows[0]:
+        raise Unreadable("the extract isn't the documented tab-delimited file")
+    for r in rows:
+        office = (r.get("OfficeCode") or "").strip().upper()
+        if office not in ("USS", "USR") or (r.get("StatusDesc") or "").strip() != "Qualified":
             continue  # Defeated (lost the primary), Withdrawn, Did not qualify
-        name, party, inc = fl_name(cell)
-        cand = {"name": name, "party": FL_PARTY.get(party, party), **({"incumbent": True} if inc else {})}
-        if office == "house":
-            if not re.fullmatch(r"\d+", district or ""):
-                raise Unreadable(f"{name}: no district")
-            contest(out, "house", district, cand)
-        else:
+        name = " ".join(x for x in ((r.get("NameFirst") or "").strip(), (r.get("NameMiddle") or "").strip(), (r.get("NameLast") or "").strip()) if x)
+        cand = {"name": name, "party": (r.get("PartyName") or "").strip() or None}
+        if office == "USS":
             contest(out, "senate", None, cand)
+        else:
+            d = (r.get("Juris1num") or "").strip()
+            if not d.isdigit():
+                raise Unreadable(f"{name}: no district")
+            contest(out, "house", d, cand)
     return out
 
 
 def build_fl():
-    page = get(FL_URL).decode("latin-1", "replace")
-    got = parse_fl(page)
+    page = get(FL_PAGE).decode("latin-1", "replace")
+    form = {"elecID": "20261103-GEN", "office": fl_option(page, "office", "ALL"), "status": fl_option(page, "status", "ALL"), "cantype": fl_option(page, "cantype", "ALL"), "FormSubmit": "Download Candidate List"}
+    req = urllib.request.Request(FL_EXTRACT, data=urllib.parse.urlencode(form).encode(), headers={"User-Agent": UA})
+    with urllib.request.urlopen(req, timeout=120) as r:
+        text = r.read().decode("latin-1", "replace")
+    got = parse_fl(text)
     if not got.get("house"):
         raise Unreadable("no House candidates read")
-    return {"source": {"name": "Florida Division of Elections, Candidate Listing for 2026 General Election", "url": FL_URL, "page": "https://dos.elections.myflorida.com/candidates/"}, "contests": got}
+    return {"source": {"name": "Florida Division of Elections, candidate list for the 2026 General Election (status Qualified)", "url": FL_LIST, "page": FL_PAGE}, "contests": got}
 
 
 BUILDERS = {"NC": build_nc, "NJ": build_nj, "FL": build_fl}
