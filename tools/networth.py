@@ -59,7 +59,7 @@ def value_bounds(text):
     s = re.sub(r"\s+", " ", str(text or "")).strip()
     if not s:
         return None
-    m = re.fullmatch(r"\$([\d,]+) ?- ?\$([\d,]+)", s)
+    m = re.fullmatch(r"\$([\d,]+) ?(?:-|to) ?\$([\d,]+)", s, re.I)
     if m:
         lo, hi = _NUM(m.group(1)), _NUM(m.group(2))
         return (lo, hi, False) if lo <= hi else None
@@ -82,7 +82,7 @@ def value_bounds(text):
 
 
 VALUE_AT_START = re.compile(
-    r"^(?:Spouse/DC Over \$[\d,]+|(?:Over|More than) \$[\d,]+(?: \(Spouse/DC Asset\))?|\$[\d,]+ - \$[\d,]+|\$[\d,]+ or less"
+    r"^(?:Spouse/DC Over \$[\d,]+|(?:Over|More than) \$[\d,]+(?: \(Spouse/DC Asset\))?|\$[\d,]+ (?:-|to) \$[\d,]+|\$[\d,]+ or less"
     r"|None \(or less than \$[\d,]+\)|None|Undetermined|Value not readily ascertainable|Not readily ascertainable|Unascertainable"
     r"|\$[\d,]+(?:\.\d\d)?(?![\d,.]|\s*-))",
     re.I,
@@ -751,28 +751,71 @@ def _norm_value(v):
     return re.sub(r"\s+", " ", str(v or "")).replace(" -$", " - $").strip()
 
 
+def _num(ln):
+    return _norm_value(ln.get("n")).rstrip(".")
+
+
 def line_key(ln):
-    """What two readings must agree on for a line to count."""
-    return (ln["sec"].strip().upper(), _norm_value(ln.get("n")), _norm_value(ln.get("v")), bool(ln.get("inc")), bool(ln.get("elsewhere")), bool(ln.get("nra")))
+    """What two readings must agree on for a line to count: its section, number and value."""
+    return (ln["sec"].strip().upper(), _num(ln), _norm_value(ln.get("v")))
+
+
+def blank_effect(ln):
+    """What a line without a value does to the total, by its flags (report_from_lines' rules)."""
+    if _norm_value(ln.get("v")):
+        return "value"
+    if ln.get("nra"):
+        return "open"
+    if ln.get("inc") or ln.get("elsewhere"):
+        return "skip"
+    return "none"
+
+
+def _empty_row(ln):
+    """A numbered row with nothing in it (forms print empty rows): no value and no flags."""
+    return blank_effect(ln) == "none" and not ln.get("unsure")
 
 
 def compare_readings(a, b):
     """
-    a, b: each model's lines, in reading order. Compared page by page, in
-    order: a line counts when both readings have it, the same way, and
-    neither marked it unsure. -> {lines: agreed lines, disagreements: [...]}.
+    a, b: each model's lines, in reading order. Compared page by page, lines
+    lined up by section and number. A line counts when both readings have it
+    with the same number and value (and, for a line without a value, the same
+    effect: reported elsewhere, income only, or not readily ascertainable)
+    and neither marked it unsure. A flag on a line that has a value changes
+    nothing, so it isn't compared. A row only one reading lists counts as
+    absent when it's empty (forms print empty numbered rows); otherwise it's
+    a disagreement. -> {lines: agreed lines, disagreements: [{key, page, idx, a, b}]}
+    (a or b None: that reading doesn't have the line).
     """
+    import difflib
     by_page = lambda lines: {p: [x for x in lines if x["page"] == p] for p in sorted({x["page"] for x in lines})}
     pa, pb = by_page(a), by_page(b)
     agreed, dis = [], []
     for page in sorted(set(pa) | set(pb)):
         la, lb = pa.get(page, []), pb.get(page, [])
-        if len(la) != len(lb):
-            dis.append({"key": f"p{page}", "page": page, "a": f"{len(la)} lines", "b": f"{len(lb)} lines", "lines_a": la, "lines_b": lb})
-            continue
-        for i, (x, y) in enumerate(zip(la, lb)):
-            if line_key(x) == line_key(y) and not x.get("unsure") and not y.get("unsure"):
-                agreed.append({**x, "idx": i})
+        ka = [(x["sec"].strip().upper(), _num(x)) for x in la]
+        kb = [(x["sec"].strip().upper(), _num(x)) for x in lb]
+        pairs = []
+        for op, i1, i2, j1, j2 in difflib.SequenceMatcher(a=ka, b=kb, autojunk=False).get_opcodes():
+            if op == "equal":
+                pairs += list(zip(la[i1:i2], lb[j1:j2]))
+            else:
+                xa, xb = la[i1:i2], lb[j1:j2]
+                common = min(len(xa), len(xb)) if op == "replace" else 0
+                pairs += list(zip(xa[:common], xb[:common]))
+                pairs += [(x, None) for x in xa[common:]] + [(None, y) for y in xb[common:]]
+        for i, (x, y) in enumerate(pairs):
+            if x is None or y is None:
+                one = x or y
+                if _empty_row(one):
+                    continue
+                dis.append({"key": f"p{page}.{i}", "page": page, "idx": i, "a": x, "b": y})
+                continue
+            same = line_key(x) == line_key(y) and (blank_effect(x) == blank_effect(y) or bool(_norm_value(x.get("v"))))
+            if same and not x.get("unsure") and not y.get("unsure"):
+                if not _empty_row(x):
+                    agreed.append({**x, "idx": i})
             else:
                 dis.append({"key": f"p{page}.{i}", "page": page, "idx": i, "a": x, "b": y})
     return {"lines": agreed, "disagreements": dis}

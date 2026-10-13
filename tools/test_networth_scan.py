@@ -76,9 +76,35 @@ class Comparing(unittest.TestCase):
         b[1]["unsure"] = True
         self.assertEqual([d["key"] for d in N.compare_readings(self.A, b)["disagreements"]], ["p4.0"])
 
-    def test_a_page_with_a_line_missing(self):
+    def test_a_line_only_one_reading_has(self):
         got = N.compare_readings(self.A, [x for x in self.A if not (x["page"] == 4 and x["n"] == "2")])
-        self.assertEqual([d["key"] for d in got["disagreements"]], ["p4"])
+        self.assertEqual([(d["key"], d["a"]["n"], d["b"]) for d in got["disagreements"]], [("p4.1", "2", None)])
+        self.assertEqual(len(got["lines"]), 3, "the lines around it still line up")
+
+    def test_empty_rows_one_reading_lists_are_absent(self):
+        # Forms print empty numbered rows; one model lists them, the other doesn't.
+        a = self.A[:1] + [L(3, "2", str(n), "") for n in range(2, 6)] + self.A[1:]
+        got = N.compare_readings(a, [dict(x) for x in self.A])
+        self.assertEqual(got["disagreements"], [])
+
+    def test_flags_on_a_line_with_a_value_change_nothing(self):
+        b = [dict(x) for x in self.A]
+        b[1]["nra"] = True
+        b[2]["elsewhere"] = True
+        self.assertEqual(N.compare_readings(self.A, b)["disagreements"], [])
+
+    def test_flags_on_a_line_without_a_value_do(self):
+        a = [L(9, "6", "4", "", "E")]
+        self.assertEqual(N.compare_readings(a, [L(9, "6", "4", "", "I")])["disagreements"], [], "both: not counted")
+        self.assertEqual(len(N.compare_readings(a, [L(9, "6", "4", "", "N")])["disagreements"]), 1, "skipped vs open-ended")
+
+    def test_a_trailing_period_in_the_number(self):
+        b = [dict(x) for x in self.A]
+        b[0]["n"] = "1."
+        self.assertEqual(N.compare_readings(self.A, b)["disagreements"], [])
+
+    def test_ranges_written_with_to(self):
+        self.assertEqual(N.value_bounds(N.first_value("$1,001 to $15,000")), (1001, 15000, False))
 
 
 class Adding(unittest.TestCase):

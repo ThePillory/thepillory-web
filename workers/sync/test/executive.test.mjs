@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import {
   isoDate, executiveOn, personName, parseCabinet, frOrder, federalOutcome, federalWorthChecking, presentableFederal,
   parseLeginfoHistory, californiaOutcome, leginfoBillId, presentableCalifornia, parseGovFeed, govOrderFromPost,
-  nominationStatus, nominationRow, currentCongress,
+  nominationStatus, nominationRow, currentCongress, namesOnPage,
 } from "../src/executive/parse.js";
 import { executive, cabinetHtml, fr, congressExec, leginfoHistory, govFeed, govPosts } from "./executive-fixtures.mjs";
 
@@ -31,6 +31,15 @@ test("President and Vice President on a date, from executive.json", () => {
   assert.equal(personName(now.viceprez.person), "Vicky Vicepresidente", "official_full wins");
   assert.equal(personName(executiveOn(executive, "2010-06-01").prez.person), "Former Presidentperson");
   assert.equal(executiveOn(executive, "1990-01-01").prez, undefined);
+});
+
+test("A source page names the person (the President's and Vice President's source link)", () => {
+  const html = "<main><h2>Example A. Person</h2><h3>Vice President</h3><p>President Example Q. Leader</p></main>";
+  assert.equal(namesOnPage(html, "Example A. Person"), true);
+  assert.equal(namesOnPage(html, "Someone Leader, Jr."), true);
+  assert.equal(namesOnPage(html, "Other Name"), false);
+  assert.equal(namesOnPage("<p>Personable</p>", "A Person"), false, "whole words only");
+  assert.equal(namesOnPage("", "A Person"), false);
 });
 
 test("Cabinet: name and office pairs only; bios and menus ignored", () => {

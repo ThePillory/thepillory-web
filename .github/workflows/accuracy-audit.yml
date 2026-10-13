@@ -1,0 +1,31 @@
+# Runs the read-only accuracy audit (tools/accuracy_audit.py) and prints the
+# report: hand-entered data against its sources, name matches, bill summaries,
+# AI quotes against their sources, and data freshness. Writes nothing.
+# Actions -> Accuracy audit -> Run workflow; "only" picks sections (e.g. "3,5").
+name: Accuracy audit
+on:
+  workflow_dispatch:
+    inputs:
+      only:
+        description: "Sections to run, e.g. 1,2,3,4,5 (blank: all)"
+        default: ""
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CONGRESS_API_KEY: ${{ secrets.CONGRESS_API_KEY }}
+          ONLY: ${{ github.event.inputs.only }}
+        run: |
+          python3 tools/accuracy_audit.py ${ONLY:+--only "$ONLY"} > audit.md
+          cat audit.md >> "$GITHUB_STEP_SUMMARY"
+          cat audit.md
