@@ -10,7 +10,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { chamberIds, districtKey, districtLabel, executiveOffice, stableKey, memberTitle, chamberName, parseChamber } from "../src/states.js";
 import { rankStates, stateBillScope } from "../src/state-priority.js";
 import { stateRecords } from "../src/states-officials.js";
-import { matchStatePositions, billIsFrom } from "../src/state-votes-api.js";
+import { matchStatePositions, billIsFrom, firstSince } from "../src/state-votes-api.js";
 import { cleanDistricts, describe, legislativeSeats, repsWhere } from "../../../functions/_lib/districts.js";
 import { listScope, voteScope, parseLevel } from "../../../functions/_lib/data.js";
 
@@ -177,4 +177,18 @@ test("an API answer is saved only under its own state and session", () => {
   assert.equal(billIsFrom(bill, "VT", "2023-2024"), false);
   assert.equal(billIsFrom({ jurisdiction: { id: "ocd-jurisdiction/country:us/district:dc/government" } }, "DC", "26"), true);
   assert.equal(billIsFrom({ session: "2025-2026" }, "VT", "2025-2026"), false, "no jurisdiction: not saved");
+  assert.equal(billIsFrom(bill, "VT"), true, "any session when none is asked for");
+});
+
+test("a state's daily read starts where its session files stop, and covers a session whose file was empty", () => {
+  const today = "2026-10-13";
+  // The new session's file was empty: read from the day the last full file covers.
+  assert.equal(firstSince([{ session: "221", bills: 2239, generated_at: "2026-01-19 04:00:00" }, { session: "222", bills: 0, generated_at: "2026-10-09" }], today), "2026-01-19");
+  // No file had bills: the whole two-year period.
+  assert.equal(firstSince([{ session: "2025-2026", bills: 0, generated_at: "2026-09-20" }], today), "2025-01-01");
+  assert.equal(firstSince([], today), "2025-01-01");
+  // A regular session and a later special session: from the regular one's file.
+  assert.equal(firstSince([{ session: "2025_26", bills: 1124, generated_at: "2026-06-21" }, { session: "2026_ss", bills: 94, generated_at: "2026-10-09" }], today), "2026-06-21");
+  // A session long over (its file months older than the newest) isn't re-read.
+  assert.equal(firstSince([{ session: "2025", bills: 1022, generated_at: "2025-05-21" }, { session: "2026", bills: 1010, generated_at: "2026-10-09" }], today), "2026-10-09");
 });
