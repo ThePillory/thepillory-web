@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "52"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "53"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -123,6 +123,7 @@ EMPTY_REPORTS = (
 )
 
 FOOTER = """<footer class="app-footer" aria-label="About ThePillory">
+  <p class="app-footer-beta">ThePillory is in beta. Every fact links to its source. Found an error? <a href="/corrections/">Report it</a></p>
   <a href="/about/">About</a>
   <a href="/about/how-it-works/">How it works</a>
   <a href="/about/principles/">Principles</a>
@@ -373,6 +374,11 @@ def build_methodology():
   <h1>Methodology</h1>
   <p class="subtitle">How ThePillory maps laws and issues to the Constitution, and how reports are reviewed.</p>
 </header>
+
+<section class="card stack-sm" id="beta">
+  <h2>In beta</h2>
+  <p>ThePillory is in beta. Every fact links to its source. Found an error? <a class="inline-link" href="/corrections/">Report it</a>. A person reads every report and checks it against the original record; a fact that's wrong is corrected on the page, with its source. Records ThePillory can't tie to an official with certainty (by an ID, or a single match the source supports) aren't shown, and reports transcribed by AI from scans stay links to the report until a person has checked them.</p>
+</section>
 
 <section class="card stack" id="analysis">
   <h2>Constitutional analysis of bills and executive orders</h2>
