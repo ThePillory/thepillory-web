@@ -48,9 +48,11 @@ for label, sql in [
 
 random.seed(20261013)
 picked = []
-for kind, n in (("c4", 5), ("c6", 5), ("committee", 5), ("llc", 5)):
+for kind, n in (("c4", 20), ("c6", 20), ("committee", 20), ("llc", 20)):
     rows = q(f"SELECT committee_id, cycle, name, kind, donor_committee_id, ein, state, total, count, source_url FROM outside_donors WHERE kind = '{kind}'")
     picked += random.sample(rows, min(n, len(rows)))
+picked = [d for d in picked if d["kind"] != "llc"] + [d for d in picked if d["kind"] == "llc"]
+picked = picked[:20]
 print(f"# {len(picked)} labeled groups, checked against public records\n")
 errors = 0
 for d in picked:
@@ -85,7 +87,13 @@ for d in picked:
     else:
         diff = abs(fec_total - float(d["total"]))
         notes.append(f"FEC receipts: ${fec_total:,.0f} in {len(rs)} rows vs ThePillory ${float(d['total']):,.0f}{'' if diff <= max(1, 0.01 * fec_total) else ' (differs)'}")
+        if diff > max(1, 0.01 * fec_total):
+            ok = False
+            for r in sorted(rs, key=lambda r: -float(r.get("contribution_receipt_amount") or 0))[:8]:
+                notes.append(f"  row: {r.get('contribution_receipt_date','')[:10]} ${float(r.get('contribution_receipt_amount') or 0):,.0f} line {r.get('line_number')} type {r.get('receipt_type')} {r.get('receipt_type_full') or ''} memo {r.get('memo_code')} entity {r.get('entity_type')}")
+            rd = q(f"SELECT receipts, rows_read, truncated, dark_total, read_at FROM outside_donor_reads WHERE committee_id = '{d['committee_id']}' AND cycle = {int(d['cycle'])}")
+            notes.append(f"  ThePillory read of the spender: {rd}")
     errors += 0 if ok else 1
-    print(f"- {'OK ' if ok else 'CHECK'} [{d['kind']}] {d['name']} → spender {d['committee_id']} ({d['cycle']}): " + "; ".join(notes))
+    print(f"- {'OK ' if ok else 'CHECK'} [{d['kind']}] {d['name']} → spender {d['committee_id']} ({d['cycle']}): " + "\n    ".join(notes))
     time.sleep(1)
 print(f"\nLabel errors: {errors} of {len(picked)}")
