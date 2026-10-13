@@ -821,6 +821,47 @@ def compare_readings(a, b):
     return {"lines": agreed, "disagreements": dis}
 
 
+def _same_line(x, y):
+    """Two readings of a line agree (compare_readings' rule)."""
+    return (line_key(x) == line_key(y) and (blank_effect(x) == blank_effect(y) or bool(_norm_value(x.get("v"))))
+            and not x.get("unsure") and not y.get("unsure"))
+
+
+def tiebreak(disagreements, third):
+    """
+    A third reading of the disputed pages -> {key: "a" | "b"} for each line it
+    settles: the third reading has exactly one line with that section and
+    number, and it agrees with one reading and not the other. A line only one
+    reading has is settled for that reading when the third has it too (and
+    agrees), and for the other when the third has no such line. Anything else
+    stays open for a person.
+    """
+    by = {}
+    for t in third or []:
+        by.setdefault((t["page"], t["sec"].strip().upper(), _num(t)), []).append(t)
+    out = {}
+    for d in disagreements:
+        a, b = d.get("a"), d.get("b")
+        one = a or b
+        if one is None:
+            continue
+        keys = {(d["page"], x["sec"].strip().upper(), _num(x)) for x in (a, b) if x}
+        ts = [t for k in keys for t in by.get(k, [])]
+        if a is not None and b is not None:
+            if len(ts) != 1:
+                continue
+            ta, tb = _same_line(ts[0], a), _same_line(ts[0], b)
+            if ta != tb:
+                out[d["key"]] = "a" if ta else "b"
+            continue
+        side = "a" if a is not None else "b"
+        if not ts:
+            out[d["key"]] = "b" if side == "a" else "a"
+        elif len(ts) == 1 and _same_line(ts[0], one):
+            out[d["key"]] = side
+    return out
+
+
 def report_from_lines(lines):
     """
     Agreed lines -> {assets, liabilities}, by the same rules as the text

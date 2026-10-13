@@ -79,6 +79,11 @@ SCHEMA = {
 }
 
 
+# The third reading, of only the pages the two readings differ on ("tiebreak").
+TIEBREAK_MODEL = os.environ.get("SCAN_MODEL_C") or "claude-opus-5-5"
+TIEBREAK_LABEL = f"{TIEBREAK_MODEL}#3"  # its chunks are stored apart from the first two readings
+
+
 def models():
     return [os.environ.get("SCAN_MODEL_A") or "claude-sonnet-5-5", os.environ.get("SCAN_MODEL_B") or "claude-opus-5-5"]
 
@@ -240,7 +245,7 @@ def read_chunk(client, model, pdf_b64, first, last, sections):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--mode", choices=("estimate", "read", "publish", "diagnose"), default="estimate")
+    ap.add_argument("--mode", choices=("estimate", "read", "tiebreak", "publish", "diagnose"), default="estimate")
     ap.add_argument("--report-id", default="", help="a networth_reports id; default: the President's newest annual report")
     ap.add_argument("--max-dollars", type=float, default=15.0)
     ap.add_argument("--chunk-pages", type=int, default=6)
@@ -326,6 +331,31 @@ def main():
             lines += parse_lines(json.loads(have[(model, first)]["reading"]).get("lines", []), sections, first, last, grp)
         readings.append(lines)
     cmp = N.compare_readings(*readings)
+    # The third reading: only the pages with lines read differently.
+    tplan = chunks({d["page"] for d in cmp["disagreements"]}, args.chunk_pages)
+    if args.mode == "tiebreak":
+        for first, last in tplan:
+            if (TIEBREAK_LABEL, first) in have:
+                continue
+            pdf_b64 = chunk_pdf(pdf, first, last, work)
+            inp = client.messages.count_tokens(model=TIEBREAK_MODEL, system=INSTRUCTIONS, messages=[{"role": "user", "content": message(pdf_b64, first, last, sections)}]).input_tokens
+            likely = cost(TIEBREAK_MODEL, inp, 6000 * (last - first + 1))
+            if spent + likely > args.max_dollars:
+                say(f"Stopped before the third reading of pages {first}-{last}: ${spent:.2f} spent, the cap is ${args.max_dollars:.2f}. Run again to resume.")
+                return summary(log)
+            data, i_tok, o_tok = read_chunk(client, TIEBREAK_MODEL, pdf_b64, first, last, sections)
+            c = cost(TIEBREAK_MODEL, i_tok, o_tok)
+            spent += c
+            T.run_sql(args, [
+                "INSERT OR REPLACE INTO networth_scan_chunks (report_id, model, first_page, last_page, reading, input_tokens, output_tokens, cost_cents) VALUES ("
+                + ", ".join(L.lit(v) for v in (f["id"], TIEBREAK_LABEL, first, last, json.dumps(data), i_tok, o_tok, round(c * 100))) + ");"])
+            have[(TIEBREAK_LABEL, first)] = {"reading": json.dumps(data)}
+            say(f"  third reading ({TIEBREAK_MODEL}) pages {first}-{last}: {len(data.get('lines', []))} entries, ${c:.2f} (total ${spent:.2f})")
+    third = None
+    if tplan and all((TIEBREAK_LABEL, first) in have for first, _ in tplan):
+        third, grp = [], {}
+        for first, last in tplan:
+            third += parse_lines(json.loads(have[(TIEBREAK_LABEL, first)]["reading"]).get("lines", []), sections, first, last, grp)
     if args.mode == "diagnose":
         return diagnose(cmp, readings, texts, log)
     settled = {}
@@ -345,8 +375,22 @@ def main():
                 lines.append({**d[choice], "idx": d["idx"], "unsure": False})
         else:
             open_dis.append(d)
+    # Lines the third reading settles: it agrees exactly with one reading and
+    # not the other. These don't count as a person's check.
+    by_third = N.tiebreak(open_dis, third) if third is not None else {}
+    if by_third:
+        kept = []
+        for d in open_dis:
+            choice = by_third.get(d["key"])
+            if choice is None:
+                kept.append(d)
+            elif isinstance(d.get(choice), dict):
+                lines.append({**d[choice], "idx": d["idx"], "unsure": False})
+        open_dis = kept
     lines.sort(key=lambda x: (x["page"], x["idx"]))
     problems = []
+    if by_third:
+        problems.append({"kind": "look", "text": f"{len(by_third)} lines the first two readings differed on were settled by a third reading ({TIEBREAK_MODEL}): two of the three agree exactly."})
     misses = N.ocr_misses(lines, {p: texts[p - 1] for p in sections})
     if misses:
         problems.append({"kind": "look", "text": f"{len(misses)} agreed values aren't in the page's OCR text, for example page {misses[0][0]}: {misses[0][1]}"})

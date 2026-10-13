@@ -107,6 +107,24 @@ class Comparing(unittest.TestCase):
         self.assertEqual(N.value_bounds(N.first_value("$1,001 to $15,000")), (1001, 15000, False))
 
 
+class TieBreak(unittest.TestCase):
+    def test_two_of_three_settle_a_line(self):
+        dis = [
+            {"key": "p9.0", "page": 9, "idx": 0, "a": L(9, "2", "4", ""), "b": L(9, "2", "4", "", "E")},         # flags differ
+            {"key": "p9.1", "page": 9, "idx": 1, "a": L(9, "6", "7", "$1,001 - $15,000"), "b": None},           # only A has it
+            {"key": "p9.2", "page": 9, "idx": 2, "a": None, "b": L(9, "6", "8", "$15,001 - $50,000")},          # only B has it
+            {"key": "p9.3", "page": 9, "idx": 3, "a": L(9, "6", "9", "$1,001 - $15,000"), "b": L(9, "6", "9", "$15,001 - $50,000")},  # the third says neither
+        ]
+        third = [L(9, "2", "4", "", "E"), L(9, "6", "7", "$1,001 - $15,000"), L(9, "6", "9", "$50,001 - $100,000")]
+        self.assertEqual(N.tiebreak(dis, third), {"p9.0": "b", "p9.1": "a", "p9.2": "a"})
+
+    def test_unsure_or_two_candidates_stay_open(self):
+        dis = [{"key": "p9.0", "page": 9, "idx": 0, "a": L(9, "6", "1", "$1,001 - $15,000"), "b": L(9, "6", "1", "$15,001 - $50,000")}]
+        self.assertEqual(N.tiebreak(dis, [L(9, "6", "1", "$1,001 - $15,000", "U")]), {})
+        self.assertEqual(N.tiebreak(dis, [L(9, "6", "1", "$1,001 - $15,000"), L(9, "6", "1", "$15,001 - $50,000")]), {})
+        self.assertEqual(N.tiebreak(dis, []), {}, "a third reading without the line doesn't settle a value both have")
+
+
 class Storing(unittest.TestCase):
     def test_a_page_per_row_and_each_open_line(self):
         lines = [dict(L(3, "2", "1", "", "E"), idx=0), dict(L(4, "6", "1", "$1,001 - $15,000"), idx=0), dict(L(4, "6", "2", "$15,001 - $50,000"), idx=1)]

@@ -22,9 +22,9 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "estimate (spends nothing), read, publish, or diagnose (lists the lines read differently, by kind; writes nothing)"
+        description: "estimate (spends nothing), read, tiebreak (a third reading of only the pages read differently), publish, or diagnose (lists the lines read differently; writes nothing)"
         type: choice
-        options: [estimate, read, publish, diagnose]
+        options: [estimate, read, tiebreak, publish, diagnose]
         default: estimate
       max_dollars:
         description: "Stop before spending more than this (dollars)"
