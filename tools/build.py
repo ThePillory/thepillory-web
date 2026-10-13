@@ -506,6 +506,7 @@ def build_methodology():
 
 <section class="card stack" id="dark-money">
   <h2>How dark money works</h2>
+  <p class="banner"><strong>Paused while we check it.</strong> The donor labels, the share from organizations that don't disclose their donors, nonprofits' Form 990 figures and electioneering communications aren't shown on any page while each label is checked against its public record. This section explains how they work.</p>
   <p>"Dark money" is money spent to influence elections where the public can't see who first gave it. It's legal. Here is how it happens, in plain terms, and what ThePillory shows about it.</p>
   <ul class="plain-list small">
     <li><strong>Candidates and most political committees disclose their donors.</strong> A campaign, a PAC or a super PAC reports to the Federal Election Commission (FEC) who gave it money, with names and amounts.</li>
