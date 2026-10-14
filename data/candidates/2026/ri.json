@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=RI&candidate_status=C",
- "list_built_on": "2026-10-12",
+ "list_built_on": "2026-10-13",
  "built_on": "2026-10-13",
  "senate_up": true,
  "candidates": {
@@ -289,7 +289,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6RI01153/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 12771.4,
+    "disbursements": 10439.39,
+    "cash_on_hand": 2332.01,
+    "individual_unitemized": 2421.4,
+    "individual_itemized": 2250,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 8100,
+    "other": 0,
+    "coverage_end": "2026-08-20",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6RI01153/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00947416&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00947416/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H2RI02184": {
    "id": "H2RI02184",
@@ -521,7 +551,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6RI02318/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2999002.38,
+    "disbursements": 2722098.4,
+    "cash_on_hand": 276903.98,
+    "individual_unitemized": 16646.65,
+    "individual_itemized": 11120.01,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 2930333.79,
+    "other": 40901.93,
+    "coverage_end": "2026-08-20",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6RI02318/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00925230&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.vicmellor.com/",
+    "as_filed": "WWW.VICMELLOR.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00925230/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6RI02326": {
    "id": "H6RI02326",
@@ -534,7 +594,45 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6RI02326/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 224747,
+    "disbursements": 153642.71,
+    "cash_on_hand": 71104.29,
+    "individual_unitemized": 23547,
+    "individual_itemized": 51150,
+    "pac": 50,
+    "party": 0,
+    "self_funding": 150000,
+    "other": 0,
+    "coverage_end": "2026-08-20",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6RI02326/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00794255",
+      "name": "FIGHTING FOR NEW ENGLAND PAC",
+      "total": 50,
+      "count": 1,
+      "industry": "other"
+     }
+    ],
+    "count": 1,
+    "total": 50,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00930826&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00930826/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   }
  }
 }

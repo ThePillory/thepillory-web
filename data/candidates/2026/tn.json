@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=TN&candidate_status=C",
- "list_built_on": "2026-10-12",
+ "list_built_on": "2026-10-13",
  "built_on": "2026-10-13",
  "senate_up": true,
  "candidates": {
@@ -57,7 +57,45 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN01537/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 101983.51,
+    "disbursements": 87877.31,
+    "cash_on_hand": 14106.2,
+    "individual_unitemized": 71203.11,
+    "individual_itemized": 30412,
+    "pac": 250,
+    "party": 0,
+    "self_funding": 10,
+    "other": 108.4,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN01537/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00545202",
+      "name": "THE CENTER FOR FREETHOUGHT EQUALITY PAC",
+      "total": 250,
+      "count": 1,
+      "industry": "other"
+     }
+    ],
+    "count": 1,
+    "total": 250,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00934778&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.votekristiburke.com/",
+    "as_filed": "HTTPS://WWW.VOTEKRISTIBURKE.COM/",
+    "source_url": "https://www.fec.gov/data/committee/C00934778/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H0TN01118": {
    "id": "H0TN01118",
@@ -289,7 +327,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN02170/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 397583.78,
+    "disbursements": 341353.67,
+    "cash_on_hand": 56230.11,
+    "individual_unitemized": 153957.38,
+    "individual_itemized": 231592.93,
+    "pac": 250,
+    "party": 0,
+    "self_funding": 6415,
+    "other": 5368.47,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN02170/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00920520&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://michaelafortennessee.com/",
+    "as_filed": "MICHAELAFORTENNESSEE.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00920520/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H8TN02119": {
    "id": "H8TN02119",
@@ -394,7 +462,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN03228/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 55554.79,
+    "disbursements": 28351.8,
+    "cash_on_hand": 33870.46,
+    "individual_unitemized": 24936.87,
+    "individual_itemized": 27758.87,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 0,
+    "other": 2859.05,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN03228/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00936971&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.annagolladay.com/",
+    "as_filed": "WWW.ANNAGOLLADAY.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00936971/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN04242": {
    "id": "H6TN04242",
@@ -407,7 +505,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN04242/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2267.06,
+    "disbursements": 1461.66,
+    "cash_on_hand": 805.4,
+    "individual_unitemized": 1847.06,
+    "individual_itemized": 0,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 420,
+    "other": 0,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN04242/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00942276&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.jacobanders.org/",
+    "as_filed": "WWW.JACOBANDERS.ORG",
+    "source_url": "https://www.fec.gov/data/committee/C00942276/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H4TN04270": {
    "id": "H4TN04270",
@@ -452,7 +580,52 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN05371/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 741733.2,
+    "disbursements": 619475.47,
+    "cash_on_hand": 122257.73,
+    "individual_unitemized": 354906.4,
+    "individual_itemized": 377616.34,
+    "pac": 8500,
+    "party": 0,
+    "self_funding": 0.67,
+    "other": 709.79,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN05371/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00012476",
+      "name": "UA UNION PLUMBERS & PIPEFITTERS VOTE! PAC (UNITED ASSOCIATION OF JOURNEYMEN AND APPRENTICES OF THE PLUMBING & PIPEFITTING INDUSTRY OF THE UNITED STATES AND CANADA)",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00845271",
+      "name": "BENCH PAC",
+      "total": 3500,
+      "count": 1,
+      "industry": "other"
+     }
+    ],
+    "count": 2,
+    "total": 8500,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00911248&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00911248/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H4TN04247": {
    "id": "H4TN04247",
@@ -727,7 +900,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN04267/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 14088.99,
+    "disbursements": 14044.78,
+    "cash_on_hand": 44.21,
+    "individual_unitemized": 0,
+    "individual_itemized": 6820,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 7268.99,
+    "other": 0,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN04267/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00950816&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://lanier4congress.com/",
+    "as_filed": "LANIER4CONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00950816/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN05363": {
    "id": "H6TN05363",
@@ -740,7 +943,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN05363/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 8310,
+    "disbursements": 8260.84,
+    "cash_on_hand": -101.25,
+    "individual_unitemized": 1590,
+    "individual_itemized": 500,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 6220,
+    "other": 0,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN05363/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00902429&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00902429/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN05405": {
    "id": "H6TN05405",
@@ -753,7 +986,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN05405/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 719502.95,
+    "disbursements": 614682.2,
+    "cash_on_hand": 104820.75,
+    "individual_unitemized": 14584.12,
+    "individual_itemized": 567705.36,
+    "pac": 3500,
+    "party": 0,
+    "self_funding": 133713.47,
+    "other": 0,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN05405/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00923383&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.charliehatcher.com/",
+    "as_filed": "WWW.CHARLIEHATCHER.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00923383/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN05439": {
    "id": "H6TN05439",
@@ -766,7 +1029,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN05439/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 44140.77,
+    "disbursements": 44140.77,
+    "cash_on_hand": 0,
+    "individual_unitemized": 37590.77,
+    "individual_itemized": 6550,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 0,
+    "other": 0,
+    "coverage_end": "2026-09-30",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN05439/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00951343&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://rachelfortn.com/",
+    "as_filed": "RACHELFORTN.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00951343/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN05397": {
    "id": "H6TN05397",
@@ -779,7 +1072,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN05397/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2599774.57,
+    "disbursements": 1117578.66,
+    "cash_on_hand": 1482195.91,
+    "individual_unitemized": 296294.63,
+    "individual_itemized": 2065322.73,
+    "pac": 215700,
+    "party": 220.78,
+    "self_funding": 0,
+    "other": 22236.43,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN05397/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00574970",
+      "name": "FAIR SHOT PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00892901",
+      "name": "INNOVATION FOR GOOD PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00495028",
+      "name": "HMP",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00573709",
+      "name": "CA LUV PAC (CALIFORNIA LEADERSHIP UNITED FOR VICTORY PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00617803",
+      "name": "JOBS, EDUCATION, & FAMILIES FIRST  JEFF PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00027342",
+      "name": "INTERNATIONAL BROTHERHOOD OF ELECTRICAL WORKERS POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00664318",
+      "name": "DEMOCRACY SUMMER LEADERSHIP PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00409730",
+      "name": "NEW DEMOCRAT COALITION ACTION FUND",
+      "total": 7500,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00012476",
+      "name": "UA UNION PLUMBERS & PIPEFITTERS VOTE! PAC (UNITED ASSOCIATION OF JOURNEYMEN AND APPRENTICES OF THE PLUMBING & PIPEFITTING INDUSTRY OF THE UNITED STATES AND CANADA)",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00344234",
+      "name": "PAC TO THE FUTURE",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00697581",
+      "name": "GO TIGERS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00001636",
+      "name": "SMART TD PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00884973",
+      "name": "SAVE DEMOCRACY PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00580068",
+      "name": "PROGRESSIVE TURNOUT PROJECT",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00002469",
+      "name": "MACHINISTS NON PARTISAN POLITICAL LEAGUE OF THE INTERNATIONAL ASSOCIATION OF MACHINISTS & AEROSPACE WORKERS",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00920603",
+      "name": "FLIP THE CONGRESS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00844720",
+      "name": "DEMOCRATIC MAJORITY FUND",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00032979",
+      "name": "D.R.I.V.E. - DEM, REP, IND VOTER ED (THE PAC OF THE INT'L BRHD OF TEAMSTERS)",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00271338",
+      "name": "AMERIPAC: THE FUND FOR A GREATER AMERICA",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00952093",
+      "name": "THE PROGRESS FUND",
+      "total": 4500,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00510461",
+      "name": "PETE AGUILAR FOR CONGRESS",
+      "total": 4000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00541888",
+      "name": "KATHERINE CLARK FOR CONGRESS",
+      "total": 4000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00503052",
+      "name": "JEFFRIES FOR CONGRESS",
+      "total": 4000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00252940",
+      "name": "LEAGUE OF CONSERVATION VOTERS ACTION FUND",
+      "total": 3600,
+      "count": 4,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00401224",
+      "name": "ACTBLUE",
+      "total": 3500,
+      "count": 1,
+      "industry": "other"
+     }
+    ],
+    "count": 58,
+    "total": 211600,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00918581&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00918581/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H2TN05446": {
    "id": "H2TN05446",
@@ -1011,7 +1510,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN06247/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 6210.22,
+    "disbursements": 6210.22,
+    "cash_on_hand": 0,
+    "individual_unitemized": 60.22,
+    "individual_itemized": 1150,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 5000,
+    "other": 0,
+    "coverage_end": "2026-03-01",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN06247/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00922435&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://ballinforcongress.com/",
+    "as_filed": "BALLINFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00922435/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN06239": {
    "id": "H6TN06239",
@@ -1024,7 +1553,45 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN06239/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 5349.93,
+    "disbursements": 5648.9,
+    "cash_on_hand": -298.97,
+    "individual_unitemized": 2735,
+    "individual_itemized": 2130,
+    "pac": 250,
+    "party": 0,
+    "self_funding": 0,
+    "other": 234.93,
+    "coverage_end": "2026-08-19",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN06239/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00545202",
+      "name": "CENTER FOR FREE THOUGHT AND EQUALITY PAC",
+      "total": 250,
+      "count": 1,
+      "industry": "other"
+     }
+    ],
+    "count": 1,
+    "total": 250,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00917682&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://lorebergman.com/",
+    "as_filed": "LOREBERGMAN.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00917682/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H2TN05347": {
    "id": "H2TN05347",
@@ -1080,7 +1647,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN06171/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 35380,
+    "disbursements": 33198.88,
+    "cash_on_hand": 2430.75,
+    "individual_unitemized": 18521,
+    "individual_itemized": 16819,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 0,
+    "other": 40,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN06171/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00902239&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://croleyforcongress.com/",
+    "as_filed": "CROLEYFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00902239/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN06213": {
    "id": "H6TN06213",
@@ -1093,7 +1690,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN06213/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2380326.98,
+    "disbursements": 2092741.5,
+    "cash_on_hand": 287585.48,
+    "individual_unitemized": 217058.97,
+    "individual_itemized": 857776.44,
+    "pac": 103200,
+    "party": 0,
+    "self_funding": 1202291.57,
+    "other": 0,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN06213/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00409276",
+      "name": "MAKING A RESPONSIBLE STAND FOR HOUSEHOLDS IN AMERICA PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00467431",
+      "name": "THE EYE OF THE TIGER POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00563726",
+      "name": "MR. SOUTHERN MISSOURIAN IN THE HOUSE PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00029447",
+      "name": "INTERNATIONAL ASSOCIATION OF FIREFIGHTERS INTERESTED IN REGI",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00592089",
+      "name": "ELECTING MAJORITY MAKING EFFECTIVE REPUBLICANS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00531764",
+      "name": "A NEW NATION PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00653220",
+      "name": "CAROL FOR CONGRESS",
+      "total": 4000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00067231",
+      "name": "HCA HEALTHCARE INC. GOOD GOVERNMENT FUND",
+      "total": 3500,
+      "count": 1,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00749481",
+      "name": "RAPTOR PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00000422",
+      "name": "AMERICAN MEDICAL ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 2500,
+      "count": 1,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00024968",
+      "name": "AMERICAN OPTOMETRIC ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 2500,
+      "count": 1,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00114447",
+      "name": "TENNESSEE BANKERS ASSOCIATION FEDERAL POLITICAL ACTION COMMI",
+      "total": 2000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00250449",
+      "name": "TENNESSEE MALT BEVERAGE ASSOCIATION FEDERAL POLITICAL ACTION",
+      "total": 2000,
+      "count": 1,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00277152",
+      "name": "ROGERS GROUP INC. POLITICAL ACTION COMMITTEE",
+      "total": 2000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00268904",
+      "name": "TRINITY INDUSTRIES EMPLOYEE POLITICAL ACTION COMMITTEE (SF)",
+      "total": 2000,
+      "count": 1,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00877506",
+      "name": "SPACE COAST LEADERSHIP PAC",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00689208",
+      "name": "RVFPAC",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00827881",
+      "name": "CIRCLE THE WAGONS PAC",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00397851",
+      "name": "CENTENE CORPORATION POLITICAL ACTION COMMITTEE (CENTENE PAC)",
+      "total": 2000,
+      "count": 1,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00394957",
+      "name": "SCALISE FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00864488",
+      "name": "MIKE KENNEDY FOR UTAH",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00545749",
+      "name": "EMMER FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00652149",
+      "name": "BURCHETT FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00347955",
+      "name": "LIFEPOINT HEALTH PAC - THE PAC OF LIFEPOINT CORPORATE SERVIC",
+      "total": 1000,
+      "count": 1,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00792341",
+      "name": "ALASKANS FOR NICK BEGICH",
+      "total": 1000,
+      "count": 1,
+      "industry": "leadership"
+     }
+    ],
+    "count": 29,
+    "total": 80000,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00910935&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.johnnygarrettforcongress.com/",
+    "as_filed": "WWW.JOHNNYGARRETTFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00910935/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN06262": {
    "id": "H6TN06262",
@@ -1106,7 +1909,17 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN06262/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": null,
+   "organizations": null,
+   "website": {
+    "url": "https://henryforcongress.com/",
+    "as_filed": "HENRYFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00905984/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN06205": {
    "id": "H6TN06205",
@@ -1119,7 +1932,185 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN06205/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 1552428.72,
+    "disbursements": 929933.7,
+    "cash_on_hand": 622495.02,
+    "individual_unitemized": 12020.83,
+    "individual_itemized": 1494900.3,
+    "pac": 45500,
+    "party": 0,
+    "self_funding": 0,
+    "other": 7.59,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN06205/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00388934",
+      "name": "FFAF PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00686402",
+      "name": "NOOGA PAC",
+      "total": 4000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00752766",
+      "name": "TTM TECHNOLOGIES INC. PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00749481",
+      "name": "RAPTOR PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00114447",
+      "name": "TENNESSEE BANKERS ASSOCIATION FEDERAL PAC",
+      "total": 2000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00277152",
+      "name": "ROGERS GROUP INC. PAC",
+      "total": 2000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00661561",
+      "name": "BEN CLINE FOR CONGRESS, INC",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00937060",
+      "name": "NATIONAL ATM COUNCIL, INC. PAC (NAC PAC)",
+      "total": 2000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00487942",
+      "name": "REACHING FOR A BRIGHTER AMERICA PAC",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00303305",
+      "name": "PETE SESSIONS FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00572271",
+      "name": "BUILDING AMERICAS REPUBLICAN REPRESENTATION PAC (BARR PAC)",
+      "total": 1500,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00781237",
+      "name": "TENNESSEE ACTION GROUP",
+      "total": 1000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00313247",
+      "name": "ROBERT ADERHOLT FOR CONGRESS",
+      "total": 1000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00385377",
+      "name": "ROAD TO VICTORY PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00765578",
+      "name": "TENNESSEE TOUGH PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00368696",
+      "name": "RESPONSIBILITY & FREEDOM WORK PAC (RFWPAC)",
+      "total": 1000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00287045",
+      "name": "PLAIN STATE PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00786202",
+      "name": "CROSS PARTISAN PAC II",
+      "total": 1000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00027532",
+      "name": "AMO VOLUNTARY POLITICAL ACTION COMMITTEE",
+      "total": 1000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00337972",
+      "name": "TOM JAMES COMPANY PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00778308",
+      "name": "SOUTHERN STATES PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "leadership"
+     }
+    ],
+    "count": 21,
+    "total": 37500,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00909838&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00909838/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN06270": {
    "id": "H6TN06270",
@@ -1132,7 +2123,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN06270/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 86869.09,
+    "disbursements": 61101.38,
+    "cash_on_hand": 25767.71,
+    "individual_unitemized": 33598.96,
+    "individual_itemized": 53250.13,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 20,
+    "other": 0,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN06270/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00909143&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.chaneymosley4tn.com/",
+    "as_filed": "HTTPS://WWW.CHANEYMOSLEY4TN.COM/",
+    "source_url": "https://www.fec.gov/data/committee/C00909143/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN07286": {
    "id": "H6TN07286",
@@ -1145,7 +2166,52 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN07286/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 868614.64,
+    "disbursements": 789925.84,
+    "cash_on_hand": 78688.8,
+    "individual_unitemized": 119533.85,
+    "individual_itemized": 516944.96,
+    "pac": 3000,
+    "party": 0,
+    "self_funding": 229135.83000000002,
+    "other": 0,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN07286/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00787945",
+      "name": "BLUE WAVE AMERICA",
+      "total": 2000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00538835",
+      "name": "COMMON GROUND PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "leadership"
+     }
+    ],
+    "count": 2,
+    "total": 3000,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00913301&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://copeland4congress.com/",
+    "as_filed": "COPELAND4CONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00913301/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN07229": {
    "id": "H6TN07229",
@@ -1158,7 +2224,73 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN07229/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 250383.75,
+    "disbursements": 228885.33,
+    "cash_on_hand": 21498.42,
+    "individual_unitemized": 44353.6,
+    "individual_itemized": 173555,
+    "pac": 27250,
+    "party": 0,
+    "self_funding": 3500,
+    "other": 1725.15,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN07229/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00617381",
+      "name": "THE COLLECTIVE PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00012476",
+      "name": "UA UNION PLUMBERS & PIPEFITTERS VOTE! PAC (UNITED ASSOCIATION OF JOURNEYMEN AND APPRENTICES OF THE PLUMBING & PIPEFITTING INDUSTRY OF THE UNITED STATES AND CANADA)",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00147512",
+      "name": "CONGRESSIONAL BLACK CAUCUS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00952093",
+      "name": "THE PROGRESS FUND",
+      "total": 4500,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00277152",
+      "name": "ROGERS GROUP INC. POLITICAL ACTION COMMITTEE",
+      "total": 3500,
+      "count": 2,
+      "industry": "issue"
+     }
+    ],
+    "count": 5,
+    "total": 23000,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00911370&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.dixie4tn.com/",
+    "as_filed": "WWW.DIXIE4TN.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00911370/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN07344": {
    "id": "H6TN07344",
@@ -1171,7 +2303,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN07344/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 91368.32,
+    "disbursements": 91367.75,
+    "cash_on_hand": 0.57,
+    "individual_unitemized": 4630,
+    "individual_itemized": 14500,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 72238.32,
+    "other": 0,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN07344/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00951731&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://hollowayfortn.com/",
+    "as_filed": "HOLLOWAYFORTN.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00951731/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN06288": {
    "id": "H6TN06288",
@@ -1184,7 +2346,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN06288/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 5100,
+    "disbursements": 129.77,
+    "cash_on_hand": 4970.23,
+    "individual_unitemized": 0,
+    "individual_itemized": 0,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 5100,
+    "other": 0,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN06288/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00942482&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00942482/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN07161": {
    "id": "H6TN07161",
@@ -1197,7 +2389,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN07161/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2300690.32,
+    "disbursements": 2092736.19,
+    "cash_on_hand": 207954.13,
+    "individual_unitemized": 419391.71,
+    "individual_itemized": 1245758.12,
+    "pac": 582300,
+    "party": 7305,
+    "self_funding": 0,
+    "other": 45935.49,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN07161/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00763664",
+      "name": "TRACTOR SUPPLY COMPANY POLITICAL ACTION COMMITTEE",
+      "total": 15000,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00411116",
+      "name": "SPACE EXPLORATION TECHNOLOGIES CORP. PAC",
+      "total": 15000,
+      "count": 3,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00030718",
+      "name": "NATIONAL ASSOCIATION OF REALTORS POLITICAL ACTION COMMITTEE",
+      "total": 14000,
+      "count": 5,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00572271",
+      "name": "BUILDING AMERICA'S REPUBLICAN REPRESENTATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00693796",
+      "name": "BUCKEYE LIBERTY POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00719971",
+      "name": "SENATE EAGLE PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00114447",
+      "name": "TENNESSEE BANKERS ASSOCIATION FEDERAL POLITICAL ACTION COMMI",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00570226",
+      "name": "SEAL PAC SUPPORTING ELECTING AMERICAN LEADERS PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00767640",
+      "name": "RANGER PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00401786",
+      "name": "FREEDOM'S DEFENSE FUND",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00531590",
+      "name": "PATRIOTS IN ACTION",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00749481",
+      "name": "RAPTOR PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00467431",
+      "name": "THE EYE OF THE TIGER POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00409276",
+      "name": "MAKING A RESPONSIBLE STAND FOR HOUSEHOLDS IN AMERICA PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00592089",
+      "name": "ELECTING MAJORITY MAKING EFFECTIVE REPUBLICANS PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00639229",
+      "name": "AMERICAN REVIVAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00877506",
+      "name": "SPACE COAST LEADERSHIP PAC",
+      "total": 9000,
+      "count": 5,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00762328",
+      "name": "FIGHT ON PAC",
+      "total": 8500,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00493221",
+      "name": "GUARDIAN LEADERSHIP PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00483487",
+      "name": "BRINGING REPUBLICAN EXCELLENCE TO TOWN PAC",
+      "total": 6000,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00416594",
+      "name": "JIM JORDAN FOR CONGRESS",
+      "total": 6000,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00661272",
+      "name": "WITH HONOR PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00199711",
+      "name": "HEALTH CARE SERVICE CORPORATION EMPLOYEES' POLITICAL ACTION",
+      "total": 5000,
+      "count": 1,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00366468",
+      "name": "CORECIVIC INC. POLITICAL ACTION COMMITTEE (CORECIVIC PAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00753475",
+      "name": "BAPS PUBLIC AFFAIRS INC. POLITICAL ACTION COMMITTEE (BAPS P",
+      "total": 5000,
+      "count": 1,
+      "industry": "legal"
+     }
+    ],
+    "count": 143,
+    "total": 570250,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00908202&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00908202/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN08359": {
    "id": "H6TN08359",
@@ -1210,7 +2608,45 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN08359/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 226145,
+    "disbursements": 225794.28,
+    "cash_on_hand": 350.72,
+    "individual_unitemized": 4695,
+    "individual_itemized": 10950,
+    "pac": 2500,
+    "party": 0,
+    "self_funding": 208000,
+    "other": 0,
+    "coverage_end": "2026-09-30",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN08359/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00035451",
+      "name": "ALPA, INT'L PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "other"
+     }
+    ],
+    "count": 1,
+    "total": 2500,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00945840&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://gordonbryanforcongress.com/",
+    "as_filed": "GORDONBRYANFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00945840/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN08367": {
    "id": "H6TN08367",
@@ -1223,7 +2659,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN08367/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 39805,
+    "disbursements": 26326.87,
+    "cash_on_hand": 13478.13,
+    "individual_unitemized": 5905,
+    "individual_itemized": 32400,
+    "pac": 1500,
+    "party": 0,
+    "self_funding": 0,
+    "other": 0,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN08367/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00951509&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.kuhnforcongress.com/",
+    "as_filed": "WWW.KUHNFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00951509/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H2TN07103": {
    "id": "H2TN07103",
@@ -1506,7 +2972,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN09068/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 776210.64,
+    "disbursements": 652524.94,
+    "cash_on_hand": 1843018.39,
+    "individual_unitemized": 19535.23,
+    "individual_itemized": 322266.54,
+    "pac": 320482.5,
+    "party": 779.17,
+    "self_funding": 0,
+    "other": 113147.2,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN09068/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00068692",
+      "name": "FEDEX CORPORATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00267849",
+      "name": "ALLIED PILOTS ASSOCIATION POLITICAL ACTION COMMITT",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00001636",
+      "name": "SMART TD PAC",
+      "total": 10000,
+      "count": 5,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00360669",
+      "name": "SOUTHWEST AIRLINES PILOTS' ASSOCIATION POLITICAL A",
+      "total": 7500,
+      "count": 2,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00011114",
+      "name": "AMERICAN FEDERATION OF STATE, COUNTY AND MUNICIPAL",
+      "total": 7500,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00096156",
+      "name": "HONEYWELL INTERNATIONAL POLITICAL ACTION COMMITTEE",
+      "total": 7000,
+      "count": 2,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00219642",
+      "name": "ENTERPRISE HOLDINGS, INC. POLITICAL ACTION COMMITT",
+      "total": 6000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00097568",
+      "name": "EMPLOYEES OF RTX CORPORATION PAC",
+      "total": 6000,
+      "count": 3,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00530865",
+      "name": "TURKISH AMERICAN COALITION PAC",
+      "total": 5500,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00664318",
+      "name": "DEMOCRACY SUMMER LEADERSHIP PAC",
+      "total": 5500,
+      "count": 4,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00002840",
+      "name": "UAW - V - CAP (UAW VOLUNTARY COMMUNITY ACTION PROG",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00001016",
+      "name": "CARPENTERS LEGISLATIVE IMPROVEMENT COMMITTEE UNITE",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00617803",
+      "name": "JOBS, EDUCATION, & FAMILIES FIRST PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00271338",
+      "name": "AMERIPAC: THE FUND FOR A GREATER AMERICA",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00002469",
+      "name": "MACHINISTS NON PARTISAN POL LEAGUE OF THE INT'L AS",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00002766",
+      "name": "UNITED FOOD & COMMERCIAL WORKERS INTERNATIONAL UNI",
+      "total": 5000,
+      "count": 1,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00344234",
+      "name": "PAC TO THE FUTURE",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00039578",
+      "name": "COUNCIL OF INSURANCE AGENTS & BROKERS",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00110338",
+      "name": "AMERICAN CRYSTAL SUGAR COMPANY POLITICAL ACTION CO",
+      "total": 5000,
+      "count": 1,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00002089",
+      "name": "CWA-COPE POLITICAL CONTRIBUTIONS COMMITTEE",
+      "total": 5000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C90021163",
+      "name": "ATU-COPE SPECIAL HOLDING ACCOUNT",
+      "total": 5000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00131185",
+      "name": "AIRCRAFT OWNERS AND PILOTS ASSOCIATION POLITICAL A",
+      "total": 5000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00636753",
+      "name": "ACADEMY OF RAIL LABOR ATTORNEYS POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 2,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00024521",
+      "name": "AMERICAN ASSOCIATION FOR JUSTICE POLITICAL ACTION",
+      "total": 5000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00008268",
+      "name": "TRANSPORT WORKERS UNION POLITICAL CONTRIBUTIONS CO",
+      "total": 5000,
+      "count": 2,
+      "industry": "labor"
+     }
+    ],
+    "count": 124,
+    "total": 320482.5,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00422980&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "http://cohenforcongress.com/",
+    "as_filed": "HTTP://COHENFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00422980/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN09498": {
    "id": "H6TN09498",
@@ -1519,7 +3191,66 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN09498/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 76320.43,
+    "disbursements": 68714.11,
+    "cash_on_hand": 7606.32,
+    "individual_unitemized": 9506,
+    "individual_itemized": 50550,
+    "pac": 16200,
+    "party": 0,
+    "self_funding": 0,
+    "other": 64.43,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN09498/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00877183",
+      "name": "THE JUNO FUND",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00697581",
+      "name": "GO TIGERS PAC",
+      "total": 5000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00901033",
+      "name": "MONROE STREET PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00328989",
+      "name": "CONCERNED EXECUTIVES FOR HEALTHCARE PAC",
+      "total": 200,
+      "count": 1,
+      "industry": "health"
+     }
+    ],
+    "count": 4,
+    "total": 12700,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00950873&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://lamarforcongress.com/",
+    "as_filed": "LAMARFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00950873/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN09449": {
    "id": "H6TN09449",
@@ -1532,7 +3263,108 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN09449/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2344946.62,
+    "disbursements": 1500213.73,
+    "cash_on_hand": 844732.89,
+    "individual_unitemized": 1218046.14,
+    "individual_itemized": 1090893.5,
+    "pac": 32694.15,
+    "party": 0,
+    "self_funding": 278.38,
+    "other": 3034.45,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN09449/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00806893",
+      "name": "JANE FONDA CLIMATE PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00847137",
+      "name": "ENGAGE Y'ALL PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00843110",
+      "name": "LEADERS WE DESERVE",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00630665",
+      "name": "JUSTICE DEMOCRATS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00908806",
+      "name": "BUILDING BLUE",
+      "total": 5000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00898486",
+      "name": "DEMOCRACY SUMMER 2026 PAC",
+      "total": 2000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00863712",
+      "name": "ROOTED & READY PAC",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00786822",
+      "name": "MAXWELL FROST FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00932715",
+      "name": "FIG AND OLIVE ACTION PAC",
+      "total": 1644.3,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00674697",
+      "name": "SUNRISE PAC",
+      "total": 49.85,
+      "count": 1,
+      "industry": "other"
+     }
+    ],
+    "count": 10,
+    "total": 32694.15,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00922633&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://votejustinj.com/",
+    "as_filed": "VOTEJUSTINJ.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00922633/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN09464": {
    "id": "H6TN09464",
@@ -1545,7 +3377,185 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN09464/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 1549481.59,
+    "disbursements": 1132104.37,
+    "cash_on_hand": 417377.22,
+    "individual_unitemized": 3346.82,
+    "individual_itemized": 462648.3,
+    "pac": 82300,
+    "party": 0,
+    "self_funding": 1000000,
+    "other": 1186.47,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN09464/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00411116",
+      "name": "SPACE EXPLORATION TECHNOLOGIES CORP. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00165159",
+      "name": "REPUBLICAN MAINSTREET PARTNERSHIP PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00749481",
+      "name": "RAPTOR PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00467431",
+      "name": "THE EYE OF THE TIGER PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00719971",
+      "name": "SENATE EAGLE PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00068692",
+      "name": "FEDEX CORPORATION PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00592089",
+      "name": "ELECTING MAJORITY MAKING EFFECTIVE REPUBLICANS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00366781",
+      "name": "BUCKEYE LIBERTY PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00541862",
+      "name": "JASON SMITH FOR CONGRESS",
+      "total": 4000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00173096",
+      "name": "SERVICE CORPORATION INTERNATIONAL PAC",
+      "total": 3500,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00029447",
+      "name": "INTERNATIONAL ASSOCIATION OF FIREFIGHTERS INTERESTED IN REGISTRATION AND EDUCATION PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00834747",
+      "name": "HIGGINBOTHAM INSURANCE AGENCY, INC. PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00114447",
+      "name": "TENNESSEE BANKERS ASSOCIATION FEDERAL PAC",
+      "total": 2000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00416594",
+      "name": "JIM JORDAN FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00342790",
+      "name": "FRIENDS OF STEVE SCALISE FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00545749",
+      "name": "EMMER FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00741090",
+      "name": "DIANA FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00940106",
+      "name": "DGD PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00250449",
+      "name": "TENNESSEE MALT BEVERAGE ASSOCIATION FEDERAL PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00153445",
+      "name": "NATIONAL HEALTH CORPORATION PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00233056",
+      "name": "AUTOZONE INC COMMITTEE FOR BETTER GOVERNMENT",
+      "total": 1000,
+      "count": 1,
+      "industry": "government"
+     }
+    ],
+    "count": 21,
+    "total": 71500,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00949867&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.brenttaylorforcongress.com/",
+    "as_filed": "WWW.BRENTTAYLORFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00949867/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN09480": {
    "id": "H6TN09480",
@@ -1558,7 +3568,45 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN09480/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 228564,
+    "disbursements": 186734.72,
+    "cash_on_hand": 41829.28,
+    "individual_unitemized": 16469,
+    "individual_itemized": 201995,
+    "pac": 3000,
+    "party": 0,
+    "self_funding": 7100,
+    "other": 0,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN09480/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00744425",
+      "name": "PEOPLETEC, INC. POLITICAL ACTION COMMITTEE (PEOPLETEC PAC)",
+      "total": 3000,
+      "count": 1,
+      "industry": "issue"
+     }
+    ],
+    "count": 1,
+    "total": 3000,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00950287&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00950287/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN05355": {
    "id": "H6TN05355",
@@ -1571,7 +3619,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN05355/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 128633.6,
+    "disbursements": 125227.92,
+    "cash_on_hand": 3405.68,
+    "individual_unitemized": 10613.45,
+    "individual_itemized": 15595.6,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 100850,
+    "other": 1574.55,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN05355/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00899450&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.jimtorino.com/",
+    "as_filed": "WWW.JIMTORINO.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00899450/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN09472": {
    "id": "H6TN09472",
@@ -1584,7 +3662,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN09472/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 689616.95,
+    "disbursements": 468526.48,
+    "cash_on_hand": -237637.47,
+    "individual_unitemized": 1560.59,
+    "individual_itemized": 68056.36,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 620000,
+    "other": 0,
+    "coverage_end": "2026-07-17",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN09472/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00950238&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.votewarner.com/",
+    "as_filed": "WWW.VOTEWARNER.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00950238/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   },
   "H6TN08342": {
    "id": "H6TN08342",
@@ -1597,7 +3705,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN08342/",
    "listed": true,
    "first_listed": "2026-10-13",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-13",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 8119,
+    "disbursements": 7975,
+    "cash_on_hand": 244,
+    "individual_unitemized": 759,
+    "individual_itemized": 1320,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 6000,
+    "other": 40,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN08342/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00948885&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": "HORACETAYLORTN@COM",
+    "source_url": "https://www.fec.gov/data/committee/C00948885/",
+    "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-13",
+   "cycle": 2026
   }
  }
 }
