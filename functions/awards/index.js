@@ -5,8 +5,12 @@
 // daily in GitHub Actions (tools/load_gov_money.py awards, tools/usaspending.py)
 // and this page reads only what they stored (federal_awards_cache). An
 // organization not looked up yet is queued (federal_awards_wanted) and looked up
-// first on the next run. Shown as facts on their own: never tied in words to a
-// vote, a contribution or lobbying (docs/funding.md).
+// first on the next run, but only when a visitor clicked through from a page on
+// the site: every organization the site names is looked up monthly anyway, and a
+// crawler (or anyone typing names into the address) never adds to the queue.
+// Every answer is kept at the edge for five minutes, so repeat visits don't read
+// D1. Shown as facts on their own: never tied in words to a vote, a contribution
+// or lobbying (docs/funding.md).
 import { page, esc, guard, edgeCached, fmtDate } from "../_lib/render.js";
 import { HOW } from "../_lib/gov-money.js";
 
@@ -23,12 +27,25 @@ export function nameKey(name) {
   return words.filter((w) => !["the", "inc", "incorporated", "llc", "corp", "corporation", "co", "ltd"].includes(w)).join(" ");
 }
 
-/** The stored lookup for this name: {result, fetched_at}, or {queued: true} after adding it to the queue; null without the tables. */
-export async function storedAwards(db, name) {
+/** Did this request come from a click on one of the site's own pages? Pure. */
+export function fromSite(request) {
+  const site = request.headers.get("Sec-Fetch-Site");
+  if (site) return site === "same-origin";
+  const ref = request.headers.get("Referer");
+  try {
+    return !!ref && new URL(ref).origin === new URL(request.url).origin;
+  } catch (_) {
+    return false;
+  }
+}
+
+/** The stored lookup for this name: {result, fetched_at}, or {queued} (true when added to the queue now); null without the tables. */
+export async function storedAwards(db, name, { queue = true } = {}) {
   const key = nameKey(name);
   try {
     const row = await db.prepare("SELECT result, fetched_at FROM federal_awards_cache WHERE name_key = ?").bind(key).first();
     if (row) return { result: JSON.parse(row.result), fetched_at: row.fetched_at };
+    if (!queue) return { queued: false };
     await db.prepare("INSERT OR IGNORE INTO federal_awards_wanted (name_key, name) VALUES (?, ?)").bind(key, name).run();
     return { queued: true };
   } catch (err) {
@@ -54,20 +71,17 @@ export function recipientBlock(r) {
 </section>`;
 }
 
-async function render(env, url) {
+async function render(env, url, request) {
   const name = (url.searchParams.get("name") || "").trim().replace(/\s+/g, " ").slice(0, 200);
   const intro = `<header class="page-head"><p class="label">Federal awards</p><h1>${name ? esc(name) : "Federal awards"}</h1></header>`;
   const note = (checked) =>
     `<p class="hint">Contracts and grants: federal money obligated to each recipient, by awarding agency and fiscal year (October to September), as agencies report it to USAspending.gov. Only recipients with exactly this name are shown, each separately, since organizations in different places can share a name.${checked ? ` Looked up ${esc(fmtDate(checked))}; looked up again monthly.` : ""} <a class="tap" href="${HOW}">How this works</a></p>`;
   const opts = { tab: "reps", back: ["Reps", "/reps/"] };
   if (nameKey(name).length < 3) return page("Federal awards", `${intro}<p class="small">Open this page from an organization's "Federal awards" link.</p>${note()}`, opts);
-  const got = env.DB ? await storedAwards(env.DB, name) : null;
+  const got = env.DB ? await storedAwards(env.DB, name, { queue: fromSite(request) }) : null;
   const search = `<a class="inline-link" href="https://www.usaspending.gov/search" target="_blank" rel="noopener">Search USAspending.gov ↗</a>`;
-  if (!got || got.queued) {
-    // Not kept at the edge, so the page shows the result as soon as it's stored.
-    const res = page(`Federal awards: ${name}`, `${intro}<p class="small">This organization's federal awards haven't been looked up yet. They're looked up from USAspending.gov once a day, and this one is now near the front of the line: check back tomorrow. ${search}</p>${note()}`, opts);
-    res.headers.set("Cache-Control", "no-store");
-    return res;
+  if (!got || "queued" in got) {
+    return page(`Federal awards: ${name}`, `${intro}<p class="small">This organization's federal awards haven't been looked up yet. They're looked up from USAspending.gov once a day${got && got.queued ? ", and this one is now near the front of the line" : ""}: check back tomorrow. ${search}</p>${note()}`, opts);
   }
   const r = got.result;
   const body = r.recipients.length
@@ -76,4 +90,4 @@ async function render(env, url) {
   return page(`Federal awards: ${name}`, `${intro}${body}${note(r.checked || String(got.fetched_at).slice(0, 10))}`, opts);
 }
 
-export const onRequestGet = guard((context) => edgeCached(context, 300, () => render(context.env, new URL(context.request.url))), { tab: "reps" });
+export const onRequestGet = guard((context) => edgeCached(context, 300, () => render(context.env, new URL(context.request.url), context.request)), { tab: "reps" });
