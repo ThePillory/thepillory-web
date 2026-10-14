@@ -4,7 +4,7 @@
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=IN&candidate_status=C",
  "list_built_on": "2026-10-13",
- "built_on": "2026-10-13",
+ "built_on": "2026-10-14",
  "senate_up": false,
  "candidates": {
   "H2IN01172": {
@@ -18,7 +18,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2IN01172/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 172055.28,
@@ -76,7 +76,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0IN01150/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 2386267.93,
@@ -295,7 +295,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN01231/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 2376255.95,
@@ -402,7 +402,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN01223/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 58804,
@@ -445,7 +445,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN02189/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 355589.42,
@@ -488,7 +488,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2IN02295/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 5246030.32,
@@ -707,7 +707,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0IN03198/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 839564.67,
@@ -926,7 +926,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN03294/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 136340.3,
@@ -969,7 +969,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8IN04199/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 358292.51,
+    "disbursements": 481341.66,
+    "cash_on_hand": 91560.58,
+    "individual_unitemized": 68518.17,
+    "individual_itemized": 90581.63,
+    "pac": 197200,
+    "party": 0,
+    "self_funding": 0,
+    "other": 1992.71,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H8IN04199/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00411116",
+      "name": "SPACE EXPLORATION TECHNOLOGIES CORP. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00376343",
+      "name": "NATIONAL CORN GROWERS ASSOCIATION PAC (CORNPAC)",
+      "total": 10000,
+      "count": 5,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00193631",
+      "name": "THE FARM CREDIT COUNCIL POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00103978",
+      "name": "INDIANA ACRE/INDIANA STATEWIDE ASSOCIATION OF RURAL ELECTRIC COOPERATIVES DBA INDIANA ELECTRIC COOPERATIVES FEDERAL PAC",
+      "total": 6500,
+      "count": 3,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00467431",
+      "name": "THE EYE OF THE TIGER POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00592089",
+      "name": "ELECTING MAJORITY MAKING EFFECTIVE REPUBLICANS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00797670",
+      "name": "AMERICAN ISRAEL PUBLIC AFFAIRS COMMITTEE POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "legal"
+     },
+     {
+      "committee_id": "C00147173",
+      "name": "WINE AND SPIRITS SHOLESALERS OF AMERICA PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00040998",
+      "name": "NATIONAL AUTOMOBILE DEALERS ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00691956",
+      "name": "INDIANA FARM BUREAU INC ELECT PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00028787",
+      "name": "NATIONAL CATTLEMEN'S BEEF ASSOCIATION (NCBA-PAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00475665",
+      "name": "GROWTH ENERGY PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00010868",
+      "name": "AMERICAN COUNCIL OF ENGINEERING COMPANIES (ACEC/PAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "construction"
+     },
+     {
+      "committee_id": "C00379628",
+      "name": "NUCOR CORPORATION POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00010421",
+      "name": "ASSOCIATED BUILDERS AND CONTRACTORS, INC. POLITICAL ACTION COMMITTEE (ABC PAC)",
+      "total": 5000,
+      "count": 2,
+      "industry": "construction"
+     },
+     {
+      "committee_id": "C00087874",
+      "name": "CONAGRA BRANDS, INC. GOOD GOVERNMENT ASSOCIATION",
+      "total": 5000,
+      "count": 2,
+      "industry": "government"
+     },
+     {
+      "committee_id": "C00030718",
+      "name": "NATIONAL ASSOCIATION OF REALTORS POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 3,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00000901",
+      "name": "BUILD POLITICAL ACTION COMMITTEE OF THE NATIONAL ASSOCIATION OF HOME BUILDERS (BUILDPAC)",
+      "total": 4000,
+      "count": 2,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00822767",
+      "name": "RUDY FOR INDIANA",
+      "total": 4000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00758813",
+      "name": "MNM PAC",
+      "total": 4000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00416594",
+      "name": "JIM JORDAN FOR CONGRESS",
+      "total": 4000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00113241",
+      "name": "NATIONAL APARTMENT ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 3500,
+      "count": 2,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00204099",
+      "name": "DEERE & COMPANY PAC (AKA JOHN DEERE PAC)",
+      "total": 3500,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00197228",
+      "name": "ELEVANCE HEALTH, INC. POLITICAL ACTION COMMITTEE (ELEVANCE HEALTH PAC)",
+      "total": 3000,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00408468",
+      "name": "AMERICAN SOYBEAN ASSOCIATION PAC (SOYPAC)",
+      "total": 3000,
+      "count": 2,
+      "industry": "other"
+     }
+    ],
+    "count": 65,
+    "total": 188000,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00662940&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.electjimbaird.com/",
+    "as_filed": "WWW.ELECTJIMBAIRD.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00662940/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "H6IN04193": {
    "id": "H6IN04193",
@@ -982,7 +1188,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN04193/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 20377.01,
@@ -1025,7 +1231,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4IN04248/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 197600,
@@ -1160,7 +1366,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN04185/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 5605.38,
@@ -1203,7 +1409,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8IN04140/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 11233.8,
+    "disbursements": 9906,
+    "cash_on_hand": 1327.8,
+    "individual_unitemized": 5169.45,
+    "individual_itemized": 3469.17,
+    "pac": 100,
+    "party": 0,
+    "self_funding": 2495.18,
+    "other": 0,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H8IN04140/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00652255&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://joe4hoosiers.com/",
+    "as_filed": "JOE4HOOSIERS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00652255/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "H6IN04227": {
    "id": "H6IN04227",
@@ -1216,7 +1452,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN04227/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 7969.48,
@@ -1259,7 +1495,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN05307/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 582086.67,
@@ -1366,7 +1602,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN05273/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 64739.51,
@@ -1409,7 +1645,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4IN03182/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 134770.58,
@@ -1460,7 +1696,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN05315/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 180411.26,
@@ -1503,7 +1739,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4IN05286/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 33483.09,
@@ -1546,7 +1782,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0IN05326/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 1327227.97,
@@ -1765,7 +2001,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN06271/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 19201.58,
@@ -1808,7 +2044,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN06255/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 6292.84,
@@ -1851,7 +2087,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN06263/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 22397.04,
@@ -1894,7 +2130,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4IN06185/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 2426804.72,
@@ -2113,7 +2349,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN06230/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 37046.11,
@@ -2156,7 +2392,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8IN07184/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13"
+   "last_listed": "2026-10-14"
   },
   "H6IN07394": {
    "id": "H6IN07394",
@@ -2169,7 +2405,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN07394/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 295528.22,
@@ -2220,7 +2456,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN07469/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 118146.18,
@@ -2263,7 +2499,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN08293/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 294502.04,
@@ -2314,7 +2550,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4IN08249/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 1171366.18,
@@ -2533,7 +2769,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN09226/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 128178.63,
@@ -2576,7 +2812,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN09143/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 1856572.42,
@@ -2795,7 +3031,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN09242/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 105510.44,
@@ -2838,7 +3074,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4IN09163/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 171569.6,
@@ -2881,7 +3117,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN09309/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 28126.99,
@@ -2924,7 +3160,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IN09283/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-13",
+   "last_listed": "2026-10-14",
    "totals": {
     "cycle": 2026,
     "receipts": 0,
