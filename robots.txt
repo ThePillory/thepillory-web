@@ -1,0 +1,10 @@
+# ThePillory (thepillory.co). Hand-written; see functions/_lib/crawl.js.
+# Every page has one plain address. Filtered, sorted, searched and later pages
+# (anything with a query string) are the same records in another order, so
+# crawlers are asked to skip them; those pages also say noindex.
+User-agent: *
+Disallow: /*?
+Disallow: /admin/
+Disallow: /api/
+Disallow: /saved/
+Allow: /

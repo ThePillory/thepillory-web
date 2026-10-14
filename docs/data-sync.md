@@ -102,6 +102,17 @@ The pages never compute from the full `votes` and `vote_positions` tables on a v
 - **Edge cache:** pages that are the same for every visitor are kept at Cloudflare's edge for 5 minutes (`edgeCached` in `functions/_lib/render.js`): Laws, rep pages, the map, state, county and district pages, and the hub and Reps list for visitors without saved districts. Pages built from a visitor's districts are never stored at the edge.
 - **One section at a time:** each section of a data-heavy page loads on its own (`loadSection`). If one can't load, it shows "Couldn't load this section right now" and the rest of the page still shows; that page isn't cached. If a whole page fails, the site's own error page shows (`guard`), not Cloudflare's. Failures are logged in the Pages Functions logs as `section "…" failed`.
 
+
+### Crawlers (October 2026)
+
+A crawler (mostly from OVH addresses in France) fetched `/awards/?name=…` about 2,200 times in a day: every organization line on every rep and bill page links to its own awards address, and each name not looked up yet used to write a row to `federal_awards_wanted` and be served uncached. Every list's filter and "Load more" links make more addresses the same way. Now:
+
+- **Unknown addresses stop before D1** (`functions/_lib/crawl.js`, run by `functions/_middleware.js` on every page but `/admin/`): only the query parameters the site's own links and forms use (`KNOWN`), each once, at most 8, values up to 300 characters; `offset` up to `MAX_OFFSET` (1,250) and `page` up to `MAX_PAGE` (50). Anything else gets a short plain-text 400. Tracking tags (`utm_*`, `fbclid`, …) are dropped with a 301. Files (`/assets/pillory.css?v=53`) pass untouched. **A new query parameter on a page must be added to `KNOWN`**, or its links get a 400.
+- **Crawlers are told to stay out:** `robots.txt` disallows every address with a query string (`Disallow: /*?`) and `/admin/`, `/api/`, `/saved/`. Pages with a query string get `<meta name="robots" content="noindex, nofollow">` and the same `X-Robots-Tag` header; every link to an address with a query string gets `rel="nofollow"`; a "Load more" or "Older" link past the cap becomes "That's as far as this list goes here."
+- **Finished pages are kept at the edge:** the middleware's archived-copy links read D1 (`linkInfo()`), on every page, even ones `edgeCached` already kept. A response marked `public, max-age=N` (the same for everyone) is now kept finished for N seconds and served without running the page or the query. Pages that read cookies are `private` and never kept.
+- **`/awards/`** answers from the edge for five minutes, "not looked up yet" included, and adds a name to the lookup queue only when a visitor clicked through from one of the site's pages (`Sec-Fetch-Site: same-origin`, or a same-site `Referer`): every organization the site names is looked up monthly anyway.
+- A rate-limiting rule in Cloudflare's dashboard (Security → WAF → Rate limiting rules) caps requests per address; it's set there, not in the repo.
+
 ## Entering county officials
 
 See `data/README.md`. In short: fill in `name`, `source_url` and `last_verified` for each supervisor in `data/county-officials.json`, then merge. The next sync loads them. Entries missing a required field are skipped, and the log says why.
