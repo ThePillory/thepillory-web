@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=NJ&candidate_status=C",
- "built_on": "2026-10-13",
+ "built_on": "2026-10-14",
  "senate_up": true,
  "senate": [
   {
@@ -379,6 +379,14 @@
    }
   ],
   "10": [
+   {
+    "id": "H4NJ10135",
+    "name": "BUCCO, CARMEN",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4NJ10135/",
+    "committee": "C00927533"
+   },
    {
     "id": "H4NJ10176",
     "name": "MCIVER, LAMONICA",

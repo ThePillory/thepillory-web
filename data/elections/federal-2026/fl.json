@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=FL&candidate_status=C",
- "built_on": "2026-10-13",
+ "built_on": "2026-10-14",
  "senate_up": true,
  "senate": [
   {
@@ -1550,6 +1550,14 @@
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6FL14203/",
     "committee": "C00949099"
+   },
+   {
+    "id": "H6FL24061",
+    "name": "DARO, ANDY",
+    "party": "NO PARTY AFFILIATION",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6FL24061/",
+    "committee": "C00951046"
    },
    {
     "id": "H6FL24129",
