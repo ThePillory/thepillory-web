@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=UT&candidate_status=C",
- "list_built_on": "2026-10-13",
+ "list_built_on": "2026-10-14",
  "built_on": "2026-10-14",
  "senate_up": false,
  "candidates": {
@@ -268,7 +268,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8UT04053/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2262254.6,
+    "disbursements": 1977908.28,
+    "cash_on_hand": 299349.65,
+    "individual_unitemized": 223153.38,
+    "individual_itemized": 1754340.99,
+    "pac": 193290.83,
+    "party": 0,
+    "self_funding": 0,
+    "other": 91469.4,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H8UT04053/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00030718",
+      "name": "NATIONAL ASSOCIATION OF REALTORS POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00004275",
+      "name": "AMERICAN BANKERS ASSOCIATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00024521",
+      "name": "AAJ PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00470666",
+      "name": "SKIPAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00757419",
+      "name": "SAVE DEMOCRACY PAC (SD PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00271338",
+      "name": "AMERIPAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00130773",
+      "name": "NMHC PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00158881",
+      "name": "NEW YORK LIFE INSURANCE COMPANY PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00029504",
+      "name": "INTERNATIONAL UNION OF OPERATING ENGINEERS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00233304",
+      "name": "COMMERCIAL REAL ESTATE DEVELOPMENT PAC (CREDA PAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00082800",
+      "name": "PACIFIC POWER / ROCKY MOUNTAIN POWER PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00551812",
+      "name": "BREAD FINANCIAL HOLDINGS INC. PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00007880",
+      "name": "AMERICA'S CREDIT UNION PAC OF CREDIT UNION NATIONAL ASSOCIATION, INC",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00409730",
+      "name": "NEW DEMOCRAT COALITION POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00573709",
+      "name": "CA LUV PAC (CALIFORNIA LEADERSHIP UNITED FOR VICTORY PAC)",
+      "total": 5000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00252940",
+      "name": "LEAGUE OF CONSERVATION VOTERS ACTION FUND",
+      "total": 4900,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00653816",
+      "name": "COMMITTEE TO ELECT JARED GOLDEN",
+      "total": 4000,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00344721",
+      "name": "MATHESON FOR CONGRESS",
+      "total": 4000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00824342",
+      "name": "WAY BACK PAC",
+      "total": 3500,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00517235",
+      "name": "TURQUOISE PAC",
+      "total": 3500,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00066472",
+      "name": "INSURING AMERICA PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00082792",
+      "name": "ELI LILLY AND COMPANY PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "pharma"
+     },
+     {
+      "committee_id": "C00386029",
+      "name": "HNTB HOLDINGS LTD PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00032979",
+      "name": "DRIVE COMMITTEE",
+      "total": 2500,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00682492",
+      "name": "ONE MAIN HOLDINGS INC PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "other"
+     }
+    ],
+    "count": 65,
+    "total": 192900,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00658633&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://benmcadamsutah.com/",
+    "as_filed": "HTTPS://BENMCADAMSUTAH.COM/",
+    "source_url": "https://www.fec.gov/data/committee/C00658633/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "H6UT01228": {
    "id": "H6UT01228",

@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=KY&candidate_status=C",
- "list_built_on": "2026-10-13",
+ "list_built_on": "2026-10-14",
  "built_on": "2026-10-14",
  "senate_up": true,
  "candidates": {
@@ -109,7 +109,73 @@
    "fec_url": "https://www.fec.gov/data/candidate/S0KY00339/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2373624.84,
+    "disbursements": 2370499.93,
+    "cash_on_hand": 3124.91,
+    "individual_unitemized": 1239099.77,
+    "individual_itemized": 1085566.31,
+    "pac": 25000,
+    "party": 0,
+    "self_funding": 6000,
+    "other": 17958.76,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S0KY00339/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00859538",
+      "name": "ALSOPAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00786202",
+      "name": "CROSSPARTISAN PAC I",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00544254",
+      "name": "PERIMETER PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00868976",
+      "name": "HOLD THE LINE",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00762666",
+      "name": "DEMOCRATIC MAJORITY ACTION",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     }
+    ],
+    "count": 5,
+    "total": 25000,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00922302&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00922302/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "S6KY00302": {
    "id": "S6KY00302",
@@ -530,7 +596,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8KY02031/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 4707592.6,
+    "disbursements": 3355565.93,
+    "cash_on_hand": 1718271.11,
+    "individual_unitemized": 8726.89,
+    "individual_itemized": 1662073.39,
+    "pac": 3025480,
+    "party": 0,
+    "self_funding": 0,
+    "other": 11312.32,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H8KY02031/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00388470",
+      "name": "EMERGENCY DEPARTMENT PRACTICE MANAGEMENT ASSOCIATION PAC (EDPMA-PAC)",
+      "total": 15000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00382424",
+      "name": "AMERICAN COLLEGE OF SURGEONS PROFESSIONAL ASSOCIATION PAC",
+      "total": 13000,
+      "count": 6,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00199257",
+      "name": "ENERGY MARKETERS OF AMERICA SMALL BUSINESS COMMITTEE PAC",
+      "total": 11000,
+      "count": 6,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00425439",
+      "name": "THOROUGHBRED PAC",
+      "total": 10500,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00408260",
+      "name": "THE GRANT THORNTON ADVISORS LLC POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00330647",
+      "name": "ECHOSTAR & DISH NETWORK CORPORATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00239848",
+      "name": "NUCLEAR ENERGY INSTITUTE FEDERAL POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00112896",
+      "name": "CONOCOPHILLIPS SPIRIT PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00428623",
+      "name": "GOOGLE NETPAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00108209",
+      "name": "DOMINION ENERGY, INC. POLITICAL ACTION COMMITTEE - DOMINION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00002972",
+      "name": "AMERICA'S ELECTRIC COOPERATIVES PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00365122",
+      "name": "VISA, INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00067231",
+      "name": "HCA GOOD GOVERNMENT FUND",
+      "total": 10000,
+      "count": 4,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00002261",
+      "name": "FEDERATION OF AMERICAN HOSPITALS PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00390963",
+      "name": "ARDENT LEGACY HOLDINGS LLC GOOD GOVERNMENT FUND",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00274431",
+      "name": "UNITED HEALTH GROUP PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00004473",
+      "name": "NATIONAL TELECOMMUNICATIONS COOPERATIVE ASSOCIATION RURAL BROADBAND PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00311878",
+      "name": "MEDTRONIC INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "pharma"
+     },
+     {
+      "committee_id": "C00342766",
+      "name": "HF SINCLAIR POLITICAL ACTION COMMITTEE ('DINO PAC')",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00424143",
+      "name": "ALLIANCE FOR PHARMACY COMPOUNDING PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "pharma"
+     },
+     {
+      "committee_id": "C00164145",
+      "name": "USAA EMPLOYEE PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00034405",
+      "name": "INTERNATIONAL PAPER PAC (IP-PAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00383976",
+      "name": "FRIENDS OF COMMUNITY ONCOLOGY PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00284885",
+      "name": "THE HOME DEPOT INC. POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "retail"
+     },
+     {
+      "committee_id": "C00522094",
+      "name": "PSYCHOLOGY PAC OF THE AMERICAN PSYCHOLOGICAL ASSOCIATION SERVICES",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     }
+    ],
+    "count": 654,
+    "total": 2988730,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00445023&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.brettguthrie.com/",
+    "as_filed": "WWW.BRETTGUTHRIE.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00445023/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "H8KY02080": {
    "id": "H8KY02080",
@@ -543,7 +815,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8KY02080/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 3800,
+    "disbursements": 23339.06,
+    "cash_on_hand": 2023.02,
+    "individual_unitemized": 300,
+    "individual_itemized": 3500,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 0,
+    "other": 0,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H8KY02080/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00668194&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://hank4ky.com/",
+    "as_filed": "HANK4KY.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00668194/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "H6KY02092": {
    "id": "H6KY02092",

@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=AL&candidate_status=C",
- "list_built_on": "2026-10-13",
+ "list_built_on": "2026-10-14",
  "built_on": "2026-10-14",
  "senate_up": true,
  "candidates": {
@@ -18,7 +18,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6AL00500/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 74362.27,
+    "disbursements": 74362.27,
+    "cash_on_hand": 0,
+    "individual_unitemized": 2808,
+    "individual_itemized": 59863.61,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 11690.66,
+    "other": 0,
+    "coverage_end": "2026-06-04",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6AL00500/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00935403&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.sethburtonforsenate.com/",
+    "as_filed": "WWW.SETHBURTONFORSENATE.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00935403/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "S6AL00443": {
    "id": "S6AL00443",
@@ -31,7 +61,59 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6AL00443/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 1920538.54,
+    "disbursements": 1806649.59,
+    "cash_on_hand": 113888.95,
+    "individual_unitemized": 300760.91,
+    "individual_itemized": 1608418.67,
+    "pac": 11000,
+    "party": 0,
+    "self_funding": 0,
+    "other": 358.96,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6AL00443/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00481200",
+      "name": "NATIONAL ASSOCIATION FOR GUN RIGHTS INC PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00570226",
+      "name": "SEAL PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00638882",
+      "name": "RFC FEDERAL PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "other"
+     }
+    ],
+    "count": 3,
+    "total": 11000,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00906453&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00906453/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "S6AL00427": {
    "id": "S6AL00427",
@@ -44,7 +126,45 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6AL00427/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 154254.02,
+    "disbursements": 151838.14,
+    "cash_on_hand": 2415.88,
+    "individual_unitemized": 88072.02,
+    "individual_itemized": 63652,
+    "pac": 20,
+    "party": 0,
+    "self_funding": 2510,
+    "other": 0,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6AL00427/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00875377",
+      "name": "HEART OF DIXIE OBLIGATION PAC",
+      "total": 20,
+      "count": 2,
+      "industry": "other"
+     }
+    ],
+    "count": 1,
+    "total": 20,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00901017&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.dakarailarriett.com/",
+    "as_filed": "WWW.DAKARAILARRIETT.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00901017/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "S6AL00450": {
    "id": "S6AL00450",
@@ -57,7 +177,185 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6AL00450/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 1298351.43,
+    "disbursements": 1298351.43,
+    "cash_on_hand": 0,
+    "individual_unitemized": 4596.37,
+    "individual_itemized": 1129068.67,
+    "pac": 91500,
+    "party": 0,
+    "self_funding": 0,
+    "other": 73186.39,
+    "coverage_end": "2026-06-30",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6AL00450/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00219642",
+      "name": "ENTERPRISE HOLDINGS INC./ENTERPRISE MOBILITY POLITICAL ACTI",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00268904",
+      "name": "TRINITY INDUSTRIES EMPLOYEE POLITICAL ACTION COMMITTEE (SF)",
+      "total": 5000,
+      "count": 1,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00457242",
+      "name": "BLUE CROSS BLUE SHIELD OF ALABAMA PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00066472",
+      "name": "AMERICAN PROPERTY CASUALTY INSURANCE ASSOCIATION (INSURING A",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00272724",
+      "name": "MAYNARD NEXSEN PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00147173",
+      "name": "WINE & SPIRITS WHOLESALERS OF AMERICA PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00433805",
+      "name": "CHECKSMART FINANCIAL LLC (CCFI LLC) PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00148031",
+      "name": "CATERPILLAR INC PAC (CATPAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00000901",
+      "name": "BUILD PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00368902",
+      "name": "DAVID VOLKERT & ASSOCIATES INC. POLITICAL ACTION COMMITTEE ('DVA/HC PAC')",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00699439",
+      "name": "ZILLOW GROUP PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00214981",
+      "name": "TEXAS FARM BUREAU AGFUND",
+      "total": 5000,
+      "count": 1,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00094573",
+      "name": "ELECT - THE PAC OF THE ALABAMA FARMERS FEDERATION",
+      "total": 5000,
+      "count": 1,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00432252",
+      "name": "REGIONS FINANCIAL CORPORATION POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00040998",
+      "name": "NATIONAL AUTOMOBILE DEALERS ASSOCIATION PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00400424",
+      "name": "TORCH TECHNOLOGIES INC PAC ACCOUNT",
+      "total": 3500,
+      "count": 1,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00082917",
+      "name": "AGC PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00730903",
+      "name": "MFBF FARM FUND PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00589044",
+      "name": "THE WESTERVELT COMPANY PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00210526",
+      "name": "AMERICAN FIDELITY CORPORATION PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00887810",
+      "name": "APP BIG FAMILY PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "other"
+     }
+    ],
+    "count": 21,
+    "total": 91500,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00906545&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00906545/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "S6AL00476": {
    "id": "S6AL00476",
@@ -70,7 +368,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6AL00476/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 3787323.72,
+    "disbursements": 3285066.21,
+    "cash_on_hand": 627389.17,
+    "individual_unitemized": 346547.67,
+    "individual_itemized": 2269056.81,
+    "pac": 881597.83,
+    "party": 0,
+    "self_funding": 50000,
+    "other": 240121.41,
+    "coverage_end": "2026-09-30",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6AL00476/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00954974&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.barrymooreforalabama.com/",
+    "as_filed": "WWW.BARRYMOOREFORALABAMA.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00954974/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "S6AL00484": {
    "id": "S6AL00484",
@@ -83,7 +411,12 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6AL00484/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": null,
+   "organizations": null,
+   "website": null,
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "S6AL00435": {
    "id": "S6AL00435",
@@ -96,7 +429,59 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6AL00435/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 166055.63,
+    "disbursements": 163371.9,
+    "cash_on_hand": 2683.73,
+    "individual_unitemized": 52673.11,
+    "individual_itemized": 98222.57,
+    "pac": 15000,
+    "party": 0,
+    "self_funding": 150.84,
+    "other": 9.11,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6AL00435/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00027342",
+      "name": "INTERNATIONAL BROTHERHOOD OF ELECTRICAL WORKERS POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00629709",
+      "name": "NO LABELS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00771113",
+      "name": "COUNTRY FIRST",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     }
+    ],
+    "count": 3,
+    "total": 15000,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00901777&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://kyleforalabama.com/",
+    "as_filed": "KYLEFORALABAMA.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00901777/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "S6AL00468": {
    "id": "S6AL00468",
@@ -109,7 +494,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6AL00468/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 2015962.9,
+    "disbursements": 2015962.9,
+    "cash_on_hand": 0,
+    "individual_unitemized": 76.03,
+    "individual_itemized": 38550,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 1914000,
+    "other": 63336.87,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6AL00468/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00914218&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.walkerforalabama.com/",
+    "as_filed": "WWW.WALKERFORALABAMA.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00914218/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "S6AL00518": {
    "id": "S6AL00518",
@@ -122,7 +537,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6AL00518/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 80554.63,
+    "disbursements": 62271.98,
+    "cash_on_hand": 18282.65,
+    "individual_unitemized": 1561.35,
+    "individual_itemized": 8350.05,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 70643.23,
+    "other": 0,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6AL00518/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00935783&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://wessforsenate.com/",
+    "as_filed": "WESSFORSENATE.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00935783/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "S6AL00393": {
    "id": "S6AL00393",
@@ -135,7 +580,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6AL00393/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 17374.48,
+    "disbursements": 16808.44,
+    "cash_on_hand": 566.04,
+    "individual_unitemized": 14599.48,
+    "individual_itemized": 2775,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 0,
+    "other": 0,
+    "coverage_end": "2026-04-29",
+    "last_report": "PRE-PRIMARY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6AL00393/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00895904&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.markwheelerforsenate.com/",
+    "as_filed": "WWW.MARKWHEELERFORSENATE.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00895904/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "H0AL01055": {
    "id": "H0AL01055",

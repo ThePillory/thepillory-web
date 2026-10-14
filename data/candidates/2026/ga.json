@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=GA&candidate_status=C",
- "list_built_on": "2026-10-13",
+ "list_built_on": "2026-10-14",
  "built_on": "2026-10-14",
  "senate_up": true,
  "candidates": {
@@ -18,7 +18,17 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6GA00267/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": null,
+   "organizations": null,
+   "website": {
+    "url": "https://www.reaganboxforcongress.com/",
+    "as_filed": "WWW.REAGANBOXFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00818807/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "S6GA00374": {
    "id": "S6GA00374",
@@ -31,7 +41,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6GA00374/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 7300242.83,
+    "disbursements": 10259563.33,
+    "cash_on_hand": 59609.84,
+    "individual_unitemized": 489314.97,
+    "individual_itemized": 1447975.51,
+    "pac": 1098775,
+    "party": 0,
+    "self_funding": 3500000,
+    "other": 764177.35,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6GA00374/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00480228",
+      "name": "CONTINUING AMERICA'S STRENGTH AND SECURITY PAC",
+      "total": 15000,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00024968",
+      "name": "AMERICAN OPTOMETRIC ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 15000,
+      "count": 3,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00789370",
+      "name": "COHERUS BIOSCIENCES PAC",
+      "total": 15000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00383976",
+      "name": "FRIENDS OF COMMUNITY ONCOLOGY PAC",
+      "total": 13000,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00193854",
+      "name": "AMERICAN PHARMACISTS ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "pharma"
+     },
+     {
+      "committee_id": "C00536573",
+      "name": "ABBVIE PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "pharma"
+     },
+     {
+      "committee_id": "C00712695",
+      "name": "VITORIA PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00770255",
+      "name": "SIX PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00428052",
+      "name": "MAJORITY COMMITTEE PAC--MC PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00683508",
+      "name": "FOREVER YOUTH ORGANIZATION UTILIZING A NEW GENERATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00756825",
+      "name": "DELIVERS PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00572271",
+      "name": "BUILDING AMERICA'S REPUBLICAN REPRESENTATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00483487",
+      "name": "BRINGING REPUBLICAN EXCELLENCE TO TOWN PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00686816",
+      "name": "AMERICA RELOADED",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00424143",
+      "name": "ALLIANCE FOR PHARMACY COMPOUNDING PAC (COMP PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "pharma"
+     },
+     {
+      "committee_id": "C00332833",
+      "name": "CARDINAL HEALTH INC. PAC AKA CARDINAL HEALTH COMPANIES PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00010983",
+      "name": "JOHNSON & JOHNSON PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "pharma"
+     },
+     {
+      "committee_id": "C00104802",
+      "name": "DELTA AIR LINES PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00400929",
+      "name": "CENCORA, INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00251876",
+      "name": "AMGEN INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "pharma"
+     },
+     {
+      "committee_id": "C00012880",
+      "name": "AMERICAN PHYSICAL THERAPY ASSOCIATION PHYSICAL THERAPY PAC (PT-PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00030809",
+      "name": "NATIONAL COMMUNITY PHARMACISTS ASSOCIATION - PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "pharma"
+     },
+     {
+      "committee_id": "C00433060",
+      "name": "REPUBLICAN GOVERNANCE GROUP/TUESDAY GROUP PAC",
+      "total": 8000,
+      "count": 8,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00332395",
+      "name": "VIATRIS INC. PAC (VIAPAC)",
+      "total": 7500,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00543371",
+      "name": "BIOMARIN PHARMACEUTICAL INC. PAC AKA BIOMARIN PAC",
+      "total": 7500,
+      "count": 2,
+      "industry": "pharma"
+     }
+    ],
+    "count": 302,
+    "total": 1097025,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00543967&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://buddycarterforcongress.com/",
+    "as_filed": "BUDDYCARTERFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00543967/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "S6GA00366": {
    "id": "S6GA00366",
@@ -44,7 +260,17 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6GA00366/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": null,
+   "organizations": null,
+   "website": {
+    "url": "https://www.stateoflocnation.com/",
+    "as_filed": "WWW.STATEOFLOCNATION.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00857128/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "S6GA00390": {
    "id": "S6GA00390",
@@ -57,7 +283,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6GA00390/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 7471304.01,
+    "disbursements": 6015387.55,
+    "cash_on_hand": 2059087,
+    "individual_unitemized": 2109742.8,
+    "individual_itemized": 2346350.19,
+    "pac": 495631.55,
+    "party": 0,
+    "self_funding": 65000,
+    "other": 2454579.47,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6GA00390/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00448696",
+      "name": "SENATE CONSERVATIVES FUND",
+      "total": 15000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00114025",
+      "name": "NATIONAL READY MIXED CONCRETE ASSN. PAC (CONCRETEPAC)",
+      "total": 15000,
+      "count": 4,
+      "industry": "construction"
+     },
+     {
+      "committee_id": "C00571000",
+      "name": "TRUE NORTH PAC",
+      "total": 10000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00467431",
+      "name": "THE EYE OF THE TIGER PAC",
+      "total": 10000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00492058",
+      "name": "LEADERSHIP AND ACCOUNTABILITY ARE NATIONAL KEYS PAC",
+      "total": 10000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00678813",
+      "name": "CONSERVATIVES HARVESTING SUCCESS PAC",
+      "total": 10000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00685115",
+      "name": "GROWING OUR OWN DYNAMIC ECONOMY NOW",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00368696",
+      "name": "RESPONSIBILITY AND FREEDOM WORK PAC (RFWPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00802595",
+      "name": "OVERHAUL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00551853",
+      "name": "OORAH! PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00391797",
+      "name": "DIRIGO PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00007880",
+      "name": "CULAC THE PAC OF CREDIT UNION NATIONAL ASSOCIATION",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00411116",
+      "name": "SPACE EXPLORATION TECHNOLOGIES CORP. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00872481",
+      "name": "PEACH STATE PAC",
+      "total": 8500,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00824151",
+      "name": "COLLINS VICTORY FUND",
+      "total": 7031.55,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00347989",
+      "name": "COCA-COLA BOTTLING COMPANY UNITED, INC. COMMITTEE FOR GOOD GOVERNMENT",
+      "total": 6500,
+      "count": 3,
+      "industry": "government"
+     },
+     {
+      "committee_id": "C00027532",
+      "name": "AMERICAN MARITIME OFFICERS VOLUNTARY POLITICAL ACTION FUND",
+      "total": 5500,
+      "count": 5,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00863217",
+      "name": "TEXAS VALUES PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00104802",
+      "name": "DELTA AIR LINES PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00762682",
+      "name": "STEER PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00764878",
+      "name": "REPUBLICAN MAJORITY FUND: STATE AND LOCAL",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00034355",
+      "name": "PEOPLE PAC (PACCAR INC EMPLOYEES ORGANIZED FOR POLITICAL LEADERSHIP AND EDUCATION PAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "education"
+     },
+     {
+      "committee_id": "C00851998",
+      "name": "PENNSYLVANIA HONOR",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00692327",
+      "name": "LETS GET TO WORK PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00607721",
+      "name": "LAND OF OPPORTUNITY PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     }
+    ],
+    "count": 131,
+    "total": 491031.55,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00544684&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://mikecollinsga.com/",
+    "as_filed": "HTTPS://MIKECOLLINSGA.COM/",
+    "source_url": "https://www.fec.gov/data/committee/C00544684/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "S6GA00408": {
    "id": "S6GA00408",
@@ -70,7 +502,12 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6GA00408/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": null,
+   "organizations": null,
+   "website": null,
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "S6GA00382": {
    "id": "S6GA00382",
@@ -83,7 +520,52 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6GA00382/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 563078.46,
+    "disbursements": 563078.46,
+    "cash_on_hand": 0,
+    "individual_unitemized": 27721.43,
+    "individual_itemized": 523623.99,
+    "pac": 11500,
+    "party": 0,
+    "self_funding": 0,
+    "other": 233.04,
+    "coverage_end": "2026-01-31",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6GA00382/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00094573",
+      "name": "ELECT - THE PAC OF THE ALABAMA FARMERS FEDERATION",
+      "total": 5000,
+      "count": 1,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00040253",
+      "name": "ALLSTATE INSURANCE COMPANY PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "finance"
+     }
+    ],
+    "count": 2,
+    "total": 10000,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00904870&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.votejohnking.com/",
+    "as_filed": "WWW.VOTEJOHNKING.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00904870/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "S2GA00282": {
    "id": "S2GA00282",
@@ -96,7 +578,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/S2GA00282/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 36143.79,
+    "disbursements": 23433.03,
+    "cash_on_hand": 12412.31,
+    "individual_unitemized": 3634.39,
+    "individual_itemized": 2509.4,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 30000,
+    "other": 0,
+    "coverage_end": "2026-03-31",
+    "last_report": "APRIL QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S2GA00282/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00805721&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://jonathanmccolumn.com/",
+    "as_filed": "JONATHANMCCOLUMN.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00805721/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "S8GA00180": {
    "id": "S8GA00180",

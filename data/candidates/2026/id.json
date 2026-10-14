@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=ID&candidate_status=C",
- "list_built_on": "2026-10-13",
+ "list_built_on": "2026-10-14",
  "built_on": "2026-10-14",
  "senate_up": true,
  "candidates": {
@@ -18,7 +18,52 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6ID00146/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 692245.06,
+    "disbursements": 506311.48,
+    "cash_on_hand": 194226.5,
+    "individual_unitemized": 115720.64,
+    "individual_itemized": 470024.42,
+    "pac": 10000,
+    "party": 0,
+    "self_funding": 10500,
+    "other": 86000,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6ID00146/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00027342",
+      "name": "IBEW PAC VOLUNTARY FUND",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00460972",
+      "name": "BLUE WAVE PROJECT PAC",
+      "total": 5000,
+      "count": 2,
+      "industry": "leadership"
+     }
+    ],
+    "count": 2,
+    "total": 10000,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00909309&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "http://www.achillesforidaho.com/",
+    "as_filed": "HTTP://WWW.ACHILLESFORIDAHO.COM/",
+    "source_url": "https://www.fec.gov/data/committee/C00909309/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "S6ID00120": {
    "id": "S6ID00120",
@@ -31,7 +76,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6ID00120/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 7741,
+    "disbursements": 7650.17,
+    "cash_on_hand": 90.83,
+    "individual_unitemized": 850,
+    "individual_itemized": 0,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 6891,
+    "other": 0,
+    "coverage_end": "2026-03-30",
+    "last_report": "APRIL QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6ID00120/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00894816&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00894816/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "S6ID00161": {
    "id": "S6ID00161",
@@ -44,7 +119,52 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6ID00161/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 170735,
+    "disbursements": 170735,
+    "cash_on_hand": 0,
+    "individual_unitemized": 820,
+    "individual_itemized": 11300,
+    "pac": 10000,
+    "party": 0,
+    "self_funding": 148000,
+    "other": 615,
+    "coverage_end": "2026-06-30",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6ID00161/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00027359",
+      "name": "INT'L ASSOCIATION OF BRIDGE, STRUCTURAL, ORNAMENTAL AND REINFORCING IRON WORKERS (IPAL)",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00383950",
+      "name": "NATIONAL ELEVATOR CONSTRUCTORS PAC/ INTN'L  UNION OF ELEVATOR CONSTRUCTORS (NEC PAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     }
+    ],
+    "count": 2,
+    "total": 10000,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00940833&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.dennyforsenate.com/",
+    "as_filed": "WWW.DENNYFORSENATE.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00940833/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "S8ID00092": {
    "id": "S8ID00092",
@@ -70,7 +190,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6ID00138/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 14626.74,
+    "disbursements": 14802.92,
+    "cash_on_hand": 278.5,
+    "individual_unitemized": 5920.71,
+    "individual_itemized": 3150,
+    "pac": 400,
+    "party": 2000,
+    "self_funding": 3156.03,
+    "other": 0,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6ID00138/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00839720&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.rothforidaho.org/",
+    "as_filed": "WWW.ROTHFORIDAHO.ORG",
+    "source_url": "https://www.fec.gov/data/committee/C00839720/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "S6ID00153": {
    "id": "S6ID00153",
@@ -83,7 +233,37 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6ID00153/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 57586.31,
+    "disbursements": 53306.51,
+    "cash_on_hand": 4279.8,
+    "individual_unitemized": 3970.93,
+    "individual_itemized": 13348.99,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 39387.4,
+    "other": 878.99,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6ID00153/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00928424&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://joshroyforidaho.com/",
+    "as_filed": "JOSHROYFORIDAHO.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00928424/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "H6ID01292": {
    "id": "H6ID01292",

@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=OH&candidate_status=C",
- "list_built_on": "2026-10-13",
+ "list_built_on": "2026-10-14",
  "built_on": "2026-10-14",
  "senate_up": true,
  "candidates": {
@@ -1599,7 +1599,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8OH05036/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 1461647.52,
+    "disbursements": 1038449.99,
+    "cash_on_hand": 1019992.61,
+    "individual_unitemized": 34440.79,
+    "individual_itemized": 576036,
+    "pac": 810650,
+    "party": 0,
+    "self_funding": 0,
+    "other": 40520.73,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H8OH05036/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00248716",
+      "name": "COMCAST CORPORATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00009985",
+      "name": "NATIONAL ASSOCIATION OF BROADCASTERS PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "media"
+     },
+     {
+      "committee_id": "C00039461",
+      "name": "BALL CORPORATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00079681",
+      "name": "NATIONAL PROPANE GAS ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00108209",
+      "name": "DOMINION ENERGY, INC. PAC - DOMINION PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00096842",
+      "name": "AMERICAN ELECTRIC POWER PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00077321",
+      "name": "AMERICAN INSTITUTE OF CERTIFIED PUBLIC ACCOUNTANTS PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00426775",
+      "name": "CHARTER COMMUNICATIONS INC. POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 3,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00793711",
+      "name": "CONSTELLATION ENERGY CORPORATION EMPLOYEE PAC (CEPAC)",
+      "total": 10000,
+      "count": 4,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00483487",
+      "name": "BRETTPAC-THE LEADERSHIP PAC OF U.S.REPRESENATIVE BRETT GUTHRIE",
+      "total": 10000,
+      "count": 4,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00083535",
+      "name": "DUKE ENERGY CORPORATION PAC",
+      "total": 9500,
+      "count": 4,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00040584",
+      "name": "CONSUMER HEALTHCARE PRODUCTS ASSOCIATION PAC  (CHPA/PAC)",
+      "total": 9500,
+      "count": 4,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00865667",
+      "name": "THE LUBRIZOL CORPORATION EMPLOYEES PAC",
+      "total": 9000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00109017",
+      "name": "AT&T INC. FEDERAL POLITICAL ACTION COMMITTEE (AT&T FEDE",
+      "total": 9000,
+      "count": 4,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00040394",
+      "name": "THE WILLIAMS COMPANIES, INC. PAC",
+      "total": 8000,
+      "count": 3,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00331173",
+      "name": "NATIONAL ELECTRICAL MANUFACTURERS ASSOCIATION PAC ('NEMA PAC')",
+      "total": 8000,
+      "count": 4,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00096156",
+      "name": "HONEYWELL INTERNATIONAL PAC",
+      "total": 8000,
+      "count": 5,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00161570",
+      "name": "AMERICAN PUBLIC POWER ASSOCIATION",
+      "total": 7500,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00010082",
+      "name": "NATIONAL CABLE AND TELECOMMUNICATIONS ASSOCIATION POLITICAL ACTION COMMITTEE (NCTA PAC)",
+      "total": 7500,
+      "count": 3,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00004275",
+      "name": "AMERICAN BANKERS ASSOCIATION QUALIFIED MULTI-CANDIDATE COMMITTEE",
+      "total": 7500,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00239848",
+      "name": "NUCLEAR ENERGY INSTITUTE FEDERAL POLITICAL ACTION COMMITTE",
+      "total": 7500,
+      "count": 3,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00085316",
+      "name": "CIGNA CORPORATION PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00144774",
+      "name": "SOUTHERN COMPANY EMPLOYEES PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00186288",
+      "name": "VERIZON COMMUNICATIONS INC. GOOD GOVERNMENT CLUB",
+      "total": 7000,
+      "count": 4,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00197228",
+      "name": "ELEVANCE HEALTH, INC. PAC (ELEVANCE HEALTH PAC)",
+      "total": 6500,
+      "count": 4,
+      "industry": "health"
+     }
+    ],
+    "count": 254,
+    "total": 808400,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00438697&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.lattaforcongress.com/",
+    "as_filed": "WWW.LATTAFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00438697/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "H6OH05154": {
    "id": "H6OH05154",
@@ -4405,7 +4611,213 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8OH12180/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14"
+   "last_listed": "2026-10-14",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 1743281.03,
+    "disbursements": 767354.32,
+    "cash_on_hand": 1982351.53,
+    "individual_unitemized": 16715.29,
+    "individual_itemized": 611500,
+    "pac": 1040300,
+    "party": 0,
+    "self_funding": 0,
+    "other": 74765.74,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H8OH12180/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00360669",
+      "name": "SOUTHWEST AIRLINES PILOTS' ASSOCIATION PAC (SWAPA PAC)",
+      "total": 13000,
+      "count": 3,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00148031",
+      "name": "CATERPILLAR INC. PAC (CATPAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00039578",
+      "name": "THE COUNCIL OF INSURANCE AGENTS & BROKERS PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00426775",
+      "name": "CHARTER COMMUNICATIONS INC. PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00065870",
+      "name": "POLITICAL EDUCATION PATTERNS POLITICAL ARM INTL UNION OPERATING ENG LOCAL 18",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00360354",
+      "name": "AMAZON.COM SERVICES, INC. SEPARATE SEGREGATED FUND (AMAZON PAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00040279",
+      "name": "ABBOTT LABORATORIES EMPLOYEE PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "pharma"
+     },
+     {
+      "committee_id": "C00488262",
+      "name": "NETJETS ASSOCIATION OF SHARED AIRCRAFT PILOTS PAC; NJASAP PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00481309",
+      "name": "NETJETS INC. PAC",
+      "total": 10000,
+      "count": 5,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00096842",
+      "name": "THE AMERICAN ELECTRIC POWER COMMITTEE FOR RESPONSIBLE GOVERNMENT",
+      "total": 10000,
+      "count": 2,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00314997",
+      "name": "LABORATORY CORPORATION OF AMERICA HOLDINGS POLITICAL PARTICIPATION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00293910",
+      "name": "AMERICAN ASSOCIATION OF ORTHODONTISTS PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00301929",
+      "name": "KELLEY DRYE & WARREN PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00332833",
+      "name": "CARDINAL HEALTH INC. PAC AKA CARDINAL HEALTH COMPANIES PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00226548",
+      "name": "VISTRA EMPLOYEE PAC OF VISTRA CORP",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00106146",
+      "name": "AMERICAN HOSPITAL ASSOCIATION PAC",
+      "total": 10000,
+      "count": 5,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00010868",
+      "name": "AMERICAN COUNCIL OF ENGINEERING COMPANIES (ACEC/PAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "construction"
+     },
+     {
+      "committee_id": "C00793711",
+      "name": "CONSTELLATION ENERGY CORPORATION EMPLOYEE PAC (CEPAC)",
+      "total": 10000,
+      "count": 4,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00083535",
+      "name": "DUKE ENERGY CORPORATION PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00496307",
+      "name": "MARATHON PETROLEUM CORPORATION EMPLOYEES PAC (MPAC)",
+      "total": 10000,
+      "count": 4,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00343137",
+      "name": "PAC OF THE AMERICAN ASSOCIATION OF ORTHOPAEDIC SURGEONS--PAC OF AAOS",
+      "total": 9500,
+      "count": 4,
+      "industry": "health"
+     },
+     {
+      "committee_id": "C00165589",
+      "name": "HUNTINGTON BANCSHARES INC. PAC  (HBI-PAC)",
+      "total": 9500,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00113811",
+      "name": "NATIONAL ELECTRICAL CONTRACTORS ASSOCIATION PAC (NECAPAC)",
+      "total": 8500,
+      "count": 4,
+      "industry": "construction"
+     },
+     {
+      "committee_id": "C00064766",
+      "name": "UNITED PARCEL SERVICE INC. PAC",
+      "total": 8000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00325357",
+      "name": "PIONEER PAC",
+      "total": 8000,
+      "count": 2,
+      "industry": "leadership"
+     }
+    ],
+    "count": 299,
+    "total": 1037250,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00662650&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://baldersonforcongress.com/",
+    "as_filed": "BALDERSONFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00662650/",
+    "checked": "2026-10-14"
+   },
+   "funding_checked": "2026-10-14",
+   "cycle": 2026
   },
   "H4OH12080": {
    "id": "H4OH12080",
