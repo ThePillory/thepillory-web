@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=TX&candidate_status=C",
- "built_on": "2026-10-14",
+ "built_on": "2026-10-15",
  "senate_up": true,
  "senate": [
   {
@@ -724,19 +724,19 @@
     "committee": "C00916049"
    },
    {
-    "id": "H6TX14157",
-    "name": "VOGIATZIS, KONSTANTINOS",
-    "party": "DEMOCRATIC PARTY",
-    "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TX14157/",
-    "committee": "C00923623"
-   },
-   {
     "id": "H6TX14165",
     "name": "VOGIATZIS, KONSTANTINOS",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6TX14165/",
+    "committee": "C00923623"
+   },
+   {
+    "id": "H6TX14157",
+    "name": "VOGIATZIS, KONSTANTINOS",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6TX14157/",
     "committee": "C00923623"
    },
    {
