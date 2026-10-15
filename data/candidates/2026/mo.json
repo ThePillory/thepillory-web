@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=MO&candidate_status=C",
- "list_built_on": "2026-10-14",
+ "list_built_on": "2026-10-15",
  "built_on": "2026-10-15",
  "senate_up": false,
  "candidates": {
@@ -736,7 +736,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00495846/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-10",
+   "funding_checked": "2026-10-15",
    "cycle": 2026
   },
   "H6MO02343": {
@@ -1042,7 +1042,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00806190/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-10",
+   "funding_checked": "2026-10-15",
    "cycle": 2026
   },
   "H8MO09146": {
@@ -1699,7 +1699,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00792598/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-10",
+   "funding_checked": "2026-10-15",
    "cycle": 2026
   },
   "H4MO04187": {
@@ -1896,17 +1896,17 @@
    "last_listed": "2026-10-15",
    "totals": {
     "cycle": 2026,
-    "receipts": 331764.08,
-    "disbursements": 109254.25,
-    "cash_on_hand": 222509.83,
-    "individual_unitemized": 4286,
-    "individual_itemized": 288391.53,
-    "pac": 39086.55,
+    "receipts": 457457.1,
+    "disbursements": 439953.9,
+    "cash_on_hand": 17503.2,
+    "individual_unitemized": 10850.5,
+    "individual_itemized": 360229.53,
+    "pac": 86186.55,
     "party": 0,
     "self_funding": 0,
-    "other": 0,
-    "coverage_end": "2026-07-15",
-    "last_report": "PRE-PRIMARY 2026",
+    "other": 190.52,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H2MO04199/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -2000,7 +2000,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00939710/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-10",
+   "funding_checked": "2026-10-15",
    "cycle": 2026
   },
   "H6MO05312": {
@@ -3195,7 +3195,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00788414/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-10",
+   "funding_checked": "2026-10-15",
    "cycle": 2026
   },
   "H4MO07156": {

@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=NJ&candidate_status=C",
- "list_built_on": "2026-10-14",
+ "list_built_on": "2026-10-15",
  "built_on": "2026-10-15",
  "senate_up": true,
  "candidates": {
@@ -435,16 +435,16 @@
    "last_listed": "2026-10-15",
    "totals": {
     "cycle": 2026,
-    "receipts": 11124.73,
-    "disbursements": 6137.79,
-    "cash_on_hand": 5055.73,
-    "individual_unitemized": 6233.03,
-    "individual_itemized": 4291.7,
+    "receipts": 15873.03,
+    "disbursements": 13920.37,
+    "cash_on_hand": 2021.45,
+    "individual_unitemized": 8161.22,
+    "individual_itemized": 7037.4,
     "pac": 0,
-    "party": 500,
+    "party": 550,
     "self_funding": 100,
-    "other": 0,
-    "coverage_end": "2026-06-30",
+    "other": 24.41,
+    "coverage_end": "2026-09-30",
     "last_report": "TERMINATION REPORT 2026",
     "source_url": "https://www.fec.gov/data/candidate/H2NJ01187/?cycle=2026&election_full=false"
    },
@@ -461,7 +461,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00930941/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-10",
+   "funding_checked": "2026-10-15",
    "cycle": 2026
   },
   "H4NJ01084": {
@@ -3369,7 +3369,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00902205/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-10",
+   "funding_checked": "2026-10-15",
    "cycle": 2026
   },
   "H4NJ07131": {
@@ -3725,7 +3725,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00799767/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-10",
+   "funding_checked": "2026-10-15",
    "cycle": 2026
   },
   "H2NJ08232": {
@@ -3944,7 +3944,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00799767/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-10",
+   "funding_checked": "2026-10-15",
    "cycle": 2026
   },
   "H6NJ09280": {
@@ -6334,7 +6334,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00796649/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-10",
+   "funding_checked": "2026-10-15",
    "cycle": 2026
   },
   "H6NJ12383": {

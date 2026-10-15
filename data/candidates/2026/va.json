@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=VA&candidate_status=C",
- "list_built_on": "2026-10-14",
+ "list_built_on": "2026-10-15",
  "built_on": "2026-10-15",
  "senate_up": true,
  "candidates": {
@@ -2869,17 +2869,17 @@
    "last_listed": "2026-10-15",
    "totals": {
     "cycle": 2026,
-    "receipts": 44967.62,
-    "disbursements": 42876.39,
-    "cash_on_hand": 6462.61,
-    "individual_unitemized": 2062.21,
+    "receipts": 44987.62,
+    "disbursements": 43598.61,
+    "cash_on_hand": 5760.39,
+    "individual_unitemized": 2082.21,
     "individual_itemized": 8268,
     "pac": 18800,
     "party": 0,
     "self_funding": 10000,
     "other": 5837.41,
-    "coverage_end": "2026-07-15",
-    "last_report": "PRE-PRIMARY 2026",
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H0VA05160/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -2952,7 +2952,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00721308/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-10",
+   "funding_checked": "2026-10-15",
    "cycle": 2026
   },
   "H6VA05191": {
@@ -3257,7 +3257,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00856831/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-10",
+   "funding_checked": "2026-10-15",
    "cycle": 2026
   },
   "H6VA05217": {
@@ -5848,7 +5848,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00477240/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-10",
+   "funding_checked": "2026-10-15",
    "cycle": 2026
   },
   "H6VA09102": {
