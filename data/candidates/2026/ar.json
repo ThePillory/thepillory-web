@@ -4,7 +4,7 @@
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=AR&candidate_status=C",
  "list_built_on": "2026-10-14",
- "built_on": "2026-10-14",
+ "built_on": "2026-10-15",
  "senate_up": true,
  "candidates": {
   "S6AR00207": {
@@ -18,7 +18,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6AR00207/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14",
+   "last_listed": "2026-10-15",
    "totals": {
     "cycle": 2026,
     "receipts": 41161.53,
@@ -61,7 +61,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S4AR00103/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14",
+   "last_listed": "2026-10-15",
    "totals": {
     "cycle": 2026,
     "receipts": 6233116.56,
@@ -280,7 +280,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6AR00173/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14",
+   "last_listed": "2026-10-15",
    "totals": {
     "cycle": 2026,
     "receipts": 17461.7,
@@ -323,7 +323,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6AR00215/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14",
+   "last_listed": "2026-10-15",
    "totals": {
     "cycle": 2026,
     "receipts": 92531.55,
@@ -366,7 +366,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6AR00199/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14",
+   "last_listed": "2026-10-15",
    "totals": {
     "cycle": 2026,
     "receipts": 2269113.78,
@@ -459,7 +459,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6AR00223/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14",
+   "last_listed": "2026-10-15",
    "totals": {
     "cycle": 2026,
     "receipts": 28778,
@@ -502,7 +502,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0AR01083/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14",
+   "last_listed": "2026-10-15",
    "totals": {
     "cycle": 2026,
     "receipts": 944302.03,
@@ -518,9 +518,196 @@
     "last_report": "JULY QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H0AR01083/?cycle=2026&election_full=false"
    },
-   "organizations": null,
-   "website": null,
-   "funding_checked": "2026-10-10",
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00064766",
+      "name": "UNITED PARCEL SERVICES PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00110338",
+      "name": "AMERICAN CRYSTAL SUGAR COMPANY POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00193631",
+      "name": "FARM CREDIT COUNCIL PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00023028",
+      "name": "NATIONAL COTTON COUNCIL OF AMERICA COMMITTEE FOR THE ADVANCE",
+      "total": 10000,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00308478",
+      "name": "USA RICE FEDERATION PAC",
+      "total": 10000,
+      "count": 5,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00169821",
+      "name": "TYSON FOODS INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00002881",
+      "name": "TRUCKING PAC OF THE AMERICAN TRUCKING ASSOC. INC",
+      "total": 10000,
+      "count": 2,
+      "industry": "transportation"
+     },
+     {
+      "committee_id": "C00028787",
+      "name": "NATIONAL CATTLEMEN'S BEEF ASSOCIATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00301929",
+      "name": "KELLEY DRYE & WARREN PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00096156",
+      "name": "HONEYWELL INTERNATIONAL PAC",
+      "total": 10000,
+      "count": 6,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00268904",
+      "name": "TRINITY INDUSTRIES EMPLOYEE POLITICAL ACTION COMMITTEE (SF)",
+      "total": 10000,
+      "count": 4,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00391979",
+      "name": "HERZOG PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00142711",
+      "name": "BOEING COMPANY POLITICAL ACTION COMMITTEE",
+      "total": 9000,
+      "count": 7,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00379628",
+      "name": "NUCOR CORPORATION POLITICAL ACTION COMMITTEE",
+      "total": 9000,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00088591",
+      "name": "EMPLOYEES OF NORTHROP GRUMMAN CORP. PAC",
+      "total": 7500,
+      "count": 2,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00144766",
+      "name": "NATIONAL BEER WHOLESALERS ASSOCIATION POLITICAL ACTION COMMI",
+      "total": 7500,
+      "count": 3,
+      "industry": "retail"
+     },
+     {
+      "committee_id": "C00100321",
+      "name": "L3HARRIS TECHNOLOGIES INC. PAC",
+      "total": 7000,
+      "count": 3,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00281212",
+      "name": "BAE SYSTEMS INC. POLITICAL ACTION COMMITTEE (BAE SYSTEMS USA",
+      "total": 7000,
+      "count": 4,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00078451",
+      "name": "GENERAL DYNAMICS CORPORATION POLITICAL ACTION COMMITTEE (GEN",
+      "total": 7000,
+      "count": 6,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00749481",
+      "name": "RAPTOR PAC",
+      "total": 6000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00147173",
+      "name": "WINE AND SPIRITS WHOLESALERS PAC",
+      "total": 6000,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00034272",
+      "name": "NATIONAL CHICKEN COUNCIL PAC",
+      "total": 6000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00571521",
+      "name": "FREEDOM 21: FIGHTING FOR FREEDOM IN THE 21ST CENTURY",
+      "total": 6000,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00010470",
+      "name": "UNION PACIFIC CORP FUND FOR EFFECTIVE GOVERNMENT",
+      "total": 6000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00010421",
+      "name": "ASSOCIATED BUILDERS & CONTRACTORS PAC",
+      "total": 6000,
+      "count": 5,
+      "industry": "construction"
+     }
+    ],
+    "count": 166,
+    "total": 557750,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00462374&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.meetrickcrawford.com/",
+    "as_filed": "WWW.MEETRICKCRAWFORD.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00462374/",
+    "checked": "2026-10-15"
+   },
+   "funding_checked": "2026-10-15",
    "cycle": 2026
   },
   "H6AR01155": {
@@ -534,7 +721,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6AR01155/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14",
+   "last_listed": "2026-10-15",
    "totals": {
     "cycle": 2026,
     "receipts": 65149.26,
@@ -592,7 +779,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4AR02141/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14",
+   "last_listed": "2026-10-15",
    "totals": {
     "cycle": 2026,
     "receipts": 4421509.93,
@@ -811,7 +998,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6AR02294/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14",
+   "last_listed": "2026-10-15",
    "totals": {
     "cycle": 2026,
     "receipts": 12402.59,
@@ -862,7 +1049,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6AR02286/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14",
+   "last_listed": "2026-10-15",
    "totals": {
     "cycle": 2026,
     "receipts": 1174414.32,
@@ -962,7 +1149,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6AR02278/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14",
+   "last_listed": "2026-10-15",
    "totals": {
     "cycle": 2026,
     "receipts": 163105.11,
@@ -1005,7 +1192,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6AR03136/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14",
+   "last_listed": "2026-10-15",
    "totals": {
     "cycle": 2026,
     "receipts": 12930.72,
@@ -1048,7 +1235,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6AR03128/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14",
+   "last_listed": "2026-10-15",
    "totals": {
     "cycle": 2026,
     "receipts": 120526.35,
@@ -1106,7 +1293,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0AR03055/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14",
+   "last_listed": "2026-10-15",
    "totals": {
     "cycle": 2026,
     "receipts": 1871760.74,
@@ -1122,9 +1309,196 @@
     "last_report": "JULY QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H0AR03055/?cycle=2026&election_full=false"
    },
-   "organizations": null,
-   "website": null,
-   "funding_checked": "2026-10-10",
+   "organizations": {
+    "items": [
+     {
+      "committee_id": "C00281212",
+      "name": "BAE SYSTEMS USA PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00828830",
+      "name": "APPLIED INTUITION, INC. PAC (APPLIED PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00076182",
+      "name": "NATIONAL TURKEY FEDERATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00089458",
+      "name": "NATIONAL STONE, SAND & GRAVEL ASSOCIATION ROCKPAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00009985",
+      "name": "NATIONAL ASSOCIATION OF BROADCASTERS PAC (NABPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "media"
+     },
+     {
+      "committee_id": "C00113241",
+      "name": "NATIONAL APARTMENT ASSOCIATION PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00238725",
+      "name": "NATIONAL AIR TRAFFIC CONTROLLERS ASSOCIATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00075341",
+      "name": "MOTOROLA SOLUTIONS, INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00546234",
+      "name": "LEIDOS INC POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 3,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00078451",
+      "name": "GENERAL DYNAMICS CORPORATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00097568",
+      "name": "EMPLOYEES OF RTX CORPORATION PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00762427",
+      "name": "APPLIED RESEARCH ASSOCIATES, INC. PAC (ARAPAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00077321",
+      "name": "AMERICAN INSTITUTE OF CERTIFIED PUBLIC ACCOUNTANTS PAC (AICPA PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00432856",
+      "name": "AM GENERAL LLC PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00215285",
+      "name": "GENERAL ATOMICS POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00661272",
+      "name": "WITH HONOR PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00093054",
+      "name": "WALMART INC PAC FOR RESPONSIBLE GVT (WALPAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "retail"
+     },
+     {
+      "committee_id": "C00142711",
+      "name": "THE BOEING COMPANY POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 4,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00100321",
+      "name": "L3HARRIS TECHNOLOGIES, INC. PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00169821",
+      "name": "TYSON FOODS INC. POLITICAL ACTION COMMITTEE (TYPAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00096156",
+      "name": "HONEYWELL INTERNATIONAL POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 4,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00035451",
+      "name": "AIR LINE PILOTS ASSOCIATION PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00147173",
+      "name": "WINE AND SPIRITS WHOLESALERS OF AMERICA, INC. PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00346353",
+      "name": "CRH AMERICAS, INC. PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00088591",
+      "name": "EMPLOYEES OF NORTHROP GRUMMAN CORPORATION PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "defense"
+     }
+    ],
+    "count": 219,
+    "total": 877500,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00477745&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://womackforcongress.com/",
+    "as_filed": "WOMACKFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00477745/",
+    "checked": "2026-10-15"
+   },
+   "funding_checked": "2026-10-15",
    "cycle": 2026
   },
   "H6AR04084": {
@@ -1138,7 +1512,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6AR04084/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14",
+   "last_listed": "2026-10-15",
    "totals": {
     "cycle": 2026,
     "receipts": 5853.42,
@@ -1181,7 +1555,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4AR04048/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-14",
+   "last_listed": "2026-10-15",
    "totals": {
     "cycle": 2026,
     "receipts": 2562973.36,
