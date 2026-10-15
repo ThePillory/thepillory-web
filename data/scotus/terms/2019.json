@@ -1,0 +1,3286 @@
+{
+ "term": 2019,
+ "source_url": "https://www.supremecourt.gov/opinions/slipopinion/19",
+ "cases": [
+  {
+   "r": "61",
+   "date": "2020-07-09",
+   "docket": "18-9526",
+   "name": "McGirt v. Oklahoma",
+   "summary": "Land in Northeastern Oklahoma reserved for the Creek Nation since the 19th century remains “Indian country” for purposes of the Major Crimes Act, which places certain crimes under federal jurisdiction if they were committed by “[a]ny Indian” within “the Indian country.”  18 U. S. C. §1153(a).",
+   "author_code": "NG",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-9526_9okb.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "GORSUCH, J., delivered the opinion of the Court, in which GINSBURG, BREYER, SOTOMAYOR, and KAGAN, JJ., joined. ROBERTS, C. J., filed a dissenting opinion, in which ALITO and KAVANAUGH, JJ., joined, and in which THOMAS, J., joined, except as to footnote 9. THOMAS, J., filed a dissenting opinion.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/18-09526qp.pdf",
+   "question_presented": [
+    "WHETHER OKLAHOMA COURTS CAN CONTINUE TO UNLAWFULLY EXERCISE, UNDER STATE LAW, CRIMINAL JURISDICTION AS\"JUSTICIABLE MATTER\" IN INDIAN COUNTRY OVER INDIANS ACCUSED OF MAJOR CRIMES ENUMERATED UNDER THE INDIAN MAJOR CRIMES ACT-WHICH ARE UNDER EXCLUSIVE FEDERAL JURISDICTION.",
+    "THE MOTION OF PETITIONER FOR APPOINTMENT OF COUNSEL IS GRANTED, AND IAN GERSHENGORN, ESQ. OF WASHINGTON, D.C., IS APPOINTED TO SERVE AS COUNSEL FOR PETITIONER IN THIS CASE. PRESS RELEASE OF APRIL 3, 2020 IN KEEPING WITH PUBLIC HEALTH GUIDANCE IN RESPONSE TO COVID-19, THE COURT WILL POSTPONE THE ORAL ARGUMENTS CURRENTLY SCHEDULED FOR THE APRIL SESSION.",
+    "PRESS RELEASE OF APRIL 13, 2020 RESCHEDULED FOR ORAL ARGUMENTS BY TELEPHONE CONFERENCE. THE JUSTICES AND COUNSEL WILL ALL PARTICIPATE REMOTELY."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "60",
+   "date": "2020-07-09",
+   "docket": "19-715",
+   "name": "Trump v. Mazars USA, LLP",
+   "summary": "The courts below did not take adequate account of the significant separation of powers concerns implicated by congressional subpoenas for the President’s information.",
+   "author_code": "R",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/19-715_febh.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "ROBERTS, C. J., delivered the opinion of the Court, in which GINSBURG, BREYER, SOTOMAYOR, KAGAN, GORSUCH, and KAVANAUGH, JJ., joined. THOMAS, J., and ALITO, J., filed dissenting opinions.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/19-00715qp.pdf",
+   "question_presented": [
+    "The Committee on Oversight and Reform of the U.S. House of Representatives has issued a subpoena to the accountant for President Trump and several of his business entities. The subpoena demands private financial records belonging to the President. The D.C. Circuit upheld the subpoena as having a legitimate legislative purpose and being within the statutory authority of the Committee.",
+    "The question presented is:",
+    "Whether the Committee has the constitutional and statutory authority to issue this subpoena."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "59",
+   "date": "2020-07-09",
+   "docket": "19-635",
+   "name": "Trump v. Vance",
+   "summary": "Article II and the Supremacy Clause do not categorically preclude, or require a heightened standard for, the issuance of a state criminal subpoena to a sitting President.",
+   "author_code": "R",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/19-635_o7jq.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "ROBERTS, C. J., delivered the opinion of the Court, in which GINSBURG, BREYER, SOTOMAYOR, and KAGAN, JJ., joined. KAVANAUGH, J., filed an opinion concurring in the judgment, in which GORSUCH, J., joined. THOMAS, J., and ALITO, J., filed dissenting opinions.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-6",
+     "quote": "The President, Marshall declared, does not “stand exempt from the general provisions of the constitution” or, in particular, the Sixth Amendment’s guarantee that those accused have compulsory process for obtaining witnesses for their defense."
+    },
+    {
+     "id": "art-6-cl-2",
+     "quote": "We granted certiorari to decide whether Article II and the Supremacy Clause categorically preclude, or require a heightened standard for, the issuance of a state criminal subpoena to a sitting President. —————— 1 This maxim traces at least as far back as Lord Chancellor Hardwicke, in a 1742 parliamentary debate."
+    },
+    {
+     "id": "art-2",
+     "quote": "We granted certiorari to decide whether Article II and the Supremacy Clause categorically preclude, or require a heightened standard for, the issuance of a state criminal subpoena to a sitting President. —————— 1 This maxim traces at least as far back as Lord Chancellor Hardwicke, in a 1742 parliamentary debate."
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/19-00635qp.pdf",
+   "question_presented": [
+    "The District Attorney for the County of New York is conducting a criminal investigation that, by his own admission, targets the President of the United States for possible indictment and prosecution during his term in office. As part of that investigation, he served a grand-jury subpoena on a custodian of the President's personal records, demanding production of nearly ten years' worth of the President's financial papers and his tax returns. That subpoena is the combination-almost a wordfor-word copy-of two subpoenas issued by committees of Congress for these same papers. The Second Circuit rejected the President's claim of immunity and ordered compliance with the subpoena.",
+    "The question presented is: Whether this subpoena violates Article II and the Supremacy Clause of the United States Constitution.",
+    "THIS CASE WILL BE SET FOR ARGUMENT IN THE MARCH 2020 ARGUMENT SESSION.",
+    "PRESS RELEASE OF MARCH 16, 2020 IN KEEPING WITH PUBLIC HEALTH PRECAUTIONS RECOMMENDED IN RESPONSE TO COVID-19, THE SUPREME COURT IS POSTPONING THE ORAL ARGUMENTS CURRENTLY SCHEDULED FOR THE MARCH SESSION. PRESS RELEASE OF APRIL 13, 2020 RESCHEDULED FOR ORAL ARGUMENTS BY TELEPHONE CONFERENCE. THE JUSTICES AND COUNSEL WILL ALL PARTICIPATE REMOTELY."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "58",
+   "date": "2020-07-08",
+   "docket": "19-267",
+   "name": "Our Lady of Guadalupe School v. Morrissey-Berru",
+   "summary": "The First Amendment’s Religion Clauses foreclose the adjudication of the employment-discrimination claims of Catholic school teachers Morrissey-Berru and Biel.",
+   "author_code": "A",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/19-267_1an2.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "ALITO, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, BREYER, KAGAN, GORSUCH, and KAVANAUGH, JJ., joined. 4 OUR LADY OF GUADALUPE SCHOOL v. MORRISSEY-BERRU THOMAS, J., filed a concurring opinion, in which GORSUCH, J., joined. SOTOMAYOR, J., filed a dissenting opinion, in which GINSBURG, J., joined.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": "These cases require us to decide whether the First Amendment permits courts to intervene in employment disputes involving teachers at religious schools who are entrusted with the responsibility of instructing their students in the faith."
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/19-00267qp.pdf",
+   "question_presented": [
+    "The First Amendment's Religion Clauses forbid government interference in a religious group's selection of its ministerial employees. The federal courts of appeals and state courts of last resort have long agreed that the key to determining ministerial status is whether an employee performed important religious functions. This Court's unanimous 2012 ruling in Hosanna-Tabor Evangelical Lutheran Church & School v. EEOC was consistent with that existing analytical consensus, and other circuits and states since 2012 have continued to rely on it. Yet the Ninth Circuit has now twice ruled that, under Hosanna-Tabor, important religious functions alone can never suffice-those functions must always be accompanied by considerations such as a religious title or religious training in order to demonstrate ministerial status.",
+    "The question presented is:",
+    "Whether the Religion Clauses prevent civil courts from adjudicating employment discrimination claims brought by an employee against her religious employer, where the employee carried out important religious functions"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "57",
+   "date": "2020-07-08",
+   "docket": "19-431",
+   "name": "Little Sisters of the Poor Saints Peter and Paul Home v. Pennsylvania",
+   "summary": "The Departments of Health and Human Services, Labor, and the Treasury had authority under the Patient Protection and Affordable Care Act of 2010 to promulgate rules exempting employers with religious or moral objections from providing contraceptive coverage to their employees; and those rules satisfy the Administrative Procedure Act’s notice requirements.",
+   "author_code": "T",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/19-431_5i36.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "THOMAS, J., delivered the opinion of the Court, in which ROBERTS, C. J., and ALITO, GORSUCH, and KAVANAUGH, JJ., joined. ALITO, J., filed a concurring opinion, in which GORSUCH, J., joined. KAGAN, J., filed an opinion concurring in the judgment, in which BREYER, J., joined. GINSBURG, J., filed a dissenting opinion, in which SOTOMAYOR, J., joined.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": "To protect this right, Con- —————— church exemption, the dissent claims that it is rooted in the First Amendment’s respect for church autonomy."
+    },
+    {
+     "id": "art-3",
+     "quote": "Under our precedents, at least one party must demonstrate Article III standing for each claim for relief."
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/19-00431qp.pdf",
+   "question_presented": [
+    "Since 2011, federal courts have repeatedly considered whether forcing religious objectors to provide health plans that include contraceptive coverage violates the Religious Freedom Restoration Act (RFRA). Over and over again, this Court has reviewed these cases on an emergency basis or on the merits. Yet it has never definitively resolved the RFRA dispute. In 2016, an eight-Justice Court in Zubik v. Burwell did not reach the RFRA question and instead remanded for the parties to try to reach a resolution, on the evident assumption that the executive branch possessed the power to provide broader accommodations and/or exemptions. After months of negotiations (and an intervening election), the agencies finally agreed to promulgate new rules providing a broader exemption, seemingly bringing an end to this long-running dispute.",
+    "Those new rules were challenged, however, by several states, resulting in a nationwide injunction on the theory that RFRA and the Affordable Care Act not only do not require, but do not even allow, the religious exemption rules. That nationwide injunction has stagnated other cases, and it conflicts with the judgments of many courts that have issued final orders affirmatively requiring comparable exemptions under RFRA. The rights of religious objectorsincluding the Little Sisters' right to defend an exemption-remain very much at issue.",
+    "The questions presented are:",
+    "1. Whether a litigant who is directly protected by an administrative rule and has been allowed to intervene to defend it lacks standing to appeal a decision invalidating the rule if the litigant is also protected by an injunction from a different court?",
+    "2. Whether the federal government lawfully exempted religious objectors from the regulatory requirement to provide health plans that include contraceptive coverage?"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "56",
+   "date": "2020-07-06",
+   "docket": "19-518",
+   "name": "Colorado Dept. of State v. Baca",
+   "summary": "The Tenth Circuit’s judgment is reversed for the reasons stated in Chiafalo v. Washington, 591 U. S. ___.",
+   "author_code": "PC",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/19-518_6k47.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "PER CURIAM. The judgment of the United States Court of Appeals for the Tenth Circuit is reversed for the reasons stated in Chiafalo v. Washington, ante, p. ___. It is so ordered. JUSTICE SOTOMAYOR took no part in the decision of this case. JUSTICE THOMAS concurs in the judgment for the reasons stated in his separate opinion in Chiafalo v. Washington, ante, p. ___.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "took no part"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/19-00518qp.pdf",
+   "question_presented": [
+    "Like most States, Colorado requires its presidential electors to follow the will of its voters when casting their Electoral College ballots for President. In the 2016 Electoral College, one of Colorado's electors violated Colorado law by attempting to cast his presidential ballot for a candidate other than the one he pledged to vote for. Colorado removed him as an elector, declined to accept his ballot, and replaced him with an alternate elector who properly cast her ballot for the winner of the State's popular vote, consistent with Colorado law. The removed elector later sued Colorado for nominal damages.",
+    "The questions presented are:",
+    "1. Whether a presidential elector who is prevented by their appointing State from casting an Electoral College ballot that violates state law lacks standing to sue their appointing State because they hold no constitutionally protected right to exercise discretion.",
+    "2. Does Article II or the Twelfth Amendment forbid a State from requiring its presidential electors to follow the State's popular vote when casting their Electoral College ballots."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "55",
+   "date": "2020-07-06",
+   "docket": "19-631",
+   "name": "Barr v. American Assn. of Political Consultants, Inc.",
+   "summary": "The Fourth Circuit’s judgment—that the robocall restriction’s government-debt exception in 47 U. S. C. §227(b)(1)(A)(iii) violates the First Amendment but is severable from the remainder of the statute—is affirmed.",
+   "author_code": "BK",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/19-631_2d93.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "KAVANAUGH, J., announced the judgment of the Court and delivered an opinion, in which ROBERTS, C. J., and ALITO, J., joined, and in which THOMAS, J., joined as to Parts I and II. SOTOMAYOR, J., filed an opinion concurring in the judgment. BREYER, J., filed an opinion concurring in the judgment with respect to severability and dissenting in part, in which GINSBURG and KAGAN, JJ., joined. GORSUCH, J., filed an opinion concurring in the judgment in part and dissenting in part, in which THOMAS, J., joined as to Part II.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence in the judgment (in part)",
+       "majority in part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": "The American Association of Political Consultants and three other organizations that participate in the political system filed a declaratory judgment action, claiming that §227(b)(1)(A)(iii) violated the First Amendment."
+    },
+    {
+     "id": "amend-14",
+     "quote": "The “First Amendment is a kind of Equal Protection Clause for ideas.” Williams-Yulee v."
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/19-00631qp.pdf",
+   "question_presented": [
+    "The Telephone Consumer Protection Act of 1991 (TCPA), Pub. L. No. 102-243, 105 Stat. 2394, generally prohibits the use of any \"automatic telephone dialing system or an artificial or prerecorded voice\" to \"make any call\" to \"any telephone number assigned to a * * * cellular telephone service.\" 47 U.S.C. 227(b)(1)(A)(iii) (Supp. V 2017). The TCPA excepts from that automated-call restriction any \"call made for emergency purposes or made with the prior express consent of the called party.\" Ibid. In 2015, Congress amended the TCPA to create an additional exception for calls \"made solely to collect a debt owed to or guaranteed by the United States.\" Ibid.",
+    "Respondents wish to use an automatic telephone dialing system or an artificial or prerecorded voice to make calls to the cell phones of potential or registered voters to solicit political donations and to advise on political and governmental issues. First Am. Compl. ¶¶ 8-10, 12. The court of appeals held that the government-debt exception to the TCPA’s automated-call restriction violates the First Amendment. The court further held that the proper remedy was to sever the government-debt exception, leaving the basic automated-call restriction in place. The question presented is as follows:",
+    "Whether the government-debt exception to the TCPA's automated-call restriction violates the First Amendment, and whether the proper remedy for any constitutional violation is to sever the exception from the remainder of the statute.",
+    "PRESS RELEASE OF APRIL 3, 2020 IN KEEPING WITH PUBLIC HEALTH GUIDANCE IN RESPONSE TO COVID-19, THE COURT WILL POSTPONE THE ORAL ARGUMENTS CURRENTLY SCHEDULED FOR THE APRIL SESSION. PRESS RELEASE OF APRIL 13, 2020 RESCHEDULED FOR ORAL ARGUMENTS BY TELEPHONE CONFERENCE. THE JUSTICES AND COUNSEL WILL ALL PARTICIPATE REMOTELY."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "54",
+   "date": "2020-07-06",
+   "docket": "19-465",
+   "name": "Chiafalo v. Washington",
+   "summary": "A State may enforce an elector’s pledge to support his party’s nominee—and the state voters’ choice—for President.",
+   "author_code": "EK",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/19-465_i425.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "KAGAN, J., delivered the opinion of the Court, in which ROBERTS, C. J., and GINSBURG, BREYER, ALITO, SOTOMAYOR, GORSUCH, and KAVANAUGH, JJ., joined. THOMAS, J., filed an opinion concurring in the judgment, in which GORSUCH, J., joined as to Part II.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence in the judgment (in part)",
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-14",
+     "quote": "A State, for example, cannot select its electors in a way that violates the Equal Protection Clause."
+    },
+    {
+     "id": "art-2",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/19-00465qp.pdf",
+   "question_presented": [
+    "A Washington State law threatens a fine for presidential electors who vote contrary to how the law directs. RCW 29A.56.340 (2016). Petitioners are three 2016 presidential electors who were fined under this provision solely because they failed to vote as the law directs, namely for the presidential and vice presidential candidates who won a majority of the popular vote in the State.",
+    "The question presented is whether enforcement of this law is unconstitutional because: (1) a State has no power to legally enforce how a presidential elector casts his or her ballot; and (2) a State penalizing an elector for exercising his or her constitutional discretion to vote violates the First Amendment."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "53",
+   "date": "2020-06-30",
+   "docket": "19-46",
+   "name": "Patent and Trademark Office v. Booking.com B. V.",
+   "summary": "A term styled “generic.com” is a generic name for a class of goods or services—and thus ineligible for federal trademark protection—only if the term has that meaning to consumers.",
+   "author_code": "G",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/19-46_8n59.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "GINSBURG, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, SOTOMAYOR, KAGAN, GORSUCH, and KAVANAUGH, JJ., joined. SOTOMAYOR, J., filed a concurring opinion. BREYER, J., filed a dissenting opinion.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/19-00046qp.pdf",
+   "question_presented": [
+    "Under the Lanham Act, 15 U.S.C. 1051 et seq., generic terms may not be registered as trademarks. The question presented is as follows:",
+    "Whether the addition by an online business of a generic top-level domain (\".com\") to an otherwise generic term can create a protectable trademark.",
+    "PRESS RELEASE OF MARCH 16, 2020 IN KEEPING WITH PUBLIC HEALTH PRECAUTIONS RECOMMENDED IN RESPONSE TO COVID-19, THE SUPREME COURT IS POSTPONING THE ORAL ARGUMENTS CURRENTLY SCHEDULED FOR THE MARCH SESSION. PRESS RELEASE OF APRIL 13, 2020 RESCHEDULED FOR ORAL ARGUMENTS BY TELEPHONE CONFERENCE. THE JUSTICES AND COUNSEL WILL ALL PARTICIPATE REMOTELY."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "52",
+   "date": "2020-06-30",
+   "docket": "18-1195",
+   "name": "Espinoza v. Montana Dept. of Revenue",
+   "summary": "The application of the Montana Constitution’s “no-aid” provision to a state program providing tuition assistance to parents who send their children to private schools discriminated against religious schools and the families whose children attend or hope to attend them in violation of the Federal Constitution’s Free Exercise Clause.",
+   "author_code": "R",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-1195_g314.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "ROBERTS, C. J., delivered the opinion of the Court, in which THOMAS, ALITO, GORSUCH, and KAVANAUGH, JJ., joined. THOMAS, J., filed a concurring opinion, in which GORSUCH, J., joined. ALITO, J., and GORSUCH, J., filed concurring opinions. GINSBURG, J., filed a dissenting opinion, in which KAGAN, J., joined. BREYER, J., filed a dissenting opinion, in which KAGAN, J., joined as to Part I. SOTOMAYOR, J., filed a dissenting opinion.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent",
+       "dissent (in part)"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": "The Court relied on the “no-aid” provision of the State Constitution, which prohibits any aid to a school controlled by a “church, sect, or denomination.” The question presented is whether the Free Exercise Clause of the United States Constitution barred that application of the no-aid provision."
+    },
+    {
+     "id": "amend-14",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/18-01195qp.pdf",
+   "question_presented": [
+    "Does it violate the Religion Clauses or Equal Protection Clause of the United States Constitution to invalidate a generally available and religiously neutral student- aid program simply because the program affords students the choice of attending religious schools?"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "51",
+   "date": "2020-06-29",
+   "docket": "19-177",
+   "name": "Agency for Int’l Development v. Alliance for Open Society",
+   "summary": "Because the foreign affiliates of American nongovernmental organizations possess no First Amendment rights, the United States Leadership Against HIV/AIDS, Tuberculosis, and Malaria Act’s limitation on funding organizations with “a policy explicitly opposing prostitution and sex trafficking,” 22 U. S. C. §7631(f), is not unconstitutional as applied to them.",
+   "author_code": "BK",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/19-177_b97c.pdf",
+   "pending_read": true,
+   "qp_url": "https://www.supremecourt.gov/qp/19-00177qp.pdf",
+   "question_presented": [
+    "Respondents are United States-based organizations that receive federal funds to fight HIV/AIDS abroad. In Agency for International Development v. Alliance for Open Society International, Inc., 570 U.S. 205 (2013), this Court held that the First Amendment bars enforcement of Congress's directive that respondents \"have a policy explicitly opposing prostitution and sex trafficking\" as a condition of accepting those funds. 22 U.S.C. 7631(f). The question presented is whether the First Amendment further bars enforcement of that directive with respect to legally distinct foreign entities operating overseas that are affiliated with respondents.",
+    "JUSTICE KAGAN TOOK NO PART.",
+    "PRESS RELEASE OF MARCH 16, 2020 IN KEEPING WITH PUBLIC HEALTH PRECAUTIONS RECOMMENDED IN RESPONSE TO COVID-19, THE SUPREME COURT IS POSTPONING THE ORAL ARGUMENTS CURRENTLY SCHEDULED FOR THE MARCH SESSION. PRESS RELEASE OF APRIL 13, 2020 RESCHEDULED FOR ORAL ARGUMENTS BY TELEPHONE CONFERENCE. THE JUSTICES AND COUNSEL WILL ALL PARTICIPATE REMOTELY."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "50",
+   "date": "2020-06-29",
+   "docket": "18-1323",
+   "name": "June Medical Services L. L. C. v. Russo",
+   "summary": "The Fifth Circuit’s judgment, upholding a Louisiana law that requires abortion providers to hold admitting privileges at local hospitals, is reversed.",
+   "author_code": "B",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-1323_c07d.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "BREYER, J., announced the judgment of the Court and delivered an opinion, in which GINSBURG, SOTOMAYOR, and KAGAN, JJ., joined. ROBERTS, C. J., filed an opinion concurring in the judgment. THOMAS, J., filed a dissenting opinion. ALITO, J., filed a dissenting opinion, in which GORSUCH, J., joined, in which THOMAS, J., joined except as to Parts III–C and IV–F, and in which KAVANAUGH, J., joined as to Parts I, II, and III. GORSUCH, J., and KAVANAUGH, J., filed dissenting opinions.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Breyer",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent",
+       "majority in part"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority in part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "dissent",
+       "majority in part"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/18-01323qp.pdf",
+   "question_presented": [
+    "In Whole Woman's Health v. Hellerstedt, 136 S. Ct. 2292 (2016), this Court held that a state law requiring physicians who perform abortions to have admitting privileges at a local hospital was unconstitutional because it imposed an undue burden on women seeking abortions. The U.S. Court of Appeals for the Fifth Circuit upheld an admitting privileges law in Louisiana that is identical to the one this Court struck down. This presents the following issue:",
+    "Whether the Fifth Circuit's decision upholding Louisiana's law requiring physicians who perform abortions to have admitting privileges at a local hospital conflicts with this Court's binding precedent in Whole Woman's Health."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "49",
+   "date": "2020-06-29",
+   "docket": "19-7",
+   "name": "Seila Law LLC v. Consumer Financial Protection Bureau",
+   "summary": "The Consumer Financial Protection Bureau’s leadership by a single Director removable only for inefficiency, neglect, or malfeasance violates the separation of powers.",
+   "author_code": "R",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/19-7_new_bq7d.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "ROBERTS, C. J., delivered the opinion of the Court with respect to Parts I, II, and III, in which THOMAS, ALITO, GORSUCH, and KAVANAUGH, JJ., joined, and an opinion with respect to Part IV, in which ALITO and KAVANAUGH, JJ., joined. THOMAS, J., filed an opinion concurring in part and dissenting in part, in which GORSUCH, J., joined. KAGAN, J., filed an opinion concurring in the judgment with respect to severability and dissenting in part, in which GINSBURG, BREYER, and SOTOMAYOR, JJ., joined.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurring in part and dissenting in part",
+       "majority"
+      ],
+      "wrote": [
+       "concurring in part and dissenting in part"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurring in part and dissenting in part",
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "art-1-sec-8-cl-18",
+     "quote": "Instead, Article I’s Necessary and Proper Clause puts those decisions in the legislature’s hands."
+    },
+    {
+     "id": "art-2-sec-2-cl-2",
+     "quote": null
+    },
+    {
+     "id": "art-2-sec-3",
+     "quote": "PROTECTION BUREAU “general rule.” Nor can the Take Care Clause come to the majority’s rescue."
+    },
+    {
+     "id": "art-3",
+     "quote": "Amicus’ traceability argument appears to challenge petitioner’s Article III standing."
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/19-00007qp.pdf",
+   "question_presented": [
+    "Whether the vesting of substantial executive authority in the Consumer Financial Protection Bureau, an independent agency led by a single director, violates the separation of powers.",
+    "IN ADDITION TO THE QUESTION PRESENTED BY THE PETITION, THE PARTIES ARE DIRECTED TO BRIEF AND ARGUE THE FOLLOWING QUESTION: IF THE CONSUMER FINANCIAL PROTECTION BUREAU IS FOUND UNCONSTITUTIONAL ON THE BASIS OF THE SEPARATION OF POWERS, CAN 12 U.S.C. §5491(c)(3) BE SEVERED FROM THE DODD-FRANK ACT?",
+    "PAUL D. CLEMENT, ESQUIRE, OF WASHINGTON, D. C., IS INVITED TO BRIEF AND ARGUE THIS CASE, AS AMICUS CURIAE, IN SUPPORT OF THE JUDGMENT BELOW ON THE QUESTION PRESENTED BY THE PETITION."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "48",
+   "date": "2020-06-25",
+   "docket": "19-161",
+   "name": "Department of Homeland Security v. Thuraissigiam",
+   "summary": "As applied here, 8 U. S. C. §1252(e)(2)—which limits the habeas review obtainable by an alien detained for expedited removal—does not violate the Suspension or Due Process Clauses.",
+   "author_code": "A",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/19-161_g314.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "ALITO, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, GORSUCH, and KAVANAUGH, JJ., joined. THOMAS, J., filed a concurring opinion. BREYER, J., filed an opinion concurring in the judgment, in which GINSBURG, J., joined. SOTOMAYOR, J., filed a dissenting opinion, in which KAGAN, J., joined.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-5",
+     "quote": "In short, under our precedents, neither the Suspension Clause nor the Due Process Clause of the Fifth Amendment requires any further review of respondent’s claims, and IIRIRA’s limitations on habeas review are constitutional as applied."
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/19-00161qp.pdf",
+   "question_presented": [
+    "Respondent is an inadmissible alien who was apprehended almost immediately after illegally crossing the U.S. border and was placed into expedited removal proceedings. See 8 U.S.C. 1225(b)(l). An asylum officer conducted a credible-fear interview and found that respondent lacked a credible fear of persecution on a protected ground or a credible fear of torture. Upon de novo review, an immigration judge reached the same conclusions and respondent's expedited-removal order became final. Respondent then filed a petition for writ of habeas corpus, which the district court dismissed for lack of jurisdiction because it did not raise the kinds of habeas challenges to expedited-removal orders that are permitted under 8 U.S.C. 1252(e)(2). The court of appeals reversed, concluding that Section 1252(e)(2) violated the Suspension Clause, U.S. Const. Art. I, § 9, Cl. 2, as applied to respondent.",
+    "The question presented is whether, as applied to respondent, Section 1252(e)(2) is unconstitutional under the Suspension Clause."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "47",
+   "date": "2020-06-22",
+   "docket": "18-1501",
+   "name": "Liu v. SEC",
+   "summary": "In a Securities and Exchange Commission enforcement action, a disgorgement award that does not exceed a wrongdoer’s net profits and is awarded for victims is equitable relief permissible under 15 U. S. C. §78u(d)(5).",
+   "author_code": "SS",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-1501_8n5a.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "SOTOMAYOR, J., delivered the opinion of the Court, in which ROBERTS, C. J., and GINSBURG, BREYER, ALITO, KAGAN, GORSUCH, and KAVANAUGH, JJ., joined. THOMAS, J., filed a dissenting opinion.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/18-01501qp.pdf",
+   "question_presented": [
+    "Whether the Securities and Exchange Commission may seek and obtain disgorgement from a court as \"equitable relief\" for a securities law violation even though this Court has determined that such disgorgement is a penalty."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "46",
+   "date": "2020-06-18",
+   "docket": "18-587",
+   "name": "Department of Homeland Security v. Regents of Univ. of Cal.",
+   "summary": "The Department of Homeland Security’s decision to rescind the Deferred Action for Childhood Arrivals program was arbitrary and capricious under the Administrative Procedure Act.",
+   "author_code": "R",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-587_5ifl.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "ROBERTS, C. J., delivered the opinion of the Court, except as to Part IV. GINSBURG, BREYER, and KAGAN, JJ., joined that opinion in full, and SOTOMAYOR, J., joined as to all but Part IV. SOTOMAYOR, J., filed an opinion concurring in part, concurring in the judgment in part, and dissenting in part. THOMAS, J., filed an opinion concurring in the judgment in part and dissenting in part, in which ALITO and GORSUCH, JJ., joined. ALITO, J., and KAVANAUGH, J., filed opinions concurring in the judgment in part and dissenting in part.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-5",
+     "quote": null
+    },
+    {
+     "id": "amend-14",
+     "quote": "But the Court forecloses any challenge to the rescission under the Equal Protection Clause."
+    },
+    {
+     "id": "art-2-sec-3",
+     "quote": "The States contended that DAPA and the DACA expansion violated the APA’s notice and comment requirement, the Immigration and Nationality Act (INA), and the Executive’s duty under the Take Care Clause of the Constitution."
+    },
+    {
+     "id": "art-2",
+     "quote": "In 2012, exercising its view of the Executive’s prosecutorial discretion under Article II and the immigration laws, President Obama’s administration unilaterally instituted a program known as Deferred Action for Childhood Arrivals, or DACA."
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/18-00587qp.pdf",
+   "question_presented": [
+    "This dispute concerns the policy of immigration enforcement discretion known as Deferred Action for Childhood Arrivals (DACA). In 2016, this Court affirmed, by an equally divided Court, a decision of the Fifth Circuit holding that two related Department of Homeland Security (DHS) discretionary enforcement policies, including an expansion of the DACA policy, were likely unlawful and should be enjoined. See United States v. Texas, 136 S. Ct. 2271 (per curiam). In September 2017, DHS determined that the original DACA policy was unlawful and would likely be struck down by the courts on the same grounds as the related policies. DHS thus instituted an orderly wind-down of the DACA policy. The questions presented are as follows:",
+    "1. Whether DHS's decision to wind down the DACA policy is judicially reviewable.",
+    "2. Whether DHS's decision to wind down the DACA policy is lawful."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "45",
+   "date": "2020-06-15",
+   "docket": "18-9674",
+   "name": "Andrus v. Texas",
+   "summary": "Because there is a significant question whether the court below properly considered whether counsel’s clearly deficient performance prejudiced Andrus, the judgment of the Texas Court of Criminal Appeals is vacated and the case is remanded for the court to address the prejudice question.",
+   "author_code": "PC",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-9674_5hd5.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "PER CURIAM. Death-sentenced petitioner Terence Andrus was six years old when his mother began selling drugs out of the apartment where Andrus and his four siblings lived. To fund a spiraling drug addiction, Andrus’ mother also turned to prostitution. By the time Andrus was 12, his mother regularly spent entire weekends, at times weeks, away from her five children to binge on drugs. When she did spend time around her children, she often was high and brought with her a revolving door of drug-addicted, sometimes physically violent, boyfriends. Before he reached adolescence, Andrus took on the role of caretaker for his four siblings. When Andrus was 16, he allegedly served as a lookout while his friends robbed a woman. He was sent to a juvenile detention facility where, for 18 months, he was steeped in gang culture, dosed on high quantities of psychotropic drugs, and frequently relegated to extended stints of solitary confinement. The ordeal left an already traumatized Andrus all but suicidal. Those suicidal urges resurfaced later in Andrus’ adult life. During Andrus’ capital trial, however, nearly none of this mitigating evidence reached the jury. That is because Andrus’ defense counsel not only neglected to present it; he failed even to look for it. Indeed, counsel performed virtually no investigation of the relevant evidence. Those failures also fettered the defense’s capacity to contextualize or counter the State’s evidence of Andrus’ alleged incidences of past violence. Only years later, during an 8-day evidentiary hearing in Per Curiam Andrus’ state habeas proceeding, did the grim facts of Andrus’ life history come to light. And when pressed at the hearing to provide his reasons for failing to investigate Andrus’ history, Andrus’ counsel offered none. The Texas trial court that heard the evidence recommended that Andrus be granted habeas relief and receive a new sentencing proceeding. The court found the abundant mitigating evidence so compelling, and so readily available, that counsel’s failure to investigate it was constitutionally deficient performance that prejudiced Andrus during the punishment phase of his trial. The Texas Court of Criminal Appeals disagreed. It concluded without explanation that Andrus had failed to satisfy his burden of showing ineffective assistance under Strickland v. Washington, 466 U. S. 668 (1984). We conclude that the record makes clear that Andrus has demonstrated counsel’s deficient performance under Strickland, but that the Court of Criminal Appeals may have failed properly to engage with the follow-on question whether Andrus has shown that counsel’s deficient performance prejudiced him. We thus grant Andrus’ petition for a writ of certiorari, vacate the judgment of the Texas Court of Criminal Appeals, and remand the case for further proceedings not inconsistent with this opinion. I A In 2008, 20-year-old Terence Andrus unsuccessfully attempted a carjacking in a grocery-store parking lot while under the influence of PCP-laced marijuana. During the bungled attempt, Andrus fired multiple shots, killing car owner Avelino Diaz and bystander Kim-Phuong Vu Bui. The State charged Andrus with capital murder. At the guilt phase of trial, Andrus’ defense counsel declined to present an opening statement. After the State rested its case, the defense immediately rested as well. In Per Curiam his closing argument, defense counsel conceded Andrus’ guilt and informed the jury that the trial would “boil down to the punishment phase,” emphasizing that “that’s where we are going to be fighting.” 45 Tr. 18. The jury found Andrus guilty of capital murder. Trial then turned to the punishment phase. Once again, Andrus’ counsel presented no opening statement. In its 3day case in aggravation, the State put forth evidence that Andrus had displayed aggressive and hostile behavior while confined in a juvenile detention center; that Andrus had tattoos indicating gang affiliations; and that Andrus had hit, kicked, and thrown excrement at prison officials while awaiting trial. The State also presented evidence tying Andrus to an aggravated robbery of a dry-cleaning business. Counsel raised no material objections to the State’s evidence and cross-examined the State’s witnesses only briefly. When it came to the defense’s case in mitigation, counsel first called Andrus’ mother to testify. The direct examination focused on Andrus’ basic biographical information and did not reveal any difficult circumstances in Andrus’ childhood. Andrus’ mother testified that Andrus had an “excellent” relationship with his siblings and grandparents. 49 id., at 52, 71. She also insisted that Andrus “didn’t have access to” “drugs or pills in [her] household,” and that she would have “counsel[ed] him” had she found out that he was using drugs. Id., at 67, 79. The second witness was Andrus’ biological father, Michael Davis, with whom Andrus had lived for about a year when Andrus was around 15 years old. Davis had been in and out of prison for much of Andrus’ life and, before he appeared to testify, had not seen Andrus in more than six years. The bulk of Davis’ direct examination explored such topics as Davis’ criminal history and his relationship with Andrus’ mother. Toward the end of the direct examination, counsel elicited testimony that Andrus had been “good Per Curiam around [Davis]” during the 1-year period he had lived with Davis. 50 id., at 8. Once Davis stepped down, Andrus’ counsel informed the court that the defense rested its case and did not intend to call any more witnesses. After the court questioned counsel about this choice during a sidebar discussion, however, counsel changed his mind and decided to call additional witnesses. Following a court recess, Andrus’ counsel called Dr. John Roache as the defense’s only expert witness. Counsel’s terse direct examination focused on the general effects of drug use on developing adolescent brains. On crossexamination, the State quizzed Dr. Roache about the relevance and purpose of his testimony, probing pointedly whether Dr. Roache “drove three hours from San Antonio to tell the jury . . . that people change their behavior when they use drugs.” 51 id., at 21. Counsel next called James Martins, a prison counselor who had worked with Andrus. Martins testified that Andrus “started having remorse” in the past two months and was “making progress.” Id., at 35. On cross-examination, the State emphasized that Andrus’ feelings of remorse had manifested only recently, around the time trial began. Finally, Andrus himself testified. Contrary to his mother’s depiction of his upbringing, he stated that his mother had started selling drugs when he was around six years old, and that he and his siblings were often home alone when they were growing up. He also explained that he first started using drugs regularly around the time he was 15. All told, counsel’s questioning about Andrus’ childhood comprised four pages of the trial transcript. The State on cross declared, “I have not heard one mitigating circumstance in your life.” Id., at 60. The jury sentenced Andrus to death. Per Curiam B After an unsuccessful direct appeal, Andrus filed a state habeas application, principally alleging that his trial counsel was ineffective for failing to investigate or present available mitigation evidence. During an 8-day evidentiary hearing, Andrus presented what the Texas trial court characterized as a “tidal wave of information . . . with regard to mitigation.” 7 Habeas Tr. 101. The evidence revealed a childhood marked by extreme neglect and privation, a family environment filled with violence and abuse. Andrus was born into a neighborhood of Houston, Texas, known for its frequent shootings, gang fights, and drug overdoses. Andrus’ mother had Andrus, her second of five children, when she was 17. The children’s fathers never stayed as part of the family. One of them raped Andrus’ younger half sister when she was a child. The others—some physically abusive toward Andrus’ mother, all addicted to drugs and carrying criminal histories—constantly flitted in and out of the picture. Starting when Andrus was young, his mother sold drugs and engaged in prostitution. She often made her drug sales at home, in view of Andrus and his siblings. She also habitually used drugs in front of them, and was high more often than not. In her frequently disoriented state, she would leave her children to fend for themselves. Many times, there was not enough food to eat. After her boyfriend was killed in a shooting, Andrus’ mother became increasingly dependent on drugs and neglectful of her children. As a close family friend attested, Andrus’ mother “would occasionally just take a week or a weekend and binge [on drugs]. She would get a room somewhere and just go at it.” 13 Habeas Tr., Def. Exh. 13, p. 2. With the children often left on their own, Andrus assumed responsibility as the head of the household for his four siblings, including his older brother with special needs. Andrus was around 12 years old at the time. He cleaned Per Curiam for his siblings, put them to bed, cooked breakfast for them, made sure they got ready for school, helped them with their homework, and made them dinner. According to his siblings, Andrus was “a protective older brother” who “kept on to [them] to stay out of trouble.” Id., Def. Exh. 18, p. 1. Andrus, by their account, was “very caring and very loving,” “liked to make people laugh,” and “never liked to see people cry.” Ibid.; id., Def. Exh. 9, p. 1. While attempting to care for his siblings, Andrus struggled with mental-health issues: When he was only 10 or 11, he was diagnosed with affective psychosis. At age 16, Andrus was sentenced to a juvenile detention center run by the Texas Youth Commission (TYC), for allegedly “serv[ing] as the ‘lookout’ ” while he and his friends robbed a woman of her purse. 10 Habeas Tr., State Exh. 16, p. 9; 13 id., Def. Exh. 4, p. 4 (“[R]ecords indicate[d that] Andrus served as the lookout”); 3 id., at 273–274; 5 id., at 206.1 While in TYC custody, Andrus was prescribed high doses of psychotropic drugs carrying serious adverse side effects. He also spent extended periods in isolation, often for purported infractions like reporting that he had heard voices telling him to do bad things. TYC records on Andrus noted multiple instances of self-harm and threats of suicide. After 18 months in TYC custody, Andrus was transferred to an adult prison facility. Not long after Andrus’ release from prison at age 18, Andrus attempted the fatal carjacking that resulted in his capital convictions. While incarcerated awaiting trial, Andrus tried to commit suicide. He slashed his wrist with a razor —————— 1 The dissent states that the victim identified Andrus as the individual holding the gun, post, at 5 (opinion of ALITO, J.), but in fact, the victim testified at Andrus’ trial that she did not and could not identify faces or individuals, see 4 Tr. 17, 19–20. The dissent also claims that “the victim matched Andrus’s clothing to the gunman’s,” post, at 5, n. 1, but neglects to mention that the victim described at least two individuals as wearing such clothing, see 46 Tr. 25–27. Per Curiam blade and used his blood to smear messages on the walls, beseeching the world to “[j]ust let [him] die.” 31 id., Def. Exh. 122–A, ANDRUS–SH 4522. After considering all the evidence at the hearing, the Texas trial court concluded that Andrus’ counsel had been ineffective for “failing to investigate and present mitigating evidence regarding [Andrus’] abusive and neglectful childhood.” App. to Pet. for Cert. 36. The court observed that the reason Andrus’ jury did not hear “relevant, available, and persuasive mitigating evidence” was that trial counsel had “fail[ed] to investigate and present all other mitigating evidence.” Id., at 36–37. The court explained that “there [is] ample mitigating evidence which could have, and should have, been presented at the punishment phase of [Andrus’] trial.” Id., at 36. For that reason, the court concluded that counsel had been constitutionally ineffective, and that habeas relief, in the form of a new punishment trial, was warranted. Id., at 37, 42. C The Texas Court of Criminal Appeals rejected the trial court’s recommendation to grant habeas relief. In an unpublished per curiam order, the Court of Criminal Appeals concluded without elaboration that Andrus had “fail[ed] to meet his burden under Strickland v. Washington, 466 U. S. 668 (1984), to show by a preponderance of the evidence that his counsel’s representation fell below an objective standard of reasonableness and that there was a reasonable probability that the result of the proceedings would have been different but for counsel’s deficient performance.” App. to Pet. for Cert. 7–8. A concurring opinion reasoned that, even if counsel had provided deficient performance under Strickland, Andrus could not show that counsel’s deficient performance prejudiced him. Andrus petitioned for a writ of certiorari. We grant the Per Curiam petition, vacate the judgment of the Texas Court of Criminal Appeals, and remand for further proceedings not inconsistent with this opinion. The evidence makes clear that Andrus’ counsel provided constitutionally deficient performance under Strickland. But we remand so that the Court of Criminal Appeals may address the prejudice prong of Strickland in the first instance. II To prevail on a Sixth Amendment claim alleging ineffective assistance of counsel, a defendant must show that his counsel’s performance was deficient and that his counsel’s deficient performance prejudiced him. Strickland, 466 U. S., at 688, 694. To show deficiency, a defendant must show that “counsel’s representation fell below an objective standard of reasonableness.” Id., at 688. And to establish prejudice, a defendant must show “that there is a reasonable probability that, but for counsel’s unprofessional errors, the result of the proceeding would have been different.” Id., at 694. A “It is unquestioned that under prevailing professional norms at the time of [Andrus’] trial, counsel had an ‘obligation to conduct a thorough investigation of the defendant’s background.’ ” Porter v. McCollum, 558 U. S. 30, 39 (2009) (per curiam) (quoting Williams v. Taylor, 529 U. S. 362, 396 (2000)). Counsel in a death-penalty case has “ ‘a duty to make reasonable investigations or to make a reasonable decision that makes particular investigations unnecessary.’ ” Wiggins v. Smith, 539 U. S. 510, 521 (2003) (quoting Strickland, 466 U. S., at 691). “ ‘In any ineffectiveness case, a particular decision not to investigate must be directly assessed for reasonableness in all the circumstances, applying a heavy measure of deference to counsel’s judgments.’ ” Wiggins, 539 U. S., at 521–522. Per Curiam Here, the habeas record reveals that Andrus’ counsel fell short of his obligation in multiple ways: First, counsel performed almost no mitigation investigation, overlooking vast tranches of mitigating evidence. Second, due to counsel’s failure to investigate compelling mitigating evidence, what little evidence counsel did present backfired by bolstering the State’s aggravation case. Third, counsel failed adequately to investigate the State’s aggravating evidence, thereby forgoing critical opportunities to rebut the case in aggravation. Taken together, those deficiencies effected an unconstitutional abnegation of prevailing professional norms. To assess whether counsel exercised objectively reasonable judgment under prevailing professional standards, we first ask “whether the investigation supporting counsel’s decision not to introduce mitigating evidence of [Andrus’] background was itself reasonable.” Id., at 523 (emphasis deleted); see also id., at 528 (considering whether “the scope of counsel’s investigation into petitioner’s background” was reasonable); Porter, 558 U. S., at 39. Here, plainly not. Although counsel nominally put on a case in mitigation in that counsel in fact called witnesses to the stand after the prosecution rested, the record leaves no doubt that counsel’s investigation to support that case was an empty exercise. To start, counsel was, by his own admissions at the habeas hearing, barely acquainted with the witnesses who testified during the case in mitigation. Counsel acknowledged that the first time he met Andrus’ mother was when she was subpoenaed to testify, and the first time he met Andrus’ biological father was when he showed up at the courthouse to take the stand. Counsel also admitted that he did not get in touch with the third witness (Dr. Roache) until just before voir dire, and became aware of the final witness (Martins) only partway through trial. Apart from Per Curiam some brief pretrial discussion with Dr. Roache, who averred that he was “struck by the extent to which [counsel] appeared unfamiliar” with pertinent issues, counsel did not prepare the witnesses or go over their testimony before calling them to the stand. 13 Habeas Tr., Def. Exh. 6, p. 3. Over and over during the habeas hearing, counsel acknowledged that he did not look into or present the myriad tragic circumstances that marked Andrus’ life. For instance, he did not know that Andrus had attempted suicide in prison, or that Andrus’ experience in the custody of the TYC left him badly traumatized. Aside from Andrus’ mother and biological father, counsel did not meet with any of Andrus’ close family members, all of whom had disturbing stories about Andrus’ upbringing. As a clinical psychologist testified at the habeas hearing, Andrus suffered “very pronounced trauma” and posttraumatic stress disorder symptoms from, among other things, “severe neglect” and exposure to domestic violence, substance abuse, and death in his childhood. 6 id., at 168–169, 180; 7 id., at 52. Counsel uncovered none of that evidence. Instead, he “abandoned [his] investigation of [Andrus’] background after having acquired only rudimentary knowledge of his history from a narrow set of sources.” Wiggins, 539 U. S., at 524. On top of that, counsel “ignored pertinent avenues for investigation of which he should have been aware,” and indeed was aware. Porter, 558 U. S., at 40. At trial, counsel averred that his review did not reveal that Andrus had any mental-health issues. But materials prepared by a mitigation expert well before trial had pointed out that Andrus had been “diagnosed with affective psychosis,” a mentalhealth condition marked by symptoms such as depression, mood lability, and emotional dysregulation. 3 id., at 70. At the habeas hearing, counsel admitted that he “recall[ed] noting,” based on the mitigation expert’s materials, that Andrus had been “diagnosed with this seemingly serious Per Curiam mental health issue.” Id., at 71. He also acknowledged that a clinical psychologist briefly retained to examine a limited sample of Andrus’ files had informed him that Andrus may have schizophrenia. Clearly, “the known evidence would [have] le[d] a reasonable attorney to investigate further.” Wiggins, 539 U. S., at 527. Yet counsel disregarded, rather than explored, the multiple red flags. In short, counsel performed virtually no investigation, either of the few witnesses he called during the case in mitigation, or of the many circumstances in Andrus’ life that could have served as powerful mitigating evidence. The untapped body of mitigating evidence was, as the habeas hearing revealed, simply vast. “[C]ounsel’s failure to uncover and present [the] voluminous mitigating evidence,” moreover, cannot “be justified as a tactical decision.” Id., at 522; see also Williams, 529 U. S., at 396. Despite repeated questioning, counsel never offered, and no evidence supports, any tactical rationale for the pervasive oversights and lapses here. Instead, the overwhelming weight of the record shows that counsel’s “failure to investigate thoroughly resulted from inattention, not reasoned strategic judgment.” Wiggins, 539 U. S., at 526. That failure is all the more alarming given that counsel’s purported strategy was to concede guilt and focus on mitigation. Indeed, counsel justified his decision to present “basically” “no defense” during the guilt phase by stressing that he intended to train his efforts on the case in mitigation. 3 Habeas Tr. 57. As the habeas hearing laid bare, that representation blinked reality. Simply put, “the scope of counsel’s [mitigation] investigation” approached nonexistent. Wiggins, 539 U. S., at 528 (emphasis deleted). No doubt due to counsel’s failure to investigate the case in mitigation, much of the so-called mitigating evidence he offered unwittingly aided the State’s case in aggravation. Per Curiam Counsel’s introduction of seemingly aggravating evidence confirms the gaping distance between his performance at trial and objectively reasonable professional judgment. The testimony elicited from Andrus’ mother best illustrates this deficiency. First to testify during the case in mitigation, Andrus’ mother sketched a portrait of a tranquil upbringing, during which Andrus got himself into trouble despite his family’s best efforts. On her account, Andrus fell into drugs entirely on his own: Drugs were not available at home, Andrus did not use them at home, and she would have intervened had she known about Andrus’ drug habits. Andrus, his mother related to the jury, “[k]ind of ” “just decided he didn’t want to do what [she] told him to do.” 49 Tr. 83. Even though counsel called Andrus’ mother as a defense witness, he was ill-prepared for her testimony. Andrus told counsel that his mother was being untruthful on the stand, but counsel made no real attempt to probe the accuracy of her testimony. Later, at the habeas hearing, counsel conceded that Andrus’ mother had been a “hostile” witness. 3 Habeas Tr. 94. He further admitted that he “[did not] know if [Andrus’ mother] was telling the truth,” id., at 96, and could not even say that he had known what Andrus’ mother would say on the stand, because he had not “done any independent investigation” of her, id., at 95. None of that inaction was for want of warning. During the habeas proceedings, a mitigation specialist averred that she had alerted Andrus’ counsel to her concerns about Andrus’ mother well before trial. In a short interview with the mitigation specialist, Andrus’ mother had stated that she “had too many kids,” and had taken out a $10,000 lifeinsurance policy on Andrus on which she would be able to collect were Andrus executed. 13 id., Def. Exh. 28, p. 5. Troubled by these comments, the mitigation specialist “specifically discussed with [Andrus’ counsel] the fact that [Andrus’ mother] was not being a cooperative witness and Per Curiam might not have Andrus’ best interests motivating her behavior.” Id., at 6. But Andrus’ counsel did not heed the caution. Turning a bad situation worse, counsel’s uninformed decision to call Andrus’ mother ultimately undermined Andrus’ own testimony. After Andrus testified that his mother had sold drugs from home when he was a child, counsel promptly pointed out that Andrus “heard [his] mama testify,” and that she “didn’t say anything about selling drugs.” 51 Tr. 48. Whether counsel merely intended to provide Andrus an opportunity to explain the discrepancy (or, far worse, sought to signal that his client was being deceitful) the jury could have understood counsel’s statements to insinuate that Andrus was lying. Counsel did nothing to dislodge that suggestion, and the damaging exchange occurred only because defense counsel had called a hostile witness in the first place. Plainly, these offerings of seemingly aggravating evidence further demonstrate counsel’s constitutionally deficient performance. Counsel also failed to conduct any independent investigation of the State’s case in aggravation, despite ample opportunity to do so. He thus could not, and did not, rebut critical aggravating evidence. This failure, too, reinforces counsel’s deficient performance. See Rompilla v. Beard, 545 U. S. 374, 385 (2005) (“counsel ha[s] a duty to make all reasonable efforts to learn what they c[an] about the offense[s]” the prosecution intends to present as aggravating evidence). During the case in aggravation, the State’s task was to prove to the jury that Andrus presented a future danger to society. Tex. Code Crim. Proc. Ann., Art. 37.071, §2(b)(1) (Vernon 2006). To that end, the State emphasized that Andrus had acted aggressively in TYC facilities and in prison while awaiting trial. This evidence principally comprised Per Curiam verbal threats, but also included instances of Andrus’ kicking, hitting, and throwing excrement at prison officials when they tried to control him. See App. to Pet. for Cert. 10–13. Had counsel genuinely investigated Andrus’ experiences in TYC custody, counsel would have learned that Andrus’ behavioral problems there were notably mild, and the harms he sustained severe.2 Or, with sufficient understanding of the violent environments Andrus inhabited his entire life, counsel could have provided a counternarrative of Andrus’ later episodes in prison. But instead, counsel left all of that aggravating evidence untouched at trial—even going so far as to inform the jury that the evidence made it “probabl[e]” that Andrus was “a violent kind of guy.” 52 Tr. 35. The State’s case in aggravation also highlighted Andrus’ alleged commission of a knifepoint robbery at a drycleaning business. At the time of the offense, “all [that] the crime victim . . . told the police . . . was that he had been the victim of an assault by a black man.” 3 Habeas Tr. 65. Although Andrus stressed to counsel his innocence of the offense, and although the State had not proceeded with charges, Andrus’ counsel did not attempt to exclude or rebut the State’s evidence. That, too, is because Andrus’ counsel concededly had not independently investigated the incident. In fact, at the habeas hearing, counsel did not even recall Andrus’ denying responsibility for the offense. —————— 2 See, e.g., 5 Habeas Tr. 189 (TYC ombudsman testifying that it was “surpris[ing] how few” citations Andrus received, “particularly in the dorms where [Andrus] was” housed); ibid. (TYC ombudsman finding “nothing uncommon” about Andrus’ altercations because “sometimes you . . . have to fight to get by” in the “violent atmosphere” and “savage environment”); id., at 169 (TYC ombudsman testifying that Andrus’ isolation periods in TCY custody, for 90 days at a time when Andrus was 16 or 17 years old, “would horrify most current professionals in our justice field today”); id., at 246 (TYC ombudsman testifying that Andrus’ “experience at TYC” “damaged him” and “further traumatized” him). Per Curiam Had he looked, counsel would have discovered that the only evidence originally tying Andrus to the incident was a lone witness statement, later recanted by the witness,3 that led to the inclusion of Andrus’ photograph in a belated photo array, which the police admitted gave rise to numerous reliability concerns. The dissent thus reinforces Andrus’ claim of deficient performance by recounting and emphasizing the details of the dry-cleaning offense as if Andrus were undoubtedly the perpetrator. See post, at 6 (opinion of ALITO, J.). The very problem here is that the jury indeed heard that account, but not any of the significant evidence that would have cast doubt on Andrus’ involvement in the offense at all: significant evidence that counsel concededly failed to investigate.4 That is hardly the work of reasonable counsel. In Texas, a jury cannot recommend a death sentence without unanimously finding that a defendant presents a future danger to society (i.e., that the State has made a sufficient showing of aggravation). Tex. Code Crim. Proc. Ann., Art. 37.071, —————— 3 The dissent maintains that this witness, Andrus’ ex-girlfriend, “linked [Andrus] to the robbery,” post, at 6, n. 4, even though she testified at the habeas hearing that she thought “it was impossible” that Andrus had committed the offense, 8 Habeas Tr. 57. 4 The dissent does not mention that Andrus’ image was conspicuously placed in a central position in the photo array, as the “[o]nly one . . . looking directly up and out.” 8 Habeas Tr. 35; see also id., at 32. Nor does the dissent acknowledge that there was an approximately 3-month interval between the incident (after which the victim provided little identifying information about the assailant) and the police’s presentation of the photo array to the victim. See id., at 37; 46 Tr. 65. When asked about the delay, the detective who prepared the photo array admitted that memory can “deca[y] within a matter of days after a traumatizing incident like a crime” and that an “eyewitness identificatio[n]” “can be” “more exponentially problematic” “the greater the time interval between the incident and the identification.” 8 Habeas Tr. 31; see also ibid. (detective confirming that there can be “real problems with reliability” if an “identification [was] made several months” after). Per Curiam §2(b)(1). Only after a jury makes a finding of future dangerousness can it consider any mitigating evidence. Ibid. Thus, by failing to conduct even a marginally adequate investigation, counsel not only “seriously compromis[ed his] opportunity to respond to a case for aggravation,” Rompilla, 545 U. S., at 385, but also relinquished the first of only two procedural pathways for opposing the State’s pursuit of the death penalty. There is no squaring that conduct, certainly when examined alongside counsel’s other shortfalls, with objectively reasonable judgment. B Having found deficient performance, the question remains whether counsel’s deficient performance prejudiced Andrus. See Strickland, 466 U. S., at 692. Here, prejudice exists if there is a reasonable probability that, but for his counsel’s ineffectiveness, the jury would have made a different judgment about whether Andrus deserved the death penalty as opposed to a lesser sentence. See Wiggins, 539 U. S., at 536; see also Tex. Code Crim. Proc. Ann., Art. 37.071, §2(e)(1). In assessing whether Andrus has made that showing, the reviewing court must consider “the totality of the available mitigation evidence—both that adduced at trial, and the evidence adduced in the habeas proceeding”—and “reweig[h] it against the evidence in aggravation.” Williams, 529 U. S., at 397–398; see also Sears v. Upton, 561 U. S. 945, 956 (2010) (per curiam) (“A proper analysis of prejudice under Strickland would have taken into account the newly uncovered [mitigation] evidence . . . , along with the mitigation evidence introduced during [the defendant’s] penalty phase trial, to assess whether there is a reasonable probability that [the defendant] would have received a different sentence after a constitutionally sufficient mitigation investigation” (citing cases)). And because Andrus’ death sentence required a unanimous jury recomPer Curiam mendation, Tex. Code Crim. Proc. Ann., Art. 37.071, prejudice here requires only “a reasonable probability that at least one juror would have struck a different balance” regarding Andrus’ “moral culpability,” Wiggins, 539 U. S., at 537–538; see also Tex. Code Crim. Proc. Ann., Art. 37.071, §2(e)(1). According to Andrus, effective counsel would have painted a vividly different tableau of aggravating and mitigating evidence than that presented at trial. See Pet. for Cert. 18. But despite powerful and readily available mitigating evidence, Andrus argues, the Texas Court of Criminal Appeals failed to engage in any meaningful prejudice inquiry. See ibid. It is unclear whether the Court of Criminal Appeals considered Strickland prejudice at all. Its one-sentence denial of Andrus’ Strickland claim, see supra, at 7, does not conclusively reveal whether it determined that Andrus had failed to demonstrate deficient performance under Strickland’s first prong, that Andrus had failed to demonstrate prejudice under Strickland’s second prong, or that Andrus had failed to satisfy both prongs of Strickland. Unlike the concurring opinion, however, the brief order of the Court of Criminal Appeals did not analyze Strickland prejudice or engage with the effect the additional mitigating evidence highlighted by Andrus would have had on the jury.5 What little is evident from the proceeding below is —————— 5 The Court of Criminal Appeals did briefly observe that the trial court’s order recommending relief had omitted the “ ‘reasonable probability’ ” language when reciting the Strickland prejudice standard. App. to Pet. for Cert. 8, n. 2; cf. Strickland, 466 U. S., at 694 (a defendant “must show that there is a reasonable probability that, but for counsel’s unprofessional errors, the result of the proceeding would have been different”). Even were there reason to set aside that “[t]rial judges are presumed to know the law,” Lambrix v. Singletary, 520 U. S. 518, 532, n. 4 (1997) (internal quotation marks omitted), the trial court’s omission of the “reasonable probability” language would at most suggest that it held Andrus Per Curiam that the concurring opinion’s analysis of or conclusion regarding prejudice did not garner a majority of the Court of Criminal Appeals.6 Given that, the court may have concluded simply that Andrus failed to demonstrate deficient performance under the first prong of Strickland (without even reaching the second prong). For the reasons explained above, any such conclusion is erroneous as a matter of law. See supra, at 8–16. The record before us raises a significant question whether the apparent “tidal wave,” 7 Habeas Tr. 101, of “available mitigating evidence taken as a whole” might have sufficiently “ ‘influenced the jury’s appraisal’ of [Andrus’] moral culpability” as to establish Strickland prejudice, Wiggins, 539 U. S., at 538 (quoting Williams, 529 U. S., at 398). (That is, at the very least, whether there is a reasonable probability that “at least one juror would have struck a different balance.” Wiggins, 539 U. S., at 537.) That prejudice inquiry “necessarily require[s] a court to ‘speculate’ as to the effect of the new evidence” on the trial evidence, “regardless of how much or little mitigation evidence was presented during the initial penalty phase.” Sears, 561 U. S., at 956; see also id., at 954 (“We have never limited the prejudice inquiry under Strickland to cases in which there was —————— to (and found that Andrus had satisfied) a stricter standard of prejudice than that set forth in Strickland. 6 The concurring opinion, moreover, seemed to assume that the prejudice inquiry here turns principally on how the facts of this case compare to the facts in Wiggins. We note that we have never before equated what was sufficient in Wiggins with what is necessary to establish prejudice. Cf. Wiggins, 539 U. S., at 537–538 (“[T]he mitigating evidence in this case is stronger, and the State’s evidence in support of the death penalty far weaker, than in Williams, where we found prejudice as the result of counsel’s failure to investigate and present mitigating evidence”); Williams, 529 U. S., at 399 (finding such prejudice after applying AEDPA deference). Per Curiam ‘little or no mitigation evidence’ presented”).7 Given the uncertainty as to whether the Texas Court of Criminal Appeals adequately conducted that weighty and record-intensive analysis in the first instance, we remand for the Court of Criminal Appeals to address Strickland prejudice in light of the correct legal principles articulated above. See Cutter v. Wilkinson, 544 U. S. 709, 718, n. 7 (2005). * * * We conclude that Andrus has shown deficient performance under the first prong of Strickland, and that there is a significant question whether the Court of Criminal Appeals properly considered prejudice under the second prong of Strickland. We thus grant Andrus’ petition for a writ of certiorari and his motion for leave to proceed in forma pauperis, vacate the judgment of the Texas Court of Criminal Appeals, and remand the case for the court to address the prejudice prong of Strickland in a manner not inconsistent with this opinion. It is so ordered. —————— 7 The dissent trains its attention on the aggravating evidence actually presented at trial. Post, at 4–7; but see Sears, 561 U. S., at 956 (Strickland prejudice inquiry “will necessarily require a court to ‘speculate’ as to the effect of the new evidence” on the trial evidence); 561 U. S., at 956 (“A proper analysis of prejudice under Strickland would have taken into account the newly uncovered evidence . . . , along with the mitigation evidence introduced during [the] penalty phase trial”).",
+   "lineup": [],
+   "provisions": [
+    {
+     "id": "amend-6",
+     "quote": "II To prevail on a Sixth Amendment claim alleging ineffective assistance of counsel, a defendant must show that his counsel’s performance was deficient and that his counsel’s deficient performance prejudiced him."
+    }
+   ],
+   "qp_url": null,
+   "question_presented": [],
+   "qp_checked": true
+  },
+  {
+   "r": "44",
+   "date": "2020-06-15",
+   "docket": "17-1618",
+   "name": "Bostock v. Clayton County",
+   "summary": "An employer who fires an individual merely for being gay or transgender violates Title VII of the Civil Rights Act of 1964.",
+   "author_code": "NG",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/17-1618_hfci.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "GORSUCH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and GINSBURG, BREYER, SOTOMAYOR, and KAGAN, JJ., joined. ALITO, J., filed a dissenting opinion, in which THOMAS, J., joined. KAVANAUGH, J., filed a dissenting opinion.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": "This Court has also recognized that the First Amendment can bar the application of employment discrimination laws “to claims concerning the employment relationship between a religious institution and its ministers.” Hosanna-Tabor Evangelical Lutheran Church and School v."
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/17-01618qp.pdf",
+   "question_presented": [
+    "Whether discrimination against an employee because of sexual orientation constitutes prohibited employment discrimination \"because of... sex\" within the meaning of Title VII of the Civil Rights Act of 1964, 42U.S.C. § 2000e-2."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "43",
+   "date": "2020-06-15",
+   "docket": "18-1584",
+   "name": "United States Forest Service v. Cowpasture River Preservation Assn.",
+   "summary": "Because the Department of the Interior’s decision to assign responsibility over the Appalachian Trail to the National Park Service did not transform the land over which the Trail passes into land within the National Park System, the Forest Service had authority under the Mineral Leasing Act to grant a natural-gas pipeline right-of-way through lands in the George Washington National Forest traversed by the Appalachian Trail.",
+   "author_code": "T",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-1584_igdj.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "THOMAS, J., delivered the opinion of the Court, in which ROBERTS, C. J., and BREYER, ALITO, GORSUCH, and KAVANAUGH, JJ., joined, and in which GINSBURG, J., joined except as to Part III–B–2. SOTOMAYOR, J., filed a dissenting opinion, in which KAGAN, J., joined.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority in part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority in part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "majority in part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority in part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority in part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority in part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "majority in part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/18-01584qp.pdf",
+   "question_presented": [
+    "The Appalachian National Scenic Trail (Appalachian Trail) is more than 2000 miles long, extending from Maine to Georgia, with approximately 1000 miles of the Trail crossing through lands within national forests. The National Trails System Act provides that the Appalachian Trail \"shall be administered primarily as a footpath by the Secretary of the Interior,\" 16 U.S.C. 1244(a)(l), and clarifies that \"[n]othing contained in [the Act] shall be deemed to transfer among Federal agencies any management responsibilities established under any other law for federally administered lands,\" 16 U.S.C. 1246(a)(l)(A). Under the Mineral Leasing Act, 30 U.S.C. 181 et seq., the United States Forest Service (Forest Service) has authority to grant certain rights-of-way through lands in the National Forest System, but no federal agency has authority under that statute to grant equivalent rights-of-way through lands in the National Park System. See 30 U.S.C. 185. The question presented is:",
+    "Whether the Forest Service has authority to grant rights-of-way under the Mineral Leasing Act through lands traversed by the Appalachian Trail within national forests."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "42",
+   "date": "2020-06-08",
+   "docket": "18-8369",
+   "name": "Lomax v. Ortiz-Marquez",
+   "summary": "A Prison Litigation Reform Act of 1995 provision that generally prevents a prisoner from bringing suit in forma pauperis if he has had three or more prior suits “dismissed on the ground[ ] that [they] . . . fail[ed] to state a claim upon which relief may be granted,” 28 U. S. C. §1915(g), refers to any dismissal for failure to state a claim, whether with prejudice or without.",
+   "author_code": "EK",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-8369_3dq3.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "KAGAN, J., delivered the opinion of the Court, in which ROBERTS, C. J., and GINSBURG, BREYER, ALITO, SOTOMAYOR, GORSUCH, and KAVANAUGH, JJ., joined, and in which THOMAS, J., joined as to all but footnote 4.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority in part"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/18-08369qp.pdf",
+   "question_presented": [
+    "A dismissal of a civil action without prejudice for failure to state a claim, is it or is it not a strike under 28 U.S.C. 1915(g)?",
+    "Courts have held that, unless otherwise specified, a dismissal for failure to state a claim under Rule 12(b)(6) is presumed to be both a judgment on the merits and to be rendered with prejudice, is this true or false?",
+    "“A district court's dismissal under Rule 12(b)(6) is, of course, with prejudice unless it specifically orders dismissal without prejudice, is this true or false? \" [l]n the absence of a clear statement to the contrary, a dismissal pursuant to Fed. R. Civ. P. 12(b)(6) is presumed to be with prejudice.\"",
+    "The Fourth Circuit Court decided a dismissal without prejudice for failure to state a claim did not count as a strike under 28 U.S.C.S. 1915(g), but the Tenth Circuit Court decided that a dismissal without prejudice do count as a strike under the Prison Litigation Reform Act of 1995( PLRA)and/or 28 U.S.C.S. 1915(g), which court is right and, is this a legal conflict between these two courts?",
+    "Would this statement of the Tenth Circuit be legally right or wrong, A dismissal for failure to state a claim under Rule 12(b)(6) satisfy the plain text of 1915(g) and therefore will count as a strike, without making an y legal interpretation of this provision, inquiry, or analysis thereof in regard to congress intent or purpose? When Congress directly incorporates language with an established legal meaning into a statute, we may infer that Congress intended the language to take on its established meaning. United States v. Langley, 62 F. 3d 602, 605 (4th Cir. 1995) (\"It is firmly entrenched that Congress is presumed to enact legislation with knowledge of the law; that is with the knowledge of the interpretation that courts have given to an existing statute.\"); see also Miles v. Apex Marine Corp., 498 U. S. 19, 32, 111 S. Ct. 317, 112 L. Ed. 2d 275 (1990) (\" We assume that Congress is aware of existing law when it passes legislation.\").",
+    "Is it the Court task here to determine whether Congress intended an action or appeal \"that was dismissed on the grounds that it…fails to state a claim upon which relief may be granted\" to count as a strike under 28 U.S. C. 1915(g) if that dismissal was specifically designated to be \"without prejudice?\"",
+    "The dismissal for failure to state a claim under Federal Rule of Civil Procedure 12(b) (6) is a \"judgment on the merits and, the type of prior dismissal for failure to state a claim contemplated by subsection 1915(g) is one that constituted an adjudication on the merits and prejudiced the filing of a subsequent complaint with the same allegations, is this true or false?",
+    "Is it true, a dismissal without prejudice for failure to state a claim \"does not\" fall within the plain and unambiguous meaning of 191S(g)'s·unqualified phrase \"dismissed ... [for] fail[ure] to state a claim\"? If true, As a result, a dismissal without prejudice for failure to state a claim does not count as a strike, is this true or false?",
+    "In any Circuit Court, will it be immaterial to the strikes analysis [whether] the dismissal was without prejudice, as opposed to with prejudice? The U.S. Court of Appeals for the Tenth Circuit stated, \" [i}n this circuit, it is immaterial ( Not material; not pertinent; of no consequence) to the strikes analysis [whether] the dismissal was without prejudice,\" as opposed to with prejudice.",
+    "Immaterial issue. An issue which occurs where a material allegation in the pleadings is not answered, but an issue is taken on some point which will not determine the merits of the case, so that the court must be at a loss to determine for which of the parties to give judgment. Garland v. Davis (US) 4 How 131, 146, 11 L Ed 907, 914.",
+    "Is it true, a dismissal without prejudice for failure to state a claim is not an adjudication on the merits, and, if true, does it permits a plaintiff to refile the complaint as though it had never been filed? See Mendez v. Elliot, 45 F.3d 75, 78(4th Cir. 1995).",
+    "GRANTED LIMITED TO THE FOLLOWING QUESTION: DOES A DISMISSAL WITHOUT PREJUDICE FOR FAILURE TO STATE A CLAIM COUNT AS A STRIKE UNDER 28 U.S.C. §1915(G)?"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "41",
+   "date": "2020-06-01",
+   "docket": "18-1432",
+   "name": "Nasrallah v. Barr",
+   "summary": "Title 8 U. S. C. §§1252(a)(2)(C) and (D) do not preclude judicial review of a removable noncitizen’s factual challenges to an order denying relief under the international Convention Against Torture, which protects noncitizens from removal to a country where they would likely face torture.",
+   "author_code": "BK",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-1432_e2pg.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "KAVANAUGH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and GINSBURG, BREYER, SOTOMAYOR, KAGAN, and GORSUCH, JJ., joined. THOMAS, J., filed a dissenting opinion, in which ALITO, J., joined.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/18-01432qp.pdf",
+   "question_presented": [
+    "Because of the United States' inviolable obligation not to deport individuals to countries in which they are likely to be subject to torture, individuals who are statutorily ineligible for asylum may request withholding (or deferral) of removal. Such relief is, as courts repeatedly note, a fundamental bulwark to ensure that the government's decision to deport an individual does not result in torture or death.",
+    "The courts of appeals have deeply and intractably divided as to whether 8 U.S.C. § 1252(a)(2)(C) divests them of jurisdiction to review factual findings underlying the administrative agency's decision to deny a request for withholding (or deferral) of removal relief. The United States has expressly acknowledged the conflict among the circuits, and it has previously acquiesced to certiorari on this question. This case, unlike those before it, cleanly presents the question for review.",
+    "The question presented is:",
+    "Whether, notwithstanding Section 1252(a)(2)(C), the courts of appeals possess jurisdiction to review factual findings underlying denials of withholding (and deferral) of removal relief."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "21",
+   "date": "2020-04-06",
+   "docket": "18-556",
+   "name": "Kansas v. Glover",
+   "summary": "When a police officer lacks information negating an inference that a person driving is the vehicle’s owner, an investigative traffic stop made after running the vehicle’s license plate and learning that the registered owner’s driver’s license has been revoked is reasonable under the Fourth Amendment.",
+   "author_code": "T",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-556_e1pf.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "THOMAS, J., delivered the opinion of the Court, in which ROBERTS, C. J., and GINSBURG, BREYER, ALITO, KAGAN, GORSUCH, and KAVANAUGH, JJ., joined. KAGAN, J., filed a concurring opinion, in which GINSBURG, J., joined. SOTOMAYOR, J., filed a dissenting opinion.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-4",
+     "quote": "This case presents the question whether a police officer violates the Fourth Amendment by initiating an investigative traffic stop after running a vehicle’s license plate and learning that the registered owner has a revoked driver’s license."
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/18-00556qp.pdf",
+   "question_presented": [
+    "A Kansas officer ran a registration check on a pickup truck and learned that the registered owner's license had been revoked. Suspecting that the owner was unlawfully driving, the officer stopped the truck, confirmed that the owner was driving, and issued the owner a citation for being a habitual violator of Kansas traffic laws. The Kansas Supreme Court, breaking with 12 state supreme courts and 4 federal circuits, held the stop violated the Fourth Amendment.",
+    "The question presented is whether, for purposes of an investigative stop under the Fourth Amendment, it is reasonable for an officer to suspect that the registered owner of a vehicle is the one driving the vehicle absent any information to the contrary."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "20",
+   "date": "2020-03-30",
+   "docket": "18-565",
+   "name": "CITGO Asphalt Refining Co. v. Frescati Shipping Co.",
+   "summary": "The plain language of the safe-berth clause in the parties’ subcharter agreement—requiring petitioners to designate a safe berth for a vessel to load and discharge cargo—establishes a warranty of safety.",
+   "author_code": "SS",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-565_3d93.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "SOTOMAYOR, J., delivered the opinion of the Court, in which ROBERTS, C. J., and GINSBURG, BREYER, KAGAN, GORSUCH, and KAVANAUGH, JJ., joined. THOMAS, J., filed a dissenting opinion, in which ALITO, J., joined.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/18-00565qp.pdf",
+   "question_presented": [
+    "Whether under federal maritime law a safe berth clause in a voyage charter contract is a guarantee of a ship's safety, as the Third Circuit below and the Second Circuit have held, or a duty of due diligence, as the Fifth Circuit has held."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "19",
+   "date": "2020-03-23",
+   "docket": "19-5421",
+   "name": "Davis v. United States",
+   "summary": "There is no legal basis for the Fifth Circuit’s practice of declining to review certain unpreserved factual arguments for plain error.",
+   "author_code": "PC",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/19-5421_o7jq.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "PER CURIAM. In July 2016, police officers in Dallas, Texas, received a tip about a suspicious car parked outside of a house in the Dallas area. The officers approached the car and encountered Charles Davis in the driver’s seat. They ordered him out of the car after smelling marijuana. As Davis exited the car, the officers spotted a black semiautomatic handgun in the door compartment. They then searched Davis and found methamphetamine pills. Davis had previously been convicted of two state felonies. In this case, a federal grand jury in the Northern District of Texas indicted Davis for being a felon in possession of a firearm, 18 U. S. C. §§922(g)(1), 924(a)(2), and for possessing drugs with the intent to distribute them, 21 U. S. C. §§841(a)(1), (b)(1)(C). Davis pleaded guilty to both counts. The presentence report prepared by the probation office noted that Davis was also facing pending drug and gun charges in Texas courts stemming from a separate 2015 state arrest. The District Court sentenced Davis to four years and nine months in prison and ordered that his sentence run consecutively to any sentences that the state courts might impose for his 2015 state offenses. Davis did not",
+   "lineup": [],
+   "provisions": [],
+   "qp_url": null,
+   "question_presented": [],
+   "qp_checked": true
+  },
+  {
+   "r": "18",
+   "date": "2020-03-23",
+   "docket": "18-1171",
+   "name": "Comcast Corp. v. National Assn. of African-American Owned Media",
+   "summary": "A plaintiff who sues for racial discrimination in contracting under 42 U. S. C. §1981 bears the burden of showing that race was a but-for cause of the plaintiff’s injury, and that burden remains constant over the life of the lawsuit.",
+   "author_code": "NG",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-1171_4425.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "GORSUCH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, BREYER, ALITO, SOTOMAYOR, KAGAN, and KAVANAUGH, JJ., joined, and in which GINSBURG, J., joined except for the footnote. GINSBURG, J., filed an opinion concurring in part and concurring in the judgment.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "concurrence in the judgment",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/18-01171qp.pdf",
+   "question_presented": [
+    "Entertainment Studios Networks (\"ESN\") owns several television networks that it sought to have carried on Comcast's cable system. Comcast and ESN met multiple times to discuss a potential deal, but Comcast ultimately declined to carry ESN's networks. ESN's response was to sue Comcast, claiming that Comcast's decision was based on an outlandish racist conspiracy between Comcast, the NAACP, and other civilrights groups and leaders to disadvantage wholly African American-owned networks in violation of 42U.S.C. § 1981.",
+    "The district court dismissed ESN's complaint three times, but the Ninth Circuit reversed. The court first ruled that Section 1981 does not require but-for causation, thereby exacerbating a conflict with the decisions of five other courts of appeals. It then held that ESN's claim was plausible despite the alternative explanations for Comcast's conduct on the face of the complaint, and the complaint's failure to allege facts showing that the other companies with which Comcast contracted were similarly situated to ESN.",
+    "The questions presented are:",
+    "1. Does a claim of race discrimination under 42 U.S.C. § 1981 fail in the absence of but-for causation?",
+    "2. Can a plaintiff state a plausible claim for relief if the complaint does not allege facts tending to exclude obvious alternative explanations for the challenged conduct and does not allege facts to support all elements of the claim?",
+    "GRANTED LIMITED TO QUESTION 1 PRESENTED BY THE PETITION."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "17",
+   "date": "2020-03-23",
+   "docket": "18-6135",
+   "name": "Kahler v. Kansas",
+   "summary": "Due process does not require Kansas to adopt an insanity test that turns on a defendant’s ability to recognize that his crime was morally wrong.",
+   "author_code": "EK",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-6135_j4ek.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "KAGAN, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, GORSUCH, and KAVANAUGH, JJ., joined. BREYER, J., filed a dissenting opinion, in which GINSBURG and SOTOMAYOR, JJ., joined.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-8",
+     "quote": "And in assessing that practice, —————— 4 Kahler also asked us to decide whether the Eighth Amendment requires that States make available the moral-incapacity defense."
+    },
+    {
+     "id": "amend-14",
+     "quote": "Before trial, Kahler filed a motion arguing that Kansas’s treatment of insanity claims violates the Fourteenth Amendment’s Due Process Clause."
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/18-06135qp.pdf",
+   "question_presented": [
+    "Do the Eighth and Fourteenth Amendments permit a state to abolish the insanity defense?"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "16",
+   "date": "2020-03-23",
+   "docket": "18-877",
+   "name": "Allen v. Cooper",
+   "summary": "Congress lacked authority to abrogate the States’ sovereign immunity from copyright infringement suits in the Copyright Remedy Clarification Act of 1990.",
+   "author_code": "EK",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-877_dc8f.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "KAGAN, J., delivered the opinion of the Court, in which ROBERTS, C. J., and ALITO, SOTOMAYOR, GORSUCH, and KAVANAUGH, JJ., joined, and in which THOMAS, J., joined except for the final paragraph in Part II–A and the final paragraph in Part II–B. THOMAS, J., filed an opinion concurring in part and concurring in the judgment. BREYER, J., filed an opinion concurring in the judgment, in which GINSBURG, J., joined.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence in the judgment",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-11",
+     "quote": "The Copyright Remedy Clarification Act of 1990 (CRCA or Act) provides that a State “shall not be immune, under the Eleventh Amendment [or] any other doctrine of sovereign immunity, from suit in Federal court” for copyright infringement. 17 U."
+    },
+    {
+     "id": "amend-14",
+     "quote": "Given the States’ “pattern” of “abus[ive]” copyright infringement, the court held, Congress could accomplish its object under Section 5 of the Fourteenth Amendment. 244 F."
+    },
+    {
+     "id": "art-3",
+     "quote": "That approach “does not comport with our judicial duty under Article III.” Gamble v."
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/18-00877qp.pdf",
+   "question_presented": [
+    "Whether Congress validly abrogated state sovereign immunity via the Copyright Remedy Clarification Act, Pub. L. No. 101-553, 104 Stat. 2749 (1990), in providing remedies for authors of original expression whose federal copyrights are infringed by States."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "15",
+   "date": "2020-03-23",
+   "docket": "18-776",
+   "name": "Guerrero-Lasprilla v. Barr",
+   "summary": "Because the phrase “questions of law” in the Immigration and Nationality Act’s Limited Review Provision, 8 U. S. C. §1252(a)(2)(D), includes the application of a legal standard to undisputed or established facts, the Fifth Circuit erred in holding that it had no jurisdiction to consider petitioners’ “factual” due diligence claims for equitable tolling purposes.",
+   "author_code": "B",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-776_8759.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "BREYER, J., delivered the opinion of the Court, in which ROBERTS, C. J., and GINSBURG, SOTOMAYOR, KAGAN, GORSUCH, and KAVANAUGH, JJ., joined. THOMAS, J., filed a dissenting opinion, in which ALITO, J., joined as to all but Part II–A–1.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Breyer",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent (in part)"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/18-00776qp.pdf",
+   "question_presented": [
+    "The deadline to file a statutory motion to reopen under 8 U.S.C. § 1229a(c)(7) is subject to equitable tolling; all the courts of appeals are in agreement. But they are in conflict as to whether they have jurisdiction to review an agency's denial of a request for equitable tolling made by someone subject to the \"criminal alien bar\" pursuant to 8 U.S.C. § 1252(a)(2)(C).",
+    "The Fifth and Fourth circuit say review of equitable tolling is a \"question of fact\" precluded from review under 8 U.S.C. § 1252(a)(2)(C). In contrast, the Ninth circuit says equitable tolling is a \"mixed question,\" i.e., \"a question of law,\" which falls under the jurisdictional savings clause under 8 U.S.C. § 1252(a)(2)(D ).",
+    "Therefore, the question presented is:",
+    "Is a request for equitable tolling, as it applies to statutory motions to reopen, judicially reviewable as a \"question of law?\""
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "14",
+   "date": "2020-03-03",
+   "docket": "17-834",
+   "name": "Kansas v. Garcia",
+   "summary": "The Kansas statutes under which respondents, three unauthorized aliens, were convicted—for fraudulently using another person’s Social Security number on state and federal tax-withholding forms submitted to their employers—are not expressly preempted by the Immigration Reform and Control Act of 1986; and respondents’ argument that those laws are preempted by implication is rejected.",
+   "author_code": "A",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/17-834_k53l.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "ALITO, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, GORSUCH, and KAVANAUGH, JJ., joined. THOMAS, J., filed a concurring opinion, in which GORSUCH, J., joined. BREYER, J., filed an opinion concurring in part and dissenting in part, in which GINSBURG, SOTOMAYOR, and KAGAN, JJ., joined.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "concurring in part and dissenting in part"
+      ],
+      "wrote": [
+       "concurring in part and dissenting in part"
+      ]
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "concurring in part and dissenting in part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "concurring in part and dissenting in part"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "concurring in part and dissenting in part"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "art-6-cl-2",
+     "quote": "II The Supremacy Clause provides that the Constitution, federal statutes, and treaties constitute “the supreme Law of the Land.” Art."
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/17-00834qp.pdf",
+   "question_presented": [
+    "In 1986, Congress enacted the Immigration Reform and Control Act CIRCA (IRCA). IRCA made it illegal to employ unauthorized aliens, established an employment eligibility verification system, and created various civil and criminal penalties against employers who violate the law. 8 U.S.C. § 1324a.",
+    "Regulations implementing IRCA created a \"Form I-9\" that employers are required to have all prospective employees complete-citizens and aliens alike. IRCA contains an \"express preemption provision, which in most instances bars States from imposing penalties on employers of unauthorized aliens,\" Arizona v. United States, 567 U.S. 387, 406 (2012), but IRCA \"is silent about whether additional penalties may be imposed against the employees themselves.\" Id. IRCA also provides that \"[the Form I-9] and any information contained in or appended to such form, may not be used for purposes other than enforcement of [chapter 12 of Title 8] and sections 1001, 1028, 1546, and 1621 of Title 18.\" 8 U.S.C. § 1324a(b)(5).",
+    "Here, Respondents used other peoples' social security numbers to complete documents, including a Form I-9, a federal W-4 tax form, a state K-4 tax form, and an apartment lease. Kansas prosecuted Respondents for identity theft and making false writings without using the Form I-9, but the Kansas Supreme Court held that IRCA expressly barred these state prosecutions.",
+    "This petition presents two questions, depending on the answer to the first question:",
+    "1. Whether IRCA expressly preempts the States from using any information entered on or appended to a federal Form I-9, including common information such as name, date of birth, and social security number, in a prosecution of any person (citizen or alien) when that same, commonly used information also appears in non-IRCA documents, such as state tax forms, leases, and credit applications.",
+    "2. If IRCA bars the States from using all such information for any purpose, whether Congress has the constitutional power to so broadly preempt the States from exercising their traditional police powers to prosecute state law crimes."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "13",
+   "date": "2020-02-26",
+   "docket": "18-1116",
+   "name": "Intel Corp. Investment Policy Comm. v. Sulyma",
+   "summary": "Under the Employee Retirement Income Security Act of 1974 requirement that plaintiffs with “actual knowledge” of an alleged fiduciary breach must file suit within three years of gaining that knowledge, 29 U. S. C. §1113(2), a plaintiff does not necessarily have “actual knowledge” of the information contained in disclosures that he receives but does not read or cannot recall reading.",
+   "author_code": "A",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-1116_h3cj.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "ALITO, J., delivered the opinion for a unanimous Court.",
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/18-01116qp.pdf",
+   "question_presented": [
+    "Whether the three-year limitations period in Section 413(2) of the Employee Retirement Income Security Act, 29 U.S.C. 1113(2), which runs from \"the earliest date on which the plaintiff had actual knowledge of the breach or violation,\" bars suit where all of the relevant information was disclosed to the plaintiff by the defendants more than three years before the plaintiff filed the complaint, but the plaintiff chose not to read or could not recall having read the information."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "12",
+   "date": "2020-02-26",
+   "docket": "18-7739",
+   "name": "Holguin-Hernandez v. United States",
+   "summary": "Petitioner’s district-court argument for a specific sentence (nothing or less than 12 months) preserved, for purposes of Fed. Rule Crim. Proc. 51(b), his claim on appeal that the sentence imposed was unreasonably long.",
+   "author_code": "B",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-7739_9q7h.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "BREYER, J., delivered the opinion for a unanimous Court. ALITO, J., filed a concurring opinion, in which GORSUCH, J., joined.",
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Breyer",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/18-07739qp.pdf",
+   "question_presented": [
+    "Whether a formal objection after pronouncement of sentence is necessary to invoke appellate reasonableness review of the length of a defendant's sentence.",
+    "K. WINN ALLEN, ESQUIRE, OF WASHINGTON, D.C. IS INVITED TO BRIEF AND ARGUE THIS CASE, AS AMICUS CURIAE, IN SUPPORT OF THE JUDGMENT BELOW.",
+    "THE MOTION OF PETITIONER FOR APPOINTMENT OF COUNSEL IS GRANTED, AND PHILIP J. LYNCH, ESQ., OF SAN ANTONIO, TEXAS, IS APPOINTED TO SERVE AS COUNSEL FOR PETITIONER IN THIS CASE."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "11",
+   "date": "2020-02-26",
+   "docket": "18-6662",
+   "name": "Shular v. United States",
+   "summary": "For purposes of the Armed Career Criminal Act’s sentence enhancement for a defendant convicted of being a felon in possession of a firearm who has at least three convictions for “serious drug offense[s],” 18 U. S. C. §924(e)(1), the “serious drug offense” definition requires only that a state offense involve the conduct specified in the statute; it does not require that the state offense match certain generic offenses.",
+   "author_code": "G",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-6662_c0ne.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "GINSBURG, J., delivered the opinion for a unanimous Court. KAVANAUGH, J., filed a concurring opinion.",
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "concurrence"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/18-06662qp.pdf",
+   "question_presented": [
+    "Whether the determination of a \"serious drug offense\" under the Armed Career Criminal Act requires the same categorical approach used in the determination of a \"violent felony'' under the Act?"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "10",
+   "date": "2020-02-25",
+   "docket": "18-1109",
+   "name": "McKinney v. Arizona",
+   "summary": "When a capital sentencing error under Eddings v. Oklahoma, 455 U. S. 104, is found on collateral review, a state appellate court may conduct the reweighing of aggravating and mitigating evidence, as permitted by Clemons v. Mississippi, 494 U. S. 738, on collateral review.",
+   "author_code": "BK",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-1109_5i36.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "KAVANAUGH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, and GORSUCH, JJ., joined. GINSBURG, J., filed a dissenting opinion, in which BREYER, SOTOMAYOR, and KAGAN, JJ., joined.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-8",
+     "quote": "After noting that the “primary concern in the Eighth Amendment context has been that the sentencing decision be based on the facts and circumstances of the defendant, his background, and his crime,” the Court explained that nothing “inherent in the process of appellate reweighing is inconsistent” with that objective."
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/18-01109qp.pdf",
+   "question_presented": [
+    "1. Whether the Arizona Supreme Court was required to apply current law when weighing mitigating and aggravating evidence to determine whether a death sentence is warranted.",
+    "2. Whether the correction of error under Eddings v. Oklahoma, 455 U.S. 104 (1982), requires resentencing"
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "9",
+   "date": "2020-02-25",
+   "docket": "18-1269",
+   "name": "Rodriguez v. FDIC",
+   "summary": "The rule of In re Bob Richards Chrysler-Plymouth Corp., 473 F. 2d 262—which specifies how federal tax refund proceeds should be allocated among members of an affiliated group of corporations that file a consolidated return—is not a legitimate exercise of federal common lawmaking.",
+   "author_code": "NG",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-1269_h3dj.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "GORSUCH, J., delivered the opinion for a unanimous Court.",
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/18-01269qp.pdf",
+   "question_presented": [
+    "The Internal Revenue Code permits affiliated corporate groups-consisting of a parent corporation and its subsidiaries-to file a consolidated income tax return. 26 U.S.C. §§ 1501, 1504(a). When the Internal Revenue Service issues a tax refund to an affiliated group, that refund is made \"directly to and in the name of” the parent corporation, even if the refund arises in whole or in part from the losses of a corporate subsidiary. 26 C.F.R. § 1.1502-77(c), (d)(5).",
+    "Three Circuits, including the court below, have adopted a federal common law rule known as the \"Bob Richards rule,\" under which a tax refund paid to an affiliated group is presumed to belong to the corporate subsidiary whose losses gave rise to the refund unless the parties clearly agree otherwise. Four Circuits reject that rule, and instead determine ownership of a tax refund based on applicable state law.",
+    "The question presented is:",
+    "Whether courts should determine ownership of a tax refund paid to an affiliated group based on the federal common law \"Bob Richards rule,\" as three Circuits hold, or based on the law of the relevant State, as four Circuits hold."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "8",
+   "date": "2020-02-25",
+   "docket": "17-1678",
+   "name": "Hernández v. Mesa",
+   "summary": "A cross-border shooting by a United States Border Patrol agent does not give rise to a damages claim pursuant to Bivens v. Six Unknown Fed. Narcotics Agents, 403 U. S. 388.",
+   "author_code": "A",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/17-1678_m6io.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "ALITO, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, GORSUCH, and KAVANAUGH, JJ., joined. THOMAS, J., filed a concurring opinion, in which GORSUCH, J., joined. GINSBURG, J., filed a dissenting opinion, in which BREYER, SOTOMAYOR, and KAGAN, JJ., joined.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": []
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-4",
+     "quote": "On the first occasion, the court held that Hernández was not entitled to Fourth Amendment protection because he was “a Mexican citizen who had no ‘significant voluntary connection’ to the United States” and “was on Mexican soil at the time he was shot.” Hernandez v."
+    },
+    {
+     "id": "amend-5",
+     "quote": "Among other claims, they sought recovery of damages under Bivens, alleging that Mesa violated Hernández’s Fourth and Fifth Amendment rights."
+    },
+    {
+     "id": "amend-8",
+     "quote": "14 (1980), a federal prisoner’s Eighth Amendment claim for failure to provide adequate medical treatment."
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/17-01678qp.pdf",
+   "question_presented": [
+    "1. Whether, when plaintiffs plausibly allege that a rogue federal law enforcement officer violated clearly established Fourth and Fifth Amendment rights for which there is no alternative legal remedy, the federal courts can and should recognize a damages claim under Bivens v. Six Unknown Named Agents of the Fed. Bureau of Narcotics, 403 U.S. 388 (1971)?",
+    "2. If not, whether the Westfall Act violates the Due Process Clause of the Fifth Amendment insofar as it preempts state-law tort suits for damages against rogue federal law enforcement officers acting within the scope of their employment for which there is no alternative legal remedy.",
+    "GRANTED LIMITED TO QUESTION 1 PRESENTED BY THE PETITION."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "7",
+   "date": "2020-02-25",
+   "docket": "18-935",
+   "name": "Monasky v. Taglieri",
+   "summary": "Under the Hague Convention on the Civil Aspects of International Child Abduction, a child’s “habitual residence” depends on the totality of the circumstances specific to the case, not on categorical requirements such as an actual agreement between the parties.",
+   "author_code": "G",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-935_new_fd9g.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "GINSBURG, J., delivered the opinion of the Court, in which ROBERTS, C. J., and BREYER, SOTOMAYOR, KAGAN, GORSUCH, and KAVANAUGH, JJ., joined, and in which THOMAS, J., joined as to Parts I, III, and IV. THOMAS, J., and ALITO, J., filed opinions concurring in part and concurring in the judgment.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "concurrence in the judgment",
+       "majority in part"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "concurrence in the judgment"
+      ],
+      "wrote": [
+       "concurrence in the judgment"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/18-00935qp.pdf",
+   "question_presented": [
+    "The Hague Convention on the Civil Aspects of International Child Abduction requires that any child wrongfully removed from her country of \"habitual residence\" be returned to that country. A.M.T. was eight weeks old when she traveled with her mother, Michelle Monasky, from a domestic-violence safe house in Italy to her grandparents' home in Ohio. Monasky's husband, from whom she had fled, filed a petition under the Hague Convention seeking A.M.T.’s return to Italy. The district court found that A.M.T. had not acclimated to living in Italy and made no finding that her parents had ever agreed that she would be raised in Italy. The court nevertheless ruled that the existence of a \"matrimonial home\" presumptively established Italy as A.M.T.'s habitual residence. In a fractured 10-8 opinion, the en banc Sixth Circuit affirmed after reviewing the district court's determination of habitual residence only for clear error and holding that a \"subjective agreement\" between the parents to raise A.M.T. in Italy was not necessary to establish that A.M.T. was habitually resident in Italy.",
+    "The questions presented are:",
+    "1. Whether a district court's determination of habitual residence under the Hague Convention should be reviewed de novo, as seven circuits have held, under a deferential version of de novo review, as the First Circuit has held, or under clear-error review, as the Fourth and Sixth Circuits have held.",
+    "2. Where an infant is too young to acclimate to her surroundings, whether a subjective agreement between the infant's parents is necessary to establish her habitual residence under the Hague Convention."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "6",
+   "date": "2020-02-24",
+   "docket": "18-921",
+   "name": "Roman Catholic Archdiocese of San Juan v. Acevedo Feliciano",
+   "summary": "A Puerto Rico trial court had no jurisdiction to issue payment and seizure orders after a pension benefits proceeding was removed to Federal District Court but before the proceeding was remanded back to the Puerto Rico court; thus the orders are void.",
+   "author_code": "PC",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-921_2cp3.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "PER CURIAM. In 1979, the Office of the Superintendent of Catholic Schools of the Archdiocese of San Juan created a trust to administer a pension plan for employees of Catholic schools, aptly named the Pension Plan for Employees of Catholic Schools Trust (Trust). Among the participating schools were Perpetuo Socorro Academy, San Ignacio de Loyola Academy, and San Jose Academy. In 2016, active and retired employees of the academies filed complaints in the Puerto Rico Court of First Instance alleging that the Trust had terminated the plan, eliminating the employees’ pension benefits. The employees named as a defendant the “Roman Catholic and Apostolic Church of Puerto Rico,” which the employees claimed was a legal entity with supervisory authority over all Catholic institutions in Puerto Rico. App. to Pet. for Cert. 58–59, 152–153 (emphasis deleted).1 The employees also named as defendants the Archdiocese of San Juan, the Superintendent, the three academies, and the Trust. The Court of First Instance, in an order affirmed by the Puerto Rico Court of Appeals, denied a preliminary injunction requiring the payment of benefits, but the Puerto Rico Supreme Court reversed. The Supreme Court concluded —————— 1 The petition for a writ of certiorari includes certified translations of the opinions, originally in Spanish, of the Puerto Rico courts. We cite the certified translations. 2 ROMAN CATHOLIC ARCHDIOCESE OF SAN JUAN v. ACEVEDO FELICIANO Per Curiam that “if the Trust did not have the necessary funds to meet its obligations, the participating employers would be obligated to pay.” Id., at 3. But, because “there was a dispute as to which defendants in the case had legal personalities,” the Supreme Court remanded the case to the Court of First Instance to “determine who would be responsible for continuing paying the pensions, pursuant to the preliminary injunction.” Ibid. The Court of First Instance determined that the “Roman Catholic and Apostolic Church in Puerto Rico” was the only defendant with separate legal personhood. Id., at 239–240. The Court held such personhood existed by virtue of the Treaty of Paris of 1898, through which Spain ceded Puerto Rico to the United States. The Court found that the Archdiocese of San Juan, the Superintendent, and the academies each constituted a “division or dependency” of the Church, because those entities were not separately incorporated. Ibid. As a result, the Court of First Instance ordered the “Roman Catholic and Apostolic Church in Puerto Rico” to make payments to the employees in accordance with the pension plan. Id., at 241. Ten days later, the Court issued a second order requiring the Church to deposit $4.7 million in a court account within 24 hours. The next day, the Court issued a third order, requiring the sheriff to “seize assets and moneys of . . . the Holy Roman Catholic and Apostolic Church, and any of its dependencies, that are located in Puerto Rico.” Id., at 223. The Puerto Rico Court of Appeals reversed. It held that the “Roman Catholic and Apostolic Church in Puerto Rico” was a “legally nonexistent entity.” Id., at 136. But, the Court concluded, the Archdiocese of San Juan and the Perpetuo Socorro Academy could be ordered to make contribution payments. The Archdiocese enjoyed separate legal personhood as the effective successor to the Roman Catholic Church in Puerto Rico, the entity recognized by the Treaty Per Curiam of Paris. Perpetuo Socorro Academy likewise constituted a separate legal person because it had been incorporated in accordance with Puerto Rico law, even though its registration was not active in 2016, when the orders were issued. The two remaining academies, San Ignacio Academy and San Jose Academy, were part of the same legal entity as “their respective parishes,” but the employees could not obtain relief against the parishes because they had not been named as defendants. Id., at 167. The Puerto Rico Supreme Court again reversed, reinstating the preliminary injunction issued by the trial court. The Supreme Court first held that the “relationship between Spain, the Catholic Church, and Puerto Rico is sui generis, given the particularities of its development and historical context.” Id., at 5. The Court explained that the Treaty of Paris recognized the “legal personality” of “the Catholic Church” in Puerto Rico. Id., at 6. The Puerto Rico Supreme Court further observed that “each entity created that operates separately and with a certain degree of autonomy from the Catholic Church is in reality a fragment of only one entity that possesses legal personality,” at least where the entities have not “independently submitt[ed] to an ordinary incorporation process.” Id., at 13–14 (emphasis deleted). “In other words,” the Court continued, “the entities created as a result of any internal configuration of the Catholic Church,” such as the Archdiocese of San Juan, “are not automatically equivalent to the formation of entities with different and separate legal personalities in the field of Civil Law,” but “are merely indivisible fragments of the legal personality that the Catholic Church has.” Ibid. And Perpetuo Socorro Academy was not a registered corporation in 2016, when the plan was terminated. Id., at 16. Therefore, under the Court’s reasoning, the only defendant with separate legal personality, and the only entity that could be ordered to pay the employees’ pensions, was the “Roman Catholic and Apostolic Church 4 ROMAN CATHOLIC ARCHDIOCESE OF SAN JUAN v. ACEVEDO FELICIANO Per Curiam in Puerto Rico.” Id., at 2. Two Justices dissented. Justice Rodríguez Rodríguez criticized the majority for “inappropriately interfer[ing] with the operation of the Catholic Church by imposing on it a legal personality that it does not hold in the field of private law.” Id., at 29. In her view, the Archdiocese of San Juan and the five other dioceses in Puerto Rico each has its own “independent legal personality.” Id., at 52. Justice Colón Pérez likewise determined that, under Puerto Rico law, “each Diocese and the Archdiocese ha[s its] own legal personality” and that no separate “legal personality” called the “Roman Catholic and Apostolic Church” exists. Id., at 80, 90 (emphasis deleted). The Archdiocese petitioned this Court for a writ of certiorari. The Archdiocese argues that the Free Exercise and Establishment Clauses of the First Amendment require courts to defer to “the Church’s own views on how the Church is structured.” Pet. for Cert. 1. Thus, in this case, the courts must follow the Church’s lead in recognizing the separate legal personalities of each diocese and parish in Puerto Rico. The Archdiocese claims that the Puerto Rico Supreme Court decision violated the “religious autonomy doctrine,” which provides: “[W]henever the questions of discipline, or of faith, or ecclesiastical rule, custom, or law have been decided by the highest of these church judicatories to which the matter has been carried, the legal tribunals must accept such decisions as final, and as binding on them, in their application to the case before them.” Id., at 20 (quoting Watson v. Jones, 13 Wall. 679, 727 (1872)). We called for the Solicitor General’s views on the petition. 588 U. S. ___ (2019). The Solicitor General argues that we need not “reach [the Archdiocese’s] broader theory in order to properly dispose of this case,” because a different error warrants vacatur and remand. Brief for United States as Amicus Curiae on Pet. for Cert. 13–14 (Brief for United States). Instead of citing “any neutral rule of Puerto Rico Per Curiam law governing corporations, incorporated or unincorporated associations, veil-piercing, joint-and-several liability, or vicarious liability,” the Puerto Rico Supreme Court “relied on a special presumption—seemingly applicable only to the Catholic Church . . . —that all Catholic entities on the Island are ‘merely indivisible fragments of the legal personality that the Catholic Church has.’ ” Id., at 9 (quoting App. to Pet. for Cert. 14). The Solicitor General contends that the Puerto Rico Supreme Court thus violated the fundamental tenet of the Free Exercise Clause that a government may not “single out an individual religious denomination or religious belief for discriminatory treatment.” Brief for United States 8 (citing Murphy v. Collier, 587 U. S. ___ (2019); Church of Lukumi Babalu Aye, Inc. v. Hialeah, 508 U. S. 520, 524–525 (1993); Fowler v. Rhode Island, 345 U. S. 67, 69 (1953)). We do not reach either argument because we find that the Court of First Instance lacked jurisdiction to issue the payment and seizure orders. On February 6, 2018, after the Supreme Court of Puerto Rico remanded the case to the Court of First Instance to determine the appropriate parties to the preliminary injunction, the Archdiocese removed the case to the United States District Court for the District of Puerto Rico. Notice of Removal in Acevedo-Feliciano v. Holy Catholic Church, No. 3:18–cv–01060. The Archdiocese argued that the Trust had filed for Chapter 11 bankruptcy and that this litigation was sufficiently related to the bankruptcy to give rise to federal jurisdiction. Id., at 5–6 (citing 28 U. S. C. §§1334(b), 1452). The Bankruptcy Court dismissed the Trust’s bankruptcy proceeding on March 13, 2018. Opinion and Order Granting Motions to Dismiss in In re Catholic Schools Employee Pension Trust, No. 18– 00108. The Puerto Rico Court of First Instance issued the relevant payment and seizure orders on March 16, March 26, and March 27. App. to Pet. for Cert. 224, 227, 241. But the District Court did not remand the case to the Puerto 6 ROMAN CATHOLIC ARCHDIOCESE OF SAN JUAN v. ACEVEDO FELICIANO Per Curiam Rico Court of First Instance until nearly five months later, on August 20, 2018. Order Granting Motion to Remand in Acevedo-Feliciano v. Archdiocese of San Juan, No. 3:18–cv– 01060. Once a notice of removal is filed, “the State court shall proceed no further unless and until the case is remanded.” 28 U. S. C. §1446(d).2 The state court “los[es] all jurisdiction over the case, and, being without jurisdiction, its subsequent proceedings and judgment [are] not . . . simply erroneous, but absolutely void.” Kern v. Huidekoper, 103 U. S. 485, 493 (1881). “Every order thereafter made in that court [is] coram non judice,” meaning “not before a judge.” Steamship Co. v. Tugman, 106 U. S. 118, 122 (1882); Black’s Law Dictionary 426 (11th ed. 2019). See also 14C C. Wright, A. Miller, E. Cooper, J. Steinman, & M. Kane, Federal Practice and Procedure §3736, pp. 727–729 (2018). The Court of First Instance issued its payment and seizure orders after the proceeding was removed to federal district court, but before the federal court remanded the proceeding back to the Puerto Rico court. At that time, the Court of First Instance had no jurisdiction over the proceeding. The orders are therefore void. We note two possible rejoinders. First, the Puerto Rico Court of Appeals suggested that the Archdiocese consented to the Court of First Instance’s jurisdiction by filing motions in that court after removal. But we have held that a removing party’s right to a federal forum becomes “fixed” upon filing of a notice of removal, and that if the removing party’s “right to removal [is] ignored by the State court,” the party may “make defence in that tribunal in every mode recog- —————— 2 “The laws of the United States relating to . . . removal of causes . . . as between the courts of the United States and the courts of the several States shall govern in such matters and proceedings as between the United States District Court for the District of Puerto Rico and the courts of Puerto Rico.” 48 U. S. C. §864. Per Curiam nized by the laws of the State, without forfeiting or impairing, in the slightest degree, its right to a trial” in federal court. Steamship Co., 106 U. S., at 122–123. Such actions do not “restore[ ]” “the jurisdiction of the State court.” Id., at 122. So, too, the Archdiocese’s motions did not restore jurisdiction to the Court of First Instance. Second, the District Court remanded the case to the Court of First Instance by way of a nunc pro tunc judgment stating that the order “shall be effective as of March 13, 2018,” the date that the Trust’s bankruptcy proceeding was dismissed. Nunc Pro Tunc Judgt. in No. 3:18–cv–01060 (Aug. 8, 2018). Federal courts may issue nunc pro tunc orders, or “now for then” orders, Black’s Law Dictionary, at 1287, to “reflect[ ] the reality” of what has already occurred, Missouri v. Jenkins, 495 U. S. 33, 49 (1990). “Such a decree presupposes a decree allowed, or ordered, but not entered, through inadvertence of the court.” Cuebas y Arredondo v. Cuebas y Arredondo, 223 U. S. 376, 390 (1912). Put colorfully, “[n]unc pro tunc orders are not some Orwellian vehicle for revisionist history—creating ‘facts’ that never occurred in fact.” United States v. Gillespie, 666 F. Supp. 1137, 1139 (ND Ill. 1987). Put plainly, the court “cannot make the record what it is not.” Jenkins, 495 U. S., at 49. Nothing occurred in the District Court case on March 13, 2018. See Order Granting Motion to Remand in No. 3:18– cv–01060 (noting, on August 20, 2018, that the motion is “hereby” granted and ordering judgment “accordingly”). March 13 was when the Bankruptcy Court dismissed the Trust’s proceeding and thus the day that the Archdiocese’s argument for federal jurisdiction lost its persuasive force. Even so, the case remained in federal court until that court, on August 20, reached a decision about the motion to remand that was pending before it. The Court of First Instance’s actions in the interim, including the payment and 8 ROMAN CATHOLIC ARCHDIOCESE OF SAN JUAN v. ACEVEDO FELICIANO Per Curiam seizure orders, are void. The Solicitor General agrees that the Court of First Instance lacked jurisdiction but argues that this defect does not prevent us from addressing additional errors, including those asserted under the Free Exercise Clause. That may be correct, given that the Puerto Rico courts do not exercise Article III jurisdiction. But we think the preferable course at this point is to remand the case to the Puerto Rico courts to consider how to proceed in light of the jurisdictional defect we have identified. The petition for certiorari and the motions for leave to file briefs amici curiae are granted, the judgment of the Puerto Rico Supreme Court is vacated, and the case is remanded for further proceedings not inconsistent with this opinion. It is so ordered.",
+   "lineup": [],
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": "The Archdiocese argues that the Free Exercise and Establishment Clauses of the First Amendment require courts to defer to “the Church’s own views on how the Church is structured.” Pet. for Cert. 1."
+    },
+    {
+     "id": "art-3",
+     "quote": "That may be correct, given that the Puerto Rico courts do not exercise Article III jurisdiction."
+    }
+   ],
+   "qp_url": null,
+   "question_presented": [],
+   "qp_checked": true
+  },
+  {
+   "r": "5",
+   "date": "2020-01-14",
+   "docket": "18-1165",
+   "name": "Retirement Plans Comm. of IBM v. Jander",
+   "summary": "The judgment is vacated, and the case is remanded to give the Second Circuit the opportunity to decide whether to entertain the parties’ arguments on ERISA’s duty of prudence.",
+   "author_code": "PC",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-1165_768c.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "PER CURIAM. In Fifth Third Bancorp v. Dudenhoeffer, 573 U. S. 409 (2014), we held that “[t]o state a claim for breach of the duty of prudence” imposed on plan fiduciaries by the Employee Retirement Income Security Act of 1974 (ERISA) “on the basis of inside information, a plaintiff must plausibly allege an alternative action that the defendant could have taken that would have been consistent with the securities laws and that a prudent fiduciary in the same circumstances would not have viewed as more likely to harm the fund than to help it.” Id., at 428. We then set out three considerations that “inform the requisite analysis.” Ibid. First, we pointed out that the “duty of prudence, under ERISA as under the common law of trusts, does not require a fiduciary to break the law.” Ibid. Accordingly, “ERISA’s duty of prudence cannot require” the fiduciary of an Employee Stock Ownership Plan (ESOP) “to perform an action—such as divesting the fund’s holdings of the employer’s stock on the basis of inside information—that would violate the securities laws.” Ibid. We then added that, where a complaint “faults fiduciaries Per Curiam for failing to decide, on the basis of the inside information, to refrain from making additional stock purchases or for failing to disclose that information to the public so that the stock would no longer be overvalued, additional considerations arise.” Id., at 429. In such cases, “[t]he courts should consider the extent to which an ERISA-based obligation either to refrain on the basis of inside information from making a planned trade or to disclose inside information to the public could conflict with the complex insider trading and corporate disclosure requirements imposed by the federal securities laws or with the objectives of those laws.” Ibid. We noted that the “U. S. Securities and Exchange Commission ha[d] not advised us of its views on these matters, and we believe[d] those views may well be relevant.” Ibid. Third, and finally, we said that “lower courts faced with such claims should also consider whether the complaint has plausibly alleged that a prudent fiduciary in the defendant’s position could not have concluded that stopping purchases—which the market might take as a sign that insider fiduciaries viewed the employer’s stock as a bad investment—or publicly disclosing negative information would do more harm than good to the fund by causing a drop in the stock price and a concomitant drop in the value of the stock already held by the fund.” Id., at 429–430. The question presented in this case concerned what it takes to plausibly allege an alternative action “that a prudent fiduciary in the same circumstances would not have viewed as more likely to harm the fund than to help it.” Id., at 428. It asked whether Dudenhoeffer’s “ ‘more harm than good’ pleading standard can be satisfied by generalized allegations that the harm of an inevitable disclosure of an alleged fraud generally increases over time.” Pet. for Cert. i. In their briefing on the merits, however, the petitioners (fiduciaries of the ESOP at issue here) and the Government (presenting the views of the Securities and Exchange Commission as well as the Department of Labor), focused their Per Curiam arguments primarily upon other matters. The petitioners argued that ERISA imposes no duty on an ESOP fiduciary to act on inside information. And the Government argued that an ERISA-based duty to disclose inside information that is not otherwise required to be disclosed by the securities laws would “conflict” at least with “objectives of ” the “complex insider trading and corporate disclosure requirements imposed by the federal securities laws . . . .” Dudenhoeffer, 573 U. S., at 429. The Second Circuit “did not address the[se] argument[s], and, for that reason, neither shall we.” F. Hoffmann-La Roche Ltd. v. Empagran S. A., 542 U. S. 155, 175 (2004) (citation omitted); see Cutter v. Wilkinson, 544 U. S. 709, 718, n. 7 (2005) (“[W]e are a court of review, not of first view”). See also 910 F. 3d 620 (CA2 2018). Nevertheless, in light of our statement in Dudenhoeffer that the views of the “U. S. Securities and Exchange Commission” might “well be relevant” to discerning the content of ERISA’s duty of prudence in this context, 573 U. S., at 429, we believe that the Court of Appeals should have an opportunity to decide whether to entertain these arguments in the first instance. For this reason we vacate the judgment below and remand the case, leaving it to the Second Circuit whether to determine their merits, taking such action as it deems appropriate. It is so ordered.",
+   "lineup": [],
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/18-01165qp.pdf",
+   "question_presented": [
+    "In Fifth Third Bancorp v. Dudenhoeffer, this Court unanimously held that to state a claim under the Employee Retirement Income Security Act of 1974 (\"ERISA''), 29 U.S.C. § 1001 et seq., for breach of the fiduciary duty of prudence based on inside information, a plaintiff must \"plausibly allege[] that a prudent fiduciary in the defendant's position could not have concluded that [an alternative action] would do more harm than good to the fund.\" 573 U.S. 409, 429-30 (2014); accord Amgen Inc. v. Harris, 136 S. Ct. 758 (2016). The Court designed this \"context specific\" standard to deter the kind of meritless suits lower courts had eliminated through a presumption of prudence (which the Court rejected) and to \"readily divide the plausible sheep from the meritless goats\" at the pleading stage. 573 U.S. at 425.",
+    "In the decision below, the Court of Appeals subverted that pleading standard and opened a circuit split by relying on boilerplate allegations that the harm of an eventual disclosure of an alleged fraud typically increases the longer the fraud continues. Those allegations \"always\" can be, and routinely are, pleaded in support of a Fifth Third claim. Other courts of appeals have rejected the same allegations as insufficient as a matter of law, in order to avoid undermining the pleading standard imposed by Fifth Third and Amgen and to deter meritless ERISA suits. The question presented is:",
+    "Whether Fifth Third's \"more harm than good\" pleading standard can be satisfied by generalized allegations that the harm of an inevitable disclosure of an alleged fraud generally increases over time."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "4",
+   "date": "2020-01-14",
+   "docket": "18-938",
+   "name": "Ritzen Group, Inc. v. Jackson Masonry, LLC",
+   "summary": "A bankruptcy court’s order unreservedly denying relief from the automatic stay of creditor debt-collection efforts outside the bankruptcy forum, see 11 U. S. C. §362(a), is final and immediately appealable under 28 U. S. C. §158(a).",
+   "author_code": "G",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-938_l6gn.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "GINSBURG, J., delivered the opinion for a unanimous Court.",
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/18-00938qp.pdf",
+   "question_presented": [
+    "Whether an order denying a motion for relief from the automatic stay is a final order under 28 U.S.C. § 158(a) (1). In diverting from this Court's prior precedent, and in conflict with the First and Third Circuit Courts of Appeal, the Sixth Circuit ruled that an order denying relief from the automatic stay is per se final."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "3",
+   "date": "2019-12-11",
+   "docket": "18-801",
+   "name": "Peter v. NantKwest, Inc.",
+   "summary": "The Patent and Trademark Office cannot recover the salaries of its legal personnel as “expenses” in civil actions brought by patent applicants pursuant to 35 U. S. C. §145.",
+   "author_code": "SS",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-801_o758.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "SOTOMAYOR, J., delivered the opinion for a unanimous Court.",
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/18-00801qp.pdf",
+   "question_presented": [
+    "When the United States Patent and Trademark Office (USPTO) denies a patent application, the Patent Act gives the unsuccessful applicant two avenues for seeking judicial review of the agency's decision. The applicant may appeal directly to the Federal Circuit, 35 U.S.C. 141, which \"shall review the decision from which an appeal is taken on the record before the [USPTO],” 35 U.S.C. 144. Alternatively, the applicant may bring a civil action against the Director of the USPTO in district court, where the applicant may present additional evidence. 35 U.S.C. 145. If the applicant elects to bring such an action, \"[a]ll the expenses of the proceedings shall be paid by the applicant.\" Ibid. The question presented is as follows:",
+    "Whether the phrase \"[a]ll the expenses of the proceedings\" in 35 U.S.C. 145 encompasses the personnel expenses the USPTO incurs when its employees, including attorneys, defend the agency in Section 145 litigation."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "2",
+   "date": "2019-12-10",
+   "docket": "18-328",
+   "name": "Rotkiske v. Klemm",
+   "summary": "Absent the application of an equitable doctrine, the Federal Debt Collection Practices Act’s statute of limitations for bringing a private civil action against debt collectors who engage in certain prohibited practices, 15 U. S. C. §1692k(d), begins to run when the alleged violation occurs, not when it is discovered.",
+   "author_code": "T",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-328_pm02.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "THOMAS, J., delivered the opinion of the Court, in which ROBERTS, C. J., and BREYER, ALITO, SOTOMAYOR, KAGAN, GORSUCH, and KAVANAUGH, JJ., joined. SOTOMAYOR, J., filed a concurring opinion. GINSBURG, J., filed an opinion dissenting in part and dissenting from the judgment.",
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Ginsburg",
+      "roles": [
+       "dissenting in part"
+      ],
+      "wrote": [
+       "dissenting in part"
+      ]
+     }
+    ]
+   },
+   "provisions": [],
+   "qp_url": "https://www.supremecourt.gov/qp/18-00328qp.pdf",
+   "question_presented": [
+    "Whether the \"discovery rule\" applies to toll the one (1) year statute of limitations under the Fair Debt Collection Practices Act, 15 U.S.C. §§ 1692, et seq., as the Fourth and Ninth Circuits have held but the Third Circuit (sua sponte en banc) has held contrarily."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "1",
+   "date": "2019-11-25",
+   "docket": "19-122",
+   "name": "Thompson v. Hebdon",
+   "summary": "The judgment is vacated, and the case is remanded for the Ninth Circuit to revisit whether Alaska’s political contribution limits are consistent with this Court’s First Amendment precedents.",
+   "author_code": "PC",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/19-122_k536.pdf",
+   "parser": 4,
+   "exact_text": true,
+   "lineup_text": "PER CURIAM. Alaska law limits the amount an individual can contribute to a candidate for political office, or to an electionoriented group other than a political party, to $500 per year. Alaska Stat. §15.13.070(b)(1) (2018). Petitioners Aaron Downing and Jim Crawford are Alaska residents. In 2015, they contributed the maximum amounts permitted under Alaska law to candidates or groups of their choice, but wanted to contribute more. They sued members of the Alaska Public Offices Commission, contending that Alaska’s individual-to-candidate and individual-to-group contribution limits violate the First Amendment. The District Court upheld the contribution limits and the Ninth Circuit agreed. 909 F. 3d 1027 (2018); Thompson v. Dauphinais, 217 F. Supp. 3d 1023 (Alaska 2016). Applying Circuit precedent, the Ninth Circuit analyzed whether the contribution limits furthered a “sufficiently important state interest” and were “closely drawn” to that end. 909 F. 3d, at 1034 (quoting Montana Right to Life Assn. v. Eddleman, 343 F. 3d 1085, 1092 (2003); internal quotation marks omitted). The court recognized that our decisions in Citizens United v. Federal Election Comm’n and McCutcheon v. Federal Election Comm’n narrow “the type of state interest that justifies a First Amendment intrusion on political contributions” to combating “actual quid pro quo corruption or its appearance.” 909 F. 3d, at 1034 (citing McCutcheon v. FedPer Curiam eral Election Comm’n, 572 U. S. 185, 206–207 (2014); Citizens United v. Federal Election Comm’n, 558 U. S. 310, 359–360 (2010)). The court below explained that under its precedent in this area “the quantum of evidence necessary to justify a legitimate state interest is low: the perceived threat must be merely more than ‘mere conjecture’ and ‘not . . . illusory.’ ” 909 F. 3d, at 1034 (quoting Eddleman, 343 F. 3d, at 1092; some internal quotation marks omitted). The court acknowledged that “McCutcheon and Citizens United created some doubt as to the continuing vitality of [this] standard,” but noted that the Ninth Circuit had recently reaffirmed it. 909 F. 3d, at 1034, n. 2. After surveying the State’s evidence, the court concluded that the individual-to-candidate contribution limit “ ‘focuses narrowly on the state’s interest,’ ‘leaves the contributor free to affiliate with a candidate,’ and ‘allows the candidate to amass sufficient resources to wage an effective campaign,’ ” and thus survives First Amendment scrutiny. Id., at 1036 (quoting Eddleman, 343 F. 3d, at 1092; alterations omitted); see also 909 F. 3d, at 1036–1039. The court also found the individual-to-group contribution limit valid as a tool for preventing circumvention of the individual-to-candidate limit. See id., at 1039–1040. In reaching those conclusions, the Ninth Circuit declined to apply our precedent in Randall v. Sorrell, 548 U. S. 230 (2006), the last time we considered a non-aggregate contribution limit. See 909 F. 3d, at 1037, n. 5. In Randall, we invalidated a Vermont law that limited individual contributions on a per-election basis to: $400 to a candidate for Governor, Lieutenant Governor, or other statewide office; $300 to a candidate for state senator; and $200 to a candidate for state representative. JUSTICE BREYER’s opinion for the plurality observed that “contribution limits that are too low can . . . harm the electoral process by preventing challengers from mounting effective campaigns against incumbent officeholders, thereby reducing democratic accountability.” Per Curiam 548 U. S., at 248–249; see also id., at 264–265 (KENNEDY, J., concurring in judgment) (agreeing that Vermont’s contribution limits violated the First Amendment); id., at 265–273 (THOMAS, J., joined by SCALIA, J., concurring in judgment) (agreeing that Vermont’s contribution limits violated the First Amendment while arguing that such limits should be subject to strict scrutiny). A contribution limit that is too low can therefore “prove an obstacle to the very electoral fairness it seeks to promote.” Id., at 249 (plurality opinion).* In Randall, we identified several “danger signs” about Vermont’s law that warranted closer review. Ibid. Alaska’s limit on campaign contributions shares some of those characteristics. First, Alaska’s $500 individual-to-candidate contribution limit is “substantially lower than . . . the limits we have previously upheld.” Id., at 253. The lowest campaign contribution limit this Court has upheld remains the limit of $1,075 per two-year election cycle for candidates for Missouri state auditor in 1998. Id., at 251 (citing Nixon v. Shrink Missouri Government PAC, 528 U. S. 377 (2000)). That limit translates to over $1,600 in today’s dollars. —————— *The court below declined to consider Randall “because no opinion commanded a majority of the Court,” 909 F. 3d, at 1037, n. 5, instead relying on its own precedent predating Randall by three years. Courts of Appeals from ten Circuits have, however, correctly looked to Randall in reviewing campaign finance restrictions. See, e.g., National Org. for Marriage v. McKee, 649 F. 3d 34, 60–61 (CA1 2011); Ognibene v. Parkes, 671 F. 3d 174, 192 (CA2 2012); Preston v. Leake, 660 F. 3d 726, 739–740 (CA4 2011); Zimmerman v. Austin, 881 F. 3d 378, 387 (CA5 2018); McNeilly v. Land, 684 F. 3d 611, 617–620 (CA6 2012); Illinois Liberty PAC v. Madigan, 904 F. 3d 463, 469–470 (CA7 2018); Minnesota Citizens Concerned for Life, Inc. v. Swanson, 640 F. 3d 304, 319, n. 9 (CA8 2011), rev’d in part on other grounds, 692 F. 3d 864 (2012) (en banc); Independence Inst. v. Williams, 812 F. 3d 787, 791 (CA10 2016); Alabama Democratic Conference v. Attorney Gen. of Ala., 838 F. 3d 1057, 1069–1070 (CA11 2016); Holmes v. Federal Election Comm’n, 875 F. 3d 1153, 1165 (CADC 2017). Per Curiam Alaska permits contributions up to 18 months prior to the general election and thus allows a maximum contribution of $1,000 over a comparable two-year period. Alaska Stat. §15.13.074(c)(1). Accordingly, Alaska’s limit is less than two-thirds of the contribution limit we upheld in Shrink. Second, Alaska’s individual-to-candidate contribution limit is “substantially lower than . . . comparable limits in other States.” Randall, 548 U. S., at 253. Most state contribution limits apply on a per-election basis, with primary and general elections counting as separate elections. Because an individual can donate the maximum amount in both the primary and general election cycles, the perelection contribution limit is comparable to Alaska’s annual limit and 18-month campaign period, which functionally allow contributions in both the election year and the year preceding it. Only five other States have any individual-tocandidate contribution limit of $500 or less per election: Colorado, Connecticut, Kansas, Maine, and Montana. Colo. Const., Art. XXVIII, §3(1)(b); 8 Colo. Code Regs. 1505–6, Rule 10.17.1(b)(2) (2019); Conn. Gen. Stat. §9–611(a)(5) (2017); Kan. Stat. Ann. §25–4153(a)(2) (2018 Cum. Supp.); Me. Rev. Stat. Ann., Tit. 21–A, §1015(1) (2018 Cum. Supp.); Mont. Code Ann. §§13–37–216(1)(a)(ii), (iii) (2017). Moreover, Alaska’s $500 contribution limit applies uniformly to all offices, including Governor and Lieutenant Governor. Alaska Stat. §15.13.070(b)(1). But Colorado, Connecticut, Kansas, Maine, and Montana all have limits above $500 for candidates for Governor and Lieutenant Governor, making Alaska’s law the most restrictive in the country in this regard. Colo. Const., Art. XXVIII, §3(1)(a)(I); 8 Colo. Code Regs. 1505–6, Rule 10.17.1(b)(1)(A); Conn. Gen. Stat. §§9– 611(a)(1), (2); Kan. Stat. Ann. §25–4153(a)(1); Me. Rev. Stat. Ann., Tit. 21–A, §1015(1); Mont. Code Ann. §13–37– 216(1)(a)(i). Third, Alaska’s contribution limit is not adjusted for inflation. We observed in Randall that Vermont’s “failure to Per Curiam index limits means that limits which are already suspiciously low” will “almost inevitably become too low over time.” 548 U. S., at 261. The failure to index “imposes the burden of preventing the decline upon incumbent legislators who may not diligently police the need for changes in limit levels to ensure the adequate financing of electoral challenges.” Ibid. So too here. In fact, Alaska’s $500 contribution limit is the same as it was 23 years ago, in 1996. 1996 Alaska Sess. Laws ch. 48, §10(b)(1). In Randall, we noted that the State had failed to provide “any special justification that might warrant a contribution limit so low.” 548 U. S., at 261. The parties dispute whether there are pertinent special justifications here. In light of all the foregoing, the petition for certiorari is granted, the judgment of the Court of Appeals is vacated, and the case is remanded for that court to revisit whether Alaska’s contribution limits are consistent with our First Amendment precedents. It is so ordered. Statement of GINSBURG, J.",
+   "lineup": [],
+   "provisions": [
+    {
+     "id": "amend-1",
+     "quote": "They sued members of the Alaska Public Offices Commission, contending that Alaska’s individual-to-candidate and individual-to-group contribution limits violate the First Amendment."
+    }
+   ],
+   "qp_url": null,
+   "question_presented": [],
+   "qp_checked": true
+  }
+ ],
+ "built_on": "2026-10-15"
+}
