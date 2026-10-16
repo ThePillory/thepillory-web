@@ -4,7 +4,7 @@
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=VT&candidate_status=C",
  "list_built_on": "2026-10-15",
- "built_on": "2026-10-15",
+ "built_on": "2026-10-16",
  "senate_up": false,
  "candidates": {
   "H2VT01076": {
@@ -18,7 +18,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2VT01076/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-15",
+   "last_listed": "2026-10-16",
    "totals": {
     "cycle": 2026,
     "receipts": 956338.66,
@@ -223,7 +223,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00797175/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-10",
+   "funding_checked": "2026-10-16",
    "cycle": 2026
   },
   "H4VT01056": {
@@ -237,20 +237,20 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4VT01056/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-15",
+   "last_listed": "2026-10-16",
    "totals": {
     "cycle": 2026,
     "receipts": 36038.95,
-    "disbursements": 17760.15,
-    "cash_on_hand": 9208.36,
+    "disbursements": 26968.51,
+    "cash_on_hand": 0,
     "individual_unitemized": 3234.11,
     "individual_itemized": 11908.3,
     "pac": 0,
     "party": 0,
     "self_funding": 20896.54,
     "other": 0,
-    "coverage_end": "2026-07-22",
-    "last_report": "PRE-PRIMARY 2026",
+    "coverage_end": "2026-10-14",
+    "last_report": "TERMINATION REPORT 2026",
     "source_url": "https://www.fec.gov/data/candidate/H4VT01056/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -266,7 +266,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00874214/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-10-11",
+   "funding_checked": "2026-10-16",
    "cycle": 2026
   },
   "H6VT01085": {
@@ -280,7 +280,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6VT01085/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-15",
+   "last_listed": "2026-10-16",
    "totals": {
     "cycle": 2026,
     "receipts": 58279.96,
