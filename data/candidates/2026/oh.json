@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=OH&candidate_status=C",
- "list_built_on": "2026-10-15",
+ "list_built_on": "2026-10-16",
  "built_on": "2026-10-16",
  "senate_up": true,
  "candidates": {
@@ -6711,6 +6711,49 @@
     "as_filed": "ADAMMILLERFORAMERICA.COM",
     "source_url": "https://www.fec.gov/data/committee/C00856823/",
     "checked": "2026-10-11"
+   },
+   "funding_checked": "2026-10-16",
+   "cycle": 2026
+  },
+  "H6OH06244": {
+   "id": "H6OH06244",
+   "name": "KIRTLEY, ELIZABETH ANN MRS.",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "6",
+   "incumbent": false,
+   "committee": "C00940908",
+   "fec_url": "https://www.fec.gov/data/candidate/H6OH06244/",
+   "listed": true,
+   "first_listed": "2026-10-16",
+   "last_listed": "2026-10-16",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 10494.43,
+    "disbursements": 5671.29,
+    "cash_on_hand": 4823.14,
+    "individual_unitemized": 2504.63,
+    "individual_itemized": 4489.8,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 3500,
+    "other": 0,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6OH06244/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00940908&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00940908/",
+    "checked": "2026-10-16"
    },
    "funding_checked": "2026-10-16",
    "cycle": 2026
