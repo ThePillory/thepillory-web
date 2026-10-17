@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=VA&candidate_status=C",
- "built_on": "2026-10-16",
+ "built_on": "2026-10-17",
  "senate_up": true,
  "senate": [
   {
@@ -180,6 +180,14 @@
   ],
   "2": [
    {
+    "id": "H6VA02263",
+    "name": "BAKER, MATTHEW",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA02263/",
+    "committee": "C00957233"
+   },
+   {
     "id": "H6VA02172",
     "name": "DEVANATH, NILA",
     "party": "DEMOCRATIC PARTY",
@@ -328,14 +336,6 @@
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H0VA07133/",
     "committee": "C00856831"
-   },
-   {
-    "id": "H6VA05217",
-    "name": "PERRIELLO, THOMAS",
-    "party": "DEMOCRATIC PARTY",
-    "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6VA05217/",
-    "committee": "C00929968"
    },
    {
     "id": "H8VA05106",

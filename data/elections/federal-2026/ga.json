@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=GA&candidate_status=C",
- "built_on": "2026-10-16",
+ "built_on": "2026-10-17",
  "senate_up": true,
  "senate": [
   {
@@ -230,6 +230,14 @@
     "incumbent": true,
     "url": "https://www.fec.gov/data/candidate/H6GA04129/",
     "committee": "C00418293"
+   },
+   {
+    "id": "H6GA04160",
+    "name": "TRUMAN, BEN",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6GA04160/",
+    "committee": "C00899468"
    }
   ],
   "5": [
@@ -470,20 +478,20 @@
     "committee": "C00938175"
    },
    {
-    "id": "H6GA11231",
-    "name": "EKPETE KAMA, ULOMA",
-    "party": "REPUBLICAN PARTY",
-    "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6GA11231/",
-    "committee": "C00946285"
-   },
-   {
     "id": "H6GA03170",
     "name": "EKPETE KAMA, ULOMA",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6GA03170/",
     "committee": "C00846402"
+   },
+   {
+    "id": "H6GA11231",
+    "name": "EKPETE KAMA, ULOMA",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6GA11231/",
+    "committee": "C00946285"
    },
    {
     "id": "H6GA11116",

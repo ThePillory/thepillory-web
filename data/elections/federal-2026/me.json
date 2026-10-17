@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=ME&candidate_status=C",
- "built_on": "2026-10-16",
+ "built_on": "2026-10-17",
  "senate_up": true,
  "senate": [
   {
@@ -63,6 +63,14 @@
    "committee": "C00907873"
   },
   {
+   "id": "S6ME00464",
+   "name": "JACKSON, TROY DALE",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6ME00464/",
+   "committee": "C00955609"
+  },
+  {
    "id": "S6ME00381",
    "name": "KLEBAN, DAN",
    "party": "DEMOCRATIC PARTY",
@@ -100,7 +108,7 @@
    "party": "DEMOCRATIC PARTY",
    "incumbent": false,
    "url": "https://www.fec.gov/data/candidate/S6ME00373/",
-   "committee": "C00916437"
+   "committee": null
   },
   {
    "id": "S6ME00282",

@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=WI&candidate_status=C",
- "built_on": "2026-10-16",
+ "built_on": "2026-10-17",
  "senate_up": false,
  "senate": [],
  "house": {
@@ -169,6 +169,14 @@
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6WI06217/",
     "committee": "C00922245"
+   },
+   {
+    "id": "H6WI06241",
+    "name": "FITZGIBBON, ELIZABETH",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WI06241/",
+    "committee": "C00946673"
    },
    {
     "id": "H4WI06048",

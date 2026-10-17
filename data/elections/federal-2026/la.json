@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=LA&candidate_status=C",
- "built_on": "2026-10-16",
+ "built_on": "2026-10-17",
  "senate_up": true,
  "senate": [
   {
@@ -332,6 +332,14 @@
     "committee": "C00868513"
    },
    {
+    "id": "H6LA06190",
+    "name": "FORBES, PATRICK WAYNE",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6LA06190/",
+    "committee": "C00958322"
+   },
+   {
     "id": "H6LA05309",
     "name": "GARCIA, LINDSAY",
     "party": "DEMOCRATIC PARTY",
@@ -354,6 +362,14 @@
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6LA05234/",
     "committee": "C00908459"
+   },
+   {
+    "id": "H6LA06182",
+    "name": "WAGLEY, STEPHEN",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6LA06182/",
+    "committee": "C00958033"
    }
   ]
  }

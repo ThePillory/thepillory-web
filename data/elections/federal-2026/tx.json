@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=TX&candidate_status=C",
- "built_on": "2026-10-16",
+ "built_on": "2026-10-17",
  "senate_up": true,
  "senate": [
   {
@@ -1216,6 +1216,14 @@
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6TX25211/",
     "committee": "C00904920"
+   },
+   {
+    "id": "H6TX25237",
+    "name": "SIMS, DIONE MICHELLE MRS",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6TX25237/",
+    "committee": "C00930974"
    },
    {
     "id": "H2TX33040",

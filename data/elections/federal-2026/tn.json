@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=TN&candidate_status=C",
- "built_on": "2026-10-16",
+ "built_on": "2026-10-17",
  "senate_up": true,
  "senate": [
   {
@@ -21,6 +21,14 @@
    "incumbent": true,
    "url": "https://www.fec.gov/data/candidate/S0TN00169/",
    "committee": "C00718627"
+  },
+  {
+   "id": "S6TN00372",
+   "name": "JONES, ROBERT THOMAS",
+   "party": "INDEPENDENT",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6TN00372/",
+   "committee": "C00941971"
   },
   {
    "id": "S6TN00364",

@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=RI&candidate_status=C",
- "built_on": "2026-10-16",
+ "built_on": "2026-10-17",
  "senate_up": true,
  "senate": [
   {
@@ -48,6 +48,14 @@
     "incumbent": true,
     "url": "https://www.fec.gov/data/candidate/H4RI01265/",
     "committee": "C00838060"
+   },
+   {
+    "id": "H6RI01161",
+    "name": "DESOUZA, PEDRO",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6RI01161/",
+    "committee": "C00951624"
    },
    {
     "id": "H6RI01153",
