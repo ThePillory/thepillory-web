@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=RI&candidate_status=C",
- "list_built_on": "2026-10-16",
+ "list_built_on": "2026-10-17",
  "built_on": "2026-10-17",
  "senate_up": true,
  "candidates": {
@@ -943,6 +943,49 @@
     "checked": "2026-10-13"
    },
    "funding_checked": "2026-10-13",
+   "cycle": 2026
+  },
+  "H6RI01161": {
+   "id": "H6RI01161",
+   "name": "DESOUZA, PEDRO",
+   "party": "INDEPENDENT",
+   "office": "H",
+   "district": "1",
+   "incumbent": false,
+   "committee": "C00951624",
+   "fec_url": "https://www.fec.gov/data/candidate/H6RI01161/",
+   "listed": true,
+   "first_listed": "2026-10-17",
+   "last_listed": "2026-10-17",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 13065.34,
+    "disbursements": 13003.77,
+    "cash_on_hand": 61.57,
+    "individual_unitemized": 3240.86,
+    "individual_itemized": 354.48,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 9470,
+    "other": 0,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6RI01161/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00951624&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00951624/",
+    "checked": "2026-10-17"
+   },
+   "funding_checked": "2026-10-17",
    "cycle": 2026
   }
  }

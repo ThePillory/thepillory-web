@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=TX&candidate_status=C",
- "list_built_on": "2026-10-16",
+ "list_built_on": "2026-10-17",
  "built_on": "2026-10-17",
  "senate_up": true,
  "candidates": {
@@ -19510,6 +19510,49 @@
     "checked": "2026-10-13"
    },
    "funding_checked": "2026-10-13",
+   "cycle": 2026
+  },
+  "H6TX25237": {
+   "id": "H6TX25237",
+   "name": "SIMS, DIONE MICHELLE MRS",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "25",
+   "incumbent": false,
+   "committee": "C00930974",
+   "fec_url": "https://www.fec.gov/data/candidate/H6TX25237/",
+   "listed": true,
+   "first_listed": "2026-10-17",
+   "last_listed": "2026-10-17",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 5,
+    "disbursements": 50,
+    "cash_on_hand": -45,
+    "individual_unitemized": 0,
+    "individual_itemized": 0,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 5,
+    "other": 0,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TX25237/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00930974&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://dionesimsforcongress.com/",
+    "as_filed": "HTTPS://DIONESIMSFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00930974/",
+    "checked": "2026-10-17"
+   },
+   "funding_checked": "2026-10-17",
    "cycle": 2026
   }
  }

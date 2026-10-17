@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=WI&candidate_status=C",
- "list_built_on": "2026-10-16",
+ "list_built_on": "2026-10-17",
  "built_on": "2026-10-17",
  "senate_up": false,
  "candidates": {
@@ -3311,6 +3311,49 @@
     "checked": "2026-10-11"
    },
    "funding_checked": "2026-10-16",
+   "cycle": 2026
+  },
+  "H6WI06241": {
+   "id": "H6WI06241",
+   "name": "FITZGIBBON, ELIZABETH",
+   "party": "INDEPENDENT",
+   "office": "H",
+   "district": "6",
+   "incumbent": false,
+   "committee": "C00946673",
+   "fec_url": "https://www.fec.gov/data/candidate/H6WI06241/",
+   "listed": true,
+   "first_listed": "2026-10-17",
+   "last_listed": "2026-10-17",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 21161.09,
+    "disbursements": 17489.63,
+    "cash_on_hand": 3671.46,
+    "individual_unitemized": 4643.54,
+    "individual_itemized": 15874.44,
+    "pac": 0,
+    "party": 470,
+    "self_funding": 173.11,
+    "other": 0,
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6WI06241/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00946673&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://elizabethfitzgibbonforglenngrothmansseatincongress.org/",
+    "as_filed": "ELIZABETHFITZGIBBONFORGLENNGROTHMANSSEATINCONGRESS.ORG",
+    "source_url": "https://www.fec.gov/data/committee/C00946673/",
+    "checked": "2026-10-17"
+   },
+   "funding_checked": "2026-10-17",
    "cycle": 2026
   }
  }

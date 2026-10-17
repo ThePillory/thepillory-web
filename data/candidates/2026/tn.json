@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=TN&candidate_status=C",
- "list_built_on": "2026-10-16",
+ "list_built_on": "2026-10-17",
  "built_on": "2026-10-17",
  "senate_up": true,
  "candidates": {
@@ -4293,6 +4293,49 @@
     "checked": "2026-10-16"
    },
    "funding_checked": "2026-10-16",
+   "cycle": 2026
+  },
+  "S6TN00372": {
+   "id": "S6TN00372",
+   "name": "JONES, ROBERT THOMAS",
+   "party": "INDEPENDENT",
+   "office": "S",
+   "district": null,
+   "incumbent": false,
+   "committee": "C00941971",
+   "fec_url": "https://www.fec.gov/data/candidate/S6TN00372/",
+   "listed": true,
+   "first_listed": "2026-10-17",
+   "last_listed": "2026-10-17",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 12300,
+    "disbursements": 13850.93,
+    "cash_on_hand": 1509.9,
+    "individual_unitemized": 0,
+    "individual_itemized": 0,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 12300,
+    "other": 0,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6TN00372/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00941971&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://robertfortn.com/",
+    "as_filed": "ROBERTFORTN.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00941971/",
+    "checked": "2026-10-17"
+   },
+   "funding_checked": "2026-10-17",
    "cycle": 2026
   }
  }

@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=CO&candidate_status=C",
- "list_built_on": "2026-10-16",
+ "list_built_on": "2026-10-17",
  "built_on": "2026-10-17",
  "senate_up": true,
  "candidates": {
@@ -4443,6 +4443,49 @@
     "checked": "2026-10-11"
    },
    "funding_checked": "2026-10-16",
+   "cycle": 2026
+  },
+  "H6CO01331": {
+   "id": "H6CO01331",
+   "name": "PETERSON, CHRISTY",
+   "party": "REPUBLICAN PARTY",
+   "office": "H",
+   "district": "1",
+   "incumbent": false,
+   "committee": "C00946152",
+   "fec_url": "https://www.fec.gov/data/candidate/H6CO01331/",
+   "listed": true,
+   "first_listed": "2026-10-17",
+   "last_listed": "2026-10-17",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 7184.96,
+    "disbursements": 1539.92,
+    "cash_on_hand": 5645.04,
+    "individual_unitemized": 3100.29,
+    "individual_itemized": 2934.67,
+    "pac": 0,
+    "party": 1150,
+    "self_funding": 0,
+    "other": 0,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6CO01331/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00946152&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://christyforamerica.us/",
+    "as_filed": "CHRISTYFORAMERICA.US",
+    "source_url": "https://www.fec.gov/data/committee/C00946152/",
+    "checked": "2026-10-17"
+   },
+   "funding_checked": "2026-10-17",
    "cycle": 2026
   }
  }
