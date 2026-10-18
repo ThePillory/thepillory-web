@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=NH&candidate_status=C",
- "list_built_on": "2026-10-17",
+ "list_built_on": "2026-10-18",
  "built_on": "2026-10-18",
  "senate_up": true,
  "candidates": {
@@ -1568,17 +1568,17 @@
    "last_listed": "2026-10-18",
    "totals": {
     "cycle": 2026,
-    "receipts": 3635661.31,
-    "disbursements": 2853018.27,
-    "cash_on_hand": 789865.88,
-    "individual_unitemized": 633535.34,
-    "individual_itemized": 2839423.3,
-    "pac": 83850,
+    "receipts": 4107138.64,
+    "disbursements": 4104109.57,
+    "cash_on_hand": 10251.91,
+    "individual_unitemized": 674898.3,
+    "individual_itemized": 3232511.79,
+    "pac": 95850,
     "party": 0,
     "self_funding": 7000,
-    "other": 71852.67,
-    "coverage_end": "2026-08-19",
-    "last_report": "PRE-PRIMARY 2026",
+    "other": 96878.55,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H8NH01186/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -1763,7 +1763,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00658724/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-18",
    "cycle": 2026
   },
   "H6NH01354": {

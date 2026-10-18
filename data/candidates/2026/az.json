@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=AZ&candidate_status=C",
- "list_built_on": "2026-10-17",
+ "list_built_on": "2026-10-18",
  "built_on": "2026-10-18",
  "senate_up": false,
  "candidates": {
@@ -1993,17 +1993,17 @@
    "last_listed": "2026-10-18",
    "totals": {
     "cycle": 2026,
-    "receipts": 2117114.23,
-    "disbursements": 1112555.97,
-    "cash_on_hand": 2020288.72,
-    "individual_unitemized": 90791.69,
-    "individual_itemized": 1387101.85,
-    "pac": 638725,
+    "receipts": 2603086.34,
+    "disbursements": 1709122.08,
+    "cash_on_hand": 1909694.72,
+    "individual_unitemized": 111543.57,
+    "individual_itemized": 1679917.02,
+    "pac": 804200,
     "party": 37.68,
     "self_funding": 0,
-    "other": 458.01,
-    "coverage_end": "2026-07-01",
-    "last_report": "PRE-PRIMARY 2026",
+    "other": 7388.07,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H8AZ09040/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -2195,7 +2195,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00657304/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-18",
    "cycle": 2026
   },
   "H6AZ05174": {
@@ -4129,6 +4129,49 @@
     "checked": "2026-10-11"
    },
    "funding_checked": "2026-10-16",
+   "cycle": 2026
+  },
+  "H6AZ01413": {
+   "id": "H6AZ01413",
+   "name": "MONTOYA, ANGIE",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "1",
+   "incumbent": false,
+   "committee": "C00918805",
+   "fec_url": "https://www.fec.gov/data/candidate/H6AZ01413/",
+   "listed": true,
+   "first_listed": "2026-10-18",
+   "last_listed": "2026-10-18",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 5423.17,
+    "disbursements": 4307.61,
+    "cash_on_hand": 1620.57,
+    "individual_unitemized": 1312.55,
+    "individual_itemized": 1000,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 3110.62,
+    "other": 0,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6AZ01413/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00918805&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://angiemontoya-az.com/",
+    "as_filed": "ANGIEMONTOYA-AZ.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00918805/",
+    "checked": "2026-10-18"
+   },
+   "funding_checked": "2026-10-18",
    "cycle": 2026
   }
  }

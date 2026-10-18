@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=OK&candidate_status=C",
- "list_built_on": "2026-10-17",
+ "list_built_on": "2026-10-18",
  "built_on": "2026-10-18",
  "senate_up": true,
  "candidates": {
@@ -327,7 +327,7 @@
    "totals": null,
    "organizations": null,
    "website": null,
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-18",
    "cycle": 2026
   },
   "S6OK04205": {
@@ -387,17 +387,17 @@
    "last_listed": "2026-10-18",
    "totals": {
     "cycle": 2026,
-    "receipts": 3181278.33,
-    "disbursements": 1943965.57,
-    "cash_on_hand": 1420329.55,
+    "receipts": 3185695.04,
+    "disbursements": 2021565.97,
+    "cash_on_hand": 1347145.86,
     "individual_unitemized": 39722.07,
     "individual_itemized": 828433.74,
     "pac": 1098238.12,
     "party": 62000,
     "self_funding": 0,
-    "other": 1152884.4,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "other": 1157301.11,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/S2OK00186/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -589,7 +589,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00498345/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-18",
    "cycle": 2026
   },
   "S6OK04197": {
@@ -2664,6 +2664,49 @@
     "as_filed": "JENANELSON.COM",
     "source_url": "https://www.fec.gov/data/committee/C00911982/",
     "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-18",
+   "cycle": 2026
+  },
+  "H6OK03272": {
+   "id": "H6OK03272",
+   "name": "BYRD, SUZANNE",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "3",
+   "incumbent": false,
+   "committee": "C00947747",
+   "fec_url": "https://www.fec.gov/data/candidate/H6OK03272/",
+   "listed": true,
+   "first_listed": "2026-10-18",
+   "last_listed": "2026-10-18",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 18023.54,
+    "disbursements": 8245.94,
+    "cash_on_hand": 9777.6,
+    "individual_unitemized": 7863.54,
+    "individual_itemized": 10085,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 75,
+    "other": 0,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6OK03272/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00947747&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00947747/",
+    "checked": "2026-10-18"
    },
    "funding_checked": "2026-10-18",
    "cycle": 2026

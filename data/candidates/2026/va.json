@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=VA&candidate_status=C",
- "list_built_on": "2026-10-17",
+ "list_built_on": "2026-10-18",
  "built_on": "2026-10-18",
  "senate_up": true,
  "candidates": {
@@ -313,7 +313,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00932962/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-18",
    "cycle": 2026
   },
   "S6VA00093": {
@@ -1241,17 +1241,17 @@
    "last_listed": "2026-10-18",
    "totals": {
     "cycle": 2026,
-    "receipts": 4053141.52,
-    "disbursements": 1136232.18,
-    "cash_on_hand": 4292789.47,
-    "individual_unitemized": 54323.6,
-    "individual_itemized": 1388219.21,
-    "pac": 1169350,
+    "receipts": 5216106.2,
+    "disbursements": 4401469.57,
+    "cash_on_hand": 2190516.76,
+    "individual_unitemized": 78791.42,
+    "individual_itemized": 1788443.09,
+    "pac": 1406456.2,
     "party": 0,
     "self_funding": 0,
-    "other": 1441248.71,
-    "coverage_end": "2026-07-15",
-    "last_report": "PRE-PRIMARY 2026",
+    "other": 1942415.49,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H8VA01147/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -1443,7 +1443,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00441014/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-18",
    "cycle": 2026
   },
   "H6VA02172": {
@@ -3751,17 +3751,17 @@
    "last_listed": "2026-10-18",
    "totals": {
     "cycle": 2026,
-    "receipts": 1441436.38,
-    "disbursements": 1058316.84,
-    "cash_on_hand": 711441.57,
-    "individual_unitemized": 46823.59,
-    "individual_itemized": 679098.79,
-    "pac": 597759.68,
+    "receipts": 1861291.16,
+    "disbursements": 1485777.19,
+    "cash_on_hand": 703836,
+    "individual_unitemized": 74415.83,
+    "individual_itemized": 872617.78,
+    "pac": 774866.73,
     "party": 0,
     "self_funding": 0,
-    "other": 117754.32,
-    "coverage_end": "2026-07-15",
-    "last_report": "PRE-PRIMARY 2026",
+    "other": 139390.82,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H8VA06104/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -3953,7 +3953,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00661561/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-18",
    "cycle": 2026
   },
   "H6VA06181": {
@@ -7082,6 +7082,92 @@
     "checked": "2026-10-17"
    },
    "funding_checked": "2026-10-17",
+   "cycle": 2026
+  },
+  "H6VA07353": {
+   "id": "H6VA07353",
+   "name": "AHRAR, ALAHA MS.",
+   "party": "INDEPENDENT",
+   "office": "H",
+   "district": "7",
+   "incumbent": false,
+   "committee": "C00947770",
+   "fec_url": "https://www.fec.gov/data/candidate/H6VA07353/",
+   "listed": true,
+   "first_listed": "2026-10-18",
+   "last_listed": "2026-10-18",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 28473.1,
+    "disbursements": 4590.61,
+    "cash_on_hand": 23882.49,
+    "individual_unitemized": 6653.1,
+    "individual_itemized": 21820,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 0,
+    "other": 0,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6VA07353/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00947770&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00947770/",
+    "checked": "2026-10-18"
+   },
+   "funding_checked": "2026-10-18",
+   "cycle": 2026
+  },
+  "H6VA07312": {
+   "id": "H6VA07312",
+   "name": "TERRY, RANDALL",
+   "party": "INDEPENDENT",
+   "office": "H",
+   "district": "7",
+   "incumbent": false,
+   "committee": "C00949990",
+   "fec_url": "https://www.fec.gov/data/candidate/H6VA07312/",
+   "listed": true,
+   "first_listed": "2026-10-18",
+   "last_listed": "2026-10-18",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 45484,
+    "disbursements": 39789.25,
+    "cash_on_hand": 5694.75,
+    "individual_unitemized": 17034,
+    "individual_itemized": 28450,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 0,
+    "other": 0,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6VA07312/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00949990&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00949990/",
+    "checked": "2026-10-18"
+   },
+   "funding_checked": "2026-10-18",
    "cycle": 2026
   }
  }

@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=NV&candidate_status=C",
- "list_built_on": "2026-10-17",
+ "list_built_on": "2026-10-18",
  "built_on": "2026-10-18",
  "senate_up": false,
  "candidates": {
@@ -47,7 +47,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00926089/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-18",
    "cycle": 2026
   },
   "H4NV01237": {
@@ -498,17 +498,17 @@
    "last_listed": "2026-10-18",
    "totals": {
     "cycle": 2026,
-    "receipts": 1537358.1,
-    "disbursements": 355196.87,
-    "cash_on_hand": 1337524.79,
-    "individual_unitemized": 50604.44,
-    "individual_itemized": 619274.06,
-    "pac": 762050,
-    "party": 4672.72,
+    "receipts": 1976232.61,
+    "disbursements": 1469763.58,
+    "cash_on_hand": 661832.59,
+    "individual_unitemized": 83895.27,
+    "individual_itemized": 808461.44,
+    "pac": 969550,
+    "party": 5311.97,
     "self_funding": 0,
-    "other": 100756.88,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "other": 109013.93,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H8NV03036/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -700,7 +700,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00499467/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-18",
    "cycle": 2026
   },
   "H6NV02362": {

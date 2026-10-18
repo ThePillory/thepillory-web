@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=ME&candidate_status=C",
- "list_built_on": "2026-10-17",
+ "list_built_on": "2026-10-18",
  "built_on": "2026-10-18",
  "senate_up": true,
  "candidates": {
@@ -395,7 +395,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00907881/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-18",
    "cycle": 2026
   },
   "S6ME00399": {
@@ -1331,17 +1331,17 @@
    "last_listed": "2026-10-18",
    "totals": {
     "cycle": 2026,
-    "receipts": 429634.08,
-    "disbursements": 422199.97,
-    "cash_on_hand": 423112.34,
-    "individual_unitemized": 69003.1,
-    "individual_itemized": 111389,
-    "pac": 237050,
+    "receipts": 531049.7,
+    "disbursements": 582147.17,
+    "cash_on_hand": 364580.76,
+    "individual_unitemized": 78696.14,
+    "individual_itemized": 144110,
+    "pac": 296050,
     "party": 0,
     "self_funding": 0,
-    "other": 12191.98,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "other": 12193.56,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H8ME01120/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -1533,7 +1533,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00433391/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-18",
    "cycle": 2026
   },
   "H6ME01280": {
@@ -2260,6 +2260,92 @@
     "checked": "2026-10-17"
    },
    "funding_checked": "2026-10-17",
+   "cycle": 2026
+  },
+  "S6ME00498": {
+   "id": "S6ME00498",
+   "name": "PELLETIER, SAUNDRA",
+   "party": "DEMOCRATIC PARTY",
+   "office": "S",
+   "district": null,
+   "incumbent": false,
+   "committee": "C00957167",
+   "fec_url": "https://www.fec.gov/data/candidate/S6ME00498/",
+   "listed": true,
+   "first_listed": "2026-10-18",
+   "last_listed": "2026-10-18",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 426560,
+    "disbursements": 426560,
+    "cash_on_hand": 0,
+    "individual_unitemized": 0,
+    "individual_itemized": 0,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 426560,
+    "other": 0,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6ME00498/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00957167&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00957167/",
+    "checked": "2026-10-18"
+   },
+   "funding_checked": "2026-10-18",
+   "cycle": 2026
+  },
+  "S6ME00449": {
+   "id": "S6ME00449",
+   "name": "SHAH, NIRAV",
+   "party": "DEMOCRATIC PARTY",
+   "office": "S",
+   "district": null,
+   "incumbent": false,
+   "committee": "C00955773",
+   "fec_url": "https://www.fec.gov/data/candidate/S6ME00449/",
+   "listed": true,
+   "first_listed": "2026-10-18",
+   "last_listed": "2026-10-18",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 280756.88,
+    "disbursements": 280756.88,
+    "cash_on_hand": 0,
+    "individual_unitemized": 53116.88,
+    "individual_itemized": 192990,
+    "pac": 750,
+    "party": 0,
+    "self_funding": 33900,
+    "other": 0,
+    "coverage_end": "2026-09-30",
+    "last_report": "TERMINATION REPORT 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6ME00449/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00955773&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://shahformaine.com/",
+    "as_filed": "SHAHFORMAINE.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00955773/",
+    "checked": "2026-10-18"
+   },
+   "funding_checked": "2026-10-18",
    "cycle": 2026
   }
  }

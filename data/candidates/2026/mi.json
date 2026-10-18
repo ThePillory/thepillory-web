@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=MI&candidate_status=C",
- "list_built_on": "2026-10-17",
+ "list_built_on": "2026-10-18",
  "built_on": "2026-10-18",
  "senate_up": true,
  "candidates": {
@@ -433,15 +433,15 @@
    "last_listed": "2026-10-18",
    "totals": {
     "cycle": 2026,
-    "receipts": 10903168.59,
-    "disbursements": 6743883.82,
-    "cash_on_hand": 4414988.49,
-    "individual_unitemized": 2220158.54,
-    "individual_itemized": 4611651.62,
-    "pac": 792227.09,
+    "receipts": 20565706.38,
+    "disbursements": 14293939.07,
+    "cash_on_hand": 6527471.03,
+    "individual_unitemized": 3311115.6,
+    "individual_itemized": 10434001.3,
+    "pac": 1184727.09,
     "party": 62000,
     "self_funding": 0,
-    "other": 3217131.34,
+    "other": 5573862.39,
     "coverage_end": "2026-09-30",
     "last_report": "TERMINATION REPORT 2026",
     "source_url": "https://www.fec.gov/data/candidate/S4MI00595/?cycle=2026&election_full=false"
@@ -635,7 +635,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00849810/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-18",
    "cycle": 2026
   },
   "S6MI00434": {
@@ -6590,17 +6590,17 @@
    "last_listed": "2026-10-18",
    "totals": {
     "cycle": 2026,
-    "receipts": 2756214.39,
-    "disbursements": 3585336.34,
-    "cash_on_hand": 3434433.03,
-    "individual_unitemized": 793973.09,
-    "individual_itemized": 1523717.52,
-    "pac": 37150.01,
+    "receipts": 3189096.1,
+    "disbursements": 4455918.24,
+    "cash_on_hand": 2996732.84,
+    "individual_unitemized": 1002655.12,
+    "individual_itemized": 1684057.51,
+    "pac": 47150.01,
     "party": 0,
     "self_funding": 0,
-    "other": 401373.77,
-    "coverage_end": "2026-07-15",
-    "last_report": "PRE-PRIMARY 2026",
+    "other": 455233.46,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H8MI13250/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -6708,7 +6708,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00668608/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-18",
    "cycle": 2026
   },
   "H6MI13296": {
@@ -7287,16 +7287,16 @@
    "totals": {
     "cycle": 2026,
     "receipts": 23554.8,
-    "disbursements": 16661.48,
-    "cash_on_hand": 8486.8,
+    "disbursements": 25870.03,
+    "cash_on_hand": 128.25,
     "individual_unitemized": 604.8,
     "individual_itemized": 10950,
     "pac": 0,
     "party": 0,
     "self_funding": 12000,
     "other": 0,
-    "coverage_end": "2026-07-15",
-    "last_report": "PRE-PRIMARY 2026",
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H8MI13185/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -7312,7 +7312,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00867960/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-18",
    "cycle": 2026
   },
   "H6MI02240": {
@@ -7356,6 +7356,49 @@
     "checked": "2026-10-16"
    },
    "funding_checked": "2026-10-16",
+   "cycle": 2026
+  },
+  "S6MI00442": {
+   "id": "S6MI00442",
+   "name": "CHRISTENSEN, LYDIA LYNN",
+   "party": "LIBERTARIAN PARTY",
+   "office": "S",
+   "district": null,
+   "incumbent": false,
+   "committee": "C00903575",
+   "fec_url": "https://www.fec.gov/data/candidate/S6MI00442/",
+   "listed": true,
+   "first_listed": "2026-10-18",
+   "last_listed": "2026-10-18",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 7129.28,
+    "disbursements": 4799.24,
+    "cash_on_hand": 2806.73,
+    "individual_unitemized": 476.7,
+    "individual_itemized": 3226.29,
+    "pac": 0,
+    "party": 2104.45,
+    "self_funding": 690,
+    "other": 631.84,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6MI00442/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00903575&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://www.lydialynnchristensen.com/",
+    "as_filed": "WWW.LYDIALYNNCHRISTENSEN.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00903575/",
+    "checked": "2026-10-18"
+   },
+   "funding_checked": "2026-10-18",
    "cycle": 2026
   }
  }
