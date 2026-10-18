@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=VA&candidate_status=C",
- "built_on": "2026-10-17",
+ "built_on": "2026-10-18",
  "senate_up": true,
  "senate": [
   {
@@ -430,6 +430,14 @@
   ],
   "7": [
    {
+    "id": "H6VA07353",
+    "name": "AHRAR, ALAHA MS.",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA07353/",
+    "committee": "C00947770"
+   },
+   {
     "id": "H6VA00028",
     "name": "COONEY, JOSEPH PATRICK",
     "party": "DEMOCRATIC PARTY",
@@ -524,6 +532,14 @@
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6VA07296/",
     "committee": "C00946319"
+   },
+   {
+    "id": "H6VA07312",
+    "name": "TERRY, RANDALL",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA07312/",
+    "committee": "C00949990"
    },
    {
     "id": "H4VA07234",

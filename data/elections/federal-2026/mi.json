@@ -3,9 +3,17 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=MI&candidate_status=C",
- "built_on": "2026-10-17",
+ "built_on": "2026-10-18",
  "senate_up": true,
  "senate": [
+  {
+   "id": "S6MI00442",
+   "name": "CHRISTENSEN, LYDIA LYNN",
+   "party": "LIBERTARIAN PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6MI00442/",
+   "committee": "C00903575"
+  },
   {
    "id": "S6MI00418",
    "name": "EL-SAYED, ABDUL",

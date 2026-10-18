@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=ME&candidate_status=C",
- "built_on": "2026-10-17",
+ "built_on": "2026-10-18",
  "senate_up": true,
  "senate": [
   {
@@ -103,6 +103,14 @@
    "committee": "C00923144"
   },
   {
+   "id": "S6ME00498",
+   "name": "PELLETIER, SAUNDRA",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6ME00498/",
+   "committee": "C00957167"
+  },
+  {
    "id": "S6ME00373",
    "name": "PLATNER, GRAHAM",
    "party": "DEMOCRATIC PARTY",
@@ -125,6 +133,14 @@
    "incumbent": false,
    "url": "https://www.fec.gov/data/candidate/S6ME00365/",
    "committee": "C00916189"
+  },
+  {
+   "id": "S6ME00449",
+   "name": "SHAH, NIRAV",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6ME00449/",
+   "committee": "C00955773"
   },
   {
    "id": "S6ME00332",

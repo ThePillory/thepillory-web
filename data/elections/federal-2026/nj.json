@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=NJ&candidate_status=C",
- "built_on": "2026-10-17",
+ "built_on": "2026-10-18",
  "senate_up": true,
  "senate": [
   {
@@ -308,6 +308,14 @@
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6NJ07284/",
     "committee": "C00928085"
+   },
+   {
+    "id": "H6NJ07300",
+    "name": "TERRY, RANDALL",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NJ07300/",
+    "committee": "C00949990"
    },
    {
     "id": "H2NJ08265",

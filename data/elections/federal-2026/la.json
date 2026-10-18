@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=LA&candidate_status=C",
- "built_on": "2026-10-17",
+ "built_on": "2026-10-18",
  "senate_up": true,
  "senate": [
   {
@@ -288,6 +288,22 @@
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6LA05275/",
     "committee": "C00939454"
+   },
+   {
+    "id": "H6LA05325",
+    "name": "WILSON, ANTONIO",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6LA05325/",
+    "committee": "C00958413"
+   },
+   {
+    "id": "H6LA05333",
+    "name": "WILSON, ANTONIO",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6LA05333/",
+    "committee": "C00958413"
    },
    {
     "id": "H6LA05192",

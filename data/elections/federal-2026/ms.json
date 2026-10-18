@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=MS&candidate_status=C",
- "built_on": "2026-10-17",
+ "built_on": "2026-10-18",
  "senate_up": true,
  "senate": [
   {
@@ -39,19 +39,19 @@
    "committee": "C00830554"
   },
   {
-   "id": "S6MS00141",
-   "name": "TILL, PRISCILLA WILLIAMS",
-   "party": "DEMOCRATIC PARTY",
-   "incumbent": false,
-   "url": "https://www.fec.gov/data/candidate/S6MS00141/",
-   "committee": "C00921445"
-  },
-  {
    "id": "S6MS00158",
    "name": "TILL, PRISCILLA WILLIAMS",
    "party": "DEMOCRATIC PARTY",
    "incumbent": false,
    "url": "https://www.fec.gov/data/candidate/S6MS00158/",
+   "committee": "C00921445"
+  },
+  {
+   "id": "S6MS00141",
+   "name": "TILL, PRISCILLA WILLIAMS",
+   "party": "DEMOCRATIC PARTY",
+   "incumbent": false,
+   "url": "https://www.fec.gov/data/candidate/S6MS00141/",
    "committee": "C00921445"
   }
  ],
