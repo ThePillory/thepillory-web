@@ -4,7 +4,7 @@
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=IL&candidate_status=C",
  "list_built_on": "2026-10-18",
- "built_on": "2026-10-18",
+ "built_on": "2026-10-19",
  "senate_up": true,
  "candidates": {
   "S6IL00391": {
@@ -18,7 +18,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6IL00391/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 1000,
@@ -47,7 +47,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00634808/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6IL00656": {
@@ -61,7 +61,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6IL00656/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 372718.37,
@@ -90,7 +90,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00920348/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6IL00730": {
@@ -104,7 +104,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6IL00730/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 10216.99,
@@ -133,7 +133,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00914846/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6IL00565": {
@@ -147,7 +147,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6IL00565/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 42028.81,
@@ -159,8 +159,8 @@
     "party": 0,
     "self_funding": 42000,
     "other": 0,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/S6IL00565/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -176,7 +176,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00907931/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6IL00490": {
@@ -190,7 +190,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6IL00490/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 13471.89,
@@ -219,7 +219,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00911628/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6IL00466": {
@@ -233,7 +233,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6IL00466/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 202000,
@@ -262,7 +262,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00903823/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6IL00623": {
@@ -276,20 +276,20 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6IL00623/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 123854.07,
-    "disbursements": 112138.37,
-    "cash_on_hand": 12564.19,
+    "disbursements": 123815.52,
+    "cash_on_hand": 38.55,
     "individual_unitemized": 19070.13,
     "individual_itemized": 31923.22,
     "pac": 0,
     "party": 0,
     "self_funding": 71857.09,
     "other": 1003.63,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/S6IL00623/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -305,7 +305,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00915280/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6IL00607": {
@@ -319,7 +319,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6IL00607/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 59060.88,
@@ -348,7 +348,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00914390/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6IL00672": {
@@ -362,20 +362,20 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6IL00672/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 1308510.17,
-    "disbursements": 1305141.26,
-    "cash_on_hand": 3368.91,
+    "disbursements": 1305174.35,
+    "cash_on_hand": 3335.82,
     "individual_unitemized": 2439,
     "individual_itemized": 222000,
     "pac": 0,
     "party": 0,
     "self_funding": 1049706.39,
     "other": 34364.78,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/S6IL00672/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -391,7 +391,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00921759/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6IL00425": {
@@ -405,7 +405,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6IL00425/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 28555.42,
@@ -434,7 +434,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00897652/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6IL00680": {
@@ -448,20 +448,20 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6IL00680/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 100702.4,
-    "disbursements": 96950.99,
-    "cash_on_hand": 3751.41,
-    "individual_unitemized": 11358,
-    "individual_itemized": 22595,
+    "receipts": 137949.62,
+    "disbursements": 115650.53,
+    "cash_on_hand": 22299.09,
+    "individual_unitemized": 23861.22,
+    "individual_itemized": 37339,
     "pac": 0,
     "party": 0,
-    "self_funding": 66749.4,
+    "self_funding": 76749.4,
     "other": 0,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/S6IL00680/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -477,7 +477,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00931428/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6IL00474": {
@@ -491,7 +491,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6IL00474/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 3509919,
@@ -696,7 +696,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00904300/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6IL00482": {
@@ -710,20 +710,20 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6IL00482/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 31558602.76,
-    "disbursements": 31484014.95,
-    "cash_on_hand": 74587.81,
+    "receipts": 31560942.64,
+    "disbursements": 31528045.13,
+    "cash_on_hand": 32897.51,
     "individual_unitemized": 645553.98,
     "individual_itemized": 10360283.07,
     "pac": 495361.2,
     "party": 500,
     "self_funding": 0,
-    "other": 20056904.51,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "other": 20059244.39,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/S6IL00482/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -915,7 +915,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00904466/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6IL00540": {
@@ -929,7 +929,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6IL00540/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 24715.06,
@@ -958,7 +958,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00904516/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6IL00649": {
@@ -972,7 +972,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6IL00649/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 21976,
@@ -984,8 +984,8 @@
     "party": 0,
     "self_funding": 0,
     "other": 0,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/S6IL00649/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -1001,7 +1001,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00918466/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6IL00581": {
@@ -1015,20 +1015,20 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6IL00581/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 139010.63,
-    "disbursements": 149062.03,
-    "cash_on_hand": -10051.4,
+    "disbursements": 142848.33,
+    "cash_on_hand": -3837.7,
     "individual_unitemized": 51859.71,
     "individual_itemized": 75817.13,
     "pac": 388,
     "party": 350,
     "self_funding": 5165.69,
     "other": 5430.1,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "coverage_end": "2026-10-15",
+    "last_report": "TERMINATION REPORT 2026",
     "source_url": "https://www.fec.gov/data/candidate/S6IL00581/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -1044,7 +1044,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00907774/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6IL00698": {
@@ -1058,7 +1058,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6IL00698/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 6021.12,
@@ -1087,7 +1087,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00942805/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6IL00458": {
@@ -1101,20 +1101,20 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6IL00458/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 5906598.55,
-    "disbursements": 4798640.54,
-    "cash_on_hand": 1107958.01,
-    "individual_unitemized": 1182892.35,
-    "individual_itemized": 3677813.2,
-    "pac": 426633.99,
+    "receipts": 7089488.11,
+    "disbursements": 5443520.89,
+    "cash_on_hand": 1645967.22,
+    "individual_unitemized": 1331959.95,
+    "individual_itemized": 3952273.57,
+    "pac": 578133.99,
     "party": 0,
     "self_funding": 0,
-    "other": 619259.01,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "other": 1227120.6,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/S6IL00458/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -1306,7 +1306,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00903252/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6IL00409": {
@@ -1320,7 +1320,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6IL00409/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 17642.57,
@@ -1349,7 +1349,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00867523/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6IL00615": {
@@ -1363,20 +1363,20 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6IL00615/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 2459889.83,
-    "disbursements": 947465.99,
-    "cash_on_hand": 1512423.84,
-    "individual_unitemized": 27050.37,
-    "individual_itemized": 374869.75,
-    "pac": 11075,
+    "receipts": 4145964.36,
+    "disbursements": 3000558.53,
+    "cash_on_hand": 1145405.83,
+    "individual_unitemized": 67770.01,
+    "individual_itemized": 503117.86,
+    "pac": 22175,
     "party": 1250,
-    "self_funding": 2000000,
-    "other": 45644.71,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "self_funding": 3500000,
+    "other": 51651.49,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/S6IL00615/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -1407,7 +1407,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00917120/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-14",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "H2IL01349": {
@@ -1421,20 +1421,20 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2IL01349/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 418349.64,
-    "disbursements": 424875.22,
-    "cash_on_hand": 47162.51,
-    "individual_unitemized": 10569.17,
-    "individual_itemized": 258792,
-    "pac": 142500,
+    "receipts": 514698.04,
+    "disbursements": 535901.93,
+    "cash_on_hand": 32484.2,
+    "individual_unitemized": 11665.17,
+    "individual_itemized": 291996,
+    "pac": 191500,
     "party": 0,
     "self_funding": 0,
-    "other": 6488.47,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "other": 19536.87,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H2IL01349/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -1626,7 +1626,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00802603/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "H6IL01191": {
@@ -1640,7 +1640,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL01191/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 88080.16,
@@ -1683,7 +1683,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL02330/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 118264.26,
@@ -1726,7 +1726,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL02280/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 7993.84,
@@ -1769,7 +1769,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL02322/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 22079.8,
@@ -1812,7 +1812,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL02124/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 366890.77,
@@ -1884,7 +1884,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL02397/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 14730.88,
@@ -1927,7 +1927,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL02355/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 2679838.58,
@@ -2146,7 +2146,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL02298/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 1324875.87,
@@ -2365,7 +2365,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL02363/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 146130.75,
@@ -2437,7 +2437,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL02306/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 71090,
@@ -2480,7 +2480,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL03163/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 10729.52,
@@ -2523,20 +2523,20 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2IL03162/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 1465280.22,
-    "disbursements": 986629.54,
-    "cash_on_hand": 946222.08,
-    "individual_unitemized": 148641.22,
-    "individual_itemized": 889031.46,
-    "pac": 371346.85,
+    "receipts": 1603319.81,
+    "disbursements": 1143478.99,
+    "cash_on_hand": 927412.22,
+    "individual_unitemized": 172883.31,
+    "individual_itemized": 925828.96,
+    "pac": 416846.85,
     "party": 500,
     "self_funding": 0,
-    "other": 55760.69,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "other": 87260.69,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H2IL03162/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -2728,7 +2728,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00796672/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "H6IL04187": {
@@ -2742,7 +2742,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL04187/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 16437,
@@ -2785,7 +2785,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL04153/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 358667.1,
@@ -3004,7 +3004,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL04195/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 188169.64,
@@ -3047,7 +3047,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL04179/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 306144.4,
@@ -3133,7 +3133,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL04161/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 188361.95,
@@ -3176,20 +3176,20 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0IL05096/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 725694.88,
-    "disbursements": 719060.36,
-    "cash_on_hand": 1187817.91,
-    "individual_unitemized": 7552.28,
-    "individual_itemized": 237025,
-    "pac": 480607.55,
+    "receipts": 995514.45,
+    "disbursements": 1046196.77,
+    "cash_on_hand": 1130501.07,
+    "individual_unitemized": 7813.28,
+    "individual_itemized": 256230,
+    "pac": 582765.88,
     "party": 0,
     "self_funding": 0,
-    "other": 510.05,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "other": 148705.29,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H0IL05096/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -3381,7 +3381,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00457556/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "H8IL06139": {
@@ -3395,7 +3395,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8IL06139/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 2471914.21,
@@ -3614,20 +3614,20 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2IL06090/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 313037.72,
-    "disbursements": 295578.41,
-    "cash_on_hand": 22661.13,
-    "individual_unitemized": 194487.35,
-    "individual_itemized": 113600.37,
-    "pac": 4950,
+    "receipts": 346267.77,
+    "disbursements": 333513.71,
+    "cash_on_hand": 17955.88,
+    "individual_unitemized": 202856.53,
+    "individual_itemized": 137660.47,
+    "pac": 5700,
     "party": 0,
     "self_funding": 0,
-    "other": 0,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "other": 50.77,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H2IL06090/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -3658,7 +3658,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00844308/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "H6IL06182": {
@@ -3672,7 +3672,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL06182/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 11487.6,
@@ -3715,7 +3715,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL06190/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 168973.07,
@@ -3758,7 +3758,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL07370/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 456944.78,
@@ -3801,7 +3801,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL07511/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 54853.67,
@@ -3844,7 +3844,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4IL07177/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 824853.42,
@@ -3909,7 +3909,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL07420/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 248729.21,
@@ -4030,7 +4030,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL07545/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 11690.18,
@@ -4073,7 +4073,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL07438/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 927615.93,
@@ -4215,7 +4215,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL07354/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 816412.56,
@@ -4413,7 +4413,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL07339/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 2507058.16,
@@ -4499,7 +4499,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL07396/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 215318.9,
@@ -4542,7 +4542,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2IL08203/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 58215.06,
@@ -4571,7 +4571,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00911453/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "H6IL07404": {
@@ -4585,7 +4585,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL07404/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 9830,
@@ -4628,7 +4628,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL07347/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 9315.84,
@@ -4671,7 +4671,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL07495/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 294428.41,
@@ -4714,7 +4714,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL07487/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 21214.59,
@@ -4757,7 +4757,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL07503/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 368347.51,
@@ -4822,7 +4822,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL07479/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 8410,
@@ -4865,20 +4865,20 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2IL08146/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 1650112.48,
-    "disbursements": 1508659.27,
-    "cash_on_hand": 141453.21,
+    "receipts": 1720112.48,
+    "disbursements": 1703902.18,
+    "cash_on_hand": 16210.3,
     "individual_unitemized": 74110.45,
     "individual_itemized": 1323499.33,
     "pac": 50318.03,
     "party": 0,
-    "self_funding": 202000,
+    "self_funding": 272000,
     "other": 184.67,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H2IL08146/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -5000,7 +5000,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00906891/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "H6IL08253": {
@@ -5014,7 +5014,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL08253/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 558710.84,
@@ -5114,7 +5114,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL08329/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 2421586.28,
@@ -5333,7 +5333,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL08311/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 1713426.25,
@@ -5426,7 +5426,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL08246/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 392018.43,
@@ -5484,7 +5484,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL08279/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 12725.05,
@@ -5527,7 +5527,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL08212/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 3133634.82,
@@ -5585,7 +5585,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL08238/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 660987.06,
@@ -5762,7 +5762,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4IL08159/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 139894.78,
@@ -5805,7 +5805,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL08287/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 728320.36,
@@ -5870,7 +5870,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL08295/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 122561,
@@ -5913,7 +5913,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL09178/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 4073733.32,
@@ -5992,7 +5992,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL09236/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 1182077.64,
@@ -6043,7 +6043,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL09301/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 1415877.43,
@@ -6086,7 +6086,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL09228/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 3380216.72,
@@ -6305,7 +6305,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL09376/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 792825,
@@ -6348,7 +6348,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL09194/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 2785400.12,
@@ -6462,7 +6462,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL09327/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 28211.02,
@@ -6505,7 +6505,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL09285/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 1043341.4,
@@ -6577,7 +6577,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL09202/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 29445.76,
@@ -6620,7 +6620,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL09277/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 901579,
@@ -6671,7 +6671,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL09335/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 5397,
@@ -6714,7 +6714,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL09343/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 377429.24,
@@ -6765,7 +6765,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL09319/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 273294.95,
@@ -6816,7 +6816,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL09251/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 141148,
@@ -6859,7 +6859,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL09293/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 466250.84,
@@ -6959,7 +6959,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL09210/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 24114.64,
@@ -7002,7 +7002,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL10168/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 98043.87,
@@ -7045,20 +7045,20 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2IL10068/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 3006862.5,
-    "disbursements": 2279281.91,
-    "cash_on_hand": 1699006.68,
-    "individual_unitemized": 96125.73,
-    "individual_itemized": 1545703.67,
-    "pac": 1266238.74,
+    "receipts": 3575300.49,
+    "disbursements": 2870939.86,
+    "cash_on_hand": 1675786.72,
+    "individual_unitemized": 108032.21,
+    "individual_itemized": 1776775.14,
+    "pac": 1559898.74,
     "party": 0,
     "self_funding": 0,
-    "other": 98794.36,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "other": 130594.4,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H2IL10068/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -7250,7 +7250,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00495952/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "H8IL14067": {
@@ -7264,7 +7264,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8IL14067/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 2535531.9,
@@ -7483,7 +7483,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4IL11245/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 58994.9,
@@ -7526,7 +7526,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2IL14086/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 94282.3,
@@ -7563,7 +7563,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00906958/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "H6IL11166": {
@@ -7577,7 +7577,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL11166/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 420243.48,
@@ -7635,7 +7635,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4IL12060/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 1327224.8,
@@ -7854,7 +7854,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL12131/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 145608.25,
@@ -7905,7 +7905,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL12123/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 9350,
@@ -7948,7 +7948,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL13162/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 105872.44,
@@ -7999,20 +7999,20 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2IL13153/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 2885017.54,
-    "disbursements": 2044185.13,
-    "cash_on_hand": 2625564.76,
-    "individual_unitemized": 107319.16,
-    "individual_itemized": 1541543.48,
-    "pac": 1172784,
-    "party": 2009.55,
+    "receipts": 3527069.13,
+    "disbursements": 2407273.49,
+    "cash_on_hand": 2904527.99,
+    "individual_unitemized": 130053.87,
+    "individual_itemized": 1858499.69,
+    "pac": 1451203.62,
+    "party": 2259.55,
     "self_funding": 0,
-    "other": 61361.35,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "other": 85052.4,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H2IL13153/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -8204,7 +8204,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00787812/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "H4IL13241": {
@@ -8218,7 +8218,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4IL13241/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 16876.2,
@@ -8261,7 +8261,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL13154/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 495129.97,
@@ -8326,7 +8326,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL14160/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 22724.53,
@@ -8369,7 +8369,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8IL16153/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 203012.03,
@@ -8420,7 +8420,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8IL14174/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 2814329.4,
@@ -8639,7 +8639,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL14178/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 68395.15,
@@ -8690,7 +8690,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL15118/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 37939.93,
@@ -8733,7 +8733,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL15100/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 86716.42,
@@ -8776,20 +8776,20 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0IL15129/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 1331399.27,
-    "disbursements": 1167228.88,
-    "cash_on_hand": 810426.73,
-    "individual_unitemized": 754615.53,
-    "individual_itemized": 405370.24,
-    "pac": 144500.01,
+    "receipts": 1776096.72,
+    "disbursements": 1483988.15,
+    "cash_on_hand": 938364.91,
+    "individual_unitemized": 994616.9,
+    "individual_itemized": 569467.89,
+    "pac": 185098.44,
     "party": 0,
     "self_funding": 100,
     "other": 26813.49,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H0IL15129/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -8981,7 +8981,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00723916/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "H6IL15134": {
@@ -8995,7 +8995,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL15134/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 5483.89,
@@ -9038,7 +9038,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL15092/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 198972.81,
@@ -9089,7 +9089,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL16090/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 19033.92,
@@ -9132,7 +9132,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL18088/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 4159073.74,
@@ -9351,7 +9351,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL16108/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 415748.4,
@@ -9472,7 +9472,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL17262/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 81764.92,
@@ -9515,20 +9515,20 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2IL17147/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 2233675.53,
-    "disbursements": 1020827.68,
-    "cash_on_hand": 1325642.13,
-    "individual_unitemized": 185873.59,
-    "individual_itemized": 1101291.81,
-    "pac": 848250,
+    "receipts": 2615272.3,
+    "disbursements": 1385088.85,
+    "cash_on_hand": 1342977.73,
+    "individual_unitemized": 217101.31,
+    "individual_itemized": 1243007.37,
+    "pac": 1018709.37,
     "party": 0,
     "self_funding": 0,
-    "other": 98260.13,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "other": 136454.25,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H2IL17147/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -9720,7 +9720,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00793935/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "H6IL17247": {
@@ -9734,7 +9734,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6IL17247/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-10-18",
+   "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
     "receipts": 398099.02,
