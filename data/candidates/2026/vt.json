@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=VT&candidate_status=C",
- "list_built_on": "2026-10-18",
+ "list_built_on": "2026-10-19",
  "built_on": "2026-10-19",
  "senate_up": false,
  "candidates": {
@@ -21,17 +21,17 @@
    "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 956338.66,
-    "disbursements": 475768.27,
-    "cash_on_hand": 626331.88,
-    "individual_unitemized": 206782.32,
-    "individual_itemized": 465946.93,
-    "pac": 279250.01,
+    "receipts": 1149110.53,
+    "disbursements": 678626.47,
+    "cash_on_hand": 616245.55,
+    "individual_unitemized": 228069.02,
+    "individual_itemized": 586405.46,
+    "pac": 329250.01,
     "party": 779.16,
     "self_funding": 0,
-    "other": 3580.24,
-    "coverage_end": "2026-07-22",
-    "last_report": "PRE-PRIMARY 2026",
+    "other": 4606.88,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H2VT01076/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -223,7 +223,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00797175/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-16",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "H4VT01056": {

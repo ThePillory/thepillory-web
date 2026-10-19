@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=WV&candidate_status=C",
- "list_built_on": "2026-10-18",
+ "list_built_on": "2026-10-19",
  "built_on": "2026-10-19",
  "senate_up": true,
  "candidates": {
@@ -246,7 +246,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00832154/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6WV00188": {
@@ -263,17 +263,17 @@
    "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 49913.08,
-    "disbursements": 34780.27,
-    "cash_on_hand": 22129.44,
-    "individual_unitemized": 14900.7,
-    "individual_itemized": 27021.98,
-    "pac": 100,
-    "party": 0,
-    "self_funding": 7890.4,
+    "receipts": 137292.09,
+    "disbursements": 119501.41,
+    "cash_on_hand": 24787.31,
+    "individual_unitemized": 38078.72,
+    "individual_itemized": 60572.97,
+    "pac": 1500,
+    "party": 250,
+    "self_funding": 36890.4,
     "other": 0,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/S6WV00188/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -289,7 +289,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00932459/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6WV00196": {
@@ -307,7 +307,7 @@
    "totals": null,
    "organizations": null,
    "website": null,
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S4WV00407": {
@@ -393,7 +393,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00906396/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S4WV00357": {
@@ -462,8 +462,8 @@
     "party": 300,
     "self_funding": 368000,
     "other": 0,
-    "coverage_end": "2026-07-10",
-    "last_report": "TERMINATION REPORT 2026",
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/S6WV00162/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -487,7 +487,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00905851/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "H6WV01137": {
@@ -1285,7 +1285,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00954263/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   }
  }

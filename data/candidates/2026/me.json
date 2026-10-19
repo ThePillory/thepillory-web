@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=ME&candidate_status=C",
- "list_built_on": "2026-10-18",
+ "list_built_on": "2026-10-19",
  "built_on": "2026-10-19",
  "senate_up": true,
  "candidates": {
@@ -47,7 +47,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00955815/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6ME00316": {
@@ -90,7 +90,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00902759/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6ME00324": {
@@ -133,7 +133,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00902759/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6ME00159": {
@@ -150,17 +150,17 @@
    "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 16169827.43,
-    "disbursements": 7708020.91,
-    "cash_on_hand": 11038115.42,
-    "individual_unitemized": 1425762.85,
-    "individual_itemized": 9075373.75,
-    "pac": 1201550,
+    "receipts": 21371159.7,
+    "disbursements": 18558986.22,
+    "cash_on_hand": 5388482.38,
+    "individual_unitemized": 2249001.49,
+    "individual_itemized": 11994556.69,
+    "pac": 1575453.75,
     "party": 62000,
     "self_funding": 0,
-    "other": 4405140.83,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "other": 5490147.77,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/S6ME00159/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -352,7 +352,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00314575/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S4ME00113": {
@@ -438,7 +438,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00921767/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6ME00357": {
@@ -481,7 +481,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00907873/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6ME00381": {
@@ -498,17 +498,17 @@
    "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 458786.42,
-    "disbursements": 458699.92,
-    "cash_on_hand": 86.5,
-    "individual_unitemized": 49349.58,
-    "individual_itemized": 194725,
+    "receipts": 535803.79,
+    "disbursements": 520644.23,
+    "cash_on_hand": 15159.56,
+    "individual_unitemized": 52816.95,
+    "individual_itemized": 243275,
     "pac": 0,
     "party": 0,
-    "self_funding": 214666.84,
+    "self_funding": 239666.84,
     "other": 45,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/S6ME00381/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -524,7 +524,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00918300/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6ME00340": {
@@ -541,17 +541,17 @@
    "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 16254.49,
-    "disbursements": 6211.33,
-    "cash_on_hand": 10043.16,
+    "receipts": 16922.43,
+    "disbursements": 12387.43,
+    "cash_on_hand": 4535,
     "individual_unitemized": 193.96,
-    "individual_itemized": 13942.54,
+    "individual_itemized": 14610.48,
     "pac": 0,
     "party": 0,
     "self_funding": 1750,
     "other": 367.99,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/S6ME00340/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -567,7 +567,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00907261/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6ME00431": {
@@ -584,17 +584,17 @@
    "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 60562.21,
-    "disbursements": 55806.47,
-    "cash_on_hand": 4755.74,
-    "individual_unitemized": 12698.44,
-    "individual_itemized": 11741,
+    "receipts": 61919.21,
+    "disbursements": 58928.17,
+    "cash_on_hand": 2991.04,
+    "individual_unitemized": 13755.44,
+    "individual_itemized": 12041,
     "pac": 3500,
     "party": 0,
     "self_funding": 31662.77,
     "other": 960,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/S6ME00431/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -625,7 +625,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00931352/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6ME00407": {
@@ -642,17 +642,17 @@
    "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 6063106.45,
-    "disbursements": 5960322.98,
-    "cash_on_hand": 102783.47,
+    "receipts": 6115222.3,
+    "disbursements": 6041024.37,
+    "cash_on_hand": 74197.93,
     "individual_unitemized": 1844987.89,
-    "individual_itemized": 3649569.49,
+    "individual_itemized": 3649669.49,
     "pac": 140912.38,
     "party": 0,
     "self_funding": 0,
-    "other": 427636.69,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "other": 479652.54,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/S6ME00407/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -844,7 +844,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00923144/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6ME00373": {
@@ -859,211 +859,15 @@
    "listed": true,
    "first_listed": "2026-10-10",
    "last_listed": "2026-10-19",
-   "totals": {
-    "cycle": 2026,
-    "receipts": 21050419.38,
-    "disbursements": 19287361.26,
-    "cash_on_hand": 1763058.12,
-    "individual_unitemized": 11786278.68,
-    "individual_itemized": 8880081.48,
-    "pac": 271559.4,
-    "party": 63000,
-    "self_funding": 0,
-    "other": 49499.82,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
-    "source_url": "https://www.fec.gov/data/candidate/S6ME00373/?cycle=2026&election_full=false"
-   },
-   "organizations": {
-    "items": [
-     {
-      "committee_id": "C00027342",
-      "name": "INTERNATIONAL BROTHERHOOD OF ELECTRICAL WORKERS POLITICAL ACTION COMMITTEE",
-      "total": 10000,
-      "count": 2,
-      "industry": "labor"
-     },
-     {
-      "committee_id": "C00497073",
-      "name": "LOBO PAC",
-      "total": 10000,
-      "count": 2,
-      "industry": "leadership"
-     },
-     {
-      "committee_id": "C00422774",
-      "name": "ADVANCING DEMOCRACY AND MOBILIZATION PAC",
-      "total": 10000,
-      "count": 2,
-      "industry": "leadership"
-     },
-     {
-      "committee_id": "C00517235",
-      "name": "TURQUOISE PAC",
-      "total": 10000,
-      "count": 2,
-      "industry": "leadership"
-     },
-     {
-      "committee_id": "C00418897",
-      "name": "VOTEVETS",
-      "total": 10000,
-      "count": 2,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00024521",
-      "name": "AMERICAN ASSOCIATION FOR JUSTICE POLITICAL ACTION COMMITTEE (AAJ PAC)",
-      "total": 10000,
-      "count": 2,
-      "industry": "issue"
-     },
-     {
-      "committee_id": "C00786186",
-      "name": "CROSSPARTISAN PAC I",
-      "total": 10000,
-      "count": 3,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00416743",
-      "name": "VICTORY NOW PAC",
-      "total": 10000,
-      "count": 2,
-      "industry": "leadership"
-     },
-     {
-      "committee_id": "C00460972",
-      "name": "BLUE WAVE PROJECT",
-      "total": 10000,
-      "count": 2,
-      "industry": "leadership"
-     },
-     {
-      "committee_id": "C00580068",
-      "name": "PROGRESSIVE TURNOUT PROJECT",
-      "total": 10000,
-      "count": 2,
-      "industry": "issue"
-     },
-     {
-      "committee_id": "C00525600",
-      "name": "OFF THE SIDELINES PAC",
-      "total": 10000,
-      "count": 2,
-      "industry": "leadership"
-     },
-     {
-      "committee_id": "C00567693",
-      "name": "HAWAII PAC",
-      "total": 10000,
-      "count": 2,
-      "industry": "leadership"
-     },
-     {
-      "committee_id": "C00431601",
-      "name": "OCEANS PAC",
-      "total": 10000,
-      "count": 2,
-      "industry": "leadership"
-     },
-     {
-      "committee_id": "C00007542",
-      "name": "INTERNATIONAL ASSOCIATION OF SHEET METAL, AIR, RAIL AND TRANSPORTATION WORKERS POLITICAL ACTION LEAGUE",
-      "total": 5000,
-      "count": 1,
-      "industry": "labor"
-     },
-     {
-      "committee_id": "C00004036",
-      "name": "SEIU COPE (SERVICE EMPLOYEES INTERNATIONAL UNION COMMITTEE ON POLITICAL EDUCATION)",
-      "total": 5000,
-      "count": 1,
-      "industry": "labor"
-     },
-     {
-      "committee_id": "C00748228",
-      "name": "MARCH ON PAC",
-      "total": 5000,
-      "count": 1,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C70000344",
-      "name": "INTERNATIONAL UNION OF BRICKLAYERS AND ALLIED CRAFTWORKERS",
-      "total": 5000,
-      "count": 1,
-      "industry": "labor"
-     },
-     {
-      "committee_id": "C00383950",
-      "name": "NATIONAL ELEVATOR CONSTRUCTORS PAC/ INTN'L  UNION OF ELEVATOR CONSTRUCTORS (NEC PAC)",
-      "total": 5000,
-      "count": 1,
-      "industry": "labor"
-     },
-     {
-      "committee_id": "C00724781",
-      "name": "STAND UP FOR WORKERS PAC",
-      "total": 5000,
-      "count": 1,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00029504",
-      "name": "ENGINEERS POLITICAL EDUCATION COMMITTEE (EPEC)/INTERNATIONAL UNION OF OPERATING ENGINEERS",
-      "total": 5000,
-      "count": 1,
-      "industry": "labor"
-     },
-     {
-      "committee_id": "C00649335",
-      "name": "MEDICARE FOR ALL PAC (MAPAC)",
-      "total": 5000,
-      "count": 1,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00002840",
-      "name": "UAW - V - CAP (UAW VOLUNTARY COMMUNITY ACTION PROGRAM) 'INT'L UNION UNITED AUTOMOBILE AEROSPACE & AGRICULTURAL IMPLEMENT WORKERS OF AMERICA UAW",
-      "total": 5000,
-      "count": 1,
-      "industry": "labor"
-     },
-     {
-      "committee_id": "C00001016",
-      "name": "CARPENTERS LEGISLATIVE IMPROVEMENT COMMITTEE UNITED BROTHERHOOD OF CARPENTERS AND JOINERS",
-      "total": 5000,
-      "count": 1,
-      "industry": "labor"
-     },
-     {
-      "committee_id": "C00459925",
-      "name": "AMERICAN MOBILIZATION PAC",
-      "total": 5000,
-      "count": 1,
-      "industry": "leadership"
-     },
-     {
-      "committee_id": "C00416131",
-      "name": "MIDWEST VALUES PAC",
-      "total": 5000,
-      "count": 1,
-      "industry": "issue"
-     }
-    ],
-    "count": 51,
-    "total": 271559.4,
-    "complete": true,
-    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00916437&two_year_transaction_period=2026&line_number=F3-11C"
-   },
+   "totals": null,
+   "organizations": null,
    "website": {
     "url": "https://www.grahamforsenate.com/",
     "as_filed": "WWW.GRAHAMFORSENATE.COM/",
     "source_url": "https://www.fec.gov/data/committee/C00916437/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6ME00282": {
@@ -1106,7 +910,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00897660/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6ME00365": {
@@ -1149,7 +953,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00916189/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S6ME00332": {
@@ -1166,17 +970,17 @@
    "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 6044820.45,
-    "disbursements": 5847145.75,
-    "cash_on_hand": 197674.7,
-    "individual_unitemized": 3807712.21,
-    "individual_itemized": 1716819.93,
+    "receipts": 6391429.51,
+    "disbursements": 6372204.88,
+    "cash_on_hand": 19224.63,
+    "individual_unitemized": 3966369.32,
+    "individual_itemized": 1784997.45,
     "pac": 37600,
     "party": 0,
-    "self_funding": 417021.92,
-    "other": 65666.39,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "self_funding": 528751.98,
+    "other": 73710.76,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/S6ME00332/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -1263,7 +1067,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00903179/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "H6ME01298": {

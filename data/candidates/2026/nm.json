@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=NM&candidate_status=C",
- "list_built_on": "2026-10-18",
+ "list_built_on": "2026-10-19",
  "built_on": "2026-10-19",
  "senate_up": true,
  "candidates": {
@@ -22,7 +22,7 @@
    "totals": null,
    "organizations": null,
    "website": null,
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "S0NM00058": {
@@ -284,7 +284,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00943738/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "H4NM01140": {
@@ -395,17 +395,17 @@
    "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 1353563.52,
-    "disbursements": 1082561.54,
-    "cash_on_hand": 416710.64,
-    "individual_unitemized": 467355.45,
-    "individual_itemized": 659075.89,
-    "pac": 202334.77,
+    "receipts": 1671810.78,
+    "disbursements": 1413721.09,
+    "cash_on_hand": 403798.35,
+    "individual_unitemized": 570445.08,
+    "individual_itemized": 819401.47,
+    "pac": 255834.77,
     "party": 0,
     "self_funding": 0,
-    "other": 24797.41,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "other": 26129.46,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H2NM01144/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -597,7 +597,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00765099/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "H6NM02127": {
@@ -876,17 +876,17 @@
    "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 3784102.3,
-    "disbursements": 1444484.19,
-    "cash_on_hand": 2378703.24,
-    "individual_unitemized": 385490.33,
-    "individual_itemized": 2064169.35,
-    "pac": 986144.61,
-    "party": 4774.45,
+    "receipts": 5259751.17,
+    "disbursements": 4655219.23,
+    "cash_on_hand": 643617.07,
+    "individual_unitemized": 571179.36,
+    "individual_itemized": 2977464.22,
+    "pac": 1301544.61,
+    "party": 5930.14,
     "self_funding": 0,
-    "other": 343523.56,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "other": 403632.84,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H2NM02191/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -1078,7 +1078,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00789404/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "H0NM03102": {

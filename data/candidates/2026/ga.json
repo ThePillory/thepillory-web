@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=GA&candidate_status=C",
- "list_built_on": "2026-10-18",
+ "list_built_on": "2026-10-19",
  "built_on": "2026-10-19",
  "senate_up": true,
  "candidates": {
@@ -624,17 +624,17 @@
    "last_listed": "2026-10-19",
    "totals": {
     "cycle": 2026,
-    "receipts": 77279766.48,
-    "disbursements": 39682882.19,
-    "cash_on_hand": 42587451,
-    "individual_unitemized": 39110515.04,
-    "individual_itemized": 28654210.06,
-    "pac": 920315.95,
+    "receipts": 110426537.75,
+    "disbursements": 89148042.07,
+    "cash_on_hand": 26269062.39,
+    "individual_unitemized": 52940763.92,
+    "individual_itemized": 44172639.37,
+    "pac": 1057402.6,
     "party": 11000,
     "self_funding": 0,
-    "other": 8583725.43,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "other": 12244731.86,
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/S8GA00180/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -826,7 +826,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00718866/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-15",
+   "funding_checked": "2026-10-19",
    "cycle": 2026
   },
   "H6GA01083": {
