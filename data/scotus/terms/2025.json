@@ -211,10 +211,10 @@
    "name": "National Republican Senatorial Committee v. Federal Election Comm’n",
    "summary": "The Federal Election Campaign Act’s restrictions on a political party’s spending on campaign activities in coordination with candidates, 52 U. S. C. §30116(d), violates the First Amendment.",
    "author_code": "BK",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/24-621_h315.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/609us2r67_g3bi.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "KAVANAUGH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, GORSUCH, and BARRETT, JJ., joined. KAGAN, J., filed a dissenting opinion, in which SOTOMAYOR and JACKSON, JJ., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -290,11 +290,11 @@
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "Ratified in 1791, the First Amendment provides that “Congress shall make no law . . . abridging the freedom of speech.” As relevant here, the Federal Election Campaign Act, known as FECA, limits a political party’s campaign spending."
+     "quote": null
     },
     {
      "id": "art-3",
-     "quote": "II Before addressing the merits, we must ensure our jurisdiction under Article III."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/24-00621qp.pdf",
@@ -5114,5 +5114,5 @@
    "qp_checked": true
   }
  ],
- "built_on": "2026-10-18"
+ "built_on": "2026-10-19"
 }
