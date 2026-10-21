@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=TX&candidate_status=C",
- "built_on": "2026-10-20",
+ "built_on": "2026-10-21",
  "senate_up": true,
  "senate": [
   {
@@ -548,19 +548,19 @@
     "committee": "C00925438"
    },
    {
-    "id": "H6TX17135",
-    "name": "BROWN, ROBERT",
-    "party": "REPUBLICAN PARTY",
-    "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TX17135/",
-    "committee": "C00918599"
-   },
-   {
     "id": "H6TX17127",
     "name": "BROWN, ROBERT",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6TX17127/",
+    "committee": "C00918599"
+   },
+   {
+    "id": "H6TX17135",
+    "name": "BROWN, ROBERT",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6TX17135/",
     "committee": "C00918599"
    },
    {
@@ -732,19 +732,19 @@
     "committee": "C00916049"
    },
    {
-    "id": "H6TX14157",
-    "name": "VOGIATZIS, KONSTANTINOS",
-    "party": "DEMOCRATIC PARTY",
-    "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TX14157/",
-    "committee": "C00923623"
-   },
-   {
     "id": "H6TX14165",
     "name": "VOGIATZIS, KONSTANTINOS",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6TX14165/",
+    "committee": "C00923623"
+   },
+   {
+    "id": "H6TX14157",
+    "name": "VOGIATZIS, KONSTANTINOS",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6TX14157/",
     "committee": "C00923623"
    },
    {
@@ -1404,19 +1404,19 @@
     "committee": "C00883736"
    },
    {
-    "id": "H6TX30252",
-    "name": "MALLORY CARAWAY, BARBARA",
-    "party": "DEMOCRATIC PARTY",
-    "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6TX30252/",
-    "committee": "C00931261"
-   },
-   {
     "id": "H0TX30073",
     "name": "MALLORY CARAWAY, BARBARA",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H0TX30073/",
+    "committee": "C00931261"
+   },
+   {
+    "id": "H6TX30252",
+    "name": "MALLORY CARAWAY, BARBARA",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6TX30252/",
     "committee": "C00931261"
    }
   ],

@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=IL&candidate_status=C",
- "built_on": "2026-10-20",
+ "built_on": "2026-10-21",
  "senate_up": true,
  "senate": [
   {
@@ -318,6 +318,14 @@
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6IL04161/",
     "committee": "C00929422"
+   },
+   {
+    "id": "H6IL04203",
+    "name": "TAMEZ, ANTHONY MICHAEL",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6IL04203/",
+    "committee": "C00914267"
    }
   ],
   "5": [

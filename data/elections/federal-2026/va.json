@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=VA&candidate_status=C",
- "built_on": "2026-10-20",
+ "built_on": "2026-10-21",
  "senate_up": true,
  "senate": [
   {
@@ -658,6 +658,14 @@
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H2VA10273/",
     "committee": "C00944264"
+   },
+   {
+    "id": "H6VA10274",
+    "name": "MALIK, AHSEN MUJEEB",
+    "party": "INDEPENDENT",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6VA10274/",
+    "committee": "C00955765"
    },
    {
     "id": "H6VA10225",
