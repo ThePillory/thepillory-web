@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=VA&candidate_status=C",
- "list_built_on": "2026-10-20",
+ "list_built_on": "2026-10-21",
  "built_on": "2026-10-21",
  "senate_up": true,
  "candidates": {
@@ -7081,7 +7081,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00957233/",
     "checked": "2026-10-17"
    },
-   "funding_checked": "2026-10-17",
+   "funding_checked": "2026-10-21",
    "cycle": 2026
   },
   "H6VA07353": {
@@ -7168,6 +7168,29 @@
     "checked": "2026-10-18"
    },
    "funding_checked": "2026-10-18",
+   "cycle": 2026
+  },
+  "H6VA10274": {
+   "id": "H6VA10274",
+   "name": "MALIK, AHSEN MUJEEB",
+   "party": "INDEPENDENT",
+   "office": "H",
+   "district": "10",
+   "incumbent": false,
+   "committee": "C00955765",
+   "fec_url": "https://www.fec.gov/data/candidate/H6VA10274/",
+   "listed": true,
+   "first_listed": "2026-10-21",
+   "last_listed": "2026-10-21",
+   "totals": null,
+   "organizations": null,
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00955765/",
+    "checked": "2026-10-21"
+   },
+   "funding_checked": "2026-10-21",
    "cycle": 2026
   }
  }

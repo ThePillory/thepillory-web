@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=IL&candidate_status=C",
- "list_built_on": "2026-10-20",
+ "list_built_on": "2026-10-21",
  "built_on": "2026-10-21",
  "senate_up": true,
  "candidates": {
@@ -9777,6 +9777,49 @@
     "as_filed": "HTTPS://WWW.VANCILFORCONGRESS.COM/",
     "source_url": "https://www.fec.gov/data/committee/C00893446/",
     "checked": "2026-10-13"
+   },
+   "funding_checked": "2026-10-21",
+   "cycle": 2026
+  },
+  "H6IL04203": {
+   "id": "H6IL04203",
+   "name": "TAMEZ, ANTHONY MICHAEL",
+   "party": "DEMOCRATIC PARTY",
+   "office": "H",
+   "district": "4",
+   "incumbent": false,
+   "committee": "C00914267",
+   "fec_url": "https://www.fec.gov/data/candidate/H6IL04203/",
+   "listed": true,
+   "first_listed": "2026-10-21",
+   "last_listed": "2026-10-21",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 7555,
+    "disbursements": 3669.35,
+    "cash_on_hand": 20,
+    "individual_unitemized": 5255,
+    "individual_itemized": 2300,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 0,
+    "other": 0,
+    "coverage_end": "2026-06-30",
+    "last_report": "JULY QUARTERLY 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6IL04203/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00914267&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": "https://tamezforcongress.com/",
+    "as_filed": "TAMEZFORCONGRESS.COM",
+    "source_url": "https://www.fec.gov/data/committee/C00914267/",
+    "checked": "2026-10-21"
    },
    "funding_checked": "2026-10-21",
    "cycle": 2026
