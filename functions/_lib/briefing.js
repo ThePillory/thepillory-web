@@ -173,7 +173,7 @@ export async function personalBriefing(env, url, d) {
   const rows = votes === FAILED ? "" : voteRows(votes.rows, 5);
   const main = `
 ${briefHead("Your briefing", esc(describe(d)))}
-<p class="panel-navy small">${esc(coverage)} <a class="inline-link" href="/#communities">Bring ThePillory to your county</a></p>
+<p class="panel-navy small">${esc(coverage)} <a class="inline-link" href="/waitlist/">Bring ThePillory to your county</a></p>
 
 <section class="brief-section" aria-labelledby="h-reps">
   ${sectionHead("h-reps", "Your representatives", "/reps/", "All reps")}

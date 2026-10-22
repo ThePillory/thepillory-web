@@ -56,7 +56,7 @@ async function placePage({ request, env, params }) {
   if (!st) return Response.redirect(`${url.origin}/explore/`, 302);
   const place = await loadPlace(env, request, st);
   if (!place) return notFound("No state at this address.", "home", ["Explore", "/explore/"]);
-  if (!slug) return Response.redirect(`${url.origin}${statePath(place.st)}#map`, 302);
+  if (!slug) return Response.redirect(`${url.origin}${statePath(place.st)}map/`, 302);
   const c = (!extra || (extra === "topics" && !more)) && place.counties.find((x) => x.slug === slug || x.fips === slug);
   if (!c) return notFound("No county at this address.", "home", [place.name, statePath(place.st)]);
   if (c.slug !== slug) return Response.redirect(`${url.origin}${placeHref(place.st, c.slug)}${extra ? `topics/${topic ? `${topic}/` : ""}` : ""}`, 301);
@@ -108,7 +108,7 @@ async function placePage({ request, env, params }) {
     });
   const countyRows = live ? o.county.map((r) => repRow(r)) : [];
   const stateRows = [
-    ...(place.st === "CA" ? executiveRows(o.stateExecutive, { href: "/bodies/ca-executive/", label: "California's other statewide offices" }) : executiveRows(o.stateExecutive, { href: `${statePath(place.st)}#h-statewide`, label: `${place.name}'s other statewide offices` })),
+    ...(place.st === "CA" ? executiveRows(o.stateExecutive, { href: "/bodies/ca-executive/", label: "California's other statewide offices" }) : executiveRows(o.stateExecutive, { href: `${statePath(place.st)}map/#h-statewide`, label: `${place.name}'s other statewide offices` })),
     ...(place.st === "DC" ? [] : [...byDistrict("sldu", o.upper), ...byDistrict("sldl", o.lower)]),
   ];
   const federalRows = [...executiveRows(o.executive, { href: "/bodies/us-executive/", label: "The Cabinet" }), ...o.senators.map((r) => repRow(r)), ...byDistrict("cd", o.house)];

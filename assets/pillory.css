@@ -1488,6 +1488,17 @@ a.review-badge--auto:hover { border-color: var(--navy); }
   .map-counts .dot { display: none; }
 }
 .map-counts .swatch { display: inline-block; width: 10px; height: 10px; margin-right: 5px; vertical-align: -1px; }
+.hub-map-links { padding-top: 0; padding-bottom: 0; }
+
+/* ---------- Home: one row of topic chips, the reps card, "Coming to" ---------- */
+.chip-scroll { display: flex; flex-wrap: nowrap; gap: 8px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: 2px; margin: 0 -16px; padding-left: 16px; padding-right: 16px; scroll-padding-left: 16px; }
+.chip-scroll::-webkit-scrollbar { display: none; }
+.chip-scroll .chip { flex: none; }
+#your-reps .lookup { padding-top: 4px; }
+.lookup-change > summary { display: inline-flex; align-items: center; min-height: var(--tap); cursor: pointer; list-style: none; }
+.lookup-change > summary::-webkit-details-marker { display: none; }
+.coming-to { margin: 0; }
+.coming-to a { display: inline-flex; align-items: center; min-height: var(--tap); }
 
 /* ---------- The executive branch: orders, nominations, a bill's final action ---------- */
 

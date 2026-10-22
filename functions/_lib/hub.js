@@ -146,12 +146,13 @@ export function happeningSection(rows, which, { hrefFor, personal = false, loade
 </section>`;
 }
 
-/** The address or ZIP lookup. `d`: the visitor's districts, if known. */
-export function lookupForm(d, { id = "find", heading = "Find your representatives", next = null } = {}) {
-  return `
-<section class="card stack-sm lookup" id="${id}" aria-labelledby="h-${id}">
-  <h2 class="label" id="h-${id}">${esc(heading)}</h2>
-  ${d ? `<p class="small">Showing: <strong>${esc(describe(d))}</strong>. <button class="linkish" type="button" data-forget-districts>Forget this</button></p>` : ""}
+/**
+ * The address or ZIP lookup. `d`: the visitor's districts, if known.
+ * `bare`: inside another card (the home page's Your representatives), with a
+ * one-line prompt instead of its own heading.
+ */
+export function lookupForm(d, { id = "find", heading = "Find your representatives", next = null, bare = false } = {}) {
+  const form = `
   <form class="lookup-form" data-district-lookup action="/api/districts" method="post"${next ? ` data-next="${esc(next)}"` : ""}>
     ${next ? `<input type="hidden" name="next" value="${esc(next)}" />` : ""}
     <label class="visually-hidden" for="${id}-q">Street address or ZIP code</label>
@@ -162,7 +163,17 @@ export function lookupForm(d, { id = "find", heading = "Find your representative
     <p class="hint">Used only to find your districts. Not stored.</p>
     <div class="lookup-result" data-lookup-result aria-live="polite"></div>
   </form>
-  <noscript><p class="small secondary">The lookup needs JavaScript. You can also browse <a class="inline-link" href="/reps/">all reps by state</a>.</p></noscript>
+  <noscript><p class="small secondary">The lookup needs JavaScript. You can also browse <a class="inline-link" href="/reps/">all reps by state</a>.</p></noscript>`;
+  if (bare) {
+    return `
+<div class="stack-sm lookup" id="${id}">
+  <p class="small"><strong>${esc(heading)}</strong></p>${form}
+</div>`;
+  }
+  return `
+<section class="card stack-sm lookup" id="${id}" aria-labelledby="h-${id}">
+  <h2 class="label" id="h-${id}">${esc(heading)}</h2>
+  ${d ? `<p class="small">Showing: <strong>${esc(describe(d))}</strong>. <button class="linkish" type="button" data-forget-districts>Forget this</button></p>` : ""}${form}
 </section>`;
 }
 

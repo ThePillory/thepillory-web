@@ -1,9 +1,9 @@
 // node --test test/state-template.test.mjs
 // Every state's page is the home page's template (functions/_lib/home.js):
 // /states/<name>/ and the home page for a visitor in that state show the same
-// sections in the same order, the national sections in the same spot, "Coming
-// soon for [State]" where a state has no data yet, and Calaveras as a county
-// link inside California. Old /explore/<st>/ links redirect. Served from the
+// sections in the same order, one "Coming to [State]" line for what isn't
+// loaded yet, and Calaveras as a county link inside California. The counties
+// and districts are on /states/<name>/map/. Old /explore/<st>/ links redirect. Served from the
 // repo's real static files, with no database (every section's empty state).
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -47,31 +47,50 @@ test("/states/<name>/ and the home page for a visitor there are the same templat
   assert.deepEqual(sections(page.html), sections(visit.html), "same sections, same order");
   assert.match(page.html, /Showing <strong>Washington<\/strong>/);
   assert.match(visit.html, /Showing <strong>Washington<\/strong>/);
-  // The national sections sit in the same spot on every state's page.
   const tx = await call(states, "/states/texas/");
   assert.deepEqual(sections(tx.html), sections(page.html));
-  const order = sections(page.html);
-  assert.ok(order.indexOf("your-state") < order.indexOf("nation") && order.indexOf("nation") < order.indexOf("map"));
-  for (const t of ["The President and the Cabinet", "U.S. Senate", "U.S. House", "The Supreme Court"]) assert.ok(page.html.includes(t), t);
+  // The eight sections, in order: map, (ballot card), Your representatives, This week, the nation, topics, elections.
+  const order = sections(page.html).filter((id) => ["your-reps", "this-week", "nation", "topics", "elections"].includes(id));
+  assert.deepEqual(order, ["your-reps", "this-week", "nation", "topics", "elections"]);
+  for (const t of ["President &amp; Cabinet", "Congress", "Supreme Court"]) assert.ok(page.html.includes(`>${t}</div>`), t);
+  for (const gone of ["take-part", "communities", "understand", "map", "your-state"]) assert.ok(!sections(page.html).includes(gone), `${gone} moved off the page`);
+  assert.doesNotMatch(page.html, /class="justice|county-list|district-grid/, "no justice cards or county and district lists here");
 });
 
-test("a section without data says Coming soon for [State], never disappears", async () => {
+test("what isn't loaded yet is one line, Coming to [State], with Join the list", async () => {
   const { html } = await call(states, "/states/texas/");
-  assert.ok((html.match(/Coming soon for Texas\./g) || []).length >= 4);
-  for (const label of ["In Congress", "Texas, statewide", "The legislature", "Ballot measures", "Counties", "Take part", "The Supreme Court"]) assert.ok(html.includes(label), label);
-  assert.doesNotMatch(html, /appear after the data sync/);
+  assert.doesNotMatch(html, /Coming soon for Texas/);
+  const line = html.match(/<p class="small secondary coming-to">([\s\S]*?)<\/p>/);
+  assert.ok(line, "one line");
+  assert.match(line[1], /^Coming to Texas: bills and votes in the legislature, statewide offices, ballot measures, county meetings\. <a class="inline-link" href="\/waitlist\/\?state=TX">Join the list ›<\/a>$/);
+  assert.equal((html.match(/coming-to/g) || []).length, 1);
 });
 
-test("California: Calaveras is a county link inside the state's page", async () => {
+test("California: Calaveras is a county link beside the map; the counties and districts are on the map page", async () => {
   const { html } = await call(states, "/states/california/");
-  assert.match(html, /<p class="label">Counties<\/p>\s*<a class="list-row link-row" href="\/calaveras\/">/);
-  assert.match(html, /Calaveras County/);
+  assert.match(html, /href="\/states\/california\/map\/"[\s\S]*?Counties and districts/);
+  assert.match(html, /href="\/calaveras\/"[\s\S]*?Calaveras County/);
+  const map = await call(states, "/states/california/map/");
+  assert.equal(map.res.status, 200);
+  assert.match(map.html, /<h1>California: counties and districts<\/h1>/);
+  assert.match(map.html, /id="county-list"/);
+  assert.match(map.html, /class="plain-list district-grid"/);
+  assert.match(map.html, /href="\/states\/california\/"[^>]*>← California/);
+});
+
+test("Ohio's State House lists district 98, never a stray 0", async () => {
+  const { html } = await call(states, "/states/ohio/map/");
+  assert.match(html, /href="\/district\/state-house\/oh-98\/"/);
+  assert.doesNotMatch(html, /\/district\/state-house\/oh-0\//);
 });
 
 test("old and other addresses redirect to the state's page", async () => {
   const r = async (fn, path) => (await call(fn, path)).res;
-  assert.equal((await r(explore, "/explore/wa/")).headers.get("Location"), "https://thepillory.test/states/washington/#map");
-  assert.equal((await r(explore, "/explore/ca/?layer=cd")).headers.get("Location"), "https://thepillory.test/states/california/?layer=cd#map");
+  assert.equal((await r(explore, "/explore/wa/")).headers.get("Location"), "https://thepillory.test/states/washington/map/");
+  assert.equal((await r(explore, "/explore/ca/?layer=cd")).headers.get("Location"), "https://thepillory.test/states/california/map/?layer=cd");
+  assert.equal((await r(states, "/states/california/?layer=cd")).headers.get("Location"), "https://thepillory.test/states/california/map/?layer=cd");
+  assert.equal((await r(states, "/states/wa/map/")).headers.get("Location"), "https://thepillory.test/states/washington/map/");
+  assert.equal((await r(states, "/states/washington/elsewhere/")).status, 404);
   assert.equal((await r(states, "/states/wa/")).headers.get("Location"), "https://thepillory.test/states/washington/");
   assert.equal((await r(states, "/states/atlantis/")).status, 404);
 });
@@ -83,10 +102,9 @@ test("a state's page shows that state, whatever districts the browser has saved"
   for (const [slug, st] of [["minnesota", "MN"], ["texas", "TX"], ["wyoming", "WY"]]) {
     const { res, html } = await call(states, `/states/${slug}/`, { cookie: CA_COOKIE });
     assert.equal(res.status, 200);
-    assert.match(html, new RegExp(`href="/bodies/us-senate/\\?state=${st}"`), `${st}: the Senate link is for ${st}`);
-    assert.match(html, new RegExp(`href="/bodies/us-house/\\?state=${st}"`));
+    assert.match(html, new RegExp(`href="/reps/\\?state=${st}"`), `${st}: the Congress link is for ${st}`);
     assert.match(html, new RegExp(`href="/ballot/${st.toLowerCase()}/"`), "the ballot is the state's");
-    assert.doesNotMatch(html, /href="\/bodies\/us-senate\/"/, "never the unscoped Senate page");
+    assert.doesNotMatch(html, /href="\/reps\/\?browse=federal"/, "never the unscoped Congress list");
     assert.doesNotMatch(html, /\/place\/ca\/calaveras\/topics\//, "no California county topics on another state's page");
     assert.doesNotMatch(html, /href="\/elections\/#how-to-vote"/);
   }
@@ -125,7 +143,7 @@ test("/bodies/us-senate/?state=MN: Minnesota's members first, then yours from an
   assert.match(plain, /California Senator One/);
 });
 
-test("the top of every state's page: headline, map, ballot card, Find your representatives, then the rest", async () => {
+test("the top of every state's page: headline, map, ballot card, Your representatives, then the rest", async () => {
   const { ballotWindow, todayIn, previewLabel } = await import("../../../functions/_lib/election-window.js");
   const dates = JSON.parse(readFileSync(new URL("data/elections/dates.json", ROOT), "utf8"));
   for (const [path, st, label] of [["/states/california/", "CA", "Preview California&#x27;s ballot"], ["/states/washington/", "WA", "Preview Washington&#x27;s ballot"], ["/states/district-of-columbia/", "DC", "Preview D.C.&#x27;s ballot"]]) {
@@ -133,13 +151,14 @@ test("the top of every state's page: headline, map, ballot card, Find your repre
     const at = (s) => html.indexOf(s);
     const head = at('class="hub-title"');
     const map = at('id="us-map"');
-    const find = at('id="find"');
-    const yours = at('id="your-state"');
-    assert.ok(head > 0 && head < map && map < find && find < yours, `${st}: headline, map, Find your representatives, Your state`);
+    const find = at('id="your-reps"');
+    const week = at('id="this-week"');
+    assert.ok(head > 0 && head < map && map < find && find < week, `${st}: headline, map, Your representatives, This week`);
+    assert.ok(at('id="find"') > find, `${st}: the ZIP box inside Your representatives`);
     const win = ballotWindow(dates, st, todayIn(st));
     if (win && win.open) {
       const card = at('class="card ballot-hero');
-      assert.ok(map < card && card < find, `${st}: the ballot card sits between the map and Find your representatives`);
+      assert.ok(map < card && card < find, `${st}: the ballot card sits between the map and Your representatives`);
       const cardHtml = html.slice(card, html.indexOf("</section>", card));
       assert.ok(cardHtml.includes(`<p class="ballot-hero-when">${win.line.replace(/'/g, "&#x27;")}`), `${st}: one line with the date and countdown`);
       assert.ok(cardHtml.includes(`>${label}</a>`), `${st}: ${label}`);
@@ -162,22 +181,22 @@ test("California districts saved: another state's page shows nothing about Calif
     const line = main.match(/<p class="small secondary your-place">[\s\S]*?<\/p>/);
     assert.ok(line, `${slug}: the "Your place" line`);
     assert.match(line[0], /Your place: Calaveras County, CA · <a class="inline-link" href="\/briefing\/">Your briefing<\/a>/);
-    assert.ok(main.indexOf(line[0]) > main.indexOf('id="h-understand"') || main.indexOf(line[0]) > main.lastIndexOf("</section>"), "at the bottom");
+    assert.ok(main.indexOf(line[0]) > main.indexOf('id="elections"'), "at the bottom");
     const rest = main.replace(line[0], "");
     // Everything else matches the page for a visitor with nothing saved (the state picker,
     // the map and the About tiles name California for everyone).
     const plain = (await call(states, `/states/${slug}/`)).html;
     const plainMain = plain.slice(plain.indexOf("<main"), plain.indexOf("</main>"));
-    const mentions = (h) => [...h.matchAll(/Showing: <strong>|Forget this|briefing-link|Calaveras|California|\/place\/ca\//g)].length;
+    const mentions = (h) => [...h.matchAll(/Showing: <strong>|Forget this|Your briefing|Calaveras|California|\/place\/ca\//g)].length;
     assert.equal(mentions(rest), mentions(plainMain), `${slug}: nothing else about the saved districts`);
-    assert.doesNotMatch(rest, /Showing: <strong>|Forget this|briefing-link/);
+    assert.doesNotMatch(rest, /Showing: <strong>|Forget this|Your briefing/);
     assert.match(rest, /id="find"/, "the search box stays");
   }
   for (const [fn, path] of [[states, "/states/california/"], [home, "/"]]) {
     const { html } = await call(fn, path, { cookie: CA_COOKIE });
-    assert.match(html, /Showing: <strong>California/, `${path}: the saved districts in Find your representatives`);
+    assert.match(html, /Showing: <strong>California/, `${path}: the saved districts in Your representatives`);
     assert.match(html, /Forget this/);
-    assert.match(html, /class="card briefing-link" href="\/briefing\/"/, `${path}: the briefing card`);
+    assert.match(html, /href="\/briefing\/">\s*<div><div class="list-title">Your briefing/, `${path}: the briefing link`);
     assert.doesNotMatch(html, /your-place/);
   }
 });

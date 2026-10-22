@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "53"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "54"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -130,6 +130,7 @@ FOOTER = """<footer class="app-footer" aria-label="About ThePillory">
   <a href="/about/methodology/">Methodology</a>
   <a href="/elections/">Elections</a>
   <a href="/topics/">Topics</a>
+  <a href="/waitlist/">Bring ThePillory to your county</a>
   <p class="app-footer-domain">thepillory.co</p>
 </footer>"""
 
@@ -737,7 +738,7 @@ def build_report():
   <h2 class="label">What you can do now</h2>
   <p class="small">See how your officials vote, read the constitutional analysis of the bills they vote on, and comment at Calaveras County meetings.</p>
   <div>
-    <a class="list-row link-row" href="/#take-part"><div><div class="list-title">Comment deadlines and ways to take part</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>
+    <a class="list-row link-row" href="/you/#take-part"><div><div class="list-title">Comment deadlines and ways to take part</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>
     <a class="list-row link-row" href="/reps/"><div><div class="list-title">Your reps</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>
     <a class="list-row link-row" href="/laws/"><div><div class="list-title">Bills and the Constitution</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>
   </div>
@@ -751,8 +752,18 @@ def build_you():
         link_row("/about/how-it-works/", "How it works"),
         link_row("/about/principles/", "Principles"),
         link_row("/about/methodology/", "Methodology", "How analyses and summaries are made and checked"),
-        link_row("/about/how-a-bill-becomes-law/", "How a bill becomes law"),
-        link_row("/about/how-to-read-a-vote/", "How to read a vote"),
+    ])
+    take_part = "".join([
+        link_row("/meetings/?level=county", "County meetings and comment deadlines", "Calaveras County for now: when to send written comments, and each meeting's agenda"),
+        link_row("/reps/", "Contact your representatives", "Each rep's page links to their official website and office"),
+        link_row("/waitlist/", "Bring ThePillory to your county", "Communities open one county at a time: join the list for yours"),
+        link_row("/calaveras/", "Calaveras County, CA", "Live: meetings, agenda watch and local officials"),
+    ])
+    understand = "".join([
+        link_row("/laws/constitution/", "The Constitution", "The full text, and how every analysis starts from it"),
+        link_row("/about/how-a-bill-becomes-law/", "How a bill becomes law", "From introduction to signature, in Congress and in California"),
+        link_row("/about/how-to-read-a-vote/", "How to read a vote", "Final passage, cloture, motions and nominations"),
+        link_row("/finances/", "Public finances by term", "Debt, spending and deficits by President, and California's budget by Governor"),
     ])
     main = f"""
 <header class="page-head">
@@ -778,6 +789,14 @@ def build_you():
   </ul>
 </section>
 {section("Elections", link_row("/ballot/", "Preview your state's ballot", "Your federal races, then your whole ballot for your address") + link_row("/elections/2026-11-03/ballot/", "Your ballot in California", "The contests and measures for your districts") + link_row("/elections/", "Elections", "What's on the ballot, and how to vote"))}
+<section class="card stack-sm" id="take-part" aria-labelledby="h-take-part">
+  <h2 class="label" id="h-take-part">Take part</h2>
+  <div>{take_part}</div>
+</section>
+<section class="card stack-sm" id="understand" aria-labelledby="h-understand">
+  <h2 class="label" id="h-understand">Understand</h2>
+  <div>{understand}</div>
+</section>
 {section("About", f'<div>{about}</div>')}"""
     render("you", "You", main, tab="you", root=True)
 
