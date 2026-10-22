@@ -67,8 +67,10 @@ export function certifiedFederal(election) {
 /** Merge today's FEC list (and the certified list's candidates for Congress) into last run's entries. Pure. */
 export function mergeList(prev, races, today, certified = []) {
   const out = {};
-  for (const [id, c] of Object.entries(prev || {})) out[id] = { ...c, listed: false };
+  // An entry with no name (an incomplete FEC record) has nothing a page can show: it's dropped, never filled in.
+  for (const [id, c] of Object.entries(prev || {})) if (String(c.name || "").trim()) out[id] = { ...c, listed: false };
   const add = (c, office, district) => {
+    if (!String(c.name || "").trim()) return;
     const old = out[c.id] || {};
     out[c.id] = {
       ...old,
@@ -108,7 +110,7 @@ export function refreshOrder(all) {
 export function websites(states, year, today) {
   const candidates = [];
   for (const [st, s] of Object.entries(states)) {
-    for (const c of Object.values(s.candidates)) if (c.listed && c.website && c.website.url) candidates.push({ id: c.id, name: c.name, st: st.toUpperCase(), url: c.website.url });
+    for (const c of Object.values(s.candidates)) if (c.listed && c.name && c.website && c.website.url) candidates.push({ id: c.id, name: c.name, st: st.toUpperCase(), url: c.website.url });
   }
   return { year, built_on: today, candidates: candidates.sort((a, b) => a.id.localeCompare(b.id)) };
 }
@@ -197,6 +199,7 @@ export function nameIndex(files) {
   const rows = [];
   for (const [st, s] of Object.entries(files)) {
     for (const c of Object.values((s && s.candidates) || {})) {
+      if (!c.name) continue;
       rows.push([c.id, c.name, st.toUpperCase(), c.office, c.district || ""]);
     }
   }

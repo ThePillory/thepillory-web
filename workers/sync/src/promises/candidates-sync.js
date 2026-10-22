@@ -25,10 +25,13 @@ async function sha256(text) {
   return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-/** New candidates and changed websites into candidate_platforms. A changed website is searched again. */
+/**
+ * New candidates and changed websites into candidate_platforms. A changed website is searched again.
+ * An entry with no name or state (an incomplete FEC record) is skipped, so one bad entry never stops the step.
+ */
 export async function upsertCandidates(db, list, year) {
   const stmts = list
-    .filter((c) => c.id && c.url && /^https?:\/\//.test(c.url))
+    .filter((c) => c.id && c.url && /^https?:\/\//.test(c.url) && String(c.name || "").trim() && /^[A-Z]{2}$/.test(String(c.st || "")))
     .map((c) =>
       db
         .prepare(
