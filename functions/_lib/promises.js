@@ -265,16 +265,12 @@ export function platformTab(o, rows, own, { env = null, url = null } = {}) {
   const statements = (own && own.statements) || [];
   const how = '<a class="inline-link" href="/about/methodology/#promises">How the platform is recorded</a>';
   const site = siteNote(o, own);
-  if (!promises.length && !pages.length && !statements.length && site) {
-    return `${site}
-<p class="hint">This tab shows ${esc(o.name)}'s platform in their own words (a short excerpt, word for word, from their own Issues or Priorities page, and statements their office submits) and specific commitments, checked word for word against their source, with a status that changes only with evidence. ${how}</p>`;
-  }
+  // Residents' reports and issues open with accounts: one line here, not a section of its own.
+  const issues = '<p class="small secondary">Residents\' reports and issues about this office open when accounts launch. <a class="inline-link" href="/about/how-it-works/">How it works</a></p>';
   if (!promises.length && !pages.length && !statements.length) {
-    return `<div class="card empty-state stack-sm">
-  <p><strong>No platform recorded yet</strong></p>
-  <p class="small">This tab shows ${esc(o.name)}'s platform in two parts. <strong>In their own words:</strong> a short excerpt, word for word, from their own Issues or Priorities page, with a link to the whole page, and statements their office submits, labeled as such. <strong>Commitments tracked:</strong> specific, checkable promises (signing a named bill, funding a program at a stated amount, finishing a project by a date), each quoted with its date and source and checked in code before it's published, with a status that changes only with evidence.</p>
-  ${how}
-</div>`;
+    return site
+      ? `${site}${issues}`
+      : `<p class="small">No platform recorded yet: no excerpt from ${esc(o.name)}'s own Issues page, no statement from their office and no commitments tracked. Residents' reports and issues open when accounts launch. ${how}</p>`;
   }
   const ownSection = `<section class="stack-sm">
   <h2 class="label">In their own words</h2>
@@ -284,7 +280,7 @@ export function platformTab(o, rows, own, { env = null, url = null } = {}) {
       : site || `<p class="secondary small">No excerpt from ${esc(o.name)}'s own Issues page, and no statement from their office, yet.</p>`
   }
 </section>`;
-  if (!promises.length) return `${ownSection}${how}`;
+  if (!promises.length) return `${ownSection}${how}${issues}`;
   const counts = STATUSES.map((s) => [s, promises.filter((r) => r.status === s).length]).filter(([, n]) => n);
   const sentKey = url && url.searchParams.get("sent");
   const errKey = url && url.searchParams.get("error");
@@ -297,5 +293,5 @@ export function platformTab(o, rows, own, { env = null, url = null } = {}) {
   <p class="small">${counts.map(([s, n]) => `${statusChip(s)} ${n}`).join(" · ")}</p>
   ${promises.map((p) => promiseCard(p, { env, slug: o.slug })).join("")}
 </section>
-${how}`;
+${how}${issues}`;
 }

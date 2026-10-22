@@ -9,11 +9,18 @@ import { currentCycle } from "../../workers/sync/src/funding/fec.js";
 import { donorsDisclosed, isPersonName } from "../../workers/sync/src/funding/disclosure.js";
 import { awardsLink } from "./gov-money.js";
 import { darkMoneyFor, electioneeringFor, spenderDetails, electioneeringSection } from "./dark-money.js";
+import { fold } from "./summary.js";
 
 export const METHOD = "/about/methodology/#funding";
 export const NOT_A_CAUSE =
   "This shows a relationship in the data, not a cause. A contribution from an industry doesn't mean the giver lobbied on this bill, or that it affected the vote.";
 const MIN_EMPLOYER_DONORS = 3; // an employer is listed only when at least this many people gave
+export const TOP = 5; // the Funding tab shows the top five of each list, then "See all"
+export const FUNDING_LISTS = { pacs: "PACs and political committees", industries: "Industries (approximate)", employers: "Donors' employers" };
+/** A member's full list of one kind, for a cycle: /reps/<slug>/funding/<kind>/. */
+export const fundingListHref = (base, kind, cycle) => `${base}funding/${kind}/?cycle=${cycle}`;
+const seeAll = (href, label) =>
+  `<a class="list-row link-row see-all" href="${esc(href)}"><div><div class="list-title">${esc(label)}</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>`;
 
 const missing = (err) => /no such table|no such column/i.test(String(err && err.message));
 export const money = (n) => (n == null ? "—" : `$${Math.round(Number(n)).toLocaleString("en-US")}`);
@@ -355,8 +362,9 @@ export function fundingTab(official, f, base) {
 
   // 1. PAC and special-interest money
   const pacs = f.pacs.length
-    ? `<ul class="plain-list money-list">${f.pacs.map((p) => row(esc(p.name), money(p.total), `${p.count} contribution${p.count === 1 ? "" : "s"} · ${esc(industryName(p.industry))}`)).join("")}</ul>
-       <p class="hint">The ${f.pacs.length} largest of ${money(t.pac)} from PACs and other political committees (${pct(t.pac, t.receipts)} of all money raised). ${
+    ? `<ul class="plain-list money-list">${f.pacs.slice(0, TOP).map(pacRow).join("")}</ul>
+       ${f.pacs.length > TOP ? seeAll(fundingListHref(base, "pacs", f.cycle), "See all PACs") : ""}
+       <p class="hint">The ${Math.min(TOP, f.pacs.length)} largest of ${money(t.pac)} from PACs and other political committees (${pct(t.pac, t.receipts)} of all money raised). ${
          f.progress.note ? esc(f.progress.note) + ". " : ""
        }<a class="tap" href="${esc(f.pacs[0].source_url)}" target="_blank" rel="noopener">Every PAC contribution at the FEC ↗</a></p>`
     : `<p class="secondary small">No contributions from PACs reported in ${span}.</p>`;
@@ -392,10 +400,8 @@ export function fundingTab(official, f, base) {
   const classified = known.reduce((s, i) => s + i.pac + i.emp, 0);
   const all = f.industries.reduce((s, i) => s + i.pac + i.emp, 0);
   const industries = known.length
-    ? `<ul class="plain-list money-list">${known
-        .slice(0, 8)
-        .map((i) => row(esc(industryName(i.industry)), money(i.pac + i.emp), [i.pac ? `PACs ${money(i.pac)}` : "", i.emp ? `donors' employers ${money(i.emp)}` : ""].filter(Boolean).join(" · ")))
-        .join("")}</ul>
+    ? `<ul class="plain-list money-list">${known.slice(0, TOP).map(industryRow).join("")}</ul>
+       ${known.length > TOP ? seeAll(fundingListHref(base, "industries", f.cycle), "See all industries") : ""}
        <p class="hint">Approximate. Industries are assigned by keywords in PAC and employer names (<a class="tap" href="${METHOD}">how</a>); ${pct(classified, all)} of these dollars matched an industry, and the rest are left unclassified rather than guessed. Employer amounts count only donors who gave more than $200, from the campaign's principal committee.</p>`
     : '<p class="secondary small">No contributions matched an industry category.</p>';
 
@@ -413,10 +419,14 @@ export function fundingTab(official, f, base) {
     ? `<p class="hint">For comparison, the average of the ${f.avg.n} ${official.chamber === "us-senate" ? "senators" : "House members"} with ${span} filings loaded: raised ${money(f.avg.receipts)}; PACs ${Math.round(100 * (f.avg.pac_share || 0))}% of money raised; small donors ${Math.round(100 * (f.avg.small_share || 0))}%; cash on hand ${money(f.avg.cash)}.${official.chamber === "us-senate" ? " A senator's fundraising varies with where they are in a six-year term." : ""}</p>`
     : "";
   const employers = f.employers.length
-    ? `<ul class="plain-list money-list">${f.employers.map((e) => row(`${esc(e.employer)}${awardsLink(e.employer)}`, money(e.total), `${e.count} donors · ${esc(industryName(e.industry))}`)).join("")}</ul>
+    ? `<ul class="plain-list money-list">${f.employers.slice(0, TOP).map(employerRow).join("")}</ul>
+       ${f.employers.length > TOP ? seeAll(fundingListHref(base, "employers", f.cycle), "See all employers") : ""}
        <p class="hint">Employers named by donors who gave more than $200, summed; an employer is listed only when ${MIN_EMPLOYER_DONORS} or more people named it. Individual donors are never listed.</p>`
     : '<p class="secondary small">No employer was named by 3 or more donors.</p>';
 
+  const outsideSum = f.outside.reduce((sum, x) => sum + x.total, 0);
+  const lobby = lobbyContribSection(official, f.lobby);
+  const electioneering = electioneeringSection(f.electioneering, official.name);
   return `
 ${cycleNav(base, f)}
 <section class="card hero-stat">
@@ -424,21 +434,15 @@ ${cycleNav(base, f)}
   <p class="hero-num">${money(t.receipts)}</p>
   <p class="small secondary">Spent ${money(t.disbursements)} · Cash on hand ${money(t.cash_on_hand)}${t.coverage_end ? ` as of ${fmtDate(t.coverage_end)}` : ""}</p>
 </section>
-${intro}
 <section class="card stack">
   <h3>Where it came from</h3>
   ${breakdown}
-  ${avg}
+  ${intro}
 </section>
 <section class="card stack-sm">
   <h3>Top PACs</h3>
   ${pacs}
 </section>
-<section class="card stack-sm">
-  <h3>Outside spending for and against</h3>
-  ${outside}
-</section>
-${electioneeringSection(f.electioneering, official.name)}
 <section class="card stack-sm">
   <h3>Top contributing industries <span class="secondary small">(approximate)</span></h3>
   ${industries}
@@ -447,8 +451,45 @@ ${electioneeringSection(f.electioneering, official.name)}
   <h3>Donors' employers</h3>
   ${employers}
 </section>
-${lobbyContribSection(official, f.lobby)}
+${fold("funding-outside", "Outside spending for and against", outside, { meta: f.outside.length ? money(outsideSum) : "None reported" })}
+${electioneering ? fold("funding-electioneering", "Electioneering communications", electioneering) : ""}
+${lobby ? fold("funding-lobbyists", "From lobbyists and lobbying organizations", lobby, { meta: f.lobby && f.lobby.progress ? "" : "Not searched yet" }) : ""}
+${avg ? fold("funding-average", "Compared with the average", avg) : ""}
 <p class="hint">Source: Federal Election Commission${fecLink ? ` (<a class="tap" href="${esc(fecLink)}" target="_blank" rel="noopener">${esc(official.name)} at the FEC ↗</a>)` : ""}, ${span}. Read ${fmtDate(f.progress.done_at)}. Federal law bars using contributor information from FEC reports to ask for contributions or for commercial purposes; ThePillory shows totals only and has no donor export. <a class="tap" href="${METHOD}">Methodology</a></p>`;
+}
+
+const pacRow = (p) => row(esc(p.name), money(p.total), `${p.count} contribution${p.count === 1 ? "" : "s"} · ${esc(industryName(p.industry))}`);
+const industryRow = (i) => row(esc(industryName(i.industry)), money(i.pac + i.emp), [i.pac ? `PACs ${money(i.pac)}` : "", i.emp ? `donors' employers ${money(i.emp)}` : ""].filter(Boolean).join(" · "));
+const employerRow = (e) => row(`${esc(e.employer)}${awardsLink(e.employer)}`, money(e.total), `${e.count} donors · ${esc(industryName(e.industry))}`);
+
+export const LIST_PER_PAGE = 25;
+
+/** One page of a member's full list (pacs, industries or employers) for a cycle: {rows, more}. */
+export async function fundingList(db, officialId, kind, cycle, offset = 0) {
+  const n = LIST_PER_PAGE + 1;
+  let rows;
+  if (kind === "pacs") {
+    rows = (await db.prepare("SELECT * FROM funding_pacs WHERE official_id = ? AND cycle = ? ORDER BY total DESC LIMIT ? OFFSET ?").bind(officialId, cycle, n, offset).all()).results;
+  } else if (kind === "employers") {
+    rows = (await db.prepare(`SELECT * FROM funding_employers WHERE official_id = ? AND cycle = ? AND count >= ${MIN_EMPLOYER_DONORS} ORDER BY total DESC LIMIT ? OFFSET ?`).bind(officialId, cycle, n, offset).all()).results;
+  } else {
+    rows = (await db
+      .prepare(
+        `SELECT industry, SUM(pac) AS pac, SUM(emp) AS emp FROM (
+           SELECT industry, total AS pac, 0 AS emp FROM funding_pacs WHERE official_id = ?1 AND cycle = ?2
+           UNION ALL SELECT industry, 0, total FROM funding_employers WHERE official_id = ?1 AND cycle = ?2)
+         WHERE industry != 'other' GROUP BY industry ORDER BY SUM(pac) + SUM(emp) DESC LIMIT ?3 OFFSET ?4`
+      )
+      .bind(officialId, cycle, n, offset)
+      .all()).results;
+  }
+  return { rows: rows.slice(0, LIST_PER_PAGE), more: rows.length > LIST_PER_PAGE };
+}
+
+/** The rows of a full list, in the Funding tab's own style. */
+export function fundingListRows(kind, rows) {
+  const r = kind === "pacs" ? pacRow : kind === "employers" ? employerRow : industryRow;
+  return `<ul class="plain-list money-list">${rows.map(r).join("")}</ul>`;
 }
 
 const LD203_SEARCH = "https://lda.gov/filings/public/contribution/search/";

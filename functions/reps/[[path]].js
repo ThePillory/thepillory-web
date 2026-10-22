@@ -1,30 +1,38 @@
 // /reps/            find your reps (address or ZIP), your reps once known, the
 //                   governing bodies, and members of Congress by state (?state=CA)
-// /reps/<slug>/     one official, five tabs for everyone: About · Promises ·
-//                   Votes · Funding · More. The President and Governor: Votes is
-//                   bills signed and vetoed; More holds executive orders (and the
+// /reps/<slug>/     one official: the photo, office, name and one line each for
+//                   votes, money and net worth, then five tabs for everyone (a
+//                   sticky tab bar): About · Platform · Votes · Funding · More.
+//                   Votes: the latest ten (every vote at /reps/<slug>/votes/).
+//                   Funding: the totals, the breakdown and the top five of each
+//                   list (each list at /reps/<slug>/funding/<list>/). More: one
+//                   row per topic; earmarks, travel and foreign agents' contacts
+//                   five each (all at /reps/<slug>/earmarks/, travel/,
+//                   foreign-agents/). The President and Governor: Votes is bills
+//                   signed and vetoed; More holds executive orders (and the
 //                   President's nominations) and disclosures. The Cabinet: Votes
 //                   and Funding say they don't apply, linking to Disclosures in
-//                   More. Everyone else: More holds committees and Issues.
+//                   More. Everyone else: More holds committees. Residents' issues
+//                   are one line under Platform until accounts launch.
 // POST /reps/<slug>/promises/<id>/flag   "Something wrong?" on a published promise
 import { simpleCard, jobSentence, voteLinePlain, moneyLinePlain, sourceNote, SIMPLE_METHOD } from "../_lib/simple.js";
-import { BODIES, LEVEL_NAME, EMPTY_REPORTS } from "../_lib/generated.js";
+import { BODIES, LEVEL_NAME } from "../_lib/generated.js";
 import { page, notFound, notLoaded, esc, safeUrl, kv, card, section, linkRow, sourceLink, fmtDate, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { officialBySlug, officialsWhere, withVoteCounts, voteCounts, votesFor, CHAMBER_NAME } from "../_lib/data.js";
 import { districtsFromCookie, repsWhere, describe, STATE_NAME } from "../_lib/districts.js";
 import { lookupForm } from "../_lib/hub.js";
 import { BROWSE, PER_PAGE, chamberPage, personRow, yourRow, yourList, statewideList, repsHref, stateChambers, statePicker, sortSwitch, pagedList } from "../_lib/reps-index.js";
 import { searchPeople } from "../_lib/people-search.js";
-import { networthFor, networthPoints, networthLine, networthSection } from "../_lib/networth.js";
+import { networthFor, networthPoints, networthLine, networthSection, rangeText } from "../_lib/networth.js";
 import { tradeSummary, memberTrades, memberReports, memberCommittees, executivePost, tradesSection, quickTradesLine, tradeRow, committeesList, TRADES_PER_PAGE, TRADES_METHOD } from "../_lib/trades.js";
 import { loadJustices } from "../_lib/scotus.js";
 import { chamberIds } from "../../workers/sync/src/states.js";
 import { visitorState } from "../_lib/visitor-state.js";
 import { voteRow, voteFilter } from "../_lib/votes.js";
-import { fundingFor, fundingTab } from "../_lib/funding.js";
+import { fundingFor, fundingTab, fundingList, fundingListRows, FUNDING_LISTS, LIST_PER_PAGE, money } from "../_lib/funding.js";
 import { executiveMoney, executiveFundingParts, stateOfficialMoney, stateForm700, form700For } from "../_lib/exec-funding.js";
 import { caLobbyingForOfficial, caLegislatorLobbying } from "../_lib/ca-lobbying.js";
-import { memberGovMoney, earmarksSection, travelSection, faraSection } from "../_lib/gov-money.js";
+import { memberGovMoney, earmarksSection, travelSection, faraSection, govMoneyMeta } from "../_lib/gov-money.js";
 import { stateFundingTab } from "../_lib/state-funding.js";
 import { promisesFor, ownWordsFor, platformTab, FLAG_REASONS } from "../_lib/promises.js";
 import { turnstileReady, verifyTurnstile, visitorHash, actionsToday, recordAction } from "../_lib/turnstile.js";
@@ -39,6 +47,9 @@ import {
 import { statePath } from "../_lib/state-paths.js";
 
 const BODY = Object.fromEntries(BODIES.map((b) => [b.slug, b]));
+const VOTES_SHOWN = 10; // the Votes tab: the latest ten final-passage votes, then "See all"
+const MORE_TOP = 5; // earmarks, travel and foreign agents' contacts on the More tab
+const VOTES_PER_PAGE = 25;
 
 /** "Test Representative Gamma" -> "TG": the first and last name's initials. */
 function initials(name) {
@@ -281,8 +292,12 @@ async function profile(env, slug, url, request) {
     const last = Math.max(FIRST_YEAR, Math.min(thisYear() - 1, (parseInt(String(any.term_end || "").slice(0, 4), 10) || thisYear()) - 1));
     return Response.redirect(`${url.origin}/reps/${any.slug}/?year=${last}`, 302);
   }
-  const all = url.searchParams.get("votes") === "all";
-  const pageNum = Math.max(1, parseInt(url.searchParams.get("page") || "1", 10) || 1);
+  // Every vote is on its own paged page now: /reps/<slug>/votes/.
+  if (url.searchParams.has("votes") || url.searchParams.has("page")) {
+    const q = new URLSearchParams();
+    for (const k of ["votes", "page"]) if (url.searchParams.get(k)) q.set(k, url.searchParams.get(k));
+    return Response.redirect(`${url.origin}/reps/${o.slug}/votes/${q.toString() ? `?${q}` : ""}`, 301);
+  }
   const cycle = parseInt(url.searchParams.get("cycle") || "", 10) || currentCycle();
   const offset = Math.max(0, parseInt(url.searchParams.get("offset") || "0", 10) || 0);
   const show = ["signed", "vetoed"].includes(url.searchParams.get("show")) ? url.searchParams.get("show") : "all";
@@ -300,7 +315,7 @@ async function profile(env, slug, url, request) {
   // Each tab loads on its own: one that can't load shows a short note there.
   const loaded = await Promise.all([
     exec ? {} : loadSection("rep vote counts", () => voteCounts(db, o.id), {}),
-    exec ? { rows: [], more: false } : loadSection("rep votes", () => votesFor(db, o.id, { all, limit: 50, offset: (pageNum - 1) * 50 }), { rows: [], more: false }),
+    exec ? { rows: [], more: false } : loadSection("rep votes", () => votesFor(db, o.id, { all: false, limit: VOTES_SHOWN, offset: 0 }), { rows: [], more: false }),
     otherState ? null
       : exec ? loadSection("rep funding", () => executiveMoney(db, o, cycle), null)
       : o.level === "federal" ? loadSection("rep funding", () => fundingFor(db, o, cycle), null)
@@ -331,8 +346,11 @@ async function profile(env, slug, url, request) {
 
   const body = BODY[o.body];
   const photo = safeUrl(o.photo_url);
+  // The money in one line (members of Congress, from the FEC).
+  const fundingOk = funding && funding !== FAILED && funding.totals ? funding : null;
+  const moneyLine = o.level === "federal" && !exec && fundingOk ? moneyLinePlain(fundingOk.totals, `${fundingOk.cycle - 1}–${fundingOk.cycle}`) : null;
   // Summary first: the record in one line, as counts and the latest recorded fact.
-  const latest = votes !== FAILED && !all && pageNum === 1 ? votes.rows[0] : null;
+  const latest = votes !== FAILED ? votes.rows[0] : null;
   const glanceLine = exec
     ? (isPresident(o) || isGovernor(o)) && ok(orders) && ok(bills)
       ? `${ok(orders).counts.executive_order || 0} executive orders and ${ok(bills).counts.signed || 0} bills signed are on record${ok(bills).counts.vetoed ? `; ${ok(bills).counts.vetoed} vetoed` : ""}.`
@@ -349,10 +367,9 @@ async function profile(env, slug, url, request) {
     <p class="label">${LEVEL_NAME[o.level]} · ${CHAMBER_NAME[o.chamber]}</p>
     <h1>${esc(o.name)}</h1>
     <p class="secondary">${esc(who(o))}</p>
+    ${glanceLine ? `<p class="small summary-line"><a class="inline-link" href="#votes">${esc(glanceLine)}</a></p>` : ""}
+    ${moneyLine ? `<p class="small summary-line"><a class="inline-link" href="#funding">${esc(moneyLine)}</a></p>` : ""}
     ${networth && networth !== FAILED ? networthLine(networth) : ""}
-    ${glanceLine ? `<p class="summary-text small">${esc(glanceLine)}</p>` : ""}
-    ${body ? `<div class="chips">${body.chip}</div>` : ""}
-    ${safeUrl(o.website) ? `<div class="chips"><a class="chip chip--tap" href="${esc(o.website)}" target="_blank" rel="noopener">Official site ↗</a></div>` : ""}
   </div>
 </header>`;
 
@@ -360,14 +377,7 @@ async function profile(env, slug, url, request) {
     o.term_start && o.term_end ? `${esc(o.term_start)} to ${esc(o.term_end)}`
       : o.term_start ? `Since ${esc(o.term_start)}` : null;
   const overview = `
-${exec ? execGlance(o, ok(orders), ok(bills), ok(nominations)) : !counts ? sectionError("Record at a glance") : `<section class="card stack">
-  <h2 class="label">Record at a glance</h2>
-  <div class="grid-2">
-    <div class="stat"><div class="stat-num">${counts.final || 0}</div><div class="stat-label">Final-passage votes</div></div>
-    <div class="stat"><div class="stat-num">${counts.total || 0}</div><div class="stat-label">All recorded votes</div></div>
-  </div>
-  <p class="hint">Counts of recorded votes only. ThePillory doesn't score or grade officials.</p>
-</section>`}
+${exec && !(isPresident(o) || isGovernor(o)) ? execGlance(o, ok(orders), ok(bills), ok(nominations)) : ""}
 ${fold("office", "Office", kv([
     ["Office", esc(o.office)],
     ["District", exec ? null : o.district ? esc(o.district) : "Statewide"],
@@ -383,23 +393,20 @@ ${fold("source", "Source", `<p class="small">Last verified ${fmtDate(o.last_veri
 ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
 
   const base = `/reps/${o.slug}/`;
-  const more = votes !== FAILED && votes.more
-    ? `<a class="btn btn--block" href="${base}?${all ? "votes=all&" : ""}page=${pageNum + 1}#votes">Older votes</a>`
+  const totalVotes = counts ? counts.total || 0 : 0;
+  const seeAllVotes = totalVotes
+    ? `<a class="list-row link-row see-all card" href="${base}votes/?votes=all"><div><div class="list-title">See all ${totalVotes.toLocaleString("en-US")} votes</div><div class="list-meta">Every recorded vote, final passage and the rest, 25 at a time</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>`
     : "";
   const voteList = votes === FAILED ? sectionError("") : votes.rows.length
-    ? `<ul class="plain-list vote-list card">${votes.rows.map(voteRow).join("")}</ul>${more}`
-    : `<p class="secondary small">${
-        o.level === "county"
-          ? "County votes aren't loaded yet."
-          : all ? "No recorded votes yet." : "No final-passage votes recorded yet. Try “All votes”."
-      }</p>`;
+    ? `<p class="small secondary">The ${votes.rows.length === 1 ? "latest final-passage vote" : `${votes.rows.length} latest final-passage votes`}.</p><ul class="plain-list vote-list card">${votes.rows.map(voteRow).join("")}</ul>${seeAllVotes}`
+    : `<p class="secondary small">${o.level === "county" ? "County votes aren't loaded yet." : "No final-passage votes recorded yet."}</p>${seeAllVotes}`;
 
   // Five tabs for every official: About · Promises · Votes · Funding · More.
   // What Votes, Funding and More hold depends on the office (roleOf).
   const role = roleOf(o);
   const money = exec && !otherState && funding !== FAILED ? executiveFundingParts(o, funding, base) : null;
-  // More: each part collapsed until tapped (a link to its id opens it).
-  const sub = (id, label, html) => fold(id, label, html);
+  // More: one line per topic, each collapsed until tapped (a link to its id opens it).
+  const sub = (id, label, html, meta = "") => fold(id, label, html, { meta });
   const appointedNote = (what) =>
     `<section class="card stack-sm"><p class="small">${what}</p><p class="small"><a class="inline-link" href="#disclosures">See financial disclosures and ethics agreements under More</a></p></section>`;
 
@@ -412,8 +419,7 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
   } else if (exec) {
     votesHtml = '<p class="secondary small">No votes are recorded for this office. ThePillory records votes in Congress and in state legislatures.</p>';
   } else {
-    votesHtml = `${voteFilter(base, all, counts)}
-    ${voteList}`;
+    votesHtml = voteList;
   }
 
   let fundingHtml;
@@ -426,16 +432,19 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
 
   // More: everything else, in sections.
   const moreParts = [];
-  if (trades) moreParts.push(sub("more-trades", "Stock trades", trades === FAILED ? sectionError("") : tradesSection(o, trades)));
-  if (networth) moreParts.push(sub("more-networth", "Net worth, as reported", networth === FAILED ? sectionError("") : networthSection(o.name, networth)));
+  const tradeCount = trades && trades !== FAILED ? (trades.summary || []).reduce((n, y) => n + (y.trades || 0), 0) : 0;
+  if (trades) moreParts.push(sub("more-trades", "Stock trades", trades === FAILED ? sectionError("") : tradesSection(o, trades), trades === FAILED ? "" : tradeCount ? `${tradeCount.toLocaleString("en-US")} reported` : "None reported"));
+  const nwEnd = networth && networth !== FAILED ? networth.latest || networth.first : null;
+  if (networth) moreParts.push(sub("more-networth", "Net worth, as reported", networth === FAILED ? sectionError("") : networthSection(o.name, networth), nwEnd ? `${rangeText(nwEnd)} (${nwEnd.year})` : "No report read yet"));
   if (congress) {
     const gm = govMoney === FAILED ? null : govMoney;
-    moreParts.push(sub("more-earmarks", "Earmarks", govMoney === FAILED ? sectionError("") : earmarksSection(o, gm)));
-    moreParts.push(sub("more-travel", "Privately paid travel", govMoney === FAILED ? sectionError("") : travelSection(o, gm)));
-    moreParts.push(sub("more-foreign-agents", "Contacts reported by foreign agents", govMoney === FAILED ? sectionError("") : faraSection(o, gm)));
+    const meta = govMoneyMeta(gm);
+    moreParts.push(sub("more-earmarks", "Earmarks", govMoney === FAILED ? sectionError("") : earmarksSection(o, gm, { top: MORE_TOP, href: `${base}earmarks/` }), meta.earmarks));
+    moreParts.push(sub("more-travel", "Privately paid travel", govMoney === FAILED ? sectionError("") : travelSection(o, gm, { top: MORE_TOP, href: `${base}travel/` }), meta.travel));
+    moreParts.push(sub("more-foreign-agents", "Contacts reported by foreign agents", govMoney === FAILED ? sectionError("") : faraSection(o, gm, { top: MORE_TOP, href: `${base}foreign-agents/` }), meta.fara));
   }
-  if (orders) moreParts.push(sub("orders", "Executive orders", orders === FAILED ? sectionError("") : ordersTab(o, orders, base, offset)));
-  if (nominations) moreParts.push(sub("nominations", "Nominations", nominations === FAILED ? sectionError("") : nominationsTab(o, nominations, base, status, offset)));
+  if (orders) moreParts.push(sub("orders", "Executive orders", orders === FAILED ? sectionError("") : ordersTab(o, orders, base, offset), orders === FAILED ? "" : `${(orders.counts.executive_order || 0).toLocaleString("en-US")} on record`));
+  if (nominations) moreParts.push(sub("nominations", "Nominations", nominations === FAILED ? sectionError("") : nominationsTab(o, nominations, base, status, offset), nominations === FAILED ? "" : `${Object.values(nominations.counts).reduce((n, c) => n + c, 0).toLocaleString("en-US")} on record`));
   if (exec && !otherState) moreParts.push(sub("more-disclosures", "Disclosures", funding === FAILED ? sectionError("") : money.disclosures));
   if (stateLegislator) moreParts.push(sub("more-lobbying", "Lobbying", caLobbying === FAILED ? sectionError("") : caLegislatorLobbying(o, caLobbying)));
   if (stateLegislator || supervisor) moreParts.push(sub("more-disclosures", "Disclosures", funding === FAILED ? sectionError("") : funding ? stateForm700(funding) : ""));
@@ -444,14 +453,10 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
       ? `<div class="card"><ul class="plain-list">${committees.map((c) => `<li class="list-row"><span class="list-title">${esc(c.name)}</span><span class="row-end">${sourceLink(c.source_url)}</span></li>`).join("")}</ul></div><p class="hint">From Open States, refreshed weekly.</p>`
       : '<p class="secondary small">No committee assignments loaded for this legislator.</p>'));
   }
-  // Reports and issues open with accounts; none exist yet.
-  moreParts.push(sub("issues", "Issues", EMPTY_REPORTS));
 
   // Quick mode: who they are, the job, the latest votes, their own words, the money in one line.
   const recent = votes !== FAILED && votes.rows ? votes.rows.slice(0, 3) : [];
   const excerpt = ownWords && ownWords !== FAILED && ownWords.pages && ownWords.pages[0];
-  const fundingOk = funding && funding !== FAILED && funding.totals ? funding : null;
-  const moneyLine = o.level === "federal" && !exec && fundingOk ? moneyLinePlain(fundingOk.totals, `${fundingOk.cycle - 1}–${fundingOk.cycle}`) : null;
   const simple = simpleCard({
     lines: [
       ["Their job", esc(jobSentence(o, STATE_NAME[o.state] || ""))],
@@ -505,8 +510,70 @@ export const onRequestGet = guard(async (context) => {
     if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
     return edgeCached(context, REPS_CACHE_SECONDS, () => tradesPage(context.env, parts[0], url));
   }
+  // The full lists behind "See all": every vote, each funding list, earmarks, travel, foreign agents' contacts.
+  const sub = parts.length === 2 && SUB_PAGES[parts[1]] ? parts[1] : parts.length === 3 && parts[1] === "funding" && FUNDING_LISTS[parts[2]] ? `funding/${parts[2]}` : null;
+  if (sub) {
+    if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
+    return edgeCached(context, REPS_CACHE_SECONDS, () => subPage(context.env, parts[0], sub, url));
+  }
   return notFound("No page at this address.", "reps", ["Reps", "/reps/"]);
 }, { tab: "reps" });
+
+const SUB_PAGES = { votes: "Votes", earmarks: "Earmarks", travel: "Privately paid travel", "foreign-agents": "Contacts reported by foreign agents" };
+
+/**
+ * A "See all" page of an official's record:
+ *   /reps/<slug>/votes/?votes=all&page=N         every vote, 25 a page (final passage only without votes=all)
+ *   /reps/<slug>/funding/<pacs|industries|employers>/?cycle=&offset=   one funding list, 25 at a time
+ *   /reps/<slug>/earmarks/, travel/, foreign-agents/   members of Congress
+ */
+async function subPage(env, slug, sub, url) {
+  if (!env.DB) return notLoaded("Reps", "reps", false, ["Reps", "/reps/"]);
+  const db = env.DB;
+  const o = await officialBySlug(db, slug);
+  if (!o) return notFound("No official at this address.", "reps", ["Reps", "/reps/"]);
+  const base = `/reps/${o.slug}/`;
+  const congress = o.chamber === "us-house" || o.chamber === "us-senate";
+  const done = (title, hash, body, partial = false) =>
+    page(`${o.name}: ${title}`, `
+<header class="page-head"><h1>${esc(title)}</h1><p class="subtitle">${esc(o.name)} · ${esc(o.office || "")}</p></header>
+${body}`, { tab: "reps", back: [o.name, `${base}#${hash}`], partial });
+
+  if (sub === "votes") {
+    if (isExecutive(o)) return notFound("No recorded votes for this office.", "reps", [o.name, base]);
+    const all = url.searchParams.get("votes") === "all";
+    const pageNum = Math.max(1, parseInt(url.searchParams.get("page") || "1", 10) || 1);
+    const [counts, votes] = await Promise.all([
+      loadSection("rep vote counts", () => voteCounts(db, o.id), {}),
+      loadSection("rep votes page", () => votesFor(db, o.id, { all, limit: VOTES_PER_PAGE, offset: (pageNum - 1) * VOTES_PER_PAGE }), { rows: [], more: false }),
+    ]);
+    const href = (n) => `${base}votes/?${all ? "votes=all&" : ""}page=${n}`;
+    const nav = votes === FAILED ? "" : `<nav class="pager">${pageNum > 1 ? `<a class="btn" href="${href(pageNum - 1)}">Newer</a>` : ""}${votes.more ? `<a class="btn" href="${href(pageNum + 1)}">Older</a>` : ""}</nav>`;
+    const body = `${voteFilter(`${base}votes/`, all, counts === FAILED ? null : counts)}
+${votes === FAILED ? sectionError("") : votes.rows.length ? `<ul class="plain-list vote-list card">${votes.rows.map(voteRow).join("")}</ul>${nav}` : `<p class="secondary small">${all ? "No recorded votes yet." : "No final-passage votes recorded yet. Try “All votes”."}</p>`}`;
+    return done(pageNum > 1 ? `Votes, page ${pageNum}` : "Votes", "votes", body, anyFailed(counts, votes));
+  }
+
+  if (sub.startsWith("funding/")) {
+    const kind = sub.slice(8);
+    if (o.level !== "federal" || isExecutive(o)) return notFound("No FEC lists for this office.", "reps", [o.name, base]);
+    const cycle = parseInt(url.searchParams.get("cycle") || "", 10) || currentCycle();
+    const offset = Math.max(0, parseInt(url.searchParams.get("offset") || "0", 10) || 0);
+    const list = await loadSection("rep funding list", () => fundingList(db, o.id, kind, cycle, offset), { rows: [], more: false });
+    const more = list !== FAILED && list.more
+      ? `<a class="btn btn--block load-more" href="${base}funding/${kind}/?cycle=${cycle}&offset=${offset + LIST_PER_PAGE}" data-load-more="funding-list">Load more</a>`
+      : "";
+    const body = `<p class="small secondary">${cycle - 1}–${cycle}, as reported to the Federal Election Commission, largest first${offset ? `, from number ${offset + 1}` : ""}.${kind === "industries" ? " Approximate: industries are assigned by keywords in PAC and employer names." : ""}${kind === "employers" ? " An employer is listed only when 3 or more donors named it; individual donors are never listed." : ""}</p>
+${list === FAILED ? sectionError("") : list.rows.length ? `<div class="card" id="funding-list">${fundingListRows(kind, list.rows)}</div>${more}` : '<p class="secondary small">None reported.</p>'}
+<p class="hint"><a class="tap" href="/about/methodology/#funding">How funding is shown</a></p>`;
+    return done(FUNDING_LISTS[kind], "funding", body, list === FAILED);
+  }
+
+  if (!congress) return notFound("This list is for members of Congress.", "reps", [o.name, base]);
+  const gm = await loadSection("rep government money", () => memberGovMoney(db, o.id), null);
+  const section = sub === "earmarks" ? earmarksSection : sub === "travel" ? travelSection : faraSection;
+  return done(SUB_PAGES[sub], `more-${sub}`, gm === FAILED ? sectionError("") : section(o, gm), gm === FAILED);
+}
 
 // /reps/<slug>/trades/?offset=N: the next page of a member's trades ("Load more" appends it in place).
 async function tradesPage(env, slug, url) {
