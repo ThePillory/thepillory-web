@@ -1,8 +1,8 @@
-// "State map" on every state's page (functions/_lib/home.js): the state's map
+// A state's map page (/states/<name>/map/, functions/states/): the state's map
 // with layer toggles (Counties, Congressional and its legislative chambers),
 // Find a county, every district, all its statewide offices, and its
 // legislature's latest final votes. This was the /explore/<st>/ page, which now
-// redirects to /states/<name>/#map. Shapes come from Census Bureau files in data/geo/.
+// redirects here. Shapes come from Census Bureau files in data/geo/.
 import { esc, fmtDate, loadSection, FAILED, sectionError } from "./render.js";
 import { billHref } from "./votes.js";
 import { coverageFor, votesLoaded, votesComingSoon, votesLoadedNote } from "./coverage.js";
@@ -109,8 +109,8 @@ export function stateMapSection(data) {
 
   return `
 <section class="brief-section" id="map" aria-labelledby="h-state-map">
-  <div class="section-head"><h2 class="label" id="h-state-map">${esc(place.name)} map</h2></div>
-  <p class="small secondary">${place.counties.length} ${place.counties.length === 1 ? "county" : "counties"}. Tap a county or district, or use the lists below.</p>
+  <h2 class="visually-hidden" id="h-state-map">${esc(place.name)} map</h2>
+  <p class="small secondary">${place.counties.length} ${place.counties.length === 1 ? "county" : "counties"}.</p>
   ${mapFigure({ id: "state-map", src: `/data/geo/shapes/${place.st.toLowerCase()}-{layer}.json`, links, status, layers, active: layer, label: `Map of ${place.name}`, legend, still: true })}
   ${fold("h-find", `Every county in ${place.name}`, `
   <input class="input" type="search" placeholder="County name" aria-label="Find a county" data-filter-list="county-list" data-filter-none="county-none" hidden />

@@ -1,7 +1,7 @@
 // /explore/          the United States map: live communities (navy), states where
 //                    people are waiting (light navy), all others; small-state
 //                    buttons; a state picker; Live communities and Most requested.
-// /explore/<st>/     moved: redirects to the state's page, /states/<name>/#map
+// /explore/<st>/     moved: redirects to the state's map page, /states/<name>/map/
 //                    (its map, counties and districts: functions/_lib/state-map.js).
 // Maps are drawn by /assets/map.js from data/geo/ (Census Bureau boundaries);
 // every shape on a map is also a link in a list.
@@ -81,7 +81,7 @@ ${mapFigure({ id: "map", src: "/data/geo/us.json", links, status, label: "Map of
 <section class="stack-sm" aria-labelledby="h-requested">
   <h2 class="label" id="h-requested">Most requested next</h2>
   ${topRows.length ? `<div class="card">${topRows.join("")}</div>` : '<p class="small secondary">No one is on the list yet.</p>'}
-  <p class="small"><a class="inline-link" href="/#communities">Bring ThePillory to your county</a></p>
+  <p class="small"><a class="inline-link" href="/waitlist/">Bring ThePillory to your county</a></p>
 </section>
 <p class="hint">Boundaries: U.S. Census Bureau cartographic boundary files (2024), simplified for the web. Every state's federal representatives, and their votes, are on ThePillory now; local coverage opens one county at a time.</p>
 ${mapScript}`;
@@ -123,7 +123,7 @@ export const onRequestGet = guard((context) => {
   // A state's map page moved to its page, /states/<name>/ (the "<State> map" section).
   if (parts.length === 1 && stateFromSlug(parts[0])) {
     const layer = url.searchParams.get("layer");
-    return Response.redirect(`${url.origin}${statePath(stateFromSlug(parts[0]))}${layer ? `?layer=${encodeURIComponent(layer)}` : ""}#map`, 301);
+    return Response.redirect(`${url.origin}${statePath(stateFromSlug(parts[0]))}map/${layer ? `?layer=${encodeURIComponent(layer)}` : ""}`, 301);
   }
   return notFound("No page at this address.", "home", ["Explore", "/explore/"]);
 }, { tab: "home" });

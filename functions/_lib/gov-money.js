@@ -146,7 +146,21 @@ function tableLinks(tables) {
     .join(" · ");
 }
 
-export function earmarksSection(o, g) {
+const seeAllRow = (href, n, what) =>
+  `<a class="list-row link-row see-all" href="${esc(href)}"><div><div class="list-title">See all ${n.toLocaleString("en-US")} ${esc(what)}</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>`;
+
+/** One-line summaries for the More tab's rows. */
+export function govMoneyMeta(g) {
+  if (!g) return { earmarks: "", travel: "", fara: "" };
+  const projects = g.rows.length + g.requests.filter((q) => !q.enacted_id).length;
+  return {
+    earmarks: projects ? plural(projects, "project") : "None found",
+    travel: g.travel.length ? `${plural(g.travel.length, "trip")} since 2023` : "None disclosed",
+    fara: g.fara.length ? plural(g.fara.length, "contact") : "None found",
+  };
+}
+
+export function earmarksSection(o, g, { top = 0, href = "" } = {}) {
   if (!g) return '<p class="secondary small">Earmarks haven\'t been loaded yet.</p>';
   const house = o.chamber === "us-house";
   const fys = [...new Set([...g.rows.map((r) => r.fy), ...g.requests.map((q) => q.fy)])].sort((a, b) => b - a);
@@ -157,7 +171,7 @@ export function earmarksSection(o, g) {
     return `<p class="secondary small">No earmarks with ${esc(o.name)} as a requester in the tables ThePillory reads.</p>
 <p class="hint">${EARMARKS_NOTE} <a class="tap" href="${HOW}">How this works</a></p>`;
   }
-  const groups = fys.map((fy, i) => {
+  const years = fys.map((fy) => {
     const rows = g.rows.filter((r) => r.fy === fy);
     const reqs = g.requests.filter((q) => q.fy === fy);
     const tiedTo = new Map(reqs.filter((q) => q.enacted_id).map((q) => [q.enacted_id, q]));
@@ -190,8 +204,21 @@ export function earmarksSection(o, g) {
       rows.length ? `${plural(rows.length, "project")} in the tables, ${money(enactedTotal)}` : "",
       reqs.length ? `${plural(reqs.length, "request")}, ${money(requestedTotal)} requested` : "",
     ].filter(Boolean).join(" · ");
-    const shown = Math.min(rows.length, 40) + Math.min(loose.length, 40);
-    const all = rows.length + loose.length;
+    return { fy, line, items, all: rows.length + loose.length };
+  });
+  const count = years.reduce((n, y) => n + y.all, 0);
+  // The More tab: the newest year's first few, then "See all" (the member's earmarks page).
+  if (top) {
+    const newest = years[0];
+    return `<div class="stack-sm">
+  <p class="small">Fiscal year ${newest.fy} · ${newest.line}</p>
+  <ul class="plain-list money-list">${newest.items.slice(0, top).join("")}</ul>
+  ${count > top && href ? seeAllRow(href, count, "earmarks") : ""}
+  <p class="hint">${EARMARKS_NOTE} <a class="tap" href="${HOW}">How this works</a></p>
+</div>`;
+  }
+  const groups = years.map(({ fy, line, items, all }, i) => {
+    const shown = items.length;
     return `<details class="weigh-details"${i === 0 ? " open" : ""}><summary>Fiscal year ${fy} · ${line}</summary>
   <ul class="plain-list money-list">${items.join("")}</ul>
   ${all > shown ? `<p class="small secondary">Showing ${shown} of ${all}. The full list is in the tables below.</p>` : ""}
@@ -207,12 +234,13 @@ export function earmarksSection(o, g) {
 // ---------------------------------------------------------------------------
 // Member: privately paid travel
 
-export function travelSection(o, g) {
+export function travelSection(o, g, { top = 0, href = "" } = {}) {
   if (!g) return '<p class="secondary small">Privately paid travel hasn\'t been loaded yet.</p>';
   const senate = o.chamber === "us-senate";
   const note = `Trips whose costs an outside organization covered instead of public funds, which members and their staff must disclose${senate ? " to the Secretary of the Senate" : " to the Clerk of the House, with the Ethics Committee's approval beforehand"}. Since 2023. Staff aren't named.${senate ? " The Senate's reports are scanned forms: the sponsor and destination are on each report." : ""} <a class="tap" href="${HOW}">How this works</a>`;
   if (!g.travel.length) return `<p class="secondary small">No privately paid trips disclosed for ${esc(o.name)} or their staff since 2023.</p><p class="hint">${note}</p>`;
-  const items = g.travel.slice(0, 50).map((t) => {
+  const limit = top || 50;
+  const items = g.travel.slice(0, limit).map((t) => {
     const title = t.sponsor ? esc(t.sponsor) : "Sponsor on the report";
     const meta = [t.traveler === "member" ? esc(o.name) : "A staff member", t.destination ? esc(t.destination) : "", dates(t.start_date, t.end_date)].filter(Boolean).join(" · ");
     return row(title, out(t.source_url, "Report ↗"), meta);
@@ -221,7 +249,7 @@ export function travelSection(o, g) {
   return `<div class="stack-sm">
   <p class="small">${plural(g.travel.length, "trip")} disclosed since 2023: ${mine} by ${esc(o.name)}, ${g.travel.length - mine} by staff.</p>
   <ul class="plain-list money-list">${items.join("")}</ul>
-  ${g.travel.length > 50 ? `<p class="small secondary">Showing the 50 newest of ${g.travel.length}.</p>` : ""}
+  ${g.travel.length > limit ? (top && href ? seeAllRow(href, g.travel.length, "trips") : `<p class="small secondary">Showing the ${limit} newest of ${g.travel.length}.</p>`) : ""}
   <p class="hint">${note}</p>
 </div>`;
 }
@@ -229,11 +257,12 @@ export function travelSection(o, g) {
 // ---------------------------------------------------------------------------
 // Member: foreign agents' reported contacts
 
-export function faraSection(o, g) {
+export function faraSection(o, g, { top = 0, href = "" } = {}) {
   if (!g) return '<p class="secondary small">Foreign agents\' filings haven\'t been loaded yet.</p>';
   const note = `Registered foreign agents report their political activities to the Justice Department under the Foreign Agents Registration Act (FARA), including contacts with members of Congress and their offices. Read from statements filed since 2025 that have a text layer; scanned statements stay links. A reported contact is the agent's account of reaching out: it doesn't say what the member did or thought. Staff contacted aren't named. <a class="tap" href="/foreign-agents/">Foreign agents</a> · <a class="tap" href="${HOW}">How this works</a>`;
   if (!g.fara.length) return `<p class="secondary small">No contacts with ${esc(o.name)} or their office in the foreign agents' statements read so far.</p><p class="hint">${note}</p>`;
-  const items = g.fara.slice(0, 50).map((c) => {
+  const limit = top || 50;
+  const items = g.fara.slice(0, limit).map((c) => {
     const reg = `<a class="inline-link" href="/foreign-agents/${c.registration_number}/">${esc(c.registrant || `Registration ${c.registration_number}`)}</a>`;
     const meta = [c.principal ? `for ${esc(c.principal)}` : "", c.contact_kind === "member" ? `with ${esc(o.name)}` : "with the member's office", c.method ? esc(c.method) : "", fmtDate(c.contact_date)]
       .filter(Boolean).join(" · ");
@@ -241,7 +270,7 @@ export function faraSection(o, g) {
   });
   return `<div class="stack-sm">
   <ul class="plain-list money-list">${items.join("")}</ul>
-  ${g.fara.length > 50 ? `<p class="small secondary">Showing the 50 newest of ${g.fara.length}.</p>` : ""}
+  ${g.fara.length > limit ? (top && href ? seeAllRow(href, g.fara.length, "contacts") : `<p class="small secondary">Showing the ${limit} newest of ${g.fara.length}.</p>`) : ""}
   <p class="hint">${note}</p>
 </div>`;
 }

@@ -886,6 +886,16 @@ a.chip:hover { text-decoration: none; filter: brightness(0.97); }
   white-space: nowrap;
 }
 .tabs--five [role="tab"]:focus-visible { outline: 2px solid var(--navy); outline-offset: -2px; }
+/* The official's tabs stay reachable while scrolling: the bar sticks to the
+   top of the screen (below the top nav from 768px), on an opaque track. */
+.rep-tabs > .tabs--five { position: sticky; top: 8px; z-index: 20; box-shadow: 0 0 0 6px var(--page); }
+.rep-tabs > [role="tabpanel"] { scroll-margin-top: 72px; }
+@media (min-width: 768px) {
+  .rep-tabs > .tabs--five { top: calc(var(--tabbar-h) + 8px); }
+  .rep-tabs > [role="tabpanel"] { scroll-margin-top: calc(var(--tabbar-h) + 72px); }
+}
+.summary-line { margin: 0; }
+.see-all .list-title { color: var(--navy); }
 @media (max-width: 374px) {
   .tabs--five [role="tab"] { font-size: 0.75rem; }
 }
@@ -1488,6 +1498,17 @@ a.review-badge--auto:hover { border-color: var(--navy); }
   .map-counts .dot { display: none; }
 }
 .map-counts .swatch { display: inline-block; width: 10px; height: 10px; margin-right: 5px; vertical-align: -1px; }
+.hub-map-links { padding-top: 0; padding-bottom: 0; }
+
+/* ---------- Home: one row of topic chips, the reps card, "Coming to" ---------- */
+.chip-scroll { display: flex; flex-wrap: nowrap; gap: 8px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: 2px; margin: 0 -16px; padding-left: 16px; padding-right: 16px; scroll-padding-left: 16px; }
+.chip-scroll::-webkit-scrollbar { display: none; }
+.chip-scroll .chip { flex: none; }
+#your-reps .lookup { padding-top: 4px; }
+.lookup-change > summary { display: inline-flex; align-items: center; min-height: var(--tap); cursor: pointer; list-style: none; }
+.lookup-change > summary::-webkit-details-marker { display: none; }
+.coming-to { margin: 0; }
+.coming-to a { display: inline-flex; align-items: center; min-height: var(--tap); }
 
 /* ---------- The executive branch: orders, nominations, a bill's final action ---------- */
 

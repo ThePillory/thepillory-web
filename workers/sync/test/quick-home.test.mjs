@@ -1,13 +1,13 @@
 // node --test test/quick-home.test.mjs
-// Quick mode on the home page and every state page (functions/_lib/quick-home.js):
-// "This week in [State]" picks its sentences by one fixed rule (final actions
-// first, then newest), "Who represents you" has one row per office, and the page
-// keeps only the headline, those two cards, the ballot card, Find your reps and
-// three links; everything else stays for Detailed.
+// "Your representatives" and "This week" on the home page and every state page
+// (functions/_lib/quick-home.js): This week picks its sentences by one fixed rule
+// (final actions first, then newest), Your representatives has each person once,
+// and Quick keeps only the headline, the ballot card, those two cards, Elections
+// and three links; everything else stays for Detailed.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
-import { thisWeek, senatorsLine, quickHome, quickLinks, THIS_WEEK_MAX } from "../../../functions/_lib/quick-home.js";
+import { thisWeek, senatorsLine, yourReps, weekFeed, quickLinks, THIS_WEEK_MAX } from "../../../functions/_lib/quick-home.js";
 
 const ROOT = new URL("../../../", import.meta.url);
 
@@ -55,18 +55,29 @@ test("a bill's checked plain line replaces its title; a bill appears once, as it
   assert.equal(items[1].href, "/laws/bills/tx-1/#votes");
 });
 
-test("Who represents you: one row each with the job in plain words; the House member only once known", () => {
-  const o = (slug, name) => ({ slug, name });
-  const html = quickHome({ st: "TX", stateName: "Texas", items: [], president: o("p", "P"), senators: [o("s1", "S1"), o("s2", "S2")], governor: o("g", "G"), house: null, districtsKnown: false });
-  assert.match(html, /This week in Texas/);
-  assert.match(html, /No new votes, laws or decisions recorded/);
+test("Your representatives: one row each with the job in plain words; the House member and state legislators once known", () => {
+  const o = (slug, name, extra = {}) => ({ slug, name, ...extra });
+  const html = yourReps({ president: o("p", "P"), senators: [o("s1", "S1"), o("s2", "S2")], governor: o("g", "G"), lookup: '<div id="find">ZIP</div>' });
   for (const [slug, job] of [["p", "Leads the federal government"], ["s1", "Writes federal laws for the whole state"], ["s2", "Writes federal laws for the whole state"], ["g", "Runs the state government"]]) {
     assert.match(html, new RegExp(`href="/reps/${slug}/"[\\s\\S]*?${job}`));
   }
-  assert.match(html, /to add your House member/);
-  const known = quickHome({ st: "TX", stateName: "Texas", items: [], president: null, senators: [], governor: null, house: o("h", "H"), districtsKnown: true });
+  assert.equal((html.match(/href="\/reps\/p\/"/g) || []).length, 1, "each person once");
+  assert.match(html, /id="find">ZIP/);
+  const known = yourReps({ president: null, senators: [], governor: null, mine: [o("h", "H", { chamber: "us-house" }), o("l", "L", { chamber: "tx-lower", office: "State Representative" })] });
   assert.match(known, /href="\/reps\/h\/"[\s\S]*?Writes federal laws for your district/);
-  assert.doesNotMatch(known, /to add your House member/);
+  assert.match(known, /href="\/reps\/l\/"[\s\S]*?Writes state laws for your district · State Representative/);
+  assert.doesNotMatch(known, /id="find"/);
+});
+
+test("This week: a Congress / [State] switch, the items, See all", () => {
+  const items = [{ date: "2026-10-01", href: "/laws/bills/a/", text: "The Senate passed A." }];
+  const html = weekFeed({ items, tabs: [{ label: "Congress", href: "/", current: true }, { label: "Texas", href: "/?now=state:TX", current: false }], seeAll: "/votes/?level=federal" });
+  assert.match(html, /<h2 class="label" id="h-this-week">This week<\/h2><a class="section-link" href="\/votes\/\?level=federal">See all<\/a>/);
+  assert.match(html, /href="\/#this-week" aria-current="true">Congress<\/a><a class="toggle" href="\/\?now=state:TX#this-week">Texas<\/a>/);
+  assert.match(html, /The Senate passed A\./);
+  const empty = weekFeed({ items: [], tabs: [{ label: "Congress", href: "/", current: true }], seeAll: "/votes/" });
+  assert.doesNotMatch(empty, /segmented/, "one tab: no switch");
+  assert.match(empty, /No new votes, laws or decisions recorded/);
   assert.match(quickLinks(), /class="card stack-sm /, "stacked");
   assert.deepEqual([...quickLinks().matchAll(/class="list-title">([^<]+)/g)].map((m) => m[1]), ["Explore the map", "Topics", "How government works"]);
 });
@@ -87,18 +98,22 @@ async function get(fn, path, cf = null) {
   return res.text();
 }
 
-test("Quick keeps the headline, This week, Who represents you, the ballot card, Find your reps and three links, in that order", async () => {
+test("Quick keeps the headline, the ballot card, Your representatives, This week, Elections and three links, in that order", async () => {
   for (const [fn, path, cf] of [[home, "/", { country: "US", regionCode: "TX" }], [states, "/states/california/"], [states, "/states/texas/"]]) {
     const html = await get(fn, path, cf);
     const main = html.slice(html.indexOf('<div class="simple-scope">'), html.indexOf("</main>"));
     assert.ok(main.length > 0, `${path}: the page is a .simple-scope`);
     const at = (s) => main.indexOf(s);
-    const order = ['class="hub-head stack-sm simple-keep"', 'id="h-quick-week"', 'id="h-quick-who"', 'id="find"', 'quick-links"'].map(at);
+    const order = ['class="hub-head stack-sm simple-keep"', 'id="your-reps"', 'id="this-week"', 'id="elections"', 'quick-links"'].map(at);
     assert.ok(order.every((n, i) => n >= 0 && (i === 0 || n > order[i - 1])), `${path}: order ${order}`);
     const hero = at("ballot-hero");
-    if (hero >= 0) assert.ok(hero > order[2] && hero < order[3], `${path}: the ballot card before Find your reps`);
+    if (hero >= 0) assert.ok(hero > order[0] && hero < order[1], `${path}: the ballot card before Your representatives`);
+    for (const id of ["your-reps", "this-week", "elections"]) {
+      const i = at(`id="${id}"`);
+      assert.match(main.slice(main.lastIndexOf("<", i), i), /simple-keep/, `${path}: ${id} stays in Quick`);
+    }
     // Everything else is a direct child of .simple-scope without .simple-keep, so Quick hides it.
-    for (const id of ["us-map", "nation", "happening", "take-part", "communities", "understand"]) {
+    for (const id of ["us-map", "nation", "topics"]) {
       const i = at(`id="${id}"`);
       if (i < 0) continue;
       const open = main.lastIndexOf("<", i);

@@ -52,13 +52,17 @@ const STATE_BY_FIPS = {
 const LOWER = { CA: "Assembly", NV: "Assembly", NY: "Assembly", WI: "Assembly", NJ: "General Assembly", MD: "House of Delegates", VA: "House of Delegates", WV: "House of Delegates" };
 const chambers = (st) => (st === "NE" ? { sldu: "Legislature" } : st === "DC" ? {} : { sldu: "State Senate", sldl: LOWER[st] || "State House" });
 
-/** "05" → "5"; at-large ("00") and delegate ("98") → "0"; letters kept (lowercased); "ZZZ" (no district) → null. */
-export function districtId(code) {
+/**
+ * "05" → "5"; at-large ("00") → "0"; letters kept (lowercased); "ZZZ" (no district) → null.
+ * For Congress only, the delegate code ("98") → "0" too: a state legislature's district 98
+ * is district 98 (27 states' lower houses have one; it was once shown as "0").
+ */
+export function districtId(code, layer = "cd") {
   const c = String(code || "").trim();
   if (!c || /^Z+$/i.test(c)) return null;
   if (/^\d+$/.test(c)) {
     const n = parseInt(c, 10);
-    return n === 0 || n === 98 ? "0" : String(n);
+    return n === 0 || (n === 98 && layer === "cd") ? "0" : String(n);
   }
   return c.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
@@ -101,11 +105,11 @@ function readBef(dir) {
 }
 
 /** {district: {county: blocks}} and {county: blocks} for one layer. */
-function overlaps(bef) {
+function overlaps(bef, layer) {
   const byCounty = new Map();
   const pairs = new Map();
   for (const [block, code] of bef) {
-    const id = districtId(code);
+    const id = districtId(code, layer);
     if (!id) continue;
     const st = STATE_BY_FIPS[block.slice(0, 2)];
     if (!st) continue;
@@ -169,7 +173,7 @@ async function main() {
   const sldls = (await readShp("cb_2024_us_sldl_500k")).filter((f) => STATE_BY_FIPS[f.properties.STATEFP]);
   console.log(`shapes: ${states.length} states, ${counties.length} counties, ${cds.length} cd, ${sldus.length} sldu, ${sldls.length} sldl`);
 
-  const ov = { cd: overlaps(readBef(path.join(work, "cd119"))), sldu: overlaps(readBef(path.join(work, "sldu24"))), sldl: overlaps(readBef(path.join(work, "sldl24"))) };
+  const ov = { cd: overlaps(readBef(path.join(work, "cd119")), "cd"), sldu: overlaps(readBef(path.join(work, "sldu24")), "sldu"), sldl: overlaps(readBef(path.join(work, "sldl24")), "sldl") };
 
   // 1. The U.S. map (Albers USA, 975 × 610, as the us-atlas package draws it).
   const us = geoAlbersUsa().scale(1300).translate([487.5, 305]);
@@ -198,8 +202,8 @@ async function main() {
     const ch = chambers(st);
     const layers = { county: countyFeatures, cd: [], sldu: [], sldl: [] };
     layers.cd = cds.filter((f) => f.properties.STATEFP === fips).map((f) => ({ ...f, properties: { id: districtId(f.properties.CD119FP) } })).filter((f) => f.properties.id);
-    if (ch.sldu) layers.sldu = sldus.filter((f) => f.properties.STATEFP === fips).map((f) => ({ ...f, properties: { id: districtId(f.properties.SLDUST) } })).filter((f) => f.properties.id);
-    if (ch.sldl) layers.sldl = sldls.filter((f) => f.properties.STATEFP === fips).map((f) => ({ ...f, properties: { id: districtId(f.properties.SLDLST) } })).filter((f) => f.properties.id);
+    if (ch.sldu) layers.sldu = sldus.filter((f) => f.properties.STATEFP === fips).map((f) => ({ ...f, properties: { id: districtId(f.properties.SLDUST, "sldu") } })).filter((f) => f.properties.id);
+    if (ch.sldl) layers.sldl = sldls.filter((f) => f.properties.STATEFP === fips).map((f) => ({ ...f, properties: { id: districtId(f.properties.SLDLST, "sldl") } })).filter((f) => f.properties.id);
 
     // Which districts cover which counties (from blocks).
     const place = { st, name: names[st], chambers: ch, layers: [], counties: [], districts: {} };

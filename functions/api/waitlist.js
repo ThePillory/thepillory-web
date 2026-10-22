@@ -1,11 +1,11 @@
-// POST /api/waitlist   "Bring ThePillory to your county" (the hub's Communities section)
+// POST /api/waitlist   "Bring ThePillory to your county" (the form on /waitlist/)
 //   form fields: state, county (5-digit FIPS), email, cf-turnstile-response
 //
 // Stores the county and email in D1 (table waitlist). The email is used only
-// to announce that county's launch; it's never shown, and the hub shows only
+// to announce that county's launch; it's never shown, and /waitlist/ shows only
 // the totals. Protected like the other public forms: Turnstile, and at most
 // SIGNUPS_PER_VISITOR a day per visitor (a daily-rotating hash, never the
-// address; table waitlist_attempts). Answers with a redirect back to the hub,
+// address; table waitlist_attempts). Answers with a redirect back to /waitlist/,
 // or to the county page (/place/…) the form was on.
 import { verifyTurnstile, turnstileReady, visitorHash } from "../_lib/turnstile.js";
 
@@ -25,11 +25,11 @@ export async function onRequestPost({ request, env }) {
   const origin = request.headers.get("Origin");
   if (origin && origin !== url.origin) return new Response("Refused", { status: 403 });
   const form = await request.formData();
-  // A county page (/place/…) sends people back to itself; anything else goes to the hub.
+  // A county page (/place/…) sends people back to itself; anything else goes to /waitlist/.
   const from = String(form.get("back") || "");
   const back = /^\/place\/[a-z]{2}\/[a-z0-9-]+\/$/.test(from)
     ? (q) => Response.redirect(`${url.origin}${from}?waitlist=${q}#waitlist`, 303)
-    : (q) => Response.redirect(`${url.origin}/?waitlist=${q}#communities`, 303);
+    : (q) => Response.redirect(`${url.origin}/waitlist/?waitlist=${q}#join`, 303);
   if (!env.DB || !turnstileReady(env)) return back("closed");
 
   const state = String(form.get("state") || "").toUpperCase();
@@ -60,5 +60,5 @@ export async function onRequestPost({ request, env }) {
 }
 
 export function onRequestGet({ request }) {
-  return Response.redirect(`${new URL(request.url).origin}/#communities`, 302);
+  return Response.redirect(`${new URL(request.url).origin}/waitlist/`, 302);
 }

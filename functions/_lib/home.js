@@ -1,169 +1,53 @@
 // Home, the hub (thepillory.co itself), and the one template for every state's
 // page: functions/index.js renders it for the visitor's state, and
 // functions/states/ for /states/<name>/. The same sections in the same order
-// for every state; a section without data says "Coming soon for [State]".
+// for every state, about three phone screens, each fact once:
+//   1. the headline, and "Showing [State] · Change" (the picker opens on tap)
+//   2. the U.S. map (tap a state; no zooming or dragging, so scrolling always
+//      works), and one link, "Counties and districts ›", to the state's map page
+//      (/states/<name>/map/: every county and district list, functions/_lib/state-map.js)
+//   3. the ballot card, from WINDOW_DAYS before the state's next election
+//   4. Your representatives: the President, the two U.S. Senators and the
+//      Governor; then the House member and state legislators once districts are
+//      known, or the address/ZIP box (functions/_lib/quick-home.js)
+//   5. This week: one feed with a Congress / [State] switch, five items, See all
+//   6. The nation: President & Cabinet, Congress, Supreme Court, one row each
+//   7. Topics: one row of chips
+//   8. Elections: one line
+// then one line for whatever isn't loaded for the state yet ("Coming to [State]:
+// … Join the list ›", functions/_lib/state-lead.js). Take part, Communities,
+// Understand and the waitlist form live on the You tab and /waitlist/.
 //
-// For every visitor. First-time
-// visitors get a short intro they can dismiss (remembered in the browser).
-// A visitor whose districts are known (the pillory_districts cookie, set by the
-// lookup) also gets a link to their briefing at /briefing/. The old ?hub=1 flag
-// redirects here; /home/ redirects here.
-//
-// The hub, top to bottom:
-//   headline; a U.S. map (tap a state for its /states/<name>/ page; no zooming or
-//   dragging here, so scrolling always works), the small-state buttons, live and
-//   waiting counts, and Explore the full map; Find your representatives (address
-//   or ZIP; nothing stored); Who represents you (the President, Vice President
-//   and Cabinet; California's Governor and statewide offices);
-//   Elections (the next election; Your ballot once districts are known; How to vote);
-//   Happening now (Congress / California: latest final-passage votes, ?now=state);
-//   Topics (every topic, for the visitor's county when known);
-//   Take part (Calaveras comment deadlines, contacting your reps);
-//   Communities (Calaveras, live; the county waitlist with real counts);
-//   Understand (explainers).
-//
-// A visitor in a US state (one they picked, their saved districts' state, or
-// Cloudflare's approximate state for the connection, never stored) gets
-// "Showing [State] · Change" at the top, their state marked "You're here" on
-// the map, and "Your state" leading the page (functions/_lib/state-lead.js);
-// the national sections follow. Outside the US, or when the region is unknown:
-// the national hub. Kept at the edge once per state; browsers don't keep it.
-import { icon } from "./icons.js";
-import { page, esc, fmtDate, linkRow, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "./render.js";
-import { listMeetings, pacificNow, addDays, deadlineParts, meetingHref, when } from "./meetings.js";
-import { districtsFromCookie, describe, STATE_NAME } from "./districts.js";
-import { happeningNow, happeningSection, lookupForm, waitlistCounts } from "./hub.js";
-import { topicGrid, placeTopicsHref } from "./topics.js";
-import { ballotWindow, todayIn, onlyIfNeeded, previewLabel, RESULT_HEADING, electionLabel } from "./election-window.js";
-import { quickHomeData, thisWeek, quickHome, quickLinks, THIS_WEEK_DAYS } from "./quick-home.js";
-import { racesHref, YEAR } from "./candidates.js";
-import { loadElection, ballotFor, ballotHref, electionHref, whenLine, daysUntil, contestRow, courtRow, statewideRow, electionIdFor, measuresOnly, ELECTION_BY_STATE } from "./elections.js";
+// First-time visitors get a short intro they can dismiss (remembered in the
+// browser). A visitor in a US state (one they picked, their saved districts'
+// state, or Cloudflare's approximate state for the connection, never stored)
+// gets their state marked "You're here" on the map. Outside the US, or when the
+// region is unknown: the national hub. Kept at the edge once per state;
+// browsers don't keep it. The old ?hub=1 flag and /home/ redirect here.
+import { page, esc, linkRow, loadSection, FAILED, anyFailed, sectionError } from "./render.js";
+import { pacificNow, addDays } from "./meetings.js";
+import { describe, STATE_NAME } from "./districts.js";
+import { lookupForm } from "./hub.js";
+import { TOPICS, topicHref, placeTopicsHref } from "./topics.js";
+import { ballotWindow, todayIn, onlyIfNeeded, previewLabel } from "./election-window.js";
+import { quickHomeData, thisWeek, yourReps, weekFeed, quickLinks, THIS_WEEK_DAYS } from "./quick-home.js";
+import { loadElection, ballotFor, ballotHref, electionHref, whenLine, electionIdFor, measuresOnly, ELECTION_BY_STATE } from "./elections.js";
 import { LIVE, asset, loadIndex, loadPlace, waitlistBy, usMapLinks, smallStateButtons, mapFigure } from "./geo.js";
 import { ASSET_VERSION } from "./generated.js";
-import { executiveOfficials, executiveRows } from "./executive.js";
-import { turnstileReady, turnstileWidget } from "./turnstile.js";
-import { visitorState } from "./visitor-state.js";
-import { stateLead, stateLeadData } from "./state-lead.js";
-import { stateMapData, stateMapSection } from "./state-map.js";
+import { executiveOfficials } from "./executive.js";
+import { stateOptions } from "./waitlist.js";
+import { stateLeadData, governorOf, liveCounties, comingTo } from "./state-lead.js";
 import { statePath } from "./state-paths.js";
-import { courtCard, loadJustices } from "./scotus.js";
 import { votesLoaded } from "./coverage.js";
-
-
-const WAITLIST_MESSAGES = {
-  joined: "Thank you. We'll email you only when ThePillory launches in your county.",
-  turnstile: "The anti-spam check didn't go through. Please try again.",
-  limit: "That's enough sign-ups from this connection for today. Please try again tomorrow.",
-  invalid: "Choose a state and county, and enter an email address.",
-  closed: "The list isn't open yet.",
-};
-
-function takePart(deadlines, loaded, vs = null) {
-  // County comment deadlines are Calaveras's for now (the live community, in California).
-  if (vs && vs.st !== "CA") return takePartSoon(vs);
-  const rows = deadlines.length
-    ? deadlines
-        .map(({ m, d }) => {
-          const w = when(m.starts_at);
-          return `
-<a class="list-row link-row" href="${meetingHref(m.id)}#weigh-in">
-  <div><div class="list-title">Written comments by ${esc(d.label)}</div><div class="list-meta">${esc(m.body)} · meets ${esc([w.day, w.time].filter(Boolean).join(", "))}</div></div>
-  <span class="row-end"><span class="chev" aria-hidden="true">›</span></span>
-</a>`;
-        })
-        .join("")
-    : `<p class="small secondary">${
-        loaded ? "No written-comment deadlines posted for the next 30 days. Public comment is also taken at each meeting." : "Comment deadlines appear here once the data sync has run."
-      }</p>`;
-  // TODO: federal agency comment periods (Regulations.gov). Not built yet.
-  return `
-<section class="brief-section" id="take-part" aria-labelledby="h-take-part">
-  <div class="section-head"><h2 class="label" id="h-take-part">Take part</h2><a class="section-link" href="/meetings/?level=county">County meetings</a></div>
-  <div class="card stack-sm">
-    <p class="label">Calaveras County comment deadlines</p>
-    <div>${rows}</div>
-  </div>
-  <div class="card">
-    <a class="list-row link-row" href="/reps/">
-      <div><div class="list-title">Contact your representatives</div><div class="list-meta">Each rep's page links to their official website and office.</div></div>
-      <span class="row-end"><span class="chev" aria-hidden="true">›</span></span>
-    </a>
-  </div>
-</section>`;
-}
-
-function takePartSoon(vs) {
-  return `
-<section class="brief-section" id="take-part" aria-labelledby="h-take-part">
-  <div class="section-head"><h2 class="label" id="h-take-part">Take part</h2></div>
-  <div class="card stack-sm">
-    <p class="label">County comment deadlines</p>
-    <p class="small secondary">Coming soon for ${esc(vs.name)}. <a class="inline-link" href="#communities">Join the list</a> for your county and we'll email you when it opens.</p>
-  </div>
-  <div class="card">${linkRow("/reps/", "Contact your representatives", "Each rep's page links to their official website and office.")}</div>
-</section>`;
-}
-
-function stateOptions(selected) {
-  return Object.entries(STATE_NAME)
-    .sort((a, b) => a[1].localeCompare(b[1]))
-    .map(([code, name]) => `<option value="${code}"${code === selected ? " selected" : ""}>${esc(name)}</option>`)
-    .join("");
-}
-
-function communities(env, counts, msg, error, st = "") {
-  const ready = turnstileReady(env);
-  const countLine = counts
-    ? counts.people
-      ? `<p class="small"><strong>${counts.people}</strong> ${counts.people === 1 ? "person is" : "people are"} waiting in <strong>${counts.counties}</strong> ${counts.counties === 1 ? "county" : "counties"}.</p>`
-      : '<p class="small secondary">No one is on the list yet.</p>'
-    : "";
-  const form = ready
-    ? `
-  <form class="stack-sm waitlist-form" method="post" action="/api/waitlist" data-county-picker>
-    <div class="field-row">
-      <label class="field"><span class="label">State</span>
-        <select class="input" name="state" required><option value="">Choose a state</option>${stateOptions(st)}</select>
-      </label>
-      <label class="field"><span class="label">County</span>
-        <select class="input" name="county" required><option value="">Choose a state first</option></select>
-      </label>
-    </div>
-    <label class="field"><span class="label">Email</span>
-      <input class="input" type="email" name="email" autocomplete="email" required maxlength="254" />
-    </label>
-    <p class="hint">Your email is used only to announce your county's launch. It's never shown or shared.</p>
-    ${turnstileWidget(env)}
-    <button class="btn btn--primary" type="submit">Join the list</button>
-    <noscript><p class="small secondary">Choosing a county needs JavaScript.</p></noscript>
-  </form>`
-    : '<p class="small secondary">The list isn\'t open yet.</p>';
-  return `
-<section class="brief-section" id="communities" aria-labelledby="h-communities">
-  <div class="section-head"><h2 class="label" id="h-communities">Communities</h2></div>
-  <a class="card community-card icon-row" href="/calaveras/">
-    <span class="icon-badge">${icon("community")}</span>
-    <div class="stack-xs">
-      <h3>Calaveras County, CA</h3>
-      <p class="small secondary">Meetings, agenda watch, comment deadlines, and every recorded vote by the officials who represent the county.</p>
-    </div>
-    <span class="live-tag">Live</span>
-  </a>
-  <div class="card stack-sm">
-    <h3>Bring ThePillory to your county</h3>
-    <p class="small">Communities open one county at a time. Tell us where you are, and we'll let you know when yours opens.</p>
-    ${msg ? `<p class="banner" role="status">${esc(msg)}</p>` : ""}
-    ${error ? `<p class="banner banner--error" role="alert">${esc(error)}</p>` : ""}
-    ${form}
-    ${countLine}
-  </div>
-</section>`;
-}
 
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 
 // The U.S. map at the top of the hub: real counts, taps only.
 function usMap(index, waiting, vs) {
+  // The state's counties and districts are on its own map page; live counties link straight to their briefing.
+  const stateLinks = vs
+    ? `<div class="card hub-map-links">${linkRow(`${statePath(vs.st)}map/`, "Counties and districts", `${vs.name}'s map, every county and district`)}${liveCounties(vs.st).map(([, c]) => linkRow(c.briefing, c.name, "Live: meetings, agendas and local officials")).join("")}</div>`
+    : "";
   if (!index) return '<p class="explore-link"><a class="btn btn--block" href="/explore/">Explore the map</a></p>';
   const { links, status } = usMapLinks(index, waiting);
   // The visitor's state, marked "You're here" (California stays a live community too).
@@ -182,6 +66,7 @@ function usMap(index, waiting, vs) {
     <p class="map-counts small">${vs ? `<span><span class="swatch is-here" aria-hidden="true"></span>You're here</span><span class="dot"> · </span>` : ""}<span><span class="swatch is-live" aria-hidden="true"></span>${plural(live, "live community", "live communities")}</span><span class="dot"> · </span><span><span class="swatch is-waiting" aria-hidden="true"></span>${plural(counties, "county", "counties")} waiting</span></p>
     <a class="inline-link" href="/explore/">Explore the full map</a>
   </div>
+  ${stateLinks}
 </section>`;
 }
 
@@ -203,102 +88,12 @@ function showingBar(vs) {
 </details>`;
 }
 
-// The nation: the same section in the same spot on every state's page. The
-// President, Vice President and Cabinet; Congress; the Supreme Court (coming soon).
-function nationalSection(federal, vs, justices) {
-  return `
-<section class="brief-section" id="nation" aria-labelledby="h-nation">
-  <div class="section-head"><h2 class="label" id="h-nation">The nation</h2><a class="section-link" href="/reps/">All reps</a></div>
-  <div class="card stack-xs">
-    <p class="label">The President and the Cabinet</p>
-    ${federal === FAILED ? sectionError("The executive branch") : federal.length ? executiveRows(federal) : '<p class="small secondary">Appears after the data sync runs.</p>'}
-  </div>
-  <div class="card stack-xs">
-    <p class="label">Congress</p>
-    ${vs
-      ? `${linkRow(`/bodies/us-senate/?state=${vs.st}`, "U.S. Senate", `${vs.name}'s senators first, then every state`)}${linkRow(`/bodies/us-house/?state=${vs.st}`, "U.S. House", `${vs.name}'s representatives first, then every state`)}`
-      : `${linkRow("/bodies/us-senate/", "U.S. Senate", "100 senators, two from each state, and their votes")}${linkRow("/bodies/us-house/", "U.S. House", "435 representatives and their votes")}`}
-  </div>
-  ${justices === FAILED ? sectionError("The Supreme Court") : courtCard(justices)}
-</section>`;
-}
-
-// The ballot preview ("Preview [State]'s ballot"): a card just below the map from WINDOW_DAYS
-// before the state's next election through Election Day (functions/_lib/election-window.js),
-// a regular link the rest of the year.
-const ballotLink = (st) =>
-  linkRow(st ? `/ballot/${st.toLowerCase()}/` : "/ballot/", previewLabel(st, STATE_NAME[st]), "Your federal races, then your whole ballot and where to vote");
-
-// Every candidate in the state's 2026 races, the same page each (functions/_lib/candidates.js).
-const racesLink = (st) => (st ? linkRow(racesHref(YEAR, st), `Candidates in ${STATE_NAME[st]}`, "Every race, the same page for every candidate") : "");
-
 // One line with the date and countdown, and a standard-size button: no more.
 function ballotHero(vs, win) {
   return `
 <section class="card ballot-hero simple-keep" aria-label="${esc(previewLabel(vs.st, vs.name))}">
   <p class="ballot-hero-when">${esc(win.line)}${onlyIfNeeded(win.election) ? '<span class="secondary"> (if needed)</span>' : ""}</p>
   <a class="btn btn--primary" href="/ballot/${vs.st.toLowerCase()}/">${esc(previewLabel(vs.st, vs.name))}</a>
-</section>`;
-}
-
-// Elections: the next election, and "Your ballot" once the visitor's districts are known.
-async function electionsData(env, request, d, st) {
-  // The visitor's state's election when ThePillory has one; otherwise California's.
-  const election = await loadElection(env, request, electionIdFor(st));
-  if (!election || !d || d.st !== election.election.state || measuresOnly(election)) return { election, ballot: null };
-  const place = d.co ? await loadPlace(env, request, d.st.toLowerCase()) : null;
-  const county = place && place.counties.find((c) => c.fips === d.co);
-  return { election, ballot: ballotFor(election, d, county ? county.name : null), county };
-}
-
-function electionsSection({ election, ballot, county }, d, st = null) {
-  // A state ThePillory has no ballot pages for yet: its federal races and the ballot for an address.
-  if (st === "PR") return "";
-  if (st && !ELECTION_BY_STATE[st]) return `
-<section class="brief-section" id="elections" aria-labelledby="h-elections">
-  <div class="section-head"><h2 class="label" id="h-elections">Elections</h2><a class="section-link" href="/elections/">All elections</a></div>
-  <div class="card stack-xs">
-    <p class="label">${esc(STATE_NAME[st])}</p>
-    <h3>General election, November 3, 2026</h3>
-    <p class="small secondary">Your federal races, then every contest and measure for your address, with where to vote.</p>
-  </div>
-  <div class="card">${ballotLink(st)}${racesLink(st)}</div>
-</section>`;
-  if (!election) return "";
-  const id = election.election.id;
-  const today = pacificNow().slice(0, 10);
-  let yours;
-  if (ballot) {
-    const district = ballot.contests.filter((c) => c.scope !== "statewide");
-    const local = ballot.partial.length + ballot.partialMeasures.length;
-    yours = `
-  <div class="card stack-xs">
-    <p class="label">Your ballot</p>
-    ${district.map((c) => contestRow(id, c)).join("")}${ballot.courts.map((g) => courtRow(id, g)).join("")}${statewideRow(election)}
-    ${local ? `<a class="list-row link-row" href="${ballotHref(id)}#h-yl"><div><div class="list-title">Local contests and measures</div><div class="list-meta">${local} on some ballots in ${esc(county ? county.name : "your county")}</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>` : ""}
-    ${linkRow(ballotHref(id), RESULT_HEADING, "Every contest for your districts")}
-  </div>`;
-  } else if (measuresOnly(election)) {
-    yours = `<p class="small secondary">The statewide measures, on every ballot in ${esc(STATE_NAME[election.election.state])}.</p>
-  <div class="card">${ballotLink(election.election.state)}</div>`;
-  } else {
-    // Every state: the federal races, then the whole ballot for an address (/ballot/<st>/).
-    yours = `<div class="card">${ballotLink(st)}</div>`;
-  }
-  return `
-<section class="brief-section" id="elections" aria-labelledby="h-elections">
-  <div class="section-head"><h2 class="label" id="h-elections">Elections</h2><a class="section-link" href="/elections/">All elections</a></div>
-  <a class="card stack-xs" href="${electionHref(id)}">
-    <p class="label">${esc(STATE_NAME[election.election.state])}</p>
-    <h3>${esc(election.election.name)}</h3>
-    <p class="small secondary">${esc(whenLine(election, today))}</p>
-    <span class="inline-link">What's on the ballot</span>
-  </a>
-  ${yours}
-  <div class="card">
-    <a class="list-row link-row" href="${electionHref(id)}#how-to-vote"><div><div class="list-title">How to vote</div><div class="list-meta">Registration, deadlines and where to vote, on the official sites</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>
-    ${racesLink(st || election.election.state)}
-  </div>
 </section>`;
 }
 
@@ -317,30 +112,56 @@ async function topicPlace(env, request, d) {
   return c ? { st: place.st, slug: c.slug, name: c.name } : null;
 }
 
-function topicsSection(place) {
+// Elections, one line: the state's election page where ThePillory has its
+// ballot ("Your ballot" once districts are known), else its ballot preview.
+// While the ballot card shows, the line doesn't repeat its date or its link.
+async function electionsData(env, request, d, st) {
+  const election = await loadElection(env, request, electionIdFor(st));
+  if (!election || !d || d.st !== election.election.state || measuresOnly(election)) return { election, ballot: null };
+  const place = d.co ? await loadPlace(env, request, d.st.toLowerCase()) : null;
+  const county = place && place.counties.find((c) => c.fips === d.co);
+  return { election, ballot: ballotFor(election, d, county ? county.name : null) };
+}
+
+function electionsLine({ election, ballot }, st, today, hero) {
+  if (st === "PR") return "";
+  const when = hero || !election ? "" : whenLine(election, today);
+  const row = election && (!st || ELECTION_BY_STATE[st])
+    ? ballot
+      ? linkRow(ballotHref(election.election.id), `Your ballot · ${election.election.name}`, when || "Every contest for your districts")
+      : linkRow(electionHref(election.election.id), election.election.name, [when, "What's on the ballot, how to vote"].filter(Boolean).join(" · "))
+    : st && !hero
+      ? linkRow(`/ballot/${st.toLowerCase()}/`, `${STATE_NAME[st]}: General election, November 3, 2026`, "Your federal races, then your whole ballot and where to vote")
+      : st
+        ? linkRow("/elections/", "All elections", "Every election ThePillory has a ballot for, and how to vote")
+        : "";
+  if (!row) return "";
   return `
-<section class="brief-section" id="topics" aria-labelledby="h-topics">
-  <div class="section-head"><h2 class="label" id="h-topics">Topics</h2><a class="section-link" href="${place ? placeTopicsHref(place) : "/topics/"}">All topics</a></div>
-  <p class="small secondary">${place ? `One subject at a time for ${esc(place.name)}: bills and how your representatives voted, county meetings, executive actions, officials' own words and campaign money, side by side.` : "One subject at a time: bills and votes, county meetings, executive actions, officials' own words and campaign money, side by side."}</p>
-  ${topicGrid(place)}
+<section class="stack-xs simple-keep" id="elections" aria-labelledby="h-elections">
+  <div class="section-head"><h2 class="label" id="h-elections">Elections</h2><a class="section-link" href="/elections/">All</a></div>
+  <div class="card">${row}</div>
 </section>`;
 }
 
-const UNDERSTAND = [
-  ["/laws/constitution/", "The Constitution", "The full text, and how every analysis starts from it."],
-  ["/about/how-a-bill-becomes-law/", "How a bill becomes law", "From introduction to signature, in Congress and in California."],
-  ["/about/how-to-read-a-vote/", "How to read a vote", "Final passage, cloture, motions and nominations."],
-  ["/about/how-it-works/", "How ThePillory works", "Evidence first, protected identities, no party labels."],
-  ["/finances/", "Public finances by term", "Debt, spending and deficits by President, and California's budget by Governor."],
-];
-
-function understand() {
+// The nation: one row each, the same on every state's page; the people are one tap further.
+function nationSection(vs) {
   return `
-<section class="brief-section" id="understand" aria-labelledby="h-understand">
-  <div class="section-head"><h2 class="label" id="h-understand">Understand</h2></div>
-  <div class="tile-grid">
-    ${UNDERSTAND.map(([href, title, sub]) => `<a class="card tile" href="${href}"><h3>${esc(title)}</h3><p class="small secondary">${esc(sub)}</p></a>`).join("")}
+<section class="stack-xs" id="nation" aria-labelledby="h-nation">
+  <h2 class="label" id="h-nation">The nation</h2>
+  <div class="card">
+    ${linkRow("/bodies/us-executive/", "President & Cabinet", "The President, the Vice President and the Cabinet")}
+    ${linkRow(vs ? `/reps/?state=${vs.st}` : "/reps/?browse=federal", "Congress", vs ? `The Senate and the House, ${vs.name}'s members first` : "The Senate and the House, every member")}
+    ${linkRow("/bodies/us-supreme-court/", "Supreme Court", "The justices, this term's cases and decisions")}
   </div>
+</section>`;
+}
+
+// Topics: one row of chips, for the visitor's county when it's known.
+function topicsRow(place) {
+  return `
+<section class="stack-xs" id="topics" aria-labelledby="h-topics">
+  <div class="section-head"><h2 class="label" id="h-topics">Topics</h2><a class="section-link" href="${place ? placeTopicsHref(place) : "/topics/"}">All</a></div>
+  <div class="chip-scroll">${TOPICS.map((t) => `<a class="chip chip--tap" href="${topicHref(t.slug, place)}">${esc(t.name)}</a>`).join("")}</div>
 </section>`;
 }
 
@@ -351,79 +172,73 @@ export async function hub(env, request, url, d, vs) {
   const mine = d && (!vs || d.st === vs.st) ? d : null;
   const elsewhere = d && !mine ? d : null;
   const lead = vs ? await stateLeadData(db, vs.st) : null;
-  // Happening now: Congress, or the state's legislature once its votes are loaded
+  const senators = lead && lead.senators !== FAILED ? lead.senators : [];
+  // This week's switch: Congress, or the state's legislature once its votes are loaded
   // (California for the national hub).
-  const leadCov = lead && lead.coverage !== FAILED ? lead.coverage : null;
-  const stateOption = !vs
-    ? { value: "state", name: "California" }
-    : votesLoaded(vs.st, leadCov)
-      ? { value: vs.st === "CA" ? "state" : `state:${vs.st}`, name: vs.name }
-      : null;
+  const feedSt = vs ? vs.st : "CA";
+  const feedName = vs ? vs.name : "California";
+  const stateOption = !vs || votesLoaded(vs.st, lead && lead.coverage !== FAILED ? lead.coverage : null)
+    ? { value: feedSt === "CA" ? "state" : `state:${feedSt}`, name: feedName }
+    : null;
   const which = stateOption && url.searchParams.get("now") === stateOption.value ? stateOption.value : "federal";
-  // Each section loads on its own: one that can't load shows a short note, and
-  // the rest of the hub still shows.
   const start = pacificNow();
-  const [index, now, deadlines, counts, waiting, federalExec, elections, tPlace, dates, mapData, justices, yourPlace] = await Promise.all([
+  const today = start.slice(0, 10);
+  const since = addDays(today, -THIS_WEEK_DAYS);
+  // Each section loads on its own: one that can't load shows a short note, and the rest still shows.
+  const [index, waiting, federalExec, elections, tPlace, dates, yourPlace, quick] = await Promise.all([
     loadIndex(env, request),
-    loadSection("hub happening now", db ? () => happeningNow(db, which, { limit: 4 }) : async () => [], []),
-    loadSection("hub deadlines", db ? async () =>
-      (await listMeetings(db, { from: start, to: `${addDays(start.slice(0, 10), 30)}T23:59`, level: "county", limit: 30 }))
-        .filter((m) => m.status !== "cancelled")
-        .map((m) => ({ m, d: deadlineParts(m) }))
-        .filter((x) => x.d && x.d.date >= start.slice(0, 10))
-        .slice(0, 4) : async () => [], []),
-    loadSection("hub waitlist counts", db ? () => waitlistCounts(db) : async () => null, null),
     loadSection("hub waitlist map", db ? () => waitlistBy(db) : async () => ({ county: {}, state: {} }), { county: {}, state: {} }),
     loadSection("hub executive", db ? () => executiveOfficials(db, "us-executive") : async () => [], []),
-    loadSection("hub elections", () => electionsData(env, request, mine, vs ? vs.st : d ? d.st : null), { election: null, ballot: null }),
+    loadSection("hub elections", () => electionsData(env, request, mine, vs ? vs.st : null), { election: null, ballot: null }),
     // Topics for the visitor's own county only on their own state's page.
-    loadSection("hub topic place", () => topicPlace(env, request, d && (!vs || d.st === vs.st) ? d : null), null),
+    loadSection("hub topic place", () => topicPlace(env, request, mine), null),
     loadSection("hub election dates", () => asset(env, request, "/data/elections/dates.json"), null),
-    vs ? loadSection("hub state map", () => stateMapData(env, request, vs.st, url.searchParams.get("layer")), null) : null,
-    loadSection("hub justices", () => loadJustices(env, request), null),
     elsewhere ? loadSection("hub your place", () => placeName(env, request, elsewhere), null) : null,
+    loadSection("hub this week", () => quickHomeData(env, request, { st: feedSt, since, districts: mine, senatorIds: senators.map((o) => o.id) }), null),
   ]);
-  // Links within the page (Happening now's switch) stay on this page: the state's own address, or /.
+  // Links within the page (This week's switch) stay on this page: the state's own address, or /.
   const here = vs && vs.source === "page" ? statePath(vs.st) : "/";
   // The state's next election (a special election too, in the visitor's own House district).
-  const win = vs && dates && dates !== FAILED ? ballotWindow(dates, vs.st, todayIn(vs.st), d && d.st === vs.st ? d.cd : null) : null;
+  const win = vs && dates && dates !== FAILED ? ballotWindow(dates, vs.st, todayIn(vs.st), mine ? mine.cd : null) : null;
   const hero = !!(win && win.open);
-  const joined = url.searchParams.get("waitlist");
-  const msg = joined === "joined" ? WAITLIST_MESSAGES.joined : "";
-  const error = joined && joined !== "joined" ? WAITLIST_MESSAGES[joined] || "" : "";
   const notFound = url.searchParams.get("lookup") === "notfound";
 
-  // Quick mode's version of this page (functions/_lib/quick-home.js): shown only in Quick.
-  const since = addDays(start.slice(0, 10), -THIS_WEEK_DAYS);
-  const senatorVotes = lead && lead.votes !== FAILED ? (lead.votes.rows || []).filter((v) => v.vote_date >= since) : [];
-  const quick = await loadSection("hub quick", () => quickHomeData(env, request, { st: vs ? vs.st : null, since, districts: mine, senatorVotes }), null);
-  const quickHtml = quick === FAILED || !quick ? "" : quickHome({
-    st: vs ? vs.st : null,
-    stateName: vs ? vs.name : null,
-    items: thisWeek({
-      stateName: vs ? vs.name : "",
-      votes: [...senatorVotes, ...quick.stateVotes],
-      outcomes: quick.outcomes,
-      decisions: quick.decisions,
-      orders: quick.orders,
-      plain: quick.plain,
-      // The ballot card, when it shows, already gives the date.
-      election: win && !hero && win.days <= 90 ? {
-        date: win.election.date,
-        href: `/ballot/${vs.st.toLowerCase()}/`,
-        text: `${electionLabel(win.election) === "Election Day" ? `Election Day in ${vs.name} is` : `${electionLabel(win.election)} in ${vs.name}:`} ${fmtDate(win.election.date)}${win.days > 0 ? `, ${win.days === 1 ? "tomorrow" : `in ${win.days} days`}` : ", today"}.${onlyIfNeeded(win.election) ? " (Held only if needed.)" : ""}`,
-      } : null,
-    }),
+  // 4. Your representatives: each person once.
+  const q = quick && quick !== FAILED ? quick : null;
+  const known = mine
+    ? `<p class="small">Showing: <strong>${esc(describe(mine))}</strong>. <button class="linkish" type="button" data-forget-districts>Forget this</button></p>
+  <div>${linkRow("/briefing/", "Your briefing", "Your reps' latest votes, and what's happening where you live")}</div>
+  <details class="lookup-change" id="find"><summary class="inline-link">Use a different address</summary>${lookupForm(null, { id: "find-change", heading: "Street address or ZIP code", bare: true })}</details>`
+    : "";
+  const repsHtml = yourReps({
     president: (federalExec === FAILED ? [] : federalExec).find((o) => o.rank === 1) || null,
-    senators: lead && lead.congress !== FAILED ? lead.congress.senators : [],
-    governor: lead && lead.executive !== FAILED ? (lead.executive.find((o) => /^governor$/i.test(o.office || "")) || lead.executive.find((o) => o.rank === 1) || null) : null,
-    house: quick.house,
-    districtsKnown: !!(mine && mine.cd),
+    senators,
+    governor: lead ? governorOf(lead.executive) : null,
+    mine: q ? q.mine : [],
+    known,
+    lookup: mine ? "" : lookupForm(null, { heading: vs ? "Add your ZIP or address for your House member and state legislators" : "Add your ZIP or address for your senators, House member and state legislators", bare: true }),
+    allHref: vs ? `/reps/?state=${vs.st}` : "/reps/",
   });
 
-  // Elections sits near the top until Election Day, then moves down to its usual place.
-  const electionsHtml = elections === FAILED ? sectionError("Elections") : electionsSection(elections, mine, vs ? vs.st : d ? d.st : null);
-  const electionsLate = elections === FAILED || !elections.election || daysUntil(elections.election, start.slice(0, 10)) == null;
+  // 5. This week: Congress, or the state.
+  const federal = which === "federal";
+  const items = !q ? [] : thisWeek({
+    stateName: feedName,
+    votes: federal ? q.congressVotes : q.stateVotes,
+    outcomes: q.outcomes.filter((o) => (o.level === "federal") === federal),
+    decisions: federal ? q.decisions : [],
+    orders: q.orders.filter((o) => !!o.federal === federal),
+    plain: q.plain,
+  });
+  const feed = quick === FAILED ? sectionError("This week") : weekFeed({
+    items,
+    tabs: stateOption ? [
+      { label: "Congress", href: here, current: federal },
+      { label: stateOption.name, href: `${here}?now=${stateOption.value}`, current: !federal },
+    ] : [],
+    seeAll: `/votes/?level=${which}`,
+  });
+
   const main = `<div class="simple-scope">
 <header class="hub-head stack-sm simple-keep">
   <h1 class="hub-title">Know what your government is doing. <span class="hub-title-soft">Then take part.</span></h1>
@@ -431,34 +246,26 @@ export async function hub(env, request, url, d, vs) {
 </header>
 ${vs ? showingBar(vs) : ""}
 ${usMap(index, waiting === FAILED ? { county: {}, state: {} } : waiting, vs)}
-${quickHtml}
 ${hero ? ballotHero(vs, win) : ""}
 ${notFound ? '<p class="banner banner--error" role="alert">We couldn\'t find districts for that. Check the address, or try your ZIP code.</p>' : ""}
-<div class="simple-keep">${lookupForm(mine)}</div>
-${vs ? stateLead(vs, lead, elections === FAILED ? FAILED : elections.election, { ballotLink: !hero }) : ""}
-${mine ? `<a class="card briefing-link" href="/briefing/"><span class="stack-xs"><span class="label">Your briefing</span><span class="small">${esc(describe(d))}</span></span><span class="chev" aria-hidden="true">›</span></a>` : ""}
-${electionsLate ? "" : electionsHtml}
+${repsHtml}
 <aside class="intro-banner" data-intro hidden aria-label="Welcome">
   <p><strong>New here?</strong> ThePillory keeps a public, sourced record of what your officials do: every recorded vote, the bills they vote on mapped to the Constitution, local meeting agendas, and the money around them. Facts and sources, no party labels.</p>
   <p><a class="inline-link" href="/about/how-it-works/">How it works</a> · <a class="inline-link" href="/about/principles/">Principles</a></p>
   <button class="intro-dismiss" type="button" data-intro-dismiss aria-label="Dismiss this introduction">×</button>
 </aside>
-${nationalSection(federalExec, vs, justices)}
-${vs ? (mapData === FAILED ? sectionError(`${vs.name} map`) : stateMapSection(mapData)) : ""}
-${electionsLate ? electionsHtml : ""}
-${now === FAILED ? sectionError("Happening now") : happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? here : `${here}?now=${v}`), loaded: !!db, state: stateOption })}
-${vs && !stateOption ? `<p class="small secondary">${esc(vs.name)}'s legislature: coming soon for ${esc(vs.name)}.</p>` : ""}
-${topicsSection(tPlace === FAILED ? null : tPlace)}
-${deadlines === FAILED ? sectionError("Take part") : takePart(deadlines, !!db, vs)}
-${communities(env, counts === FAILED ? null : counts, msg, error, vs ? vs.st : "")}
-${understand()}
+${feed}
+${nationSection(vs)}
+${topicsRow(tPlace === FAILED ? null : tPlace)}
+${elections === FAILED ? sectionError("Elections") : electionsLine(elections, vs ? vs.st : null, today, hero)}
+${vs && lead ? comingTo(vs, lead) : ""}
 ${elsewhere ? `<p class="small secondary your-place">Your place: ${esc(typeof yourPlace === "string" ? yourPlace : STATE_NAME[elsewhere.st])} · <a class="inline-link" href="/briefing/">Your briefing</a></p>` : ""}
 ${quickLinks()}
 </div>
 ${index ? `<script src="/assets/map.js?v=${ASSET_VERSION}" defer></script>` : ""}`;
   // Personal only once the visitor's districts are known; otherwise the same for everyone.
   const title = vs && vs.source === "page" ? vs.name : "Know what your government is doing";
-  return page(title, main, { tab: "home", root: true, personal: !!d, partial: anyFailed(now, deadlines, counts, waiting, federalExec, elections, mapData) });
+  return page(title, main, { tab: "home", root: true, personal: !!d, partial: anyFailed(waiting, federalExec, elections, quick) });
 }
 
 // The hub for a visitor without saved districts is the same for everyone: kept

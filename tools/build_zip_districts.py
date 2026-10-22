@@ -137,17 +137,17 @@ def legislative_district(block, code, names):
     name = names.get((block[:2], code))
     if name:
         return str(int(name)) if name.isdigit() else name
-    return district_number(code)
+    return district_number(code, congress=False)
 
 
-def geo_id(code):
-    """The map data's id for a district code: districtId() in tools/build_geo.mjs."""
+def geo_id(code, layer="cd"):
+    """The map data's id for a district code: districtId() in tools/build_geo.mjs (98 -> 0 for Congress only)."""
     c = (code or "").strip()
     if not c or set(c.upper()) == {"Z"}:
         return None
     if c.isdigit():
         n = int(c)
-        return "0" if n in (0, 98) else str(n)
+        return "0" if n == 0 or (n == 98 and layer == "cd") else str(n)
     return re.sub(r"^-|-$", "", re.sub(r"[^a-z0-9]+", "-", c.lower()))
 
 
@@ -156,7 +156,7 @@ def write_district_names(su_names, sl_names):
     out = defaultdict(lambda: {"sldu": {}, "sldl": {}})
     for layer, names in (("sldu", su_names), ("sldl", sl_names)):
         for (fips, code), name in names.items():
-            st, gid = STATE_BY_FIPS.get(fips), geo_id(code)
+            st, gid = STATE_BY_FIPS.get(fips), geo_id(code, layer)
             if st and gid and name and name != gid and not (name.isdigit() and str(int(name)) == gid):
                 out[st][layer][gid] = name
     folder = ROOT / "data" / "states" / "district-names"
@@ -170,12 +170,13 @@ def write_district_names(su_names, sl_names):
     print(f"district names: {', '.join(sorted(out))}", flush=True)
 
 
-def district_number(code):
-    """'05' -> '5'; at-large ('00') and delegate ('98') -> '0'. Non-numeric codes -> ''."""
+def district_number(code, congress=True):
+    """'05' -> '5'; at-large ('00') -> '0'; for Congress, the delegate ('98') -> '0' too
+    (a state legislature's district 98 stays 98). Non-numeric codes -> ''."""
     if not code.isdigit():
         return ""
     n = int(code)
-    return "0" if n in (0, 98) else str(n)
+    return "0" if n == 0 or (n == 98 and congress) else str(n)
 
 
 def main():

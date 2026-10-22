@@ -27,6 +27,10 @@ async function districtPage({ request, env, params }) {
   const place = await loadPlace(env, request, m[1]);
   const id = m[2];
   const counties = place && place.districts && place.districts[layer] && place.districts[layer][id];
+  // A state legislature's district 98 was once listed as "0" (Congress's delegate code): send old links on.
+  if (!counties && layer !== "cd" && id === "0" && place && place.districts && place.districts[layer] && place.districts[layer]["98"]) {
+    return Response.redirect(`${url.origin}/district/${type}/${m[1]}-98/`, 301);
+  }
   if (!counties) return notFound("No district at this address.", "home", ["Explore", "/explore/"]);
   // One canonical type per chamber (e.g. California's lower chamber is "assembly").
   const canonical = typeOf(layer, place.chambers);
