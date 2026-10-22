@@ -1,0 +1,66 @@
+# A pilot of Cloudflare's Clairic extraction model (@cf/cloudflare/clairic,
+# Workers AI, preview) on documents ThePillory has already read and checked:
+# tools/clairic_pilot.py. It only reads D1 and writes nothing there; the
+# results are in the run's summary and the clairic-pilot artifact. Nothing on
+# the site changes. By hand only (Actions -> Clairic pilot -> Run workflow).
+#
+# Clairic costs $0.10 per million input tokens (a whole run is a few cents).
+# claude_dollars > 0 also reads the same pages with the current method's two
+# Claude models, for comparison, stopping before that many dollars.
+#
+# Needs these repository secrets (Settings -> Secrets and variables -> Actions):
+#   CLOUDFLARE_AI_TOKEN                           a Cloudflare API token with the Workers AI permission
+#                                                 (or give CLOUDFLARE_API_TOKEN that permission instead)
+#   CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID   D1 access, as for the other workflows
+#   ANTHROPIC_API_KEY                             only when claude_dollars > 0
+#
+# These records may not be used for commercial purposes (Ethics in Government
+# Act): never sell, export or put them behind a paid plan.
+name: Clairic pilot
+on:
+  workflow_dispatch:
+    inputs:
+      kinds:
+        description: "Which documents: 278t, house, annual, agenda (comma-separated)"
+        default: "278t,house,annual,agenda"
+      modes:
+        description: "image (each page as a picture), text (its text layer)"
+        default: "image,text"
+      claude_dollars:
+        description: "Also read the same pages with the current two-Claude method, up to this many dollars (0: don't)"
+        default: "0"
+      seed:
+        description: "Which random sample (the same seed picks the same documents)"
+        default: "1"
+permissions:
+  contents: read
+concurrency:
+  group: clairic-pilot
+  cancel-in-progress: false
+jobs:
+  pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null && pip install -q anthropic
+      - name: Run the pilot
+        env:
+          CLOUDFLARE_AI_TOKEN: ${{ secrets.CLOUDFLARE_AI_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          KINDS: ${{ github.event.inputs.kinds }}
+          MODES: ${{ github.event.inputs.modes }}
+          CLAUDE_DOLLARS: ${{ github.event.inputs.claude_dollars }}
+          SEED: ${{ github.event.inputs.seed }}
+        run: python3 tools/clairic_pilot.py --kinds "$KINDS" --modes "$MODES" --claude-dollars "$CLAUDE_DOLLARS" --seed "$SEED"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: clairic-pilot
+          path: clairic-pilot.json
+          if-no-files-found: ignore
