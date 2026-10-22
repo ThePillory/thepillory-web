@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=FL&candidate_status=C",
- "built_on": "2026-10-21",
+ "built_on": "2026-10-22",
  "senate_up": true,
  "senate": [
   {
@@ -144,6 +144,14 @@
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6FL01523/",
     "committee": "C00938555"
+   },
+   {
+    "id": "H6FL01143",
+    "name": "MILLS, RALPH JOHN III",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6FL01143/",
+    "committee": "C00565366"
    },
    {
     "id": "H6FL01390",
