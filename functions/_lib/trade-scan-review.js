@@ -70,7 +70,7 @@ export async function scanList(db, { done = "" } = {}) {
   }).join("");
   return {
     title: "Scanned trade reports",
-    main: `<header class="page-head"><h1>Scanned trade reports</h1><p class="subtitle">Executive branch reports (OGE Form 278-T) posted as scans. Each is read twice by AI, by two different models; the trades publish when the readings agree and the checks pass, labeled as transcribed by AI. A share is picked for you to check against the scan.</p></header>
+    main: `<header class="page-head"><h1>Scanned trade reports</h1><p class="subtitle">Executive branch reports (OGE Form 278-T) posted as scans. Each is read by AI; a row the report's own text layer shows the same way (date, amount, description) counts as checked once, and every other row is read again by a second AI model. Nothing publishes until you compare the rows with the scan and confirm them; they're then labeled as transcribed by AI and checked by you.</p></header>
 ${done ? `<p class="banner" role="status">${esc(done)}</p>` : ""}
 ${sections}`,
   };
@@ -110,7 +110,7 @@ ${post(`<input type="hidden" name="action" value="reject">
   <button class="btn" type="submit">${s.status === "approved" ? "Take down" : "Don't publish"}</button>`)}
 </section>`;
   } else if (["disagree", "rejected"].includes(s.status)) {
-    actions = `<section class="card stack-sm"><h2 class="label">Read again</h2><p class="small">Puts it back in the queue: both models read it again on a later sync run.</p>
+    actions = `<section class="card stack-sm"><h2 class="label">Read again</h2><p class="small">Puts it back in the queue: it's read again on a later sync run.</p>
 ${post('<input type="hidden" name="action" value="reread"><button class="btn" type="submit">Read it again</button>')}</section>`;
   }
   const url = safeUrl(s.report_url);
@@ -127,7 +127,7 @@ ${error ? `<p class="banner banner--error" role="alert">${esc(error)}</p>` : ""}
 ${blocks.length ? `<section class="card stack-sm"><h2 class="label">Why it wasn't published</h2><ul class="plain-list">${blocks.map((p) => `<li class="small">${esc(p.text)}</li>`).join("")}</ul></section>` : ""}
 ${unread.length ? `<section class="card stack-sm"><h2 class="label">Rows not published (${unread.length})</h2><p class="small secondary">Public pages say these rows couldn't be read with confidence and link the scan.</p><ul class="plain-list">${unread.map((u) => `<li class="small">Row ${esc(String(u.n))}: ${esc(u.reason)}</li>`).join("")}</ul></section>` : ""}
 ${looks.length ? `<section class="card stack-sm"><h2 class="label">Check these closely</h2><ul class="plain-list">${looks.map((p) => `<li class="small">${esc(p.text)}</li>`).join("")}</ul></section>` : ""}
-${rows.length ? `<section class="stack-sm"><h2 class="label">${s.status === "disagree" ? "Rows both readings agreed on" : "The rows"} (${rows.length})</h2>${rowsTable(rows)}</section>` : ""}
+${rows.length ? `<section class="stack-sm"><h2 class="label">${s.status === "disagree" ? "Rows that passed the checks" : "The rows"} (${rows.length})</h2>${rowsTable(rows)}</section>` : ""}
 ${actions}`,
   };
 }

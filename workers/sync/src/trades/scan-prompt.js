@@ -1,5 +1,5 @@
 // The transcription prompt for scanned OGE Form 278-T reports (docs/trades.md).
-// The same prompt goes to both models; their answers are compared in code
+// The same prompt goes to both models (the second reads only the rows the text layer doesn't back up); their answers are compared in code
 // (scan-check.js) and then checked by a person against the scan.
 
 export const SCAN_INSTRUCTIONS = `You transcribe the transactions table of a scanned U.S. Office of Government Ethics Form 278-T (Periodic Transaction Report) for a public record. Accuracy matters more than completeness: a wrong date or amount would be published as fact.

@@ -398,6 +398,8 @@ def main():
                             "compare": compare(d["kind"], got, d["want"]), "calls": raw})
         if client:
             for model in CLAUDE:
+                if client is None:
+                    break
                 if claude_spent >= args.claude_dollars:
                     break
                 got, dollars, secs, partial = [], 0.0, 0.0, False
@@ -405,7 +407,13 @@ def main():
                     if claude_spent + dollars >= args.claude_dollars:
                         partial = True  # stopped inside the document: not scored, since its later rows would count as missed
                         break
-                    rows, c, s = claude(client, model, d["kind"], png)
+                    try:
+                        rows, c, s = claude(client, model, d["kind"], png)
+                    except Exception as e:  # noqa: BLE001
+                        # No credit, a refusal, an outage: the Clairic results still count; the comparison stops.
+                        print(f"  Claude comparison stopped: {str(e)[:200]}", flush=True)
+                        client, partial = None, True
+                        break
                     got += rows
                     dollars += c
                     secs += s

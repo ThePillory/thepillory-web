@@ -8,7 +8,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { DatabaseSync } from "node:sqlite";
 import { Budget } from "../src/util.js";
-import { syncCandidatePlatforms } from "../src/promises/candidates-sync.js";
+import { syncCandidatePlatforms, upsertCandidates } from "../src/promises/candidates-sync.js";
 import { excerptInstructions, EXCERPT_INSTRUCTIONS, checkExcerpt } from "../src/promises/excerpt.js";
 import { candidatePlatform } from "../../../functions/_lib/candidates.js";
 
@@ -56,6 +56,17 @@ const pick = async (env, page, who, kind) => {
   return { ...checkExcerpt(page.text, "We will fix the bridges in every county by 2028. We will open two new clinics."), model: "test-model" };
 };
 const env = { SITE_URL: "https://thepillory.test", CANDIDATE_PLATFORMS_DAILY: "2" };
+
+test("an entry with no name or state is skipped, so it never stops the step", async () => {
+  const db = d1();
+  const n = await upsertCandidates(db, [
+    { id: "H6ZZ08210", name: null, st: "ZZ", url: "https://nameless.example/" },
+    { id: "H6ZZ08211", name: "DELTA, DEE", st: "", url: "https://delta.example/" },
+    ...WEBSITES.candidates,
+  ], 2026);
+  assert.equal(n, 3);
+  assert.deepEqual(db.sqlite.prepare("SELECT candidate_id FROM candidate_platforms ORDER BY candidate_id").all().map((r) => r.candidate_id), ["S6ZZ00001", "S6ZZ00002", "S6ZZ00003"]);
+});
 
 test("the same excerpt rules for candidates as officials", () => {
   assert.match(EXCERPT_INSTRUCTIONS, /from an official's own Issues/);

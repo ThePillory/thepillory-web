@@ -2,10 +2,15 @@
 // (docs/trades.md). tools/load_trades.py queues each executive-branch report
 // whose text layer it couldn't read, with that layer's numbered rows
 // (trade_scans, trade_scan_lines). Here each queued report is read from its
-// PDF twice, by two different models (SCAN_MODEL_A, SCAN_MODEL_B), in chunks
-// of SCAN_CHUNK_ROWS rows so a long report's answer isn't cut off; each chunk
-// is kept (trade_scan_chunks), so a reading resumes in the next round. The
-// readings are then checked row by row in code (scan-check.js). Nothing is
+// PDF by SCAN_MODEL_A (claude-sonnet-5-5), in chunks of SCAN_CHUNK_ROWS rows
+// so a long report's answer isn't cut off; each chunk is kept
+// (trade_scan_chunks), so a reading resumes in the next round. Each row it
+// reads is then held against the report's own text layer (textBacks(): the
+// same date, both dollar figures of the range, most of the description); only
+// the rows the text layer doesn't back up are read a second time, by
+// SCAN_MODEL_B (claude-opus-5-5), so the second, dearer model reads only what
+// needs a second opinion (all of it when there's no usable text layer). The
+// rows are then checked one by one in code (scan-check.js). Nothing is
 // published here: a report whose readings agree waits on
 // /admin/review/trades/ until a person compares it with the scan and confirms
 // it ("Checked by [name]"), and stays a link to the report on public pages
@@ -18,7 +23,7 @@
 import { getState, setState, today, redact, BudgetExhausted } from "../util.js";
 import { structuredCall, DraftRefused } from "../analysis/claude.js";
 import { SCAN_INSTRUCTIONS, scanSchema, scanMessage } from "./scan-prompt.js";
-import { checkReadings, blocking, rowsLine } from "./scan-check.js";
+import { checkReadings, blocking, rowsLine, isoDate, amountBounds, contained, textLayerType, typeLabel } from "./scan-check.js";
 import { takeDownStatements } from "./publish.js";
 
 const missing = (err) => /no such (table|column)/i.test(String(err && err.message));
@@ -81,21 +86,102 @@ export async function readReport(env, db, report, model, { call = structuredCall
   }
 }
 
-/** Read one report with both models and check the readings row by row. Returns {status, rows, unread, total, problems, models}. */
+/**
+ * Does the report's own text layer back up this row of the first reading?
+ * Strict, since it then stands in for a second reading: the line shows the
+ * same date, both dollar figures of the range, most of the description's
+ * letters, and no other transaction type; and the reading didn't mark the row
+ * hard to read. Pure.
+ */
+export function textBacks(row, line) {
+  if (!row || !line || row.uncertain) return false;
+  const iso = isoDate(row.date);
+  if (!iso) return false;
+  const [y, m, d] = iso.split("-").map(Number);
+  if (!new RegExp(`(^|[^0-9])0?${m}/0?${d}/(?:${y}|${String(y).slice(2)})(?![0-9])`).test(line)) return false;
+  const [lo, hi] = amountBounds(row.amount);
+  if (lo == null) return false;
+  const digits = String(line).replace(/[^0-9$]/g, "");
+  const shown = (/^(?:Spouse\/DC )?Over /.test(String(row.amount).trim()) ? [lo - 1] : [lo, hi]).filter((x) => x != null);
+  if (!shown.every((x) => digits.includes(`$${x}`))) return false;
+  if (contained(row.description, line) < 0.8) return false;
+  const t = textLayerType(line);
+  const want = typeLabel(row.type);
+  return !t || t === (want === "Partial sale" ? "Sale" : want);
+}
+
+/** Row numbers -> ranges to read, consecutive ones together (gaps of up to 2 rows bridged), none longer than size. Pure. */
+export function rowRanges(ns, size = 80) {
+  const out = [];
+  for (const n of [...new Set(ns)].sort((a, b) => a - b)) {
+    const last = out[out.length - 1];
+    if (last && n - last[1] <= 3 && n - last[0] < size) last[1] = n;
+    else out.push([n, n]);
+  }
+  return out;
+}
+
+/** The second model's reading of only these ranges, resuming from what's stored (a stored chunk that covers a range is used as is). */
+export async function readRows(env, db, report, model, ranges, { call = structuredCall, budget = null } = {}) {
+  const { results } = await db.prepare("SELECT first_n, last_n, reading FROM trade_scan_chunks WHERE report_id = ? AND model = ?").bind(report.report_id, model).all();
+  const have = results.map((c) => ({ ...c, reading: JSON.parse(c.reading) }));
+  const rows = [];
+  for (const [first, last] of ranges) {
+    let chunk = have.find((c) => c.first_n <= first && c.last_n >= last);
+    if (!chunk) {
+      if (budget && budget.timeLeft() < CALL_MS) throw new BudgetExhausted(`run time limit reached before the second reading of rows ${first}-${last} of ${report.report_id}`);
+      const { data } = await call(env, { model, system: [SCAN_INSTRUCTIONS], message: scanMessage(report.report_url, first, last), jsonSchema: scanSchema, maxTokens: 64000 });
+      chunk = { first_n: first, last_n: last, reading: { rows: Array.isArray(data && data.rows) ? data.rows : [] } };
+      await db
+        .prepare("INSERT OR REPLACE INTO trade_scan_chunks (report_id, model, first_n, last_n, reading) VALUES (?, ?, ?, ?, ?)")
+        .bind(report.report_id, model, first, last, JSON.stringify(chunk.reading))
+        .run();
+      have.push(chunk);
+    }
+    for (const r of chunk.reading.rows || []) if (Number(r.n) >= first && Number(r.n) <= last) rows.push({ ...r, n: Number(r.n) });
+  }
+  return rows;
+}
+
+/**
+ * Read one report and check it row by row: the first model reads everything;
+ * the text layer backs up what it can; the second model reads only the rest.
+ * Returns {status, rows, unread, total, problems, models}.
+ */
 export async function transcribe(env, db, report, lines, { call = structuredCall, budget = null } = {}) {
-  const models = scanModels(env);
-  const readings = [];
-  for (const model of models) {
+  const [first, second] = scanModels(env);
+  let models = [first];
+  const refused = (model) => ({ status: "disagree", rows: [], unread: [], total: 0, problems: [{ n: null, kind: "block", text: `${model} declined to read it.` }], models: [first, second] });
+  let a;
+  try {
+    a = await readReport(env, db, report, first, { call, budget });
+  } catch (err) {
+    if (err instanceof DraftRefused) return refused(first);
+    throw err;
+  }
+  const backed = a.rows.filter((r) => textBacks(r, lines[r.n]));
+  const backedNs = new Set(backed.map((r) => r.n));
+  const others = a.rows.map((r) => r.n).filter((n) => !backedNs.has(n));
+  let again = [];
+  if (others.length) {
+    models = [first, second];
     try {
-      readings.push(await readReport(env, db, report, model, { call, budget }));
+      again = await readRows(env, db, report, second, rowRanges(others, chunkRows(env)), { call, budget });
     } catch (err) {
-      if (err instanceof DraftRefused) {
-        return { status: "disagree", rows: [], unread: [], total: 0, problems: [{ n: null, kind: "block", text: `${model} declined to read it.` }], models };
-      }
+      if (err instanceof DraftRefused) return refused(second);
       throw err;
     }
   }
-  const { rows, unread, total, problems } = checkReadings(readings[0], readings[1], lines);
+  // The second "reading": the text layer's backing for those rows, the second model's for the rest.
+  const b = { rows: [...backed.map((r) => ({ ...r })), ...again.filter((r) => !backedNs.has(r.n))] };
+  const { rows, unread, total, problems } = checkReadings(a, b, lines);
+  if (a.rows.length) {
+    problems.push({
+      n: null,
+      kind: "look",
+      text: `${backed.length} of ${a.rows.length} rows read by ${first} matched the report's text layer (date, amount, description)${others.length ? `; the other ${others.length} were read again by ${second}` : "; no second reading was needed"}. Check every row against the scan.`,
+    });
+  }
   const status = blocking(problems) || !rows.length ? "disagree" : "agreed";
   if (!rows.length && !blocking(problems)) problems.push({ n: null, kind: "block", text: "No row was read the same way by both readings." });
   return { status, rows: status === "agreed" ? rows : [], agreedRows: rows, unread, total, problems, models };

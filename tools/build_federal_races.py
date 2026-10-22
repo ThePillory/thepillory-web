@@ -83,6 +83,24 @@ def row(c):
     }
 
 
+def usable(c, office):
+    """A record a page can show: it has a name, and a House record says which district.
+    The FEC sometimes lists an incomplete record (no name, no district); it's left out, never filled in."""
+    if not str(c.get("name") or "").strip():
+        return False
+    return office != "H" or str(c.get("district") or "").strip() != ""
+
+
+def keep(cs, office, st):
+    out = []
+    for c in cs:
+        if usable(c, office):
+            out.append(c)
+        else:
+            print(f"{st}: {c.get('candidate_id')} left out: the FEC record has no {'name' if not str(c.get('name') or '').strip() else 'district'}", flush=True)
+    return out
+
+
 def senate_up(st, key):
     """True if the FEC lists a U.S. Senate race in this state this cycle (a regular or special election)."""
     d = get({"state": st, "cycle": YEAR}, key, RACES)
@@ -95,9 +113,9 @@ def senate_up(st, key):
 def build(st, key):
     # Candidates who registered for a seat that isn't up this year are left out with the race.
     up = senate_up(st, key)
-    senate = [row(c) for c in candidates(st, "S", key)] if up else []
+    senate = [row(c) for c in keep(candidates(st, "S", key), "S", st)] if up else []
     house = defaultdict(list)
-    for c in candidates(st, "H", key):
+    for c in keep(candidates(st, "H", key), "H", st):
         house[str(int(c.get("district") or 0))].append(row(c))
     # One entry a candidate (the FEC can list the same candidate twice).
     dedupe = lambda xs: list({x["id"]: x for x in xs}.values())

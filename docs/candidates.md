@@ -19,6 +19,7 @@ Linked from: the ballot preview (each candidate's name, "The race", "Every 2026 
 
 - **Congress:** every candidate in `data/elections/federal-2026/<st>.json` (`tools/build_federal_races.py`: the FEC's statutory candidates, `candidate_status=C`, active this cycle), plus every candidate for Congress on a loaded certified list with an FEC ID.
 - **State offices:** every candidate on a loaded certified list (California's, `data/elections/2026-11-03.json`). Other states' governor and state races are added as their certified lists are.
+- An FEC record with no name (or a House record with no district) is left out, never filled in: the builders skip it and drop one kept from an earlier run, and the `candidate-platforms` step skips any entry without a name or state. (One such record, H6AZ08210, stopped that step every day from October 12 to October 22, 2026.)
 - Once included, a candidate keeps their page. If the FEC stops listing them as active, the entry stays with `listed: false` and the date they were last listed.
 
 ## Order and cards

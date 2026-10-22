@@ -9,7 +9,7 @@ import assert from "node:assert/strict";
 import {
   fecDisplayName, stateOfId, standing, officesHeld, raceKey, officeName, generalDate, raceList,
 } from "../../../functions/_lib/candidates.js";
-import { websiteUrl, mergeList, certifiedFederal, refreshOrder } from "../../../tools/build_candidates.mjs";
+import { websiteUrl, mergeList, certifiedFederal, refreshOrder, websites, nameIndex } from "../../../tools/build_candidates.mjs";
 import { sameCandidate, matchFec, certifiedRace } from "../../../functions/_lib/certified.js";
 
 const totals = { receipts: 1000, disbursements: 400, cash_on_hand: 600, individual_unitemized: 300, individual_itemized: 500, pac: 200, party: 0, self_funding: 0, other: 0, coverage_end: "2026-06-30", last_report: null, source_url: "https://www.fec.gov/data/candidate/S6ZZ00001/?cycle=2026&election_full=false" };
@@ -252,6 +252,13 @@ test("builder: websites, the list kept over time, certified candidates, refresh 
   assert.deepEqual(cert.map((c) => c.id), ["H6CA05002", "H6CA05001"]);
   const merged = mergeList(null, { senate: [], house: {} }, "2026-10-10", cert);
   assert.equal(merged.H6CA05002.certified_only, true);
+  // An incomplete FEC record (no name) is left out, and one kept from an earlier run is dropped: never a blank card.
+  const nameless = { id: "H6TX08210", name: null, party: "", incumbent: false, url: "https://www.fec.gov/data/candidate/H6TX08210/", committee: "C2" };
+  const withNameless = mergeList({ H6TX08210: { ...nameless, listed: true, website: { url: "https://x.example/" } } }, { senate: [], house: { 8: [nameless] } }, "2026-10-22");
+  assert.equal(withNameless.H6TX08210, undefined);
+  const files = { tx: { candidates: { S6TX00001: { ...first.S6TX00001, website: { url: "https://zulu.example/" } }, H6TX08210: { ...nameless, listed: true, website: { url: "https://x.example/" } } } } };
+  assert.deepEqual(websites(files, 2026, "2026-10-22").candidates.map((c) => c.id), ["S6TX00001"]);
+  assert.deepEqual(nameIndex(files).map((r) => r[0]), ["S6TX00001"]);
   const order = refreshOrder([{ c: { id: "B", funding_checked: "2026-10-09" } }, { c: { id: "A" } }, { c: { id: "C", funding_checked: "2026-10-01" } }]);
   assert.deepEqual(order.map((x) => x.c.id), ["A", "C", "B"]);
 });
