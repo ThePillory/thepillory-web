@@ -1,8 +1,10 @@
 // Checks on the transcription of a scanned OGE Form 278-T (docs/trades.md).
 // Pure: no I/O, so the admin page can use them too.
 //
-// A scanned report is read twice, by two different models, from the PDF, and
-// each row is judged on its own. A row is published only when:
+// A scanned report is read by one model; the rows its text layer backs up
+// (textBacks() in scan-sync.js) count as their own second reading, and the
+// rest are read again by a second model. Each row is judged on its own. A row
+// passes only when:
 //   - it's in both readings, under the same row number;
 //   - they agree on it exactly: the date, the type, the amount range, and the
 //     description letter for letter (spaces and punctuation aside);

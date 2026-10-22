@@ -9,7 +9,7 @@ import assert from "node:assert/strict";
 import { DatabaseSync } from "node:sqlite";
 import { readFileSync, readdirSync } from "node:fs";
 import { checkReadings, blocking, contained, textLayerType, rowsLine } from "../src/trades/scan-check.js";
-import { syncScannedTrades, mergeChunks, accountError, holdUnchecked } from "../src/trades/scan-sync.js";
+import { syncScannedTrades, mergeChunks, accountError, holdUnchecked, textBacks, rowRanges } from "../src/trades/scan-sync.js";
 import { ensureSchema } from "../src/db.js";
 import { scanChange, scanItem, scanList } from "../../../functions/_lib/trade-scan-review.js";
 import { memberTrades, memberReports, tradeRow, tradesSection } from "../../../functions/_lib/trades.js";
@@ -179,6 +179,9 @@ test("the step reads reports and holds them for a person; confirming publishes t
   assert.match(r.message, /2 scanned report\(s\) read and waiting for a person \(3 of 4 rows transcribed\), 0 didn't agree/);
   assert.deepEqual(asked.map((x) => x[0]), ["claude-sonnet-5-5", "claude-opus-5-5", "claude-sonnet-5-5", "claude-opus-5-5"]);
   assert.match(asked[0][2], /rows 1 to 80/);
+  // Neither text layer backs a row (a's is garbled, b has none): the second model reads only the rows the first found.
+  assert.match(asked[1][2], /rows 1 to 2\b/);
+  assert.match(asked[3][2], /rows 1 to 2\b/);
   const a = sqlite.prepare("SELECT * FROM trade_scans WHERE report_id = 'oge:a'").get();
   const b = sqlite.prepare("SELECT * FROM trade_scans WHERE report_id = 'oge:b'").get();
   assert.equal(a.status, "agreed");
@@ -244,12 +247,61 @@ test("a long report is read in chunks that resume in the next round; the Preside
   assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM trade_scan_chunks WHERE report_id = 'oge:a'").get().n, 3);
   asked.length = 0;
   const r = await syncScannedTrades(env, db, null, { call, random: () => 0.5 });
-  assert.deepEqual(asked, ["a.pdf claude-opus-5-5 rows 1 to 10", "a.pdf claude-opus-5-5 rows 11 to 20", "a.pdf claude-opus-5-5 rows 21 to 30"], "resumes: the first model's chunks aren't read again");
+  assert.deepEqual(asked, ["a.pdf claude-opus-5-5 rows 1 to 10", "a.pdf claude-opus-5-5 rows 11 to 20", "a.pdf claude-opus-5-5 rows 21 to 25"], "resumes: the first model's chunks aren't read again, and the second reads only the 25 rows found");
   // Row 1 is a sale in both readings, but the seeded text layer's row 1 reads "lourchaso": that row stays linked.
   assert.match(r.message, /1 scanned report\(s\) read and waiting for a person \(24 of 25 rows transcribed\)/);
   assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM trades WHERE report_id = 'oge:a'").get().n, 0, "nothing public until a person confirms");
   assert.equal(JSON.parse(sqlite.prepare("SELECT reading FROM trade_scans WHERE report_id = 'oge:a'").get().reading).length, 24);
   assert.equal(sqlite.prepare("SELECT status FROM trade_scans WHERE report_id = 'oge:c'").get().status, "pending", "the daily limit: one report");
+});
+
+test("the text layer backs a row only when it shows the same date, amount and description", () => {
+  const row = { n: 1, description: "Abbott Labs (ABT)", type: "Sale", date: "5/5/2026", amount: "$15,001 - $50,000", uncertain: false };
+  assert.equal(textBacks(row, "1  Abbott Labs (ABT)   Sale   5/5/2026   $15,001 - $50,000"), true);
+  assert.equal(textBacks(row, "1  Abbott Labs (ABT)   Sale   05/05/26   $15,001-$50,000"), true, "a two-digit year, padding and spacing aside");
+  assert.equal(textBacks(row, "1  Abbott Labs (ABT)   Sale   5/6/2026   $15,001 - $50,000"), false, "another date");
+  assert.equal(textBacks(row, "1  Abbott Labs (ABT)   Sale   5/5/2026   $1,001 - $15,000"), false, "another range");
+  assert.equal(textBacks(row, "1  Abbott Labs (ABT)   Purchase   5/5/2026   $15,001 - $50,000"), false, "another type");
+  assert.equal(textBacks(row, "1  Medtronic PLC   Sale   5/5/2026   $15,001 - $50,000"), false, "another asset");
+  assert.equal(textBacks(row, "Abbott labs sale 5/512026"), false, "garbled");
+  assert.equal(textBacks({ ...row, uncertain: true }, "1  Abbott Labs (ABT)   Sale   5/5/2026   $15,001 - $50,000"), false, "marked hard to read");
+  assert.equal(textBacks({ ...row, amount: "Over $50,000,000" }, "Abbott Labs (ABT) Sale 5/5/2026 Over $50,000,000"), true);
+  assert.deepEqual(rowRanges([7, 1, 2, 3, 5, 30, 31], 80), [[1, 7], [30, 31]]);
+  assert.deepEqual(rowRanges([1, 2, 3, 4], 2), [[1, 2], [3, 4]]);
+});
+
+test("rows the text layer backs aren't read a second time; only the others are", async () => {
+  const sqlite = seeded();
+  sqlite.exec(`DELETE FROM trade_scan_lines WHERE report_id = 'oge:a'`);
+  sqlite.exec(`INSERT INTO trade_scan_lines (report_id, n, line) VALUES
+    ('oge:a', 1, 'MIAMI DADE CNTY FL AVIATION REV RFDG SER A B/E PTC 5.00 % Due Oct 1, 2031  Purchase  7/7/2026  $1,000,001 - $5,000,000'),
+    ('oge:a', 2, 'Abbott Labs (ABT)  Sale  5/5/2026  $15,001 - $50,000')`);
+  sqlite.exec(`DELETE FROM trade_scans WHERE report_id = 'oge:b'`);
+  const db = d1(sqlite);
+  const asked = [];
+  const call = async (env, args) => (asked.push(args.model), ranged(() => copy(ROWS).rows)(env, args));
+  const r = await syncScannedTrades({ SCANNED_TRADES_DAILY: "5" }, db, null, { call });
+  assert.deepEqual(asked, ["claude-sonnet-5-5"], "every row backed: no second model");
+  assert.match(r.message, /1 scanned report\(s\) read and waiting for a person \(2 of 2 rows transcribed\)/);
+  const a = sqlite.prepare("SELECT status, models, problems FROM trade_scans WHERE report_id = 'oge:a'").get();
+  assert.equal(a.status, "agreed");
+  assert.equal(a.models, "claude-sonnet-5-5");
+  assert.match(a.problems, /2 of 2 rows read by claude-sonnet-5-5 matched the report's text layer.*no second reading was needed/);
+  assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM trades").get().n, 0, "still nothing public until a person confirms");
+
+  // One row the text layer doesn't back: the second model reads that row only.
+  const sqlite2 = seeded();
+  sqlite2.exec(`DELETE FROM trade_scan_lines WHERE report_id = 'oge:a'`);
+  sqlite2.exec(`INSERT INTO trade_scan_lines (report_id, n, line) VALUES ('oge:a', 2, 'Abbott Labs (ABT)  Sale  5/5/2026  $15,001 - $50,000')`);
+  sqlite2.exec(`DELETE FROM trade_scans WHERE report_id = 'oge:b'`);
+  const asked2 = [];
+  const call2 = async (env, args) => (asked2.push(`${args.model} ${args.message[1].text.match(/rows \d+ to \d+/)[0]}`), ranged(() => copy(ROWS).rows)(env, args));
+  await syncScannedTrades({ SCANNED_TRADES_DAILY: "5" }, d1(sqlite2), null, { call: call2 });
+  assert.deepEqual(asked2, ["claude-sonnet-5-5 rows 1 to 80", "claude-opus-5-5 rows 1 to 1"]);
+  const a2 = sqlite2.prepare("SELECT status, models, problems FROM trade_scans WHERE report_id = 'oge:a'").get();
+  assert.equal(a2.status, "agreed");
+  assert.equal(a2.models, "claude-sonnet-5-5, claude-opus-5-5");
+  assert.match(a2.problems, /1 of 2 rows .*the other 1 were read again by claude-opus-5-5/);
 });
 
 test("a transcription published before a person checked it goes back to a link; a checked one stays", async () => {
