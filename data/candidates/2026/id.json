@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=ID&candidate_status=C",
- "list_built_on": "2026-10-21",
+ "list_built_on": "2026-10-22",
  "built_on": "2026-10-22",
  "senate_up": true,
  "candidates": {
@@ -730,7 +730,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00648295/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-18",
+   "funding_checked": "2026-10-22",
    "cycle": 2026
   },
   "H2ID01192": {
@@ -977,17 +977,17 @@
    "last_listed": "2026-10-22",
    "totals": {
     "cycle": 2026,
-    "receipts": 1316625.65,
-    "disbursements": 1137249.39,
-    "cash_on_hand": 284581.98,
-    "individual_unitemized": 2911.65,
-    "individual_itemized": 587214,
-    "pac": 726500,
-    "party": 0,
+    "receipts": 1409211.99,
+    "disbursements": 1213826.5,
+    "cash_on_hand": 300591.21,
+    "individual_unitemized": 3247.99,
+    "individual_itemized": 618964,
+    "pac": 786500,
+    "party": 500,
     "self_funding": 0,
     "other": 0,
-    "coverage_end": "2026-09-30",
-    "last_report": "OCTOBER QUARTERLY 2026",
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
     "source_url": "https://www.fec.gov/data/candidate/H8ID02064/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -1179,7 +1179,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00331397/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-18",
+   "funding_checked": "2026-10-22",
    "cycle": 2026
   },
   "H6ID02225": {

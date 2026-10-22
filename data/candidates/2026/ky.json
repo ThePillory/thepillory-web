@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=KY&candidate_status=C",
- "list_built_on": "2026-10-21",
+ "list_built_on": "2026-10-22",
  "built_on": "2026-10-22",
  "senate_up": true,
  "candidates": {
@@ -621,7 +621,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00922302/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-18",
+   "funding_checked": "2026-10-22",
    "cycle": 2026
   },
   "S6KY00302": {
@@ -1254,17 +1254,17 @@
    "last_listed": "2026-10-22",
    "totals": {
     "cycle": 2026,
-    "receipts": 5897228.16,
-    "disbursements": 4588069.13,
-    "cash_on_hand": 1675403.47,
-    "individual_unitemized": 9421.41,
-    "individual_itemized": 1768607.95,
-    "pac": 3312755,
+    "receipts": 5986647.25,
+    "disbursements": 4905596.15,
+    "cash_on_hand": 1447295.54,
+    "individual_unitemized": 9569.99,
+    "individual_itemized": 1786878.46,
+    "pac": 3382255,
     "party": 0,
     "self_funding": 0,
-    "other": 806443.8,
-    "coverage_end": "2026-09-30",
-    "last_report": "OCTOBER QUARTERLY 2026",
+    "other": 807943.8,
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
     "source_url": "https://www.fec.gov/data/candidate/H8KY02031/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -1456,7 +1456,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00445023/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-18",
+   "funding_checked": "2026-10-22",
    "cycle": 2026
   },
   "H8KY02080": {
@@ -1482,8 +1482,8 @@
     "party": 0,
     "self_funding": 0,
     "other": 0,
-    "coverage_end": "2026-06-30",
-    "last_report": "JULY QUARTERLY 2026",
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H8KY02080/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -1499,7 +1499,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00668194/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-18",
+   "funding_checked": "2026-10-22",
    "cycle": 2026
   },
   "H6KY02092": {
