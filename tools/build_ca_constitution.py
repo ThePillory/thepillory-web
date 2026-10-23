@@ -175,7 +175,7 @@ def main():
     ids = [r["id"] for r in rows]
     if len(ids) != len(set(ids)):
         sys.exit(f"Duplicate IDs: {sorted({i for i in ids if ids.count(i) > 1})}")
-    if len(sections) < 400:
+    if len(sections) < 300:  # about 370 in 2026
         sys.exit(f"Read too little to trust: {len(sections)} sections. Run --probe and fix the reader.")
     if "--check" in sys.argv:
         old = {r["id"]: r for r in json.loads(OUT.read_text())["provisions"]}
