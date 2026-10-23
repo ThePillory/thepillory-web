@@ -12,10 +12,6 @@
 # CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID.
 name: Draft measure Constitution sections
 on:
-  # TEMPORARY: the first draft run from the branch; removed before merging.
-  push:
-    branches: [claude/pillory-mobile-screens-p5zekn]
-    paths: [.github/workflows/measure-constitution.yml, tools/measure_constitution.py]
   schedule:
     - cron: "23 15 * * *"
   workflow_dispatch:
@@ -69,9 +65,9 @@ jobs:
           COURTLISTENER_API_TOKEN: ${{ secrets.COURTLISTENER_API_TOKEN }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          MODE: ${{ github.event.inputs.mode || (github.event_name == 'push' && 'draft') || 'cases' }}
+          MODE: ${{ github.event.inputs.mode || 'cases' }}
           ONLY: ${{ github.event.inputs.only }}
-          REDO: ${{ github.event.inputs.redo || github.event_name == 'push' }}
+          REDO: ${{ github.event.inputs.redo }}
           MAX_DOLLARS: ${{ github.event.inputs.max_dollars || '15' }}
         run: |
           python3 tools/measure_constitution.py "$MODE" --only "$ONLY" --max-dollars "$MAX_DOLLARS" $([ "$REDO" = "true" ] && echo --redo)
