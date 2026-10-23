@@ -1,7 +1,7 @@
 # Builds data/ca-constitution.json, the California Constitution word for word
 # from California Legislative Information (tools/build_ca_constitution.py).
 # Weekly, so amendments voters approve show up; when the builder changes; and on demand (Actions ->
-# California Constitution -> Run workflow; "probe" prints one page's HTML).
+# California Constitution -> Run workflow; "probe" prints the first rows).
 name: California Constitution
 on:
   push:
@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "build, or probe (print one article page, write nothing)"
+        description: "build, or probe (print the first rows and one section, write nothing)"
         default: "build"
 permissions:
   contents: write
@@ -27,7 +27,7 @@ jobs:
       - name: Build from leginfo
         if: github.event.inputs.mode != 'probe'
         run: python3 tools/build_ca_constitution.py
-      - name: One article page, for fixing the parser
+      - name: The first rows and one section, for fixing the reader
         if: failure()
         run: python3 tools/build_ca_constitution.py --probe
       - name: Commit the text
