@@ -93,7 +93,7 @@ export function constitutionSection(row, { stateName, label }) {
     ${p.quote ? `<blockquote class="constitution-text">${p.quote.split("\n\n").map((q) => `<p>${esc(q)}</p>`).join("")}${p.cut ? `<p class="small">… ${link(p.url, "the full text")}</p>` : ""}</blockquote>` : p.new ? `<p class="small secondary">Not in the ${esc(stateName)} Constitution now: its proposed words are in ${ext(p.url, "the measure's official text")}.</p>` : `<p class="small secondary">The full text is on the state's official site: ${ext(p.url, `the ${stateName} Constitution`)}.</p>`}
     <p class="small">${esc(p.line)}</p>
   </article>`).join("")
-    : `<p class="small secondary">The official text doesn't cite a provision of the U.S. Constitution or the ${esc(stateName)} Constitution.</p>`}
+    : `<p class="small secondary">No provision of the U.S. Constitution or the ${esc(stateName)} Constitution is named in the official text read for this measure (${ext(row.changes_source_url, row.changes_source)}).</p>`}
 </div>
 <div class="stack-sm">
   <h3 class="label">Legal challenges</h3>

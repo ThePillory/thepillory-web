@@ -243,8 +243,10 @@ def cited_in(article, section, parts):
             if not section:
                 return True
             window = t[max(0, m.start() - 160): m.end() + 160]
-            if re.search(rf"(?:section|sec\.|§)\s*{re.escape(section)}(?![0-9.])", window, flags=re.I):
-                return True
+            # "Section 26", "Sec. 26.", "§ 26", and lists: "Sections 4, 6 and 9".
+            for sm in re.finditer(r"(?:sections?|secs?\.|§§?)\s*((?:[0-9]+(?:\.[0-9]+)?[a-z]?(?:\s*(?:,|and|or|&)\s*)?)+)", window, flags=re.I):
+                if section in re.findall(r"[0-9]+(?:\.[0-9]+)?[a-z]?", sm.group(1)):
+                    return True
     return False
 
 
@@ -395,7 +397,15 @@ def fetch_text(url):
     import load_trades as T  # noqa: E402  (fetching, pdftotext)
     data = T.get(url, timeout=180)
     if url.lower().endswith(".pdf") or data[:5] == b"%PDF-":
-        return T.pdf_text(data)
+        # Reading order, not -layout: the states print measure texts in two columns,
+        # and -layout keeps the columns side by side on each line.
+        import subprocess
+        import tempfile
+        with tempfile.NamedTemporaryFile(suffix=".pdf") as f:
+            f.write(data)
+            f.flush()
+            r = subprocess.run(["pdftotext", f.name, "-"], capture_output=True, text=True, timeout=180)
+        return r.stdout if r.returncode == 0 else ""
     t = data.decode("utf-8", "replace")
     t = re.sub(r"(?is)<(script|style)\b.*?</\1>", " ", t)
     return html.unescape(re.sub(r"<[^>]+>", " ", t))

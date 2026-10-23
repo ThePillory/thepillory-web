@@ -118,7 +118,7 @@ test("the section: the same parts for every measure, and the line", () => {
   assert.match(html, /The full text is on the state's official site/);
   assert.doesNotMatch(html, /aligns|tension/i);
   const none = constitutionSection({ ...row, changes: "statute", provisions: "[]", cases: JSON.stringify(CASES) }, { stateName: "Colorado", label: "Amendment A" });
-  assert.match(none, /doesn't cite a provision of the U\.S\. Constitution or the Colorado Constitution/);
+  assert.match(none, /No provision of the U\.S\. Constitution or the Colorado Constitution is named in the official text read for this measure/);
   assert.match(none, /Doe v\. State/);
   assert.equal(constitutionSection(null, {}), "");
   assert.equal(measureReviewHref("2026-11-03-ca/prop-1"), "/admin/review/measures/2026-11-03-ca/prop-1/");

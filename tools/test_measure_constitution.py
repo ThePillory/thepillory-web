@@ -133,6 +133,14 @@ class Draft(unittest.TestCase):
         self.assertEqual(len(provs), 1, "only the measure that adds it can name an article that isn't there yet")
         self.assertEqual((provs[0]["label"], provs[0]["new"], provs[0]["url"]), ("California Constitution, Article XXIV (new)", True, "https://sos.example/text.pdf"))
 
+    def test_citation_forms(self):
+        p = parts("AMENDING ARTICLE IX, CONSTITUTION OF ARIZONA, BY ADDING SECTION 26.")
+        self.assertTrue(M.cited_in("IX", "26", p))
+        self.assertFalse(M.cited_in("IX", "2", p))
+        p = parts("This amends Article VII, Sections 4, 6 and 9 of the State Constitution.")
+        self.assertTrue(all(M.cited_in("VII", n, p) for n in ("4", "6", "9")))
+        self.assertFalse(M.cited_in("VII", "5", p))
+
     def test_excerpt(self):
         short, cut = M.excerpt("One. Two.")
         self.assertEqual((short, cut), ("One. Two.", False))
