@@ -2,7 +2,7 @@
 """Builds data/ca-constitution.json: the California Constitution, word for word,
 from the Legislature's own database export (California Legislative
 Information's public download site, downloads.leginfo.legislature.ca.gov: the
-daily "pubinfo" snapshot's law section table, law code CONS), one row per
+yearly "pubinfo" export's law section table, refreshed weekly, law code CONS), one row per
 section with a stable ID. The leginfo pages themselves refuse GitHub's
 servers; the download site serves the same law text.
 
@@ -43,12 +43,12 @@ COLS = ["id", "law_code", "section_num", "op_statues", "op_chapter", "op_section
 
 
 def latest_snapshot():
-    """The newest pubinfo_daily_<Day>.zip on the download site."""
+    """The newest yearly export, pubinfo_<year>.zip (the daily files carry bills only, not the law tables)."""
     listing = urllib.request.urlopen(urllib.request.Request(DOWNLOADS, headers={"User-Agent": UA}), timeout=60).read().decode("utf-8", "replace")
-    rows = re.findall(r'href="(pubinfo_daily_[A-Za-z]{3}\.zip)"[^\n]*?(\d{4}-\d{2}-\d{2} \d{2}:\d{2})', listing)
+    rows = re.findall(r'href="(pubinfo_\d{4}\.zip)"[^\n]*?(\d{4}-\d{2}-\d{2} \d{2}:\d{2})', listing)
     if not rows:
-        sys.exit("No pubinfo_daily_*.zip on the download site")
-    return DOWNLOADS + max(rows, key=lambda r: r[1])[0]
+        sys.exit("No pubinfo_<year>.zip on the download site")
+    return DOWNLOADS + max(rows, key=lambda r: (r[1], r[0]))[0]
 
 
 def download(url, path):
@@ -107,7 +107,7 @@ def read_snapshot(zpath, probe=False):
     names = {n.lower(): n for n in z.namelist()}
     table = next((names[n] for n in names if n.endswith("law_section_tbl.dat")), None)
     if not table:
-        sys.exit(f"No LAW_SECTION_TBL in the snapshot: {sorted(names)[:30]}")
+        sys.exit(f"No LAW_SECTION_TBL in the snapshot; its tables: {sorted(n for n in names if n.endswith('.dat'))}")
     rows = []
     with z.open(table) as f:
         for line in io.TextIOWrapper(f, encoding="utf-8", errors="replace"):
