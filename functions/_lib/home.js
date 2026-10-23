@@ -85,7 +85,7 @@ function stateMapTop(vs, lite, waiting) {
     : "";
   return `
 <section class="hub-map stack-xs simple-keep" id="map" aria-labelledby="h-map">
-  <h2 class="visually-hidden" id="h-map">Map of ${esc(vs.name)}</h2>
+  <div class="section-head"><h2 id="h-map">${esc(vs.name)}</h2></div>
   ${figure || `<p class="small secondary">No map for ${esc(vs.name)} yet.</p>`}
   <div class="card hub-map-links">${linkRow(mapPage, "Every county and district", lite ? `${lite.place.counties.length} ${lite.place.counties.length === 1 ? "county" : "counties"}, and every district, as lists` : "As lists")}${live}</div>
   <p class="small"><a class="inline-link" href="/explore/">← The U.S. map</a></p>
