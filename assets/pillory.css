@@ -1474,7 +1474,11 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 /* The hub's map: taps only, a fixed shape (no jump while it loads), and the
    small states in one row, so the headline, map and lookup fit a phone screen. */
 .map-figure--still .map-canvas { aspect-ratio: 975 / 610; min-height: 0; }
-.map-figure--still .map-svg { touch-action: manipulation; }
+.map-figure--still .map-svg { height: 100%; touch-action: manipulation; }
+/* A state's map: states are about as tall as they are wide (1.0 to 1.4 wide
+   to 1 tall), not the U.S. map's 1.6, so the box is square and the whole state
+   fits inside it (the drawing keeps its own shape, centered), never cropped. */
+#state-map .map-canvas { aspect-ratio: 1 / 1; }
 .hub-map .small-states { display: grid; grid-template-columns: repeat(9, 1fr); gap: 4px; }
 .hub-map .small-states .chip--tap { min-width: 0; padding: 0; font-size: 0.8125rem; }
 .hub-map-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 12px; }
