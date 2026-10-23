@@ -691,7 +691,7 @@ def committees():
 # D1
 
 
-BUSY = re.compile(r"overloaded|queued for too long|too many requests|SQLITE_BUSY|timed? ?out|Not currently importing anything|long-running import", re.I)
+BUSY = re.compile(r"overloaded|queued for too long|too many requests|SQLITE_BUSY|timed? ?out|Not currently importing anything|long-running import|cloudflarestatus\.com|\(10043\)", re.I)
 
 
 def d1(args, *, file=None, command=None):

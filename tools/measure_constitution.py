@@ -47,7 +47,9 @@ import html
 import json
 import os
 import re
+import time
 import sys
+import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -105,15 +107,51 @@ def norm(s):
     return re.sub(r"\s+", " ", s).strip()
 
 
-def found_in(quote, parts):
-    """The first official part (name, url, text) that has the quote word for word, or None."""
+WORD = re.compile(r"[A-Za-z0-9]+")
+
+
+def locate(quote, parts):
+    """
+    (part, the source's own words) for the first official part that has the
+    quote's words, in order and unchanged, or None. Spacing and punctuation
+    between words may differ (PDF text puts line breaks, dashes and spaces
+    differently); the words may not. What's shown is the source's own text.
+    """
     q = norm(quote)
     if len(q) < 12:
         return None
     for part in parts:
         if q in norm(part["text"]):
-            return part
+            return part, q
+    words = [w.lower() for w in WORD.findall(q)]
+    if len(words) < 3:
+        return None
+    for part in parts:
+        t = norm(part["text"])
+        toks = list(WORD.finditer(t))
+        low = [m.group(0).lower() for m in toks]
+        first = words[0]
+        for i, w in enumerate(low):
+            if w == first and low[i:i + len(words)] == words:
+                return part, t[toks[i].start():toks[i + len(words) - 1].end()] + (q[-1] if q[-1] in ".:;" else "")
     return None
+
+
+def found_in(quote, parts):
+    """The first official part (name, url, text) that has the quote word for word, or None."""
+    hit = locate(quote, parts)
+    return hit[0] if hit else None
+
+
+def nearest(quote, parts):
+    """For the log: where the quote's first words appear in the official text, when the whole quote doesn't."""
+    words = [w.lower() for w in WORD.findall(norm(quote))][:4]
+    for part in parts:
+        t = norm(part["text"])
+        m = re.search(r"\W+".join(re.escape(w) for w in words), t, flags=re.I) if words else None
+        if m:
+            return f"{part['name']}: …{t[m.start():m.start() + 240]}…"
+    return "its first words aren't in the official text either"
 
 
 def strings(x):
@@ -248,11 +286,12 @@ def check_draft(m, state, parts, draft, us, ca):
     changes = draft.get("changes") or "unclear"
     quotes = []
     for q in (draft.get("changes_quotes") or [])[:2]:
-        part = found_in(q, parts)
-        if part:
-            quotes.append((norm(q), part))
+        hit = locate(q, parts)
+        if hit:
+            quotes.append((hit[1], hit[0]))
         else:
             notes.append(f"Removed a quote not found word for word in the official text: “{norm(q)[:200]}”")
+            print(f"      (nearest: {nearest(q, parts)})", flush=True)
     if quotes and not quote_supports(changes, [q for q, _ in quotes]):
         notes.append(f"The quoted words don't say “{changes}”; set aside.")
         quotes, changes = [], "unclear"
@@ -301,8 +340,18 @@ def check_draft(m, state, parts, draft, us, ca):
             row = ca.get(sid)
             if rel == "adds" and not row:
                 row = ca.get(ca_section_id(art, None))
+            if not row and rel == "adds":
+                # A new article or section: not in the Constitution yet, so its words are the measure's own.
+                key = ca_section_id(art, sec)
+                if key in seen:
+                    continue
+                seen.add(key)
+                text_url = (m.get("links") or {}).get("text") if isinstance(m.get("links"), dict) else None
+                provisions.append({"doc": "ca", "id": key, "label": f"California Constitution, Article {art}" + (f", Section {sec}" if sec else "") + " (new)",
+                                   "quote": "", "cut": False, "new": True, "url": text_url or m.get("source_url"), "relation": rel, "line": clean_line(p.get("line"), rel)})
+                continue
             if not row:
-                notes.append(f"Removed Article {art}, Section {sec}: not in data/ca-constitution.json.")
+                notes.append(f"Removed Article {art}" + (f", Section {sec}" if sec else "") + ": not in data/ca-constitution.json, and the measure doesn't add it.")
                 continue
             if row["id"] in seen:
                 continue
@@ -445,6 +494,9 @@ def parse_cases(results):
     return out[:10]
 
 
+CL_PAUSE = 4  # seconds between CourtListener requests
+
+
 def search_cases(item):
     token = os.environ.get("COURTLISTENER_API_TOKEN")
     if not token:
@@ -454,8 +506,18 @@ def search_cases(item):
     for kind in ("r", "o"):
         url = "https://www.courtlistener.com/api/rest/v4/search/?" + urllib.parse.urlencode({"type": kind, "q": q, "order_by": "dateFiled desc"})
         req = urllib.request.Request(url, headers={"Authorization": f"Token {token}", "User-Agent": "ThePillory/1.0 (+https://thepillory.co)"})
-        with urllib.request.urlopen(req, timeout=60) as r:
-            rows += json.loads(r.read()).get("results", [])
+        for attempt in range(4):
+            time.sleep(CL_PAUSE)
+            try:
+                with urllib.request.urlopen(req, timeout=60) as r:
+                    rows += json.loads(r.read()).get("results", [])
+                break
+            except urllib.error.HTTPError as err:
+                if err.code != 429 or attempt == 3:
+                    raise
+                wait = int(err.headers.get("Retry-After") or 0) or 30 * 2 ** attempt
+                print(f"      CourtListener asked to wait ({err.headers.get('Retry-After') or 'no Retry-After'}; {err.read()[:200]!r}); waiting {min(wait, 300)} s", flush=True)
+                time.sleep(min(wait, 300))
     return parse_cases(rows), q
 
 
@@ -501,8 +563,7 @@ def save(args, item, changes, quotes, provisions, cases, notes, prev, by):
               f"ON CONFLICT (measure_key) DO UPDATE SET {', '.join(f'{c} = excluded.{c}' for c in cols if c != 'measure_key')}, status = 'pending', "
               "reviewed_by = NULL, reviewed_at = NULL, cases_checked_at = excluded.cases_checked_at, updated_at = excluded.updated_at;")
     hist = f"INSERT INTO measure_constitution_history (measure_key, version, snapshot, action, by_whom) VALUES ({lit(key)}, {version}, {lit(json.dumps(row, ensure_ascii=False))}, 'drafted', {lit(by)});"
-    import load_trades as T  # noqa: E402
-    T.run_sql(args, [upsert, hist])
+    d1(args, command=f"{upsert}\n{hist}")
 
 
 MAX_ANALYSIS_TEXT = 150000

@@ -117,6 +117,22 @@ class Draft(unittest.TestCase):
         self.assertEqual(changes, "unclear")
         self.assertTrue(any("must add or confirm" in n for n in notes))
 
+    def test_pdf_punctuation(self):
+        # PDF text breaks a dash and a line differently; the words are the same, and the page shows the source's own text.
+        src = parts("Third —That Section 22 of Article XVI\nthereof is amended to read:")
+        part, shown = M.locate("Third-That Section 22 of Article XVI thereof is amended to read:", src)
+        self.assertEqual(shown, "Third -That Section 22 of Article XVI thereof is amended to read:")
+        self.assertIsNone(M.locate("Third-That Section 23 of Article XVI thereof is amended to read:", src), "a different word isn't a quote")
+
+    def test_new_article(self):
+        m = {"title": "NEW RULES. LEGISLATIVE CONSTITUTIONAL AMENDMENT.", "links": {"text": "https://sos.example/text.pdf"}}
+        text = "NEW RULES. LEGISLATIVE CONSTITUTIONAL AMENDMENT. Article XXIV is added to the California Constitution, to read:"
+        _, _, provs, notes = self.check(m, text, {"changes": "constitution", "changes_quotes": [], "provisions": [
+            {"doc": "state", "us_id": None, "state_citation": "Article XXIV", "relation": "adds", "line": "This measure adds this article."},
+            {"doc": "state", "us_id": None, "state_citation": "Article XXIV", "relation": "amends", "line": "This measure amends this article."}]})
+        self.assertEqual(len(provs), 1, "only the measure that adds it can name an article that isn't there yet")
+        self.assertEqual((provs[0]["label"], provs[0]["new"], provs[0]["url"]), ("California Constitution, Article XXIV (new)", True, "https://sos.example/text.pdf"))
+
     def test_excerpt(self):
         short, cut = M.excerpt("One. Two.")
         self.assertEqual((short, cut), ("One. Two.", False))

@@ -90,7 +90,7 @@ export function constitutionSection(row, { stateName, label }) {
   ${provisions.length
     ? provisions.map((p) => `<article class="card stack-xs measure-provision">
     <p class="small"><strong>${link(p.url, p.label)}</strong></p>
-    ${p.quote ? `<blockquote class="constitution-text">${p.quote.split("\n\n").map((q) => `<p>${esc(q)}</p>`).join("")}${p.cut ? `<p class="small">… ${link(p.url, "the full text")}</p>` : ""}</blockquote>` : `<p class="small secondary">The full text is on the state's official site: ${ext(p.url, `the ${stateName} Constitution`)}.</p>`}
+    ${p.quote ? `<blockquote class="constitution-text">${p.quote.split("\n\n").map((q) => `<p>${esc(q)}</p>`).join("")}${p.cut ? `<p class="small">… ${link(p.url, "the full text")}</p>` : ""}</blockquote>` : p.new ? `<p class="small secondary">Not in the ${esc(stateName)} Constitution now: its proposed words are in ${ext(p.url, "the measure's official text")}.</p>` : `<p class="small secondary">The full text is on the state's official site: ${ext(p.url, `the ${stateName} Constitution`)}.</p>`}
     <p class="small">${esc(p.line)}</p>
   </article>`).join("")
     : `<p class="small secondary">The official text doesn't cite a provision of the U.S. Constitution or the ${esc(stateName)} Constitution.</p>`}

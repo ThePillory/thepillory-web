@@ -71,7 +71,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           MODE: ${{ github.event.inputs.mode || (github.event_name == 'push' && 'draft') || 'cases' }}
           ONLY: ${{ github.event.inputs.only }}
-          REDO: ${{ github.event.inputs.redo }}
+          REDO: ${{ github.event.inputs.redo || github.event_name == 'push' }}
           MAX_DOLLARS: ${{ github.event.inputs.max_dollars || '15' }}
         run: |
           python3 tools/measure_constitution.py "$MODE" --only "$ONLY" --max-dollars "$MAX_DOLLARS" $([ "$REDO" = "true" ] && echo --redo)
