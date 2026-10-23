@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=AR&candidate_status=C",
- "list_built_on": "2026-10-22",
+ "list_built_on": "2026-10-23",
  "built_on": "2026-10-23",
  "senate_up": true,
  "candidates": {
@@ -782,17 +782,17 @@
    "last_listed": "2026-10-23",
    "totals": {
     "cycle": 2026,
-    "receipts": 5011741.47,
-    "disbursements": 4735596.64,
-    "cash_on_hand": 1652497.02,
-    "individual_unitemized": 35192.01,
-    "individual_itemized": 2005444.31,
-    "pac": 1707367.48,
+    "receipts": 5264024.47,
+    "disbursements": 5151945.46,
+    "cash_on_hand": 1488431.2,
+    "individual_unitemized": 36760.01,
+    "individual_itemized": 2169659.31,
+    "pac": 1793867.48,
     "party": 5500,
     "self_funding": 0,
     "other": 1258237.67,
-    "coverage_end": "2026-09-30",
-    "last_report": "OCTOBER QUARTERLY 2026",
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
     "source_url": "https://www.fec.gov/data/candidate/H4AR02141/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -984,7 +984,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00551275/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-19",
+   "funding_checked": "2026-10-23",
    "cycle": 2026
   },
   "H6AR02294": {
@@ -1558,17 +1558,17 @@
    "last_listed": "2026-10-23",
    "totals": {
     "cycle": 2026,
-    "receipts": 2959104.53,
-    "disbursements": 1215042.11,
-    "cash_on_hand": 4777622.82,
-    "individual_unitemized": 39254.92,
-    "individual_itemized": 935293.33,
-    "pac": 1251050,
+    "receipts": 2975232.54,
+    "disbursements": 1506970.43,
+    "cash_on_hand": 4501822.51,
+    "individual_unitemized": 39279.92,
+    "individual_itemized": 936293.33,
+    "pac": 1259300,
     "party": 0,
     "self_funding": 0,
-    "other": 733506.28,
-    "coverage_end": "2026-09-30",
-    "last_report": "OCTOBER QUARTERLY 2026",
+    "other": 740359.29,
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
     "source_url": "https://www.fec.gov/data/candidate/H4AR04048/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -1760,7 +1760,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00548180/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-20",
+   "funding_checked": "2026-10-23",
    "cycle": 2026
   }
  }

@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=MN&candidate_status=C",
- "list_built_on": "2026-10-22",
+ "list_built_on": "2026-10-23",
  "built_on": "2026-10-23",
  "senate_up": true,
  "candidates": {
@@ -223,7 +223,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00903690/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-19",
+   "funding_checked": "2026-10-23",
    "cycle": 2026
   },
   "S6MN00440": {
@@ -240,17 +240,17 @@
    "last_listed": "2026-10-23",
    "totals": {
     "cycle": 2026,
-    "receipts": 10301879.15,
-    "disbursements": 8758551.67,
-    "cash_on_hand": 1543327.48,
-    "individual_unitemized": 3927301,
-    "individual_itemized": 5536633.19,
-    "pac": 489461.13,
+    "receipts": 11563963.37,
+    "disbursements": 10570749.3,
+    "cash_on_hand": 993214.07,
+    "individual_unitemized": 4472333.26,
+    "individual_itemized": 6156892.77,
+    "pac": 536180.72,
     "party": 1000,
     "self_funding": 7000,
-    "other": 340483.83,
-    "coverage_end": "2026-09-30",
-    "last_report": "OCTOBER QUARTERLY 2026",
+    "other": 390556.62,
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
     "source_url": "https://www.fec.gov/data/candidate/S6MN00440/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -442,7 +442,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00897751/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-19",
+   "funding_checked": "2026-10-23",
    "cycle": 2026
   },
   "S6MN00531": {
@@ -485,7 +485,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00932954/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-19",
+   "funding_checked": "2026-10-23",
    "cycle": 2026
   },
   "S6MN00465": {
@@ -536,7 +536,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00899310/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-19",
+   "funding_checked": "2026-10-23",
    "cycle": 2026
   },
   "S6MN00457": {
@@ -593,6 +593,13 @@
       "committee_id": "C00683508",
       "name": "FOREVER YOUTH ORGANIZATION UTILIZING A NEW GENERATION PAC",
       "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00571216",
+      "name": "DEFENDING AMERICAN VALUES EVERYWHERE PAC",
+      "total": 3500,
       "count": 1,
       "industry": "leadership"
      },
@@ -660,8 +667,8 @@
       "industry": "other"
      }
     ],
-    "count": 13,
-    "total": 47344.31,
+    "count": 14,
+    "total": 50844.31,
     "complete": true,
     "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00898817&two_year_transaction_period=2026&line_number=F3-11C"
    },
@@ -671,7 +678,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00898817/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-19",
+   "funding_checked": "2026-10-23",
    "cycle": 2026
   },
   "S6MN00556": {
@@ -688,17 +695,17 @@
    "last_listed": "2026-10-23",
    "totals": {
     "cycle": 2026,
-    "receipts": 9661153.52,
-    "disbursements": 7527317.45,
-    "cash_on_hand": 2134167.17,
-    "individual_unitemized": 3826145.7,
-    "individual_itemized": 4448571.04,
-    "pac": 306250.6,
+    "receipts": 12501785.59,
+    "disbursements": 9682729.8,
+    "cash_on_hand": 2819386.89,
+    "individual_unitemized": 5258641.37,
+    "individual_itemized": 5828686.93,
+    "pac": 334250.6,
     "party": 62000,
     "self_funding": 7878.48,
-    "other": 1010307.7,
-    "coverage_end": "2026-09-30",
-    "last_report": "OCTOBER QUARTERLY 2026",
+    "other": 1010328.21,
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
     "source_url": "https://www.fec.gov/data/candidate/S6MN00556/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -862,7 +869,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00935528/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-19",
+   "funding_checked": "2026-10-23",
    "cycle": 2026
   },
   "S6MN00515": {
@@ -905,7 +912,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00792002/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-19",
+   "funding_checked": "2026-10-23",
    "cycle": 2026
   },
   "S4MN00502": {
@@ -991,7 +998,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00932863/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-19",
+   "funding_checked": "2026-10-23",
    "cycle": 2026
   },
   "H6MN01232": {

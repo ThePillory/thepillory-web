@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=WI&candidate_status=C",
- "list_built_on": "2026-10-22",
+ "list_built_on": "2026-10-23",
  "built_on": "2026-10-23",
  "senate_up": false,
  "candidates": {
@@ -564,17 +564,17 @@
    "last_listed": "2026-10-23",
    "totals": {
     "cycle": 2026,
-    "receipts": 1001890.34,
-    "disbursements": 1075639.48,
-    "cash_on_hand": 928467.82,
-    "individual_unitemized": 141614.04,
-    "individual_itemized": 289024.6,
-    "pac": 520660,
+    "receipts": 1025262.83,
+    "disbursements": 1145843.38,
+    "cash_on_hand": 881636.41,
+    "individual_unitemized": 144136.53,
+    "individual_itemized": 290374.6,
+    "pac": 540160,
     "party": 0,
     "self_funding": 0,
     "other": 50591.7,
-    "coverage_end": "2026-09-30",
-    "last_report": "OCTOBER QUARTERLY 2026",
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
     "source_url": "https://www.fec.gov/data/candidate/H2WI02124/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -766,7 +766,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00502179/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-19",
+   "funding_checked": "2026-10-23",
    "cycle": 2026
   },
   "H6WI03180": {

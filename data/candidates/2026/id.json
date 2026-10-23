@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=ID&candidate_status=C",
- "list_built_on": "2026-10-22",
+ "list_built_on": "2026-10-23",
  "built_on": "2026-10-23",
  "senate_up": true,
  "candidates": {
@@ -21,14 +21,14 @@
    "last_listed": "2026-10-23",
    "totals": {
     "cycle": 2026,
-    "receipts": 1632335.28,
-    "disbursements": 1271518.58,
-    "cash_on_hand": 369109.62,
-    "individual_unitemized": 417174.95,
-    "individual_itemized": 1108660.33,
-    "pac": 10000,
-    "party": 0,
-    "self_funding": 10500,
+    "receipts": 1720883.16,
+    "disbursements": 1333768.68,
+    "cash_on_hand": 395407.4,
+    "individual_unitemized": 417944.73,
+    "individual_itemized": 1147938.43,
+    "pac": 33000,
+    "party": 2500,
+    "self_funding": 33500,
     "other": 86000,
     "coverage_end": "2026-09-30",
     "last_report": "OCTOBER QUARTERLY 2026",
@@ -62,7 +62,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00909309/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-19",
+   "funding_checked": "2026-10-23",
    "cycle": 2026
   },
   "S6ID00120": {
@@ -105,7 +105,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00894816/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-19",
+   "funding_checked": "2026-10-23",
    "cycle": 2026
   },
   "S6ID00161": {
@@ -163,7 +163,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00940833/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-19",
+   "funding_checked": "2026-10-23",
    "cycle": 2026
   },
   "S8ID00092": {
@@ -382,7 +382,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00440362/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-19",
+   "funding_checked": "2026-10-23",
    "cycle": 2026
   },
   "S6ID00138": {
@@ -425,7 +425,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00839720/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-19",
+   "funding_checked": "2026-10-23",
    "cycle": 2026
   },
   "S6ID00153": {
@@ -468,7 +468,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00928424/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-19",
+   "funding_checked": "2026-10-23",
    "cycle": 2026
   },
   "H6ID01292": {

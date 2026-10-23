@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=WA&candidate_status=C",
- "list_built_on": "2026-10-22",
+ "list_built_on": "2026-10-23",
  "built_on": "2026-10-23",
  "senate_up": false,
  "candidates": {
@@ -893,17 +893,17 @@
    "last_listed": "2026-10-23",
    "totals": {
     "cycle": 2026,
-    "receipts": 8838140.74,
-    "disbursements": 8226213.51,
-    "cash_on_hand": 638387.6,
-    "individual_unitemized": 770545.73,
-    "individual_itemized": 3173508.86,
-    "pac": 1039810.92,
+    "receipts": 9472266.66,
+    "disbursements": 9264207.1,
+    "cash_on_hand": 234519.93,
+    "individual_unitemized": 988249.07,
+    "individual_itemized": 3377431.09,
+    "pac": 1103810.93,
     "party": 6377.8,
     "self_funding": 0,
-    "other": 3847897.43,
-    "coverage_end": "2026-09-30",
-    "last_report": "OCTOBER QUARTERLY 2026",
+    "other": 3996397.77,
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
     "source_url": "https://www.fec.gov/data/candidate/H2WA03217/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -1095,7 +1095,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00806174/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-19",
+   "funding_checked": "2026-10-23",
    "cycle": 2026
   },
   "H2WA03134": {
@@ -1138,7 +1138,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00771436/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-19",
+   "funding_checked": "2026-10-23",
    "cycle": 2026
   },
   "H6WA03317": {
@@ -1566,7 +1566,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00773101/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-19",
+   "funding_checked": "2026-10-23",
    "cycle": 2026
   },
   "H6WA04257": {
@@ -1986,7 +1986,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00791236/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-10-19",
+   "funding_checked": "2026-10-23",
    "cycle": 2026
   },
   "H6WA05247": {
