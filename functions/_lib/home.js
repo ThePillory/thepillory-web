@@ -3,9 +3,12 @@
 // functions/states/ for /states/<name>/. The same sections in the same order
 // for every state, about three phone screens, each fact once:
 //   1. the headline, and "Showing [State] · Change" (the picker opens on tap)
-//   2. the U.S. map (tap a state; no zooming or dragging, so scrolling always
-//      works), and one link, "Counties and districts ›", to the state's map page
-//      (/states/<name>/map/: every county and district list, functions/_lib/state-map.js)
+//   2. on /, the U.S. map ("Tap your state to see who represents you"; no
+//      zooming or dragging, so scrolling always works) and "Counties and
+//      districts ›"; on /states/<name>/, that state's own map with its layers
+//      (Counties, Congressional, the state's chambers; a county or district
+//      opens its page) and "Every county and district ›", the lists on
+//      /states/<name>/map/ (functions/_lib/state-map.js). Both in Quick too.
 //   3. the ballot card, from WINDOW_DAYS before the state's next election
 //   4. Your representatives: the President, the two U.S. Senators and the
 //      Governor; then the House member and state legislators once districts are
@@ -38,6 +41,7 @@ import { executiveOfficials } from "./executive.js";
 import { stateOptions } from "./waitlist.js";
 import { stateLeadData, governorOf, liveCounties, comingTo } from "./state-lead.js";
 import { statePath } from "./state-paths.js";
+import { stateMapLite, stateMapFigure } from "./state-map.js";
 import { votesLoaded } from "./coverage.js";
 
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
@@ -58,8 +62,9 @@ function usMap(index, waiting, vs) {
   const live = Object.keys(LIVE).length;
   const counties = Object.keys(waiting.county).filter((f) => !LIVE[f]).length;
   return `
-<section class="hub-map stack-xs" aria-labelledby="h-map">
+<section class="hub-map stack-xs simple-keep" aria-labelledby="h-map">
   <h2 class="visually-hidden" id="h-map">Map of the United States</h2>
+  <p class="small secondary map-hint">Tap your state to see who represents you.</p>
   ${mapFigure({ id: "us-map", src: "/data/geo/us.json", links, status, label: "Map of the United States: tap a state to explore it", still: true })}
   ${smallStateButtons(index)}
   <div class="hub-map-foot">
@@ -67,6 +72,24 @@ function usMap(index, waiting, vs) {
     <a class="inline-link" href="/explore/">Explore the full map</a>
   </div>
   ${stateLinks}
+</section>`;
+}
+
+// A state's own page: the state's map at the top, the "zoom in" from the U.S.
+// map. Counties, Congressional and the state's chambers as layers; a county or
+// district opens its page. The long lists stay on /states/<name>/map/.
+function stateMapTop(vs, lite, waiting) {
+  const mapPage = `${statePath(vs.st)}map/`;
+  const live = liveCounties(vs.st).map(([, c]) => linkRow(c.briefing, c.name, "Live: meetings, agendas and local officials")).join("");
+  const figure = lite
+    ? stateMapFigure({ ...lite, waiting }, { noscript: `The map needs JavaScript. <a class="inline-link" href="${mapPage}">Every county and district in ${esc(vs.name)}</a> is listed on its map page.` })
+    : "";
+  return `
+<section class="hub-map stack-xs simple-keep" id="map" aria-labelledby="h-map">
+  <h2 class="visually-hidden" id="h-map">Map of ${esc(vs.name)}</h2>
+  ${figure || `<p class="small secondary">No map for ${esc(vs.name)} yet.</p>`}
+  <div class="card hub-map-links">${linkRow(mapPage, "Every county and district", lite ? `${lite.place.counties.length} ${lite.place.counties.length === 1 ? "county" : "counties"}, and every district, as lists` : "As lists")}${live}</div>
+  <p class="small"><a class="inline-link" href="/explore/">← The U.S. map</a></p>
 </section>`;
 }
 
@@ -185,7 +208,9 @@ export async function hub(env, request, url, d, vs) {
   const today = start.slice(0, 10);
   const since = addDays(today, -THIS_WEEK_DAYS);
   // Each section loads on its own: one that can't load shows a short note, and the rest still shows.
-  const [index, waiting, federalExec, elections, tPlace, dates, yourPlace, quick] = await Promise.all([
+  // The state's own page (/states/<name>/) leads with the state's map; / with the U.S. map.
+  const statePage = !!(vs && vs.source === "page");
+  const [index, waiting, federalExec, elections, tPlace, dates, yourPlace, quick, lite] = await Promise.all([
     loadIndex(env, request),
     loadSection("hub waitlist map", db ? () => waitlistBy(db) : async () => ({ county: {}, state: {} }), { county: {}, state: {} }),
     loadSection("hub executive", db ? () => executiveOfficials(db, "us-executive") : async () => [], []),
@@ -195,6 +220,7 @@ export async function hub(env, request, url, d, vs) {
     loadSection("hub election dates", () => asset(env, request, "/data/elections/dates.json"), null),
     elsewhere ? loadSection("hub your place", () => placeName(env, request, elsewhere), null) : null,
     loadSection("hub this week", () => quickHomeData(env, request, { st: feedSt, since, districts: mine, senatorIds: senators.map((o) => o.id) }), null),
+    statePage ? loadSection("hub state map", () => stateMapLite(env, request, vs.st, url.searchParams.get("layer")), null) : null,
   ]);
   // Links within the page (This week's switch) stay on this page: the state's own address, or /.
   const here = vs && vs.source === "page" ? statePath(vs.st) : "/";
@@ -245,7 +271,7 @@ export async function hub(env, request, url, d, vs) {
   <p class="hub-sub">Votes, bills, and meetings in plain language, measured against the Constitution. Built on evidence, open to every point of view.</p>
 </header>
 ${vs ? showingBar(vs) : ""}
-${usMap(index, waiting === FAILED ? { county: {}, state: {} } : waiting, vs)}
+${statePage ? (lite === FAILED ? sectionError(`${vs.name} map`) : stateMapTop(vs, lite, waiting)) : usMap(index, waiting === FAILED ? { county: {}, state: {} } : waiting, vs)}
 ${hero ? ballotHero(vs, win) : ""}
 ${notFound ? '<p class="banner banner--error" role="alert">We couldn\'t find districts for that. Check the address, or try your ZIP code.</p>' : ""}
 ${repsHtml}
@@ -262,7 +288,7 @@ ${vs && lead ? comingTo(vs, lead) : ""}
 ${elsewhere ? `<p class="small secondary your-place">Your place: ${esc(typeof yourPlace === "string" ? yourPlace : STATE_NAME[elsewhere.st])} · <a class="inline-link" href="/briefing/">Your briefing</a></p>` : ""}
 ${quickLinks()}
 </div>
-${index ? `<script src="/assets/map.js?v=${ASSET_VERSION}" defer></script>` : ""}`;
+${index || lite ? `<script src="/assets/map.js?v=${ASSET_VERSION}" defer></script>` : ""}`;
   // Personal only once the visitor's districts are known; otherwise the same for everyone.
   const title = vs && vs.source === "page" ? vs.name : "Know what your government is doing";
   return page(title, main, { tab: "home", root: true, personal: !!d, partial: anyFailed(waiting, federalExec, elections, quick) });

@@ -176,7 +176,7 @@ export function breadcrumb(items) {
  * shape goes. `still`: no zooming or dragging (the hub), so a swipe always
  * scrolls the page.
  */
-export function mapFigure({ id, src, links, status = {}, layers = null, active = null, label, legend = "", still = false }) {
+export function mapFigure({ id, src, links, status = {}, layers = null, active = null, label, legend = "", still = false, noscript = "" }) {
   const toggles = layers && layers.length > 1
     ? `<div class="pill-filter map-layers" role="group" aria-label="Map layers">${layers
         .map(([key, name]) => `<a class="toggle" href="?layer=${key}#map" data-layer="${key}"${key === active ? ' aria-current="true"' : ""}>${esc(name)}</a>`)
@@ -195,6 +195,6 @@ export function mapFigure({ id, src, links, status = {}, layers = null, active =
   </div>
   ${legend}
   <script type="application/json" data-map-links>${JSON.stringify({ links, status }).replace(/</g, "\\u003c")}</script>
-  <noscript><p class="small secondary">The map needs JavaScript. Everything on it is in the lists below.</p></noscript>
+  <noscript><p class="small secondary">${noscript || "The map needs JavaScript. Everything on it is in the lists below."}</p></noscript>
 </figure>`;
 }

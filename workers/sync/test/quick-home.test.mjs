@@ -108,12 +108,13 @@ test("Quick keeps the headline, the ballot card, Your representatives, This week
     assert.ok(order.every((n, i) => n >= 0 && (i === 0 || n > order[i - 1])), `${path}: order ${order}`);
     const hero = at("ballot-hero");
     if (hero >= 0) assert.ok(hero > order[0] && hero < order[1], `${path}: the ballot card before Your representatives`);
+    assert.match(main, /<section class="hub-map stack-xs simple-keep"/, `${path}: the map stays in Quick`);
     for (const id of ["your-reps", "this-week", "elections"]) {
       const i = at(`id="${id}"`);
       assert.match(main.slice(main.lastIndexOf("<", i), i), /simple-keep/, `${path}: ${id} stays in Quick`);
     }
     // Everything else is a direct child of .simple-scope without .simple-keep, so Quick hides it.
-    for (const id of ["us-map", "nation", "topics"]) {
+    for (const id of ["nation", "topics"]) {
       const i = at(`id="${id}"`);
       if (i < 0) continue;
       const open = main.lastIndexOf("<", i);
