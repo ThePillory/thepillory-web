@@ -1,0 +1,41 @@
+# Builds data/ca-constitution.json, the California Constitution word for word
+# from California Legislative Information (tools/build_ca_constitution.py).
+# Weekly, so amendments voters approve show up; when the builder changes; and on demand (Actions ->
+# California Constitution -> Run workflow; "probe" prints one page's HTML).
+name: California Constitution
+on:
+  push:
+    paths: ["tools/build_ca_constitution.py", ".github/workflows/ca-constitution.yml"]
+  schedule:
+    - cron: "17 14 * * 1"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "build, or probe (print one article page, write nothing)"
+        default: "build"
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe
+        if: github.event.inputs.mode == 'probe'
+        run: python3 tools/build_ca_constitution.py --probe
+      - name: Build from leginfo
+        if: github.event.inputs.mode != 'probe'
+        run: python3 tools/build_ca_constitution.py
+      - name: One article page, for fixing the parser
+        if: failure()
+        run: python3 tools/build_ca_constitution.py --probe
+      - name: Commit the text
+        if: github.event.inputs.mode != 'probe'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/ca-constitution.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Refresh the California Constitution from California Legislative Information"
+          git push
