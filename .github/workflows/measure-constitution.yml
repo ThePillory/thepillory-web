@@ -15,7 +15,7 @@ on:
   # TEMPORARY: the first draft run from the branch; removed before merging.
   push:
     branches: [claude/pillory-mobile-screens-p5zekn]
-    paths: [.github/workflows/measure-constitution.yml]
+    paths: [.github/workflows/measure-constitution.yml, tools/measure_constitution.py]
   schedule:
     - cron: "23 15 * * *"
   workflow_dispatch:
