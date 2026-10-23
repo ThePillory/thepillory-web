@@ -91,7 +91,9 @@ def fields(line):
 
 
 def section_text(xml):
-    """A section's content XML as plain text, one paragraph per <p>."""
+    """A section's content XML as plain text, one paragraph per <p>. The XML marks the space
+    after a subdivision letter with an empty element (<span class="EnSpace"/>): read as a space."""
+    xml = re.sub(r"<[^<>]+/>", " ", xml)
     paras = [text_of(p) for p in re.findall(r"<p\b[^>]*>(.*?)</p>", xml, flags=re.S | re.I)]
     return "\n\n".join(p for p in paras if p)
 
@@ -142,7 +144,11 @@ def build(zpath):
             continue
         lob = r["content_xml"]
         name = names.get(lob.lower()) or next((names[n] for n in names if n.endswith(lob.lower())), None)
-        text = section_text(z.read(name).decode("utf-8", "replace")) if name else ""
+        raw = z.read(name).decode("utf-8", "replace") if name else ""
+        text = section_text(raw)
+        if art == "XIII A" and num == "1":
+            print("Article XIII A, Section 1, as stored:", raw[:400])
+            print("  read as:", text[:200])
         if not text:
             bad.append((r["article"], r["section_num"], "no text"))
             continue

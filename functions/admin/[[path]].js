@@ -20,6 +20,9 @@
 // /admin/review/networth/ scanned annual financial disclosure reports read by AI ("Net worth,
 //                         as reported"): settle lines the two readings read differently,
 //                         confirm or take down
+// /admin/review/measures/ ballot measures' "Constitution" sections (functions/_lib/measure-review.js):
+//                         read each AI draft against its sources, keep or drop provisions and court
+//                         records, approve or send back; they go live together once all are approved
 // /admin/waitlist/        "Bring ThePillory to your county": sign-ups by county (counts only)
 // /admin/corrections/     readers' error reports ("Report an error"): record fixed, not an error, or duplicate
 // /admin/health/          every data source green, yellow or red, with 30 days of history (functions/_lib/health-pages.js)
@@ -31,6 +34,7 @@ import { checkAccess } from "../_lib/access.js";
 import { healthData, adminHealthMain, deadLinks } from "../_lib/health-pages.js";
 import { networthScanList, networthScanItem, networthScanChange, networthReviewHref } from "../_lib/networth-review.js";
 import { correctionsList, correctionChange } from "../_lib/corrections-review.js";
+import { measureReviewList, measureReviewItem, measureReviewChange, measureReviewHref } from "../_lib/measure-review.js";
 import { inChunks } from "../_lib/data.js";
 import { parse, badge, baselineSection, provisionsFor } from "../_lib/analysis.js";
 import { orderHref } from "../_lib/orders.js";
@@ -1094,6 +1098,7 @@ ${batch}
 <h2 class="label queue-head" id="topics">Topic tags</h2>
 <p class="small"><a class="inline-link" href="/admin/review/topics/">Check and correct topic tags</a> on bills, county agenda items, executive actions and Platform excerpts.</p>
 <p class="small"><a class="inline-link" href="/admin/review/trades/">Scanned trade reports</a>: compare AI transcriptions of scanned OGE Form 278-T reports with the scan before they publish.</p>
+<p class="small"><a class="inline-link" href="/admin/review/measures/">Ballot measures: the Constitution section</a>: what each November 3 measure changes, the constitutional provisions it touches and court records about it. Approve each one; they go live together.</p>
 <p class="small"><a class="inline-link" href="/admin/review/networth/">Scanned net worth reports</a>: check AI transcriptions of scanned annual financial disclosure reports, and settle lines the two readings read differently.</p>`;
 }
 
@@ -1598,6 +1603,28 @@ async function handle(context) {
     const origin = request.headers.get("Origin");
     if (origin && origin !== url.origin) return adminPage("Refused", '<header class="page-head"><h1>Refused</h1></header>', 403);
     return relevanceChange(env.DB, decodeURIComponent(parts[2]), request, who.email);
+  }
+  if (parts[1] === "measures") {
+    try {
+      if (parts.length === 2) return adminPage(...Object.values(await measureReviewList(env.DB, { done: url.searchParams.get("done") || "" })));
+      if (parts.length !== 3) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+      const key = decodeURIComponent(parts[2]);
+      if (request.method === "POST") {
+        const origin = request.headers.get("Origin");
+        if (origin && origin !== url.origin) return adminPage("Refused", '<header class="page-head"><h1>Refused</h1></header>', 403);
+        const r = await measureReviewChange(env.DB, key, await request.formData(), who.email);
+        if (r.error) {
+          const v = await measureReviewItem(env.DB, key, { error: r.error, form: r.form });
+          return v ? adminPage(v.title, v.main) : adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+        }
+        return Response.redirect(`${url.origin}${measureReviewHref(key)}?done=${encodeURIComponent(r.done)}`, 303);
+      }
+      const v = await measureReviewItem(env.DB, key, { done: url.searchParams.get("done") || "" });
+      return v ? adminPage(v.title, v.main) : adminPage("Not found", '<header class="page-head"><h1>No such measure</h1></header>', 404);
+    } catch (err) {
+      if (/no such table|no such column/i.test(String(err && err.message))) return missingTables();
+      throw err;
+    }
   }
   if (parts[1] === "trades") {
     try {

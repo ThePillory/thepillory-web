@@ -27,6 +27,7 @@ import {
 } from "../_lib/elections.js";
 import { pacificNow } from "../_lib/meetings.js";
 import { fold } from "../_lib/summary.js";
+import { publishedSection, constitutionSection } from "../_lib/measure-constitution.js";
 
 const BACK = ["Elections", "/elections/"];
 const NEUTRAL = "Every candidate and measure is shown the same way, in ballot order, with what the official sources print. ThePillory doesn't endorse candidates or measures, and doesn't publish polls or predictions.";
@@ -413,7 +414,7 @@ ${source ? `<p class="small">${source}</p>` : ""}`;
 // A Washington measure: the Voters' Pamphlet's parts in its order. The ballot title and the explanatory
 // statement are the Attorney General's, the fiscal impact statement is the Office of Financial Management's,
 // and the arguments are each campaign's, all word for word (tools/build_wa_measures.py).
-function waMeasurePage(election, m, back, plain = null) {
+function waMeasurePage(election, m, back, plain = null, conHtml = "") {
   const id = election.election.id;
   const bt = m.ballot_title;
   const paras = (list) => list.map((p) => `<p class="small">${esc(p)}</p>`).join("");
@@ -457,6 +458,7 @@ ${simple}
 </section>
 ${fold("present", "The law as it presently exists", `<div class="statement-body stack-xs">${paras(m.explanatory.present)}</div><p class="hint">From the explanatory statement written by the Office of the Attorney General.</p>`)}
 ${fold("effect", "The effect of the proposed measure if approved", `<div class="statement-body stack-xs">${paras(m.explanatory.effect)}</div><p class="hint">From the explanatory statement written by the Office of the Attorney General.</p>`)}
+${conHtml}
 <section class="stack-sm" aria-labelledby="h-res"><h2 class="label" id="h-res">Results</h2>${results}</section>
 ${argumentsSection(m, `${sourceLink(m.links.pamphlet_page, "Arguments and rebuttals in the Voters' Pamphlet")} · ${esc(m.arguments_disclaimer)}`)}
 <section class="stack-sm" aria-labelledby="h-src"><h2 class="label" id="h-src">Official sources</h2>
@@ -470,7 +472,7 @@ ${argumentsSection(m, `${sourceLink(m.links.pamphlet_page, "Arguments and rebutt
 // A measure in the "sections" format (tools/build_state_measures.py: Colorado, Arizona, Florida,
 // Michigan): the question on the ballot, what a Yes and a No vote mean where the state publishes that,
 // then each official section in the source's order, each with who wrote it, all word for word.
-function sectionsMeasurePage(election, m, back, plain = null) {
+function sectionsMeasurePage(election, m, back, plain = null, conHtml = "") {
   const e = election.election;
   const state = STATE_NAME[e.state] || e.state_name || e.state;
   const para = (p) => {
@@ -533,6 +535,7 @@ ${m.yes_means ? `<section class="stack-sm" aria-labelledby="h-means"><h2 class="
 </section>` : ""}
 ${first ? sectionCard(first) : ""}
 ${rest.map((sec) => fold(sec.id, sec.heading, `${body(sec.paragraphs)}<p class="hint">${esc(sec.by)}.${sec.note ? ` ${esc(sec.note)}` : ""}</p>`)).join("")}
+${conHtml}
 ${args}
 ${argLinks}
 <section class="stack-sm" aria-labelledby="h-res"><h2 class="label" id="h-res">Results</h2>${results}</section>
@@ -545,13 +548,17 @@ ${argLinks}
 }
 
 async function measurePage(election, measureId, env = {}) {
+  const st = election.election.state;
   const id = election.election.id;
   const back = [election.election.name, electionHref(id)];
   const m = election.measures.find((x) => x.id === measureId);
   if (!m) return notFound("No measure at this address.", "home", back);
   const plain = await loadSection("measure plain", () => plainFor(env.DB, "measure", `${id}:${m.id}`), null);
-  if (m.ballot_title) return waMeasurePage(election, m, back, plain === FAILED ? null : plain);
-  if (election.election.format === "sections") return sectionsMeasurePage(election, m, back, plain === FAILED ? null : plain);
+  // The Constitution section: only once every measure's is approved, all at once (functions/_lib/measure-constitution.js).
+  const con = m.scope === "statewide" ? await loadSection("measure constitution", () => publishedSection(env.DB, id, m.id), null) : null;
+  const conHtml = con && con !== FAILED ? constitutionSection(con, { stateName: STATE_NAME[st] || st, label: measureName(m) }) : "";
+  if (m.ballot_title) return waMeasurePage(election, m, back, plain === FAILED ? null : plain, conHtml);
+  if (election.election.format === "sections") return sectionsMeasurePage(election, m, back, plain === FAILED ? null : plain, conHtml);
   const statewide = m.scope === "statewide";
   const county = m.county ? election.counties[m.county] : null;
   const feed = statewide ? await loadSection("measure results", () => sosResults(election, m.results_path), null) : null;
@@ -620,6 +627,7 @@ ${m.tax_rate_statement && m.tax_rate_statement.length ? `<section class="stack-s
 </header>
 ${simple}
 ${official}
+${conHtml}
 <section class="stack-sm" aria-labelledby="h-res"><h2 class="label" id="h-res">Results</h2>${results}</section>
 ${argumentsSection(m, statewide ? sourceLink(m.links.arguments, "Arguments and rebuttals in the official guide") : sourceLink(m.links.pamphlet, "Arguments in the county's Voter Information Pamphlet (PDF)"))}
 <section class="stack-sm" aria-labelledby="h-src"><h2 class="label" id="h-src">Official sources</h2>

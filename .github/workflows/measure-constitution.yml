@@ -1,0 +1,60 @@
+# The "Constitution" section of each November 3, 2026 statewide ballot measure
+# (tools/measure_constitution.py, docs/elections.md "The Constitution section").
+#   draft: suggests each measure's section (claude-opus-5-5), checks it in code,
+#          searches court records, and holds every one on /admin/review/measures/
+#          until a person approves it. Nothing goes live here.
+#   cases: searches court records again (daily); a record found after a measure
+#          was approved waits on the review page too.
+#   list:  what's drafted, by status.
+# Actions -> Draft measure Constitution sections -> Run workflow.
+#
+# Needs these repository secrets: ANTHROPIC_API_KEY, COURTLISTENER_API_TOKEN,
+# CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID.
+name: Draft measure Constitution sections
+on:
+  schedule:
+    - cron: "23 15 * * *"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "draft, cases, or list"
+        type: choice
+        options: [draft, cases, list]
+        default: draft
+      only:
+        description: "One measure, e.g. 2026-11-03-co/amendment-87 (blank: every measure)"
+        default: ""
+      redo:
+        description: "Draft again measures already drafted and waiting (never an approved one)"
+        type: boolean
+        default: false
+      max_dollars:
+        description: "Stop before spending more than this (dollars)"
+        default: "15"
+permissions:
+  contents: read
+concurrency:
+  group: measure-constitution
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null && pip install -q anthropic
+      - name: Run
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          COURTLISTENER_API_TOKEN: ${{ secrets.COURTLISTENER_API_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          MODE: ${{ github.event.inputs.mode || 'cases' }}
+          ONLY: ${{ github.event.inputs.only }}
+          REDO: ${{ github.event.inputs.redo }}
+          MAX_DOLLARS: ${{ github.event.inputs.max_dollars || '15' }}
+        run: |
+          python3 tools/measure_constitution.py "$MODE" --only "$ONLY" --max-dollars "$MAX_DOLLARS" $([ "$REDO" = "true" ] && echo --redo)
