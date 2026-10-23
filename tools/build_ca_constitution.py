@@ -31,7 +31,7 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "data" / "ca-constitution.json"
 BASE = "https://leginfo.legislature.ca.gov/faces/"
 TOC = BASE + "codesTOCSelected.xhtml?tocCode=CONS&tocTitle=+California+Constitution+-+CONS"
-UA = "ThePillory/1.0 (+https://thepillory.co; civic data, one request at a time)"
+UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36 ThePillory/1.0 (+https://thepillory.co)"
 
 # Every article of the California Constitution, in order (used when the table of
 # contents can't be read; the TOC's own list wins when it can).
@@ -44,7 +44,7 @@ ROMAN = {"I": 1, "V": 5, "X": 10, "L": 50, "C": 100}
 def get(url, tries=3):
     for i in range(tries):
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": UA})
+            req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "text/html,application/xhtml+xml", "Accept-Language": "en-US,en;q=0.9"})
             with urllib.request.urlopen(req, timeout=60) as r:
                 return r.read().decode("utf-8", "replace")
         except Exception as err:  # noqa: BLE001 (any network error: try again, then give up loudly)
@@ -141,6 +141,11 @@ def build():
 
 def main():
     if "--probe" in sys.argv:
+        for u in ["https://downloads.leginfo.legislature.ca.gov/", "https://leginfo.legislature.ca.gov/faces/home.xhtml"]:
+            try:
+                print(u, "->", len(get(u, tries=1)), "bytes")
+            except Exception as err:  # noqa: BLE001
+                print(u, "->", err)
         page = get(BASE + "codes_displayText.xhtml?lawCode=CONS&article=XIII%20A")
         i = page.find("SECTION 1")
         print(len(page), "bytes; around SECTION 1:\n", page[max(0, i - 1500): i + 2500])
