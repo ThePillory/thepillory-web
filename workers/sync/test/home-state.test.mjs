@@ -4,7 +4,7 @@
 // copy per state that browsers don't keep.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { connectionState, visitorState, pickedState, stateCookie } from "../../../functions/_lib/visitor-state.js";
+import { connectionState, visitorState, clearStateCookie } from "../../../functions/_lib/visitor-state.js";
 import { edgeCached } from "../../../functions/_lib/render.js";
 
 const R = (cookie = "", cf = null) => ({ headers: new Headers({ Cookie: cookie }), cf });
@@ -19,15 +19,14 @@ test("the connection's state: US states, DC and Puerto Rico; nothing else", () =
   assert.equal(connectionState(null), null);
 });
 
-test("a picked state, then saved districts, then the connection", () => {
+test("saved districts, then the connection; a state picked with the old picker no longer counts", () => {
   const wa = { country: "US", regionCode: "WA" };
   assert.deepEqual(visitorState(R("", wa), null), { st: "WA", name: "Washington", source: "connection" });
   assert.deepEqual(visitorState(R("", wa), { st: "CA", cd: "5" }), { st: "CA", name: "California", source: "districts" });
-  assert.deepEqual(visitorState(R("pillory_state=tx", wa), { st: "CA" }), { st: "TX", name: "Texas", source: "picked" });
-  assert.equal(visitorState(R("pillory_state=zz", { country: "DE" }), null), null, "a bad cookie is ignored");
-  assert.equal(pickedState(R("other=1; pillory_state=NY")), "NY");
-  assert.match(stateCookie("NY"), /^pillory_state=NY; Path=\/; Max-Age=31536000/);
-  assert.match(stateCookie(null), /Max-Age=0/);
+  assert.deepEqual(visitorState(R("pillory_state=TX", wa), null), { st: "WA", name: "Washington", source: "connection" }, "back to the connection's state");
+  assert.deepEqual(visitorState(R("pillory_state=TX", wa), { st: "CA" }), { st: "CA", name: "California", source: "districts" });
+  assert.equal(visitorState(R("pillory_state=TX", { country: "DE" }), null), null);
+  assert.match(clearStateCookie(), /^pillory_state=; Path=\/; Max-Age=0/);
 });
 
 test("one cached copy per state; browsers told not to keep it", async () => {
