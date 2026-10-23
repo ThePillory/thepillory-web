@@ -141,11 +141,9 @@ def build():
 
 def main():
     if "--probe" in sys.argv:
-        for u in ["https://downloads.leginfo.legislature.ca.gov/", "https://leginfo.legislature.ca.gov/faces/home.xhtml"]:
-            try:
-                print(u, "->", len(get(u, tries=1)), "bytes")
-            except Exception as err:  # noqa: BLE001
-                print(u, "->", err)
+        listing = get("https://downloads.leginfo.legislature.ca.gov/", tries=1)
+        print(re.sub(r"<[^>]+>", " ", listing)[:6000])
+        sys.exit(1)
         page = get(BASE + "codes_displayText.xhtml?lawCode=CONS&article=XIII%20A")
         i = page.find("SECTION 1")
         print(len(page), "bytes; around SECTION 1:\n", page[max(0, i - 1500): i + 2500])
