@@ -9,7 +9,6 @@
 //      (Counties, Congressional, the state's chambers; a county or district
 //      opens its page) and "Every county and district ›", the lists on
 //      /states/<name>/map/ (functions/_lib/state-map.js). Both in Quick too.
-//      Then "Showing [State] · Change", below the map (the picker opens on tap).
 //   3. the ballot card, from WINDOW_DAYS before the state's next election
 //   4. Your representatives: the President, the two U.S. Senators and the
 //      Governor; then the House member and state legislators once districts are
@@ -39,7 +38,6 @@ import { loadElection, ballotFor, ballotHref, electionHref, whenLine, electionId
 import { LIVE, asset, loadIndex, loadPlace, waitlistBy, usMapLinks, smallStateButtons, mapFigure } from "./geo.js";
 import { ASSET_VERSION } from "./generated.js";
 import { executiveOfficials } from "./executive.js";
-import { stateOptions } from "./waitlist.js";
 import { stateLeadData, governorOf, liveCounties, comingTo } from "./state-lead.js";
 import { statePath } from "./state-paths.js";
 import { stateMapLite, stateMapFigure } from "./state-map.js";
@@ -92,24 +90,6 @@ function stateMapTop(vs, lite, waiting) {
   <div class="card hub-map-links">${linkRow(mapPage, "Every county and district", lite ? `${lite.place.counties.length} ${lite.place.counties.length === 1 ? "county" : "counties"}, and every district, as lists` : "As lists")}${live}</div>
   <p class="small"><a class="inline-link" href="/explore/">← The U.S. map</a></p>
 </section>`;
-}
-
-// "Showing [State] · Change": where the state came from, and a picker that
-// saves another one in this browser (POST /api/state). Works without JavaScript.
-function showingBar(vs) {
-  const why = vs.source === "page" ? "" : vs.source === "picked" ? "you chose it" : vs.source === "districts" ? "from your saved districts" : "based on your connection";
-  return `
-<details class="showing-bar card">
-  <summary><span>Showing <strong>${esc(vs.name)}</strong>${why ? ` <span class="secondary">· ${why}</span>` : ""}</span><span class="inline-link">Change</span></summary>
-  <form class="stack-sm" method="post" action="/api/state">
-    <label class="field"><span class="label">State</span>
-      <select class="input" name="st" required>${stateOptions(vs.st)}</select>
-    </label>
-    <button class="btn btn--primary" type="submit">Show this state</button>
-  </form>
-  ${vs.source === "picked" ? `<form method="post" action="/api/state"><input type="hidden" name="st" value="" /><button class="btn btn--block" type="submit">Use my connection's location instead</button></form>` : ""}
-  <p class="hint">Your approximate state comes from your connection and isn't stored. A state you choose is saved only in this browser. For your exact districts, <a class="inline-link" href="#find">find your reps</a> with an address or ZIP code.</p>
-</details>`;
 }
 
 // One line with the date and countdown, and a standard-size button: no more.
@@ -238,6 +218,7 @@ export async function hub(env, request, url, d, vs) {
   <details class="lookup-change" id="find"><summary class="inline-link">Use a different address</summary>${lookupForm(null, { id: "find-change", heading: "Street address or ZIP code", bare: true })}</details>`
     : "";
   const repsHtml = yourReps({
+    stateName: vs ? vs.name : null,
     president: (federalExec === FAILED ? [] : federalExec).find((o) => o.rank === 1) || null,
     senators,
     governor: lead ? governorOf(lead.executive) : null,
@@ -272,7 +253,6 @@ export async function hub(env, request, url, d, vs) {
   <p class="hub-sub">Votes, bills, and meetings in plain language, measured against the Constitution. Built on evidence, open to every point of view.</p>
 </header>
 ${statePage ? (lite === FAILED ? sectionError(`${vs.name} map`) : stateMapTop(vs, lite, waiting)) : usMap(index, waiting === FAILED ? { county: {}, state: {} } : waiting, vs)}
-${vs ? showingBar(vs) : ""}
 ${hero ? ballotHero(vs, win) : ""}
 ${notFound ? '<p class="banner banner--error" role="alert">We couldn\'t find districts for that. Check the address, or try your ZIP code.</p>' : ""}
 ${repsHtml}

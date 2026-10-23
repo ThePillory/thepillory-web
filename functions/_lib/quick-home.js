@@ -188,9 +188,9 @@ const personRow = (o, job) =>
  * state's two U.S. Senators and its Governor; then the visitor's House member
  * and state legislators once their districts are known (`mine`), or the
  * address/ZIP box (`lookup`, the form's HTML) until then. `allHref`: every
- * level, county included, on the Reps tab.
+ * level, county included, on the Reps tab. `stateName`: the state shown, in the heading.
  */
-export function yourReps({ president, senators = [], governor, mine = [], lookup = "", known = "", allHref = "/reps/" }) {
+export function yourReps({ president, senators = [], governor, mine = [], lookup = "", known = "", allHref = "/reps/", stateName = null }) {
   const rows = [
     president ? personRow(president, JOB.president) : "",
     ...senators.map((o) => personRow(o, JOB.senator)),
@@ -199,7 +199,7 @@ export function yourReps({ president, senators = [], governor, mine = [], lookup
   ].join("");
   return `
 <section class="card stack-sm simple-keep" id="your-reps" aria-labelledby="h-your-reps">
-  <div class="section-head"><h2 class="label" id="h-your-reps">Your representatives</h2><a class="section-link" href="${esc(allHref)}">All</a></div>
+  <div class="section-head"><h2 class="label" id="h-your-reps">Your representatives${stateName ? ` in ${esc(stateName)}` : ""}</h2><a class="section-link" href="${esc(allHref)}">All</a></div>
   ${rows ? `<div>${rows}</div>` : '<p class="small secondary">Appears after the data sync runs.</p>'}
   ${known}
   ${lookup}

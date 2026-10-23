@@ -49,8 +49,9 @@ test("/states/<name>/ and the home page for a visitor there are the same templat
   assert.equal(sections(page.html)[0], "map", "the state's map first");
   assert.match(visit.html, /id="us-map"/);
   assert.doesNotMatch(page.html, /id="us-map"/);
-  assert.match(page.html, /Showing <strong>Washington<\/strong>/);
-  assert.match(visit.html, /Showing <strong>Washington<\/strong>/);
+  assert.match(page.html, /Your representatives in Washington<\/h2>/);
+  assert.match(visit.html, /Your representatives in Washington<\/h2>/);
+  for (const h of [page.html, visit.html]) assert.doesNotMatch(h, /showing-bar|Showing <strong>/, "no Showing [State] · Change bar");
   const tx = await call(states, "/states/texas/");
   assert.deepEqual(sections(tx.html), sections(page.html));
   // The eight sections, in order: map, (ballot card), Your representatives, This week, the nation, topics, elections.
@@ -85,7 +86,7 @@ test("California: Calaveras is a county link beside the map; the counties and di
 test("tap a state: its own map at the top, with its layers, every shape linked, and the lists one tap away", async () => {
   const { html } = await call(states, "/states/ohio/");
   const at = (x) => html.indexOf(x);
-  assert.ok(at('class="hub-title"') < at('id="state-map"') && at('id="state-map"') < at("Showing <strong>Ohio") && at("Showing <strong>Ohio") < at('id="your-reps"'), "the map right under the headline, then Showing Ohio");
+  assert.ok(at('class="hub-title"') < at('id="state-map"') && at('id="state-map"') < at('id="your-reps"'), "the map right under the headline, then Your representatives");
   for (const [layer, name] of [["county", "Counties"], ["cd", "Congressional"], ["sldu", "State Senate"], ["sldl", "State House"]]) {
     assert.match(html, new RegExp(`href="\\?layer=${layer}#map" data-layer="${layer}"[^>]*>${name}</a>`), name);
   }
