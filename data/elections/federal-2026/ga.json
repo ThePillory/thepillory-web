@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=GA&candidate_status=C",
- "built_on": "2026-10-22",
+ "built_on": "2026-10-23",
  "senate_up": true,
  "senate": [
   {
@@ -478,20 +478,20 @@
     "committee": "C00938175"
    },
    {
-    "id": "H6GA11231",
-    "name": "EKPETE KAMA, ULOMA",
-    "party": "REPUBLICAN PARTY",
-    "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6GA11231/",
-    "committee": "C00946285"
-   },
-   {
     "id": "H6GA03170",
     "name": "EKPETE KAMA, ULOMA",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6GA03170/",
     "committee": "C00846402"
+   },
+   {
+    "id": "H6GA11231",
+    "name": "EKPETE KAMA, ULOMA",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6GA11231/",
+    "committee": "C00946285"
    },
    {
     "id": "H6GA11116",
@@ -526,19 +526,19 @@
     "committee": "C00919027"
    },
    {
-    "id": "H6GA11207",
-    "name": "PRIDEMORE, TRICIA",
-    "party": "REPUBLICAN PARTY",
-    "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6GA11207/",
-    "committee": "C00941468"
-   },
-   {
     "id": "H4GA11087",
     "name": "PRIDEMORE, TRICIA",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H4GA11087/",
+    "committee": "C00941468"
+   },
+   {
+    "id": "H6GA11207",
+    "name": "PRIDEMORE, TRICIA",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6GA11207/",
     "committee": "C00941468"
    },
    {

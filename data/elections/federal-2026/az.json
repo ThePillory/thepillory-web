@@ -3,20 +3,10 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=AZ&candidate_status=C",
- "built_on": "2026-10-22",
+ "built_on": "2026-10-23",
  "senate_up": false,
  "senate": [],
  "house": {
-  "0": [
-   {
-    "id": "H6AZ08210",
-    "name": null,
-    "party": "",
-    "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6AZ08210/",
-    "committee": "C00894121"
-   }
-  ],
   "1": [
    {
     "id": "H6AZ01488",

@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=NV&candidate_status=C",
- "built_on": "2026-10-22",
+ "built_on": "2026-10-23",
  "senate_up": false,
  "senate": [],
  "house": {
@@ -229,19 +229,19 @@
     "committee": "C00904219"
    },
    {
-    "id": "H6NV03204",
-    "name": "O'DONNELL, MARTY",
-    "party": "REPUBLICAN PARTY",
-    "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6NV03204/",
-    "committee": "C00900910"
-   },
-   {
     "id": "H4NV03225",
     "name": "O'DONNELL, MARTY",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H4NV03225/",
+    "committee": "C00900910"
+   },
+   {
+    "id": "H6NV03204",
+    "name": "O'DONNELL, MARTY",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NV03204/",
     "committee": "C00900910"
    },
    {
