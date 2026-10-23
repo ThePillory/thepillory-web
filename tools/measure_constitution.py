@@ -495,6 +495,14 @@ def parse_cases(results):
 
 
 CL_PAUSE = 4  # seconds between CourtListener requests
+# The token allows 125 searches a day, shared with the sync's order-courts step;
+# each measure takes two (dockets, opinions). The daily run checks this many
+# measures, the longest unchecked first, so each is searched every few days.
+CASES_PER_RUN = 20
+
+
+class DailyLimit(Exception):
+    """CourtListener's daily limit is used up: no more searches this run."""
 
 
 def search_cases(item):
@@ -516,6 +524,8 @@ def search_cases(item):
                 if err.code != 429 or attempt == 3:
                     raise
                 wait = int(err.headers.get("Retry-After") or 0) or 30 * 2 ** attempt
+                if wait > 120:
+                    raise DailyLimit(err.read()[:200].decode("utf-8", "replace")) from err
                 print(f"      CourtListener asked to wait ({err.headers.get('Retry-After') or 'no Retry-After'}; {err.read()[:200]!r}); waiting {min(wait, 300)} s", flush=True)
                 time.sleep(min(wait, 300))
     return parse_cases(rows), q
@@ -544,10 +554,10 @@ def ensure_tables(args):
 
 
 def existing(args):
-    return {r["measure_key"]: r for r in d1(args, command="SELECT measure_key, status, version, review_note, cases, cases_new FROM measure_constitution")}
+    return {r["measure_key"]: r for r in d1(args, command="SELECT measure_key, status, version, review_note, cases, cases_new, cases_checked_at FROM measure_constitution")}
 
 
-def save(args, item, changes, quotes, provisions, cases, notes, prev, by):
+def save(args, item, changes, quotes, provisions, cases, notes, prev, by, searched=True):
     key = item["key"]
     version = (prev["version"] + 1) if prev else 1
     quote_text = "\n\n".join(q for q, _ in quotes)
@@ -559,9 +569,10 @@ def save(args, item, changes, quotes, provisions, cases, notes, prev, by):
         "notes": json.dumps(notes, ensure_ascii=False), "model": MODEL, "prompt_version": PROMPT_VERSION, "version": version,
     }
     cols = list(row)
-    upsert = (f"INSERT INTO measure_constitution ({', '.join(cols)}, status, cases_checked_at, updated_at) VALUES ({', '.join(lit(row[c]) for c in cols)}, 'pending', datetime('now'), datetime('now')) "
+    checked_now = "datetime('now')" if searched else "NULL"
+    upsert = (f"INSERT INTO measure_constitution ({', '.join(cols)}, status, cases_checked_at, updated_at) VALUES ({', '.join(lit(row[c]) for c in cols)}, 'pending', {checked_now}, datetime('now')) "
               f"ON CONFLICT (measure_key) DO UPDATE SET {', '.join(f'{c} = excluded.{c}' for c in cols if c != 'measure_key')}, status = 'pending', "
-              "reviewed_by = NULL, reviewed_at = NULL, cases_checked_at = excluded.cases_checked_at, updated_at = excluded.updated_at;")
+              f"reviewed_by = NULL, reviewed_at = NULL, cases_checked_at = {'excluded.cases_checked_at' if searched else 'measure_constitution.cases_checked_at'}, updated_at = excluded.updated_at;")
     hist = f"INSERT INTO measure_constitution_history (measure_key, version, snapshot, action, by_whom) VALUES ({lit(key)}, {version}, {lit(json.dumps(row, ensure_ascii=False))}, 'drafted', {lit(by)});"
     d1(args, command=f"{upsert}\n{hist}")
 
@@ -614,11 +625,14 @@ def main():
 
     if args.mode == "cases":
         import load_trades as T  # noqa: E402
-        for i in items:
-            p = prev.get(i["key"])
-            if not p:
-                continue
-            cases, q = search_cases(i)
+        due = sorted((i for i in items if i["key"] in prev), key=lambda i: prev[i["key"]]["cases_checked_at"] or "")[:CASES_PER_RUN]
+        for i in due:
+            p = prev[i["key"]]
+            try:
+                cases, q = search_cases(i)
+            except DailyLimit as err:
+                print(f"CourtListener's daily limit is used up ({err}); the rest wait for the next run.", flush=True)
+                break
             if p["status"] != "approved":
                 # Not reviewed yet: the draft's list is simply brought up to date.
                 T.run_sql(args, [f"UPDATE measure_constitution SET cases = {lit(json.dumps(cases, ensure_ascii=False))}, cases_checked_at = datetime('now') WHERE measure_key = {lit(i['key'])};"])
@@ -644,7 +658,7 @@ def main():
         raise SystemExit("data/ca-constitution.json isn't built yet: run the California Constitution workflow first")
     ca = {r["id"]: r for r in json.loads(ca_path.read_text())["provisions"]}
     us_list = provisions_for_prompt(us)
-    spent, drafted, failed, texts = 0.0, 0, [], {}
+    spent, drafted, failed, texts, limit_hit = 0.0, 0, [], {}, False
     for i in items:
         p = prev.get(i["key"])
         if p and p["status"] == "approved" and not args.redo_approved:
@@ -666,12 +680,20 @@ def main():
             continue
         spent += dollars
         changes, quotes, provisions, notes = check_draft(i["m"], i["state"], parts, draft, us, ca)
-        try:
-            cases, q = search_cases(i)
-        except Exception as err:  # noqa: BLE001
-            cases, q = [], ""
-            notes.append(f"Court records couldn't be searched this time ({err}); searched again daily.")
-        save(args, i, changes, quotes, provisions, cases, notes, p, f"{MODEL} + code checks")
+        searched = False
+        if not limit_hit:
+            try:
+                cases, q = search_cases(i)
+                searched = True
+            except DailyLimit:
+                limit_hit = True
+            except Exception as err:  # noqa: BLE001
+                notes.append(f"Court records couldn't be searched this time ({err}); searched again daily.")
+        if not searched:
+            cases = json.loads((p or {}).get("cases") or "[]")
+            if limit_hit:
+                notes.append("Court records weren't searched in this run (CourtListener's daily limit); the daily run searches them.")
+        save(args, i, changes, quotes, provisions, cases, notes, p, f"{MODEL} + code checks", searched=searched)
         drafted += 1
         print(f"  {i['key']}: {changes}; {len(quotes)} quote(s); {len(provisions)} provision(s); {len(cases)} court record(s); "
               f"{len(notes)} note(s); ${dollars:.3f}", flush=True)
