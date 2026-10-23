@@ -44,7 +44,11 @@ test("/states/<name>/ and the home page for a visitor there are the same templat
   const page = await call(states, "/states/washington/");
   const visit = await call(home, "/", { cf: { country: "US", regionCode: "WA" } });
   assert.equal(page.res.status, 200);
-  assert.deepEqual(sections(page.html), sections(visit.html), "same sections, same order");
+  // The same sections, except that the state's page leads with the state's own map and / with the U.S. map.
+  assert.deepEqual(sections(page.html).filter((id) => id !== "map"), sections(visit.html), "same sections, same order");
+  assert.equal(sections(page.html)[0], "map", "the state's map first");
+  assert.match(visit.html, /id="us-map"/);
+  assert.doesNotMatch(page.html, /id="us-map"/);
   assert.match(page.html, /Showing <strong>Washington<\/strong>/);
   assert.match(visit.html, /Showing <strong>Washington<\/strong>/);
   const tx = await call(states, "/states/texas/");
@@ -53,7 +57,7 @@ test("/states/<name>/ and the home page for a visitor there are the same templat
   const order = sections(page.html).filter((id) => ["your-reps", "this-week", "nation", "topics", "elections"].includes(id));
   assert.deepEqual(order, ["your-reps", "this-week", "nation", "topics", "elections"]);
   for (const t of ["President &amp; Cabinet", "Congress", "Supreme Court"]) assert.ok(page.html.includes(`>${t}</div>`), t);
-  for (const gone of ["take-part", "communities", "understand", "map", "your-state"]) assert.ok(!sections(page.html).includes(gone), `${gone} moved off the page`);
+  for (const gone of ["take-part", "communities", "understand", "your-state"]) assert.ok(!sections(page.html).includes(gone), `${gone} moved off the page`);
   assert.doesNotMatch(page.html, /class="justice|county-list|district-grid/, "no justice cards or county and district lists here");
 });
 
@@ -68,7 +72,7 @@ test("what isn't loaded yet is one line, Coming to [State], with Join the list",
 
 test("California: Calaveras is a county link beside the map; the counties and districts are on the map page", async () => {
   const { html } = await call(states, "/states/california/");
-  assert.match(html, /href="\/states\/california\/map\/"[\s\S]*?Counties and districts/);
+  assert.match(html, /href="\/states\/california\/map\/"[\s\S]*?Every county and district/);
   assert.match(html, /href="\/calaveras\/"[\s\S]*?Calaveras County/);
   const map = await call(states, "/states/california/map/");
   assert.equal(map.res.status, 200);
@@ -76,6 +80,27 @@ test("California: Calaveras is a county link beside the map; the counties and di
   assert.match(map.html, /id="county-list"/);
   assert.match(map.html, /class="plain-list district-grid"/);
   assert.match(map.html, /href="\/states\/california\/"[^>]*>← California/);
+});
+
+test("tap a state: its own map at the top, with its layers, every shape linked, and the lists one tap away", async () => {
+  const { html } = await call(states, "/states/ohio/");
+  const at = (x) => html.indexOf(x);
+  assert.ok(at("Showing <strong>Ohio") < at('id="state-map"') && at('id="state-map"') < at('id="your-reps"'), "right below Showing Ohio");
+  for (const [layer, name] of [["county", "Counties"], ["cd", "Congressional"], ["sldu", "State Senate"], ["sldl", "State House"]]) {
+    assert.match(html, new RegExp(`href="\\?layer=${layer}#map" data-layer="${layer}"[^>]*>${name}</a>`), name);
+  }
+  const links = JSON.parse(html.match(/<script type="application\/json" data-map-links>([\s\S]*?)<\/script>/)[1]).links;
+  assert.equal(links.county["39049"][0], "/place/oh/franklin/", "a county opens its page");
+  assert.equal(links.cd["3"][0], "/district/congressional/oh-3/", "a district opens its page");
+  assert.equal(links.sldl["98"][0], "/district/state-house/oh-98/");
+  assert.match(html, /href="\/states\/ohio\/map\/">[\s\S]*?Every county and district/);
+  assert.match(html, /<noscript><p class="small secondary">The map needs JavaScript\. <a class="inline-link" href="\/states\/ohio\/map\/">/, "the list fallback without JavaScript");
+  assert.doesNotMatch(html, /county-list|district-grid/, "no long lists on the state's page");
+  const cd = await call(states, "/states/ohio/?layer=cd");
+  assert.match(cd.html, /data-layer="cd" aria-current="true"/);
+  const home = await call((await import("../../../functions/index.js")).onRequestGet, "/", { cf: { country: "US", regionCode: "OH" } });
+  assert.match(home.html, /Tap your state to see who represents you\./);
+  assert.match(home.html, /"OH":\["\/states\/ohio\/"/, "the U.S. map links each state to its page");
 });
 
 test("Ohio's State House lists district 98, never a stray 0", async () => {
@@ -88,7 +113,7 @@ test("old and other addresses redirect to the state's page", async () => {
   const r = async (fn, path) => (await call(fn, path)).res;
   assert.equal((await r(explore, "/explore/wa/")).headers.get("Location"), "https://thepillory.test/states/washington/map/");
   assert.equal((await r(explore, "/explore/ca/?layer=cd")).headers.get("Location"), "https://thepillory.test/states/california/map/?layer=cd");
-  assert.equal((await r(states, "/states/california/?layer=cd")).headers.get("Location"), "https://thepillory.test/states/california/map/?layer=cd");
+  assert.equal((await r(states, "/states/california/?layer=cd")).status, 200, "the state's page takes the map's layer");
   assert.equal((await r(states, "/states/wa/map/")).headers.get("Location"), "https://thepillory.test/states/washington/map/");
   assert.equal((await r(states, "/states/washington/elsewhere/")).status, 404);
   assert.equal((await r(states, "/states/wa/")).headers.get("Location"), "https://thepillory.test/states/washington/");
@@ -150,7 +175,7 @@ test("the top of every state's page: headline, map, ballot card, Your representa
     const { html } = await call(states, path);
     const at = (s) => html.indexOf(s);
     const head = at('class="hub-title"');
-    const map = at('id="us-map"');
+    const map = at('id="state-map"');
     const find = at('id="your-reps"');
     const week = at('id="this-week"');
     assert.ok(head > 0 && head < map && map < find && find < week, `${st}: headline, map, Your representatives, This week`);

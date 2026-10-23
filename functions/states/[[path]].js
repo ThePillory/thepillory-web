@@ -5,7 +5,8 @@
 // different spelling goes to the page's own address.
 // /states/<name>/map/: the state's map with its layers, every county, every
 // district, its statewide offices and its legislature's latest final votes
-// (functions/_lib/state-map.js). The old /states/<name>/?layer= goes there.
+// (functions/_lib/state-map.js). The state's page shows the same map at the
+// top (?layer= picks the layer there too), without the lists.
 import { page, guard, edgeCached, notFound, loadSection, FAILED, sectionError } from "../_lib/render.js";
 import { districtsFromCookie, STATE_NAME } from "../_lib/districts.js";
 import { hub, HUB_CACHE_SECONDS } from "../_lib/home.js";
@@ -26,8 +27,6 @@ export const onRequestGet = guard(async (context) => {
   const isMap = parts.length === 2;
   const own = isMap ? `${statePath(st)}map/` : statePath(st);
   if (url.pathname !== own) return Response.redirect(`${url.origin}${own}${url.search}`, 301);
-  // The map's layer switch used to live on the state's page.
-  if (!isMap && url.searchParams.has("layer")) return Response.redirect(`${url.origin}${statePath(st)}map/?layer=${encodeURIComponent(url.searchParams.get("layer"))}`, 301);
   if (isMap) return edgeCached(context, MAP_CACHE_SECONDS, () => mapPage(env, request, url, st));
   const vs = { st, name: STATE_NAME[st], source: "page" };
   const d = districtsFromCookie(request);

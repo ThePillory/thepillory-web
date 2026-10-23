@@ -56,20 +56,19 @@ export async function stateMapData(env, request, st, layerParam) {
   return { place, names, layer, waiting, officials, coverage: cov, activity };
 }
 
-/** The section, under "State map" (id "map"). */
-export function stateMapSection(data) {
-  if (!data) return "";
-  const { place, names, layer, activity, coverage } = data;
-  const waiting = data.waiting === FAILED ? { county: {} } : data.waiting;
-  const officials = data.officials === FAILED ? emptyOfficials : data.officials;
-
-  // Where each shape on the map goes.
+/**
+ * The drawn map and its layer switch (Counties, Congressional and the state's
+ * chambers): every county and district links to its page. `noscript`: what to
+ * say without JavaScript.
+ */
+export function stateMapFigure({ place, names, layer, waiting }, { noscript = "" } = {}) {
+  const wait = waiting && waiting !== FAILED ? waiting : { county: {} };
   const links = { county: {} };
   const status = {};
   for (const c of place.counties) {
     links.county[c.fips] = [placeHref(place.st, c.slug), `${c.name}${LIVE[c.fips] ? " (live community)" : ""}`];
     if (LIVE[c.fips]) status[c.fips] = "live";
-    else if (waiting.county[c.fips]) status[c.fips] = "waiting";
+    else if (wait.county[c.fips]) status[c.fips] = "waiting";
   }
   for (const l of ["cd", "sldu", "sldl"]) {
     if (!place.layers.includes(l)) continue;
@@ -81,6 +80,22 @@ export function stateMapSection(data) {
     <li><span class="swatch is-live" aria-hidden="true"></span>Live community</li>
     <li><span class="swatch is-waiting" aria-hidden="true"></span>People waiting</li>
   </ul>`;
+  return mapFigure({ id: "state-map", src: `/data/geo/shapes/${place.st.toLowerCase()}-{layer}.json`, links, status, layers, active: layer, label: `Map of ${place.name}`, legend, still: true, noscript });
+}
+
+/** Only what the drawn map needs: the state's shapes index and district names. Null when there's no map data. */
+export async function stateMapLite(env, request, st, layerParam) {
+  const place = await loadPlace(env, request, st.toLowerCase());
+  if (!place) return null;
+  const names = await loadDistrictNames(env, request, place.st);
+  return { place, names, layer: place.layers.includes(layerParam) ? layerParam : "county" };
+}
+
+/** The section on the state's map page (id "map"): the map, then every county and district as lists. */
+export function stateMapSection(data) {
+  if (!data) return "";
+  const { place, names, layer, activity, coverage } = data;
+  const officials = data.officials === FAILED ? emptyOfficials : data.officials;
   const countyList = place.counties
     .map((c) => `<li><a class="list-row link-row" href="${placeHref(place.st, c.slug)}"><span class="list-title">${esc(c.name)}${LIVE[c.fips] ? ' <span class="live-tag">Live</span>' : ""}</span><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a></li>`)
     .join("");
@@ -111,7 +126,7 @@ export function stateMapSection(data) {
 <section class="brief-section" id="map" aria-labelledby="h-state-map">
   <h2 class="visually-hidden" id="h-state-map">${esc(place.name)} map</h2>
   <p class="small secondary">${place.counties.length} ${place.counties.length === 1 ? "county" : "counties"}.</p>
-  ${mapFigure({ id: "state-map", src: `/data/geo/shapes/${place.st.toLowerCase()}-{layer}.json`, links, status, layers, active: layer, label: `Map of ${place.name}`, legend, still: true })}
+  ${stateMapFigure(data)}
   ${fold("h-find", `Every county in ${place.name}`, `
   <input class="input" type="search" placeholder="County name" aria-label="Find a county" data-filter-list="county-list" data-filter-none="county-none" hidden />
   <ul class="card plain-list county-list" id="county-list">${countyList}</ul>
