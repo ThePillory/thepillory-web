@@ -40,7 +40,7 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 - **Elections** (`/elections/`): upcoming elections, Your ballot, How to vote (official links only), other states > USA.gov's state election offices
 - **Election** (`/elections/<id>/`): statewide offices, propositions, contests by district (U.S. House, State Senate, Assembly, Board of Equalization), courts, local contests and measures (live counties), How to vote, sources
 - **Contest** (`/elections/<id>/contest/<contest>/`): candidates in ballot order, the same card for each (ballot designation, party preference as listed, FEC filing for U.S. House, Holds office now > Platform / Votes / Funding, the candidate statement word for word); results after the polls close; sources. Court pages (`contest/supreme-court/`, `contest/court-of-appeal-<n>/`): each retention question as worded
-- **Measure** (`/elections/<id>/measure/<measure>/`): official title and summary (or the ballot question, impartial analysis and tax rate statement for a local measure), what a yes and a no vote mean, arguments and rebuttals word for word with their signers, results after the polls close, official sources
+- **Measure** (`/elections/<id>/measure/<measure>/`): official title and summary (or the ballot question, impartial analysis and tax rate statement for a local measure), what a yes and a no vote mean, arguments and rebuttals word for word with their signers, Constitution (statewide measures, collapsed, once every measure is approved: what it changes, constitutional provisions it touches > the clause, legal challenges > CourtListener, the not-a-recommendation line; after November 4, the constitutional baseline under it), results after the polls close, official sources
 - **Your ballot** (`/elections/<id>/ballot/`, private): from the districts cookie; without it, the address or ZIP lookup, which returns here
 - **The Supreme Court** (`/bodies/us-supreme-court/`; from "The nation" on every state's page, Reps > Browse > Courts, and Laws > This term at the Supreme Court): the justices by seniority > Justice; This term > `/court/term/`; latest decisions > Decision
 - **Justice** (`/justices/<slug>/`): About (nominated by, confirmed by the Senate with the roll call, oath, the official biography word for word) · Record (each decision where the syllabus names them, their position and what they wrote, newest first, Load more > Decision) · Disclosures (each year's report, gifts and reimbursements, CourtListener) · More
@@ -109,6 +109,7 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 - Topic chips on bill pages, each meeting agenda item (and "Topics on this agenda"), executive orders and Platform excerpts on officials' pages
 
 ### Private
+- Ballot measures' Constitution sections (`/admin/review/measures/`, each at `/admin/review/measures/<election>/<measure>/`), behind Cloudflare Access
 - Review queue (`/admin/review/`), readers' error reports (`/admin/corrections/`) and county waitlist counts (`/admin/waitlist/`), behind Cloudflare Access
 
 ## Opens when accounts launch

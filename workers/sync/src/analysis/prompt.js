@@ -7,32 +7,38 @@ import { PROVISIONS } from "../constitution.js";
 export const PROMPT_VERSION = "2026-10-08.1";
 export const CARD_PROMPT_VERSION = "2026-10-08.1";
 
-// The same instructions for bills and for executive orders (the President's
-// and the Governor's), with the words for each. Bills' wording is unchanged.
+// The same instructions for bills, executive orders (the President's and the
+// Governor's) and statewide ballot measures (after the election: functions in
+// measures.js), with the words for each. Bills' wording is unchanged.
 const KINDS = {
   bill: { noun: "bill", plural: "bills", power: "Congress's (or the legislature's)", ruled: "is within Congress's (or the legislature's) power", actor: "the bill" },
   order: { noun: "executive order", plural: "executive orders", power: "the President's (or the Governor's)", ruled: "is within the President's (or the Governor's) power", actor: "the order" },
+  measure: { noun: "ballot measure", plural: "statewide ballot measures", power: "the voters' (through the state's initiative and referendum process)", ruled: "is within the voters' power", actor: "the measure" },
 };
+const article = (w) => (w.noun === "bill" ? "a bill" : /^[aeiou]/i.test(w.noun) ? `an ${w.noun}` : `a ${w.noun}`);
 const kindOf = (k) => KINDS[k] || KINDS.bill;
 
 function intro(k) {
   const w = kindOf(k);
   return `You draft constitutional context for ${w.plural} on ThePillory, a nonpartisan civic accountability site. Every draft is checked automatically (quotes against the stored Constitution, cases against CourtListener), then by a separate AI reviewer, and people review flagged drafts and a random share of the rest.
 
-ThePillory maps the Constitution; it does not rule on it. Your job is to show which provisions ${w.noun === "bill" ? "a bill" : "an executive order"} touches and how different careful readers would see the question, not to decide it.`;
+ThePillory maps the Constitution; it does not rule on it. Your job is to show which provisions ${article(w)} touches and how different careful readers would see the question, not to decide it.`;
 }
 
 export function rules(k = "bill") {
   const w = kindOf(k);
   if (w.noun === "bill") return BILL_RULES;
+  const short = w.noun === "executive order" ? "order" : "measure";
   return BILL_RULES.replaceAll(
     "the bill draws on the commerce power, because it regulates goods sold across state lines",
-    "the order draws on the duty to take care that the laws be faithfully executed, because it directs how agencies carry out an existing statute"
+    short === "order"
+      ? "the order draws on the duty to take care that the laws be faithfully executed, because it directs how agencies carry out an existing statute"
+      : "the measure draws on the state's power to tax, because it sets a tax rate for state residents"
   )
     .replaceAll("is within Congress's (or the legislature's) power", w.ruled)
-    .replaceAll(" a bill ", " an executive order ")
-    .replaceAll("the bill text", "the order text")
-    .replaceAll("Only part of the bill text was read", "Only part of the order text was read")
+    .replaceAll(" a bill ", ` ${article(w)} `)
+    .replaceAll("the bill text", `the ${short} text`)
+    .replaceAll("Only part of the bill text was read", `Only part of the ${short} text was read`)
     .replaceAll("the bill", w.actor);
 }
 
@@ -82,7 +88,7 @@ This is a short card: most readers want the gist. Keep every field brief. A full
 ${rules(k)}
 
 Fields:
-- plain_summary: 2 to 3 sentences on what ${w.actor} does, in plain language. No adjectives of judgment. If you were given only part of the text, one sentence begins "Only part of the ${w.noun === "bill" ? "bill" : "order"} text was read" (and says what); if only the official summary, "Only the official summary was read".
+- plain_summary: 2 to 3 sentences on what ${w.actor} does, in plain language. No adjectives of judgment. If you were given only part of the text, one sentence begins "Only part of the ${w.noun === "bill" ? "bill" : w.noun === "executive order" ? "order" : "measure"} text was read" (and says what); if only the official summary, "Only the official summary was read".
 - clauses: the 1 to 3 most relevant provisions, most relevant first. For each: the provision's ID, a short exact quote from that provision, and one sentence on why it is relevant.
 - aligns: one sentence of 20 to 35 words, beginning "One view is that", on where ${w.actor} may align with the constitutional baseline and why.
 - tension: one sentence of 20 to 35 words, beginning "One view is that", on where it may be in tension with it and why.
@@ -234,6 +240,16 @@ export function billMessage(bill, source, depth = "full") {
 
 /** The bill's (or order's) identity and text (or summary), shared by the draft and the reviewer. */
 export function billContext(bill, source) {
+  if (bill.kind === "measure") {
+    const head = [
+      `Statewide ballot measure: ${bill.bill_number} (${bill.state_name}), voted on ${bill.election_date}`,
+      `Title: ${bill.title}`,
+      "The measure was on the ballot; whether it passed doesn't change this analysis, which is of its text.",
+      source.version ? `Text: ${source.version}` : null,
+    ].filter(Boolean);
+    const basis = source.basis === "partial_text" ? `Below is the first part of the measure's official text only (${source.note}); the draft must say what that limits.` : "Below is the measure's official text: the ballot title and summary, the official analysis, and the text of the measure where the state publishes it.";
+    return `${head.join("\n")}\n\n${basis}\n\n<measure_text>\n${source.text}\n</measure_text>`;
+  }
   if (bill.kind === "order") {
     const head = [
       `Executive order: ${bill.bill_number} (${bill.issuer})`,

@@ -38,6 +38,7 @@ import { runAgendaWatch } from "./agenda.js";
 import { runPromises } from "../promises/index.js";
 import { runTopics } from "../topics/index.js";
 import { statePriority, stateBillScope } from "../state-priority.js";
+import { nextMeasures, measureSource, finishMeasure } from "./measures.js";
 
 const RETRY_AFTER_DAYS = 7; // a bill that couldn't be drafted waits this long before another try
 const MIN_TIME_PER_BILL_MS = 4 * 60 * 1000; // don't start a bill without this much time left in the round
@@ -500,6 +501,7 @@ export async function orderSubject(db, id) {
  * drafted from a condensed text, billtext.js), or an order's stored text.
  */
 async function subjectSource(env, db, budget, subject, depth) {
+  if (subject.kind === "measure") return measureSource(subject.queued);
   if (subject.kind === "order") {
     const t = await db.prepare("SELECT text, text_url FROM executive_action_texts WHERE action_id = ? AND status = 'ok'").bind(subject.id).first();
     if (!t || !t.text) return null;
@@ -573,7 +575,7 @@ export async function analyzeBill(env, db, budget, bill) {
   const depth = bill.depth === "full" ? "full" : "card";
   const source = await subjectSource(env, db, budget, bill, depth);
   if (!source) {
-    const msg = bill.kind === "order" ? "no readable text of the order" : "no bill text or official summary available";
+    const msg = bill.kind === "order" ? "no readable text of the order" : bill.kind === "measure" ? "no official text of the measure stored" : "no bill text or official summary available";
     await noteAttempt(db, bill.id, msg);
     await finishRequest(db, bill, "failed", msg);
     return { status: "skipped", message: `${bill.id}: ${msg}`, counted: false };
@@ -788,6 +790,45 @@ export async function runAnalysis(rawEnv, { deadlineMs, runId, trigger }) {
     }
   } catch (err) {
     // Before migration 0018 (no order tables yet), there is nothing to do.
+    if (!/no such (table|column)/i.test(String(err && err.message))) throw err;
+  }
+
+  // Statewide ballot measures, from the day after the election: the full analysis of every
+  // one, passed or not (measures.js), with their own daily cap (MEASURE_ANALYSIS_DAILY).
+  const measureLimit = parseInt(env.MEASURE_ANALYSIS_DAILY || "10", 10);
+  const measureKey = `measure_analyses_${day()}`;
+  let measuresUsed = parseInt((await getState(db, measureKey)) || "0", 10);
+  try {
+    const measures = measuresUsed < measureLimit && !stoppedEarly ? await nextMeasures(db, measureLimit - measuresUsed, day()) : [];
+    for (const measure of measures) {
+      if (measuresUsed >= measureLimit) break;
+      if (budget.timeLeft() < MIN_TIME_PER_BILL_MS) {
+        ordersWaiting = true;
+        break;
+      }
+      const t0 = new Date().toISOString();
+      const before = budget.used;
+      let r;
+      try {
+        r = await analyzeBill(env, db, budget, measure);
+      } catch (err) {
+        if (err instanceof BudgetExhausted) {
+          ordersWaiting = true;
+          break;
+        }
+        r = { status: "error", message: `${measure.id}: ${redact(`${err.name}: ${err.message}`)}`, counted: false };
+        await noteAttempt(db, measure.id, r.message);
+      }
+      await finishMeasure(db, measure.id, r.status === "ok", r.status === "ok" ? null : r.message);
+      if (r.counted) {
+        measuresUsed += 1;
+        await setState(db, measureKey, String(measuresUsed));
+      }
+      if (r.status === "ok") analyzed += 1;
+      await log(db, run, "analysis-measures", r.status, budget.used - before, r.message, t0);
+    }
+  } catch (err) {
+    // Before migration 0041 (no measure queue yet), there is nothing to do.
     if (!/no such (table|column)/i.test(String(err && err.message))) throw err;
   }
 
