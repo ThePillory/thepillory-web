@@ -8,6 +8,7 @@
 // the election.
 import { esc, fmtDate, safeUrl } from "./render.js";
 import { fold } from "./summary.js";
+import { currentAnalysis, isPublic, parse, provisionsFor, baselineSection } from "./analysis.js";
 
 export const NOT_ADVICE = "This shows which parts of the Constitution each measure involves. It is not a recommendation on how to vote.";
 export const METHOD = "/about/methodology/#measure-constitution";
@@ -104,4 +105,24 @@ export function constitutionSection(row, { stateName, label }) {
 <p class="banner">${esc(NOT_ADVICE)}</p>
 <p class="hint">AI-drafted from the official text, checked word for word in code, and reviewed by ${esc(row.reviewed_by || "a person")}, ${esc(fmtDate(String(row.reviewed_at || "").slice(0, 10)))}. <a class="inline-link" href="${METHOD}">How this works</a></p>`;
   return fold("constitution", "Constitution", inner, { meta: stateText(kind.short).replace(`the ${stateName} Constitution`, "the constitution") });
+}
+
+/**
+ * After the election: the full three-panel analysis of the measure (drafted by
+ * the sync's analysis step from measure_analysis_queue, keyed
+ * "measure:<election>/<measure>"), shown only once it is public (approved, or
+ * passed by the AI reviewer). "" until then.
+ */
+export async function measureAnalysisSection(db, electionId, measureId) {
+  if (!db) return "";
+  try {
+    const row = await currentAnalysis(db, `measure:${electionId}/${measureId}`);
+    if (!isPublic(row)) return "";
+    const a = parse(row);
+    const provisions = await provisionsFor(db, a.clauses.map((c) => c.id));
+    return baselineSection(a, provisions, { noun: "measure" });
+  } catch (err) {
+    if (/no such table|no such column/i.test(String(err && err.message))) return "";
+    throw err;
+  }
 }

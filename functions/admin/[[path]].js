@@ -91,15 +91,17 @@ function missingTables() {
 // ---------------------------------------------------------------------------
 // List
 
-// A subject is a bill or an executive order (migration 0018): both are listed.
+// A subject is a bill, an executive order (migration 0018) or, after the election, a
+// statewide ballot measure (migration 0041, keyed "measure:<election>/<measure>"): all are listed.
 const ROW_SQL = `SELECT a.id, a.bill_id, a.status, a.depth, a.basis, a.created_at, a.reviewer, a.reviewed_at, a.ai_review,
     a.ai_review_detail, a.spot_check,
-    COALESCE(b.bill_number, CASE WHEN x.number IS NOT NULL THEN 'Executive Order ' || x.number ELSE 'Executive order' END) AS bill_number,
-    COALESCE(b.title, x.title) AS title,
+    COALESCE(b.bill_number, CASE WHEN x.id IS NULL THEN NULL WHEN x.number IS NOT NULL THEN 'Executive Order ' || x.number ELSE 'Executive order' END, m.label || ' (' || m.state || ')') AS bill_number,
+    COALESCE(b.title, x.title, m.title) AS title,
     COALESCE(b.level, CASE WHEN x.id LIKE 'fr:%' THEN 'federal' ELSE 'state' END) AS level,
     (SELECT COUNT(*) FROM analysis_flags f WHERE f.analysis_id = a.id AND f.status = 'open') AS open_flags
   FROM bill_analyses a LEFT JOIN bills b ON b.id = a.bill_id LEFT JOIN executive_actions x ON x.id = a.bill_id
-  WHERE a.current = 1 AND (b.id IS NOT NULL OR x.id IS NOT NULL)`;
+    LEFT JOIN measure_analysis_queue m ON 'measure:' || m.measure_key = a.bill_id
+  WHERE a.current = 1 AND (b.id IS NOT NULL OR x.id IS NOT NULL OR m.measure_key IS NOT NULL)`;
 
 function analysisRow(r, why) {
   const meta = [
@@ -582,8 +584,9 @@ async function detail(db, env, id, { error = "", done = "", form = null, email =
   if (!row) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
   const bill = await db.prepare("SELECT * FROM bills WHERE id = ?").bind(row.bill_id).first();
   const order = bill ? null : await db.prepare("SELECT * FROM executive_actions WHERE id = ?").bind(row.bill_id).first();
-  const b = bill || (order ? { bill_number: order.number ? `Executive Order ${order.number}` : "Executive order", title: order.title } : null);
-  const publicHref = order ? orderHref(order.id) : `/laws/bills/${esc(row.bill_id)}/`;
+  const measure = bill || order || !row.bill_id.startsWith("measure:") ? null : await db.prepare("SELECT * FROM measure_analysis_queue WHERE measure_key = ?").bind(row.bill_id.slice(8)).first();
+  const b = bill || (order ? { bill_number: order.number ? `Executive Order ${order.number}` : "Executive order", title: order.title } : measure ? { bill_number: `${measure.label} (${measure.state})`, title: measure.title } : null);
+  const publicHref = order ? orderHref(order.id) : measure ? `/elections/${esc(measure.election_id)}/measure/${esc(measure.measure_id)}/` : `/laws/bills/${esc(row.bill_id)}/`;
   const a = parse(row);
   const provisions = await provisionsFor(db, a.clauses.map((c) => c.id));
   const f = form || {
@@ -655,14 +658,14 @@ async function detail(db, env, id, { error = "", done = "", form = null, email =
 <header class="page-head">
   <p class="label">${esc(b ? b.bill_number : row.bill_id)} · analysis ${row.id}</p>
   <h1>${esc(b ? b.title : row.bill_id)}</h1>
-  <p class="secondary"><a class="inline-link" href="${publicHref}">Public ${order ? "order" : "bill"} page</a></p>
+  <p class="secondary"><a class="inline-link" href="${publicHref}">Public ${order ? "order" : measure ? "measure" : "bill"} page</a></p>
 </header>
 ${done ? `<p class="banner" role="status">${esc(done)}</p>` : ""}
 ${error ? `<p class="banner banner--error" role="alert">${esc(error)}</p>` : ""}
 ${whySection(a, openFlags)}
 ${actions}
 <h2 class="label">Preview</h2>
-${baselineSection(a, provisions, { underReview: openFlags.length > 0, noun: order ? "order" : "bill" })}
+${baselineSection(a, provisions, { underReview: openFlags.length > 0, noun: order ? "order" : measure ? "measure" : "bill" })}
 ${aiReviewSection(a)}
 ${flags.length ? `<section class="card stack-sm"><h2 class="label">Reader reports</h2><ul class="panel-list small">${flags
     .map((f) => `<li><strong>${esc(FLAG_REASON_NAMES[f.reason] || f.reason)}</strong>${f.note ? `: ${esc(f.note)}` : ""} (${fmtDate(f.created_at)}; ${f.status === "open" ? "open" : `closed: ${esc(f.resolution || "")}`})</li>`)
@@ -1607,8 +1610,8 @@ async function handle(context) {
   if (parts[1] === "measures") {
     try {
       if (parts.length === 2) return adminPage(...Object.values(await measureReviewList(env.DB, { done: url.searchParams.get("done") || "" })));
-      if (parts.length !== 3) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
-      const key = decodeURIComponent(parts[2]);
+      if (parts.length !== 4) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+      const key = `${decodeURIComponent(parts[2])}/${decodeURIComponent(parts[3])}`;
       if (request.method === "POST") {
         const origin = request.headers.get("Origin");
         if (origin && origin !== url.origin) return adminPage("Refused", '<header class="page-head"><h1>Refused</h1></header>', 403);

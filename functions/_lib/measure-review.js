@@ -4,14 +4,15 @@
 // a person approves each measure here, and the measure pages show the sections
 // only once every measure of the election is approved, all at once.
 //   /admin/review/measures/          every measure: waiting, sent back, approved; progress
-//   /admin/review/measures/<key>/    one measure's draft: what it changes and the words quoted,
+//   /admin/review/measures/<election>/<measure>/   one measure's draft: what it changes and the words quoted,
 //                                    each provision (keep or drop; edit its line), each court
 //                                    record (keep or drop), what the checks removed; approve or send back
 // Court records found after approval wait here too ("New court records").
 import { esc, fmtDate, safeUrl } from "./render.js";
 import { CHANGES, LINE_RULE, lineProblem } from "./measure-constitution.js";
 
-export const measureReviewHref = (key) => `/admin/review/measures/${encodeURIComponent(key)}/`;
+// A key is '<election id>/<measure id>': two path segments, both plain [a-z0-9-].
+export const measureReviewHref = (key) => `/admin/review/measures/${key.split("/").map(encodeURIComponent).join("/")}/`;
 const clean = (v, max) => String(v == null ? "" : v).replace(/\s+/g, " ").trim().slice(0, max);
 const json = (s, fallback) => {
   try {

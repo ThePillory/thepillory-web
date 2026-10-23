@@ -27,7 +27,7 @@ import {
 } from "../_lib/elections.js";
 import { pacificNow } from "../_lib/meetings.js";
 import { fold } from "../_lib/summary.js";
-import { publishedSection, constitutionSection } from "../_lib/measure-constitution.js";
+import { publishedSection, constitutionSection, measureAnalysisSection } from "../_lib/measure-constitution.js";
 
 const BACK = ["Elections", "/elections/"];
 const NEUTRAL = "Every candidate and measure is shown the same way, in ballot order, with what the official sources print. ThePillory doesn't endorse candidates or measures, and doesn't publish polls or predictions.";
@@ -556,7 +556,8 @@ async function measurePage(election, measureId, env = {}) {
   const plain = await loadSection("measure plain", () => plainFor(env.DB, "measure", `${id}:${m.id}`), null);
   // The Constitution section: only once every measure's is approved, all at once (functions/_lib/measure-constitution.js).
   const con = m.scope === "statewide" ? await loadSection("measure constitution", () => publishedSection(env.DB, id, m.id), null) : null;
-  const conHtml = con && con !== FAILED ? constitutionSection(con, { stateName: STATE_NAME[st] || st, label: measureName(m) }) : "";
+  const analysis = m.scope === "statewide" ? await loadSection("measure analysis", () => measureAnalysisSection(env.DB, id, m.id), "") : "";
+  const conHtml = (con && con !== FAILED ? constitutionSection(con, { stateName: STATE_NAME[st] || st, label: measureName(m) }) : "") + (analysis === FAILED ? "" : analysis);
   if (m.ballot_title) return waMeasurePage(election, m, back, plain === FAILED ? null : plain, conHtml);
   if (election.election.format === "sections") return sectionsMeasurePage(election, m, back, plain === FAILED ? null : plain, conHtml);
   const statewide = m.scope === "statewide";

@@ -92,6 +92,7 @@ ORDER_TEXTS_DAILY = "60"
 ORDER_COURTS_DAILY = "40"
 ORDER_COURTS_RECHECK_DAYS = "14"
 ORDER_ANALYSIS_DAILY = "5"
+MEASURE_ANALYSIS_DAILY = "10"  # statewide ballot measures, from the day after the election (docs/elections.md)
 # Agenda watch: plain-language summaries of county agendas. Separate daily cap
 # from bill analyses (each agenda is one Claude API call).
 AGENDA_DAILY_LIMIT = "3"

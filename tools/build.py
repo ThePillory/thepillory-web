@@ -596,6 +596,18 @@ def build_methodology():
   </ul>
 </section>
 
+<section class="card stack" id="measure-constitution">
+  <h2>Ballot measures and the Constitution</h2>
+  <p>Each statewide measure on the November 3, 2026 ballot (California, Washington, Colorado, Arizona, Florida and Michigan) has a "Constitution" section with the same three parts, and one line: "This shows which parts of the Constitution each measure involves. It is not a recommendation on how to vote." Before the election there are no "Where it aligns" or "Where it may be in tension" panels.</p>
+  <ul class="plain-list small">
+    <li><strong>What it changes:</strong> whether the measure amends the state constitution, changes state statutes, or both, as the official ballot label, title or summary states it (for example "Initiative Constitutional Amendment" or "Amendment to the Colorado Revised Statutes"), quoted with its source. When the official label states it, the label decides; when nothing official states it, the page says so.</li>
+    <li><strong>Constitutional provisions it touches:</strong> the clauses of the U.S. Constitution and of the state's constitution that the measure amends, adds to, repeals or is proposed under, only where the official text cites them. An AI model suggests the clauses; code keeps one only when its citation appears in the official text and every quote matches its source word for word. U.S. clauses are quoted from the National Archives text, and California's from the California Constitution as California Legislative Information publishes it (refreshed weekly); other states' provisions link to the state's official text. Each has one neutral line on how the measure involves it ("This measure amends this section."), never what it means or whether it's constitutional.</li>
+    <li><strong>Legal challenges:</strong> court records that name the measure and its state, filed in 2026, from CourtListener's search of federal and state court records, listed with the case name, court, date filed and a link. They aren't summarized or predicted, and the list may miss cases, especially in state courts. The search runs daily; a record found after a measure is approved waits for a person before it's added.</li>
+    <li><strong>Reviewed by a person, all at once:</strong> nothing goes live until a person has read every measure's section against its sources and approved it; then every measure's section is published together, so no measure is shown before another.</li>
+    <li><strong>After the election:</strong> from November 4, every statewide measure, passed or not, gets the full constitutional analysis (Where it aligns, Where it may be in tension, Why this might still serve the public), drafted and checked the same way as bills.</li>
+  </ul>
+</section>
+
 <section class="card stack" id="quick">
   <h2>Quick mode</h2>
   <p>The Quick / Detailed switch under the header shows a short card in plain words at the top of a page, with the full page one tap away. Your choice is kept in your browser only; nothing is sent to ThePillory, and you're never asked your age. The rules don't change: facts only, neutral wording, the source one tap away.</p>

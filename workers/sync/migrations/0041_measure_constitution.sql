@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS measure_analysis_queue (
   label TEXT NOT NULL,
   title TEXT NOT NULL,
   text_url TEXT NOT NULL CHECK (text_url LIKE 'http%'),
+  text TEXT,                                  -- the official text the analysis is drafted from (stored by the drafting tool: PDFs are read there)
   not_before TEXT NOT NULL,                   -- '2026-11-04'
   status TEXT NOT NULL DEFAULT 'queued' CHECK (status IN ('queued', 'drafted', 'failed')),
   tries INTEGER NOT NULL DEFAULT 0,

@@ -505,15 +505,21 @@ def save(args, item, changes, quotes, provisions, cases, notes, prev, by):
     T.run_sql(args, [upsert, hist])
 
 
-def queue_analysis(args, items):
+MAX_ANALYSIS_TEXT = 150000
+
+
+def queue_analysis(args, items, texts):
+    """Every measure, for the full analysis after the election; `texts`: {key: official text} read in this run."""
     stmts = []
     for it in items:
         m = it["m"]
         links = m.get("links") if isinstance(m.get("links"), dict) else {}
         url = links.get("text") or m.get("source_url")
         title = norm(m.get("title") or it["label"])
-        stmts.append("INSERT OR IGNORE INTO measure_analysis_queue (measure_key, election_id, measure_id, state, label, title, text_url, not_before) VALUES "
-                     f"({lit(it['key'])}, {lit(it['election_id'])}, {lit(m['id'])}, {lit(it['state'])}, {lit(it['label'])}, {lit(title)}, {lit(url)}, {lit(ANALYSIS_NOT_BEFORE)});")
+        text = texts.get(it["key"])
+        stmts.append("INSERT INTO measure_analysis_queue (measure_key, election_id, measure_id, state, label, title, text_url, text, not_before) VALUES "
+                     f"({lit(it['key'])}, {lit(it['election_id'])}, {lit(m['id'])}, {lit(it['state'])}, {lit(it['label'])}, {lit(title)}, {lit(url)}, {lit(text[:MAX_ANALYSIS_TEXT] if text else None)}, {lit(ANALYSIS_NOT_BEFORE)}) "
+                     "ON CONFLICT (measure_key) DO UPDATE SET text = COALESCE(excluded.text, measure_analysis_queue.text), title = excluded.title, text_url = excluded.text_url;")
     stmts.append(f"INSERT OR REPLACE INTO sync_state (key, value) VALUES ('measure_constitution_total', {lit(str(len(items)))});")
     import load_trades as T  # noqa: E402
     T.run_sql(args, stmts)
@@ -577,7 +583,7 @@ def main():
         raise SystemExit("data/ca-constitution.json isn't built yet: run the California Constitution workflow first")
     ca = {r["id"]: r for r in json.loads(ca_path.read_text())["provisions"]}
     us_list = provisions_for_prompt(us)
-    spent, drafted, failed = 0.0, 0, []
+    spent, drafted, failed, texts = 0.0, 0, [], {}
     for i in items:
         p = prev.get(i["key"])
         if p and p["status"] == "approved" and not args.redo_approved:
@@ -590,6 +596,7 @@ def main():
             print(f"Stopping before ${args.max_dollars:.2f}: ${spent:.2f} spent", flush=True)
             break
         parts = record_parts(i["m"]) + full_text_parts(i)
+        texts[i["key"]] = "\n\n".join(f"=== {p['name']} ===\n{norm(p['text'])}" for p in parts)
         try:
             draft, dollars = suggest(client, i, parts, us_list, note=(p or {}).get("review_note") or "")
         except Exception as err:  # noqa: BLE001  (one measure failing leaves the others)
@@ -609,7 +616,7 @@ def main():
               f"{len(notes)} note(s); ${dollars:.3f}", flush=True)
         for n in notes:
             print(f"      note: {n}", flush=True)
-    queue_analysis(args, load_measures())
+    queue_analysis(args, load_measures(), texts)
     print(f"Drafted {drafted}; ${spent:.2f} spent" + (f"; no draft for {', '.join(failed)}" if failed else ""), flush=True)
     if failed:
         sys.exit(1)

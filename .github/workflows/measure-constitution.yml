@@ -12,6 +12,10 @@
 # CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID.
 name: Draft measure Constitution sections
 on:
+  # TEMPORARY: the first draft run from the branch; removed before merging.
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [.github/workflows/measure-constitution.yml]
   schedule:
     - cron: "23 15 * * *"
   workflow_dispatch:
@@ -46,13 +50,26 @@ jobs:
         with:
           node-version: 22
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null && pip install -q anthropic
+      - name: Check that each state's constitution link opens
+        run: |
+          python3 - <<'PY'
+          import re, urllib.request
+          s = open("tools/measure_constitution.py").read()
+          block = re.search(r"STATE_CONSTITUTION = \{(.*?)\n\}", s, re.S).group(1)
+          for st, url in re.findall(r'"(\w\w)": "(https?://[^"]+)"', block):
+              try:
+                  r = urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "ThePillory/1.0 (+https://thepillory.co)"}), timeout=30)
+                  print(st, r.status, r.geturl())
+              except Exception as e:
+                  print(st, "FAILED", url, e)
+          PY
       - name: Run
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           COURTLISTENER_API_TOKEN: ${{ secrets.COURTLISTENER_API_TOKEN }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          MODE: ${{ github.event.inputs.mode || 'cases' }}
+          MODE: ${{ github.event.inputs.mode || (github.event_name == 'push' && 'draft') || 'cases' }}
           ONLY: ${{ github.event.inputs.only }}
           REDO: ${{ github.event.inputs.redo }}
           MAX_DOLLARS: ${{ github.event.inputs.max_dollars || '15' }}

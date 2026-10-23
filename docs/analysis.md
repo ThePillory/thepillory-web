@@ -225,6 +225,10 @@ For each new county agenda (Board of Supervisors, Planning Commission), one Clau
 
 Tables: `agenda_summaries` (every version kept), `agenda_summary_revisions`, `item_issue_links`, `agenda_requests` (migration `0003_meetings.sql`).
 
+## Ballot measures (after the election)
+
+Statewide ballot measures queued in `measure_analysis_queue` (migration 0041, by `tools/measure_constitution.py`, with each measure's official text) are drafted from November 4, 2026 (`not_before`), passed or not, as `kind: "measure"` subjects (`workers/sync/src/analysis/measures.js`): no relevance check, always a full analysis, `MEASURE_ANALYSIS_DAILY` (default 10) a day, the same checks, AI review and review queue as bills. Stored in `bill_analyses` keyed `measure:<election id>/<measure id>`; listed on `/admin/review/` with the measure's label and state, and shown on the measure page once public. See docs/elections.md, "The Constitution section".
+
 ## Reviewing
 
 `/admin/review/` is a queue, in three parts, each showing why an analysis is there:
