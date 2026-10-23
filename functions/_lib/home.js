@@ -2,13 +2,14 @@
 // page: functions/index.js renders it for the visitor's state, and
 // functions/states/ for /states/<name>/. The same sections in the same order
 // for every state, about three phone screens, each fact once:
-//   1. the headline, and "Showing [State] · Change" (the picker opens on tap)
+//   1. the headline
 //   2. on /, the U.S. map ("Tap your state to see who represents you"; no
 //      zooming or dragging, so scrolling always works) and "Counties and
 //      districts ›"; on /states/<name>/, that state's own map with its layers
 //      (Counties, Congressional, the state's chambers; a county or district
 //      opens its page) and "Every county and district ›", the lists on
 //      /states/<name>/map/ (functions/_lib/state-map.js). Both in Quick too.
+//      Then "Showing [State] · Change", below the map (the picker opens on tap).
 //   3. the ballot card, from WINDOW_DAYS before the state's next election
 //   4. Your representatives: the President, the two U.S. Senators and the
 //      Governor; then the House member and state legislators once districts are
@@ -270,8 +271,8 @@ export async function hub(env, request, url, d, vs) {
   <h1 class="hub-title">Know what your government is doing. <span class="hub-title-soft">Then take part.</span></h1>
   <p class="hub-sub">Votes, bills, and meetings in plain language, measured against the Constitution. Built on evidence, open to every point of view.</p>
 </header>
-${vs ? showingBar(vs) : ""}
 ${statePage ? (lite === FAILED ? sectionError(`${vs.name} map`) : stateMapTop(vs, lite, waiting)) : usMap(index, waiting === FAILED ? { county: {}, state: {} } : waiting, vs)}
+${vs ? showingBar(vs) : ""}
 ${hero ? ballotHero(vs, win) : ""}
 ${notFound ? '<p class="banner banner--error" role="alert">We couldn\'t find districts for that. Check the address, or try your ZIP code.</p>' : ""}
 ${repsHtml}
