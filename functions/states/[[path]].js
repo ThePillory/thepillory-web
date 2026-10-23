@@ -1,5 +1,5 @@
 // /states/<name>/: a state's page, the same template as the home page
-// (functions/_lib/home.js) filled with that state: "Showing [State] · Change",
+// (functions/_lib/home.js) filled with that state: its own map under its name,
 // the same sections in the same order, and the national sections in the same
 // spot. /states/ goes to the U.S. map; a two-letter code (/states/wa/) or a
 // different spelling goes to the page's own address.
