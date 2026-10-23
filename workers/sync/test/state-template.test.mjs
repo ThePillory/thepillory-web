@@ -85,7 +85,7 @@ test("California: Calaveras is a county link beside the map; the counties and di
 test("tap a state: its own map at the top, with its layers, every shape linked, and the lists one tap away", async () => {
   const { html } = await call(states, "/states/ohio/");
   const at = (x) => html.indexOf(x);
-  assert.ok(at("Showing <strong>Ohio") < at('id="state-map"') && at('id="state-map"') < at('id="your-reps"'), "right below Showing Ohio");
+  assert.ok(at('class="hub-title"') < at('id="state-map"') && at('id="state-map"') < at("Showing <strong>Ohio") && at("Showing <strong>Ohio") < at('id="your-reps"'), "the map right under the headline, then Showing Ohio");
   for (const [layer, name] of [["county", "Counties"], ["cd", "Congressional"], ["sldu", "State Senate"], ["sldl", "State House"]]) {
     assert.match(html, new RegExp(`href="\\?layer=${layer}#map" data-layer="${layer}"[^>]*>${name}</a>`), name);
   }
