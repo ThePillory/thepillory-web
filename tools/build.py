@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "57"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "58"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -202,6 +202,7 @@ TABS = [
 ]
 
 WORDMARK = 'The<span class="wordmark-accent">Pillory</span>'
+TAGLINE = "Accountability through facts."
 
 SEARCH = """
 <form class="search" action="/search/" role="search" autocomplete="off">
@@ -216,7 +217,10 @@ SEARCH = """
 def site_header():
     return f"""<header class="site-header">
   <div class="site-header-row">
-    <a class="wordmark" href="/" aria-label="ThePillory, home">{WORDMARK}</a>
+    <div class="brand">
+      <a class="wordmark" href="/" aria-label="ThePillory, home">{WORDMARK}</a>
+      <p class="tagline">{TAGLINE}</p>
+    </div>
     <button class="search-toggle" type="button" aria-controls="q" aria-expanded="false" aria-label="Search">{icon("search")}</button>
   </div>
   {SEARCH.strip()}
@@ -243,7 +247,10 @@ def tabbar(current, is_root):
     return f"""
 <nav class="tabbar" aria-label="Main">
   <div class="tabbar-row">
-    <a class="wordmark tabbar-brand" href="/" aria-label="ThePillory, home">{WORDMARK}</a>
+    <div class="brand tabbar-brand">
+      <a class="wordmark" href="/" aria-label="ThePillory, home">{WORDMARK}</a>
+      <p class="tagline">{TAGLINE}</p>
+    </div>
     <div class="tabbar-inner">
       {"".join(links)}
     </div>
@@ -251,11 +258,13 @@ def tabbar(current, is_root):
 </nav>"""
 
 
-SITE_DESCRIPTION = "Evidence-first civic accountability. Verified residents, protected identities, nonpartisan."
+SITE_DESCRIPTION = f"{TAGLINE} Evidence-first and nonpartisan: verified residents, protected identities."
+# The home page's title and description (functions/_lib/home.js, through page()).
+HOME_TITLE = f"ThePillory · {TAGLINE}"
 SITE_URL = "https://thepillory.co"
 # Bump when anything in assets/logo/ or site.webmanifest changes: browsers keep
 # favicons and home-screen icons far longer than other files.
-ICON_VERSION = 3
+ICON_VERSION = 4
 
 
 def head_tags(title):
@@ -272,10 +281,10 @@ def head_tags(title):
     <meta property="og:title" content="{e(title)}" />
     <meta property="og:description" content="{SITE_DESCRIPTION}" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="{SITE_URL}/assets/logo/og-image.png" />
+    <meta property="og:image" content="{SITE_URL}/assets/logo/og-image.png?v={ICON_VERSION}" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="ThePillory: a serif P in a seal beside the wordmark, with the line Evidence-first civic accountability" />
+    <meta property="og:image:alt" content="ThePillory: a serif P in a seal beside the wordmark, with the line {TAGLINE}" />
     <meta name="twitter:card" content="summary_large_image" />
 """
 
@@ -823,6 +832,7 @@ def build_about():
     ])
     main = f"""
 <header class="page-head">
+  <p class="page-tagline">{TAGLINE}</p>
   <h1>About ThePillory</h1>
   <p class="subtitle">A fact-based civic accountability platform, built for communities that value facts over noise.</p>
 </header>
@@ -1257,6 +1267,8 @@ def export_for_functions():
     data = {
         "ASSET_VERSION": ASSET_VERSION,
         "PAGE": page,
+        "SITE_DESCRIPTION": SITE_DESCRIPTION,
+        "HOME_TITLE": HOME_TITLE,
         "TABBARS": tabbars,
         "LEVEL_NAME": LEVEL_NAME,
         "BODIES": bodies,

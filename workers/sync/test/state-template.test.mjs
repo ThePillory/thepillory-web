@@ -104,6 +104,11 @@ test("tap a state: its own map at the top, with its layers, every shape linked, 
   const home = await call((await import("../../../functions/index.js")).onRequestGet, "/", { cf: { country: "US", regionCode: "OH" } });
   assert.match(home.html, /Tap your state to see who represents you\./);
   assert.match(home.html, /"OH":\["\/states\/ohio\/"/, "the U.S. map links each state to its page");
+  // The tagline: the hub's title and description, and under the wordmark on every page.
+  assert.match(home.html, /<title>ThePillory · Accountability through facts\.<\/title>/);
+  assert.match(home.html, /<meta name="description" content="ThePillory · Accountability through facts\./);
+  assert.match(home.html, /<p class="tagline">Accountability through facts\.<\/p>/);
+  assert.match((await call(states, "/states/ohio/")).html, /<title>Ohio – ThePillory<\/title>/, "a state's own page keeps its name");
 });
 
 test("Ohio's State House lists district 98, never a stray 0", async () => {
