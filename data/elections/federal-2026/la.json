@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=LA&candidate_status=C",
- "built_on": "2026-10-23",
+ "built_on": "2026-10-24",
  "senate_up": true,
  "senate": [
   {
@@ -131,6 +131,14 @@
    }
   ],
   "2": [
+   {
+    "id": "H2LA02305",
+    "name": "BALLAY, LISA",
+    "party": "LIBERTARIAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H2LA02305/",
+    "committee": "C00959395"
+   },
    {
     "id": "H2LA02149",
     "name": "CARTER, TROY A. SR.",
