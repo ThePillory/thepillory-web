@@ -41,6 +41,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -179,10 +180,39 @@ def parse_senate(page):
     return out
 
 
+BROWSER_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+}
+
+
+def senate_confirmations():
+    """
+    The Senate's list of Supreme Court nominations, keyed by name as listed, or None
+    when senate.gov refuses (it sometimes answers GitHub's servers with 403).
+    """
+    for headers in (None, BROWSER_HEADERS):
+        try:
+            return parse_senate(fetch(SENATE, headers=headers, tries=2))
+        except urllib.error.HTTPError as err:
+            print(f"senate.gov: {err}", flush=True)
+    return None
+
+
+def stored_confirmations():
+    """{slug: confirmation record} already in data/scotus/justices.json. A past confirmation never changes."""
+    path = OUT / "justices.json"
+    if not path.exists():
+        return {}
+    return {j["slug"]: j["senate"] for j in json.loads(path.read_text()).get("justices", []) if j.get("senate")}
+
+
 def build_justices():
     members = parse_members(fetch(f"{SCOTUS}/about/members_text.aspx"))
     bios = parse_bios(fetch(f"{SCOTUS}/about/biographies.aspx"))
-    senate = parse_senate(fetch(SENATE))
+    senate = senate_confirmations()
+    stored = stored_confirmations() if senate is None else {}
     if len(members) != 9:
         raise SystemExit(f"Justices: expected 9 current justices, found {len(members)}; not written")
     out = []
@@ -191,7 +221,13 @@ def build_justices():
         # The Senate lists "Roberts, John G., Jr." as "Roberts, John G., Jr." and "Thomas, Clarence " with a space.
         last, first = listed.split(",")[0].lower(), listed.split(",")[1].strip().split()[0].lower()
         # The confirmation that seated them (Roberts was first nominated for another seat, withdrawn).
-        conf = next((v for k, v in senate.items() if k.lower().startswith(last + ",") and first in k.lower() and v["result"].startswith("C")), None)
+        if senate is None:
+            # senate.gov refused: the record already stored, or stop rather than drop it.
+            conf = stored.get(justice_slug(listed))
+            if not conf:
+                raise SystemExit(f"senate.gov refused and no confirmation is stored for {listed}; not written")
+        else:
+            conf = next((v for k, v in senate.items() if k.lower().startswith(last + ",") and first in k.lower() and v["result"].startswith("C")), None)
         bio = bios.get(m["bio_anchor"], {})
         out.append({
             "slug": justice_slug(listed),
