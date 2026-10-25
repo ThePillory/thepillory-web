@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=NC&candidate_status=C",
- "built_on": "2026-10-24",
+ "built_on": "2026-10-25",
  "senate_up": true,
  "senate": [
   {
@@ -200,19 +200,19 @@
     "committee": "C00794727"
    },
    {
-    "id": "H4NC02150",
-    "name": "GANORKAR, MAHESH",
-    "party": "REPUBLICAN PARTY",
-    "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H4NC02150/",
-    "committee": "C00769463"
-   },
-   {
     "id": "H2NC06106",
     "name": "GANORKAR, MAHESH",
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H2NC06106/",
+    "committee": "C00769463"
+   },
+   {
+    "id": "H4NC02150",
+    "name": "GANORKAR, MAHESH",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H4NC02150/",
     "committee": "C00769463"
    }
   ],
@@ -328,19 +328,19 @@
   ],
   "8": [
    {
-    "id": "H6NC09200",
-    "name": "HARRIS, MARK E",
-    "party": "REPUBLICAN PARTY",
-    "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6NC09200/",
-    "committee": "C00850404"
-   },
-   {
     "id": "H4NC08066",
     "name": "HARRIS, MARK E",
     "party": "REPUBLICAN PARTY",
     "incumbent": true,
     "url": "https://www.fec.gov/data/candidate/H4NC08066/",
+    "committee": "C00850404"
+   },
+   {
+    "id": "H6NC09200",
+    "name": "HARRIS, MARK E",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6NC09200/",
     "committee": "C00850404"
    },
    {

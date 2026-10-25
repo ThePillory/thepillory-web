@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=CO&candidate_status=C",
- "built_on": "2026-10-24",
+ "built_on": "2026-10-25",
  "senate_up": true,
  "senate": [
   {
@@ -139,6 +139,14 @@
    }
   ],
   "2": [
+   {
+    "id": "H6CO02206",
+    "name": "DENNISON, KELLEY ANNE",
+    "party": "REPUBLICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6CO02206/",
+    "committee": "C00943555"
+   },
    {
     "id": "H8CO02160",
     "name": "NEGUSE, JOSEPH",

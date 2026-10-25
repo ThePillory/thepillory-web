@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=WI&candidate_status=C",
- "built_on": "2026-10-24",
+ "built_on": "2026-10-25",
  "senate_up": false,
  "senate": [],
  "house": {
@@ -155,19 +155,19 @@
   ],
   "6": [
    {
-    "id": "H6WI06225",
-    "name": "BELL, AMANDA H",
-    "party": "DEMOCRATIC PARTY",
-    "incumbent": false,
-    "url": "https://www.fec.gov/data/candidate/H6WI06225/",
-    "committee": "C00922245"
-   },
-   {
     "id": "H6WI06217",
     "name": "BELL, AMANDA H",
     "party": "DEMOCRATIC PARTY",
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H6WI06217/",
+    "committee": "C00922245"
+   },
+   {
+    "id": "H6WI06225",
+    "name": "BELL, AMANDA H",
+    "party": "DEMOCRATIC PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6WI06225/",
     "committee": "C00922245"
    },
    {
@@ -242,7 +242,7 @@
     "party": "REPUBLICAN PARTY",
     "incumbent": false,
     "url": "https://www.fec.gov/data/candidate/H0WI03159/",
-    "committee": "C00921734"
+    "committee": "C00736108"
    },
    {
     "id": "H6WI07249",
