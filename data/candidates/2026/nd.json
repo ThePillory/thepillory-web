@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=ND&candidate_status=C",
- "list_built_on": "2026-10-24",
+ "list_built_on": "2026-10-25",
  "built_on": "2026-10-25",
  "senate_up": false,
  "candidates": {
@@ -283,17 +283,17 @@
    "last_listed": "2026-10-25",
    "totals": {
     "cycle": 2026,
-    "receipts": 341313.1,
-    "disbursements": 266773.46,
-    "cash_on_hand": 74539.64,
-    "individual_unitemized": 169959.97,
-    "individual_itemized": 160413,
+    "receipts": 370969,
+    "disbursements": 328860.24,
+    "cash_on_hand": 42108.76,
+    "individual_unitemized": 184085.87,
+    "individual_itemized": 175943,
     "pac": 10025,
     "party": 0,
     "self_funding": 15,
     "other": 900.13,
-    "coverage_end": "2026-09-30",
-    "last_report": "OCTOBER QUARTERLY 2026",
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
     "source_url": "https://www.fec.gov/data/candidate/H6ND01049/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -309,7 +309,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00935494/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-10-21",
+   "funding_checked": "2026-10-25",
    "cycle": 2026
   }
  }

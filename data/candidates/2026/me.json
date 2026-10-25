@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=ME&candidate_status=C",
- "list_built_on": "2026-10-24",
+ "list_built_on": "2026-10-25",
  "built_on": "2026-10-25",
  "senate_up": true,
  "candidates": {
@@ -2037,17 +2037,17 @@
    "last_listed": "2026-10-25",
    "totals": {
     "cycle": 2026,
-    "receipts": 20431280.18,
-    "disbursements": 16474463.59,
-    "cash_on_hand": 3956816.59,
-    "individual_unitemized": 7575501.72,
-    "individual_itemized": 11417767.86,
-    "pac": 352306.25,
+    "receipts": 26872873.96,
+    "disbursements": 25276003.4,
+    "cash_on_hand": 1596870.56,
+    "individual_unitemized": 9882853.44,
+    "individual_itemized": 14094265.09,
+    "pac": 400543.55,
     "party": 67000,
     "self_funding": 0,
-    "other": 1018704.35,
-    "coverage_end": "2026-09-30",
-    "last_report": "OCTOBER QUARTERLY 2026",
+    "other": 2428211.88,
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
     "source_url": "https://www.fec.gov/data/candidate/S6ME00464/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -2063,7 +2063,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00955609/",
     "checked": "2026-10-17"
    },
-   "funding_checked": "2026-10-21",
+   "funding_checked": "2026-10-25",
    "cycle": 2026
   },
   "S6ME00498": {

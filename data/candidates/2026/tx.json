@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=TX&candidate_status=C",
- "list_built_on": "2026-10-24",
+ "list_built_on": "2026-10-25",
  "built_on": "2026-10-25",
  "senate_up": true,
  "candidates": {
@@ -19533,17 +19533,17 @@
    "last_listed": "2026-10-25",
    "totals": {
     "cycle": 2026,
-    "receipts": 5,
-    "disbursements": 50,
-    "cash_on_hand": -45,
-    "individual_unitemized": 0,
-    "individual_itemized": 0,
+    "receipts": 546.48,
+    "disbursements": 3550,
+    "cash_on_hand": -3003.52,
+    "individual_unitemized": 516.48,
+    "individual_itemized": 25,
     "pac": 0,
     "party": 0,
     "self_funding": 5,
     "other": 0,
-    "coverage_end": "2026-09-30",
-    "last_report": "OCTOBER QUARTERLY 2026",
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
     "source_url": "https://www.fec.gov/data/candidate/H6TX25237/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -19559,7 +19559,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00930974/",
     "checked": "2026-10-17"
    },
-   "funding_checked": "2026-10-21",
+   "funding_checked": "2026-10-25",
    "cycle": 2026
   },
   "S6TX00636": {

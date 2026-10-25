@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=TN&candidate_status=C",
- "list_built_on": "2026-10-24",
+ "list_built_on": "2026-10-25",
  "built_on": "2026-10-25",
  "senate_up": true,
  "candidates": {
@@ -4310,16 +4310,16 @@
    "totals": {
     "cycle": 2026,
     "receipts": 12300,
-    "disbursements": 13850.93,
-    "cash_on_hand": 1509.9,
+    "disbursements": 15263.47,
+    "cash_on_hand": 706.97,
     "individual_unitemized": 0,
     "individual_itemized": 0,
     "pac": 0,
     "party": 0,
     "self_funding": 12300,
     "other": 0,
-    "coverage_end": "2026-09-30",
-    "last_report": "OCTOBER QUARTERLY 2026",
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
     "source_url": "https://www.fec.gov/data/candidate/S6TN00372/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -4335,7 +4335,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00941971/",
     "checked": "2026-10-17"
    },
-   "funding_checked": "2026-10-21",
+   "funding_checked": "2026-10-25",
    "cycle": 2026
   },
   "H6TN05462": {
@@ -4350,15 +4350,35 @@
    "listed": true,
    "first_listed": "2026-10-21",
    "last_listed": "2026-10-25",
-   "totals": null,
-   "organizations": null,
+   "totals": {
+    "cycle": 2026,
+    "receipts": 0,
+    "disbursements": 0,
+    "cash_on_hand": 0,
+    "individual_unitemized": 0,
+    "individual_itemized": 0,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 0,
+    "other": 0,
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6TN05462/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00959460&two_year_transaction_period=2026&line_number=F3-11C"
+   },
    "website": {
     "url": "https://oleary4congress.com/",
     "as_filed": "OLEARY4CONGRESS.COM",
     "source_url": "https://www.fec.gov/data/committee/C00959460/",
     "checked": "2026-10-21"
    },
-   "funding_checked": "2026-10-21",
+   "funding_checked": "2026-10-25",
    "cycle": 2026
   }
  }

@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=CO&candidate_status=C",
- "list_built_on": "2026-10-24",
+ "list_built_on": "2026-10-25",
  "built_on": "2026-10-25",
  "senate_up": true,
  "candidates": {
@@ -1798,17 +1798,17 @@
    "last_listed": "2026-10-25",
    "totals": {
     "cycle": 2026,
-    "receipts": 1163946.59,
-    "disbursements": 1087619.81,
-    "cash_on_hand": 235471.83,
-    "individual_unitemized": 423086.52,
-    "individual_itemized": 484025.29,
-    "pac": 174000,
+    "receipts": 1226252.92,
+    "disbursements": 1111236.09,
+    "cash_on_hand": 274161.88,
+    "individual_unitemized": 444004.35,
+    "individual_itemized": 515413.79,
+    "pac": 184000,
     "party": 0,
     "self_funding": 0,
     "other": 82834.78,
-    "coverage_end": "2026-09-30",
-    "last_report": "OCTOBER QUARTERLY 2026",
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
     "source_url": "https://www.fec.gov/data/candidate/H0CO03165/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -2000,7 +2000,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00728238/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-22",
+   "funding_checked": "2026-10-25",
    "cycle": 2026
   },
   "H4CO04280": {
@@ -4529,6 +4529,49 @@
     "checked": "2026-10-18"
    },
    "funding_checked": "2026-10-24",
+   "cycle": 2026
+  },
+  "H6CO02206": {
+   "id": "H6CO02206",
+   "name": "DENNISON, KELLEY ANNE",
+   "party": "REPUBLICAN PARTY",
+   "office": "H",
+   "district": "2",
+   "incumbent": false,
+   "committee": "C00943555",
+   "fec_url": "https://www.fec.gov/data/candidate/H6CO02206/",
+   "listed": true,
+   "first_listed": "2026-10-25",
+   "last_listed": "2026-10-25",
+   "totals": {
+    "cycle": 2026,
+    "receipts": 12348.37,
+    "disbursements": 11261.16,
+    "cash_on_hand": 1087.21,
+    "individual_unitemized": 0,
+    "individual_itemized": 8323.37,
+    "pac": 0,
+    "party": 3500,
+    "self_funding": 525,
+    "other": 0,
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
+    "source_url": "https://www.fec.gov/data/candidate/H6CO02206/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00943555&two_year_transaction_period=2026&line_number=F3-11C"
+   },
+   "website": {
+    "url": null,
+    "as_filed": null,
+    "source_url": "https://www.fec.gov/data/committee/C00943555/",
+    "checked": "2026-10-25"
+   },
+   "funding_checked": "2026-10-25",
    "cycle": 2026
   }
  }
