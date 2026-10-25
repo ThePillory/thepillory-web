@@ -597,6 +597,17 @@ a.card:hover { box-shadow: var(--shadow-lg); }
   min-height: var(--tap);
 }
 .wordmark-accent { color: var(--navy); }
+/* The wordmark with the tagline tucked under it, lined up with the word (past the seal) */
+.brand { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+.tagline {
+  margin: -9px 0 0;
+  padding-left: 1.95rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--text-2);
+}
+.page-tagline { margin: 0 0 4px; font-size: 0.9375rem; font-weight: 600; color: var(--text-2); }
 /* The seal mark sits before "ThePillory" wherever the wordmark appears */
 .wordmark::before {
   content: "";
@@ -744,7 +755,7 @@ a.card:hover { box-shadow: var(--shadow-lg); }
     justify-content: space-between;
     gap: 16px;
   }
-  .tabbar-brand { display: inline-flex; }
+  .tabbar-brand { display: flex; }
   .tabbar-inner { display: flex; gap: 4px; align-items: center; }
   .tabbar .tab { flex-direction: row; gap: 8px; min-height: var(--tap); padding: 0 14px; border-radius: 999px; font-size: 0.9375rem; color: var(--text-2); }
   .tabbar .tab .icon { width: 20px; height: 20px; }

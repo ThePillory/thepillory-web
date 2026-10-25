@@ -271,8 +271,9 @@ ${quickLinks()}
 </div>
 ${index || lite ? `<script src="/assets/map.js?v=${ASSET_VERSION}" defer></script>` : ""}`;
   // Personal only once the visitor's districts are known; otherwise the same for everyone.
-  const title = vs && vs.source === "page" ? vs.name : "Know what your government is doing";
-  return page(title, main, { tab: "home", root: true, personal: !!d, partial: anyFailed(waiting, federalExec, elections, quick) });
+  // A state's own page is titled with the state; the hub at "/" with the tagline.
+  const title = statePage ? vs.name : "Know what your government is doing";
+  return page(title, main, { tab: "home", root: true, home: !statePage, personal: !!d, partial: anyFailed(waiting, federalExec, elections, quick) });
 }
 
 // The hub for a visitor without saved districts is the same for everyone: kept

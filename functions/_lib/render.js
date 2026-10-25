@@ -1,7 +1,7 @@
 // HTML helpers for the Pages Functions. The page shell, tab bars and sample
 // cards come from generated.js (written by tools/build.py), so dynamic pages
 // match the static ones exactly.
-import { PAGE, TABBARS } from "./generated.js";
+import { PAGE, TABBARS, SITE_DESCRIPTION, HOME_TITLE } from "./generated.js";
 
 export function esc(s) {
   return String(s == null ? "" : s)
@@ -18,11 +18,17 @@ export function safeUrl(u) {
 }
 
 // personal: the page depends on the visitor's district cookie, so no shared cache.
-export function page(title, main, { tab = null, root = false, back = null, status = 200, personal = false, partial = false } = {}) {
+// home: the hub at thepillory.co itself, titled and described with the tagline
+// ("ThePillory · Accountability through facts.") instead of "[title] – ThePillory".
+export function page(title, main, { tab = null, root = false, back = null, status = 200, personal = false, partial = false, home = false } = {}) {
   const nav = tab ? TABBARS[tab][root ? "root" : "sub"] : "";
   const backHtml = back ? `<a class="back-link" href="${esc(back[1])}">← ${esc(back[0])}</a>` : "";
+  const shell = home
+    ? PAGE.split("%%TITLE%% – ThePillory").join(esc(HOME_TITLE))
+      .replace(`<meta name="description" content="${esc(SITE_DESCRIPTION)}"`, () => `<meta name="description" content="${esc(`ThePillory · ${SITE_DESCRIPTION}`)}"`)
+    : PAGE;
   // Function replacements: data may contain "$", which .replace() would treat as a pattern.
-  const html = PAGE.split("%%TITLE%%").join(esc(title))
+  const html = shell.split("%%TITLE%%").join(esc(title))
     .replace("%%NAV%%", () => nav)
     .replace("%%BACK%%", () => backHtml)
     .replace("%%MAIN%%", () => main);

@@ -197,5 +197,42 @@ class Tests(unittest.TestCase):
         self.assertEqual(r[0]["source_url"], "https://www.courtlistener.com/person/2738/john-glover-roberts-jr/disclosures/")
         self.assertEqual(out["ketanji-brown-jackson"], [], "matched by first name too; no reports listed")
 
+class SenateRefused(unittest.TestCase):
+    """senate.gov answers GitHub's servers with 403 at times: stored confirmations stand in, or the build stops."""
+
+    def setUp(self):
+        import json
+        import tempfile
+        import urllib.error
+        self.tmp = tempfile.TemporaryDirectory()
+        self.saved = (B.fetch, B.OUT, B.parse_members)
+        B.OUT = Path(self.tmp.name)
+        self.record = {"vote": "78-22", "roll_call": "245", "result": "C"}
+        (B.OUT / "justices.json").write_text(json.dumps({"justices": [{"slug": "john-roberts", "senate": self.record}]}))
+        members = {m["listed_name"].split(",")[0]: m for m in self.saved[2](MEMBERS)}
+        self.roberts, self.barrett = members["Roberts"], members["Barrett"]
+
+        def fetch(url, binary=False, headers=None, tries=3):
+            if url == B.SENATE:
+                raise urllib.error.HTTPError(url, 403, "Forbidden", {}, None)
+            return MEMBERS if "members" in url else BIOS
+        B.fetch = fetch
+
+    def tearDown(self):
+        B.fetch, B.OUT, B.parse_members = self.saved
+        self.tmp.cleanup()
+
+    def test_stored_record_kept(self):
+        self.assertIsNone(B.senate_confirmations())
+        B.parse_members = lambda page: [self.roberts] * 9
+        self.assertEqual(B.build_justices()[0]["senate"], self.record)
+
+    def test_nothing_stored_stops_the_build(self):
+        B.parse_members = lambda page: [self.roberts] * 8 + [self.barrett]
+        with self.assertRaises(SystemExit) as stop:
+            B.build_justices()
+        self.assertIn("no confirmation is stored for Barrett", str(stop.exception))
+
+
 if __name__ == "__main__":
     unittest.main()
