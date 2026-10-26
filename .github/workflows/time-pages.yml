@@ -1,0 +1,28 @@
+# Time pages: runs pages' own Function code against the production database,
+# read-only, and lists every query with its time and rows read
+# (tools/time_page.mjs). Use it when a page is slow: the slowest query is at
+# the top. Actions -> Time pages -> Run workflow.
+name: Time pages
+on:
+  workflow_dispatch:
+    inputs:
+      paths:
+        description: "Pages to time, separated by spaces"
+        default: "/ /calaveras/ /place/ca/calaveras/ /briefing/"
+permissions:
+  contents: read
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Each query, timed
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PATHS: ${{ github.event.inputs.paths }}
+        run: node --import ./workers/sync/test/sql-stub.mjs tools/time_page.mjs $PATHS
