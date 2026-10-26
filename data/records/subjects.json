@@ -1,0 +1,43 @@
+{
+  "about": "Who the Public Records & Investigations tab covers (docs/records-tab-spec.md, section 3). Phase 1 lists the qualifying roles only. The people holding them are filled in from official sources, each with its source URL and linked to their official profile by official_id, just before the pilot. A role whose holders have no official profile on ThePillory yet (senior White House staff) waits until they do. official_source is the page that lists a role's holders; it's empty until that page is checked, when the holders are filled in.",
+  "updated": "2026-10-26",
+  "roles": [
+    {
+      "id": "cabinet",
+      "name": "Cabinet secretaries and Cabinet-level officials",
+      "branch": "executive",
+      "official_source": "https://www.whitehouse.gov/administration/cabinet/",
+      "has_profiles": true,
+      "subjects": []
+    },
+    {
+      "id": "white-house-senior-staff",
+      "name": "Senior White House staff (Chief of Staff, National Security Advisor, Counsel to the President, and others at that level)",
+      "branch": "executive",
+      "official_source": null,
+      "has_profiles": false,
+      "subjects": []
+    },
+    {
+      "id": "house-leadership",
+      "name": "House leadership: the Speaker, the majority and minority leaders, and the majority and minority whips",
+      "branch": "legislative",
+      "official_source": null,
+      "has_profiles": true,
+      "subjects": []
+    },
+    {
+      "id": "senate-leadership",
+      "name": "Senate leadership: the majority and minority leaders and the majority and minority whips",
+      "branch": "legislative",
+      "official_source": null,
+      "has_profiles": true,
+      "subjects": []
+    }
+  ],
+  "later": [
+    "Every member of Congress",
+    "Agency heads",
+    "Federal judges"
+  ]
+}
