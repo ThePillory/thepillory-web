@@ -135,6 +135,7 @@ To test the sync and Functions locally with **fake** data: `workers/sync/test/ru
   - `breakdownBar()`: the funding breakdown bar with a legend of amounts and shares.
   - `miniBars()`: small bar charts, with values below zero hanging under the line and a "Show the numbers" table.
   - Topic tiles with line icons; stat tiles; the big-number hero card.
+- **Spacing:** only the tokens on `:root` (`--space-1`…`--space-6`: 4, 8, 12, 16, 24, 32px; `--card-pad`, 16px on phones and 20px from 600px); the few px values left are geometry (room for an icon, the tab bar, a sticky bar). Every card has `--card-pad` on all sides, cards of link rows included; list rows have 12px top and bottom (the first and last row in a card take the card's padding), at least 44px, title and subtitle 4px apart; 12px between cards in a section and between a heading and its card, 24px between sections.
 - **Controls:** pill-shaped chips and buttons, and every tap target at least 44px tall. Section labels (`.label`) are small, uppercase, letter-spaced and secondary-colored; section headings (`.section-head h2`) are big and bold.
 - **Layout:** every screen is a centered app column, max 480px, with the tab bar and the footer. The header is the wordmark plus a search button that opens the search field (the field always shows without JavaScript).
 - **Checks:** before shipping, look at phone (360–390px) and desktop (1280px) widths, in light and dark mode, with no horizontal scroll.

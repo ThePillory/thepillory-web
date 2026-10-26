@@ -12,6 +12,8 @@ WRANGLER="${WRANGLER:-npx wrangler}"
 rm -rf "$STATE"
 
 echo "--- unit tests (quote and citation checks):"
+# Tests that import Worker code read .sql migrations through the stub.
+node() { if [ "${1:-}" = "fixture-server.mjs" ]; then command node "$@"; else command node --import ./sql-stub.mjs "$@"; fi; }
 node verify.test.mjs | tail -1
 node access.test.mjs | tail -1
 node d1retry.test.mjs | tail -1
@@ -23,6 +25,7 @@ node executive.test.mjs | tail -1
 node --test pages.test.mjs 2>/dev/null | grep -E "positions:|^# (pass|fail)"
 node --test promises.test.mjs 2>/dev/null | grep -E "^# (pass|fail)"
 
+unset -f node
 node fixture-server.mjs & FIX=$!
 $WRANGLER dev -c wrangler.test.toml --port 8789 --persist-to "$STATE" --test-scheduled >/tmp/pillory-worker.log 2>&1 & WK=$!
 trap 'kill $FIX $WK ${PG:-} 2>/dev/null || true' EXIT
