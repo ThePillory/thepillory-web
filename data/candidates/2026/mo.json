@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=MO&candidate_status=C",
- "list_built_on": "2026-10-25",
+ "list_built_on": "2026-10-26",
  "built_on": "2026-10-26",
  "senate_up": false,
  "candidates": {
@@ -302,7 +302,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00922153/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-22",
+   "funding_checked": "2026-10-26",
    "cycle": 2026
   },
   "H6MO02327": {
@@ -1059,17 +1059,17 @@
    "last_listed": "2026-10-26",
    "totals": {
     "cycle": 2026,
-    "receipts": 1136684.58,
-    "disbursements": 718228.12,
-    "cash_on_hand": 568900.6,
-    "individual_unitemized": 84761.82,
-    "individual_itemized": 465390.63,
-    "pac": 510980,
+    "receipts": 1146488.94,
+    "disbursements": 771105.16,
+    "cash_on_hand": 525827.92,
+    "individual_unitemized": 85508.83,
+    "individual_itemized": 466947.98,
+    "pac": 518480,
     "party": 0,
     "self_funding": 0,
     "other": 75552.13,
-    "coverage_end": "2026-09-30",
-    "last_report": "OCTOBER QUARTERLY 2026",
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
     "source_url": "https://www.fec.gov/data/candidate/H8MO09146/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -1261,7 +1261,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00870238/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-22",
+   "funding_checked": "2026-10-26",
    "cycle": 2026
   },
   "H4MO03221": {

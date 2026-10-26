@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=AZ&candidate_status=C",
- "list_built_on": "2026-10-25",
+ "list_built_on": "2026-10-26",
  "built_on": "2026-10-26",
  "senate_up": false,
  "candidates": {
@@ -1970,17 +1970,17 @@
    "last_listed": "2026-10-26",
    "totals": {
     "cycle": 2026,
-    "receipts": 2603086.34,
-    "disbursements": 1709122.08,
-    "cash_on_hand": 1909694.72,
-    "individual_unitemized": 111543.57,
-    "individual_itemized": 1679917.02,
-    "pac": 804200,
+    "receipts": 2674366.81,
+    "disbursements": 1771390.65,
+    "cash_on_hand": 1918706.62,
+    "individual_unitemized": 117523.54,
+    "individual_itemized": 1731717.52,
+    "pac": 817700,
     "party": 37.68,
     "self_funding": 0,
     "other": 7388.07,
-    "coverage_end": "2026-09-30",
-    "last_report": "OCTOBER QUARTERLY 2026",
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
     "source_url": "https://www.fec.gov/data/candidate/H8AZ09040/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -2172,7 +2172,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00657304/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-22",
+   "funding_checked": "2026-10-26",
    "cycle": 2026
   },
   "H6AZ05174": {

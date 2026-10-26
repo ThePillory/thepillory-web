@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=ME&candidate_status=C",
- "list_built_on": "2026-10-25",
+ "list_built_on": "2026-10-26",
  "built_on": "2026-10-26",
  "senate_up": true,
  "candidates": {
@@ -395,7 +395,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00907881/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-22",
+   "funding_checked": "2026-10-26",
    "cycle": 2026
   },
   "S6ME00399": {
@@ -1135,17 +1135,17 @@
    "last_listed": "2026-10-26",
    "totals": {
     "cycle": 2026,
-    "receipts": 531049.7,
-    "disbursements": 582147.17,
-    "cash_on_hand": 364580.76,
-    "individual_unitemized": 78696.14,
-    "individual_itemized": 144110,
-    "pac": 296050,
+    "receipts": 551077.7,
+    "disbursements": 646706.82,
+    "cash_on_hand": 320049.11,
+    "individual_unitemized": 81268.14,
+    "individual_itemized": 151266,
+    "pac": 306050,
     "party": 0,
     "self_funding": 0,
-    "other": 12193.56,
-    "coverage_end": "2026-09-30",
-    "last_report": "OCTOBER QUARTERLY 2026",
+    "other": 12493.56,
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
     "source_url": "https://www.fec.gov/data/candidate/H8ME01120/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -1337,7 +1337,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00433391/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-22",
+   "funding_checked": "2026-10-26",
    "cycle": 2026
   },
   "H6ME01280": {
@@ -2106,7 +2106,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00957167/",
     "checked": "2026-10-18"
    },
-   "funding_checked": "2026-10-22",
+   "funding_checked": "2026-10-26",
    "cycle": 2026
   },
   "S6ME00449": {
@@ -2149,7 +2149,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00955773/",
     "checked": "2026-10-18"
    },
-   "funding_checked": "2026-10-22",
+   "funding_checked": "2026-10-26",
    "cycle": 2026
   }
  }
