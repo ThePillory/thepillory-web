@@ -257,7 +257,7 @@ a.card:hover { box-shadow: var(--shadow-lg); }
 /* Reset list / fieldset chrome when used purely for semantics */
 .plain-list { list-style: none; margin: 0; }
 /* A list's own padding goes, except on a list that is also a card: the card keeps its padding. */
-.plain-list:not(.card) { padding: 0; }
+.plain-list:not(:where(.card)) { padding: 0; }
 .bare { border: 0; margin: 0; padding: 0; min-width: 0; }
 
 .divider { border: 0; border-top: 1px solid var(--border); margin: 0; }
@@ -1192,7 +1192,7 @@ a.constitution-link:hover { border-color: var(--parch-text); }
 }
 .page-head .chips .example-tag { align-self: center; }
 
-.meeting-card { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-4) var(--space-4); text-decoration: none; color: inherit; }
+.meeting-card { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--card-pad); text-decoration: none; color: inherit; }
 .meeting-card h3 { font-size: 1.1875rem; line-height: 1.25; }
 .meeting-card--hearing h3 { font-family: var(--sans); font-size: 0.9375rem; font-weight: 600; line-height: 1.35; }
 .meeting-card:hover { box-shadow: var(--shadow-lg); }
@@ -1203,7 +1203,7 @@ a.constitution-link:hover { border-color: var(--parch-text); }
 .chip--light.chip--sm { font-weight: 600; }
 .chip--quiet { background: var(--panel); color: var(--text); }
 
-.brief-vote { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-top: 1px solid var(--border); }
+.brief-vote { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); padding: var(--space-3) 0; border-top: 1px solid var(--border); }
 .brief-vote:first-child { border-top: 0; }
 .brief-vote-main { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; overflow-wrap: anywhere; }
 .brief-vote-name { font-size: 0.875rem; font-weight: 600; color: var(--text); text-decoration: none; }
@@ -1967,6 +1967,7 @@ article.fin-term { scroll-margin-top: var(--space-4); }
 .ballot-cands > li { padding: var(--space-3) 0; border-top: 1px solid var(--border); }
 .ballot-cands > li:first-child { border-top: 0; }
 .ballot-cands > li:last-child { padding-bottom: 0; }
+.ballot-cands > li > .list-row { padding-block: 0; border-top: 0; }
 .ballot-cands p { margin: 0; }
 /* The ballot preview card under the map, in the weeks before the state's next election:
    one line with the date and countdown, and a standard-size button. */
