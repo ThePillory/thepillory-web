@@ -119,17 +119,28 @@ export function section(label, inner, cls = "card stack") {
 
 export const FAILED = Symbol("section failed");
 
+// Each section gets this long. A slower one counts as FAILED, so the rest of the
+// page still shows (with the note below) instead of the whole page hanging.
+export const SECTION_BUDGET_MS = 3000;
+
 /**
  * Runs one section's loader. Returns its value, or FAILED (logged) if it
- * threw. A missing table (before the first sync) returns `missingValue`.
+ * threw or took longer than SECTION_BUDGET_MS. A missing table (before the
+ * first sync) returns `missingValue`.
  */
-export async function loadSection(name, fn, missingValue = FAILED) {
+export async function loadSection(name, fn, missingValue = FAILED, { budgetMs = SECTION_BUDGET_MS } = {}) {
+  let timer;
+  const slow = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(Object.assign(new Error(`took longer than ${budgetMs} ms`), { name: "SectionTimeout" })), budgetMs);
+  });
   try {
-    return await fn();
+    return await Promise.race([fn(), slow]);
   } catch (err) {
     if (missingValue !== FAILED && /no such table|no such column/i.test(String(err && err.message))) return missingValue;
     console.error(`section "${name}" failed: ${err && err.name}: ${err && err.message}`);
     return FAILED;
+  } finally {
+    clearTimeout(timer);
   }
 }
 
@@ -140,7 +151,7 @@ export const anyFailed = (...values) => values.some((v) => v === FAILED);
 export function sectionError(label) {
   return `<section class="card stack-sm section-error" role="status">
   ${label ? `<h2 class="label">${esc(label)}</h2>` : ""}
-  <p class="small secondary">Couldn't load this section right now. The rest of the page is fine; try again in a few minutes.</p>
+  <p class="small secondary">This section is loading slowly or couldn't load right now. The rest of the page is fine; try again in a few minutes.</p>
 </section>`;
 }
 
