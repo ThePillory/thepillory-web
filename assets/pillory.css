@@ -255,7 +255,9 @@ a.card:hover { box-shadow: var(--shadow-lg); }
 }
 
 /* Reset list / fieldset chrome when used purely for semantics */
-.plain-list { list-style: none; margin: 0; padding: 0; }
+.plain-list { list-style: none; margin: 0; }
+/* A list's own padding goes, except on a list that is also a card: the card keeps its padding. */
+.plain-list:not(:where(.card)) { padding: 0; }
 .bare { border: 0; margin: 0; padding: 0; min-width: 0; }
 
 .divider { border: 0; border-top: 1px solid var(--border); margin: 0; }
@@ -520,6 +522,11 @@ a.card:hover { box-shadow: var(--shadow-lg); }
 .list-title + .list-meta { margin-top: var(--space-1); }
 /* A heading inside a card sits a row's padding above the first row */
 .card > .section-head + * { margin-top: calc(var(--space-3) - var(--space-2)); }
+/* A list that is a card: rows keep their own padding and dividers between them,
+   and the first and last rows take the card's padding at its edges. */
+.plain-list > li > .list-row { padding-block: var(--space-3); border-top: 1px solid var(--border); }
+.card.plain-list > li:first-child, .card.plain-list > li:first-child > .list-row { padding-top: 0; border-top: 0; }
+.card.plain-list > li:last-child, .card.plain-list > li:last-child > .list-row { padding-bottom: 0; }
 /* A row that is a card on its own ("See all …"): the card's padding, no divider */
 .list-row.card { padding: var(--card-pad); border-top: 0; }
 .list-meta { font-size: 0.8125rem; color: var(--text-2); }
@@ -1025,7 +1032,6 @@ a.constitution-link:hover { border-color: var(--parch-text); }
 .segmented a.toggle { text-decoration: none; text-align: center; }
 .toggle[aria-current="true"] { background: var(--navy-fill); color: var(--on-accent); }
 
-.vote-list { padding: calc(var(--card-pad) - var(--space-3)) var(--card-pad); }
 .vote-row {
   display: flex;
   justify-content: space-between;
@@ -1163,7 +1169,7 @@ a.constitution-link:hover { border-color: var(--parch-text); }
 .brief-section { display: flex; flex-direction: column; gap: var(--space-3); }
 .section-head h2.label { font-size: 1.375rem; font-weight: 700; letter-spacing: -0.015em; text-transform: none; color: var(--text); }
 .brief-section--issues { gap: var(--space-3); }
-.brief-section--issues .issue-card { padding: var(--space-4); gap: var(--space-3); }
+.brief-section--issues .issue-card { padding: var(--card-pad); gap: var(--space-3); }
 .brief-section--issues .issue-card h3 { font-size: 1.25rem; line-height: 1.25; }
 .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-2); }
 .section-link { font-size: 0.9375rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; min-height: var(--tap); }
@@ -1186,7 +1192,7 @@ a.constitution-link:hover { border-color: var(--parch-text); }
 }
 .page-head .chips .example-tag { align-self: center; }
 
-.meeting-card { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-4) var(--space-4); text-decoration: none; color: inherit; }
+.meeting-card { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--card-pad); text-decoration: none; color: inherit; }
 .meeting-card h3 { font-size: 1.1875rem; line-height: 1.25; }
 .meeting-card--hearing h3 { font-family: var(--sans); font-size: 0.9375rem; font-weight: 600; line-height: 1.35; }
 .meeting-card:hover { box-shadow: var(--shadow-lg); }
@@ -1197,8 +1203,7 @@ a.constitution-link:hover { border-color: var(--parch-text); }
 .chip--light.chip--sm { font-weight: 600; }
 .chip--quiet { background: var(--panel); color: var(--text); }
 
-.brief-votes { padding: 0; }
-.brief-vote { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-top: 1px solid var(--border); }
+.brief-vote { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); padding: var(--space-3) 0; border-top: 1px solid var(--border); }
 .brief-vote:first-child { border-top: 0; }
 .brief-vote-main { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; overflow-wrap: anywhere; }
 .brief-vote-name { font-size: 0.875rem; font-weight: 600; color: var(--text); text-decoration: none; }
@@ -1223,8 +1228,8 @@ a.constitution-link:hover { border-color: var(--parch-text); }
 .weigh-details summary::after { content: " ▾"; font-size: 0.75em; margin-left: var(--space-1); }
 .weigh-details[open] summary::after { content: " ▴"; }
 .weigh-details[open] summary { margin-bottom: var(--space-2); }
-.watch-card { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-4) var(--card-pad) var(--card-pad); }
-.watch-card.card--highlight { padding: var(--space-4) var(--card-pad) var(--card-pad); }
+.watch-card { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--card-pad); }
+.watch-card.card--highlight { padding: var(--card-pad); }
 .watch-card h3 { font-family: var(--sans); font-size: 1.0625rem; font-weight: 600; line-height: 1.35; }
 .related-link { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-2) var(--space-4); min-height: var(--tap); font-size: 0.875rem; font-weight: 600; color: var(--parch-text); text-decoration: none; }
 .related-link:hover { text-decoration: underline; }
@@ -1495,7 +1500,7 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 .chip--tap { min-height: var(--tap); display: inline-flex; align-items: center; background: var(--panel); border: 0; color: var(--navy); font-weight: 600; text-decoration: none; }
 .chip--tap:hover { background: var(--navy-light); text-decoration: none; }
 .small-states .chip--tap { min-width: 52px; justify-content: center; font-weight: 600; }
-.county-list { max-height: 420px; overflow-y: auto; padding: 0 var(--card-pad); }
+.county-list { max-height: 420px; overflow-y: auto; }
 .county-list li[hidden] { display: none; }
 .district-grid { display: flex; flex-wrap: wrap; gap: var(--space-2); padding: var(--space-2) 0; }
 .explore-link { margin: 0; }
@@ -1537,7 +1542,7 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 
 /* ---------- The executive branch: orders, nominations, a bill's final action ---------- */
 
-.exec-list { padding: 0 var(--card-pad); }
+.exec-list:not(.card) { padding: 0 var(--card-pad); }
 .exec-row { padding: var(--space-3) 0; border-top: 1px solid var(--border); }
 .exec-row:first-child { border-top: 0; }
 .exec-row .label { margin: 0; }
@@ -1587,6 +1592,7 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 .cand-statement[open] summary::after { content: " ▴"; }
 .cand-statement .statement-body { padding-top: var(--space-1); }
 .card.cand-statement { padding-top: var(--space-1); padding-bottom: var(--space-1); }
+.card.cand-statement[open] { padding-bottom: var(--card-pad); }
 .holds-office { padding-top: var(--space-2); border-top: 1px solid var(--border); }
 .cand-links .inline-link { display: inline-flex; align-items: center; min-height: var(--tap); }
 .measure-title { margin: 0; font-family: var(--sans); font-weight: 700; font-size: 1.0625rem; line-height: 1.4; overflow-wrap: anywhere; }
@@ -1613,7 +1619,7 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 .chip--topic:hover { text-decoration: none; filter: brightness(0.96); }
 .topic-row { display: flex; flex-direction: column; gap: var(--space-1); }
 .topic-grid { display: flex; flex-wrap: wrap; gap: var(--space-2); }
-.topic-list { padding: 0 var(--card-pad); }
+
 .topic-item { padding: var(--space-3) 0; border-top: 1px solid var(--border); overflow-wrap: anywhere; }
 .topic-item:first-child { border-top: 0; }
 .topic-item .list-title { display: inline-flex; align-items: center; min-height: var(--tap); font-weight: 600; }
@@ -1942,7 +1948,8 @@ article.fin-term { scroll-margin-top: var(--space-4); }
 .roll-filters { display: flex; flex-direction: column; gap: var(--space-2); }
 .roll-selects { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: var(--space-2); }
 .roll-selects .input, .roll-search .input { width: 100%; min-height: var(--tap); }
-.roll-list { padding: var(--space-1) var(--card-pad); }
+/* Rows pad 8px each: the first and last sit a card's padding from the edges */
+.roll-list { padding: calc(var(--card-pad) - var(--space-2)) var(--card-pad); }
 .roll-list[aria-busy="true"] { opacity: 0.6; }
 .roll-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: 56px; padding: var(--space-2) 0; border-top: 1px solid var(--border); color: inherit; text-decoration: none; }
 .roll-row:first-child { border-top: 0; }
@@ -1958,8 +1965,9 @@ article.fin-term { scroll-margin-top: var(--space-4); }
 
 /* The ballot preview (/ballot/<st>/): every candidate in the same row, whatever their party. */
 .ballot-cands > li { padding: var(--space-3) 0; border-top: 1px solid var(--border); }
-.ballot-cands > li:first-child { border-top: 0; padding-top: var(--space-1); }
+.ballot-cands > li:first-child { border-top: 0; }
 .ballot-cands > li:last-child { padding-bottom: 0; }
+.ballot-cands > li > .list-row { padding-block: 0; border-top: 0; }
 .ballot-cands p { margin: 0; }
 /* The ballot preview card under the map, in the weeks before the state's next election:
    one line with the date and countdown, and a standard-size button. */
