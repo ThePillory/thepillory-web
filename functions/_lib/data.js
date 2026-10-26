@@ -210,6 +210,10 @@ async function summariesBuilt(db) {
 
 // Most recent final-passage votes by the given officials (ids), newest first,
 // each with those officials' positions. level: "federal" | "state" | null (all).
+// Starts from these officials' own positions (vote_positions by official,
+// state_positions by member through its (member_k, vote_k) index), never from
+// every final vote in the country: that walk read 12.7 million rows and took
+// 25 seconds once other states' votes loaded (Oct 26, 2026).
 export async function recentFinalVotes(db, { level = null, limit = 3, offset = 0, officialIds = [] } = {}) {
   if (!officialIds.length) return { rows: [], more: false };
   const ids = officialIds.map(() => "?").join(",");
@@ -217,13 +221,16 @@ export async function recentFinalVotes(db, { level = null, limit = 3, offset = 0
     .prepare(
       `SELECT v.*, b.bill_number, b.title AS bill_title FROM votes v
        LEFT JOIN bills b ON b.id = v.bill_id
-       WHERE v.vote_type = 'final_passage' AND (? IS NULL OR v.level = ?)
+       WHERE v.id IN (
+           SELECT p.vote_id FROM vote_positions p WHERE p.official_id IN (${ids})
+           UNION ALL
+           SELECT sv.id FROM state_positions sp JOIN votes sv ON sv.k = sp.vote_k
+           WHERE sp.member_k IN (SELECT so.k FROM officials so WHERE so.id IN (${ids}) AND so.k IS NOT NULL))
+         AND v.vote_type = 'final_passage' AND (? IS NULL OR v.level = ?)
          AND (? IS NULL OR substr(v.chamber, 1, 3) = lower(?) || '-')
-         AND (EXISTS (SELECT 1 FROM vote_positions p WHERE p.vote_id = v.id AND p.official_id IN (${ids}))
-           OR EXISTS (SELECT 1 FROM state_positions sp JOIN officials so ON so.k = sp.member_k WHERE sp.vote_k = v.k AND so.id IN (${ids})))
        ORDER BY v.vote_date DESC, v.id DESC LIMIT ? OFFSET ?`
     )
-    .bind(parseLevel(level).level, parseLevel(level).level, parseLevel(level).st, parseLevel(level).st, ...officialIds, ...officialIds, limit + 1, offset)
+    .bind(...officialIds, ...officialIds, parseLevel(level).level, parseLevel(level).level, parseLevel(level).st, parseLevel(level).st, limit + 1, offset)
     .all();
   const rows = results.slice(0, limit);
   if (rows.length) {

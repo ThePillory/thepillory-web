@@ -172,7 +172,13 @@ test("one section failing doesn't fail the page", async () => {
     assert.equal(await loadSection("missing, no fallback", async () => { throw new Error("no such table: x"); }), FAILED);
     assert.equal(anyFailed(1, FAILED), true);
     assert.equal(anyFailed(1, null), false);
-    assert.match(sectionError("Votes"), /Couldn't load this section/);
+    assert.match(sectionError("Votes"), /loading slowly or couldn't load/);
+    // A section past its budget counts as failed, so the page shows instead of hanging.
+    const t0 = Date.now();
+    assert.equal(await loadSection("slow", () => new Promise((r) => setTimeout(() => r(1), 500)), FAILED, { budgetMs: 50 }), FAILED);
+    assert.ok(Date.now() - t0 < 400, "cut off at the budget, not after the slow query");
+    assert.ok(errors.some((e) => /section "slow" failed: SectionTimeout: took longer than 50 ms/.test(e)));
+    assert.equal(await loadSection("quick enough", () => new Promise((r) => setTimeout(() => r(2), 10)), FAILED, { budgetMs: 200 }), 2);
     // A page with a failed section is never cached.
     assert.equal(page("T", "<p>x</p>", { partial: true }).headers.get("Cache-Control"), "no-store");
     assert.equal(page("T", "<p>x</p>").headers.get("Cache-Control"), "public, max-age=300");

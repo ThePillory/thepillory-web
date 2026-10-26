@@ -52,7 +52,9 @@ for (const path of process.argv.slice(2)) {
   log.length = 0;
   const headers = path.startsWith("/briefing/") ? { cookie: "pillory_districts=st=CA&cd=5&su=4&sl=8&co=06009" } : {};
   const t = Date.now();
-  const res = await onRequestGet({ request: new Request(`https://thepillory.co${path}`, { headers }), env: { DB, ASSETS }, params: {}, next: async () => new Response("") });
+  // Catch-all routes ([[path]].js) get the segments after their prefix, as Pages passes them.
+  const params = file.includes("[[path]]") ? { path: path.split("?")[0].split("/").filter(Boolean).slice(1) } : {};
+  const res = await onRequestGet({ request: new Request(`https://thepillory.co${path}`, { headers }), env: { DB, ASSETS }, params, next: async () => new Response("") });
   const html = await res.text();
   console.log(`\n=== ${path}: ${Date.now() - t} ms, HTTP ${res.status}, ${html.length} bytes, ${log.length} queries${/Couldn.t load this section/.test(html) ? ", a section failed" : ""}`);
   for (const q of [...log].sort((a, b) => b.ms - a.ms)) console.log(`${String(q.ms).padStart(6)} ms  d1 ${String(q.d1_ms ?? "?").padStart(5)} ms  ${String(q.rows_read ?? "?").padStart(9)} rows  ${q.ok ? "" : "FAILED "}${q.sql}`);

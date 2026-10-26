@@ -24,12 +24,12 @@ jobs:
           for p in / /calaveras/ /place/ca/calaveras/ /briefing/; do
             for i in 1 2 3; do
               curl -s -o /dev/null -m 60 -H "Cookie: pillory_districts=st=CA&cd=5&su=4&sl=8&co=06009" -D /tmp/h \
-                -w "$p try $i: HTTP %{http_code}, %{time_total} s" "https://thepillory.co$p?nocache=$RANDOM" || true
+                -w "$p try $i: HTTP %{http_code}, %{time_total} s" "https://thepillory.co$p" || true
               echo " cf-cache-status: $(grep -i '^cf-cache-status' /tmp/h | tr -d '\r' | cut -d' ' -f2)"
             done
           done
       - name: Each query, timed (the page's own code, read-only)
-        run: node --import ./workers/sync/test/sql-stub.mjs tools/time_page.mjs / /calaveras/ /place/ca/calaveras/ /briefing/
+        run: node --import ./workers/sync/test/sql-stub.mjs tools/time_page.mjs / /calaveras/ /place/ca/calaveras/ /briefing/ /district/cd/ca-5/ /calaveras/?level=state
       - name: Sync running now, recent migrations, table sizes, query plan
         working-directory: workers/sync
         run: |
