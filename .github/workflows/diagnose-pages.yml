@@ -19,27 +19,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Live load times (3 tries each, 60 s limit)
-        run: |
-          for p in / /calaveras/ /place/ca/calaveras/ /briefing/; do
-            for i in 1 2 3; do
-              curl -s -o /dev/null -m 60 -H "Cookie: pillory_districts=st=CA&cd=5&su=4&sl=8&co=06009" -D /tmp/h \
-                -w "$p try $i: HTTP %{http_code}, %{time_total} s" "https://thepillory.co$p" || true
-              echo " cf-cache-status: $(grep -i '^cf-cache-status' /tmp/h | tr -d '\r' | cut -d' ' -f2)"
-            done
-          done
       - name: Each query, timed (the page's own code, read-only)
-        run: node --import ./workers/sync/test/sql-stub.mjs tools/time_page.mjs / /calaveras/ /place/ca/calaveras/ /briefing/ /district/cd/ca-5/ /calaveras/?level=state
-      - name: Sync running now, recent migrations, table sizes, query plan
-        working-directory: workers/sync
-        run: |
-          q() { npx --yes wrangler@4 d1 execute pillory --remote --json --command "$1" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{const r=JSON.parse(s.slice(s.indexOf("[")))[0];console.log(JSON.stringify(r.results));console.log("  ("+JSON.stringify(r.meta&&{duration:r.meta.duration,rows_read:r.meta.rows_read})+")")})'; }
-          echo "--- steps started in the last 6 hours"; q "SELECT id, step, status, started_at, finished_at, substr(message,1,80) AS message FROM sync_log WHERE started_at >= datetime('now','-6 hours') ORDER BY id DESC LIMIT 25"
-          echo "--- still running"; q "SELECT id, step, started_at FROM sync_log WHERE finished_at IS NULL ORDER BY id DESC LIMIT 10"
-          echo "--- latest migrations"; q "SELECT name, applied_at FROM d1_migrations ORDER BY id DESC LIMIT 4"
-          echo "--- sizes"; q "SELECT (SELECT COUNT(*) FROM votes) AS votes, (SELECT COUNT(*) FROM votes WHERE vote_type='final_passage') AS final_votes, (SELECT COUNT(*) FROM state_positions) AS state_positions, (SELECT COUNT(*) FROM meetings) AS meetings"
-          echo "--- indexes on votes, vote_positions, state_positions"; q "SELECT tbl_name, name, sql FROM sqlite_master WHERE type='index' AND tbl_name IN ('votes','vote_positions','state_positions') ORDER BY tbl_name"
-          echo "--- plan: recentFinalVotes"; q "EXPLAIN QUERY PLAN SELECT v.id FROM votes v LEFT JOIN bills b ON b.id = v.bill_id WHERE v.vote_type = 'final_passage' AND (NULL IS NULL OR v.level = NULL) AND (EXISTS (SELECT 1 FROM vote_positions p WHERE p.vote_id = v.id AND p.official_id IN ('x')) OR EXISTS (SELECT 1 FROM state_positions sp JOIN officials so ON so.k = sp.member_k WHERE sp.vote_k = v.k AND so.id IN ('x'))) ORDER BY v.vote_date DESC, v.id DESC LIMIT 6"
+        run: node --import ./workers/sync/test/sql-stub.mjs tools/time_page.mjs /calaveras/ /place/ca/calaveras/ /briefing/ /calaveras/?level=state /calaveras/ /place/ca/calaveras/
       - name: Workers Logs (errors on these routes, last 6 hours)
         run: |
           now=$(date +%s%3N); from=$((now - 6*3600*1000))
