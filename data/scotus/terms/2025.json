@@ -1047,10 +1047,10 @@
    "name": "Mullin v. Al Otro Lado",
    "summary": "Under the Immigration and Nationality Act, an alien “arrives in the United States” for purposes of 8 U. S. C. §§1158(a)(1) and 1225(a) only when the alien crosses the border into the United States; the INA neither entitles an alien standing at the border in Mexico to apply for asylum nor requires an immigration officer to inspect him.",
    "author_code": "A",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25-5_86qd.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/609us1r59_kjfl.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ALITO, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, GORSUCH, KAVANAUGH, and BARRETT, JJ., joined. THOMAS, J., filed a concurring opinion. SOTOMAYOR, J., filed a dissenting opinion, in which KAGAN and JACKSON, JJ., joined. JACKSON, J., filed a dissenting opinion.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1128,7 +1128,16 @@
      }
     ]
    },
-   "provisions": [],
+   "provisions": [
+    {
+     "id": "art-1-sec-8-cl-18",
+     "quote": null
+    },
+    {
+     "id": "art-3",
+     "quote": null
+    }
+   ],
    "qp_url": "https://www.supremecourt.gov/qp/25-00005qp.pdf",
    "question_presented": [
     "The Immigration and Nationality Act, 8 U.S.C. 1101 et seq. , provides that an alien who \"arrives in the United States\" may apply for asylum and must be inspected by an immigration officer. 8 U.S.C. 1158(b)(1)(A), 1225(a)(1) and (3). The question presented is whether an alien who is stopped on the Mexican side of the U.S.-Mexico border \"arrives in the United States\" within the meaning of those provisions."
@@ -1142,10 +1151,10 @@
    "name": "Wolford v. Lopez",
    "summary": "Hawaii’s law prohibiting licensed concealed-carry permit holders from carrying handguns on private property open to the public without the property owner’s express authorization violates the Second and Fourteenth Amendments.",
    "author_code": "A",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/24-1046_nmio.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/609us1r58_a8cf.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ALITO, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, GORSUCH, KAVANAUGH, and BARRETT, JJ., joined. BARRETT, J., filed a concurring opinion, in which THOMAS and GORSUCH, JJ., joined as to Part II–B. KAGAN, J., filed a dissenting opinion. JACKSON, J., filed a dissenting opinion, in which SOTOMAYOR, J., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1227,20 +1236,20 @@
    },
    "provisions": [
     {
+     "id": "amend-1",
+     "quote": null
+    },
+    {
      "id": "amend-2",
-     "quote": "This regime hobbles what the Second Amendment protects: the right of Americans to carry arms for self-defense as they go about their daily lives."
+     "quote": null
     },
     {
      "id": "amend-4",
-     "quote": "Jardines, a Fourth Amendment case, had nothing to do with variations in property norms across different localities."
+     "quote": null
     },
     {
      "id": "amend-5",
-     "quote": "Likewise, a State may not “ ‘sidestep the Takings Clause’ ” by enacting a law purporting to extinguish a property interest."
-    },
-    {
-     "id": "amend-14",
-     "quote": "Following a body of precedent dating back more than a century, the plurality concluded that the provision of the Fourteenth Amendment that did this work was the Due Process Clause."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/24-01046qp.pdf",
@@ -1260,10 +1269,10 @@
    "name": "Cisco Systems, Inc. v. Doe",
    "summary": "Courts may not create new rights of action to remedy violations of international law under the Alien Tort Statute; neither the ATS nor the Torture Victim Protection Act of 1991 imposes liability for aiding-and-abetting offenses.",
    "author_code": "AB",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/24-856_kjfm.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/609us1r57_db8e.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "BARRETT, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, GORSUCH, and KAVANAUGH, JJ., joined. JACKSON, J., filed an opinion concurring in part and dissenting in part, in which KAGAN, J., joined. SOTOMAYOR, J., filed a dissenting opinion, in which KAGAN and JACKSON, JJ., joined as to Parts I–III and V.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1314,18 +1323,18 @@
      {
       "justice": "Jackson",
       "roles": [
-       "concurring in part and dissenting in part",
-       "dissent (in part)"
+       "dissent (in part)",
+       "dissenting in part"
       ],
       "wrote": [
-       "concurring in part and dissenting in part"
+       "dissenting in part"
       ]
      },
      {
       "justice": "Kagan",
       "roles": [
-       "concurring in part and dissenting in part",
-       "dissent (in part)"
+       "dissent (in part)",
+       "dissenting in part"
       ],
       "wrote": []
      },
@@ -1343,7 +1352,7 @@
    "provisions": [
     {
      "id": "art-3",
-     "quote": "Article III extends the judicial power to “all Cases affecting Ambassadors, other public ministers and Consuls,” and “to Controversies . . . between a State, or the Citizens thereof, and foreign States, Citizens or Subjects.” §2."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/24-00856qp.pdf",
@@ -1360,10 +1369,10 @@
    "name": "Exxon Mobil Corp. v. Corporación Cimex, S. A. (Cuba)",
    "summary": "The Helms-Burton Act, formally known as the Cuban Liberty and Democratic Solidarity Act, §301, 110 Stat. 815, 22 U. S. C. §6021 et seq., abrogates the sovereign immunity of Cuban agencies and instrumentalities; plaintiffs who sue Cuban agencies or instrumentalities under the Act need not also satisfy one of the Foreign Sovereign Immunities Act’s enumerated exceptions to foreign sovereign immunity.",
    "author_code": "BK",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/24-699_f204.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/609us1r56_3e04.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "KAVANAUGH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, GORSUCH, and BARRETT, JJ., joined. KAGAN, J., filed a dissenting opinion, in which SOTOMAYOR and JACKSON, JJ., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1451,10 +1460,10 @@
    "name": "Landor v. Louisiana Dept of Corrections and Public Safety",
    "summary": "State employees may not be held liable in their personal capacities under a Spending Clause statute such as the Religious Land Use and Institutionalized Persons Act of 2000 unless those individuals have voluntarily and knowingly consented to answer private suits under the statute; the individual defendants in this case did not do so here, so Landor’s case cannot proceed against them.",
    "author_code": "NG",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/23-1197_new2_k5fm.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/609us1r55_h315.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "GORSUCH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, KAVANAUGH, and BARRETT, JJ., joined. PUBLIC SAFETY JACKSON, J., filed a dissenting opinion, in which SOTOMAYOR and KAGAN, JJ., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1503,16 +1512,25 @@
       "wrote": []
      },
      {
+      "justice": "Jackson",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
       "justice": "Sotomayor",
       "roles": [
-       "majority"
+       "dissent"
       ],
       "wrote": []
      },
      {
       "justice": "Kagan",
       "roles": [
-       "majority"
+       "dissent"
       ],
       "wrote": []
      }
@@ -1520,16 +1538,20 @@
    },
    "provisions": [
     {
+     "id": "amend-1",
+     "quote": null
+    },
+    {
+     "id": "amend-14",
+     "quote": null
+    },
+    {
      "id": "art-1-sec-8-cl-3",
-     "quote": "Federal authorities would have no need to show that their regulations represent proper exercises of Congress’s limited and enumerated powers found in the Commerce Clause, the Bankruptcy Clause, or any other."
+     "quote": null
     },
     {
      "id": "art-1-sec-8-cl-1",
-     "quote": "pursuant to what is sometimes called the Constitution’s Spending Clause."
-    },
-    {
-     "id": "art-1-sec-8-cl-18",
-     "quote": "Landor and the dissent appeal to ones construing the Necessary and Proper Clause."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/23-01197qp.pdf",
@@ -1546,10 +1568,10 @@
    "name": "Pung v. Isabella County",
    "summary": "The proper baseline for measuring “just compensation” following a fairly conducted tax sale is the auction sale price, not the property’s hypothetical fair market value; Isabella County did not violate the Eighth Amendment Excessive Fines Clause by failing to compensate the taxpayer for his property’s fair market value.",
    "author_code": "A",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25-95_dc8e.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/609us1r54_d18e.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ALITO, J., delivered the opinion of the Court, in which ROBERTS, C. J., and SOTOMAYOR, KAGAN, GORSUCH, KAVANAUGH, BARRETT, and JACKSON, JJ., joined, and in which THOMAS, J., joined except as to Part II–B. SOTOMAYOR, J., filed a concurring opinion, in which GORSUCH and JACKSON, JJ., joined. THOMAS, J., filed an opinion concurring in part and concurring in the judgment, in which GORSUCH, J., joined except as to n. 1.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1630,15 +1652,15 @@
    "provisions": [
     {
      "id": "amend-5",
-     "quote": "631 (2023), we held that the Fifth Amendment Takings Clause requires the government to return any surplus proceeds from tax foreclosure sales, i.e., the difference between the sale price and the taxpayer’s debt."
+     "quote": null
     },
     {
      "id": "amend-8",
-     "quote": "We also hold that, following a tax sale, the Eighth Amendment Excessive Fines Clause does not require the government to return more than the surplus proceeds."
+     "quote": null
     },
     {
      "id": "amend-14",
-     "quote": "Shortly after the ratification of the Fourteenth Amendment, a leading treatise surveyed state practices and found several ways of refunding surplus funds—some did so by bond, others through the county treasury—but all refunded only the “surplus” “if the bid exceed the tax.” T."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/25-00095qp.pdf",
@@ -1657,10 +1679,10 @@
    "name": "Blanche v. Lau",
    "summary": "The Immigration and Nationality Act does not require a border officer to have clear and convincing evidence that a lawful permanent resident has committed a crime involving moral turpitude before deeming the resident an applicant for admission.",
    "author_code": "T",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25-429_h3ci.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/609us1r53_i4dk.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "THOMAS, J., delivered the opinion of the Court, in which ROBERTS, C. J., and ALITO, GORSUCH, KAVANAUGH, and BARRETT, JJ., joined. JACKSON, J., filed a dissenting opinion, in which SOTOMAYOR and KAGAN, JJ., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1748,10 +1770,10 @@
    "name": "McCarthy v. Hernandez",
    "summary": "The Second Circuit exceeded its authority in holding that Hernandez is entitled to habeas relief under 28 U. S. C. §2254(d)(1); no clearly established federal law required the trial court to instruct the jury about the rule that Justice Kennedy adopted in Missouri v. Seibert, 542 U. S. 600, and the Second Circuit erred in holding otherwise.",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25-748_4g1o.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r52_k5fm.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "PER CURIAM. The Antiterrorism and Effective Death Penalty Act of 1996 (AEDPA) imposes strict limits on federal courts’ power to grant habeas relief to a prisoner convicted in state court. District courts and courts of appeals have sometimes chafed under these restraints, and when they have strayed too far from the modest role that AEDPA prescribes, we have summarily reversed their decisions. See, e.g., Klein v. Martin, 607 U. S. 213 (2026) (per curiam). We must do the same today. The Second Circuit ordered habeas relief in this case based on its holding that a state-court decision was “contrary to” and “involved an unreasonable application” of Missouri v. Seibert, 542 U. S. 600 (2004), because the decision approved a trial judge’s refusal to tell a jury how to apply Seibert—or, more precisely, how to apply what the Second Circuit understood to be the holding in that case. 28 U. S. C. §2254(d)(1). But Seibert said nothing about jury instructions. For this reason and others, the Second Circuit exceeded the role that AEDPA prescribes. I A This case concerns a tragic event that once captured the Nation’s attention. On May 25, 1979, 6-year-old Etan Patz left his family’s apartment in lo",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": [],
    "provisions": [],
    "qp_url": null,
@@ -1765,10 +1787,10 @@
    "name": "United States v. Hemani",
    "summary": "Prosecution of Ali Hemani under 18 U. S. C. §922(g)(3)—for knowingly possessing a gun in his home while being an unlawful user of a controlled substance—is inconsistent with the Second Amendment.",
    "author_code": "NG",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/24-1234_new_6k47.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r51_k4lo.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "GORSUCH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, SOTOMAYOR, KAVANAUGH, BARRETT, and JACKSON, JJ., joined. THOMAS, J., filed a concurring opinion. JACKSON, J., filed a concurring opinion, in which SOTOMAYOR, J., joined. ALITO, J., filed an opinion concurring in the judgment, in which KAGAN, J., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1850,16 +1872,20 @@
    },
    "provisions": [
     {
+     "id": "amend-1",
+     "quote": null
+    },
+    {
      "id": "amend-2",
-     "quote": "Hemani is consistent with the Second Amendment."
+     "quote": null
+    },
+    {
+     "id": "amend-5",
+     "quote": null
     },
     {
      "id": "amend-14",
-     "quote": "And, apart from pointing to habitual drunkard laws, the government has not even attempted to prove that any other specific historical principle might justify its prosecution in this case.3 —————— 3 As in Bruen, we need not decide today “whether courts should primarily rely on the prevailing understanding of an individual right when the Fourteenth Amendment was ratified in 1868” or when the Bill of Rights was ratified in 1791."
-    },
-    {
-     "id": "art-1-sec-8-cl-3",
-     "quote": "He surrendered a gun he kept in the house and —————— 1 Because Congress adopted §922(g) pursuant to the Commerce Clause, the statute requires the government to show that a firearm possessed in violation of the statute’s terms “has been shipped or transported in interstate or foreign commerce.” As that element is not in dispute here, we do not discuss it further. pointed agents to some marijuana on the property."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/24-01234qp.pdf",
@@ -1875,10 +1901,10 @@
    "name": "Hunter v. United States",
    "summary": "An agreement not to appeal a sentence is unenforceable when it would result in a miscarriage of justice—meaning, when it would leave in place the kind of egregious error that would bring the judicial system into disrepute.",
    "author_code": "EK",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/24-1063new_l5gm.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r50_lkgn.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "KAGAN, J., delivered the opinion of the Court, in which ROBERTS, C. J., and ALITO, SOTOMAYOR, GORSUCH, KAVANAUGH, BARRETT, and JACKSON, JJ., joined. GORSUCH, J., filed a concurring opinion, in which SOTOMAYOR and JACKSON, JJ., joined. KAVANAUGH, J., filed a concurring opinion, in which ALITO and BARRETT, JJ., joined. BARRETT, J., filed a concurring opinion. THOMAS, J., filed a dissenting opinion.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1963,7 +1989,16 @@
      }
     ]
    },
-   "provisions": [],
+   "provisions": [
+    {
+     "id": "amend-5",
+     "quote": null
+    },
+    {
+     "id": "art-3",
+     "quote": null
+    }
+   ],
    "qp_url": "https://www.supremecourt.gov/qp/24-01063qp.pdf",
    "question_presented": [
     "This Court has recognized that \"no appeal waiver serves as an absolute bar to all appellate claims.\" Garza v. Idaho, 586 U.S. 232, 238 (2019). But the Court has \"ma[de] no statement ... on what particular exceptions [to appeal waivers] may be required.\" Id. at 238-39 & n.6.",
@@ -1982,10 +2017,10 @@
    "name": "T. M. v. University of Md. Medical System Corporation",
    "summary": "The Rooker-Feldman doctrine bars federal district court jurisdiction over cases brought by state-court losers complaining of injuries caused by state-court judgments rendered before the district court proceedings commenced and seeking district court review and rejection of those judgments, regardless of whether the state-court judgment remains subject to further review in state appellate proceedings.",
    "author_code": "SS",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25-197_new_4g15.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r49_mlho.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "SOTOMAYOR, J., delivered the opinion of the Court, in which THOMAS, ALITO, KAVANAUGH, and JACKSON, JJ., joined. THOMAS, J., filed a concurring opinion. BARRETT, J., filed a dissenting opinion, in which ROBERTS, C. J., and KAGAN and GORSUCH, JJ., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -2075,10 +2110,10 @@
    "name": "Keathley v. Buddy Ayers Construction, Inc.",
    "summary": "To determine whether an omission of a claim in the bankruptcy context was inadvertent or mistaken for purposes of the judicial estoppel doctrine, courts should look to the totality of the circumstances surrounding the omission; the Fifth Circuit erred in narrowing its inquiry in this case to whether the debtor had knowledge of the underlying facts or a potential motive to conceal the claim.",
    "author_code": "KJ",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25-6_d1o2.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r48_k53m.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "JACKSON, J., delivered the opinion for a unanimous Court. THOMAS, J., filed a concurring opinion, in which GORSUCH, J., joined. SOTOMAYOR, J., filed a concurring opinion.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2135,10 +2170,10 @@
    "name": "FS Credit Opportunities Corp. v. Saba Capital Master Fund, Ltd.",
    "summary": "Section 47(b) of the Investment Company Act does not impliedly empower private parties to sue for rescission of contracts that allegedly violate the Act.",
    "author_code": "AB",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/24-345_i42k.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r47_m64o.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "BARRETT, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, GORSUCH, and KAVANAUGH, JJ., joined. KAGAN, J., filed a dissenting opinion. JACKSON, J., filed a dissenting opinion, in which SOTOMAYOR, J., joined, and in which KAGAN, J., joined as to Parts I and II.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -2232,10 +2267,10 @@
    "name": "Abouammo v. United States",
    "summary": "A defendant charged with knowingly falsifying a document with the intent to obstruct a federal investigation in violation of 18 U. S. C. §1519 must be tried in the district where the falsification occurred; the defendant cannot be tried in a different district where the investigation was located because no “conduct constituting the offense” happened there.",
    "author_code": "EK",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25-5146_new_kifl.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r46_2c8f.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "KAGAN, J., delivered the opinion for a unanimous Court.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2253,11 +2288,11 @@
    "provisions": [
     {
      "id": "amend-6",
-     "quote": "And the Sixth Amendment reinforces that command, entitling criminal defendants to a jury “of the State and district wherein the crime shall have been committed.” To implement that constitutional rule—meaning, to decide where the crime was committed—courts generally must determine the location of the offense’s “essential conduct elements.” Rodriguez-Moreno, 526 U."
+     "quote": null
     },
     {
      "id": "art-3",
-     "quote": "Article III instructs that “Trial of all Crimes” shall “be held in the State where the said Crimes shall have been committed.” §2, cl. 3."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/25-05146qp.pdf",
@@ -2278,10 +2313,10 @@
    "name": "Hikma Pharmaceuticals USA Inc. v. Amarin Pharma, Inc.",
    "summary": "Amarin has failed to state a claim for actively inducing infringement of its brand-name drug’s patented uses in violation of 35 U. S. C. §271(b), so its complaint cannot withstand Hikma’s motion to dismiss.",
    "author_code": "KJ",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/24-889_5i36.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r45_i4dk.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "JACKSON, J., delivered the opinion for a unanimous Court.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2299,7 +2334,7 @@
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "175 (2024), that, “[t]o state a claim that the government violated the First Amendment through coercion of a third party, a plaintiff must plausibly allege conduct that, viewed in context, could be reasonably understood to convey a threat of adverse government action,” id., at 191 (emphasis added)."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/24-00889qp.pdf",
@@ -2318,10 +2353,10 @@
    "name": "Sripetch v. SEC",
    "summary": "A showing of pecuniary loss to investors is not required before the SEC may obtain a disgorgement award under 15 U. S. C. §78u(d)(5) or §78u(d)(7).",
    "author_code": "NG",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25-466_5i26.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r44_j42l.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "GORSUCH, J., delivered the opinion for a unanimous Court. THOMAS, J., filed a concurring opinion.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2348,7 +2383,7 @@
    "provisions": [
     {
      "id": "amend-7",
-     "quote": "109, 123–125 (2024) (holding that, when the SEC seeks penalties, the Seventh Amendment entitles the defendant to a jury trial)."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/25-00466qp.pdf",
@@ -2368,10 +2403,10 @@
    "name": "FCC v. AT&T",
    "summary": "Because forfeiture orders issued under 47 U. S. C. §503(b)(4) do not definitively resolve the parties’ legal obligations, and the FCC’s factual findings in its forfeiture proceedings are not conclusive, it does not violate the Seventh Amendment for the FCC to issue forfeiture orders without the involvement of a jury.",
    "author_code": "R",
-   "pdf": "https://www.supremecourt.gov/opinions/25pdf/25-406_nmip.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/25pdf/608us2r43_m648.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ROBERTS, C. J., delivered the opinion of the Court, in which ALITO, SOTOMAYOR, KAGAN, GORSUCH, KAVANAUGH, BARRETT, and JACKSON, JJ., joined. THOMAS, J., filed a dissenting opinion.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -2447,11 +2482,15 @@
    "provisions": [
     {
      "id": "amend-6",
-     "quote": "In the Sixth Amendment context, we have upheld “the imposition of . . . difficult choices” to forgo a jury trial by pleading guilty, even where the defendant faces a “certainty or probability” that the exercise of his trial right will result in a higher sentence if he is found guilty."
+     "quote": null
     },
     {
      "id": "amend-7",
-     "quote": "We decide whether that enforcement structure violates the Seventh Amendment, which provides that “[i]n Suits at common law, where the value in controversy shall exceed twenty dollars, the right of trial by jury shall be preserved.” I A The Communications Act of 1934 established the Federal Communications Commission."
+     "quote": null
+    },
+    {
+     "id": "art-3",
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/25-00406qp.pdf",
@@ -5075,5 +5114,5 @@
    "qp_checked": true
   }
  ],
- "built_on": "2026-10-26"
+ "built_on": "2026-10-27"
 }
