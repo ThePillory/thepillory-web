@@ -166,8 +166,13 @@ export function inOrder(list) {
  */
 export async function recordsFor(db, st) {
   if (!db) return { officials: [], byFec: {} };
+  const cols = "slug, name, last_name, office, district, district_code, level, chamber, active, state";
+  // senate_class arrives with migration 0043; until it's applied, the same list without it.
+  const officials = () =>
+    db.prepare(`SELECT ${cols}, senate_class FROM officials WHERE state = ?`).bind(st).all()
+      .catch((err) => (/no such column/i.test(String(err && err.message)) ? db.prepare(`SELECT ${cols} FROM officials WHERE state = ?`).bind(st).all() : Promise.reject(err)));
   const [o, f] = await Promise.all([
-    db.prepare("SELECT slug, name, last_name, office, district, district_code, level, chamber, active, state FROM officials WHERE state = ?").bind(st).all(),
+    officials(),
     db
       .prepare("SELECT f.candidate_id, o.slug, o.name, o.office, o.district, o.active, o.level FROM fec_candidates f JOIN officials o ON o.id = f.official_id WHERE f.candidate_id IS NOT NULL AND o.state = ?")
       .bind(st)
@@ -200,17 +205,29 @@ export function officesHeld(c, records, displayName, { incumbent = false } = {})
 
 const officeKey = (o) => String(o || "").toLowerCase().replace(/^state\s+/, "").trim();
 
+/** The Senate class up in a regular election in an even year: 1 in 2024, 2 in 2026, 3 in 2028. Pure. */
+export function senateClassUp(year) {
+  const y = Number(year);
+  if (!Number.isInteger(y) || y % 2) return null;
+  return ((((y - 2024) / 2) % 3) + 3) % 3 + 1;
+}
+
 /**
  * The current officials in ThePillory's records who hold the seat a race is
  * for: the House member for the district, the state legislator for the
- * district, the statewide officer with the same office. For a U.S. Senate race
- * both senators (which seat is up isn't in the records), so a Senate race never
- * names an open seat. Pure.
+ * district, the statewide officer with the same office. For a U.S. Senate race,
+ * both senators can be its incumbent (a candidate tied to either is labeled),
+ * and `up` is the senator whose seat's class is up in a regular election that
+ * year (senate_class, migration 0043), the only one an open seat can name.
+ * Pure.
  */
-export function seatOf(records, st, key, contest = null) {
+export function seatOf(records, st, key, contest = null, year = YEAR) {
   const active = (records.officials || []).filter((o) => o.active);
   if (key === "senate" || (contest && /united states senator/i.test(contest.office || ""))) {
-    return { senate: true, holders: active.filter((o) => o.chamber === "us-senate") };
+    const holders = active.filter((o) => o.chamber === "us-senate");
+    const cls = senateClassUp(year);
+    const up = cls ? holders.filter((o) => Number(o.senate_class) === cls) : [];
+    return { senate: true, holders, up: up.length === 1 ? up[0] : null };
   }
   const m = /^house-(\d+)$/.exec(key || "");
   const cd = m ? m[1] : contest && contest.scope === "cd" ? contest.district : null;
@@ -230,10 +247,10 @@ export function seatOf(records, st, key, contest = null) {
  * official list's candidates ({name, fec, incumbent}), or null for a race known
  * only from FEC filings. Returns get(fecId, name) -> {holder} | null, and
  * `open`: the seat's one current holder when none of the candidates is them
- * (never for the Senate). Pure.
+ * (for the Senate, the senator whose class is up that year). Pure.
  */
-export function raceIncumbency({ st, key, contest = null, ballot = null, fecList = [], records }) {
-  const seat = seatOf(records, st, key, contest);
+export function raceIncumbency({ st, key, contest = null, ballot = null, fecList = [], records, year = YEAR }) {
+  const seat = seatOf(records, st, key, contest, year);
   const listed = ballot || [];
   const people = [
     ...listed.map((x) => ({ name: x.name, fecId: x.fec && x.fec.id, mark: !!x.incumbent })),
@@ -256,7 +273,9 @@ export function raceIncumbency({ st, key, contest = null, ballot = null, fecList
     if (p.fecId) found.set(`fec:${p.fecId}`, v);
     found.set(`name:${p.name}`, v);
   });
-  const open = !seat.senate && seat.holders.length === 1 && !found.size ? seat.holders[0] : null;
+  // An open seat: no candidate holds it. For the Senate, the holder of the seat that's up (its class).
+  const holder = seat.senate ? seat.up : seat.holders.length === 1 ? seat.holders[0] : null;
+  const open = holder && !found.size ? holder : null;
   return { get: (fecId, name) => (fecId && found.get(`fec:${fecId}`)) || found.get(`name:${name}`) || null, open };
 }
 
@@ -443,7 +462,7 @@ export function fecCandidatePage({ c, st, data, election, records, dates, today,
   const stateList = contest ? null : certifiedRace(certified, key, Object.values(data.candidates).filter((x) => raceKey(x) === key));
   const onCert = contest ? contest.candidates.find((x) => x.fec && x.fec.id === c.id) : stateList ? stateList.candidates.find((x) => x.fec && x.fec.id === c.id) || null : null;
   const display = onCert ? onCert.name : fecDisplayName(c.name);
-  const me = raceIncumbency({ st, key, contest, ballot: contest ? contest.candidates : stateList ? stateList.candidates : null, fecList: Object.values(data.candidates).filter((x) => raceKey(x) === key), records }).get(c.id, display);
+  const me = raceIncumbency({ st, key, contest, ballot: contest ? contest.candidates : stateList ? stateList.candidates : null, fecList: Object.values(data.candidates).filter((x) => raceKey(x) === key), records, year: data.year }).get(c.id, display);
   const held = officesHeld(c, records, display, { incumbent: !!c.incumbent });
   const now = held.find((h) => h.active && h.how === "fec");
   const after = today > generalDate(dates, st);
@@ -537,7 +556,7 @@ export function racePage({ st, key, data, election, records, dates, today, certi
   const stateList = contest ? null : certifiedRace(certified, key, fecList);
   if (!contest && !stateList && !fecList.length) return null;
   // Who holds this seat now: "Incumbent" on their card only, and an open-seat line when none of them does.
-  const inc = raceIncumbency({ st, key, contest, ballot: contest ? contest.candidates : stateList ? stateList.candidates : null, fecList, records });
+  const inc = raceIncumbency({ st, key, contest, ballot: contest ? contest.candidates : stateList ? stateList.candidates : null, fecList, records, year });
 
   const fecCard = (c) => {
     const name = fecDisplayName(c.name);
