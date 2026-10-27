@@ -114,6 +114,7 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 - Review queue (`/admin/review/`), readers' error reports (`/admin/corrections/`) and county waitlist counts (`/admin/waitlist/`), behind Cloudflare Access
 
 ## Opens when accounts launch
+- First, an invite-only reporting pilot in Calaveras County: [reporting-pilot.md](reporting-pilot.md) (plan only; nothing built yet)
 - Join & verify (identity once, address > districts)
 - Report flow: Details > Evidence > Perspective > Constitution > Review > Submitted
 - Issue: evidence, constitutional baseline, responsible rep or body, agency response, record history, published record
