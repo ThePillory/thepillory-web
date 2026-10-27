@@ -38,6 +38,10 @@ Every ballot measure page (California's statewide and county measures, Washingto
 
 Official text only: nothing written by ThePillory or AI, shortened only by cutting whole paragraphs, never by rewording; what the source doesn't print says so plainly. In Quick mode the card is all the page shows. The ballot preview (`/ballot/<st>/`, with and without an address) and Your ballot show the same card, folded under each measure's name (`factsFold()`). The campaigns' arguments and rebuttals follow, word for word, in one collapsed section, "What each side says (their own words, not checked by ThePillory)".
 
+## Proposition titles
+
+Any measure title printed entirely in capitals, in any state (today California's 14), is shown with ordinary capitalization, the words unchanged (`headlineCase()` in `functions/_lib/elections.js`: each word capitalized, small words such as "of" and "for" lowercase except at the start of a sentence, abbreviations and bill numbers like "U.S." and "ACA 13" kept), and one line says so wherever such a title appears (`titleNote()`: the measure page, the propositions list, Your ballot and the ballot preview). Any other title is shown as printed. The same rule as county candidate names, which the county prints in capitals.
+
 ## Who's behind each side, and who signed the arguments
 
 **Who's behind each side** (`behindSection()` in `functions/_lib/measure-people.js`, a collapsed section before the arguments, the same layout for Yes and No): California's statewide propositions, from `data/elections/measure-money-2026-11-03.json`, built weekly by `tools/build_measure_money.py` in the "Refresh California campaign data" workflow from the Cal-Access export:
