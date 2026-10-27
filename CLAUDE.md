@@ -124,7 +124,7 @@ To test the sync and Functions locally with **fake** data: `workers/sync/test/ru
 - **Fonts** (Google Fonts): **Figtree** 400–800 for everything, with large, bold headlines (h1 800, tight letter-spacing). **Newsreader** only for quotes and constitutional text (`.quote`, `.constitution-text`, `.promise-quote`).
 - **Type scale: five sizes only**, tokens on `:root`, and every `font-size` in `pillory.css` uses one: `--fs-h1` (page title, 32px; 36px from 600px), `--fs-h2` (section heading, 22px), `--fs-body` (16px: row titles, sentences, empty states and their links, never larger), `--fs-small` (14px: meta and details lines), `--fs-label` (12px: section labels, chips, tab labels). Card titles are Body, bold; big numbers are a heading size.
 - **Colors** (light; dark values in the same tokens):
-  - Page white `#FFFFFF`; light gray panels `#F5F5F7` (`--panel`: insets, stat tiles, inputs, segmented tracks); text `#1D1D1F`; secondary `#6E6E73`.
+  - Page light gray `#F2F2F7` (`--page`; black in dark mode) with white cards (`--card`; `#1C1C1E` in dark mode), so every card has a clear edge. Fills (insets, stat tiles, inputs, segmented tracks, chips) use `--fill`: `#E5E5EA` on the page, and inside any white surface (`.card`, `.fold`, `.tabbar`, …) it resets to the light panel gray `#F5F5F7` (`--panel`). Text `#1D1D1F`; secondary `#6E6E73`.
   - Cards white with a **soft shadow instead of a border** (`--shadow`), **20px** corners (`--radius`); inner panels 14px (`--radius-sm`).
   - Accent blue `#0066CC` (`--navy`, kept as the variable name; `--navy-fill` behind white text); light blue `#E8F1FB`.
   - Parchment (`--parch`, `--parch-text`) for anything constitutional; tension red-brown (`--tension`); Live green (`--live`).
