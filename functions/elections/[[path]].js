@@ -24,7 +24,7 @@ import {
   ballotOrder, ballotFor, courtGroups, scopeLabel, contestTitle,
   officeholders, holderFor, pollsClosed, sosResults, candidateResults, measureResult, resultsBlock,
   whenLine, howToVote, contestRow, measureRow, courtRow, judicialContests, judicialRow,
-  measuresOnly, measureName, measureTitle, titleNote, electionIdFor, ELECTION_BY_STATE, COVERAGE_NOTE,
+  measuresOnly, measureName, measureTitle, measureHeading, titleNote, electionIdFor, ELECTION_BY_STATE, COVERAGE_NOTE,
 } from "../_lib/elections.js";
 import { pacificNow } from "../_lib/meetings.js";
 import { fold } from "../_lib/summary.js";
@@ -190,7 +190,7 @@ function ballotSections(election, b, { ad = null, countyLabel = null } = {}) {
   ${b.boeKnown ? "" : '<p class="hint">Board of Equalization: your district is on your sample ballot. <a class="inline-link" href="' + electionHref(id) + '#h-dist">All four districts</a>.</p>'}
 </section>
 <section class="stack-sm" aria-labelledby="h-ym"><h2 class="label" id="h-ym">Statewide propositions</h2>
-  ${b.measures.map((m) => factsFold(election, m, { href: measureHref(id, m.id), name: measureName(m), sub: measureTitle(m) })).join("")}
+  ${b.measures.map((m) => factsFold(election, m, { href: measureHref(id, m.id), ...measureHeading(m) })).join("")}
   ${titleNote(b.measures) ? `<p class="hint">${esc(titleNote(b.measures))}</p>` : ""}
 </section>
 ${b.partial.length || b.partialMeasures.length ? `<section class="stack-sm" aria-labelledby="h-yl"><h2 class="label" id="h-yl">Local, on some ballots in ${esc(countyLabel || "your county")}</h2>
@@ -550,15 +550,14 @@ function sectionsMeasurePage(election, m, back, conHtml = "", people = {}) {
     : m.no_arguments
       ? `<section class="card stack-xs" id="arguments" aria-labelledby="h-args"><h2 class="label" id="h-args">Arguments for and against</h2><p class="small">${esc(m.no_arguments)}</p></section>`
       : "";
-  // A ballot that doesn't number its measures (North Carolina's "Constitutional Amendment"): the heading is the name.
-  const numbered = /\d/.test(measureName(m));
+  const heading = measureHeading(m);
   // The question card only when the facts card leads with the summary instead of the question.
   const question = m.lead && m.lead.text && m.lead.text !== m.yes_means;
   const main = `<div class="simple-scope">
 <header class="page-head stack-xs">
   <p class="label">Statewide · ${esc(state)} · ${esc(fmtDate(e.date))} · ${esc(m.kind)}</p>
-  <h1>${esc(numbered ? measureName(m) : measureTitle(m))}</h1>
-  ${numbered ? `<p class="subtitle">${esc(measureTitle(m))}</p>` : ""}
+  <h1>${esc(heading.name)}</h1>
+  ${heading.sub && heading.sub !== m.label ? `<p class="subtitle">${esc(heading.sub)}</p>` : ""}
   ${titleNote([m]) ? `<p class="hint">${esc(titleNote([m]))}</p>` : ""}
 </header>
 ${factsCard(election, m)}
@@ -577,7 +576,7 @@ ${args}
 </section>
 <p class="hint">${esc(NEUTRAL)}</p>
 </div>`;
-  return page(`${numbered ? measureName(m) : `${measureName(m)}: ${measureTitle(m)}`}, ${state}`, main, { tab: "home", back });
+  return page(`${heading.name === measureName(m) ? heading.name : `${measureName(m)}: ${heading.name}`}, ${state}`, main, { tab: "home", back });
 }
 
 async function measurePage(election, measureId, env = {}, request = null) {

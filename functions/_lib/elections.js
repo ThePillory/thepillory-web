@@ -344,13 +344,20 @@ export const capsTitle = (m) => /[A-Z]/.test(String((m && m.title) || "")) && !/
 /** A measure's title for display: one printed in capitals in ordinary capitalization (see TITLE_CASE_NOTE), any other as printed. */
 export const measureTitle = (m) => (capsTitle(m) ? headlineCase(m.title) : m.title);
 
+/**
+ * A statewide measure's name and the line under it, the same on every page: its ballot number
+ * ("Proposition 4", then the title), or, where the ballot doesn't number its measures (North
+ * Carolina's "Constitutional Amendment"), the title, then that label.
+ */
+export const measureHeading = (m) => (/\d/.test(measureName(m)) ? { name: measureName(m), sub: measureTitle(m) || "" } : { name: measureTitle(m), sub: measureName(m) });
+
 /** The note, when any of these measures' titles was printed in capitals; otherwise "". */
 export const titleNote = (measures) => ((measures || []).some(capsTitle) ? TITLE_CASE_NOTE : "");
 
 export function measureRow(electionId, m, note = "") {
-  const title = m.scope === "statewide" ? measureName(m) : `${m.title}${m.jurisdiction ? ` · ${m.jurisdiction}` : ""}`;
+  const title = m.scope === "statewide" ? measureHeading(m).name : `${m.title}${m.jurisdiction ? ` · ${m.jurisdiction}` : ""}`;
   // California's titles are printed in capitals; Washington's statement of subject is a sentence.
-  const sub = m.scope === "statewide" ? measureTitle(m) : note;
+  const sub = m.scope === "statewide" ? measureHeading(m).sub : note;
   return `
 <a class="list-row link-row" href="${measureHref(electionId, m.id)}">
   <div><div class="list-title">${esc(title)}</div>${sub ? `<div class="list-meta">${esc(sub)}</div>` : ""}</div>
@@ -368,10 +375,9 @@ export const judicialContests = (election) => (election && election.judicial && 
 
 /** One guide contest as a list row. */
 export function judicialRow(electionId, c) {
-  const n = c.candidates.length;
   return `
 <a class="list-row link-row" href="${contestHref(electionId, c.id)}">
-  <div><div class="list-title">${esc(c.office)}</div><div class="list-meta">${n} ${n === 1 ? "candidate" : "candidates"} · statements from the Judicial Voter Guide</div></div>
+  <div><div class="list-title">${esc(c.office)}</div><div class="list-meta">${esc(c.candidates.map((x) => x.name).join(" · "))}</div></div>
   <span class="row-end"><span class="chev" aria-hidden="true">›</span></span>
 </a>`;
 }

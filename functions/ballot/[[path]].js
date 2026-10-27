@@ -28,7 +28,7 @@ import { page, esc, notFound, safeUrl, linkRow, loadSection, FAILED, sectionErro
 import { districtsFromCookie, STATE_NAME } from "../_lib/districts.js";
 import { visitorState } from "../_lib/visitor-state.js";
 import { asset } from "../_lib/geo.js";
-import { loadElection, electionHref, ballotHref, measureHref, measureName, measureTitle, titleNote, contestHref, ballotOrder, ELECTION_BY_STATE, measuresOnly, howToVote, judicialContests, judicialRow } from "../_lib/elections.js";
+import { loadElection, electionHref, ballotHref, measureHref, measureName, measureTitle, measureHeading, titleNote, contestHref, ballotOrder, ELECTION_BY_STATE, measuresOnly, howToVote, judicialContests, judicialRow } from "../_lib/elections.js";
 import { voterInfo, ballotFromVoterInfo, measureFor, CivicError } from "../_lib/civic.js";
 import { factsFold } from "../_lib/measure-facts.js";
 import { visitorHash } from "../_lib/turnstile.js";
@@ -255,7 +255,7 @@ function certifiedSection(st, election, filed, d, records) {
 <section class="stack-sm simple-keep" id="statewide" aria-labelledby="h-statewide">
   <h2 class="label" id="h-statewide">On every ${esc(STATE_NAME[st])} ballot · November 3, 2026</h2>
   ${offices.length ? `<div class="card">${offices.map((c) => { const inc = incFor(c); return linkRow(raceHref(YEAR, st, c.id), c.office, [ballotOrder(c, election).candidates.map((x) => `${x.name}${inc.get(x.fec && x.fec.id, x.name) ? " (Incumbent)" : ""}`).join(" · "), inc.open ? `Open seat: ${inc.open.name} isn't running for this seat` : ""].filter(Boolean).join(". ")); }).join("")}</div>` : ""}
-  ${props.length ? `<div class="stack-sm">${props.map((m) => factsFold(election, m, { href: measureHref(id, m.id), name: measureName(m), sub: measureTitle(m) || "" })).join("")}</div>` : ""}
+  ${props.length ? `<div class="stack-sm">${props.map((m) => factsFold(election, m, { href: measureHref(id, m.id), ...measureHeading(m) })).join("")}</div>` : ""}
   <p class="hint">Candidates in ballot order as on ballots in Assembly District 1 (statewide offices rotate by district). Each proposition opens to its facts, from the official guide; its page has the rest, including each side's arguments. ${esc(titleNote(props))}</p>
 </section>`
     : "";
@@ -352,23 +352,31 @@ function federalSection(st, races, loaded, d, election = null, { dates = null, o
 </section>`;
 }
 
-/** ThePillory's own pages for this state's election, where it has them. */
-function ownSection(st, election) {
-  if (!election || election.election.state !== st) return "";
+/**
+ * "On every [State] ballot" for a state where ThePillory has the statewide measures (and, for North
+ * Carolina, the appellate court races) but not every contest: the same section, in the same place and
+ * style, as California's. Races are one row each with the candidates on one line; each measure folds
+ * open to its facts.
+ */
+function statewideSection(st, election) {
+  if (!election || election.election.state !== st || !measuresOnly(election)) return "";
   const id = election.election.id;
-  if (measuresOnly(election)) {
-    return `
-<section class="stack-sm simple-keep" aria-labelledby="h-own">
-  <h2 class="label" id="h-own">Statewide measures</h2>
-  ${election.measures.filter((m) => m.scope === "statewide").map((m) => factsFold(election, m, { href: measureHref(id, m.id), name: measureName(m), sub: measureTitle(m) || "" })).join("")}
-  <p class="hint">On every ballot in ${esc(STATE_NAME[st] || st)}. Each opens to its facts, from the official guide; its page has the rest${election.measures.some((m) => (m.arguments || []).length || (m.argument_links || []).length) ? ", including each side's arguments" : ""}. ${esc(titleNote(election.measures.filter((m) => m.scope === "statewide")))}</p>
-</section>${judicialContests(election).length ? `
-<section class="stack-sm simple-keep" aria-labelledby="h-courts">
-  <h2 class="label" id="h-courts">Appellate courts</h2>
-  <div class="card">${judicialContests(election).map((c) => judicialRow(id, c)).join("")}</div>
-  <p class="hint">On every ballot in ${esc(STATE_NAME[st] || st)}. Each candidate's details and statement, word for word from the State Board of Elections' Judicial Voter Guide.</p>
-</section>` : ""}`;
-  }
+  const courts = judicialContests(election);
+  const props = election.measures.filter((m) => m.scope === "statewide");
+  const args = props.some((m) => (m.arguments || []).length || (m.argument_links || []).length);
+  return `
+<section class="stack-sm simple-keep" id="statewide" aria-labelledby="h-statewide">
+  <h2 class="label" id="h-statewide">On every ${esc(STATE_NAME[st])} ballot · November 3, 2026</h2>
+  ${courts.length ? `<div class="card">${courts.map((c) => judicialRow(id, c)).join("")}</div>` : ""}
+  ${props.length ? `<div class="stack-sm">${props.map((m) => factsFold(election, m, { href: measureHref(id, m.id), ...measureHeading(m) })).join("")}</div>` : ""}
+  <p class="hint">${courts.length ? "Court candidates in ballot order, from the State Board of Elections' Judicial Voter Guide. " : ""}Each measure opens to its facts, from the official sources; its page has the rest${args ? ", including each side's arguments" : ""}. ${esc(titleNote(props))}</p>
+</section>`;
+}
+
+/** ThePillory's own pages for California's full ballot. */
+function ownSection(st, election) {
+  if (!election || election.election.state !== st || measuresOnly(election)) return "";
+  const id = election.election.id;
   return `
 <section class="stack-sm" aria-labelledby="h-own">
   <h2 class="label" id="h-own">On ThePillory</h2>
@@ -410,17 +418,20 @@ async function statePage(env, request, st, { message = "" } = {}) {
   const certified = e && e.election.state === st && !measuresOnly(e);
   const offices = certified ? e.contests.filter((c) => c.scope === "statewide").length : 0;
   const props = e && e.election.state === st ? e.measures.filter((m) => m.scope === "statewide").length : 0;
+  const courts = e && e.election.state === st ? judicialContests(e).length : 0;
   const onIt = certified
     ? `On every ${esc(name)} ballot: ${offices} statewide ${offices === 1 ? "office" : "offices"}${props ? ` and ${props} ${props === 1 ? "proposition" : "propositions"}` : ""}. Your races for Congress and the Legislature depend on where you live.`
     : NO_GENERAL.has(st) ? `${esc(name)} has no general election on November 3, 2026.`
-    : `Races for Congress${props ? ` and ${props} statewide ${props === 1 ? "measure" : "measures"}` : ""}. Your exact ballot depends on where you live.`;
+    : courts || props
+    ? `On every ${esc(name)} ballot: ${[courts ? `${courts} court ${courts === 1 ? "race" : "races"}` : "", props ? `${props} statewide ${props === 1 ? "measure" : "measures"}` : ""].filter(Boolean).join(" and ")}. Your race for the U.S. House depends on where you live.`
+    : "Races for Congress. Your exact ballot depends on where you live.";
   const simple = simpleCard({
     lines: [
       ["What's on it", onIt],
       ["Your exact ballot", '<a class="inline-link" href="#address">Add your address below</a> to see every race for where you live, and where to vote.'],
     ],
     source: esc(CONFIRM),
-    jump: "federal",
+    jump: e && e.election.state === st ? "statewide" : "federal",
   });
   const main = `<div class="simple-scope">
 <header class="page-head stack-xs">
@@ -430,6 +441,7 @@ async function statePage(env, request, st, { message = "" } = {}) {
 ${simple}
 ${message ? `<p class="banner banner--error" role="alert">${esc(message)}</p>` : ""}
 <p class="small"><a class="inline-link jump-link" href="#address">Add your address for your exact ballot ↓</a></p>
+${statewideSection(st, e)}
 ${federalSection(st, races, filed, d, election === FAILED ? null : election, { dates: dates === FAILED ? null : dates, office: office === FAILED ? null : office, certified: stateList === FAILED ? null : stateList })}
 ${ownSection(st, election === FAILED ? null : election)}
 ${addressForm(st)}
