@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Statewide ballot measures for the November 3, 2026 general election in
-Colorado, Arizona, Florida and Michigan, from each state's official documents,
+Colorado, Arizona, Florida, Michigan and North Carolina, from each state's official documents,
 word for word. Each state's file is data/elections/2026-11-03-<st>.json, in the
 "sections" format the measure page shows the same way for every state
 (functions/elections/[[path]].js): each measure's ballot question, what a Yes
@@ -20,6 +20,13 @@ arguments and fiscal impact as sections, each with who wrote it.
              font doesn't survive extraction, so it's linked)
   Michigan   the ballot wording as quoted in the Senate Fiscal Agency's
              overview of each proposal; the overviews are linked
+  North Carolina  the State Board of Elections' ballot wording, the
+             Legislative Services Officer's official summary explanations, the
+             session laws that put each amendment on the ballot (what happens
+             after the vote) and the Fiscal Research Division's fiscal notes;
+             North Carolina publishes no official arguments. Also the State
+             Board's Judicial Voter Guide: each appellate court candidate's
+             details and statement, word for word
 
 Every paragraph is checked word for word against the text it came from; a
 state whose document doesn't read as expected is not written (the others still
@@ -732,9 +739,332 @@ def mi_measures():
     return doc("MI", elec, measures, "the ballot wording quoted in the Michigan Senate Fiscal Agency's overviews")
 
 
+
+# ---------------------------------------------------------------------------
+# North Carolina: the State Board of Elections' ballot wording, the Legislative
+# Services Officer's official summary explanations, the session laws that put
+# each amendment on the ballot, the Fiscal Research Division's fiscal notes, and
+# the State Board's Judicial Voter Guide (candidates' own statements).
+
+NC_REFERENDA = "https://s3.amazonaws.com/dl.ncsbe.gov/Elections/2026/Candidate%20Filing/statewide_referendums_20261103.pdf"
+NC_UPCOMING = "https://www.ncsbe.gov/voting/upcoming-election"
+# The Legislative Services Officer's release (N.C.G.S. 147-54.10) goes to every county board of
+# elections; the Secretary of State's commission page doesn't post it, so it's read from the copy a
+# county board of elections publishes (the first that reads; each is checked against itself).
+NC_EXPLANATION = [
+    "https://www.forsythcountync.gov/elections/assets/documents/Summary_Explanation_of_2026_Constitutional_Amendments.pdf",
+    "https://www.clevelandcounty.com/main/Summary%20Explanation%20of%202026%20Constitutional%20Amendments.pdf",
+]
+NC_JUDICIAL = "https://www.ncsbe.gov/voting/upcoming-election/judicial-voter-guide-2026-general-election"
+# Each amendment's session law: (number, the ratified law's PDF, the bill's page with its fiscal notes).
+NC_LAWS = [
+    ("2024-58", "https://www.ncleg.gov/EnactedLegislation/SessionLaws/PDF/2023-2024/SL2024-58.pdf", "https://www.ncleg.gov/BillLookUp/2023/S921", "Senate Bill 921"),
+    ("2026-4", "https://www.ncleg.gov/Sessions/2025/Bills/Senate/PDF/S1080v3.pdf", "https://www.ncleg.gov/BillLookUp/2025/S1080", "Senate Bill 1080"),
+    ("2026-5", "https://www.ncleg.gov/Sessions/2025/Bills/House/PDF/H1089v3.pdf", "https://www.ncleg.gov/BillLookUp/2025/H1089", "House Bill 1089"),
+]
+NC_SBE = "the North Carolina State Board of Elections' list of statewide referendum choices"
+NC_LSO = "Official summary explanation, prepared by the Legislative Services Officer of the North Carolina General Assembly under N.C.G.S. 147-54.10"
+NC_FRD = "Fiscal Research Division, North Carolina General Assembly: legislative fiscal note"
+NC_NO_ARGUMENTS = "North Carolina doesn't publish official arguments for or against its constitutional amendments, so there are none to show here. The official summary explanation, the session law and the fiscal note above are the state's official documents on this amendment."
+BULLET = re.compile(r"^[•●▪◦]\s*")
+
+
+def nc_paragraphs(lines):
+    """Lines of a PDF (no layout) as paragraphs: a blank line or a bullet starts a new one."""
+    out, cur = [], []
+    for raw in lines:
+        line = raw.strip()
+        if not line:
+            if cur:
+                out.append(join_lines(cur))
+            cur = []
+            continue
+        if BULLET.match(line):
+            if cur:
+                out.append(join_lines(cur))
+            cur = [BULLET.sub("", line)]
+        else:
+            cur.append(line)
+    if cur:
+        out.append(join_lines(cur))
+    return [p for p in out if p]
+
+
+def nc_referenda():
+    """[{heading, question}] in the State Board's order."""
+    text = pdf_text(NC_REFERENDA)
+    ls = [l.strip() for l in text.split("\n")]
+    out = []
+    for i, l in enumerate(ls):
+        m = re.fullmatch(r"CONSTITUTIONAL AMENDMENT\s*-\s*(.+)", l)
+        if not m:
+            continue
+        j = i + 1
+        while j < len(ls) and ls[j] != "For":
+            j += 1
+        q = []
+        for l2 in ls[j + 1:]:
+            if l2 in ("Against", "For") or l2.startswith("CONSTITUTIONAL AMENDMENT"):
+                break
+            if l2:
+                q.append(l2)
+        question = join_lines(q)
+        check(f"North Carolina: {m.group(1)}", text, [l, question])
+        out.append({"heading": m.group(1).strip(), "question": question})
+    if not out:
+        raise Unreadable("North Carolina: no referenda in the State Board's list")
+    return out, text
+
+
+def nc_explanations():
+    """{session law number: {name, question, summary}} from the Legislative Services Officer's release."""
+    last = None
+    for url in NC_EXPLANATION:
+        try:
+            text = pdf_text(url)
+        except Exception as e:  # noqa: BLE001 (the next county's copy)
+            last = e
+            continue
+        ls = [l.strip() for l in text.split("\n")]
+        heads = [i for i, l in enumerate(ls) if l.endswith("Proposed Constitutional Amendment")]
+        out = {}
+        for k, h in enumerate(heads):
+            end = heads[k + 1] if k + 1 < len(heads) else len(ls)
+            seg = ls[h:end]
+            name = seg[0][: -len("Proposed Constitutional Amendment")].strip()
+            law = re.search(r"Session Law (\d{4}-\d+) places", " ".join(seg))
+            off = next((i for i, l in enumerate(seg) if l.endswith("(Official Summary)")), None)
+            if not law or off is None:
+                raise Unreadable(f"North Carolina: the explanation for {name} didn't read")
+            body = []
+            for l in seg[off + 1:]:
+                if l.startswith("This official summary explanation was adopted"):
+                    break
+                body.append(l)
+            summary = nc_paragraphs(body)
+            check(f"North Carolina explanation, {name}", text, [name, *summary])
+            out[law.group(1)] = {"name": name, "summary": summary, "url": url}
+        if out:
+            return out
+        last = Unreadable("North Carolina: no explanations found in the Legislative Services Officer's release")
+    raise last if isinstance(last, Unreadable) else Unreadable(f"North Carolina: the explanation didn't download ({last})")
+
+
+def nc_law(number, url):
+    """The session law's ballot question and what its sections say happens after the vote."""
+    text = pdf_text(url)
+    ls = [l.strip() for l in text.split("\n")]
+    secs, cur = [], []
+    for l in ls:
+        if re.match(r"SECTION \d+\.", l):
+            if cur:
+                secs.append(join_lines(cur))
+            cur = [l]
+        elif cur and (l.startswith("In the General Assembly read three times") or re.match(r"\*[SH]\d+-v-\d+\*", l) or re.match(r"Page \d+ ", l)):
+            secs.append(join_lines(cur))
+            cur = []
+        elif cur:
+            cur.append(l)
+    if cur:
+        secs.append(join_lines(cur))
+    q = next((x for x in secs if "The question to be used in the voting systems and ballots shall be" in x), None)
+    after = [x for x in secs if re.search(r"majority of votes cast on the question", x)]
+    if not q or not after:
+        raise Unreadable(f"North Carolina Session Law {number}: its ballot question or certification sections weren't found")
+    check(f"North Carolina Session Law {number}", text, after)
+    title = re.search(r"(AN ACT TO .+?)\s+The General Assembly of North Carolina enacts:", flat(text))
+    return {"after": after, "question_text": flat(q), "title": title.group(1) if title else None}
+
+
+def nc_fiscal(bill_page):
+    """The bill's latest fiscal note: its Fiscal Impact Summary, word for word, and the note's edition and date. None when there's no note."""
+    page = page_text(bill_page)
+    notes = re.findall(r'href="(/Sessions/\d+/FiscalNotes/[^"]+\.pdf)"', page)
+    if not notes:
+        return None
+    url = "https://www.ncleg.gov" + notes[-1]
+    text = pdf_text(url)
+    ls = [l.strip() for l in text.split("\n")]
+    try:
+        a = ls.index("FISCAL IMPACT SUMMARY")
+    except ValueError:
+        raise Unreadable(f"North Carolina fiscal note {url}: no Fiscal Impact Summary")
+    b = next((i for i in range(a + 1, len(ls)) if ls[i] in ("FISCAL ANALYSIS", "TECHNICAL CONSIDERATIONS") or ls[i].startswith("FISCAL RESEARCH DIVISION")), len(ls))
+    paras = nc_paragraphs(ls[a + 1:b])
+    check(f"North Carolina fiscal note {url}", text, paras)
+    edition = re.search(r"Bill Number:\s*(.+?\((?:[A-Z][a-z]+ )?Edition\))", flat(text))
+    date = re.search(r"FISCAL RESEARCH DIVISION Page 1 of \d+ ([A-Z][a-z]+ \d{1,2}, \d{4})", flat(text))
+    return {"url": url, "paragraphs": paras, "edition": edition.group(1) if edition else None, "date": date.group(1) if date else None}
+
+
+def nc_judicial():
+    """The Judicial Voter Guide: each contest's candidates in ballot order, with the guide's fields and statement, word for word."""
+    page = page_text(NC_JUDICIAL)
+    page = page.split("<footer", 1)[0]
+    body = re.sub(r"(?is)<(script|style|nav|header)\b.*?</\1>", "", page)
+    body = re.sub(r"(?i)<br\s*/?>|</?(p|div|h[1-6]|li|ul|ol|section|article|tr|td|th|table|dt|dd|dl)\b[^>]*>", "\n", body)
+    body = html.unescape(re.sub(r"<[^>]+>", "", body)).replace("\xa0", " ")
+    ls = [re.sub(r"[ \t]+", " ", l).strip() for l in body.split("\n")]
+    ls = [l for l in ls if l]
+    src = "\n".join(ls)
+    try:
+        start = max(i for i, l in enumerate(ls) if l == "Candidate Submissions")
+    except ValueError:
+        raise Unreadable("North Carolina Judicial Voter Guide: no candidate submissions")
+    intro = []
+    if "About This Guide" in ls:
+        a = max(i for i, l in enumerate(ls) if l == "About This Guide")
+        for l in ls[a + 1:]:
+            if l in ("4 Appellate Court Contests", "About the Appellate Courts", "Voter Registration", "Candidate Submissions") or re.match(r"\d+ Appellate Court Contests", l):
+                break
+            intro.append(l)
+    labels = ["Residence", "Education", "Occupation", "Employer", "Date Admitted to the Bar", "Date Admitted to Bar", "Legal/Judicial Experience", "Candidate Statement"]
+    parties = {"Democrat", "Republican", "Libertarian", "Green", "Unaffiliated", "Constitution", "Justice for All", "No Labels", "We the People"}
+    contests, cand, field = [], None, None
+    stop = ("Return to top", "Back to top", "Share this page", "Was this page helpful?", "Last updated")
+    for i, l in enumerate(ls[start + 1:], start + 1):
+        if l.startswith(stop):
+            break
+        if re.match(r"^NC (Supreme Court|Court of Appeals)\b", l):
+            contests.append({"office": l, "candidates": []})
+            cand, field = None, None
+            continue
+        if not contests:
+            continue
+        if i + 1 < len(ls) and ls[i + 1] in parties and l not in labels:
+            cand = {"name": l, "party": ls[i + 1], "fields": []}
+            contests[-1]["candidates"].append(cand)
+            field = "party"
+            continue
+        if field == "party" and l in parties:
+            field = None
+            continue
+        if cand is None:
+            continue
+        if l in labels:
+            cand["fields"].append([("Date Admitted to the Bar" if l.startswith("Date Admitted") else l), []])
+            field = l
+            continue
+        if cand["fields"]:
+            cand["fields"][-1][1].append(l)
+    out = []
+    for c in contests:
+        if not c["candidates"]:
+            continue
+        m = re.match(r"NC (Supreme Court|Court of Appeals)(?: (Associate Justice|Chief Justice|Judge))? Seat (\d+)", c["office"])
+        if not m:
+            raise Unreadable(f"North Carolina Judicial Voter Guide: contest {c['office']!r} didn't read")
+        court = "supreme-court" if m.group(1) == "Supreme Court" else "court-of-appeals"
+        office = f"{'Associate Justice, Supreme Court of North Carolina' if court == 'supreme-court' else 'Judge, North Carolina Court of Appeals'}, Seat {m.group(3)}"
+        cands = []
+        for cd in c["candidates"]:
+            fields, statement = [], []
+            for label, vals in cd["fields"]:
+                # A sentence ending in "Learn more at" plus its link, and a lone "." after a link: one paragraph.
+                merged = []
+                for v in vals:
+                    if merged and (v in (".", ",") or merged[-1].endswith(("Learn more at", "Learn more at:")) or re.fullmatch(r"(?:https?://)?(?:www\.)?[\w-]+(\.[\w-]+)+(/\S*)?\.?", v) and merged[-1].rstrip().endswith((":", "at"))):
+                        merged[-1] = merged[-1].rstrip() + ("" if v in (".", ",") else " ") + v
+                    else:
+                        merged.append(v)
+                if label == "Candidate Statement":
+                    statement = merged
+                else:
+                    fields.append([label, merged])
+            for label, vals in fields:
+                check(f"North Carolina Judicial Voter Guide, {cd['name']}, {label}", src, vals)
+            check(f"North Carolina Judicial Voter Guide, {cd['name']}, statement", src, statement)
+            cands.append({
+                "name": cd["name"],
+                "party": cd["party"],
+                "details": fields,
+                **({"statement": {"paragraphs": statement, "source_url": NC_JUDICIAL, "source": "North Carolina State Board of Elections, Judicial Voter Guide: 2026 General Election"}} if statement else {}),
+            })
+        out.append({"id": f"{court}-seat-{m.group(3)}", "office": office, "guide_heading": c["office"], "court": court, "candidates": cands})
+    if not out or any(len(c["candidates"]) < 1 for c in out):
+        raise Unreadable("North Carolina Judicial Voter Guide: no contests read")
+    check("North Carolina Judicial Voter Guide, about this guide", src, intro)
+    return {
+        "source_url": NC_JUDICIAL,
+        "source": "North Carolina State Board of Elections, Judicial Voter Guide: 2026 General Election",
+        "about": intro,
+        "contests": out,
+    }
+
+
+def nc_measures():
+    referenda, ref_text = nc_referenda()
+    explained = nc_explanations()
+    laws = {}
+    for number, url, bill_page, bill in NC_LAWS:
+        laws[number] = {**nc_law(number, url), "url": url, "bill_page": bill_page, "bill": bill, "fiscal": nc_fiscal(bill_page)}
+    measures = []
+    for n, r in enumerate(referenda, 1):
+        # Each referendum's session law is the one whose ballot question is the State Board's, word for word.
+        number = next((k for k, v in laws.items() if flat(r["question"]) in v["question_text"]), None)
+        if not number:
+            raise Unreadable(f"North Carolina: no session law has the ballot question {r['question'][:80]!r}")
+        law, ex = laws[number], explained.get(number)
+        if not ex:
+            raise Unreadable(f"North Carolina: no official explanation for Session Law {number}")
+        sections = [
+            section("explanation", "Official summary explanation", NC_LSO + ", adopted August 20, 2026", ex["summary"]),
+            section("law", f"How it got on the ballot: Session Law {number}", f"Session Law {number} ({law['bill']}), North Carolina General Assembly", law["after"],
+                    "The amendment's own text marks the words it adds and removes by underlining and striking through, which doesn't survive copying, so it isn't shown here. Read it in the session law (linked below)."),
+        ]
+        fiscal = law["fiscal"]
+        if fiscal:
+            sections.append(section("fiscal", "Fiscal note", NC_FRD + (f", on {fiscal['edition']}" if fiscal["edition"] else "") + (f", {fiscal['date']}" if fiscal["date"] else ""), fiscal["paragraphs"],
+                                    "The note's Fiscal Impact Summary, word for word. The full note, with its analysis and tables, is linked below."))
+        links = [
+            {"url": NC_REFERENDA, "label": "Statewide referendum choices on the ballot, North Carolina State Board of Elections (PDF)"},
+            {"url": ex["url"], "label": "Official Summary Explanation of 2026 Constitutional Amendments, Legislative Services Officer (PDF, as published by a county board of elections)"},
+            {"url": law["url"], "label": f"Session Law {number}, with the amendment's text (PDF)"},
+            {"url": law["bill_page"], "label": f"{law['bill']}: history and votes, North Carolina General Assembly"},
+        ]
+        if fiscal:
+            links.append({"url": fiscal["url"], "label": "Legislative fiscal note, Fiscal Research Division (PDF)"})
+        measures.append({
+            "id": f"amendment-{n}",
+            "number": str(n),
+            "label": f"Constitutional Amendment {n}" if len(referenda) > 1 else "Constitutional Amendment",
+            "kind": "Legislatively referred constitutional amendment",
+            "placed_by": "the General Assembly",
+            "scope": "statewide",
+            "title": r["heading"],
+            "official_name": ex["name"],
+            "requirement": "Passes with a majority of the votes cast on the question (the session law, as quoted below)",
+            "question": r["question"],
+            "question_by": "the ballot wording, from " + NC_SBE + " and the session law",
+            "means_note": f"North Carolina's official documents don't print a “Yes means / No means.” Voters mark FOR or AGAINST: “{r['question']}”",
+            "lead": {"text": " ".join(ex["summary"]), "source": "The official summary explanation."},
+            "sections": sections,
+            "arguments": [],
+            "no_arguments": NC_NO_ARGUMENTS,
+            "links": links,
+            "source_url": ex["url"],
+            "source": "Official Summary Explanation of 2026 Constitutional Amendments, Legislative Services Officer",
+        })
+    office = offices()["NC"]
+    elec = election("NC", "North Carolina", "2026-11-04T00:30:00Z", office,
+                    [{"url": NC_REFERENDA, "label": "Statewide referendum choices (State Board of Elections)"},
+                     {"url": NC_EXPLANATION[0], "label": "Official Summary Explanation of 2026 Constitutional Amendments (Legislative Services Officer)"},
+                     {"url": NC_JUDICIAL, "label": "Judicial Voter Guide: 2026 General Election (State Board of Elections)"}], guide=NC_UPCOMING)
+    elec["_guide_link"] = {"label": "Judicial Voter Guide: the appellate court candidates, in their own words", "url": NC_JUDICIAL, "by": "North Carolina State Board of Elections"}
+    data = doc("NC", elec, measures, "the North Carolina State Board of Elections, the Legislative Services Officer's summary explanations, the session laws and the Fiscal Research Division's fiscal notes, and the State Board's Judicial Voter Guide")
+    try:
+        data["judicial"] = nc_judicial()
+    except Unreadable as e:
+        # The measures still publish; the guide waits for the next run (the run is marked failed).
+        print(f"NC: Judicial Voter Guide not read: {e}", file=sys.stderr)
+        LATE_FAILURES.append("NC judicial guide")
+    return data
+
+
 # ---------------------------------------------------------------------------
 
-STATES = {"CO": co_measures, "AZ": az_measures, "FL": fl_measures, "MI": mi_measures}
+LATE_FAILURES = []
+STATES = {"CO": co_measures, "AZ": az_measures, "FL": fl_measures, "MI": mi_measures, "NC": nc_measures}
 
 
 def main():
@@ -760,8 +1090,10 @@ def main():
         print(f"{st}: {len(data['measures'])} measures → {out.relative_to(ROOT) if out.is_relative_to(ROOT) else out}")
         for m in data["measures"]:
             print(f"  {m['label']}: {m['title'][:70]} · {sum(len(s['paragraphs']) for s in m['sections'])} section paragraphs, {sum(len(a['paragraphs']) for a in m['arguments'])} argument paragraphs")
-    if failed:
-        sys.exit(f"Not written: {', '.join(failed)}")
+        if data.get("judicial"):
+            print(f"  Judicial Voter Guide: {len(data['judicial']['contests'])} contests, {sum(1 for c in data['judicial']['contests'] for x in c['candidates'] if x.get('statement'))} statements")
+    if failed or LATE_FAILURES:
+        sys.exit(f"Not written: {', '.join(failed + LATE_FAILURES)}")
 
 
 if __name__ == "__main__":
