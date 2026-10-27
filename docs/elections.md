@@ -26,6 +26,17 @@ Rules the builder keeps:
 
 To add a county: an entry in `COUNTIES` and `HOW_TO_VOTE` in the builder (its candidate list, pamphlet, results page, elections page and Board of Equalization district), and check the log after a run. To add an election: a new `ELECTION` block, then add its id to `ELECTIONS` in `functions/_lib/elections.js` (newest first).
 
+## "Just the facts" (every measure)
+
+Every ballot measure page (California's statewide and county measures, Washington's, and the "sections" states) leads with one card, `factsCard()` in `functions/_lib/measure-facts.js`, the same five lines in the same order, each labeled with its source:
+
+- **Measure type** (statute, constitutional amendment, both, or a constitutional convention question) and **Put on the ballot by** (the Legislature or citizen initiative), in the official label's own words, the label quoted beside them: California's title label ("LEGISLATIVE STATUTE.") and "Put on the Ballot by …"; Washington's measure type ("Initiative to the People") and its ballot question; the other states' guide labels.
+- **What it changes**: California's Attorney General's summary, Washington's ballot title (Attorney General), Colorado's Blue Book summary, Florida's ballot summary, Michigan's ballot wording caption; otherwise the question on the ballot.
+- **Yes means / No means**, word for word where the state prints it.
+- **Cost**: the Legislative Analyst's estimate (California), the Office of Financial Management's summary (Washington), the Blue Book's fiscal impact (Colorado, cut to its first two paragraphs with their headings), a county tax rate statement's first paragraph.
+
+Official text only: nothing written by ThePillory or AI, shortened only by cutting whole paragraphs, never by rewording; what the source doesn't print is one plain line. In Quick mode the card is all the page shows. The ballot preview (`/ballot/<st>/`, with and without an address) and Your ballot show the same card, folded under each measure's name (`factsFold()`). The campaigns' arguments and rebuttals follow, word for word as before, in one collapsed section, "What each side says (their own words, not checked by ThePillory)".
+
 ## Washington's statewide measures
 
 `tools/build_wa_measures.py` builds `data/elections/2026-11-03-wa.json` in the same shape as California's file, with only the three statewide measures (no candidates or local contests; `measuresOnly()` in `functions/_lib/elections.js` shows those elections as a list of measures, and "Your ballot" points to the statewide list, since it's the same on every ballot). It runs in the same daily workflow, after California. Sources, all from the Secretary of State's site:

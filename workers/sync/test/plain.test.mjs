@@ -133,15 +133,19 @@ async function get(mod, path) {
   return res.status === 200 ? res.text() : "";
 }
 
-test("Quick cards on the Supreme Court, a case, a measure and the ballot preview", async () => {
+test("Quick cards on the Supreme Court, a case, a measure (its facts card) and the ballot preview", async () => {
   const court = await get("../../../functions/bodies/[[path]].js", "/bodies/us-supreme-court/");
   assert.match(court, /<div class="simple-scope">/);
   assert.match(court, /simple-card simple-only[\s\S]*What it is[\s\S]*Latest decisions/);
   const prop = await get("../../../functions/elections/[[path]].js", "/elections/2026-11-03/measure/prop-1/");
-  assert.match(prop, /simple-card[\s\S]*What it does[\s\S]*A Yes vote means[\s\S]*A No vote means[\s\S]*Where it stands/);
-  assert.match(prop, /word for word from the official guide/);
+  // A measure's Quick version is its "Just the facts" card: official text only, no AI rewrite.
+  assert.match(prop, /facts-card simple-keep[\s\S]*Measure type[\s\S]*What it changes[\s\S]*Yes means \/ No means[\s\S]*Cost/);
+  assert.doesNotMatch(prop, /simple-card/);
   const ballot = await get("../../../functions/ballot/[[path]].js", "/ballot/ca/");
   assert.match(ballot, /simple-card[\s\S]*What&#x27;s on it[\s\S]*statewide offices/);
   assert.match(ballot, /class="stack-sm simple-keep" id="statewide"/);
+  assert.match(ballot, /id="facts-prop-4"[\s\S]*Measure type[\s\S]*Put on the ballot by[\s\S]*Legislative Analyst/, "each proposition's facts card on the ballot preview");
+  const wa = await get("../../../functions/ballot/[[path]].js", "/ballot/wa/");
+  assert.match(wa, /id="facts-ip26-645"[\s\S]*Citizen initiative[\s\S]*Office of Financial Management/, "Washington's measures too");
   assert.match(ballot, /lookup simple-keep" id="address"/);
 });

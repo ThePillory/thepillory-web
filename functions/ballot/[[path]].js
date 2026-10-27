@@ -30,6 +30,7 @@ import { visitorState } from "../_lib/visitor-state.js";
 import { asset } from "../_lib/geo.js";
 import { loadElection, electionHref, ballotHref, measureHref, measureName, contestHref, ballotOrder, ELECTION_BY_STATE, measuresOnly, howToVote } from "../_lib/elections.js";
 import { voterInfo, ballotFromVoterInfo, measureFor, CivicError } from "../_lib/civic.js";
+import { factsFold } from "../_lib/measure-facts.js";
 import { visitorHash } from "../_lib/turnstile.js";
 import { fold } from "../_lib/summary.js";
 import { statePossessive, RESULT_HEADING, nominations, nominationWords, todayIn } from "../_lib/election-window.js";
@@ -254,8 +255,8 @@ function certifiedSection(st, election, filed, d, records) {
 <section class="stack-sm simple-keep" id="statewide" aria-labelledby="h-statewide">
   <h2 class="label" id="h-statewide">On every ${esc(STATE_NAME[st])} ballot · November 3, 2026</h2>
   ${offices.length ? `<div class="card">${offices.map((c) => { const inc = incFor(c); return linkRow(raceHref(YEAR, st, c.id), c.office, [ballotOrder(c, election).candidates.map((x) => `${x.name}${inc.get(x.fec && x.fec.id, x.name) ? " (Incumbent)" : ""}`).join(" · "), inc.open ? `Open seat: ${inc.open.name} isn't running for this seat` : ""].filter(Boolean).join(". ")); }).join("")}</div>` : ""}
-  ${props.length ? `<div class="card">${props.map((m) => linkRow(measureHref(id, m.id), measureName(m), m.title || "")).join("")}</div>` : ""}
-  <p class="hint">Candidates in ballot order as on ballots in Assembly District 1 (statewide offices rotate by district). Propositions with the official summary and arguments, word for word.</p>
+  ${props.length ? `<div class="stack-sm">${props.map((m) => factsFold(election, m, { href: measureHref(id, m.id), name: measureName(m), sub: m.title || "" })).join("")}</div>` : ""}
+  <p class="hint">Candidates in ballot order as on ballots in Assembly District 1 (statewide offices rotate by district). Each proposition opens to its facts, from the official guide; its page has the rest, including each side's arguments.</p>
 </section>`
     : "";
   return `${statewide}
@@ -355,13 +356,18 @@ function federalSection(st, races, loaded, d, election = null, { dates = null, o
 function ownSection(st, election) {
   if (!election || election.election.state !== st) return "";
   const id = election.election.id;
-  const rows = measuresOnly(election)
-    ? election.measures.filter((m) => m.scope === "statewide").map((m) => linkRow(measureHref(id, m.id), measureName(m), "Official arguments for and against, word for word")).join("")
-    : `${linkRow(ballotHref(id), "Your ballot on ThePillory", "Every contest for your districts, with candidate statements word for word")}${linkRow(electionHref(id), "Everything on the ballot", "Statewide offices, propositions with official arguments, courts")}`;
+  if (measuresOnly(election)) {
+    return `
+<section class="stack-sm simple-keep" aria-labelledby="h-own">
+  <h2 class="label" id="h-own">Statewide measures</h2>
+  ${election.measures.filter((m) => m.scope === "statewide").map((m) => factsFold(election, m, { href: measureHref(id, m.id), name: measureName(m), sub: m.title || "" })).join("")}
+  <p class="hint">On every ballot in ${esc(STATE_NAME[st] || st)}. Each opens to its facts, from the official guide; its page has the rest, including each side's arguments.</p>
+</section>`;
+  }
   return `
 <section class="stack-sm" aria-labelledby="h-own">
   <h2 class="label" id="h-own">On ThePillory</h2>
-  <div class="card">${rows}</div>
+  <div class="card">${linkRow(ballotHref(id), "Your ballot on ThePillory", "Every contest for your districts, with candidate statements word for word")}${linkRow(electionHref(id), "Everything on the ballot", "Statewide offices, propositions with their facts, courts")}</div>
 </section>`;
 }
 
@@ -485,7 +491,7 @@ function civicContest(c, { election }) {
     <h3>${esc(r.title || c.title)}</h3>
     ${r.subtitle ? `<p class="small">${esc(r.subtitle)}</p>` : ""}
     ${r.brief ? `<p class="small secondary">${esc(r.brief)}</p>` : ""}
-    ${ours ? `<p class="small"><a class="inline-link" href="${measureHref(election.election.id, ours.id)}">Official arguments for and against, on ThePillory</a></p>` : ""}
+    ${ours ? factsFold(election, ours, { href: measureHref(election.election.id, ours.id), name: `Just the facts: ${measureName(ours)}` }) : ""}
     ${r.url ? `<p class="small"><a class="inline-link" href="${esc(r.url)}" target="_blank" rel="noopener">Official text ↗</a></p>` : ""}
   </div>`;
   }

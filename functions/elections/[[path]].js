@@ -12,7 +12,7 @@
 // Neutral by design: candidates and measures all get the same layout, in ballot
 // order; no endorsements, polls or predictions; results only from the official
 // feed, only after the polls close, and no race is called.
-import { simpleCard, plainFor, plainLead } from "../_lib/simple.js";
+import { factsCard, factsFold } from "../_lib/measure-facts.js";
 import { previewLabel } from "../_lib/election-window.js";
 import { page, esc, notFound, safeUrl, sourceLink, fmtDate, kv, loadSection, FAILED, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { districtsFromCookie, describe, STATE_NAME } from "../_lib/districts.js";
@@ -187,10 +187,11 @@ function ballotSections(election, b, { ad = null, countyLabel = null } = {}) {
   ${b.boeKnown ? "" : '<p class="hint">Board of Equalization: your district is on your sample ballot. <a class="inline-link" href="' + electionHref(id) + '#h-dist">All four districts</a>.</p>'}
 </section>
 <section class="stack-sm" aria-labelledby="h-ym"><h2 class="label" id="h-ym">Statewide propositions</h2>
-  <div class="card">${b.measures.map((m) => measureRow(id, m)).join("")}</div>
+  ${b.measures.map((m) => factsFold(election, m, { href: measureHref(id, m.id), name: measureName(m), sub: m.title })).join("")}
 </section>
 ${b.partial.length || b.partialMeasures.length ? `<section class="stack-sm" aria-labelledby="h-yl"><h2 class="label" id="h-yl">Local, on some ballots in ${esc(countyLabel || "your county")}</h2>
-  <div class="card">${b.partial.map((c) => contestRow(id, c)).join("")}${b.partialMeasures.map((m) => measureRow(id, m, "on ballots in this district")).join("")}</div>
+  ${b.partial.length ? `<div class="card">${b.partial.map((c) => contestRow(id, c)).join("")}</div>` : ""}
+  ${b.partialMeasures.map((m) => factsFold(election, m, { href: measureHref(id, m.id), name: `${m.title}${m.jurisdiction ? ` · ${m.jurisdiction}` : ""}`, sub: "On ballots in this district" })).join("")}
   <p class="hint">Each is for part of the county (a supervisor district, a city, or a school, fire or water district). Your sample ballot shows which are yours.</p>
 </section>` : ""}`;
 }
@@ -374,6 +375,7 @@ const ARG_PARTS = [
   { kind: "against", label: "Opponents' argument" },
   { kind: "rebuttal_for", label: "Supporters' rebuttal" },
 ];
+export const ARGUMENTS_TITLE = "What each side says (their own words, not checked by ThePillory)";
 export const ARGUMENTS_NOTE = "Written by each campaign, printed word for word from the official voter guide. Not written or checked by ThePillory or any government agency.";
 
 /** One argument or rebuttal, the same layout for every side: label, the guide's heading, the full text, who signed it. */
@@ -408,13 +410,13 @@ function argumentsSection(m, source) {
   ${exchange("The argument against, and the supporters' rebuttal", ARG_PARTS.slice(2))}
 </div>
 ${source ? `<p class="small">${source}</p>` : ""}`;
-  return fold("arguments", "Arguments from each campaign", inner);
+  return fold("arguments", ARGUMENTS_TITLE, inner);
 }
 
 // A Washington measure: the Voters' Pamphlet's parts in its order. The ballot title and the explanatory
 // statement are the Attorney General's, the fiscal impact statement is the Office of Financial Management's,
 // and the arguments are each campaign's, all word for word (tools/build_wa_measures.py).
-function waMeasurePage(election, m, back, plain = null, conHtml = "") {
+function waMeasurePage(election, m, back, conHtml = "") {
   const id = election.election.id;
   const bt = m.ballot_title;
   const paras = (list) => list.map((p) => `<p class="small">${esc(p)}</p>`).join("");
@@ -428,34 +430,13 @@ function waMeasurePage(election, m, back, plain = null, conHtml = "") {
     [m.links.text, "Complete text of the measure (PDF)"],
     [m.links.guide, "2026 General Election Voters' Guide (Secretary of State)"],
   ];
-  const lead = plainLead(plain, { text: bt.description, source: "The Attorney General's ballot title." });
-  const simple = simpleCard({
-    lines: [
-      ["What it does", lead.html],
-      ["Where it stands", pollsClosed(election) ? "Voted on. Results are counted by each county and the Secretary of State." : `On the ballot on ${esc(fmtDate(election.election.date))}.`],
-      ["Money", m.fiscal_summary && m.fiscal_summary[0] ? `${esc(m.fiscal_summary[0])} <span class="secondary">(Office of Financial Management)</span>` : ""],
-      ...lead.extra,
-    ],
-    source: [lead.source, sourceLink(m.links.pamphlet_page, "Voters' Pamphlet")].filter(Boolean).join(" "),
-    jump: "h-bt",
-  });
   const main = `<div class="simple-scope">
 <header class="page-head stack-xs">
   <p class="label">Statewide · ${esc(fmtDate(election.election.date))} · ${esc(m.kind)}</p>
   <h1>${esc(measureName(m))}</h1>
+  <p class="subtitle">${esc(bt.subject)}</p>
 </header>
-${simple}
-<section class="card stack-sm" aria-labelledby="h-bt">
-  <h2 class="label" id="h-bt">Ballot title · Written by the Office of the Attorney General</h2>
-  <p class="measure-title">${esc(bt.subject)}</p>
-  <p class="small">${esc(bt.description)}</p>
-  <p class="small"><strong>${esc(bt.question)}</strong> Yes · No</p>
-</section>
-<section class="card stack-sm" aria-labelledby="h-fiscal">
-  <h2 class="label" id="h-fiscal">Fiscal impact · Written by the Office of Financial Management</h2>
-  ${paras(m.fiscal_summary)}
-  <p class="hint">The summary of the fiscal impact statement, as the Voters' Pamphlet prints it. ${sourceLink(m.links.fiscal, "The full statement")}</p>
-</section>
+${factsCard(election, m)}
 ${fold("present", "The law as it presently exists", `<div class="statement-body stack-xs">${paras(m.explanatory.present)}</div><p class="hint">From the explanatory statement written by the Office of the Attorney General.</p>`)}
 ${fold("effect", "The effect of the proposed measure if approved", `<div class="statement-body stack-xs">${paras(m.explanatory.effect)}</div><p class="hint">From the explanatory statement written by the Office of the Attorney General.</p>`)}
 ${conHtml}
@@ -472,7 +453,7 @@ ${argumentsSection(m, `${sourceLink(m.links.pamphlet_page, "Arguments and rebutt
 // A measure in the "sections" format (tools/build_state_measures.py: Colorado, Arizona, Florida,
 // Michigan): the question on the ballot, what a Yes and a No vote mean where the state publishes that,
 // then each official section in the source's order, each with who wrote it, all word for word.
-function sectionsMeasurePage(election, m, back, plain = null, conHtml = "") {
+function sectionsMeasurePage(election, m, back, conHtml = "") {
   const e = election.election;
   const state = STATE_NAME[e.state] || e.state_name || e.state;
   const para = (p) => {
@@ -484,60 +465,31 @@ function sectionsMeasurePage(election, m, back, plain = null, conHtml = "") {
   const results = pollsClosed(election)
     ? `<p class="small">Results: ${sourceLink(e.results_page, `${state} election office`)}</p>`
     : `<p class="small secondary">Results are linked here after the polls close on Election Day.</p>`;
-  const lead = plainLead(plain, m.lead && m.lead.text ? m.lead : { text: m.question, source: "The question as it appears on the ballot." });
-  const simple = simpleCard({
-    lines: [
-      ["What it does", lead.html],
-      ["A Yes vote means", m.yes_means ? esc(m.yes_means) : ""],
-      ["A No vote means", m.no_means ? esc(m.no_means) : ""],
-      ["To pass", m.requirement ? esc(m.requirement) : ""],
-      ["Where it stands", pollsClosed(election) ? "Voted on. Results are counted by the state and its counties." : `On the ballot on ${esc(fmtDate(e.date))}.`],
-      ...lead.extra,
-    ],
-    source: [lead.source, m.yes_means ? `The Yes and No lines are word for word: ${esc(m.means_by)}.` : "", sourceLink(m.source_url, "Official source")].filter(Boolean).join(" "),
-    jump: "h-q",
-  });
-  const [first, ...rest] = m.sections;
+  // The campaigns' arguments (or the links to those filed), folded under one title, word for word.
   const sides = (m.arguments || []).filter((a) => a.paragraphs.length);
-  const args = sides.length
-    ? fold("arguments", "Arguments for and against", `<div class="argument-sides">${sides
+  const argLinks = (m.argument_links || []).filter((x) => safeUrl(x.url));
+  const args = sides.length || argLinks.length
+    ? fold("arguments", ARGUMENTS_TITLE, `${sides.length ? `<div class="argument-sides">${sides
         .map((a) => `<article class="card stack-sm argument-card"><p class="label">${esc(a.side === "for" ? "For" : "Against")}</p><h3 class="statement-title">${esc(a.heading)}</h3>${body(a.paragraphs)}</article>`)
-        .join("")}</div>${m.arguments_by ? `<p class="hint">${esc(m.arguments_by)}</p>` : ""}`)
+        .join("")}</div>${m.arguments_by ? `<p class="hint">${esc(m.arguments_by)}</p>` : ""}` : ""}${argLinks.length ? `<div class="stack-xs"><p class="label">Arguments filed for and against</p>${argLinks.map((x) => `<p class="small">${sourceLink(x.url, x.label)}</p>`).join("")}${m.arguments_note ? `<p class="hint">${esc(m.arguments_note)}</p>` : ""}</div>` : ""}`)
     : "";
-  const argLinks = (m.argument_links || []).length
-    ? `<section class="stack-sm" aria-labelledby="h-args"><h2 class="label" id="h-args">Arguments filed for and against</h2>
-  <div class="card stack-xs">${m.argument_links.filter((x) => safeUrl(x.url)).map((x) => `<p class="small">${sourceLink(x.url, x.label)}</p>`).join("")}</div>
-  ${m.arguments_note ? `<p class="hint">${esc(m.arguments_note)}</p>` : ""}
-</section>`
-    : "";
-  const sectionCard = (sec) => `<section class="card stack-sm" aria-labelledby="h-${esc(sec.id)}">
-  <h2 class="label" id="h-${esc(sec.id)}">${esc(sec.heading)} · ${esc(sec.by)}</h2>
-  ${sec.paragraphs.length ? body(sec.paragraphs) : ""}${sec.note ? `<p class="hint">${esc(sec.note)}</p>` : ""}
-</section>`;
+  // The question card only when the facts card leads with the summary instead of the question.
+  const question = m.lead && m.lead.text && m.lead.text !== m.yes_means;
   const main = `<div class="simple-scope">
 <header class="page-head stack-xs">
   <p class="label">Statewide · ${esc(state)} · ${esc(fmtDate(e.date))} · ${esc(m.kind)}</p>
   <h1>${esc(measureName(m))}</h1>
   <p class="subtitle">${esc(m.title)}</p>
 </header>
-${simple}
-<section class="card stack-sm" aria-labelledby="h-q">
+${factsCard(election, m)}
+${question ? `<section class="card stack-sm" aria-labelledby="h-q">
   <h2 class="label" id="h-q">The question on the ballot · ${esc(m.question_by)}</h2>
   <p class="measure-title">${esc(m.question)}</p>
   ${m.requirement ? `<p class="small secondary">${esc(m.requirement)}.</p>` : ""}
-</section>
-${m.yes_means ? `<section class="stack-sm" aria-labelledby="h-means"><h2 class="label" id="h-means">What your vote means</h2>
-  <div class="vote-means">
-    <div class="card stack-xs"><p class="vote-means-head">Yes</p><p class="small">${esc(m.yes_means)}</p></div>
-    <div class="card stack-xs"><p class="vote-means-head">No</p><p class="small">${esc(m.no_means)}</p></div>
-  </div>
-  <p class="hint">Word for word: ${esc(m.means_by)}.</p>
-</section>` : ""}
-${first ? sectionCard(first) : ""}
-${rest.map((sec) => fold(sec.id, sec.heading, `${body(sec.paragraphs)}<p class="hint">${esc(sec.by)}.${sec.note ? ` ${esc(sec.note)}` : ""}</p>`)).join("")}
+</section>` : m.requirement ? `<p class="small secondary">${esc(m.requirement)}.</p>` : ""}
+${m.sections.map((sec) => fold(sec.id, sec.heading, `${sec.paragraphs.length ? body(sec.paragraphs) : ""}<p class="hint">${esc(sec.by)}.${sec.note ? ` ${esc(sec.note)}` : ""}</p>`)).join("")}
 ${conHtml}
 ${args}
-${argLinks}
 <section class="stack-sm" aria-labelledby="h-res"><h2 class="label" id="h-res">Results</h2>${results}</section>
 <section class="stack-sm" aria-labelledby="h-src"><h2 class="label" id="h-src">Official sources</h2>
   <div class="card stack-xs">${(m.links || []).filter((x) => safeUrl(x.url)).map((x) => `<p class="small">${sourceLink(x.url, x.label)}</p>`).join("")}</div>
@@ -553,13 +505,12 @@ async function measurePage(election, measureId, env = {}) {
   const back = [election.election.name, electionHref(id)];
   const m = election.measures.find((x) => x.id === measureId);
   if (!m) return notFound("No measure at this address.", "home", back);
-  const plain = await loadSection("measure plain", () => plainFor(env.DB, "measure", `${id}:${m.id}`), null);
   // The Constitution section: only once every measure's is approved, all at once (functions/_lib/measure-constitution.js).
   const con = m.scope === "statewide" ? await loadSection("measure constitution", () => publishedSection(env.DB, id, m.id), null) : null;
   const analysis = m.scope === "statewide" ? await loadSection("measure analysis", () => measureAnalysisSection(env.DB, id, m.id), "") : "";
   const conHtml = (con && con !== FAILED ? constitutionSection(con, { stateName: STATE_NAME[st] || st, label: measureName(m) }) : "") + (analysis === FAILED ? "" : analysis);
-  if (m.ballot_title) return waMeasurePage(election, m, back, plain === FAILED ? null : plain, conHtml);
-  if (election.election.format === "sections") return sectionsMeasurePage(election, m, back, plain === FAILED ? null : plain, conHtml);
+  if (m.ballot_title) return waMeasurePage(election, m, back, conHtml);
+  if (election.election.format === "sections") return sectionsMeasurePage(election, m, back, conHtml);
   const statewide = m.scope === "statewide";
   const county = m.county ? election.counties[m.county] : null;
   const feed = statewide ? await loadSection("measure results", () => sosResults(election, m.results_path), null) : null;
@@ -571,31 +522,11 @@ async function measurePage(election, measureId, env = {}) {
       : r
         ? `<div class="results stack-sm"><p class="label">Results so far</p><ul class="plain-list results-list"><li class="result-row"><span class="result-name">Yes</span><span class="result-num">${r.yes == null ? "—" : r.yes.toLocaleString("en-US")} votes · ${esc(r.yesPercent)}%</span></li><li class="result-row"><span class="result-name">No</span><span class="result-num">${r.no == null ? "—" : r.no.toLocaleString("en-US")} votes · ${esc(r.noPercent)}%</span></li></ul><p class="hint">${esc(feed.Reporting || "")}${feed.ReportingTime ? ` · as of ${esc(feed.ReportingTime)}` : ""}. Counting continues after Election Day until each county certifies its results. ${sourceLink(election.election.results_page, "Secretary of State results")}</p></div>`
         : `<p class="small">Results: ${sourceLink(m.results_url || election.election.results_page, county ? `${county.name} Elections, current results` : "Secretary of State results")}</p>`;
-  const list = (items) => (items.length > 1 ? `<ul class="plain-list bullet-list">${items.map((x) => `<li class="small">${esc(x)}</li>`).join("")}</ul>` : items.map((x) => `<p class="small">${esc(x)}</p>`).join(""));
+  // The facts card has the title's label, summary, Yes and No, and the cost; for a local measure,
+  // the impartial analysis and the tax rate statement follow it in full.
   const official = statewide
-    ? `
-<section class="card stack-sm" aria-labelledby="h-ts">
-  <h2 class="label" id="h-ts">Official title and summary · Prepared by the Attorney General</h2>
-  <p class="measure-title">${esc(m.title)}</p>
-  ${m.ag_summary && m.ag_summary.length ? list(m.ag_summary) : `<p class="small secondary">The summary couldn't be read from the guide. ${sourceLink(m.links.guide, "Read it in the official guide")}</p>`}
-</section>
-<section class="stack-sm" aria-labelledby="h-means"><h2 class="label" id="h-means">What your vote means</h2>
-  <div class="vote-means">
-    <div class="card stack-xs"><p class="vote-means-head">Yes</p><p class="small">${esc((m.yes_means || "").replace(/^A YES vote on this measure means:\s*/, "")) || "Not found in the guide."}</p></div>
-    <div class="card stack-xs"><p class="vote-means-head">No</p><p class="small">${esc((m.no_means || "").replace(/^A NO vote on this measure means:\s*/, "")) || "Not found in the guide."}</p></div>
-  </div>
-  <p class="hint">As the official guide states it.</p>
-</section>
-<section class="card stack-sm" aria-labelledby="h-fiscal">
-  <h2 class="label" id="h-fiscal">Fiscal effect · Legislative Analyst's estimate</h2>
-  ${m.fiscal_effect && m.fiscal_effect.length ? list(m.fiscal_effect) : '<p class="small secondary">Not found in the guide.</p>'}
-  <p class="hint">The summary of the Legislative Analyst's estimate of the net state and local government fiscal impact, from the official title and summary. ${sourceLink(m.links.analysis, "The full analysis by the Legislative Analyst")}</p>
-</section>`
+    ? ""
     : `
-<section class="card stack-sm">
-  <p class="label">The question on the ballot</p>
-  <p class="measure-title">${esc(m.question || "Not found in the pamphlet; see the PDF.")}</p>
-</section>
 <section class="stack-sm" aria-labelledby="h-ia"><h2 class="label" id="h-ia">Impartial analysis by ${esc(m.impartial_analysis_by)}</h2>
   <div class="card statement-body stack-xs">${m.impartial_analysis.map((p) => `<p class="small">${esc(p)}</p>`).join("")}</div>
 </section>
@@ -605,28 +536,13 @@ ${m.tax_rate_statement && m.tax_rate_statement.length ? `<section class="stack-s
   const links = statewide
     ? [[m.links.guide, "This proposition in the Official Voter Information Guide"], [m.links.title_summary, "Official title and summary"], [m.links.analysis, "Analysis by the Legislative Analyst"], [m.links.arguments, "Arguments and rebuttals"], [m.links.text, "Text of the proposed law (PDF)"]]
     : [[m.links.pamphlet, `${county ? county.name : "County"} Voter Information Pamphlet (PDF), the official version`], [m.links.page, `${county ? county.name : "County"} Elections: candidates and measures`]];
-  const meaning = (t, prefix) => esc(String(t || "").replace(prefix, ""));
-  const lead = plainLead(plain === FAILED ? null : plain, statewide
-    ? { text: String(m.summary || "").replace(/^Put on the Ballot by (?:the Legislature|Petition Signatures)\s*/, ""), source: "The Attorney General's official summary." }
-    : { text: (m.question || ""), source: "The question as it appears on the ballot." });
-  const simple = simpleCard({
-    lines: [
-      ["What it does", lead.html],
-      ["A Yes vote means", statewide && m.yes_means ? meaning(m.yes_means, /^A YES vote on this measure means:\s*/) : ""],
-      ["A No vote means", statewide && m.no_means ? meaning(m.no_means, /^A NO vote on this measure means:\s*/) : ""],
-      ["Where it stands", r ? `Counting so far: Yes ${esc(r.yesPercent)}%, No ${esc(r.noPercent)}%. Counting continues until each county certifies its results.` : pollsClosed(election) ? "Voted on. Results are being counted." : `On the ballot on ${esc(fmtDate(election.election.date))}.`],
-      ...lead.extra,
-    ],
-    source: [lead.source, statewide ? "The Yes and No lines are word for word from the official guide." : "", sourceLink(statewide ? m.links.guide : m.links.pamphlet, statewide ? "Official guide" : "County pamphlet")].filter(Boolean).join(" "),
-    jump: statewide ? "h-ts" : "h-ia",
-  });
   const main = `<div class="simple-scope">
 <header class="page-head stack-xs">
   <p class="label">${esc(statewide ? `Statewide · ${fmtDate(election.election.date)}` : `${m.jurisdiction || (county ? county.name : "Local")} · ${fmtDate(election.election.date)}`)}</p>
   <h1>${esc(statewide ? `Proposition ${m.number}` : m.title)}</h1>
-  ${statewide ? "" : `<p class="small secondary">On ballots in ${esc(m.jurisdiction || "part of the county")}${county ? `, ${esc(county.name)}` : ""}.</p>`}
+  ${statewide ? `<p class="subtitle">${esc(m.title)}</p>` : `<p class="small secondary">On ballots in ${esc(m.jurisdiction || "part of the county")}${county ? `, ${esc(county.name)}` : ""}.</p>`}
 </header>
-${simple}
+${factsCard(election, m)}
 ${official}
 ${conHtml}
 <section class="stack-sm" aria-labelledby="h-res"><h2 class="label" id="h-res">Results</h2>${results}</section>

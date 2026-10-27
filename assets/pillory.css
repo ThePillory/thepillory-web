@@ -1892,6 +1892,11 @@ article.fin-term { scroll-margin-top: var(--space-4); }
 .fold .card { box-shadow: none; background: var(--fill); }
 .fold--parch .provision-cite { background: transparent; }
 
+/* "Just the facts" (functions/_lib/measure-facts.js): the official facts that lead every ballot measure */
+.facts-list { display: flex; flex-direction: column; gap: var(--space-4); }
+.facts-list .fact { overflow-wrap: anywhere; }
+.facts-fold .fold-sub { display: block; font-size: var(--fs-small); color: var(--text-2); overflow-wrap: anywhere; }
+
 /* The first and last rows sit a card's padding from its edges */
 .compact-list { padding: calc(var(--card-pad) - var(--row-pad)) 0; }
 .cr-empty { padding: var(--space-4) var(--card-pad); }
