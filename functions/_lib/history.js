@@ -7,6 +7,7 @@
 import { esc, fmtDate } from "./render.js";
 import { asset } from "./geo.js";
 import { orderHref } from "./orders.js";
+import { positionRow, voteHref } from "./votes.js";
 import { CABINET, cabinetPosition, holdersInYear } from "../../workers/sync/src/history/parse.js";
 
 /** The earliest year the slider reaches: officeholder records and the federal budget tables start here. */
@@ -307,10 +308,13 @@ export function pastVoteRows(votes) {
   const rows = [];
   for (const v of votes) {
     for (const p of v.positions || []) {
-      const facts = `${esc(v.bill_number || v.subject || "")} · ${esc(v.question)} · ${esc(v.result)} · ${fmtDate(v.vote_date)}`;
-      const who = p.active ? `<a class="brief-vote-name" href="/reps/${esc(p.slug)}/">${esc(p.name)}</a>` : `<a class="brief-vote-name" href="/reps/${esc(p.slug)}/?year=${yearOf(v.vote_date)}">${esc(p.name)}</a>`;
-      const meta = v.bill_id ? `<a class="brief-vote-meta xsmall" href="/laws/bills/${esc(v.bill_id)}/#votes">${facts}</a>` : `<a class="brief-vote-meta xsmall" href="${esc(v.source_url)}" target="_blank" rel="noopener">${facts} ↗</a>`;
-      rows.push(`<li class="brief-vote"><div class="brief-vote-main">${who}${meta}</div><span class="brief-vote-position" title="Recorded as: ${esc(p.raw_position)}">${esc(p.position)}</span></li>`);
+      rows.push(positionRow({
+        href: voteHref(v, `/reps/${p.slug}/${p.active ? "" : `?year=${yearOf(v.vote_date)}`}`),
+        title: esc(p.name),
+        details: `${esc(v.bill_number || v.subject || "")} · ${esc(v.question)} · ${esc(v.result)} · ${fmtDate(v.vote_date)}`,
+        position: p.position,
+        raw: p.raw_position,
+      }));
     }
   }
   return rows.join("");

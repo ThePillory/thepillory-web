@@ -115,8 +115,10 @@ test("a justice's purchases and sales: each line as filed, unread reports as lin
   assert.match(html, /Purchases and sales/);
   assert.match(html, /Example Index Fund/);
   assert.match(html, /Sold \(part\)/);
-  assert.match(html, /\$15,000 or less · Oct 2, 2025 · Held in \(H\) IRA #1/);
-  assert.match(html, /Value not given · Date not given/);
+  assert.match(html, /Sold \(part\) · Oct 2, 2025 · Held in \(H\) IRA #1/);
+  assert.match(html, /<span class="cr-side">\$15,000 or less/);
+  assert.match(html, /<span class="cr-side">Value not given/);
+  assert.match(html, /· Date not given/);
   assert.match(html, /2024 report ↗<\/a>: not read in full/);
   assert.match(html, /not within 45 days/);
   assert.doesNotMatch(html, /conflict/i);

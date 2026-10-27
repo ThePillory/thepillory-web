@@ -208,9 +208,8 @@ export function form700Lines(f) {
       const when = l.disposed || l.acquired;
       const meta = [l.value ? `Value ${l.value}` : "", fmtDate(when), l.description || "", l.nature && l.nature !== "Stock" ? l.nature : "", `${l.period} statement`].filter(Boolean);
       return `<a class="compact-row trade-row" href="/api/form700/${esc(String(l.disclosure_id).replace(/^fppc:/, ""))}" target="_blank" rel="noopener">
-  <span class="cr-type">${l.disposed ? "Disposed" : "Acquired"}</span>
   <span class="cr-main"><span class="cr-title">${esc(l.entity)}</span><span class="cr-meta">${meta.map(esc).join(" · ")}</span></span>
-  <span class="chev" aria-hidden="true">↗</span>
+  <span class="cr-side">${l.disposed ? "Disposed" : "Acquired"}<span class="chev" aria-hidden="true">↗</span></span>
 </a>`;
     })
     .join("");

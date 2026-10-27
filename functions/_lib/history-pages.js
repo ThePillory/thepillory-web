@@ -18,6 +18,7 @@ import {
 } from "./history.js";
 import { holdersInYear } from "../../workers/sync/src/history/parse.js";
 import { statePath } from "./state-paths.js";
+import { positionRow, voteHref } from "./votes.js";
 
 const block = (id, label, inner, hint = "") =>
   `<section class="stack-sm section-block" aria-labelledby="h-${id}"><h2 id="h-${id}">${esc(label)}</h2>${inner}${hint ? `<p class="hint">${hint}</p>` : ""}</section>`;
@@ -247,7 +248,7 @@ export async function officialPastYear(env, request, url, o, year) {
       votesHtml = votes === FAILED ? sectionError("Votes") : block(
         "votes",
         `Votes in ${year}`,
-        `${filter}${votes.rows.length ? `<ul class="plain-list vote-list card">${votes.rows.map((v) => `<li class="brief-vote"><div class="brief-vote-main"><span class="brief-vote-name">${esc(v.bill_number || v.subject || v.question)}</span><a class="brief-vote-meta xsmall" href="${v.bill_id ? `/laws/bills/${esc(v.bill_id)}/#votes` : esc(v.source_url)}">${esc(v.question)} · ${esc(v.result)} · ${fmtDate(v.vote_date)}</a></div><span class="brief-vote-position" title="Recorded as: ${esc(v.raw_position)}">${esc(v.position)}</span></li>`).join("")}</ul>` : `<p class="small secondary">No ${all ? "" : "final-passage "}votes loaded for ${year} yet. Past roll calls load a little each day, newest first.</p>`}`,
+        `${filter}${votes.rows.length ? `<ul class="plain-list vote-list card">${votes.rows.map((v) => positionRow({ href: voteHref(v, "#votes"), title: esc(v.bill_number || v.subject || v.question), details: `${esc(v.question)} · ${esc(v.result)} · ${fmtDate(v.vote_date)}`, position: v.position, raw: v.raw_position })).join("")}</ul>` : `<p class="small secondary">No ${all ? "" : "final-passage "}votes loaded for ${year} yet. Past roll calls load a little each day, newest first.</p>`}`,
         counts && counts !== FAILED && counts.total ? `${counts.total} recorded vote${counts.total === 1 ? "" : "s"} loaded for ${year}, ${counts.final || 0} on final passage${votes.more ? "; the latest are shown" : ""}. Positions as the official record lists them.` : ""
       );
     }

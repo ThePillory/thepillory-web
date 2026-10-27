@@ -87,14 +87,14 @@ test("the header: office, name, and one line each for votes and money; no repeat
 test("Votes: the latest ten, then See all on its own paged page", async () => {
   const { html } = await get("/reps/example-member/");
   const votes = panel(html, "votes");
-  assert.equal((votes.match(/class="vote-row/g) || []).length, 10);
+  assert.equal((votes.match(/class="list-status row-position/g) || []).length, 10);
   assert.match(votes, new RegExp(`href="/reps/example-member/votes/\\?votes=all">[\\s\\S]*?See all ${VOTES} votes`));
   const all = await get("/reps/example-member/votes/?votes=all");
-  assert.equal((all.html.match(/class="vote-row/g) || []).length, 25);
+  assert.equal((all.html.match(/class="list-status row-position/g) || []).length, 25);
   assert.match(all.html, /href="\/reps\/example-member\/votes\/\?votes=all&page=2">Older/);
   assert.match(all.html, /← Example Member/);
   const two = await get("/reps/example-member/votes/?votes=all&page=2");
-  assert.equal((two.html.match(/class="vote-row/g) || []).length, VOTES - 25);
+  assert.equal((two.html.match(/class="list-status row-position/g) || []).length, VOTES - 25);
   const old = await get("/reps/example-member/?votes=all&page=2");
   assert.equal(old.res.status, 301, "the old paging moves to the votes page");
   assert.equal(old.res.headers.get("Location"), "https://thepillory.test/reps/example-member/votes/?votes=all&page=2");

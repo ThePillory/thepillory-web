@@ -22,10 +22,10 @@ const f = {
 test("Form 700 lines: as filed, with the value box, the date and the statement; unread statements as links", () => {
   const html = form700Lines(f);
   assert.match(html, /Bought and sold \(Schedule A-1\)/);
-  assert.match(html, /<span class="cr-type">Disposed<\/span>/);
+  assert.match(html, /<span class="cr-side">Disposed</);
   assert.match(html, /Example Devices, Inc\./);
   assert.match(html, /Value \$2,000 - \$10,000 · Oct 21, 2025 · Technology - Retirement Account - Spouse · 2025 statement/);
-  assert.match(html, /<span class="cr-type">Acquired<\/span>[\s\S]*Other: LLC/);
+  assert.match(html, /Other: LLC[^<]*<\/span><\/span>\s*<span class="cr-side">Acquired</);
   assert.match(html, /2 of 40 investments acquired or disposed of/);
   assert.match(html, /2024 statement ↗<\/a>: not read in full/);
   assert.match(html, /not the size of a purchase or sale/);

@@ -118,11 +118,10 @@ export function fold(id, title, inner, { meta = "", open = false, cls = "" } = {
  */
 export function compactRow({ href, type, title, status = "", clause = null, meta = "" }) {
   return `<a class="compact-row" href="${esc(href)}">
-  <span class="cr-type">${esc(type)}</span>
-  <span class="cr-main"><span class="cr-title">${esc(title)}</span><span class="cr-meta">${[status ? esc(status) : "", meta ? esc(meta) : ""].filter(Boolean).join(" · ")}</span>${
+  <span class="cr-main"><span class="cr-title">${esc(title)}</span><span class="cr-meta">${[esc(type), meta ? esc(meta) : ""].filter(Boolean).join(" · ")}</span>${
     clause ? `<span class="cr-clause">${esc(shortLabel(clause.label))}</span>` : ""
   }</span>
-  <span class="chev" aria-hidden="true">›</span>
+  <span class="cr-side">${status ? esc(status) : ""}<span class="chev" aria-hidden="true">›</span></span>
 </a>`;
 }
 
