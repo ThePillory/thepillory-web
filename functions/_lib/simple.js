@@ -179,3 +179,22 @@ export function moneyLinePlain(t, period) {
   const share = (t[key] || 0) / t.receipts;
   return `Raised ${dollars(t.receipts)} in ${period}, ${share >= 0.5 ? "mostly" : "the largest share"} from ${name}.`;
 }
+
+/** Recorded positions in plain words, one per line: "[Name] voted Yes on H.R. 1 (title). It passed." `rows`: recentFinalVotes() rows. */
+export function positionLinesPlain(rows, max = 3) {
+  const lines = [];
+  for (const v of rows || []) {
+    for (const p of v.positions || []) {
+      if (lines.length >= max) break;
+      const said = voteLinePlain({ ...v, position: p.position });
+      lines.push(`<li><a class="inline-link" href="/reps/${esc(p.slug)}/#votes">${esc(p.name)}</a> ${said.charAt(0).toLowerCase()}${said.slice(1)}</li>`);
+    }
+  }
+  return lines.length ? `<ul class="simple-list">${lines.join("")}</ul>` : "";
+}
+
+/** Officials in one short list: "[Name], [office], [district]", each linked to their page. */
+export function repListPlain(officials) {
+  const items = (officials || []).filter(Boolean).map((o) => `<li><a class="inline-link" href="/reps/${esc(o.slug)}/">${esc(o.name)}</a>, ${esc([o.office, o.district].filter(Boolean).join(", "))}</li>`);
+  return items.length ? `<ul class="simple-list">${items.join("")}</ul>` : "";
+}

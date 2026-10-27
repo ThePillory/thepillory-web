@@ -13,7 +13,8 @@ import { EMPTY_REPORTS } from "./generated.js";
 import { page, esc, fmtDate, loadSection, FAILED, anyFailed, sectionError } from "./render.js";
 import { recentFinalVotes, officialsWhere, homeDistricts } from "./data.js";
 import { positionRow, voteHref } from "./votes.js";
-import { listMeetings, summariesFor, meetingCard, pacificNow, addDays, when } from "./meetings.js";
+import { listMeetings, summariesFor, meetingCard, meetingLinePlain, pacificNow, addDays, when } from "./meetings.js";
+import { simpleCard, positionLinesPlain, repListPlain } from "./simple.js";
 import { repsWhere, describe, isCalaveras } from "./districts.js";
 import { happeningNow, happeningSection, lookupForm } from "./hub.js";
 
@@ -44,7 +45,7 @@ export function voteRows(votes, max) {
 
 function briefHead(title, sub, { hubLink = true, now } = {}) {
   return `
-<header class="brief-head">
+<header class="brief-head simple-keep">
   <div class="stack-xs">
     <h1 class="brief-title">${esc(title)}</h1>
     <p class="small secondary">${sub}</p>
@@ -110,13 +111,24 @@ export async function calaverasBriefing(env, url, visitor = null) {
         level === "county" ? "Supervisors' votes will come from meeting minutes. That's coming next." : db ? "No final-passage votes loaded yet." : "Votes appear here once the data sync has run."
       }</p>`;
 
-  const main = `
+  // Quick: this week's meetings and the reps' latest votes, in plain words.
+  const simple = simpleCard({
+    lines: [
+      ["This week", meetingsLoaded !== FAILED && week.length ? `<ul class="simple-list">${week.map(meetingLinePlain).join("")}</ul>` : ""],
+      ["Your reps' latest votes", votes === FAILED ? "" : positionLinesPlain(votes.rows, 3)],
+    ],
+    jump: "h-week",
+    source: "From the county's meeting calendar and the officials' recorded votes, as shown on this page.",
+  });
+  // No Quick card (nothing loaded yet): no Quick version, and no switch.
+  const main = `<div class="${simple ? "simple-scope" : "page-scope"}">
 ${briefHead("Calaveras County", "Live · the county's meetings and the votes of the officials who represent it", { hubLink: base === "/briefing/", now: when(now).long || "" })}
 <aside class="intro-banner" data-intro hidden aria-label="Welcome">
   <p><strong>New here?</strong> ThePillory keeps a public, sourced record of what the officials who represent Calaveras County do: their votes, the bills they vote on mapped to the Constitution, and what's on county meeting agendas.</p>
   <p><a class="inline-link" href="/about/how-it-works/">How it works</a></p>
   <button class="intro-dismiss" type="button" data-intro-dismiss aria-label="Dismiss this introduction">×</button>
 </aside>
+${simple}
 ${filterNav()}
 
 <section class="brief-section" aria-labelledby="h-week">
@@ -133,7 +145,8 @@ ${filterNav()}
   ${sectionHead("h-votes", "Your reps' latest votes", withLevel("/votes/", level === "county" ? null : level), "See all votes")}
   ${votesHtml}
 </section>
-${caughtUp}`;
+${caughtUp}
+</div>`;
   return page("Calaveras County briefing", main, { tab: "home", back: ["Home", "/"], personal: true, partial: anyFailed(meetingsLoaded, votes) });
 }
 
@@ -168,8 +181,19 @@ export async function personalBriefing(env, url, d) {
     ? "State and federal coverage for your districts. County coverage comes as communities launch."
     : `Your members of Congress and state legislators, with Congress's votes. ${STATE_NAME[d.st] || "Your state"}'s bills and votes are coming soon, loaded state by state. County coverage comes as communities launch.`;
   const rows = votes === FAILED ? "" : voteRows(votes.rows, 5);
-  const main = `
+  // Quick: their representatives and those reps' latest votes, in plain words.
+  const simple = simpleCard({
+    lines: [
+      ["Your representatives", repsLoaded === FAILED ? "" : repListPlain(reps)],
+      ["Their latest votes", votes === FAILED ? "" : positionLinesPlain(votes.rows, 3)],
+    ],
+    jump: "h-reps",
+    source: "From the officials' records and recorded votes, as shown on this page.",
+  });
+  // No Quick card (nothing loaded yet): no Quick version, and no switch.
+  const main = `<div class="${simple ? "simple-scope" : "page-scope"}">
 ${briefHead("Your briefing", esc(describe(d)))}
+${simple}
 <p class="panel-navy small">${esc(coverage)} <a class="inline-link" href="/waitlist/">Bring ThePillory to your county</a></p>
 
 <section class="brief-section" aria-labelledby="h-reps">
@@ -183,6 +207,7 @@ ${briefHead("Your briefing", esc(describe(d)))}
 </section>
 
 ${now === FAILED ? sectionError("Happening now") : happeningSection(now, which, { hrefFor: (v) => (v === "federal" ? "/briefing/" : `/briefing/?now=${v}`), personal: true, loaded: !!db, state: stateOption })}
-${caughtUp}`;
+${caughtUp}
+</div>`;
   return page("Your briefing", main, { tab: "home", back: ["Home", "/"], personal: true, partial: anyFailed(repsLoaded, votes, now) });
 }

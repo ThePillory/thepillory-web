@@ -1980,25 +1980,28 @@ article.fin-term { scroll-margin-top: var(--space-4); }
 .tabs--four [role="tab"] { min-width: 0; min-height: var(--tap); padding: 0 var(--space-1); font-size: var(--fs-small); text-align: center; white-space: nowrap; }
 .tabs--four [role="tab"]:focus-visible { outline: 2px solid var(--navy); outline-offset: -2px; }
 
-/* Quick / Detailed: a switch under the header, remembered in this browser only
-   (assets/app.js). Pages carry both: .simple-only shows in Quick mode, and
-   inside a page with a Quick card (.simple-scope) the long sections hide. */
+/* Quick / Detailed: a switch under the header, only on pages that have a Quick
+   version (<body data-quick>), remembered in this browser only (assets/app.js).
+   Every Quick-mode rule is scoped to [data-quick], so a page without a Quick
+   version looks the same in both modes. On a Quick page: .simple-only shows in
+   Quick mode, and inside .simple-scope the long sections hide. */
 .mode-switch { margin: var(--space-3) 0 0; max-width: 240px; }
 .mode-switch .toggle[aria-pressed="true"] { background: var(--card); color: var(--text); box-shadow: var(--shadow-sm); }
 @media (prefers-color-scheme: dark) { .mode-switch .toggle[aria-pressed="true"] { background: var(--panel-2); } }
 .simple-only { display: none; }
-html[data-mode="simple"] .simple-only { display: block; }
-html[data-mode="simple"] .simple-card { display: flex; }
+html[data-mode="simple"] [data-quick] .simple-only { display: block; }
+html[data-mode="simple"] [data-quick] .simple-card { display: flex; }
 /* A page with a Quick card wraps its sections in .simple-scope: in Quick mode
    only the title and chips (.summary-head, .rep-head, .page-head), the card and
    anything marked .simple-keep show; everything else is one tap away. */
-.simple-scope { display: flex; flex-direction: column; gap: var(--space-5); }
-html[data-mode="simple"] .detail-only,
-html[data-mode="simple"] .simple-scope > :not(.summary-head):not(.rep-head):not(.page-head):not(.simple-card):not(.simple-keep):not(.banner),
-html[data-mode="simple"] .simple-scope .summary-text,
-html[data-mode="simple"] .simple-scope .summary-source,
-html[data-mode="simple"] .simple-scope .page-head .subtitle,
-html[data-mode="simple"] .simple-scope .page-head .hint { display: none; }
+/* .page-scope: the same page with no Quick card (nothing loaded yet), so it lays out the same */
+.simple-scope, .page-scope { display: flex; flex-direction: column; gap: var(--space-5); }
+html[data-mode="simple"] [data-quick] .detail-only,
+html[data-mode="simple"] [data-quick] .simple-scope > :not(.summary-head):not(.rep-head):not(.page-head):not(.simple-card):not(.simple-keep):not(.banner),
+html[data-mode="simple"] [data-quick] .simple-scope .summary-text,
+html[data-mode="simple"] [data-quick] .simple-scope .summary-source,
+html[data-mode="simple"] [data-quick] .simple-scope .page-head .subtitle,
+html[data-mode="simple"] [data-quick] .simple-scope .page-head .hint { display: none; }
 .card.simple-card { gap: var(--space-4); }
 .simple-line { margin: 0; }
 .simple-line .label { display: block; margin-bottom: var(--space-1); }
@@ -2008,8 +2011,8 @@ html[data-mode="simple"] .simple-scope .page-head .hint { display: none; }
 .simple-card .btn { align-self: flex-start; min-height: var(--tap); }
 /* The Quick home page (functions/_lib/quick-home.js): the headline on one line,
    then This week, Who represents you, the ballot card, the lookup, three links. */
-html[data-mode="simple"] .hub-head .hub-sub,
-html[data-mode="simple"] .hub-head .hub-title-soft { display: none; }
+html[data-mode="simple"] [data-quick] .hub-head .hub-sub,
+html[data-mode="simple"] [data-quick] .hub-head .hub-title-soft { display: none; }
 .quick-week { gap: var(--space-3); }
 .quick-week li { display: flex; flex-direction: column; gap: var(--space-1); }
 .quick-item { color: var(--text); text-decoration: underline; text-decoration-color: var(--text-3); text-underline-offset: 3px; }
@@ -2017,8 +2020,8 @@ html[data-mode="simple"] .hub-head .hub-title-soft { display: none; }
 .quick-links { padding-top: var(--space-1); padding-bottom: var(--space-1); }
 /* Plain names on Constitution chips in Quick mode (assets/app.js, data/glossary.json). */
 .chip .plain-name { display: none; }
-html[data-mode="simple"] .chip .plain-name { display: inline; }
-html[data-mode="simple"] .chip.has-plain .formal-name { display: none; }
+html[data-mode="simple"] [data-quick] .chip .plain-name { display: inline; }
+html[data-mode="simple"] [data-quick] .chip.has-plain .formal-name { display: none; }
 /* Glossary: a dotted underline; tap for a one-sentence definition. */
 .term { display: inline; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-decoration: underline dotted; text-underline-offset: 3px; cursor: help; min-height: 0; }
 .term-def { display: block; margin: var(--space-2) 0; padding: var(--space-3) var(--space-3); border-radius: var(--radius-sm); background: var(--fill); color: var(--text); font-size: var(--fs-body); line-height: 1.4; }
