@@ -1,6 +1,6 @@
 # Reporting pilot: Calaveras County (plan)
 
-**Status: plan only. Nothing here is built yet.** The seven open questions were answered on October 27, 2026; see "Decisions" at the end. One thing is still open: your check of the public bodies list.
+**Status: plan only. Nothing here is built yet.** Every open question was answered on October 27, 2026; see "Decisions" at the end.
 
 ## The pilot in one line
 
@@ -62,7 +62,7 @@ Each report keeps every version (the reporter's edits after "request changes" ar
 
 ### Public bodies
 
-A hand-written list, `data/reporting/calaveras-bodies.json`, each entry with a slug, the name, the county's own page for it (the source link) and, where it holds public meetings, the matching meeting body so issues can link to agenda items. A first draft for you to correct:
+A hand-written list, `data/reporting/calaveras-bodies.json`, each entry with a slug, the name, the county's own page for it (the source link) and, where it holds public meetings, the matching meeting body so issues can link to agenda items. The list for the pilot (approved October 27, 2026; it can change before or during the pilot):
 
 - Board of Supervisors (and each supervisor, by district: public role)
 - Planning Commission
@@ -75,7 +75,7 @@ A hand-written list, `data/reporting/calaveras-bodies.json`, each entry with a s
 
 **Out of scope for the pilot** (decided): the Sheriff's Office and Elections (the County Clerk-Recorder's elections work), to revisit after the pilot; state agencies that work in the county (CAL FIRE, Caltrans); and special districts (fire districts, water districts, schools). Their boards and records aren't loaded yet, and keeping the pilot to the rest of county government keeps review manageable.
 
-**Still open:** you check this list against how Calaveras actually organizes its departments (names, which ones residents deal with, the county page for each) before step 2 writes the file.
+Step 2 adds the county's own page for each entry as its source link.
 
 ### Evidence
 
@@ -222,7 +222,7 @@ One migration, `0044_reporting_pilot.sql`. All tables are prefixed `pilot_`, so 
 ## Build order (small steps, each its own PR)
 
 1. **Rules and privacy drafts** (`docs/reporting-rules-draft.md`, `docs/reporting-privacy-draft.md`) for the lawyer. No code.
-2. **Migration 0044** and the `REPORTS_PILOT` and `PILOT_REVIEWERS` settings (off, and your email). Tables only, nothing reads them yet. The bodies list (`data/reporting/calaveras-bodies.json`), from your corrected list.
+2. **Migration 0044** and the `REPORTS_PILOT` and `PILOT_REVIEWERS` settings (off, and your email). Tables only, nothing reads them yet. The bodies list (`data/reporting/calaveras-bodies.json`), as approved.
 3. **Accounts**: `/admin/accounts/` (invite, sign-in link, verify, suspend; the 20-member cap while only one reviewer is listed), `/join/<token>`, sessions, sign out, the middleware cache bypass, tests (including "a signed-in page is never cached").
 4. **The report, text only**: the form (with the publish date), My reports, the review queue (approve / request changes / decline, recusal for two reviewers), review history. Still off for everyone but test accounts.
 5. **Evidence**: links; photos (browser re-save plus server stripping and the location check, with test images); PDFs (metadata blanking); the private R2 bucket and the file Function.
@@ -244,7 +244,7 @@ Answered on October 27, 2026:
 
 1. **Two reviewers**: built for two from the start (recusal, the queue, Access). You add the second when you find them; **required before the pilot goes past 20 members**, enforced on `/admin/accounts/`.
 2. **Email**: kept for the whole pilot, so a lost device can get a new sign-in link. Deleted with the account.
-3. **Public bodies**: the Sheriff's Office and Elections are left out of the pilot (revisit after). CAL FIRE, Caltrans and special districts stay out. **Still open:** your corrections to the rest of the list, before step 2.
+3. **Public bodies**: the Sheriff's Office and Elections are left out of the pilot (revisit after). CAL FIRE, Caltrans and special districts stay out. The rest of the list is approved as drafted for now.
 4. **Corroboration**: only verified pilot members can tap "I've seen this too" and "This affects me". Visitors see the counts.
 5. **Deletion**: a checkbox, "Also remove my published reports", checked by default. Issues keep their remaining reports.
 6. **Publish date**: a reporter can choose a publish date up to 14 days after approval (`publish_wanted`, `publish_on`).
