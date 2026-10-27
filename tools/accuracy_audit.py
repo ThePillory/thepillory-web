@@ -16,6 +16,10 @@ D1 and the sources; it changes nothing.
      against their source pages, as stored and as live today).
   5. Freshness: the newest vote and bill per state, and Congress against
      senate.gov and the House Clerk.
+  6. Coverage: stock trade, net worth and disclosure reports by status (read
+     and public, waiting for a person, held, waiting to be read, link only),
+     the President's reports one by one, and what people decided on the
+     reports already reviewed.
 
   python3 tools/accuracy_audit.py > audit.md   (or Actions -> Accuracy audit)
 """
@@ -487,17 +491,170 @@ def freshness(args):
     say()
 
 
+TRADE_STATUS = """CASE
+  WHEN s.status = 'approved' THEN 'read (scan, checked by a person)'
+  WHEN s.status = 'agreed' THEN 'waiting for a person'
+  WHEN s.status = 'disagree' THEN 'held (readings disagree or failed)'
+  WHEN s.status = 'pending' THEN 'waiting to be read'
+  WHEN s.status = 'rejected' THEN 'taken down by a person'
+  WHEN r.parsed = 1 THEN 'read and public'
+  WHEN r.paper = 1 THEN 'link only: paper'
+  WHEN r.report_url IS NULL AND r.request_url IS NOT NULL THEN 'link only: on request'
+  ELSE 'link only: not read' END"""
+
+NW_STATUS = """CASE
+  WHEN s.status = 'approved' THEN 'read (scan, checked by a person)'
+  WHEN s.status = 'agreed' THEN 'waiting for a person'
+  WHEN s.status = 'disagree' THEN 'held (readings disagree)'
+  WHEN s.status = 'rejected' THEN 'taken down by a person'
+  WHEN n.status = 'read' THEN 'read and public'
+  WHEN n.status = 'scan' THEN 'waiting to be read (scan)'
+  ELSE 'link only: ' || n.status END"""
+
+PRESIDENT = "SELECT id FROM officials WHERE office LIKE 'President of the United States%' AND active = 1"
+
+
+def table(rows, cols, heads):
+    say("| " + " | ".join(heads) + " |")
+    say("|" + "---|" * len(heads))
+    for r in rows:
+        say("| " + " | ".join(str(r.get(c) if r.get(c) is not None else "—") for c in cols) + " |")
+    say()
+
+
+def pivot(rows, key):
+    """rows of {key, status, n} -> one row per key, a column per status."""
+    statuses = sorted({r["status"] for r in rows})
+    out = {}
+    for r in rows:
+        out.setdefault(r[key], {key: r[key], "total": 0})
+        out[r[key]][r["status"]] = r["n"]
+        out[r[key]]["total"] += r["n"]
+    return list(out.values()), statuses
+
+
+def coverage(args):
+    say("## 6. Coverage: trades, net worth, disclosures")
+    say()
+    say("### Stock trade reports (278-T, House and Senate PTRs)")
+    say()
+    rows = q(args, f"""SELECT r.chamber AS who, {TRADE_STATUS} AS status, COUNT(*) AS n
+      FROM trade_reports r LEFT JOIN trade_scans s ON s.report_id = r.id
+      WHERE r.official_id IS NOT NULL GROUP BY 1, 2""")
+    piv, st = pivot(rows, "who")
+    table(piv, ["who", "total"] + st, ["Chamber", "Reports"] + st)
+    unmatched = q(args, "SELECT chamber, COUNT(*) AS n FROM trade_reports WHERE official_id IS NULL GROUP BY chamber")
+    say("Reports not tied to any official (no single name match): " + (", ".join(f"{r['chamber']} {r['n']:,}" for r in unmatched) or "none") + ".")
+    say()
+    say("Supreme Court justices: from `data/scotus/trades.json`, not D1.")
+    try:
+        sc = json.loads((ROOT / "data" / "scotus" / "trades.json").read_text())
+        reps = [r for j in sc["justices"].values() for r in j.get("reports", [])]
+        by = {}
+        for r in reps:
+            by[r.get("status")] = by.get(r.get("status"), 0) + 1
+        say(f"{len(reps)} annual reports since 2023: " + ", ".join(f"{k} {v}" for k, v in sorted(by.items())) + f" (built {sc.get('built_on')}).")
+    except Exception as e:  # noqa: BLE001
+        say(f"> Couldn't read it: {e}")
+    say()
+
+    say("### Net worth (annual financial disclosure reports)")
+    say()
+    rows = q(args, f"""SELECT n.source AS who, {NW_STATUS} AS status, COUNT(*) AS n
+      FROM networth_reports n LEFT JOIN networth_scans s ON s.report_id = n.id GROUP BY 1, 2""")
+    piv, st = pivot(rows, "who")
+    table(piv, ["who", "total"] + st, ["Source", "Reports"] + st)
+    reasons = q(args, "SELECT source, status, COALESCE(reason, '') AS reason, COUNT(*) AS n FROM networth_reports WHERE status <> 'read' GROUP BY 1, 2, 3 ORDER BY n DESC LIMIT 15")
+    say("Why reports aren't read (top 15 reasons):")
+    say()
+    table(reasons, ["source", "status", "reason", "n"], ["Source", "Status", "Reason", "Reports"])
+    people = q(args, """SELECT COUNT(DISTINCT official_id) AS any_report,
+      COUNT(DISTINCT CASE WHEN status = 'read' THEN official_id END) AS any_read FROM networth_reports""")
+    if people:
+        say(f"People with at least one report: {people[0]['any_report']:,}; with at least one read: {people[0]['any_read']:,}.")
+        say()
+
+    say("### Disclosures listed (OGE for the executive branch, FPPC Form 700 for California)")
+    say()
+    rows = q(args, """SELECT d.source || ' ' || d.kind AS who,
+      CASE WHEN f.status = 'read' THEN 'contents read (Form 700 Schedule A-1)'
+           WHEN f.status = 'link' THEN 'link only: ' || COALESCE(f.reason, 'not read')
+           WHEN d.document_url IS NOT NULL THEN 'link only: document'
+           WHEN d.request_url IS NOT NULL THEN 'link only: on request'
+           ELSE 'listed, no link' END AS status, COUNT(*) AS n
+      FROM disclosures d LEFT JOIN form700_reads f ON f.disclosure_id = d.id GROUP BY 1, 2""")
+    piv, st = pivot(rows, "who")
+    table(piv, ["who", "total"] + st, ["Source", "Listed"] + st)
+    say("House and Senate annual reports aren't in `disclosures`; they're the net worth reports above.")
+    say()
+
+    say("### The President's reports")
+    say()
+    say("Stock trade reports (278-T):")
+    say()
+    rows = q(args, f"""SELECT r.id, r.filed_on, {TRADE_STATUS} AS status, r.trade_count, s.rows_total, s.tries,
+        COALESCE(s.error, '') AS error, s.read_at, s.reviewed_by
+      FROM trade_reports r LEFT JOIN trade_scans s ON s.report_id = r.id
+      WHERE r.official_id IN ({PRESIDENT}) ORDER BY r.filed_on DESC""")
+    table(rows, ["id", "filed_on", "status", "trade_count", "rows_total", "tries", "read_at", "reviewed_by", "error"],
+          ["Report", "Filed", "Status", "Trades public", "Rows read", "Tries", "Read", "Checked by", "Last error"])
+    say("Annual reports (278e):")
+    say()
+    rows = q(args, f"""SELECT n.id, n.year, n.kind, {NW_STATUS} AS status, COALESCE(n.reason, '') AS reason,
+        s.lines_total, s.cost_cents, s.read_at, s.reviewed_by
+      FROM networth_reports n LEFT JOIN networth_scans s ON s.report_id = n.id
+      WHERE n.official_id IN ({PRESIDENT}) ORDER BY n.year DESC""")
+    table(rows, ["id", "year", "kind", "status", "reason", "lines_total", "cost_cents", "read_at", "reviewed_by"],
+          ["Report", "Year", "Kind", "Status", "Reason", "Lines", "Cost (¢)", "Read", "Checked by"])
+    open_lines = q(args, f"SELECT report_id, COUNT(*) AS n FROM networth_scan_open WHERE report_id IN (SELECT id FROM networth_reports WHERE official_id IN ({PRESIDENT})) GROUP BY 1")
+    if open_lines:
+        say("Lines still read differently: " + ", ".join(f"{r['report_id']} {r['n']}" for r in open_lines) + ".")
+        say()
+
+    say("### Waiting for a person")
+    say()
+    rows = q(args, """SELECT 'trades' AS queue, COUNT(*) AS n, MIN(read_at) AS oldest FROM trade_scans WHERE status = 'agreed'
+      UNION ALL SELECT 'trades: held', COUNT(*), MIN(read_at) FROM trade_scans WHERE status = 'disagree'
+      UNION ALL SELECT 'net worth', COUNT(*), MIN(read_at) FROM networth_scans WHERE status = 'agreed'
+      UNION ALL SELECT 'net worth: held', COUNT(*), MIN(read_at) FROM networth_scans WHERE status = 'disagree'""")
+    table(rows, ["queue", "n", "oldest"], ["Queue", "Waiting", "Oldest"])
+
+    say("### What people decided on reviewed scans (for an error rate)")
+    say()
+    rows = q(args, """SELECT 'trades' AS kind, status, COUNT(*) AS n, COALESCE(SUM(rows_total), 0) AS rows FROM trade_scans WHERE status IN ('approved', 'rejected') GROUP BY status
+      UNION ALL SELECT 'net worth', status, COUNT(*), COALESCE(SUM(lines_total), 0) FROM networth_scans WHERE status IN ('approved', 'rejected') GROUP BY status""")
+    table(rows, ["kind", "status", "n", "rows"], ["Kind", "Decision", "Reports", "Rows or lines"])
+    rows = q(args, """SELECT 'trades' AS kind, report_id, reject_reason FROM trade_scans WHERE status = 'rejected'
+      UNION ALL SELECT 'net worth', report_id, reject_reason FROM networth_scans WHERE status = 'rejected'""")
+    if rows:
+        say("Reasons given for taking a scan down:")
+        say()
+        table(rows, ["kind", "report_id", "reject_reason"], ["Kind", "Report", "Reason"])
+    rows = q(args, "SELECT report_id, settled FROM networth_scans WHERE settled IS NOT NULL")
+    for r in rows:
+        try:
+            say(f"{r['report_id']}: a person settled {len(json.loads(r['settled']))} line(s) the two readings disagreed on.")
+        except ValueError:
+            pass
+    say()
+    rows = q(args, """SELECT review, COUNT(*) AS n FROM promises GROUP BY review""")
+    say("Promises by review state (the auto-publish model's track record): " + ", ".join(f"{r['review']} {r['n']:,}" for r in rows) + ".")
+    rows = q(args, "SELECT status, COUNT(*) AS n FROM promise_flags GROUP BY status")
+    say("Reader flags on promises: " + (", ".join(f"{r['status']} {r['n']:,}" for r in rows) or "none") + ".")
+    say()
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--database", default="pillory")
-    ap.add_argument("--only", default="1,2,3,4,5")
+    ap.add_argument("--only", default="1,2,3,4,5,6")
     args = ap.parse_args()
     only = set(args.only.split(","))
     say("# Accuracy audit")
     say()
     say(f"Run {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}. Reads D1 and the sources; changes nothing.")
     say()
-    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness)):
+    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage)):
         if k in only:
             try:
                 fn(args)
