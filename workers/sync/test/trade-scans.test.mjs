@@ -11,7 +11,7 @@ import assert from "node:assert/strict";
 import { DatabaseSync } from "node:sqlite";
 import { readFileSync, readdirSync } from "node:fs";
 import { checkReadings, blocking, contained, textLayerType, rowsLine } from "../src/trades/scan-check.js";
-import { syncScannedTrades, mergeChunks, accountError, textBacks, rowRanges, pdfSource, toBase64 } from "../src/trades/scan-sync.js";
+import { syncScannedTrades, recheckUnpublished, mergeChunks, accountError, textBacks, rowRanges, pdfSource, toBase64 } from "../src/trades/scan-sync.js";
 import { ensureSchema } from "../src/db.js";
 import { scanChange, scanItem, scanList } from "../../../functions/_lib/trade-scan-review.js";
 import { memberTrades, memberReports, tradeRow, tradesSection } from "../../../functions/_lib/trades.js";
@@ -428,4 +428,22 @@ test("the step sends the PDF itself when it can download it, and the link when i
   assert.equal(await pdfSource({ report_id: "oge:d", report_url: "https://example.org/d.pdf" }, null), "https://example.org/d.pdf");
   const big = new Uint8Array(100000).fill(65);
   assert.equal(atob(toBase64(big)).length, 100000);
+});
+
+test("a report agreed under the earlier rule but never confirmed is checked again under this one", async () => {
+  const sqlite = seeded();
+  cleanLines(sqlite, ["oge:a"]);
+  sqlite.exec(`DELETE FROM trade_scans WHERE report_id = 'oge:b'`);
+  // As the earlier rule left it: agreed, waiting for a person, nothing public; the first model's reading kept.
+  sqlite.exec(`UPDATE trade_scans SET status = 'agreed', reading = '[]', problems = '[]', tries = 1 WHERE report_id = 'oge:a'`);
+  sqlite.prepare("INSERT INTO trade_scan_chunks (report_id, model, first_n, last_n, reading) VALUES ('oge:a', 'claude-sonnet-5-5', 1, 80, ?)").run(JSON.stringify(copy(ROWS)));
+  const db = d1(sqlite);
+  const asked = [];
+  const call = async (env, args) => (asked.push(args.model), ranged(() => copy(ROWS).rows)(env, args));
+  const r = await syncScannedTrades({ SCANNED_TRADES_DAILY: "5" }, db, null, { call, random: () => 0.5 });
+  assert.match(r.message, /1 report\(s\) read under the earlier rule queued to be checked again, 1 scanned report\(s\) published/);
+  assert.deepEqual(asked, ["claude-opus-5-5"], "the first model's saved reading is reused");
+  assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM trades WHERE report_id = 'oge:a'").get().n, 2);
+  // A published or confirmed one is left alone.
+  assert.equal(await recheckUnpublished(db), 0);
 });

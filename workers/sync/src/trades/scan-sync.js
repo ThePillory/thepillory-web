@@ -228,10 +228,33 @@ export async function transcribe(env, db, report, lines, { call = structuredCall
   return { status, rows: status === "agreed" ? rows : [], agreedRows: rows, unread, total, problems, models };
 }
 
+/**
+ * Reports read and agreed under the earlier rule (a person confirmed each one
+ * first) that nobody confirmed are checked again under this one: back to
+ * 'pending', keeping their chunks, so only the readings the new rule needs
+ * are made. Returns how many.
+ */
+export async function recheckUnpublished(db) {
+  try {
+    const r = await db
+      .prepare(
+        `UPDATE trade_scans SET status = 'pending', reading = NULL, problems = NULL, unread = NULL, rows_total = NULL, spot_check = 0, error = NULL, tries = 0
+         WHERE status = 'agreed' AND report_id IN (SELECT id FROM trade_reports WHERE transcribed_at IS NULL)`
+      )
+      .run();
+    return (r && r.meta && r.meta.changes) ?? (r && r.changes) ?? 0;
+  } catch (err) {
+    if (missing(err)) return 0;
+    throw err;
+  }
+}
+
 const spotRate = (env) => Math.min(1, Math.max(0, parseFloat(env.SPOT_CHECK_RATE || "0.1") || 0));
 
 export async function syncScannedTrades(env, db, budget, { call, random = Math.random } = {}) {
-  if (!env.ANTHROPIC_API_KEY && !call) return { status: "skipped", message: "no ANTHROPIC_API_KEY" };
+  const rechecked = await recheckUnpublished(db);
+  const recheckNote = rechecked ? `${rechecked} report(s) read under the earlier rule queued to be checked again; ` : "";
+  if (!env.ANTHROPIC_API_KEY && !call) return { status: "skipped", message: `${recheckNote}no ANTHROPIC_API_KEY` };
   const limit = parseInt(env.SCANNED_TRADES_DAILY || "5", 10);
   const dayKey = `scanned_trades_${today()}`;
   let done = parseInt((await getState(db, dayKey)) || "0", 10);
@@ -261,6 +284,7 @@ export async function syncScannedTrades(env, db, budget, { call, random = Math.r
   const failed = [];
   const note = () =>
     [
+      recheckNote.replace(/; $/, ""),
       `${tally.agreed} scanned report(s) published (${rowsLine(tally.rows, tally.total).replace(/\.$/, "") || "no rows"})`,
       `${tally.disagree} didn't agree (kept as links)`,
       failed.length ? `${failed.length} failed: ${failed.join("; ")}` : "",
