@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       only:
-        description: "Sections to run, e.g. 1,2,3,4,5 (blank: all)"
+        description: "Sections to run, e.g. 1,2,3,4,5,6 (blank: all)"
         default: ""
 permissions:
   contents: read

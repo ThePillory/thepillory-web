@@ -18,6 +18,11 @@
 // this rule) is taken back to a link at the start of each run. The
 // President's reports go first, newest first, then the rest of the executive
 // branch.
+// The step downloads each report's PDF itself and sends the file, since
+// OGE's server often times out when the Claude API fetches the link; a PDF
+// that can't be downloaded (or is over MAX_PDF_BYTES) is sent as its link.
+// A round that runs out of time stops "partial", keeping its chunks, and the
+// next round resumes (rather than the step waiting for tomorrow).
 // SCANNED_TRADES_DAILY reports are finished a day; a report that fails to
 // read is tried again (SCAN_TRIES times), and failures don't count.
 import { getState, setState, today, redact, BudgetExhausted } from "../util.js";
@@ -30,6 +35,35 @@ const missing = (err) => /no such (table|column)/i.test(String(err && err.messag
 const MAX_ROWS = 1500; // no 278-T is near this long; a reading past it is a runaway
 const CALL_MS = 5 * 60 * 1000; // leave this much of the round for each chunk
 const SCAN_TRIES = 3;
+const MAX_PDF_BYTES = 24 * 1024 * 1024; // the Claude API takes requests up to 32 MB, and base64 adds a third
+
+/** Bytes -> base64, in slices so a large PDF doesn't overflow the call stack. Pure. */
+export function toBase64(bytes) {
+  let bin = "";
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(bin);
+}
+
+/**
+ * The report's document source, downloaded once per report and round: the
+ * PDF's bytes (base64) when the round's budget can fetch it, else its link.
+ */
+export async function pdfSource(report, budget) {
+  if (report.doc) return report.doc;
+  report.doc = report.report_url;
+  if (budget && typeof budget.fetch === "function") {
+    try {
+      const res = await budget.fetch(report.report_url, {}, `scanned report ${report.report_id}`);
+      const bytes = new Uint8Array(await res.arrayBuffer());
+      const pdf = bytes.length >= 5 && String.fromCharCode(...bytes.subarray(0, 5)) === "%PDF-";
+      if (pdf && bytes.length <= MAX_PDF_BYTES) report.doc = { type: "base64", media_type: "application/pdf", data: toBase64(bytes) };
+    } catch (err) {
+      if (err instanceof BudgetExhausted) throw err;
+      console.warn(`scanned report ${report.report_id}: download failed, sending the link (${redact(String(err.message || err)).slice(0, 200)})`);
+    }
+  }
+  return report.doc;
+}
 
 export const scanModels = (env) => [env.SCAN_MODEL_A || "claude-sonnet-5-5", env.SCAN_MODEL_B || "claude-opus-5-5"];
 const chunkRows = (env) => Math.max(10, parseInt(env.SCAN_CHUNK_ROWS || "80", 10) || 80);
@@ -72,10 +106,11 @@ export async function readReport(env, db, report, model, { call = structuredCall
     if (budget && budget.timeLeft() < CALL_MS) throw new BudgetExhausted(`run time limit reached before reading rows ${merged.next}+ of ${report.report_id}`);
     const first = merged.next;
     const last = first + size - 1;
+    const doc = await pdfSource(report, budget);
     const { data } = await call(env, {
       model,
       system: [SCAN_INSTRUCTIONS],
-      message: scanMessage(report.report_url, first, last),
+      message: scanMessage(doc, first, last),
       jsonSchema: scanSchema,
       maxTokens: 64000,
     });
@@ -130,7 +165,8 @@ export async function readRows(env, db, report, model, ranges, { call = structur
     let chunk = have.find((c) => c.first_n <= first && c.last_n >= last);
     if (!chunk) {
       if (budget && budget.timeLeft() < CALL_MS) throw new BudgetExhausted(`run time limit reached before the second reading of rows ${first}-${last} of ${report.report_id}`);
-      const { data } = await call(env, { model, system: [SCAN_INSTRUCTIONS], message: scanMessage(report.report_url, first, last), jsonSchema: scanSchema, maxTokens: 64000 });
+      const doc = await pdfSource(report, budget);
+      const { data } = await call(env, { model, system: [SCAN_INSTRUCTIONS], message: scanMessage(doc, first, last), jsonSchema: scanSchema, maxTokens: 64000 });
       chunk = { first_n: first, last_n: last, reading: { rows: Array.isArray(data && data.rows) ? data.rows : [] } };
       await db
         .prepare("INSERT OR REPLACE INTO trade_scan_chunks (report_id, model, first_n, last_n, reading) VALUES (?, ?, ?, ?, ?)")
@@ -246,7 +282,8 @@ export async function syncScannedTrades(env, db, budget, { call } = {}) {
     try {
       out = await transcribe(env, db, report, lines, { call, budget });
     } catch (err) {
-      if (err instanceof BudgetExhausted) throw err;
+      // Out of time (or requests): the chunks read so far are kept, and the next round resumes.
+      if (err instanceof BudgetExhausted) return { status: "partial", message: `${note()}; ${err.message}` };
       const msg = redact(String(err.message || err)).slice(0, 300);
       // The account can't read anything today (no credit, a bad key): stop, count nothing.
       if (accountError(err)) return { status: "error", message: `${note()}; stopped: ${msg}` };

@@ -172,7 +172,7 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId }) {
     summary.push({ step, ...result, requests: budget.used - before });
   }
   const temporary = summary.filter((s) => s.status === "partial" && /^temporary error/.test(s.message || ""));
-  const partialVotes = summary.filter((s) => (s.step.endsWith("-votes") || ["county-meetings", "bill-outcomes", "executive-orders", "nominations", "order-texts", "order-courts", "executive-funding", "dark-money", "federal-funding", "committee-bills", "lobbying-contributions", "federal-lobbying"].includes(s.step)) && s.status === "partial");
+  const partialVotes = summary.filter((s) => (s.step.endsWith("-votes") || ["county-meetings", "bill-outcomes", "executive-orders", "nominations", "order-texts", "order-courts", "executive-funding", "dark-money", "federal-funding", "committee-bills", "lobbying-contributions", "federal-lobbying", "scanned-trades"].includes(s.step)) && s.status === "partial");
   return {
     run_id: run.id,
     trigger,
