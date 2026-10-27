@@ -16,7 +16,7 @@ import { billHref } from "../_lib/votes.js";
 import { lobbyingFor, lobbyGiversFor, industryMoney, followTheMoney, cycleOf } from "../_lib/funding.js";
 import { caLobbyingFor, caFollowTheMoney } from "../_lib/ca-lobbying.js";
 import { outcomeFor, outcomeSection } from "../_lib/executive.js";
-import { currentAnalysis, parse, provisionsFor, baselineSection, isPublic, openFlagCount, analysisClauses, constitutionBrief } from "../_lib/analysis.js";
+import { currentAnalysis, parse, provisionsFor, baselineSection, isPublic, openFlagCount, analysisClauses, constitutionBrief, analysisChanges } from "../_lib/analysis.js";
 import { summaryHead, contentsBar, fold, clauseChips, statusChip, compactRow, shortLabel } from "../_lib/summary.js";
 import { billStatus, billSummary, yourRepsCard, billHistory, billFullText, billState, legislatureOf } from "../_lib/bill-page.js";
 import { STATE_NAME } from "../_lib/districts.js";
@@ -153,7 +153,7 @@ ${more}
 // The current analysis and what the page needs around it. Missing tables
 // (before the analysis step's first run) just mean there's no analysis yet.
 async function analysisFor(db, id) {
-  const none = { a: null, row: null, provisions: new Map(), flags: 0, relevance: null, pendingFull: false };
+  const none = { a: null, row: null, provisions: new Map(), flags: 0, relevance: null, pendingFull: false, changes: [] };
   try {
     const row = await currentAnalysis(db, id);
     const relevance = await db.prepare("SELECT * FROM bill_relevance WHERE bill_id = ?").bind(id).first();
@@ -161,7 +161,8 @@ async function analysisFor(db, id) {
       .prepare("SELECT id FROM analysis_requests WHERE bill_id = ? AND status = 'pending' AND depth = 'full'")
       .bind(id)
       .first();
-    if (!row) return { ...none, relevance, pendingFull: Boolean(pendingFull) };
+    const changes = await analysisChanges(db, id);
+    if (!row) return { ...none, relevance, pendingFull: Boolean(pendingFull), changes };
     const a = parse(row);
     return {
       a: isPublic(row) ? a : null,
@@ -170,6 +171,7 @@ async function analysisFor(db, id) {
       flags: isPublic(row) ? await openFlagCount(db, row.id) : 0,
       relevance,
       pendingFull: Boolean(pendingFull),
+      changes,
     };
   } catch (err) {
     if (/no such table|no such column/i.test(String(err && err.message))) return none;
@@ -180,7 +182,7 @@ async function analysisFor(db, id) {
 const skipped = (r) => r && r.verdict === "skip" && r.override !== "unskip";
 
 const MESSAGES = {
-  flag: "Thank you. Your report went to the review queue, and the analysis is marked \"Under review\" until a person checks it (this page can take a few minutes to update).",
+  flag: "Thank you. The analysis is marked \"Under review\" until it is checked again: an AI re-check reads it with your report, then fixes it, removes the problem passage, or takes it down, and any change is listed under \"Changes to this analysis\" (this page can take a few minutes to update).",
   full: "Thank you. A full analysis is requested; it's usually written within a day, then checked like every analysis.",
   turnstile: "The anti-spam check didn't go through. Please try again.",
   limit: "You've reached today's limit for this. Please try again tomorrow.",
@@ -264,7 +266,7 @@ async function bill(env, id, url, request, { analysisPage = false } = {}) {
   <h1>${esc(b.title)}</h1>
 </header>
 ${banners}
-${analysis.failed ? sectionError("Constitutional baseline") : baselineSection(analysis.a, analysis.provisions, { underReview: analysis.flags > 0, empty, after: readerForms(env, id, analysis) })}`;
+${analysis.failed ? sectionError("Constitutional baseline") : baselineSection(analysis.a, analysis.provisions, { underReview: analysis.flags > 0, empty, after: readerForms(env, id, analysis), changes: analysis.changes })}`;
     return page(`${b.bill_number}: constitutional analysis`, main, { tab: "laws", back: [b.bill_number, href], partial: analysisLoaded === FAILED });
   }
 
@@ -410,7 +412,7 @@ async function orderPage(env, id, url, { analysisPage = false } = {}) {
   <h1>${esc(a.title)}</h1>
 </header>
 ${banners}
-${analysis.failed ? sectionError("Constitutional baseline") : baselineSection(analysis.a, analysis.provisions, { underReview: analysis.flags > 0, empty, after: forms, noun: "order" })}`;
+${analysis.failed ? sectionError("Constitutional baseline") : baselineSection(analysis.a, analysis.provisions, { underReview: analysis.flags > 0, empty, after: forms, noun: "order", changes: analysis.changes })}`;
     return page(`${label}: constitutional analysis`, main, { tab: "laws", back: [label, href], partial: analysisLoaded === FAILED });
   }
   const [topics, plain] = await Promise.all([

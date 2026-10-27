@@ -8,7 +8,7 @@
 // the election.
 import { esc, fmtDate, safeUrl } from "./render.js";
 import { fold } from "./summary.js";
-import { currentAnalysis, isPublic, parse, provisionsFor, baselineSection } from "./analysis.js";
+import { currentAnalysis, isPublic, parse, provisionsFor, baselineSection, analysisChanges } from "./analysis.js";
 
 export const NOT_ADVICE = "This shows which parts of the Constitution each measure involves. It is not a recommendation on how to vote.";
 export const METHOD = "/about/methodology/#measure-constitution";
@@ -120,7 +120,7 @@ export async function measureAnalysisSection(db, electionId, measureId) {
     if (!isPublic(row)) return "";
     const a = parse(row);
     const provisions = await provisionsFor(db, a.clauses.map((c) => c.id));
-    return baselineSection(a, provisions, { noun: "measure" });
+    return baselineSection(a, provisions, { noun: "measure", changes: await analysisChanges(db, `measure:${electionId}/${measureId}`) });
   } catch (err) {
     if (/no such table|no such column/i.test(String(err && err.message))) return "";
     throw err;

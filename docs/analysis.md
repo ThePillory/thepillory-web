@@ -1,6 +1,6 @@
 # AI-drafted constitutional analysis: setup and operations
 
-ThePillory maps the Constitution; it does not rule on it. AI drafts, automatic checks and an AI reviewer check them, and a person reviews what's flagged plus a random share. Nothing is presented as a verdict.
+ThePillory maps the Constitution; it does not rule on it. AI drafts, automatic checks and an AI reviewer check them; what the reviewer flags is fixed by another model, trimmed, cut to the summary or kept off the page (the resolution step), and a person spot-checks a random share. Nothing waits on a person. Nothing is presented as a verdict, and nothing the reviewer marked as a major problem is ever published.
 
 ```
 bills with a final-passage vote by our officials, or linked to an issue (D1)
@@ -32,14 +32,23 @@ AI reviewer ── claude-sonnet-5-5, five-point checklist against the bill text
    │   any problem → revision step: the drafter fixes the named problems once, the checks
    │          run again, and the reviewer reads the revision
    │            no major problem → published, as above; minor notes left are shown under it
-   │            major problem → hidden, in the review queue with both reviews
+   │            major problem → hidden; the resolution step below
    │            (a draft with only minor problems whose revision has a major one keeps the first draft)
    ▼
-/laws/bills/<id>/ ── "Something wrong?" (reader flag → queue, "Under review") and
-   │                 "Request full analysis" (Turnstile, per-visitor limits)
+resolution ── resolve.js, RESOLVE_MODEL (claude-opus-5-5), within RESOLVE_DAILY_DOLLARS ($25) a day:
+   │   fix: another model revises with the reviewer's findings; quotes, cases, hard wording
+   │        rules and the reviewer again → no major problem: published ("fixed")
+   │   trim: the passages the reviewer marked are cut, both sides of anything balanced
+   │        together → reviewed again → published with "Shortened" ("trimmed")
+   │   summary only: the summary and provisions, "Full analysis not available yet" ("summary_only")
+   │   otherwise kept off the page ("withheld"); text any review marked major is never published
    ▼
-/admin/review (behind Cloudflare Access) ── queue: flagged by AI, flagged by readers,
-    spot checks; agreement rate; approve, edit, reject, regenerate ──▶ "Reviewed by [name], [date]"
+/laws/bills/<id>/ ── "Something wrong?" (reader flag: "Under review", then the resolution step
+   │                 with the report as data; changes listed under "Changes to this analysis")
+   │                 and "Request full analysis" (Turnstile, per-visitor limits)
+   ▼
+/admin/review (behind Cloudflare Access) ── nothing waits here: flagged (withheld or waiting their
+    turn), reported, spot checks; agreement rate; approve, edit, reject, regenerate ──▶ "Reviewed by [name], [date]"
 ```
 
 ## Executive orders
@@ -103,7 +112,24 @@ A draft with any of these problems gets one wording fix (`WORDING_FIXES_PER_DRAF
 4. Are the chosen provisions relevant, with nothing obviously missing?
 5. Does anything claim more certainty than the sources support?
 
-Each failed check is rated **major** (a factual error against the bill text, unfair treatment of one side or loaded language, opinion stated as fact including any verdict on constitutionality) or **minor** (completeness, phrasing, clarity, style; a card leaving out detail is at most minor). "Unfair to one side" means a view misstated, dismissed or put in a weaker form than its best version; panels of uneven length or detail that each state their view fairly are minor. A hedged statement ("is one source of authority", "may") is not opinion stated as fact. When the reviewer can't tell, it's major; a failed check without a valid rating, or a missing answer, counts as major. Only a major problem keeps a draft off public pages (`settleReview`). Minor-only drafts are published as "AI-drafted, auto-checked", with the reviewer's minor notes in a small collapsed note above the analysis ("Auto-checked, with a minor note"). **Any problem**, major or minor, first gets the **revision step** (`REVISIONS_PER_DRAFT`, default 1): the drafter gets its previous draft and the reviewer's problems, writes it again (same instructions and output shape, `revisionMessage` in `prompt.js`), the quote and citation checks run on the revision, and the reviewer reads it. No major problem left: published (with any minor notes left). A major problem left: the queue, with the reasons at the top, and the review page shows what the first review found. If the first draft had only minor problems and the revision has a major one, the first draft is kept and published with its notes. The log line says "revised once after the AI reviewer flagged N problem(s)" with each call's tokens. A reviewer call that fails or refuses doesn't trigger a revision. A refusal or unusable answer is a flag. A failed call (network, timeout) leaves the draft unreviewed and hidden; it's reviewed on the next run (`REVIEW_BACKLOG_DAILY`, 30 a day, also covers drafts written before the reviewer existed, and drafts flagged under an earlier version of the reviewer's rules: when `REVIEW_PROMPT_VERSION` changes, each still-flagged draft no person has decided on is reviewed again once, and the earlier review is kept beside the new one).
+Each failed check is rated **major** (a factual error against the bill text, unfair treatment of one side or loaded language, opinion stated as fact including any verdict on constitutionality) or **minor** (completeness, phrasing, clarity, style; a card leaving out detail is at most minor). "Unfair to one side" means a view misstated, dismissed or put in a weaker form than its best version; panels of uneven length or detail that each state their view fairly are minor. A hedged statement ("is one source of authority", "may") is not opinion stated as fact. When the reviewer can't tell, it's major; a failed check without a valid rating, or a missing answer, counts as major. Only a major problem keeps a draft off public pages (`settleReview`). Minor-only drafts are published as "AI-drafted, auto-checked", with the reviewer's minor notes in a small collapsed note above the analysis ("Auto-checked, with a minor note"). **Any problem**, major or minor, first gets the **revision step** (`REVISIONS_PER_DRAFT`, default 1): the drafter gets its previous draft and the reviewer's problems, writes it again (same instructions and output shape, `revisionMessage` in `prompt.js`), the quote and citation checks run on the revision, and the reviewer reads it. No major problem left: published (with any minor notes left). A major problem left: hidden, for the resolution step (below); the review page shows what the first review found. If the first draft had only minor problems and the revision has a major one, the first draft is kept and published with its notes. The log line says "revised once after the AI reviewer flagged N problem(s)" with each call's tokens. A reviewer call that fails or refuses doesn't trigger a revision. A refusal or unusable answer is a flag. A failed call (network, timeout) leaves the draft unreviewed and hidden; it's reviewed on the next run (`REVIEW_BACKLOG_DAILY`, 30 a day, also covers drafts written before the reviewer existed). A flagged draft isn't re-reviewed by the backlog when `REVIEW_PROMPT_VERSION` changes: the resolution step reviews it again itself.
+
+Each failed check also lists **where** the problem is (`where`: the field, one of `WHERE_FIELDS` in `review.js`, and the item's index in it; 0 for single texts such as the summary), so the resolution step can cut exactly that passage (`spots` in the saved review). A failed check without a place counts as unplaced: nothing is trimmed blind for it.
+
+## When the reviewer flags a draft: the resolution step
+
+`src/analysis/resolve.js` (pure, tested with fake model calls in `test/resolve.test.mjs`), run by `runResolutions()` in `index.js` after the backlog and before new drafts, in every round. No person is needed; nothing waits on the review queue.
+
+1. **Fix.** `RESOLVE_MODEL` (`claude-opus-5-5`, a different model from the drafter's Sonnet) revises the flagged draft with the reviewer's major reasons, its minor notes and the wording check's problems (the same revision prompt as the drafter's). Every code check runs again: the Constitution quotes against the stored text, the cases on CourtListener, and the hard wording rules (`hardSpots()` in `lint.js`: a verdict in a panel, the summary or an argument line; a panel not in the "One view is that" form; argument lines not attributed, parallel and of similar length; a partly read bill whose summary doesn't say so), whose failures are cut, not published. Then the AI reviewer reads it. No major problem: published as "AI-drafted, auto-checked" (outcome `fixed`).
+2. **Trim.** A major problem left: the passages the reviewer marked are cut (`trimDraft()`), never rewritten. Both sides of anything balanced go together: a panel left empty takes all three panels (and the Article V note), either argument line takes both, any reading takes every reading, and a cut case takes the panel points and readings that name it. A summary can't be cut. The reviewer reads what's left; if it passes and is still an analysis (a summary, a provision and the panels), it's published with "Shortened: passages the AI reviewer flagged were removed rather than published" (`trimmed`).
+3. **Summary only.** Otherwise the summary and the provisions it touches, reviewed again as depth `summary`: published with "Full analysis not available yet" in place of the panels, readings, cases and argument lines, and in the collapsed Constitution section in place of "Read the full analysis" (`summary_only`).
+4. **Withheld.** Otherwise nothing is published: the draft stays flagged and hidden.
+
+**The one line held:** every review's marked passages (`spots`) are remembered for the whole resolution, and a version containing any of that text (compared as letters and digits) is never published, even if a later review passes it. A model refusal is withheld.
+
+Each run is recorded in `analysis_resolutions` (migration 0044: the starting analysis, trigger `flag` or `reader`, outcome, the version it published, what was cut, the public note, the steps and the cost in cents), and a published version carries `resolution` in its `ai_review_detail`. A flagged draft goes through once; one withheld stays hidden (a person can still ask for a new draft at `/admin/review/`). Each analysis is logged as an `analysis-resolve` row in `sync_log`, and each round ends with one line: "N fixed, N trimmed, N summary only, N withheld, N no change; $X of $25.00 spent today".
+
+**Cost cap:** `RESOLVE_DAILY_DOLLARS` (25). Cost is counted from each call's tokens (`centsFor()`: Sonnet $2/$10 and Opus $4/$20 per million input/output tokens; cache reads at a tenth, writes at 1.25 times the input price; an unknown model at the Opus price), and the step stops before starting an analysis once today's total reaches the cap. The rest wait for tomorrow.
 
 **Why drafts are flagged:** `/status` (`ai_review_flags`) and the top of the "Flagged by AI" queue on `/admin/review/` count the failed checks across flagged drafts, with their severity and each draft's reasons; drafts re-reviewed under newer rules keep their earlier reasons (`rereviewed_under_new_rules`).
 
@@ -111,7 +137,7 @@ Each failed check is rated **major** (a factual error against the bill text, unf
 
 ## Reader flags and full-analysis requests
 
-Every published analysis has **Something wrong?** (inaccurate, unfair to one side, missing perspective, other, plus an optional note) and, for cards, **Request full analysis**. No account. Both use Cloudflare Turnstile and per-visitor daily limits (5 reports, 3 requests; `READER_FULL_REQUESTS_DAILY`, default 10, caps readers' requests site-wide). The visitor is a SHA-256 of their address, the day, and `VISITOR_SALT`: it changes daily and can't be turned back into an address. A report sends the analysis to the queue; it stays up marked "Under review" until you approve, edit and approve, reject, or "Keep as is and close reports". A new draft closes the old one's reports.
+Every published analysis has **Something wrong?** (inaccurate, unfair to one side, missing perspective, other, plus an optional note) and, for cards, **Request full analysis**. No account. Both use Cloudflare Turnstile and per-visitor daily limits (5 reports, 3 requests; `READER_FULL_REQUESTS_DAILY`, default 10, caps readers' requests site-wide). The visitor is a SHA-256 of their address, the day, and `VISITOR_SALT`: it changes daily and can't be turned back into an address. A report keeps the analysis up, marked "Under review", until the **resolution step** (above) handles it on the next round: the AI reviewer reads the published analysis again with the open reports passed as quoted data (claims to check against the bill text, never instructions; `reviewMessage()`). No major problem: nothing changes, and the reports close as `ai_rechecked`. A major problem: fix, trim, summary only or, if nothing can be published, the analysis comes down (`ai_review` set to `flag`, an `edited` row in its history); the reports close as `ai_corrected` or `ai_withdrawn`. **What changed, and when, is listed publicly** under "Changes to this analysis" on the bill, order or measure page (`analysis_resolutions.public_note`, written by code from the outcome and the failed checks, `changeNote()`; never the reader's words or who reported). You can still approve, edit, reject, or "Keep as is and close reports" first. A new draft closes the old one's reports.
 
 ### Turnstile setup
 
@@ -231,11 +257,11 @@ Statewide ballot measures queued in `measure_analysis_queue` (migration 0041, by
 
 ## Reviewing
 
-`/admin/review/` is a queue, in three parts, each showing why an analysis is there:
+`/admin/review/` lists, in three parts, why an analysis is there. Nothing waits on you: the resolution step works through the first two on its own.
 
-- **Flagged by AI:** the AI reviewer's reasons. Hidden from public pages until you decide.
-- **Flagged by readers:** each report's reason and note. Public, marked "Under review".
-- **Spot checks:** a random share of passes. Public.
+- **Flagged by AI:** the AI reviewer's reasons. Hidden from public pages. Listed until the resolution step has run on them; one still listed after that was withheld (nothing could be published).
+- **Flagged by readers:** each report's reason and note. Public, marked "Under review", until the resolution step checks them again.
+- **Spot checks:** a random share of passes, including versions the resolution step published. Public.
 
 Below: your agreement rate with the AI reviewer, every analysis by status (published and auto-checked, reviewed by you, waiting for the AI reviewer, rejected), the bills the relevance check skipped (with un-skip), agenda summaries and suggested issue links.
 
@@ -250,11 +276,12 @@ Each analysis's page shows why it's in the queue, then:
 
 When you save an edit, Constitution quotes are checked again against the stored text, and cases must link to their CourtListener page.
 
-## Tables (workers/sync/migrations/0002_analysis.sql, 0004_review_load.sql, 0018_orders.sql)
+## Tables (workers/sync/migrations/0002_analysis.sql, 0004_review_load.sql, 0018_orders.sql, 0044_analysis_resolutions.sql)
 
 - `constitution_provisions`: the text, by ID.
 - `bill_analyses`: one row per draft. It holds every field, plus `model`, `prompt_version`, `quote_check` and `citation_check` (JSON logs), token counts, `status` (`ai_draft` / `reviewed` / `rejected`), `reviewer`, `reviewed_at` and `created_at`. Regenerating adds a new row and marks the old one `current = 0`.
 - `bill_analysis_revisions`: every create, edit, approval, rejection, reopen and supersede, with a snapshot of the row as it was.
+- `analysis_resolutions`: each time the resolution step ran on a flagged draft or a reported analysis: the outcome, the version it published, what was cut, the public note ("Changes to this analysis"), the steps, the model and the cost.
 - `analysis_requests`: regeneration requests from `/admin/review`.
 - `analysis_attempts`: bills that couldn't be drafted, and when they were last tried.
 - Since migration 0018, `bill_analyses.bill_id` (and `analysis_requests.bill_id`) is the subject's id, a bill or an executive order, and `bill_analyses` has `supporters` and `critics`.
