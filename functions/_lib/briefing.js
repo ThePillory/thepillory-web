@@ -12,7 +12,7 @@ import { STATE_NAME } from "./districts.js";
 import { EMPTY_REPORTS } from "./generated.js";
 import { page, esc, fmtDate, loadSection, FAILED, anyFailed, sectionError } from "./render.js";
 import { recentFinalVotes, officialsWhere, homeDistricts } from "./data.js";
-import { billHref } from "./votes.js";
+import { positionRow, voteHref } from "./votes.js";
 import { listMeetings, summariesFor, meetingCard, pacificNow, addDays, when } from "./meetings.js";
 import { repsWhere, describe, isCalaveras } from "./districts.js";
 import { happeningNow, happeningSection, lookupForm } from "./hub.js";
@@ -29,17 +29,14 @@ export function voteRows(votes, max) {
   for (const v of votes) {
     for (const p of v.positions || []) {
       if (rows.length >= max) break;
-      const facts = `${esc(v.bill_number || v.subject || "")} · Final passage · ${esc(v.result)} · ${fmtDate(v.vote_date)}`;
-      // The bill page has the official record for every vote.
-      const meta = v.bill_id ? `<a class="brief-vote-meta xsmall" href="${billHref(v.bill_id)}#votes">${facts}</a>` : `<span class="xsmall secondary">${facts}</span>`;
-      rows.push(`
-  <li class="brief-vote">
-    <div class="brief-vote-main">
-      <a class="brief-vote-name" href="/reps/${esc(p.slug)}/#votes">${esc(p.name)}</a>
-      ${meta}
-    </div>
-    <span class="brief-vote-position" title="Recorded as: ${esc(p.raw_position)}">${esc(p.position)}</span>
-  </li>`);
+      // The bill page has the official record for every vote, every member's position included.
+      rows.push(positionRow({
+        href: voteHref(v, `/reps/${p.slug}/#votes`),
+        title: esc(p.name),
+        details: `${esc(v.bill_number || v.subject || "")} · Final passage · ${esc(v.result)} · ${fmtDate(v.vote_date)}`,
+        position: p.position,
+        raw: p.raw_position,
+      }));
     }
   }
   return rows.join("");

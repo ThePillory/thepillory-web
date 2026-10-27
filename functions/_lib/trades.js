@@ -49,9 +49,8 @@ export function tradeRow(t, { member = false } = {}) {
     t.transcribed_by ? `Transcribed by AI from a scanned report · Checked by ${t.transcribed_by}` : t.transcribed_at ? "Transcribed by AI from a scanned report, auto-checked" : "",
   ].filter(Boolean);
   return `<a class="compact-row trade-row" href="${esc(t.report_url)}" target="_blank" rel="noopener">
-  <span class="cr-type">${esc(t.type)}</span>
-  <span class="cr-main"><span class="cr-title">${esc(asset)}</span><span class="cr-meta">${esc(t.amount || "Value not given")} · ${meta.map(esc).join(" · ")}</span></span>
-  <span class="chev" aria-hidden="true">↗</span>
+  <span class="cr-main"><span class="cr-title">${esc(asset)}</span><span class="cr-meta">${[t.type, ...meta].map(esc).join(" · ")}</span></span>
+  <span class="cr-side">${esc(t.amount || "Value not given")}<span class="chev" aria-hidden="true">↗</span></span>
 </a>`;
 }
 

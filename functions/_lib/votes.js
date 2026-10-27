@@ -2,7 +2,7 @@
 // position, the result, the date, and a source link. No scores, grades, or
 // "voted against X" summaries, and positions are styled the same whatever
 // they are.
-import { esc, fmtDate, sourceLink } from "./render.js";
+import { esc, fmtDate, safeUrl } from "./render.js";
 import { TYPE_LABELS, CHAMBER_NAME } from "./data.js";
 import { voteBar } from "./charts.js";
 
@@ -10,32 +10,41 @@ export function billHref(id) {
   return `/laws/bills/${encodeURIComponent(id)}/`;
 }
 
-function what(v) {
-  if (v.bill_id && v.bill_number) {
-    return `<a class="inline-link vote-bill" href="${billHref(v.bill_id)}">${esc(v.bill_number)}</a>
-      ${v.bill_title ? `<p class="small">${esc(v.bill_title)}</p>` : ""}`;
-  }
-  return `<p class="vote-bill-text">${esc(v.subject || "Not tied to a bill")}</p>`;
-}
-
 function typeTag(v) {
   return v.vote_type === "final_passage" ? "" : `<span class="type-tag">${esc(TYPE_LABELS[v.vote_type] || "Other")}</span>`;
 }
 
-// One row in a rep's Votes tab.
-export function voteRow(v) {
+/**
+ * One recorded position as one compact row, the same everywhere a list of
+ * votes appears: line 1 the title with the position on the right, line 2 the
+ * details. The whole row is one link (the bill's votes, or the official record
+ * when the vote isn't tied to a bill), so it stays one tap target. title and
+ * details are HTML, already escaped.
+ */
+export function positionRow({ href, title, details, position, raw }) {
+  const out = !href.startsWith("/");
   return `
-<li class="vote-row">
-  <div class="vote-main">
-    ${what(v)}
-    <p class="vote-question">${esc(v.question)}</p>
-    <p class="list-meta">${fmtDate(v.vote_date)} · Result: ${esc(v.result)} ${typeTag(v)}</p>
-  </div>
-  <div class="vote-side">
-    <span class="position" title="Recorded as: ${esc(v.raw_position)}">${esc(v.position)}</span>
-    ${sourceLink(v.source_url)}
-  </div>
-</li>`;
+<li><a class="list-row link-row" href="${esc(href)}"${out ? ' target="_blank" rel="noopener"' : ""}>
+  <div><span class="list-title">${title}</span><span class="list-meta">${details}${out ? " · Source ↗" : ""}</span></div>
+  <span class="list-status row-position" title="Recorded as: ${esc(raw)}">${esc(position)}</span>
+</a></li>`;
+}
+
+/** Where a vote's row links: the bill's votes, else the official record. */
+export function voteHref(v, fallback = "") {
+  return v.bill_id ? `${billHref(v.bill_id)}#votes` : safeUrl(v.source_url) || fallback;
+}
+
+// One row in a rep's Votes tab: the bill, then the exact question, result and date.
+export function voteRow(v) {
+  const title = v.bill_number ? `${esc(v.bill_number)}${v.bill_title ? `: ${esc(v.bill_title)}` : ""}` : esc(v.subject || "Not tied to a bill");
+  return positionRow({
+    href: voteHref(v, "#votes"),
+    title,
+    details: `${esc(v.question)} · Result: ${esc(v.result)} · ${fmtDate(v.vote_date)} ${typeTag(v)}`,
+    position: v.position,
+    raw: v.raw_position,
+  });
 }
 
 // One vote on a bill page: the question, result, totals, and (when the
