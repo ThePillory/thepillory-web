@@ -208,12 +208,12 @@ test("before an address: FEC races, incumbents linked to Votes and Funding, offi
   assert.match(html, /No U\.S\. Senate seat in Washington is up this year/);
   assert.match(html, /U\.S\. House, District 7/);
   // The seat's holder: "Incumbent" and a link to their record; nobody else is labeled.
-  assert.match(html, /href="\/reps\/dee-lane\/#votes">Votes and record ›<\/a> · <a class="inline-link" href="\/reps\/dee-lane\/#funding">Funding/);
+  assert.match(html, /href="\/reps\/dee-lane\/#votes">Votes and record ›<\/a><\/li><li><a class="inline-link" href="\/reps\/dee-lane\/#funding">Funding/, "each link its own bullet");
   assert.doesNotMatch(html, /Challenger/);
   // The same row for every candidate: name, party, links.
   assert.equal((html.match(/<li class="ballot-cand stack-xs">/g) || []).length, 2);
   assert.match(html, /<li>Party One<\/li><li>Incumbent<\/li>/);
-  assert.match(html, /<li>Party Two<\/li><\/ul>/);
+  assert.match(html, /<li>Party Two<\/li><li><a class="inline-link" href="https:\/\/www\.fec\.gov[^"]*" target="_blank" rel="noopener">FEC filing ↗<\/a><\/li><\/ul>/);
   assert.doesNotMatch(html, /PARTY ONE|PARTY TWO/, "the FEC's capitals, in normal capitalization");
   assert.match(html, /href="https:\/\/www\.sos\.wa\.gov\/elections"/);
   assert.match(html, /href="https:\/\/vote\.gov\/"/);

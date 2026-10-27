@@ -1976,6 +1976,8 @@ article.fin-term { scroll-margin-top: var(--space-4); }
 /* A candidate's facts (party, ballot designation, office held, incumbent): small, gray, one bullet each */
 .cand-facts { margin: 0; padding-left: 1.1em; list-style: disc; font-size: var(--fs-small); line-height: 1.4; color: var(--text-2); }
 .cand-facts li::marker { color: var(--text-3); }
+/* A link among the facts: a bullet like the rest, in the accent color, not bold */
+.cand-facts .inline-link { font-weight: 400; }
 /* The ballot preview card under the map, in the weeks before the state's next election:
    one line with the date and countdown, and a standard-size button. */
 .ballot-hero { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); }

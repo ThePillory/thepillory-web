@@ -304,10 +304,10 @@ export function candidateCard({ href, name, facts, held, record = null }) {
 /** A card's facts with "Incumbent" last, plain text, only for the seat's holder. */
 const withIncumbent = (parts, inc) => [...parts, inc ? "Incumbent" : ""].filter(Boolean);
 
-/** A candidate's facts (party, ballot designation, office held, incumbent), one bullet each. */
-export function candFacts(facts) {
-  const items = (facts || []).filter(Boolean);
-  return items.length ? `<ul class="cand-facts">${items.map((f) => `<li>${esc(f)}</li>`).join("")}</ul>` : "";
+/** A candidate's facts (party, ballot designation, office held, incumbent), one bullet each, then their links (HTML) as bullets too. */
+export function candFacts(facts, links = []) {
+  const items = [...(facts || []).filter(Boolean).map(esc), ...(links || []).filter(Boolean)];
+  return items.length ? `<ul class="cand-facts">${items.map((f) => `<li>${f}</li>`).join("")}</ul>` : "";
 }
 
 const heldLine = (h) => `${h.active ? "Holds" : "Held"}: ${h.office}${h.district ? `, ${h.district}` : ""}`;
