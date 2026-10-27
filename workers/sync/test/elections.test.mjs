@@ -44,7 +44,7 @@ const ELECTION = {
       candidates: [{ name: "PAT HILL", party: null, designation: "Retired Clerk", incumbent: false }, { name: "ROB ABEL", party: null, designation: "Incumbent", incumbent: true }] },
   ],
   measures: [
-    { id: "prop-1", number: "1", title: "AUTHORIZES EXAMPLE BONDS. LEGISLATIVE STATUTE.", scope: "statewide", summary: "Authorizes example bonds.", yes_means: "A YES vote on this measure means: example yes.", no_means: "A NO vote on this measure means: example no.",
+    { id: "prop-1", number: "1", title: "AUTHORIZES EXAMPLE BONDS. LEGISLATIVE STATUTE.", scope: "statewide", summary: "Put on the Ballot by the Legislature Authorizes example bonds.", yes_means: "A YES vote on this measure means: example yes.", no_means: "A NO vote on this measure means: example no.",
       ag_summary: ["Authorizes $1 billion in example bonds.", "Requires annual audits."], fiscal_heading: "SUMMARY OF LEGISLATIVE ANALYST'S ESTIMATE OF NET STATE AND LOCAL GOVERNMENT FISCAL IMPACT", fiscal_effect: ["Example state costs of about $50 million a year."],
       // Out of order on purpose: the page puts them in the guide's order.
       arguments: [
@@ -195,26 +195,31 @@ test("contest page: every candidate gets the same card, in ballot order, with no
   assert.match(html, /doesn&#x27;t endorse candidates or measures, and doesn&#x27;t publish polls or predictions/);
 });
 
-test("measure page: official content first; then each argument and rebuttal labeled by side, in the guide's order, collapsed", async () => {
-  const full = (await get("/elections/2026-11-03/measure/prop-1/")).html;
-  // The Detailed page, after the Quick card (which repeats the official Yes and No lines).
-  const html = full.slice(full.indexOf("See the details"));
+test("measure page: the facts card first; then each argument and rebuttal labeled by side, in the guide's order, collapsed", async () => {
+  const html = (await get("/elections/2026-11-03/measure/prop-1/")).html;
   const at = (t) => {
     const i = html.indexOf(t);
     assert.ok(i >= 0, `missing: ${t}`);
     return i;
   };
-  // The neutral official content leads: title and summary, what a vote means, the fiscal estimate.
-  assert.ok(at("AUTHORIZES EXAMPLE BONDS. LEGISLATIVE STATUTE.") < at("Authorizes $1 billion in example bonds."));
-  assert.ok(at("Requires annual audits.") < at("example yes."));
-  assert.ok(at("example no.") < at("Example state costs of about $50 million a year."));
-  assert.ok(at("Example state costs of about $50 million a year.") < at("Arguments from each campaign"));
+  // "Just the facts" leads, each line labeled with its source: type, who put it on the ballot, what it changes, Yes / No, cost.
+  const facts = html.slice(at("Just the facts"), at("Nothing in this card is written by ThePillory or by AI."));
+  const order = ["Measure type", "Statute", "“LEGISLATIVE STATUTE”", "Put on the ballot by", "The Legislature", "“Put on the Ballot by the Legislature”", "What it changes", "Authorizes $1 billion in example bonds.", "Requires annual audits.", "Official summary, prepared by the Attorney General", "Yes means / No means", "example yes.", "example no.", "Cost", "Example state costs of about $50 million a year.", "Legislative Analyst"].map((t) => {
+    const i = facts.indexOf(t);
+    assert.ok(i >= 0, `facts card missing: ${t}`);
+    return i;
+  });
+  assert.deepEqual(order, [...order].sort((a, b) => a - b), "the facts in order");
+  assert.doesNotMatch(facts, /Simplified by AI|Supporters say|Critics say/, "no AI text in the facts card");
+  assert.match(html, /class="card stack facts-card simple-keep" id="facts"/, "the only thing Quick mode shows");
+  assert.match(html, /data-mode-set="detailed" data-mode-jump="facts">See the full measure page</);
+  assert.ok(at("Example state costs of about $50 million a year.") < at("What each side says (their own words, not checked by ThePillory)"));
   // Collapsed by default, under the note.
-  assert.match(html, /<details class="fold" id="arguments">/);
+  assert.match(html, /<details class="fold" id="arguments">\s*<summary><span class="fold-title">What each side says \(their own words, not checked by ThePillory\)/);
   assert.match(html, /Written by each campaign, printed word for word from the official voter guide\. Not written or checked by ThePillory or any government agency\./);
   // The guide's order, each labeled: supporters' argument, opponents' rebuttal, opponents' argument, supporters' rebuttal.
-  const order = ["Supporters&#x27; argument", "Vote yes because of the example.", "Opponents&#x27; rebuttal", "The opponents reply.", "Opponents&#x27; argument", "Vote no because of the example.", "Supporters&#x27; rebuttal", "The supporters reply."].map(at);
-  assert.deepEqual(order, [...order].sort((a, b) => a - b), "in the guide's order");
+  const parts = ["Supporters&#x27; argument", "Vote yes because of the example.", "Opponents&#x27; rebuttal", "The opponents reply.", "Opponents&#x27; argument", "Vote no because of the example.", "Supporters&#x27; rebuttal", "The supporters reply."].map(at);
+  assert.deepEqual(parts, [...parts].sort((a, b) => a - b), "in the guide's order");
   // Each part with its own signers: the opponents' rebuttal is signed by its author, not the supporters.
   assert.ok(at("The opponents reply.") < at("<strong>Ada Park</strong>, U.S. Senator") && at("<strong>Ada Park</strong>, U.S. Senator") < at("Opponents&#x27; argument"));
   assert.match(html, /<strong>Lee Moss<\/strong>, Director, Example Taxpayers/);
@@ -222,6 +227,7 @@ test("measure page: official content first; then each argument and rebuttal labe
   assert.ok(!/Read the argument/.test(html));
   const local = (await get("/elections/2026-11-03/measure/06999-measure-a/")).html;
   assert.match(local, /Shall the example district issue bonds\?/);
+  assert.match(local, /Just the facts[\s\S]*Not stated in the county pamphlet/, "what the pamphlet doesn't print is one plain line");
   assert.match(local, /Impartial analysis by County Counsel/);
   assert.match(local, /No argument against Measure A was filed\./);
   assert.match(local, /Opponents&#x27; rebuttal<\/p>\s*<p class="small secondary">None printed in the official guide\./);
@@ -233,6 +239,7 @@ test("your ballot: private, built from the districts cookie; without it, the loo
   assert.match(res.headers.get("Cache-Control"), /private/);
   for (const t of ["Governor", "United States Representative District 9", "State Senate District 2", "Board of Equalization Member District 1", "Court of Appeal, Third Appellate District", "Proposition 1", "Town Council", "Local, on some ballots in Example County"]) assert.ok(html.includes(t), t);
   assert.ok(!html.includes("District 10"), "another district's contest isn't on it");
+  assert.match(html, /<details class="fold facts-fold" id="facts-prop-1">[\s\S]*Just the facts[\s\S]*example yes\.[\s\S]*Full measure page ›/, "each measure's facts card, folded");
   const none = await get("/elections/2026-11-03/ballot/");
   assert.match(none.html, /data-next="\/elections\/2026-11-03\/ballot\/"/);
   const nv = await get("/elections/2026-11-03/ballot/", `pillory_districts=${encodeURIComponent("st=NV&cd=1")}`);
@@ -256,7 +263,7 @@ test("Washington: the statewide measures, the pamphlet's official parts first, b
   assert.doesNotMatch(all.html, /Statewide offices|By district/, "no candidates or districts: measures only");
   const { res, html } = await get("/elections/2026-11-03-wa/measure/il26-001/");
   assert.equal(res.status, 200);
-  const order = ["Ballot title · Written by the Office of the Attorney General", "Fiscal impact · Written by the Office of Financial Management", "The law as it presently exists", "The effect of the proposed measure if approved", "Arguments from each campaign"].map((t) => html.indexOf(t));
+  const order = ["Just the facts", "Citizen initiative", "Ballot title, written by the Office of the Attorney General", "Washington&#x27;s Voters&#x27; Pamphlet doesn&#x27;t print", "Office of Financial Management", "The law as it presently exists", "The effect of the proposed measure if approved", "What each side says (their own words, not checked by ThePillory)"].map((t) => html.indexOf(t));
   assert.ok(order.every((i) => i > 0) && order.every((i, k) => !k || i > order[k - 1]), "official parts first, in the pamphlet's order, then the arguments");
   for (const label of ["Supporters&#x27; argument", "Opponents&#x27; rebuttal", "Opponents&#x27; argument", "Supporters&#x27; rebuttal"]) assert.ok(html.includes(label), label);
   assert.doesNotMatch(html, /Contact:|@gmail\.com|nohateinwastate\.org/, "no campaign contact details");
@@ -278,18 +285,21 @@ test("Colorado, Arizona, Florida, Michigan: one measure layout, official parts w
     for (const m of data.measures) {
       const { res, html } = await get(`/elections/2026-11-03-${st}/measure/${m.id}/`);
       assert.equal(res.status, 200, `${st} ${m.id}`);
-      assert.ok(html.includes("The question on the ballot"), `${st} ${m.id}: the question`);
+      assert.ok(html.includes("Just the facts"), `${st} ${m.id}: the facts card`);
+      for (const label of ["Measure type", "Put on the ballot by", "What it changes", "Yes means / No means", "Cost"]) assert.ok(html.includes(label), `${st} ${m.id}: ${label}`);
+      assert.ok(html.includes(m.question.replace(/'/g, "&#x27;").replace(/"/g, "&quot;")) || html.includes("The question on the ballot"), `${st} ${m.id}: the question`);
       assert.ok(html.includes("Official sources"), `${st} ${m.id}: sources`);
       for (const sec of m.sections) assert.ok(html.includes(sec.heading.replace(/'/g, "&#x27;")), `${st} ${m.id}: ${sec.heading}`);
     }
   }
   // Colorado: what your vote means, then the Legislative Council Staff's analysis, both sides' arguments in matching cards.
   const co = await get("/elections/2026-11-03-co/measure/amendment-81/");
-  for (const t of ["What your vote means", "Summary and analysis", "Arguments for and against", "Fiscal impact", "Legislative Council Staff"]) assert.ok(co.html.includes(t), t);
+  for (const t of ["Yes means / No means", "Summary and analysis", "What each side says", "Fiscal impact", "Legislative Council Staff", "Citizen initiative", "Constitutional amendment", "State Spending"]) assert.ok(co.html.includes(t), t);
   assert.equal(co.html.split('class="card stack-sm argument-card"').length - 1, 2, "one card for each side");
   // Arizona: the arguments filed are linked, never summarized.
   const az = await get("/elections/2026-11-03-az/measure/prop-141/");
-  assert.ok(az.html.includes("What your vote means"));
+  assert.ok(az.html.includes("Yes means / No means") && az.html.includes("The Legislature"));
+  assert.match(az.html, /Arguments filed for and against/);
   // Florida: a summary that couldn't be read says so and links the booklet instead of guessing.
   const fl = JSON.parse(readFileSync(new URL("../../../data/elections/2026-11-03-fl.json", import.meta.url), "utf8"));
   for (const m of fl.measures.filter((x) => !x.sections[0].paragraphs.length)) {

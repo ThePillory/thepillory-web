@@ -18,7 +18,7 @@ Same rules as everywhere else: facts only, neutral wording, no party colors, and
 | Official | Who they are · Their job (`jobSentence()`, by office) · Latest votes (three, in plain words) · In their own words (the Platform excerpt) · Money (one line from FEC totals, with a link to the Funding tab) |
 | The Supreme Court | What it is · Who's on it · Latest decisions (the Court's own one-line summaries) |
 | A decided case | What the Court decided (the Court's summary) · Where it stands · How the justices lined up (only when it's simple: unanimous, or everyone in the majority or dissent) |
-| Ballot measure | What it does · A Yes vote means / A No vote means (word for word from the official guide, California) · Where it stands |
+| Ballot measure | Its "Just the facts" card, nothing else (official text only: measure type, who put it on the ballot, what it changes, Yes means / No means, cost), with "See the full measure page" (`functions/_lib/measure-facts.js`) |
 | Ballot preview | What's on it · Your exact ballot (the statewide list and the address card stay) |
 | County page (`/place/<st>/<county>/`) | In Congress · In [State] (Governor and state legislators) · On the county board (live counties) · Next county meetings (live counties, two) · Latest votes (three) · Election Day, with Preview the ballot. The Open briefing / Make this my place card (or the waitlist) stays |
 | District page (`/district/<type>/<st>-<id>/`) | Who represents it · Their job (`jobSentence()`) · Latest votes (three) · On the ballot (when the seat is, with Preview the ballot) · Where it is (its counties, six at most) |
@@ -57,7 +57,7 @@ The sync's `plain-summaries` step (`workers/sync/src/plain/`) rewrites, in plain
 
 - bills: a person's summary; the official summary's "This bill …" part (Congressional Research Service, or the Legislative Counsel's Digest); or the checked analysis's summary with its supporters and critics lines;
 - executive orders: the checked analysis's summary, supporters and critics;
-- ballot measures: the official summary (California's Attorney General, Washington's ballot title, a county measure's question), from the election files (`PLAIN_ELECTIONS`).
+- ballot measures: off (`PLAIN_ELECTIONS` is empty). A measure's Quick version is its official "Just the facts" card, with no AI text.
 
 Every rewrite is checked in code (`check.js`) and kept only when it passes: one or two sentences and at most 40 words; a reading grade of 9.5 or lower (Flesch-Kincaid, about 8th grade); every number and every name in it is in the source; no loaded or judging words (the shared list plus plain-language ones like "common-sense" and "giveaway"); and supporters and critics both or neither, only when the source has both, each at most 30 words and of similar length. It's stored in `plain_summaries` (migration 0023) and shown as "Simplified by AI from [source], with no new facts added", linked to the methodology. A refused rewrite is recorded in `plain_attempts` and tried again only when its source changes. Bills with the latest final votes go first, then orders, then measures; `PLAIN_DAILY` (40) a day. Until an item has one, its card shows the first sentence of its own summary, word for word, with that summary's source.
 

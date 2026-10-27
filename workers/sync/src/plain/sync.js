@@ -10,7 +10,7 @@
 //   orders    the checked analysis's summary, with supporters and critics
 //   measures  the official summary (California's Attorney General; Washington's
 //             ballot title; a county measure's ballot question), from the
-//             election files on the site (PLAIN_ELECTIONS)
+//             election files on the site (PLAIN_ELECTIONS; off: measures lead with their official facts card)
 // Order: bills with the latest final votes first, then orders, then measures.
 // PLAIN_DAILY (40) rewrites a day. A refused rewrite is tried again only when
 // its source changes.
@@ -104,7 +104,7 @@ async function candidates(env, db, budget) {
     });
   for (const o of orders) items.push({ kind: "order", id: o.id, describe: `an executive order, "${o.title}"`, ...analysisSource(o) });
   const base = (env.SITE_URL || "").replace(/\/$/, "");
-  for (const eid of String(env.PLAIN_ELECTIONS || "2026-11-03,2026-11-03-wa").split(",").map((x) => x.trim()).filter(Boolean)) {
+  for (const eid of String(env.PLAIN_ELECTIONS || "").split(",").map((x) => x.trim()).filter(Boolean)) {
     if (!base) break;
     let election;
     try {
