@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "61"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "62"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -271,7 +271,7 @@ def head_tags(title):
     """Icons, manifest, and link-share (Open Graph) tags for every page."""
     return f"""    <meta name="description" content="{SITE_DESCRIPTION}" />
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
     <link rel="icon" href="/assets/logo/icon.svg?v={ICON_VERSION}" type="image/svg+xml" />
     <link rel="icon" href="/assets/logo/favicon-32.png?v={ICON_VERSION}" sizes="32x32" type="image/png" />
@@ -1230,7 +1230,7 @@ def write_manifest():
     manifest = {
         "id": "/", "name": "ThePillory", "short_name": "ThePillory",
         "description": SITE_DESCRIPTION, "start_url": "/", "scope": "/", "display": "standalone",
-        "background_color": "#FFFFFF", "theme_color": "#FFFFFF",
+        "background_color": "#F2F2F7", "theme_color": "#F2F2F7",
         "icons": [png(192, "any"), png(512, "any"), png(192, "maskable"), png(512, "maskable"),
                   {"src": f"/assets/logo/icon.svg{v}", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}],
     }
