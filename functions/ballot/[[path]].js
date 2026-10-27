@@ -33,8 +33,8 @@ import { voterInfo, ballotFromVoterInfo, measureFor, CivicError } from "../_lib/
 import { visitorHash } from "../_lib/turnstile.js";
 import { fold } from "../_lib/summary.js";
 import { statePossessive, RESULT_HEADING, nominations, nominationWords, todayIn } from "../_lib/election-window.js";
-import { candidateHref, raceHref, racesHref, YEAR } from "../_lib/candidates.js";
-import { loadCertified, certifiedRace, certifiedMeta } from "../_lib/certified.js";
+import { candidateHref, raceHref, racesHref, YEAR, recordsFor, raceIncumbency, openSeatLine } from "../_lib/candidates.js";
+import { loadCertified, certifiedRace } from "../_lib/certified.js";
 
 const BACK = ["Elections", "/elections/"];
 export const CONFIRM = "Always confirm your ballot with your county election office.";
@@ -124,15 +124,21 @@ async function stateOffice(env, request, st) {
   return o && safeUrl(o.url) ? { ...o, source: all.source } : null;
 }
 
-/** ThePillory's pages for the state's officials who have filed with the FEC, by candidate ID. */
+/** The state's officials in ThePillory's records (recordsFor()), and `filed`: the current ones who have filed with the FEC, by candidate ID. */
 async function filedOfficials(db, st) {
-  if (!db) return {};
-  const { results } = await db
-    .prepare("SELECT f.candidate_id, o.slug, o.name, o.office FROM fec_candidates f JOIN officials o ON o.id = f.official_id WHERE o.active = 1 AND o.state = ? AND f.candidate_id IS NOT NULL")
-    .bind(st)
-    .all();
-  return Object.fromEntries(results.map((r) => [r.candidate_id, r]));
+  const records = await recordsFor(db, st);
+  return { records, filed: Object.fromEntries(Object.entries(records.byFec).filter(([, o]) => o.active)) };
 }
+
+/** A candidate's links: the incumbent's record first ("Votes and record ›"), otherwise their votes and funding when they hold another office, and the FEC filing. */
+function candLinks(own, me, fecUrl) {
+  return [
+    me && me.holder ? `<a class="inline-link" href="/reps/${esc(me.holder.slug)}/#votes">Votes and record ›</a>` : own ? `<a class="inline-link" href="/reps/${esc(own.slug)}/#votes">Votes</a>` : "",
+    own ? `<a class="inline-link" href="/reps/${esc(own.slug)}/#funding">Funding</a>` : "",
+    fecUrl && safeUrl(fecUrl) ? `<a class="inline-link" href="${esc(fecUrl)}" target="_blank" rel="noopener">FEC filing ↗</a>` : "",
+  ].filter(Boolean).join(" · ");
+}
+const withIncumbent = (parts, me) => [...parts, me ? "Incumbent" : ""].filter(Boolean).join(" · ");
 
 /** ThePillory's election for the state, when it has one (California's full ballot, Washington's measures). */
 const ownElection = (env, request, st) => (ELECTION_BY_STATE[st] ? loadElection(env, request, ELECTION_BY_STATE[st]) : null);
@@ -180,45 +186,38 @@ function officialLinks(st, office, election) {
 </section>`;
 }
 
-/** One FEC candidate. The same layout for everyone: name as filed, party as filed, incumbent, links. */
-function fecCandidate(c, filed) {
-  const own = filed[c.id];
-  const links = [
-    own ? `<a class="inline-link" href="/reps/${esc(own.slug)}/#votes">Votes</a>` : "",
-    own ? `<a class="inline-link" href="/reps/${esc(own.slug)}/#funding">Funding</a>` : "",
-    `<a class="inline-link" href="${esc(c.url)}" target="_blank" rel="noopener">FEC filing ↗</a>`,
-  ].filter(Boolean).join(" · ");
+/** One FEC candidate. The same layout for everyone: name as filed, party as filed, "Incumbent" only for the seat's holder, links. */
+function fecCandidate(c, filed, inc) {
+  const me = inc.get(c.id, c.name);
   return `
   <li class="ballot-cand stack-xs">
     <p class="list-title"><a class="inline-link" href="${candidateHref(c.id)}">${esc(c.name)}</a></p>
-    <p class="list-meta">${esc([c.party || "No party listed", c.incumbent ? "Incumbent" : ""].filter(Boolean).join(" · "))}</p>
-    <p class="small">${links}</p>
+    <p class="list-meta">${esc(withIncumbent([c.party || "No party listed"], me))}</p>
+    <p class="small">${candLinks(filed[c.id], me, c.url)}</p>
   </li>`;
 }
 
-function fecRace(title, list, filed, href = null) {
+function fecRace(title, list, filed, href = null, inc) {
   return `
   <div class="card stack-xs">
     <p class="label">${esc(title)}</p>
+    ${openSeatLine(inc.open)}
     ${list.length
-      ? `<ul class="plain-list ballot-cands">${list.map((c) => fecCandidate(c, filed)).join("")}</ul>`
+      ? `<ul class="plain-list ballot-cands">${list.map((c) => fecCandidate(c, filed, inc)).join("")}</ul>`
       : '<p class="small secondary">No candidates who have reached the FEC\'s filing threshold are listed yet.</p>'}
     ${href && list.length ? `<p class="small"><a class="inline-link" href="${href}">Every candidate's page: the race</a></p>` : ""}
   </div>`;
 }
 
 /** One candidate from the certified list: the same layout for everyone, in ballot order. */
-function certifiedCandidate(c, filed) {
+function certifiedCandidate(c, filed, inc) {
   const own = c.fec && filed[c.fec.id];
-  const links = [
-    own ? `<a class="inline-link" href="/reps/${esc(own.slug)}/#votes">Votes</a>` : "",
-    own ? `<a class="inline-link" href="/reps/${esc(own.slug)}/#funding">Funding</a>` : "",
-    c.fec && safeUrl(c.fec.url) ? `<a class="inline-link" href="${esc(c.fec.url)}" target="_blank" rel="noopener">FEC filing ↗</a>` : "",
-  ].filter(Boolean).join(" · ");
+  const me = inc.get(c.fec && c.fec.id, c.name);
+  const links = candLinks(own, me, c.fec && c.fec.url);
   return `
   <li class="ballot-cand stack-xs">
     <p class="list-title">${c.fec && c.fec.id ? `<a class="inline-link" href="${candidateHref(c.fec.id)}">${esc(c.name)}</a>` : esc(c.name)}</p>
-    <p class="list-meta">${esc([c.party ? `Party preference: ${c.party}` : "No party preference listed", c.designation].filter(Boolean).join(" · "))}</p>
+    <p class="list-meta">${esc(withIncumbent([c.party ? `Party preference: ${c.party}` : "No party preference listed", c.designation], me))}</p>
     ${links ? `<p class="small">${links}</p>` : ""}
   </li>`;
 }
@@ -227,16 +226,19 @@ function certifiedCandidate(c, filed) {
  * Where ThePillory has the state's certified candidate list (California), the U.S. House race from it:
  * only the candidates on the November ballot, in ballot order.
  */
-function certifiedSection(st, election, filed, d) {
+function certifiedSection(st, election, filed, d, records) {
+  const incFor = (c) => raceIncumbency({ st, key: c.scope === "cd" ? `house-${c.district}` : c.scope === "statewide" && /united states senator/i.test(c.office) ? "senate" : c.id, contest: c, ballot: c.candidates, records });
   const cd = d && d.st === st && d.cd != null ? String(Number(d.cd)) : null;
   const contest = cd && election.contests.find((c) => c.scope === "cd" && String(c.district) === cd);
   const senate = election.contests.filter((c) => c.scope === "statewide" && /united states senator/i.test(c.office));
   const race = (c) => {
     const { candidates, note } = ballotOrder(c, election);
+    const inc = incFor(c);
     return `
   <div class="card stack-xs">
     <p class="label">${esc(c.office)}</p>
-    <ul class="plain-list ballot-cands">${candidates.map((x) => certifiedCandidate(x, filed)).join("")}</ul>
+    ${openSeatLine(inc.open)}
+    <ul class="plain-list ballot-cands">${candidates.map((x) => certifiedCandidate(x, filed, inc)).join("")}</ul>
     <p class="hint">${esc(note)} <a class="inline-link" href="${contestHref(election.election.id, c.id)}">Candidate statements</a> · <a class="inline-link" href="${raceHref(YEAR, st, c.scope === "cd" ? `house-${c.district}` : "senate")}">The race</a></p>
   </div>`;
   };
@@ -249,7 +251,7 @@ function certifiedSection(st, election, filed, d) {
     ? `
 <section class="stack-sm simple-keep" id="statewide" aria-labelledby="h-statewide">
   <h2 class="label" id="h-statewide">On every ${esc(STATE_NAME[st])} ballot · November 3, 2026</h2>
-  ${offices.length ? `<div class="card">${offices.map((c) => linkRow(raceHref(YEAR, st, c.id), c.office, ballotOrder(c, election).candidates.map((x) => x.name).join(" · "))).join("")}</div>` : ""}
+  ${offices.length ? `<div class="card">${offices.map((c) => { const inc = incFor(c); return linkRow(raceHref(YEAR, st, c.id), c.office, [ballotOrder(c, election).candidates.map((x) => `${x.name}${inc.get(x.fec && x.fec.id, x.name) ? " (Incumbent)" : ""}`).join(" · "), inc.open ? `Open seat: ${inc.open.name} isn't running` : ""].filter(Boolean).join(". ")); }).join("")}</div>` : ""}
   ${props.length ? `<div class="card">${props.map((m) => linkRow(measureHref(id, m.id), measureName(m), m.title || "")).join("")}</div>` : ""}
   <p class="hint">Candidates in ballot order as on ballots in Assembly District 1 (statewide offices rotate by district). Propositions with the official summary and arguments, word for word.</p>
 </section>`
@@ -265,24 +267,22 @@ function certifiedSection(st, election, filed, d) {
 }
 
 /** A race from the state's own certified candidate list: only who the state certified, as it lists them. */
-function stateListRace(title, race, filed, href) {
+function stateListRace(title, race, filed, href, inc) {
   const cand = (c) => {
     const own = c.fec && filed[c.fec.id];
-    const links = [
-      own ? `<a class="inline-link" href="/reps/${esc(own.slug)}/#votes">Votes</a>` : "",
-      own ? `<a class="inline-link" href="/reps/${esc(own.slug)}/#funding">Funding</a>` : "",
-      c.fec && safeUrl(c.fec.url) ? `<a class="inline-link" href="${esc(c.fec.url)}" target="_blank" rel="noopener">FEC filing ↗</a>` : "",
-    ].filter(Boolean).join(" · ");
+    const me = inc.get(c.fec && c.fec.id, c.name);
+    const links = candLinks(own, me, c.fec && c.fec.url);
     return `
   <li class="ballot-cand stack-xs">
     <p class="list-title">${c.fec ? `<a class="inline-link" href="${candidateHref(c.fec.id)}">${esc(c.name)}</a>` : esc(c.name)}</p>
-    <p class="list-meta">${esc(certifiedMeta(c))}</p>
+    <p class="list-meta">${esc(withIncumbent([c.party || "No party listed"], me))}</p>
     ${links ? `<p class="small">${links}</p>` : ""}
   </li>`;
   };
   return `
   <div class="card stack-xs">
     <p class="label">${esc(title)}</p>
+    ${openSeatLine(inc.open)}
     <ul class="plain-list ballot-cands">${race.candidates.map(cand).join("")}</ul>
     <p class="small"><a class="inline-link" href="${href}">The race</a></p>
   </div>`;
@@ -304,13 +304,16 @@ function settledRace(title, st, events, office, fecHref) {
   </div>`;
 }
 
-function federalSection(st, races, filed, d, election = null, { dates = null, office = null, today = todayIn(st), certified = null } = {}) {
+function federalSection(st, races, loaded, d, election = null, { dates = null, office = null, today = todayIn(st), certified = null } = {}) {
   const name = STATE_NAME[st];
-  if (election && election.election.state === st && !measuresOnly(election)) return certifiedSection(st, election, filed === FAILED ? {} : filed, d);
+  const { records, filed } = loaded === FAILED || !loaded || !loaded.records ? { records: { officials: [], byFec: {} }, filed: {} } : loaded;
+  if (election && election.election.state === st && !measuresOnly(election)) return certifiedSection(st, election, filed, d, records);
   if (NO_GENERAL.has(st)) return `<div class="card"><p class="small">${esc(name)} holds its general elections in presidential election years, so there's no general election on November 3, 2026. <a class="inline-link" href="#address">Add your address below</a> for anything else on a ballot for it.</p></div>`;
   if (races === FAILED) return sectionError("Federal races");
   if (!races) return `<section class="stack-sm"><h2 class="label">Federal races</h2><div class="card"><p class="small secondary">${esc(name)}'s federal candidate lists appear after the daily election data refresh.</p></div></section>`;
-  const filedMap = filed === FAILED ? {} : filed;
+  const filedMap = filed;
+  // Who holds each seat now, from the race's list and ThePillory's records.
+  const incOf = (key, list, stateList = null) => raceIncumbency({ st, key, ballot: stateList ? stateList.candidates : null, fecList: list, records });
   const cd = d && d.st === st && d.cd != null ? String(Number(d.cd)) : null;
   const districts = Object.keys(races.house || {});
   const atLarge = districts.length === 1 && districts[0] === "0";
@@ -323,14 +326,14 @@ function federalSection(st, races, filed, d, election = null, { dates = null, of
   // The state's own certified list, where it's loaded, stands for the ballot: never the FEC list.
   const certSenate = certifiedRace(certified, "senate", races.senate || []);
   const certHouse = houseKey == null ? null : certifiedRace(certified, `house-${houseKey}`, (races.house || {})[houseKey] || []);
-  const senate = certSenate ? stateListRace(senateTitle, certSenate, filedMap, raceHref(YEAR, st, "senate"))
+  const senate = certSenate ? stateListRace(senateTitle, certSenate, filedMap, raceHref(YEAR, st, "senate"), incOf("senate", races.senate || [], certSenate))
     : !races.senate_up
     ? `<div class="card"><p class="small">No U.S. Senate seat in ${esc(name)} is up this year, by the FEC's list of 2026 races.</p></div>`
-    : senateNom.open ? fecRace(senateTitle, races.senate || [], filedMap, raceHref(YEAR, st, "senate"))
+    : senateNom.open ? fecRace(senateTitle, races.senate || [], filedMap, raceHref(YEAR, st, "senate"), incOf("senate", races.senate || []))
     : settledRace(senateTitle, st, senateNom.events, office, raceHref(YEAR, st, "senate"));
-  const house = certHouse ? stateListRace(houseTitle, certHouse, filedMap, raceHref(YEAR, st, `house-${houseKey}`))
+  const house = certHouse ? stateListRace(houseTitle, certHouse, filedMap, raceHref(YEAR, st, `house-${houseKey}`), incOf(`house-${houseKey}`, (races.house || {})[houseKey] || [], certHouse))
     : houseKey == null || !races.house ? ""
-    : houseNom.open ? fecRace(houseTitle, races.house[houseKey] || [], filedMap, raceHref(YEAR, st, `house-${houseKey}`))
+    : houseNom.open ? fecRace(houseTitle, races.house[houseKey] || [], filedMap, raceHref(YEAR, st, `house-${houseKey}`), incOf(`house-${houseKey}`, races.house[houseKey] || []))
     : settledRace(houseTitle, st, houseNom.events, office, raceHref(YEAR, st, `house-${houseKey}`));
   const anyOpen = (races.senate_up && !certSenate && senateNom.open) || (house && !certHouse && houseNom.open);
   const src = (certSenate || certHouse || {}).source;

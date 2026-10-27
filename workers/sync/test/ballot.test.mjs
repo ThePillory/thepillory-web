@@ -147,7 +147,9 @@ function stubDb({ lookupsToday = 0 } = {}) {
       const s = {
         bind: (...a) => ((args = a), s),
         all: async () => {
-          if (/FROM fec_candidates/.test(sql)) return { results: args[0] === "WA" ? [{ candidate_id: "H0WA00001", slug: "dee-lane", name: "Dee Lane", office: "U.S. Representative" }] : args[0] === "CA" ? [{ candidate_id: "H0CA00002", slug: "zed-zane", name: "Zed Zane", office: "U.S. Representative" }] : [] };
+          if (/FROM fec_candidates/.test(sql)) return { results: args[0] === "WA" ? [{ candidate_id: "H0WA00001", slug: "dee-lane", name: "Dee Lane", office: "U.S. Representative", active: 1 }] : args[0] === "CA" ? [{ candidate_id: "H0CA00002", slug: "zed-zane", name: "Zed Zane", office: "U.S. Representative", active: 1 }] : [] };
+          // The state's officials (recordsFor()): Washington's District 7 member holds that seat.
+          if (/FROM officials WHERE state = \?/.test(sql)) return { results: args[0] === "WA" ? [{ slug: "dee-lane", name: "Dee Lane", office: "U.S. Representative", chamber: "us-house", district_code: "7", active: 1, state: "WA" }] : [] };
           if (/FROM officials/.test(sql)) return { results: [{ slug: "hal-jones", name: "Hal Jones", office: "Assemblymember" }] };
           return { results: [] };
         },
@@ -205,7 +207,9 @@ test("before an address: FEC races, incumbents linked to Votes and Funding, offi
   assert.equal(res.headers.get("Cache-Control"), "private, no-store");
   assert.match(html, /No U\.S\. Senate seat in Washington is up this year/);
   assert.match(html, /U\.S\. House, District 7/);
-  assert.match(html, /href="\/reps\/dee-lane\/#votes">Votes<\/a> · <a class="inline-link" href="\/reps\/dee-lane\/#funding">Funding/);
+  // The seat's holder: "Incumbent" and a link to their record; nobody else is labeled.
+  assert.match(html, /href="\/reps\/dee-lane\/#votes">Votes and record ›<\/a> · <a class="inline-link" href="\/reps\/dee-lane\/#funding">Funding/);
+  assert.doesNotMatch(html, /Challenger/);
   // The same row for every candidate: name, party, links.
   assert.equal((html.match(/<li class="ballot-cand stack-xs">/g) || []).length, 2);
   assert.match(html, /PARTY ONE · Incumbent/);

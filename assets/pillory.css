@@ -1970,6 +1970,9 @@ article.fin-term { scroll-margin-top: var(--space-4); }
 .ballot-cands > li:last-child { padding-bottom: 0; }
 .ballot-cands > li > .list-row { padding-block: 0; border-top: 0; }
 .ballot-cands p { margin: 0; }
+/* The incumbent's card: one more link, to their record; its tap area reaches past its line */
+.cand-record { display: inline-flex; align-items: center; min-height: var(--tap); margin-block: var(--tap-bleed); margin-top: calc(var(--space-1) + var(--tap-bleed)); font-size: var(--fs-small); font-weight: 600; text-decoration: none; }
+.open-seat { margin: 0; }
 /* The ballot preview card under the map, in the weeks before the state's next election:
    one line with the date and countdown, and a standard-size button. */
 .ballot-hero { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); }
