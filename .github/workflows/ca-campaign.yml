@@ -23,23 +23,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      # Reads the 1.6 GB export once (about 3 minutes); individuals leave this
-      # step only as totals and by employer, never by name.
-      - run: python3 tools/build_ca_campaign.py /tmp/cabuild
-      # Industries by the same keyword rules as federal funding, and lists cut to what pages show.
-      - run: node tools/ca_campaign_finish.mjs /tmp/cabuild/ca-campaign-raw.json data/ca-campaign.json
-      - name: Commit the data
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/ca-campaign.json
-          git diff --cached --quiet && exit 0
-          git commit -m "Refresh California campaign data from the Cal-Access export"
-          git push
-      # Lobbying (Forms 635, 645, 625 and 615) from the same export, straight into D1:
-      # only filings new or amended since the last run (tools/load_ca_lobbying.py).
-      - name: Load California lobbying into D1
-        run: python3 tools/load_ca_lobbying.py /tmp/cabuild/dbwebexport.zip --mode load
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      # TEMPORARY probe (removed before the PR): how 2026 measure committees appear.
+      - run: python3 tools/probe_measures.py /tmp/cabuild
