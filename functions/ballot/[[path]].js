@@ -28,7 +28,7 @@ import { page, esc, notFound, safeUrl, linkRow, loadSection, FAILED, sectionErro
 import { districtsFromCookie, STATE_NAME } from "../_lib/districts.js";
 import { visitorState } from "../_lib/visitor-state.js";
 import { asset } from "../_lib/geo.js";
-import { loadElection, electionHref, ballotHref, measureHref, measureName, measureTitle, titleNote, contestHref, ballotOrder, ELECTION_BY_STATE, measuresOnly, howToVote } from "../_lib/elections.js";
+import { loadElection, electionHref, ballotHref, measureHref, measureName, measureTitle, titleNote, contestHref, ballotOrder, ELECTION_BY_STATE, measuresOnly, howToVote, judicialContests, judicialRow } from "../_lib/elections.js";
 import { voterInfo, ballotFromVoterInfo, measureFor, CivicError } from "../_lib/civic.js";
 import { factsFold } from "../_lib/measure-facts.js";
 import { visitorHash } from "../_lib/turnstile.js";
@@ -361,8 +361,13 @@ function ownSection(st, election) {
 <section class="stack-sm simple-keep" aria-labelledby="h-own">
   <h2 class="label" id="h-own">Statewide measures</h2>
   ${election.measures.filter((m) => m.scope === "statewide").map((m) => factsFold(election, m, { href: measureHref(id, m.id), name: measureName(m), sub: measureTitle(m) || "" })).join("")}
-  <p class="hint">On every ballot in ${esc(STATE_NAME[st] || st)}. Each opens to its facts, from the official guide; its page has the rest, including each side's arguments. ${esc(titleNote(election.measures.filter((m) => m.scope === "statewide")))}</p>
-</section>`;
+  <p class="hint">On every ballot in ${esc(STATE_NAME[st] || st)}. Each opens to its facts, from the official guide; its page has the rest${election.measures.some((m) => (m.arguments || []).length || (m.argument_links || []).length) ? ", including each side's arguments" : ""}. ${esc(titleNote(election.measures.filter((m) => m.scope === "statewide")))}</p>
+</section>${judicialContests(election).length ? `
+<section class="stack-sm simple-keep" aria-labelledby="h-courts">
+  <h2 class="label" id="h-courts">Appellate courts</h2>
+  <div class="card">${judicialContests(election).map((c) => judicialRow(id, c)).join("")}</div>
+  <p class="hint">On every ballot in ${esc(STATE_NAME[st] || st)}. Each candidate's details and statement, word for word from the State Board of Elections' Judicial Voter Guide.</p>
+</section>` : ""}`;
   }
   return `
 <section class="stack-sm" aria-labelledby="h-own">

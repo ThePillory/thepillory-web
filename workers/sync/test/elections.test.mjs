@@ -181,7 +181,7 @@ const ASSETS = {
     // Washington's real file (tools/build_wa_measures.py): its three statewide measures.
     if (path === "/data/elections/2026-11-03-wa.json") return new Response(readFileSync(new URL("../../../data/elections/2026-11-03-wa.json", import.meta.url), "utf8"));
     // Colorado's, Arizona's, Florida's and Michigan's real files (tools/build_state_measures.py).
-    const st = path.match(/^\/data\/elections\/(2026-11-03-(?:co|az|fl|mi))\.json$/);
+    const st = path.match(/^\/data\/elections\/(2026-11-03-(?:co|az|fl|mi|nc))\.json$/);
     if (st) return new Response(readFileSync(new URL(`../../../data/elections/${st[1]}.json`, import.meta.url), "utf8"));
     return new Response("not found", { status: 404 });
   },
@@ -334,11 +334,46 @@ test("Colorado, Arizona, Florida, Michigan: one measure layout, official parts w
   assert.match(v.html, /href="\/elections\/2026-11-03-co\/"/);
 });
 
+test("North Carolina: the three amendments with no official arguments said plainly, and the Judicial Voter Guide word for word", async () => {
+  const data = JSON.parse(readFileSync(new URL("../../../data/elections/2026-11-03-nc.json", import.meta.url), "utf8"));
+  assert.equal(data.election.format, "sections");
+  assert.equal(data.measures.length, 3);
+  const all = await get("/elections/2026-11-03-nc/");
+  assert.equal(all.res.status, 200);
+  assert.match(all.html, /Appellate courts/);
+  assert.match(all.html, /Require Photo ID for Voting/, "the State Board's heading, in ordinary capitalization");
+  for (const m of data.measures) {
+    const { res, html } = await get(`/elections/2026-11-03-nc/measure/${m.id}/`);
+    assert.equal(res.status, 200, m.id);
+    assert.match(html, /Just the facts[\s\S]*Placed by the General Assembly/, m.id);
+    assert.match(html, /don(?:'|&#x27;)t print a “Yes means \/ No means\.”/, `${m.id}: Yes / No not printed, said so`);
+    assert.match(html, /North Carolina doesn(?:'|&#x27;)t publish official arguments for or against/, `${m.id}: no arguments, said plainly`);
+    assert.doesNotMatch(html, /What each side says/, `${m.id}: no empty arguments section`);
+    assert.ok(html.includes(m.lead.text), `${m.id}: the official summary explanation`);
+    assert.match(html, /<title>Constitutional Amendment: /, `${m.id}: the heading names the page`);
+    if (!m.sections.some((s) => s.id === "fiscal")) assert.match(html, /lists no fiscal note/, `${m.id}: no fiscal note, said so`);
+  }
+  // Every guide contest: each candidate's card, the statement word for word, no endorsements added.
+  for (const c of data.judicial.contests) {
+    const { res, html } = await get(`/elections/2026-11-03-nc/contest/${c.id}/`);
+    assert.equal(res.status, 200, c.id);
+    assert.equal(html.split('class="card stack-sm cand-card"').length - 1, c.candidates.length, `${c.id}: one card each`);
+    for (const cand of c.candidates) {
+      for (const p of (cand.statement || { paragraphs: [] }).paragraphs) assert.ok(html.includes(p.replace(/&/g, "&amp;").replace(/'/g, "&#x27;").replace(/"/g, "&quot;").replace(/</g, "&lt;")), `${cand.name}: ${p.slice(0, 40)}`);
+      if (!cand.statement) assert.match(html, /No statement in the Judicial Voter Guide/);
+    }
+  }
+  // North Carolina's visitors: their state's measures from California's ballot page.
+  const v = await get("/elections/2026-11-03/ballot/", `pillory_districts=${encodeURIComponent("st=NC&cd=4")}`);
+  assert.match(v.html, /href="\/elections\/2026-11-03-nc\/"/);
+});
+
 test("California's proposition titles: ordinary capitalization, the words unchanged, and a note saying so", async () => {
   const { headlineCase, measureTitle, TITLE_CASE_NOTE } = await import("../../../functions/_lib/elections.js");
   assert.equal(headlineCase("REPEALS PROHIBITION AGAINST PUBLIC FUNDING OF ELECTION CAMPAIGNS. LEGISLATIVE STATUTE."), "Repeals Prohibition Against Public Funding of Election Campaigns. Legislative Statute.");
   assert.equal(headlineCase("IMPOSES ONE-TIME TAX ON CERTAIN TAXPAYERS. INITIATIVE CONSTITUTIONAL AMENDMENT AND STATUTE."), "Imposes One-Time Tax on Certain Taxpayers. Initiative Constitutional Amendment and Statute.");
   assert.equal(headlineCase("REQUIRES U.S. CITIZENSHIP FOR ACA 13 VOTERS: A TEST."), "Requires U.S. Citizenship for ACA 13 Voters: A Test.", "abbreviations, bill numbers, and a small word starting a sentence");
+  assert.equal(headlineCase("MAXIMUM INCOME TAX RATE OF 3.5%"), "Maximum Income Tax Rate of 3.5%", "a small word before a number isn't a bill number");
   assert.equal(headlineCase("x").toLowerCase(), "x");
   const words = (t) => t.toLowerCase().split(/\s+/);
   const title = "AUTHORIZES BONDS FOR HOUSING AFFORDABILITY PROGRAMS. LEGISLATIVE STATUTE.";

@@ -16,7 +16,7 @@ import { simpleCard, positionLinesPlain, repListPlain } from "../_lib/simple.js"
 import { turnstileReady, turnstileWidget } from "../_lib/turnstile.js";
 import { placeTopicsIndex, placeTopicPage } from "../_lib/topic-pages.js";
 import { topicGrid, placeTopicsHref } from "../_lib/topics.js";
-import { electionIdFor, measuresOnly, loadElection, onTheBallot, statewideRow, contestRow, measureRow, courtRow, courtGroups } from "../_lib/elections.js";
+import { electionIdFor, measuresOnly, loadElection, onTheBallot, statewideRow, contestRow, measureRow, courtRow, courtGroups, judicialContests, judicialRow } from "../_lib/elections.js";
 import { pickYear, yearBar } from "../_lib/history.js";
 import { placePastYear, topicPastYear } from "../_lib/history-pages.js";
 import { LIVE, loadPlace, officialsFor, allIds, repRow, executiveRows, breadcrumb, districtLabel, districtHref, placeHref, loadDistrictNames } from "../_lib/geo.js";
@@ -250,8 +250,9 @@ function countyBallot(election, c, place) {
   const id = election.election.id;
   if (measuresOnly(election)) {
     // Washington: the statewide measures, the same on every ballot in the state.
-    const rows = election.measures.map((m) => measureRow(id, m));
-    return onTheBallot(election, { rows, intro: `The statewide measures, on every ballot in ${place.name}. ${c.name}'s candidates and local measures are on its elections office's website and sample ballot.`, today: pacificNow().slice(0, 10), folded: true, ballotLinks: false });
+    const courts = judicialContests(election);
+    const rows = [...election.measures.map((m) => measureRow(id, m)), ...courts.map((x) => judicialRow(id, x))];
+    return onTheBallot(election, { rows, intro: `The statewide measures${courts.length ? " and appellate court contests" : ""}, on every ballot in ${place.name}. ${c.name}'s ${courts.length ? "other " : ""}candidates and local measures are on its elections office's website and sample ballot.`, today: pacificNow().slice(0, 10), folded: true, ballotLinks: false });
   }
   const rows = [statewideRow(election)];
   for (const layer of ["cd", "sldu", "sldl"]) {

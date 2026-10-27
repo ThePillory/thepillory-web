@@ -23,7 +23,7 @@ import {
   ELECTIONS, loadElection, electionHref, contestHref, measureHref, ballotHref,
   ballotOrder, ballotFor, courtGroups, scopeLabel, contestTitle,
   officeholders, holderFor, pollsClosed, sosResults, candidateResults, measureResult, resultsBlock,
-  whenLine, howToVote, contestRow, measureRow, courtRow,
+  whenLine, howToVote, contestRow, measureRow, courtRow, judicialContests, judicialRow,
   measuresOnly, measureName, measureTitle, titleNote, electionIdFor, ELECTION_BY_STATE, COVERAGE_NOTE,
 } from "../_lib/elections.js";
 import { pacificNow } from "../_lib/meetings.js";
@@ -142,8 +142,9 @@ function measuresElectionPage(election) {
 </header>
 <section class="stack-sm" aria-labelledby="h-props"><h2 class="label" id="h-props">Statewide measures</h2>
   <div class="card">${election.measures.map((m) => measureRow(id, m)).join("")}</div>
-  <p class="hint">On every ballot in ${esc(state)}, in the order the official guide lists them. ThePillory has ${esc(state)}'s statewide measures for this election; candidates and local measures are in the state's official election information (see How to vote).</p>
+  <p class="hint">On every ballot in ${esc(state)}, in the order the official guide lists them. ThePillory has ${esc(state)}'s statewide measures for this election${judicialContests(election).length ? " and its appellate court candidates' statements" : ""}; ${judicialContests(election).length ? "other candidates" : "candidates"} and local measures are in the state's official election information (see How to vote).</p>
 </section>
+${judicialSection(election)}
 ${howToVote(election)}
 ${sources(election)}
 <p class="hint">${esc(NEUTRAL)}</p>`;
@@ -247,6 +248,64 @@ ${howToVote(election, d.co)}
 
 const PARTISAN = new Set(["statewide", "cd", "sldu", "sldl", "boe"]);
 
+/** North Carolina's appellate court contests (the Judicial Voter Guide), on every ballot in the state. */
+export function judicialSection(election) {
+  const list = judicialContests(election);
+  if (!list.length) return "";
+  const id = election.election.id;
+  return `<section class="stack-sm" aria-labelledby="h-courts"><h2 class="label" id="h-courts">Appellate courts</h2>
+  <div class="card">${list.map((c) => judicialRow(id, c)).join("")}</div>
+  <p class="hint">On every ballot in ${esc(STATE_NAME[election.election.state] || election.election.state)}. Each candidate's details and statement, word for word from the ${sourceLink(election.judicial.source_url, "State Board of Elections' Judicial Voter Guide")}.</p>
+</section>`;
+}
+
+const candidateAnchor = (name) => `cand-${String(name).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
+
+/** One contest from the Judicial Voter Guide: every candidate in the guide's (ballot) order, the same card for each. */
+function judicialPage(election, c) {
+  const e = election.election;
+  const g = election.judicial;
+  const back = [e.name, electionHref(e.id)];
+  const state = STATE_NAME[e.state] || e.state;
+  const cards = c.candidates
+    .map((cand) => {
+      // Each field's label above its text, so long lists (experience) read at phone width.
+      const fields = cand.details.map(([label, vals]) => `<div class="stack-xs"><p class="label">${esc(label)}</p>${vals.map((v) => `<p class="small">${esc(v)}</p>`).join("")}</div>`).join("");
+      const statement = cand.statement
+        ? `<div class="stack-xs"><p class="label">Candidate statement</p><div class="statement-body stack-xs">${cand.statement.paragraphs.map((p) => `<p>${esc(p)}</p>`).join("")}</div>
+  <p class="hint">Written by the candidate, printed word for word from the ${sourceLink(cand.statement.source_url, "Judicial Voter Guide")}.</p></div>`
+        : `<p class="small secondary">No statement in the Judicial Voter Guide.</p>`;
+      return `
+<article class="card stack-sm cand-card" id="${esc(candidateAnchor(cand.name))}">
+  <h3 class="cand-name">${esc(cand.name)}</h3>
+  ${kv([["Party", esc(cand.party || "None listed")]])}
+  ${fields}
+  ${statement}
+</article>`;
+    })
+    .join("");
+  const results = pollsClosed(election)
+    ? `<p class="small">Results: ${sourceLink(e.results_page, `${state} election office`)}</p>`
+    : `<p class="small secondary">Results are linked here after the polls close on Election Day.</p>`;
+  const main = `
+<header class="page-head stack-xs">
+  <p class="label">${esc(state)} · Statewide · ${esc(fmtDate(e.date))}</p>
+  <h1>${esc(c.office)}</h1>
+  <p class="subtitle">Vote for 1 · ${c.candidates.length} ${c.candidates.length === 1 ? "candidate" : "candidates"}</p>
+</header>
+<section class="stack-sm" aria-labelledby="h-cands">
+  <h2 class="label" id="h-cands">Candidates, in ballot order</h2>
+  <p class="hint">In the order the guide lists them, which it says is their order on the ballot. Everything on each card is the candidate's own submission, word for word; the State Board says statements "do not express or reflect the opinions of the State Board of Elections."</p>
+  ${cards}
+</section>
+<section class="stack-sm" aria-labelledby="h-res"><h2 class="label" id="h-res">Results</h2>${results}</section>
+<section class="stack-sm" aria-labelledby="h-src"><h2 class="label" id="h-src">Sources</h2>
+  <div class="card stack-xs"><p class="small">${sourceLink(g.source_url, g.source)}</p></div>
+</section>
+<p class="hint">${esc(NEUTRAL)}</p>`;
+  return page(`${c.office}, ${state}`, main, { tab: "home", back });
+}
+
 function statementBlock(cand, contest, coverage) {
   const s = cand.statement;
   if (!s) return `<p class="small secondary">${esc(coverage)}</p>`;
@@ -289,6 +348,8 @@ function candidateCard(cand, contest, election, holder, coverage) {
 async function contestPage(env, election, contestId) {
   const id = election.election.id;
   const back = [election.election.name, electionHref(id)];
+  const guide = judicialContests(election).find((c) => c.id === contestId);
+  if (guide) return judicialPage(election, guide);
   const group = courtGroups(election.contests).find((g) => g.id === contestId);
   if (group) return courtPage(election, group);
   const contest = election.contests.find((c) => c.id === contestId && c.scope !== "judicial");
@@ -486,14 +547,18 @@ function sectionsMeasurePage(election, m, back, conHtml = "", people = {}) {
     ? fold("arguments", ARGUMENTS_TITLE, `${sides.length ? `<div class="argument-sides">${sides
         .map((a) => `<article class="card stack-sm argument-card"><p class="label">${esc(a.side === "for" ? "For" : "Against")}</p><h3 class="statement-title">${esc(a.heading)}</h3>${body(a.paragraphs)}</article>`)
         .join("")}</div>${m.arguments_by ? `<p class="hint">${esc(m.arguments_by)}</p>` : ""}` : ""}${argLinks.length ? `<div class="stack-xs"><p class="label">Arguments filed for and against</p>${argLinks.map((x) => `<p class="small">${sourceLink(x.url, x.label)}</p>`).join("")}${m.arguments_note ? `<p class="hint">${esc(m.arguments_note)}</p>` : ""}</div>` : ""}`)
-    : "";
+    : m.no_arguments
+      ? `<section class="card stack-xs" id="arguments" aria-labelledby="h-args"><h2 class="label" id="h-args">Arguments for and against</h2><p class="small">${esc(m.no_arguments)}</p></section>`
+      : "";
+  // A ballot that doesn't number its measures (North Carolina's "Constitutional Amendment"): the heading is the name.
+  const numbered = /\d/.test(measureName(m));
   // The question card only when the facts card leads with the summary instead of the question.
   const question = m.lead && m.lead.text && m.lead.text !== m.yes_means;
   const main = `<div class="simple-scope">
 <header class="page-head stack-xs">
   <p class="label">Statewide · ${esc(state)} · ${esc(fmtDate(e.date))} · ${esc(m.kind)}</p>
-  <h1>${esc(measureName(m))}</h1>
-  <p class="subtitle">${esc(measureTitle(m))}</p>
+  <h1>${esc(numbered ? measureName(m) : measureTitle(m))}</h1>
+  ${numbered ? `<p class="subtitle">${esc(measureTitle(m))}</p>` : ""}
   ${titleNote([m]) ? `<p class="hint">${esc(titleNote([m]))}</p>` : ""}
 </header>
 ${factsCard(election, m)}
@@ -512,7 +577,7 @@ ${args}
 </section>
 <p class="hint">${esc(NEUTRAL)}</p>
 </div>`;
-  return page(`${measureName(m)}, ${state}`, main, { tab: "home", back });
+  return page(`${numbered ? measureName(m) : `${measureName(m)}: ${measureTitle(m)}`}, ${state}`, main, { tab: "home", back });
 }
 
 async function measurePage(election, measureId, env = {}, request = null) {
