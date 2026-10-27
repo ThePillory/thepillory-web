@@ -38,6 +38,22 @@ Every ballot measure page (California's statewide and county measures, Washingto
 
 Official text only: nothing written by ThePillory or AI, shortened only by cutting whole paragraphs, never by rewording; what the source doesn't print says so plainly. In Quick mode the card is all the page shows. The ballot preview (`/ballot/<st>/`, with and without an address) and Your ballot show the same card, folded under each measure's name (`factsFold()`). The campaigns' arguments and rebuttals follow, word for word, in one collapsed section, "What each side says (their own words, not checked by ThePillory)".
 
+## Who's behind each side, and who signed the arguments
+
+**Who's behind each side** (`behindSection()` in `functions/_lib/measure-people.js`, a collapsed section before the arguments, the same layout for Yes and No): California's statewide propositions, from `data/elections/measure-money-2026-11-03.json`, built weekly by `tools/build_measure_money.py` in the "Refresh California campaign data" workflow from the Cal-Access export:
+
+- **Committees formed for the measure**: ballot measure committees (entity BMC) whose campaign statements (Form 460) since late June 2026 (when the propositions were numbered) name the proposition by number, statewide, with a side, on the cover or the statement's list of measures. A committee naming both sides of one measure is left out. The export's own measure tables (`BALLOT_MEASURES_CD`, `FILER_LINKS_CD`) carry nothing for 2026, and the Cal-Access proposition pages are behind bot protection, so the statements are the source; each proposition's Cal-Access page is linked for readers.
+- For each: raised and spent (Summary Page lines 5 and 11, column A, summed over its statements since 2025, latest amendment of each), cash on hand (line 16, latest statement), its ten largest donors that are organizations (by name, each linked to the latest statement it appears on), and individuals only as a total and a count, never by name, at any amount. "As of the statement covering through [date]". A committee formed for several measures says so: its totals cover all of them.
+- **Independent spending by others**: Form 496 reports for or against the measure by anyone else (parties, general-purpose committees, organizations), by spender, with dates; people spending their own money are counted, never named.
+- Other states: "Campaign committee data for [State]'s measures isn't loaded yet."
+
+**Argument signers** (`signerDetails()`; `workers/sync/src/elections/signers.js`): names and titles exactly as printed. A signer is linked to their page only when their printed title names an elected office they hold now ("Senate Minority Leader", not "Former …") and exactly one official in the state's records, else exactly one certified candidate, has that name; a private person who shares a name is never linked. Each linked signer and each organization a title names ("President, [Organization]"; government bodies left out) gets a panel, closed by default, that opens in place:
+
+- officials: office, party as plain text, final-passage votes on record and the latest, money raised this period, the net worth line, each with "Full record ›"; candidates: the race, party as listed, money raised (no votes or net worth on record);
+- organizations: type from its IRS record through ProPublica (exact name and the election's state, one match only; looked up once by the sync's `measure-signer-orgs` step), California lobbying payments and years (Forms 635/645 under the exact name, one employer only), and its gifts to committees and its own spending on 2026 statewide measures, then "More ›".
+
+Private individuals stay as printed, with no panel. No party labels for private individuals or organizations, no voter registration data, and nothing that ties money to a position in words.
+
 ## Washington's statewide measures
 
 `tools/build_wa_measures.py` builds `data/elections/2026-11-03-wa.json` in the same shape as California's file, with only the three statewide measures (no candidates or local contests; `measuresOnly()` in `functions/_lib/elections.js` shows those elections as a list of measures, and "Your ballot" points to the statewide list, since it's the same on every ballot). It runs in the same daily workflow, after California. Sources, all from the Secretary of State's site:

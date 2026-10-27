@@ -157,6 +157,19 @@ test("results: never before the polls close (the feed carries test numbers), the
 });
 
 // ---------------------------------------------------------------------------
+// Who's behind each side of Proposition 1 (tools/build_measure_money.py's shape).
+const MONEY = {
+  generated: "2026-10-27",
+  measures: {
+    1: {
+      cal_access_url: SRC,
+      committees: [{ filer_id: "9", name: "Yes on 1, Example Homes Committee", side: "support", props: [{ number: "1", side: "support" }], raised: 2500, spent: 1000, cash_end: 1500, statements: 1, through: "2026-10-17", filed: "2026-10-22", source_url: SRC, statement_url: SRC, individuals: { total: 0, count: 0 }, organizations: [], organizations_count: 0 }],
+      spending: [],
+    },
+  },
+  orgs: {},
+};
+
 // The pages, with the fixture served as the static files.
 
 const ASSETS = {
@@ -164,6 +177,7 @@ const ASSETS = {
     const path = new URL(u).pathname;
     if (path === "/data/elections/2026-11-03.json") return new Response(JSON.stringify(ELECTION));
     if (path === "/data/geo/places/ca.json") return new Response(JSON.stringify(PLACE));
+    if (path === "/data/elections/measure-money-2026-11-03.json") return new Response(JSON.stringify(MONEY));
     // Washington's real file (tools/build_wa_measures.py): its three statewide measures.
     if (path === "/data/elections/2026-11-03-wa.json") return new Response(readFileSync(new URL("../../../data/elections/2026-11-03-wa.json", import.meta.url), "utf8"));
     // Colorado's, Arizona's, Florida's and Michigan's real files (tools/build_state_measures.py).
@@ -226,6 +240,10 @@ test("measure page: the facts card first; then each argument and rebuttal labele
   // Each part with its own signers: the opponents' rebuttal is signed by its author, not the supporters.
   assert.ok(at("The opponents reply.") < at("<strong>Ada Park</strong>, U.S. Senator") && at("<strong>Ada Park</strong>, U.S. Senator") < at("Opponents&#x27; argument"));
   assert.match(html, /<strong>Lee Moss<\/strong>, Director, Example Taxpayers/);
+  // Who's behind each side: before the arguments, the same layout for both sides.
+  assert.ok(at("Who&#x27;s behind each side") < at("What each side says (their own words, not checked by ThePillory)"));
+  assert.match(html, /Yes on 1, Example Homes Committee[\s\S]*Raised \$2,500/);
+  assert.match(html, /No committee formed to oppose this measure has filed a campaign statement naming it\./);
   // The same full-text treatment for every part: nothing excerpted or behind a second tap.
   assert.ok(!/Read the argument/.test(html));
   const local = (await get("/elections/2026-11-03/measure/06999-measure-a/")).html;
@@ -270,6 +288,7 @@ test("Washington: the statewide measures, the pamphlet's official parts first, b
   assert.ok(order.every((i) => i > 0) && order.every((i, k) => !k || i > order[k - 1]), "official parts first, in the pamphlet's order, then the arguments");
   for (const label of ["Supporters&#x27; argument", "Opponents&#x27; rebuttal", "Opponents&#x27; argument", "Supporters&#x27; rebuttal"]) assert.ok(html.includes(label), label);
   assert.doesNotMatch(html, /Contact:|@gmail\.com|nohateinwastate\.org/, "no campaign contact details");
+  assert.match(html, /Campaign committee data for Washington&#x27;s measures isn&#x27;t loaded yet\./);
   // A visitor in Washington is sent to Washington's measures from California's ballot page.
   const wa = await get("/elections/2026-11-03/ballot/", `pillory_districts=${encodeURIComponent("st=WA&cd=7")}`);
   assert.match(wa.html, /href="\/elections\/2026-11-03-wa\/"/);

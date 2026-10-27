@@ -3,7 +3,8 @@
 # totals, contributions by industry and employer, organizations, and Form 496
 # independent expenditures) from the Secretary of State's Cal-Access export and
 # commits it, then loads California lobbying reports from the same export into
-# D1 (tools/load_ca_lobbying.py), weekly and on demand (Actions -> Refresh
+# D1 (tools/load_ca_lobbying.py), and writes who's behind each side of the
+# statewide propositions (data/elections/measure-money-*.json), weekly and on demand (Actions -> Refresh
 # California campaign data -> Run workflow). See tools/build_ca_campaign.py and
 # tools/ca_campaign_finish.mjs. The sync Worker loads the file when it changes. Cal-Access is replaced by CARS after the November 2026
 # election; this workflow then needs the new system's data access.
@@ -28,11 +29,14 @@ jobs:
       - run: python3 tools/build_ca_campaign.py /tmp/cabuild
       # Industries by the same keyword rules as federal funding, and lists cut to what pages show.
       - run: node tools/ca_campaign_finish.mjs /tmp/cabuild/ca-campaign-raw.json data/ca-campaign.json
+      # The committees formed for each statewide proposition, their money, and independent
+      # spending on each (tools/build_measure_money.py), from the same export.
+      - run: python3 tools/build_measure_money.py /tmp/cabuild
       - name: Commit the data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/ca-campaign.json
+          git add data/ca-campaign.json data/elections/measure-money-*.json
           git diff --cached --quiet && exit 0
           git commit -m "Refresh California campaign data from the Cal-Access export"
           git push
