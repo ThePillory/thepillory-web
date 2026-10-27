@@ -43,7 +43,8 @@ export const scanSchema = {
  * The document is cached, so reading a long report in several chunks pays for
  * it in full only once per model.
  */
-export const scanMessage = (url, first, last) => [
-  { type: "document", source: { type: "url", url }, cache_control: { type: "ephemeral" } },
+/** The report as a document block: the PDF itself when the step downloaded it, otherwise its link. */
+export const scanMessage = (doc, first, last) => [
+  { type: "document", source: typeof doc === "string" ? { type: "url", url: doc } : doc, cache_control: { type: "ephemeral" } },
   { type: "text", text: `Transcribe rows ${first} to ${last} of this report's Transactions table, following the rules.` },
 ];

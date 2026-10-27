@@ -9,7 +9,7 @@ import assert from "node:assert/strict";
 import { DatabaseSync } from "node:sqlite";
 import { readFileSync, readdirSync } from "node:fs";
 import { checkReadings, blocking, contained, textLayerType, rowsLine } from "../src/trades/scan-check.js";
-import { syncScannedTrades, mergeChunks, accountError, holdUnchecked, textBacks, rowRanges } from "../src/trades/scan-sync.js";
+import { syncScannedTrades, mergeChunks, accountError, holdUnchecked, textBacks, rowRanges, pdfSource, toBase64 } from "../src/trades/scan-sync.js";
 import { ensureSchema } from "../src/db.js";
 import { scanChange, scanItem, scanList } from "../../../functions/_lib/trade-scan-review.js";
 import { memberTrades, memberReports, tradeRow, tradesSection } from "../../../functions/_lib/trades.js";
@@ -242,7 +242,9 @@ test("a long report is read in chunks that resume in the next round; the Preside
   let left = 3;
   const budget = { timeLeft: () => (left-- > 0 ? 10 * 60 * 1000 : 1000) };
   const env = { SCANNED_TRADES_DAILY: "1", SCAN_CHUNK_ROWS: "10" };
-  await assert.rejects(syncScannedTrades(env, db, budget, { call }), /run time limit/);
+  const stopped = await syncScannedTrades(env, db, budget, { call });
+  assert.equal(stopped.status, "partial", "out of time isn't a failure: the step isn't held until tomorrow");
+  assert.match(stopped.message, /run time limit reached before the second reading of rows 1-10 of oge:a/);
   assert.deepEqual(asked, ["a.pdf claude-sonnet-5-5 rows 1 to 10", "a.pdf claude-sonnet-5-5 rows 11 to 20", "a.pdf claude-sonnet-5-5 rows 21 to 30"], "the President's newest report first");
   assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM trade_scan_chunks WHERE report_id = 'oge:a'").get().n, 3);
   asked.length = 0;
@@ -402,4 +404,23 @@ test("the Worker records 0025 to 0027 instead of applying them again", async () 
   assert.deepEqual({ ...row }, { request_url: "https://example.org/request", position: "Secretary", agency: "Department" });
   const names = sqlite.prepare("SELECT name FROM d1_migrations").all().map((r) => r.name);
   assert.ok(["0025_executive_trades.sql", "0026_trade_scans.sql", "0027_trade_scans_auto.sql"].every((n) => names.includes(n)));
+});
+
+test("the step sends the PDF itself when it can download it, and the link when it can't", async () => {
+  const pdf = new TextEncoder().encode("%PDF-1.7 fake report");
+  const fetched = [];
+  const budget = { timeLeft: () => 10 * 60 * 1000, fetch: async (url) => (fetched.push(url), { arrayBuffer: async () => pdf.buffer }) };
+  const report = { report_id: "oge:a", report_url: "https://example.org/a.pdf" };
+  const doc = await pdfSource(report, budget);
+  assert.deepEqual(doc, { type: "base64", media_type: "application/pdf", data: toBase64(pdf) });
+  assert.equal(atob(doc.data), "%PDF-1.7 fake report");
+  await pdfSource(report, budget);
+  assert.equal(fetched.length, 1, "downloaded once per report and round");
+  const failing = { timeLeft: () => 10 * 60 * 1000, fetch: async () => { throw new Error("524 timeout"); } };
+  assert.equal(await pdfSource({ report_id: "oge:b", report_url: "https://example.org/b.pdf" }, failing), "https://example.org/b.pdf");
+  const html = { timeLeft: () => 10 * 60 * 1000, fetch: async () => ({ arrayBuffer: async () => new TextEncoder().encode("<html>").buffer }) };
+  assert.equal(await pdfSource({ report_id: "oge:c", report_url: "https://example.org/c.pdf" }, html), "https://example.org/c.pdf", "not a PDF: the link");
+  assert.equal(await pdfSource({ report_id: "oge:d", report_url: "https://example.org/d.pdf" }, null), "https://example.org/d.pdf");
+  const big = new Uint8Array(100000).fill(65);
+  assert.equal(atob(toBase64(big)).length, 100000);
 });
