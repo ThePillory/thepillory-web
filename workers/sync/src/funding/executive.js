@@ -20,7 +20,7 @@
 // on their own.
 import { getState, setState, BudgetExhausted, UpstreamError, isHttp, slugify } from "../util.js";
 import { fecOptions } from "./sync.js";
-import { seatOf, matchSeat, moneyRows } from "./state.js";
+import { seatOf, matchSeat, moneyRows, candidateKey, contestSeat, matchCandidate } from "./state.js";
 import {
   committeeTypes, pickInauguralCommittee, latestReports, parseForm13, form13Consistent, fecCommitteePage,
   OGE_API, OGE_SEARCH_PAGE, ogeRow, ogeKey, ogeNameMatches, nameParts,
@@ -225,6 +225,10 @@ async function fppcStatements(env, db, budget) {
     )
     .bind(`-${days} days`, ...firstSeats, parseInt(env.FPPC_PER_RUN || "30", 10))
     .all();
+  // Then the candidates on the certified list (statewide, Legislature, Board of Equalization), each under
+  // its own key, in what's left of this run: the same search, matched to the office they're running for.
+  const perRun = parseInt(env.FPPC_PER_RUN || "30", 10);
+  if (people.length < perRun) people.push(...(await fppcCandidates(env, db, budget, days, perRun - people.length)));
   let searched = 0;
   let found = 0;
   for (const p of people) {
@@ -245,7 +249,8 @@ async function fppcStatements(env, db, budget) {
             `INSERT OR REPLACE INTO disclosures (id, official_id, source, kind, doc_type, filer_name, position, agency, filed_on, period, amended_on, detail, source_url, updated_at)
              VALUES (?, ?, 'fppc', 'financial', ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`
           )
-          .bind(`fppc:${x.index_id}`, p.id, x.doc_type, p.name, x.position, x.agency, x.filed_on, x.period, x.amended ? x.filed_on : null,
+          // A candidate's rows carry their key, so an incumbent's own rows (the same statement) stay theirs.
+          .bind(p.candidate ? `fppc:${x.index_id}@${p.id}` : `fppc:${x.index_id}`, p.id, x.doc_type, p.name, x.position, x.agency, x.filed_on, x.period, x.amended ? x.filed_on : null,
             JSON.stringify({ index_id: x.index_id, pdf: x.pdf, no_interests: x.no_interests }), `${FPPC_SEARCH}/`)
       );
     }
@@ -255,13 +260,46 @@ async function fppcStatements(env, db, budget) {
           `INSERT INTO disclosure_checks (official_id, source, checked_at, note) VALUES (?, 'fppc', datetime('now'), ?)
            ON CONFLICT(official_id, source) DO UPDATE SET checked_at = excluded.checked_at, note = excluded.note`
         )
-        .bind(p.id, mine.length ? null : `No Form 700 filed as ${p.office} under this name was found in the FPPC's search.`)
+        .bind(p.id, mine.length ? null : `No Form 700 filed ${p.candidate ? "for" : "as"} ${p.office} under this name was found in the FPPC's search.`)
     );
     await inBatches(db, stmts);
     searched += 1;
     found += mine.length;
   }
-  return searched ? `FPPC: ${searched} official(s) searched, ${found} Form 700(s)` : null;
+  const cands = people.filter((p) => p.candidate).length;
+  return searched ? `FPPC: ${searched - cands} official(s) and ${cands} candidate(s) searched, ${found} Form 700(s)` : null;
+}
+
+const CHAMBER_OF = { sldl: "ca-assembly", sldu: "ca-senate" };
+
+/** Candidates on the certified list whose Form 700s weren't searched in `days`, up to `limit`, as the search's people. */
+async function fppcCandidates(env, db, budget, days, limit) {
+  if (limit <= 0) return [];
+  let election;
+  try {
+    election = await budget.json(`${(env.SITE_URL || "").replace(/\/$/, "")}/data/elections/2026-11-03.json`, {}, "certified candidate list");
+  } catch (err) {
+    if (err && err.status === 404) return [];
+    throw err;
+  }
+  const all = [];
+  for (const c of (election && election.contests) || []) {
+    if (!["statewide", "sldl", "sldu", "boe"].includes(c.scope) || /united states senator/i.test(c.office)) continue;
+    for (const cand of c.candidates) {
+      all.push({ id: candidateKey(c.id, cand.name), name: cand.name.replace(/\([^)]*\)|"[^"]*"/g, " ").replace(/\s+/g, " ").trim(), office: c.office, chamber: CHAMBER_OF[c.scope] || null, candidate: true });
+    }
+  }
+  if (!all.length) return [];
+  const fresh = new Set();
+  for (let i = 0; i < all.length; i += 90) {
+    const ids = all.slice(i, i + 90).map((p) => p.id);
+    const { results } = await db
+      .prepare(`SELECT official_id FROM disclosure_checks WHERE source = 'fppc' AND checked_at >= datetime('now', ?) AND official_id IN (${ids.map(() => "?").join(",")})`)
+      .bind(`-${days} days`, ...ids)
+      .all();
+    for (const r of results) fresh.add(r.official_id);
+  }
+  return all.filter((p) => !fresh.has(p.id)).slice(0, limit);
 }
 
 /** The statements that replace one official's California campaign rows with an entry from data/ca-campaign.json. */
@@ -326,7 +364,8 @@ async function caCampaign(env, db, budget) {
     if (err && err.status === 404) return "California campaign data: data/ca-campaign.json not built yet";
     throw err;
   }
-  const stamp = `${file.generated}|${file.export_modified}`;
+  // The suffix reloads the file once when what's loaded from it changes (candidates, October 2026).
+  const stamp = `${file.generated}|${file.export_modified}|candidates-1`;
   if ((await getState(db, "ca_campaign_loaded")) === stamp) return null;
   const exported = `Cal-Access export of ${file.export_modified || file.generated}`;
   const { results: officials } = await db
@@ -359,9 +398,38 @@ async function caCampaign(env, db, budget) {
       add(o.id, entry, entry ? exported : `No campaign statement (Form 460) since 2025 naming this legislator as the candidate for this seat in the ${exported}.`);
     }
   }
+  // Every candidate on the certified list, under their own key (candidateKey): statewide ones from
+  // "candidates", the rest from their seat, each only on a unique name match that no other candidate shares.
+  let candidates = 0;
+  let candidatesMatched = 0;
+  let election = null;
+  try {
+    election = await budget.json(`${(env.SITE_URL || "").replace(/\/$/, "")}/data/elections/2026-11-03.json`, {}, "certified candidate list");
+  } catch (err) {
+    if (!(err && err.status === 404)) throw err;
+  }
+  for (const contest of (election && election.contests) || []) {
+    const seat = contestSeat(contest);
+    const statewide = contest.scope === "statewide" && file.candidates && Object.prototype.hasOwnProperty.call(file.candidates, contest.id);
+    if (!seat && !statewide) continue; // the U.S. Senate (FEC), or a statewide list not built yet
+    const entries = statewide ? file.candidates[contest.id] : (file.seats || {})[seat] || [];
+    const picks = contest.candidates.map((cand) => matchCandidate(entries, cand.name));
+    for (const [i, cand] of contest.candidates.entries()) {
+      const entry = picks[i] && picks.filter((x) => x === picks[i]).length === 1 ? picks[i] : null;
+      if (entry) candidatesMatched += 1;
+      candidates += 1;
+      add(
+        candidateKey(contest.id, cand.name),
+        entry,
+        entry
+          ? exported
+          : `No campaign statement (Form 460) naming ${cand.name} as the candidate for ${contest.office} was matched to exactly one candidate in the ${exported}.`
+      );
+    }
+  }
   await inBatches(db, stmts);
   await setState(db, "ca_campaign_loaded", stamp);
-  return `California campaign data: ${people} official(s) (${unmatched} legislator(s) without a statement for their seat), ${committees} committee(s), ${reports} statement(s)`;
+  return `California campaign data: ${people - candidates} official(s) (${unmatched} legislator(s) without a statement for their seat), ${candidates} certified candidate(s) (${candidatesMatched} matched), ${committees} committee(s), ${reports} statement(s)`;
 }
 
 export async function syncExecutiveFunding(env, db, budget) {

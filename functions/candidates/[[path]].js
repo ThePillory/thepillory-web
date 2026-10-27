@@ -9,8 +9,9 @@ import { STATE_NAME } from "../_lib/districts.js";
 import { todayIn } from "../_lib/election-window.js";
 import { loadCertified } from "../_lib/certified.js";
 import {
-  loadCandidates, certifiedElection, platformFor, recordsFor, fecCandidatePage, stateCandidatePage, stateOfId, nameSlug, racesHref, YEAR, STATE_SCOPES,
+  loadCandidates, certifiedElection, platformFor, recordsFor, fecCandidatePage, stateCandidatePage, stateCandidateMoney, stateOfId, nameSlug, racesHref, YEAR, STATE_SCOPES,
 } from "../_lib/candidates.js";
+import { currentCycle } from "../../workers/sync/src/funding/fec.js";
 
 const BACK = ["Preview your state's ballot", "/ballot/"];
 const NONE = "No candidate at this address.";
@@ -30,8 +31,19 @@ export const onRequestGet = guard(async (context) => {
       const contest = election && election.contests.find((c) => c.id === parts[1] && STATE_SCOPES.has(c.scope));
       const cand = contest && contest.candidates.find((x) => nameSlug(x.name) === parts[2]);
       if (!cand) return notFound(NONE, "home", BACK);
-      const records = await loadSection("candidate records", () => recordsFor(env.DB, "CA"), noRecords);
-      const p = stateCandidatePage({ cand, contest, election, records: records && records.officials ? records : noRecords, today: todayIn("CA") });
+      const cycle = parseInt(url.searchParams.get("cycle") || "", 10) || currentCycle();
+      const [records, money] = await Promise.all([
+        loadSection("candidate records", () => recordsFor(env.DB, "CA"), noRecords),
+        // Campaign money (Cal-Access) and Form 700s (FPPC), under the candidate's own key, like an official's.
+        env.DB ? loadSection("candidate money", () => stateCandidateMoney(env.DB, contest, cand, cycle), null) : null,
+      ]);
+      const p = stateCandidatePage({
+        cand, contest, election,
+        records: records && records.officials ? records : noRecords,
+        today: todayIn("CA"),
+        money: money && money !== FAILED ? money : null,
+        base: url.pathname,
+      });
       return page(p.title, p.main, { tab: "home", back: ["Candidates in California", racesHref(Number(election.election.date.slice(0, 4)), "CA")] });
     });
   }

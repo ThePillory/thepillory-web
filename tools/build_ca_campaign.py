@@ -12,9 +12,16 @@ with the same rules as federal funding).
 Who:
   - each official in data/state-executive-officials.json (the Governor and
     the statewide offices), matched by name;
-  - every candidate for the State Assembly or State Senate with a campaign
-    statement since 2025, by seat ("ASM-8", "SEN-4"); the sync Worker matches
-    each sitting legislator to their seat's entry by name.
+  - every candidate for the State Assembly, State Senate or Board of
+    Equalization with a campaign statement since 2025, by seat ("ASM-8",
+    "SEN-4", "BOE-2"); the sync Worker matches each sitting legislator, and
+    each candidate on the certified list, to their seat's entry by name;
+  - every candidate for a statewide office on the Secretary of State's
+    Certified List of Candidates (data/elections/2026-11-03.json), by contest
+    ("candidates"): the committees whose cover pages name them as the
+    candidate for that office (its Cal-Access office code), by last name and
+    first name (or the nickname the list gives in parentheses). A name two
+    candidates in the same contest could both match is left out.
 
 For each, the campaign committees they control (a Form 460 cover page filed
 by a candidate or candidate-controlled committee, entity CAO or CTL, naming
@@ -130,7 +137,7 @@ def seat_of(r):
     """'ASM-8' from a cover's office and district, or None."""
     office = (r.get("OFFICE_CD") or r.get("JURIS_CD") or "").strip().upper()
     dist = (r.get("DIST_NO") or "").strip()
-    if office in ("ASM", "SEN") and dist.isdigit() and int(dist) > 0:
+    if office in ("ASM", "SEN", "BOE") and dist.isdigit() and int(dist) > 0:
         return f"{office}-{int(dist)}"
     return None
 
@@ -141,6 +148,49 @@ def employer_key(s):
 
 def new_person(name, first, last):
     return {"name": name, "first": first, "last": last, "filers": set(), "covers": {}}
+
+
+NICKNAMES = {
+    "tom": "thomas", "bill": "william", "will": "william", "mike": "michael", "bob": "robert", "rob": "robert", "jim": "james",
+    "joe": "joseph", "dave": "david", "dan": "daniel", "steve": "stephen", "chris": "christopher", "tony": "anthony",
+    "ed": "edward", "kathy": "katherine", "liz": "elizabeth", "sam": "samuel", "rick": "richard", "dick": "richard",
+    "pat": "patrick", "matt": "matthew", "nick": "nicholas", "ben": "benjamin", "alex": "alexander", "andy": "andrew",
+    "greg": "gregory", "jeff": "jeffrey", "ken": "kenneth", "larry": "lawrence", "ron": "ronald", "tim": "timothy",
+    "don": "donald", "jon": "jonathan", "phil": "philip", "fred": "frederick", "gerry": "gerald",
+}
+
+# Cal-Access office codes (OFFICE_CD on cover pages) for the statewide offices on the certified list.
+STATEWIDE_CODES = {
+    "Governor": "GOV", "Lieutenant Governor": "LTG", "Secretary of State": "SOS", "Controller": "CON",
+    "Treasurer": "TRE", "Attorney General": "ATT", "Insurance Commissioner": "INS",
+    "Superintendent of Public Instruction": "SPI",
+}
+ELECTION = ROOT / "data/elections/2026-11-03.json"
+
+
+def certified_statewide():
+    """{contest_id: (office code, [person])} for each statewide office on the certified list; a person
+    also carries "firsts", their first name and the nickname the list gives in parentheses."""
+    if not ELECTION.exists():
+        return {}
+    out = {}
+    for c in json.loads(ELECTION.read_text()).get("contests", []):
+        code = STATEWIDE_CODES.get(c.get("office"))
+        if c.get("scope") != "statewide" or not code:
+            continue
+        people = []
+        for cand in c.get("candidates", []):
+            nick = re.findall(r"\(([^)]+)\)", cand["name"])
+            p = name_parts(re.sub(r"\([^)]*\)", " ", cand["name"]))
+            if not p:
+                continue
+            person = new_person(cand["name"], p[0], p[1])
+            firsts = {p[0], *(fold(n.split()[0]) for n in nick if n.strip())}
+            # Common short forms, both ways (the same list as workers/sync/src/funding/state.js).
+            person["firsts"] = firsts | {NICKNAMES.get(f, f) for f in firsts} | {k for k, v in NICKNAMES.items() if v in firsts}
+            people.append(person)
+        out[c["id"]] = (code, people)
+    return out
 
 
 def build(zip_path, officials):
@@ -155,6 +205,9 @@ def build(zip_path, officials):
         if p and o.get("office_key"):
             statewide[o["office_key"]] = new_person(o["name"], p[0], p[1])
             by_last.setdefault(p[1], []).append(statewide[o["office_key"]])
+
+    contests = certified_statewide()
+    by_code = {code: people for code, people in contests.values()}
 
     # 1. Form 460 cover pages by candidate committees, latest amendment of each.
     #    Statewide officials: any cover naming them. Legislative candidates: by seat and name.
@@ -197,6 +250,10 @@ def build(zip_path, officials):
         for p in by_last.get(last, []):
             if first_matches(first, p["first"]):
                 p["filers"].add(r["FILER_ID"])
+        # A statewide candidate on the certified list: this office's code, and a name only one of them matches.
+        cands = [p for p in by_code.get((r["OFFICE_CD"] or "").strip().upper(), []) if p["last"] == last and any(first_matches(first, f) for f in p["firsts"])]
+        if len(cands) == 1:
+            cands[0]["filers"].add(r["FILER_ID"])
         seat = seat_of(r)
         if seat and last and thru >= SEATS_SINCE:
             people = seats.setdefault(seat, [])
@@ -207,7 +264,7 @@ def build(zip_path, officials):
                 people.append(who)
             who["filers"].add(r["FILER_ID"])
 
-    everyone = list(statewide.values()) + [p for people in seats.values() for p in people]
+    everyone = list(statewide.values()) + [p for people in seats.values() for p in people] + [p for _, people in contests.values() for p in people]
     for p in everyone:
         for f in p["filers"]:
             for c in filer_covers.get(f, {}).values():
@@ -353,9 +410,17 @@ def build(zip_path, officials):
             "cycles": cycles,
         }
 
+    # Campaign websites: whether the Statement of Organization (Form 410) carries one (printed for the record).
+    try:
+        cols = list(next(rows(zf, "CVR_SO_CD")).keys())
+        print(f"Form 410 (CVR_SO_CD) columns that could hold a website: {[c for c in cols if re.search(r'WEB|URL|SITE|EMAIL', c)] or 'none'}")
+    except StopIteration:
+        pass
+
     return {
         "officials": {k: out(p) for k, p in statewide.items()},
         "seats": {seat: [out(p) for p in people] for seat, people in sorted(seats.items())},
+        "candidates": {cid: [out(p) for p in people] for cid, (_, people) in sorted(contests.items())},
     }
 
 
@@ -378,6 +443,9 @@ def main():
     (work / "ca-campaign-raw.json").write_text(json.dumps(doc))
     for k, v in data["officials"].items():
         print(f"{k}: {len(v['committees'])} committee(s), {sum(len(c['reports']) for c in v['committees'])} statement(s), periods {sorted(v['cycles'])}")
+    for k, people in data["candidates"].items():
+        for v in people:
+            print(f"candidate {k}: {v['name']}: {len(v['committees'])} committee(s) {[c['name'] for c in v['committees']]}")
     print(f"legislative seats: {len(data['seats'])}, candidates: {sum(len(v) for v in data['seats'].values())}")
     for seat in ("ASM-8", "SEN-4"):
         for p in data["seats"].get(seat, []):

@@ -31,6 +31,56 @@ export function matchSeat(entries, o) {
   return found.length === 1 ? found[0] : null;
 }
 
+// Candidates on the Secretary of State's certified list (data/elections/2026-11-03.json):
+// statewide ones by contest ("candidates" in the file), legislative and Board of
+// Equalization ones by seat; each stored under its own key, the same rows as officials'.
+
+/** A candidate's key in state_money_* and disclosures: "ca-cand:<contest>:<name slug>" (the slug of /candidates/ca/<contest>/<slug>/). */
+export const candidateKey = (contestId, name) =>
+  `ca-cand:${contestId}:${String(name).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
+
+const CONTEST_SEAT = { sldl: "ASM", sldu: "SEN", boe: "BOE" };
+/** "ASM-8" for an Assembly contest, and the like; null for a statewide one. */
+export function contestSeat(contest) {
+  const prefix = CONTEST_SEAT[contest && contest.scope];
+  const n = parseInt(String(contest && contest.district), 10);
+  return prefix && n > 0 ? `${prefix}-${n}` : null;
+}
+
+// Common short forms of first names, the same for everyone ("Tom Patti" on the ballot, "Thomas Patti" on the filing).
+export const NICKNAMES = {
+  tom: "thomas", bill: "william", will: "william", mike: "michael", bob: "robert", rob: "robert", jim: "james", joe: "joseph",
+  dave: "david", dan: "daniel", steve: "stephen", chris: "christopher", tony: "anthony", ed: "edward", kathy: "katherine",
+  liz: "elizabeth", sam: "samuel", rick: "richard", dick: "richard", pat: "patrick", matt: "matthew", nick: "nicholas",
+  ben: "benjamin", alex: "alexander", andy: "andrew", greg: "gregory", jeff: "jeffrey", ken: "kenneth", larry: "lawrence",
+  ron: "ronald", tim: "timothy", don: "donald", jon: "jonathan", phil: "philip", fred: "frederick", gerry: "gerald",
+};
+const fullName = (first) => NICKNAMES[first] || first;
+const firstOrNickname = (a, b) => firstMatches(a, b) || firstMatches(fullName(a), fullName(b)) || (fullName(a) === "stephen" && fullName(b) === "steven") || (fullName(a) === "steven" && fullName(b) === "stephen");
+
+/** The names to try for a certified name: as listed, then with the nickname in parentheses or quotes as the first name ("Donald P. (Don) Wagner", 'Nicholas "Nick" Schultz'). */
+function namesToTry(name) {
+  const plain = String(name || "").replace(/\([^)]*\)|"[^"]*"/g, " ").replace(/\s+/g, " ").trim();
+  const m = String(name || "").match(/\(([^)]+)\)|"([^"]+)"/);
+  const nick = m && (m[1] || m[2]);
+  const last = plain.split(" ").pop();
+  return [plain, nick ? `${nick.trim()} ${last}` : null].filter(Boolean);
+}
+
+/** The one entry for this candidate (same last name, a first name, nickname or common short form that matches), or null when none or more than one does. */
+export function matchCandidate(entries, name) {
+  const found = new Set();
+  for (const n of namesToTry(name)) {
+    const me = nameParts(n);
+    if (!me) continue;
+    for (const p of entries || []) {
+      const them = nameParts(String(p.name || "").replace(/\([^)]*\)/g, " "));
+      if (them && them.last === me.last && firstOrNickname(them.first, me.first)) found.add(p);
+    }
+  }
+  return found.size === 1 ? [...found][0] : null;
+}
+
 /** The Cal-Access page an official's money links to: their first (newest) committee. */
 export const mainSource = (person) => (person.committees && person.committees[0] && person.committees[0].source_url) || null;
 

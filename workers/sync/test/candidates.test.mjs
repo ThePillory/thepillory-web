@@ -11,6 +11,7 @@ import {
 } from "../../../functions/_lib/candidates.js";
 import { websiteUrl, mergeList, certifiedFederal, refreshOrder, websites, nameIndex } from "../../../tools/build_candidates.mjs";
 import { sameCandidate, matchFec, certifiedRace } from "../../../functions/_lib/certified.js";
+import { stateCandidatePage } from "../../../functions/_lib/candidates.js";
 
 const totals = { receipts: 1000, disbursements: 400, cash_on_hand: 600, individual_unitemized: 300, individual_itemized: 500, pac: 200, party: 0, self_funding: 0, other: 0, coverage_end: "2026-06-30", last_report: null, source_url: "https://www.fec.gov/data/candidate/S6ZZ00001/?cycle=2026&election_full=false" };
 const cand = (id, name, office, district, extra = {}) => ({
@@ -49,7 +50,8 @@ const ELECTION = {
     ] },
     { id: "governor", office: "Governor", scope: "statewide", district: null, source_url: "https://elections.example/cert.pdf", candidates: [
       { name: "Gail Golf", party: "Party G", designation: "State Senator", incumbent: false },
-      { name: "Hal Hotel", party: "Party H", designation: "Business Owner", incumbent: false },
+      { name: "Hal Hotel", party: "Party H", designation: "Business Owner", incumbent: false,
+        statement: { paragraphs: ["I will keep the state's books open to everyone."], source_url: "https://voterguide.example/statements.htm", source: "Official Voter Information Guide, Secretary of State" } },
     ] },
   ],
   measures: [],
@@ -299,4 +301,31 @@ test("a race with a state's own certified list: its names on the ballot, the oth
   const on = await call(CANDIDATES, "/candidates/S6NC00002/");
   assert.match(on.html, /Candidate · Not yet in office/);
   assert.match(on.html, /On the state(?:'|&#x27;)s certified list as/);
+});
+
+test("statements: word for word on the candidate's page, a link on race cards, and plainly none where there's none", async () => {
+  const hal = await call(CANDIDATES, "/candidates/ca/governor/hal-hotel/");
+  assert.match(hal.html, /<details class="fold" id="statement" open>/);
+  assert.match(hal.html, /I will keep the state(?:'|&#39;|&#x27;)s books open to everyone\./);
+  assert.match(hal.html, /printed word for word in the Official Voter Information Guide, Secretary of State/);
+  const gail = await call(CANDIDATES, "/candidates/ca/governor/gail-golf/");
+  assert.match(gail.html, /No statement in the state(?:'|&#39;|&#x27;)s Official Voter Information Guide\./);
+  const race = await call(RACES, "/races/2026/ca/governor/");
+  assert.match(race.html, /href="\/candidates\/ca\/governor\/hal-hotel\/#statement">Read their statement ›/);
+  assert.match(race.html, /No statement in the voter guide/);
+});
+
+test("a state candidate's campaign money and Form 700s use officials' tabs, under their own key", () => {
+  const contest = ELECTION.contests[1];
+  const cand = contest.candidates[1];
+  const money = {
+    money: { cycle: 2026, cycles: [2026], row: { raised: 51000, spent: 20000, statements: 2, individuals_total: 4850, individuals_count: 5 }, industries: [], employers: [], orgs: [], ie: [], committees: [], totals: [], check: { note: "Cal-Access export of Mon, 26 Oct 2026", checked_at: "2026-10-27" } },
+    form700: { rows: [], check: { note: "No Form 700 filed for Governor under this name was found in the FPPC's search.", checked_at: "2026-10-27" }, lines: [], reads: [] },
+  };
+  const p = stateCandidatePage({ cand, contest, election: ELECTION, records: { officials: [], byFec: {} }, today: "2026-10-27", money, base: "/candidates/ca/governor/hal-hotel/" });
+  assert.match(p.main, /Money raised and spent by the campaign committees Hal Hotel controls/);
+  assert.match(p.main, /\$51,000/);
+  assert.match(p.main, /No Form 700 filed for Governor under this name/);
+  const none = stateCandidatePage({ cand, contest, election: ELECTION, records: { officials: [], byFec: {} }, today: "2026-10-27" });
+  assert.match(none.main, /Not loaded yet\. Campaign money for California candidates/);
 });

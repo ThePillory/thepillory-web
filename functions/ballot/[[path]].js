@@ -209,10 +209,14 @@ function fecRace(title, list, filed, href = null, inc) {
 }
 
 /** One candidate from the certified list: the same layout for everyone, in ballot order. */
-function certifiedCandidate(c, filed, inc) {
+function certifiedCandidate(c, filed, inc, contest, election) {
   const own = c.fec && filed[c.fec.id];
   const me = inc.get(c.fec && c.fec.id, c.name);
-  const links = candLinks(own, me, c.fec && c.fec.url);
+  // The statement, word for word, is on the candidate's page (or the contest's, for a candidate without an FEC filing).
+  const statement = c.statement
+    ? `<a class="inline-link" href="${c.fec && c.fec.id ? `${candidateHref(c.fec.id)}#statement` : contestHref(election.election.id, contest.id)}">Read their statement ›</a>`
+    : contest.scope === "statewide" ? "No statement in the voter guide" : null;
+  const links = [...candLinks(own, me, c.fec && c.fec.url), statement].filter(Boolean);
   return `
   <li class="ballot-cand stack-xs">
     <p class="list-title">${c.fec && c.fec.id ? `<a class="inline-link" href="${candidateHref(c.fec.id)}">${esc(c.name)}</a>` : esc(c.name)}</p>
@@ -236,7 +240,7 @@ function certifiedSection(st, election, filed, d, records) {
   <div class="card stack-xs">
     <p class="label">${esc(c.office)}</p>
     ${openSeatLine(inc.open)}
-    <ul class="plain-list ballot-cands">${candidates.map((x) => certifiedCandidate(x, filed, inc)).join("")}</ul>
+    <ul class="plain-list ballot-cands">${candidates.map((x) => certifiedCandidate(x, filed, inc, c, election)).join("")}</ul>
     <p class="hint">${esc(note)} <a class="inline-link" href="${contestHref(election.election.id, c.id)}">Candidate statements</a> · <a class="inline-link" href="${raceHref(YEAR, st, c.scope === "cd" ? `house-${c.district}` : "senate")}">The race</a></p>
   </div>`;
   };

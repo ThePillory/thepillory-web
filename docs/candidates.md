@@ -85,6 +85,15 @@ Built by `tools/build_candidates.mjs` in the "Refresh candidate data" workflow (
 
 The principal committee ID comes from the FEC candidate search (`principal_committees`, designation P) in `tools/build_federal_races.py`.
 
+## Statements, California money and Form 700s
+
+The same sections, in the same order, for every candidate on a loaded certified list; what's missing is one plain line, never a blank.
+
+- **Candidate statement** (`statementSection()` in `functions/_lib/candidates.js`): the statement from the state's official voter guide, word for word, with its source and link, open at the top of About (`#statement`). Race cards and the ballot preview show "Read their statement ›" or "No statement in the voter guide". California's statements come with `data/elections/2026-11-03.json` (the Secretary of State's guide for statewide races; the county's Voter Information Pamphlet for Calaveras's races). A candidate without one says "No statement in the state's Official Voter Information Guide." Washington's and the other states' loaded pamphlets carry measures only, so their candidates have no statement section yet.
+- **California campaign money** (Funding tab, `stateFundingTab()`, the same as legislators): totals raised and spent, organizations by name, industries, employers and independent expenditures for and against, from the Cal-Access export (`tools/build_ca_campaign.py`, weekly). Legislative and Board of Equalization candidates are matched by seat (`file.seats`), statewide candidates by office code and name from the certified list (`file.candidates`); either only when exactly one entry matches the name (`matchCandidate()`: a nickname in parentheses or quotes and a fixed short-name list, the same for everyone) and no other candidate in the contest matches the same entry. Stored under `ca-cand:<contest>:<name>` (`candidateKey()`) by the sync's `executive-funding` step. No match: "Not loaded yet", with the Cal-Access search linked.
+- **Form 700** (More → Disclosures, `stateForm700()`): the FPPC search for the candidate's name and office, in what's left of `FPPC_PER_RUN` after officials; a statement row's ID is `fppc:<index>@<key>`. None found: "No Form 700 filed for [office] under this name was found in the FPPC's search."
+- **Campaign website:** only from an official filing: the FEC Form 1 for federal candidates. California's certified list has none; the builder prints the Cal-Access Form 410 columns that could hold one, and none is shown until a filing lists it.
+
 ## Platform tab
 
 The sync Worker's `candidate-platforms` step (`workers/sync/src/promises/candidates-sync.js`, after `issues-pages`):
