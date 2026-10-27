@@ -125,6 +125,16 @@ export function placeName(location) {
   return parts.length ? parts[parts.length - 1] : "";
 }
 
+/** A meeting in plain words, for Quick mode: "[Body] meets Thu, Oct 29 at 9:00 AM in San Andreas. Written comments are due Wed, Oct 28." */
+export function meetingLinePlain(m) {
+  const w = when(m.starts_at);
+  const d = deadlineParts(m);
+  const state = m.level === "state";
+  const town = state ? "" : placeName(m.location);
+  const at = `${w.day}${w.time ? ` at ${w.time}` : ""}${town ? ` in ${town}` : ""}`.replace(/[.\s]+$/, "");
+  return `<li><a class="inline-link" href="${meetingHref(m.id)}">${esc(m.body)}</a> ${state ? "holds a hearing" : "meets"} ${esc(at)}.${d ? ` Written comments are due ${esc(d.day)}.` : ""}</li>`;
+}
+
 /** A compact meeting card (Home, calendar). */
 export function meetingCard(m, summary) {
   const w = when(m.starts_at);

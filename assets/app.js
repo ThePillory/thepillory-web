@@ -589,6 +589,8 @@
   // ---------------------------------------------------------------------
   // Quick / Detailed: the switch under the header. The choice is kept in this
   // browser only (localStorage "pillory_mode"); nothing goes to the server. The
+  // switch is only on pages that have a Quick version (<body data-quick>); the
+  // choice is remembered everywhere, but only those pages change with it. The
   // page carries both versions; the <head> script sets data-mode before the
   // page draws, so there's no flash. In Quick mode, glossary words get a
   // dotted underline and a tap-to-explain, and Constitution chips show their
@@ -604,12 +606,14 @@
     document.querySelectorAll("[data-mode-switch] [data-mode-set]").forEach(function (b) {
       b.setAttribute("aria-pressed", String(b.getAttribute("data-mode-set") === (mode === "simple" ? "simple" : "detailed")));
     });
-    if (mode === "simple") loadGlossary();
+    // Glossary words and plain Constitution names only on pages with a Quick version.
+    if (mode === "simple" && document.body.hasAttribute("data-quick")) loadGlossary();
   }
   document.querySelectorAll("[data-mode-switch]").forEach(function (sw) { sw.hidden = false; });
   document.addEventListener("click", function (ev) {
     var b = ev.target.closest && ev.target.closest("[data-mode-set]");
-    if (!b) return;
+    // A page without a Quick version never changes the remembered choice.
+    if (!b || !document.body.hasAttribute("data-quick")) return;
     var mode = b.getAttribute("data-mode-set");
     storeMode(mode);
     setMode(mode);

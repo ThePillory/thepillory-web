@@ -11,7 +11,8 @@ import { summaryHead, contentsBar, fold, statusChip } from "../_lib/summary.js";
 import { EMPTY_REPORTS } from "../_lib/generated.js";
 import { recentFinalVotes } from "../_lib/data.js";
 import { voteRows } from "../_lib/briefing.js";
-import { listMeetings, summariesFor, meetingCard, pacificNow, addDays } from "../_lib/meetings.js";
+import { listMeetings, summariesFor, meetingCard, meetingLinePlain, pacificNow, addDays, when } from "../_lib/meetings.js";
+import { simpleCard, positionLinesPlain, repListPlain } from "../_lib/simple.js";
 import { turnstileReady, turnstileWidget } from "../_lib/turnstile.js";
 import { placeTopicsIndex, placeTopicPage } from "../_lib/topic-pages.js";
 import { topicGrid, placeTopicsHref } from "../_lib/topics.js";
@@ -196,11 +197,28 @@ async function placePage({ request, env, params }) {
     summary: { text: `${sumText}${live ? " ThePillory follows its county meetings and agendas." : ""}`, source: "District overlaps from the U.S. Census Bureau." },
     extra: districtsLine ? `<div class="stack-sm">${districtsLine}</div>` : "",
   });
-  const main = `
+  // Quick: who represents the county, its next meetings, the latest votes and
+  // Election Day, in plain words; the briefing or waitlist card stays.
+  const governor = o.stateExecutive.filter((x) => /^governor$/i.test(x.office || ""));
+  const election = electionLoaded && electionLoaded !== FAILED && electionLoaded.election.state === place.st ? electionLoaded.election : null;
+  const simple = simpleCard({
+    lines: [
+      ["In Congress", repListPlain([...o.senators, ...o.house])],
+      [`In ${place.name}`, repListPlain([...governor, ...o.upper, ...o.lower])],
+      ["On the county board", live ? repListPlain(o.county) : ""],
+      ["Next county meetings", live && meetingsLoaded !== FAILED && meetings.length ? `<ul class="simple-list">${meetings.slice(0, 2).map(meetingLinePlain).join("")}</ul>` : ""],
+      ["Latest votes", votes === FAILED ? "" : positionLinesPlain(votes.rows, 3)],
+      ["Election Day", election && election.date >= now.slice(0, 10) ? `${esc(when(`${election.date}T00:00`).long)}. <a class="inline-link" href="/ballot/${esc(place.st.toLowerCase())}/">Preview the ballot</a>` : ""],
+    ],
+    source: "From the officials' records, the county's meeting calendar and the Secretary of State, as shown on this page.",
+  });
+  // No Quick card (nothing loaded yet): no Quick version, and no switch.
+  const main = `<div class="${simple ? "simple-scope" : "page-scope"}">
 ${breadcrumb([["United States", "/explore/"], [place.name, statePath(place.st)], [c.name, null]])}
 ${contentsBar([["summary", "Summary"], ballot ? ["elections", "Ballot"] : [null], ["who", "Who represents"], live ? ["meetings", "Meetings"] : [null], ["topics", "Topics"], ["votes", "Votes"], ["funding", "Funding"], nearby ? ["nearby", "Nearby"] : [null]])}
 ${head}
-${action}
+${simple}
+<div class="simple-keep">${action}</div>
 ${electionLoaded === FAILED ? sectionError("On the ballot") : ballot}
 ${fold("who", `Who represents ${c.name}`, `${oLoaded === FAILED ? sectionError("") : ""}
   ${group("County", countyRows, live ? "The supervisors appear after the data sync runs." : "County officials aren't on ThePillory yet. County coverage opens when a community launches.")}
@@ -222,7 +240,8 @@ ${fold("votes", `Recent votes by ${live ? "its" : "its state and federal"} repre
 ${fold("funding", "Funding", funding)}
 ${nearby ? fold("nearby", "Nearby counties", `<div class="chips">${nearby}</div>`) : ""}
 ${yearBar(url, null, { label: `See who represented ${c.name} in an earlier year` })}
-<p class="hint">County boundaries and district overlaps: U.S. Census Bureau (2024 boundaries, 2020 census blocks).</p>`;
+<p class="hint">County boundaries and district overlaps: U.S. Census Bureau (2024 boundaries, 2020 census blocks).</p>
+</div>`;
   return page(`${c.name}, ${place.name}`, main, { tab: "home", back: [place.name, statePath(place.st)], partial: anyFailed(oLoaded, votes, meetingsLoaded, electionLoaded) });
 }
 

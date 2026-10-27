@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "62"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "63"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -212,9 +212,19 @@ SEARCH = """
   <div class="search-results" id="search-results" hidden></div>
 </form>"""
 
+# The Quick / Detailed switch: only on pages that have a Quick version (the
+# Functions' page() adds it where the page wraps its sections in .simple-scope;
+# static pages never have one). Without JavaScript it stays hidden.
+MODE_SWITCH = """<div class="mode-switch segmented" role="group" aria-label="How much detail" data-mode-switch hidden>
+    <button class="toggle" type="button" data-mode-set="simple" aria-pressed="false">Quick</button>
+    <button class="toggle" type="button" data-mode-set="detailed" aria-pressed="true">Detailed</button>
+  </div>"""
+
+
 # One header on every page: the wordmark (home) and search. On tablets and
-# computers the wordmark moves into the top navigation bar.
-def site_header():
+# computers the wordmark moves into the top navigation bar. `mode`: the switch
+# (or the Functions' placeholder for it).
+def site_header(mode=""):
     return f"""<header class="site-header">
   <div class="site-header-row">
     <div class="brand">
@@ -224,10 +234,7 @@ def site_header():
     <button class="search-toggle" type="button" aria-controls="q" aria-expanded="false" aria-label="Search">{icon("search")}</button>
   </div>
   {SEARCH.strip()}
-  <div class="mode-switch segmented" role="group" aria-label="How much detail" data-mode-switch hidden>
-    <button class="toggle" type="button" data-mode-set="simple" aria-pressed="false">Quick</button>
-    <button class="toggle" type="button" data-mode-set="detailed" aria-pressed="true">Detailed</button>
-  </div>
+  {mode}
 </header>"""
 
 
@@ -289,7 +296,7 @@ def head_tags(title):
 """
 
 
-def shell(title, main, *, nav="", back_html="", after="", title_is_html=False):
+def shell(title, main, *, nav="", back_html="", after="", title_is_html=False, mode=""):
     """The full HTML document around a page's main content.
 
     Shared by the static pages (render) and, through functions/_lib/generated.js,
@@ -299,7 +306,7 @@ def shell(title, main, *, nav="", back_html="", after="", title_is_html=False):
     body_cls = ["has-tabbar"]
     if after:
         body_cls.append("has-action-bar")
-    header = site_header()
+    header = site_header(mode)
     # Officials, bills and meetings are searched only as someone types (assets/app.js
     # asks /api/search-officials?q=), so no page downloads a full list.
     scripts = (f'<script src="/assets/search-index.js?v={ASSET_VERSION}"></script>\n'
@@ -1257,7 +1264,7 @@ def export_for_functions():
     meetings) in JavaScript. Rather than duplicate the templates, they import
     the exact shell and card HTML produced here.
     """
-    page = shell("%%TITLE%%", "%%MAIN%%", nav="%%NAV%%", back_html="%%BACK%%", title_is_html=True)
+    page = shell("%%TITLE%%", "%%MAIN%%", nav="%%NAV%%", back_html="%%BACK%%", title_is_html=True, mode="%%MODE%%")
     tabbars = {t: {"root": tabbar(t, True), "sub": tabbar(t, False)} for t, _, _ in TABS}
     bodies = [{
         "slug": b["slug"], "name": b["name"], "short": b["short"], "level": b["level"],
@@ -1267,6 +1274,7 @@ def export_for_functions():
     data = {
         "ASSET_VERSION": ASSET_VERSION,
         "PAGE": page,
+        "MODE_SWITCH": MODE_SWITCH,
         "SITE_DESCRIPTION": SITE_DESCRIPTION,
         "HOME_TITLE": HOME_TITLE,
         "TABBARS": tabbars,

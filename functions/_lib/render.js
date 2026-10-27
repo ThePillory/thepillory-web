@@ -1,7 +1,7 @@
 // HTML helpers for the Pages Functions. The page shell, tab bars and sample
 // cards come from generated.js (written by tools/build.py), so dynamic pages
 // match the static ones exactly.
-import { PAGE, TABBARS, SITE_DESCRIPTION, HOME_TITLE } from "./generated.js";
+import { PAGE, TABBARS, SITE_DESCRIPTION, HOME_TITLE, MODE_SWITCH } from "./generated.js";
 
 export function esc(s) {
   return String(s == null ? "" : s)
@@ -20,7 +20,11 @@ export function safeUrl(u) {
 // personal: the page depends on the visitor's district cookie, so no shared cache.
 // home: the hub at thepillory.co itself, titled and described with the tagline
 // ("ThePillory · Accountability through facts.") instead of "[title] – ThePillory".
-export function page(title, main, { tab = null, root = false, back = null, status = 200, personal = false, partial = false, home = false } = {}) {
+// quick: the page has a Quick version (docs/quick-mode.md). It's read from the
+// page itself: a page with one wraps its sections in .simple-scope. Only those
+// pages get the Quick / Detailed switch and the body's data-quick, which every
+// Quick-mode style and script is scoped to, so other pages look the same in both modes.
+export function page(title, main, { tab = null, root = false, back = null, status = 200, personal = false, partial = false, home = false, quick = /class="simple-scope[" ]/.test(main) } = {}) {
   const nav = tab ? TABBARS[tab][root ? "root" : "sub"] : "";
   const backHtml = back ? `<a class="back-link" href="${esc(back[1])}">← ${esc(back[0])}</a>` : "";
   const shell = home
@@ -30,6 +34,8 @@ export function page(title, main, { tab = null, root = false, back = null, statu
   // Function replacements: data may contain "$", which .replace() would treat as a pattern.
   const html = shell.split("%%TITLE%%").join(esc(title))
     .replace("%%NAV%%", () => nav)
+    .replace("%%MODE%%", () => (quick ? MODE_SWITCH : ""))
+    .replace('<body class="has-tabbar"', () => (quick ? '<body class="has-tabbar" data-quick' : '<body class="has-tabbar"'))
     .replace("%%BACK%%", () => backHtml)
     .replace("%%MAIN%%", () => main);
   return new Response(html, {
