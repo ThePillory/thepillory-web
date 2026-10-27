@@ -1,6 +1,6 @@
 # Reporting pilot: Calaveras County (plan)
 
-**Status: plan only. Nothing here is built yet.** Decisions still open are listed under "Decisions for you" at the end; answer them before step 2 of the build order.
+**Status: plan only. Nothing here is built yet.** The seven open questions were answered on October 27, 2026; see "Decisions" at the end. One thing is still open: your check of the public bodies list.
 
 ## The pilot in one line
 
@@ -25,8 +25,8 @@ Nothing yet: accounts, sessions, uploads, image processing, or any page that sho
 |---|---|
 | Anyone | Read approved reports and issues; see "Verified resident · Calaveras County". Same Report tab as today if not in the pilot. |
 | Invited, not yet verified | Sign in, read the rules, nothing else. |
-| Verified Calaveras resident (you mark them) | Submit reports, see and edit their own, mark "I've seen this too" and "This affects me" on others' approved reports, delete their account. |
-| Reviewer (you, plus an optional second reviewer) | Everything in `/admin/`: invite and verify accounts, review reports, group issues, link agenda items, enter agency responses, see metrics. Emails are visible only here. |
+| Verified Calaveras resident (you mark them) | Submit reports, see and edit their own, choose a later publish date, mark "I've seen this too" and "This affects me" on others' approved reports, delete their account. |
+| Reviewer (you, and a second reviewer) | Everything in `/admin/`: invite and verify accounts, review reports, group issues, link agenda items, enter agency responses, see metrics. Emails are visible only here. |
 
 Officials and agencies never see who reported anything, and neither does any other user.
 
@@ -40,7 +40,7 @@ Officials and agencies never see who reported anything, and neither does any oth
 
 **Verified resident by hand.** After you've confirmed the person lives in the county (you know them), you press "Mark verified resident" on their account. That records who verified and when. No ID, address or document is collected.
 
-**What's stored per person:** email (lower-cased), status (invited, active, verified, suspended, deleted), who verified them and when, the optional supervisor district you entered, and the date (not time) of last use. **Never** a name, address, phone, IP address, or device details. Server logs don't record request bodies.
+**What's stored per person:** email (lower-cased, kept for the whole pilot, since it's how a lost device gets a new sign-in link), status (invited, active, verified, suspended, deleted), who verified them and when, the optional supervisor district you entered, and the date (not time) of last use. **Never** a name, address, phone, IP address, or device details. Server logs don't record request bodies.
 
 **Signed-in pages are never cached.** Any request with a session cookie is served `private, no-store`, and `functions/_middleware.js` must skip its edge cache for it. This is the most important security detail in the build: a cached signed-in page could show one person's drafts to another. The build adds a test for it.
 
@@ -53,6 +53,8 @@ One page, works without JavaScript, in four parts (the order follows "facts firs
 3. **Which public body**: one choice from the pilot's list of Calaveras public bodies (see "Public bodies" below), or "Not sure" (you assign it in review).
 4. **Evidence** (at least one is strongly encouraged; the reviewer can still approve a report without it if the facts are checkable): photos, PDFs or links (see "Evidence" below).
 5. **Why it matters to me** (optional, up to 1,000 characters), labeled "Perspective" and shown in its own box under the facts, never mixed in.
+
+Then one optional choice: **When to publish**: "As soon as it's approved" (the default) or "Wait until [date]", a date no more than 14 days after approval (for example, until after a meeting). See "Publish date" under Review.
 
 Each report keeps every version (the reporter's edits after "request changes" are new versions; the reviewer never rewrites a report's words, see Risks). A reporter can withdraw a report until it's approved, and ask for removal after.
 
@@ -67,13 +69,13 @@ A hand-written list, `data/reporting/calaveras-bodies.json`, each entry with a s
 - Public Works (roads, bridges)
 - Planning Department / Building (permits)
 - Environmental Health
-- Sheriff's Office (as a county department)
 - Office of Emergency Services
-- Elections (County Clerk-Recorder)
 - Library
 - Other county department (named in the report)
 
-State agencies that work in the county (CAL FIRE, Caltrans) and special districts (fire districts, water districts, schools) are **out of scope for the pilot**: their own boards and records aren't loaded yet, and keeping the pilot to county government keeps review manageable. They'd be a later step.
+**Out of scope for the pilot** (decided): the Sheriff's Office and Elections (the County Clerk-Recorder's elections work), to revisit after the pilot; state agencies that work in the county (CAL FIRE, Caltrans); and special districts (fire districts, water districts, schools). Their boards and records aren't loaded yet, and keeping the pilot to the rest of county government keeps review manageable.
+
+**Still open:** you check this list against how Calaveras actually organizes its departments (names, which ones residents deal with, the county page for each) before step 2 writes the file.
 
 ### Evidence
 
@@ -93,7 +95,7 @@ State agencies that work in the county (CAL FIRE, Caltrans) and special district
 
 Each report shows the facts, perspective, evidence (with what metadata was removed), the body, the account's verified status (not the email, which is one click away on the account page, so review stays about the report), and the reporter's other reports. Three actions, each needing a reason:
 
-- **Approve**: published at once as "Verified resident · Calaveras County", with the date it was approved.
+- **Approve**: published as "Verified resident · Calaveras County", with the date it was published: at once, or on the reporter's chosen date.
 - **Request changes**: the reason goes to the reporter (on their My reports page); they edit and resubmit. The reviewer never edits the words.
 - **Decline**: the reason goes to the reporter; the report stays private.
 
@@ -101,19 +103,21 @@ A checklist on the review page, the same for every report: public body or public
 
 Later actions: **remove** an approved report (with a reason; logged publicly as "Removed on [date]: [reason category]", never who asked) and **restore**.
 
-Every action is a row in `report_reviews` (who, what, when, reason): the audit trail and the source of the review-time metric.
+**Publish date.** If the reporter chose "Wait until [date]", the review page shows it beside the actions. The report publishes on that date, or at approval if the date has already passed; a date more than 14 days after approval is capped at 14 days, and the reporter is told so on My reports. Until then the report is "Approved · publishes [date]": not on any public page, its files not served, not counted on an issue. On My reports the reporter can publish it now or move the date earlier, never later. A report waiting to publish doesn't appear anywhere public, so there's nothing to schedule: pages check `publish_on` when they're built, and the edge cache's 5 minutes is the only lag.
 
-**Two reviewers.** If you add a second reviewer, each reviewer can mark themselves recused on a report (for example, about a relative's department), and the other reviews it.
+Every action is a row in `pilot_reviews` (who, what, when, reason): the audit trail and the source of the review-time metric.
+
+**Two reviewers, built in from the start.** The queue, recusal and the audit trail all assume two reviewers, even while you're the only one: each reviewer can mark themselves recused on a report (for example, about a relative's department), and it waits for the other. With only one reviewer, a recused report shows "Waiting for a second reviewer" in the queue. Both reviewers are on the Access allow list for `/admin/`. **A second reviewer is required before the pilot goes past 20 members**: `/admin/accounts/` refuses a 21st invite while only one reviewer is listed (the list is the `PILOT_REVIEWERS` setting, the same emails as the Access policy).
 
 ## Public view
 
-- **Report page** (`/reports/<id>/`, a random id, so ids don't reveal counts or order): the body, place and date, the facts, the evidence, then "Perspective" in its own box, then "Verified resident · Calaveras County · Approved [date]". Counts of "I've seen this too" and "This affects me". If it's part of an issue, a link to it.
+- **Report page** (`/reports/<id>/`, a random id, so ids don't reveal counts or order): the body, place and date, the facts, the evidence, then "Perspective" in its own box, then "Verified resident · Calaveras County · Approved [date]". Counts of "I've seen this too" and "This affects me". If it's part of an issue, a link to it. Shown only from its publish date.
 - **Issue page** (`/issues/<slug>/`): a short neutral title and summary that you write (facts only), the reports in it (oldest first), the combined counts, the responsible body, then:
   - **On the agenda**: Board or Planning Commission items linked through approved `item_issue_links` (as now), each with the meeting date and **the public comment instructions copied verbatim from the agenda**, plus the comment deadline.
   - **Response**: a response from the county body, entered by you only with its source (a letter, an email from a public address, meeting minutes, a quote from a meeting video with its time), word for word, labeled "Response from [body]".
   - Status: Open, On an agenda, Responded, Resolved (with the evidence), Closed.
 - **Issues list** (`/issues/`): becomes a Function when the pilot is on; until then, the current static page.
-- **Corroboration**: "I've seen this too" and "This affects me", one each per verified account per report, never on your own report. Only pilot accounts can press them, so outside brigading can't move the counts. Counts are shown as numbers only; who pressed them is never shown.
+- **Corroboration**: "I've seen this too" and "This affects me", one each per verified account per report, never on your own report. Only verified pilot accounts can press them, so outside brigading can't move the counts (decided). Visitors see the counts, and the buttons are replaced by a line saying only pilot members can mark them. Counts are shown as numbers only; who pressed them is never shown.
 - **Grouping**: you group reports into issues on `/admin/issues/`; nothing is grouped automatically.
 
 No comments, replies or ranking of reports in the pilot.
@@ -134,9 +138,9 @@ The build starts by writing two drafts, `docs/reporting-rules-draft.md` and `doc
 
 "Delete my account" on the You tab, confirmed once. Immediately: email, sessions and invite records erased; pending reports and drafts (and their files) deleted; the person's corroborations and "affects me" marks removed (counts go down).
 
-**Approved reports**: the person chooses, on the delete page:
-- **Remove my reports** (the default): unpublished, files deleted, a public removal note on any issue they were part of ("A report was removed by its author on [date]").
-- **Leave my approved reports up**: they stay, with no link back to any account. The account id is cleared, so there's nothing left to connect them to anyone, even for you.
+**Approved reports**: one checkbox on the delete page, **"Also remove my published reports"**, checked by default (decided):
+- **Checked**: their approved reports (and any waiting for their publish date) are unpublished and their files deleted. An issue they were part of stays up with its remaining reports, and shows a public removal note ("A report was removed by its author on [date]"). An issue left with no reports keeps its title, summary, agenda links and responses, and says "No reports remain on this issue."
+- **Unchecked**: their approved reports stay, with no link back to any account. The account id is cleared, so there's nothing left to connect them to anyone, even for you.
 
 Deleted accounts can't be restored; you'd send a new invite.
 
@@ -162,7 +166,7 @@ One migration, `0044_reporting_pilot.sql`. All tables are prefixed `pilot_`, so 
 |---|---|
 | `pilot_accounts` | `id`, `email` (unique, lower-cased), `status` (invited / active / verified / suspended / deleted), `verified_by`, `verified_at`, `district` (optional, 1–5, reviewers only), `created_at`, `last_seen_day`, `deleted_at` |
 | `pilot_tokens` | `hash` (SHA-256), `account_id`, `kind` (invite / session), `created_at`, `expires_at`, `used_at` |
-| `pilot_reports` | `id` (random), `account_id` (NULL once detached), `body_slug`, `status` (draft / submitted / changes_requested / approved / declined / withdrawn / removed), `version`, `submitted_at`, `decided_at`, `approved_at`, `issue_id` |
+| `pilot_reports` | `id` (random), `account_id` (NULL once detached), `body_slug`, `status` (draft / submitted / changes_requested / approved / declined / withdrawn / removed), `version`, `submitted_at`, `decided_at`, `approved_at`, `publish_wanted` (the reporter's date, or NULL), `publish_on` (set at approval: the later of approval and `publish_wanted`, at most 14 days after approval; public pages show a report only when `publish_on` ≤ today), `issue_id` |
 | `pilot_report_versions` | `report_id`, `version`, `what`, `place`, `happened_on`, `happened_time`, `why`, `created_at` (every edit kept) |
 | `pilot_evidence` | `id`, `report_id`, `kind` (photo / pdf / link), `r2_key` or `url`, `mime`, `bytes`, `sha256`, `removed_metadata` (what was stripped, as JSON), `created_at` |
 | `pilot_reviews` | `id`, `report_id`, `action` (approve / request_changes / decline / remove / restore / recuse), `reason`, `reviewer`, `at` |
@@ -181,7 +185,7 @@ One migration, `0044_reporting_pilot.sql`. All tables are prefixed `pilot_`, so 
 | `/join/<token>` | Redeem an invite or sign-in link; sets the session | Invitees |
 | `/report/` | The pilot's start page, or today's page | Everyone (gated) |
 | `/report/new/`, `/report/<id>/edit/` | The form | Verified accounts |
-| `/report/mine/` | My reports, status and reasons, withdraw | Signed-in accounts |
+| `/report/mine/` | My reports, status and reasons, withdraw, publish now or earlier | Signed-in accounts |
 | `/reports/<id>/` | An approved report | Everyone |
 | `/reports/<id>/files/<file>` | Evidence files | Everyone if approved; else the author and reviewers |
 | `/issues/`, `/issues/<slug>/` | Issues | Everyone |
@@ -192,7 +196,7 @@ One migration, `0044_reporting_pilot.sql`. All tables are prefixed `pilot_`, so 
 | `/admin/pilot/` | Metrics | Reviewers |
 | `POST /api/reports`, `/api/reports/<id>/evidence`, `/api/reactions`, `/api/account/delete` | Writes | As above, with origin check and a per-form token |
 
-`functions/_lib/crawl.js` (`KNOWN`) gets any new query parameters, and every pilot path is `noindex` until the pilot's results are reviewed.
+`functions/_lib/crawl.js` (`KNOWN`) gets any new query parameters. Every pilot path, report and issue pages included, is `noindex` for the whole pilot (decided): a `noindex` robots tag on the page and an `X-Robots-Tag: noindex` header, and `/reports/` added to `robots.txt`. Revisit when the pilot's results are reviewed.
 
 ## Risks
 
@@ -202,10 +206,10 @@ One migration, `0044_reporting_pilot.sql`. All tables are prefixed `pilot_`, so 
 - **Copyright**: photos and documents people upload. Public records are fine; the rules ask people to upload only what they took or what's a public record.
 
 **People**
-- **A small county means reporters can be recognized** from details or photos, even without a name. The review checklist covers this, and a reporter can ask for a delay before publishing.
+- **A small county means reporters can be recognized** from details or photos, even without a name. The review checklist covers this, and a reporter can choose a publish date up to 14 days after approval.
 - **Harassment of officials or staff**: public roles only, no home addresses, no family members, no calls to action against a person; repeat offenders suspended.
 - **Looking partisan**: invite across districts and political leanings; neutral wording; no campaign content; reviewer recusal; starting after the election.
-- **Reviewer load and burnout**: 40 people may produce more than expected; the 48-hour target is a target, and the metrics show it. A second reviewer helps.
+- **Reviewer load and burnout**: 40 people may produce more than expected; the 48-hour target is a target, and the metrics show it. A second reviewer is required before going past 20 members.
 - **Emergencies**: the form says "If someone is in danger, call 911. This isn't monitored in real time."
 
 **Technical**
@@ -218,15 +222,15 @@ One migration, `0044_reporting_pilot.sql`. All tables are prefixed `pilot_`, so 
 ## Build order (small steps, each its own PR)
 
 1. **Rules and privacy drafts** (`docs/reporting-rules-draft.md`, `docs/reporting-privacy-draft.md`) for the lawyer. No code.
-2. **Migration 0044** and the `REPORTS_PILOT` setting (off). Tables only, nothing reads them yet. The bodies list (`data/reporting/calaveras-bodies.json`) for you to check.
-3. **Accounts**: `/admin/accounts/` (invite, sign-in link, verify, suspend), `/join/<token>`, sessions, sign out, the middleware cache bypass, tests (including "a signed-in page is never cached").
-4. **The report, text only**: the form, My reports, the review queue (approve / request changes / decline), review history. Still off for everyone but test accounts.
+2. **Migration 0044** and the `REPORTS_PILOT` and `PILOT_REVIEWERS` settings (off, and your email). Tables only, nothing reads them yet. The bodies list (`data/reporting/calaveras-bodies.json`), from your corrected list.
+3. **Accounts**: `/admin/accounts/` (invite, sign-in link, verify, suspend; the 20-member cap while only one reviewer is listed), `/join/<token>`, sessions, sign out, the middleware cache bypass, tests (including "a signed-in page is never cached").
+4. **The report, text only**: the form (with the publish date), My reports, the review queue (approve / request changes / decline, recusal for two reviewers), review history. Still off for everyone but test accounts.
 5. **Evidence**: links; photos (browser re-save plus server stripping and the location check, with test images); PDFs (metadata blanking); the private R2 bucket and the file Function.
 6. **Public pages**: report pages, the Report tab gate, issues as Functions, "I've seen this too" and "This affects me".
 7. **Issues admin**: grouping, agenda item links (approved, as now) with the verbatim comment instructions, agency responses, statuses.
-8. **Account deletion** (both choices), the public removal log, a CLAUDE.md section on the pilot's rules.
+8. **Account deletion** (the "Also remove my published reports" checkbox), the public removal log, a CLAUDE.md section on the pilot's rules.
 9. **Metrics** (`/admin/pilot/`).
-10. **Dry run**: you and the second reviewer as test reporters for a week, on the live site with the pilot on but no invites; fix what's awkward; then the first 20 invites.
+10. **Dry run**: you and the second reviewer as test reporters for a week, on the live site with the pilot on but no invites; fix what's awkward; then the first 20 invites. Invites past 20 wait for the second reviewer.
 
 Steps 1–2 can be done in a day; 3–7 are the bulk of November; 8–10 before the first invites in early December.
 
@@ -234,14 +238,14 @@ Steps 1–2 can be done in a day; 3–7 are the bulk of November; 8–10 before 
 
 About $0 in services: D1 and R2 within the free tiers at this size (a few hundred photos is well under 1 GB), Turnstile free, no email service. The real costs: your review time, and one hour with a media lawyer. ID checks (Stripe Identity, about $1.50 each) wait for the wider opening.
 
-## Decisions for you
+## Decisions
 
-Answer these before step 2:
+Answered on October 27, 2026:
 
-1. **Second reviewer**: will there be one at the start? (It changes the recusal flow and the Access allow list.)
-2. **Email**: keep it for the whole pilot (needed to send new sign-in links), or let people use the site with no email at all after the first sign-in (no way to recover a lost device)?
-3. **The bodies list**: correct the draft above. In particular, whether the Sheriff's Office and Elections are in scope for the pilot.
-4. **Corroboration**: who can press "I've seen this too"? Only pilot accounts (the plan's default), or also any visitor (with the visitor hash and Turnstile)?
-5. **Deletion default**: "Remove my reports" (the plan's default) or "Leave them up"?
-6. **Delay option**: should a reporter be able to ask for publication to wait (for example, until after a meeting), and for how long at most?
-7. **Pilot pages and search engines**: keep report and issue pages `noindex` for the whole pilot (the plan's default), or let them be found?
+1. **Two reviewers**: built for two from the start (recusal, the queue, Access). You add the second when you find them; **required before the pilot goes past 20 members**, enforced on `/admin/accounts/`.
+2. **Email**: kept for the whole pilot, so a lost device can get a new sign-in link. Deleted with the account.
+3. **Public bodies**: the Sheriff's Office and Elections are left out of the pilot (revisit after). CAL FIRE, Caltrans and special districts stay out. **Still open:** your corrections to the rest of the list, before step 2.
+4. **Corroboration**: only verified pilot members can tap "I've seen this too" and "This affects me". Visitors see the counts.
+5. **Deletion**: a checkbox, "Also remove my published reports", checked by default. Issues keep their remaining reports.
+6. **Publish date**: a reporter can choose a publish date up to 14 days after approval (`publish_wanted`, `publish_on`).
+7. **Search engines**: report and issue pages stay `noindex` for the whole pilot.
