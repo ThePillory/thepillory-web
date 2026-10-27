@@ -21,6 +21,7 @@ Same rules as everywhere else: facts only, neutral wording, no party colors, and
 | Ballot measure | What it does · A Yes vote means / A No vote means (word for word from the official guide, California) · Where it stands |
 | Ballot preview | What's on it · Your exact ballot (the statewide list and the address card stay) |
 | County page (`/place/<st>/<county>/`) | In Congress · In [State] (Governor and state legislators) · On the county board (live counties) · Next county meetings (live counties, two) · Latest votes (three) · Election Day, with Preview the ballot. The Open briefing / Make this my place card (or the waitlist) stays |
+| District page (`/district/<type>/<st>-<id>/`) | Who represents it · Their job (`jobSentence()`) · Latest votes (three) · On the ballot (when the seat is, with Preview the ballot) · Where it is (its counties, six at most) |
 | The briefing (`/calaveras/`, `/briefing/`) | Calaveras: This week (the week's meetings and hearings, in plain words) · Your reps' latest votes. Elsewhere: Your representatives · Their latest votes |
 
 ### Which pages have a Quick version
@@ -32,8 +33,7 @@ Same rules as everywhere else: facts only, neutral wording, no party colors, and
 | Bill, executive order | Yes |
 | The Supreme Court, a decided case | Yes |
 | Ballot measure, ballot preview | Yes |
-| County page, the briefing | Yes |
-| District pages | Not yet: would benefit most (the same card as county pages: who represents it, latest votes) |
+| County page, district page, the briefing | Yes |
 | Justice pages | Not yet: would benefit (official pages have one; justices would match) |
 | A meeting | Not yet: would benefit (the agenda watch summaries, in plain words) |
 | A topic | Not yet: would benefit (the latest bills and votes on it, in plain words) |

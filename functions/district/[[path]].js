@@ -7,7 +7,8 @@ import { page, notFound, esc, loadSection, FAILED, anyFailed, sectionError, guar
 import { recentFinalVotes } from "../_lib/data.js";
 import { voteRows } from "../_lib/briefing.js";
 import { CURRENT, loadElection, onTheBallot, statewideRow, contestRow, electionHref } from "../_lib/elections.js";
-import { pacificNow } from "../_lib/meetings.js";
+import { pacificNow, when } from "../_lib/meetings.js";
+import { simpleCard, positionLinesPlain, repListPlain, jobSentence } from "../_lib/simple.js";
 import { LAYER_OF_TYPE, typeOf, loadPlace, officialsFor, repRow, breadcrumb, districtLabel, placeHref, loadDistrictNames } from "../_lib/geo.js";
 import { statePath } from "../_lib/state-paths.js";
 
@@ -70,13 +71,31 @@ async function districtPage({ request, env, params }) {
       : `<section class="stack-sm" aria-labelledby="h-elections"><h2 class="label" id="h-elections">Elections</h2><p class="small secondary">This seat isn't on the Secretary of State's certified list of candidates for the ${esc(election.election.name)}. <a class="inline-link" href="${electionHref(election.election.id)}">What's on the ballot</a></p></section>`;
   const federal = reps.filter((r) => r.level === "federal");
 
-  const main = `
+  // Quick: who represents the district and what the job is, the latest votes,
+  // whether the seat is on the ballot, and the counties it covers, in plain words.
+  const inCounties = counties.map(([fips, full]) => [place.counties.find((x) => x.fips === fips), full]).filter(([c]) => c);
+  const shownCounties = inCounties.slice(0, 6).map(([c, full]) => `<a class="inline-link" href="${placeHref(place.st, c.slug)}">${esc(c.name)}</a>${full ? "" : " (part)"}`);
+  const simple = simpleCard({
+    lines: [
+      ["Who represents it", repsLoaded === FAILED ? "" : repListPlain(reps)],
+      ["Their job", reps.length ? esc(jobSentence(reps[0], place.name)) : ""],
+      ["Latest votes", votes === FAILED ? "" : positionLinesPlain(votes.rows, 3)],
+      ["On the ballot", contest && election.election.date >= pacificNow().slice(0, 10) ? `This seat is on the ballot ${esc(when(`${election.election.date}T00:00`).long)}. <a class="inline-link" href="/ballot/${esc(place.st.toLowerCase())}/">Preview the ballot</a>` : ""],
+      ["Where it is", shownCounties.length ? `${shownCounties.join(", ")}${inCounties.length > shownCounties.length ? `, and ${inCounties.length - shownCounties.length} more` : ""}.` : ""],
+    ],
+    jump: "h-rep",
+    source: "From the officials' records, their recorded votes and the U.S. Census Bureau, as shown on this page.",
+  });
+
+  // No Quick card (nothing loaded yet): no Quick version, and no switch.
+  const main = `<div class="${simple ? "simple-scope" : "page-scope"}">
 ${breadcrumb([["United States", "/explore/"], [place.name, statePath(place.st)], [label, null]])}
 <header class="page-head stack-xs">
   <p class="label">${esc(layer === "cd" ? "U.S. House" : place.chambers[layer])}</p>
   <h1>${esc(label)}</h1>
   <p class="secondary">${esc(place.name)} · ${counties.length} ${counties.length === 1 ? "county" : "counties"}</p>
 </header>
+${simple}
 <section class="stack-sm" aria-labelledby="h-rep">
   <h2 class="label" id="h-rep">Representative</h2>
   ${repHtml}
@@ -91,6 +110,7 @@ ${electionLoaded === FAILED ? sectionError("Elections") : ballot}
   <h2 class="label" id="h-votes">Recent votes</h2>
   ${votes === FAILED ? sectionError("") : rows ? `<ul class="card plain-list brief-votes">${rows}</ul>` : `<p class="small secondary">${reps.length ? "No final-passage votes loaded yet." : "Votes appear once the representative is loaded."}</p>`}
 </section>
-${federal.length ? `<section class="stack-sm" aria-labelledby="h-funding"><h2 class="label" id="h-funding">Funding</h2><div class="chips">${federal.map((r) => `<a class="chip chip--tap" href="/reps/${esc(r.slug)}/#funding">${esc(r.name)}</a>`).join("")}</div><p class="hint">Campaign funding, from the Federal Election Commission.</p></section>` : ""}`;
+${federal.length ? `<section class="stack-sm" aria-labelledby="h-funding"><h2 class="label" id="h-funding">Funding</h2><div class="chips">${federal.map((r) => `<a class="chip chip--tap" href="/reps/${esc(r.slug)}/#funding">${esc(r.name)}</a>`).join("")}</div><p class="hint">Campaign funding, from the Federal Election Commission.</p></section>` : ""}
+</div>`;
   return page(`${label}, ${place.name}`, main, { tab: "home", back: [place.name, statePath(place.st)], partial: anyFailed(repsLoaded, votes, electionLoaded) });
 }
