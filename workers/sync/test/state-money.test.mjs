@@ -3,7 +3,7 @@
 // seat's entry, and the rows loaded from it. Every name here is invented.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { seatOf, matchSeat, moneyRows } from "../src/funding/state.js";
+import { seatOf, matchSeat, moneyRows, candidateKey, contestSeat, matchCandidate } from "../src/funding/state.js";
 import { finishCycle } from "../../../tools/ca_campaign_finish.mjs";
 
 const ENTRY = {
@@ -59,4 +59,17 @@ test("rows: totals, industries, employers (3 or more donors only), organizations
 
 test("no committee, no rows", () => {
   assert.deepEqual(moneyRows("x", { name: "X Y", committees: [], cycles: {} }), { cycles: [], industries: [], employers: [], orgs: [], ie: [] });
+});
+
+test("certified candidates: their key, their seat, and their entry only on a unique name match", () => {
+  assert.equal(candidateKey("secretary-of-state", "Donald P. (Don) Wagner"), "ca-cand:secretary-of-state:donald-p-don-wagner");
+  assert.equal(contestSeat({ scope: "sldl", district: 8 }), "ASM-8");
+  assert.equal(contestSeat({ scope: "boe", district: "2" }), "BOE-2");
+  assert.equal(contestSeat({ scope: "statewide", district: null }), null);
+  const seat = [{ name: "Don Example" }, { name: "Thomas Patti" }, { name: "Liz Ortega-Toro" }, { name: "Nicholas Schultz" }, { name: "Nick Schultz" }];
+  assert.equal(matchCandidate(seat, "Donald P. (Don) Example").name, "Don Example", "the nickname in parentheses");
+  assert.equal(matchCandidate(seat, "Tom Patti").name, "Thomas Patti", "a common short form");
+  assert.equal(matchCandidate(seat, "Liz Ortega"), null, "a different last name is no match");
+  assert.equal(matchCandidate(seat, 'Nicholas "Nick" Schultz'), null, "two entries could be them: no match");
+  assert.equal(matchCandidate([{ name: "Ada Example" }], "Bea Example"), null);
 });

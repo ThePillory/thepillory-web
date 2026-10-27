@@ -157,7 +157,7 @@ function disclosureRows(rows) {
     .map((d) => {
       const link =
         d.source === "fppc"
-          ? `<a class="tap" href="/api/form700/${esc(String(d.id).replace(/^fppc:/, ""))}" target="_blank" rel="noopener">Statement (PDF) ↗</a>`
+          ? `<a class="tap" href="/api/form700/${esc(String(d.id).replace(/^fppc:/, "").replace(/@.*$/, ""))}" target="_blank" rel="noopener">Statement (PDF) ↗</a>`
           : d.document_url ? ext(d.document_url, "Document") : d.request_url ? ext(d.request_url, "Request from OGE") : "";
       const meta = [d.position, d.agency !== d.position ? d.agency : null].filter(Boolean).map(esc).join(" · ");
       return `<li class="exec-row stack-xs">

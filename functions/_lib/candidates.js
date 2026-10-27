@@ -28,6 +28,9 @@ import { statePath } from "./state-paths.js";
 import { previewLabel, nominations, nominationWords } from "./election-window.js";
 import { certifiedRace, certifiedMeta } from "./certified.js";
 import { chamberIds } from "../../workers/sync/src/states.js";
+import { candidateKey } from "../../workers/sync/src/funding/state.js";
+import { stateFundingTab } from "./state-funding.js";
+import { stateOfficialMoney, stateForm700 } from "./exec-funding.js";
 
 export const YEAR = 2026;
 export const METHOD = "/about/methodology/#candidates";
@@ -290,15 +293,48 @@ export function openSeatLine(holder) {
 // Pieces
 
 /** The same card for every candidate in a race. The incumbent's also links to their record. */
-export function candidateCard({ href, name, facts, held, record = null }) {
+export function candidateCard({ href, name, facts, held, record = null, statement = "" }) {
   return `
   <li class="ballot-cand">
     <a class="list-row link-row" href="${esc(href)}">
       <div><div class="list-title">${esc(name)}</div>${candFacts([...facts, held])}</div>
       <span class="row-end"><span class="chev" aria-hidden="true">›</span></span>
-    </a>${record ? `
+    </a>${statement}${record ? `
     <a class="cand-record" href="/reps/${esc(record.slug)}/#votes">Votes and record ›</a>` : ""}
   </li>`;
+}
+
+// ---------------------------------------------------------------------------
+// Candidate statements, word for word from the official voter guide (or the
+// county's pamphlet), the same way for every candidate; where there's none,
+// where statements for the office come from, said plainly.
+
+/** Where statements for this contest come from, for a candidate without one. */
+export function statementCoverage(contest, election) {
+  if (contest.scope === "statewide") return "No statement in the state's Official Voter Information Guide.";
+  const fromCounty = contest.candidates.some((c) => c.statement && /Pamphlet/.test(c.statement.source));
+  const county = Object.values((election && election.counties) || {})[0];
+  if (contest.scope === "county" || fromCounty) return `No statement in the ${county ? county.name : "county"} Voter Information Pamphlet.`;
+  return "Statements for this office are printed in each county's voter pamphlet; ThePillory has them only for counties where it's live.";
+}
+
+/** The candidate's statement, word for word, with its source; or where statements come from. */
+export function statementSection(cand, contest, election) {
+  const s = cand && cand.statement;
+  const body = s
+    ? `${(s.header || []).map((h) => `<p class="small secondary">${esc(h)}</p>`).join("")}
+  <div class="statement-body stack-xs">${s.paragraphs.map((p) => `<p>${esc(p)}</p>`).join("")}</div>
+  <p class="hint">Written by the candidate, printed word for word in the ${esc(s.source)}${s.note ? `. ${esc(s.note)}` : ""} ${sourceLink(s.source_url, "Source")}</p>`
+    : `<p class="small secondary">${esc(statementCoverage(contest, election))}</p>`;
+  return fold("statement", "Candidate statement", body, { open: true, meta: s ? "From the official voter guide" : "None on file" });
+}
+
+/** On a card: "Read their statement ›" to the candidate's page, or a short line saying there's none. */
+export function statementLink(cand, contest, election, href) {
+  if (cand && cand.statement) return `
+    <a class="cand-record" href="${esc(href)}#statement">Read their statement ›</a>`;
+  return `
+    <p class="list-meta cand-nostatement">${esc(contest.scope === "statewide" ? "No statement in the voter guide" : statementCoverage(contest, election).replace(/;.*$/, "").replace(/\.$/, ""))}</p>`;
 }
 
 /** A card's facts with "Incumbent" last, plain text, only for the seat's holder. */
@@ -477,6 +513,7 @@ export function fecCandidatePage({ c, st, data, election, records, dates, today,
   ].join("");
 
   const about = `
+${onCert && contest ? statementSection(onCert, contest, election) : ""}
 ${fold("race", "The race", kv([
     ["Office", esc(office)],
     ["State", `<a class="inline-link" href="${statePath(st)}">${esc(stateName)}</a>`],
@@ -497,7 +534,7 @@ ${fold("source", "Sources", `<p class="small">${sourceLink(c.fec_url, "FEC candi
 ${included()}`;
 
   const more = `
-${onCert && contest ? fold("statement", "Candidate statement", `<p class="small"><a class="inline-link" href="${contestHref(election.election.id, contest.id)}">Statements in the official voter guide, word for word</a></p>`) : ""}
+${onCert && contest ? `<p class="small"><a class="inline-link" href="${contestHref(election.election.id, contest.id)}">Every candidate's statement in this contest</a></p>` : ""}
 ${fold("how", "How candidates are included", `<p class="small">${esc(INCLUDED)}</p><p class="small">${esc(NEUTRAL)}</p><a class="inline-link" href="${METHOD}">Methodology</a>`)}`;
 
   const main = `${head({ label: s.label, name: display, line: s.line, chips })}
@@ -505,8 +542,14 @@ ${tabs(about, candidatePlatform(display, website, platform), recordTab(display, 
   return { title: display, main };
 }
 
-/** A certified-list candidate for a state office (no FEC filing). */
-export function stateCandidatePage({ cand, contest, election, records, today }) {
+/** A certified-list candidate's key for their campaign money and Form 700s (the same rows as officials'). */
+export const stateCandidateKey = (contest, cand) => candidateKey(contest.id, cand.name);
+
+/** Their California money and Form 700s, loaded like an official's (Cal-Access, FPPC), under their own key. */
+export const stateCandidateMoney = (db, contest, cand, cycle) => stateOfficialMoney(db, { id: stateCandidateKey(contest, cand) }, cycle);
+
+/** A certified-list candidate for a state office (no FEC filing). `money`: stateCandidateMoney's result, or null. */
+export function stateCandidatePage({ cand, contest, election, records, today, money: m = null, base = "" }) {
   const st = election.election.state;
   const stateName = STATE_NAME[st];
   const held = officesHeld({}, records, cand.name, { incumbent: !!cand.incumbent });
@@ -519,6 +562,7 @@ export function stateCandidatePage({ cand, contest, election, records, today }) 
   const label = now && !after ? `${s.label} · Holds another office` : s.label;
   const chips = `<a class="chip chip--tap" href="${race}">The race: ${esc(office)}</a>${me && me.holder ? `<a class="chip chip--tap" href="/reps/${esc(me.holder.slug)}/#votes">Votes and record ›</a>` : now ? `<a class="chip chip--tap" href="/reps/${esc(now.slug)}/">Current office: record</a>` : ""}`;
   const about = `
+${statementSection(cand, contest, election)}
 ${fold("race", "The race", kv([
     ["Office", esc(office)],
     ["Election", esc(election.election.name)],
@@ -532,9 +576,14 @@ ${fold("filing", "As certified", kv([
   ].filter(Boolean)), { meta: partyName(cand.party) })}
 ${fold("source", "Sources", `<p class="small">${sourceLink(contest.source_url, "Certified List of Candidates")}</p>`)}
 ${included(INCLUDED_CERTIFIED)}`;
-  const funding = `<section class="card stack-sm"><p class="small">Campaign money for candidates for ${esc(stateName)}'s state offices is reported to the Secretary of State (Cal-Access). ThePillory shows it for current officials and doesn't load it for other candidates yet.</p>${now ? `<p class="small"><a class="inline-link" href="/reps/${esc(now.slug)}/#funding">Funding for ${esc(now.office)}</a></p>` : ""}${outLink("https://cal-access.sos.ca.gov/Campaign/Candidates/", "Cal-Access candidate search")}</section>`;
+  // Campaign money: the same tab and rules as officials', from the committees Cal-Access lists with this
+  // candidate's name for this office (a unique match only). Their Form 700s go under More, like officials'.
+  const funding = m && m.money
+    ? stateFundingTab({ name: cand.name }, m.money, base)
+    : `<section class="card stack-sm"><p class="small">Not loaded yet. Campaign money for ${esc(stateName)} candidates comes from the Secretary of State's Cal-Access export, loaded in the data sync.</p>${outLink("https://cal-access.sos.ca.gov/Campaign/Candidates/", "Cal-Access candidate search")}</section>`;
   const more = `
-${fold("statement", "Candidate statement", `<p class="small"><a class="inline-link" href="${contestHref(election.election.id, contest.id)}">Statements in the official voter guide, word for word</a></p>`)}
+${stateForm700(m || {}).replace("California officials file a Statement of Economic Interests (Form 700) each year", "Candidates for state office file a Statement of Economic Interests (Form 700) when they run, and officials each year")}
+<p class="small"><a class="inline-link" href="${contestHref(election.election.id, contest.id)}">Every candidate's statement in this contest</a></p>
 ${fold("how", "How candidates are included", `<p class="small">Every candidate on the Secretary of State's Certified List of Candidates, in ballot order. ${esc(NEUTRAL)}</p><a class="inline-link" href="${METHOD}">Methodology</a>`)}`;
   const main = `${head({ label, name: cand.name, line: s.line, chips })}
 ${tabs(about, candidatePlatform(cand.name, null, null, { state: true }), recordTab(cand.name, held), funding, more)}`;
@@ -579,12 +628,14 @@ export function racePage({ st, key, data, election, records, dates, today, certi
       const f = x.fec && byFec[x.fec.id];
       const held = officesHeld(f || {}, records, x.name, { incumbent: !!(x.incumbent || (f && f.incumbent)) });
       const me = inc.get(x.fec && x.fec.id, x.name);
+      const href = f ? candidateHref(f.id) : stateCandidateHref(contest.id, nameSlug(x.name));
       return candidateCard({
-        href: f ? candidateHref(f.id) : stateCandidateHref(contest.id, nameSlug(x.name)),
+        href,
         name: x.name,
         facts: withIncumbent([x.party ? `Party preference: ${partyName(x.party)}` : "No party preference listed", x.designation], me),
         held: held[0] ? heldLine(held[0]) : "",
         record: me && me.holder,
+        statement: statementLink(x, contest, election, href),
       });
     });
     ballot = `

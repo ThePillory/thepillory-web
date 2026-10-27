@@ -14,7 +14,8 @@ export async function onRequestGet({ env, params }) {
   if (!/^[0-9A-Fa-f-]{36}$/.test(id) || !env.DB) return go(search);
   let row;
   try {
-    row = await env.DB.prepare("SELECT detail FROM disclosures WHERE id = ? AND source = 'fppc'").bind(`fppc:${id}`).first();
+    // An official's row is "fppc:<id>"; a candidate's is "fppc:<id>@<candidate key>" (the same statement).
+    row = await env.DB.prepare("SELECT detail FROM disclosures WHERE (id = ? OR id LIKE ?) AND source = 'fppc' LIMIT 1").bind(`fppc:${id}`, `fppc:${id}@%`).first();
   } catch (_) {
     return go(search);
   }
