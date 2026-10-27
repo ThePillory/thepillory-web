@@ -5,14 +5,14 @@ const BASE = "https://claude-pillory-mobile-screen.thepillory-web.pages.dev";
 mkdirSync("shots", { recursive: true });
 const b = await chromium.launch();
 for (let i = 0; i < 40; i++) {
-  const html = await (await fetch(`${BASE}/elections/2026-11-03/measure/prop-4/?v=${Date.now()}`)).text();
+  const html = await (await fetch(`${BASE}/elections/2026-11-03/measure/prop-4/`)).text();
   if (html.includes("behind each side")) break;
   await new Promise((r) => setTimeout(r, 20000));
 }
 for (const n of ["4", "5"]) {
   const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
   const p = await ctx.newPage();
-  await p.goto(`${BASE}/elections/2026-11-03/measure/prop-${n}/?shot=${Date.now()}`, { waitUntil: "networkidle" });
+  await p.goto(`${BASE}/elections/2026-11-03/measure/prop-${n}/`, { waitUntil: "networkidle" });
   await p.screenshot({ path: `shots/prop${n}-top.png` });
   await p.evaluate(() => { for (const id of ["behind", "arguments"]) { const d = document.getElementById(id); if (d) d.open = true; } });
   const behind = await p.$("#behind");
