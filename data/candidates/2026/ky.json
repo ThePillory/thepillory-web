@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=KY&candidate_status=C",
- "list_built_on": "2026-10-26",
+ "list_built_on": "2026-10-27",
  "built_on": "2026-10-27",
  "senate_up": true,
  "candidates": {
@@ -223,7 +223,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00467571/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-23",
+   "funding_checked": "2026-10-27",
    "cycle": 2026
   },
   "S6KY00385": {
@@ -309,7 +309,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00929208/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-23",
+   "funding_checked": "2026-10-27",
    "cycle": 2026
   },
   "S6KY00237": {
@@ -374,7 +374,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00898189/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-23",
+   "funding_checked": "2026-10-27",
    "cycle": 2026
   },
   "S6KY00377": {
@@ -389,15 +389,35 @@
    "listed": true,
    "first_listed": "2026-10-10",
    "last_listed": "2026-10-27",
-   "totals": null,
-   "organizations": null,
+   "totals": {
+    "cycle": 2026,
+    "receipts": 0,
+    "disbursements": 0,
+    "cash_on_hand": 0,
+    "individual_unitemized": 0,
+    "individual_itemized": 0,
+    "pac": 0,
+    "party": 0,
+    "self_funding": 0,
+    "other": 0,
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
+    "source_url": "https://www.fec.gov/data/candidate/S6KY00377/?cycle=2026&election_full=false"
+   },
+   "organizations": {
+    "items": [],
+    "count": 0,
+    "total": 0,
+    "complete": true,
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00954131&two_year_transaction_period=2026&line_number=F3-11C"
+   },
    "website": {
     "url": "https://campbell4congress.info/",
     "as_filed": "CAMPBELL4CONGRESS.INFO",
     "source_url": "https://www.fec.gov/data/committee/C00954131/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-23",
+   "funding_checked": "2026-10-27",
    "cycle": 2026
   },
   "S6KY00260": {
@@ -448,7 +468,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00903930/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-23",
+   "funding_checked": "2026-10-27",
    "cycle": 2026
   },
   "S6KY00278": {
@@ -499,7 +519,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00903930/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-23",
+   "funding_checked": "2026-10-27",
    "cycle": 2026
   },
   "S6KY00328": {
@@ -542,7 +562,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00919811/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-23",
+   "funding_checked": "2026-10-27",
    "cycle": 2026
   },
   "S0KY00339": {
@@ -721,7 +741,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00909705/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-23",
+   "funding_checked": "2026-10-27",
    "cycle": 2026
   },
   "S6KY00369": {
@@ -772,7 +792,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00925578/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-23",
+   "funding_checked": "2026-10-27",
    "cycle": 2026
   },
   "S6KY00211": {
@@ -830,7 +850,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00897058/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-23",
+   "funding_checked": "2026-10-27",
    "cycle": 2026
   },
   "S6KY00336": {
@@ -881,7 +901,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00920009/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-23",
+   "funding_checked": "2026-10-27",
    "cycle": 2026
   },
   "H6KY01110": {
