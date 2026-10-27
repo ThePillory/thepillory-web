@@ -40,7 +40,7 @@ Official text only: nothing written by ThePillory or AI, shortened only by cutti
 
 ## Proposition titles
 
-California's guide prints proposition titles in capitals. They're shown with ordinary capitalization, the words unchanged (`headlineCase()` in `functions/_lib/elections.js`: each word capitalized, small words such as "of" and "for" lowercase except at the start of a sentence, abbreviations and bill numbers like "U.S." and "ACA 13" kept), and one line says so wherever they appear (`TITLE_CASE_NOTE`: the measure page, the propositions list, Your ballot and the ballot preview). Other states' titles are shown as printed. The same rule as county candidate names, which the county prints in capitals.
+Any measure title printed entirely in capitals, in any state (today California's 14), is shown with ordinary capitalization, the words unchanged (`headlineCase()` in `functions/_lib/elections.js`: each word capitalized, small words such as "of" and "for" lowercase except at the start of a sentence, abbreviations and bill numbers like "U.S." and "ACA 13" kept), and one line says so wherever such a title appears (`titleNote()`: the measure page, the propositions list, Your ballot and the ballot preview). Any other title is shown as printed. The same rule as county candidate names, which the county prints in capitals.
 
 ## Who's behind each side, and who signed the arguments
 

@@ -310,11 +310,12 @@ export function contestRow(electionId, c, note = "") {
 /** A statewide measure's name as its ballot prints it: "Proposition 1", "Initiative Measure No. IL26-001". */
 export const measureName = (m) => m.label || `Proposition ${m.number}`;
 
-// California's guide prints proposition titles in capitals. They're shown with
-// ordinary capitalization, the words unchanged, and TITLE_CASE_NOTE says so
-// wherever they appear; other states' titles are shown as printed.
+// A measure title printed entirely in capitals (California's guide prints them
+// so; any state's that does the same) is shown with ordinary capitalization,
+// the words unchanged, and TITLE_CASE_NOTE says so wherever it appears; any
+// other title is shown as printed.
 const SMALL_WORDS = new Set(["a", "an", "and", "as", "at", "but", "by", "for", "from", "in", "into", "nor", "of", "on", "or", "per", "than", "the", "to", "via", "with"]);
-export const TITLE_CASE_NOTE = "Proposition titles are printed in capitals in the official voter guide; they're shown here with ordinary capitalization, the words unchanged.";
+export const TITLE_CASE_NOTE = "Titles printed in capitals in the official voter guide are shown here with ordinary capitalization, the words unchanged.";
 
 /** "REPEALS PROHIBITION AGAINST PUBLIC FUNDING OF ELECTION CAMPAIGNS. LEGISLATIVE STATUTE." → "Repeals Prohibition Against Public Funding of Election Campaigns. Legislative Statute." Pure. */
 export function headlineCase(s) {
@@ -335,8 +336,14 @@ export function headlineCase(s) {
     .join("");
 }
 
-/** A statewide measure's title for display: California's in ordinary capitalization (see TITLE_CASE_NOTE), other states' as printed. */
-export const measureTitle = (m) => (m.label ? m.title : headlineCase(m.title));
+/** Whether a measure's title is printed entirely in capitals (letters, none lowercase). */
+export const capsTitle = (m) => /[A-Z]/.test(String((m && m.title) || "")) && !/[a-z]/.test(String(m.title));
+
+/** A measure's title for display: one printed in capitals in ordinary capitalization (see TITLE_CASE_NOTE), any other as printed. */
+export const measureTitle = (m) => (capsTitle(m) ? headlineCase(m.title) : m.title);
+
+/** The note, when any of these measures' titles was printed in capitals; otherwise "". */
+export const titleNote = (measures) => ((measures || []).some(capsTitle) ? TITLE_CASE_NOTE : "");
 
 export function measureRow(electionId, m, note = "") {
   const title = m.scope === "statewide" ? measureName(m) : `${m.title}${m.jurisdiction ? ` · ${m.jurisdiction}` : ""}`;

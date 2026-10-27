@@ -343,9 +343,13 @@ test("California's proposition titles: ordinary capitalization, the words unchan
   const words = (t) => t.toLowerCase().split(/\s+/);
   const title = "AUTHORIZES BONDS FOR HOUSING AFFORDABILITY PROGRAMS. LEGISLATIVE STATUTE.";
   assert.deepEqual(words(headlineCase(title)), words(title), "the words unchanged");
-  assert.equal(measureTitle({ label: "Amendment 81", title: "Law Enforcement Communication with Federal Immigration Authorities" }), "Law Enforcement Communication with Federal Immigration Authorities", "other states' as printed");
+  assert.equal(measureTitle({ label: "Amendment 81", title: "Law Enforcement Communication with Federal Immigration Authorities" }), "Law Enforcement Communication with Federal Immigration Authorities", "a title not in capitals: as printed");
   const page = (await get("/elections/2026-11-03/measure/prop-1/")).html;
   assert.match(page, /<p class="subtitle">Authorizes Example Bonds\. Legislative Statute\.<\/p>/);
   assert.ok(page.includes(TITLE_CASE_NOTE.replace(/'/g, "&#x27;")), "the note on the measure page");
   assert.ok((await get("/elections/2026-11-03/")).html.includes(TITLE_CASE_NOTE.replace(/'/g, "&#x27;")), "and under the list");
+  // Any state: only a title printed in capitals is changed, and only then is the note shown.
+  assert.equal(measureTitle({ title: "PROHIBITS NEW TAXES ON GROCERIES." }), "Prohibits New Taxes on Groceries.", "no label needed: any title in capitals");
+  const wa = (await get("/elections/2026-11-03-wa/measure/il26-001/")).html;
+  assert.ok(!wa.includes(TITLE_CASE_NOTE.replace(/'/g, "&#x27;")), "Washington's titles aren't in capitals: no note");
 });
