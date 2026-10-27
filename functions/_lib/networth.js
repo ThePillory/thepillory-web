@@ -38,12 +38,12 @@ export async function networthFor(db, officialId) {
   }
 }
 
-/** "Transcribed by AI from a scanned report, auto-checked" or "…, checked by [name]" for a report read by AI; "" otherwise. Pure. */
+/** "Read by AI from the scanned report, auto-checked" or "…, checked by [name]" for a report read by AI; "" otherwise. Pure. */
 export function aiLabel(r) {
   if (r.method !== "ai") return "";
   return r.scan_status === "approved" && r.reviewed_by
-    ? `Transcribed by AI from a scanned report, checked by ${r.reviewed_by}`
-    : "Transcribed by AI from a scanned report, auto-checked";
+    ? `Read by AI from the scanned report, checked by ${r.reviewed_by}`
+    : "Read by AI from the scanned report, auto-checked";
 }
 
 const later = (a, b) => ((a.filed_on || "") > (b.filed_on || "") || ((a.filed_on || "") === (b.filed_on || "") && a.amended > b.amended) ? a : b);
@@ -57,10 +57,10 @@ const later = (a, b) => ((a.filed_on || "") > (b.filed_on || "") || ((a.filed_on
  *   unread: reports not read (linked, with why)
  */
 export function networthPoints(allRows) {
-  // A report transcribed by AI counts only once a person has checked it against
-  // the scan; until then it's listed as a link, like any report not read.
+  // A report read by AI counts once it passed every check ('agreed') or a
+  // person confirmed it ('approved'); anything else is listed as a link.
   const rows = allRows.map((r) =>
-    r.method === "ai" && r.status === "read" && !(r.scan_status === "approved" && r.reviewed_by) ? { ...r, status: "scan", reason: "Read by AI: waiting for a person's check" } : r
+    r.method === "ai" && r.status === "read" && !["agreed", "approved"].includes(r.scan_status) ? { ...r, status: "scan", reason: "Read by AI: waiting for a person's check" } : r
   );
   const byYear = new Map();
   for (const r of rows.filter((r) => r.kind === "annual")) byYear.set(r.year, byYear.has(r.year) ? later(byYear.get(r.year), r) : r);
@@ -165,7 +165,7 @@ export function networthSection(name, points) {
   );
   const ai = shown.filter((r) => r.method === "ai");
   const aiNote = ai.length
-    ? `<p class="small">${ai.map((r) => `${esc(yearLabel(r))}: ${esc(aiLabel(r))}.`).join(" ")} <a class="inline-link" href="${NETWORTH_METHOD}">How scanned reports are read</a></p>`
+    ? `<p class="small">${ai.map((r) => `${esc(yearLabel(r))}: ${esc(aiLabel(r))}. <a class="inline-link" href="${esc(r.report_url)}" target="_blank" rel="noopener">See the original</a>.`).join(" ")} <a class="inline-link" href="${NETWORTH_METHOD}">How scanned reports are read</a></p>`
     : "";
   return `
   <p class="small">Estimated net worth: ${esc(rangeText(end, fullMoney))} (${esc(String(end.year))}), as reported in ranges.</p>

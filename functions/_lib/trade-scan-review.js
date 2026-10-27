@@ -1,14 +1,15 @@
 // Scanned OGE Form 278-T reports on /admin/review/trades/ (routed from
 // functions/admin/[[path]].js; docs/trades.md):
-//   /admin/review/trades/          waiting for a person; not agreeing (kept as
+//   /admin/review/trades/          spot checks; published by AI; held (kept as
 //                                  links); waiting to be read; confirmed; taken down
 //   /admin/review/trades/<id>/     one report: the scan's link, what the checks noted,
 //                                  the rows; confirm, take down, read again
-// Nothing an AI reads is public until a person checks it: a report whose two
-// readings agree and pass the checks waits here, a link to the report on
-// public pages. Confirming (after comparing every row with the scan)
-// publishes the agreed rows with "Checked by [name]"; taking down keeps it a
-// link.
+// The rows of a report that pass every check (the report's text layer backs
+// them and two AI readings agree exactly) publish on their own, labeled "Read
+// by AI from the scanned report, auto-checked". SPOT_CHECK_RATE of them are
+// marked here for a person; nothing waits on that. Confirming (after
+// comparing every row with the scan) adds "Checked by [name]"; taking down
+// removes the trades and makes the report a link again.
 import { esc, fmtDate, safeUrl } from "./render.js";
 import { publishStatements, takeDownStatements } from "../../workers/sync/src/trades/publish.js";
 
@@ -23,8 +24,8 @@ const json = (s, fallback) => {
 };
 
 const SECTIONS = [
-  ["spot", "Spot checks", "Picked at random before checks were required for every report. Compare every row with the scan, then confirm it or take it down."],
-  ["agreed", "Waiting for a person", "Both readings agreed and the checks passed. Not public yet: the report is a link until a person compares every row with the scan and confirms it."],
+  ["spot", "Spot checks", "Picked at random from published reports (10%). Already public; nothing waits on this. Compare every row with the scan when you have time, then confirm it or take it down."],
+  ["agreed", "Published by AI", "Public as \"Read by AI from the scanned report, auto-checked\": the rows the report's text backs and both readings agree on. The other rows link to the scan."],
   ["disagree", "Held", "Nothing published: the readings couldn't be trusted as a set, or the report couldn't be read. Kept as links to the report. The notes say why."],
   ["pending", "Waiting to be read", "The sync Worker reads these, a few a day."],
   ["approved", "Confirmed by a person", "Public with \"Checked by [name]\"."],
@@ -70,7 +71,7 @@ export async function scanList(db, { done = "" } = {}) {
   }).join("");
   return {
     title: "Scanned trade reports",
-    main: `<header class="page-head"><h1>Scanned trade reports</h1><p class="subtitle">Executive branch reports (OGE Form 278-T) posted as scans. Each is read by AI; a row the report's own text layer shows the same way (date, amount, description) counts as checked once, and every other row is read again by a second AI model. Nothing publishes until you compare the rows with the scan and confirm them; they're then labeled as transcribed by AI and checked by you.</p></header>
+    main: `<header class="page-head"><h1>Scanned trade reports</h1><p class="subtitle">Executive branch reports (OGE Form 278-T) posted as scans. Each is read by AI; a row publishes on its own only when the report's own text layer shows it the same way (date, amount, description) and a second AI model reads it the same way too. Every other row stays a link to the scan. A share is picked for you to check against the scan; nothing waits on it.</p></header>
 ${done ? `<p class="banner" role="status">${esc(done)}</p>` : ""}
 ${sections}`,
   };
@@ -99,15 +100,15 @@ export async function scanItem(db, env, id, { error = "", done = "", form = null
 ${post(`<input type="hidden" name="action" value="approve">
   <label class="check-row"><input type="checkbox" name="compared" value="1" required> <span class="small">I compared every row above with the scan: the dates, types, descriptions and amounts.</span></label>
   <label class="field"><span class="field-label">Your name, as shown with these trades</span><input class="input" name="reviewer" required autocomplete="name" value="${reviewer}"></label>
-  <button class="btn btn--primary" type="submit">Confirm and publish these ${rows.length} trades with "Checked by"</button>`)}
+  <button class="btn btn--primary" type="submit">Confirm: show "Checked by" with these ${rows.length} trades</button>`)}
 </section>`;
   }
   if (["agreed", "approved"].includes(s.status)) {
-    actions += `<section class="card stack-sm"><h2 class="label">${s.status === "approved" ? "Take down" : "Don't publish"}</h2><p class="small">${s.status === "approved" ? "Removes these trades from public pages; the report shows as a link again." : "Keeps the report a link on public pages."}</p>
+    actions += `<section class="card stack-sm"><h2 class="label">Take down</h2><p class="small">Removes these trades from public pages; the report shows as a link again.</p>
 ${post(`<input type="hidden" name="action" value="reject">
   <label class="field"><span class="field-label">What's wrong (kept with the report)</span><input class="input" name="reason" required value="${esc(f.reason || "")}"></label>
   <label class="field"><span class="field-label">Your name</span><input class="input" name="reviewer" required autocomplete="name" value="${reviewer}"></label>
-  <button class="btn" type="submit">${s.status === "approved" ? "Take down" : "Don't publish"}</button>`)}
+  <button class="btn" type="submit">Take down</button>`)}
 </section>`;
   } else if (["disagree", "rejected"].includes(s.status)) {
     actions = `<section class="card stack-sm"><h2 class="label">Read again</h2><p class="small">Puts it back in the queue: it's read again on a later sync run.</p>
@@ -149,7 +150,7 @@ export async function scanChange(db, id, rawForm, email) {
   if (!form.reviewer) return { error: "Enter your name.", form };
   const report = { id, official_id: s.official_id };
   if (action === "reject") {
-    if (!["agreed", "approved"].includes(s.status)) return { error: "Only a transcription waiting for a person or confirmed can be taken down.", form };
+    if (!["agreed", "approved"].includes(s.status)) return { error: "Only a published transcription can be taken down.", form };
     if (!form.reason) return { error: "Say what's wrong: it's kept with the report.", form };
     await db.batch([
       db.prepare("UPDATE trade_scans SET status = 'rejected', reviewed_by = ?, reviewer_email = ?, reviewed_at = datetime('now'), reject_reason = ? WHERE report_id = ?").bind(form.reviewer, email || null, form.reason, id),
@@ -158,16 +159,16 @@ export async function scanChange(db, id, rawForm, email) {
     return { done: "Taken down. The report is a link again on public pages." };
   }
   if (action !== "approve") return { error: "Unknown action.", form };
-  if (s.status !== "agreed") return { error: "Only a transcription waiting for a person can be confirmed.", form };
+  if (s.status !== "agreed") return { error: "Only a transcription published by AI can be confirmed.", form };
   if (rawForm.get("compared") !== "1") return { error: "Tick the box once you've compared every row with the scan.", form };
   const rows = json(s.reading, []);
   if (!rows.length) return { error: "This reading has no rows to publish.", form };
   const unread = json(s.unread, []).map((u) => u.n).filter((n) => n != null);
   await db.batch([
-    // Publish the agreed rows, then record who checked them (publishing clears the name).
+    // Publish the rows again (unchanged if already public), then record who checked them (publishing clears the name).
     ...publishStatements({ id, official_id: s.official_id, chamber: s.chamber, state: s.state, filed_on: s.filed_on }, rows).map((q) => db.prepare(q.sql).bind(...q.binds)),
     db.prepare("UPDATE trade_reports SET transcribed_by = ?, rows_total = ?, unread_rows = ? WHERE id = ?").bind(form.reviewer, s.rows_total || rows.length, JSON.stringify(unread), id),
     db.prepare("UPDATE trade_scans SET status = 'approved', reviewed_by = ?, reviewer_email = ?, reviewed_at = datetime('now') WHERE report_id = ?").bind(form.reviewer, email || null, id),
   ]);
-  return { done: `Confirmed and published. These trades show "Checked by ${form.reviewer}".` };
+  return { done: `Confirmed. These trades now show "Checked by ${form.reviewer}".` };
 }
