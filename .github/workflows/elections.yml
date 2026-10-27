@@ -20,6 +20,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null
+      - name: PROBE
+        run: |
+          python3 tools/_probe_nc.py https://www.sosnc.gov/divisions/general_counsel/constitutional_amendments_publication_commission https://www.ncsbe.gov/judicial-voter-guide-2026-general-election "https://www.forsythcountync.gov/elections/article.aspx?NewsID=29268" "https://www.clevelandcounty.com/main/Summary%20Explanation%20of%202026%20Constitutional%20Amendments.pdf" https://www.ncsbe.gov/voting/upcoming-election https://www.ncleg.gov/BillLookUp/2025/S921 https://www.ncleg.gov/BillLookUp/2025/S1080 https://www.ncleg.gov/BillLookUp/2025/H1089
+          exit 1
       - name: Build from official sources
         env:
           FEC_API_KEY: ${{ secrets.FEC_API_KEY }}
