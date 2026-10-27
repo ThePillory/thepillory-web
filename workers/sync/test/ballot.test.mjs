@@ -147,7 +147,9 @@ function stubDb({ lookupsToday = 0 } = {}) {
       const s = {
         bind: (...a) => ((args = a), s),
         all: async () => {
-          if (/FROM fec_candidates/.test(sql)) return { results: args[0] === "WA" ? [{ candidate_id: "H0WA00001", slug: "dee-lane", name: "Dee Lane", office: "U.S. Representative" }] : args[0] === "CA" ? [{ candidate_id: "H0CA00002", slug: "zed-zane", name: "Zed Zane", office: "U.S. Representative" }] : [] };
+          if (/FROM fec_candidates/.test(sql)) return { results: args[0] === "WA" ? [{ candidate_id: "H0WA00001", slug: "dee-lane", name: "Dee Lane", office: "U.S. Representative", active: 1 }] : args[0] === "CA" ? [{ candidate_id: "H0CA00002", slug: "zed-zane", name: "Zed Zane", office: "U.S. Representative", active: 1 }] : [] };
+          // The state's officials (recordsFor()): Washington's District 7 member holds that seat.
+          if (/FROM officials WHERE state = \?/.test(sql)) return { results: args[0] === "WA" ? [{ slug: "dee-lane", name: "Dee Lane", office: "U.S. Representative", chamber: "us-house", district_code: "7", active: 1, state: "WA" }] : [] };
           if (/FROM officials/.test(sql)) return { results: [{ slug: "hal-jones", name: "Hal Jones", office: "Assemblymember" }] };
           return { results: [] };
         },
@@ -205,11 +207,14 @@ test("before an address: FEC races, incumbents linked to Votes and Funding, offi
   assert.equal(res.headers.get("Cache-Control"), "private, no-store");
   assert.match(html, /No U\.S\. Senate seat in Washington is up this year/);
   assert.match(html, /U\.S\. House, District 7/);
-  assert.match(html, /href="\/reps\/dee-lane\/#votes">Votes<\/a> · <a class="inline-link" href="\/reps\/dee-lane\/#funding">Funding/);
+  // The seat's holder: "Incumbent" and a link to their record; nobody else is labeled.
+  assert.match(html, /href="\/reps\/dee-lane\/#votes">Votes and record ›<\/a> · <a class="inline-link" href="\/reps\/dee-lane\/#funding">Funding/);
+  assert.doesNotMatch(html, /Challenger/);
   // The same row for every candidate: name, party, links.
   assert.equal((html.match(/<li class="ballot-cand stack-xs">/g) || []).length, 2);
-  assert.match(html, /PARTY ONE · Incumbent/);
-  assert.match(html, /PARTY TWO<\/p>/);
+  assert.match(html, /<li>Party One<\/li><li>Incumbent<\/li>/);
+  assert.match(html, /<li>Party Two<\/li><\/ul>/);
+  assert.doesNotMatch(html, /PARTY ONE|PARTY TWO/, "the FEC's capitals, in normal capitalization");
   assert.match(html, /href="https:\/\/www\.sos\.wa\.gov\/elections"/);
   assert.match(html, /href="https:\/\/vote\.gov\/"/);
   assert.match(html, /<form class="lookup-form" action="\/ballot\/wa\/" method="post">/);
@@ -237,7 +242,7 @@ test("a state's own certified list: its names under the ballot heading, never th
   assert.equal((html.match(/<li class="ballot-cand stack-xs">/g) || []).length, 2, "the two certified House candidates");
   assert.match(html, /JEFF ROWE/);
   assert.match(html, /Mia Novak/);
-  assert.match(html, /Party One · Incumbent/);
+  assert.match(html, /<li>Party One<\/li><li>Incumbent<\/li>/);
   assert.match(html, /href="\/candidates\/H0NM00001\/">JEFF ROWE<\/a>/, "one filer in the race has that name: linked");
   assert.doesNotMatch(html, /href="\/candidates\/[^"]*">Mia Novak/, "no filing matches: no link");
   assert.doesNotMatch(html, /LOST, LENA|Lena Lost|GONE, GUS|Gus Gone/);
@@ -251,7 +256,8 @@ test("California: the certified candidates for the House race, in ballot order, 
   assert.match(html, /United States Representative District 5/);
   assert.ok(html.indexOf("Zed Zane") < html.indexOf("Ann Able"), "the randomized alphabet (Z first here)");
   assert.equal((html.match(/<li class="ballot-cand stack-xs">/g) || []).length, 2, "only the two on the November ballot");
-  assert.match(html, /Party preference: Party Two · United States Representative/);
+  // One bullet each: party preference, then the ballot designation.
+  assert.match(html, /<li>Party preference: Party Two<\/li><li>United States Representative<\/li>/);
   assert.match(html, /href="\/reps\/zed-zane\/#votes">Votes/);
   assert.match(html, /Certified List of Candidates: only the candidates on the November ballot/);
   assert.doesNotMatch(html, /FEC list ↗/);
@@ -265,7 +271,7 @@ test("with an address: every contest in ballot order, the same card for each can
   const at = (t) => html.indexOf(t);
   assert.ok(at("<h3>Governor</h3>") > 0 && at("<h3>Governor</h3>") < at("<h3>Member of the State Assembly</h3>") && at("<h3>Member of the State Assembly</h3>") < at("<h3>Proposition 1</h3>"));
   assert.equal((html.match(/<li class="ballot-cand stack-xs">/g) || []).length, 5, "one row per candidate");
-  assert.match(html, /Cy Kemp<\/p>\s*<p class="list-meta">No party listed/);
+  assert.match(html, /Cy Kemp<\/p>\s*<ul class="cand-facts"><li>No party listed/);
   assert.doesNotMatch(html, /href="\/reps\/hal-jones\/"/, "a name alone doesn't link a candidate to an official");
   assert.match(html, /href="\/elections\/2026-11-03\/measure\/prop-1\/">Official arguments for and against, on ThePillory/);
   assert.match(html, /href="https:\/\/sos\.example\.gov\/prop1"/);

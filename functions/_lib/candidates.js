@@ -14,7 +14,7 @@
 // order where the state's certified list gives it, otherwise alphabetical. No
 // polls, predictions, rankings or contact details; individual donors are never
 // named. Party is plain text, as filed.
-import { esc, safeUrl, kv, fmtDate, linkRow, sourceLink } from "./render.js";
+import { esc, safeUrl, kv, fmtDate, linkRow, sourceLink, partyName } from "./render.js";
 import { asset } from "./geo.js";
 import { STATE_NAME } from "./districts.js";
 import { fold, outLink } from "./summary.js";
@@ -27,6 +27,7 @@ import { loadElection, ballotOrder, contestHref, ELECTION_BY_STATE, measuresOnly
 import { statePath } from "./state-paths.js";
 import { previewLabel, nominations, nominationWords } from "./election-window.js";
 import { certifiedRace, certifiedMeta } from "./certified.js";
+import { chamberIds } from "../../workers/sync/src/states.js";
 
 export const YEAR = 2026;
 export const METHOD = "/about/methodology/#candidates";
@@ -166,7 +167,7 @@ export function inOrder(list) {
 export async function recordsFor(db, st) {
   if (!db) return { officials: [], byFec: {} };
   const [o, f] = await Promise.all([
-    db.prepare("SELECT slug, name, last_name, office, district, level, chamber, active, state FROM officials WHERE state = ?").bind(st).all(),
+    db.prepare("SELECT slug, name, last_name, office, district, district_code, level, chamber, active, state FROM officials WHERE state = ?").bind(st).all(),
     db
       .prepare("SELECT f.candidate_id, o.slug, o.name, o.office, o.district, o.active, o.level FROM fec_candidates f JOIN officials o ON o.id = f.official_id WHERE f.candidate_id IS NOT NULL AND o.state = ?")
       .bind(st)
@@ -195,17 +196,99 @@ export function officesHeld(c, records, displayName, { incumbent = false } = {})
 }
 
 // ---------------------------------------------------------------------------
+// Incumbency: who holds the exact seat a race is for
+
+const officeKey = (o) => String(o || "").toLowerCase().replace(/^state\s+/, "").trim();
+
+/**
+ * The current officials in ThePillory's records who hold the seat a race is
+ * for: the House member for the district, the state legislator for the
+ * district, the statewide officer with the same office. For a U.S. Senate race
+ * both senators (which seat is up isn't in the records), so a Senate race never
+ * names an open seat. Pure.
+ */
+export function seatOf(records, st, key, contest = null) {
+  const active = (records.officials || []).filter((o) => o.active);
+  if (key === "senate" || (contest && /united states senator/i.test(contest.office || ""))) {
+    return { senate: true, holders: active.filter((o) => o.chamber === "us-senate") };
+  }
+  const m = /^house-(\d+)$/.exec(key || "");
+  const cd = m ? m[1] : contest && contest.scope === "cd" ? contest.district : null;
+  if (cd != null) return { holders: active.filter((o) => o.chamber === "us-house" && Number(o.district_code) === Number(cd)) };
+  const ch = chamberIds(st);
+  const legislature = contest && { sldu: ch.upper, sldl: ch.lower }[contest.scope];
+  if (legislature) return { holders: active.filter((o) => o.chamber === legislature && Number(o.district_code) === Number(contest.district)) };
+  if (contest && contest.scope === "statewide") return { holders: active.filter((o) => o.chamber === ch.executive && officeKey(o.office) === officeKey(contest.office)) };
+  return { holders: [] };
+}
+
+/**
+ * Who in a race holds its seat now. A candidate is the incumbent when the
+ * state's certified list marks them so, or when ThePillory's records tie them
+ * to the official in that exact seat: the same FEC ID, or the only candidate
+ * whose name matches the seat's holder. Nobody else is labeled. `ballot`: the
+ * official list's candidates ({name, fec, incumbent}), or null for a race known
+ * only from FEC filings. Returns get(fecId, name) -> {holder} | null, and
+ * `open`: the seat's one current holder when none of the candidates is them
+ * (never for the Senate). Pure.
+ */
+export function raceIncumbency({ st, key, contest = null, ballot = null, fecList = [], records }) {
+  const seat = seatOf(records, st, key, contest);
+  const listed = ballot || [];
+  const people = [
+    ...listed.map((x) => ({ name: x.name, fecId: x.fec && x.fec.id, mark: !!x.incumbent })),
+    ...fecList.filter((c) => !listed.some((x) => x.fec && x.fec.id === c.id)).map((c) => ({ name: fecDisplayName(c.name), fecId: c.id, mark: false })),
+  ];
+  const match = people.map((p) => {
+    const byId = p.fecId && records.byFec[p.fecId];
+    const h = byId && seat.holders.find((o) => o.slug === byId.slug);
+    if (h) return { holder: h, how: "fec" };
+    const n = officialFor(p.name, seat.holders);
+    return n ? { holder: n, how: "name" } : null;
+  });
+  // A name match counts only when no other candidate's name matches the same official.
+  const named = (slug) => match.filter((x) => x && x.how === "name" && x.holder.slug === slug).length;
+  const found = new Map();
+  people.forEach((p, i) => {
+    const m = match[i] && (match[i].how === "fec" || named(match[i].holder.slug) === 1) ? match[i] : null;
+    if (!p.mark && !m) return;
+    const v = { holder: m ? m.holder : null };
+    if (p.fecId) found.set(`fec:${p.fecId}`, v);
+    found.set(`name:${p.name}`, v);
+  });
+  const open = !seat.senate && seat.holders.length === 1 && !found.size ? seat.holders[0] : null;
+  return { get: (fecId, name) => (fecId && found.get(`fec:${fecId}`)) || found.get(`name:${name}`) || null, open };
+}
+
+/** "Open seat: the current officeholder, [Name], isn't running for this seat." Only from ThePillory's records. */
+export function openSeatLine(holder) {
+  return holder
+    ? `<p class="small open-seat">Open seat: the current officeholder, <a class="inline-link" href="/reps/${esc(holder.slug)}/">${esc(holder.name)}</a>, isn't running for this seat.</p>`
+    : "";
+}
+
+// ---------------------------------------------------------------------------
 // Pieces
 
-/** The same card for every candidate in a race. */
-export function candidateCard({ href, name, meta, held }) {
+/** The same card for every candidate in a race. The incumbent's also links to their record. */
+export function candidateCard({ href, name, facts, held, record = null }) {
   return `
   <li class="ballot-cand">
     <a class="list-row link-row" href="${esc(href)}">
-      <div><div class="list-title">${esc(name)}</div><div class="list-meta">${esc(meta)}</div>${held ? `<div class="list-meta">${esc(held)}</div>` : ""}</div>
+      <div><div class="list-title">${esc(name)}</div>${candFacts([...facts, held])}</div>
       <span class="row-end"><span class="chev" aria-hidden="true">›</span></span>
-    </a>
+    </a>${record ? `
+    <a class="cand-record" href="/reps/${esc(record.slug)}/#votes">Votes and record ›</a>` : ""}
   </li>`;
+}
+
+/** A card's facts with "Incumbent" last, plain text, only for the seat's holder. */
+const withIncumbent = (parts, inc) => [...parts, inc ? "Incumbent" : ""].filter(Boolean);
+
+/** A candidate's facts (party, ballot designation, office held, incumbent), one bullet each. */
+export function candFacts(facts) {
+  const items = (facts || []).filter(Boolean);
+  return items.length ? `<ul class="cand-facts">${items.map((f) => `<li>${esc(f)}</li>`).join("")}</ul>` : "";
 }
 
 const heldLine = (h) => `${h.active ? "Holds" : "Held"}: ${h.office}${h.district ? `, ${h.district}` : ""}`;
@@ -360,6 +443,7 @@ export function fecCandidatePage({ c, st, data, election, records, dates, today,
   const stateList = contest ? null : certifiedRace(certified, key, Object.values(data.candidates).filter((x) => raceKey(x) === key));
   const onCert = contest ? contest.candidates.find((x) => x.fec && x.fec.id === c.id) : stateList ? stateList.candidates.find((x) => x.fec && x.fec.id === c.id) || null : null;
   const display = onCert ? onCert.name : fecDisplayName(c.name);
+  const me = raceIncumbency({ st, key, contest, ballot: contest ? contest.candidates : stateList ? stateList.candidates : null, fecList: Object.values(data.candidates).filter((x) => raceKey(x) === key), records }).get(c.id, display);
   const held = officesHeld(c, records, display, { incumbent: !!c.incumbent });
   const now = held.find((h) => h.active && h.how === "fec");
   const after = today > generalDate(dates, st);
@@ -369,7 +453,7 @@ export function fecCandidatePage({ c, st, data, election, records, dates, today,
   const race = raceHref(data.year, st, key);
   const chips = [
     `<a class="chip chip--tap" href="${race}">The race: ${esc(office)}</a>`,
-    now ? `<a class="chip chip--tap" href="/reps/${esc(now.slug)}/">Official page</a>` : "",
+    me && me.holder ? `<a class="chip chip--tap" href="/reps/${esc(me.holder.slug)}/#votes">Votes and record ›</a>` : now ? `<a class="chip chip--tap" href="/reps/${esc(now.slug)}/">Official page</a>` : "",
     website ? `<a class="chip chip--tap" href="${esc(website)}" target="_blank" rel="noopener">Campaign website ↗</a>` : "",
   ].join("");
 
@@ -382,13 +466,13 @@ ${fold("race", "The race", kv([
   ]), { open: true })}
 ${fold("filing", "As filed", kv([
     ["Name as filed", esc(c.name)],
-    ["Party", c.party ? esc(c.party) : "None listed"],
-    ["Incumbent", c.incumbent ? "Yes" : "No"],
+    ["Party", c.party ? esc(partyName(c.party)) : "None listed"],
+    me ? ["Incumbent", "Holds this seat now"] : null,
     onCert && stateList ? ["On the state's certified list as", esc(`${onCert.name} · ${certifiedMeta(onCert)}`)] : null,
-    onCert && !stateList ? ["On the ballot as", esc([onCert.party ? `Party preference: ${onCert.party}` : "", onCert.designation].filter(Boolean).join(" · ") || onCert.name)] : null,
+    onCert && !stateList ? ["On the ballot as", esc([onCert.party ? `Party preference: ${partyName(onCert.party)}` : "", onCert.designation].filter(Boolean).join(" · ") || onCert.name)] : null,
     ["Campaign website", website ? `${outLink(website, website.replace(/^https?:\/\//, "").replace(/\/$/, ""))} <span class="secondary small">(as listed in the campaign's FEC filing)</span>` : c.website ? "None listed in the FEC filing" : null],
     ["First listed", c.first_listed ? esc(fmtDate(c.first_listed)) : null],
-  ].filter(Boolean)), { meta: c.party || "" })}
+  ].filter(Boolean)), { meta: partyName(c.party) })}
 ${fold("source", "Sources", `<p class="small">${sourceLink(c.fec_url, "FEC candidate record")}${c.website && c.website.source_url ? ` · ${sourceLink(c.website.source_url, "Campaign committee at the FEC")}` : ""}${contest ? ` · ${sourceLink(contest.source_url, "Certified List of Candidates")}` : ""}${stateList && stateList.source.url ? ` · ${sourceLink(stateList.source.url, `${stateName}'s certified candidate list`)}` : ""}</p>
   <p class="hint">FEC list read ${fmtDate(data.list_built_on || data.built_on)}.</p>`)}
 ${included()}`;
@@ -408,12 +492,13 @@ export function stateCandidatePage({ cand, contest, election, records, today }) 
   const stateName = STATE_NAME[st];
   const held = officesHeld({}, records, cand.name, { incumbent: !!cand.incumbent });
   const now = held.find((h) => h.active);
+  const me = raceIncumbency({ st, key: contest.id, contest, ballot: contest.candidates, records }).get(cand.fec && cand.fec.id, cand.name);
   const after = today > election.election.date;
   const office = contest.office;
   const s = standing({ office, year: Number(election.election.date.slice(0, 4)), state: stateName, certified: true, onBallot: true, after, inOffice: null });
   const race = raceHref(Number(election.election.date.slice(0, 4)), st, contest.id);
   const label = now && !after ? `${s.label} · Holds another office` : s.label;
-  const chips = `<a class="chip chip--tap" href="${race}">The race: ${esc(office)}</a>${now ? `<a class="chip chip--tap" href="/reps/${esc(now.slug)}/">Current office: record</a>` : ""}`;
+  const chips = `<a class="chip chip--tap" href="${race}">The race: ${esc(office)}</a>${me && me.holder ? `<a class="chip chip--tap" href="/reps/${esc(me.holder.slug)}/#votes">Votes and record ›</a>` : now ? `<a class="chip chip--tap" href="/reps/${esc(now.slug)}/">Current office: record</a>` : ""}`;
   const about = `
 ${fold("race", "The race", kv([
     ["Office", esc(office)],
@@ -422,10 +507,10 @@ ${fold("race", "The race", kv([
   ]), { open: true })}
 ${fold("filing", "As certified", kv([
     ["Name", esc(cand.name)],
-    ["Party preference", cand.party ? esc(cand.party) : "None listed"],
+    ["Party preference", cand.party ? esc(partyName(cand.party)) : "None listed"],
     ["Ballot designation", cand.designation ? esc(cand.designation) : null],
-    ["Incumbent", cand.incumbent ? "Yes" : "No"],
-  ]), { meta: cand.party || "" })}
+    me ? ["Incumbent", "Holds this seat now"] : null,
+  ].filter(Boolean)), { meta: partyName(cand.party) })}
 ${fold("source", "Sources", `<p class="small">${sourceLink(contest.source_url, "Certified List of Candidates")}</p>`)}
 ${included(INCLUDED_CERTIFIED)}`;
   const funding = `<section class="card stack-sm"><p class="small">Campaign money for candidates for ${esc(stateName)}'s state offices is reported to the Secretary of State (Cal-Access). ThePillory shows it for current officials and doesn't load it for other candidates yet.</p>${now ? `<p class="small"><a class="inline-link" href="/reps/${esc(now.slug)}/#funding">Funding for ${esc(now.office)}</a></p>` : ""}${outLink("https://cal-access.sos.ca.gov/Campaign/Candidates/", "Cal-Access candidate search")}</section>`;
@@ -451,16 +536,20 @@ export function racePage({ st, key, data, election, records, dates, today, certi
   const byFec = Object.fromEntries(fecList.map((c) => [c.id, c]));
   const stateList = contest ? null : certifiedRace(certified, key, fecList);
   if (!contest && !stateList && !fecList.length) return null;
+  // Who holds this seat now: "Incumbent" on their card only, and an open-seat line when none of them does.
+  const inc = raceIncumbency({ st, key, contest, ballot: contest ? contest.candidates : stateList ? stateList.candidates : null, fecList, records });
 
   const fecCard = (c) => {
     const name = fecDisplayName(c.name);
     const held = officesHeld(c, records, name, { incumbent: !!c.incumbent });
     const now = held.find((h) => h.active && h.how === "fec");
+    const me = inc.get(c.id, name);
     return candidateCard({
       href: candidateHref(c.id),
       name,
-      meta: [c.party || "No party listed", c.incumbent ? "Incumbent" : ""].filter(Boolean).join(" · "),
+      facts: withIncumbent([partyName(c.party) || "No party listed"], me),
       held: now ? heldLine(now) : held[0] ? heldLine(held[0]) : "",
+      record: me && me.holder,
     });
   };
   let ballot = "";
@@ -470,11 +559,13 @@ export function racePage({ st, key, data, election, records, dates, today, certi
     const cards = candidates.map((x) => {
       const f = x.fec && byFec[x.fec.id];
       const held = officesHeld(f || {}, records, x.name, { incumbent: !!(x.incumbent || (f && f.incumbent)) });
+      const me = inc.get(x.fec && x.fec.id, x.name);
       return candidateCard({
         href: f ? candidateHref(f.id) : stateCandidateHref(contest.id, nameSlug(x.name)),
         name: x.name,
-        meta: [x.party ? `Party preference: ${x.party}` : "No party preference listed", x.designation].filter(Boolean).join(" · "),
+        facts: withIncumbent([x.party ? `Party preference: ${partyName(x.party)}` : "No party preference listed", x.designation], me),
         held: held[0] ? heldLine(held[0]) : "",
+        record: me && me.holder,
       });
     });
     ballot = `
@@ -491,12 +582,14 @@ export function racePage({ st, key, data, election, records, dates, today, certi
     const items = stateList.candidates.map((x) => {
       const f = x.fec && byFec[x.fec.id];
       const held = f ? officesHeld(f, records, x.name, { incumbent: !!(x.incumbent || f.incumbent) }) : [];
-      const meta = certifiedMeta(x);
+      const me = inc.get(x.fec && x.fec.id, x.name);
+      const facts = withIncumbent([partyName(x.party) || "No party listed"], me);
       const heldText = held[0] ? heldLine(held[0]) : "";
       return f
-        ? candidateCard({ href: candidateHref(f.id), name: x.name, meta, held: heldText })
+        ? candidateCard({ href: candidateHref(f.id), name: x.name, facts, held: heldText, record: me && me.holder })
         : `
-  <li class="ballot-cand list-row"><div><div class="list-title">${esc(x.name)}</div><div class="list-meta">${esc(meta)}</div></div></li>`;
+  <li class="ballot-cand"><div class="list-row"><div><div class="list-title">${esc(x.name)}</div>${candFacts(facts)}</div></div>${me && me.holder ? `
+    <a class="cand-record" href="/reps/${esc(me.holder.slug)}/#votes">Votes and record ›</a>` : ""}</li>`;
     });
     const src = stateList.source;
     ballot = `
@@ -536,6 +629,7 @@ export function racePage({ st, key, data, election, records, dates, today, certi
   <h1>${esc(office)}</h1>
   <p class="subtitle">General election, ${esc(fmtDate(date))}${after ? " (held)" : ""}.</p>
 </header>
+${after ? "" : openSeatLine(inc.open)}
 ${ballot}
 ${settledNote}
 ${fecSection}

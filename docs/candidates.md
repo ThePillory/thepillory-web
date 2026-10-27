@@ -29,6 +29,17 @@ Linked from: the ballot preview (each candidate's name, "The race", "Every 2026 
 - Without: alphabetically by last name as filed.
 - Every card is the same: name, party as filed (or party preference and ballot designation as certified), "Incumbent" where the source says so, and any office the candidate holds or held in ThePillory's records. No money on the cards.
 
+## Incumbency (`seatOf()`, `raceIncumbency()`)
+
+On race pages, the ballot preview and candidate pages, one plain-text label, **"Incumbent"**, last on the card's details line, styled like every other part of that line, only on the candidate who holds that exact seat now:
+
+- the state's certified list marks them as the incumbent (California marks its state races), or
+- ThePillory's records tie them to the current official in that seat (`seatOf()`: the House member for the district by `district_code`, the state legislator for the district, the statewide officer with the same office, "State Controller" matching "Controller"): the same FEC ID, or the only candidate in the race whose name matches that official (`officialFor()`). Two candidates matching the same official: neither is labeled.
+
+Nobody else gets a label (never "Challenger"); their cards show what the official list gives them (party, ballot designation) and their links as before. The order never changes. The incumbent's card adds **"Votes and record ›"** to their official page when the records tie them (the list's mark alone gives the label, not a link). The FEC's own incumbent flag isn't used.
+
+**Open seats:** when the seat has exactly one current holder in the records and none of the candidates is them, the race starts with "Open seat: the current officeholder, [Name], isn't running for this seat." (`openSeatLine()`, linked to their page), on the race page and in the ballot preview, and the statewide list on the ballot preview adds "Open seat: [Name] isn't running for this seat". Never for a U.S. Senate race (which of the two seats is up isn't in the records), never after Election Day, and never when the holder isn't in the records. `workers/sync/test/incumbency.test.mjs`.
+
 ## Labels (`standing()`)
 
 | When | Label |
