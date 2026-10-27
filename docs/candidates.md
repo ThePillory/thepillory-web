@@ -38,7 +38,7 @@ On race pages, the ballot preview and candidate pages, one plain-text label, **"
 
 Nobody else gets a label (never "Challenger"); their cards show what the official list gives them (party, ballot designation) and their links as before. The order never changes. The incumbent's card adds **"Votes and record ›"** to their official page when the records tie them (the list's mark alone gives the label, not a link). The FEC's own incumbent flag isn't used.
 
-**Open seats:** when the seat has exactly one current holder in the records and none of the candidates is them, the race starts with "Open seat: the current officeholder, [Name], isn't running." (`openSeatLine()`, linked to their page), on the race page and in the ballot preview, and the statewide list on the ballot preview adds "Open seat: [Name] isn't running". Never for a U.S. Senate race (which of the two seats is up isn't in the records), never after Election Day, and never when the holder isn't in the records. `workers/sync/test/incumbency.test.mjs`.
+**Open seats:** when the seat has exactly one current holder in the records and none of the candidates is them, the race starts with "Open seat: the current officeholder, [Name], isn't running for this seat." (`openSeatLine()`, linked to their page), on the race page and in the ballot preview, and the statewide list on the ballot preview adds "Open seat: [Name] isn't running for this seat". Never for a U.S. Senate race (which of the two seats is up isn't in the records), never after Election Day, and never when the holder isn't in the records. `workers/sync/test/incumbency.test.mjs`.
 
 ## Labels (`standing()`)
 

@@ -251,7 +251,7 @@ function certifiedSection(st, election, filed, d, records) {
     ? `
 <section class="stack-sm simple-keep" id="statewide" aria-labelledby="h-statewide">
   <h2 class="label" id="h-statewide">On every ${esc(STATE_NAME[st])} ballot · November 3, 2026</h2>
-  ${offices.length ? `<div class="card">${offices.map((c) => { const inc = incFor(c); return linkRow(raceHref(YEAR, st, c.id), c.office, [ballotOrder(c, election).candidates.map((x) => `${x.name}${inc.get(x.fec && x.fec.id, x.name) ? " (Incumbent)" : ""}`).join(" · "), inc.open ? `Open seat: ${inc.open.name} isn't running` : ""].filter(Boolean).join(". ")); }).join("")}</div>` : ""}
+  ${offices.length ? `<div class="card">${offices.map((c) => { const inc = incFor(c); return linkRow(raceHref(YEAR, st, c.id), c.office, [ballotOrder(c, election).candidates.map((x) => `${x.name}${inc.get(x.fec && x.fec.id, x.name) ? " (Incumbent)" : ""}`).join(" · "), inc.open ? `Open seat: ${inc.open.name} isn't running for this seat` : ""].filter(Boolean).join(". ")); }).join("")}</div>` : ""}
   ${props.length ? `<div class="card">${props.map((m) => linkRow(measureHref(id, m.id), measureName(m), m.title || "")).join("")}</div>` : ""}
   <p class="hint">Candidates in ballot order as on ballots in Assembly District 1 (statewide offices rotate by district). Propositions with the official summary and arguments, word for word.</p>
 </section>`

@@ -260,10 +260,10 @@ export function raceIncumbency({ st, key, contest = null, ballot = null, fecList
   return { get: (fecId, name) => (fecId && found.get(`fec:${fecId}`)) || found.get(`name:${name}`) || null, open };
 }
 
-/** "Open seat: the current officeholder, [Name], isn't running." Only from ThePillory's records. */
+/** "Open seat: the current officeholder, [Name], isn't running for this seat." Only from ThePillory's records. */
 export function openSeatLine(holder) {
   return holder
-    ? `<p class="small open-seat">Open seat: the current officeholder, <a class="inline-link" href="/reps/${esc(holder.slug)}/">${esc(holder.name)}</a>, isn't running.</p>`
+    ? `<p class="small open-seat">Open seat: the current officeholder, <a class="inline-link" href="/reps/${esc(holder.slug)}/">${esc(holder.name)}</a>, isn't running for this seat.</p>`
     : "";
 }
 

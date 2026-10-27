@@ -59,7 +59,7 @@ test("an open seat names the current holder only from the records; never for the
   const contest = { id: "governor", scope: "statewide", office: "Governor", candidates: [{ name: "Xena Y", incumbent: false }, { name: "Zed Q", incumbent: false }] };
   const inc = raceIncumbency({ st: "CA", key: "governor", contest, ballot: contest.candidates, records });
   assert.equal(inc.open.slug, "gov-one");
-  assert.match(openSeatLine(inc.open), /Open seat: the current officeholder, <a class="inline-link" href="\/reps\/gov-one\/">Gwen Governor<\/a>, isn't running\./);
+  assert.match(openSeatLine(inc.open), /Open seat: the current officeholder, <a class="inline-link" href="\/reps\/gov-one\/">Gwen Governor<\/a>, isn't running for this seat\./);
   assert.equal(raceIncumbency({ st: "CA", key: "house-7", fecList: [{ id: "H1", name: "A, B" }], records }).open, null, "no current holder in the records: no line");
   assert.equal(raceIncumbency({ st: "CA", key: "senate", fecList: [{ id: "S1", name: "NEW, NORA" }], records }).open, null);
   assert.equal(openSeatLine(null), "");
