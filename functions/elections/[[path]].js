@@ -24,7 +24,7 @@ import {
   ballotOrder, ballotFor, courtGroups, scopeLabel, contestTitle,
   officeholders, holderFor, pollsClosed, sosResults, candidateResults, measureResult, resultsBlock,
   whenLine, howToVote, contestRow, measureRow, courtRow,
-  measuresOnly, measureName, electionIdFor, ELECTION_BY_STATE, COVERAGE_NOTE,
+  measuresOnly, measureName, measureTitle, electionIdFor, ELECTION_BY_STATE, COVERAGE_NOTE,
 } from "../_lib/elections.js";
 import { pacificNow } from "../_lib/meetings.js";
 import { fold } from "../_lib/summary.js";
@@ -188,7 +188,7 @@ function ballotSections(election, b, { ad = null, countyLabel = null } = {}) {
   ${b.boeKnown ? "" : '<p class="hint">Board of Equalization: your district is on your sample ballot. <a class="inline-link" href="' + electionHref(id) + '#h-dist">All four districts</a>.</p>'}
 </section>
 <section class="stack-sm" aria-labelledby="h-ym"><h2 class="label" id="h-ym">Statewide propositions</h2>
-  ${b.measures.map((m) => factsFold(election, m, { href: measureHref(id, m.id), name: measureName(m), sub: m.title })).join("")}
+  ${b.measures.map((m) => factsFold(election, m, { href: measureHref(id, m.id), name: measureName(m), sub: measureTitle(m) })).join("")}
 </section>
 ${b.partial.length || b.partialMeasures.length ? `<section class="stack-sm" aria-labelledby="h-yl"><h2 class="label" id="h-yl">Local, on some ballots in ${esc(countyLabel || "your county")}</h2>
   ${b.partial.length ? `<div class="card">${b.partial.map((c) => contestRow(id, c)).join("")}</div>` : ""}
@@ -562,7 +562,7 @@ ${m.tax_rate_statement && m.tax_rate_statement.length ? `<section class="stack-s
 <header class="page-head stack-xs">
   <p class="label">${esc(statewide ? `Statewide · ${fmtDate(election.election.date)}` : `${m.jurisdiction || (county ? county.name : "Local")} · ${fmtDate(election.election.date)}`)}</p>
   <h1>${esc(statewide ? `Proposition ${m.number}` : m.title)}</h1>
-  ${statewide ? `<p class="subtitle">${esc(m.title)}</p>` : `<p class="small secondary">On ballots in ${esc(m.jurisdiction || "part of the county")}${county ? `, ${esc(county.name)}` : ""}.</p>`}
+  ${statewide ? `<p class="subtitle">${esc(measureTitle(m))}</p>` : `<p class="small secondary">On ballots in ${esc(m.jurisdiction || "part of the county")}${county ? `, ${esc(county.name)}` : ""}.</p>`}
 </header>
 ${factsCard(election, m)}
 ${official}

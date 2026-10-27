@@ -310,10 +310,13 @@ export function contestRow(electionId, c, note = "") {
 /** A statewide measure's name as its ballot prints it: "Proposition 1", "Initiative Measure No. IL26-001". */
 export const measureName = (m) => m.label || `Proposition ${m.number}`;
 
+/** A statewide measure's title for display: California's guide prints titles in capitals, shown in title case; other states' as printed. */
+export const measureTitle = (m) => (m.label ? m.title : titleCase(m.title));
+
 export function measureRow(electionId, m, note = "") {
   const title = m.scope === "statewide" ? measureName(m) : `${m.title}${m.jurisdiction ? ` · ${m.jurisdiction}` : ""}`;
   // California's titles are printed in capitals; Washington's statement of subject is a sentence.
-  const sub = m.scope === "statewide" ? (m.label ? m.title : titleCase(m.title)) : note;
+  const sub = m.scope === "statewide" ? measureTitle(m) : note;
   return `
 <a class="list-row link-row" href="${measureHref(electionId, m.id)}">
   <div><div class="list-title">${esc(title)}</div>${sub ? `<div class="list-meta">${esc(sub)}</div>` : ""}</div>
