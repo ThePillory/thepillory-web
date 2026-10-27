@@ -1,0 +1,25 @@
+# TEMPORARY (removed before merge): phone-width screenshots of Props 4 and 5 from this branch's preview.
+name: Measure page screenshots (temporary)
+on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [".github/workflows/measure-shots.yml", "tools/shots_measures.mjs"]
+permissions:
+  contents: write
+jobs:
+  shots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm i --no-save playwright@1.48.2 && npx playwright install --with-deps chromium
+      - run: node tools/shots_measures.mjs
+      - name: Commit the screenshots
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add shots/
+          git commit -m "Temporary: measure page screenshots" && git push || true

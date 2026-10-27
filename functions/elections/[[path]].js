@@ -13,6 +13,7 @@
 // order; no endorsements, polls or predictions; results only from the official
 // feed, only after the polls close, and no race is called.
 import { factsCard, factsFold } from "../_lib/measure-facts.js";
+import { loadMeasureMoney, behindSection, signerContext, signerDetails } from "../_lib/measure-people.js";
 import { previewLabel } from "../_lib/election-window.js";
 import { page, esc, notFound, safeUrl, sourceLink, fmtDate, kv, loadSection, FAILED, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { districtsFromCookie, describe, STATE_NAME } from "../_lib/districts.js";
@@ -46,7 +47,7 @@ export const onRequestGet = guard(async (context) => {
   if (!kind) return edgeCached(context, cacheSeconds(election), () => electionPage(election));
   if (kind === "ballot" && !item) return ballotPage(env, request, election);
   if (kind === "contest" && item) return edgeCached(context, cacheSeconds(election), () => contestPage(env, election, item));
-  if (kind === "measure" && item) return edgeCached(context, cacheSeconds(election), () => measurePage(election, item, context.env));
+  if (kind === "measure" && item) return edgeCached(context, cacheSeconds(election), () => measurePage(election, item, context.env, request));
   return notFound("No page at this address.", "home", [election.election.name, electionHref(id)]);
 }, { tab: "home" });
 
@@ -378,8 +379,12 @@ const ARG_PARTS = [
 export const ARGUMENTS_TITLE = "What each side says (their own words, not checked by ThePillory)";
 export const ARGUMENTS_NOTE = "Written by each campaign, printed word for word from the official voter guide. Not written or checked by ThePillory or any government agency.";
 
-/** One argument or rebuttal, the same layout for every side: label, the guide's heading, the full text, who signed it. */
-function argumentPart(part, a) {
+/**
+ * One argument or rebuttal, the same layout for every side: label, the guide's heading, the full text, who signed it.
+ * Signers are printed exactly as the guide prints them; an official or candidate in the records is linked,
+ * and they and any organization a title names get a collapsed panel (signerDetails()).
+ */
+function argumentPart(part, a, details = null) {
   if (!a) {
     return `<article class="card stack-sm argument-card">
   <p class="label">${esc(part.label)}</p>
@@ -387,7 +392,13 @@ function argumentPart(part, a) {
 </article>`;
   }
   const signers = a.signers.length
-    ? `<div class="stack-xs"><p class="label">Signed by</p><ul class="plain-list signer-list">${a.signers.map((s) => `<li class="small"><strong>${esc(s.name)}</strong>${s.title ? `, ${esc(s.title)}` : ""}</li>`).join("")}</ul></div>`
+    ? `<div class="stack-xs"><p class="label">Signed by</p><ul class="plain-list signer-list">${a.signers
+        .map((s) => {
+          const d = details && details.get(`${s.name}|${s.title}`);
+          const name = d && d.href ? `<a class="inline-link" href="${esc(d.href)}">${esc(s.name)}</a>` : esc(s.name);
+          return `<li class="small"><strong>${name}</strong>${s.title ? `, ${esc(s.title)}` : ""}${d && d.panel ? d.panel : ""}</li>`;
+        })
+        .join("")}</ul></div>`
     : "";
   return `<article class="card stack-sm argument-card">
   <p class="label">${esc(part.label)}</p>
@@ -398,11 +409,11 @@ function argumentPart(part, a) {
 }
 
 /** Both exchanges in matching panels, in the guide's order, collapsed until opened. */
-function argumentsSection(m, source) {
+function argumentsSection(m, source, details = null) {
   const by = (kind) => m.arguments.find((a) => a.kind === kind) || null;
   const exchange = (title, parts) => `<div class="stack-sm argument-side">
   <h3 class="label">${esc(title)}</h3>
-  ${parts.map((part) => argumentPart(part, by(part.kind))).join("")}
+  ${parts.map((part) => argumentPart(part, by(part.kind), details)).join("")}
 </div>`;
   const inner = `<p class="banner argument-note">${esc(ARGUMENTS_NOTE)}</p>
 <div class="argument-sides">
@@ -416,7 +427,7 @@ ${source ? `<p class="small">${source}</p>` : ""}`;
 // A Washington measure: the Voters' Pamphlet's parts in its order. The ballot title and the explanatory
 // statement are the Attorney General's, the fiscal impact statement is the Office of Financial Management's,
 // and the arguments are each campaign's, all word for word (tools/build_wa_measures.py).
-function waMeasurePage(election, m, back, conHtml = "") {
+function waMeasurePage(election, m, back, conHtml = "", people = {}) {
   const id = election.election.id;
   const bt = m.ballot_title;
   const paras = (list) => list.map((p) => `<p class="small">${esc(p)}</p>`).join("");
@@ -441,7 +452,8 @@ ${fold("present", "The law as it presently exists", `<div class="statement-body 
 ${fold("effect", "The effect of the proposed measure if approved", `<div class="statement-body stack-xs">${paras(m.explanatory.effect)}</div><p class="hint">From the explanatory statement written by the Office of the Attorney General.</p>`)}
 ${conHtml}
 <section class="stack-sm" aria-labelledby="h-res"><h2 class="label" id="h-res">Results</h2>${results}</section>
-${argumentsSection(m, `${sourceLink(m.links.pamphlet_page, "Arguments and rebuttals in the Voters' Pamphlet")} · ${esc(m.arguments_disclaimer)}`)}
+${people.behind || ""}
+${argumentsSection(m, `${sourceLink(m.links.pamphlet_page, "Arguments and rebuttals in the Voters' Pamphlet")} · ${esc(m.arguments_disclaimer)}`, people.details)}
 <section class="stack-sm" aria-labelledby="h-src"><h2 class="label" id="h-src">Official sources</h2>
   <div class="card stack-xs">${links.filter(([u]) => safeUrl(u)).map(([u, l]) => `<p class="small">${sourceLink(u, l)}</p>`).join("")}</div>
 </section>
@@ -453,7 +465,7 @@ ${argumentsSection(m, `${sourceLink(m.links.pamphlet_page, "Arguments and rebutt
 // A measure in the "sections" format (tools/build_state_measures.py: Colorado, Arizona, Florida,
 // Michigan): the question on the ballot, what a Yes and a No vote mean where the state publishes that,
 // then each official section in the source's order, each with who wrote it, all word for word.
-function sectionsMeasurePage(election, m, back, conHtml = "") {
+function sectionsMeasurePage(election, m, back, conHtml = "", people = {}) {
   const e = election.election;
   const state = STATE_NAME[e.state] || e.state_name || e.state;
   const para = (p) => {
@@ -489,6 +501,7 @@ ${question ? `<section class="card stack-sm" aria-labelledby="h-q">
 </section>` : m.requirement ? `<p class="small secondary">${esc(m.requirement)}.</p>` : ""}
 ${m.sections.map((sec) => fold(sec.id, sec.heading, `${sec.paragraphs.length ? body(sec.paragraphs) : ""}<p class="hint">${esc(sec.by)}.${sec.note ? ` ${esc(sec.note)}` : ""}</p>`)).join("")}
 ${conHtml}
+${people.behind || ""}
 ${args}
 <section class="stack-sm" aria-labelledby="h-res"><h2 class="label" id="h-res">Results</h2>${results}</section>
 <section class="stack-sm" aria-labelledby="h-src"><h2 class="label" id="h-src">Official sources</h2>
@@ -499,7 +512,7 @@ ${args}
   return page(`${measureName(m)}, ${state}`, main, { tab: "home", back });
 }
 
-async function measurePage(election, measureId, env = {}) {
+async function measurePage(election, measureId, env = {}, request = null) {
   const st = election.election.state;
   const id = election.election.id;
   const back = [election.election.name, electionHref(id)];
@@ -509,8 +522,17 @@ async function measurePage(election, measureId, env = {}) {
   const con = m.scope === "statewide" ? await loadSection("measure constitution", () => publishedSection(env.DB, id, m.id), null) : null;
   const analysis = m.scope === "statewide" ? await loadSection("measure analysis", () => measureAnalysisSection(env.DB, id, m.id), "") : "";
   const conHtml = (con && con !== FAILED ? constitutionSection(con, { stateName: STATE_NAME[st] || st, label: measureName(m) }) : "") + (analysis === FAILED ? "" : analysis);
-  if (m.ballot_title) return waMeasurePage(election, m, back, conHtml);
-  if (election.election.format === "sections") return sectionsMeasurePage(election, m, back, conHtml);
+  // Who's behind each side (statewide measures; committee data loaded for California), and the signers'
+  // links and panels. Each loads on its own: one that can't load leaves the arguments as printed.
+  const money = m.scope === "statewide" && st === "CA" && request ? await loadSection("measure money", () => loadMeasureMoney(env, request, id), null) : null;
+  const ctx = (m.arguments || []).length ? await loadSection("measure signers", () => signerContext(env.DB, election), null) : null;
+  const details = ctx && ctx !== FAILED ? await loadSection("measure signer details", () => signerDetails(env.DB, election, m, money === FAILED ? null : money, ctx), null) : null;
+  const people = {
+    behind: m.scope === "statewide" ? (money === FAILED ? sectionError("Who's behind each side") : behindSection(money, m, election)) : "",
+    details: details && details !== FAILED ? details : null,
+  };
+  if (m.ballot_title) return waMeasurePage(election, m, back, conHtml, people);
+  if (election.election.format === "sections") return sectionsMeasurePage(election, m, back, conHtml, people);
   const statewide = m.scope === "statewide";
   const county = m.county ? election.counties[m.county] : null;
   const feed = statewide ? await loadSection("measure results", () => sosResults(election, m.results_path), null) : null;
@@ -546,7 +568,8 @@ ${factsCard(election, m)}
 ${official}
 ${conHtml}
 <section class="stack-sm" aria-labelledby="h-res"><h2 class="label" id="h-res">Results</h2>${results}</section>
-${argumentsSection(m, statewide ? sourceLink(m.links.arguments, "Arguments and rebuttals in the official guide") : sourceLink(m.links.pamphlet, "Arguments in the county's Voter Information Pamphlet (PDF)"))}
+${people.behind}
+${argumentsSection(m, statewide ? sourceLink(m.links.arguments, "Arguments and rebuttals in the official guide") : sourceLink(m.links.pamphlet, "Arguments in the county's Voter Information Pamphlet (PDF)"), people.details)}
 <section class="stack-sm" aria-labelledby="h-src"><h2 class="label" id="h-src">Official sources</h2>
   <div class="card stack-xs">${links.filter(([u]) => safeUrl(u)).map(([u, l]) => `<p class="small">${sourceLink(u, l)}</p>`).join("")}</div>
   ${m.note ? `<p class="hint">${esc(m.note)}</p>` : ""}

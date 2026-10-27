@@ -30,7 +30,7 @@ import { syncStateHearings } from "./meetings/state.js";
 import { withD1Retry } from "./d1retry.js";
 import { syncFederalFunding, syncFederalLobbying, syncCommitteeBills, syncLobbyContributions } from "./funding/sync.js";
 import { syncExecutiveFunding } from "./funding/executive.js";
-import { syncDarkMoney } from "./funding/darkmoney-sync.js";
+import { syncDarkMoney, syncSignerOrgs } from "./funding/darkmoney-sync.js";
 import { syncSummaries, buildSummaries } from "./summaries.js";
 import { syncCandidatePlatforms } from "./promises/candidates-sync.js";
 import { syncPlainSummaries } from "./plain/sync.js";
@@ -76,6 +76,8 @@ const STEPS = [
   // Dark money (src/funding/darkmoney-sync.js): outside spenders' donors that are
   // organizations, nonprofits' IRS records, and electioneering communications.
   ["dark-money", syncDarkMoney],
+  // Ballot measure signers' organizations: their IRS record, once each (same file).
+  ["measure-signer-orgs", syncSignerOrgs],
   // Officials' Issues and Priorities pages, found by following links from their
   // own websites (src/promises/finder-sync.js), a few dozen officials a day.
   ["issues-pages", syncIssuesPages],

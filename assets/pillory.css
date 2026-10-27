@@ -1897,6 +1897,23 @@ article.fin-term { scroll-margin-top: var(--space-4); }
 .facts-means { display: grid; grid-template-columns: 1fr; gap: var(--space-3); }
 @media (min-width: 768px) { .facts-means { grid-template-columns: 1fr 1fr; } }
 .facts-card .inset, .facts-fold .inset { overflow-wrap: anywhere; }
+/* "Who's behind each side" (functions/_lib/measure-people.js): Yes and No in the same layout, side by side from 768px */
+.behind-sides { display: grid; grid-template-columns: 1fr; gap: var(--space-5); }
+@media (min-width: 768px) { .behind-sides { grid-template-columns: 1fr 1fr; } }
+.behind-side .inset { overflow-wrap: anywhere; }
+/* Name on the left, amount on the right, one row each */
+.money-list { display: flex; flex-direction: column; gap: var(--space-2); }
+.money-row { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); overflow-wrap: anywhere; }
+.money-row .source-link { display: inline; min-height: 0; padding-block: var(--space-2); }
+.money-amount { white-space: nowrap; font-weight: 600; }
+.money-when { display: block; color: var(--text-2); }
+/* A signer's panel: closed by default, opens in place under the name */
+.signer-list li { overflow-wrap: anywhere; }
+.signer-more > summary { display: flex; align-items: center; min-height: var(--tap); color: var(--navy); font-weight: 600; cursor: pointer; list-style: none; }
+.signer-more > summary::-webkit-details-marker { display: none; }
+.signer-more > summary::after { content: "›"; margin-left: var(--space-2); transition: transform 0.15s ease; }
+.signer-more[open] > summary::after { transform: rotate(90deg); }
+.signer-fact .label { margin: 0; }
 /* One sources line: the links flow inline, their tap area padded out instead of adding height. */
 .facts-sources .source-link { display: inline; min-height: 0; padding-block: var(--space-3); font-weight: 400; }
 .facts-fold .fold-sub { display: block; font-size: var(--fs-small); color: var(--text-2); overflow-wrap: anywhere; }

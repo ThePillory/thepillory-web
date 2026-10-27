@@ -20,6 +20,7 @@
 import { getState, setState, BudgetExhausted, UpstreamError, isHttp } from "../util.js";
 import { fecOptions } from "./sync.js";
 import { currentCycle } from "./fec.js";
+import { signerOrgs } from "../elections/signers.js";
 import { FEC_LINES, PROPUBLICA, aggregateDonors, pickNonprofit, nonprofitRow, electioneeringRows, orgKey, DARK_KINDS, isOrganizationRow } from "./darkmoney.js";
 
 const TOP_DONORS = 15; // saved per spender and period, and the most looked up in IRS records
@@ -274,3 +275,46 @@ export async function syncDarkMoney(env, db, budget) {
   return { status: any ? "ok" : "skipped", message: any ? summary() : "dark money data is up to date" };
 }
 
+
+// The organizations named in ballot measure arguments' signer titles ("President,
+// California Nurses Association"): their IRS record, by exact name and the
+// election's state, one match only, for the measure pages' signer panels
+// (functions/_lib/measure-people.js). Asked once per name; ProPublica's pace and
+// daily cap are shared with the step above.
+export const SIGNER_ELECTIONS = ["2026-11-03", "2026-11-03-wa"];
+
+export async function syncSignerOrgs(env, db, budget) {
+  const base = String(env.SITE_URL || "").replace(/\/$/, "");
+  if (!base) return { status: "skipped", message: "SITE_URL not set" };
+  const { propublica } = clients(env, db, budget);
+  let asked = 0;
+  let matched = 0;
+  let known = 0;
+  try {
+    for (const id of SIGNER_ELECTIONS) {
+      let election;
+      try {
+        election = await budget.json(`${base}/data/elections/${id}.json`, {}, `election ${id}`);
+      } catch (err) {
+        if (err instanceof BudgetExhausted) throw err;
+        continue;
+      }
+      const state = election && election.election ? election.election.state : null;
+      for (const name of signerOrgs(election)) {
+        const have = await db.prepare("SELECT 1 FROM org_lookups WHERE name_key = ?").bind(`${orgKey(name)}|${state || ""}`).first();
+        if (have) {
+          known += 1;
+          continue;
+        }
+        asked += 1;
+        if (await lookupOrg(db, propublica, name, state)) matched += 1;
+      }
+    }
+  } catch (err) {
+    if (!(err instanceof BudgetExhausted)) throw err;
+    return { status: "partial", message: `${asked} signer organization(s) looked up in IRS records (${matched} matched); ${err.message}` };
+  }
+  return asked
+    ? { status: "ok", message: `${asked} signer organization(s) looked up in IRS records (${matched} matched), ${known} already known` }
+    : { status: "skipped", message: `all ${known} signer organization(s) already looked up` };
+}
