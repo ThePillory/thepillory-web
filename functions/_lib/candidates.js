@@ -14,7 +14,7 @@
 // order where the state's certified list gives it, otherwise alphabetical. No
 // polls, predictions, rankings or contact details; individual donors are never
 // named. Party is plain text, as filed.
-import { esc, safeUrl, kv, fmtDate, linkRow, sourceLink } from "./render.js";
+import { esc, safeUrl, kv, fmtDate, linkRow, sourceLink, partyName } from "./render.js";
 import { asset } from "./geo.js";
 import { STATE_NAME } from "./districts.js";
 import { fold, outLink } from "./summary.js";
@@ -460,13 +460,13 @@ ${fold("race", "The race", kv([
   ]), { open: true })}
 ${fold("filing", "As filed", kv([
     ["Name as filed", esc(c.name)],
-    ["Party", c.party ? esc(c.party) : "None listed"],
+    ["Party", c.party ? esc(partyName(c.party)) : "None listed"],
     me ? ["Incumbent", "Holds this seat now"] : null,
     onCert && stateList ? ["On the state's certified list as", esc(`${onCert.name} · ${certifiedMeta(onCert)}`)] : null,
-    onCert && !stateList ? ["On the ballot as", esc([onCert.party ? `Party preference: ${onCert.party}` : "", onCert.designation].filter(Boolean).join(" · ") || onCert.name)] : null,
+    onCert && !stateList ? ["On the ballot as", esc([onCert.party ? `Party preference: ${partyName(onCert.party)}` : "", onCert.designation].filter(Boolean).join(" · ") || onCert.name)] : null,
     ["Campaign website", website ? `${outLink(website, website.replace(/^https?:\/\//, "").replace(/\/$/, ""))} <span class="secondary small">(as listed in the campaign's FEC filing)</span>` : c.website ? "None listed in the FEC filing" : null],
     ["First listed", c.first_listed ? esc(fmtDate(c.first_listed)) : null],
-  ].filter(Boolean)), { meta: c.party || "" })}
+  ].filter(Boolean)), { meta: partyName(c.party) })}
 ${fold("source", "Sources", `<p class="small">${sourceLink(c.fec_url, "FEC candidate record")}${c.website && c.website.source_url ? ` · ${sourceLink(c.website.source_url, "Campaign committee at the FEC")}` : ""}${contest ? ` · ${sourceLink(contest.source_url, "Certified List of Candidates")}` : ""}${stateList && stateList.source.url ? ` · ${sourceLink(stateList.source.url, `${stateName}'s certified candidate list`)}` : ""}</p>
   <p class="hint">FEC list read ${fmtDate(data.list_built_on || data.built_on)}.</p>`)}
 ${included()}`;
@@ -501,10 +501,10 @@ ${fold("race", "The race", kv([
   ]), { open: true })}
 ${fold("filing", "As certified", kv([
     ["Name", esc(cand.name)],
-    ["Party preference", cand.party ? esc(cand.party) : "None listed"],
+    ["Party preference", cand.party ? esc(partyName(cand.party)) : "None listed"],
     ["Ballot designation", cand.designation ? esc(cand.designation) : null],
     me ? ["Incumbent", "Holds this seat now"] : null,
-  ].filter(Boolean)), { meta: cand.party || "" })}
+  ].filter(Boolean)), { meta: partyName(cand.party) })}
 ${fold("source", "Sources", `<p class="small">${sourceLink(contest.source_url, "Certified List of Candidates")}</p>`)}
 ${included(INCLUDED_CERTIFIED)}`;
   const funding = `<section class="card stack-sm"><p class="small">Campaign money for candidates for ${esc(stateName)}'s state offices is reported to the Secretary of State (Cal-Access). ThePillory shows it for current officials and doesn't load it for other candidates yet.</p>${now ? `<p class="small"><a class="inline-link" href="/reps/${esc(now.slug)}/#funding">Funding for ${esc(now.office)}</a></p>` : ""}${outLink("https://cal-access.sos.ca.gov/Campaign/Candidates/", "Cal-Access candidate search")}</section>`;
@@ -541,7 +541,7 @@ export function racePage({ st, key, data, election, records, dates, today, certi
     return candidateCard({
       href: candidateHref(c.id),
       name,
-      meta: withIncumbent([c.party || "No party listed"], me),
+      meta: withIncumbent([partyName(c.party) || "No party listed"], me),
       held: now ? heldLine(now) : held[0] ? heldLine(held[0]) : "",
       record: me && me.holder,
     });
@@ -557,7 +557,7 @@ export function racePage({ st, key, data, election, records, dates, today, certi
       return candidateCard({
         href: f ? candidateHref(f.id) : stateCandidateHref(contest.id, nameSlug(x.name)),
         name: x.name,
-        meta: withIncumbent([x.party ? `Party preference: ${x.party}` : "No party preference listed", x.designation], me),
+        meta: withIncumbent([x.party ? `Party preference: ${partyName(x.party)}` : "No party preference listed", x.designation], me),
         held: held[0] ? heldLine(held[0]) : "",
         record: me && me.holder,
       });
@@ -577,7 +577,7 @@ export function racePage({ st, key, data, election, records, dates, today, certi
       const f = x.fec && byFec[x.fec.id];
       const held = f ? officesHeld(f, records, x.name, { incumbent: !!(x.incumbent || f.incumbent) }) : [];
       const me = inc.get(x.fec && x.fec.id, x.name);
-      const meta = withIncumbent([x.party || "No party listed"], me);
+      const meta = withIncumbent([partyName(x.party) || "No party listed"], me);
       const heldText = held[0] ? heldLine(held[0]) : "";
       return f
         ? candidateCard({ href: candidateHref(f.id), name: x.name, meta, held: heldText, record: me && me.holder })

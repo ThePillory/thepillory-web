@@ -98,6 +98,18 @@ export function linkRow(href, title, meta = "", right = "") {
 </a>`;
 }
 
+/**
+ * A party as a filing gives it, in normal capitalization: the FEC files them in
+ * capitals ("DEMOCRATIC PARTY" -> "Democratic Party"). The words are unchanged,
+ * and a name that already has lowercase letters is left as it is.
+ */
+export function partyName(p) {
+  const s = String(p || "").trim();
+  if (!s || /[a-z]/.test(s)) return s;
+  const small = new Set(["of", "and", "the", "for", "a", "an"]);
+  return s.toLowerCase().replace(/[a-z]+/g, (w, i) => (i > 0 && small.has(w) ? w : w[0].toUpperCase() + w.slice(1)));
+}
+
 export function sourceLink(url, label = "Source") {
   const u = safeUrl(url);
   return u ? `<a class="inline-link source-link" href="${esc(u)}" target="_blank" rel="noopener">${esc(label)} ↗</a>` : "";

@@ -212,8 +212,9 @@ test("before an address: FEC races, incumbents linked to Votes and Funding, offi
   assert.doesNotMatch(html, /Challenger/);
   // The same row for every candidate: name, party, links.
   assert.equal((html.match(/<li class="ballot-cand stack-xs">/g) || []).length, 2);
-  assert.match(html, /PARTY ONE · Incumbent/);
-  assert.match(html, /PARTY TWO<\/p>/);
+  assert.match(html, /Party One · Incumbent/);
+  assert.match(html, /Party Two<\/p>/);
+  assert.doesNotMatch(html, /PARTY ONE|PARTY TWO/, "the FEC's capitals, in normal capitalization");
   assert.match(html, /href="https:\/\/www\.sos\.wa\.gov\/elections"/);
   assert.match(html, /href="https:\/\/vote\.gov\/"/);
   assert.match(html, /<form class="lookup-form" action="\/ballot\/wa\/" method="post">/);

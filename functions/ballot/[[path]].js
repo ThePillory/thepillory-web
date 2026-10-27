@@ -24,7 +24,7 @@
 // cached (Cache-Control: no-store). Every candidate gets the same layout, in the
 // order the official data lists them; no endorsements, polls or predictions.
 import { simpleCard } from "../_lib/simple.js";
-import { page, esc, notFound, safeUrl, linkRow, loadSection, FAILED, sectionError, guard, fmtDate } from "../_lib/render.js";
+import { page, esc, notFound, safeUrl, linkRow, loadSection, FAILED, sectionError, guard, fmtDate, partyName } from "../_lib/render.js";
 import { districtsFromCookie, STATE_NAME } from "../_lib/districts.js";
 import { visitorState } from "../_lib/visitor-state.js";
 import { asset } from "../_lib/geo.js";
@@ -192,7 +192,7 @@ function fecCandidate(c, filed, inc) {
   return `
   <li class="ballot-cand stack-xs">
     <p class="list-title"><a class="inline-link" href="${candidateHref(c.id)}">${esc(c.name)}</a></p>
-    <p class="list-meta">${esc(withIncumbent([c.party || "No party listed"], me))}</p>
+    <p class="list-meta">${esc(withIncumbent([partyName(c.party) || "No party listed"], me))}</p>
     <p class="small">${candLinks(filed[c.id], me, c.url)}</p>
   </li>`;
 }
@@ -217,7 +217,7 @@ function certifiedCandidate(c, filed, inc) {
   return `
   <li class="ballot-cand stack-xs">
     <p class="list-title">${c.fec && c.fec.id ? `<a class="inline-link" href="${candidateHref(c.fec.id)}">${esc(c.name)}</a>` : esc(c.name)}</p>
-    <p class="list-meta">${esc(withIncumbent([c.party ? `Party preference: ${c.party}` : "No party preference listed", c.designation], me))}</p>
+    <p class="list-meta">${esc(withIncumbent([c.party ? `Party preference: ${partyName(c.party)}` : "No party preference listed", c.designation], me))}</p>
     ${links ? `<p class="small">${links}</p>` : ""}
   </li>`;
 }
@@ -275,7 +275,7 @@ function stateListRace(title, race, filed, href, inc) {
     return `
   <li class="ballot-cand stack-xs">
     <p class="list-title">${c.fec ? `<a class="inline-link" href="${candidateHref(c.fec.id)}">${esc(c.name)}</a>` : esc(c.name)}</p>
-    <p class="list-meta">${esc(withIncumbent([c.party || "No party listed"], me))}</p>
+    <p class="list-meta">${esc(withIncumbent([partyName(c.party) || "No party listed"], me))}</p>
     ${links ? `<p class="small">${links}</p>` : ""}
   </li>`;
   };
@@ -470,7 +470,7 @@ function civicCandidate(c) {
   return `
   <li class="ballot-cand stack-xs">
     <p class="list-title">${esc(c.name)}</p>
-    <p class="list-meta">${esc(c.party || "No party listed")}</p>
+    <p class="list-meta">${esc(partyName(c.party) || "No party listed")}</p>
   </li>`;
 }
 

@@ -11,6 +11,7 @@
 // filer matches no other certified name. Otherwise there's no link: never a
 // guess.
 import { asset } from "./geo.js";
+import { partyName } from "./render.js";
 
 export const CERTIFIED_YEAR = 2026;
 
@@ -84,4 +85,4 @@ export function certifiedRace(file, key, fecList = []) {
 }
 
 /** Candidates as the state's list gives them, the same line for each: "Party · Incumbent". Pure. */
-export const certifiedMeta = (c) => [c.party || "No party listed", c.incumbent ? "Incumbent" : ""].filter(Boolean).join(" · ");
+export const certifiedMeta = (c) => [partyName(c.party) || "No party listed", c.incumbent ? "Incumbent" : ""].filter(Boolean).join(" · ");
