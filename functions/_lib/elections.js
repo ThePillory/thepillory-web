@@ -310,8 +310,33 @@ export function contestRow(electionId, c, note = "") {
 /** A statewide measure's name as its ballot prints it: "Proposition 1", "Initiative Measure No. IL26-001". */
 export const measureName = (m) => m.label || `Proposition ${m.number}`;
 
-/** A statewide measure's title for display: California's guide prints titles in capitals, shown in title case; other states' as printed. */
-export const measureTitle = (m) => (m.label ? m.title : titleCase(m.title));
+// California's guide prints proposition titles in capitals. They're shown with
+// ordinary capitalization, the words unchanged, and TITLE_CASE_NOTE says so
+// wherever they appear; other states' titles are shown as printed.
+const SMALL_WORDS = new Set(["a", "an", "and", "as", "at", "but", "by", "for", "from", "in", "into", "nor", "of", "on", "or", "per", "than", "the", "to", "via", "with"]);
+export const TITLE_CASE_NOTE = "Proposition titles are printed in capitals in the official voter guide; they're shown here with ordinary capitalization, the words unchanged.";
+
+/** "REPEALS PROHIBITION AGAINST PUBLIC FUNDING OF ELECTION CAMPAIGNS. LEGISLATIVE STATUTE." → "Repeals Prohibition Against Public Funding of Election Campaigns. Legislative Statute." Pure. */
+export function headlineCase(s) {
+  let start = true;
+  const parts = String(s || "").split(/(\s+)/);
+  return parts
+    .map((w, i) => {
+      if (/^\s+$/.test(w) || !w) return w;
+      const bare = w.replace(/[^A-Za-z]/g, "");
+      const billNumber = /^[A-Z]{2,4}$/.test(bare) && /^\d/.test(parts[i + 2] || ""); // "ACA 13", "SB 42"
+      let out;
+      if (!bare || billNumber || /\d/.test(w) || /^[A-Z](\.[A-Z])+\.?$/.test(w.replace(/[^A-Za-z.]/g, "")) || KEEP_UPPER.has(bare.toUpperCase())) out = w; // "U.S.", "AB 42", "ACA 13"
+      else if (!start && SMALL_WORDS.has(bare.toLowerCase())) out = w.toLowerCase();
+      else out = w.split("-").map((part, i) => (i && SMALL_WORDS.has(part.toLowerCase()) ? part.toLowerCase() : part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())).join("-"); // "Middle-Income"
+      start = /[.:;?!]$/.test(w);
+      return out;
+    })
+    .join("");
+}
+
+/** A statewide measure's title for display: California's in ordinary capitalization (see TITLE_CASE_NOTE), other states' as printed. */
+export const measureTitle = (m) => (m.label ? m.title : headlineCase(m.title));
 
 export function measureRow(electionId, m, note = "") {
   const title = m.scope === "statewide" ? measureName(m) : `${m.title}${m.jurisdiction ? ` · ${m.jurisdiction}` : ""}`;

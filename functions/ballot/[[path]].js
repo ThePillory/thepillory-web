@@ -28,7 +28,7 @@ import { page, esc, notFound, safeUrl, linkRow, loadSection, FAILED, sectionErro
 import { districtsFromCookie, STATE_NAME } from "../_lib/districts.js";
 import { visitorState } from "../_lib/visitor-state.js";
 import { asset } from "../_lib/geo.js";
-import { loadElection, electionHref, ballotHref, measureHref, measureName, measureTitle, contestHref, ballotOrder, ELECTION_BY_STATE, measuresOnly, howToVote } from "../_lib/elections.js";
+import { loadElection, electionHref, ballotHref, measureHref, measureName, measureTitle, TITLE_CASE_NOTE, contestHref, ballotOrder, ELECTION_BY_STATE, measuresOnly, howToVote } from "../_lib/elections.js";
 import { voterInfo, ballotFromVoterInfo, measureFor, CivicError } from "../_lib/civic.js";
 import { factsFold } from "../_lib/measure-facts.js";
 import { visitorHash } from "../_lib/turnstile.js";
@@ -256,7 +256,7 @@ function certifiedSection(st, election, filed, d, records) {
   <h2 class="label" id="h-statewide">On every ${esc(STATE_NAME[st])} ballot · November 3, 2026</h2>
   ${offices.length ? `<div class="card">${offices.map((c) => { const inc = incFor(c); return linkRow(raceHref(YEAR, st, c.id), c.office, [ballotOrder(c, election).candidates.map((x) => `${x.name}${inc.get(x.fec && x.fec.id, x.name) ? " (Incumbent)" : ""}`).join(" · "), inc.open ? `Open seat: ${inc.open.name} isn't running for this seat` : ""].filter(Boolean).join(". ")); }).join("")}</div>` : ""}
   ${props.length ? `<div class="stack-sm">${props.map((m) => factsFold(election, m, { href: measureHref(id, m.id), name: measureName(m), sub: measureTitle(m) || "" })).join("")}</div>` : ""}
-  <p class="hint">Candidates in ballot order as on ballots in Assembly District 1 (statewide offices rotate by district). Each proposition opens to its facts, from the official guide; its page has the rest, including each side's arguments.</p>
+  <p class="hint">Candidates in ballot order as on ballots in Assembly District 1 (statewide offices rotate by district). Each proposition opens to its facts, from the official guide; its page has the rest, including each side's arguments. ${esc(TITLE_CASE_NOTE)}</p>
 </section>`
     : "";
   return `${statewide}

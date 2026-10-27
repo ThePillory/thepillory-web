@@ -333,3 +333,19 @@ test("Colorado, Arizona, Florida, Michigan: one measure layout, official parts w
   const v = await get("/elections/2026-11-03/ballot/", `pillory_districts=${encodeURIComponent("st=CO&cd=1")}`);
   assert.match(v.html, /href="\/elections\/2026-11-03-co\/"/);
 });
+
+test("California's proposition titles: ordinary capitalization, the words unchanged, and a note saying so", async () => {
+  const { headlineCase, measureTitle, TITLE_CASE_NOTE } = await import("../../../functions/_lib/elections.js");
+  assert.equal(headlineCase("REPEALS PROHIBITION AGAINST PUBLIC FUNDING OF ELECTION CAMPAIGNS. LEGISLATIVE STATUTE."), "Repeals Prohibition Against Public Funding of Election Campaigns. Legislative Statute.");
+  assert.equal(headlineCase("IMPOSES ONE-TIME TAX ON CERTAIN TAXPAYERS. INITIATIVE CONSTITUTIONAL AMENDMENT AND STATUTE."), "Imposes One-Time Tax on Certain Taxpayers. Initiative Constitutional Amendment and Statute.");
+  assert.equal(headlineCase("REQUIRES U.S. CITIZENSHIP FOR ACA 13 VOTERS: A TEST."), "Requires U.S. Citizenship for ACA 13 Voters: A Test.", "abbreviations, bill numbers, and a small word starting a sentence");
+  assert.equal(headlineCase("x").toLowerCase(), "x");
+  const words = (t) => t.toLowerCase().split(/\s+/);
+  const title = "AUTHORIZES BONDS FOR HOUSING AFFORDABILITY PROGRAMS. LEGISLATIVE STATUTE.";
+  assert.deepEqual(words(headlineCase(title)), words(title), "the words unchanged");
+  assert.equal(measureTitle({ label: "Amendment 81", title: "Law Enforcement Communication with Federal Immigration Authorities" }), "Law Enforcement Communication with Federal Immigration Authorities", "other states' as printed");
+  const page = (await get("/elections/2026-11-03/measure/prop-1/")).html;
+  assert.match(page, /<p class="subtitle">Authorizes Example Bonds\. Legislative Statute\.<\/p>/);
+  assert.ok(page.includes(TITLE_CASE_NOTE.replace(/'/g, "&#x27;")), "the note on the measure page");
+  assert.ok((await get("/elections/2026-11-03/")).html.includes(TITLE_CASE_NOTE.replace(/'/g, "&#x27;")), "and under the list");
+});
