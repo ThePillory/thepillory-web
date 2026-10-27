@@ -22,7 +22,7 @@ import { ensureSchema, log } from "./db.js";
 import { Budget, redact, getState, setState, isTemporary } from "./util.js";
 import { syncCounty } from "./county.js";
 import { syncStateOfficials, syncStateVotes } from "./openstates.js";
-import { syncFederalOfficials, syncHouseVotes } from "./congress.js";
+import { syncFederalOfficials, syncSenateClasses, syncHouseVotes } from "./congress.js";
 import { syncSenateVotes } from "./senate.js";
 import { runAnalysis } from "./analysis/index.js";
 import { syncCountyMeetings } from "./meetings/county.js";
@@ -51,6 +51,8 @@ const STEPS = [
   // data/states/people/ (src/states-officials.js); no Open States API requests.
   ["all-state-officials", syncAllStateOfficials],
   ["federal-officials", syncFederalOfficials],
+  // Which Senate seat each senator holds (class), weekly, from congress-legislators.
+  ["senate-classes", syncSenateClasses],
   ["executive-officials", syncExecutiveOfficials],
   ["state-hearings", syncStateHearings],
   ["house-votes", syncHouseVotes],

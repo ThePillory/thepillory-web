@@ -5,7 +5,8 @@
 // the records.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { seatOf, raceIncumbency, openSeatLine, candidateCard } from "../../../functions/_lib/candidates.js";
+import { seatOf, raceIncumbency, openSeatLine, candidateCard, senateClassUp } from "../../../functions/_lib/candidates.js";
+import { senateClasses } from "../src/congress.js";
 
 const off = (slug, name, chamber, extra = {}) => ({ slug, name, chamber, active: 1, state: "CA", office: "", district_code: null, ...extra });
 const records = {
@@ -55,13 +56,13 @@ test("two candidates matching the holder's name: neither is labeled", () => {
   assert.equal(inc.get(null, "Ida M. Inc"), null);
 });
 
-test("an open seat names the current holder only from the records; never for the Senate", () => {
+test("an open seat names the current holder only from the records", () => {
   const contest = { id: "governor", scope: "statewide", office: "Governor", candidates: [{ name: "Xena Y", incumbent: false }, { name: "Zed Q", incumbent: false }] };
   const inc = raceIncumbency({ st: "CA", key: "governor", contest, ballot: contest.candidates, records });
   assert.equal(inc.open.slug, "gov-one");
   assert.match(openSeatLine(inc.open), /Open seat: the current officeholder, <a class="inline-link" href="\/reps\/gov-one\/">Gwen Governor<\/a>, isn't running for this seat\./);
   assert.equal(raceIncumbency({ st: "CA", key: "house-7", fecList: [{ id: "H1", name: "A, B" }], records }).open, null, "no current holder in the records: no line");
-  assert.equal(raceIncumbency({ st: "CA", key: "senate", fecList: [{ id: "S1", name: "NEW, NORA" }], records }).open, null);
+  assert.equal(raceIncumbency({ st: "CA", key: "senate", fecList: [{ id: "S1", name: "NEW, NORA" }], records }).open, null, "senators' classes not read yet: no line");
   assert.equal(openSeatLine(null), "");
 });
 
@@ -70,4 +71,32 @@ test("the incumbent's card links to their record; others' cards don't", () => {
   assert.match(card, /<a class="cand-record" href="\/reps\/rep-five\/#votes">Votes and record ›<\/a>/);
   assert.match(card, /<ul class="cand-facts"><li>Party A<\/li><li>Incumbent<\/li><\/ul>/, "one bullet each");
   assert.doesNotMatch(candidateCard({ href: "/candidates/H2/", name: "Ann Able", facts: ["Party B"], held: "" }), /cand-record|Incumbent|Challenger/);
+});
+
+test("the Senate class up in a regular election: 1 in 2024, 2 in 2026, 3 in 2028", () => {
+  assert.deepEqual([2024, 2026, 2028, 2030, 2032].map(senateClassUp), [1, 2, 3, 1, 2]);
+  assert.equal(senateClassUp(2027), null);
+});
+
+test("a Senate open seat names the senator whose class is up, and only them", () => {
+  const withClass = { ...records, officials: records.officials.map((o) => (o.slug === "sen-a" ? { ...o, senate_class: 2 } : o.slug === "sen-b" ? { ...o, senate_class: 1 } : o)) };
+  const field = [{ id: "S6CA00001", name: "NEW, NORA" }, { id: "S6CA00002", name: "OTHER, OLIVER" }];
+  const inc = raceIncumbency({ st: "CA", key: "senate", fecList: field, records: withClass, year: 2026 });
+  assert.equal(inc.open.slug, "sen-a", "class 2 is up in 2026");
+  assert.equal(inc.get("S6CA00001", "Nora New"), null, "nobody labeled");
+  assert.equal(raceIncumbency({ st: "CA", key: "senate", fecList: field, records: withClass, year: 2030 }).open.slug, "sen-b", "class 1 in 2030");
+  assert.equal(raceIncumbency({ st: "CA", key: "senate", fecList: field, records: withClass, year: 2028 }).open, null, "no senator in class 3: a special election only, no line");
+  const running = raceIncumbency({ st: "CA", key: "senate", fecList: [...field, { id: "S6CA00009", name: "SENATOR, SAM" }], records: withClass, year: 2026 });
+  assert.equal(running.open, null, "the senator is running: no open seat");
+  assert.equal(running.get("S6CA00009", "Sam Senator").holder.slug, "sen-a", "and labeled Incumbent");
+});
+
+test("senators' classes from congress-legislators: the current term, senators only", () => {
+  const list = [
+    { id: { bioguide: "A000001" }, terms: [{ type: "rep" }, { type: "sen", class: 2 }] },
+    { id: { bioguide: "B000002" }, terms: [{ type: "sen", class: 1 }, { type: "rep" }] },
+    { id: { bioguide: "C000003" }, terms: [{ type: "sen", class: 4 }] },
+    { id: {}, terms: [{ type: "sen", class: 3 }] },
+  ];
+  assert.deepEqual(senateClasses(list), { A000001: 2 });
 });

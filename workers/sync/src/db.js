@@ -41,6 +41,7 @@ import init0039 from "../migrations/0039_networth_scan_pages.sql";
 import init0040 from "../migrations/0040_dark_money_reread.sql";
 import init0041 from "../migrations/0041_measure_constitution.sql";
 import init0042 from "../migrations/0042_records.sql";
+import init0043 from "../migrations/0043_senate_class.sql";
 import { isHttp, today } from "./util.js";
 import { totals } from "./rollcall.js";
 
@@ -87,6 +88,7 @@ const MIGRATIONS = [
   ["0040_dark_money_reread.sql", init0040],
   ["0041_measure_constitution.sql", init0041],
   ["0042_records.sql", init0042],
+  ["0043_senate_class.sql", init0043],
 ];
 
 // Migrations tools/load_trades.py can also apply (the "Load stock trades"
@@ -101,6 +103,8 @@ const ALREADY_APPLIED = {
   "0027_trade_scans_auto.sql": (db) => hasColumn(db, "trade_scans", "spot_check"),
   "0030_dark_money.sql": (db) => hasColumn(db, "fec_committees", "ein"),
   "0035_trade_scan_rows.sql": (db) => hasColumn(db, "trade_scans", "rows_total"),
+  // Applied by hand (`wrangler d1 migrations apply`) before the Worker runs: only record it.
+  "0043_senate_class.sql": (db) => hasColumn(db, "officials", "senate_class"),
 };
 
 function statements(sql) {

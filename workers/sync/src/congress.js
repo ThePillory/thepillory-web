@@ -101,6 +101,38 @@ function memberRecord(m, d, detailDay) {
   };
 }
 
+const LEGISLATORS_CURRENT = "https://unitedstates.github.io/congress-legislators/legislators-current.json";
+const SENATE_CLASS_DAY_KEY = "senate_class_day";
+
+/**
+ * Each current senator's class (which of the state's two seats they hold), by
+ * Bioguide ID, from congress-legislators' current term for them. Pure.
+ */
+export function senateClasses(legislators) {
+  const out = {};
+  for (const l of legislators || []) {
+    const terms = l.terms || [];
+    const t = terms[terms.length - 1];
+    if (l.id && l.id.bioguide && t && t.type === "sen" && [1, 2, 3].includes(t.class)) out[l.id.bioguide] = t.class;
+  }
+  return out;
+}
+
+/** Senators' classes into officials.senate_class, weekly (migration 0043). */
+export async function syncSenateClasses(env, db, budget) {
+  const day = await getState(db, SENATE_CLASS_DAY_KEY);
+  if (day && Date.now() - Date.parse(day) < 6 * 86400000) return { status: "skipped", message: `read ${day}; refreshes weekly` };
+  const classes = senateClasses(await budget.json(LEGISLATORS_CURRENT, {}, "congress-legislators current"));
+  const n = Object.keys(classes).length;
+  // A short list means a bad response, not a changed Senate: change nothing.
+  if (n < 90) return { status: "error", message: `congress-legislators listed only ${n} senators with a class; nothing changed` };
+  const stmts = Object.entries(classes).map(([bioguide, cls]) =>
+    db.prepare("UPDATE officials SET senate_class = ? WHERE bioguide_id = ? AND chamber = 'us-senate'").bind(cls, bioguide));
+  for (let i = 0; i < stmts.length; i += 50) await db.batch(stmts.slice(i, i + 50));
+  await setState(db, SENATE_CLASS_DAY_KEY, today());
+  return { status: "ok", message: `${n} senators' classes from congress-legislators` };
+}
+
 export async function syncFederalOfficials(env, db, budget) {
   const day = await getState(db, FEDERAL_DAY_KEY);
   if (day === today()) return { status: "skipped", message: `already refreshed today (${day}); refreshes at each day's first run` };
