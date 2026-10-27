@@ -611,6 +611,11 @@ def coverage(args):
         say("Lines still read differently: " + ", ".join(f"{r['report_id']} {r['n']}" for r in open_lines) + ".")
         say()
 
+    say("The scanned-trades step's last 15 runs:")
+    say()
+    rows = q(args, "SELECT started_at, status, substr(COALESCE(message, ''), 1, 300) AS message FROM sync_log WHERE step = 'scanned-trades' ORDER BY id DESC LIMIT 15")
+    table(rows, ["started_at", "status", "message"], ["Started", "Status", "Message"])
+
     say("### Waiting for a person")
     say()
     rows = q(args, """SELECT 'trades' AS queue, COUNT(*) AS n, MIN(read_at) AS oldest FROM trade_scans WHERE status = 'agreed'
