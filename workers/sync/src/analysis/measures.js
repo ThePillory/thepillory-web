@@ -8,7 +8,7 @@
 // bill_analyses keyed "measure:<election id>/<measure id>".
 
 export const MEASURE_PREFIX = "measure:";
-const STATE_NAME = { CA: "California", WA: "Washington", CO: "Colorado", AZ: "Arizona", FL: "Florida", MI: "Michigan" };
+const STATE_NAME = { CA: "California", WA: "Washington", CO: "Colorado", AZ: "Arizona", FL: "Florida", MI: "Michigan", NC: "North Carolina" };
 const MAX_MEASURE_CHARS = 150000;
 const RETRY_AFTER_DAYS = 2;
 

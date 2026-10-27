@@ -17,16 +17,16 @@ import { asset } from "./geo.js";
 // California's full ballot (tools/build_elections.py), Washington's statewide
 // measures (tools/build_wa_measures.py), and Colorado's, Arizona's, Florida's and
 // Michigan's statewide measures (tools/build_state_measures.py).
-export const ELECTIONS = ["2026-11-03", "2026-11-03-wa", "2026-11-03-co", "2026-11-03-az", "2026-11-03-fl", "2026-11-03-mi"];
+export const ELECTIONS = ["2026-11-03", "2026-11-03-wa", "2026-11-03-co", "2026-11-03-az", "2026-11-03-fl", "2026-11-03-mi", "2026-11-03-nc"];
 export const CURRENT = ELECTIONS[0];
 /** The next election ThePillory has for each state. */
-export const ELECTION_BY_STATE = { CA: "2026-11-03", WA: "2026-11-03-wa", CO: "2026-11-03-co", AZ: "2026-11-03-az", FL: "2026-11-03-fl", MI: "2026-11-03-mi" };
+export const ELECTION_BY_STATE = { CA: "2026-11-03", WA: "2026-11-03-wa", CO: "2026-11-03-co", AZ: "2026-11-03-az", FL: "2026-11-03-fl", MI: "2026-11-03-mi", NC: "2026-11-03-nc" };
 /** The election to show for a state: its own, or California's (the default) when ThePillory has none for it. */
 export const electionIdFor = (st) => ELECTION_BY_STATE[st] || CURRENT;
 /** True for an election ThePillory has only the statewide measures of (no candidates or local contests). */
 export const measuresOnly = (election) => !!election && !(election.contests || []).length;
 /** What ThePillory has, said plainly. */
-export const COVERAGE_NOTE = "ThePillory has California's full ballot, and the statewide measures for Washington, Colorado, Arizona, Florida and Michigan, so far";
+export const COVERAGE_NOTE = "ThePillory has California's full ballot, and the statewide measures for Washington, Colorado, Arizona, Florida, Michigan and North Carolina (with North Carolina's appellate court candidates' statements), so far";
 
 export const loadElection = (env, request, id) => (ELECTIONS.includes(id) ? asset(env, request, `/data/elections/${id}.json`) : null);
 
@@ -281,7 +281,9 @@ export function whenLine(election, todayIso) {
 const STATE_TITLE = { CA: "California", WA: "Washington" };
 
 export function howToVote(election, countyFips = null, { heading = true } = {}) {
-  const groups = [[`${STATE_TITLE[election.election.state] || election.election.state} Secretary of State`, election.how_to_vote.state]];
+  // Not every state's elections are run by its Secretary of State (North Carolina's State Board of Elections, Florida's Division of Elections).
+  const st = election.election.state;
+  const groups = [[STATE_TITLE[st] ? `${STATE_TITLE[st]} Secretary of State` : `${election.election.state_name || st} election office`, election.how_to_vote.state]];
   const county = countyFips && election.how_to_vote[countyFips];
   if (county) groups.push([(election.counties[countyFips] || {}).name || "Your county", county]);
   return `
@@ -325,7 +327,7 @@ export function headlineCase(s) {
     .map((w, i) => {
       if (/^\s+$/.test(w) || !w) return w;
       const bare = w.replace(/[^A-Za-z]/g, "");
-      const billNumber = /^[A-Z]{2,4}$/.test(bare) && /^\d/.test(parts[i + 2] || ""); // "ACA 13", "SB 42"
+      const billNumber = /^[A-Z]{2,4}$/.test(bare) && !SMALL_WORDS.has(bare.toLowerCase()) && /^\d/.test(parts[i + 2] || ""); // "ACA 13", "SB 42", not "RATE OF 3.5%"
       let out;
       if (!bare || billNumber || /\d/.test(w) || /^[A-Z](\.[A-Z])+\.?$/.test(w.replace(/[^A-Za-z.]/g, "")) || KEEP_UPPER.has(bare.toUpperCase())) out = w; // "U.S.", "AB 42", "ACA 13"
       else if (!start && SMALL_WORDS.has(bare.toLowerCase())) out = w.toLowerCase();
@@ -352,6 +354,24 @@ export function measureRow(electionId, m, note = "") {
   return `
 <a class="list-row link-row" href="${measureHref(electionId, m.id)}">
   <div><div class="list-title">${esc(title)}</div>${sub ? `<div class="list-meta">${esc(sub)}</div>` : ""}</div>
+  <span class="row-end"><span class="chev" aria-hidden="true">›</span></span>
+</a>`;
+}
+
+// North Carolina's appellate court contests, from the State Board of Elections' Judicial Voter
+// Guide (election.judicial, tools/build_state_measures.py): each candidate's details and statement
+// word for word, on /elections/<id>/contest/<contest>/. Kept apart from `contests`, so the election
+// stays "measures only" everywhere else (its other contests are in the official sample ballot).
+
+/** The guide's contests, in its order; [] when the election has none. */
+export const judicialContests = (election) => (election && election.judicial && election.judicial.contests) || [];
+
+/** One guide contest as a list row. */
+export function judicialRow(electionId, c) {
+  const n = c.candidates.length;
+  return `
+<a class="list-row link-row" href="${contestHref(electionId, c.id)}">
+  <div><div class="list-title">${esc(c.office)}</div><div class="list-meta">${n} ${n === 1 ? "candidate" : "candidates"} · statements from the Judicial Voter Guide</div></div>
   <span class="row-end"><span class="chev" aria-hidden="true">›</span></span>
 </a>`;
 }

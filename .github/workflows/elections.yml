@@ -2,7 +2,8 @@
 # candidate statements and arguments) from official sources only: the
 # California Secretary of State, county elections offices and the FEC; and
 # Washington's statewide measures from its Secretary of State, and Colorado's,
-# Arizona's, Florida's and Michigan's from their official guides. See
+# Arizona's, Florida's, Michigan's and North Carolina's (with its Judicial Voter
+# Guide) from their official documents. See
 # tools/build_elections.py, tools/build_wa_measures.py,
 # tools/build_state_measures.py and docs/elections.md. Daily during election season,
 # and on demand (Actions -> Refresh election data -> Run workflow).
@@ -20,10 +21,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null
-      - name: PROBE
-        run: |
-          mkdir -p /tmp/o && (python3 tools/build_state_measures.py --state NC --out-dir /tmp/o || true) && cat /tmp/o/*.json
-          exit 1
       - name: Build from official sources
         env:
           FEC_API_KEY: ${{ secrets.FEC_API_KEY }}
@@ -31,7 +28,7 @@ jobs:
       - name: Washington's statewide measures (Secretary of State, Attorney General, Office of Financial Management)
         run: python3 tools/build_wa_measures.py
       # One state's guide failing to read keeps its earlier file; the others still update. The run is marked failed at the end.
-      - name: Colorado's, Arizona's, Florida's and Michigan's statewide measures (official guides)
+      - name: Colorado's, Arizona's, Florida's, Michigan's and North Carolina's statewide measures (official documents)
         id: states
         continue-on-error: true
         run: python3 tools/build_state_measures.py

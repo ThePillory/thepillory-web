@@ -15,7 +15,7 @@
 // Three data formats (data/elections/): California's guide (title, ag_summary,
 // yes_means, fiscal_effect), Washington's Voters' Pamphlet (ballot_title,
 // fiscal_summary) and the "sections" format (Colorado, Arizona, Florida,
-// Michigan). Pure.
+// Michigan, North Carolina). Pure.
 import { esc, safeUrl, sourceLink } from "./render.js";
 
 export const FACTS_NOTE = "Official text only, word for word or shortened by cutting; nothing here is written by ThePillory or by AI.";
@@ -90,7 +90,7 @@ export function measureFacts(election, m) {
     };
   }
 
-  // The "sections" format: Colorado, Arizona, Florida, Michigan.
+  // The "sections" format: Colorado, Arizona, Florida, Michigan, North Carolina.
   if (e.format === "sections") {
     const kind = m.kind || "";
     const placed = m.placed_by ? m.placed_by.charAt(0).toUpperCase() + m.placed_by.slice(1) : placedFrom(kind);
@@ -115,9 +115,9 @@ export function measureFacts(election, m) {
       placed: placed ? { text: placed, from: quote(m.placed_by || kind) } : null,
       changes: lead ? para(lead.text) : m.question ? para(m.question) : null,
       means: m.yes_means && m.no_means ? { yes: m.yes_means, no: m.no_means } : null,
-      meansMissing: "Not printed in the official source ThePillory reads.",
+      meansMissing: m.means_note || "Not printed in the official source ThePillory reads.",
       cost,
-      costMissing: `No cost estimate in the official source ThePillory reads (${m.source || "the state's official guide"}).`,
+      costMissing: m.cost_note || `No cost estimate in the official source ThePillory reads (${m.source || "the state's official guide"}).`,
       sources,
     };
   }

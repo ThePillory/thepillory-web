@@ -140,6 +140,7 @@ export function officialFor(name, officials) {
  * ThePillory's page for a measure on the ballot, matched by its number, only when exactly one fits. Pure.
  * California: "Proposition 1" / "Prop. 1". Washington: "Initiative Measure No. IP26-645" or "... No. 645".
  * Colorado, Arizona, Florida, Michigan: the label ("Amendment 81", "Prop. 141", "Proposal 26-1").
+ * North Carolina (its amendments aren't numbered): the ballot heading ("Require Photo ID for Voting").
  */
 export function measureFor(ref, election) {
   if (!ref || !election) return null;
@@ -149,6 +150,9 @@ export function measureFor(ref, election) {
   if (st === "CA") {
     const m = /\bprop(?:osition|\.)?\s*(\d{1,3})\b/i.exec(t);
     if (m) hits = election.measures.filter((x) => x.scope === "statewide" && String(x.number) === String(Number(m[1])));
+  } else if (st === "NC") {
+    const norm = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9.%]+/g, " ").trim();
+    hits = election.measures.filter((x) => x.scope === "statewide" && norm(t).includes(norm(x.title)));
   } else if (election.election.format === "sections") {
     // Colorado, Arizona, Florida, Michigan: "Amendment 81", "Proposition NN", "Prop. 141", "Proposal 26-1".
     const esc = (v) => String(v).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
