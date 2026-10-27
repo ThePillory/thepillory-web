@@ -101,6 +101,9 @@ export async function searchOne(env, db, budget, c, { pick = pickExcerpt } = {})
 export async function syncCandidatePlatforms(env, db, budget, { pick = pickExcerpt } = {}) {
   const base = (env.SITE_URL || "").replace(/\/$/, "");
   if (!base) return { status: "skipped", message: "SITE_URL is not set" };
+  // Candidates' platforms matter before the vote: no searches (or AI calls) after Election Day.
+  const until = env.CANDIDATE_PLATFORMS_UNTIL || "";
+  if (until && today() > until) return { status: "skipped", message: `after ${until} (CANDIDATE_PLATFORMS_UNTIL): candidates' sites aren't searched again` };
   const year = parseInt(env.CANDIDATE_YEAR || "2026", 10);
   const limit = parseInt(env.CANDIDATE_PLATFORMS_DAILY || "25", 10);
   const recheckDays = parseInt(env.CANDIDATE_PLATFORMS_RECHECK_DAYS || "30", 10);

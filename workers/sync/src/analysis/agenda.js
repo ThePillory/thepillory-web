@@ -17,6 +17,7 @@ import { getState, setState, redact } from "../util.js";
 import { pacificNow, addDays } from "../meetings/time.js";
 import { FLAGS, IMPACT, MAX_FLAGGED, checkSummaries } from "./agenda-check.js";
 import { DEFAULT_MODEL, DraftRefused } from "./claude.js";
+import { recordUsage } from "../ai-usage.js";
 
 export { FLAGS, FLAG_LABELS } from "./agenda-check.js";
 export const AGENDA_PROMPT_VERSION = "2026-10-02.1";
@@ -117,6 +118,7 @@ async function draftSummaries(env, meeting, items) {
     cache_read_tokens: msg.usage.cache_read_input_tokens || 0,
     cache_write_tokens: msg.usage.cache_creation_input_tokens || 0,
   };
+  await recordUsage(env.DB, msg.model, usage);
   if (msg.stop_reason === "refusal") throw Object.assign(new DraftRefused(`model declined (${(msg.stop_details || {}).category || "no category"})`), { usage });
   if (msg.stop_reason === "max_tokens") throw Object.assign(new Error("draft cut off at the output limit"), { usage });
   const text = msg.content.filter((b) => b.type === "text").map((b) => b.text).join("");

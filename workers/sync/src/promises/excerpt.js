@@ -10,7 +10,8 @@
 import { findQuote } from "./check.js";
 
 export const EXCERPT_MAX = 450; // characters, about two or three sentences
-export const EXCERPT_REFRESH_DAYS = 30;
+// A page with no excerpt found is asked again after this many days (each ask is an AI call).
+export const EXCERPT_REFRESH_DAYS = 90;
 
 /** The same rules for officials and candidates; only the word for who it is changes. */
 export const excerptInstructions = (who = "official") => `You pick a short excerpt from a${/^[aeiou]/.test(who) ? "n" : ""} ${who}'s own Issues or Priorities web page for ThePillory, a nonpartisan civic record. Readers see it under "In their own words", with a link to the page.
@@ -50,15 +51,15 @@ export function checkExcerpt(pageText, excerpt) {
 
 /**
  * Whether a page needs a new excerpt now: none yet, or it's no longer on the
- * page, or the AI picked it more than EXCERPT_REFRESH_DAYS ago. One a person
- * chose stays while it's still on the page; a hidden one stays hidden.
+ * page. An excerpt still on the page stays (it's word for word from the page
+ * as it is now), so the AI is asked only when the page changes; a page where
+ * none was found is asked again after EXCERPT_REFRESH_DAYS. A hidden one stays
+ * hidden.
  */
 export function needsExcerpt(row, pageText, now = Date.now(), days = EXCERPT_REFRESH_DAYS) {
   const at = Date.parse(`${String(row.excerpt_at || "").replace(" ", "T")}Z`);
   const stale = !(at > 0) || now - at > days * 86400000;
   if (row.excerpt_by === "hidden") return false;
-  if (!row.excerpt) return row.excerpt_by === "none" ? stale : true; // none found: ask again monthly
-  if (!findQuote(pageText, row.excerpt)) return true;
-  if (String(row.excerpt_by || "").startsWith("person:")) return false;
-  return stale;
+  if (!row.excerpt) return row.excerpt_by === "none" ? stale : true; // none found: ask again after EXCERPT_REFRESH_DAYS
+  return !findQuote(pageText, row.excerpt);
 }

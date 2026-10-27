@@ -281,16 +281,5 @@ export function changeNote(result, { reader = false, flagReview = null } = {}) {
   return "";
 }
 
-// ---------------------------------------------------------------------------
-// Cost, in cents, from the tokens a call used ($ per million tokens).
-
-export const PRICES = { "claude-sonnet-5-5": [2, 10], "claude-opus-5-5": [4, 20], "claude-haiku-4-5": [1, 5] };
-
-/** Cents for one call: input, output, cache reads at a tenth and cache writes at 1.25 times the input price. Unknown models at the Opus price. Pure. */
-export function centsFor(model, usage = {}) {
-  const key = Object.keys(PRICES).find((k) => String(model || "").startsWith(k));
-  const [inp, out] = PRICES[key] || PRICES["claude-opus-5-5"];
-  const dollars =
-    ((usage.input_tokens || 0) * inp + (usage.output_tokens || 0) * out + (usage.cache_read_tokens || 0) * inp * 0.1 + (usage.cache_write_tokens || 0) * inp * 1.25) / 1e6;
-  return dollars * 100;
-}
+// Cost, in cents, from the tokens a call used: the shared price table (src/ai-usage.js).
+export { PRICES, centsFor } from "../ai-usage.js";

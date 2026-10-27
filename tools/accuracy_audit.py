@@ -639,6 +639,27 @@ def coverage(args):
     rows = q(args, "SELECT started_at, status, substr(message, 1, 300) AS message FROM sync_log WHERE step = 'analysis-resolve' AND message LIKE '%spent today%' ORDER BY id DESC LIMIT 5")
     table(rows, ["started_at", "status", "message"], ["Round", "Status", "Summary"])
 
+    say("### AI cost per day, by step")
+    say()
+    say("Every AI call the sync makes, at list price (ai_usage, migration 0045), the last 14 days; scanned net worth reports read in GitHub Actions are counted separately (networth_scans).")
+    say()
+    rows = q(args, """SELECT day, step, SUM(calls) AS calls, ROUND(SUM(cost_usd), 2) AS dollars FROM ai_usage
+      WHERE day >= date('now', '-14 days') GROUP BY day, step ORDER BY day DESC, dollars DESC""")
+    table(rows, ["day", "step", "calls", "dollars"], ["Day", "Step", "Calls", "Cost ($)"])
+    rows = q(args, """SELECT day, ROUND(SUM(cost_usd), 2) AS dollars, SUM(calls) AS calls FROM ai_usage
+      WHERE day >= date('now', '-14 days') GROUP BY day ORDER BY day DESC""")
+    if rows:
+        say("Each day's total: " + ", ".join(f"{r['day']} ${r['dollars']:,.2f} ({r['calls']:,} calls)" for r in rows) + ".")
+        say()
+    rows = q(args, """SELECT step, ROUND(SUM(cost_usd), 2) AS dollars, ROUND(SUM(cost_usd) / COUNT(DISTINCT day), 2) AS per_day FROM ai_usage
+      WHERE day >= date('now', '-14 days') GROUP BY step ORDER BY dollars DESC""")
+    table(rows, ["step", "dollars", "per_day"], ["Step", "14-day total ($)", "Per day it ran ($)"])
+    rows = q(args, """SELECT substr(read_at, 1, 10) AS day, COUNT(*) AS reports, ROUND(SUM(cost_cents) / 100.0, 2) AS dollars FROM networth_scans
+      WHERE read_at >= date('now', '-14 days') GROUP BY 1 ORDER BY 1 DESC""")
+    if rows:
+        say("Scanned net worth reports (Actions): " + ", ".join(f"{r['day']} ${r['dollars'] or 0:,.2f} ({r['reports']} report(s))" for r in rows) + ".")
+        say()
+
     say("### What people decided on reviewed scans (for an error rate)")
     say()
     rows = q(args, """SELECT 'trades' AS kind, status, COUNT(*) AS n, COALESCE(SUM(rows_total), 0) AS rows FROM trade_scans WHERE status IN ('approved', 'rejected') GROUP BY status

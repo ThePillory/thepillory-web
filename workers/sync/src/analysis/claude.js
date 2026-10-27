@@ -1,11 +1,12 @@
 // Claude API calls for the analysis pipeline. Each call returns JSON in a fixed
 // shape (structured outputs), plus the model and token counts, which are saved
-// with the result and logged.
+// with the result, logged, and added to ai_usage (src/ai-usage.js).
 //   draftAnalysis  the card or the full analysis (claude-sonnet-5-5), or its
 //                  one revision after the AI reviewer flags it
 //   (review.js)    the AI reviewer pass (claude-sonnet-5-5)
 //   (relevance.js) the cheap relevance check (claude-haiku-4-5)
 import Anthropic from "@anthropic-ai/sdk";
+import { recordUsage } from "../ai-usage.js";
 import { instructions, cardInstructions, constitutionBlock, schema, cardSchema, billMessage, revisionMessage, cardToDraft } from "./prompt.js";
 
 export const DEFAULT_MODEL = "claude-sonnet-5-5";
@@ -58,6 +59,8 @@ export async function structuredCall(env, { model, system, message, jsonSchema, 
     cache_read_tokens: msg.usage.cache_read_input_tokens || 0,
     cache_write_tokens: msg.usage.cache_creation_input_tokens || 0,
   };
+  // Every answered call is paid for, whatever comes next: counted by step and day.
+  await recordUsage(env.DB, msg.model, usage);
   if (msg.stop_reason === "refusal") {
     const d = msg.stop_details || {};
     throw Object.assign(new DraftRefused(`model declined (${d.category || "no category"})`), { usage, model: msg.model });
