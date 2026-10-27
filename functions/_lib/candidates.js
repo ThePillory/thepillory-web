@@ -271,19 +271,25 @@ export function openSeatLine(holder) {
 // Pieces
 
 /** The same card for every candidate in a race. The incumbent's also links to their record. */
-export function candidateCard({ href, name, meta, held, record = null }) {
+export function candidateCard({ href, name, facts, held, record = null }) {
   return `
   <li class="ballot-cand">
     <a class="list-row link-row" href="${esc(href)}">
-      <div><div class="list-title">${esc(name)}</div><div class="list-meta">${esc(meta)}</div>${held ? `<div class="list-meta">${esc(held)}</div>` : ""}</div>
+      <div><div class="list-title">${esc(name)}</div>${candFacts([...facts, held])}</div>
       <span class="row-end"><span class="chev" aria-hidden="true">›</span></span>
     </a>${record ? `
     <a class="cand-record" href="/reps/${esc(record.slug)}/#votes">Votes and record ›</a>` : ""}
   </li>`;
 }
 
-/** A card's meta line with "Incumbent" last, plain text, only for the seat's holder. */
-const withIncumbent = (parts, inc) => [...parts, inc ? "Incumbent" : ""].filter(Boolean).join(" · ");
+/** A card's facts with "Incumbent" last, plain text, only for the seat's holder. */
+const withIncumbent = (parts, inc) => [...parts, inc ? "Incumbent" : ""].filter(Boolean);
+
+/** A candidate's facts (party, ballot designation, office held, incumbent), one bullet each. */
+export function candFacts(facts) {
+  const items = (facts || []).filter(Boolean);
+  return items.length ? `<ul class="cand-facts">${items.map((f) => `<li>${esc(f)}</li>`).join("")}</ul>` : "";
+}
 
 const heldLine = (h) => `${h.active ? "Holds" : "Held"}: ${h.office}${h.district ? `, ${h.district}` : ""}`;
 
@@ -541,7 +547,7 @@ export function racePage({ st, key, data, election, records, dates, today, certi
     return candidateCard({
       href: candidateHref(c.id),
       name,
-      meta: withIncumbent([partyName(c.party) || "No party listed"], me),
+      facts: withIncumbent([partyName(c.party) || "No party listed"], me),
       held: now ? heldLine(now) : held[0] ? heldLine(held[0]) : "",
       record: me && me.holder,
     });
@@ -557,7 +563,7 @@ export function racePage({ st, key, data, election, records, dates, today, certi
       return candidateCard({
         href: f ? candidateHref(f.id) : stateCandidateHref(contest.id, nameSlug(x.name)),
         name: x.name,
-        meta: withIncumbent([x.party ? `Party preference: ${partyName(x.party)}` : "No party preference listed", x.designation], me),
+        facts: withIncumbent([x.party ? `Party preference: ${partyName(x.party)}` : "No party preference listed", x.designation], me),
         held: held[0] ? heldLine(held[0]) : "",
         record: me && me.holder,
       });
@@ -577,12 +583,12 @@ export function racePage({ st, key, data, election, records, dates, today, certi
       const f = x.fec && byFec[x.fec.id];
       const held = f ? officesHeld(f, records, x.name, { incumbent: !!(x.incumbent || f.incumbent) }) : [];
       const me = inc.get(x.fec && x.fec.id, x.name);
-      const meta = withIncumbent([partyName(x.party) || "No party listed"], me);
+      const facts = withIncumbent([partyName(x.party) || "No party listed"], me);
       const heldText = held[0] ? heldLine(held[0]) : "";
       return f
-        ? candidateCard({ href: candidateHref(f.id), name: x.name, meta, held: heldText, record: me && me.holder })
+        ? candidateCard({ href: candidateHref(f.id), name: x.name, facts, held: heldText, record: me && me.holder })
         : `
-  <li class="ballot-cand"><div class="list-row"><div><div class="list-title">${esc(x.name)}</div><div class="list-meta">${esc(meta)}</div></div></div>${me && me.holder ? `
+  <li class="ballot-cand"><div class="list-row"><div><div class="list-title">${esc(x.name)}</div>${candFacts(facts)}</div></div>${me && me.holder ? `
     <a class="cand-record" href="/reps/${esc(me.holder.slug)}/#votes">Votes and record ›</a>` : ""}</li>`;
     });
     const src = stateList.source;

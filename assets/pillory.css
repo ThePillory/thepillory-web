@@ -1973,6 +1973,9 @@ article.fin-term { scroll-margin-top: var(--space-4); }
 /* The incumbent's card: one more link, to their record; its tap area reaches past its line */
 .cand-record { display: inline-flex; align-items: center; min-height: var(--tap); margin-block: var(--tap-bleed); margin-top: calc(var(--space-1) + var(--tap-bleed)); font-size: var(--fs-small); font-weight: 600; text-decoration: none; }
 .open-seat { margin: 0; }
+/* A candidate's facts (party, ballot designation, office held, incumbent): small, gray, one bullet each */
+.cand-facts { margin: 0; padding-left: 1.1em; list-style: disc; font-size: var(--fs-small); line-height: 1.4; color: var(--text-2); }
+.cand-facts li::marker { color: var(--text-3); }
 /* The ballot preview card under the map, in the weeks before the state's next election:
    one line with the date and countdown, and a standard-size button. */
 .ballot-hero { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); }

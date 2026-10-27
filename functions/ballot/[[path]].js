@@ -33,7 +33,7 @@ import { voterInfo, ballotFromVoterInfo, measureFor, CivicError } from "../_lib/
 import { visitorHash } from "../_lib/turnstile.js";
 import { fold } from "../_lib/summary.js";
 import { statePossessive, RESULT_HEADING, nominations, nominationWords, todayIn } from "../_lib/election-window.js";
-import { candidateHref, raceHref, racesHref, YEAR, recordsFor, raceIncumbency, openSeatLine } from "../_lib/candidates.js";
+import { candidateHref, raceHref, racesHref, YEAR, recordsFor, raceIncumbency, openSeatLine, candFacts } from "../_lib/candidates.js";
 import { loadCertified, certifiedRace } from "../_lib/certified.js";
 
 const BACK = ["Elections", "/elections/"];
@@ -138,7 +138,7 @@ function candLinks(own, me, fecUrl) {
     fecUrl && safeUrl(fecUrl) ? `<a class="inline-link" href="${esc(fecUrl)}" target="_blank" rel="noopener">FEC filing ↗</a>` : "",
   ].filter(Boolean).join(" · ");
 }
-const withIncumbent = (parts, me) => [...parts, me ? "Incumbent" : ""].filter(Boolean).join(" · ");
+const withIncumbent = (parts, me) => [...parts, me ? "Incumbent" : ""].filter(Boolean);
 
 /** ThePillory's election for the state, when it has one (California's full ballot, Washington's measures). */
 const ownElection = (env, request, st) => (ELECTION_BY_STATE[st] ? loadElection(env, request, ELECTION_BY_STATE[st]) : null);
@@ -192,7 +192,7 @@ function fecCandidate(c, filed, inc) {
   return `
   <li class="ballot-cand stack-xs">
     <p class="list-title"><a class="inline-link" href="${candidateHref(c.id)}">${esc(c.name)}</a></p>
-    <p class="list-meta">${esc(withIncumbent([partyName(c.party) || "No party listed"], me))}</p>
+    ${candFacts(withIncumbent([partyName(c.party) || "No party listed"], me))}
     <p class="small">${candLinks(filed[c.id], me, c.url)}</p>
   </li>`;
 }
@@ -217,7 +217,7 @@ function certifiedCandidate(c, filed, inc) {
   return `
   <li class="ballot-cand stack-xs">
     <p class="list-title">${c.fec && c.fec.id ? `<a class="inline-link" href="${candidateHref(c.fec.id)}">${esc(c.name)}</a>` : esc(c.name)}</p>
-    <p class="list-meta">${esc(withIncumbent([c.party ? `Party preference: ${partyName(c.party)}` : "No party preference listed", c.designation], me))}</p>
+    ${candFacts(withIncumbent([c.party ? `Party preference: ${partyName(c.party)}` : "No party preference listed", c.designation], me))}
     ${links ? `<p class="small">${links}</p>` : ""}
   </li>`;
 }
@@ -275,7 +275,7 @@ function stateListRace(title, race, filed, href, inc) {
     return `
   <li class="ballot-cand stack-xs">
     <p class="list-title">${c.fec ? `<a class="inline-link" href="${candidateHref(c.fec.id)}">${esc(c.name)}</a>` : esc(c.name)}</p>
-    <p class="list-meta">${esc(withIncumbent([partyName(c.party) || "No party listed"], me))}</p>
+    ${candFacts(withIncumbent([partyName(c.party) || "No party listed"], me))}
     ${links ? `<p class="small">${links}</p>` : ""}
   </li>`;
   };
@@ -470,7 +470,7 @@ function civicCandidate(c) {
   return `
   <li class="ballot-cand stack-xs">
     <p class="list-title">${esc(c.name)}</p>
-    <p class="list-meta">${esc(partyName(c.party) || "No party listed")}</p>
+    ${candFacts([partyName(c.party) || "No party listed"])}
   </li>`;
 }
 

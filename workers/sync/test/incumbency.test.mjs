@@ -66,7 +66,8 @@ test("an open seat names the current holder only from the records; never for the
 });
 
 test("the incumbent's card links to their record; others' cards don't", () => {
-  const card = candidateCard({ href: "/candidates/H1/", name: "Hank House", meta: "Party A · Incumbent", held: "", record: { slug: "rep-five" } });
+  const card = candidateCard({ href: "/candidates/H1/", name: "Hank House", facts: ["Party A", "Incumbent"], held: "", record: { slug: "rep-five" } });
   assert.match(card, /<a class="cand-record" href="\/reps\/rep-five\/#votes">Votes and record ›<\/a>/);
-  assert.doesNotMatch(candidateCard({ href: "/candidates/H2/", name: "Ann Able", meta: "Party B", held: "" }), /cand-record|Incumbent|Challenger/);
+  assert.match(card, /<ul class="cand-facts"><li>Party A<\/li><li>Incumbent<\/li><\/ul>/, "one bullet each");
+  assert.doesNotMatch(candidateCard({ href: "/candidates/H2/", name: "Ann Able", facts: ["Party B"], held: "" }), /cand-record|Incumbent|Challenger/);
 });
