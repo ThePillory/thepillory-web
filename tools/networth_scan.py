@@ -14,11 +14,15 @@ trade reports are read:
   3. Code compares the readings line by line (networth.compare_readings),
      applies the same rules as the text reader (networth.report_from_lines)
      and checks every value against the page's OCR text.
-  4. All lines agree: the report is written into networth_reports (method
-     'ai') but public pages show it only once a person confirms it on
-     /admin/review/networth/ ("checked by [name]"; a link until then). Any
-     line that doesn't: a person settles each line there, and the next run
-     (--mode publish) publishes with "Checked by [name]".
+  4. The two readings agree on every line and every value is in the page's
+     OCR text: the report publishes into networth_reports (method 'ai'),
+     labeled "Read by AI from the scanned report, auto-checked", with no
+     person's check first; SPOT_CHECK_RATE (10%) of them are marked for a
+     person on /admin/review/networth/, and nothing waits on that. Anything
+     else (a line read differently, settled only by a third reading, or a
+     value the OCR text doesn't show) is held: a link until a person settles
+     each line there, and the next run (--mode publish) publishes with
+     "Checked by [name]".
 
 Spending is capped: --max-dollars stops the run before a call that could go
 past it. --mode estimate counts the input tokens (free) and prints the
@@ -392,10 +396,13 @@ def main():
     if by_third:
         problems.append({"kind": "look", "text": f"{len(by_third)} lines the first two readings differed on were settled by a third reading ({TIEBREAK_MODEL}): two of the three agree exactly."})
     misses = N.ocr_misses(lines, {p: texts[p - 1] for p in sections})
-    if misses:
+    # Published without a person only when the page's own text backs every value.
+    if misses and not settled:
+        problems.append({"kind": "block", "text": f"{len(misses)} of {len(lines)} agreed values aren't in the pages' OCR text, for example page {misses[0][0]}: {misses[0][1]}. Held for a person."})
+    elif misses:
         problems.append({"kind": "look", "text": f"{len(misses)} agreed values aren't in the page's OCR text, for example page {misses[0][0]}: {misses[0][1]}"})
-    if len(misses) > max(3, 0.02 * len(lines)):
-        problems.append({"kind": "block", "text": f"{len(misses)} of {len(lines)} values aren't in the pages' OCR text: the readings may have shifted."})
+    if by_third and not settled:
+        problems.append({"kind": "block", "text": f"{len(by_third)} lines were settled only by a third reading, not by both readings agreeing. Held for a person."})
     total_lines = len(lines) + len(open_dis)
     say(f"Compared: {len(cmp['lines'])} lines agreed, {len(cmp['disagreements'])} not ({len(open_dis)} still open after a person's choices)")
     summ, read_err = None, None
@@ -410,13 +417,15 @@ def main():
     status = "approved" if checked else "agreed" if publish else "disagree"
     if args.mode == "publish" and not settled and status != "agreed":
         say("Nothing to publish.")
+    # A share of the reports published without a person go to the spot-check queue; nothing waits on it.
+    spot = 1 if status == "agreed" and random.random() < float(os.environ.get("SPOT_CHECK_RATE", "0.1")) else 0
     pages_json = json.dumps({s: [min(v), max(v)] for s, v in by_sec.items()})
     stmts = [
         # The lines and the open disagreements go in their own rows (one JSON
         # column ran past D1's 100 KB statement limit); networth_scans keeps
         # only the keys of the lines still open.
         "INSERT INTO networth_scans (report_id, official_id, report_url, year, status, pages, lines_total, disagreements, reading, problems, models, cost_cents, spot_check, read_at) VALUES ("
-        + ", ".join(L.lit(v) for v in (f["id"], f["official_id"], f["url"], f["year"], status, pages_json, total_lines, json.dumps([d["key"] for d in open_dis]), "[]", json.dumps(problems), ", ".join(ms), round(spent * 100), 1))
+        + ", ".join(L.lit(v) for v in (f["id"], f["official_id"], f["url"], f["year"], status, pages_json, total_lines, json.dumps([d["key"] for d in open_dis]), "[]", json.dumps(problems), ", ".join(ms), round(spent * 100), spot))
         + ", datetime('now')) ON CONFLICT(report_id) DO UPDATE SET status = excluded.status, pages = excluded.pages, lines_total = excluded.lines_total, disagreements = excluded.disagreements, reading = excluded.reading, problems = excluded.problems, models = excluded.models, cost_cents = excluded.cost_cents, read_at = excluded.read_at;",
         *storage_sql(f["id"], lines, open_dis),
     ]
@@ -425,9 +434,9 @@ def main():
         sql = L.row_sql(rec, "read", None, "ai", summ, L.before_office(rec, {}, {}))
         stmts.append(sql)
         say(f"Published: {summ['assets']} assets, {summ['liabilities']} liabilities; {N.fmt_money(summ['low'])} to {N.fmt_money(summ['high'])}{' or more' if summ['high_open'] else ''}"
-            f"{' (checked by a person)' if checked else ' (transcribed by AI, auto-checked; queued for a person)'}")
+            f"{' (checked by a person)' if checked else ' (read by AI, auto-checked)'}{'; picked for a spot check' if spot else ''}")
     else:
-        reason = read_err or (f"Read by AI: {len(open_dis)} lines read differently; waiting for a person" if open_dis else "Read by AI: held for a person")
+        reason = read_err or (f"Read by AI: {len(open_dis)} lines read differently; waiting for a person" if open_dis else "Read by AI: held for a person (a check didn't pass)")
         stmts.append(L.row_sql(f, "scan", reason[:300], None, None, 0))
         say(f"Held: {reason}")
     for p in problems:

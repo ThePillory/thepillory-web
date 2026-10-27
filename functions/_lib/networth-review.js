@@ -1,16 +1,18 @@
 // Scanned net worth reports on /admin/review/networth/ (routed from
 // functions/admin/[[path]].js; docs/funding.md "Net worth"):
-//   /admin/review/networth/              every report read by AI: waiting for a person,
+//   /admin/review/networth/              every report read by AI: spot checks, published by AI,
 //                                        held (lines read differently), confirmed, taken down
 //   /admin/review/networth/<id>/         one report: the totals, the lines the two readings
 //                                        read differently (pick one for each), the lines page
 //                                        by page beside the scan; confirm or take down
 //   /admin/review/networth/<id>/?page=N  the lines read from one page of the scan
-// tools/networth_scan.py reads the reports. Nothing it reads is public until a
-// person checks it here: a report whose two readings agree on every line waits
-// for a person's confirmation (public pages list it as a link until then);
-// lines a person settles are applied by the script's next run in "publish"
-// mode. Either way the public label is "Checked by [name]".
+// tools/networth_scan.py reads the reports. A report whose two readings agree
+// on every line, with every value in the page's own OCR text, publishes on its
+// own ("Read by AI from the scanned report, auto-checked"); SPOT_CHECK_RATE of
+// them are marked here for a person, and nothing waits on that. A report held
+// (lines read differently, or a value the OCR text doesn't show) stays a link
+// until a person settles each line here; the script's next run in "publish"
+// mode applies them, labeled "Checked by [name]".
 import { esc, fmtDate, safeUrl } from "./render.js";
 
 export const networthReviewHref = (id) => `/admin/review/networth/${encodeURIComponent(id)}/`;
@@ -25,7 +27,8 @@ const json = (s, fallback) => {
 const money = (n) => (n == null ? "" : `${n < 0 ? "−" : ""}$${Math.abs(Math.round(n)).toLocaleString("en-US")}`);
 
 const SECTIONS = [
-  ["agreed", "Waiting for a person", "Both readings agreed on every line and the checks passed. Not public yet: a link to the report until a person compares the lines with the scan and confirms it."],
+  ["spot", "Spot checks", "Picked at random from published reports (10%). Already public; nothing waits on this. Compare the lines with the scan when you have time, then confirm it or take it down."],
+  ["agreed", "Published by AI", "Public as \"Read by AI from the scanned report, auto-checked\": both readings agreed on every line and every value is in the page's OCR text."],
   ["disagree", "Held", "Nothing public: some lines were read differently (or a check failed). Pick the right reading for each; the next run of the \"Read a scanned net worth report\" workflow (mode: publish) publishes it."],
   ["approved", "Confirmed by a person", "Public with \"Checked by [name]\"."],
   ["rejected", "Taken down", "A link to the report again."],
@@ -45,10 +48,10 @@ export async function networthScanList(db, { done = "" } = {}) {
   };
   return {
     title: "Scanned net worth reports",
-    main: `<header class="page-head"><h1>Scanned net worth reports</h1><p class="subtitle">Annual financial disclosure reports posted as scans, read twice by two AI models. Every line has to be read the same way by both before the report counts toward "Net worth, as reported".</p></header>
+    main: `<header class="page-head"><h1>Scanned net worth reports</h1><p class="subtitle">Annual financial disclosure reports posted as scans, read twice by two AI models. A report counts toward "Net worth, as reported" on its own only when both read every line the same way and every value is in the page's own OCR text; otherwise it waits for you to settle the lines.</p></header>
 ${done ? `<p class="banner" role="status">${esc(done)}</p>` : ""}
 ${SECTIONS.map(([status, title, note]) => {
-  const rows = results.filter((s) => s.status === status);
+  const rows = results.filter((s) => (s.status === "agreed" && s.spot_check ? "spot" : s.status) === status);
   return `<h2 class="label queue-head">${esc(title)} (${rows.length})</h2><p class="hint">${esc(note)}</p>${rows.length ? `<div class="card compact-list">${rows.map(line).join("")}</div>` : '<p class="small secondary">None.</p>'}`;
 }).join("")}`,
   };
@@ -129,7 +132,7 @@ ${dis.map((d) => `<fieldset class="stack-xs settle-line"><legend class="small">$
 ${post(`<input type="hidden" name="action" value="approve">
   <label class="check-row"><input type="checkbox" name="compared" value="1" required> <span class="small">I compared the lines with the scan, page by page.</span></label>
   <label class="field"><span class="field-label">Your name, as shown with this report</span><input class="input" name="reviewer" required autocomplete="name" value="${reviewer}"></label>
-  <button class="btn btn--primary" type="submit">Confirm and publish with "Checked by"</button>`)}</section>`;
+  <button class="btn btn--primary" type="submit">Confirm: show "Checked by"</button>`)}</section>`;
   }
   if (["agreed", "approved"].includes(s.status)) {
     actions += `<section class="card stack-sm"><h2 class="label">Take down</h2><p class="small">Removes this report from "Net worth, as reported"; it shows as a link again.</p>
@@ -185,8 +188,8 @@ export async function networthScanChange(db, id, rawForm, email) {
     return { done: "Taken down. The report is a link again on public pages." };
   }
   if (action !== "approve") return { error: "Unknown action.", form };
-  if (s.status !== "agreed") return { error: "Only a report waiting for a person can be confirmed.", form };
+  if (s.status !== "agreed") return { error: "Only a report published by AI can be confirmed.", form };
   if (rawForm.get("compared") !== "1") return { error: "Tick the box once you've compared the lines with the scan.", form };
   await db.prepare("UPDATE networth_scans SET status = 'approved', reviewed_by = ?, reviewer_email = ?, reviewed_at = datetime('now') WHERE report_id = ?").bind(form.reviewer, email || null, id).run();
-  return { done: `Confirmed and published with "Checked by ${form.reviewer}".` };
+  return { done: `Confirmed. The report now shows "Checked by ${form.reviewer}".` };
 }
