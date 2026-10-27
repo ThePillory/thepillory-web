@@ -139,13 +139,13 @@ test("Quick cards on the Supreme Court, a case, a measure (its facts card) and t
   assert.match(court, /simple-card simple-only[\s\S]*What it is[\s\S]*Latest decisions/);
   const prop = await get("../../../functions/elections/[[path]].js", "/elections/2026-11-03/measure/prop-1/");
   // A measure's Quick version is its "Just the facts" card: official text only, no AI rewrite.
-  assert.match(prop, /facts-card simple-keep[\s\S]*Measure type[\s\S]*What it changes[\s\S]*Yes means \/ No means[\s\S]*Cost/);
+  assert.match(prop, /facts-card simple-keep[\s\S]*facts-chips[\s\S]*facts-means[\s\S]*What it changes[\s\S]*>Cost<[\s\S]*Sources:/);
   assert.doesNotMatch(prop, /simple-card/);
   const ballot = await get("../../../functions/ballot/[[path]].js", "/ballot/ca/");
   assert.match(ballot, /simple-card[\s\S]*What&#x27;s on it[\s\S]*statewide offices/);
   assert.match(ballot, /class="stack-sm simple-keep" id="statewide"/);
-  assert.match(ballot, /id="facts-prop-4"[\s\S]*Measure type[\s\S]*Put on the ballot by[\s\S]*Legislative Analyst/, "each proposition's facts card on the ballot preview");
+  assert.match(ballot, /id="facts-prop-4"[\s\S]*Statute[\s\S]*Placed by the Legislature[\s\S]*Legislative Analyst/, "each proposition's facts card on the ballot preview");
   const wa = await get("../../../functions/ballot/[[path]].js", "/ballot/wa/");
-  assert.match(wa, /id="facts-ip26-645"[\s\S]*Citizen initiative[\s\S]*Office of Financial Management/, "Washington's measures too");
+  assert.match(wa, /id="facts-ip26-645"[\s\S]*Placed by citizen initiative[\s\S]*Office of Financial Management/, "Washington's measures too");
   assert.match(ballot, /lookup simple-keep" id="address"/);
 });

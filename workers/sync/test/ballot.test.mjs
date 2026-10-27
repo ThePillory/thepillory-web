@@ -273,7 +273,7 @@ test("with an address: every contest in ballot order, the same card for each can
   assert.equal((html.match(/<li class="ballot-cand stack-xs">/g) || []).length, 5, "one row per candidate");
   assert.match(html, /Cy Kemp<\/p>\s*<ul class="cand-facts"><li>No party listed/);
   assert.doesNotMatch(html, /href="\/reps\/hal-jones\/"/, "a name alone doesn't link a candidate to an official");
-  assert.match(html, /Just the facts: Proposition 1[\s\S]*Measure type[\s\S]*href="\/elections\/2026-11-03\/measure\/prop-1\/">Full measure page ›/);
+  assert.match(html, /Just the facts: Proposition 1[\s\S]*facts-chips[\s\S]*href="\/elections\/2026-11-03\/measure\/prop-1\/">Full measure page ›/);
   assert.match(html, /href="https:\/\/sos\.example\.gov\/prop1"/);
   assert.match(html, /For an address in Exampleville, CA/);
   assert.match(html, /Example Hall/);

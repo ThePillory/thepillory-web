@@ -1893,8 +1893,12 @@ article.fin-term { scroll-margin-top: var(--space-4); }
 .fold--parch .provision-cite { background: transparent; }
 
 /* "Just the facts" (functions/_lib/measure-facts.js): the official facts that lead every ballot measure */
-.facts-list { display: flex; flex-direction: column; gap: var(--space-4); }
-.facts-list .fact { overflow-wrap: anywhere; }
+.facts-chips .chip { white-space: normal; }
+.facts-means { display: grid; grid-template-columns: 1fr; gap: var(--space-3); }
+@media (min-width: 768px) { .facts-means { grid-template-columns: 1fr 1fr; } }
+.facts-card .inset, .facts-fold .inset { overflow-wrap: anywhere; }
+/* One sources line: the links flow inline, their tap area padded out instead of adding height. */
+.facts-sources .source-link { display: inline; min-height: 0; padding-block: var(--space-3); font-weight: 400; }
 .facts-fold .fold-sub { display: block; font-size: var(--fs-small); color: var(--text-2); overflow-wrap: anywhere; }
 
 /* The first and last rows sit a card's padding from its edges */

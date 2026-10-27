@@ -28,14 +28,15 @@ To add a county: an entry in `COUNTIES` and `HOW_TO_VOTE` in the builder (its ca
 
 ## "Just the facts" (every measure)
 
-Every ballot measure page (California's statewide and county measures, Washington's, and the "sections" states) leads with one card, `factsCard()` in `functions/_lib/measure-facts.js`, the same five lines in the same order, each labeled with its source:
+Every ballot measure page (California's statewide and county measures, Washington's, and the "sections" states) leads with one card, `factsCard()` in `functions/_lib/measure-facts.js`, in the home page's card style (inner `.inset` panels, the type tokens, no new sizes), the same for every measure:
 
-- **Measure type** (statute, constitutional amendment, both, or a constitutional convention question) and **Put on the ballot by** (the Legislature or citizen initiative), in the official label's own words, the label quoted beside them: California's title label ("LEGISLATIVE STATUTE.") and "Put on the Ballot by …"; Washington's measure type ("Initiative to the People") and its ballot question; the other states' guide labels.
+- **Chips**: the measure's type (statute, constitutional amendment, both, or a constitutional convention question), who placed it on the ballot (the Legislature or citizen initiative), and whether an official cost estimate is printed. The type and "placed by" chips are the official label's own words; the label itself (California's "LEGISLATIVE STATUTE.", "Put on the Ballot by …"; Washington's "Initiative to the People" and its ballot question; the other states' guide labels) is in each chip's title.
+- **Yes** and **No**: two panels, word for word where the state prints them; side by side from 768px, stacked on phones.
 - **What it changes**: California's Attorney General's summary, Washington's ballot title (Attorney General), Colorado's Blue Book summary, Florida's ballot summary, Michigan's ballot wording caption; otherwise the question on the ballot.
-- **Yes means / No means**, word for word where the state prints it.
 - **Cost**: the Legislative Analyst's estimate (California), the Office of Financial Management's summary (Washington), the Blue Book's fiscal impact (Colorado, cut to its first two paragraphs with their headings), a county tax rate statement's first paragraph.
+- **One sources line** at the bottom, naming and linking each source once. Every fact in the card comes from one of them.
 
-Official text only: nothing written by ThePillory or AI, shortened only by cutting whole paragraphs, never by rewording; what the source doesn't print is one plain line. In Quick mode the card is all the page shows. The ballot preview (`/ballot/<st>/`, with and without an address) and Your ballot show the same card, folded under each measure's name (`factsFold()`). The campaigns' arguments and rebuttals follow, word for word as before, in one collapsed section, "What each side says (their own words, not checked by ThePillory)".
+Official text only: nothing written by ThePillory or AI, shortened only by cutting whole paragraphs, never by rewording; what the source doesn't print says so plainly. In Quick mode the card is all the page shows. The ballot preview (`/ballot/<st>/`, with and without an address) and Your ballot show the same card, folded under each measure's name (`factsFold()`). The campaigns' arguments and rebuttals follow, word for word, in one collapsed section, "What each side says (their own words, not checked by ThePillory)".
 
 ## Washington's statewide measures
 
