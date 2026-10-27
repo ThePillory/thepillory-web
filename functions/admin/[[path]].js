@@ -231,14 +231,14 @@ async function list(db, url, env) {
     "Review drafts",
     `<header class="page-head">
   <h1>Review queue</h1>
-  <p class="subtitle">What needs a person. Drafts the AI reviewer passes are published as "AI-drafted, auto-checked"; the rest wait here.</p>
+  <p class="subtitle">Nothing here waits on you. Drafts the AI reviewer passes are published as "AI-drafted, auto-checked"; flagged drafts and readers' reports go through the resolution step on the sync Worker's next run (fixed by another model, flagged passages cut, or cut to the summary; nothing marked as a major problem is published). You can still approve, edit or reject any of them.</p>
   <p class="small"><a class="inline-link" href="/admin/corrections/">Error reports</a> · <a class="inline-link" href="/admin/waitlist/">County waitlist</a> · <a class="inline-link" href="/admin/health/">Data sources</a></p>
 </header>
 ${await waitingSummary(db)}
 ${await promiseQueue(db, env, url)}
-${queue("flagged-ai", "Flagged by AI", "The AI reviewer found a major problem: a factual error, unfair treatment of one side, or opinion stated as fact. These are hidden from public pages until you decide. Minor problems (completeness, wording) are fixed or noted automatically and don't come here.", aiFlagged, aiReasons)}
+${queue("flagged-ai", "Flagged by AI", "The AI reviewer found a major problem: a factual error, unfair treatment of one side, or opinion stated as fact. Hidden from public pages. The resolution step works through these on its own, within RESOLVE_DAILY_DOLLARS a day; what's still listed after it ran was withheld (nothing could be published) or is waiting its turn. Minor problems (completeness, wording) are fixed or noted automatically and don't come here.", aiFlagged, aiReasons)}
 ${flagSummary(aiFlagged)}
-${queue("flagged-readers", "Flagged by readers", 'Readers reported a problem. These stay up, marked "Under review", until you approve, edit, reject or close the reports.', readerFlagged, (r) => {
+${queue("flagged-readers", "Flagged by readers", 'Readers reported a problem. These stay up, marked "Under review", until the resolution step checks them again on the next run (it fixes, trims or takes down, and lists the change publicly under "Changes to this analysis"), or until you decide first.', readerFlagged, (r) => {
       const fs = reports.get(r.id) || [];
       return `<ul class="panel-list small">${fs
         .slice(0, 3)
@@ -523,7 +523,7 @@ function whySection(a, openFlags) {
   const parts = [];
   const d = a.ai_review_detail || {};
   if (a.status === "ai_draft" && a.ai_review === "flag") {
-    parts.push(`<p><strong>Flagged by the AI reviewer.</strong> Hidden from the public bill page until you decide.</p>
+    parts.push(`<p><strong>Flagged by the AI reviewer.</strong> Hidden from the public bill page. The resolution step fixes it, cuts the flagged passages or keeps it hidden, unless you decide first.</p>
   <ul class="panel-list">${(d.reasons || []).map((x) => `<li>${esc(x)}</li>`).join("") || "<li>No reason given.</li>"}</ul>`);
   }
   if (openFlags.length) {

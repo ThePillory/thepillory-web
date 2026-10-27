@@ -6,9 +6,14 @@
 // What the public sees:
 //   - approved by a person: "Reviewed by [name], [date]"
 //   - passed by the AI reviewer: "AI-drafted, auto-checked" (linked to the methodology)
-//   - flagged by the AI reviewer, or not reviewed yet: nothing (it's in the review queue)
+//   - flagged by the AI reviewer, or not reviewed yet: nothing (the resolution
+//     step fixes it, cuts the flagged passages, or keeps it off the page)
 //   - rejected: nothing
-// A published analysis with open reader flags stays up, marked "Under review".
+// A published analysis with open reader flags stays up, marked "Under review",
+// until the resolution step has checked it again. An analysis the resolution
+// step shortened says so; one cut to its summary shows only the summary and
+// the provisions, with "Full analysis not available yet". What it changed
+// after a reader's report is listed under "Changes to this analysis".
 import { esc, safeUrl, fmtDate } from "./render.js";
 
 export const METHOD_URL = "/about/methodology/#analysis";
@@ -39,6 +44,39 @@ export async function provisionsFor(db, ids) {
     .all();
   return new Map(results.map((r) => [r.id, r]));
 }
+
+/** What the resolution step did to make this version, if anything: {outcome, note, …} or null. Pure. */
+export function resolutionOf(a) {
+  if (!a) return null;
+  const d = typeof a.ai_review_detail === "string" ? (() => { try { return JSON.parse(a.ai_review_detail); } catch (_) { return {}; } })() : a.ai_review_detail || {};
+  return d && d.resolution ? d.resolution : null;
+}
+
+/** The changes made after readers' reports, newest first: [{public_note, created_at}] ([] before migration 0044). */
+export async function analysisChanges(db, billId) {
+  try {
+    return (
+      await db
+        .prepare("SELECT public_note, created_at FROM analysis_resolutions WHERE bill_id = ? AND trigger = 'reader' AND public_note IS NOT NULL ORDER BY created_at DESC, id DESC LIMIT 10")
+        .bind(billId)
+        .all()
+    ).results;
+  } catch (err) {
+    if (/no such table/i.test(String(err && err.message))) return [];
+    throw err;
+  }
+}
+
+/** "Changes to this analysis": the public log of what changed after readers' reports, and when. Pure. */
+export function changesList(changes = []) {
+  if (!changes.length) return "";
+  return `<details class="small review-notes"><summary>Changes to this analysis (${changes.length})</summary>
+  <ul class="panel-list">${changes.map((c) => `<li>${esc(fmtDate(String(c.created_at || "").slice(0, 10)))}: ${esc(c.public_note)}</li>`).join("")}</ul>
+</details>`;
+}
+
+const FULL_NOT_YET = '<p class="small">Full analysis not available yet. The AI reviewer found problems in the rest of the draft that couldn\'t be fixed, so only the summary and the provisions it touches are shown. <a class="inline-link" href="/about/methodology/#analysis">How drafts are checked</a></p>';
+const SHORTENED = '<p class="small">Shortened: passages the AI reviewer flagged were removed rather than published. <a class="inline-link" href="/about/methodology/#analysis">How drafts are checked</a></p>';
 
 export function parse(a) {
   const j = (s, d) => {
@@ -124,17 +162,20 @@ const panel = (list, card) => (card && list.length === 1 ? `<p class="small">${e
  *   empty        what to say when there's no public analysis (HTML)
  *   after        extra HTML at the end (the reader forms)
  */
-export function baselineSection(a, provisions, { underReview = false, empty = "", after = "", noun = "bill" } = {}) {
+export function baselineSection(a, provisions, { underReview = false, empty = "", after = "", noun = "bill", changes = [] } = {}) {
   if (!a) {
     return `
 <section class="parchment stack-sm" id="baseline">
   <h2 class="label">Constitutional baseline</h2>
   ${empty || `<p>Not yet mapped. The parts of the Constitution this ${esc(noun)} touches will appear here once an analysis is written and checked.</p>`}
+  ${changesList(changes)}
   <p class="baseline-foot"><a class="inline-link" href="${METHOD_URL}">How this is made</a></p>
   ${after}
 </section>`;
   }
   const card = a.depth === "card";
+  const resolution = resolutionOf(a);
+  const summaryOnly = Boolean(resolution && resolution.outcome === "summary_only");
   const clauses = a.clauses
     .map((c) => {
       const p = provisions.get(c.id);
@@ -189,7 +230,9 @@ export function baselineSection(a, provisions, { underReview = false, empty = ""
     <h2 class="label">Constitutional baseline${card ? " · Short card" : ""}</h2>
     <div class="chips">${badge(a)}${underReview ? UNDER_REVIEW : ""}</div>
   </div>
-  ${underReview ? '<p class="small">A reader reported a possible problem with this analysis. It stays up while a person checks it.</p>' : ""}
+  ${underReview ? '<p class="small">A reader reported a possible problem with this analysis. It stays up while it is checked again.</p>' : ""}
+  ${summaryOnly ? FULL_NOT_YET : resolution && resolution.outcome === "trimmed" ? SHORTENED : ""}
+  ${changesList(changes)}
   ${a.basis_note ? `<p class="limited-note">${esc(a.basis_note.replace(/^limited:/i, "Limited:"))}</p>` : ""}
   ${minorNotes(a)}
   <div class="stack-sm">
@@ -197,12 +240,12 @@ export function baselineSection(a, provisions, { underReview = false, empty = ""
     <p>${esc(a.plain_summary)}</p>
   </div>
   ${clauses ? `<div class="stack-sm"><h3>Provisions it touches</h3>${clauses}</div>` : ""}
-  <div class="baseline-panels">
+  ${summaryOnly ? "" : `<div class="baseline-panels">
     <div class="panel"><p class="label">Where it aligns</p>${panel(a.aligns, card) || '<p class="small">None identified.</p>'}</div>
     <div class="panel panel--tension"><p class="label">Where it may be in tension</p>${panel(a.tension, card) || '<p class="small">None identified.</p>'}</div>
     <div class="panel"><p class="label">Why this might still serve the public</p>${panel(a.departure, card) || '<p class="small">No departure identified.</p>'}
       ${a.article_v ? `<p class="small"><strong>Article V:</strong> ${esc(a.article_v)}</p>` : ""}</div>
-  </div>
+  </div>`}
   ${readings}
   ${cases}
   ${arguments_(a)}
@@ -270,5 +313,5 @@ export function constitutionBrief(a, provisions, { fullHref, underReview = false
 ${args}
 <div class="chips">${badge(a)}${underReview ? UNDER_REVIEW : ""}</div>
 <p class="small">Mapped, not ruled: no finding on whether it is constitutional.</p>
-${fullHref ? `<a class="btn btn--block" href="${esc(fullHref)}">Read the full analysis</a>` : ""}`;
+${(resolutionOf(a) || {}).outcome === "summary_only" ? '<p class="small">Full analysis not available yet.</p>' : fullHref ? `<a class="btn btn--block" href="${esc(fullHref)}">Read the full analysis</a>` : ""}`;
 }

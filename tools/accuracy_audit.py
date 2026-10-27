@@ -624,6 +624,21 @@ def coverage(args):
       UNION ALL SELECT 'net worth: held', COUNT(*), MIN(read_at) FROM networth_scans WHERE status = 'disagree'""")
     table(rows, ["queue", "n", "oldest"], ["Queue", "Waiting", "Oldest"])
 
+    say("### Constitutional analyses: flagged drafts and the resolution step")
+    say()
+    rows = q(args, """SELECT CASE WHEN x.id IS NOT NULL THEN 'executive order' WHEN a.bill_id LIKE 'measure:%' THEN 'ballot measure' ELSE 'bill' END AS kind,
+        COUNT(*) AS n FROM bill_analyses a LEFT JOIN executive_actions x ON x.id = a.bill_id
+      WHERE a.current = 1 AND a.status = 'ai_draft' AND a.ai_review = 'flag' GROUP BY 1""")
+    say("Flagged drafts hidden now: " + (", ".join(f"{r['kind']} {r['n']}" for r in rows) or "none") + ".")
+    rows = q(args, "SELECT COUNT(DISTINCT analysis_id) AS n FROM analysis_flags WHERE status = 'open'")
+    say(f"Published analyses with open reader reports: {rows[0]['n'] if rows else '—'}.")
+    say()
+    rows = q(args, """SELECT trigger, outcome, COUNT(*) AS n, ROUND(SUM(cost_cents) / 100.0, 2) AS dollars, MIN(created_at) AS first, MAX(created_at) AS last
+      FROM analysis_resolutions GROUP BY 1, 2 ORDER BY 1, 2""")
+    table(rows, ["trigger", "outcome", "n", "dollars", "first", "last"], ["Trigger", "Outcome", "Analyses", "Cost ($)", "First", "Last"])
+    rows = q(args, "SELECT started_at, status, substr(message, 1, 300) AS message FROM sync_log WHERE step = 'analysis-resolve' AND message LIKE '%spent today%' ORDER BY id DESC LIMIT 5")
+    table(rows, ["started_at", "status", "message"], ["Round", "Status", "Summary"])
+
     say("### What people decided on reviewed scans (for an error rate)")
     say()
     rows = q(args, """SELECT 'trades' AS kind, status, COUNT(*) AS n, COALESCE(SUM(rows_total), 0) AS rows FROM trade_scans WHERE status IN ('approved', 'rejected') GROUP BY status

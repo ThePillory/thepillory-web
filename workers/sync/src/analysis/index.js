@@ -18,8 +18,12 @@
 //      links to the bill or someone asked), check every quote against the stored
 //      Constitution and every case against CourtListener, then the AI reviewer
 //      (review.js). Pass: published as "AI-drafted, auto-checked" (a random
-//      SPOT_CHECK_RATE also goes to the review queue). Flag: kept off public
-//      pages and sent to the review queue with the reasons.
+//      SPOT_CHECK_RATE also goes to the review queue, which nothing waits on).
+//      Flag: kept off public pages for the resolution step.
+//   resolution (resolve.js), right after the backlog: drafts the reviewer
+//   flagged, and published analyses readers reported, are fixed by another
+//   model, trimmed, or cut to the summary; nothing marked as a major problem
+//   is ever published. RESOLVE_DAILY_DOLLARS caps what it spends a day.
 //
 // Every earlier version is kept. Tokens are logged per call.
 import { log } from "../db.js";
@@ -31,14 +35,15 @@ import { verifyQuotes, verifyCitations, sameCase } from "./verify.js";
 import { makeLookup } from "./courtlistener.js";
 import { PROMPT_VERSION, CARD_PROMPT_VERSION } from "./prompt.js";
 import { checkRelevance, BATCH, RELEVANCE_PROMPT_VERSION } from "./relevance.js";
-import { reviewDraft, draftForReview, REVIEW_PROMPT_VERSION } from "./review.js";
-import { lintDraft } from "./lint.js";
+import { reviewDraft, draftForReview } from "./review.js";
+import { lintDraft, hardSpots } from "./lint.js";
+import { resolveDraft, changeNote, centsFor, RESOLVE_MODEL } from "./resolve.js";
 import { withD1Retry } from "../d1retry.js";
 import { runAgendaWatch } from "./agenda.js";
 import { runPromises } from "../promises/index.js";
 import { runTopics } from "../topics/index.js";
 import { statePriority, stateBillScope } from "../state-priority.js";
-import { nextMeasures, measureSource, finishMeasure } from "./measures.js";
+import { nextMeasures, measureSource, finishMeasure, measureSubject, MEASURE_PREFIX } from "./measures.js";
 
 const RETRY_AFTER_DAYS = 7; // a bill that couldn't be drafted waits this long before another try
 const MIN_TIME_PER_BILL_MS = 4 * 60 * 1000; // don't start a bill without this much time left in the round
@@ -192,6 +197,8 @@ function reviewColumns(env, review) {
       ...(review.first ? { revised: true, first_review: review.first } : {}),
       ...(review.kept_first ? { kept_first: true } : {}),
       ...(review.previous ? { previous: review.previous } : {}),
+      ...(review.spots && review.spots.length ? { spots: review.spots } : {}),
+      ...(review.resolution ? { resolution: review.resolution } : {}),
     }),
     review.model,
     J({ input: review.usage.input_tokens, output: review.usage.output_tokens, cache_read: review.usage.cache_read_tokens }),
@@ -265,7 +272,9 @@ async function save(env, db, bill, source, draft, meta) {
   stmts.push(insert);
   await db.batch(stmts);
   const row = await db.prepare("SELECT * FROM bill_analyses WHERE bill_id = ? AND current = 1").bind(bill.id).first();
-  const why = bill.request_id ? (bill.request_source === "reader" ? "a reader asked for a full analysis" : "requested at /admin/review") : bill.upgrade ? "an issue now links to this bill" : bill.redraft ? "redrafted under the current drafting prompt" : null;
+  const why = bill.resolution_note
+    ? bill.resolution_note
+    : bill.request_id ? (bill.request_source === "reader" ? "a reader asked for a full analysis" : "requested at /admin/review") : bill.upgrade ? "an issue now links to this bill" : bill.redraft ? "redrafted under the current drafting prompt" : null;
   await db
     .prepare("INSERT INTO bill_analysis_revisions (analysis_id, bill_id, action, actor, note, snapshot) VALUES (?, ?, 'created', 'pipeline', ?, ?)")
     .bind(row.id, bill.id, why, J(row))
@@ -310,13 +319,11 @@ async function reviewBacklog(env, db, budget, run) {
                 x.id IS NOT NULL AS is_order
          FROM bill_analyses a LEFT JOIN bills b ON b.id = a.bill_id LEFT JOIN executive_actions x ON x.id = a.bill_id
            LEFT JOIN bill_relevance r ON r.bill_id = a.bill_id
-         -- Not reviewed yet, or flagged under an earlier version of the reviewer's
-         -- rules (and no person has decided yet): reviewed again with the current rules.
-         WHERE a.current = 1 AND a.status = 'ai_draft' AND (b.id IS NOT NULL OR x.id IS NOT NULL)
-           AND (a.ai_review IS NULL OR (a.ai_review = 'flag' AND COALESCE(json_extract(a.ai_review_detail, '$.version'), '') != ?))
-         ORDER BY a.ai_review IS NOT NULL, a.created_at, a.id LIMIT 25`
+         -- Not reviewed yet. (A flagged draft goes to the resolution step, which
+         -- reviews it again itself, so it isn't re-reviewed here.)
+         WHERE a.current = 1 AND a.status = 'ai_draft' AND (b.id IS NOT NULL OR x.id IS NOT NULL) AND a.ai_review IS NULL
+         ORDER BY a.created_at, a.id LIMIT 25`
       )
-      .bind(REVIEW_PROMPT_VERSION)
       .all()
   ).results;
   let rejected = 0;
@@ -380,6 +387,206 @@ async function reviewBacklog(env, db, budget, run) {
     }
   }
   return { rejected, reviewed };
+}
+
+// ---------------------------------------------------------------------------
+// 2b. Resolution: flagged drafts and reader reports (resolve.js)
+
+const RESOLVE_SELECT = `SELECT a.*, b.bill_number, b.title, b.level, b.session, b.chamber, b.official_url, b.summary AS bill_summary, b.source_url AS bill_source_url,
+    x.id IS NOT NULL AS is_order
+  FROM bill_analyses a LEFT JOIN bills b ON b.id = a.bill_id LEFT JOIN executive_actions x ON x.id = a.bill_id`;
+
+/** The bill, order or measure an analysis row is about, as the pipeline's subject; null if it's gone. */
+async function subjectFor(db, row) {
+  if (String(row.bill_id).startsWith(MEASURE_PREFIX)) {
+    const q = await db.prepare("SELECT * FROM measure_analysis_queue WHERE measure_key = ?").bind(row.bill_id.slice(MEASURE_PREFIX.length)).first();
+    return q ? { ...measureSubject(q), queued: q } : null;
+  }
+  if (row.is_order) return orderSubject(db, row.bill_id);
+  if (!row.bill_number) return null;
+  return { id: row.bill_id, bill_number: row.bill_number, title: row.title, level: row.level, session: row.session, chamber: row.chamber, official_url: row.official_url, summary: row.bill_summary || "", source_url: row.bill_source_url };
+}
+
+/** A saved analysis row as a draft. */
+function draftFromRow(row) {
+  const j = (s) => JSON.parse(s || "[]");
+  return {
+    plain_summary: row.plain_summary || "",
+    clauses: j(row.clauses),
+    aligns: j(row.aligns),
+    tension: j(row.tension),
+    departure: j(row.departure),
+    article_v: row.article_v || "",
+    readings: j(row.readings),
+    citations: j(row.citations),
+    uncertainty: row.uncertainty || "",
+    supporters: row.supporters || "",
+    critics: row.critics || "",
+  };
+}
+
+/**
+ * Runs the resolution step: reader reports on published analyses first, then
+ * drafts the reviewer flagged that no person has decided on, oldest first.
+ * Stops at RESOLVE_DAILY_DOLLARS (25) spent today. Each one is recorded in
+ * analysis_resolutions; a flagged draft goes through once (one withheld stays
+ * off public pages and isn't tried again).
+ */
+export async function runResolutions(env, db, budget, run, { fakes = null } = {}) {
+  const started = new Date().toISOString();
+  const capCents = Math.round(parseFloat(env.RESOLVE_DAILY_DOLLARS || "25") * 100);
+  const key = `resolve_cents_${day()}`;
+  let spent = parseFloat((await getState(db, key)) || "0") || 0;
+  const tally = { fixed: 0, trimmed: 0, summary_only: 0, withheld: 0, no_change: 0, errors: 0 };
+  let rows;
+  try {
+    const reader = (
+      await db
+        .prepare(
+          `${RESOLVE_SELECT} WHERE a.current = 1 AND (a.status = 'reviewed' OR (a.status = 'ai_draft' AND a.ai_review = 'pass'))
+             AND EXISTS (SELECT 1 FROM analysis_flags f WHERE f.analysis_id = a.id AND f.status = 'open')
+           ORDER BY a.id LIMIT 10`
+        )
+        .all()
+    ).results.map((r) => ({ ...r, trigger: "reader" }));
+    const flagged = (
+      await db
+        .prepare(
+          `${RESOLVE_SELECT} WHERE a.current = 1 AND a.status = 'ai_draft' AND a.ai_review = 'flag'
+             AND NOT EXISTS (SELECT 1 FROM bill_analysis_revisions v WHERE v.analysis_id = a.id AND v.actor != 'pipeline')
+             AND NOT EXISTS (SELECT 1 FROM analysis_resolutions z WHERE z.analysis_id = a.id)
+           ORDER BY a.created_at, a.id LIMIT 40`
+        )
+        .all()
+    ).results.map((r) => ({ ...r, trigger: "flag" }));
+    rows = [...reader, ...flagged];
+  } catch (err) {
+    if (/no such (table|column)/i.test(String(err && err.message))) return { more: false };
+    throw err;
+  }
+  if (!rows.length) return { more: false };
+  let more = false;
+  let capped = false;
+  for (const row of rows) {
+    if (spent >= capCents) {
+      capped = true;
+      break;
+    }
+    if (budget.timeLeft() < MIN_TIME_PER_BILL_MS) {
+      more = true;
+      break;
+    }
+    const t0 = new Date().toISOString();
+    const before = budget.used;
+    try {
+      const out = await resolveRow(env, db, budget, row, fakes);
+      if (!out) continue;
+      tally[out.outcome] += 1;
+      spent += out.cents;
+      await setState(db, key, String(Math.round(spent * 100) / 100));
+      await log(db, run, "analysis-resolve", "ok", budget.used - before, out.message, t0);
+    } catch (err) {
+      if (err instanceof BudgetExhausted) {
+        more = true;
+        break;
+      }
+      tally.errors += 1;
+      await log(db, run, "analysis-resolve", "error", budget.used - before, `${row.bill_id}: ${redact(`${err.name}: ${err.message}`)}`, t0);
+    }
+  }
+  const counts = ["fixed", "trimmed", "summary_only", "withheld", "no_change"].map((k) => `${tally[k]} ${k.replace("_", " ")}`).join(", ");
+  await log(
+    db,
+    run,
+    "analysis-resolve",
+    tally.errors ? "partial" : "ok",
+    0,
+    `${counts}${tally.errors ? `, ${tally.errors} error(s)` : ""}; $${(spent / 100).toFixed(2)} of $${(capCents / 100).toFixed(2)} spent today${capped ? "; the daily cap is reached, the rest wait for tomorrow" : more ? "; more waiting, continuing" : ""}`,
+    started
+  );
+  return { more: more && !capped };
+}
+
+/** One flagged draft or reported analysis through the resolution step. Returns {outcome, cents, message}, or null to try again later. */
+async function resolveRow(env, db, budget, row, fakes = null) {
+  const bill = await subjectFor(db, row);
+  if (!bill) return null;
+  const depth = row.depth === "card" ? "card" : "full";
+  const source = await subjectSource(env, db, budget, bill, depth);
+  if (!source) return null;
+  const resolveModel = env.RESOLVE_MODEL || RESOLVE_MODEL;
+  const deps = {
+    revise: (d, reasons) => {
+      budget.take(`resolution ${bill.id}`);
+      return draftAnalysis({ ...env, ANALYSIS_MODEL: resolveModel }, bill, source, depth, { draft: draftForReview(d, depth), reasons });
+    },
+    check: async (d, trimmed) => {
+      const quoteCheck = verifyQuotes(d, PROVISIONS);
+      for (const id of trimmed) quoteCheck.dropped.push({ id, reason: "a card keeps only the 3 most relevant provisions" });
+      return { quoteCheck, citationCheck: await verifyCitations(d, makeLookup(env, budget, sameCase)) };
+    },
+    review: (d, dep, opts = {}) => {
+      budget.take(`AI reviewer (resolution) ${bill.id}`);
+      return reviewDraft(env, bill, source, d, dep, opts);
+    },
+    hard: (d) => hardSpots(d, { basis: source.basis }),
+    lint: (d) => lintDraft(d, { basis: source.basis, depth }),
+    cost: centsFor,
+    ...(fakes || {}), // tests: fake model calls
+  };
+  const reader = row.trigger === "reader";
+  const readerReports = reader ? (await db.prepare("SELECT reason, note FROM analysis_flags WHERE analysis_id = ? AND status = 'open'").bind(row.id).all()).results : [];
+  if (reader && !readerReports.length) return null;
+  const flagReview = reader ? null : JSON.parse(row.ai_review_detail || "{}");
+  let result;
+  try {
+    result = await resolveDraft({ draft: draftFromRow(row), depth, review: flagReview, readerReports }, deps);
+  } catch (err) {
+    if (!(err instanceof DraftRefused)) throw err;
+    result = { outcome: "withheld", removed: [], cents: 0, steps: [`the model declined: ${err.message}`], flagReview, model: resolveModel };
+  }
+  const note = changeNote(result, { reader });
+  const record = (newId) =>
+    db
+      .prepare("INSERT INTO analysis_resolutions (analysis_id, bill_id, trigger, outcome, new_analysis_id, removed, public_note, steps, model, cost_cents) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+      .bind(row.id, row.bill_id, row.trigger, result.outcome, newId, J(result.removed || []), note || null, J(result.steps || []), result.model || resolveModel, Math.round(result.cents));
+  const flagsDone = (resolution) =>
+    db
+      .prepare("UPDATE analysis_flags SET status = 'resolved', resolution = ?, resolved_by = 'AI re-check', resolved_at = datetime('now') WHERE analysis_id = ? AND (status = 'open' OR (resolution = 'superseded' AND resolved_by = 'pipeline'))")
+      .bind(resolution, row.id);
+  let newId = null;
+  if (["fixed", "trimmed", "summary_only"].includes(result.outcome)) {
+    const review = { ...result.review, resolution: { outcome: result.outcome, trigger: row.trigger, from: row.id, note, removed: (result.removed || []).length } };
+    const saved = await save(env, db, { ...bill, resolution_note: note }, source, result.draft, {
+      depth,
+      model: result.model || resolveModel,
+      usage: result.usage,
+      quoteCheck: result.checks.quoteCheck,
+      citationCheck: result.checks.citationCheck,
+      review,
+    });
+    newId = saved.id;
+    await db.batch([record(newId), ...(reader ? [flagsDone("ai_corrected")] : [])]);
+  } else if (result.outcome === "withheld" && reader) {
+    // A published analysis that couldn't be fixed comes down: off public pages, its history kept.
+    const detail = { ...(result.review || {}), checks: (result.review || {}).checks || [], reasons: (result.review || {}).reasons || [], resolution: { outcome: "withheld", trigger: "reader", note } };
+    await db.batch([
+      db.prepare("INSERT INTO bill_analysis_revisions (analysis_id, bill_id, action, actor, note, snapshot) VALUES (?, ?, 'edited', 'pipeline', ?, ?)").bind(row.id, row.bill_id, note, J(row)),
+      db.prepare("UPDATE bill_analyses SET status = 'ai_draft', ai_review = 'flag', ai_review_detail = ? WHERE id = ?").bind(J(detail), row.id),
+      record(null),
+      flagsDone("ai_withdrawn"),
+    ]);
+  } else if (result.outcome === "no_change") {
+    await db.batch([record(null), flagsDone("ai_rechecked")]);
+  } else {
+    await record(null).run();
+  }
+  const words = { fixed: "fixed by another model and published", trimmed: "flagged passages cut and published", summary_only: "summary and provisions only published", withheld: reader ? "taken down: the problem couldn't be fixed" : "withheld: nothing could be published", no_change: "re-checked after a reader's report: no problem found" };
+  return {
+    outcome: result.outcome,
+    cents: result.cents,
+    message: `${row.bill_id}: analysis ${row.id}${reader ? " (reader report)" : ""}: ${words[result.outcome]}${newId ? ` as ${newId}` : ""}; ${(result.steps || []).join("; ")}; $${(result.cents / 100).toFixed(2)}`,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -708,9 +915,12 @@ export async function runAnalysis(rawEnv, { deadlineMs, runId, trigger }) {
 
   let relevance = { checked: 0, skipped: 0 };
   let backlog = { rejected: 0, reviewed: 0 };
+  let resolved = { more: false };
   try {
     relevance = await runRelevance(env, db, budget, run);
     backlog = await reviewBacklog(env, db, budget, run);
+    // Flagged drafts and reader reports before new drafts, within their own daily dollar cap.
+    resolved = await runResolutions(env, db, budget, run);
   } catch (err) {
     if (!(err instanceof BudgetExhausted)) throw err;
   }
@@ -866,5 +1076,5 @@ export async function runAnalysis(rawEnv, { deadlineMs, runId, trigger }) {
   } catch (err) {
     await log(db, run, "topics", "error", 0, redact(`${err.name}: ${err.message}`), new Date().toISOString());
   }
-  return { status: "ok", analyzed, used, limit, agendas, promises, topics, more_now: (waiting && (stoppedEarly || unchecked)) || ordersWaiting || agendas.more_now || topics.more_now };
+  return { status: "ok", analyzed, used, limit, agendas, promises, topics, more_now: (waiting && (stoppedEarly || unchecked)) || ordersWaiting || agendas.more_now || topics.more_now || resolved.more };
 }

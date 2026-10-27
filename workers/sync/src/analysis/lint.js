@@ -112,3 +112,43 @@ export function lintDraft(draft, { basis = "full_text", depth = "card" } = {}) {
   }
   return [...new Set(problems)];
 }
+
+/**
+ * Where a draft breaks a hard wording rule, for the resolution step
+ * (resolve.js), which cuts what a revision didn't fix: [{field, index, why}].
+ * A verdict in a panel, the summary or an argument line; a panel not in the
+ * "One view is that" form; "Supporters argue" and "Critics argue" not in
+ * their form or not of similar length (both lines, so neither side stands
+ * alone); and a partly read bill whose summary doesn't say so. Panel lengths
+ * in a card are left to the AI reviewer. Pure.
+ */
+export function hardSpots(draft, { basis = "full_text" } = {}) {
+  const spots = [];
+  const verdictIn = (text, list = VERDICTS) => list.find(([re]) => re.test(String(text || "")));
+  for (const [key] of PANELS) {
+    (draft[key] || []).forEach((t, index) => {
+      const text = String(t || "").trim();
+      if (!text) return;
+      const v = verdictIn(text);
+      if (v) spots.push({ field: key, index, why: `states a verdict (${v[1]})` });
+      else if (!PANEL_LEAD.test(text)) spots.push({ field: key, index, why: 'not in the "One view is that" form' });
+    });
+  }
+  const v = verdictIn(draft.plain_summary, VERDICTS.slice(0, 8));
+  if (v) spots.push({ field: "plain_summary", index: 0, why: `states a verdict (${v[1]})` });
+  const must = limitedSentence(basis);
+  if (must && !must.test(String(draft.plain_summary || ""))) spots.push({ field: "plain_summary", index: 0, why: "doesn't say only part of the text was read" });
+  const sup = String(draft.supporters || "").trim();
+  const cri = String(draft.critics || "").trim();
+  if (sup || cri) {
+    const [ws, wc] = [words(sup), words(cri)];
+    const bad =
+      !/^Supporters argue\b/.test(sup) ||
+      !/^Critics argue\b/.test(cri) ||
+      (Math.max(ws, wc) / Math.max(1, Math.min(ws, wc)) > 1.6 && Math.abs(ws - wc) > 8) ||
+      verdictIn(sup, VERDICTS.slice(0, 8)) ||
+      verdictIn(cri, VERDICTS.slice(0, 8));
+    if (bad) spots.push({ field: "supporters", index: 0, why: "the argument lines aren't attributed, parallel and neutral" }, { field: "critics", index: 0, why: "the argument lines aren't attributed, parallel and neutral" });
+  }
+  return spots;
+}
