@@ -31,6 +31,7 @@ import { withD1Retry } from "./d1retry.js";
 import { syncFederalFunding, syncFederalLobbying, syncCommitteeBills, syncLobbyContributions } from "./funding/sync.js";
 import { syncExecutiveFunding } from "./funding/executive.js";
 import { syncDarkMoney, syncSignerOrgs } from "./funding/darkmoney-sync.js";
+import { setStep } from "./ai-usage.js";
 import { syncSummaries, buildSummaries } from "./summaries.js";
 import { syncCandidatePlatforms } from "./promises/candidates-sync.js";
 import { syncPlainSummaries } from "./plain/sync.js";
@@ -154,6 +155,7 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId }) {
       result = { status: "skipped", message: `failed earlier today (${failed.message}); tried again in tomorrow's run or a manual run` };
     } else {
       try {
+        setStep(step);
         result = await fn(env, env.DB, budget);
       } catch (err) {
         if (isTemporary(err)) {

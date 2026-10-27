@@ -109,6 +109,8 @@ ISSUES_PAGES_RECHECK_DAYS = "90"
 # Candidates' Platform tab: campaign sites searched a day (one AI excerpt each at most), and how often again.
 CANDIDATE_PLATFORMS_DAILY = "25"
 CANDIDATE_PLATFORMS_RECHECK_DAYS = "30"
+# The last day candidates' sites are searched (Election Day); empty means no end.
+CANDIDATE_PLATFORMS_UNTIL = "2026-11-03"
 CANDIDATE_YEAR = "2026"
 # Quick mode: plain rewrites of summaries a day, and the election files whose measures get one.
 PLAIN_DAILY = "40"

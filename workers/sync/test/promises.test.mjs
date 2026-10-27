@@ -147,11 +147,13 @@ test("In their own words: an excerpt word for word, refreshed monthly; statement
   const now = Date.parse("2026-10-06T00:00:00Z");
   const row = (patch) => ({ excerpt: "As Governor I will repave Route 4 between Murphys and Arnold by the end of 2027.", excerpt_at: "2026-09-20 00:00:00", excerpt_by: "claude-sonnet-5-5", ...patch });
   assert.equal(needsExcerpt(row({}), page, now), false, "picked 16 days ago");
-  assert.equal(needsExcerpt(row({ excerpt_at: "2026-08-01 00:00:00" }), page, now), true, "monthly");
+  assert.equal(needsExcerpt(row({ excerpt_at: "2026-08-01 00:00:00" }), page, now), false, "still on the page: kept, however old (no AI call)");
+  assert.equal(needsExcerpt(row({ excerpt_at: "2026-08-01 00:00:00" }), "The page changed.", now), true, "gone from the page: picked again");
   assert.equal(needsExcerpt(row({ excerpt_at: "2026-08-01 00:00:00", excerpt_by: "person:Test" }), page, now), false, "a person's choice stays");
   assert.equal(needsExcerpt(row({ excerpt_by: "person:Test" }), "The page changed.", now), true, "but not once it's gone from the page");
   assert.equal(needsExcerpt(row({ excerpt_by: "hidden" }), page, now), false);
-  assert.equal(needsExcerpt({ excerpt: null, excerpt_by: "none", excerpt_at: "2026-09-20 00:00:00" }, page, now), false, "none found: not asked again for a month");
+  assert.equal(needsExcerpt({ excerpt: null, excerpt_by: "none", excerpt_at: "2026-09-20 00:00:00" }, page, now), false, "none found: not asked again for 90 days");
+  assert.equal(needsExcerpt({ excerpt: null, excerpt_by: "none", excerpt_at: "2026-06-01 00:00:00" }, page, now), true, "none found 90+ days ago: asked again");
   assert.equal(needsExcerpt({ excerpt: null, excerpt_by: null }, page, now), true);
 
   const officials = [{ id: "g", name: "Gloria Testgovernor", office: "Governor" }];

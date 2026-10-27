@@ -38,6 +38,7 @@ import { checkRelevance, BATCH, RELEVANCE_PROMPT_VERSION } from "./relevance.js"
 import { reviewDraft, draftForReview } from "./review.js";
 import { lintDraft, hardSpots } from "./lint.js";
 import { resolveDraft, changeNote, centsFor, RESOLVE_MODEL } from "./resolve.js";
+import { setStep } from "../ai-usage.js";
 import { withD1Retry } from "../d1retry.js";
 import { runAgendaWatch } from "./agenda.js";
 import { runPromises } from "../promises/index.js";
@@ -917,9 +918,12 @@ export async function runAnalysis(rawEnv, { deadlineMs, runId, trigger }) {
   let backlog = { rejected: 0, reviewed: 0 };
   let resolved = { more: false };
   try {
+    setStep("analysis-relevance");
     relevance = await runRelevance(env, db, budget, run);
+    setStep("analysis-review-backlog");
     backlog = await reviewBacklog(env, db, budget, run);
     // Flagged drafts and reader reports before new drafts, within their own daily dollar cap.
+    setStep("analysis-resolve");
     resolved = await runResolutions(env, db, budget, run);
   } catch (err) {
     if (!(err instanceof BudgetExhausted)) throw err;
@@ -943,6 +947,7 @@ export async function runAnalysis(rawEnv, { deadlineMs, runId, trigger }) {
     const before = budget.used;
     let r;
     try {
+      setStep("analysis-bills");
       r = await analyzeBill(env, db, budget, bill);
     } catch (err) {
       if (err instanceof BudgetExhausted) {
@@ -981,6 +986,7 @@ export async function runAnalysis(rawEnv, { deadlineMs, runId, trigger }) {
       const before = budget.used;
       let r;
       try {
+        setStep("analysis-orders");
         r = await analyzeBill(env, db, budget, order);
       } catch (err) {
         if (err instanceof BudgetExhausted) {
@@ -1020,6 +1026,7 @@ export async function runAnalysis(rawEnv, { deadlineMs, runId, trigger }) {
       const before = budget.used;
       let r;
       try {
+        setStep("analysis-measures");
         r = await analyzeBill(env, db, budget, measure);
       } catch (err) {
         if (err instanceof BudgetExhausted) {
@@ -1061,6 +1068,7 @@ export async function runAnalysis(rawEnv, { deadlineMs, runId, trigger }) {
     started
   );
   // Agenda watch: county agenda summaries, with their own daily cap.
+  setStep("agenda-watch");
   const agendas = await runAgendaWatch(env, db, { run, deadline: budget.deadline });
   // Promises: candidates for review, with their own small daily caps.
   let promises = { suggested: 0 };
@@ -1072,6 +1080,7 @@ export async function runAnalysis(rawEnv, { deadlineMs, runId, trigger }) {
   // Topics: tags for new bills, agenda items, executive actions and Platform excerpts, with their own daily cap.
   let topics = { tagged: 0, more_now: false };
   try {
+    setStep("topics");
     topics = await runTopics(env, db, { run, deadline: budget.deadline });
   } catch (err) {
     await log(db, run, "topics", "error", 0, redact(`${err.name}: ${err.message}`), new Date().toISOString());
