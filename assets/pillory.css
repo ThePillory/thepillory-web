@@ -555,7 +555,7 @@ a.card:hover { box-shadow: var(--shadow-lg); }
 .card.plain-list > li:first-child, .card.plain-list > li:first-child > .list-row { padding-top: 0; border-top: 0; }
 .card.plain-list > li:last-child, .card.plain-list > li:last-child > .list-row { padding-bottom: 0; }
 /* A row that is a card on its own ("See all …"): the card's padding, no divider */
-.list-row.card { padding: var(--card-pad); border-top: 0; }
+.list-row.card { display: flex; padding: var(--card-pad); border-top: 0; }
 
 .perspective {
   background: var(--card);
@@ -878,10 +878,10 @@ a.card:hover { box-shadow: var(--shadow-lg); }
 /* Inline links still get a 44px tap height */
 a { text-decoration: none; }
 a:hover { text-decoration: underline; }
+/* A link inside a sentence stays inline, so its line keeps the sentence's height;
+   the padding gives it a tap area of about 44px without moving anything. */
 .inline-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--tap);
+  padding-block: var(--space-3);
   font-weight: 600;
 }
 
