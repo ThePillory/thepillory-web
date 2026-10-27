@@ -892,7 +892,7 @@ def nc_fiscal(bill_page):
     b = next((i for i in range(a + 1, len(ls)) if ls[i] in ("FISCAL ANALYSIS", "TECHNICAL CONSIDERATIONS") or ls[i].startswith("FISCAL RESEARCH DIVISION")), len(ls))
     paras = nc_paragraphs(ls[a + 1:b])
     check(f"North Carolina fiscal note {url}", text, paras)
-    edition = re.search(r"Bill Number:\s*(.+?\((?:[A-Z][a-z]+ )?Edition\))", flat(text))
+    edition = re.search(r"((?:Senate|House) Bill \d+ \([A-Z][a-z]+ Edition\))", flat(text))
     date = re.search(r"FISCAL RESEARCH DIVISION Page 1 of \d+ ([A-Z][a-z]+ \d{1,2}, \d{4})", flat(text))
     return {"url": url, "paragraphs": paras, "edition": edition.group(1) if edition else None, "date": date.group(1) if date else None}
 
@@ -925,7 +925,7 @@ def nc_judicial():
     for i, l in enumerate(ls[start + 1:], start + 1):
         if l.startswith(stop):
             break
-        if re.match(r"^NC (Supreme Court|Court of Appeals)\b", l):
+        if re.fullmatch(r"NC (Supreme Court|Court of Appeals)(?: Associate Justice| Chief Justice| Judge)? Seat \d+", l):
             contests.append({"office": l, "candidates": []})
             cand, field = None, None
             continue
@@ -1015,7 +1015,7 @@ def nc_measures():
         fiscal = law["fiscal"]
         if fiscal:
             sections.append(section("fiscal", "Fiscal note", NC_FRD + (f", on {fiscal['edition']}" if fiscal["edition"] else "") + (f", {fiscal['date']}" if fiscal["date"] else ""), fiscal["paragraphs"],
-                                    "The note's Fiscal Impact Summary, word for word. The full note, with its analysis and tables, is linked below."))
+                                    "The note's Fiscal Impact Summary, word for word. It was written on the edition of the bill named above, the latest the General Assembly lists a fiscal note for. The full note, with its analysis and tables, is linked below."))
         links = [
             {"url": NC_REFERENDA, "label": "Statewide referendum choices on the ballot, North Carolina State Board of Elections (PDF)"},
             {"url": ex["url"], "label": "Official Summary Explanation of 2026 Constitutional Amendments, Legislative Services Officer (PDF, as published by a county board of elections)"},
@@ -1027,7 +1027,8 @@ def nc_measures():
         measures.append({
             "id": f"amendment-{n}",
             "number": str(n),
-            "label": f"Constitutional Amendment {n}" if len(referenda) > 1 else "Constitutional Amendment",
+            # The ballot doesn't number North Carolina's amendments: each is "Constitutional Amendment" plus its heading.
+            "label": "Constitutional Amendment",
             "kind": "Legislatively referred constitutional amendment",
             "placed_by": "the General Assembly",
             "scope": "statewide",
@@ -1036,6 +1037,7 @@ def nc_measures():
             "requirement": "Passes with a majority of the votes cast on the question (the session law, as quoted below)",
             "question": r["question"],
             "question_by": "the ballot wording, from " + NC_SBE + " and the session law",
+            **({} if fiscal else {"cost_note": f"The General Assembly lists no fiscal note from its Fiscal Research Division for {law['bill']} (Session Law {number})."}),
             "means_note": f"North Carolina's official documents don't print a “Yes means / No means.” Voters mark FOR or AGAINST: “{r['question']}”",
             "lead": {"text": " ".join(ex["summary"]), "source": "The official summary explanation."},
             "sections": sections,
