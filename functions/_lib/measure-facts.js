@@ -4,6 +4,11 @@
 //     whether an official cost estimate is printed;
 //   - "Yes" and "No" in two inner panels (side by side from 768px);
 //   - "What it changes" (the official summary) in its own panel;
+//   - "Conflicts with other measures", only when the official text says the
+//     measure can void, or be voided by, another measure on the same ballot
+//     (the "conflicts" field, tools/measure_conflicts.py): quoted word for
+//     word, each measure it names linked, and the other measures' own text
+//     that names this one; in Quick mode one line of links;
 //   - "Cost" (the Legislative Analyst's estimate or the state's equivalent);
 //   - one line at the bottom naming each source once, linked.
 // Official neutral text only. Nothing here is written by ThePillory or by AI:
@@ -17,6 +22,7 @@
 // fiscal_summary) and the "sections" format (Colorado, Arizona, Florida,
 // Michigan, North Carolina). Pure.
 import { esc, safeUrl, sourceLink } from "./render.js";
+import { measureHref } from "./elections.js";
 
 export const FACTS_NOTE = "Official text only, word for word or shortened by cutting; nothing here is written by ThePillory or by AI.";
 const MAX_COST_PARAGRAPHS = 2;
@@ -54,13 +60,61 @@ function cut(list, max) {
   return { items: items.slice(0, max), cut: items.length > max };
 }
 
+/** A measure's short name where it's linked: "Prop 40" in California, the label elsewhere ("Amendment 81"). */
+function shortName(election, x) {
+  if (election.election.state === "CA" && x.scope === "statewide") return `Prop ${x.number}`;
+  return x.label || x.title || x.id;
+}
+
+/**
+ * "Conflicts with other measures": this measure's own official text about other measures on the same
+ * ballot, then the other measures' official text that names this one (when this one's doesn't name
+ * them). {html, quick, sources} or null when no official text says so. Nothing written here: the
+ * quotes are word for word, and the only words of ThePillory's are the measures' names, linked.
+ */
+export function measureConflicts(election, m) {
+  const all = election.measures || [];
+  const byId = Object.fromEntries(all.map((x) => [x.id, x]));
+  const link = (id) => (byId[id] ? `<a class="inline-link" href="${esc(measureHref(election.election.id, id))}">${esc(shortName(election, byId[id]))}</a>` : "");
+  const own = (m.conflicts || []).filter((c) => c && c.text);
+  const ownNames = new Set(own.flatMap((c) => c.measures || []));
+  const theirs = all
+    .filter((x) => x.id !== m.id && !ownNames.has(x.id))
+    .flatMap((x) => (x.conflicts || []).filter((c) => c && c.text && (c.measures || []).includes(m.id)).map((c) => ({ ...c, from: x })));
+  if (!own.length && !theirs.length) return null;
+  const sources = [];
+  const block = (c, from = null) => {
+    if (safeUrl(c.source_url)) sources.push({ label: from ? `${shortName(election, from)}: ${c.source}` : c.source, url: c.source_url });
+    const named = (c.measures || []).filter((id) => id !== m.id && byId[id]);
+    return `<div class="stack-xs">
+    ${from ? `<p class="small">${link(from.id)}, ${esc(c.source.replace(/, Official Voter Information Guide$/, ""))}:</p>` : ""}
+    ${c.title ? `<p class="small"><strong>${esc(c.title)}</strong></p>` : ""}
+    <p class="small">${esc(quote(c.text))}</p>
+    ${!from && named.length ? `<p class="small secondary">Names ${named.map(link).join(", ")}.</p>` : ""}
+  </div>`;
+  };
+  const names = [...new Set([...own.flatMap((c) => c.measures || []), ...theirs.map((c) => c.from.id)])].filter((id) => id !== m.id && byId[id]);
+  return {
+    html: [...own.map((c) => block(c)), ...theirs.map((c) => block(c, c.from))].join(""),
+    quick: names.length ? `Can cancel or be cancelled by: ${names.map(link).join(", ")}` : `${esc(quote(own[0].text))}`,
+    sources,
+  };
+}
+
 /**
  * The facts for one measure, in one shape for every format:
  * {type, placed: {text, from} | null, changes: html | null, means: {yes, no} | null,
- *  meansMissing, cost: html | null, costMissing, sources: [{label, url}]}.
+ *  meansMissing, cost: html | null, costMissing, conflicts: {html, quick} | null, sources: [{label, url}]}.
  * Every text here comes from one of `sources`.
  */
 export function measureFacts(election, m) {
+  const f = formatFacts(election, m);
+  const conflicts = measureConflicts(election, m);
+  if (conflicts) for (const x of conflicts.sources) if (!f.sources.some((y) => y.url === x.url)) f.sources.push(x);
+  return { ...f, conflicts };
+}
+
+function formatFacts(election, m) {
   const e = election.election;
   const county = m.county ? (election.counties || {})[m.county] : null;
   const para = (t) => `<p class="small">${esc(t)}</p>`;
@@ -188,6 +242,7 @@ function factsBody(f) {
   return `<ul class="plain-list chips facts-chips">${chips.join("")}</ul>
   ${means}
   ${panel("What it changes", f.changes || '<p class="small secondary">Not printed in the official source ThePillory reads.</p>')}
+  ${f.conflicts ? `<p class="small simple-only facts-conflicts-quick">${f.conflicts.quick}</p>${panel("Conflicts with other measures", f.conflicts.html, "detail-only")}` : ""}
   ${panel("Cost", f.cost || `<p class="small secondary">${esc(f.costMissing)}</p>`)}
   <p class="hint facts-sources">Sources: ${f.sources.length ? f.sources.map((x) => sourceLink(x.url, x.label)).join(" · ") : "the official guide"}. ${esc(FACTS_NOTE)}</p>`;
 }

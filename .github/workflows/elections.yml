@@ -20,18 +20,6 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - name: PROBE (temporary) save the analyses' raw pages
-        run: |
-          mkdir -p probe
-          for n in $(curl -s https://voterguide.sos.ca.gov/propositions/ | grep -o 'propositions/[0-9]\+/' | sort -u | grep -o '[0-9]\+'); do
-            curl -s -A "ThePillory/1.0 (+https://thepillory.co)" "https://voterguide.sos.ca.gov/propositions/$n/analysis.htm" -o probe/analysis-$n.htm
-            curl -s -A "ThePillory/1.0 (+https://thepillory.co)" "https://voterguide.sos.ca.gov/propositions/$n/title-summary.htm" -o probe/ts-$n.htm
-          done
-          ls -la probe
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add probe && git commit -m "probe: analyses" && git push
-          exit 1
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null
       - name: Build from official sources
         env:
