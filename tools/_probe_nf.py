@@ -1,4 +1,4 @@
-import json, urllib.request, urllib.parse, io, zipfile
+import json, urllib.request, urllib.parse, concurrent.futures as cf
 UA = "ThePillory/1.0 (+https://thepillory.co; public records)"
 B = "https://netfile.com/Connect2/api"
 def call(method, path, body=None, q=None, accept="application/json"):
@@ -7,27 +7,26 @@ def call(method, path, body=None, q=None, accept="application/json"):
     h = {"User-Agent": UA, "Accept": accept}
     if data: h["Content-Type"] = "application/json"
     try:
-        r = urllib.request.urlopen(urllib.request.Request(u, data=data, headers=h, method=method), timeout=180)
+        r = urllib.request.urlopen(urllib.request.Request(u, data=data, headers=h, method=method), timeout=120)
         return r.status, r.headers.get("Content-Type"), r.read()
     except Exception as e:
-        return getattr(e, "code", 0), "", (getattr(e, "read", lambda: b"")() or str(e).encode())[:600]
-st, ct, b = call("GET", "/public/filing/info/217834141")
-print("INFO", st, ct, b[:2500])
-st, ct, b = call("GET", "/public/efile/217834141", accept="*/*")
-print("EFILE", st, ct, len(b))
-if b[:2] == b"PK":
-    z = zipfile.ZipFile(io.BytesIO(b)); print([i.filename for i in z.infolist()]); b = z.read(z.infolist()[0])
-print(b[:5000].decode("utf-8", "replace"))
-st, ct, b = call("GET", "/public/image/217834141", accept="*/*")
-print("IMAGE", st, ct, len(b), b[:8])
-for tt in (4, 19, 20):
-    st, ct, b = call("POST", "/public/campaign/search/transaction/query", body={"Agency": 51, "PageSize": 3, "CurrentPageIndex": 0, "DateStart": "2026-01-01", "TransactionType": tt, "SortOrder": 1})
-    print("TYPE", tt, st, b[:2500])
-st, ct, b = call("POST", "/public/campaign/search/transaction/query", body={"Agency": 51, "PageSize": 1000, "CurrentPageIndex": 0, "DateStart": "2026-01-01", "SortOrder": 1})
-d = json.loads(b); print("PAGE1000", st, len(d.get("results", [])), d.get("totalMatchingPages"))
-codes = {}
-for r in d.get("results", []):
-    codes[(r["transactionType"], r["code"])] = codes.get((r["transactionType"], r["code"]), 0) + 1
-print("CODES", sorted(codes.items(), key=lambda x: -x[1])[:40])
-st, ct, b = call("POST", "/public/campaign/search/transaction/query", body={"Agency": 116, "QueryString": "Folendorf", "PageSize": 5, "CurrentPageIndex": 0})
-print("SUPER Folendorf", st, b[:2500])
+        return getattr(e, "code", 0), "", (getattr(e, "read", lambda: b"")() or str(e).encode())[:400]
+for acc in ("application/json", "text/plain", "application/octet-stream", "text/csv"):
+    st, ct, b = call("GET", "/public/efile/217834141", accept=acc)
+    print("EFILE", acc, st, ct, len(b)); print(b[:3000].decode("utf-8", "replace") if b[:1] != b"<" else b[:200])
+for p in ("/public/efile/217834141.json", "/public/efile/217834141?format=json", "/json/reply/PublicEfileRequest?FilingId=217834141"):
+    st, ct, b = call("GET", p)
+    print("EFILE2", p, st, ct, len(b)); print(b[:1500].decode("utf-8", "replace") if b[:1] != b"<" else b[:200])
+ids = set(r["id"] for r in json.loads(call("GET", "/public/campaign/agencies", q={"IncludeTestAgencies": "true"})[2])["agencies"])
+def probe(i):
+    st, ct, b = call("POST", "/public/campaign/search/transaction/query", body={"Agency": i, "PageSize": 1, "CurrentPageIndex": 0})
+    try:
+        d = json.loads(b)
+        r = d.get("results") or []
+        return i, d.get("totalMatchingCount"), (r[0]["filerLocalId"], r[0]["filerName"]) if r else None
+    except Exception:
+        return i, None, None
+with cf.ThreadPoolExecutor(8) as ex:
+    for i, n, r in ex.map(probe, [i for i in range(0, 700) if i not in ids]):
+        if n:
+            print("UNLISTED", i, n, r)
