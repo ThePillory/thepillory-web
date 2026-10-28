@@ -397,7 +397,7 @@ ${docs ? contestSpending(docs, contest.id) : ""}
   <div class="card stack-xs">
     <p class="small">${sourceLink(contest.source_url, contest.source)}</p>
     ${contest.scope === "statewide" ? `<p class="small">${sourceLink(election.election.guide, "Official Voter Information Guide")}</p>` : ""}
-    <p class="small">${sourceLink(election.election.alphabet_source, "Randomized alphabet (ballot order)")}</p>
+    ${county && county.list_order === "filing" ? "" : `<p class="small">${sourceLink(election.election.alphabet_source, "Randomized alphabet (ballot order)")}</p>`}
     ${county ? `<p class="small">${sourceLink(county.elections_page, `${county.name} Elections: candidates and measures`)}</p>` : ""}
   </div>
 </section>
