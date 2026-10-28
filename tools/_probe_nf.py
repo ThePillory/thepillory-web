@@ -1,34 +1,28 @@
 import json, urllib.request, urllib.parse
 UA = "ThePillory/1.0 (+https://thepillory.co; public records)"
 B = "https://netfile.com/Connect2/api"
-def call(method, path, body=None, q=None, accept="application/json"):
+def call(method, path, body=None, q=None):
     u = B + path + ("?" + urllib.parse.urlencode(q) if q else "")
     data = json.dumps(body).encode() if body is not None else None
-    h = {"User-Agent": UA, "Accept": accept}
+    h = {"User-Agent": UA, "Accept": "application/json"}
     if data: h["Content-Type"] = "application/json"
     try:
         r = urllib.request.urlopen(urllib.request.Request(u, data=data, headers=h, method=method), timeout=180)
-        b = r.read(); return r.status, r.headers.get("Content-Type"), b
+        return r.status, r.read()
     except Exception as e:
-        return getattr(e, "code", 0), str(e), (getattr(e, "read", lambda: b"")() or b"")[:400]
-st, ct, b = call("GET", "/public/campaign/agencies")
-print("AGENCIES", st, ct, len(b))
-try:
-    ag = json.loads(b)
-    print(json.dumps(ag)[:600])
-    rows = ag if isinstance(ag, list) else next(v for v in ag.values() if isinstance(v, list))
-    print("COUNT", len(rows))
-    for r in rows:
-        print("AG", json.dumps(r, ensure_ascii=False))
-except Exception as e:
-    print("parse", e, b[:300])
-st, ct, b = call("GET", "/public/campaign/list/filer", q={"AID": "CLVS", "PageSize": 5, "CurrentPageIndex": 0})
-print("FILERS", st, ct, b[:1500])
-st, ct, b = call("GET", "/public/list/filing", q={"AID": "CLVS", "Application": "Campaign", "PageSize": 3, "CurrentPageIndex": 0})
-print("FILINGS", st, ct, b[:1500])
-for path in ["/public/campaign/export/cal201/summary/year", "/public/campaign/export/cal201/transaction/year"]:
-    for body in [{"Aid": "CLVS", "Year": 2026}, {"AID": "CLVS", "Year": 2026, "PageSize": 3, "CurrentPageIndex": 0}]:
-        st, ct, b = call("POST", path, body=body)
-        print("EXPORT", path, body, st, ct, len(b)); print(b[:1500])
-    st, ct, b = call("POST", path + "/csv", body={"Aid": "CLVS", "Year": 2026}, accept="*/*")
-    print("EXPORTCSV", path, st, ct, len(b)); print(b[:1200])
+        return getattr(e, "code", 0), (getattr(e, "read", lambda: b"")() or str(e).encode())[:600]
+st, b = call("GET", "/public/campaign/agencies", q={"IncludeTestAgencies": "true", "IncludeCaSOS": "true"})
+for r in json.loads(b).get("agencies", []):
+    if r["shortcut"] in ("CLVS", "SCC", "CSC") or "Calaveras" in r["name"] or "San Jos" in r["name"] or "Cupertino" in r["name"] or "Campbell" in r["name"] or "Los Altos" in r["name"]:
+        print("AG", r)
+print("TYPES", call("GET", "/public/campaign/list/transaction/types")[1][:3000])
+print("FORMS", call("GET", "/public/list/form/types")[1][:3000])
+st, b = call("POST", "/public/campaign/search/transaction/query", body={"Agency": 51, "PageSize": 3, "CurrentPageIndex": 0, "DateStart": "2026-01-01", "SortOrder": 1})
+print("TXN SCC", st, b[:4000])
+st, b = call("GET", "/public/campaign/list/filer", q={"AID": "SCC", "PageSize": 3, "CurrentPageIndex": 0})
+print("FILERS SCC", st, b[:1200])
+for form in (30, 460, 1, 0):
+    st, b = call("GET", "/public/list/filing", q={"AID": "SCC", "Application": "Campaign", "Form": form, "PageSize": 3, "CurrentPageIndex": 0})
+    print("FILINGS SCC form", form, st, b[:1500])
+st, b = call("GET", "/public/list/filing/rss/SCC/Campaign", q={"Format": "Xml"})
+print("RSS", st, b[:2500])
