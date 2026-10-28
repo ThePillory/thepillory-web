@@ -8,3 +8,16 @@ Disallow: /admin/
 Disallow: /api/
 Disallow: /saved/
 Allow: /
+
+# Commercial SEO crawlers (backlink and keyword tools, not search engines):
+# none of the site. Googlebot, Bingbot and other search engines follow the
+# group above.
+User-agent: SemrushBot
+User-agent: AhrefsBot
+User-agent: MJ12bot
+User-agent: DotBot
+User-agent: BLEXBot
+User-agent: DataForSeoBot
+User-agent: serpstatbot
+User-agent: Barkrowler
+Disallow: /
