@@ -16,7 +16,9 @@ import { positionRow, voteHref } from "./votes.js";
 import { listMeetings, summariesFor, meetingCard, meetingLinePlain, pacificNow, addDays, when } from "./meetings.js";
 import { simpleCard, positionLinesPlain, repListPlain } from "./simple.js";
 import { repsWhere, describe, isCalaveras } from "./districts.js";
-import { happeningNow, happeningSection, lookupForm } from "./hub.js";
+import { happeningNow, happeningSection, lookupForm, notYourCounty } from "./hub.js";
+import { linkRow } from "./render.js";
+import { loadPlace, placeHref } from "./geo.js";
 
 const LEVELS = ["county", "state", "federal"];
 
@@ -123,6 +125,7 @@ export async function calaverasBriefing(env, url, visitor = null) {
   // No Quick card (nothing loaded yet): no Quick version, and no switch.
   const main = `<div class="${simple ? "simple-scope" : "page-scope"}">
 ${briefHead("Calaveras County", "Live · the county's meetings and the votes of the officials who represent it", { hubLink: base === "/briefing/", now: when(now).long || "" })}
+${visitor && isCalaveras(visitor) ? "" : notYourCounty()}
 <aside class="intro-banner" data-intro hidden aria-label="Welcome">
   <p><strong>New here?</strong> ThePillory keeps a public, sourced record of what the officials who represent Calaveras County do: their votes, the bills they vote on mapped to the Constitution, and what's on county meeting agendas.</p>
   <p><a class="inline-link" href="/about/how-it-works/">How it works</a></p>
@@ -151,7 +154,25 @@ ${caughtUp}
 }
 
 /** The briefing for a visitor outside Calaveras County. */
-export async function personalBriefing(env, url, d) {
+/**
+ * /briefing/ with no saved districts: "Find your place", never a county standing in for the visitor's.
+ */
+export function findYourPlace() {
+  const main = `
+${briefHead("Your briefing", "Your representatives, their latest votes and your ballot, once ThePillory knows where you are.", { hubLink: false })}
+${lookupForm(null, { id: "find", heading: "Find your place", next: "/briefing/" })}
+<p class="small secondary">Enter a street address or a ZIP code. Only your district numbers are kept, in your browser; the address or ZIP never is.</p>`;
+  return page("Your briefing", main, { tab: "home", back: ["Home", "/"], personal: true });
+}
+
+/** "Your county" (when the saved districts name one) and "Your ballot", from the visitor's own place. */
+async function yourPlaceLinks(env, request, d) {
+  const place = d.co ? await loadPlace(env, request, d.st.toLowerCase()).catch(() => null) : null;
+  const county = place && (place.counties || []).find((c) => c.fips === d.co);
+  return `<div class="card">${county ? linkRow(placeHref(d.st, county.slug), `Your county: ${county.name}`, "Who represents it, what's on its ballot, and its topics") : ""}${linkRow(`/ballot/${d.st.toLowerCase()}/`, "Your ballot preview", `What's on ${STATE_NAME[d.st] || "your state"}'s ballot, and your exact ballot by address`)}</div>`;
+}
+
+export async function personalBriefing(env, url, d, request = null) {
   const db = env.DB;
   // The visitor's state in Happening now, once its votes are loaded ("state" means California).
   const cov = d.st === "CA" ? null : await loadSection("briefing coverage", () => coverageFor(db, d.st), null);
@@ -199,6 +220,11 @@ ${simple}
 <section class="brief-section" aria-labelledby="h-reps">
   ${sectionHead("h-reps", "Your representatives", "/reps/", "All reps")}
   <div class="card">${repRows}</div>
+</section>
+
+<section class="brief-section" aria-labelledby="h-place">
+  ${sectionHead("h-place", "Your place")}
+  ${request ? await yourPlaceLinks(env, request, d) : ""}
 </section>
 
 <section class="brief-section" aria-labelledby="h-votes">

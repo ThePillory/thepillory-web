@@ -71,10 +71,11 @@ test("what isn't loaded yet is one line, Coming to [State], with Join the list",
   assert.equal((html.match(/coming-to/g) || []).length, 1);
 });
 
-test("California: Calaveras is a county link beside the map; the counties and districts are on the map page", async () => {
+test("California: Calaveras is a Live community link below Your representatives; the counties and districts are on the map page", async () => {
   const { html } = await call(states, "/states/california/");
   assert.match(html, /href="\/states\/california\/map\/"[\s\S]*?Every county and district/);
-  assert.match(html, /href="\/calaveras\/"[\s\S]*?Calaveras County/);
+  assert.match(html, /id="h-live">Live community<\/h2>[\s\S]*?href="\/calaveras\/"[\s\S]*?Calaveras County, CA[\s\S]*?Not necessarily yours\./);
+  assert.ok(html.indexOf('id="live"') > html.indexOf('id="your-reps"'), "below Your representatives and the ZIP box");
   const map = await call(states, "/states/california/map/");
   assert.equal(map.res.status, 200);
   assert.match(map.html, /<h1>California: counties and districts<\/h1>/);

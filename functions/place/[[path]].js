@@ -11,6 +11,7 @@ import { summaryHead, contentsBar, fold, statusChip } from "../_lib/summary.js";
 import { EMPTY_REPORTS } from "../_lib/generated.js";
 import { recentFinalVotes } from "../_lib/data.js";
 import { voteRows } from "../_lib/briefing.js";
+import { notYourCounty } from "../_lib/hub.js";
 import { listMeetings, summariesFor, meetingCard, meetingLinePlain, pacificNow, addDays, when } from "../_lib/meetings.js";
 import { simpleCard, positionLinesPlain, repListPlain } from "../_lib/simple.js";
 import { turnstileReady, turnstileWidget } from "../_lib/turnstile.js";
@@ -217,6 +218,7 @@ async function placePage({ request, env, params }) {
 ${breadcrumb([["United States", "/explore/"], [place.name, statePath(place.st)], [c.name, null]])}
 ${contentsBar([["summary", "Summary"], ballot ? ["elections", "Ballot"] : [null], ["who", "Who represents"], live ? ["meetings", "Meetings"] : [null], ["topics", "Topics"], ["votes", "Votes"], ["funding", "Funding"], nearby ? ["nearby", "Nearby"] : [null]])}
 ${head}
+${notYourCounty()}
 ${simple}
 <div class="simple-keep">${action}</div>
 ${electionLoaded === FAILED ? sectionError("On the ballot") : ballot}

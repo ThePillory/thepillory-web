@@ -111,8 +111,11 @@ const MIN_CHOICE_SHARE = 0.02; // parts of a ZIP smaller than this aren't offere
 export function zipResult(options, counties = {}) {
   if (!options || !options.length) return { found: false, error: "That ZIP code isn't one of the Census Bureau's ZIP code areas. Try your street address." };
   const merged = new Map();
+  // The county is kept when the whole ZIP is in one (so the visitor's own county page and local
+  // ballot can follow), and for Calaveras's briefing; otherwise choices that differ only by county count as one.
+  const oneCounty = new Set(options.map((o) => o[4])).size === 1;
   for (const [st, cd, su, sl, co, share] of options) {
-    const districts = cleanDistricts({ st, cd, su, sl, co: co === CALAVERAS_FIPS ? co : "" });
+    const districts = cleanDistricts({ st, cd, su, sl, co: oneCounty || co === CALAVERAS_FIPS ? co : "" });
     if (!districts) continue;
     const key = JSON.stringify(districts);
     const m = merged.get(key) || { districts, share: 0, county: counties[co] ? counties[co][0] : null };
@@ -126,7 +129,7 @@ export function zipResult(options, counties = {}) {
   if (choices.length === 1) return { found: true, districts: choices[0].districts, county: choices[0].county };
   return {
     found: false,
-    choices: choices.map((c) => ({ districts: c.districts, label: [describe(c.districts), c.districts.co ? "Calaveras County" : null].filter(Boolean).join(" · ") })),
+    choices: choices.map((c) => ({ districts: c.districts, label: [describe(c.districts), c.districts.co === CALAVERAS_FIPS ? "Calaveras County" : null].filter(Boolean).join(" · ") })),
   };
 }
 

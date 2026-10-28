@@ -49,7 +49,7 @@ const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 function usMap(index, waiting, vs) {
   // The state's counties and districts are on its own map page; live counties link straight to their briefing.
   const stateLinks = vs
-    ? `<div class="card hub-map-links">${linkRow(`${statePath(vs.st)}map/`, "Counties and districts", `${vs.name}'s map, every county and district`)}${liveCounties(vs.st).map(([, c]) => linkRow(c.briefing, c.name, "Live: meetings, agendas and local officials")).join("")}</div>`
+    ? `<div class="card hub-map-links">${linkRow(`${statePath(vs.st)}map/`, "Counties and districts", `${vs.name}'s map, every county and district`)}</div>`
     : "";
   if (!index) return '<p class="explore-link"><a class="btn btn--block" href="/explore/">Explore the map</a></p>';
   const { links, status } = usMapLinks(index, waiting);
@@ -79,7 +79,6 @@ function usMap(index, waiting, vs) {
 // district opens its page. The long lists stay on /states/<name>/map/.
 function stateMapTop(vs, lite, waiting) {
   const mapPage = `${statePath(vs.st)}map/`;
-  const live = liveCounties(vs.st).map(([, c]) => linkRow(c.briefing, c.name, "Live: meetings, agendas and local officials")).join("");
   const figure = lite
     ? stateMapFigure({ ...lite, waiting }, { noscript: `The map needs JavaScript. <a class="inline-link" href="${mapPage}">Every county and district in ${esc(vs.name)}</a> is listed on its map page.` })
     : "";
@@ -87,8 +86,22 @@ function stateMapTop(vs, lite, waiting) {
 <section class="hub-map stack-xs simple-keep" id="map" aria-labelledby="h-map">
   <div class="section-head"><h2 id="h-map">${esc(vs.name)}</h2></div>
   ${figure || `<p class="small secondary">No map for ${esc(vs.name)} yet.</p>`}
-  <div class="card hub-map-links">${linkRow(mapPage, "Every county and district", lite ? `${lite.place.counties.length} ${lite.place.counties.length === 1 ? "county" : "counties"}, and every district, as lists` : "As lists")}${live}</div>
+  <div class="card hub-map-links">${linkRow(mapPage, "Every county and district", lite ? `${lite.place.counties.length} ${lite.place.counties.length === 1 ? "county" : "counties"}, and every district, as lists` : "As lists")}</div>
   <p class="small"><a class="inline-link" href="/explore/">← The U.S. map</a></p>
+</section>`;
+}
+
+/**
+ * The state's live communities, below Your representatives and the ZIP box: labeled as one county
+ * ThePillory follows in depth, never as the visitor's own (that's only from their saved districts).
+ */
+function liveCommunities(vs) {
+  const live = vs ? liveCounties(vs.st) : [];
+  if (!live.length) return "";
+  return `
+<section class="stack-xs" id="live" aria-labelledby="h-live">
+  <h2 class="label" id="h-live">Live community</h2>
+  <div class="card">${live.map(([, c]) => linkRow(c.briefing, `${c.name}, ${vs.st}`, `One ${vs.name} county ThePillory follows in depth so far: its meetings, agendas and local officials. Not necessarily yours.`)).join("")}</div>
 </section>`;
 }
 
@@ -256,6 +269,7 @@ ${statePage ? (lite === FAILED ? sectionError(`${vs.name} map`) : stateMapTop(vs
 ${hero ? ballotHero(vs, win) : ""}
 ${notFound ? '<p class="banner banner--error" role="alert">We couldn\'t find districts for that. Check the address, or try your ZIP code.</p>' : ""}
 ${repsHtml}
+${liveCommunities(vs)}
 <aside class="intro-banner" data-intro hidden aria-label="Welcome">
   <p><strong>New here?</strong> ThePillory keeps a public, sourced record of what your officials do: every recorded vote, the bills they vote on mapped to the Constitution, local meeting agendas, and the money around them. Facts and sources, no party labels.</p>
   <p><a class="inline-link" href="/about/how-it-works/">How it works</a> · <a class="inline-link" href="/about/principles/">Principles</a></p>
