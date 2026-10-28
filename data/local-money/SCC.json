@@ -8,7 +8,7 @@
  "generated": "2026-10-28",
  "source": "NetFile public campaign filings, Santa Clara County",
  "source_url": "https://public.netfile.com/pub2/?aid=SCC",
- "transactions": 62870,
+ "transactions": 62891,
  "committees": {
   "SCC-113817": {
    "local_id": "SCC-113817",
@@ -37,13 +37,40 @@
    ],
    "as_of": "2025-01-01"
   },
+  "SCC-114190": {
+   "local_id": "SCC-114190",
+   "fppc_id": "1460612",
+   "name": "Sally Lieber for Santa Clara County Supervisor 2024",
+   "contributions": 83000.0,
+   "nonmonetary": 0.0,
+   "payments": 1374.16,
+   "first": "2025-01-01",
+   "last": "2025-01-27",
+   "individuals": {
+    "total": 83000.0,
+    "count": 3
+   },
+   "organizations": [],
+   "organizations_count": 0,
+   "employers": [],
+   "filings": [
+    {
+     "id": "213115377",
+     "url": "https://netfile.com/Connect2/api/public/image/213115377",
+     "filed": "2025-02-05",
+     "from": "2025-01-01",
+     "through": "2025-01-27"
+    }
+   ],
+   "as_of": "2025-02-05"
+  },
   "CAMPAIGN_SCC-714": {
    "local_id": "CAMPAIGN_SCC-714",
    "fppc_id": "981173",
    "name": "Santa Clara County Employees Management Association (CEMA) Political Action Committee",
    "contributions": 0.0,
    "nonmonetary": 0.0,
-   "payments": 227138.18,
+   "payments": 234238.18,
    "first": "2025-01-01",
    "last": "2026-06-30",
    "individuals": {
@@ -78,51 +105,24 @@
    ],
    "as_of": "2026-07-30"
   },
-  "SCC-114190": {
-   "local_id": "SCC-114190",
-   "fppc_id": "1460612",
-   "name": "Sally Lieber for Santa Clara County Supervisor 2024",
-   "contributions": 83000.0,
-   "nonmonetary": 0.0,
-   "payments": 1374.16,
-   "first": "2025-01-01",
-   "last": "2025-01-27",
-   "individuals": {
-    "total": 83000.0,
-    "count": 3
-   },
-   "organizations": [],
-   "organizations_count": 0,
-   "employers": [],
-   "filings": [
-    {
-     "id": "213115377",
-     "url": "https://netfile.com/Connect2/api/public/image/213115377",
-     "filed": "2025-02-05",
-     "from": "2025-01-01",
-     "through": "2025-01-27"
-    }
-   ],
-   "as_of": "2025-02-05"
-  },
   "SCC-113629": {
    "local_id": "SCC-113629",
    "fppc_id": "1384928",
    "name": "Santa Clara Charter Advocates for Great Public Schools, sponsored by California Charter Schools Association Advocates",
-   "contributions": 22230.0,
-   "nonmonetary": 5426.83,
+   "contributions": 22100.0,
+   "nonmonetary": 5740.67,
    "payments": 20375.9,
    "first": "2025-01-01",
    "last": "2026-10-17",
    "individuals": {
-    "total": 21730.0,
+    "total": 21600.0,
     "count": 45
    },
    "organizations": [
     {
      "name": "California Charter Schools Association Advocates (CCSAA)",
-     "total": 5426.83,
-     "count": 20
+     "total": 5740.67,
+     "count": 21
     },
     {
      "name": "The Schoennauer Company",
@@ -205,6 +205,396 @@
    ],
    "as_of": "2025-02-01"
   },
+  "SCC-114232": {
+   "local_id": "SCC-114232",
+   "fppc_id": "1464753",
+   "name": "Yan Zhao for Santa Clara County Assessor 2026",
+   "contributions": 306862.76,
+   "nonmonetary": 270.0,
+   "payments": 626175.6,
+   "first": "2025-01-02",
+   "last": "2026-03-16",
+   "individuals": {
+    "total": 284962.76,
+    "count": 571
+   },
+   "organizations": [
+    {
+     "name": "Dave Cortese for Senate",
+     "total": 2000.0,
+     "count": 2
+    },
+    {
+     "name": "A Little Idea Education Group LLC",
+     "total": 1000.0,
+     "count": 1
+    },
+    {
+     "name": "Jiangsu Association of CA",
+     "total": 1000.0,
+     "count": 1
+    },
+    {
+     "name": "Angelocity Homecare, Inc",
+     "total": 1000.0,
+     "count": 1
+    },
+    {
+     "name": "Harrens Lab Inc",
+     "total": 1000.0,
+     "count": 1
+    },
+    {
+     "name": "CCN Global Foundation",
+     "total": 1000.0,
+     "count": 1
+    },
+    {
+     "name": "Alphax Re Capital Inc",
+     "total": 1000.0,
+     "count": 1
+    },
+    {
+     "name": "LWL Funding Inc",
+     "total": 1000.0,
+     "count": 1
+    },
+    {
+     "name": "Norcal Shaanxi Association",
+     "total": 1000.0,
+     "count": 1
+    },
+    {
+     "name": "Topper Associates LLC",
+     "total": 1000.0,
+     "count": 1
+    }
+   ],
+   "organizations_count": 28,
+   "employers": [
+    {
+     "employer": "City House Reality Inc",
+     "total": 6000.0,
+     "donors": 3
+    },
+    {
+     "employer": "NexAI Inc",
+     "total": 5000.0,
+     "donors": 3
+    },
+    {
+     "employer": "New Era Life Insurance",
+     "total": 5000.0,
+     "donors": 4
+    },
+    {
+     "employer": "Google",
+     "total": 4100.0,
+     "donors": 4
+    },
+    {
+     "employer": "housewife",
+     "total": 2000.0,
+     "donors": 3
+    },
+    {
+     "employer": "Cisco",
+     "total": 1700.0,
+     "donors": 4
+    },
+    {
+     "employer": "Coldwell Banker Realty",
+     "total": 600.0,
+     "donors": 3
+    },
+    {
+     "employer": "Broadcom",
+     "total": 600.0,
+     "donors": 3
+    }
+   ],
+   "filings": [
+    {
+     "id": "216875352",
+     "url": "https://netfile.com/Connect2/api/public/image/216875352",
+     "filed": "2026-06-10",
+     "from": "2026-01-01",
+     "through": "2026-06-07"
+    },
+    {
+     "id": "215388467",
+     "url": "https://netfile.com/Connect2/api/public/image/215388467",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214952909",
+     "url": "https://netfile.com/Connect2/api/public/image/214952909",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214900554",
+     "url": "https://netfile.com/Connect2/api/public/image/214900554",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214897368",
+     "url": "https://netfile.com/Connect2/api/public/image/214897368",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214890756",
+     "url": "https://netfile.com/Connect2/api/public/image/214890756",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214890509",
+     "url": "https://netfile.com/Connect2/api/public/image/214890509",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214887007",
+     "url": "https://netfile.com/Connect2/api/public/image/214887007",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214878275",
+     "url": "https://netfile.com/Connect2/api/public/image/214878275",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214875314",
+     "url": "https://netfile.com/Connect2/api/public/image/214875314",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214821800",
+     "url": "https://netfile.com/Connect2/api/public/image/214821800",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214789130",
+     "url": "https://netfile.com/Connect2/api/public/image/214789130",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214780792",
+     "url": "https://netfile.com/Connect2/api/public/image/214780792",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214770565",
+     "url": "https://netfile.com/Connect2/api/public/image/214770565",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214754326",
+     "url": "https://netfile.com/Connect2/api/public/image/214754326",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214748497",
+     "url": "https://netfile.com/Connect2/api/public/image/214748497",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214742223",
+     "url": "https://netfile.com/Connect2/api/public/image/214742223",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214734426",
+     "url": "https://netfile.com/Connect2/api/public/image/214734426",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214734164",
+     "url": "https://netfile.com/Connect2/api/public/image/214734164",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214733950",
+     "url": "https://netfile.com/Connect2/api/public/image/214733950",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214727484",
+     "url": "https://netfile.com/Connect2/api/public/image/214727484",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214723761",
+     "url": "https://netfile.com/Connect2/api/public/image/214723761",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214716263",
+     "url": "https://netfile.com/Connect2/api/public/image/214716263",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214710059",
+     "url": "https://netfile.com/Connect2/api/public/image/214710059",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214703404",
+     "url": "https://netfile.com/Connect2/api/public/image/214703404",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214699225",
+     "url": "https://netfile.com/Connect2/api/public/image/214699225",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214698797",
+     "url": "https://netfile.com/Connect2/api/public/image/214698797",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214696019",
+     "url": "https://netfile.com/Connect2/api/public/image/214696019",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214692240",
+     "url": "https://netfile.com/Connect2/api/public/image/214692240",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214685260",
+     "url": "https://netfile.com/Connect2/api/public/image/214685260",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214664401",
+     "url": "https://netfile.com/Connect2/api/public/image/214664401",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214659178",
+     "url": "https://netfile.com/Connect2/api/public/image/214659178",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214524885",
+     "url": "https://netfile.com/Connect2/api/public/image/214524885",
+     "filed": null,
+     "from": null,
+     "through": null
+    }
+   ],
+   "as_of": "2026-06-10"
+  },
+  "CAMPAIGN_SCC-9349": {
+   "local_id": "CAMPAIGN_SCC-9349",
+   "fppc_id": "1314982",
+   "name": "Democratic 21st Century Club",
+   "contributions": 283278.93,
+   "nonmonetary": 0.0,
+   "payments": 281489.23,
+   "first": "2025-01-02",
+   "last": "2026-06-30",
+   "individuals": {
+    "total": 14290.9,
+    "count": 149
+   },
+   "organizations": [
+    {
+     "name": "Excel Trust Deed Investment",
+     "total": 268988.03,
+     "count": 11
+    }
+   ],
+   "organizations_count": 1,
+   "employers": [],
+   "filings": [
+    {
+     "id": "217091744",
+     "url": "https://netfile.com/Connect2/api/public/image/217091744",
+     "filed": "2026-07-29",
+     "from": "2026-01-01",
+     "through": "2026-06-30"
+    },
+    {
+     "id": "215502201",
+     "url": "https://netfile.com/Connect2/api/public/image/215502201",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214565317",
+     "url": "https://netfile.com/Connect2/api/public/image/214565317",
+     "filed": null,
+     "from": null,
+     "through": null
+    }
+   ],
+   "as_of": "2026-07-29"
+  },
   "SCC-114261": {
    "local_id": "SCC-114261",
    "fppc_id": "1468841",
@@ -246,65 +636,18 @@
    ],
    "as_of": "2026-07-31"
   },
-  "CAMPAIGN_SCC-9349": {
-   "local_id": "CAMPAIGN_SCC-9349",
-   "fppc_id": "1314982",
-   "name": "Democratic 21st Century Club",
-   "contributions": 533316.41,
-   "nonmonetary": 0.0,
-   "payments": 281489.23,
-   "first": "2025-01-02",
-   "last": "2026-06-30",
-   "individuals": {
-    "total": 15301.38,
-    "count": 156
-   },
-   "organizations": [
-    {
-     "name": "Excel Trust Deed Investment",
-     "total": 518015.03,
-     "count": 12
-    }
-   ],
-   "organizations_count": 1,
-   "employers": [],
-   "filings": [
-    {
-     "id": "217091744",
-     "url": "https://netfile.com/Connect2/api/public/image/217091744",
-     "filed": "2026-07-29",
-     "from": "2026-01-01",
-     "through": "2026-06-30"
-    },
-    {
-     "id": "215502201",
-     "url": "https://netfile.com/Connect2/api/public/image/215502201",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214565317",
-     "url": "https://netfile.com/Connect2/api/public/image/214565317",
-     "filed": null,
-     "from": null,
-     "through": null
-    }
-   ],
-   "as_of": "2026-07-29"
-  },
   "CAMPAIGN_SCC-746": {
    "local_id": "CAMPAIGN_SCC-746",
    "fppc_id": "744711",
    "name": "South Bay AFL- CIO Labor Council Committee On Political Education Sponsored by South Bay AFL-CIO Labor Council",
-   "contributions": 1385459.4,
-   "nonmonetary": 7426.09,
-   "payments": 1410738.01,
+   "contributions": 1381159.4,
+   "nonmonetary": 9126.09,
+   "payments": 1410080.82,
    "first": "2025-01-02",
    "last": "2026-10-17",
    "individuals": {
-    "total": 72536.07,
-    "count": 415
+    "total": 74736.07,
+    "count": 412
    },
    "organizations": [
     {
@@ -333,11 +676,6 @@
      "count": 5
     },
     {
-     "name": "Service Employees International Union Local No.1021 Candidate PAC",
-     "total": 40000.0,
-     "count": 2
-    },
-    {
      "name": "Santa Clara & San Benito Counties Building & Construction Trades Council PAC",
      "total": 35600.0,
      "count": 6
@@ -356,6 +694,11 @@
      "name": "California Working Families Party",
      "total": 25000.0,
      "count": 1
+    },
+    {
+     "name": "Patrick Ahrens for Assembly 2026",
+     "total": 25000.0,
+     "count": 4
     }
    ],
    "organizations_count": 93,
@@ -590,355 +933,46 @@
    ],
    "as_of": "2026-10-22"
   },
-  "SCC-114232": {
-   "local_id": "SCC-114232",
-   "fppc_id": "1464753",
-   "name": "Yan Zhao for Santa Clara County Assessor 2026",
-   "contributions": 332214.76,
-   "nonmonetary": 270.0,
-   "payments": 585282.96,
+  "SCC-112872": {
+   "local_id": "SCC-112872",
+   "fppc_id": "1352638",
+   "name": "Simitian for County Central Committee 2024",
+   "contributions": 0.0,
+   "nonmonetary": 0.0,
+   "payments": 45101.62,
    "first": "2025-01-02",
-   "last": "2026-03-16",
+   "last": "2026-06-30",
    "individuals": {
-    "total": 309314.76,
-    "count": 617
+    "total": 0.0,
+    "count": 0
    },
-   "organizations": [
-    {
-     "name": "Sunnet Systems Inc",
-     "total": 2000.0,
-     "count": 4
-    },
-    {
-     "name": "A Little Idea Education Group LLC",
-     "total": 1000.0,
-     "count": 1
-    },
-    {
-     "name": "Jiangsu Association of CA",
-     "total": 1000.0,
-     "count": 1
-    },
-    {
-     "name": "Angelocity Homecare, Inc",
-     "total": 1000.0,
-     "count": 1
-    },
-    {
-     "name": "Harrens Lab Inc",
-     "total": 1000.0,
-     "count": 1
-    },
-    {
-     "name": "CCN Global Foundation",
-     "total": 1000.0,
-     "count": 1
-    },
-    {
-     "name": "Alphax Re Capital Inc",
-     "total": 1000.0,
-     "count": 1
-    },
-    {
-     "name": "LWL Funding Inc",
-     "total": 1000.0,
-     "count": 1
-    },
-    {
-     "name": "Norcal Shaanxi Association",
-     "total": 1000.0,
-     "count": 1
-    },
-    {
-     "name": "Topper Associates LLC",
-     "total": 1000.0,
-     "count": 1
-    }
-   ],
-   "organizations_count": 29,
-   "employers": [
-    {
-     "employer": "City House Reality Inc",
-     "total": 6000.0,
-     "donors": 3
-    },
-    {
-     "employer": "NexAI Inc",
-     "total": 5000.0,
-     "donors": 3
-    },
-    {
-     "employer": "New Era Life Insurance",
-     "total": 5000.0,
-     "donors": 4
-    },
-    {
-     "employer": "Google",
-     "total": 4100.0,
-     "donors": 4
-    },
-    {
-     "employer": "Cisco",
-     "total": 3700.0,
-     "donors": 5
-    },
-    {
-     "employer": "housewife",
-     "total": 2000.0,
-     "donors": 3
-    },
-    {
-     "employer": "Coldwell Banker Realty",
-     "total": 600.0,
-     "donors": 3
-    },
-    {
-     "employer": "Broadcom",
-     "total": 600.0,
-     "donors": 3
-    }
-   ],
+   "organizations": [],
+   "organizations_count": 0,
+   "employers": [],
    "filings": [
     {
-     "id": "216875352",
-     "url": "https://netfile.com/Connect2/api/public/image/216875352",
-     "filed": "2026-06-10",
+     "id": "217039899",
+     "url": "https://netfile.com/Connect2/api/public/image/217039899",
+     "filed": "2026-07-21",
      "from": "2026-01-01",
-     "through": "2026-06-07"
+     "through": "2026-06-30"
     },
     {
-     "id": "215388467",
-     "url": "https://netfile.com/Connect2/api/public/image/215388467",
+     "id": "215485067",
+     "url": "https://netfile.com/Connect2/api/public/image/215485067",
      "filed": null,
      "from": null,
      "through": null
     },
     {
-     "id": "214952909",
-     "url": "https://netfile.com/Connect2/api/public/image/214952909",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214900554",
-     "url": "https://netfile.com/Connect2/api/public/image/214900554",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214897368",
-     "url": "https://netfile.com/Connect2/api/public/image/214897368",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214890756",
-     "url": "https://netfile.com/Connect2/api/public/image/214890756",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214890509",
-     "url": "https://netfile.com/Connect2/api/public/image/214890509",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214887007",
-     "url": "https://netfile.com/Connect2/api/public/image/214887007",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214878275",
-     "url": "https://netfile.com/Connect2/api/public/image/214878275",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214878051",
-     "url": "https://netfile.com/Connect2/api/public/image/214878051",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214875314",
-     "url": "https://netfile.com/Connect2/api/public/image/214875314",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214821800",
-     "url": "https://netfile.com/Connect2/api/public/image/214821800",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214789130",
-     "url": "https://netfile.com/Connect2/api/public/image/214789130",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214780792",
-     "url": "https://netfile.com/Connect2/api/public/image/214780792",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214770565",
-     "url": "https://netfile.com/Connect2/api/public/image/214770565",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214754326",
-     "url": "https://netfile.com/Connect2/api/public/image/214754326",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214748497",
-     "url": "https://netfile.com/Connect2/api/public/image/214748497",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214742223",
-     "url": "https://netfile.com/Connect2/api/public/image/214742223",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214734426",
-     "url": "https://netfile.com/Connect2/api/public/image/214734426",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214734164",
-     "url": "https://netfile.com/Connect2/api/public/image/214734164",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214733950",
-     "url": "https://netfile.com/Connect2/api/public/image/214733950",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214727484",
-     "url": "https://netfile.com/Connect2/api/public/image/214727484",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214723761",
-     "url": "https://netfile.com/Connect2/api/public/image/214723761",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214716263",
-     "url": "https://netfile.com/Connect2/api/public/image/214716263",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214710059",
-     "url": "https://netfile.com/Connect2/api/public/image/214710059",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214703404",
-     "url": "https://netfile.com/Connect2/api/public/image/214703404",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214699225",
-     "url": "https://netfile.com/Connect2/api/public/image/214699225",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214698797",
-     "url": "https://netfile.com/Connect2/api/public/image/214698797",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214696019",
-     "url": "https://netfile.com/Connect2/api/public/image/214696019",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214692240",
-     "url": "https://netfile.com/Connect2/api/public/image/214692240",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214685260",
-     "url": "https://netfile.com/Connect2/api/public/image/214685260",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214664401",
-     "url": "https://netfile.com/Connect2/api/public/image/214664401",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214659178",
-     "url": "https://netfile.com/Connect2/api/public/image/214659178",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214524885",
-     "url": "https://netfile.com/Connect2/api/public/image/214524885",
+     "id": "214600210",
+     "url": "https://netfile.com/Connect2/api/public/image/214600210",
      "filed": null,
      "from": null,
      "through": null
     }
    ],
-   "as_of": "2026-06-10"
+   "as_of": "2026-07-21"
   },
   "SCC-113915": {
    "local_id": "SCC-113915",
@@ -946,7 +980,7 @@
    "name": "2020 Supervisor Lee Office Holder Committee",
    "contributions": 18000.0,
    "nonmonetary": 0.0,
-   "payments": 27155.17,
+   "payments": 28055.17,
    "first": "2025-01-02",
    "last": "2026-06-16",
    "individuals": {
@@ -1027,46 +1061,32 @@
    ],
    "as_of": "2026-07-31"
   },
-  "SCC-112872": {
-   "local_id": "SCC-112872",
-   "fppc_id": "1352638",
-   "name": "Simitian for County Central Committee 2024",
-   "contributions": 0.0,
+  "SCC-114311": {
+   "local_id": "SCC-114311",
+   "fppc_id": "1471280",
+   "name": "HG Nguyen for Franklin-McKinley School Board 2024",
+   "contributions": 1138.27,
    "nonmonetary": 0.0,
-   "payments": 40789.24,
-   "first": "2025-01-02",
-   "last": "2026-06-30",
+   "payments": 0.0,
+   "first": "2025-01-03",
+   "last": "2025-01-26",
    "individuals": {
-    "total": 0.0,
-    "count": 0
+    "total": 1138.27,
+    "count": 3
    },
    "organizations": [],
    "organizations_count": 0,
    "employers": [],
    "filings": [
     {
-     "id": "217039899",
-     "url": "https://netfile.com/Connect2/api/public/image/217039899",
-     "filed": "2026-07-21",
-     "from": "2026-01-01",
-     "through": "2026-06-30"
-    },
-    {
-     "id": "215485067",
-     "url": "https://netfile.com/Connect2/api/public/image/215485067",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214600210",
-     "url": "https://netfile.com/Connect2/api/public/image/214600210",
-     "filed": null,
-     "from": null,
-     "through": null
+     "id": "212964088",
+     "url": "https://netfile.com/Connect2/api/public/image/212964088",
+     "filed": "2025-01-27",
+     "from": "2025-01-01",
+     "through": "2025-01-26"
     }
    ],
-   "as_of": "2026-07-21"
+   "as_of": "2025-01-27"
   },
   "SCC-114021": {
    "local_id": "SCC-114021",
@@ -1136,148 +1156,6 @@
    ],
    "as_of": "2026-10-22"
   },
-  "CAMPAIGN_SCC-464": {
-   "local_id": "CAMPAIGN_SCC-464",
-   "fppc_id": "871251",
-   "name": "Deputy Sheriffs Association of Santa Clara County PAC",
-   "contributions": 100000.0,
-   "nonmonetary": 19477.23,
-   "payments": 105142.11,
-   "first": "2025-01-03",
-   "last": "2026-10-17",
-   "individuals": {
-    "total": 0.0,
-    "count": 0
-   },
-   "organizations": [
-    {
-     "name": "Deputy Sheriffs' Association of Santa Clara County",
-     "total": 119477.23,
-     "count": 26
-    }
-   ],
-   "organizations_count": 1,
-   "employers": [],
-   "filings": [
-    {
-     "id": "217699100",
-     "url": "https://netfile.com/Connect2/api/public/image/217699100",
-     "filed": "2026-10-22",
-     "from": "2026-07-01",
-     "through": "2026-10-17"
-    },
-    {
-     "id": "217118133",
-     "url": "https://netfile.com/Connect2/api/public/image/217118133",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "215468542",
-     "url": "https://netfile.com/Connect2/api/public/image/215468542",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214802351",
-     "url": "https://netfile.com/Connect2/api/public/image/214802351",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214590870",
-     "url": "https://netfile.com/Connect2/api/public/image/214590870",
-     "filed": null,
-     "from": null,
-     "through": null
-    }
-   ],
-   "as_of": "2026-10-22"
-  },
-  "CAMPAIGN_SCC-488": {
-   "local_id": "CAMPAIGN_SCC-488",
-   "fppc_id": "743393",
-   "name": "San Jose Firefighters, IAFF Local 230 Political Action Committee",
-   "contributions": 100878.87,
-   "nonmonetary": 3942.49,
-   "payments": 38356.91,
-   "first": "2025-01-03",
-   "last": "2026-10-23",
-   "individuals": {
-    "total": 100878.87,
-    "count": 10159
-   },
-   "organizations": [
-    {
-     "name": "San Jose Firefighters Local 230",
-     "total": 3942.49,
-     "count": 6
-    }
-   ],
-   "organizations_count": 1,
-   "employers": [
-    {
-     "employer": "CITY OF SAN JOSE",
-     "total": 100878.87,
-     "donors": 667
-    }
-   ],
-   "filings": [
-    {
-     "id": "217733592",
-     "url": "https://netfile.com/Connect2/api/public/image/217733592",
-     "filed": "2026-10-23",
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "217135443",
-     "url": "https://netfile.com/Connect2/api/public/image/217135443",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "216830982",
-     "url": "https://netfile.com/Connect2/api/public/image/216830982",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "216681896",
-     "url": "https://netfile.com/Connect2/api/public/image/216681896",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "216242358",
-     "url": "https://netfile.com/Connect2/api/public/image/216242358",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "215516612",
-     "url": "https://netfile.com/Connect2/api/public/image/215516612",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214552837",
-     "url": "https://netfile.com/Connect2/api/public/image/214552837",
-     "filed": null,
-     "from": null,
-     "through": null
-    }
-   ],
-   "as_of": "2026-10-23"
-  },
   "SCC-114394": {
    "local_id": "SCC-114394",
    "fppc_id": "1475800",
@@ -1346,32 +1224,147 @@
    ],
    "as_of": "2026-07-22"
   },
-  "SCC-114311": {
-   "local_id": "SCC-114311",
-   "fppc_id": "1471280",
-   "name": "HG Nguyen for Franklin-McKinley School Board 2024",
-   "contributions": 1138.27,
-   "nonmonetary": 0.0,
-   "payments": 0.0,
+  "CAMPAIGN_SCC-488": {
+   "local_id": "CAMPAIGN_SCC-488",
+   "fppc_id": "743393",
+   "name": "San Jose Firefighters, IAFF Local 230 Political Action Committee",
+   "contributions": 101971.17,
+   "nonmonetary": 3942.49,
+   "payments": 38356.91,
    "first": "2025-01-03",
-   "last": "2025-01-26",
+   "last": "2026-10-23",
    "individuals": {
-    "total": 1138.27,
-    "count": 3
+    "total": 101971.17,
+    "count": 10269
    },
-   "organizations": [],
-   "organizations_count": 0,
+   "organizations": [
+    {
+     "name": "San Jose Firefighters Local 230",
+     "total": 3942.49,
+     "count": 6
+    }
+   ],
+   "organizations_count": 1,
+   "employers": [
+    {
+     "employer": "CITY OF SAN JOSE",
+     "total": 101971.17,
+     "donors": 667
+    }
+   ],
+   "filings": [
+    {
+     "id": "217733592",
+     "url": "https://netfile.com/Connect2/api/public/image/217733592",
+     "filed": "2026-10-23",
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217135443",
+     "url": "https://netfile.com/Connect2/api/public/image/217135443",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "216830982",
+     "url": "https://netfile.com/Connect2/api/public/image/216830982",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "216681896",
+     "url": "https://netfile.com/Connect2/api/public/image/216681896",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "216242358",
+     "url": "https://netfile.com/Connect2/api/public/image/216242358",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "215516612",
+     "url": "https://netfile.com/Connect2/api/public/image/215516612",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214552837",
+     "url": "https://netfile.com/Connect2/api/public/image/214552837",
+     "filed": null,
+     "from": null,
+     "through": null
+    }
+   ],
+   "as_of": "2026-10-23"
+  },
+  "CAMPAIGN_SCC-464": {
+   "local_id": "CAMPAIGN_SCC-464",
+   "fppc_id": "871251",
+   "name": "Deputy Sheriffs Association of Santa Clara County PAC",
+   "contributions": 100000.0,
+   "nonmonetary": 19477.23,
+   "payments": 103142.11,
+   "first": "2025-01-03",
+   "last": "2026-10-17",
+   "individuals": {
+    "total": 0.0,
+    "count": 0
+   },
+   "organizations": [
+    {
+     "name": "Deputy Sheriffs' Association of Santa Clara County",
+     "total": 119477.23,
+     "count": 26
+    }
+   ],
+   "organizations_count": 1,
    "employers": [],
    "filings": [
     {
-     "id": "212964088",
-     "url": "https://netfile.com/Connect2/api/public/image/212964088",
-     "filed": "2025-01-27",
-     "from": "2025-01-01",
-     "through": "2025-01-26"
+     "id": "217699100",
+     "url": "https://netfile.com/Connect2/api/public/image/217699100",
+     "filed": "2026-10-22",
+     "from": "2026-07-01",
+     "through": "2026-10-17"
+    },
+    {
+     "id": "217118133",
+     "url": "https://netfile.com/Connect2/api/public/image/217118133",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "215468542",
+     "url": "https://netfile.com/Connect2/api/public/image/215468542",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214802351",
+     "url": "https://netfile.com/Connect2/api/public/image/214802351",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214590870",
+     "url": "https://netfile.com/Connect2/api/public/image/214590870",
+     "filed": null,
+     "from": null,
+     "through": null
     }
    ],
-   "as_of": "2025-01-27"
+   "as_of": "2026-10-22"
   },
   "SCC-114224": {
    "local_id": "SCC-114224",
@@ -1379,7 +1372,7 @@
    "name": "Speiser for Board of Education 2024",
    "contributions": 0.0,
    "nonmonetary": 0.0,
-   "payments": 1004.0,
+   "payments": 784.0,
    "first": "2025-01-04",
    "last": "2026-06-30",
    "individuals": {
@@ -1418,9 +1411,9 @@
    "local_id": "CAMPAIGN_SCC-5193",
    "fppc_id": "1303083",
    "name": "Otto Lee for 2008",
-   "contributions": 29000.0,
+   "contributions": 32500.0,
    "nonmonetary": 0.0,
-   "payments": 73744.53,
+   "payments": 13432.53,
    "first": "2025-01-05",
    "last": "2026-05-21",
    "individuals": {
@@ -1428,6 +1421,11 @@
     "count": 23
    },
    "organizations": [
+    {
+     "name": "Brilliant Jade, Inc.",
+     "total": 4000.0,
+     "count": 4
+    },
     {
      "name": "ARC Inc",
      "total": 2000.0,
@@ -1445,11 +1443,11 @@
     },
     {
      "name": "Santa Clara & San Benito Counties Building & Construction trades Council PAC",
-     "total": 1000.0,
-     "count": 2
+     "total": 500.0,
+     "count": 1
     }
    ],
-   "organizations_count": 4,
+   "organizations_count": 5,
    "employers": [],
    "filings": [
     {
@@ -1593,6 +1591,39 @@
    ],
    "as_of": "2026-01-01"
   },
+  "SCC-114345": {
+   "local_id": "SCC-114345",
+   "fppc_id": "1472788",
+   "name": "Beija Gonzalez for Oak Grove School Board 2024",
+   "contributions": 200.0,
+   "nonmonetary": 0.0,
+   "payments": 1033.24,
+   "first": "2025-01-06",
+   "last": "2025-02-05",
+   "individuals": {
+    "total": 0.0,
+    "count": 0
+   },
+   "organizations": [
+    {
+     "name": "Bricklayers & Allied Craftworkers Local 3",
+     "total": 200.0,
+     "count": 1
+    }
+   ],
+   "organizations_count": 1,
+   "employers": [],
+   "filings": [
+    {
+     "id": "213714313",
+     "url": "https://netfile.com/Connect2/api/public/image/213714313",
+     "filed": "2025-03-17",
+     "from": "2025-01-01",
+     "through": "2025-03-16"
+    }
+   ],
+   "as_of": "2025-03-17"
+  },
   "SCC-114218": {
    "local_id": "SCC-114218",
    "fppc_id": "1463092",
@@ -1631,14 +1662,14 @@
    "local_id": "SCC-113910",
    "fppc_id": "1435190",
    "name": "Jeff Rosen for District Attorney 2026",
-   "contributions": 464622.7,
+   "contributions": 511814.53,
    "nonmonetary": 2342.49,
-   "payments": 462903.92,
+   "payments": 451980.55,
    "first": "2025-01-06",
    "last": "2026-09-10",
    "individuals": {
-    "total": 419567.49,
-    "count": 906
+    "total": 463809.32,
+    "count": 972
    },
    "organizations": [
     {
@@ -1657,12 +1688,22 @@
      "count": 2
     },
     {
+     "name": "All Seasons Roofing & Waterproofing, Inc.",
+     "total": 2000.0,
+     "count": 2
+    },
+    {
      "name": "BN Transport, Inc.",
      "total": 2000.0,
      "count": 2
     },
     {
      "name": "Smile Brand, LLC",
+     "total": 2000.0,
+     "count": 2
+    },
+    {
+     "name": "Dave Cortese for Senate 2028",
      "total": 2000.0,
      "count": 2
     },
@@ -1680,48 +1721,38 @@
      "name": "Pamar, Inc.",
      "total": 2000.0,
      "count": 2
-    },
-    {
-     "name": "Advancing Democracy and Mobilization PAC",
-     "total": 2000.0,
-     "count": 2
-    },
-    {
-     "name": "Innovation for Good Federal PAC",
-     "total": 1995.0,
-     "count": 2
     }
    ],
-   "organizations_count": 52,
+   "organizations_count": 54,
    "employers": [
     {
      "employer": "Santa Clara County",
-     "total": 23407.5,
-     "donors": 41
+     "total": 30042.5,
+     "donors": 43
     },
     {
      "employer": "Google, LLC",
-     "total": 7727.5,
+     "total": 8727.5,
      "donors": 8
     },
     {
      "employer": "Santa Clara County District Attorney's Office",
-     "total": 3131.0,
-     "donors": 7
-    },
-    {
-     "employer": "Kaiser Permanente",
-     "total": 2920.53,
-     "donors": 4
+     "total": 4646.0,
+     "donors": 8
     },
     {
      "employer": "Cotchett, Pitre & McCarthy, LLP",
-     "total": 2650.0,
-     "donors": 6
+     "total": 3950.0,
+     "donors": 10
+    },
+    {
+     "employer": "Kaiser Permanente",
+     "total": 3178.03,
+     "donors": 4
     },
     {
      "employer": "Stanford University",
-     "total": 1556.0,
+     "total": 1656.0,
      "donors": 5
     },
     {
@@ -1811,13 +1842,6 @@
     {
      "id": "216824543",
      "url": "https://netfile.com/Connect2/api/public/image/216824543",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "216821058",
-     "url": "https://netfile.com/Connect2/api/public/image/216821058",
      "filed": null,
      "from": null,
      "through": null
@@ -2063,39 +2087,6 @@
    ],
    "as_of": "2026-09-10"
   },
-  "SCC-114345": {
-   "local_id": "SCC-114345",
-   "fppc_id": "1472788",
-   "name": "Beija Gonzalez for Oak Grove School Board 2024",
-   "contributions": 200.0,
-   "nonmonetary": 0.0,
-   "payments": 1033.24,
-   "first": "2025-01-06",
-   "last": "2025-02-05",
-   "individuals": {
-    "total": 0.0,
-    "count": 0
-   },
-   "organizations": [
-    {
-     "name": "Bricklayers & Allied Craftworkers Local 3",
-     "total": 200.0,
-     "count": 1
-    }
-   ],
-   "organizations_count": 1,
-   "employers": [],
-   "filings": [
-    {
-     "id": "213714313",
-     "url": "https://netfile.com/Connect2/api/public/image/213714313",
-     "filed": "2025-03-17",
-     "from": "2025-01-01",
-     "through": "2025-03-16"
-    }
-   ],
-   "as_of": "2025-03-17"
-  },
   "SCC-114225": {
    "local_id": "SCC-114225",
    "fppc_id": "1464406",
@@ -2127,7 +2118,7 @@
    "local_id": "CAMPAIGN_SCC-10022",
    "fppc_id": "1318985",
    "name": "IBEW 332 Issues Account (Sponsored by International Brotherhood of Electrical Workers Local 332)",
-   "contributions": 152941.5,
+   "contributions": 156188.58,
    "nonmonetary": 0.0,
    "payments": 74409.0,
    "first": "2025-01-07",
@@ -2139,8 +2130,8 @@
    "organizations": [
     {
      "name": "IBEW Local 332",
-     "total": 152941.5,
-     "count": 21
+     "total": 156188.58,
+     "count": 22
     }
    ],
    "organizations_count": 1,
@@ -2204,7 +2195,7 @@
    "name": "South County Democratic Club",
    "contributions": 5584.07,
    "nonmonetary": 0.0,
-   "payments": 12137.41,
+   "payments": 12071.93,
    "first": "2025-01-07",
    "last": "2026-10-17",
    "individuals": {
@@ -2263,17 +2254,23 @@
    "local_id": "SCC-114239",
    "fppc_id": "1467714",
    "name": "Tomara Hall for Santa Clara County Board of Education 2024",
-   "contributions": 6840.98,
+   "contributions": 18616.99,
    "nonmonetary": 0.0,
-   "payments": 3826.05,
+   "payments": 15527.06,
    "first": "2025-01-07",
    "last": "2025-05-15",
    "individuals": {
     "total": 6840.98,
     "count": 5
    },
-   "organizations": [],
-   "organizations_count": 0,
+   "organizations": [
+    {
+     "name": "UDEA PAC (Union District Educators Association)",
+     "total": 11776.01,
+     "count": 1
+    }
+   ],
+   "organizations_count": 1,
    "employers": [],
    "filings": [
     {
@@ -2282,6 +2279,13 @@
      "filed": "2025-05-19",
      "from": "2025-01-01",
      "through": "2025-05-15"
+    },
+    {
+     "id": "214232566",
+     "url": "https://netfile.com/Connect2/api/public/image/214232566",
+     "filed": null,
+     "from": null,
+     "through": null
     }
    ],
    "as_of": "2025-05-19"
@@ -2333,7 +2337,7 @@
    "name": "Andres Quintero for Alum Rock School Board 2026",
    "contributions": 3958.6,
    "nonmonetary": 0.0,
-   "payments": 3046.81,
+   "payments": 3646.81,
    "first": "2025-01-08",
    "last": "2026-10-17",
    "individuals": {
@@ -2414,14 +2418,14 @@
    "local_id": "CAMPAIGN_SCC-742",
    "fppc_id": "951348",
    "name": "Santa Clara County League of Conservation Voters",
-   "contributions": 24300.0,
+   "contributions": 23550.0,
    "nonmonetary": 3053.14,
-   "payments": 18029.64,
+   "payments": 18629.64,
    "first": "2025-01-08",
    "last": "2026-10-17",
    "individuals": {
-    "total": 26603.14,
-    "count": 72
+    "total": 25853.14,
+    "count": 69
    },
    "organizations": [
     {
@@ -2482,6 +2486,81 @@
    ],
    "as_of": "2026-10-19"
   },
+  "SCC-113493": {
+   "local_id": "SCC-113493",
+   "fppc_id": "1287998",
+   "name": "Star One Credit Union",
+   "contributions": 0.0,
+   "nonmonetary": 0.0,
+   "payments": 0.0,
+   "first": "2025-01-09",
+   "last": "2026-01-07",
+   "individuals": {
+    "total": 0.0,
+    "count": 0
+   },
+   "organizations": [],
+   "organizations_count": 0,
+   "employers": [],
+   "filings": [
+    {
+     "id": "216966930",
+     "url": "https://netfile.com/Connect2/api/public/image/216966930",
+     "filed": "2026-07-09",
+     "from": "2026-01-01",
+     "through": "2026-06-30"
+    },
+    {
+     "id": "214537194",
+     "url": "https://netfile.com/Connect2/api/public/image/214537194",
+     "filed": null,
+     "from": null,
+     "through": null
+    }
+   ],
+   "as_of": "2026-07-09"
+  },
+  "SCC-112825": {
+   "local_id": "SCC-112825",
+   "fppc_id": "1350006",
+   "name": "Citizens for East Side Schools",
+   "contributions": 0.0,
+   "nonmonetary": 0.0,
+   "payments": 7780.52,
+   "first": "2025-01-09",
+   "last": "2026-06-04",
+   "individuals": {
+    "total": 0.0,
+    "count": 0
+   },
+   "organizations": [],
+   "organizations_count": 0,
+   "employers": [],
+   "filings": [
+    {
+     "id": "217126082",
+     "url": "https://netfile.com/Connect2/api/public/image/217126082",
+     "filed": "2026-07-31",
+     "from": "2026-01-01",
+     "through": "2026-06-30"
+    },
+    {
+     "id": "215514109",
+     "url": "https://netfile.com/Connect2/api/public/image/215514109",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214594085",
+     "url": "https://netfile.com/Connect2/api/public/image/214594085",
+     "filed": null,
+     "from": null,
+     "through": null
+    }
+   ],
+   "as_of": "2026-07-31"
+  },
   "SCC-114287": {
    "local_id": "SCC-114287",
    "fppc_id": "1470288",
@@ -2523,81 +2602,6 @@
    ],
    "as_of": "2026-07-29"
   },
-  "SCC-112825": {
-   "local_id": "SCC-112825",
-   "fppc_id": "1350006",
-   "name": "Citizens for East Side Schools",
-   "contributions": 0.0,
-   "nonmonetary": 0.0,
-   "payments": 8007.47,
-   "first": "2025-01-09",
-   "last": "2026-06-04",
-   "individuals": {
-    "total": 0.0,
-    "count": 0
-   },
-   "organizations": [],
-   "organizations_count": 0,
-   "employers": [],
-   "filings": [
-    {
-     "id": "217126082",
-     "url": "https://netfile.com/Connect2/api/public/image/217126082",
-     "filed": "2026-07-31",
-     "from": "2026-01-01",
-     "through": "2026-06-30"
-    },
-    {
-     "id": "215514109",
-     "url": "https://netfile.com/Connect2/api/public/image/215514109",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214594085",
-     "url": "https://netfile.com/Connect2/api/public/image/214594085",
-     "filed": null,
-     "from": null,
-     "through": null
-    }
-   ],
-   "as_of": "2026-07-31"
-  },
-  "SCC-113493": {
-   "local_id": "SCC-113493",
-   "fppc_id": "1287998",
-   "name": "Star One Credit Union",
-   "contributions": 0.0,
-   "nonmonetary": 0.0,
-   "payments": 0.0,
-   "first": "2025-01-09",
-   "last": "2026-01-07",
-   "individuals": {
-    "total": 0.0,
-    "count": 0
-   },
-   "organizations": [],
-   "organizations_count": 0,
-   "employers": [],
-   "filings": [
-    {
-     "id": "216966930",
-     "url": "https://netfile.com/Connect2/api/public/image/216966930",
-     "filed": "2026-07-09",
-     "from": "2026-01-01",
-     "through": "2026-06-30"
-    },
-    {
-     "id": "214537194",
-     "url": "https://netfile.com/Connect2/api/public/image/214537194",
-     "filed": null,
-     "from": null,
-     "through": null
-    }
-   ],
-   "as_of": "2026-07-09"
-  },
   "SCC-114222": {
    "local_id": "SCC-114222",
    "fppc_id": "1464389",
@@ -2629,9 +2633,9 @@
    "local_id": "SCC-113300",
    "fppc_id": "1390715",
    "name": "Silicon Valley MEPS PAC, Sponsored by Mechanical, Electrical and Plumbing Organizations",
-   "contributions": 84000.0,
+   "contributions": 86000.0,
    "nonmonetary": 0.0,
-   "payments": 28579.34,
+   "payments": 29239.34,
    "first": "2025-01-10",
    "last": "2026-06-26",
    "individuals": {
@@ -2641,8 +2645,8 @@
    "organizations": [
     {
      "name": "Plumbers, Steamfitters & Refrigeration Fitters Local 393 Political Action Fund",
-     "total": 30000.0,
-     "count": 15
+     "total": 28000.0,
+     "count": 14
     },
     {
      "name": "IBEW 332 Education Fund (sponsored by International Brotherhood of Electrical Workers Local 332)",
@@ -2651,8 +2655,8 @@
     },
     {
      "name": "Sheet Metal Workers Local Union 104 Political Committee",
-     "total": 10000.0,
-     "count": 5
+     "total": 14000.0,
+     "count": 7
     },
     {
      "name": "Sprinkler Fitters & Apprentices Local 483 Legislative Political Action Committee",
@@ -2746,7 +2750,7 @@
    "name": "Silicon Valley MEPS Issues PAC, Sponsored by Mechanical, Electrical, Plumbing and Sprinkler Fitting Organizations",
    "contributions": 0.0,
    "nonmonetary": 0.0,
-   "payments": 13511.57,
+   "payments": 13237.57,
    "first": "2025-01-10",
    "last": "2026-06-26",
    "individuals": {
@@ -2785,37 +2789,42 @@
    "local_id": "SCC-114151",
    "fppc_id": "1368115",
    "name": "West Valley-Mission Federation of Teachers, AFT Local 6554 PAC",
-   "contributions": 22114.64,
+   "contributions": 25329.64,
    "nonmonetary": 0.0,
-   "payments": 18806.03,
+   "payments": 17258.93,
    "first": "2025-01-13",
    "last": "2026-10-22",
    "individuals": {
-    "total": 22114.64,
-    "count": 219
+    "total": 25329.64,
+    "count": 254
    },
    "organizations": [],
    "organizations_count": 0,
    "employers": [
     {
      "employer": "West Valley Mission CCD",
-     "total": 13294.64,
+     "total": 14724.64,
      "donors": 54
     },
     {
      "employer": "WVMCCD",
-     "total": 5120.0,
-     "donors": 47
+     "total": 5610.0,
+     "donors": 48
     },
     {
      "employer": "West Valley Mission Community College District",
-     "total": 2795.0,
-     "donors": 15
+     "total": 3545.0,
+     "donors": 16
     },
     {
      "employer": "West Valley-Mission CCD",
-     "total": 675.0,
+     "total": 760.0,
      "donors": 4
+    },
+    {
+     "employer": "Mission College",
+     "total": 585.0,
+     "donors": 5
     }
    ],
    "filings": [
@@ -2976,18 +2985,165 @@
    ],
    "as_of": "2026-10-22"
   },
+  "SCC-114379": {
+   "local_id": "SCC-114379",
+   "fppc_id": "1474795",
+   "name": "Yes on A for San Jose Unified Schools",
+   "contributions": 47466.16,
+   "nonmonetary": 0.0,
+   "payments": 51640.2,
+   "first": "2025-01-14",
+   "last": "2025-06-15",
+   "individuals": {
+    "total": 15466.16,
+    "count": 13
+   },
+   "organizations": [
+    {
+     "name": "Stifel Nicolaus & Co., Inc.",
+     "total": 12500.0,
+     "count": 1
+    },
+    {
+     "name": "Sodexo, Inc. & Affiliates",
+     "total": 10000.0,
+     "count": 2
+    },
+    {
+     "name": "Orbach, Huff, & Henderson, LLP",
+     "total": 3000.0,
+     "count": 1
+    },
+    {
+     "name": "San Jose Teachers Association (SJTA) PAC",
+     "total": 3000.0,
+     "count": 1
+    },
+    {
+     "name": "EdTheory, LLC",
+     "total": 2000.0,
+     "count": 1
+    },
+    {
+     "name": "San Jose Administrators Association",
+     "total": 1000.0,
+     "count": 1
+    },
+    {
+     "name": "The Schoennauer Company",
+     "total": 500.0,
+     "count": 1
+    }
+   ],
+   "organizations_count": 7,
+   "employers": [],
+   "filings": [
+    {
+     "id": "214503689",
+     "url": "https://netfile.com/Connect2/api/public/image/214503689",
+     "filed": "2025-07-11",
+     "from": "2025-04-20",
+     "through": "2025-06-30"
+    },
+    {
+     "id": "214209618",
+     "url": "https://netfile.com/Connect2/api/public/image/214209618",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214190504",
+     "url": "https://netfile.com/Connect2/api/public/image/214190504",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214180813",
+     "url": "https://netfile.com/Connect2/api/public/image/214180813",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214144245",
+     "url": "https://netfile.com/Connect2/api/public/image/214144245",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214140000",
+     "url": "https://netfile.com/Connect2/api/public/image/214140000",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214135111",
+     "url": "https://netfile.com/Connect2/api/public/image/214135111",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "213962103",
+     "url": "https://netfile.com/Connect2/api/public/image/213962103",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "213923583",
+     "url": "https://netfile.com/Connect2/api/public/image/213923583",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "213805857",
+     "url": "https://netfile.com/Connect2/api/public/image/213805857",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "213714219",
+     "url": "https://netfile.com/Connect2/api/public/image/213714219",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "213634604",
+     "url": "https://netfile.com/Connect2/api/public/image/213634604",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "213512273",
+     "url": "https://netfile.com/Connect2/api/public/image/213512273",
+     "filed": null,
+     "from": null,
+     "through": null
+    }
+   ],
+   "as_of": "2025-07-11"
+  },
   "CAMPAIGN_SCC-495": {
    "local_id": "CAMPAIGN_SCC-495",
    "fppc_id": "941786",
    "name": "Santa Clara County Government Attorneys Assoc  PAC",
-   "contributions": 559702.64,
+   "contributions": 559943.41,
    "nonmonetary": 20183.04,
    "payments": 581621.42,
    "first": "2025-01-14",
    "last": "2026-06-15",
    "individuals": {
-    "total": 59702.64,
-    "count": 2778
+    "total": 59943.41,
+    "count": 2781
    },
    "organizations": [
     {
@@ -3000,7 +3156,7 @@
    "employers": [
     {
      "employer": "Santa Clara County",
-     "total": 59247.21,
+     "total": 59444.09,
      "donors": 410
     }
    ],
@@ -3063,141 +3219,6 @@
     }
    ],
    "as_of": "2026-07-27"
-  },
-  "SCC-114379": {
-   "local_id": "SCC-114379",
-   "fppc_id": "1474795",
-   "name": "Yes on A for San Jose Unified Schools",
-   "contributions": 40466.16,
-   "nonmonetary": 0.0,
-   "payments": 53434.48,
-   "first": "2025-01-14",
-   "last": "2025-06-15",
-   "individuals": {
-    "total": 18466.16,
-    "count": 14
-   },
-   "organizations": [
-    {
-     "name": "Stifel Nicolaus & Co., Inc.",
-     "total": 12500.0,
-     "count": 1
-    },
-    {
-     "name": "Orbach, Huff, & Henderson, LLP",
-     "total": 3000.0,
-     "count": 1
-    },
-    {
-     "name": "San Jose Teachers Association (SJTA) PAC",
-     "total": 3000.0,
-     "count": 1
-    },
-    {
-     "name": "EdTheory, LLC",
-     "total": 2000.0,
-     "count": 1
-    },
-    {
-     "name": "San Jose Administrators Association",
-     "total": 1000.0,
-     "count": 1
-    },
-    {
-     "name": "The Schoennauer Company",
-     "total": 500.0,
-     "count": 1
-    }
-   ],
-   "organizations_count": 6,
-   "employers": [],
-   "filings": [
-    {
-     "id": "214503689",
-     "url": "https://netfile.com/Connect2/api/public/image/214503689",
-     "filed": "2025-07-11",
-     "from": "2025-04-20",
-     "through": "2025-06-30"
-    },
-    {
-     "id": "214209618",
-     "url": "https://netfile.com/Connect2/api/public/image/214209618",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214190504",
-     "url": "https://netfile.com/Connect2/api/public/image/214190504",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214180813",
-     "url": "https://netfile.com/Connect2/api/public/image/214180813",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214144245",
-     "url": "https://netfile.com/Connect2/api/public/image/214144245",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214140000",
-     "url": "https://netfile.com/Connect2/api/public/image/214140000",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214135111",
-     "url": "https://netfile.com/Connect2/api/public/image/214135111",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "213923583",
-     "url": "https://netfile.com/Connect2/api/public/image/213923583",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "213805857",
-     "url": "https://netfile.com/Connect2/api/public/image/213805857",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "213714219",
-     "url": "https://netfile.com/Connect2/api/public/image/213714219",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "213634604",
-     "url": "https://netfile.com/Connect2/api/public/image/213634604",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "213512273",
-     "url": "https://netfile.com/Connect2/api/public/image/213512273",
-     "filed": null,
-     "from": null,
-     "through": null
-    }
-   ],
-   "as_of": "2025-07-11"
   },
   "SCC-114301": {
    "local_id": "SCC-114301",
@@ -3287,13 +3308,149 @@
    ],
    "as_of": "2026-07-20"
   },
+  "SCC-114292": {
+   "local_id": "SCC-114292",
+   "fppc_id": "1473495",
+   "name": "Lutes for Santa Clara County Board of Trustees, District 3, 2024",
+   "contributions": 0.0,
+   "nonmonetary": 0.0,
+   "payments": 5865.02,
+   "first": "2025-01-15",
+   "last": "2025-06-30",
+   "individuals": {
+    "total": 0.0,
+    "count": 0
+   },
+   "organizations": [],
+   "organizations_count": 0,
+   "employers": [],
+   "filings": [
+    {
+     "id": "215395745",
+     "url": "https://netfile.com/Connect2/api/public/image/215395745",
+     "filed": "2026-01-22",
+     "from": "2025-01-01",
+     "through": "2025-06-30"
+    }
+   ],
+   "as_of": "2026-01-22"
+  },
+  "SCC-114175": {
+   "local_id": "SCC-114175",
+   "fppc_id": "1456808",
+   "name": "Otto Lee for Supervisor 2024",
+   "contributions": 4000.0,
+   "nonmonetary": 0.0,
+   "payments": 25496.84,
+   "first": "2025-01-15",
+   "last": "2026-05-26",
+   "individuals": {
+    "total": 4000.0,
+    "count": 4
+   },
+   "organizations": [],
+   "organizations_count": 0,
+   "employers": [],
+   "filings": [
+    {
+     "id": "217102737",
+     "url": "https://netfile.com/Connect2/api/public/image/217102737",
+     "filed": "2026-07-30",
+     "from": "2026-01-01",
+     "through": "2026-06-30"
+    },
+    {
+     "id": "215529953",
+     "url": "https://netfile.com/Connect2/api/public/image/215529953",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "215529939",
+     "url": "https://netfile.com/Connect2/api/public/image/215529939",
+     "filed": null,
+     "from": null,
+     "through": null
+    }
+   ],
+   "as_of": "2026-07-30"
+  },
+  "SCC-113919": {
+   "local_id": "SCC-113919",
+   "fppc_id": "1436429",
+   "name": "Claudia Rossi for Supervisor 2022",
+   "contributions": 4033.39,
+   "nonmonetary": 0.0,
+   "payments": 1300.0,
+   "first": "2025-01-15",
+   "last": "2026-02-19",
+   "individuals": {
+    "total": 4033.39,
+    "count": 13
+   },
+   "organizations": [],
+   "organizations_count": 0,
+   "employers": [],
+   "filings": [
+    {
+     "id": "215873043",
+     "url": "https://netfile.com/Connect2/api/public/image/215873043",
+     "filed": "2026-03-01",
+     "from": "2026-01-01",
+     "through": "2026-02-19"
+    },
+    {
+     "id": "215873029",
+     "url": "https://netfile.com/Connect2/api/public/image/215873029",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "215873016",
+     "url": "https://netfile.com/Connect2/api/public/image/215873016",
+     "filed": null,
+     "from": null,
+     "through": null
+    }
+   ],
+   "as_of": "2026-03-01"
+  },
+  "SCC-114349": {
+   "local_id": "SCC-114349",
+   "fppc_id": "1474688",
+   "name": "Sharma For CUSD School Board 2024",
+   "contributions": 0.0,
+   "nonmonetary": 0.0,
+   "payments": 200.0,
+   "first": "2025-01-15",
+   "last": "2025-01-30",
+   "individuals": {
+    "total": 0.0,
+    "count": 0
+   },
+   "organizations": [],
+   "organizations_count": 0,
+   "employers": [],
+   "filings": [
+    {
+     "id": "214682970",
+     "url": "https://netfile.com/Connect2/api/public/image/214682970",
+     "filed": "2025-08-18",
+     "from": "2024-10-20",
+     "through": "2025-01-30"
+    }
+   ],
+   "as_of": "2025-08-18"
+  },
   "CAMPAIGN_SCC-465": {
    "local_id": "CAMPAIGN_SCC-465",
    "fppc_id": "1249672",
    "name": "East Side Teachers Association Political Action Committee",
    "contributions": 209738.0,
    "nonmonetary": 0.0,
-   "payments": 235776.9,
+   "payments": 235416.1,
    "first": "2025-01-15",
    "last": "2026-10-26",
    "individuals": {
@@ -3406,14 +3563,14 @@
    "local_id": "SCC-114182",
    "fppc_id": "1459982",
    "name": "Margaret Abe-Koga for Santa Clara County Supervisor 2024",
-   "contributions": 58200.0,
+   "contributions": 56200.0,
    "nonmonetary": 0.0,
-   "payments": 25168.49,
+   "payments": 25150.99,
    "first": "2025-01-15",
    "last": "2026-06-23",
    "individuals": {
-    "total": 51700.0,
-    "count": 98
+    "total": 49700.0,
+    "count": 94
    },
    "organizations": [
     {
@@ -3485,161 +3642,58 @@
    ],
    "as_of": "2026-07-18"
   },
-  "SCC-114349": {
-   "local_id": "SCC-114349",
-   "fppc_id": "1474688",
-   "name": "Sharma For CUSD School Board 2024",
+  "SCC-114378": {
+   "local_id": "SCC-114378",
+   "fppc_id": "1474601",
+   "name": "United Today for a Better Tomorrow supporting Duong and Abe-Koga for Supervisor 2024, sponsored by law enforcement, nurse, firefighters, and labor organizations",
    "contributions": 0.0,
-   "nonmonetary": 0.0,
-   "payments": 200.0,
-   "first": "2025-01-15",
-   "last": "2025-01-30",
-   "individuals": {
-    "total": 0.0,
-    "count": 0
-   },
-   "organizations": [],
-   "organizations_count": 0,
-   "employers": [],
-   "filings": [
-    {
-     "id": "214682970",
-     "url": "https://netfile.com/Connect2/api/public/image/214682970",
-     "filed": "2025-08-18",
-     "from": "2024-10-20",
-     "through": "2025-01-30"
-    }
-   ],
-   "as_of": "2025-08-18"
-  },
-  "SCC-114292": {
-   "local_id": "SCC-114292",
-   "fppc_id": "1473495",
-   "name": "Lutes for Santa Clara County Board of Trustees, District 3, 2024",
-   "contributions": 0.0,
-   "nonmonetary": 0.0,
-   "payments": 5093.89,
-   "first": "2025-01-15",
+   "nonmonetary": 4178.69,
+   "payments": 0.0,
+   "first": "2025-01-17",
    "last": "2025-06-30",
    "individuals": {
     "total": 0.0,
     "count": 0
    },
-   "organizations": [],
-   "organizations_count": 0,
+   "organizations": [
+    {
+     "name": "Santa Clara County Correctional Peace Officers' Association PAC",
+     "total": 4178.69,
+     "count": 4
+    }
+   ],
+   "organizations_count": 1,
    "employers": [],
    "filings": [
     {
-     "id": "215395745",
-     "url": "https://netfile.com/Connect2/api/public/image/215395745",
-     "filed": "2026-01-22",
+     "id": "214603458",
+     "url": "https://netfile.com/Connect2/api/public/image/214603458",
+     "filed": "2025-07-31",
      "from": "2025-01-01",
      "through": "2025-06-30"
     }
    ],
-   "as_of": "2026-01-22"
-  },
-  "SCC-113919": {
-   "local_id": "SCC-113919",
-   "fppc_id": "1436429",
-   "name": "Claudia Rossi for Supervisor 2022",
-   "contributions": 4033.39,
-   "nonmonetary": 0.0,
-   "payments": 1300.0,
-   "first": "2025-01-15",
-   "last": "2026-02-19",
-   "individuals": {
-    "total": 4033.39,
-    "count": 13
-   },
-   "organizations": [],
-   "organizations_count": 0,
-   "employers": [],
-   "filings": [
-    {
-     "id": "215873043",
-     "url": "https://netfile.com/Connect2/api/public/image/215873043",
-     "filed": "2026-03-01",
-     "from": "2026-01-01",
-     "through": "2026-02-19"
-    },
-    {
-     "id": "215873029",
-     "url": "https://netfile.com/Connect2/api/public/image/215873029",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "215873016",
-     "url": "https://netfile.com/Connect2/api/public/image/215873016",
-     "filed": null,
-     "from": null,
-     "through": null
-    }
-   ],
-   "as_of": "2026-03-01"
-  },
-  "SCC-114175": {
-   "local_id": "SCC-114175",
-   "fppc_id": "1456808",
-   "name": "Otto Lee for Supervisor 2024",
-   "contributions": 0.0,
-   "nonmonetary": 0.0,
-   "payments": 27746.84,
-   "first": "2025-01-15",
-   "last": "2026-06-29",
-   "individuals": {
-    "total": 0.0,
-    "count": 0
-   },
-   "organizations": [],
-   "organizations_count": 0,
-   "employers": [],
-   "filings": [
-    {
-     "id": "217102737",
-     "url": "https://netfile.com/Connect2/api/public/image/217102737",
-     "filed": "2026-07-30",
-     "from": "2026-01-01",
-     "through": "2026-06-30"
-    },
-    {
-     "id": "215529953",
-     "url": "https://netfile.com/Connect2/api/public/image/215529953",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "215529939",
-     "url": "https://netfile.com/Connect2/api/public/image/215529939",
-     "filed": null,
-     "from": null,
-     "through": null
-    }
-   ],
-   "as_of": "2026-07-30"
+   "as_of": "2025-07-31"
   },
   "CAMPAIGN_SCC-910": {
    "local_id": "CAMPAIGN_SCC-910",
    "fppc_id": "970770",
    "name": "Santa Clara County Correctional Peace Officers' Association PAC",
-   "contributions": 217392.0,
+   "contributions": 216240.0,
    "nonmonetary": 0.0,
-   "payments": 66731.08,
+   "payments": 67731.08,
    "first": "2025-01-17",
    "last": "2026-10-13",
    "individuals": {
-    "total": 217392.0,
-    "count": 18116
+    "total": 216240.0,
+    "count": 18020
    },
    "organizations": [],
    "organizations_count": 0,
    "employers": [
     {
      "employer": "Santa Clara County",
-     "total": 217392.0,
+     "total": 216240.0,
      "donors": 737
     }
    ],
@@ -3696,39 +3750,6 @@
    ],
    "as_of": "2026-10-21"
   },
-  "SCC-114378": {
-   "local_id": "SCC-114378",
-   "fppc_id": "1474601",
-   "name": "United Today for a Better Tomorrow supporting Duong and Abe-Koga for Supervisor 2024, sponsored by law enforcement, nurse, firefighters, and labor organizations",
-   "contributions": 0.0,
-   "nonmonetary": 4178.69,
-   "payments": 0.0,
-   "first": "2025-01-17",
-   "last": "2025-06-30",
-   "individuals": {
-    "total": 0.0,
-    "count": 0
-   },
-   "organizations": [
-    {
-     "name": "Santa Clara County Correctional Peace Officers' Association PAC",
-     "total": 4178.69,
-     "count": 4
-    }
-   ],
-   "organizations_count": 1,
-   "employers": [],
-   "filings": [
-    {
-     "id": "214603458",
-     "url": "https://netfile.com/Connect2/api/public/image/214603458",
-     "filed": "2025-07-31",
-     "from": "2025-01-01",
-     "through": "2025-06-30"
-    }
-   ],
-   "as_of": "2025-07-31"
-  },
   "SCC-112575": {
    "local_id": "SCC-112575",
    "fppc_id": "1331288",
@@ -3781,14 +3802,14 @@
    "local_id": "SCC-113613",
    "fppc_id": "1415319",
    "name": "Otto Lee for Supervisor 2020",
-   "contributions": 61550.0,
+   "contributions": 65750.0,
    "nonmonetary": 0.0,
    "payments": 21859.69,
    "first": "2025-01-20",
    "last": "2026-02-15",
    "individuals": {
-    "total": 49300.0,
-    "count": 68
+    "total": 53500.0,
+    "count": 83
    },
    "organizations": [
     {
@@ -3868,14 +3889,14 @@
    "local_id": "SCC-114397",
    "fppc_id": "1478952",
    "name": "Neysa Fligor for Assessor 2030",
-   "contributions": 84074.98,
+   "contributions": 82524.98,
    "nonmonetary": 0.0,
-   "payments": 85671.15,
+   "payments": 85523.22,
    "first": "2025-01-21",
    "last": "2025-09-20",
    "individuals": {
-    "total": 84074.98,
-    "count": 143
+    "total": 82524.98,
+    "count": 142
    },
    "organizations": [],
    "organizations_count": 0,
@@ -3908,33 +3929,6 @@
     }
    ],
    "as_of": "2025-09-25"
-  },
-  "SCC-112583": {
-   "local_id": "SCC-112583",
-   "fppc_id": "1331439",
-   "name": "UDEA PAC (Union District Educator's Association)",
-   "contributions": 0.0,
-   "nonmonetary": 0.0,
-   "payments": 13926.01,
-   "first": "2025-01-22",
-   "last": "2025-05-23",
-   "individuals": {
-    "total": 0.0,
-    "count": 0
-   },
-   "organizations": [],
-   "organizations_count": 0,
-   "employers": [],
-   "filings": [
-    {
-     "id": "214575467",
-     "url": "https://netfile.com/Connect2/api/public/image/214575467",
-     "filed": "2025-07-28",
-     "from": "2025-01-01",
-     "through": "2025-06-30"
-    }
-   ],
-   "as_of": "2025-07-28"
   },
   "SCC-113415": {
    "local_id": "SCC-113415",
@@ -3977,15 +3971,15 @@
    ],
    "as_of": "2026-10-10"
   },
-  "SCC-113453": {
-   "local_id": "SCC-113453",
-   "fppc_id": "1406400",
-   "name": "Dharap for School Board 2022",
+  "SCC-112583": {
+   "local_id": "SCC-112583",
+   "fppc_id": "1331439",
+   "name": "UDEA PAC (Union District Educator's Association)",
    "contributions": 0.0,
    "nonmonetary": 0.0,
-   "payments": 216.0,
+   "payments": 13926.01,
    "first": "2025-01-22",
-   "last": "2025-06-23",
+   "last": "2025-05-23",
    "individuals": {
     "total": 0.0,
     "count": 0
@@ -3995,24 +3989,24 @@
    "employers": [],
    "filings": [
     {
-     "id": "214616370",
-     "url": "https://netfile.com/Connect2/api/public/image/214616370",
-     "filed": "2025-07-31",
+     "id": "214575467",
+     "url": "https://netfile.com/Connect2/api/public/image/214575467",
+     "filed": "2025-07-28",
      "from": "2025-01-01",
      "through": "2025-06-30"
     }
    ],
-   "as_of": "2025-07-31"
+   "as_of": "2025-07-28"
   },
   "CAMPAIGN_SCC-716": {
    "local_id": "CAMPAIGN_SCC-716",
    "fppc_id": "950169",
    "name": "Democratic Activists for Women Now (DAWN)",
-   "contributions": 13210.0,
+   "contributions": 13710.0,
    "nonmonetary": 5000.0,
-   "payments": 22271.15,
+   "payments": 21646.65,
    "first": "2025-01-22",
-   "last": "2026-06-29",
+   "last": "2026-06-23",
    "individuals": {
     "total": 6000.0,
     "count": 2
@@ -4049,6 +4043,11 @@
      "count": 2
     },
     {
+     "name": "Gail Pellerin for Assembly 2026",
+     "total": 535.0,
+     "count": 2
+    },
+    {
      "name": "Otto Lee for Supervisor 2024",
      "total": 500.0,
      "count": 1
@@ -4060,11 +4059,6 @@
     },
     {
      "name": "Josh Becker for Senate 2024",
-     "total": 500.0,
-     "count": 1
-    },
-    {
-     "name": "South Bay AFL-CIO Labor Council COPE",
      "total": 500.0,
      "count": 1
     }
@@ -4123,6 +4117,33 @@
     }
    ],
    "as_of": "2026-07-31"
+  },
+  "SCC-113453": {
+   "local_id": "SCC-113453",
+   "fppc_id": "1406400",
+   "name": "Dharap for School Board 2022",
+   "contributions": 0.0,
+   "nonmonetary": 0.0,
+   "payments": 216.0,
+   "first": "2025-01-22",
+   "last": "2025-06-23",
+   "individuals": {
+    "total": 0.0,
+    "count": 0
+   },
+   "organizations": [],
+   "organizations_count": 0,
+   "employers": [],
+   "filings": [
+    {
+     "id": "214616370",
+     "url": "https://netfile.com/Connect2/api/public/image/214616370",
+     "filed": "2025-07-31",
+     "from": "2025-01-01",
+     "through": "2025-06-30"
+    }
+   ],
+   "as_of": "2025-07-31"
   },
   "SCC-112590": {
    "local_id": "SCC-112590",
@@ -4256,7 +4277,7 @@
    "local_id": "CAMPAIGN_SCC-1425",
    "fppc_id": "1275831",
    "name": "Cupertino Education Association Political Action Committee",
-   "contributions": 8800.0,
+   "contributions": 9450.0,
    "nonmonetary": 0.0,
    "payments": 0.0,
    "first": "2025-01-25",
@@ -4268,8 +4289,8 @@
    "organizations": [
     {
      "name": "CEA PAC",
-     "total": 8800.0,
-     "count": 15
+     "total": 9450.0,
+     "count": 16
     }
    ],
    "organizations_count": 1,
@@ -4332,7 +4353,7 @@
    "name": "Morgan Hill Federation of Teachers Committee on Political Federation",
    "contributions": 3042.0,
    "nonmonetary": 0.0,
-   "payments": 2835.1,
+   "payments": 4976.77,
    "first": "2025-01-27",
    "last": "2026-04-17",
    "individuals": {
@@ -4391,7 +4412,7 @@
    "name": "Clay Hale for SJECCD Board of Trustees 2024",
    "contributions": 0.0,
    "nonmonetary": 0.0,
-   "payments": 1434.7,
+   "payments": 1505.3,
    "first": "2025-01-28",
    "last": "2026-06-28",
    "individuals": {
@@ -4546,11 +4567,220 @@
    ],
    "as_of": "2026-10-21"
   },
+  "CAMPAIGN_SCC-472": {
+   "local_id": "CAMPAIGN_SCC-472",
+   "fppc_id": "821697",
+   "name": "AFSCME Local 101 PAC",
+   "contributions": 93270.0,
+   "nonmonetary": 0.0,
+   "payments": 63750.0,
+   "first": "2025-01-31",
+   "last": "2026-10-23",
+   "individuals": {
+    "total": 0.0,
+    "count": 0
+   },
+   "organizations": [
+    {
+     "name": "Local 101 AFSCME Dues Trust",
+     "total": 93270.0,
+     "count": 1
+    }
+   ],
+   "organizations_count": 1,
+   "employers": [],
+   "filings": [
+    {
+     "id": "217734520",
+     "url": "https://netfile.com/Connect2/api/public/image/217734520",
+     "filed": "2026-10-23",
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217612929",
+     "url": "https://netfile.com/Connect2/api/public/image/217612929",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217454763",
+     "url": "https://netfile.com/Connect2/api/public/image/217454763",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217308947",
+     "url": "https://netfile.com/Connect2/api/public/image/217308947",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217021197",
+     "url": "https://netfile.com/Connect2/api/public/image/217021197",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "216838634",
+     "url": "https://netfile.com/Connect2/api/public/image/216838634",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "215321100",
+     "url": "https://netfile.com/Connect2/api/public/image/215321100",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "215320998",
+     "url": "https://netfile.com/Connect2/api/public/image/215320998",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "215118837",
+     "url": "https://netfile.com/Connect2/api/public/image/215118837",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "213047167",
+     "url": "https://netfile.com/Connect2/api/public/image/213047167",
+     "filed": null,
+     "from": null,
+     "through": null
+    }
+   ],
+   "as_of": "2026-10-23"
+  },
+  "CAMPAIGN_SCC-736": {
+   "local_id": "CAMPAIGN_SCC-736",
+   "fppc_id": "980777",
+   "name": "Santa Clara & San Benito Counties Building and Construction Trades Council - Issues Account",
+   "contributions": 113700.0,
+   "nonmonetary": 626.0,
+   "payments": 65769.76,
+   "first": "2025-01-31",
+   "last": "2026-10-26",
+   "individuals": {
+    "total": 23600.0,
+    "count": 8
+   },
+   "organizations": [
+    {
+     "name": "IBEW 332 Issues Account",
+     "total": 40000.0,
+     "count": 2
+    },
+    {
+     "name": "Liuna Local 270",
+     "total": 13000.0,
+     "count": 2
+    },
+    {
+     "name": "Plasterers' and Cement Masons' Local 300",
+     "total": 8500.0,
+     "count": 2
+    },
+    {
+     "name": "International Association of Heat and Frost Insulators and Allied Workers Local 16, AFL-CIO",
+     "total": 8500.0,
+     "count": 2
+    },
+    {
+     "name": "District Council No. 16",
+     "total": 5000.0,
+     "count": 1
+    },
+    {
+     "name": "PG&E Corporation Major Donor Account",
+     "total": 5000.0,
+     "count": 1
+    },
+    {
+     "name": "International Union of Elevator Constructors Local Union 8",
+     "total": 3500.0,
+     "count": 1
+    },
+    {
+     "name": "Teamsters Local Union No. 853",
+     "total": 2950.0,
+     "count": 2
+    },
+    {
+     "name": "Unite Here Union Local 19",
+     "total": 2000.0,
+     "count": 2
+    },
+    {
+     "name": "Roofers Union Local No. 95",
+     "total": 900.0,
+     "count": 1
+    }
+   ],
+   "organizations_count": 12,
+   "employers": [],
+   "filings": [
+    {
+     "id": "217822529",
+     "url": "https://netfile.com/Connect2/api/public/image/217822529",
+     "filed": "2026-10-26",
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217715910",
+     "url": "https://netfile.com/Connect2/api/public/image/217715910",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217685281",
+     "url": "https://netfile.com/Connect2/api/public/image/217685281",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217389150",
+     "url": "https://netfile.com/Connect2/api/public/image/217389150",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "215454826",
+     "url": "https://netfile.com/Connect2/api/public/image/215454826",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214595390",
+     "url": "https://netfile.com/Connect2/api/public/image/214595390",
+     "filed": null,
+     "from": null,
+     "through": null
+    }
+   ],
+   "as_of": "2026-10-26"
+  },
   "CAMPAIGN_SCC-486": {
    "local_id": "CAMPAIGN_SCC-486",
    "fppc_id": "931135",
    "name": "Registered Nurses Professional Association  Political Action Committee",
-   "contributions": 149245.5,
+   "contributions": 134540.0,
    "nonmonetary": 1918.5,
    "payments": 40031.77,
    "first": "2025-01-31",
@@ -4562,8 +4792,8 @@
    "organizations": [
     {
      "name": "Registered Nurses Professional Association",
-     "total": 147334.5,
-     "count": 30
+     "total": 132629.0,
+     "count": 28
     },
     {
      "name": "Registered Nurses Professional Association General Fund",
@@ -4701,222 +4931,6 @@
    ],
    "as_of": "2026-07-31"
   },
-  "CAMPAIGN_SCC-736": {
-   "local_id": "CAMPAIGN_SCC-736",
-   "fppc_id": "980777",
-   "name": "Santa Clara & San Benito Counties Building and Construction Trades Council - Issues Account",
-   "contributions": 113700.0,
-   "nonmonetary": 626.0,
-   "payments": 65769.76,
-   "first": "2025-01-31",
-   "last": "2026-10-26",
-   "individuals": {
-    "total": 23600.0,
-    "count": 8
-   },
-   "organizations": [
-    {
-     "name": "IBEW 332 Issues Account",
-     "total": 40000.0,
-     "count": 2
-    },
-    {
-     "name": "Liuna Local 270",
-     "total": 13000.0,
-     "count": 2
-    },
-    {
-     "name": "Plasterers' and Cement Masons' Local 300",
-     "total": 8500.0,
-     "count": 2
-    },
-    {
-     "name": "International Association of Heat and Frost Insulators and Allied Workers Local 16, AFL-CIO",
-     "total": 8500.0,
-     "count": 2
-    },
-    {
-     "name": "District Council No. 16",
-     "total": 5000.0,
-     "count": 1
-    },
-    {
-     "name": "PG&E Corporation Major Donor Account",
-     "total": 5000.0,
-     "count": 1
-    },
-    {
-     "name": "International Union of Elevator Constructors Local Union 8",
-     "total": 3500.0,
-     "count": 1
-    },
-    {
-     "name": "Teamsters Local Union No. 853",
-     "total": 2950.0,
-     "count": 2
-    },
-    {
-     "name": "Unite Here Union Local 19",
-     "total": 2000.0,
-     "count": 2
-    },
-    {
-     "name": "Roofers Union Local No. 95",
-     "total": 900.0,
-     "count": 1
-    }
-   ],
-   "organizations_count": 12,
-   "employers": [],
-   "filings": [
-    {
-     "id": "217822529",
-     "url": "https://netfile.com/Connect2/api/public/image/217822529",
-     "filed": "2026-10-26",
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "217715910",
-     "url": "https://netfile.com/Connect2/api/public/image/217715910",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "217685281",
-     "url": "https://netfile.com/Connect2/api/public/image/217685281",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "217389150",
-     "url": "https://netfile.com/Connect2/api/public/image/217389150",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "215454826",
-     "url": "https://netfile.com/Connect2/api/public/image/215454826",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214595390",
-     "url": "https://netfile.com/Connect2/api/public/image/214595390",
-     "filed": null,
-     "from": null,
-     "through": null
-    }
-   ],
-   "as_of": "2026-10-26"
-  },
-  "CAMPAIGN_SCC-472": {
-   "local_id": "CAMPAIGN_SCC-472",
-   "fppc_id": "821697",
-   "name": "AFSCME Local 101 PAC",
-   "contributions": 93270.0,
-   "nonmonetary": 0.0,
-   "payments": 78750.0,
-   "first": "2025-01-31",
-   "last": "2026-10-23",
-   "individuals": {
-    "total": 0.0,
-    "count": 0
-   },
-   "organizations": [
-    {
-     "name": "Local 101 AFSCME Dues Trust",
-     "total": 93270.0,
-     "count": 1
-    }
-   ],
-   "organizations_count": 1,
-   "employers": [],
-   "filings": [
-    {
-     "id": "217734520",
-     "url": "https://netfile.com/Connect2/api/public/image/217734520",
-     "filed": "2026-10-23",
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "217612929",
-     "url": "https://netfile.com/Connect2/api/public/image/217612929",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "217454763",
-     "url": "https://netfile.com/Connect2/api/public/image/217454763",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "217308947",
-     "url": "https://netfile.com/Connect2/api/public/image/217308947",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "217021197",
-     "url": "https://netfile.com/Connect2/api/public/image/217021197",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "216838634",
-     "url": "https://netfile.com/Connect2/api/public/image/216838634",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "215321100",
-     "url": "https://netfile.com/Connect2/api/public/image/215321100",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "215320998",
-     "url": "https://netfile.com/Connect2/api/public/image/215320998",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "215118837",
-     "url": "https://netfile.com/Connect2/api/public/image/215118837",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214299450",
-     "url": "https://netfile.com/Connect2/api/public/image/214299450",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "213047167",
-     "url": "https://netfile.com/Connect2/api/public/image/213047167",
-     "filed": null,
-     "from": null,
-     "through": null
-    }
-   ],
-   "as_of": "2026-10-23"
-  },
   "SCC-114278": {
    "local_id": "SCC-114278",
    "fppc_id": "1469474",
@@ -5030,14 +5044,14 @@
    "local_id": "SCC-114255",
    "fppc_id": "1469527",
    "name": "Jeremy Barousse for Evergreen School Board 2024",
-   "contributions": 5487.74,
+   "contributions": 3047.84,
    "nonmonetary": 0.0,
    "payments": 0.0,
    "first": "2025-02-03",
    "last": "2025-04-14",
    "individuals": {
-    "total": 4879.8,
-    "count": 4
+    "total": 2439.9,
+    "count": 2
    },
    "organizations": [
     {
@@ -5058,33 +5072,6 @@
     }
    ],
    "as_of": "2025-04-15"
-  },
-  "SCC-114284": {
-   "local_id": "SCC-114284",
-   "fppc_id": "1470486",
-   "name": "Committee to Elect Diane Lamkin, WVMCCD Board of Trustees, Area 5, 2024",
-   "contributions": 0.0,
-   "nonmonetary": 0.0,
-   "payments": 1300.0,
-   "first": "2025-02-04",
-   "last": "2025-02-11",
-   "individuals": {
-    "total": 0.0,
-    "count": 0
-   },
-   "organizations": [],
-   "organizations_count": 0,
-   "employers": [],
-   "filings": [
-    {
-     "id": "214506746",
-     "url": "https://netfile.com/Connect2/api/public/image/214506746",
-     "filed": "2025-07-14",
-     "from": "2025-01-01",
-     "through": "2025-06-30"
-    }
-   ],
-   "as_of": "2025-07-14"
   },
   "SCC-112478": {
    "local_id": "SCC-112478",
@@ -5133,18 +5120,45 @@
    ],
    "as_of": "2026-07-23"
   },
+  "SCC-114284": {
+   "local_id": "SCC-114284",
+   "fppc_id": "1470486",
+   "name": "Committee to Elect Diane Lamkin, WVMCCD Board of Trustees, Area 5, 2024",
+   "contributions": 0.0,
+   "nonmonetary": 0.0,
+   "payments": 1300.0,
+   "first": "2025-02-04",
+   "last": "2025-02-11",
+   "individuals": {
+    "total": 0.0,
+    "count": 0
+   },
+   "organizations": [],
+   "organizations_count": 0,
+   "employers": [],
+   "filings": [
+    {
+     "id": "214506746",
+     "url": "https://netfile.com/Connect2/api/public/image/214506746",
+     "filed": "2025-07-14",
+     "from": "2025-01-01",
+     "through": "2025-06-30"
+    }
+   ],
+   "as_of": "2025-07-14"
+  },
   "SCC-114227": {
    "local_id": "SCC-114227",
    "fppc_id": "1464630",
    "name": "Silicon Valley Young Democrats",
-   "contributions": 21575.3,
+   "contributions": 22075.3,
    "nonmonetary": 5333.0,
-   "payments": 19605.12,
+   "payments": 19705.12,
    "first": "2025-02-05",
    "last": "2026-06-30",
    "individuals": {
-    "total": 10755.0,
-    "count": 44
+    "total": 11255.0,
+    "count": 45
    },
    "organizations": [
     {
@@ -5289,14 +5303,14 @@
    "local_id": "SCC-113678",
    "fppc_id": "1422587",
    "name": "2018 Supervisor Ellenberg Officeholder Account",
-   "contributions": 4375.0,
+   "contributions": 4250.0,
    "nonmonetary": 0.0,
-   "payments": 10774.5,
+   "payments": 11774.5,
    "first": "2025-02-10",
    "last": "2026-06-30",
    "individuals": {
-    "total": 4375.0,
-    "count": 13
+    "total": 4250.0,
+    "count": 12
    },
    "organizations": [],
    "organizations_count": 0,
@@ -5339,7 +5353,7 @@
    "name": "Santa Clara & San Benito Counties Building and Construction Trades Council Political Action Committee",
    "contributions": 163700.0,
    "nonmonetary": 7780.0,
-   "payments": 178938.48,
+   "payments": 177438.48,
    "first": "2025-02-10",
    "last": "2026-10-16",
    "individuals": {
@@ -5683,14 +5697,14 @@
    "local_id": "CAMPAIGN_SCC-475",
    "fppc_id": "1239854",
    "name": "Los Altos Teachers Assoc. PAC",
-   "contributions": 2954.0,
+   "contributions": 4054.0,
    "nonmonetary": 0.0,
-   "payments": 438.45,
+   "payments": 1350.45,
    "first": "2025-02-18",
-   "last": "2026-10-06",
+   "last": "2026-10-15",
    "individuals": {
-    "total": 0.0,
-    "count": 0
+    "total": 1100.0,
+    "count": 1
    },
    "organizations": [
     {
@@ -5703,9 +5717,16 @@
    "employers": [],
    "filings": [
     {
+     "id": "217836075",
+     "url": "https://netfile.com/Connect2/api/public/image/217836075",
+     "filed": "2026-10-27",
+     "from": "2026-09-20",
+     "through": "2026-10-17"
+    },
+    {
      "id": "217593056",
      "url": "https://netfile.com/Connect2/api/public/image/217593056",
-     "filed": "2026-10-06",
+     "filed": null,
      "from": null,
      "through": null
     },
@@ -5759,7 +5780,7 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-06"
+   "as_of": "2026-10-27"
   },
   "SCC-113923": {
    "local_id": "SCC-113923",
@@ -6205,21 +6226,16 @@
    "local_id": "SCC-114417",
    "fppc_id": "1479168",
    "name": "Susan Ellenberg for Supervisor 2026",
-   "contributions": 104516.0,
+   "contributions": 101966.0,
    "nonmonetary": 0.0,
-   "payments": 87588.87,
+   "payments": 84369.57,
    "first": "2025-03-18",
    "last": "2026-06-30",
    "individuals": {
-    "total": 86667.0,
-    "count": 288
+    "total": 85117.0,
+    "count": 282
    },
    "organizations": [
-    {
-     "name": "Dave Cortese for Senate 2028",
-     "total": 2000.0,
-     "count": 2
-    },
     {
      "name": "Otto Lee for Supervisor 2024",
      "total": 1000.0,
@@ -6262,6 +6278,11 @@
     },
     {
      "name": "Robert Rivas for Assembly 2026",
+     "total": 1000.0,
+     "count": 1
+    },
+    {
+     "name": "Dave Cortese for Senate 2028",
      "total": 1000.0,
      "count": 1
     }
@@ -6665,7 +6686,7 @@
    "name": "Valley Physicians Group, Yes on A (nonprofit 501(c) (5))",
    "contributions": 689.94,
    "nonmonetary": 0.0,
-   "payments": 259250.0,
+   "payments": 259000.0,
    "first": "2025-04-14",
    "last": "2026-10-22",
    "individuals": {
@@ -6849,7 +6870,7 @@
    "name": "Shiloh Ballard for Santa Clara Valley Water District 2024",
    "contributions": 0.0,
    "nonmonetary": 0.0,
-   "payments": 2609.39,
+   "payments": 2331.83,
    "first": "2025-05-05",
    "last": "2026-05-28",
    "individuals": {
@@ -7012,7 +7033,7 @@
    "name": "Citizens for Our High Schools of Tomorrow-Yes on Measure G",
    "contributions": 0.0,
    "nonmonetary": 0.0,
-   "payments": 2130.0,
+   "payments": 1420.0,
    "first": "2025-06-03",
    "last": "2026-06-30",
    "individuals": {
@@ -7107,61 +7128,13 @@
    ],
    "as_of": "2025-07-31"
   },
-  "SCC-113852": {
-   "local_id": "SCC-113852",
-   "fppc_id": "487106",
-   "name": "Peninsula Open Space Trust",
-   "contributions": 0.0,
-   "nonmonetary": 0.0,
-   "payments": 0.0,
-   "first": "2025-06-24",
-   "last": "2026-05-12",
-   "individuals": {
-    "total": 0.0,
-    "count": 0
-   },
-   "organizations": [],
-   "organizations_count": 0,
-   "employers": [],
-   "filings": [
-    {
-     "id": "217115009",
-     "url": "https://netfile.com/Connect2/api/public/image/217115009",
-     "filed": "2026-07-30",
-     "from": "2026-01-01",
-     "through": "2026-06-30"
-    },
-    {
-     "id": "217065251",
-     "url": "https://netfile.com/Connect2/api/public/image/217065251",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "215513955",
-     "url": "https://netfile.com/Connect2/api/public/image/215513955",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "215513898",
-     "url": "https://netfile.com/Connect2/api/public/image/215513898",
-     "filed": null,
-     "from": null,
-     "through": null
-    }
-   ],
-   "as_of": "2026-07-30"
-  },
   "SCC-114428": {
    "local_id": "SCC-114428",
    "fppc_id": "1481814",
    "name": "Peninsula Open Space Trust Action Fund",
    "contributions": 1059836.28,
    "nonmonetary": 2367.91,
-   "payments": 1048568.21,
+   "payments": 1045106.41,
    "first": "2025-06-24",
    "last": "2026-06-30",
    "individuals": {
@@ -7247,6 +7220,54 @@
    ],
    "as_of": "2026-07-31"
   },
+  "SCC-113852": {
+   "local_id": "SCC-113852",
+   "fppc_id": "487106",
+   "name": "Peninsula Open Space Trust",
+   "contributions": 0.0,
+   "nonmonetary": 0.0,
+   "payments": 0.0,
+   "first": "2025-06-24",
+   "last": "2026-05-12",
+   "individuals": {
+    "total": 0.0,
+    "count": 0
+   },
+   "organizations": [],
+   "organizations_count": 0,
+   "employers": [],
+   "filings": [
+    {
+     "id": "217115009",
+     "url": "https://netfile.com/Connect2/api/public/image/217115009",
+     "filed": "2026-07-30",
+     "from": "2026-01-01",
+     "through": "2026-06-30"
+    },
+    {
+     "id": "217065251",
+     "url": "https://netfile.com/Connect2/api/public/image/217065251",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "215513955",
+     "url": "https://netfile.com/Connect2/api/public/image/215513955",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "215513898",
+     "url": "https://netfile.com/Connect2/api/public/image/215513898",
+     "filed": null,
+     "from": null,
+     "through": null
+    }
+   ],
+   "as_of": "2026-07-30"
+  },
   "SCC-114426": {
    "local_id": "SCC-114426",
    "fppc_id": "1481276",
@@ -7281,56 +7302,15 @@
    ],
    "as_of": "2026-08-18"
   },
-  "SCC-113812": {
-   "local_id": "SCC-113812",
-   "fppc_id": "1428184",
-   "name": "Friends of Santa Clara Valley Open Space, Yes on Measure T, sponsored by Peninsula Open Space Trust",
-   "contributions": 0.0,
-   "nonmonetary": 0.0,
-   "payments": 10168.28,
-   "first": "2025-06-30",
-   "last": "2025-07-28",
-   "individuals": {
-    "total": 0.0,
-    "count": 0
-   },
-   "organizations": [],
-   "organizations_count": 0,
-   "employers": [],
-   "filings": [
-    {
-     "id": "214638794",
-     "url": "https://netfile.com/Connect2/api/public/image/214638794",
-     "filed": "2025-08-06",
-     "from": "2025-07-01",
-     "through": "2025-07-28"
-    },
-    {
-     "id": "214574518",
-     "url": "https://netfile.com/Connect2/api/public/image/214574518",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214574190",
-     "url": "https://netfile.com/Connect2/api/public/image/214574190",
-     "filed": null,
-     "from": null,
-     "through": null
-    }
-   ],
-   "as_of": "2025-08-06"
-  },
-  "SCC-113224": {
-   "local_id": "SCC-113224",
-   "fppc_id": "1389747",
-   "name": "Dolores Marquez for School Board 2016",
+  "SCC-114269": {
+   "local_id": "SCC-114269",
+   "fppc_id": "1468573",
+   "name": "Long Jiao For Cupertino Union School District 2024",
    "contributions": 0.0,
    "nonmonetary": 0.0,
    "payments": 0.0,
    "first": "2025-06-30",
-   "last": "2025-06-30",
+   "last": "2026-06-30",
    "individuals": {
     "total": 0.0,
     "count": 0
@@ -7340,14 +7320,137 @@
    "employers": [],
    "filings": [
     {
-     "id": "214598778",
-     "url": "https://netfile.com/Connect2/api/public/image/214598778",
-     "filed": "2025-07-31",
-     "from": "2025-01-01",
-     "through": "2025-06-30"
+     "id": "217043075",
+     "url": "https://netfile.com/Connect2/api/public/image/217043075",
+     "filed": "2026-07-21",
+     "from": "2026-01-01",
+     "through": "2026-06-30"
+    },
+    {
+     "id": "215152237",
+     "url": "https://netfile.com/Connect2/api/public/image/215152237",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214515435",
+     "url": "https://netfile.com/Connect2/api/public/image/214515435",
+     "filed": null,
+     "from": null,
+     "through": null
     }
    ],
-   "as_of": "2025-07-31"
+   "as_of": "2026-07-21"
+  },
+  "SCC-113431": {
+   "local_id": "SCC-113431",
+   "fppc_id": "1405886",
+   "name": "Committee to Re-Elect Chris Miller For Campbell Union School Board 2022",
+   "contributions": 5500.0,
+   "nonmonetary": 0.0,
+   "payments": 0.0,
+   "first": "2025-06-30",
+   "last": "2026-10-17",
+   "individuals": {
+    "total": 1500.0,
+    "count": 9
+   },
+   "organizations": [
+    {
+     "name": "LEE California General Purpose Committee",
+     "total": 4000.0,
+     "count": 3
+    }
+   ],
+   "organizations_count": 1,
+   "employers": [],
+   "filings": [
+    {
+     "id": "217666098",
+     "url": "https://netfile.com/Connect2/api/public/image/217666098",
+     "filed": "2026-10-19",
+     "from": "2026-09-20",
+     "through": "2026-10-17"
+    },
+    {
+     "id": "217460039",
+     "url": "https://netfile.com/Connect2/api/public/image/217460039",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "216932454",
+     "url": "https://netfile.com/Connect2/api/public/image/216932454",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "215413966",
+     "url": "https://netfile.com/Connect2/api/public/image/215413966",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214530210",
+     "url": "https://netfile.com/Connect2/api/public/image/214530210",
+     "filed": null,
+     "from": null,
+     "through": null
+    }
+   ],
+   "as_of": "2026-10-19"
+  },
+  "CAMPAIGN_SCC-452": {
+   "local_id": "CAMPAIGN_SCC-452",
+   "fppc_id": "1244846",
+   "name": "Campbell High School Teachers Association Political Action Committee",
+   "contributions": 0.0,
+   "nonmonetary": 0.0,
+   "payments": 0.0,
+   "first": "2025-06-30",
+   "last": "2026-09-19",
+   "individuals": {
+    "total": 0.0,
+    "count": 0
+   },
+   "organizations": [],
+   "organizations_count": 0,
+   "employers": [],
+   "filings": [
+    {
+     "id": "217509852",
+     "url": "https://netfile.com/Connect2/api/public/image/217509852",
+     "filed": "2026-09-24",
+     "from": "2026-07-01",
+     "through": "2026-09-19"
+    },
+    {
+     "id": "216659575",
+     "url": "https://netfile.com/Connect2/api/public/image/216659575",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "215431785",
+     "url": "https://netfile.com/Connect2/api/public/image/215431785",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214544415",
+     "url": "https://netfile.com/Connect2/api/public/image/214544415",
+     "filed": null,
+     "from": null,
+     "through": null
+    }
+   ],
+   "as_of": "2026-09-24"
   },
   "SCC-113374": {
    "local_id": "SCC-113374",
@@ -7394,18 +7497,18 @@
    "local_id": "SCC-114424",
    "fppc_id": "Pending",
    "name": "Betty Duong for Supervisor 2024 Officeholder Account",
-   "contributions": 39975.0,
+   "contributions": 39375.0,
    "nonmonetary": 0.0,
-   "payments": 31015.1,
+   "payments": 30688.46,
    "first": "2025-06-30",
    "last": "2026-06-30",
    "individuals": {
-    "total": 31225.0,
-    "count": 58
+    "total": 30625.0,
+    "count": 55
    },
    "organizations": [
     {
-     "name": "Teamsters Local 350",
+     "name": "Santa Clara & San Benito Counties Building & Construction Trades Council",
      "total": 2000.0,
      "count": 2
     },
@@ -7430,14 +7533,14 @@
      "count": 1
     },
     {
+     "name": "Teamsters Local 350",
+     "total": 1000.0,
+     "count": 1
+    },
+    {
      "name": "Speed Construction and Development Inc",
      "total": 1000.0,
      "count": 4
-    },
-    {
-     "name": "Santa Clara & San Benito Counties Building & Construction Trades Council",
-     "total": 1000.0,
-     "count": 1
     },
     {
      "name": "San Jose Firefighters Local 230 Inc",
@@ -7476,6 +7579,74 @@
     }
    ],
    "as_of": "2026-07-30"
+  },
+  "SCC-113224": {
+   "local_id": "SCC-113224",
+   "fppc_id": "1389747",
+   "name": "Dolores Marquez for School Board 2016",
+   "contributions": 0.0,
+   "nonmonetary": 0.0,
+   "payments": 0.0,
+   "first": "2025-06-30",
+   "last": "2025-06-30",
+   "individuals": {
+    "total": 0.0,
+    "count": 0
+   },
+   "organizations": [],
+   "organizations_count": 0,
+   "employers": [],
+   "filings": [
+    {
+     "id": "214598778",
+     "url": "https://netfile.com/Connect2/api/public/image/214598778",
+     "filed": "2025-07-31",
+     "from": "2025-01-01",
+     "through": "2025-06-30"
+    }
+   ],
+   "as_of": "2025-07-31"
+  },
+  "SCC-113812": {
+   "local_id": "SCC-113812",
+   "fppc_id": "1428184",
+   "name": "Friends of Santa Clara Valley Open Space, Yes on Measure T, sponsored by Peninsula Open Space Trust",
+   "contributions": 0.0,
+   "nonmonetary": 0.0,
+   "payments": 10168.28,
+   "first": "2025-06-30",
+   "last": "2025-07-28",
+   "individuals": {
+    "total": 0.0,
+    "count": 0
+   },
+   "organizations": [],
+   "organizations_count": 0,
+   "employers": [],
+   "filings": [
+    {
+     "id": "214638794",
+     "url": "https://netfile.com/Connect2/api/public/image/214638794",
+     "filed": "2025-08-06",
+     "from": "2025-07-01",
+     "through": "2025-07-28"
+    },
+    {
+     "id": "214574518",
+     "url": "https://netfile.com/Connect2/api/public/image/214574518",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214574190",
+     "url": "https://netfile.com/Connect2/api/public/image/214574190",
+     "filed": null,
+     "from": null,
+     "through": null
+    }
+   ],
+   "as_of": "2025-08-06"
   },
   "SCC-113363": {
    "local_id": "SCC-113363",
@@ -7522,14 +7693,14 @@
    "local_id": "SCC-114429",
    "fppc_id": "Pending",
    "name": "Neysa Fligor for Assessor 2025",
-   "contributions": 328370.55,
+   "contributions": 340852.18,
    "nonmonetary": 2038.09,
-   "payments": 451559.66,
+   "payments": 430167.75,
    "first": "2025-06-30",
    "last": "2026-05-20",
    "individuals": {
-    "total": 302024.05,
-    "count": 669
+    "total": 317005.68,
+    "count": 692
    },
    "organizations": [
     {
@@ -7539,11 +7710,6 @@
     },
     {
      "name": "Democratic Activists for Women Now (DAWN)",
-     "total": 2000.0,
-     "count": 2
-    },
-    {
-     "name": "Malia Cohen for Controller 2026",
      "total": 2000.0,
      "count": 2
     },
@@ -7581,9 +7747,14 @@
      "name": "IBEW 332 Education Fund (Sponsored by International Brotherhood of Electrical Workers Local 332) Small Contributor Committee",
      "total": 1000.0,
      "count": 1
+    },
+    {
+     "name": "Service Employees International Union Local 521 Candidate PAC Small Contributor Committee",
+     "total": 1000.0,
+     "count": 1
     }
    ],
-   "organizations_count": 27,
+   "organizations_count": 25,
    "employers": [
     {
      "employer": "Santa Clara County",
@@ -7596,14 +7767,19 @@
      "donors": 4
     },
     {
+     "employer": "HP, Inc.",
+     "total": 3371.0,
+     "donors": 8
+    },
+    {
      "employer": "Imwalle Properties, Inc.",
      "total": 2998.0,
      "donors": 3
     },
     {
-     "employer": "HP, Inc.",
-     "total": 2272.0,
-     "donors": 7
+     "employer": "Stanford University",
+     "total": 1700.0,
+     "donors": 3
     },
     {
      "employer": "City of San Jose",
@@ -7683,6 +7859,13 @@
     {
      "id": "215009297",
      "url": "https://netfile.com/Connect2/api/public/image/215009297",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214991445",
+     "url": "https://netfile.com/Connect2/api/public/image/214991445",
      "filed": null,
      "from": null,
      "through": null
@@ -7912,13 +8095,6 @@
      "through": null
     },
     {
-     "id": "214875574",
-     "url": "https://netfile.com/Connect2/api/public/image/214875574",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
      "id": "214830824",
      "url": "https://netfile.com/Connect2/api/public/image/214830824",
      "filed": null,
@@ -8081,10 +8257,10 @@
    ],
    "as_of": "2026-07-29"
   },
-  "SCC-114269": {
-   "local_id": "SCC-114269",
-   "fppc_id": "1468573",
-   "name": "Long Jiao For Cupertino Union School District 2024",
+  "SCC-112912": {
+   "local_id": "SCC-112912",
+   "fppc_id": "1362259",
+   "name": "Sallings for Santa Clara School Board 2014",
    "contributions": 0.0,
    "nonmonetary": 0.0,
    "payments": 0.0,
@@ -8099,95 +8275,28 @@
    "employers": [],
    "filings": [
     {
-     "id": "217043075",
-     "url": "https://netfile.com/Connect2/api/public/image/217043075",
-     "filed": "2026-07-21",
+     "id": "217004690",
+     "url": "https://netfile.com/Connect2/api/public/image/217004690",
+     "filed": "2026-07-16",
      "from": "2026-01-01",
      "through": "2026-06-30"
     },
     {
-     "id": "215152237",
-     "url": "https://netfile.com/Connect2/api/public/image/215152237",
+     "id": "215507553",
+     "url": "https://netfile.com/Connect2/api/public/image/215507553",
      "filed": null,
      "from": null,
      "through": null
     },
     {
-     "id": "214515435",
-     "url": "https://netfile.com/Connect2/api/public/image/214515435",
+     "id": "214475658",
+     "url": "https://netfile.com/Connect2/api/public/image/214475658",
      "filed": null,
      "from": null,
      "through": null
     }
    ],
-   "as_of": "2026-07-21"
-  },
-  "SCC-113431": {
-   "local_id": "SCC-113431",
-   "fppc_id": "1405886",
-   "name": "Committee to Re-Elect Chris Miller For Campbell Union School Board 2022",
-   "contributions": 5850.0,
-   "nonmonetary": 0.0,
-   "payments": 0.0,
-   "first": "2025-06-30",
-   "last": "2026-10-17",
-   "individuals": {
-    "total": 1850.0,
-    "count": 11
-   },
-   "organizations": [
-    {
-     "name": "LEE California General Purpose Committee",
-     "total": 4000.0,
-     "count": 3
-    }
-   ],
-   "organizations_count": 1,
-   "employers": [
-    {
-     "employer": "UNKNOWN",
-     "total": 600.0,
-     "donors": 3
-    }
-   ],
-   "filings": [
-    {
-     "id": "217666098",
-     "url": "https://netfile.com/Connect2/api/public/image/217666098",
-     "filed": "2026-10-19",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
-    },
-    {
-     "id": "217460039",
-     "url": "https://netfile.com/Connect2/api/public/image/217460039",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "216932454",
-     "url": "https://netfile.com/Connect2/api/public/image/216932454",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "215413966",
-     "url": "https://netfile.com/Connect2/api/public/image/215413966",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214530210",
-     "url": "https://netfile.com/Connect2/api/public/image/214530210",
-     "filed": null,
-     "from": null,
-     "through": null
-    }
-   ],
-   "as_of": "2026-10-19"
+   "as_of": "2026-07-16"
   },
   "SCC-113617": {
    "local_id": "SCC-113617",
@@ -8230,10 +8339,10 @@
    ],
    "as_of": "2026-07-30"
   },
-  "SCC-112912": {
-   "local_id": "SCC-112912",
-   "fppc_id": "1362259",
-   "name": "Sallings for Santa Clara School Board 2014",
+  "SCC-113590": {
+   "local_id": "SCC-113590",
+   "fppc_id": "1410956",
+   "name": "Maria Fuentes for Trustee 2022",
    "contributions": 0.0,
    "nonmonetary": 0.0,
    "payments": 0.0,
@@ -8248,28 +8357,21 @@
    "employers": [],
    "filings": [
     {
-     "id": "217004690",
-     "url": "https://netfile.com/Connect2/api/public/image/217004690",
-     "filed": "2026-07-16",
+     "id": "217197180",
+     "url": "https://netfile.com/Connect2/api/public/image/217197180",
+     "filed": "2026-08-08",
      "from": "2026-01-01",
      "through": "2026-06-30"
     },
     {
-     "id": "215507553",
-     "url": "https://netfile.com/Connect2/api/public/image/215507553",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214475658",
-     "url": "https://netfile.com/Connect2/api/public/image/214475658",
+     "id": "214639252",
+     "url": "https://netfile.com/Connect2/api/public/image/214639252",
      "filed": null,
      "from": null,
      "through": null
     }
    ],
-   "as_of": "2026-07-16"
+   "as_of": "2026-08-08"
   },
   "SCC-113955": {
    "local_id": "SCC-113955",
@@ -8312,15 +8414,15 @@
    ],
    "as_of": "2026-07-31"
   },
-  "SCC-113590": {
-   "local_id": "SCC-113590",
-   "fppc_id": "1410956",
-   "name": "Maria Fuentes for Trustee 2022",
+  "SCC-113188": {
+   "local_id": "SCC-113188",
+   "fppc_id": "1387602",
+   "name": "LAN NGUYEN FOR SCHOOL BOARD 2016",
    "contributions": 0.0,
    "nonmonetary": 0.0,
-   "payments": 0.0,
-   "first": "2025-06-30",
-   "last": "2026-06-30",
+   "payments": 612.0,
+   "first": "2025-07-01",
+   "last": "2025-12-01",
    "individuals": {
     "total": 0.0,
     "count": 0
@@ -8330,69 +8432,14 @@
    "employers": [],
    "filings": [
     {
-     "id": "217197180",
-     "url": "https://netfile.com/Connect2/api/public/image/217197180",
-     "filed": "2026-08-08",
-     "from": "2026-01-01",
-     "through": "2026-06-30"
-    },
-    {
-     "id": "214639252",
-     "url": "https://netfile.com/Connect2/api/public/image/214639252",
-     "filed": null,
-     "from": null,
-     "through": null
+     "id": "215510458",
+     "url": "https://netfile.com/Connect2/api/public/image/215510458",
+     "filed": "2026-02-02",
+     "from": "2025-07-01",
+     "through": "2025-12-31"
     }
    ],
-   "as_of": "2026-08-08"
-  },
-  "CAMPAIGN_SCC-452": {
-   "local_id": "CAMPAIGN_SCC-452",
-   "fppc_id": "1244846",
-   "name": "Campbell High School Teachers Association Political Action Committee",
-   "contributions": 0.0,
-   "nonmonetary": 0.0,
-   "payments": 0.0,
-   "first": "2025-06-30",
-   "last": "2026-09-19",
-   "individuals": {
-    "total": 0.0,
-    "count": 0
-   },
-   "organizations": [],
-   "organizations_count": 0,
-   "employers": [],
-   "filings": [
-    {
-     "id": "217509852",
-     "url": "https://netfile.com/Connect2/api/public/image/217509852",
-     "filed": "2026-09-24",
-     "from": "2026-07-01",
-     "through": "2026-09-19"
-    },
-    {
-     "id": "216659575",
-     "url": "https://netfile.com/Connect2/api/public/image/216659575",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "215431785",
-     "url": "https://netfile.com/Connect2/api/public/image/215431785",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214544415",
-     "url": "https://netfile.com/Connect2/api/public/image/214544415",
-     "filed": null,
-     "from": null,
-     "through": null
-    }
-   ],
-   "as_of": "2026-09-24"
+   "as_of": "2026-02-02"
   },
   "SCC-114090": {
    "local_id": "SCC-114090",
@@ -8462,45 +8509,18 @@
    ],
    "as_of": "2026-08-05"
   },
-  "SCC-113188": {
-   "local_id": "SCC-113188",
-   "fppc_id": "1387602",
-   "name": "LAN NGUYEN FOR SCHOOL BOARD 2016",
-   "contributions": 0.0,
-   "nonmonetary": 0.0,
-   "payments": 612.0,
-   "first": "2025-07-01",
-   "last": "2025-12-01",
-   "individuals": {
-    "total": 0.0,
-    "count": 0
-   },
-   "organizations": [],
-   "organizations_count": 0,
-   "employers": [],
-   "filings": [
-    {
-     "id": "215510458",
-     "url": "https://netfile.com/Connect2/api/public/image/215510458",
-     "filed": "2026-02-02",
-     "from": "2025-07-01",
-     "through": "2025-12-31"
-    }
-   ],
-   "as_of": "2026-02-02"
-  },
   "SCC-114431": {
    "local_id": "SCC-114431",
    "fppc_id": "1482432",
    "name": "Kumar for Assessor 2025",
-   "contributions": 82079.0,
+   "contributions": 81779.0,
    "nonmonetary": 0.0,
-   "payments": 76689.24,
+   "payments": 83860.0,
    "first": "2025-07-08",
    "last": "2026-03-27",
    "individuals": {
-    "total": 82079.0,
-    "count": 107
+    "total": 81779.0,
+    "count": 105
    },
    "organizations": [],
    "organizations_count": 0,
@@ -8666,21 +8686,21 @@
    "local_id": "SCC-114463",
    "fppc_id": "1321515",
    "name": "Santa Clara County Correctional Peace Officers' Association Political Issues Committee, Yes on A",
-   "contributions": 111254.0,
+   "contributions": 111470.0,
    "nonmonetary": 0.0,
-   "payments": 97206.0,
+   "payments": 97586.5,
    "first": "2025-07-15",
    "last": "2026-06-26",
    "individuals": {
-    "total": 111254.0,
-    "count": 10467
+    "total": 111470.0,
+    "count": 10485
    },
    "organizations": [],
    "organizations_count": 0,
    "employers": [
     {
      "employer": "Santa Clara County",
-     "total": 111254.0,
+     "total": 111470.0,
      "donors": 715
     }
    ],
@@ -8713,14 +8733,14 @@
    "local_id": "SCC-114430",
    "fppc_id": "1482283",
    "name": "Daniel Chung for District Attorney 2026",
-   "contributions": 231872.31,
+   "contributions": 228372.31,
    "nonmonetary": 68432.3,
-   "payments": 185462.07,
+   "payments": 179128.46,
    "first": "2025-07-18",
    "last": "2026-08-20",
    "individuals": {
-    "total": 296304.61,
-    "count": 263
+    "total": 292804.61,
+    "count": 264
    },
    "organizations": [
     {
@@ -8884,7 +8904,7 @@
    "name": "Buu Thai for Trustee 2022",
    "contributions": 0.0,
    "nonmonetary": 0.0,
-   "payments": 2089.19,
+   "payments": 2589.19,
    "first": "2025-07-20",
    "last": "2025-10-12",
    "individuals": {
@@ -9060,45 +9080,18 @@
    ],
    "as_of": "2026-10-18"
   },
-  "SCC-114187": {
-   "local_id": "SCC-114187",
-   "fppc_id": "1460525",
-   "name": "Dominguez for SJECCD Trustee 2023",
-   "contributions": 0.0,
-   "nonmonetary": 0.0,
-   "payments": 70.0,
-   "first": "2025-07-31",
-   "last": "2025-12-31",
-   "individuals": {
-    "total": 0.0,
-    "count": 0
-   },
-   "organizations": [],
-   "organizations_count": 0,
-   "employers": [],
-   "filings": [
-    {
-     "id": "215530307",
-     "url": "https://netfile.com/Connect2/api/public/image/215530307",
-     "filed": "2026-02-02",
-     "from": "2025-07-01",
-     "through": "2025-12-31"
-    }
-   ],
-   "as_of": "2026-02-02"
-  },
   "SCC-114574": {
    "local_id": "SCC-114574",
    "fppc_id": "1490160",
    "name": "Gabriel Gutierrez for Gavilan College Trustee 2026",
-   "contributions": 7099.0,
+   "contributions": 6849.0,
    "nonmonetary": 0.0,
    "payments": 8170.85,
    "first": "2025-08-05",
    "last": "2026-10-12",
    "individuals": {
-    "total": 6099.0,
-    "count": 32
+    "total": 5849.0,
+    "count": 31
    },
    "organizations": [
     {
@@ -9161,17 +9154,106 @@
    ],
    "as_of": "2025-08-07"
   },
+  "SCC-114442": {
+   "local_id": "SCC-114442",
+   "fppc_id": "1484022",
+   "name": "Neighbors for Bryan Do for County Assessor 2025",
+   "contributions": 34879.0,
+   "nonmonetary": 0.0,
+   "payments": 27833.74,
+   "first": "2025-08-07",
+   "last": "2025-11-04",
+   "individuals": {
+    "total": 34879.0,
+    "count": 57
+   },
+   "organizations": [],
+   "organizations_count": 0,
+   "employers": [
+    {
+     "employer": "Pho San Jose",
+     "total": 800.0,
+     "donors": 4
+    }
+   ],
+   "filings": [
+    {
+     "id": "217054605",
+     "url": "https://netfile.com/Connect2/api/public/image/217054605",
+     "filed": "2026-07-23",
+     "from": "2026-01-01",
+     "through": "2026-06-30"
+    },
+    {
+     "id": "215529570",
+     "url": "https://netfile.com/Connect2/api/public/image/215529570",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214958309",
+     "url": "https://netfile.com/Connect2/api/public/image/214958309",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214887809",
+     "url": "https://netfile.com/Connect2/api/public/image/214887809",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214821631",
+     "url": "https://netfile.com/Connect2/api/public/image/214821631",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214783473",
+     "url": "https://netfile.com/Connect2/api/public/image/214783473",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214782461",
+     "url": "https://netfile.com/Connect2/api/public/image/214782461",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214782227",
+     "url": "https://netfile.com/Connect2/api/public/image/214782227",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214782190",
+     "url": "https://netfile.com/Connect2/api/public/image/214782190",
+     "filed": null,
+     "from": null,
+     "through": null
+    }
+   ],
+   "as_of": "2026-07-23"
+  },
   "SCC-114432": {
    "local_id": "SCC-114432",
-   "fppc_id": "1482711",
-   "name": "Save Our Local Hospitals Yes on A",
-   "contributions": 2967183.0,
-   "nonmonetary": 73618.18,
-   "payments": 2954152.53,
+   "fppc_id": "Pending",
+   "name": "Save Our Local Hospitals",
+   "contributions": 2954133.0,
+   "nonmonetary": 73911.36,
+   "payments": 2922855.48,
    "first": "2025-08-07",
    "last": "2026-06-30",
    "individuals": {
-    "total": 403083.0,
+    "total": 410033.0,
     "count": 160
    },
    "organizations": [
@@ -9217,8 +9299,8 @@
     },
     {
      "name": "South Bay AFL-CIO Labor Council Issues Account Sponsored by South Bay AFL-CIO Labor Council",
-     "total": 57441.67,
-     "count": 54
+     "total": 57734.85,
+     "count": 55
     },
     {
      "name": "Abode Services",
@@ -9364,13 +9446,6 @@
      "through": null
     },
     {
-     "id": "214878004",
-     "url": "https://netfile.com/Connect2/api/public/image/214878004",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
      "id": "214877990",
      "url": "https://netfile.com/Connect2/api/public/image/214877990",
      "filed": null,
@@ -9443,6 +9518,13 @@
     {
      "id": "214801894",
      "url": "https://netfile.com/Connect2/api/public/image/214801894",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "214796405",
+     "url": "https://netfile.com/Connect2/api/public/image/214796405",
      "filed": null,
      "from": null,
      "through": null
@@ -9562,107 +9644,18 @@
    ],
    "as_of": "2026-07-30"
   },
-  "SCC-114442": {
-   "local_id": "SCC-114442",
-   "fppc_id": "1484022",
-   "name": "Neighbors for Bryan Do for County Assessor 2025",
-   "contributions": 34879.0,
-   "nonmonetary": 0.0,
-   "payments": 27833.74,
-   "first": "2025-08-07",
-   "last": "2025-11-04",
-   "individuals": {
-    "total": 34879.0,
-    "count": 57
-   },
-   "organizations": [],
-   "organizations_count": 0,
-   "employers": [
-    {
-     "employer": "Pho San Jose",
-     "total": 800.0,
-     "donors": 4
-    }
-   ],
-   "filings": [
-    {
-     "id": "217054605",
-     "url": "https://netfile.com/Connect2/api/public/image/217054605",
-     "filed": "2026-07-23",
-     "from": "2026-01-01",
-     "through": "2026-06-30"
-    },
-    {
-     "id": "215529570",
-     "url": "https://netfile.com/Connect2/api/public/image/215529570",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214958309",
-     "url": "https://netfile.com/Connect2/api/public/image/214958309",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214887809",
-     "url": "https://netfile.com/Connect2/api/public/image/214887809",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214821631",
-     "url": "https://netfile.com/Connect2/api/public/image/214821631",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214783473",
-     "url": "https://netfile.com/Connect2/api/public/image/214783473",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214782461",
-     "url": "https://netfile.com/Connect2/api/public/image/214782461",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214782227",
-     "url": "https://netfile.com/Connect2/api/public/image/214782227",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "214782190",
-     "url": "https://netfile.com/Connect2/api/public/image/214782190",
-     "filed": null,
-     "from": null,
-     "through": null
-    }
-   ],
-   "as_of": "2026-07-23"
-  },
   "SCC-114435": {
    "local_id": "SCC-114435",
    "fppc_id": "1482753",
    "name": "Marc Cooper for Franklin McKinley School  Board 2026",
-   "contributions": 15346.1,
+   "contributions": 15696.1,
    "nonmonetary": 0.0,
-   "payments": 18651.77,
+   "payments": 17371.24,
    "first": "2025-08-07",
    "last": "2026-10-13",
    "individuals": {
-    "total": 14846.1,
-    "count": 67
+    "total": 15196.1,
+    "count": 70
    },
    "organizations": [
     {
@@ -9711,7 +9704,7 @@
    "name": "South Bay AFL-CIO Labor Council Issues Account Sponsored By South Bay AFL-CIO Labor Council",
    "contributions": 201200.0,
    "nonmonetary": 29575.14,
-   "payments": 208530.72,
+   "payments": 207054.96,
    "first": "2025-08-11",
    "last": "2026-06-30",
    "individuals": {
@@ -9932,14 +9925,14 @@
    "local_id": "SCC-114438",
    "fppc_id": "1483498",
    "name": "Mer Curry Nunez for ESUHSD Trustee 2026",
-   "contributions": 93391.0,
+   "contributions": 92941.0,
    "nonmonetary": 39270.0,
-   "payments": 74956.04,
+   "payments": 74697.94,
    "first": "2025-08-19",
    "last": "2026-10-26",
    "individuals": {
-    "total": 71776.0,
-    "count": 315
+    "total": 71976.0,
+    "count": 312
    },
    "organizations": [
     {
@@ -9968,23 +9961,23 @@
      "count": 1
     },
     {
-     "name": "Santa Clara & San Benito Counties Building and Construction Trades Council Political Action Committee",
-     "total": 1000.0,
-     "count": 2
-    },
-    {
      "name": "Susan Ellenberg for Supervisor 2026",
      "total": 500.0,
      "count": 1
     },
     {
-     "name": "South Bay Progressive Alliance",
-     "total": 300.0,
-     "count": 2
+     "name": "Santa Clara & San Benito Counties Building and Construction Trades Council Political Action Committee",
+     "total": 500.0,
+     "count": 1
     },
     {
      "name": "Santa Clara County Probation Peace Officers Union Local 1587 AFSCME AFL-CIO PAC",
      "total": 250.0,
+     "count": 1
+    },
+    {
+     "name": "South Bay Progressive Alliance",
+     "total": 150.0,
      "count": 1
     }
    ],
@@ -10007,7 +10000,7 @@
     },
     {
      "employer": "San Jose State University",
-     "total": 1850.0,
+     "total": 1800.0,
      "donors": 3
     },
     {
@@ -10134,14 +10127,14 @@
    "local_id": "SCC-113382",
    "fppc_id": "1402368",
    "name": "Lorena Chavez for ESUHSD School Board 2026",
-   "contributions": 104464.0,
+   "contributions": 102914.0,
    "nonmonetary": 560.0,
-   "payments": 76454.12,
+   "payments": 76148.12,
    "first": "2025-08-28",
    "last": "2026-10-18",
    "individuals": {
-    "total": 69025.0,
-    "count": 153
+    "total": 67475.0,
+    "count": 146
    },
    "organizations": [
     {
@@ -10198,14 +10191,9 @@
      "donors": 5
     },
     {
-     "employer": "Teach For America",
-     "total": 600.0,
-     "donors": 3
-    },
-    {
      "employer": "City of San Jose",
-     "total": 550.0,
-     "donors": 4
+     "total": 350.0,
+     "donors": 3
     }
    ],
    "filings": [
@@ -10344,13 +10332,40 @@
    ],
    "as_of": "2026-01-29"
   },
+  "SCC-114187": {
+   "local_id": "SCC-114187",
+   "fppc_id": "1460525",
+   "name": "Dominguez for SJECCD Trustee 2023",
+   "contributions": 0.0,
+   "nonmonetary": 0.0,
+   "payments": 50.0,
+   "first": "2025-08-29",
+   "last": "2025-12-31",
+   "individuals": {
+    "total": 0.0,
+    "count": 0
+   },
+   "organizations": [],
+   "organizations_count": 0,
+   "employers": [],
+   "filings": [
+    {
+     "id": "215530307",
+     "url": "https://netfile.com/Connect2/api/public/image/215530307",
+     "filed": "2026-02-02",
+     "from": "2025-07-01",
+     "through": "2025-12-31"
+    }
+   ],
+   "as_of": "2026-02-02"
+  },
   "SCC-114441": {
    "local_id": "SCC-114441",
    "fppc_id": "1483296",
    "name": "Yes on A, Santa Clara County Public Health and Safety Coalition sponsored by public health, safety, and labor organization",
    "contributions": 625000.0,
    "nonmonetary": 10000.0,
-   "payments": 639884.63,
+   "payments": 621884.63,
    "first": "2025-09-04",
    "last": "2026-06-30",
    "individuals": {
@@ -10515,16 +10530,22 @@
    "fppc_id": "1470714",
    "name": "Committee to Elect Danny Choi to FUHSD Trustee Area 5",
    "contributions": 0.0,
-   "nonmonetary": 125.0,
+   "nonmonetary": 275.0,
    "payments": 0.0,
    "first": "2025-09-14",
-   "last": "2025-09-14",
+   "last": "2025-12-08",
    "individuals": {
     "total": 125.0,
     "count": 1
    },
-   "organizations": [],
-   "organizations_count": 0,
+   "organizations": [
+    {
+     "name": "Silicon Valley Leadership Group",
+     "total": 150.0,
+     "count": 1
+    }
+   ],
+   "organizations_count": 1,
    "employers": [],
    "filings": [
     {
@@ -10710,14 +10731,21 @@
    "employers": [],
    "filings": [
     {
+     "id": "215431369",
+     "url": "https://netfile.com/Connect2/api/public/image/215431369",
+     "filed": "2026-01-26",
+     "from": "2025-01-01",
+     "through": "2025-12-31"
+    },
+    {
      "id": "214812916",
      "url": "https://netfile.com/Connect2/api/public/image/214812916",
-     "filed": "2025-10-07",
+     "filed": null,
      "from": null,
      "through": null
     }
    ],
-   "as_of": "2025-10-07"
+   "as_of": "2026-01-26"
   },
   "SCC-113607": {
    "local_id": "SCC-113607",
@@ -10811,14 +10839,14 @@
    "local_id": "SCC-114447",
    "fppc_id": "1483907",
    "name": "Connect Bay Area Transit",
-   "contributions": 8335746.69,
-   "nonmonetary": 291269.25,
-   "payments": 6951369.28,
+   "contributions": 8341446.69,
+   "nonmonetary": 334869.0,
+   "payments": 6951269.28,
    "first": "2025-09-30",
-   "last": "2026-10-24",
+   "last": "2026-10-27",
    "individuals": {
-    "total": 1806026.0,
-    "count": 115
+    "total": 1811726.0,
+    "count": 120
    },
    "organizations": [
     {
@@ -10882,9 +10910,16 @@
    ],
    "filings": [
     {
+     "id": "217836914",
+     "url": "https://netfile.com/Connect2/api/public/image/217836914",
+     "filed": "2026-10-27",
+     "from": null,
+     "through": null
+    },
+    {
      "id": "217826087",
      "url": "https://netfile.com/Connect2/api/public/image/217826087",
-     "filed": "2026-10-26",
+     "filed": null,
      "from": null,
      "through": null
     },
@@ -11169,7 +11204,7 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-26"
+   "as_of": "2026-10-27"
   },
   "SCC-114446": {
    "local_id": "SCC-114446",
@@ -11874,14 +11909,14 @@
    "local_id": "SCC-113772",
    "fppc_id": "1426302",
    "name": "Ali Sapirman for Trustee 2028",
-   "contributions": 550.21,
+   "contributions": 550.0,
    "nonmonetary": 0.0,
    "payments": 0.0,
    "first": "2025-11-07",
-   "last": "2025-11-20",
+   "last": "2025-11-11",
    "individuals": {
-    "total": 550.21,
-    "count": 5
+    "total": 550.0,
+    "count": 4
    },
    "organizations": [],
    "organizations_count": 0,
@@ -12126,14 +12161,14 @@
    "local_id": "SCC-114032",
    "fppc_id": "1449892",
    "name": "Rosa Kim for School Board 2022",
-   "contributions": 9650.0,
+   "contributions": 9400.0,
    "nonmonetary": 0.0,
-   "payments": 14702.09,
+   "payments": 14522.18,
    "first": "2025-12-31",
-   "last": "2026-10-25",
+   "last": "2026-10-27",
    "individuals": {
-    "total": 8150.0,
-    "count": 36
+    "total": 7900.0,
+    "count": 35
    },
    "organizations": [
     {
@@ -12151,9 +12186,16 @@
    "employers": [],
    "filings": [
     {
+     "id": "217837158",
+     "url": "https://netfile.com/Connect2/api/public/image/217837158",
+     "filed": "2026-10-27",
+     "from": null,
+     "through": null
+    },
+    {
      "id": "217815720",
      "url": "https://netfile.com/Connect2/api/public/image/217815720",
-     "filed": "2026-10-25",
+     "filed": null,
      "from": null,
      "through": null
     },
@@ -12214,7 +12256,7 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-25"
+   "as_of": "2026-10-27"
   },
   "SCC-114006": {
    "local_id": "SCC-114006",
@@ -12342,14 +12384,14 @@
    "local_id": "SCC-114476",
    "fppc_id": "1485928",
    "name": "Anthony Montes for ESUHSD Board 2026",
-   "contributions": 28794.49,
+   "contributions": 29094.49,
    "nonmonetary": 15822.7,
    "payments": 6727.2,
    "first": "2026-01-17",
    "last": "2026-09-28",
    "individuals": {
-    "total": 13867.19,
-    "count": 56
+    "total": 14167.19,
+    "count": 58
    },
    "organizations": [
     {
@@ -12600,7 +12642,7 @@
    "name": "Peggy Shen Brewster for Sunnyvale School Board 2024",
    "contributions": 0.0,
    "nonmonetary": 0.0,
-   "payments": 1262.54,
+   "payments": 631.27,
    "first": "2026-02-12",
    "last": "2026-02-13",
    "individuals": {
@@ -12733,13 +12775,13 @@
    "fppc_id": "1490829",
    "name": "Grunthaner for SJUSD Trustee Area 4 2026",
    "contributions": 17635.73,
-   "nonmonetary": 16974.62,
+   "nonmonetary": 16841.42,
    "payments": 12601.96,
    "first": "2026-03-01",
    "last": "2026-10-15",
    "individuals": {
-    "total": 14369.9,
-    "count": 64
+    "total": 14236.7,
+    "count": 63
    },
    "organizations": [
     {
@@ -12882,23 +12924,23 @@
    "local_id": "SCC-113693",
    "fppc_id": "1489971",
    "name": "Melillo for SJUSD Trustee 2026",
-   "contributions": 11147.97,
+   "contributions": 9449.06,
    "nonmonetary": 0.0,
-   "payments": 19003.94,
+   "payments": 18987.14,
    "first": "2026-03-24",
    "last": "2026-10-16",
    "individuals": {
-    "total": 9497.97,
-    "count": 51
+    "total": 8299.06,
+    "count": 48
    },
    "organizations": [
     {
-     "name": "Plumbers Local 393 Political Action Fund",
-     "total": 1000.0,
-     "count": 2
+     "name": "Everytown for Gun Safety Action Fund",
+     "total": 500.0,
+     "count": 1
     },
     {
-     "name": "Everytown for Gun Safety Action Fund",
+     "name": "Plumbers Local 393 Political Action Fund",
      "total": 500.0,
      "count": 1
     },
@@ -12912,7 +12954,7 @@
    "employers": [
     {
      "employer": "Apple",
-     "total": 1556.74,
+     "total": 1395.63,
      "donors": 7
     }
    ],
@@ -12945,14 +12987,14 @@
    "local_id": "SCC-114488",
    "fppc_id": "1491531",
    "name": "Paul Pham for ESUHSD Trustee Area 1",
-   "contributions": 6159.4,
+   "contributions": 5675.88,
    "nonmonetary": 0.0,
    "payments": 51990.18,
    "first": "2026-03-24",
    "last": "2026-10-15",
    "individuals": {
-    "total": 6159.4,
-    "count": 21
+    "total": 5675.88,
+    "count": 20
    },
    "organizations": [],
    "organizations_count": 0,
@@ -12984,11 +13026,11 @@
   },
   "SCC-114501": {
    "local_id": "SCC-114501",
-   "fppc_id": "1490110",
+   "fppc_id": "Pending",
    "name": "Tomara Hall for SJUSD School Board 2026",
    "contributions": 16210.22,
    "nonmonetary": 0.0,
-   "payments": 14090.01,
+   "payments": 14081.76,
    "first": "2026-03-30",
    "last": "2026-10-17",
    "individuals": {
@@ -13045,18 +13087,100 @@
    ],
    "as_of": "2026-10-22"
   },
+  "SCC-114496": {
+   "local_id": "SCC-114496",
+   "fppc_id": "1489465",
+   "name": "John Craig for PAUSD Board 2026",
+   "contributions": 18792.26,
+   "nonmonetary": 133.34,
+   "payments": 22051.0,
+   "first": "2026-04-01",
+   "last": "2026-10-19",
+   "individuals": {
+    "total": 18292.26,
+    "count": 102
+   },
+   "organizations": [
+    {
+     "name": "GFC Courage Committee - Peninsular South Bay Chapter",
+     "total": 500.0,
+     "count": 1
+    },
+    {
+     "name": "Garry's List Action",
+     "total": 133.34,
+     "count": 1
+    }
+   ],
+   "organizations_count": 2,
+   "employers": [
+    {
+     "employer": "Apple",
+     "total": 1290.09,
+     "donors": 3
+    },
+    {
+     "employer": "Google",
+     "total": 1009.65,
+     "donors": 6
+    },
+    {
+     "employer": "Meta",
+     "total": 611.5,
+     "donors": 3
+    }
+   ],
+   "filings": [
+    {
+     "id": "217696184",
+     "url": "https://netfile.com/Connect2/api/public/image/217696184",
+     "filed": "2026-10-22",
+     "from": "2026-09-20",
+     "through": "2026-10-17"
+    },
+    {
+     "id": "217670365",
+     "url": "https://netfile.com/Connect2/api/public/image/217670365",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217660186",
+     "url": "https://netfile.com/Connect2/api/public/image/217660186",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217487005",
+     "url": "https://netfile.com/Connect2/api/public/image/217487005",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217092309",
+     "url": "https://netfile.com/Connect2/api/public/image/217092309",
+     "filed": null,
+     "from": null,
+     "through": null
+    }
+   ],
+   "as_of": "2026-10-22"
+  },
   "SCC-114497": {
    "local_id": "SCC-114497",
    "fppc_id": "1489468",
    "name": "Avery Wang for PAUSD Board 2026",
-   "contributions": 30295.84,
+   "contributions": 29978.91,
    "nonmonetary": 133.33,
-   "payments": 25314.97,
+   "payments": 23298.59,
    "first": "2026-04-01",
    "last": "2026-10-21",
    "individuals": {
-    "total": 29929.17,
-    "count": 119
+    "total": 29612.24,
+    "count": 117
    },
    "organizations": [
     {
@@ -13069,8 +13193,8 @@
    "employers": [
     {
      "employer": "Google",
-     "total": 1332.33,
-     "donors": 8
+     "total": 1121.15,
+     "donors": 7
     },
     {
      "employer": "Waymo",
@@ -13131,88 +13255,6 @@
    ],
    "as_of": "2026-10-25"
   },
-  "SCC-114496": {
-   "local_id": "SCC-114496",
-   "fppc_id": "1489465",
-   "name": "John Craig for PAUSD Board 2026",
-   "contributions": 19103.76,
-   "nonmonetary": 133.34,
-   "payments": 23627.34,
-   "first": "2026-04-01",
-   "last": "2026-10-19",
-   "individuals": {
-    "total": 18603.76,
-    "count": 105
-   },
-   "organizations": [
-    {
-     "name": "GFC Courage Committee - Peninsular South Bay Chapter",
-     "total": 500.0,
-     "count": 1
-    },
-    {
-     "name": "Garry's List Action",
-     "total": 133.34,
-     "count": 1
-    }
-   ],
-   "organizations_count": 2,
-   "employers": [
-    {
-     "employer": "Apple",
-     "total": 1290.09,
-     "donors": 3
-    },
-    {
-     "employer": "Google",
-     "total": 1009.65,
-     "donors": 6
-    },
-    {
-     "employer": "Meta",
-     "total": 717.25,
-     "donors": 3
-    }
-   ],
-   "filings": [
-    {
-     "id": "217696184",
-     "url": "https://netfile.com/Connect2/api/public/image/217696184",
-     "filed": "2026-10-22",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
-    },
-    {
-     "id": "217670365",
-     "url": "https://netfile.com/Connect2/api/public/image/217670365",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "217660186",
-     "url": "https://netfile.com/Connect2/api/public/image/217660186",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "217487005",
-     "url": "https://netfile.com/Connect2/api/public/image/217487005",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "217092309",
-     "url": "https://netfile.com/Connect2/api/public/image/217092309",
-     "filed": null,
-     "from": null,
-     "through": null
-    }
-   ],
-   "as_of": "2026-10-22"
-  },
   "SCC-114707": {
    "local_id": "SCC-114707",
    "fppc_id": "Pending",
@@ -13244,14 +13286,14 @@
    "local_id": "SCC-114503",
    "fppc_id": "1490656",
    "name": "Alexander Gvatua for Foothill De Anza Trustee Area 2 2026",
-   "contributions": 13910.0,
+   "contributions": 13810.0,
    "nonmonetary": 0.0,
-   "payments": 5773.19,
+   "payments": 5425.19,
    "first": "2026-04-04",
    "last": "2026-09-15",
    "individuals": {
-    "total": 13910.0,
-    "count": 52
+    "total": 13810.0,
+    "count": 51
    },
    "organizations": [],
    "organizations_count": 0,
@@ -13463,7 +13505,7 @@
    "local_id": "SCC-114128",
    "fppc_id": "1452186",
    "name": "Maimona Afzal Berta for SCC Board of Education 2026",
-   "contributions": 5500.0,
+   "contributions": 6500.0,
    "nonmonetary": 0.0,
    "payments": 1099.0,
    "first": "2026-04-15",
@@ -13477,9 +13519,14 @@
      "name": "San Jose Teachers' Association Political Action Committee",
      "total": 5500.0,
      "count": 1
+    },
+    {
+     "name": "Leadership for Educational Equity California General Purpose Committee",
+     "total": 1000.0,
+     "count": 1
     }
    ],
-   "organizations_count": 1,
+   "organizations_count": 2,
    "employers": [],
    "filings": [
     {
@@ -13505,7 +13552,7 @@
    "name": "Committee for Stronger FMSD Schools - Yes on Measure C 2026",
    "contributions": 73000.0,
    "nonmonetary": 0.0,
-   "payments": 31000.71,
+   "payments": 32110.71,
    "first": "2026-04-15",
    "last": "2026-06-21",
    "individuals": {
@@ -13664,7 +13711,7 @@
    "name": "Protect Palo Alto Schools- Yes on B",
    "contributions": 26046.46,
    "nonmonetary": 800.0,
-   "payments": 16449.7,
+   "payments": 7449.7,
    "first": "2026-04-29",
    "last": "2026-06-12",
    "individuals": {
@@ -13848,31 +13895,53 @@
    "local_id": "SCC-114515",
    "fppc_id": "1490905",
    "name": "Phillips for School Board 2026",
-   "contributions": 4461.35,
+   "contributions": 8511.35,
    "nonmonetary": 0.0,
-   "payments": 0.0,
+   "payments": 4049.69,
    "first": "2026-05-02",
-   "last": "2026-09-19",
+   "last": "2026-10-16",
    "individuals": {
-    "total": 3961.35,
-    "count": 14
+    "total": 4011.35,
+    "count": 15
    },
    "organizations": [
+    {
+     "name": "Service Employees international union local 521 independent expenditure committee",
+     "total": 2500.0,
+     "count": 1
+    },
+    {
+     "name": "IBEW 332 Education fund",
+     "total": 1000.0,
+     "count": 1
+    },
     {
      "name": "Santa Clara and San Benito Counties Building and Construction Trades PAC",
      "total": 500.0,
      "count": 1
+    },
+    {
+     "name": "Santa Clara and San Benito Counties Building and construction trades council pac",
+     "total": 500.0,
+     "count": 1
     }
    ],
-   "organizations_count": 1,
+   "organizations_count": 4,
    "employers": [],
    "filings": [
     {
+     "id": "217836115",
+     "url": "https://netfile.com/Connect2/api/public/image/217836115",
+     "filed": "2026-10-27",
+     "from": "2026-09-20",
+     "through": "2026-10-17"
+    },
+    {
      "id": "217530993",
      "url": "https://netfile.com/Connect2/api/public/image/217530993",
-     "filed": "2026-09-25",
-     "from": "2026-07-01",
-     "through": "2026-09-19"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "217114297",
@@ -13882,7 +13951,7 @@
      "through": null
     }
    ],
-   "as_of": "2026-09-25"
+   "as_of": "2026-10-27"
   },
   "SCC-114517": {
    "local_id": "SCC-114517",
@@ -13947,14 +14016,14 @@
    "local_id": "SCC-114495",
    "fppc_id": "1489483",
    "name": "Northrup Gadus for MHUSD Trustee Area 3 - 2026",
-   "contributions": 9200.0,
+   "contributions": 8800.0,
    "nonmonetary": 300.3,
-   "payments": 6146.91,
+   "payments": 5674.85,
    "first": "2026-05-15",
    "last": "2026-10-15",
    "individuals": {
-    "total": 6750.0,
-    "count": 30
+    "total": 6350.0,
+    "count": 27
    },
    "organizations": [
     {
@@ -14068,7 +14137,7 @@
    "name": "Horner for MHUSD Trustee Area 2 - 2026",
    "contributions": 13450.0,
    "nonmonetary": 0.0,
-   "payments": 16403.98,
+   "payments": 13302.78,
    "first": "2026-05-18",
    "last": "2026-10-16",
    "individuals": {
@@ -14154,14 +14223,14 @@
    "local_id": "SCC-114502",
    "fppc_id": "1491441",
    "name": "Ilanit Eliaz for FUHSD Trustee Area 4 2026",
-   "contributions": 14956.27,
+   "contributions": 14645.09,
    "nonmonetary": 0.0,
    "payments": 6598.68,
    "first": "2026-06-04",
    "last": "2026-10-15",
    "individuals": {
-    "total": 14756.27,
-    "count": 62
+    "total": 14445.09,
+    "count": 60
    },
    "organizations": [
     {
@@ -14210,46 +14279,6 @@
     }
    ],
    "as_of": "2026-10-20"
-  },
-  "SCC-114523": {
-   "local_id": "SCC-114523",
-   "fppc_id": "1491989",
-   "name": "Yan Zhao for County Board of Education 2026",
-   "contributions": 53000.0,
-   "nonmonetary": 0.0,
-   "payments": 0.0,
-   "first": "2026-06-15",
-   "last": "2026-08-09",
-   "individuals": {
-    "total": 0.0,
-    "count": 0
-   },
-   "organizations": [
-    {
-     "name": "Yan Zhao For Council 2022",
-     "total": 53000.0,
-     "count": 2
-    }
-   ],
-   "organizations_count": 1,
-   "employers": [],
-   "filings": [
-    {
-     "id": "217203616",
-     "url": "https://netfile.com/Connect2/api/public/image/217203616",
-     "filed": "2026-08-10",
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "216943213",
-     "url": "https://netfile.com/Connect2/api/public/image/216943213",
-     "filed": null,
-     "from": null,
-     "through": null
-    }
-   ],
-   "as_of": "2026-08-10"
   },
   "SCC-114530": {
    "local_id": "SCC-114530",
@@ -14318,7 +14347,7 @@
    "name": "Committee for Affordable Bay Area Transit Sponsored by Contra Costa Taxpayers Association",
    "contributions": 18596.01,
    "nonmonetary": 598.72,
-   "payments": 14266.68,
+   "payments": 10756.68,
    "first": "2026-06-19",
    "last": "2026-10-13",
    "individuals": {
@@ -14574,13 +14603,53 @@
    ],
    "as_of": "2026-10-21"
   },
+  "SCC-114523": {
+   "local_id": "SCC-114523",
+   "fppc_id": "1491989",
+   "name": "Yan Zhao for County Board of Education 2026",
+   "contributions": 50000.0,
+   "nonmonetary": 0.0,
+   "payments": 0.0,
+   "first": "2026-06-25",
+   "last": "2026-08-09",
+   "individuals": {
+    "total": 0.0,
+    "count": 0
+   },
+   "organizations": [
+    {
+     "name": "Yan Zhao For Council 2022",
+     "total": 50000.0,
+     "count": 1
+    }
+   ],
+   "organizations_count": 1,
+   "employers": [],
+   "filings": [
+    {
+     "id": "217203616",
+     "url": "https://netfile.com/Connect2/api/public/image/217203616",
+     "filed": "2026-08-10",
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "216943213",
+     "url": "https://netfile.com/Connect2/api/public/image/216943213",
+     "filed": null,
+     "from": null,
+     "through": null
+    }
+   ],
+   "as_of": "2026-08-10"
+  },
   "SCC-113999": {
    "local_id": "SCC-113999",
    "fppc_id": "1448260",
    "name": "Thida Cornes for MVLA Board 2026",
    "contributions": 5500.0,
    "nonmonetary": 457.1,
-   "payments": 5522.17,
+   "payments": 5520.96,
    "first": "2026-06-29",
    "last": "2026-10-16",
    "individuals": {
@@ -14733,14 +14802,14 @@
    "local_id": "SCC-114526",
    "fppc_id": "1492114",
    "name": "Naomi Nakano-Matsumoto for Fremont Union High School District 2026",
-   "contributions": 24897.0,
+   "contributions": 23898.0,
    "nonmonetary": 0.0,
-   "payments": 20739.14,
+   "payments": 14588.32,
    "first": "2026-07-02",
    "last": "2026-10-24",
    "individuals": {
-    "total": 23397.0,
-    "count": 83
+    "total": 22398.0,
+    "count": 82
    },
    "organizations": [
     {
@@ -14800,13 +14869,13 @@
    "fppc_id": "1492961",
    "name": "Devon Conley for Mountain View Whisman School Board 2026",
    "contributions": 6050.0,
-   "nonmonetary": 300.0,
+   "nonmonetary": 620.0,
    "payments": 4985.4,
    "first": "2026-07-06",
    "last": "2026-10-17",
    "individuals": {
-    "total": 5850.0,
-    "count": 28
+    "total": 6170.0,
+    "count": 30
    },
    "organizations": [
     {
@@ -14884,7 +14953,7 @@
   },
   "SCC-114827": {
    "local_id": "SCC-114827",
-   "fppc_id": "1495935",
+   "fppc_id": "Pending",
    "name": "Nancy Altman-Palm for MHUSD Trustee 2026",
    "contributions": 4660.0,
    "nonmonetary": 0.0,
@@ -14933,14 +15002,14 @@
    "local_id": "SCC-114540",
    "fppc_id": "1493385",
    "name": "Jaria Jaug for Berryessa School Board 2026",
-   "contributions": 21229.93,
+   "contributions": 20909.93,
    "nonmonetary": 0.0,
-   "payments": 8577.29,
+   "payments": 8573.81,
    "first": "2026-07-14",
    "last": "2026-10-17",
    "individuals": {
-    "total": 10579.93,
-    "count": 42
+    "total": 10259.93,
+    "count": 41
    },
    "organizations": [
     {
@@ -15134,23 +15203,30 @@
    "local_id": "SCC-114493",
    "fppc_id": null,
    "name": "Committee to Elect Jimmy Forbis",
-   "contributions": 2366.67,
+   "contributions": 2966.67,
    "nonmonetary": 0.0,
    "payments": 3731.49,
    "first": "2026-07-19",
-   "last": "2026-10-01",
+   "last": "2026-10-11",
    "individuals": {
-    "total": 2366.67,
-    "count": 11
+    "total": 2966.67,
+    "count": 14
    },
    "organizations": [],
    "organizations_count": 0,
    "employers": [],
    "filings": [
     {
+     "id": "217837352",
+     "url": "https://netfile.com/Connect2/api/public/image/217837352",
+     "filed": "2026-10-27",
+     "from": "2026-09-20",
+     "through": "2026-10-17"
+    },
+    {
      "id": "217567674",
      "url": "https://netfile.com/Connect2/api/public/image/217567674",
-     "filed": "2026-10-02",
+     "filed": null,
      "from": null,
      "through": null
     },
@@ -15162,20 +15238,20 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-02"
+   "as_of": "2026-10-27"
   },
   "SCC-114573": {
    "local_id": "SCC-114573",
    "fppc_id": "1493259",
    "name": "Vartika Chandra For School Board 2026",
-   "contributions": 2800.0,
+   "contributions": 2600.0,
    "nonmonetary": 1.5,
    "payments": 3392.37,
    "first": "2026-07-20",
    "last": "2026-10-17",
    "individuals": {
-    "total": 2801.5,
-    "count": 27
+    "total": 2601.5,
+    "count": 26
    },
    "organizations": [],
    "organizations_count": 0,
@@ -15457,7 +15533,7 @@
    "fppc_id": null,
    "name": "Committee for WVMCCD Board of Trustees Area 3 Election for Glaves 2026",
    "contributions": 6246.25,
-   "nonmonetary": 7531.95,
+   "nonmonetary": 6758.4,
    "payments": 0.0,
    "first": "2026-07-25",
    "last": "2026-10-05",
@@ -15468,8 +15544,8 @@
    "organizations": [
     {
      "name": "West Valley-Mission Federation of Teachers AFT local 6554 PAC",
-     "total": 12531.95,
-     "count": 11
+     "total": 11758.4,
+     "count": 10
     },
     {
      "name": "Plumbers Local 393 Political Action Fund",
@@ -15555,16 +15631,16 @@
   },
   "SCC-114708": {
    "local_id": "SCC-114708",
-   "fppc_id": "Pending",
+   "fppc_id": "1494484",
    "name": "Mary Pollett for Evergreen School Board 2026",
-   "contributions": 7218.38,
+   "contributions": 7114.9,
    "nonmonetary": 1844.06,
    "payments": 6045.41,
    "first": "2026-07-27",
    "last": "2026-10-14",
    "individuals": {
-    "total": 9062.44,
-    "count": 37
+    "total": 8958.96,
+    "count": 36
    },
    "organizations": [],
    "organizations_count": 0,
@@ -15625,7 +15701,7 @@
    "fppc_id": "1494041",
    "name": "Amezcua for MHUSD Trustee Area 1 - 2026",
    "contributions": 6300.0,
-   "nonmonetary": 600.6,
+   "nonmonetary": 300.3,
    "payments": 5408.04,
    "first": "2026-07-29",
    "last": "2026-10-16",
@@ -15635,13 +15711,13 @@
    },
    "organizations": [
     {
-     "name": "HORNER FOR MHUSD TRUSTEE AREA 2 - 2026",
-     "total": 600.6,
-     "count": 2
-    },
-    {
      "name": "Sylvia Arenas for Supervisor 2030",
      "total": 500.0,
+     "count": 1
+    },
+    {
+     "name": "HORNER FOR MHUSD TRUSTEE AREA 2 - 2026",
+     "total": 300.3,
      "count": 1
     }
    ],
@@ -15719,53 +15795,45 @@
    ],
    "as_of": "2026-10-22"
   },
-  "SCC-114725": {
-   "local_id": "SCC-114725",
-   "fppc_id": "1495201",
-   "name": "BRANDON STROY FOR LASD",
-   "contributions": 3092.75,
-   "nonmonetary": 0.0,
-   "payments": 4886.37,
+  "SCC-114134": {
+   "local_id": "SCC-114134",
+   "fppc_id": "1450841",
+   "name": "Chris Norwood for School Board 2026",
+   "contributions": 7976.52,
+   "nonmonetary": 199.0,
+   "payments": 1558.35,
    "first": "2026-07-31",
-   "last": "2026-10-26",
+   "last": "2026-09-25",
    "individuals": {
-    "total": 3092.75,
-    "count": 14
+    "total": 7675.52,
+    "count": 15
    },
-   "organizations": [],
-   "organizations_count": 0,
+   "organizations": [
+    {
+     "name": "Lincoln Club of Northern California PAC",
+     "total": 500.0,
+     "count": 1
+    }
+   ],
+   "organizations_count": 1,
    "employers": [],
    "filings": [
     {
-     "id": "217827549",
-     "url": "https://netfile.com/Connect2/api/public/image/217827549",
-     "filed": "2026-10-27",
-     "from": null,
-     "through": null
+     "id": "217681843",
+     "url": "https://netfile.com/Connect2/api/public/image/217681843",
+     "filed": "2026-10-21",
+     "from": "2026-09-20",
+     "through": "2026-10-17"
     },
     {
-     "id": "217820544",
-     "url": "https://netfile.com/Connect2/api/public/image/217820544",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "217684677",
-     "url": "https://netfile.com/Connect2/api/public/image/217684677",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "217492497",
-     "url": "https://netfile.com/Connect2/api/public/image/217492497",
+     "id": "217528273",
+     "url": "https://netfile.com/Connect2/api/public/image/217528273",
      "filed": null,
      "from": null,
      "through": null
     }
    ],
-   "as_of": "2026-10-27"
+   "as_of": "2026-10-21"
   },
   "SCC-114669": {
    "local_id": "SCC-114669",
@@ -15852,6 +15920,54 @@
    ],
    "as_of": "2026-10-26"
   },
+  "SCC-114725": {
+   "local_id": "SCC-114725",
+   "fppc_id": "1495201",
+   "name": "BRANDON STROY FOR LASD",
+   "contributions": 3092.75,
+   "nonmonetary": 0.0,
+   "payments": 4886.37,
+   "first": "2026-07-31",
+   "last": "2026-10-26",
+   "individuals": {
+    "total": 3092.75,
+    "count": 14
+   },
+   "organizations": [],
+   "organizations_count": 0,
+   "employers": [],
+   "filings": [
+    {
+     "id": "217827549",
+     "url": "https://netfile.com/Connect2/api/public/image/217827549",
+     "filed": "2026-10-27",
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217820544",
+     "url": "https://netfile.com/Connect2/api/public/image/217820544",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217684677",
+     "url": "https://netfile.com/Connect2/api/public/image/217684677",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217492497",
+     "url": "https://netfile.com/Connect2/api/public/image/217492497",
+     "filed": null,
+     "from": null,
+     "through": null
+    }
+   ],
+   "as_of": "2026-10-27"
+  },
   "SCC-114545": {
    "local_id": "SCC-114545",
    "fppc_id": "1493705",
@@ -15893,46 +16009,6 @@
    ],
    "as_of": "2026-10-25"
   },
-  "SCC-114134": {
-   "local_id": "SCC-114134",
-   "fppc_id": "1450841",
-   "name": "Chris Norwood for School Board 2026",
-   "contributions": 7976.52,
-   "nonmonetary": 199.0,
-   "payments": 1558.35,
-   "first": "2026-07-31",
-   "last": "2026-09-25",
-   "individuals": {
-    "total": 7675.52,
-    "count": 15
-   },
-   "organizations": [
-    {
-     "name": "Lincoln Club of Northern California PAC",
-     "total": 500.0,
-     "count": 1
-    }
-   ],
-   "organizations_count": 1,
-   "employers": [],
-   "filings": [
-    {
-     "id": "217681843",
-     "url": "https://netfile.com/Connect2/api/public/image/217681843",
-     "filed": "2026-10-21",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
-    },
-    {
-     "id": "217528273",
-     "url": "https://netfile.com/Connect2/api/public/image/217528273",
-     "filed": null,
-     "from": null,
-     "through": null
-    }
-   ],
-   "as_of": "2026-10-21"
-  },
   "SCC-114700": {
    "local_id": "SCC-114700",
    "fppc_id": "1494317",
@@ -15973,11 +16049,18 @@
    ],
    "filings": [
     {
+     "id": "217838202",
+     "url": "https://netfile.com/Connect2/api/public/image/217838202",
+     "filed": "2026-10-28",
+     "from": "2026-01-01",
+     "through": "2026-09-19"
+    },
+    {
      "id": "217829725",
      "url": "https://netfile.com/Connect2/api/public/image/217829725",
-     "filed": "2026-10-27",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "217581932",
@@ -15985,29 +16068,22 @@
      "filed": null,
      "from": null,
      "through": null
-    },
-    {
-     "id": "217458951",
-     "url": "https://netfile.com/Connect2/api/public/image/217458951",
-     "filed": null,
-     "from": null,
-     "through": null
     }
    ],
-   "as_of": "2026-10-27"
+   "as_of": "2026-10-28"
   },
   "SCC-113583": {
    "local_id": "SCC-113583",
    "fppc_id": "1411550",
    "name": "Sirkay for LASD 2026",
-   "contributions": 3411.67,
+   "contributions": 3161.67,
    "nonmonetary": 0.0,
    "payments": 4459.88,
    "first": "2026-08-04",
    "last": "2026-10-21",
    "individuals": {
-    "total": 3411.67,
-    "count": 18
+    "total": 3161.67,
+    "count": 17
    },
    "organizations": [],
    "organizations_count": 0,
@@ -16083,7 +16159,7 @@
    "name": "GABRIELA WINTER CAMPAIGN FOR MORGAN HILL SCHOOL BOARD, AREA 2, 2026",
    "contributions": 11200.0,
    "nonmonetary": 0.0,
-   "payments": 11120.61,
+   "payments": 10876.31,
    "first": "2026-08-04",
    "last": "2026-10-16",
    "individuals": {
@@ -16147,14 +16223,14 @@
    "local_id": "SCC-114764",
    "fppc_id": "1495080",
    "name": "BALINTON FOR WATER BOARD 2026",
-   "contributions": 33035.9,
+   "contributions": 32935.9,
    "nonmonetary": 0.0,
    "payments": 6647.49,
    "first": "2026-08-04",
    "last": "2026-10-23",
    "individuals": {
-    "total": 23485.9,
-    "count": 93
+    "total": 23385.9,
+    "count": 92
    },
    "organizations": [
     {
@@ -16246,14 +16322,14 @@
    "local_id": "SCC-114655",
    "fppc_id": "Pending",
    "name": "Jose Magana for SJUSD Area 2 Trustee 2026",
-   "contributions": 34187.0,
+   "contributions": 33987.0,
    "nonmonetary": 0.0,
    "payments": 34721.62,
    "first": "2026-08-07",
    "last": "2026-10-19",
    "individuals": {
-    "total": 27937.0,
-    "count": 138
+    "total": 27737.0,
+    "count": 136
    },
    "organizations": [
     {
@@ -16279,11 +16355,6 @@
    ],
    "organizations_count": 4,
    "employers": [
-    {
-     "employer": "San Jose Unified",
-     "total": 750.0,
-     "donors": 3
-    },
     {
      "employer": "San Jose Unified School District",
      "total": 650.0,
@@ -16623,7 +16694,7 @@
    "name": "Kelly Yip-Chuan for Milpitas School Board 2026",
    "contributions": 5200.21,
    "nonmonetary": 200.0,
-   "payments": 828.37,
+   "payments": 438.37,
    "first": "2026-08-28",
    "last": "2026-10-04",
    "individuals": {
@@ -16661,14 +16732,14 @@
    "local_id": "SCC-114616",
    "fppc_id": "Pending",
    "name": "Yes on N - Neighbors for Strong Local High Schools",
-   "contributions": 140015.0,
+   "contributions": 137515.0,
    "nonmonetary": 0.0,
    "payments": 68446.56,
    "first": "2026-09-02",
    "last": "2026-10-26",
    "individuals": {
-    "total": 49200.0,
-    "count": 14
+    "total": 46700.0,
+    "count": 13
    },
    "organizations": [
     {
@@ -17080,14 +17151,14 @@
    "local_id": "SCC-114727",
    "fppc_id": null,
    "name": "Kamal Yassin for Santa Clara USD Area 1 2026",
-   "contributions": 11442.23,
+   "contributions": 10942.23,
    "nonmonetary": 3454.58,
    "payments": 4354.05,
    "first": "2026-09-08",
    "last": "2026-10-21",
    "individuals": {
-    "total": 11442.23,
-    "count": 35
+    "total": 10942.23,
+    "count": 34
    },
    "organizations": [
     {
@@ -17100,7 +17171,7 @@
    "employers": [
     {
      "employer": "NVIDIA",
-     "total": 2408.65,
+     "total": 1908.65,
      "donors": 5
     },
     {
@@ -17159,14 +17230,14 @@
    "local_id": "SCC-114746",
    "fppc_id": "1495167",
    "name": "NGUYEN FOR WATER DISTRICT BOARDMEMBER, DISTRICT 6 2026",
-   "contributions": 36050.0,
+   "contributions": 36300.0,
    "nonmonetary": 0.0,
-   "payments": 16486.37,
+   "payments": 22159.37,
    "first": "2026-09-09",
    "last": "2026-10-17",
    "individuals": {
-    "total": 22200.0,
-    "count": 28
+    "total": 22450.0,
+    "count": 29
    },
    "organizations": [
     {
@@ -17423,58 +17494,18 @@
    ],
    "as_of": "2026-09-19"
   },
-  "SCC-114786": {
-   "local_id": "SCC-114786",
-   "fppc_id": null,
-   "name": "Friends of Jenny Ludwig for ARUSD Board 2026",
-   "contributions": 2900.0,
-   "nonmonetary": 0.0,
-   "payments": 605.11,
-   "first": "2026-09-19",
-   "last": "2026-10-17",
-   "individuals": {
-    "total": 2000.0,
-    "count": 7
-   },
-   "organizations": [
-    {
-     "name": "Alum Rock Educators Association",
-     "total": 900.0,
-     "count": 1
-    }
-   ],
-   "organizations_count": 1,
-   "employers": [],
-   "filings": [
-    {
-     "id": "217707425",
-     "url": "https://netfile.com/Connect2/api/public/image/217707425",
-     "filed": "2026-10-22",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
-    },
-    {
-     "id": "217518619",
-     "url": "https://netfile.com/Connect2/api/public/image/217518619",
-     "filed": null,
-     "from": null,
-     "through": null
-    }
-   ],
-   "as_of": "2026-10-22"
-  },
   "SCC-114818": {
    "local_id": "SCC-114818",
    "fppc_id": "1495820",
    "name": "Jason Lin for Fremont Union High School District Board 2026, TA3",
-   "contributions": 6795.2,
+   "contributions": 6895.2,
    "nonmonetary": 0.0,
    "payments": 0.0,
    "first": "2026-09-19",
    "last": "2026-10-24",
    "individuals": {
-    "total": 5795.2,
-    "count": 29
+    "total": 5895.2,
+    "count": 30
    },
    "organizations": [
     {
@@ -17514,6 +17545,46 @@
     }
    ],
    "as_of": "2026-10-24"
+  },
+  "SCC-114786": {
+   "local_id": "SCC-114786",
+   "fppc_id": null,
+   "name": "Friends of Jenny Ludwig for ARUSD Board 2026",
+   "contributions": 2900.0,
+   "nonmonetary": 0.0,
+   "payments": 605.11,
+   "first": "2026-09-19",
+   "last": "2026-10-17",
+   "individuals": {
+    "total": 2000.0,
+    "count": 7
+   },
+   "organizations": [
+    {
+     "name": "Alum Rock Educators Association",
+     "total": 900.0,
+     "count": 1
+    }
+   ],
+   "organizations_count": 1,
+   "employers": [],
+   "filings": [
+    {
+     "id": "217707425",
+     "url": "https://netfile.com/Connect2/api/public/image/217707425",
+     "filed": "2026-10-22",
+     "from": "2026-09-20",
+     "through": "2026-10-17"
+    },
+    {
+     "id": "217518619",
+     "url": "https://netfile.com/Connect2/api/public/image/217518619",
+     "filed": null,
+     "from": null,
+     "through": null
+    }
+   ],
+   "as_of": "2026-10-22"
   },
   "SCC-114749": {
    "local_id": "SCC-114749",
@@ -18009,13 +18080,13 @@
    "contest": "06085-3354",
    "candidate": "Michael Melillo"
   },
-  "SCC-114497": {
-   "contest": "06085-3340",
-   "candidate": "Avery Wang"
-  },
   "SCC-114496": {
    "contest": "06085-3340",
    "candidate": "John Craig"
+  },
+  "SCC-114497": {
+   "contest": "06085-3340",
+   "candidate": "Avery Wang"
   },
   "SCC-114490": {
    "contest": "06085-3336",
@@ -18113,21 +18184,21 @@
    "contest": "06085-6007",
    "candidate": "Rebecca Eisenberg"
   },
-  "SCC-114725": {
-   "contest": "06085-3591",
-   "candidate": "Brandon Stroy"
+  "SCC-114134": {
+   "contest": "06085-3321",
+   "candidate": "Chris Norwood"
   },
   "SCC-114669": {
    "contest": "06085-3170",
    "candidate": "Raeena S. Lari"
   },
+  "SCC-114725": {
+   "contest": "06085-3591",
+   "candidate": "Brandon Stroy"
+  },
   "SCC-114545": {
    "contest": "06085-3352",
    "candidate": "Carson Dance"
-  },
-  "SCC-114134": {
-   "contest": "06085-3321",
-   "candidate": "Chris Norwood"
   },
   "SCC-114700": {
    "contest": "06085-3551",
@@ -18173,13 +18244,13 @@
    "contest": "06085-3216",
    "candidate": "Liangfang \"Liang\" Chao"
   },
-  "SCC-114786": {
-   "contest": "06085-3505",
-   "candidate": "Jenny Ludwig"
-  },
   "SCC-114818": {
    "contest": "06085-3435",
    "candidate": "Jason Lin"
+  },
+  "SCC-114786": {
+   "contest": "06085-3505",
+   "candidate": "Jenny Ludwig"
   },
   "SCC-114649": {
    "contest": "06085-3511",
@@ -18302,17 +18373,6 @@
    "candidate": null,
    "amount": 41.29,
    "date": "2025-09-10",
-   "filing": "215141437",
-   "url": "https://netfile.com/Connect2/api/public/image/215141437"
-  },
-  {
-   "spender": "South Bay AFL- CIO Labor Council Committee On Political Education Sponsored by South Bay AFL-CIO Labor Council",
-   "spender_id": "CAMPAIGN_SCC-746",
-   "target": "Neysa Fligor",
-   "contest": null,
-   "candidate": null,
-   "amount": 61.42,
-   "date": "2025-09-11",
    "filing": "215141437",
    "url": "https://netfile.com/Connect2/api/public/image/215141437"
   },
@@ -18630,28 +18690,6 @@
    "target": "Neysa Fligor",
    "contest": null,
    "candidate": null,
-   "amount": 181.02,
-   "date": "2025-10-16",
-   "filing": "214898162",
-   "url": "https://netfile.com/Connect2/api/public/image/214898162"
-  },
-  {
-   "spender": "South Bay AFL- CIO Labor Council Committee On Political Education Sponsored by South Bay AFL-CIO Labor Council",
-   "spender_id": "CAMPAIGN_SCC-746",
-   "target": "Neysa Fligor",
-   "contest": null,
-   "candidate": null,
-   "amount": 181.02,
-   "date": "2025-10-16",
-   "filing": "214898162",
-   "url": "https://netfile.com/Connect2/api/public/image/214898162"
-  },
-  {
-   "spender": "South Bay AFL- CIO Labor Council Committee On Political Education Sponsored by South Bay AFL-CIO Labor Council",
-   "spender_id": "CAMPAIGN_SCC-746",
-   "target": "Neysa Fligor",
-   "contest": null,
-   "candidate": null,
    "amount": 71.39,
    "date": "2025-10-18",
    "filing": "214898162",
@@ -18665,6 +18703,28 @@
    "candidate": null,
    "amount": 95.67,
    "date": "2025-10-19",
+   "filing": "214898162",
+   "url": "https://netfile.com/Connect2/api/public/image/214898162"
+  },
+  {
+   "spender": "South Bay AFL- CIO Labor Council Committee On Political Education Sponsored by South Bay AFL-CIO Labor Council",
+   "spender_id": "CAMPAIGN_SCC-746",
+   "target": "Neysa Fligor",
+   "contest": null,
+   "candidate": null,
+   "amount": 46.4,
+   "date": "2025-10-21",
+   "filing": "214898162",
+   "url": "https://netfile.com/Connect2/api/public/image/214898162"
+  },
+  {
+   "spender": "South Bay AFL- CIO Labor Council Committee On Political Education Sponsored by South Bay AFL-CIO Labor Council",
+   "spender_id": "CAMPAIGN_SCC-746",
+   "target": "Neysa Fligor",
+   "contest": null,
+   "candidate": null,
+   "amount": 75.06,
+   "date": "2025-10-21",
    "filing": "214898162",
    "url": "https://netfile.com/Connect2/api/public/image/214898162"
   },
@@ -18968,6 +19028,17 @@
   {
    "spender": "South Bay AFL- CIO Labor Council Committee On Political Education Sponsored by South Bay AFL-CIO Labor Council",
    "spender_id": "CAMPAIGN_SCC-746",
+   "target": "Neysa Filgor",
+   "contest": null,
+   "candidate": null,
+   "amount": 9500.0,
+   "date": "2025-12-13",
+   "filing": "215114214",
+   "url": "https://netfile.com/Connect2/api/public/image/215114214"
+  },
+  {
+   "spender": "South Bay AFL- CIO Labor Council Committee On Political Education Sponsored by South Bay AFL-CIO Labor Council",
+   "spender_id": "CAMPAIGN_SCC-746",
    "target": "Neysa Fligor",
    "contest": null,
    "candidate": null,
@@ -18986,17 +19057,6 @@
    "date": "2025-12-13",
    "filing": "215120001",
    "url": "https://netfile.com/Connect2/api/public/image/215120001"
-  },
-  {
-   "spender": "South Bay AFL- CIO Labor Council Committee On Political Education Sponsored by South Bay AFL-CIO Labor Council",
-   "spender_id": "CAMPAIGN_SCC-746",
-   "target": "Neysa Filgor",
-   "contest": null,
-   "candidate": null,
-   "amount": 9500.0,
-   "date": "2025-12-13",
-   "filing": "215114214",
-   "url": "https://netfile.com/Connect2/api/public/image/215114214"
   },
   {
    "spender": "South Bay AFL- CIO Labor Council Committee On Political Education Sponsored by South Bay AFL-CIO Labor Council",
@@ -19301,17 +19361,6 @@
    "target": "Sylvia Arenas",
    "contest": null,
    "candidate": null,
-   "amount": 79.43,
-   "date": "2026-04-28",
-   "filing": "216733088",
-   "url": "https://netfile.com/Connect2/api/public/image/216733088"
-  },
-  {
-   "spender": "South Bay AFL- CIO Labor Council Committee On Political Education Sponsored by South Bay AFL-CIO Labor Council",
-   "spender_id": "CAMPAIGN_SCC-746",
-   "target": "Sylvia Arenas",
-   "contest": null,
-   "candidate": null,
    "amount": 47.81,
    "date": "2026-04-30",
    "filing": "216733088",
@@ -19521,6 +19570,28 @@
    "target": "Sylvia Arenas",
    "contest": null,
    "candidate": null,
+   "amount": 87.35,
+   "date": "2026-05-23",
+   "filing": "216827766",
+   "url": "https://netfile.com/Connect2/api/public/image/216827766"
+  },
+  {
+   "spender": "South Bay AFL- CIO Labor Council Committee On Political Education Sponsored by South Bay AFL-CIO Labor Council",
+   "spender_id": "CAMPAIGN_SCC-746",
+   "target": "Sylvia Arenas",
+   "contest": null,
+   "candidate": null,
+   "amount": 20.81,
+   "date": "2026-05-23",
+   "filing": "216827766",
+   "url": "https://netfile.com/Connect2/api/public/image/216827766"
+  },
+  {
+   "spender": "South Bay AFL- CIO Labor Council Committee On Political Education Sponsored by South Bay AFL-CIO Labor Council",
+   "spender_id": "CAMPAIGN_SCC-746",
+   "target": "Sylvia Arenas",
+   "contest": null,
+   "candidate": null,
    "amount": 25017.36,
    "date": "2026-05-26",
    "filing": "216827766",
@@ -19703,17 +19774,6 @@
    "url": "https://netfile.com/Connect2/api/public/image/217603233"
   },
   {
-   "spender": "Fighting for Working Families, Tim Grayson Ballot Measure Committee",
-   "spender_id": "SCC-114832",
-   "target": null,
-   "contest": null,
-   "candidate": null,
-   "amount": 9950.0,
-   "date": "2026-10-09",
-   "filing": "217616997",
-   "url": "https://netfile.com/Connect2/api/public/image/217616997"
-  },
-  {
    "spender": "Empower Oakland Committee",
    "spender_id": "SCC-114831",
    "target": null,
@@ -19734,6 +19794,17 @@
    "date": "2026-10-09",
    "filing": "217630972",
    "url": "https://netfile.com/Connect2/api/public/image/217630972"
+  },
+  {
+   "spender": "Fighting for Working Families, Tim Grayson Ballot Measure Committee",
+   "spender_id": "SCC-114832",
+   "target": null,
+   "contest": null,
+   "candidate": null,
+   "amount": 9950.0,
+   "date": "2026-10-09",
+   "filing": "217616997",
+   "url": "https://netfile.com/Connect2/api/public/image/217616997"
   },
   {
    "spender": "Palo Alto Educators Association Political Action Committee - PAEA PAC",

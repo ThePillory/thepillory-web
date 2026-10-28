@@ -8,27 +8,27 @@
  "generated": "2026-10-28",
  "source": "NetFile public campaign filings, City of Mountain View",
  "source_url": "https://public.netfile.com/pub2/?aid=MTV",
- "transactions": 3606,
+ "transactions": 3607,
  "committees": {
   "MTV-112409": {
    "local_id": "MTV-112409",
    "fppc_id": "1229347",
    "name": "Mountain View Professional Firefighters Political Action Committee",
-   "contributions": 27608.84,
+   "contributions": 27619.41,
    "nonmonetary": 4586.25,
    "payments": 19966.0,
    "first": "2025-01-02",
    "last": "2026-10-14",
    "individuals": {
-    "total": 32195.09,
-    "count": 2633
+    "total": 32205.66,
+    "count": 2634
    },
    "organizations": [],
    "organizations_count": 0,
    "employers": [
     {
      "employer": "City of Mountain View",
-     "total": 23898.77,
+     "total": 23909.34,
      "donors": 58
     },
     {
@@ -1102,7 +1102,7 @@
    "nonmonetary": 0.0,
    "payments": 0.0,
    "first": "2026-10-09",
-   "last": "2026-10-13",
+   "last": "2026-10-27",
    "individuals": {
     "total": 3000.0,
     "count": 2
@@ -1123,11 +1123,18 @@
    "employers": [],
    "filings": [
     {
+     "id": "217837663",
+     "url": "https://netfile.com/Connect2/api/public/image/217837663",
+     "filed": "2026-10-28",
+     "from": "2026-10-18",
+     "through": "2026-10-27"
+    },
+    {
      "id": "217659502",
      "url": "https://netfile.com/Connect2/api/public/image/217659502",
-     "filed": "2026-10-18",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "217632359",
@@ -1144,7 +1151,7 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-18"
+   "as_of": "2026-10-28"
   },
   "MTV-112918": {
    "local_id": "MTV-112918",
@@ -1334,50 +1341,6 @@
    "target": "Erik Poicon",
    "contest": "06085-5110",
    "candidate": "Erik Poicon",
-   "amount": 879.45,
-   "date": "2026-09-26",
-   "filing": "217535024",
-   "url": "https://netfile.com/Connect2/api/public/image/217535024"
-  },
-  {
-   "spender": "South Bay AFL-CIO Labor Council Committee on Political Education Sponsored by South Bay AFL-CIO Labor Council",
-   "spender_id": "MTV-112598",
-   "target": "Erik Poicon",
-   "contest": "06085-5110",
-   "candidate": "Erik Poicon",
-   "amount": 9.46,
-   "date": "2026-09-26",
-   "filing": "217535024",
-   "url": "https://netfile.com/Connect2/api/public/image/217535024"
-  },
-  {
-   "spender": "South Bay AFL-CIO Labor Council Committee on Political Education Sponsored by South Bay AFL-CIO Labor Council",
-   "spender_id": "MTV-112598",
-   "target": "Erik Poicon",
-   "contest": "06085-5110",
-   "candidate": "Erik Poicon",
-   "amount": 8.45,
-   "date": "2026-09-26",
-   "filing": "217535024",
-   "url": "https://netfile.com/Connect2/api/public/image/217535024"
-  },
-  {
-   "spender": "South Bay AFL-CIO Labor Council Committee on Political Education Sponsored by South Bay AFL-CIO Labor Council",
-   "spender_id": "MTV-112598",
-   "target": "Erik Poicon",
-   "contest": "06085-5110",
-   "candidate": "Erik Poicon",
-   "amount": 14.83,
-   "date": "2026-09-26",
-   "filing": "217535024",
-   "url": "https://netfile.com/Connect2/api/public/image/217535024"
-  },
-  {
-   "spender": "South Bay AFL-CIO Labor Council Committee on Political Education Sponsored by South Bay AFL-CIO Labor Council",
-   "spender_id": "MTV-112598",
-   "target": "Erik Poicon",
-   "contest": "06085-5110",
-   "candidate": "Erik Poicon",
    "amount": 8.45,
    "date": "2026-09-26",
    "filing": "217616329",
@@ -1415,6 +1378,50 @@
    "date": "2026-09-26",
    "filing": "217616329",
    "url": "https://netfile.com/Connect2/api/public/image/217616329"
+  },
+  {
+   "spender": "South Bay AFL-CIO Labor Council Committee on Political Education Sponsored by South Bay AFL-CIO Labor Council",
+   "spender_id": "MTV-112598",
+   "target": "Erik Poicon",
+   "contest": "06085-5110",
+   "candidate": "Erik Poicon",
+   "amount": 879.45,
+   "date": "2026-09-26",
+   "filing": "217535024",
+   "url": "https://netfile.com/Connect2/api/public/image/217535024"
+  },
+  {
+   "spender": "South Bay AFL-CIO Labor Council Committee on Political Education Sponsored by South Bay AFL-CIO Labor Council",
+   "spender_id": "MTV-112598",
+   "target": "Erik Poicon",
+   "contest": "06085-5110",
+   "candidate": "Erik Poicon",
+   "amount": 9.46,
+   "date": "2026-09-26",
+   "filing": "217535024",
+   "url": "https://netfile.com/Connect2/api/public/image/217535024"
+  },
+  {
+   "spender": "South Bay AFL-CIO Labor Council Committee on Political Education Sponsored by South Bay AFL-CIO Labor Council",
+   "spender_id": "MTV-112598",
+   "target": "Erik Poicon",
+   "contest": "06085-5110",
+   "candidate": "Erik Poicon",
+   "amount": 8.45,
+   "date": "2026-09-26",
+   "filing": "217535024",
+   "url": "https://netfile.com/Connect2/api/public/image/217535024"
+  },
+  {
+   "spender": "South Bay AFL-CIO Labor Council Committee on Political Education Sponsored by South Bay AFL-CIO Labor Council",
+   "spender_id": "MTV-112598",
+   "target": "Erik Poicon",
+   "contest": "06085-5110",
+   "candidate": "Erik Poicon",
+   "amount": 14.83,
+   "date": "2026-09-26",
+   "filing": "217535024",
+   "url": "https://netfile.com/Connect2/api/public/image/217535024"
   },
   {
    "spender": "South Bay AFL-CIO Labor Council Committee on Political Education Sponsored by South Bay AFL-CIO Labor Council",

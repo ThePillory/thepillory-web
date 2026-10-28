@@ -8,7 +8,7 @@
  "generated": "2026-10-28",
  "source": "NetFile public campaign filings, City of Santa Clara",
  "source_url": "https://public.netfile.com/pub2/?aid=CSC",
- "transactions": 1063,
+ "transactions": 1130,
  "committees": {
   "CAMPAIGN_CSC-1114": {
    "local_id": "CAMPAIGN_CSC-1114",
@@ -238,25 +238,38 @@
    "local_id": "CSC-113390",
    "fppc_id": "1491566",
    "name": "David Kertes for Santa Clara Mayor 2026",
-   "contributions": 3489.7,
+   "contributions": 6649.7,
    "nonmonetary": 0.0,
    "payments": 54942.66,
    "first": "2026-05-07",
-   "last": "2026-10-16",
+   "last": "2026-10-22",
    "individuals": {
-    "total": 3489.7,
-    "count": 12
+    "total": 5889.7,
+    "count": 17
    },
-   "organizations": [],
-   "organizations_count": 0,
+   "organizations": [
+    {
+     "name": "Santa Clara Police Officers Association",
+     "total": 760.0,
+     "count": 1
+    }
+   ],
+   "organizations_count": 1,
    "employers": [],
    "filings": [
     {
+     "id": "217836383",
+     "url": "https://netfile.com/Connect2/api/public/image/217836383",
+     "filed": "2026-10-27",
+     "from": "2026-10-18",
+     "through": "2026-10-23"
+    },
+    {
      "id": "217831772",
      "url": "https://netfile.com/Connect2/api/public/image/217831772",
-     "filed": "2026-10-27",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "217831565",
@@ -346,14 +359,14 @@
    "local_id": "CSC-113399",
    "fppc_id": "Pending",
    "name": "Karen Hardy 4 Mayor 2026",
-   "contributions": 8710.0,
+   "contributions": 13710.0,
    "nonmonetary": 660.0,
-   "payments": 10064.87,
+   "payments": 10527.18,
    "first": "2026-07-10",
    "last": "2026-10-23",
    "individuals": {
-    "total": 8610.0,
-    "count": 25
+    "total": 13610.0,
+    "count": 26
    },
    "organizations": [
     {
@@ -366,9 +379,16 @@
    "employers": [],
    "filings": [
     {
+     "id": "217835807",
+     "url": "https://netfile.com/Connect2/api/public/image/217835807",
+     "filed": "2026-10-27",
+     "from": "2026-10-18",
+     "through": "2026-10-23"
+    },
+    {
      "id": "217814941",
      "url": "https://netfile.com/Connect2/api/public/image/217814941",
-     "filed": "2026-10-25",
+     "filed": null,
      "from": null,
      "through": null
     },
@@ -387,7 +407,7 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-25"
+   "as_of": "2026-10-27"
   },
   "CSC-113410": {
    "local_id": "CSC-113410",
@@ -479,11 +499,11 @@
    "local_id": "CSC-113397",
    "fppc_id": "1492963",
    "name": "Gary Ferraris for Mayor 2026",
-   "contributions": 7330.0,
+   "contributions": 8590.0,
    "nonmonetary": 245.67,
-   "payments": 4478.34,
+   "payments": 5221.29,
    "first": "2026-07-22",
-   "last": "2026-10-17",
+   "last": "2026-10-27",
    "individuals": {
     "total": 5295.67,
     "count": 17
@@ -503,9 +523,24 @@
      "name": "Santa Clara and San Benito Counties Building and Construction trades Council PAC",
      "total": 760.0,
      "count": 1
+    },
+    {
+     "name": "IBEW 332 Education Fund",
+     "total": 760.0,
+     "count": 1
+    },
+    {
+     "name": "Cement Masons Local 400 Political Action Committee",
+     "total": 250.0,
+     "count": 1
+    },
+    {
+     "name": "CEMA PAC",
+     "total": 250.0,
+     "count": 1
     }
    ],
-   "organizations_count": 3,
+   "organizations_count": 6,
    "employers": [
     {
      "employer": "City of Santa Clara",
@@ -515,11 +550,25 @@
    ],
    "filings": [
     {
+     "id": "217837487",
+     "url": "https://netfile.com/Connect2/api/public/image/217837487",
+     "filed": "2026-10-28",
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217837474",
+     "url": "https://netfile.com/Connect2/api/public/image/217837474",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
      "id": "217712826",
      "url": "https://netfile.com/Connect2/api/public/image/217712826",
-     "filed": "2026-10-22",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "217505076",
@@ -529,7 +578,7 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-22"
+   "as_of": "2026-10-28"
   },
   "CSC-113407": {
    "local_id": "CSC-113407",
@@ -718,7 +767,7 @@
    "nonmonetary": 10411.84,
    "payments": 584764.77,
    "first": "2026-08-25",
-   "last": "2026-10-23",
+   "last": "2026-10-26",
    "individuals": {
     "total": 0.0,
     "count": 0
@@ -734,9 +783,23 @@
    "employers": [],
    "filings": [
     {
+     "id": "217836061",
+     "url": "https://netfile.com/Connect2/api/public/image/217836061",
+     "filed": "2026-10-27",
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217836048",
+     "url": "https://netfile.com/Connect2/api/public/image/217836048",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
      "id": "217738442",
      "url": "https://netfile.com/Connect2/api/public/image/217738442",
-     "filed": "2026-10-24",
+     "filed": null,
      "from": null,
      "through": null
     },
@@ -965,7 +1028,7 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-24"
+   "as_of": "2026-10-27"
   },
   "CSC-113406": {
    "local_id": "CSC-113406",
@@ -973,7 +1036,7 @@
    "name": "Affordable Santa Clara Supporting Ferraris and Opposing Watanabe and Kertes for Mayor 2026, Sponsored by Forty Niners Football Company LLC",
    "contributions": 1862000.0,
    "nonmonetary": 10411.84,
-   "payments": 1020120.97,
+   "payments": 1006698.39,
    "first": "2026-08-27",
    "last": "2026-10-20",
    "individuals": {
@@ -2240,6 +2303,17 @@
    "date": "2026-10-23",
    "filing": "217738428",
    "url": "https://netfile.com/Connect2/api/public/image/217738428"
+  },
+  {
+   "spender": "Affordable Santa Clara Supporting Williams and Opposing Inciarte for City Council 2026, Sponsored by Forty Niners Football Company LLC",
+   "spender_id": "CSC-113405",
+   "target": "Kimberley Williams",
+   "contest": "06085-5232",
+   "candidate": "Kimberley Williams",
+   "amount": 3732.78,
+   "date": "2026-10-26",
+   "filing": "217836061",
+   "url": "https://netfile.com/Connect2/api/public/image/217836061"
   }
  ]
 }
