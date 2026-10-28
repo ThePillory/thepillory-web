@@ -97,10 +97,20 @@ test("statewide offices rotate by Assembly district: the first name moves to the
 test("the real data: each county contest's list order is the randomized-alphabet order", () => {
   const real = JSON.parse(readFileSync(new URL("../../../data/elections/2026-11-03.json", import.meta.url), "utf8"));
   assert.equal(real.election.alphabet.length, 26);
-  const local = real.contests.filter((c) => c.scope === "county");
+  // Counties whose list gives the ballot order (Calaveras); Santa Clara's is in filing order, shown alphabetically.
+  const local = real.contests.filter((c) => c.scope === "county" && real.counties[c.county].list_order !== "filing");
   assert.ok(local.length > 0);
   for (const c of local) {
     assert.deepEqual(alphabetOrder(real.election.alphabet, c.candidates).map((x) => x.name), c.candidates.map((x) => x.name), c.office);
+  }
+  // Santa Clara (entered from a copy of its list): every contest alphabetical by last name, said so, no contact details kept.
+  const sc = real.contests.filter((c) => c.county === "06085");
+  assert.ok(sc.length > 50);
+  for (const c of sc) {
+    const o = ballotOrder(c, real);
+    assert.deepEqual(o.candidates.map((x) => x.name), alphabetOrder("ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""), c.candidates).map((x) => x.name), c.office);
+    assert.match(o.note, /alphabetically by last name/);
+    for (const k of c.candidates) assert.deepEqual(Object.keys(k).sort(), ["designation", "incumbent", "name", "party"], `${k.name}: names and designations only`);
   }
   for (const c of real.contests) {
     assert.match(c.source_url, /^https:\/\//, `${c.id} has a source`);

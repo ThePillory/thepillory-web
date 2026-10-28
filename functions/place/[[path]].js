@@ -270,8 +270,9 @@ function countyBallot(election, c, place) {
     rows.push(...election.contests.filter((x) => x.scope === "county" && x.county === c.fips).map((x) => contestRow(id, x, "on some ballots in the county")));
     rows.push(...election.measures.filter((m) => m.scope === "county" && m.county === c.fips).map((m) => measureRow(id, m, "on some ballots in the county")));
   }
+  const localContests = election.contests.some((x) => x.scope === "county" && x.county === c.fips);
   const intro = local
-    ? ""
+    ? localContests ? "" : `Statewide, district and court contests, and ${c.name}'s local measures. Its local candidate contests are on its elections office's website and sample ballot.`
     : `Statewide, district and court contests. ${c.name}'s local contests are on its elections office's website and sample ballot.`;
   return onTheBallot(election, { rows, intro, today: pacificNow().slice(0, 10), folded: true });
 }
