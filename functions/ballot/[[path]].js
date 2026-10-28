@@ -18,16 +18,24 @@
 //                   POST with an address: every contest, candidate and measure on
 //                   that ballot, with polling places and early-voting sites, from
 //                   the Google Civic Information API (functions/_lib/civic.js).
+//                   POST with a ZIP code alone: the county and districts the ZIP
+//                   covers (data/zip/), the statewide races and measures, and a
+//                   request for the street address. Never presented as the ballot.
 //
-// The address is sent to Google for that one request and is never stored,
-// logged or shown back (only the city and state are). The answer is never
-// cached (Cache-Control: no-store). Every candidate gets the same layout, in the
+// What the visitor enters always wins: a result never uses the saved districts
+// cookie, and a failed lookup says so for what they entered instead of showing
+// their saved place ("Use my saved place instead" is a link, only when it
+// differs). A lookup never changes the cookie; "Make this my place" does.
+// The address is sent to Google for that one request and is never stored or
+// logged; it's shown back only on that one answer, which is never cached
+// (Cache-Control: no-store). Every candidate gets the same layout, in the
 // order the official data lists them; no endorsements, polls or predictions.
 import { simpleCard } from "../_lib/simple.js";
 import { page, esc, notFound, safeUrl, linkRow, loadSection, FAILED, sectionError, guard, fmtDate, partyName } from "../_lib/render.js";
 import { districtsFromCookie, STATE_NAME } from "../_lib/districts.js";
+import { districtLabel as seatLabel } from "../../workers/sync/src/states.js";
 import { visitorState } from "../_lib/visitor-state.js";
-import { asset } from "../_lib/geo.js";
+import { asset, loadPlace, placeHref, districtHref } from "../_lib/geo.js";
 import { loadElection, electionHref, ballotHref, measureHref, measureName, measureTitle, measureHeading, titleNote, contestHref, ballotOrder, ELECTION_BY_STATE, measuresOnly, howToVote, judicialContests, judicialRow } from "../_lib/elections.js";
 import { voterInfo, ballotFromVoterInfo, measureFor, CivicError } from "../_lib/civic.js";
 import { factsFold } from "../_lib/measure-facts.js";
@@ -54,6 +62,41 @@ const stateFrom = (s) => {
   return /^[A-Z]{2}$/.test(st) && STATE_NAME[st] ? st : null;
 };
 
+/** A ZIP code on its own ("95120", "95120-1234"): looked up in data/zip/, never sent to Google. */
+export const ZIP = /^(\d{5})(?:-\d{4})?$/;
+
+/** The saved place (the districts cookie) in words: "Calaveras County, CA", else the state and House district. */
+async function savedLabel(env, request, saved) {
+  if (saved.co) {
+    const place = await loadPlace(env, request, saved.st.toLowerCase()).catch(() => null);
+    const county = place && (place.counties || []).find((c) => c.fips === saved.co);
+    if (county) return `${county.name}, ${saved.st}`;
+  }
+  return [STATE_NAME[saved.st], saved.cd && saved.cd !== "0" ? `Congressional District ${saved.cd}` : ""].filter(Boolean).join(", ");
+}
+
+/**
+ * The line at the top of every result: what it shows (what the visitor entered), and their saved
+ * place as a link only when one exists and differs. `same` is true only when the result is known
+ * to be the saved place.
+ */
+async function showingLine(env, request, entered, { same = false } = {}) {
+  const saved = districtsFromCookie(request);
+  const other = saved && !same ? ` · <a class="inline-link" href="${ballotPath(saved.st)}">${esc(`Use my saved place (${await savedLabel(env, request, saved)}) instead`)}</a>` : "";
+  return `<p class="small showing"><strong>Showing:</strong> ${esc(entered)}${other}</p>`;
+}
+
+/** "Make this my place": the one way a ballot lookup changes the saved districts (through /api/districts). */
+function makeMyPlace(q, st, hint) {
+  return `
+<form class="stack-xs" method="post" action="/api/districts">
+  <input type="hidden" name="q" value="${esc(q)}" />
+  <input type="hidden" name="next" value="${ballotPath(st)}" />
+  <button class="btn" type="submit">Make this my place</button>
+  <p class="hint">${esc(hint)}</p>
+</form>`;
+}
+
 export const onRequestGet = guard(async (context) => {
   const { request, env, params } = context;
   const url = new URL(request.url);
@@ -79,17 +122,20 @@ export const onRequestPost = guard(async (context) => {
   if (!st) return notFound("No ballot page at this address.", "home", BACK);
   const form = await request.formData();
   const address = String(form.get("address") || "").replace(/\s+/g, " ").trim();
-  if (address.length < 5 || address.length > 200) return statePage(env, request, st, { message: "Enter a street address with the city and state (or ZIP code)." });
-  if (await overLimit(env, request)) return statePage(env, request, st, { message: `That's ${LOOKUPS_PER_DAY} address lookups today from this connection, the daily limit. Your state's official links below work any time.` });
+  // Whatever was entered wins: none of these answers reads the saved districts cookie.
+  if (address.length < 5 || address.length > 200) return statePage(env, request, st, { message: "Enter a street address with the city and state, or a 5-digit ZIP code.", entered: address });
+  const zip = ZIP.exec(address);
+  if (zip) return zipPage(env, request, st, zip[1]);
+  if (await overLimit(env, request)) return statePage(env, request, st, { message: `That's ${LOOKUPS_PER_DAY} address lookups today from this connection, the daily limit. Your state's official links below work any time.`, entered: address });
   let data;
   try {
     data = await voterInfo(env, address);
   } catch (err) {
     if (!(err instanceof CivicError)) throw err;
-    return noData(env, request, st, err.kind);
+    return noData(env, request, st, err.kind, null, address);
   }
   const ballot = ballotFromVoterInfo(data);
-  return answerPage(env, request, stateFrom(ballot.stateCode) || st, ballot);
+  return answerPage(env, request, stateFrom(ballot.stateCode) || st, ballot, address);
 }, { tab: "home" });
 
 /** Counts this lookup; true once the visitor is past the daily limit. Without the table yet (before the sync's migration), no limit. */
@@ -162,7 +208,7 @@ function addressForm(st, { heading = EXACT } = {}) {
       <input class="input" id="ballot-address" name="address" type="text" autocomplete="street-address" placeholder="Street address, city, state" minlength="5" maxlength="200" required />
       <div><button class="btn btn--primary" type="submit">Show my ballot</button></div>
     </div>
-    <p class="hint">Sent to Google's Civic Information API for this one lookup. ThePillory never stores or logs your address.</p>
+    <p class="hint">An address is sent to Google's Civic Information API for this one lookup; a ZIP code alone is looked up on ThePillory and shows the districts it covers. ThePillory never stores or logs either, and a lookup doesn't change your saved place.</p>
   </form>
 </section>`;
 }
@@ -229,7 +275,7 @@ function certifiedCandidate(c, filed, inc, contest, election) {
  * Where ThePillory has the state's certified candidate list (California), the U.S. House race from it:
  * only the candidates on the November ballot, in ballot order.
  */
-function certifiedSection(st, election, filed, d, records) {
+function certifiedSection(st, election, filed, d, records, houseNote = HOUSE_NOTE) {
   const incFor = (c) => raceIncumbency({ st, key: c.scope === "cd" ? `house-${c.district}` : c.scope === "statewide" && /united states senator/i.test(c.office) ? "senate" : c.id, contest: c, ballot: c.candidates, records });
   const cd = d && d.st === st && d.cd != null ? String(Number(d.cd)) : null;
   const contest = cd && election.contests.find((c) => c.scope === "cd" && String(c.district) === cd);
@@ -263,7 +309,7 @@ function certifiedSection(st, election, filed, d, records) {
 <section class="stack-sm" id="federal" aria-labelledby="h-federal">
   <h2 class="label" id="h-federal">Federal races · November 3, 2026</h2>
   ${senate.length ? senate.map(race).join("") : `<div class="card"><p class="small">No U.S. Senate seat in ${esc(STATE_NAME[st])} is on this ballot.</p></div>`}
-  ${contest ? race(contest) : `<div class="card"><p class="small">Your U.S. House race: <a class="inline-link" href="#address">add your address below</a>, or <a class="inline-link" href="/#find">find your district</a> by ZIP code.</p></div>`}
+  ${contest ? race(contest) : `<div class="card"><p class="small">${houseNote}</p></div>`}
   <p class="small"><a class="inline-link" href="${racesHref(YEAR, st)}">Every ${YEAR} race in ${esc(STATE_NAME[st])}, Governor and the Legislature too</a></p>
   <p class="hint">From the Secretary of State's Certified List of Candidates: only the candidates on the November ballot. <a class="inline-link" href="${esc(election.election.certified_list)}" target="_blank" rel="noopener">Certified list ↗</a></p>
 </section>`;
@@ -306,10 +352,12 @@ function settledRace(title, st, events, office, fecHref) {
   </div>`;
 }
 
-function federalSection(st, races, loaded, d, election = null, { dates = null, office = null, today = todayIn(st), certified = null } = {}) {
+const HOUSE_NOTE = 'Your U.S. House race: <a class="inline-link" href="#address">add your address below</a>, or <a class="inline-link" href="/#find">find your district</a> by ZIP code.';
+
+function federalSection(st, races, loaded, d, election = null, { dates = null, office = null, today = todayIn(st), certified = null, houseNote = HOUSE_NOTE } = {}) {
   const name = STATE_NAME[st];
   const { records, filed } = loaded === FAILED || !loaded || !loaded.records ? { records: { officials: [], byFec: {} }, filed: {} } : loaded;
-  if (election && election.election.state === st && !measuresOnly(election)) return certifiedSection(st, election, filed, d, records);
+  if (election && election.election.state === st && !measuresOnly(election)) return certifiedSection(st, election, filed, d, records, houseNote);
   if (NO_GENERAL.has(st)) return `<div class="card"><p class="small">${esc(name)} holds its general elections in presidential election years, so there's no general election on November 3, 2026. <a class="inline-link" href="#address">Add your address below</a> for anything else on a ballot for it.</p></div>`;
   if (races === FAILED) return sectionError("Federal races");
   if (!races) return `<section class="stack-sm"><h2 class="label">Federal races</h2><div class="card"><p class="small secondary">${esc(name)}'s federal candidate lists appear after the daily election data refresh.</p></div></section>`;
@@ -346,7 +394,7 @@ function federalSection(st, races, loaded, d, election = null, { dates = null, o
 <section class="stack-sm" id="federal" aria-labelledby="h-federal">
   <h2 class="label" id="h-federal">Federal races · November 3, 2026</h2>
   ${senate}
-  ${house || `<div class="card"><p class="small">Your U.S. House race: <a class="inline-link" href="#address">add your address below</a>, or <a class="inline-link" href="/#find">find your district</a> by ZIP code.</p></div>`}
+  ${house || `<div class="card"><p class="small">${houseNote}</p></div>`}
   ${certNote}
   ${anyOpen ? `<p class="hint">Before the primary: everyone who has filed with the Federal Election Commission and passed its $5,000 threshold, listed alphabetically, names as filed. Not everyone listed will be on the November ballot (some lose the primary or withdraw). <a class="inline-link" href="${esc(races.source_url)}" target="_blank" rel="noopener">FEC list ↗</a> · updated ${esc(fmtDate(races.built_on))}.</p>` : ""}
 </section>`;
@@ -402,8 +450,15 @@ function pickerPage() {
 // ---------------------------------------------------------------------------
 // /ballot/<st>/ before an address
 
-async function statePage(env, request, st, { message = "" } = {}) {
-  const d = districtsFromCookie(request);
+async function statePage(env, request, st, { message = "", entered = null } = {}) {
+  // After a lookup (entered), the saved districts never stand in for what was entered.
+  const saved = districtsFromCookie(request);
+  const d = entered == null ? saved : null;
+  const showing = entered != null
+    ? await showingLine(env, request, entered)
+    : saved && saved.st === st
+    ? `<p class="small showing"><strong>Showing:</strong> ${esc(`your saved place (${await savedLabel(env, request, saved)})`)} · <a class="inline-link" href="#address">a different address or ZIP</a></p>`
+    : "";
   const name = STATE_NAME[st];
   const [races, filed, office, election, dates, stateList] = await Promise.all([
     loadSection("ballot races", () => loadRaces(env, request, st), null),
@@ -438,12 +493,13 @@ async function statePage(env, request, st, { message = "" } = {}) {
   <p class="label">${esc(name)}${NO_GENERAL.has(st) ? "" : " · Nov 3, 2026"}</p>
   <h1>${esc(statePossessive(st, name))} ballot</h1>
 </header>
+${showing}
 ${simple}
 ${message ? `<p class="banner banner--error" role="alert">${esc(message)}</p>` : ""}
 <p class="small"><a class="inline-link jump-link" href="#address">Add your address for your exact ballot ↓</a></p>
 ${statewideSection(st, e)}
 ${federalSection(st, races, filed, d, election === FAILED ? null : election, { dates: dates === FAILED ? null : dates, office: office === FAILED ? null : office, certified: stateList === FAILED ? null : stateList })}
-${ownSection(st, election === FAILED ? null : election)}
+${entered == null ? ownSection(st, election === FAILED ? null : election) : ""}
 ${addressForm(st)}
 <p class="small secondary">${esc(CONFIRM)}</p>
 ${officialLinks(st, office === FAILED ? null : office, election === FAILED ? null : election)}
@@ -457,32 +513,36 @@ ${officialLinks(st, office === FAILED ? null : office, election === FAILED ? nul
 // With an address
 
 const NO_DATA = {
-  "not-found": "There's no ballot information for this address yet. Election offices publish their ballot data in the weeks before an election, and not every county does.",
-  address: "That address couldn't be read. Check the street, city and state, and try again.",
-  unavailable: "The ballot lookup didn't answer just now. Try again in a minute.",
-  "no-key": "The address lookup isn't switched on yet.",
+  "not-found": (x) => `There's no ballot information for ${x} yet. Election offices publish their ballot data in the weeks before an election, and not every county does.`,
+  address: (x) => `${x} couldn't be read as an address. Check the street, city and state, and try again.`,
+  unavailable: () => "The ballot lookup didn't answer just now. Try again in a minute.",
+  "no-key": () => "The address lookup isn't switched on yet.",
 };
 
-async function noData(env, request, st, kind, ballot = null) {
+/** What a failed lookup says, for what the visitor entered. Pure. */
+export const noDataMessage = (kind, entered) => (NO_DATA[kind] || NO_DATA["not-found"])(entered ? `"${entered}"` : "this address");
+
+async function noData(env, request, st, kind, ballot = null, entered = "") {
   const name = STATE_NAME[st];
   const [office, election] = await Promise.all([
     loadSection("ballot office", () => stateOffice(env, request, st), null),
     loadSection("ballot election", () => ownElection(env, request, st), null),
   ]);
+  // ThePillory's "Your ballot" pages read the saved districts, so they aren't offered on a lookup's answer.
   const o = office === FAILED ? null : office;
   const main = `
 <header class="page-head stack-xs">
   <p class="label">${esc(name)}</p>
   <h1>${RESULT_HEADING}</h1>
 </header>
+${await showingLine(env, request, entered)}
 <p class="banner">${esc(CONFIRM)}</p>
 <section class="card stack-sm">
-  <p>${esc(NO_DATA[kind] || NO_DATA["not-found"])}</p>
+  <p>${esc(noDataMessage(kind, entered))}</p>
   <p class="small">Your sample ballot is on ${o ? `<a class="inline-link" href="${esc(o.url)}" target="_blank" rel="noopener">${esc(name)}'s election office website ↗</a>` : `<a class="inline-link" href="${USA_GOV}" target="_blank" rel="noopener">your state's election office ↗</a>`}, and your county election office mails it before Election Day.</p>
 </section>
 ${ballot ? placesSections(ballot) : ""}
 ${addressForm(st, { heading: "Try another address" })}
-${ownSection(st, election === FAILED ? null : election)}
 ${officialLinks(st, o, election === FAILED ? null : election)}
 <p class="small"><a class="inline-link" href="${ballotPath(st)}">${esc(name)}'s federal races</a></p>`;
   return privatePage(RESULT_HEADING, main, [`${statePossessive(st, name)} ballot`, ballotPath(st)]);
@@ -557,8 +617,16 @@ function civicLinks(b) {
 </section>`;
 }
 
-async function answerPage(env, request, st, b) {
-  if (!b.contests.length) return noData(env, request, st, "not-found", b);
+/** True only when the address's ZIP (as Google read it) lies wholly in the saved place. */
+async function addressIsSaved(env, request, b) {
+  const saved = districtsFromCookie(request);
+  if (!saved || !b.zip) return false;
+  const file = await asset(env, request, `/data/zip/${b.zip.slice(0, 3)}.json`).catch(() => null);
+  return zipIsSaved(file && file[b.zip], saved);
+}
+
+async function answerPage(env, request, st, b, entered) {
+  if (!b.contests.length) return noData(env, request, st, "not-found", b, entered);
   const name = STATE_NAME[st];
   const [election, office] = await Promise.all([
     loadSection("ballot election", () => ownElection(env, request, st), null),
@@ -570,8 +638,9 @@ async function answerPage(env, request, st, b) {
 <header class="page-head stack-xs">
   <p class="label">${esc(b.election.name || "Your ballot")}${b.election.day ? ` · ${esc(fmtDate(b.election.day))}` : ""}</p>
   <h1>${RESULT_HEADING}</h1>
-  ${b.where ? `<p class="subtitle">For an address in ${esc(b.where)}</p>` : ""}
+  <p class="subtitle">${esc(`Your ballot preview for ${entered}`)}</p>
 </header>
+${await showingLine(env, request, entered, { same: await addressIsSaved(env, request, b) })}
 <p class="banner">${esc(CONFIRM)}</p>
 <section class="stack-sm" id="contests" aria-labelledby="h-contests">
   <h2 class="label" id="h-contests">${b.contests.length} ${b.contests.length === 1 ? "contest" : "contests and measures"}</h2>
@@ -581,8 +650,99 @@ async function answerPage(env, request, st, b) {
 ${placesSections(b)}
 ${civicLinks(b)}
 ${b.otherElections.length ? `<p class="small secondary">Also for this address: ${esc(b.otherElections.map((e) => `${e.name}${e.day ? ` (${fmtDate(e.day)})` : ""}`).join("; "))}.</p>` : ""}
+<section class="card stack-sm">${makeMyPlace(entered, st, "Saves this address's districts in your browser only, never the address. Until then, your saved place stays as it is.")}</section>
 ${addressForm(st, { heading: "Look up another address" })}
 ${officialLinks(st, office === FAILED ? null : office, ctx.election)}
 <p class="hint">${esc(NEUTRAL)} <a class="inline-link" href="/about/methodology/#elections">How ThePillory builds this</a></p>`;
   return privatePage(RESULT_HEADING, main, [`${statePossessive(st, name)} ballot`, ballotPath(st)]);
+}
+
+// ---------------------------------------------------------------------------
+// A ZIP code alone
+
+/**
+ * What a ZIP covers, from data/zip/ ([st, cd, su, sl, county, share] for each part): its state (the
+ * largest part's), its counties and districts, largest first, and the House district only when the
+ * whole ZIP is in one. Pure.
+ */
+export function zipCoverage(options) {
+  if (!options || !options.length) return null;
+  const order = [...options].sort((a, b) => (Number(b[5]) || 0) - (Number(a[5]) || 0));
+  const st = order[0][0];
+  const parts = order.filter((o) => o[0] === st);
+  const uniq = (i) => [...new Set(parts.map((o) => o[i]).filter((v) => v != null && v !== ""))];
+  const cds = uniq(1);
+  return { st, states: [...new Set(order.map((o) => o[0]))], counties: uniq(4), cd: cds, su: uniq(2), sl: uniq(3), houseCd: cds.length === 1 ? cds[0] : null };
+}
+
+/** True only when every part of the ZIP is the saved place (the same state and districts, and county where one is saved). Pure. */
+export function zipIsSaved(options, saved) {
+  if (!saved || !options || !options.length) return false;
+  return options.every(([st, cd, su, sl, co]) => st === saved.st && (!saved.cd || String(cd) === saved.cd) && (!saved.su || String(su) === saved.su) && (!saved.sl || String(sl) === saved.sl) && (!saved.co || co === saved.co));
+}
+
+const listWords = (xs) => (xs.length < 2 ? xs.join("") : `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`);
+
+async function zipPage(env, request, st, zip) {
+  const file = await asset(env, request, `/data/zip/${zip.slice(0, 3)}.json`).catch(() => null);
+  const options = file && file[zip];
+  const cov = zipCoverage(options);
+  if (!cov || !STATE_NAME[cov.st]) return statePage(env, request, st, { message: `${zip} isn't one of the Census Bureau's ZIP code areas. Try your street address.`, entered: zip });
+  const zst = cov.st;
+  const name = STATE_NAME[zst];
+  const saved = districtsFromCookie(request);
+  const [races, filed, office, election, dates, stateList, place] = await Promise.all([
+    loadSection("ballot races", () => loadRaces(env, request, zst), null),
+    loadSection("ballot filed officials", () => filedOfficials(env.DB, zst), {}),
+    loadSection("ballot office", () => stateOffice(env, request, zst), null),
+    loadSection("ballot election", () => ownElection(env, request, zst), null),
+    loadSection("ballot dates", () => asset(env, request, "/data/elections/dates.json"), null),
+    loadSection("ballot certified list", () => loadCertified(env, request, zst), null),
+    loadSection("ballot place", () => loadPlace(env, request, zst.toLowerCase()), null),
+  ]);
+  const p = place === FAILED ? null : place;
+  const e = election === FAILED ? null : election;
+  const countyOf = (fips) => p && (p.counties || []).find((c) => c.fips === fips);
+  const counties = cov.counties.map((f) => {
+    const c = countyOf(f);
+    return c ? `<a class="inline-link" href="${placeHref(zst, c.slug)}">${esc(c.name)}</a>` : esc(`county ${f}`);
+  });
+  const whole = (xs) => xs.length === 1;
+  // "State Senate", so it isn't read as the U.S. Senate beside the House districts.
+  const seat = (type, id) => esc(String(seatLabel(zst, type, id) || id).replace(/^Senate\b/, "State Senate"));
+  const lower = p && p.chambers && p.chambers.sldl;
+  const rows = [
+    cov.cd.length ? `<li>${cov.cd.map((id) => (p ? `<a class="inline-link" href="${districtHref("cd", id, p)}">${esc(id === "0" ? "U.S. House, at large" : `U.S. House District ${id}`)}</a>` : esc(`U.S. House District ${id}`))).join(" · ")}</li>` : "",
+    cov.su.length ? `<li>${cov.su.map((id) => seat(lower ? "upper" : "legislature", id)).join(" · ")}</li>` : "",
+    cov.sl.length && lower ? `<li>${cov.sl.map((id) => seat("lower", id)).join(" · ")}</li>` : "",
+  ].filter(Boolean).join("");
+  const split = !whole(cov.cd) || !whole(cov.su) || !whole(cov.sl) || cov.counties.length > 1 || cov.states.length > 1;
+  const lead = `${esc(zip)} ${cov.counties.length > 1 ? `spans parts of ${listWords(counties)}` : `is in ${counties[0]}`}${cov.states.length > 1 ? ` (most of it in ${esc(name)})` : ""} and ${split ? "covers parts of these districts" : "is in these districts"}:`;
+  const houseNote = cov.houseCd
+    ? HOUSE_NOTE
+    : `${esc(zip)} covers parts of ${esc(listWords(cov.cd.map((id) => `District ${id}`)))} of the U.S. House. <a class="inline-link" href="#address">Add your street address below</a> for yours.`;
+  const d = cov.houseCd ? { st: zst, cd: String(Number(cov.houseCd)) } : null;
+  const same = zipIsSaved(options, saved);
+  const main = `<div class="simple-scope">
+<header class="page-head stack-xs">
+  <p class="label">${esc(name)}${NO_GENERAL.has(zst) ? "" : " · Nov 3, 2026"}</p>
+  <h1>${esc(`What's on ballots in ${zip}`)}</h1>
+</header>
+${await showingLine(env, request, zip, { same })}
+<section class="card stack-sm simple-keep" id="zip" aria-labelledby="h-zip">
+  <h2 class="label" id="h-zip">${esc(`ZIP code ${zip}`)}</h2>
+  <p>${lead}</p>
+  <ul class="plain-list stack-xs small">${rows}</ul>
+  <p class="banner">A ZIP can span several districts; add your street address for your exact ballot.</p>
+  <p class="hint">This isn't your ballot: below are the races and measures on every ${esc(name)} ballot. From the Census Bureau's ZIP code areas and district maps.</p>
+  ${same ? "" : makeMyPlace(zip, zst, split ? "Saves this ZIP's districts in your browser only; where it's split, you choose which. Until then, your saved place stays as it is." : "Saves this ZIP's districts in your browser only. Until then, your saved place stays as it is.")}
+</section>
+${addressForm(zst)}
+${statewideSection(zst, e)}
+${federalSection(zst, races, filed, d, e, { dates: dates === FAILED ? null : dates, office: office === FAILED ? null : office, certified: stateList === FAILED ? null : stateList, houseNote })}
+<p class="small secondary">${esc(CONFIRM)}</p>
+${officialLinks(zst, office === FAILED ? null : office, e)}
+<p class="hint">${esc(NEUTRAL)} <a class="inline-link" href="/about/methodology/#elections">How ThePillory builds this</a></p>
+</div>`;
+  return privatePage(`What's on ballots in ${zip}`, main, [`${statePossessive(zst, name)} ballot`, ballotPath(zst)]);
 }
