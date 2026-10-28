@@ -19,7 +19,7 @@ import { simpleCard, jobSentence, voteLinePlain, moneyLinePlain, sourceNote, SIM
 import { BODIES, LEVEL_NAME } from "../_lib/generated.js";
 import { page, notFound, notLoaded, esc, safeUrl, kv, card, section, linkRow, sourceLink, fmtDate, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { officialBySlug, officialsWhere, withVoteCounts, voteCounts, votesFor, CHAMBER_NAME } from "../_lib/data.js";
-import { districtsFromCookie, repsWhere, describe, STATE_NAME } from "../_lib/districts.js";
+import { districtsFromCookie, repsWhere, describe, STATE_NAME, CALAVERAS_FIPS } from "../_lib/districts.js";
 import { lookupForm } from "../_lib/hub.js";
 import { BROWSE, PER_PAGE, chamberPage, personRow, yourRow, yourList, statewideList, repsHref, stateChambers, statePicker, sortSwitch, pagedList } from "../_lib/reps-index.js";
 import { searchPeople } from "../_lib/people-search.js";
@@ -34,6 +34,7 @@ import { executiveMoney, executiveFundingParts, stateOfficialMoney, stateForm700
 import { caLobbyingForOfficial, caLegislatorLobbying } from "../_lib/ca-lobbying.js";
 import { memberGovMoney, earmarksSection, travelSection, faraSection, govMoneyMeta } from "../_lib/gov-money.js";
 import { stateFundingTab } from "../_lib/state-funding.js";
+import { loadLocalMoney, officialMoney } from "../_lib/local-money.js";
 import { promisesFor, ownWordsFor, platformTab, FLAG_REASONS } from "../_lib/promises.js";
 import { turnstileReady, verifyTurnstile, visitorHash, actionsToday, recordAction } from "../_lib/turnstile.js";
 import { fold } from "../_lib/summary.js";
@@ -320,7 +321,7 @@ async function profile(env, slug, url, request) {
       : exec ? loadSection("rep funding", () => executiveMoney(db, o, cycle), null)
       : o.level === "federal" ? loadSection("rep funding", () => fundingFor(db, o, cycle), null)
       : stateLegislator ? loadSection("rep funding", () => stateOfficialMoney(db, o, cycle), null)
-      : supervisor ? loadSection("rep form 700", async () => ({ kind: "county", form700: await form700For(db, o.id) }), null) : null,
+      : supervisor ? loadSection("rep form 700", async () => ({ kind: "county", form700: await form700For(db, o.id), local: await loadLocalMoney(env, request, CALAVERAS_FIPS).catch(() => []) }), null) : null,
     isPresident(o) || isGovernor(o) ? loadSection("rep orders", () => ordersFor(db, o.id, { offset }), null) : null,
     isPresident(o) || isGovernor(o) ? loadSection("rep bills", () => billsActedOn(db, o.id, { show, offset }), null) : null,
     isPresident(o) ? loadSection("rep nominations", () => nominationsFor(db, o.id, { status, offset }), null) : null,
@@ -428,6 +429,8 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
   else if (otherState) fundingHtml = `<section class="card stack-sm"><p class="small">Campaign money for ${esc(STATE_NAME[o.state] || o.state)}'s officials isn't on ThePillory yet. It comes from each state's own campaign finance agency, and will be added state by state.</p><p class="hint">Members of Congress: Federal Election Commission. California: Cal-Access.</p></section>`;
   else if (exec) fundingHtml = money.funding || '<p class="secondary small">No campaign money to show for this office.</p>';
   else if (stateLegislator) fundingHtml = stateFundingTab(o, funding && funding.money, base);
+  // County supervisors: their committees' local filings (NetFile), matched in the builder; otherwise the general note.
+  else if (supervisor && funding && officialMoney(funding.local, o.name)) fundingHtml = `<section class="stack-sm"><h3 class="label">Campaign committees, from the county's filings</h3>${officialMoney(funding.local, o.name)}</section>`;
   else fundingHtml = fundingTab(o, supervisor ? null : funding, base);
 
   // More: everything else, in sections.

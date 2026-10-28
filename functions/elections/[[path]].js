@@ -14,6 +14,7 @@
 // feed, only after the polls close, and no race is called.
 import { factsCard, factsFold } from "../_lib/measure-facts.js";
 import { loadMeasureMoney, behindSection, signerContext, signerDetails } from "../_lib/measure-people.js";
+import { loadLocalMoney, candidateMoney, contestSpending, localBehindSection } from "../_lib/local-money.js";
 import { previewLabel } from "../_lib/election-window.js";
 import { page, esc, notFound, safeUrl, sourceLink, fmtDate, kv, loadSection, FAILED, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { districtsFromCookie, describe, STATE_NAME } from "../_lib/districts.js";
@@ -46,7 +47,7 @@ export const onRequestGet = guard(async (context) => {
   if (!election) return notFound("This election's data isn't loaded yet.", "home", BACK);
   if (!kind) return edgeCached(context, cacheSeconds(election), () => electionPage(election));
   if (kind === "ballot" && !item) return ballotPage(env, request, election);
-  if (kind === "contest" && item) return edgeCached(context, cacheSeconds(election), () => contestPage(env, election, item));
+  if (kind === "contest" && item) return edgeCached(context, cacheSeconds(election), () => contestPage(env, election, item, request));
   if (kind === "measure" && item) return edgeCached(context, cacheSeconds(election), () => measurePage(election, item, context.env, request));
   return notFound("No page at this address.", "home", [election.election.name, electionHref(id)]);
 }, { tab: "home" });
@@ -331,7 +332,7 @@ function statementCoverage(contest, election) {
   return "Candidate statements for this office are printed in each county's voter information pamphlet. ThePillory has them for counties where it's live.";
 }
 
-function candidateCard(cand, contest, election, holder, coverage) {
+function candidateCard(cand, contest, election, holder, coverage, money = "") {
   const rows = [["Ballot designation", esc(cand.designation || "None given")]];
   if (PARTISAN.has(contest.scope)) rows.push(["Party preference", esc(cand.party || "None listed")]);
   if (contest.scope === "cd") rows.push(["FEC filing", cand.fec && safeUrl(cand.fec.url) ? sourceLink(cand.fec.url, cand.fec.id) : "Not matched by name"]);
@@ -344,10 +345,11 @@ function candidateCard(cand, contest, election, holder, coverage) {
   ${kv(rows)}
   ${hold}
   ${statementBlock(cand, contest, coverage)}
+  ${money}
 </article>`;
 }
 
-async function contestPage(env, election, contestId) {
+async function contestPage(env, election, contestId, request = null) {
   const id = election.election.id;
   const back = [election.election.name, electionHref(id)];
   const guide = judicialContests(election).find((c) => c.id === contestId);
@@ -363,7 +365,10 @@ async function contestPage(env, election, contestId) {
     contest.results_path ? loadSection("election results", () => sosResults(election, contest.results_path), null) : null,
   ]);
   const coverage = statementCoverage(contest, election);
-  const cards = candidates.map((c) => candidateCard(c, contest, election, holders === FAILED ? null : holderFor(c, holders), coverage)).join("");
+  // Local campaign money (NetFile counties and cities), for a county contest only.
+  const local = contest.scope === "county" && request ? await loadSection("local money", () => loadLocalMoney(env, request, contest.county), null) : null;
+  const docs = local && local !== FAILED ? local : null;
+  const cards = candidates.map((c) => candidateCard(c, contest, election, holders === FAILED ? null : holderFor(c, holders), coverage, docs ? candidateMoney(docs, contest.id, c.name) : "")).join("");
   const closed = pollsClosed(election);
   const results = !closed
     ? `<p class="small secondary">Results appear here after the polls close at 8 p.m. on Election Day.</p>`
@@ -386,17 +391,18 @@ ${contest.scope === "county" ? `<p class="small secondary">On some ballots in ${
   <p class="hint">${esc(note)}</p>
   ${cards}
 </section>
+${docs ? contestSpending(docs, contest.id) : ""}
 <section class="stack-sm" aria-labelledby="h-res"><h2 class="label" id="h-res">Results</h2>${results}</section>
 <section class="stack-sm" aria-labelledby="h-src"><h2 class="label" id="h-src">Sources</h2>
   <div class="card stack-xs">
     <p class="small">${sourceLink(contest.source_url, contest.source)}</p>
     ${contest.scope === "statewide" ? `<p class="small">${sourceLink(election.election.guide, "Official Voter Information Guide")}</p>` : ""}
-    <p class="small">${sourceLink(election.election.alphabet_source, "Randomized alphabet (ballot order)")}</p>
+    ${county && county.list_order === "filing" ? "" : `<p class="small">${sourceLink(election.election.alphabet_source, "Randomized alphabet (ballot order)")}</p>`}
     ${county ? `<p class="small">${sourceLink(county.elections_page, `${county.name} Elections: candidates and measures`)}</p>` : ""}
   </div>
 </section>
 <p class="hint">${esc(NEUTRAL)} Officeholders are matched by name to the officials ThePillory follows.</p>`;
-  return page(contestTitle(contest), main, { tab: "home", back, partial: holders === FAILED || feed === FAILED });
+  return page(contestTitle(contest), main, { tab: "home", back, partial: holders === FAILED || feed === FAILED || local === FAILED });
 }
 
 function courtPage(election, g) {
@@ -596,8 +602,11 @@ async function measurePage(election, measureId, env = {}, request = null) {
   const money = m.scope === "statewide" && st === "CA" && request ? await loadSection("measure money", () => loadMeasureMoney(env, request, id), null) : null;
   const ctx = (m.arguments || []).length ? await loadSection("measure signers", () => signerContext(env.DB, election), null) : null;
   const details = ctx && ctx !== FAILED ? await loadSection("measure signer details", () => signerDetails(env.DB, election, m, money === FAILED ? null : money, ctx), null) : null;
+  const localDocs = m.scope === "county" && request ? await loadSection("local money", () => loadLocalMoney(env, request, m.county), null) : null;
   const people = {
-    behind: m.scope === "statewide" ? (money === FAILED ? sectionError("Who's behind each side") : behindSection(money, m, election)) : "",
+    behind: m.scope === "statewide"
+      ? (money === FAILED ? sectionError("Who's behind each side") : behindSection(money, m, election))
+      : localDocs === FAILED ? sectionError("Who's behind each side") : localDocs && localDocs.length ? localBehindSection(localDocs, m) : "",
     details: details && details !== FAILED ? details : null,
   };
   if (m.ballot_title) return waMeasurePage(election, m, back, conHtml, people);
