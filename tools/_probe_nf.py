@@ -1,35 +1,29 @@
-import json, sys, urllib.request, io, zipfile
+import json, urllib.request, io, zipfile
 UA = "ThePillory/1.0 (+https://thepillory.co; public records)"
-def req(u, data=None, accept="application/json"):
+def show(label, u, data=None, accept="application/json", n=1200):
+    print("=" * 20, label, u, data)
     h = {"User-Agent": UA, "Accept": accept}
+    body = None
     if data is not None:
-        h["Content-Type"] = "application/json"; data = json.dumps(data).encode()
-    r = urllib.request.urlopen(urllib.request.Request(u, data=data, headers=h), timeout=90)
-    return r.status, r.headers.get("Content-Type"), r.read()
-def show(label, u, data=None, accept="application/json", n=1500):
-    print("=" * 20, label, u)
+        h["Content-Type"] = "application/json"; body = json.dumps(data).encode()
     try:
-        st, ct, b = req(u, data, accept)
-        print(st, ct, len(b))
+        r = urllib.request.urlopen(urllib.request.Request(u, data=body, headers=h), timeout=120)
+        b = r.read(); print(r.status, r.headers.get("Content-Type"), len(b))
         if b[:2] == b"PK":
-            z = zipfile.ZipFile(io.BytesIO(b)); print("ZIP", [(i.filename, i.file_size) for i in z.infolist()][:20]); return b
-        print(b[:n].decode("utf-8", "replace")); return b
+            z = zipfile.ZipFile(io.BytesIO(b)); print("ZIP", [(i.filename, i.file_size) for i in z.infolist()][:30])
+        else:
+            print(b[:n].decode("utf-8", "replace"))
+        return b
     except Exception as e:
-        print("ERR", e, getattr(e, "read", lambda: b"")()[:500])
+        print("ERR", e, (getattr(e, "read", lambda: b"")() or b"")[:300])
 B = "https://netfile.com/Connect2/api"
-ag = show("agencies", B + "/public/list/agencies", n=400)
-try:
-    d = json.loads(ag)
-    rows = d if isinstance(d, list) else d.get("agencies") or d.get("Agencies") or d
-    print("COUNT", len(rows))
-    for r in rows:
-        s = json.dumps(r)
-        if any(k in s.upper() for k in ("SANTA CLARA", "CALAVERAS", "SAN JOSE", "SAN JOSÉ", "SUNNYVALE", "PALO ALTO", "MOUNTAIN VIEW", "CUPERTINO", "MILPITAS", "GILROY", "MORGAN HILL", "CAMPBELL", "LOS GATOS", "SARATOGA", "LOS ALTOS")):
-            print("AG", s)
-    open("/tmp/agencies.json", "w").write(json.dumps(rows))
-except Exception as e:
-    print("parse", e)
-show("filings CLVS", B + "/public/list/filing", {"AID": "CLVS", "Application": "Campaign", "CurrentPageIndex": 0, "PageSize": 5})
-show("filings list GET", B + "/public/list/filing/list/CLVS?pageSize=5")
-show("export cal201 CLVS 2026", B + "/public/campaign/export/cal201/transaction/year/2026?aid=CLVS", accept="*/*")
-show("help", B + "/help", accept="text/html", n=3000)
+for p in ["/metadata", "/openapi.json", "/swagger-ui/", "/types/metadata", "/json/metadata?op=PublicFilingListRequest"]:
+    show("meta", B + p, accept="*/*", n=4000)
+for body in [{"AID": "CLVS"}, {"Aid": "CLVS", "Application": "Campaign"}, {"AgencyId": "CLVS"}, {"AID": "CLVS", "Year": 2026}]:
+    show("filings", B + "/public/list/filing", body, n=800)
+for u in ["https://public.netfile.com/pub2/excel/CLVSBrowsable/efile_newest_CLVS_2026.zip",
+          "https://public.netfile.com/pub2/excel/SCCBrowsable/efile_newest_SCC_2026.zip",
+          "https://public.netfile.com/pub2/excel/CSJBrowsable/efile_newest_CSJ_2026.zip",
+          "https://netfile.com/Connect2/api/public/campaign/export/cal201/transaction/year/2026?AID=CLVS&format=json",
+          "https://netfile.com/Connect2/api/public/list/agencies?format=json"]:
+    show("export", u, accept="*/*")
