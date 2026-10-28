@@ -1,0 +1,37 @@
+# Local campaign money for California counties and cities that publish filings
+# through NetFile (Santa Clara County and its cities, Calaveras County): read from
+# NetFile's public Connect2 API by tools/build_netfile.py into data/local-money/.
+# Individuals are never named. Weekly, and on demand (Actions -> Refresh local
+# campaign money -> Run workflow). See docs/funding.md, "Local campaign money".
+name: Refresh local campaign money
+on:
+  schedule:
+    - cron: "37 10 * * 3"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: local-money
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      # One agency failing keeps its earlier file; the others still update. The run is marked failed at the end.
+      - name: Read every agency from NetFile
+        id: read
+        continue-on-error: true
+        run: python3 tools/build_netfile.py
+      - name: Commit the data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/local-money
+          git diff --cached --quiet && exit 0
+          git commit -m "Refresh local campaign money from NetFile"
+          git push
+      - name: Fail the run if an agency didn't read
+        if: steps.read.outcome == 'failure'
+        run: exit 1
