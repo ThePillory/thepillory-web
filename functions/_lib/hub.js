@@ -177,6 +177,19 @@ export function lookupForm(d, { id = "find", heading = "Find your representative
 </section>`;
 }
 
+/**
+ * "Not your county?": a compact lookup near the top of every county page (/calaveras/ included),
+ * so nobody who lands on a county that isn't theirs is stuck there. The lookup goes to their own
+ * briefing (their reps, county and ballot); nothing about the county page is saved.
+ */
+export function notYourCounty() {
+  return `
+<section class="card stack-xs not-your-county simple-keep" aria-label="Not your county?">
+  ${lookupForm(null, { id: "not-yours", heading: "Not your county? Enter your ZIP or address", bare: true, next: "/briefing/" })}
+  <p class="hint">Takes you to your own representatives, county and ballot. Or <a class="inline-link" href="/ballot/">preview your state's ballot</a>.</p>
+</section>`;
+}
+
 export async function waitlistCounts(db) {
   try {
     const r = await db.prepare("SELECT COUNT(DISTINCT email) AS people, COUNT(DISTINCT county_fips) AS counties FROM waitlist").first();

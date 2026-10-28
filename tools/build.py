@@ -792,7 +792,7 @@ def build_you():
         link_row("/meetings/?level=county", "County meetings and comment deadlines", "Calaveras County for now: when to send written comments, and each meeting's agenda"),
         link_row("/reps/", "Contact your representatives", "Each rep's page links to their official website and office"),
         link_row("/waitlist/", "Bring ThePillory to your county", "Communities open one county at a time: join the list for yours"),
-        link_row("/calaveras/", "Calaveras County, CA", "Live: meetings, agenda watch and local officials"),
+        link_row("/calaveras/", "Live community: Calaveras County, CA", "One county ThePillory follows in depth so far: meetings, agenda watch and local officials"),
     ])
     understand = "".join([
         link_row("/laws/constitution/", "The Constitution", "The full text, and how every analysis starts from it"),
