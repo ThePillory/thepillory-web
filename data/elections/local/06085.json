@@ -1,5 +1,5 @@
 {
- "_readme": "Santa Clara County's local measures for the November 3, 2026 General Election, entered by hand from the Registrar of Voters' List of Local Measures (the county's site refuses automated requests). Each ballot question is word for word as the Registrar lists it; 'filed' is what the list shows for each measure's arguments and impartial analysis. tools/build_elections.py merges this file into data/elections/2026-11-03.json. See data/README.md.",
+ "_readme": "Santa Clara County's local measures for the November 3, 2026 General Election, entered by hand from the Registrar of Voters' List of Local Measures (the county's site refuses automated requests). Each ballot question is word for word as the Registrar lists it; 'filed' is what the list shows for each measure's arguments and impartial analysis. 'contests' is read by `tools/build_elections.py --local-candidates 06085 <copy of the county's Final Qualified List PDF>`: contests on the ballot, candidates in list order with ballot designations, never addresses, phones, emails or websites. tools/build_elections.py merges this file into data/elections/2026-11-03.json. See data/README.md.",
  "county": "06085",
  "name": "Santa Clara County",
  "elections_page": "https://vote.santaclaracounty.gov/candidates-and-measures/candidate-and-campaign-services",
@@ -10,6 +10,9 @@
  "source": "Santa Clara County Registrar of Voters, List of Local Measures, November 3, 2026, General Election",
  "source_url": "https://vote.santaclaracounty.gov/candidates-and-measures/candidate-and-campaign-services",
  "entered": "2026-10-28",
+ "candidates_source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+ "candidates_source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+ "list_order": "filing",
  "measures": [
   {
    "letter": "RTM",
@@ -17,7 +20,11 @@
    "subject": "Connect Bay Area Transit Initiative",
    "vote_required": "Majority Vote Required",
    "question": "To prevent major service cuts to BART and other transit, avoid increased traffic, and reduce pollution by: Preserving BART, Caltrain, VTA, SamTrans, AC Transit, Muni, other transit for everyone, including workers, students, seniors, persons with disabilities; Supporting transit safety, cleanliness, affordability, reliability; Repairing targeted roads/potholes; Requiring financial transparency, oversight, accountability; shall the measure enacting a 0.5% (Alameda, Contra Costa, San Mateo, Santa Clara counties) and 1% (San Francisco) sales tax for 14 years generating approximately $980,000,000 annually, be adopted?",
-   "filed": ["Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor", "Primary Argument Against / Rebuttal Argument to Primary Argument Against", "Impartial Analysis"]
+   "filed": [
+    "Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor",
+    "Primary Argument Against / Rebuttal Argument to Primary Argument Against",
+    "Impartial Analysis"
+   ]
   },
   {
    "letter": "A",
@@ -25,7 +32,11 @@
    "subject": "City Treasurer Change from Elective to Appointive Office",
    "vote_required": "Majority Vote Required",
    "question": "Shall the office of the City Treasurer be appointive?",
-   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+   "filed": [
+    "Primary Argument In-Favor",
+    "Primary Argument Against (none filed)",
+    "Impartial Analysis"
+   ]
   },
   {
    "letter": "B",
@@ -33,7 +44,11 @@
    "subject": "Transient Occupancy Tax",
    "vote_required": "Majority Vote Required",
    "question": "To maintain critical City services such as street/pothole repair, park and recreation programs, emergency preparedness for storms, flooding and wildfires, and police and fire response shall the City of Gilroy measure raising the Transient Occupancy Tax (hotel tax) rate from 9% to a maximum of 13%, set by Council resolution, providing $700,000 annually paid only by hotel/lodging guests, with annual independent audits, that cannot be taken by Sacramento, until ended by voters, be adopted?",
-   "filed": ["Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor (none filed)", "Primary Argument Against / Rebuttal Argument to Primary Argument Against", "Impartial Analysis"]
+   "filed": [
+    "Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor (none filed)",
+    "Primary Argument Against / Rebuttal Argument to Primary Argument Against",
+    "Impartial Analysis"
+   ]
   },
   {
    "letter": "C",
@@ -41,7 +56,11 @@
    "subject": "Public Works Charter Amendment",
    "vote_required": "Majority Vote Required",
    "question": "Shall the measure proposing to amend the City Charter to update rules for public works contracting, setting the threshold for Council approval and formal bidding at $250,000, retaining provisions for awards of standard contracts to the lowest responsive and responsible bidder, and also allowing for competitive \"best value\" contracting to improve project quality, expedite project completion, and minimize risks, all as set forth in a City ordinance approved at a public meeting, be adopted?",
-   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+   "filed": [
+    "Primary Argument In-Favor",
+    "Primary Argument Against (none filed)",
+    "Impartial Analysis"
+   ]
   },
   {
    "letter": "D",
@@ -49,7 +68,11 @@
    "subject": "Citizen-Sponsored Initiative",
    "vote_required": "Majority Vote Required",
    "question": "Shall the Ordinance, which prohibits the City of Los Altos from selling, leasing, conveying, or declaring as surplus land the ten City-owned Downtown Parking Plazas for any reason, or from authorizing new uses or physical alterations that would diminish protected trees or parking availability, access, or convenience, unless separately approved by a majority of voters, except that two Parking Plazas may be developed for affordable housing without a vote, be adopted?",
-   "filed": ["Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor", "Primary Argument Against / Rebuttal Argument to Primary Argument Against", "Impartial Analysis"]
+   "filed": [
+    "Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor",
+    "Primary Argument Against / Rebuttal Argument to Primary Argument Against",
+    "Impartial Analysis"
+   ]
   },
   {
    "letter": "E",
@@ -57,7 +80,11 @@
    "subject": "City Charter Amendment - Modernizing Provisions",
    "vote_required": "Majority Vote Required",
    "question": "Shall the measure amending the City Charter to modernize provisions by replacing gender-specific terms with gender-neutral language; extending the time to take action to fill a council vacancy from 30 to 60 days; eliminating the requirement to read ordinances and resolutions in full; authorizing Council to establish qualifications for legislatively created boards, commissions, and committees; updating outdated terminology; improving internal consistency, and making clarifying edits to align with State law and current practices, be adopted?",
-   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+   "filed": [
+    "Primary Argument In-Favor",
+    "Primary Argument Against (none filed)",
+    "Impartial Analysis"
+   ]
   },
   {
    "letter": "F",
@@ -65,7 +92,11 @@
    "subject": "Transient Occupancy Tax",
    "vote_required": "Majority Vote Required",
    "question": "Shall the measure to provide locally controlled funding for repairing potholes, streets and sidewalks, improving police, fire, and 911 emergency response services, supporting affordable housing, and adding new parks, and other general government services by authorizing City Council to increase the City of Mountain View's existing Transient Occupancy Tax paid by hotel and short-term rental guests from 10% up to 15%, generating up to $5,200,000 annually until ended by voters, with independent audits, be adopted?",
-   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+   "filed": [
+    "Primary Argument In-Favor",
+    "Primary Argument Against (none filed)",
+    "Impartial Analysis"
+   ]
   },
   {
    "letter": "G",
@@ -73,7 +104,11 @@
    "subject": "City Charter Amendment - Public Works Contracting",
    "vote_required": "Majority Vote Required",
    "question": "Shall Section 1309 of the City Charter be amended to allow the City Council to adopt an ordinance giving the City more options for delivery of public works construction projects by authorizing use of any purchasing or contracting method allowed by California law to select contractors for such projects, and to make clarifying changes to the wording of Section 1309 that do not alter the meaning of the section?",
-   "filed": ["Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor", "Primary Argument Against / Rebuttal Argument to Primary Argument Against", "Impartial Analysis"]
+   "filed": [
+    "Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor",
+    "Primary Argument Against / Rebuttal Argument to Primary Argument Against",
+    "Impartial Analysis"
+   ]
   },
   {
    "letter": "H",
@@ -81,7 +116,11 @@
    "subject": "City Charter Amendment - City Manager's Authority to Settle Claims",
    "vote_required": "Majority Vote Required",
    "question": "Shall Section 1314 of the City Charter be amended to authorize the City Council to adopt an ordinance establishing the maximum amount the City Manager may approve to settle legal claims against the City, instead of the current $50,000 limit established by state law and unchanged since 1989, while retaining City Council approval authority for settlements exceeding the amount set by the ordinance?",
-   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+   "filed": [
+    "Primary Argument In-Favor",
+    "Primary Argument Against (none filed)",
+    "Impartial Analysis"
+   ]
   },
   {
    "letter": "I",
@@ -89,7 +128,11 @@
    "subject": "City Charter Amendment - City Council Vacancies",
    "vote_required": "Majority Vote Required",
    "question": "Shall Section 606 of the City Charter be amended to require that a person appointed to fill a vacancy on the City Council serve until a successor is elected at the next General Municipal Election (November of even-numbered years), rather than until an earlier election date that could be consolidated with a statewide election?",
-   "filed": ["Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor", "Primary Argument Against / Rebuttal Argument to Primary Argument Against", "Impartial Analysis"]
+   "filed": [
+    "Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor",
+    "Primary Argument Against / Rebuttal Argument to Primary Argument Against",
+    "Impartial Analysis"
+   ]
   },
   {
    "letter": "J",
@@ -97,7 +140,11 @@
    "subject": "Transactions and Use Tax",
    "vote_required": "Majority Vote Required",
    "question": "City of Palo Alto Community Safety/Services Measure. To provide general city services including repairing Cubberley Community Center for current safety, earthquake, accessibility standards; upgrading deteriorating electrical systems, wiring, plumbing; acquiring outdoor space/sites; maintaining streets, safe, clean downtown/commercial cores; preparing for natural disasters; repairing deteriorating community spaces, libraries, shall City of Palo Alto’s measure enacting a 0.5% (1/2¢) sales tax, providing approximately $15,600,000 annually until ended by voters, with published financial audits, all funds used locally, be adopted?",
-   "filed": ["Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor", "Primary Argument Against / Rebuttal Argument to Primary Argument Against", "Impartial Analysis"]
+   "filed": [
+    "Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor",
+    "Primary Argument Against / Rebuttal Argument to Primary Argument Against",
+    "Impartial Analysis"
+   ]
   },
   {
    "letter": "K",
@@ -105,7 +152,11 @@
    "subject": "Local Funding -Business Tax Update",
    "vote_required": "Majority Vote Required",
    "question": "City of Milpitas Local Funding Measure. Shall an ordinance to update City of Milpitas's 50-year-old business tax be adopted, with no tax increase to residents, so small businesses pay less than larger businesses, with all paying an annual flat rate, plus 0.025% to 0.035% of gross receipts for larger businesses, providing approximately $3,000,000 annually for general city services such as maintaining fiscal stability, neighborhood safety /cleanliness; requiring public disclosure, all funds invested locally, until ended by voters?",
-   "filed": ["Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor", "Primary Argument Against / Rebuttal Argument to Primary Argument Against", "Impartial Analysis"]
+   "filed": [
+    "Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor",
+    "Primary Argument Against / Rebuttal Argument to Primary Argument Against",
+    "Impartial Analysis"
+   ]
   },
   {
    "letter": "L",
@@ -113,7 +164,11 @@
    "subject": "General Plan Amendment",
    "vote_required": "Majority Vote Required",
    "question": "Shall an ordinance amending the City of Cupertino General Plan be adopted to mandate that any attempt to rezone parks, parklands or open space to residential, commercial or industrial uses, or any proposal for residential, commercial or industrial development in parks, parkland or open space, must be placed before Cupertino voters and secure two-thirds support in the City's next general election?",
-   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+   "filed": [
+    "Primary Argument In-Favor",
+    "Primary Argument Against (none filed)",
+    "Impartial Analysis"
+   ]
   },
   {
    "letter": "M",
@@ -121,7 +176,11 @@
    "subject": "School Bonds",
    "vote_required": "55% Vote Required",
    "question": "To improve the quality of education; construct, upgrade, and modernize classrooms, restrooms, and school facilities; make safety and security improvements; renovate or construct career technical education classrooms; and replace leaky roofs; shall Gilroy Unified School District's measure authorizing $295,000,000 in bonds, at legal rates, and levying approximately $59 per $100,000 of assessed value (raising $18,300,000 annually) while bonds are outstanding, be adopted, with annual audits, independent oversight, NO money for teacher/administrator salaries and all money spent locally?",
-   "filed": ["Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor", "Primary Argument Against / Rebuttal Argument to Primary Argument Against", "Impartial Analysis"]
+   "filed": [
+    "Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor",
+    "Primary Argument Against / Rebuttal Argument to Primary Argument Against",
+    "Impartial Analysis"
+   ]
   },
   {
    "letter": "N",
@@ -129,7 +188,11 @@
    "subject": "School Bonds",
    "vote_required": "55% Vote Required",
    "question": "To maintain quality academic facilities at Los Gatos High School and Saratoga High School by replacing leaky roofs and failing restrooms, plumbing, electrical, heating/ cooling systems; improving school safety; updating, repairing and equipping schools including science, technology, engineering, arts, math, robotics, and career/ college readiness classrooms/ labs; shall Los Gatos Saratoga Union High School District's measure be adopted, authorizing $321,000,000 in bonds at legal rates, levying approximately $30 per $100,000 assessed value ($23,000,000 annually) while bonds are outstanding, with oversight, annual audits, and local control?",
-   "filed": ["Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor", "Primary Argument Against / Rebuttal Argument to Primary Argument Against", "Impartial Analysis"]
+   "filed": [
+    "Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor",
+    "Primary Argument Against / Rebuttal Argument to Primary Argument Against",
+    "Impartial Analysis"
+   ]
   },
   {
    "letter": "O",
@@ -137,7 +200,11 @@
    "subject": "Parcel Tax",
    "vote_required": "2/3rds (66.67%) Vote Required",
    "question": "With funds that cannot be taken by State or Federal Government officials, shall Alum Rock Union Elementary School District's measure to protect services for students with disabilities; improve reading, writing, math and science programs; attract and retain highly qualified teachers; and support students experiencing housing instability be adopted, by replacing the current tax at $310 per parcel for seven years, while raising $6.5 million annually with senior exemptions, and public disclosure of all spending?",
-   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+   "filed": [
+    "Primary Argument In-Favor",
+    "Primary Argument Against (none filed)",
+    "Impartial Analysis"
+   ]
   },
   {
    "letter": "P",
@@ -145,7 +212,11 @@
    "subject": "General Obligation Bond",
    "vote_required": "55% Vote Required",
    "question": "With funds that cannot be taken by the State or Federal government, shall Alum Rock Union Elementary School District's measure to repair leaky roofs and plumbing; replace heating, ventilation, and air conditioning; and upgrade emergency communication and security systems be adopted, authorizing $100 million of bonds with legal rates, without increasing current tax rates, average levies below $26 per $100,000 of assessed valuation (raising $6.3 million annually while outstanding), audits, independent oversight, and disclosure of all spending?",
-   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+   "filed": [
+    "Primary Argument In-Favor",
+    "Primary Argument Against (none filed)",
+    "Impartial Analysis"
+   ]
   },
   {
    "letter": "Q",
@@ -153,7 +224,11 @@
    "subject": "Parcel Tax",
    "vote_required": "2/3rds (66.67%) Vote Required",
    "question": "To protect the quality of education in our local elementary and middle schools, provide funding for core academic programs in math, science, engineering, technology, reading, writing and arts, attract/retain highly qualified teachers, and maintain manageable class sizes, shall Cambrian School District's measure be adopted, levying $148/parcel for 8 years, its continuance subject to voter approval, with senior exemptions, annual inflation adjustments, providing $1,000,000 annually in locally controlled funding that can't be taken by the State?",
-   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+   "filed": [
+    "Primary Argument In-Favor",
+    "Primary Argument Against (none filed)",
+    "Impartial Analysis"
+   ]
   },
   {
    "letter": "R",
@@ -161,7 +236,11 @@
    "subject": "Parcel Tax",
    "vote_required": "2/3rds (66.67%) Vote Required",
    "question": "To enhance and create quality educational opportunities, attract and retain teachers and staff, support Science, Technology, Engineering, Arts and Mathematics (STEAM) education and visual and performing arts, shall the Orchard School District measure levying a parcel tax at the rate of 4 cents per building square foot (not-to-exceed $7,500 non-residential and $89 residential per parcel), raising $1.4 million annually for eight years beginning July 1, 2027, with senior exemptions and all expenditures audited be adopted?",
-   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+   "filed": [
+    "Primary Argument In-Favor",
+    "Primary Argument Against (none filed)",
+    "Impartial Analysis"
+   ]
   },
   {
    "letter": "S",
@@ -169,7 +248,2216 @@
    "subject": "Limit District Directors to Four Four-Year Terms",
    "vote_required": "Majority Vote Required",
    "question": "Shall the measure amending the Bylaws of the El Camino Healthcare District to limit District Directors to four four-year terms be adopted?",
-   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+   "filed": [
+    "Primary Argument In-Favor",
+    "Primary Argument Against (none filed)",
+    "Impartial Analysis"
+   ]
+  }
+ ],
+ "contests": [
+  {
+   "id": "06085-3170",
+   "office": "Santa Clara County BOE, Trustee Area 7",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Raeena S. Lari",
+     "designation": "Governing Board Member, Santa Clara County Board of Education,TA #7",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Karla Dominguez Vega",
+     "designation": "Student Support Specialist",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3216",
+   "office": "Foothill-De Anza CCD, Trustee Area 4",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Liangfang \"Liang\" Chao",
+     "designation": "City Councilmember/Technologist",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "William \"Bill\" Wilson",
+     "designation": "Educator",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3227",
+   "office": "Gavilan Joint CCD, Trustee Area 3",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Shahida S. Merchant",
+     "designation": "Scientist/College Educator",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Gabriel Gutierrez",
+     "designation": "Governing Board Member, Gavilan Joint Community College District, Trustee Area 3",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3234",
+   "office": "San José-Evergreen CCD, Trustee Area 2",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Karen Martinez",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    },
+    {
+     "name": "Scott Hung Pham",
+     "designation": "Retired College Professor",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3253",
+   "office": "West Valley-Mission CCD, Trustee Area 3",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Anne J. Kepner",
+     "designation": "Governing Board Member, West Valley-Mission Community College District, Trustee Area 3",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Colin Lee Elliott Glaves",
+     "designation": "Materials Engineer",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3257",
+   "office": "West Valley-Mission CCD, Trustee Area 7",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Doug Robb",
+     "designation": "College Professor/Coach",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Susan Oster Fish",
+     "designation": "Nurse/College Trustee",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3264",
+   "office": "Yosemite CCD, Trustee Area 4",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Ryan Segoviano",
+     "designation": "Teacher",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Jenny Nicolau",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3312",
+   "office": "Gilroy Unified SD, Trustee Area 3",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Michelle Nelson",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    },
+    {
+     "name": "Daniel Harney",
+     "designation": "Parent/Business Owner",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3314",
+   "office": "Gilroy Unified SD, Trustee Area 4",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Trevor Scott Van Laar",
+     "designation": "Pastor",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Jane Stevens",
+     "designation": "Retired Registered Nurse",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3321",
+   "office": "Milpitas Unified SD",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 3,
+   "candidates": [
+    {
+     "name": "Chris Norwood",
+     "designation": "Governing Board Member, Milpitas Unified School District",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Kelly Yip-Chuan",
+     "designation": "Governing Board Member, Milpitas Unified School District",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Anuradha Sankaran",
+     "designation": "Engineer/Parent",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Franchesca Lacanlale",
+     "designation": "Non Profit Director",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3333",
+   "office": "Morgan Hill Unified SD, Trustee Area 1",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Nancy Altman-Palm",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    },
+    {
+     "name": "Jason Amezcua",
+     "designation": "Father/College Educator",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3334",
+   "office": "Morgan Hill Unified SD, Trustee Area 2",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "John T. Horner",
+     "designation": "Governing Board Member, Morgan Hill Unified School District, TA 2",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Gabriela \"Gabby\" Winter",
+     "designation": "Homemaker",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3335",
+   "office": "Morgan Hill Unified SD, Trustee Area 3",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Art Cohen",
+     "designation": "Parent/Business Consultant",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Cesar Gamboa",
+     "designation": "Father/Translator/Educator",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Sarah Northrup Gadus",
+     "designation": "Parent/Student",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3336",
+   "office": "Morgan Hill Unified SD, Trustee Area 4",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Glen R. Webb",
+     "designation": "Educator/Coach/Administrator",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Claudia Ortiz",
+     "designation": "Parent/Business Owner",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3340",
+   "office": "Palo Alto Unified SD",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 2,
+   "candidates": [
+    {
+     "name": "Linda Henigin",
+     "designation": "Math Teacher/Mother",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "John Craig",
+     "designation": "Parent/Operations Executive",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Avery Wang",
+     "designation": "Research Scientist/Parent",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3352",
+   "office": "San José Unified SD, Trustee Area 2",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Tomara Hall",
+     "designation": "Public School Teacher",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Carson Dance",
+     "designation": "Student Service Administrator",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Jose Magana",
+     "designation": "San José Unified School District, Governing Board Member, Trustee Area 2",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3354",
+   "office": "San José Unified SD, Trustee Area 4",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Mary J. Grunthaner",
+     "designation": "Retired Educator/Teacher",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Michael Melillo",
+     "designation": "Parent/Data Scientist",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3371",
+   "office": "Santa Clara Unified SD, Trustee Area 1",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Jim Canova",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    },
+    {
+     "name": "Kamal Yassin",
+     "designation": "Engineer/Manager/Parent",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3422",
+   "office": "East Side Union HSD, TA 1, Short Term",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Mer Curry Nuñez",
+     "designation": "Educator/Consultant",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Patricia Martínez-Roach",
+     "designation": "Retired Public Schoolteacher",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Paul Pham",
+     "designation": "School District Auditor",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3425",
+   "office": "East Side Union HSD, TA 4",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Lorena Chavez",
+     "designation": "Governing Board Member, East Side Union High School District",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Tony Lam",
+     "designation": "Parent/Business Owner",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Mahbub Khan",
+     "designation": "Professor of Physics",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3435",
+   "office": "Fremont Union HSD, TA 3",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Rosa Kim",
+     "designation": "Governing Board Member",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Jason Lin",
+     "designation": "Executive/Educator/Father",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3436",
+   "office": "Fremont Union HSD, TA 4",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Ilanit Eliaz",
+     "designation": "Community Volunteer",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Naomi Nakano-Matsumoto",
+     "designation": "Governing Board Member",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3444",
+   "office": "Los Gatos-Saratoga Union HSD, TA 2",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Sangeeta Balachandran Mallik",
+     "designation": "Psychologist/Researcher/Parent",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Ishaan Prasad",
+     "designation": "Educational Advocate",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3455",
+   "office": "Mountain View-Los Altos Union HSD, TA 3",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Catherine Vonnegut",
+     "designation": "Governing Board Member",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Thida Cornes",
+     "designation": "Governing Board Member, Mountain View-Los Altos Union High School District",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Sanjay Dave",
+     "designation": "Engineer/Parent",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3503",
+   "office": "Alum Rock Union SD, TA 3",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Andrés Quintero",
+     "designation": "Governing Board Member, Alum Rock Union School District",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Delia Oseguera",
+     "designation": "Community Volunteer",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3505",
+   "office": "Alum Rock Union SD, TA 5",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Manisha Kand",
+     "designation": "Education Consultant",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Línda Lo Chávez",
+     "designation": "Small Business Owner",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Jenny Ludwig",
+     "designation": "Retired School Teacher",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3511",
+   "office": "Berryessa Union SD",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 3,
+   "candidates": [
+    {
+     "name": "Jaria Jaug",
+     "designation": "Governing Board Member, Berryessa Union School District",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Thelma B. Boac",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    },
+    {
+     "name": "Jamal Khan",
+     "designation": "Nonprofit Attorney",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Shanna Brewer",
+     "designation": "Appointed Incumbent",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3521",
+   "office": "Cambrian SD",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 3,
+   "candidates": [
+    {
+     "name": "Carol Presunka",
+     "designation": "Governing Board Member",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Debora Bodenheimer",
+     "designation": "Retired Educator",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Sergio Martínez",
+     "designation": "Appointed Incumbent",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Harmony \"Jay\" McMillin",
+     "designation": "Program Specialist/Parent",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3533",
+   "office": "Campbell Union SD, TA 4",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Mohit Vora",
+     "designation": "Parent/Technology Executive",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Chris Miller",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3534",
+   "office": "Campbell Union SD, TA 5",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Vartika Chandra",
+     "designation": "Community Volunteer",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Sam Krow-Lucal",
+     "designation": "Appointed Incumbent",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3551",
+   "office": "Evergreen SD",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 3,
+   "candidates": [
+    {
+     "name": "Johnny Ray Reyna",
+     "designation": "Teacher/Parent",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Mary Hien Pollett",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    },
+    {
+     "name": "Corinna Diener",
+     "designation": "Retired Secretary/Parent",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Monte Wright",
+     "designation": "Nurse/Parent/Educator",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Thong Quang La",
+     "designation": "Father",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Magaly Fernández",
+     "designation": "Mother/Artist",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3561",
+   "office": "Franklin-McKinley SD",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 3,
+   "candidates": [
+    {
+     "name": "Rudy J. Rodriguez",
+     "designation": "Governing Board Member",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Gilbert Borrayo",
+     "designation": "Educator/Advisory President",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Marc Cooper",
+     "designation": "Governing Board Member",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Steven Sanchez",
+     "designation": "Governing Board Member",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3591",
+   "office": "Los Altos SD",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 3,
+   "candidates": [
+    {
+     "name": "David Poll",
+     "designation": "Parent/Engineering Director",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Brandon Stroy",
+     "designation": "Appointed Incumbent",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Vaishali \"Shali\" Sirkay",
+     "designation": "Governing Board Member, Los Altos School District",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Bryan Harvey Johnson",
+     "designation": "Governing Board Member, Los Altos School District",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3641",
+   "office": "Mountain View Whisman SD",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 2,
+   "candidates": [
+    {
+     "name": "Devon Conley",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    },
+    {
+     "name": "William Lambert",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    },
+    {
+     "name": "Sundar Subbarayan",
+     "designation": "Retired Tech Executive",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Quintin Riis",
+     "designation": "Father",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3672",
+   "office": "Oak Grove SD, Trustee Area 2",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Victor A. Ramirez",
+     "designation": "Air Traffic Controller",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Diego Martinez",
+     "designation": "Governing Board Member, Oak Grove School District, Trustee Area 2",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3673",
+   "office": "Oak Grove SD, Trustee Area 3",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Sophie Freestone",
+     "designation": "Homemaker/Mother/Educator",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Kaushik C. Joglekar",
+     "designation": "Appointed Governing Board Member, Oak Grove School District, Trustee Area 3",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3675",
+   "office": "Oak Grove SD, Trustee Area 5",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Paul Chun",
+     "designation": "Public School Teacher",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Pradeep Kumar",
+     "designation": "Cyber Security Professional",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Casino Fajardo",
+     "designation": "School Administrator/Parent",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3681",
+   "office": "Orchard SD",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 3,
+   "candidates": [
+    {
+     "name": "Lyseria Evelyn Phillips",
+     "designation": "Union Inside Wireman",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Renee Lo",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    },
+    {
+     "name": "Katherine Kasolas-Jacobson",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    },
+    {
+     "name": "Jeff Tang",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    },
+    {
+     "name": "Molly Eslao",
+     "designation": "Senior Placement Counselor",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3691",
+   "office": "Saratoga Union SD",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 3,
+   "candidates": [
+    {
+     "name": "Eric Cao",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    },
+    {
+     "name": "Catalina Rupert",
+     "designation": "Community Volunteer",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Vidya R. Vineet",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    },
+    {
+     "name": "Farnoush Drexel",
+     "designation": "Community Volunteer",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Anna Goldberg",
+     "designation": "Community Volunteer",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-3705",
+   "office": "Sunnyvale SD, Trustee Area 3",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Michelle Maginot",
+     "designation": "Governing Board Member, Sunnyvale School District, Trustee Area 3",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Rommy Kushner",
+     "designation": "Teacher",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5022",
+   "office": "City of Campbell Council, District 3",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Joseph \"Joe\" Brenner",
+     "designation": "Small Business Owner",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Dan Furtado",
+     "designation": "City Councilmember/Educator",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5025",
+   "office": "City of Campbell Council, District 4",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Davis Stuart Fields",
+     "designation": "Product Manager/Father",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Joseph I. Guardado",
+     "designation": "Grocery Store Clerk",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5026",
+   "office": "City of Campbell Council, District 5",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Daraius R. Sorabji",
+     "designation": "Business Owner",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5031",
+   "office": "City of Cupertino Council",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 3,
+   "candidates": [
+    {
+     "name": "Gopal Kumarappan",
+     "designation": "Community Volunteer",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Santosh Rao",
+     "designation": "Technology Executive",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Seema Sharma Lindskog",
+     "designation": "Nonprofit Director",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Tracy Kosolcharoen",
+     "designation": "Community Volunteer",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Mark Fantozzi",
+     "designation": "Civil Engineer",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "John Tang",
+     "designation": "Educator/Engineer/Executive",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "J.R. Fruen",
+     "designation": "Member of the City Council, City of Cupertino",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "J. Z. Wang",
+     "designation": "Engineer/Caregiver/Businesswoman",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5044",
+   "office": "City of Gilroy Council, District 4",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Fred Tovar",
+     "designation": "College Admissions Counselor",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Diana Sanchez Bentz",
+     "designation": "Specialist Paralegal",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5045",
+   "office": "City of Gilroy Council, District 5",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Joseph Garcia",
+     "designation": "Locomotive Engineer",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Christina Tovar",
+     "designation": "Gilroy Business Owner",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Tom Cline",
+     "designation": "Business Owner",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5046",
+   "office": "City of Gilroy Council, District 6",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Elizabeth Bracco",
+     "designation": "Chief Financial Officer",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Brad Starks",
+     "designation": "Father/Marketing Director",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Rebeca G. Armendáriz",
+     "designation": "Nonprofit Director",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5054",
+   "office": "City of Los Altos Council, D2",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Anky van Deursen",
+     "designation": "Housing Manager",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Lynette Lee Eng",
+     "designation": "Community Programs Coordinator",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5056",
+   "office": "City of Los Altos Council, D4",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Larry Lang",
+     "designation": "Councilmember, City of Los Altos",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5060",
+   "office": "Town of Los Altos Hills Council",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 2,
+   "candidates": [
+    {
+     "name": "Jim Waschura",
+     "designation": "Los Altos Hills Planning Commissioner",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Jasmeen Pombra",
+     "designation": "Physician",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Indu Kadambi",
+     "designation": "Business Owner",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5071",
+   "office": "Town of Los Gatos Council",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 3,
+   "candidates": [
+    {
+     "name": "Steve Raspe",
+     "designation": "Attorney/Father",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Rob Stump",
+     "designation": "Retired Business Executive",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Mary Badame",
+     "designation": "Council Member",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Jeff Suzuki",
+     "designation": "Economic Analyst",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Rob Moore",
+     "designation": "Los Gatos Town Council Member",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Heidi Owens",
+     "designation": "Senior Management Analyst",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5080",
+   "office": "Mayor, City of Milpitas",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Hon Lien",
+     "designation": "Council Member, City of Milpitas",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Carmen Montano",
+     "designation": "Mayor/Educator",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Voltaire S. Montemayor",
+     "designation": "Retired Geologist",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Santosh Sahoo",
+     "designation": "Tech Entrepreneur",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5081",
+   "office": "City of Milpitas Council",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 2,
+   "candidates": [
+    {
+     "name": "Jennie Ha Phan",
+     "designation": "Community Volunteer",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Bill Chuan",
+     "designation": "Engineer/Business Owner",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Seema Kanani",
+     "designation": "Clinical Social Worker",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Garry Barbadillo",
+     "designation": "City Councilmember/Attorney",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Dipak Awasthi",
+     "designation": "Milpitas Planning Commissioner",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5100",
+   "office": "Mayor, City of Morgan Hill",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Kristopher L. Clayton",
+     "designation": "Carpenter",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Mark Turner",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    },
+    {
+     "name": "Deborah M. Africa",
+     "designation": "Retired RN/Mother",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5107",
+   "office": "City of Morgan Hill Council, District B",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Steven Hayes",
+     "designation": "Fire Captain/Paramedic",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Yvonne Martinez Beltran",
+     "designation": "Councilwoman/Mother",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5109",
+   "office": "City of Morgan Hill Council, District D",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Dolores Alvarado",
+     "designation": "Chief Executive Officer",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Marilyn Librers",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5110",
+   "office": "City of Mountain View Council",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 3,
+   "candidates": [
+    {
+     "name": "Paul Donahue",
+     "designation": "Engineer",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Robert Cox",
+     "designation": "Retired Software Engineer",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "James Kuszmaul",
+     "designation": "Engineer",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Samuel Ali",
+     "designation": "No Ballot Designation",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "IdaRose Sylvester",
+     "designation": "Entrepreneur/Educator",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Silja Paymer",
+     "designation": "Teacher/Mother/Engineer",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Erik Poicon",
+     "designation": "Library Outreach Specalist",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Alex Amoroso",
+     "designation": "Army Reserve Officer",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5121",
+   "office": "City of Palo Alto Council",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 3,
+   "candidates": [
+    {
+     "name": "Henry Etzkowitz",
+     "designation": "(No Ballot Designation)",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Ed Lauing",
+     "designation": "(No Ballot Designation)",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Bryna Chang",
+     "designation": "(No Ballot Designation)",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Vicki Veenker",
+     "designation": "(No Ballot Designation)",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Yu \"Yudy\" Deng",
+     "designation": "(No Ballot Designation)",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Gary Gechlik",
+     "designation": "(No Ballot Designation)",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Raymond L. Goins",
+     "designation": "(No Ballot Designation)",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Brian Hamachek",
+     "designation": "(No Ballot Designation)",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5205",
+   "office": "City of San José Council, District 5",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Nora Campos",
+     "designation": "Businesswoman/Policy Analyst",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Peter Ortiz",
+     "designation": "Councilmember, City of San Jose District 5",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5207",
+   "office": "City of San José Council, District 7",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Van Le",
+     "designation": "Trustee East Side Union High School District",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Bien Doan",
+     "designation": "Council Member, City of San Jose District 7",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5209",
+   "office": "City of San José Council, District 9",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Genny Altwer",
+     "designation": "Business Owner/Mother",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Gordon Chester",
+     "designation": "City of San Jose Infrastructure Engineer",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5230",
+   "office": "Mayor, City of Santa Clara",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Mike Wiltberger",
+     "designation": "Research Scientist/Entrepreneur",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Armando \"Gary\" Ferraris",
+     "designation": "Retired City Employee",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Karen Hardy",
+     "designation": "City of Santa Clara Councilmember District 3",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "David Kertes",
+     "designation": "Bussinessman/Father/Coach",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Kathy Watanabe",
+     "designation": "School Board Trustee",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Kevin Park",
+     "designation": "City of Santa Clara Councilmember, District 4",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5232",
+   "office": "City of Santa Clara Council, District 2",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Kimberley Williams",
+     "designation": "University Administrator/Mother",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Yvonne Inciarte",
+     "designation": "Government Relations Director",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5233",
+   "office": "City of Santa Clara Council, District 3",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Kyle Madej",
+     "designation": "Businessman/Father",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Eric Crutchlow",
+     "designation": "Cybersecurity Product Manager",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5240",
+   "office": "City of Saratoga Council",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 3,
+   "candidates": [
+    {
+     "name": "Jeri Bromley",
+     "designation": "Commissioner, Saratoga Library and Public Art Commission",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Ping Li",
+     "designation": "Chairperson, Planning Commission",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Bill Dalton",
+     "designation": "Retired Programmer/Engineer",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Glenn K. Hendricks",
+     "designation": "(No Ballot Designation)",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5251",
+   "office": "City of Sunnyvale Council, District 1",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Linda Sell",
+     "designation": "Sunnyvale Councilmember, District 1",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5253",
+   "office": "City of Sunnyvale Council, District 3",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Murali Srinivasan",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-5255",
+   "office": "City of Sunnyvale Council, District 5",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Richard Mehlinger",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-6001",
+   "office": "Santa Clara Valley Water, District 1",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Jimmy Forbis",
+     "designation": "Retired City Manager",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "John L. Varela",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-6006",
+   "office": "Santa Clara Valley Water, District 6",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Phuong Tran Nguyen",
+     "designation": "Field Representative",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Milan Balinton",
+     "designation": "Nonprofit Executive Director",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-6007",
+   "office": "Santa Clara Valley Water, District 7",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Pete Dailey",
+     "designation": "Member, Los Altos City Council",
+     "party": null,
+     "incumbent": false
+    },
+    {
+     "name": "Rebecca Eisenberg",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-6020",
+   "office": "Cupertino Sanitary District",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 2,
+   "candidates": [
+    {
+     "name": "Patrick Shupui Kwok",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    },
+    {
+     "name": "Taghi Saadati",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    },
+    {
+     "name": "Gilbert Wong",
+     "designation": "Small Business Owner",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
+  },
+  {
+   "id": "06085-6051",
+   "office": "Midpeninsula Regional Open Space District Ward 1",
+   "scope": "county",
+   "county": "06085",
+   "district": null,
+   "vote_for": 1,
+   "candidates": [
+    {
+     "name": "Craig Gleason",
+     "designation": "Incumbent",
+     "party": null,
+     "incumbent": true
+    },
+    {
+     "name": "Tina Marie To",
+     "designation": "Director of Operations",
+     "party": null,
+     "incumbent": false
+    }
+   ],
+   "source_url": "https://vote.santaclaracounty.gov/november-3-2026-general-election-resources",
+   "source": "Santa Clara County Registrar of Voters, Final Qualified List of Local Eligible Candidates (printed 8/27/2026)",
+   "results_url": "https://vote.santaclaracounty.gov/home"
   }
  ]
 }

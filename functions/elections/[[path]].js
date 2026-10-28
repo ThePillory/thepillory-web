@@ -324,7 +324,9 @@ function statementBlock(cand, contest, coverage) {
 function statementCoverage(contest, election) {
   if (contest.scope === "statewide") return "No candidate statement in the state Official Voter Information Guide.";
   const fromCounty = contest.candidates.some((c) => c.statement && /Pamphlet/.test(c.statement.source));
-  const county = Object.values(election.counties || {})[0];
+  const county = (contest.county && (election.counties || {})[contest.county]) || Object.values(election.counties || {})[0];
+  // A county whose pamphlet ThePillory hasn't read (Santa Clara): say so, never "no statement".
+  if (contest.scope === "county" && county && !county.pamphlet_pdf) return `Candidate statements are printed in ${county.name}'s Voter Information Guide, which ThePillory hasn't read yet.`;
   if (contest.scope === "county" || fromCounty) return `No candidate statement in the ${county ? county.name : "county"} Voter Information Pamphlet.`;
   return "Candidate statements for this office are printed in each county's voter information pamphlet. ThePillory has them for counties where it's live.";
 }

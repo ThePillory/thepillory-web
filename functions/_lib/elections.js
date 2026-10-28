@@ -97,6 +97,10 @@ export function rotateFor(list, ad) {
 export function ballotOrder(contest, election, { ad = null, countyName = null } = {}) {
   const alpha = election.election.alphabet;
   if (contest.scope === "county") {
+    // A county whose list is in filing order (Santa Clara): alphabetical by last name, never a guessed ballot order.
+    if (((election.counties || {})[contest.county] || {}).list_order === "filing") {
+      return { candidates: alphabetOrder("ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""), contest.candidates), note: `Listed alphabetically by last name. ${countyName || "The county"}'s list of qualified candidates doesn't give the ballot order, so the order on your ballot may differ.` };
+    }
     return { candidates: contest.candidates, note: `In the order of ${countyName || "the county"}'s list of qualified candidates, which follows the Secretary of State's randomized alphabet.` };
   }
   const base = alphabetOrder(alpha, contest.candidates);
@@ -159,8 +163,10 @@ export function scopeLabel(c) {
 }
 
 /** A contest's title as the ballot names the office. County titles are printed in capitals on the county's list. */
+// A county list printed in capitals (Calaveras's) gets title case; one already in mixed case (Santa Clara's) is shown as printed.
+const printedInCaps = (s) => /[A-Z]/.test(String(s || "")) && !/[a-z]/.test(String(s || ""));
 export function contestTitle(c) {
-  return c.scope === "county" ? titleCase(c.office) : c.office;
+  return c.scope === "county" && printedInCaps(c.office) ? titleCase(c.office) : c.office;
 }
 
 const KEEP_UPPER = new Set(["CCD", "TA1", "TA2", "TA3", "TA4", "TA5", "FPD", "PUD", "USD", "UHSD", "CSD", "WD", "ID", "II", "III", "IV"]);
@@ -169,7 +175,7 @@ export function titleCase(s) {
 }
 
 /** A candidate's name as the source prints it; the county's capitals become title case (with a note on the page). */
-export const displayName = (c, contest) => (contest.scope === "county" ? titleCase(c.name).replace(/\bIii\b/g, "III").replace(/\bIi\b/g, "II") : c.name);
+export const displayName = (c, contest) => (contest.scope === "county" && printedInCaps(c.name) ? titleCase(c.name).replace(/\bIii\b/g, "III").replace(/\bIi\b/g, "II") : c.name);
 
 // ---------------------------------------------------------------------------
 // Candidates who already hold an office ThePillory follows: matched by name to

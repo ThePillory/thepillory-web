@@ -443,7 +443,13 @@ def arguments(h):
 # Calaveras County.
 
 def county_contests(fips, cfg):
-    t = pdf_text(cfg["candidates_pdf"])
+    return parse_contests(pdf_text(cfg["candidates_pdf"]), fips, cfg, cfg["candidates_pdf"])
+
+
+def parse_contests(t, fips, cfg, source_url):
+    """The county's Qualified Candidates List (the CFMR009 report: Calaveras's and Santa Clara's):
+    each contest on the ballot, its candidates in list order with their ballot designations.
+    Addresses, phones, emails and websites on the list are never read."""
     contests, current = [], None
     lines = t.splitlines()
     for idx, raw in enumerate(lines):
@@ -451,14 +457,14 @@ def county_contests(fips, cfg):
         if m:
             current = {"id": f"{fips}-{m.group(1)}", "office": m.group(2).strip(), "scope": "county", "county": fips, "district": None,
                        "on_ballot": m.group(3) == "Yes", "vote_for": int(m.group(4)), "candidates": [],
-                       "source_url": cfg["candidates_pdf"], "source": f"{cfg['name']} Elections, Qualified Candidates List",
+                       "source_url": source_url, "source": cfg.get("candidates_source") or f"{cfg['name']} Elections, Qualified Candidates List",
                        "results_url": cfg["results_page"]}
             contests.append(current)
             continue
         m = re.match(r"^Qualified\s+\d+\s+(.+?)\s{3,}Candidate Stmt Filed\?", raw.strip())
         if m and current is not None:
             designation = lines[idx + 1].strip() if idx + 1 < len(lines) else ""
-            if re.match(r"^(Res:|Qualified)", designation):
+            if re.match(r"^(Res:|Qualified|Contest$)", designation) or re.search(r"Candidate Stmt Filed\?", designation):
                 designation = ""
             current["candidates"].append({"name": m.group(1).strip(), "designation": designation, "party": None, "incumbent": designation == "Incumbent"})
     on = [c for c in contests if c["on_ballot"] and c["candidates"]]
@@ -688,7 +694,7 @@ def local_counties():
         for k in ("source_url", "elections_page"):
             if not str(d.get(k) or "").startswith("https://"):
                 raise SystemExit(f"{f.name}: {k} must be an https link to the county's page")
-        county = {"name": d["name"], "elections_page": d["elections_page"], "results_page": d["results_page"], "pamphlet_pdf": d.get("pamphlet_pdf"), "boe": d.get("boe"), "entered": d.get("entered")}
+        county = {"name": d["name"], "elections_page": d["elections_page"], "results_page": d["results_page"], "pamphlet_pdf": d.get("pamphlet_pdf"), "boe": d.get("boe"), "entered": d.get("entered"), "list_order": d.get("list_order")}
         measures = []
         for m in d["measures"]:
             letter = m["letter"]
@@ -703,20 +709,37 @@ def local_counties():
                 "results_url": d["results_page"], "source_url": d["source_url"], "source": d["source"],
                 "note": f"The ballot question is word for word from the {d['source']} (entered {d.get('entered')}). The impartial analysis and arguments are published by the county; ThePillory hasn't read them yet.",
             })
-        out.append((fips, county, measures))
+        out.append((fips, county, measures, d.get("contests", [])))
     return out
 
 
 def merge_local(doc):
     """The hand-entered counties' measures and entries, replacing any earlier copy."""
-    for fips, county, measures in local_counties():
+    for fips, county, measures, contests in local_counties():
         doc["counties"][fips] = county
         doc["measures"] = [m for m in doc["measures"] if m.get("county") != fips] + measures
-        log(f"{county['name']}: {len(measures)} local measures entered by hand")
+        doc["contests"] = [c for c in doc["contests"] if c.get("county") != fips] + contests
+        log(f"{county['name']}: {len(measures)} local measures and {len(contests)} local contests entered by hand")
     return doc
 
 
+def local_candidates(fips, pdf):
+    """Read a county's Qualified Candidates List from a copy of its PDF (for a county whose site
+    refuses automated requests) into data/elections/local/<fips>.json: contests and candidates only."""
+    f = LOCAL_DIR / f"{fips}.json"
+    d = json.loads(f.read_text())
+    text = subprocess.run(["pdftotext", "-layout", pdf, "-"], check=True, capture_output=True, text=True).stdout
+    cfg = {"name": d["name"], "results_page": d["results_page"], "candidates_source": d["candidates_source"]}
+    d["contests"] = parse_contests(text, fips, cfg, d["candidates_source_url"])
+    f.write_text(json.dumps(d, indent=1, ensure_ascii=False) + "\n")
+    log(f"{d['name']}: {len(d['contests'])} contests on the ballot written to {f.relative_to(ROOT)}")
+
+
 def main():
+    if "--local-candidates" in sys.argv:
+        i = sys.argv.index("--local-candidates")
+        local_candidates(sys.argv[i + 1], sys.argv[i + 2])
+        return
     if "--local-only" in sys.argv:
         # Merge the hand-entered counties into the current file without fetching anything.
         out = ROOT / "data" / "elections" / f"{ELECTION['id']}.json"
