@@ -21,6 +21,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null
+      - name: PROBE
+        run: |
+          python3 tools/_probe_nf.py
+          exit 1
       - name: Build from official sources
         env:
           FEC_API_KEY: ${{ secrets.FEC_API_KEY }}
