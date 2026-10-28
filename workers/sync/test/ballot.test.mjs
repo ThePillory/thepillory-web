@@ -134,6 +134,8 @@ const ASSETS = {
     if (path === "/data/elections/certified-2026/nm.json") return new Response(JSON.stringify(NM_CERTIFIED));
     if (path === "/data/elections/2026-11-03.json") return new Response(JSON.stringify(CA_ELECTION));
     if (path === "/data/elections/2026-11-03-wa.json") return new Response(readFileSync(new URL("../../../data/elections/2026-11-03-wa.json", import.meta.url), "utf8"));
+    // The real ZIP and county files: ZIP lookups and the saved place's name.
+    if (/^\/data\/(zip\/\d{3}|geo\/places\/[a-z]{2})\.json$/.test(path)) return new Response(readFileSync(new URL(`../../..${path}`, import.meta.url), "utf8"));
     return new Response("not found", { status: 404 });
   },
 };
@@ -172,10 +174,10 @@ const get = async (path, { cookie = "", cf = null, db = stubDb() } = {}) => {
   return { res, html: await res.text() };
 };
 
-const post = async (path, address, { civic = null, db = stubDb(), key = "k" } = {}) => {
+const post = async (path, address, { civic = null, db = stubDb(), key = "k", cookie = "" } = {}) => {
   const body = new FormData();
   body.set("address", address);
-  const request = new Request(`https://thepillory.test${path}`, { method: "POST", body, headers: { Origin: "https://thepillory.test" } });
+  const request = new Request(`https://thepillory.test${path}`, { method: "POST", body, headers: { Origin: "https://thepillory.test", ...(cookie ? { Cookie: cookie } : {}) } });
   const realFetch = globalThis.fetch;
   const logged = [];
   const realLog = [console.log, console.error, console.warn];
@@ -263,7 +265,7 @@ test("California: the certified candidates for the House race, in ballot order, 
   assert.doesNotMatch(html, /FEC list ↗/);
 });
 
-test("with an address: every contest in ballot order, the same card for each candidate, the address nowhere", async () => {
+test("with an address: every contest in ballot order, the same card for each candidate, the address shown back only on its own answer", async () => {
   const db = stubDb();
   const { res, html, logged } = await post("/ballot/ca/", ADDRESS, { db });
   assert.equal(res.status, 200);
@@ -275,11 +277,12 @@ test("with an address: every contest in ballot order, the same card for each can
   assert.doesNotMatch(html, /href="\/reps\/hal-jones\/"/, "a name alone doesn't link a candidate to an official");
   assert.match(html, /Just the facts: Proposition 1[\s\S]*facts-chips[\s\S]*href="\/elections\/2026-11-03\/measure\/prop-1\/">Full measure page ›/);
   assert.match(html, /href="https:\/\/sos\.example\.gov\/prop1"/);
-  assert.match(html, /For an address in Exampleville, CA/);
+  assert.match(html, /Your ballot preview for 123 Example Street, Exampleville, CA 95999/, "labeled with the address as entered");
+  assert.match(html, /<strong>Showing:<\/strong> 123 Example Street, Exampleville, CA 95999<\/p>/, "no saved place: no other link");
   assert.match(html, /Example Hall/);
   assert.match(html, /Early voting/);
   assert.ok(html.includes(esc(CONFIRM)));
-  assert.doesNotMatch(html, /Example Street|555-0100|hal@example\.org|ana\.example\.org|javascript:/, "no address, no contact details, no unsafe links");
+  assert.doesNotMatch(html, /555-0100|hal@example\.org|ana\.example\.org|javascript:/, "no contact details, no unsafe links");
   assert.ok(!logged.some((l) => l.includes("Example Street")), "nothing logged with the address");
   assert.equal(db.inserted.length, 1, "the lookup is counted");
   assert.deepEqual(db.inserted[0].args.length, 1, "only the visitor hash is kept");
@@ -288,11 +291,10 @@ test("with an address: every contest in ballot order, the same card for each can
 test("no data for the address: said plainly, with the state's official sample ballot lookup", async () => {
   const { res, html } = await post("/ballot/wa/", "1 Nowhere Rd, Olympia, WA", { civic: async () => new Response(JSON.stringify({ error: { message: "Election unknown" } }), { status: 400 }) });
   assert.equal(res.headers.get("Cache-Control"), "private, no-store");
-  assert.match(html, /There&#x27;s no ballot information for this address yet/);
+  assert.match(html, /There&#x27;s no ballot information for &quot;1 Nowhere Rd, Olympia, WA&quot; yet/, "said for what was entered");
   assert.match(html, /Your sample ballot is on <a class="inline-link" href="https:\/\/www\.sos\.wa\.gov\/elections" target="_blank" rel="noopener">Washington's election office website/);
-  assert.doesNotMatch(html, /Nowhere Rd/);
   const empty = await post("/ballot/wa/", "1 Nowhere Rd, Olympia, WA", { civic: async () => new Response(JSON.stringify({ ...VOTER_INFO, normalizedInput: { city: "Olympia", state: "WA" }, contests: [] })) });
-  assert.match(empty.html, /no ballot information for this address yet/, "an answer with no contests is no data");
+  assert.match(empty.html, /no ballot information for &quot;1 Nowhere Rd, Olympia, WA&quot; yet/, "an answer with no contests is no data");
   assert.match(empty.html, /Example Hall/, "its polling places still show");
 });
 
@@ -317,6 +319,72 @@ test("the ballot page leads with the statewide preview; the address card comes a
   assert.ok(at('id="address"') < main.lastIndexOf("Always confirm your ballot"), "the confirm line after the card");
   assert.match(main, /<h2 class="label" id="h-address">Your exact ballot<\/h2>\s*<p class="small">Add your address for local contests and where to vote\.<\/p>/);
   assert.match(main, />Show my ballot<\/button>/);
-  assert.match(main, /never stores or logs your address/);
+  assert.match(main, /ThePillory never stores or logs either, and a lookup doesn(?:'|&#x27;)t change your saved place/);
   assert.doesNotMatch(html, /Preview Washington/, "never the label of the button that leads here");
+});
+
+// What the visitor enters always wins over the saved districts cookie (Calaveras saved here).
+const CALAVERAS = `pillory_districts=${encodeURIComponent("st=CA&cd=5&su=4&sl=8&co=06009")}`;
+
+test("a ZIP alone (95120): its county and districts, the statewide ballot, and a request for the street address; never Calaveras, never 'your ballot'", async () => {
+  let called = false;
+  const db = stubDb();
+  const { res, html } = await post("/ballot/ca/", "95120", { cookie: CALAVERAS, db, civic: async () => ((called = true), new Response("{}")) });
+  assert.equal(res.status, 200);
+  assert.equal(res.headers.get("Cache-Control"), "private, no-store");
+  assert.equal(called, false, "a ZIP isn't sent to Google");
+  assert.equal(db.inserted.length, 0, "and doesn't count toward the address lookups");
+  assert.equal(res.headers.get("Set-Cookie"), null, "a lookup never changes the saved place");
+  assert.match(html, /<h1>What(?:'|&#x27;)s on ballots in 95120<\/h1>/);
+  assert.match(html, /<strong>Showing:<\/strong> 95120 · <a class="inline-link" href="\/ballot\/ca\/">Use my saved place \(Calaveras County, CA\) instead<\/a>/);
+  assert.match(html, /95120 is in <a class="inline-link" href="\/place\/ca\/santa-clara\/">Santa Clara County<\/a> and covers parts of these districts:/);
+  assert.match(html, /U\.S\. House District 19<\/a> · <a[^>]*>U\.S\. House District 16/);
+  assert.match(html, /A ZIP can span several districts; add your street address for your exact ballot\./);
+  assert.match(html, /95120 covers parts of District 19 and District 16 of the U\.S\. House/);
+  assert.match(html, /id="h-statewide"/, "the statewide races and measures");
+  assert.match(html, /<input type="hidden" name="q" value="95120" \/>[\s\S]*<input type="hidden" name="next" value="\/ballot\/ca\/" \/>[\s\S]*Make this my place/);
+  assert.doesNotMatch(html, /Calaveras County(?!, CA\) instead)|District 5\b|Your ballot on ThePillory|Your ballot preview for/, "nothing from the saved place, and not presented as the ballot");
+});
+
+test("a ZIP across county lines (95033): both counties, every district part", async () => {
+  const { html } = await post("/ballot/ca/", "95033", { cookie: CALAVERAS });
+  assert.match(html, /95033 spans parts of <a[^>]*>Santa Cruz County<\/a> and <a[^>]*>Santa Clara County<\/a> and covers parts of these districts:/);
+  assert.match(html, /covers parts of District 19 and District 16 of the U\.S\. House/);
+  assert.match(html, /Use my saved place \(Calaveras County, CA\) instead/);
+});
+
+test("the saved place's own ZIP: no 'use my saved place' link, no 'Make this my place'", async () => {
+  const { html } = await post("/ballot/ca/", "95249", { cookie: CALAVERAS });
+  assert.match(html, /<strong>Showing:<\/strong> 95249<\/p>/);
+  assert.match(html, /95249 is in <a[^>]*>Calaveras County<\/a> and is in these districts:/);
+  assert.doesNotMatch(html, /Make this my place/);
+});
+
+test("a full address: Google's answer, labeled with what was entered; the saved place only as a link when it differs", async () => {
+  const santaClara = { ...VOTER_INFO, normalizedInput: { line1: "1 Example Way", city: "San Jose", state: "CA", zip: "95120" } };
+  const sc = await post("/ballot/ca/", "1 Example Way, San Jose, CA 95120", { cookie: CALAVERAS, civic: async () => new Response(JSON.stringify(santaClara)) });
+  assert.match(sc.html, /Your ballot preview for 1 Example Way, San Jose, CA 95120/);
+  assert.match(sc.html, /Use my saved place \(Calaveras County, CA\) instead/);
+  assert.equal(sc.res.headers.get("Set-Cookie"), null);
+  assert.doesNotMatch(sc.html, /Your ballot on ThePillory/);
+  const calaveras = { ...VOTER_INFO, normalizedInput: { line1: "1 Example Rd", city: "San Andreas", state: "CA", zip: "95249" } };
+  const cv = await post("/ballot/ca/", "1 Example Rd, San Andreas, CA", { cookie: CALAVERAS, civic: async () => new Response(JSON.stringify(calaveras)) });
+  assert.match(cv.html, /<strong>Showing:<\/strong> 1 Example Rd, San Andreas, CA<\/p>/, "the saved place itself: no link");
+});
+
+test("a failed lookup says so for what was entered and never swaps in the saved place", async () => {
+  const notFound = await post("/ballot/ca/", "1 Example Way, San Jose, CA 95120", { cookie: CALAVERAS, civic: async () => new Response(JSON.stringify({ error: { message: "Election unknown" } }), { status: 400 }) });
+  assert.match(notFound.html, /no ballot information for &quot;1 Example Way, San Jose, CA 95120&quot; yet/);
+  assert.match(notFound.html, /Use my saved place \(Calaveras County, CA\) instead/);
+  assert.doesNotMatch(notFound.html, /Your ballot on ThePillory/);
+  const unknownZip = await post("/ballot/ca/", "00000", { cookie: CALAVERAS });
+  assert.match(unknownZip.html, /00000 isn(?:'|&#x27;)t one of the Census Bureau(?:'|&#x27;)s ZIP code areas/);
+  assert.doesNotMatch(unknownZip.html, /U\.S\. House, District 5|District 5<\/p>/, "the saved House race isn't shown in its place");
+  const bad = await post("/ballot/ca/", "x", { cookie: CALAVERAS });
+  assert.match(bad.html, /<strong>Showing:<\/strong> x · /);
+});
+
+test("before any lookup, the page says it's showing the saved place", async () => {
+  const { html } = await get("/ballot/ca/", { cookie: CALAVERAS });
+  assert.match(html, /<strong>Showing:<\/strong> your saved place \(Calaveras County, CA\) · <a class="inline-link" href="#address">a different address or ZIP<\/a>/);
 });

@@ -171,7 +171,7 @@ export function cookieHeader(d) {
 
 // The no-JavaScript path: a page to pick among a ZIP's districts.
 // Where a plain form post goes after the lookup: the briefing, or a ballot page that sent it.
-const NEXT_OK = /^\/(briefing|reps|elections\/\d{4}-\d{2}-\d{2}\/ballot)\/$/;
+const NEXT_OK = /^\/(briefing|reps|elections\/\d{4}-\d{2}-\d{2}\/ballot|ballot\/[a-z]{2})\/$/;
 const nextPath = (v) => (NEXT_OK.test(String(v || "")) ? String(v) : "/briefing/");
 
 function choicePage(result, next) {

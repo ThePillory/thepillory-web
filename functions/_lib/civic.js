@@ -108,6 +108,8 @@ export function ballotFromVoterInfo(data) {
     otherElections: (data.otherElections || []).map((e) => ({ name: text(e.name), day: text(e.electionDay) })),
     where: [text(data.normalizedInput && data.normalizedInput.city), text(data.normalizedInput && data.normalizedInput.state)].filter(Boolean).join(", "),
     stateCode: text(data.normalizedInput && data.normalizedInput.state).toUpperCase(),
+    // The ZIP Google read from the address: only to tell whether it's the visitor's saved place, never kept.
+    zip: (/^\d{5}/.exec(text(data.normalizedInput && data.normalizedInput.zip)) || [""])[0],
     mailOnly: !!data.mailOnly,
     contests,
     polling: (data.pollingLocations || []).map(place),
