@@ -670,7 +670,60 @@ def fec_links(contests):
     log(f"FEC filings linked: {n}")
 
 
+# ---------------------------------------------------------------------------
+# Counties whose election office refuses automated requests (Santa Clara): entered by
+# hand from the county's own list into data/elections/local/<fips>.json, every ballot
+# question word for word, and merged here. The impartial analyses and arguments stay
+# links to the county until ThePillory has read them.
+
+LOCAL_DIR = ROOT / "data" / "elections" / "local"
+
+
+def local_counties():
+    """[(fips, county entry, measures)] from each hand-entered county file."""
+    out = []
+    for f in sorted(LOCAL_DIR.glob("*.json")):
+        d = json.loads(f.read_text())
+        fips = d["county"]
+        for k in ("source_url", "elections_page"):
+            if not str(d.get(k) or "").startswith("https://"):
+                raise SystemExit(f"{f.name}: {k} must be an https link to the county's page")
+        county = {"name": d["name"], "elections_page": d["elections_page"], "results_page": d["results_page"], "pamphlet_pdf": d.get("pamphlet_pdf"), "boe": d.get("boe"), "entered": d.get("entered")}
+        measures = []
+        for m in d["measures"]:
+            letter = m["letter"]
+            if not m.get("question", "").strip():
+                raise SystemExit(f"{f.name}: Measure {letter} has no ballot question")
+            measures.append({
+                "id": f"{fips}-measure-{letter.lower()}", "number": letter, "title": f"Measure {letter}", "subject": m.get("subject"),
+                "question": m["question"], "scope": "county", "county": fips, "jurisdiction": m["jurisdiction"],
+                "requirement": m.get("vote_required"), "filed": m.get("filed", []),
+                "impartial_analysis": [], "impartial_analysis_by": None, "tax_rate_statement": [], "arguments": [],
+                "links": {"pamphlet": d.get("pamphlet_pdf"), "page": d["source_url"]},
+                "results_url": d["results_page"], "source_url": d["source_url"], "source": d["source"],
+                "note": f"The ballot question is word for word from the {d['source']} (entered {d.get('entered')}). The impartial analysis and arguments are published by the county; ThePillory hasn't read them yet.",
+            })
+        out.append((fips, county, measures))
+    return out
+
+
+def merge_local(doc):
+    """The hand-entered counties' measures and entries, replacing any earlier copy."""
+    for fips, county, measures in local_counties():
+        doc["counties"][fips] = county
+        doc["measures"] = [m for m in doc["measures"] if m.get("county") != fips] + measures
+        log(f"{county['name']}: {len(measures)} local measures entered by hand")
+    return doc
+
+
 def main():
+    if "--local-only" in sys.argv:
+        # Merge the hand-entered counties into the current file without fetching anything.
+        out = ROOT / "data" / "elections" / f"{ELECTION['id']}.json"
+        doc = merge_local(json.loads(out.read_text()))
+        out.write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
+        log(f"wrote {out.relative_to(ROOT)}")
+        return
     check = "--check" in sys.argv
     letters = alphabet()
     contests = certified_list()
@@ -691,6 +744,7 @@ def main():
         "contests": contests + local,
         "measures": measures,
     }
+    merge_local(doc)
     summary = f"{len(contests)} state and federal contests, {len(local)} local, {len(measures)} measures"
     log(summary)
     if check:

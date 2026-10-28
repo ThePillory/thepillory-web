@@ -50,3 +50,7 @@ them after each election or appointment.
 
 An entry missing `name`, `source_url` or `last_verified` is skipped, not shown,
 and the sync log says which office and why.
+
+## `elections/local/<fips>.json`: county measures entered by hand
+
+For a county whose election office refuses automated requests (Santa Clara, `06085`), its local measures are entered by hand from the county's own List of Local Measures, and `tools/build_elections.py` merges them into `data/elections/2026-11-03.json` (`python3 tools/build_elections.py --local-only` merges them without fetching anything else). Each measure's ballot question is copied word for word; `filed` lists what the county shows for its arguments and impartial analysis, which stay links to the county until ThePillory reads them. `source_url` and `elections_page` must be the county's own https pages; `entered` is the date the list was copied. Never add a measure that isn't on the county's list, and never shorten or reword a question.

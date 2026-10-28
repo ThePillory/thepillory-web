@@ -144,8 +144,22 @@ export function measureFacts(election, m) {
     };
   }
 
-  // California, local: the county's Voter Information Pamphlet.
+  // California, local: the county's Voter Information Pamphlet, or, for a county whose list was
+  // entered by hand (Santa Clara), the county's list of measures, where only the question is read.
   source(`${county ? county.name : "County"} Voter Information Pamphlet`, m.links && m.links.pamphlet);
+  if (!(m.links && m.links.pamphlet)) {
+    source(m.source || `${county ? county.name : "County"} list of local measures`, m.source_url);
+    return {
+      type: { text: "", from: "" },
+      placed: null,
+      changes: m.question ? para(m.question) : null,
+      means: null,
+      meansMissing: "The county's list of measures doesn't print a “Yes means / No means”; the impartial analysis, published by the county, explains the measure.",
+      cost: null,
+      costMissing: "ThePillory hasn't read this measure's impartial analysis or any tax rate statement yet; the county publishes them.",
+      sources,
+    };
+  }
   const tax = cut(m.tax_rate_statement, 1);
   return {
     type: { text: "", from: "" },

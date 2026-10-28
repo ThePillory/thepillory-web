@@ -122,7 +122,7 @@ function electionPage(election) {
 </section>
 ${counties.length ? `<section class="stack-sm" aria-labelledby="h-local"><h2 class="label" id="h-local">Local contests and measures</h2>
   ${counties.map(([fips, cty]) => `<div class="card stack-xs"><p class="label">${esc(cty.name)}</p>${election.contests.filter((c) => c.scope === "county" && c.county === fips).map((c) => contestRow(id, c)).join("")}${election.measures.filter((m) => m.scope === "county" && m.county === fips).map((m) => measureRow(id, m)).join("")}</div>`).join("")}
-  <p class="hint">Local contests are listed for counties where ThePillory is live. Other counties' are on their elections office's website and sample ballot.</p>
+  <p class="hint">Local contests and measures are listed for the counties ThePillory has loaded. Other counties' are on their elections office's website and sample ballot.</p>
 </section>` : ""}
 ${howToVote(election)}
 ${sources(election)}
@@ -613,8 +613,16 @@ async function measurePage(election, measureId, env = {}, request = null) {
         : `<p class="small">Results: ${sourceLink(m.results_url || election.election.results_page, county ? `${county.name} Elections, current results` : "Secretary of State results")}</p>`;
   // The facts card has the title's label, summary, Yes and No, and the cost; for a local measure,
   // the impartial analysis and the tax rate statement follow it in full.
+  // A county list entered by hand (Santa Clara): what the county lists as filed, linked, not yet read.
+  const unread = !statewide && !(m.impartial_analysis || []).length && !(m.arguments || []).length;
   const official = statewide
     ? ""
+    : unread
+    ? `
+<section class="card stack-xs" id="arguments" aria-labelledby="h-filed"><h2 class="label" id="h-filed">Impartial analysis and arguments</h2>
+  ${(m.filed || []).length ? `<p class="small">What the county lists for this measure:</p><ul class="plain-list bullet-list">${m.filed.map((x) => `<li class="small">${esc(x)}</li>`).join("")}</ul>` : ""}
+  <p class="small secondary">ThePillory hasn't read these yet. ${sourceLink(m.source_url, "Read them on the county's list of measures")}</p>
+</section>`
     : `
 <section class="stack-sm" aria-labelledby="h-ia"><h2 class="label" id="h-ia">Impartial analysis by ${esc(m.impartial_analysis_by)}</h2>
   <div class="card statement-body stack-xs">${m.impartial_analysis.map((p) => `<p class="small">${esc(p)}</p>`).join("")}</div>
@@ -624,19 +632,22 @@ ${m.tax_rate_statement && m.tax_rate_statement.length ? `<section class="stack-s
 </section>` : ""}`;
   const links = statewide
     ? [[m.links.guide, "This proposition in the Official Voter Information Guide"], [m.links.title_summary, "Official title and summary"], [m.links.analysis, "Analysis by the Legislative Analyst"], [m.links.arguments, "Arguments and rebuttals"], [m.links.text, "Text of the proposed law (PDF)"]]
-    : [[m.links.pamphlet, `${county ? county.name : "County"} Voter Information Pamphlet (PDF), the official version`], [m.links.page, `${county ? county.name : "County"} Elections: candidates and measures`]];
+    : m.links.pamphlet
+    ? [[m.links.pamphlet, `${county ? county.name : "County"} Voter Information Pamphlet (PDF), the official version`], [m.links.page, `${county ? county.name : "County"} Elections: candidates and measures`]]
+    : [[m.source_url, m.source || `${county ? county.name : "County"} list of local measures`]];
   const main = `<div class="simple-scope">
 <header class="page-head stack-xs">
   <p class="label">${esc(statewide ? `Statewide · ${fmtDate(election.election.date)}` : `${m.jurisdiction || (county ? county.name : "Local")} · ${fmtDate(election.election.date)}`)}</p>
   <h1>${esc(statewide ? `Proposition ${m.number}` : m.title)}</h1>
-  ${statewide ? `<p class="subtitle">${esc(measureTitle(m))}</p>${titleNote([m]) ? `<p class="hint">${esc(titleNote([m]))}</p>` : ""}` : `<p class="small secondary">On ballots in ${esc(m.jurisdiction || "part of the county")}${county ? `, ${esc(county.name)}` : ""}.</p>`}
+  ${!statewide && m.subject ? `<p class="subtitle">${esc(m.subject)}</p>` : ""}
+  ${statewide ? `<p class="subtitle">${esc(measureTitle(m))}</p>${titleNote([m]) ? `<p class="hint">${esc(titleNote([m]))}</p>` : ""}` : `<p class="small secondary">On ballots in ${esc(m.jurisdiction || "part of the county")}${county ? `, ${esc(county.name)}` : ""}.${m.requirement ? ` ${esc(m.requirement)}.` : ""}</p>`}
 </header>
 ${factsCard(election, m)}
 ${official}
 ${conHtml}
 <section class="stack-sm" aria-labelledby="h-res"><h2 class="label" id="h-res">Results</h2>${results}</section>
 ${people.behind}
-${argumentsSection(m, statewide ? sourceLink(m.links.arguments, "Arguments and rebuttals in the official guide") : sourceLink(m.links.pamphlet, "Arguments in the county's Voter Information Pamphlet (PDF)"), people.details)}
+${unread ? "" : argumentsSection(m, statewide ? sourceLink(m.links.arguments, "Arguments and rebuttals in the official guide") : sourceLink(m.links.pamphlet, "Arguments in the county's Voter Information Pamphlet (PDF)"), people.details)}
 <section class="stack-sm" aria-labelledby="h-src"><h2 class="label" id="h-src">Official sources</h2>
   <div class="card stack-xs">${links.filter(([u]) => safeUrl(u)).map(([u, l]) => `<p class="small">${sourceLink(u, l)}</p>`).join("")}</div>
   ${m.note ? `<p class="hint">${esc(m.note)}</p>` : ""}

@@ -15,6 +15,7 @@ What's on the ballot, from official sources only. Pages: `functions/elections/[[
 | Propositions: official title and summary (Attorney General), what a yes and a no vote mean, the summary of the Legislative Analyst's fiscal estimate, and each argument and rebuttal with its signers | Official Voter Information Guide: each proposition's page, its Official Title and Summary page (`title-summary.htm`) and its Arguments and Rebuttals page |
 | Calaveras local contests | County's Qualified Candidates List (PDF), contests marked "On Ballot: Yes" |
 | Calaveras candidate statements, Measure A (question, impartial analysis, tax rate statement, arguments) | County's Voter Information Pamphlet (PDF) |
+| Santa Clara local measures (RTM and A–S: ballot question, jurisdiction, vote required, what was filed) | The Registrar of Voters' List of Local Measures, copied by hand into `data/elections/local/06085.json` (the county's site refuses automated requests from GitHub and Cloudflare); each question word for word; the impartial analyses and arguments are linked, not yet read, and the page says so. Santa Clara's local candidate contests aren't loaded yet |
 | U.S. House candidates' FEC filings | api.open.fec.gov (`FEC_API_KEY` secret, or DEMO_KEY), matched by last name and district |
 | Results | api.sos.ca.gov/returns/ (read by the pages, never stored), only after `polls_close_utc` |
 

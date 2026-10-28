@@ -1,0 +1,175 @@
+{
+ "_readme": "Santa Clara County's local measures for the November 3, 2026 General Election, entered by hand from the Registrar of Voters' List of Local Measures (the county's site refuses automated requests). Each ballot question is word for word as the Registrar lists it; 'filed' is what the list shows for each measure's arguments and impartial analysis. tools/build_elections.py merges this file into data/elections/2026-11-03.json. See data/README.md.",
+ "county": "06085",
+ "name": "Santa Clara County",
+ "elections_page": "https://vote.santaclaracounty.gov/candidates-and-measures/candidate-and-campaign-services",
+ "results_page": "https://vote.santaclaracounty.gov/home",
+ "pamphlet_pdf": null,
+ "boe": "2",
+ "boe_source": "https://vote.santaclaracounty.gov/candidates-and-measures/november-3-2026-general-election-candidate-guide",
+ "source": "Santa Clara County Registrar of Voters, List of Local Measures, November 3, 2026, General Election",
+ "source_url": "https://vote.santaclaracounty.gov/candidates-and-measures/candidate-and-campaign-services",
+ "entered": "2026-10-28",
+ "measures": [
+  {
+   "letter": "RTM",
+   "jurisdiction": "Public Transit Revenue Measure District",
+   "subject": "Connect Bay Area Transit Initiative",
+   "vote_required": "Majority Vote Required",
+   "question": "To prevent major service cuts to BART and other transit, avoid increased traffic, and reduce pollution by: Preserving BART, Caltrain, VTA, SamTrans, AC Transit, Muni, other transit for everyone, including workers, students, seniors, persons with disabilities; Supporting transit safety, cleanliness, affordability, reliability; Repairing targeted roads/potholes; Requiring financial transparency, oversight, accountability; shall the measure enacting a 0.5% (Alameda, Contra Costa, San Mateo, Santa Clara counties) and 1% (San Francisco) sales tax for 14 years generating approximately $980,000,000 annually, be adopted?",
+   "filed": ["Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor", "Primary Argument Against / Rebuttal Argument to Primary Argument Against", "Impartial Analysis"]
+  },
+  {
+   "letter": "A",
+   "jurisdiction": "City of Morgan Hill",
+   "subject": "City Treasurer Change from Elective to Appointive Office",
+   "vote_required": "Majority Vote Required",
+   "question": "Shall the office of the City Treasurer be appointive?",
+   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+  },
+  {
+   "letter": "B",
+   "jurisdiction": "City of Gilroy",
+   "subject": "Transient Occupancy Tax",
+   "vote_required": "Majority Vote Required",
+   "question": "To maintain critical City services such as street/pothole repair, park and recreation programs, emergency preparedness for storms, flooding and wildfires, and police and fire response shall the City of Gilroy measure raising the Transient Occupancy Tax (hotel tax) rate from 9% to a maximum of 13%, set by Council resolution, providing $700,000 annually paid only by hotel/lodging guests, with annual independent audits, that cannot be taken by Sacramento, until ended by voters, be adopted?",
+   "filed": ["Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor (none filed)", "Primary Argument Against / Rebuttal Argument to Primary Argument Against", "Impartial Analysis"]
+  },
+  {
+   "letter": "C",
+   "jurisdiction": "City of Santa Clara",
+   "subject": "Public Works Charter Amendment",
+   "vote_required": "Majority Vote Required",
+   "question": "Shall the measure proposing to amend the City Charter to update rules for public works contracting, setting the threshold for Council approval and formal bidding at $250,000, retaining provisions for awards of standard contracts to the lowest responsive and responsible bidder, and also allowing for competitive \"best value\" contracting to improve project quality, expedite project completion, and minimize risks, all as set forth in a City ordinance approved at a public meeting, be adopted?",
+   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+  },
+  {
+   "letter": "D",
+   "jurisdiction": "City of Los Altos",
+   "subject": "Citizen-Sponsored Initiative",
+   "vote_required": "Majority Vote Required",
+   "question": "Shall the Ordinance, which prohibits the City of Los Altos from selling, leasing, conveying, or declaring as surplus land the ten City-owned Downtown Parking Plazas for any reason, or from authorizing new uses or physical alterations that would diminish protected trees or parking availability, access, or convenience, unless separately approved by a majority of voters, except that two Parking Plazas may be developed for affordable housing without a vote, be adopted?",
+   "filed": ["Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor", "Primary Argument Against / Rebuttal Argument to Primary Argument Against", "Impartial Analysis"]
+  },
+  {
+   "letter": "E",
+   "jurisdiction": "City of Mountain View",
+   "subject": "City Charter Amendment - Modernizing Provisions",
+   "vote_required": "Majority Vote Required",
+   "question": "Shall the measure amending the City Charter to modernize provisions by replacing gender-specific terms with gender-neutral language; extending the time to take action to fill a council vacancy from 30 to 60 days; eliminating the requirement to read ordinances and resolutions in full; authorizing Council to establish qualifications for legislatively created boards, commissions, and committees; updating outdated terminology; improving internal consistency, and making clarifying edits to align with State law and current practices, be adopted?",
+   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+  },
+  {
+   "letter": "F",
+   "jurisdiction": "City of Mountain View",
+   "subject": "Transient Occupancy Tax",
+   "vote_required": "Majority Vote Required",
+   "question": "Shall the measure to provide locally controlled funding for repairing potholes, streets and sidewalks, improving police, fire, and 911 emergency response services, supporting affordable housing, and adding new parks, and other general government services by authorizing City Council to increase the City of Mountain View's existing Transient Occupancy Tax paid by hotel and short-term rental guests from 10% up to 15%, generating up to $5,200,000 annually until ended by voters, with independent audits, be adopted?",
+   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+  },
+  {
+   "letter": "G",
+   "jurisdiction": "City of Sunnyvale",
+   "subject": "City Charter Amendment - Public Works Contracting",
+   "vote_required": "Majority Vote Required",
+   "question": "Shall Section 1309 of the City Charter be amended to allow the City Council to adopt an ordinance giving the City more options for delivery of public works construction projects by authorizing use of any purchasing or contracting method allowed by California law to select contractors for such projects, and to make clarifying changes to the wording of Section 1309 that do not alter the meaning of the section?",
+   "filed": ["Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor", "Primary Argument Against / Rebuttal Argument to Primary Argument Against", "Impartial Analysis"]
+  },
+  {
+   "letter": "H",
+   "jurisdiction": "City of Sunnyvale",
+   "subject": "City Charter Amendment - City Manager's Authority to Settle Claims",
+   "vote_required": "Majority Vote Required",
+   "question": "Shall Section 1314 of the City Charter be amended to authorize the City Council to adopt an ordinance establishing the maximum amount the City Manager may approve to settle legal claims against the City, instead of the current $50,000 limit established by state law and unchanged since 1989, while retaining City Council approval authority for settlements exceeding the amount set by the ordinance?",
+   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+  },
+  {
+   "letter": "I",
+   "jurisdiction": "City of Sunnyvale",
+   "subject": "City Charter Amendment - City Council Vacancies",
+   "vote_required": "Majority Vote Required",
+   "question": "Shall Section 606 of the City Charter be amended to require that a person appointed to fill a vacancy on the City Council serve until a successor is elected at the next General Municipal Election (November of even-numbered years), rather than until an earlier election date that could be consolidated with a statewide election?",
+   "filed": ["Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor", "Primary Argument Against / Rebuttal Argument to Primary Argument Against", "Impartial Analysis"]
+  },
+  {
+   "letter": "J",
+   "jurisdiction": "City of Palo Alto",
+   "subject": "Transactions and Use Tax",
+   "vote_required": "Majority Vote Required",
+   "question": "City of Palo Alto Community Safety/Services Measure. To provide general city services including repairing Cubberley Community Center for current safety, earthquake, accessibility standards; upgrading deteriorating electrical systems, wiring, plumbing; acquiring outdoor space/sites; maintaining streets, safe, clean downtown/commercial cores; preparing for natural disasters; repairing deteriorating community spaces, libraries, shall City of Palo Alto’s measure enacting a 0.5% (1/2¢) sales tax, providing approximately $15,600,000 annually until ended by voters, with published financial audits, all funds used locally, be adopted?",
+   "filed": ["Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor", "Primary Argument Against / Rebuttal Argument to Primary Argument Against", "Impartial Analysis"]
+  },
+  {
+   "letter": "K",
+   "jurisdiction": "City of Milpitas",
+   "subject": "Local Funding -Business Tax Update",
+   "vote_required": "Majority Vote Required",
+   "question": "City of Milpitas Local Funding Measure. Shall an ordinance to update City of Milpitas's 50-year-old business tax be adopted, with no tax increase to residents, so small businesses pay less than larger businesses, with all paying an annual flat rate, plus 0.025% to 0.035% of gross receipts for larger businesses, providing approximately $3,000,000 annually for general city services such as maintaining fiscal stability, neighborhood safety /cleanliness; requiring public disclosure, all funds invested locally, until ended by voters?",
+   "filed": ["Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor", "Primary Argument Against / Rebuttal Argument to Primary Argument Against", "Impartial Analysis"]
+  },
+  {
+   "letter": "L",
+   "jurisdiction": "City of Cupertino",
+   "subject": "General Plan Amendment",
+   "vote_required": "Majority Vote Required",
+   "question": "Shall an ordinance amending the City of Cupertino General Plan be adopted to mandate that any attempt to rezone parks, parklands or open space to residential, commercial or industrial uses, or any proposal for residential, commercial or industrial development in parks, parkland or open space, must be placed before Cupertino voters and secure two-thirds support in the City's next general election?",
+   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+  },
+  {
+   "letter": "M",
+   "jurisdiction": "Gilroy Unified School District",
+   "subject": "School Bonds",
+   "vote_required": "55% Vote Required",
+   "question": "To improve the quality of education; construct, upgrade, and modernize classrooms, restrooms, and school facilities; make safety and security improvements; renovate or construct career technical education classrooms; and replace leaky roofs; shall Gilroy Unified School District's measure authorizing $295,000,000 in bonds, at legal rates, and levying approximately $59 per $100,000 of assessed value (raising $18,300,000 annually) while bonds are outstanding, be adopted, with annual audits, independent oversight, NO money for teacher/administrator salaries and all money spent locally?",
+   "filed": ["Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor", "Primary Argument Against / Rebuttal Argument to Primary Argument Against", "Impartial Analysis"]
+  },
+  {
+   "letter": "N",
+   "jurisdiction": "Los Gatos-Saratoga Union High School District",
+   "subject": "School Bonds",
+   "vote_required": "55% Vote Required",
+   "question": "To maintain quality academic facilities at Los Gatos High School and Saratoga High School by replacing leaky roofs and failing restrooms, plumbing, electrical, heating/ cooling systems; improving school safety; updating, repairing and equipping schools including science, technology, engineering, arts, math, robotics, and career/ college readiness classrooms/ labs; shall Los Gatos Saratoga Union High School District's measure be adopted, authorizing $321,000,000 in bonds at legal rates, levying approximately $30 per $100,000 assessed value ($23,000,000 annually) while bonds are outstanding, with oversight, annual audits, and local control?",
+   "filed": ["Primary Argument In-Favor / Rebuttal Argument to Primary Argument In-Favor", "Primary Argument Against / Rebuttal Argument to Primary Argument Against", "Impartial Analysis"]
+  },
+  {
+   "letter": "O",
+   "jurisdiction": "Alum Rock Union Elementary School District",
+   "subject": "Parcel Tax",
+   "vote_required": "2/3rds (66.67%) Vote Required",
+   "question": "With funds that cannot be taken by State or Federal Government officials, shall Alum Rock Union Elementary School District's measure to protect services for students with disabilities; improve reading, writing, math and science programs; attract and retain highly qualified teachers; and support students experiencing housing instability be adopted, by replacing the current tax at $310 per parcel for seven years, while raising $6.5 million annually with senior exemptions, and public disclosure of all spending?",
+   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+  },
+  {
+   "letter": "P",
+   "jurisdiction": "Alum Rock Union Elementary School District",
+   "subject": "General Obligation Bond",
+   "vote_required": "55% Vote Required",
+   "question": "With funds that cannot be taken by the State or Federal government, shall Alum Rock Union Elementary School District's measure to repair leaky roofs and plumbing; replace heating, ventilation, and air conditioning; and upgrade emergency communication and security systems be adopted, authorizing $100 million of bonds with legal rates, without increasing current tax rates, average levies below $26 per $100,000 of assessed valuation (raising $6.3 million annually while outstanding), audits, independent oversight, and disclosure of all spending?",
+   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+  },
+  {
+   "letter": "Q",
+   "jurisdiction": "Cambrian School District",
+   "subject": "Parcel Tax",
+   "vote_required": "2/3rds (66.67%) Vote Required",
+   "question": "To protect the quality of education in our local elementary and middle schools, provide funding for core academic programs in math, science, engineering, technology, reading, writing and arts, attract/retain highly qualified teachers, and maintain manageable class sizes, shall Cambrian School District's measure be adopted, levying $148/parcel for 8 years, its continuance subject to voter approval, with senior exemptions, annual inflation adjustments, providing $1,000,000 annually in locally controlled funding that can't be taken by the State?",
+   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+  },
+  {
+   "letter": "R",
+   "jurisdiction": "Orchard School District",
+   "subject": "Parcel Tax",
+   "vote_required": "2/3rds (66.67%) Vote Required",
+   "question": "To enhance and create quality educational opportunities, attract and retain teachers and staff, support Science, Technology, Engineering, Arts and Mathematics (STEAM) education and visual and performing arts, shall the Orchard School District measure levying a parcel tax at the rate of 4 cents per building square foot (not-to-exceed $7,500 non-residential and $89 residential per parcel), raising $1.4 million annually for eight years beginning July 1, 2027, with senior exemptions and all expenditures audited be adopted?",
+   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+  },
+  {
+   "letter": "S",
+   "jurisdiction": "El Camino Healthcare District",
+   "subject": "Limit District Directors to Four Four-Year Terms",
+   "vote_required": "Majority Vote Required",
+   "question": "Shall the measure amending the Bylaws of the El Camino Healthcare District to limit District Directors to four four-year terms be adopted?",
+   "filed": ["Primary Argument In-Favor", "Primary Argument Against (none filed)", "Impartial Analysis"]
+  }
+ ]
+}
