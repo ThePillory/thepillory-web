@@ -13,7 +13,7 @@
 //   signerDetails      for one measure's signers: the link and the collapsed
 //                      panel for each official, candidate and organization
 //                      (private individuals stay as printed, with no panel)
-import { esc, safeUrl, sourceLink, fmtDate, loadSection, FAILED } from "./render.js";
+import { esc, safeUrl, sourceLink, fmtDate, loadSection, FAILED, donorNote } from "./render.js";
 import { asset } from "./geo.js";
 import { fold } from "./summary.js";
 import { STATE_NAME } from "./districts.js";
@@ -83,7 +83,7 @@ export function behindSection(money, m, election) {
 </div>`;
   };
   const inner = `<div class="behind-sides">${side("support")}${side("oppose")}</div>
-<p class="hint">${esc(BEHIND_NOTE)} Committees formed for this measure are those whose campaign statements name it with a side; independent spending is reported on Form 496. ${sourceLink(x.cal_access_url || "https://cal-access.sos.ca.gov/Campaign/Measures/", "Cal-Access: this proposition")} · ${esc(`Read ${fmtDate(money.generated)}.`)}</p>`;
+<p class="hint">${esc(BEHIND_NOTE)} Committees formed for this measure are those whose campaign statements name it with a side; independent spending is reported on Form 496. ${sourceLink(x.cal_access_url || "https://cal-access.sos.ca.gov/Campaign/Measures/", "Cal-Access: this proposition")} · ${esc(`Read ${fmtDate(money.generated)}.`)} ${donorNote()}</p>`;
   return fold("behind", "Who's behind each side", inner);
 }
 
