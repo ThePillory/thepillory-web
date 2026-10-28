@@ -14,7 +14,7 @@
 // What NetFile's public data doesn't give is said plainly: the Form 460 summary
 // (total raised including unitemized contributions, and cash on hand) and whether
 // an independent expenditure supports or opposes; both are on each filing, linked.
-import { esc, sourceLink, fmtDate } from "./render.js";
+import { esc, sourceLink, fmtDate, donorNote } from "./render.js";
 import { asset } from "./geo.js";
 import { fold } from "./summary.js";
 
@@ -75,7 +75,7 @@ export function candidateMoney(docs, contestId, name) {
   if (!docs || !docs.length) return "";
   const found = candidateCommittees(docs, contestId, name);
   const body = found.length
-    ? `${found.map(({ c, doc }) => committeeBlock(c, doc)).join("")}<p class="hint">${esc(LOCAL_NOTE)}</p>`
+    ? `${found.map(({ c, doc }) => committeeBlock(c, doc)).join("")}<p class="hint">${esc(LOCAL_NOTE)} ${donorNote()}</p>`
     : `<p class="small secondary">${esc(`No committee in ${docs.map((d) => d.name).join(" or ")}'s NetFile filings matched this candidate by name and office. Unmatched committees aren't guessed.`)}</p>`;
   return `<details class="cand-statement"><summary>Campaign money</summary><div class="statement-body stack-xs">${body}</div></details>`;
 }
@@ -107,7 +107,7 @@ export function localBehindSection(docs, m) {
 </div>`;
   };
   return fold("behind", "Who's behind each side", `<div class="behind-sides">${side("support")}${side("oppose")}</div>
-<p class="hint">Money and positions are listed side by side as facts, from the committees' own filings. A committee is shown only when its name says "Yes on" or "No on" this measure's letter and it filed in this measure's jurisdiction. ${esc(LOCAL_NOTE)}</p>`);
+<p class="hint">Money and positions are listed side by side as facts, from the committees' own filings. A committee is shown only when its name says "Yes on" or "No on" this measure's letter and it filed in this measure's jurisdiction. ${esc(LOCAL_NOTE)} ${donorNote()}</p>`);
 }
 
 /** A county official's committees (matched in the builder by last name, office and district), for the Funding tab. */
@@ -115,5 +115,5 @@ export function officialMoney(docs, name) {
   const found = [];
   for (const doc of docs || []) for (const lid of (doc.officials || {})[name] || []) if (doc.committees[lid]) found.push({ c: doc.committees[lid], doc });
   if (!found.length) return "";
-  return `<div class="stack-sm">${found.map(({ c, doc }) => committeeBlock(c, doc)).join("")}<p class="hint">${esc(LOCAL_NOTE)}</p></div>`;
+  return `<div class="stack-sm">${found.map(({ c, doc }) => committeeBlock(c, doc)).join("")}<p class="hint">${esc(LOCAL_NOTE)} ${donorNote()}</p></div>`;
 }

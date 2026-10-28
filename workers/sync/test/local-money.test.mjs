@@ -41,6 +41,7 @@ test("a candidate gets money only on a match; anyone else gets a plain line, nev
   assert.match(other, /No committee in Santa Clara County(?:'|&#x27;)s NetFile filings matched this candidate/);
   assert.doesNotMatch(other, /Ada Park for Example/);
   assert.equal(candidateMoney([], "06085-1", "Ada Park"), "", "nothing loaded: nothing shown");
+  assert.match(candidateMoney([DOC], "06085-1", "Ada Park"), /to stay impartial[\s\S]*methodology\/#donors/, "says why people aren't named");
 });
 
 test("independent spending names the candidate, never a side the data doesn't state", () => {

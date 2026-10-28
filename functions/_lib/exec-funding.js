@@ -9,8 +9,8 @@
 //   Cabinet           no campaign money (appointed); OGE financial disclosure
 //                     reports and ethics agreements.
 //   California        Cal-Access campaign committees and FPPC Form 700s.
-import { esc, safeUrl, fmtDate } from "./render.js";
-import { fundingFor, fundingTab, money, METHOD } from "./funding.js";
+import { esc, safeUrl, fmtDate, donorNote } from "./render.js";
+import { fundingFor, fundingTab, money } from "./funding.js";
 import { stateMoneyFor, stateFundingTab } from "./state-funding.js";
 
 const missing = (err) => /no such table|no such column/i.test(String(err && err.message));
@@ -148,7 +148,7 @@ function inauguralSection(i) {
   <p class="small">${esc(c.name)} raised money for the ${esc(year)} inauguration. Inaugural committees have no federal limit on donation size; they report every donation of $200 or more to the Federal Election Commission after the inauguration (Form 13). This money pays for inaugural events; it isn't campaign money.</p>
   ${reports}
   ${breakdown}
-  <p class="hint">Source: ${ext(c.source_url, "the committee at the FEC")}. Individual donors are never named on ThePillory, at any amount. <a class="tap" href="${METHOD}">Methodology</a></p>
+  <p class="hint">Source: ${ext(c.source_url, "the committee at the FEC")}. ${donorNote()}</p>
 </section>`;
 }
 

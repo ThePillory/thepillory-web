@@ -135,6 +135,10 @@ export function section(label, inner, cls = "card stack") {
 // section's data can't load, the rest of the page still shows, with a short
 // note where that section would be (and the page isn't cached).
 
+// Why individual donors aren't named: one sentence, the same on every page that sums individual giving.
+export const DONOR_NOTE = "ThePillory doesn't name individual donors, at any amount, to stay impartial: it reports on officials and organizations, not on private people's political choices. Their names are public in the filings linked here.";
+export const donorNote = () => `${esc(DONOR_NOTE)} <a class="tap" href="/about/methodology/#donors">Why</a>`;
+
 export const FAILED = Symbol("section failed");
 
 // Each section gets this long. A slower one counts as FAILED, so the rest of the

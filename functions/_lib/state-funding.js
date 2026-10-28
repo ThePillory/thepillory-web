@@ -3,7 +3,7 @@
 // funding. Facts with what, when and where from; no cause and effect; no
 // individual donor named, at any amount (individuals only as totals and by
 // employer). See docs/funding.md.
-import { esc, safeUrl, fmtDate } from "./render.js";
+import { esc, safeUrl, fmtDate, donorNote } from "./render.js";
 import { money, period, METHOD } from "./funding.js";
 import { INDUSTRIES } from "../../workers/sync/src/funding/industry.js";
 
@@ -139,7 +139,7 @@ export function stateFundingTab(o, m, base) {
       ? `<ul class="plain-list money-list">${m.employers.map((e) => row(esc(e.employer), money(e.total), `${e.count} donors · ${esc(industryName(e.industry))}`)).join("")}</ul>`
       : '<p class="secondary small">No employer was named by 3 or more donors.</p>'
   }
-  <p class="hint">The employers individual donors named, summed; an employer is listed only when 3 or more people named it.${r.not_employed_total ? ` ${money(r.not_employed_total)} came from people who listed no employer (retired, not employed or self-employed).` : ""} Individual donors are never named on ThePillory, at any amount.</p>
+  <p class="hint">The employers individual donors named, summed; an employer is listed only when 3 or more people named it.${r.not_employed_total ? ` ${money(r.not_employed_total)} came from people who listed no employer (retired, not employed or self-employed).` : ""} ${donorNote()}</p>
 </section>`;
 
   const orgs = `<section class="card stack-sm">

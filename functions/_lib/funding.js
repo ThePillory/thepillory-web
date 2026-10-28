@@ -3,7 +3,7 @@
 // what period it covers and where it comes from, and nothing here says or implies
 // that money caused a vote. No individual donor is ever named.
 import { breakdownBar } from "./charts.js";
-import { esc, safeUrl, fmtDate } from "./render.js";
+import { esc, safeUrl, fmtDate, donorNote } from "./render.js";
 import { INDUSTRIES } from "../../workers/sync/src/funding/industry.js";
 import { currentCycle } from "../../workers/sync/src/funding/fec.js";
 import { donorsDisclosed, isPersonName } from "../../workers/sync/src/funding/disclosure.js";
@@ -421,7 +421,7 @@ export function fundingTab(official, f, base) {
   const employers = f.employers.length
     ? `<ul class="plain-list money-list">${f.employers.slice(0, TOP).map(employerRow).join("")}</ul>
        ${f.employers.length > TOP ? seeAll(fundingListHref(base, "employers", f.cycle), "See all employers") : ""}
-       <p class="hint">Employers named by donors who gave more than $200, summed; an employer is listed only when ${MIN_EMPLOYER_DONORS} or more people named it. Individual donors are never listed.</p>`
+       <p class="hint">Employers named by donors who gave more than $200, summed; an employer is listed only when ${MIN_EMPLOYER_DONORS} or more people named it. ${donorNote()}</p>`
     : '<p class="secondary small">No employer was named by 3 or more donors.</p>';
 
   const outsideSum = f.outside.reduce((sum, x) => sum + x.total, 0);

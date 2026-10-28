@@ -14,7 +14,7 @@
 // order where the state's certified list gives it, otherwise alphabetical. No
 // polls, predictions, rankings or contact details; individual donors are never
 // named. Party is plain text, as filed.
-import { esc, safeUrl, kv, fmtDate, linkRow, sourceLink, partyName } from "./render.js";
+import { esc, safeUrl, kv, fmtDate, linkRow, sourceLink, partyName, donorNote } from "./render.js";
 import { asset } from "./geo.js";
 import { STATE_NAME } from "./districts.js";
 import { fold, outLink } from "./summary.js";
@@ -392,7 +392,7 @@ export function candidateFunding(c, name, { electioneering = null } = {}) {
   ${orgs}
 </section>
 ${electioneeringSection(electioneering, name)}
-<p class="hint">Source: Federal Election Commission (${sourceLink(t.source_url, `${name} at the FEC`)}), ${span}. Read ${fmtDate(c.funding_checked)}. Individual donors are never named; federal law bars using contributor information from FEC reports to ask for contributions or for commercial purposes. <a class="tap" href="/about/methodology/#funding">How funding is shown</a></p>`;
+<p class="hint">Source: Federal Election Commission (${sourceLink(t.source_url, `${name} at the FEC`)}), ${span}. Read ${fmtDate(c.funding_checked)}. ${donorNote()} Federal law also bars using contributor information from FEC reports to ask for contributions or for commercial purposes.</p>`;
 }
 
 /** The candidate's row in candidate_platforms (null before migration 0022 or before the first search). */
