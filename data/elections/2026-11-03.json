@@ -10359,7 +10359,19 @@
    "results_path": "ballot-measures",
    "results_number": "40",
    "source_url": "https://voterguide.sos.ca.gov/propositions/40/",
-   "source": "Official Voter Information Guide, Secretary of State"
+   "source": "Official Voter Information Guide, Secretary of State",
+   "conflicts": [
+    {
+     "text": "If Proposition 41 or 42 on this same ballot receive more yes votes than Proposition 40, then Propostion 40 could be stopped from becoming law even if it gets yes votes from a majority of voters. This is because the courts could find that Proposition 41 or 42 conflict with 40.",
+     "title": "Potential Interactions With Other Propositions",
+     "measures": [
+      "prop-41",
+      "prop-42"
+     ],
+     "source": "Legislative Analyst's analysis, Official Voter Information Guide",
+     "source_url": "https://voterguide.sos.ca.gov/propositions/40/analysis.htm"
+    }
+   ]
   },
   {
    "id": "prop-41",
@@ -10517,7 +10529,17 @@
    "results_path": "ballot-measures",
    "results_number": "41",
    "source_url": "https://voterguide.sos.ca.gov/propositions/41/",
-   "source": "Official Voter Information Guide, Secretary of State"
+   "source": "Official Voter Information Guide, Secretary of State",
+   "conflicts": [
+    {
+     "text": "If Proposition 41 receives more “yes” votes than Proposition 40 on this same ballot, then Proposition 40 could be stopped from becoming law even if it gets yes votes from a majority of voters. This is because the courts could find that Proposition 41 conflicts with Proposition 40.",
+     "measures": [
+      "prop-40"
+     ],
+     "source": "Legislative Analyst's analysis, Official Voter Information Guide",
+     "source_url": "https://voterguide.sos.ca.gov/propositions/41/analysis.htm"
+    }
+   ]
   },
   {
    "id": "prop-42",
@@ -10675,7 +10697,18 @@
    "results_path": "ballot-measures",
    "results_number": "42",
    "source_url": "https://voterguide.sos.ca.gov/propositions/42/",
-   "source": "Official Voter Information Guide, Secretary of State"
+   "source": "Official Voter Information Guide, Secretary of State",
+   "conflicts": [
+    {
+     "text": "If Proposition 42 receives more “yes” votes than Proposition 40 on this same ballot, then Proposition 40 could be stopped from becoming law even if it gets yes votes from a majority of voters. This is because the courts could find that Proposition 42 conflicts with Proposition 40.",
+     "title": "Potential Interactions With Other Propositions",
+     "measures": [
+      "prop-40"
+     ],
+     "source": "Legislative Analyst's analysis, Official Voter Information Guide",
+     "source_url": "https://voterguide.sos.ca.gov/propositions/42/analysis.htm"
+    }
+   ]
   },
   {
    "id": "prop-43",

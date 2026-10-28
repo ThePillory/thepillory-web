@@ -47,6 +47,9 @@ import tempfile
 import urllib.request
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from measure_conflicts import sections_conflicts  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 OUT_DIR = ROOT / "data" / "elections"
 UA = "ThePillory/1.0 (+https://thepillory.co; public records)"
@@ -1087,6 +1090,11 @@ def main():
             failed.append(st)
             continue
         data["election"].pop("_guide_link", None)
+        # What the official sections say about other measures on this ballot (tools/measure_conflicts.py).
+        for m in data["measures"]:
+            conflicts = sections_conflicts(m, data["measures"])
+            if conflicts:
+                m["conflicts"] = conflicts
         out = Path(args.out_dir) / f"{DATE}-{st.lower()}.json"
         out.write_text(json.dumps(data, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
         print(f"{st}: {len(data['measures'])} measures → {out.relative_to(ROOT) if out.is_relative_to(ROOT) else out}")

@@ -44,6 +44,9 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from measure_conflicts import ca_conflicts  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 UA = "ThePillory/1.0 (+https://thepillory.co; civic records)"
 
@@ -315,6 +318,7 @@ def propositions():
         if n not in nums:
             nums.append(n)
     props = []
+    analyses = {}
     for n in nums:
         base = f"https://voterguide.sos.ca.gov/propositions/{n}/"
         h = fetch(base)
@@ -329,6 +333,12 @@ def propositions():
         args = arguments(fetch(args_url))
         ts_url = f"{base}title-summary.htm"
         ts = title_summary(fetch(ts_url))
+        analysis_url = f"{base}analysis.htm"
+        try:
+            analyses[n] = fetch(analysis_url)
+        except Exception as e:  # noqa: BLE001 (the conflict line from the summary still reads)
+            log(f"analysis {n}: {e}")
+            analyses[n] = ""
         props.append({
             "id": f"prop-{n}", "number": n, "title": title, "scope": "statewide",
             "summary": summary, "yes_means": yes, "no_means": no,
@@ -339,7 +349,12 @@ def propositions():
             "results_path": "ballot-measures", "results_number": n.zfill(2),
             "source_url": base, "source": "Official Voter Information Guide, Secretary of State",
         })
-    log(f"propositions: {[p['number'] for p in props]}")
+    # What the official text says about other measures on this ballot (tools/measure_conflicts.py).
+    for p in props:
+        conflicts = ca_conflicts(p["number"], analyses.get(p["number"]), p["links"]["analysis"], p["ag_summary"], p["links"]["title_summary"], nums)
+        if conflicts:
+            p["conflicts"] = conflicts
+    log(f"propositions: {[p['number'] for p in props]}; conflicts: {[(p['number'], [m for c in p.get('conflicts', []) for m in c['measures']]) for p in props if p.get('conflicts')]}")
     return props
 
 
