@@ -40,22 +40,28 @@ const ASSETS = { fetch: async (u) => { try { return new Response(await readFile(
 const ROUTES = [
   [/^\/calaveras\/$/, "functions/calaveras/index.js"],
   [/^\/briefing\/$/, "functions/briefing/index.js"],
-  [/^\/place\//, "functions/place/[[path]].js"],
-  [/^\/district\//, "functions/district/[[path]].js"],
-  [/^\/states\//, "functions/states/[[path]].js"],
   [/^\/$/, "functions/index.js"],
 ];
+// Any other page: its folder's catch-all ([[path]].js) or index.js.
+import { existsSync } from "node:fs";
+function routeFile(path) {
+  const hit = ROUTES.find(([re]) => re.test(path.split("?")[0]));
+  if (hit) return hit[1];
+  const seg = path.split("?")[0].split("/").filter(Boolean)[0];
+  for (const f of [`functions/${seg}/[[path]].js`, `functions/${seg}/index.js`, `functions/${seg}.js`]) if (existsSync(new URL(f, ROOT))) return f;
+  return null;
+}
 for (const path of process.argv.slice(2)) {
-  const [, file] = ROUTES.find(([re]) => re.test(path.split("?")[0])) || [];
+  const file = routeFile(path);
   if (!file) { console.log(`${path}: no route here`); continue; }
-  const { onRequestGet } = await import(new URL(file, ROOT));
   log.length = 0;
   const headers = path.startsWith("/briefing/") ? { cookie: "pillory_districts=st=CA&cd=5&su=4&sl=8&co=06009" } : {};
   const t = Date.now();
   // Catch-all routes ([[path]].js) get the segments after their prefix, as Pages passes them.
   const params = file.includes("[[path]]") ? { path: path.split("?")[0].split("/").filter(Boolean).slice(1) } : {};
-  const res = await onRequestGet({ request: new Request(`https://thepillory.co${path}`, { headers }), env: { DB, ASSETS }, params, next: async () => new Response("") });
+  const handler = (await import(new URL(file, ROOT))).onRequestGet || (await import(new URL(file, ROOT))).onRequest;
+  const res = await handler({ request: new Request(`https://thepillory.co${path}`, { headers }), env: { DB, ASSETS }, params, next: async () => new Response(""), waitUntil: () => {} });
   const html = await res.text();
-  console.log(`\n=== ${path}: ${Date.now() - t} ms, HTTP ${res.status}, ${html.length} bytes, ${log.length} queries${/Couldn.t load this section/.test(html) ? ", a section failed" : ""}`);
+  console.log(`\n=== ${path}: ${Date.now() - t} ms, HTTP ${res.status}, ${html.length} bytes, ${log.length} queries, ${log.reduce((a, q) => a + (q.rows_read || 0), 0)} rows read${/Couldn.t load this section/.test(html) ? ", a section failed" : ""}`);
   for (const q of [...log].sort((a, b) => b.ms - a.ms)) console.log(`${String(q.ms).padStart(6)} ms  d1 ${String(q.d1_ms ?? "?").padStart(5)} ms  ${String(q.rows_read ?? "?").padStart(9)} rows  ${q.ok ? "" : "FAILED "}${q.sql}`);
 }

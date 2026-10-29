@@ -3,7 +3,7 @@ name: Probe Cloudflare usage
 on:
   push:
     branches: [claude/pillory-mobile-screens-p5zekn]
-    paths: [.github/workflows/probe-usage.yml, tools/cf_usage.mjs, workers/sync/src/usage/cloudflare.js]
+    paths: [.github/workflows/probe-usage.yml, probe/d1_probe.mjs, tools/time_page.mjs]
 permissions:
   contents: write
 jobs:
@@ -13,27 +13,17 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
-      - name: Usage report
+      - name: D1 facts and page costs (read-only)
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
-          mkdir -p probe
-          node tools/cf_usage.mjs --days 31 --json probe/usage.json > probe/usage.md || true
-          cat probe/usage.md
-          # The Pages project's compatibility flags (no secrets in the output).
-          curl -s -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects" \
-            | python3 -c "import json,sys; d=json.load(sys.stdin); print(json.dumps([{'name':p.get('name'),'flags':{k:(v or {}).get('compatibility_flags') for k,v in (p.get('deployment_configs') or {}).items()},'date':{k:(v or {}).get('compatibility_date') for k,v in (p.get('deployment_configs') or {}).items()},'usage_model':{k:(v or {}).get('usage_model') for k,v in (p.get('deployment_configs') or {}).items()}} for p in d.get('result') or []], indent=1) if d.get('success') else d.get('errors'))" > probe/pages-projects.json || true
-          cat probe/pages-projects.json
-      - name: Published prices
-        run: |
-          for u in workers/platform/pricing d1/platform/pricing r2/pricing pages/functions/pricing workers-ai/platform/pricing durable-objects/platform/pricing; do
-            f=probe/price-$(echo $u | tr / -).txt
-            curl -sL "https://developers.cloudflare.com/$u/index.md" -o $f || curl -sL "https://developers.cloudflare.com/$u/" -o $f
-            wc -c $f
-          done
+          node probe/d1_probe.mjs > probe/d1.md 2>&1 || true
+          cat probe/d1.md
+          node --import ./workers/sync/test/sql-stub.mjs tools/time_page.mjs / /states/california/ /reps/ /laws/ /votes/ /topics/ /trades/ /explore/ /calaveras/ /place/ca/santa-clara/ /ballot/ca/ /elections/2026-11-03/ /bodies/us-senate/ /bodies/us-house/ /court/term/ > probe/pages.md 2>&1 || true
+          grep "^===" probe/pages.md
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add probe && git commit -m "probe: Cloudflare usage" && git push
+          git add probe && git commit -m "probe: D1 facts" && git push
