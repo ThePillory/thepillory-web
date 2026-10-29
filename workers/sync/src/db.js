@@ -44,6 +44,7 @@ import init0042 from "../migrations/0042_records.sql";
 import init0043 from "../migrations/0043_senate_class.sql";
 import init0044 from "../migrations/0044_analysis_resolutions.sql";
 import init0045 from "../migrations/0045_ai_usage.sql";
+import init0046 from "../migrations/0046_usage.sql";
 import { isHttp, today } from "./util.js";
 import { totals } from "./rollcall.js";
 
@@ -93,6 +94,7 @@ const MIGRATIONS = [
   ["0043_senate_class.sql", init0043],
   ["0044_analysis_resolutions.sql", init0044],
   ["0045_ai_usage.sql", init0045],
+  ["0046_usage.sql", init0046],
 ];
 
 // Migrations tools/load_trades.py can also apply (the "Load stock trades"

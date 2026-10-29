@@ -3,7 +3,7 @@ name: Probe Cloudflare usage
 on:
   push:
     branches: [claude/pillory-mobile-screens-p5zekn]
-    paths: [.github/workflows/probe-usage.yml, probe/d1_probe.mjs, tools/time_page.mjs]
+    paths: [.github/workflows/probe-usage.yml, probe/d1_probe.mjs, tools/time_page.mjs, functions/_lib/data.js, functions/votes/index.js]
 permissions:
   contents: write
 jobs:
@@ -18,12 +18,10 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
-          node probe/d1_probe.mjs > probe/d1.md 2>&1 || true
-          cat probe/d1.md
-          node --import ./workers/sync/test/sql-stub.mjs tools/time_page.mjs / /states/california/ /reps/ /laws/ /votes/ /topics/ /trades/ /explore/ /calaveras/ /place/ca/santa-clara/ /ballot/ca/ /elections/2026-11-03/ /bodies/us-senate/ /bodies/us-house/ /court/term/ > probe/pages.md 2>&1 || true
-          grep "^===" probe/pages.md
+          node --import ./workers/sync/test/sql-stub.mjs tools/time_page.mjs /votes/ "/votes/?level=federal" /calaveras/ /ballot/ca/ /briefing/ > probe/pages-after.md 2>&1 || true
+          cat probe/pages-after.md
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add probe && git commit -m "probe: D1 facts" && git push
+          git add probe && git commit -m "probe: pages after" && git push

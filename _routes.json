@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "description": "Static files never run a Function (functions/_middleware.js runs on everything else). Every Functions request is billed as a Workers request; these are served free. docs/data-sync.md, 'What Cloudflare costs'.",
+  "include": ["/*"],
+  "exclude": ["/assets/*", "/data/*", "/favicon.ico", "/robots.txt", "/site.webmanifest", "/docs/*", "/tools/*", "/workers/*", "/design/*"]
+}

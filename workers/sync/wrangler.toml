@@ -43,6 +43,11 @@ database_id = "b6afd5de-4804-4c2b-bb14-af4314190e9d"
 migrations_dir = "migrations"
 
 [vars]
+# What Cloudflare usage costs (src/usage/, docs/data-sync.md "What Cloudflare costs"): one email when
+# the projected month passes this many dollars, or a day costs more than 3 times the week before.
+# The usage itself comes from CF_ANALYTICS_TOKEN (a secret: an API token with Account Analytics Read)
+# and CF_ACCOUNT_ID (a secret or var); without them, D1 rows counted inside ThePillory only.
+USAGE_ALERT_DOLLARS = "150"
 # Where data/county-officials.json is published.
 SITE_URL = "https://thepillory.co"
 # A point inside Calaveras County (San Andreas, the county seat), used to look

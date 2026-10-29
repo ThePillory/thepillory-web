@@ -217,16 +217,18 @@ async function summariesBuilt(db) {
 export async function recentFinalVotes(db, { level = null, limit = 3, offset = 0, officialIds = [] } = {}) {
   if (!officialIds.length) return { rows: [], more: false };
   const ids = officialIds.map(() => "?").join(",");
+  // From the officials' own positions to their votes (CROSS JOIN keeps that order): reading the
+  // whole votes table to test each vote against the list read ~150,000 rows a visit.
   const { results } = await db
     .prepare(
-      `SELECT v.*, b.bill_number, b.title AS bill_title FROM votes v
-       LEFT JOIN bills b ON b.id = v.bill_id
-       WHERE v.id IN (
-           SELECT p.vote_id FROM vote_positions p WHERE p.official_id IN (${ids})
-           UNION ALL
+      `SELECT v.*, b.bill_number, b.title AS bill_title FROM (
+           SELECT p.vote_id AS id FROM vote_positions p WHERE p.official_id IN (${ids})
+           UNION
            SELECT sv.id FROM state_positions sp JOIN votes sv ON sv.k = sp.vote_k
-           WHERE sp.member_k IN (SELECT so.k FROM officials so WHERE so.id IN (${ids}) AND so.k IS NOT NULL))
-         AND v.vote_type = 'final_passage' AND (? IS NULL OR v.level = ?)
+           WHERE sp.member_k IN (SELECT so.k FROM officials so WHERE so.id IN (${ids}) AND so.k IS NOT NULL)) mine
+       CROSS JOIN votes v ON v.id = mine.id
+       LEFT JOIN bills b ON b.id = v.bill_id
+       WHERE v.vote_type = 'final_passage' AND (? IS NULL OR v.level = ?)
          AND (? IS NULL OR substr(v.chamber, 1, 3) = lower(?) || '-')
        ORDER BY v.vote_date DESC, v.id DESC LIMIT ? OFFSET ?`
     )

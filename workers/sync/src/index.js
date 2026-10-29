@@ -39,6 +39,8 @@ import { syncScannedTrades } from "./trades/scan-sync.js";
 import { syncIssuesPages } from "./promises/finder-sync.js";
 import { syncOrderTexts, syncOrderCourts } from "./executive/orders-sync.js";
 import { syncSourceHealth, syncArchiveSources, syncSourceCopies } from "./health/sync.js";
+import { newTally, meteredEnv } from "./usage/meter.js";
+import { recordStepUsage, syncUsageCheck } from "./usage/sync.js";
 import { syncHistoryOfficials, syncHistoryOrders, syncHistoryFunding, syncHistoryNominations, syncHistoryVotes } from "./history/sync.js";
 
 // Order matters: officials before votes; state officials first because the
@@ -117,6 +119,9 @@ const STEPS = [
   ["source-health", syncSourceHealth],
   ["archive-sources", syncArchiveSources],
   ["source-copies", syncSourceCopies],
+  // Then what Cloudflare usage costs: the month so far and projected, one email when it passes
+  // USAGE_ALERT_DOLLARS or a day jumps (src/usage/, docs/data-sync.md "What Cloudflare costs").
+  ["usage-check", syncUsageCheck],
 ];
 
 const ROUND_MS = 12 * 60 * 1000; // stop starting new requests after this; the alarm limit is 15 minutes
@@ -147,6 +152,7 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId }) {
     const started = new Date().toISOString();
     const before = budget.used;
     let result;
+    let tally = null;
     // A step that failed waits for the next day's run instead of failing again
     // every round. A manual run (/run) retries a step that failed in an
     // earlier run today, e.g. after a fix is deployed.
@@ -156,7 +162,10 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId }) {
     } else {
       try {
         setStep(step);
-        result = await fn(env, env.DB, budget);
+        // The step's D1 rows read and written, counted (src/usage/meter.js) and kept per day in usage_steps.
+        tally = newTally();
+        const stepEnv = meteredEnv(env, tally);
+        result = await fn(stepEnv, stepEnv.DB, budget);
       } catch (err) {
         if (isTemporary(err)) {
           // A rate limit or an unavailable server, still failing after the
@@ -173,6 +182,8 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId }) {
       }
     }
     await log(env.DB, run, step, result.status, budget.used - before, result.message, started);
+    if (tally) await recordStepUsage(env.DB, day, step, tally);
+    tally = null;
     summary.push({ step, ...result, requests: budget.used - before });
   }
   const temporary = summary.filter((s) => s.status === "partial" && /^temporary error/.test(s.message || ""));
