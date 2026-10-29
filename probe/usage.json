@@ -1,0 +1,34 @@
+{
+ "since": "2026-09-29",
+ "until": "2026-10-29",
+ "errors": {
+  "d1": {
+   "error": "not authorized for that account"
+  },
+  "d1Storage": {
+   "error": "not authorized for that account"
+  },
+  "workers": {
+   "error": "authorization denied"
+  },
+  "pages": {
+   "error": "authorization denied"
+  },
+  "doInvocations": {
+   "error": "authorization denied"
+  },
+  "doPeriodic": {
+   "error": "authorization denied"
+  },
+  "r2Storage": {
+   "error": "not authorized for that account"
+  },
+  "r2Ops": {
+   "error": "not authorized for that account"
+  },
+  "ai": {
+   "error": "not authorized for that account"
+  }
+ },
+ "daily": []
+}
