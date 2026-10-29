@@ -2,6 +2,7 @@
 // cards come from generated.js (written by tools/build.py), so dynamic pages
 // match the static ones exactly.
 import { PAGE, TABBARS, SITE_DESCRIPTION, HOME_TITLE, MODE_SWITCH } from "./generated.js";
+import { usageEnv } from "./usage.js";
 
 export function esc(s) {
   return String(s == null ? "" : s)
@@ -193,7 +194,14 @@ export function errorPage(tab = null) {
 export function guard(handler, { tab = null } = {}) {
   return async (context) => {
     try {
-      return await handler(context);
+      // The page's D1 queries counted into this request's tally (functions/_lib/usage.js).
+      const env = usageEnv(context);
+      return await handler(env === context.env ? context : Object.create(context, {
+        env: { value: env, enumerable: true },
+        waitUntil: { value: (p) => context.waitUntil(p) },
+        next: { value: (...a) => context.next(...a) },
+        passThroughOnException: { value: () => context.passThroughOnException && context.passThroughOnException() },
+      }));
     } catch (err) {
       console.error(`${new URL(context.request.url).pathname}: ${err && err.name}: ${err && err.message}`);
       return errorPage(tab);

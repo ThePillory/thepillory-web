@@ -11,7 +11,11 @@
 //                   and votes, the dates and sessions they span (docs/states.md).
 //
 // Rebuilt only when something they're computed from changed (the fingerprint),
-// so the step costs one small query on a round with nothing new.
+// at most once every SUMMARIES_MIN_MINUTES (60), and then only the rows whose
+// values changed are written: every row written and every index entry it
+// touches is billed by D1, and bill_list has eight indexes, so rewriting all of
+// it each round (as before October 2026) was most of the month's D1 bill
+// (docs/data-sync.md, "What Cloudflare costs").
 
 import { getState, setState } from "./util.js";
 
@@ -39,8 +43,15 @@ export async function fingerprint(db) {
 
 // The bill list in one statement: per-bill aggregates from votes (not
 // vote_positions), the latest final-passage vote, the final action and the
-// relevance verdict. Run in a batch with the DELETE, so the page never sees an
-// empty table.
+// relevance verdict. An upsert that writes a row only when one of its values
+// changed (bills no longer listed are removed by DELETE_STALE), so the page
+// never sees an empty table and an unchanged bill costs no write.
+const LIST_COLS = ["level", "chamber", "bill_number", "title", "session", "last_vote", "vote_count", "last_final", "final_count", "final_vote_id",
+  "final_result", "final_chamber", "yea", "nay", "present", "not_voting", "outcome", "outcome_date", "routine", "st"];
+const UPSERT_LIST = `
+ON CONFLICT (bill_id) DO UPDATE SET ${LIST_COLS.map((c) => `${c} = excluded.${c}`).join(", ")}
+WHERE ${LIST_COLS.map((c) => `bill_list.${c} IS NOT excluded.${c}`).join(" OR ")}`;
+const DELETE_STALE = "DELETE FROM bill_list WHERE bill_id NOT IN (SELECT v.bill_id FROM votes v JOIN bills b ON b.id = v.bill_id WHERE v.bill_id IS NOT NULL)";
 const BILL_LIST = `
 INSERT INTO bill_list (bill_id, level, chamber, bill_number, title, session, last_vote, vote_count,
   last_final, final_count, final_vote_id, final_result, final_chamber, yea, nay, present, not_voting,
@@ -61,19 +72,20 @@ LEFT JOIN votes lf ON lf.id = (
   SELECT v2.id FROM votes v2 WHERE v2.bill_id = agg.bill_id AND v2.vote_type = 'final_passage'
   ORDER BY v2.vote_date DESC, v2.id DESC LIMIT 1)
 LEFT JOIN bill_outcomes o ON o.bill_id = b.id
-LEFT JOIN bill_relevance r ON r.bill_id = b.id`;
+LEFT JOIN bill_relevance r ON r.bill_id = b.id
+WHERE true${UPSERT_LIST}`;
 
 // Without the tables an older database may lack (outcomes, relevance).
 const BILL_LIST_BASIC = BILL_LIST
   .replace("o.outcome, o.action_date,\n  CASE WHEN r.verdict = 'skip' AND r.override IS NULL THEN 1 ELSE 0 END", "NULL, NULL, 0")
-  .replace("LEFT JOIN bill_outcomes o ON o.bill_id = b.id\nLEFT JOIN bill_relevance r ON r.bill_id = b.id", "");
+  .replace("LEFT JOIN bill_outcomes o ON o.bill_id = b.id\nLEFT JOIN bill_relevance r ON r.bill_id = b.id\n", "");
 
 // Official stats, a few officials per statement, so no single statement reads
 // more than a few hundred thousand positions. Positions are in vote_positions
 // (Congress, California) or the compact state_positions (every other state),
-// each read by the member's key.
+// each read by the member's key. Written only when a count changed.
 const STATS = `
-INSERT OR REPLACE INTO official_stats (official_id, vote_count, final_count, built_at)
+INSERT INTO official_stats (official_id, vote_count, final_count, built_at)
 SELECT o.id,
   (SELECT COUNT(*) FROM vote_positions p WHERE p.official_id = o.id)
     + (SELECT COUNT(*) FROM state_positions sp WHERE o.k IS NOT NULL AND sp.member_k = o.k),
@@ -81,7 +93,9 @@ SELECT o.id,
     + (SELECT COUNT(*) FROM state_positions sp JOIN votes v ON v.k = sp.vote_k WHERE o.k IS NOT NULL AND sp.member_k = o.k AND v.vote_type = 'final_passage'),
   datetime('now')
 FROM officials o
-WHERE o.id IN (%IDS%)`;
+WHERE o.id IN (%IDS%)
+ON CONFLICT (official_id) DO UPDATE SET vote_count = excluded.vote_count, final_count = excluded.final_count, built_at = excluded.built_at
+WHERE official_stats.vote_count IS NOT excluded.vote_count OR official_stats.final_count IS NOT excluded.final_count`;
 const STATS_CHUNK = 25;
 
 /** What's loaded for each state (state_coverage): officials, bills, votes, their dates and sessions. */
@@ -117,20 +131,30 @@ export async function buildStateCoverage(db) {
   return list.length;
 }
 
-export async function buildSummaries(db, { force = false } = {}) {
+export const SUMMARIES_MIN_MINUTES = 60;
+
+export async function buildSummaries(db, { force = false, minMinutes = SUMMARIES_MIN_MINUTES } = {}) {
+  // At most once an hour: the fingerprint itself reads a few hundred thousand rows, and the step runs every round.
+  const last = await getState(db, "summaries_built_at");
+  if (!force && last && Date.now() - Date.parse(last) < minMinutes * 60000) {
+    return { status: "skipped", message: `built at ${last}; next build after ${minMinutes} minutes` };
+  }
   const fp = await fingerprint(db);
   if (!force && fp === (await getState(db, "summaries_fingerprint"))) {
+    await setState(db, "summaries_built_at", new Date().toISOString());
     return { status: "skipped", message: "nothing changed since the last build" };
   }
   const started = Date.now();
   let basic = false;
+  let changed;
   try {
-    await db.batch([db.prepare("DELETE FROM bill_list"), db.prepare(BILL_LIST)]);
+    changed = await db.prepare(BILL_LIST).run();
   } catch (err) {
     if (!missing(err)) throw err;
     basic = true;
-    await db.batch([db.prepare("DELETE FROM bill_list"), db.prepare(BILL_LIST_BASIC)]);
+    changed = await db.prepare(BILL_LIST_BASIC).run();
   }
+  const stale = await db.prepare(DELETE_STALE).run();
   const { results: ids } = await db.prepare("SELECT id FROM officials").all();
   for (let i = 0; i < ids.length; i += STATS_CHUNK) {
     const chunk = ids.slice(i, i + STATS_CHUNK).map((r) => r.id);
@@ -146,9 +170,10 @@ export async function buildSummaries(db, { force = false } = {}) {
   const bills = await db.prepare("SELECT COUNT(*) AS n FROM bill_list").first();
   const officials = await db.prepare("SELECT COUNT(*) AS n FROM official_stats").first();
   await setState(db, "summaries_fingerprint", fp);
+  await setState(db, "summaries_built_at", new Date().toISOString());
   return {
     status: "ok",
-    message: `bill list: ${bills.n} bills; vote counts: ${officials.n} officials; coverage: ${states} states${basic ? " (without outcomes or relevance checks, not loaded yet)" : ""}; ${Math.round((Date.now() - started) / 100) / 10}s`,
+    message: `bill list: ${bills.n} bills (${(changed.meta && changed.meta.changes) || 0} changed, ${(stale.meta && stale.meta.changes) || 0} removed); vote counts: ${officials.n} officials; coverage: ${states} states${basic ? " (without outcomes or relevance checks, not loaded yet)" : ""}; ${Math.round((Date.now() - started) / 100) / 10}s`,
   };
 }
 

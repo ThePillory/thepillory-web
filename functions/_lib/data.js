@@ -217,21 +217,44 @@ async function summariesBuilt(db) {
 export async function recentFinalVotes(db, { level = null, limit = 3, offset = 0, officialIds = [] } = {}) {
   if (!officialIds.length) return { rows: [], more: false };
   const ids = officialIds.map(() => "?").join(",");
-  const { results } = await db
+  // First the newest final-passage votes, a bounded window read in date order (an index), each kept
+  // when one of these officials voted on it (a primary-key lookup per vote): a few thousand rows for a
+  // page. Only when the window doesn't fill the page (officials with few recent votes) the officials'
+  // own positions are read, all of them (~90,000 rows for a county's reps). Never every final vote in
+  // the country: that walk read 12.7 million rows once other states' votes loaded (Oct 26, 2026).
+  const scope = level ? `AND ${voteScope(level).sql}` : "";
+  const scopeBinds = level ? voteScope(level).binds : [];
+  const window = Math.min(5000, (offset + limit + 1) * 40);
+  const mine = (alias) => `(EXISTS (SELECT 1 FROM vote_positions p WHERE p.vote_id = ${alias}.id AND p.official_id IN (${ids}))
+           OR (${alias}.k IS NOT NULL AND EXISTS (SELECT 1 FROM state_positions sp WHERE sp.vote_k = ${alias}.k
+                 AND sp.member_k IN (SELECT so.k FROM officials so WHERE so.id IN (${ids}) AND so.k IS NOT NULL))))`;
+  let { results } = await db
     .prepare(
-      `SELECT v.*, b.bill_number, b.title AS bill_title FROM votes v
+      `SELECT v.*, b.bill_number, b.title AS bill_title FROM (
+         SELECT * FROM votes v WHERE v.vote_type = 'final_passage' ${scope} ORDER BY v.vote_date DESC, v.id DESC LIMIT ?) v
        LEFT JOIN bills b ON b.id = v.bill_id
-       WHERE v.id IN (
-           SELECT p.vote_id FROM vote_positions p WHERE p.official_id IN (${ids})
-           UNION ALL
-           SELECT sv.id FROM state_positions sp JOIN votes sv ON sv.k = sp.vote_k
-           WHERE sp.member_k IN (SELECT so.k FROM officials so WHERE so.id IN (${ids}) AND so.k IS NOT NULL))
-         AND v.vote_type = 'final_passage' AND (? IS NULL OR v.level = ?)
-         AND (? IS NULL OR substr(v.chamber, 1, 3) = lower(?) || '-')
+       WHERE ${mine("v")}
        ORDER BY v.vote_date DESC, v.id DESC LIMIT ? OFFSET ?`
     )
-    .bind(...officialIds, ...officialIds, parseLevel(level).level, parseLevel(level).level, parseLevel(level).st, parseLevel(level).st, limit + 1, offset)
+    .bind(...scopeBinds, window, ...officialIds, ...officialIds, limit + 1, offset)
     .all();
+  if (results.length <= limit) {
+    // From the officials' own positions to their votes (CROSS JOIN keeps that order).
+    ({ results } = await db
+      .prepare(
+        `SELECT v.*, b.bill_number, b.title AS bill_title FROM (
+             SELECT p.vote_id AS id FROM vote_positions p WHERE p.official_id IN (${ids})
+             UNION
+             SELECT sv.id FROM state_positions sp JOIN votes sv ON sv.k = sp.vote_k
+             WHERE sp.member_k IN (SELECT so.k FROM officials so WHERE so.id IN (${ids}) AND so.k IS NOT NULL)) mine
+         CROSS JOIN votes v ON v.id = mine.id
+         LEFT JOIN bills b ON b.id = v.bill_id
+         WHERE v.vote_type = 'final_passage' ${scope}
+         ORDER BY v.vote_date DESC, v.id DESC LIMIT ? OFFSET ?`
+      )
+      .bind(...officialIds, ...officialIds, ...scopeBinds, limit + 1, offset)
+      .all());
+  }
   const rows = results.slice(0, limit);
   if (rows.length) {
     const { results: pos } = await db

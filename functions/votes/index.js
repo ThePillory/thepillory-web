@@ -4,7 +4,7 @@
 //   Otherwise: every final-passage vote with its totals, and a link to find
 //   your reps.
 import { voteScope } from "../_lib/data.js";
-import { page, notLoaded, esc, fmtDate, guard } from "../_lib/render.js";
+import { page, notLoaded, esc, fmtDate, guard, edgeCached } from "../_lib/render.js";
 import { safe, recentFinalVotes, officialsWhere, CHAMBER_NAME } from "../_lib/data.js";
 import { billHref } from "../_lib/votes.js";
 import { compactRow } from "../_lib/summary.js";
@@ -14,19 +14,29 @@ import { districtsFromCookie, repsWhere, describe, STATE_NAME } from "../_lib/di
 const PER_PAGE = 30;
 
 async function allFinalVotes(db, { level, limit, offset }) {
-  const { results } = await db
-    .prepare(
-      `SELECT v.*, b.bill_number, b.title AS bill_title FROM votes v LEFT JOIN bills b ON b.id = v.bill_id
-       WHERE v.vote_type = 'final_passage' AND (? IS NULL OR (${voteScope(level).sql}))
+  // Two shapes, so each reads its index in date order (votes_type_date_id, votes_type_date) and stops
+  // at the page: "? IS NULL OR …" kept SQLite from using either and read ~310,000 rows a visit.
+  const sql = level
+    ? `SELECT v.*, b.bill_number, b.title AS bill_title FROM votes v LEFT JOIN bills b ON b.id = v.bill_id
+       WHERE v.vote_type = 'final_passage' AND ${voteScope(level).sql}
        ORDER BY v.vote_date DESC, v.id DESC LIMIT ? OFFSET ?`
-    )
-    .bind(level, ...voteScope(level).binds, limit + 1, offset)
+    : `SELECT v.*, b.bill_number, b.title AS bill_title FROM votes v LEFT JOIN bills b ON b.id = v.bill_id
+       WHERE v.vote_type = 'final_passage'
+       ORDER BY v.vote_date DESC, v.id DESC LIMIT ? OFFSET ?`;
+  const { results } = await db
+    .prepare(sql)
+    .bind(...(level ? voteScope(level).binds : []), limit + 1, offset)
     .all();
   for (const r of results) r.positions = [];
   return { rows: results.slice(0, limit), more: results.length > limit };
 }
 
-export const onRequestGet = guard(async ({ request, env }) => {
+// Without saved districts the page is the same for everyone: kept at the edge for 5 minutes.
+export const onRequestGet = guard(async (context) =>
+  districtsFromCookie(context.request) ? render(context) : edgeCached(context, 300, () => render(context))
+, { tab: "reps" });
+
+async function render({ request, env }) {
   const url = new URL(request.url);
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
   const asked = url.searchParams.get("level") || "";
@@ -72,5 +82,5 @@ ${d ? "" : '<p class="small"><a class="inline-link" href="/#find">Find your repr
 <section class="card compact-list" id="vote-list" data-more-list>${rows || `<p class="secondary small cr-empty">${d ? "No final-passage votes loaded yet for your reps." : "No final-passage votes loaded yet."}</p>`}</section>
 ${data.more ? `<a class="btn btn--block load-more" href="${q(pageNo + 1)}" data-load-more="vote-list">Load more</a>` : ""}
 <p class="hint">Each line opens the bill's votes, which link to the official record. County supervisors' votes will come from meeting minutes. That's coming next.</p>`;
-  return page(title, main, { tab: "reps", back: ["Reps", "/reps/"], personal: true });
-}, { tab: "reps" });
+  return page(title, main, { tab: "reps", back: ["Reps", "/reps/"], personal: !!d });
+}

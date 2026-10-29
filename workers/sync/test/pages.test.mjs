@@ -20,7 +20,7 @@ function d1(sqlite) {
     bind: (...b) => stmt(sql, b),
     all: async () => ({ results: sqlite.prepare(sql).all(...binds) }),
     first: async () => sqlite.prepare(sql).get(...binds) ?? null,
-    run: async () => sqlite.prepare(sql).run(...binds),
+    run: async () => { const r = sqlite.prepare(sql).run(...binds); return { ...r, meta: { changes: Number(r.changes) } }; },
   });
   return {
     prepare: (sql) => stmt(sql),
@@ -76,7 +76,7 @@ test("bill list: built from votes, with the latest final vote, outcome and routi
   sqlite.prepare("INSERT INTO bill_relevance (bill_id, verdict, category, reason, local, model, prompt_version) VALUES ('us-119-hr-2', 'skip', 'naming', 'Names a post office.', 'none', 'm', 'p')").run();
   const r = await buildSummaries(db);
   assert.equal(r.status, "ok");
-  assert.match(r.message, /bill list: 4 bills; vote counts: 4 officials/);
+  assert.match(r.message, /bill list: 4 bills \(4 changed, 0 removed\); vote counts: 4 officials/);
   const rows = sqlite.prepare("SELECT * FROM bill_list ORDER BY bill_id").all();
   const hr1 = rows.find((x) => x.bill_id === "us-119-hr-1");
   assert.equal(hr1.vote_count, 2);
@@ -93,10 +93,17 @@ test("bill list: built from votes, with the latest final vote, outcome and routi
   assert.equal(hr4.final_count, 0);
   // Counts per official.
   assert.deepEqual({ ...(await voteCounts(db, "o0")) }, { total: 7, final: 3 });
-  // Nothing changed: skipped. A change: rebuilt.
-  assert.equal((await buildSummaries(db)).status, "skipped");
+  // Within the hour: skipped without even reading the fingerprint. Nothing changed: skipped.
+  assert.match((await buildSummaries(db)).message, /next build after 60 minutes/);
+  assert.equal((await buildSummaries(db, { minMinutes: 0 })).message, "nothing changed since the last build");
+  // A forced build with nothing new writes no rows: unchanged bills and counts aren't rewritten.
+  const again = await buildSummaries(db, { force: true });
+  assert.match(again.message, /\(0 changed, 0 removed\)/);
+  // A change: rebuilt, and only that bill's row written.
   sqlite.prepare("UPDATE votes SET result = 'Failed', updated_at = '2099-01-01' WHERE id = 'v0-f'").run();
-  assert.equal((await buildSummaries(db)).status, "ok");
+  const changed = await buildSummaries(db, { minMinutes: 0 });
+  assert.equal(changed.status, "ok");
+  assert.match(changed.message, /\(1 changed, 0 removed\)/);
   assert.equal(sqlite.prepare("SELECT final_result FROM bill_list WHERE bill_id = 'us-119-hr-1'").get().final_result, "Failed");
 });
 

@@ -10,9 +10,12 @@
 //      served from there without running the page or the query again.
 //   3. Filtered and later pages are marked noindex, links to addresses with a
 //      query string get rel="nofollow", and "Load more" stops at the cap.
+//   4. Every request's D1 rows read and written are counted by its route pattern
+//      and kind of visitor (functions/_lib/usage.js; nothing about the visitor kept).
 // Everything else passes through untouched.
 import { linksIn, linkInfo, rewriteSourceLinks } from "./_lib/source-links.js";
 import { checkQuery, badRequest, forCrawlers } from "./_lib/crawl.js";
+import { startUsage, finishUsage, usageDb } from "./_lib/usage.js";
 
 const DONE = "__finished";
 
@@ -25,6 +28,13 @@ export function publicSeconds(res) {
 }
 
 export async function onRequest(context) {
+  const usage = startUsage(context);
+  const res = await handle(context);
+  finishUsage(context, usage);
+  return res;
+}
+
+async function handle(context) {
   const { request, env } = context;
   const url = new URL(request.url);
   const admin = url.pathname.startsWith("/admin/");
@@ -59,7 +69,7 @@ export async function onRequest(context) {
   if (env.DB) {
     try {
       const urls = linksIn(html);
-      if (urls.length) out = rewriteSourceLinks(html, await linkInfo(env.DB, urls));
+      if (urls.length) out = rewriteSourceLinks(html, await linkInfo(usageDb(context), urls));
     } catch (err) {
       // The page as it was: a copy link is never worth a failed page.
       console.error(`source links: ${err && err.message}`);

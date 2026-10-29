@@ -26,12 +26,15 @@
 // /admin/waitlist/        "Bring ThePillory to your county": sign-ups by county (counts only)
 // /admin/corrections/     readers' error reports ("Report an error"): record fixed, not an error, or duplicate
 // /admin/health/          every data source green, yellow or red, with 30 days of history (functions/_lib/health-pages.js)
+// /admin/usage/           what Cloudflare usage costs, by day, page, sync step and query; the AI cost beside it
+//                         (functions/_lib/usage-pages.js)
 //
 // Protected by Cloudflare Access (see functions/_lib/access.js and docs/analysis.md).
 // Every change writes a bill_analysis_revisions row with the row as it was before.
 import { page, esc, fmtDate, safeUrl, guard } from "../_lib/render.js";
 import { checkAccess } from "../_lib/access.js";
 import { healthData, adminHealthMain, deadLinks } from "../_lib/health-pages.js";
+import { usageData, adminUsageMain } from "../_lib/usage-pages.js";
 import { networthScanList, networthScanItem, networthScanChange, networthReviewHref } from "../_lib/networth-review.js";
 import { correctionsList, correctionChange } from "../_lib/corrections-review.js";
 import { measureReviewList, measureReviewItem, measureReviewChange, measureReviewHref } from "../_lib/measure-review.js";
@@ -232,7 +235,7 @@ async function list(db, url, env) {
     `<header class="page-head">
   <h1>Review queue</h1>
   <p class="subtitle">Nothing here waits on you. Drafts the AI reviewer passes are published as "AI-drafted, auto-checked"; flagged drafts and readers' reports go through the resolution step on the sync Worker's next run (fixed by another model, flagged passages cut, or cut to the summary; nothing marked as a major problem is published). You can still approve, edit or reject any of them.</p>
-  <p class="small"><a class="inline-link" href="/admin/corrections/">Error reports</a> · <a class="inline-link" href="/admin/waitlist/">County waitlist</a> · <a class="inline-link" href="/admin/health/">Data sources</a></p>
+  <p class="small"><a class="inline-link" href="/admin/corrections/">Error reports</a> · <a class="inline-link" href="/admin/waitlist/">County waitlist</a> · <a class="inline-link" href="/admin/health/">Data sources</a> · <a class="inline-link" href="/admin/usage/">Cloudflare usage</a></p>
 </header>
 ${await waitingSummary(db)}
 ${await promiseQueue(db, env, url)}
@@ -1573,13 +1576,17 @@ async function handle(context) {
   if (!who.ok) return locked(who.reason);
   const parts = (context.params.path || []).filter(Boolean);
   if (parts.length === 0) return Response.redirect(`${url.origin}/admin/review/`, 302);
-  if (!["review", "waitlist", "health", "corrections"].includes(parts[0])) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+  if (!["review", "waitlist", "health", "corrections", "usage"].includes(parts[0])) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
   if (!env.DB) return missingTables();
   if (parts[0] === "health") {
     if (parts.length !== 1 || request.method !== "GET") return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
     const [data, dead] = await Promise.all([healthData(env.DB), deadLinks(env.DB)]);
     return adminPage("Data sources", adminHealthMain(data, dead));
+  }
+  if (parts[0] === "usage") {
+    if (parts.length !== 1 || request.method !== "GET") return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+    return adminPage("Cloudflare usage", adminUsageMain(await usageData(env.DB)));
   }
   if (parts[0] === "corrections") {
     try {
