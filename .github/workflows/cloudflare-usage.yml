@@ -1,0 +1,27 @@
+# The Cloudflare usage report (tools/cf_usage.mjs): the last 30 days by day, by Worker script and
+# D1 database, priced at Workers Paid rates. Read-only. Needs the repository secret
+# CF_ANALYTICS_TOKEN (an API token with Account Analytics Read; docs/data-sync.md, "What Cloudflare
+# costs"). The sync Worker's own daily check (/admin/usage/) uses the same token as a Worker secret.
+name: Cloudflare usage report
+on:
+  workflow_dispatch:
+    inputs:
+      days:
+        description: Days back
+        default: "30"
+permissions:
+  contents: read
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Report
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_ANALYTICS_TOKEN }}
+        run: |
+          node tools/cf_usage.mjs --days "${{ inputs.days }}" | tee -a "$GITHUB_STEP_SUMMARY"
