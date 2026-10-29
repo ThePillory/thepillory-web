@@ -814,10 +814,10 @@
    "name": "Riley v. Bondi",
    "summary": "Order from the Board of Immigration Appeals denying deferral of removal in “withholding only” proceeding is not a “final order of removal” under 8 U. S. C. §1252(b)(1); the 30-day filing deadline to challenge a final order of removal under §1252(b)(1) is a claims-processing rule, not a jurisdictional requirement.",
    "author_code": "A",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/606us1r58_5h25.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1270_new_3dq3.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "ALITO, J., delivered the opinion of the Court, in which ROBERTS, C. J., THOMAS, KAVANAUGH, and BARRETT, JJ., joined in full, and in which SOTOMAYOR, KAGAN, GORSUCH, and JACKSON, JJ., joined only as to Part II–B. THOMAS, J., filed a concurring opinion. SOTOMAYOR, J., filed an opinion dissenting in part, in which KAGAN and JACKSON, JJ., joined in full, and in which GORSUCH, J., joined except as to Part IV.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -895,12 +895,7 @@
      }
     ]
    },
-   "provisions": [
-    {
-     "id": "amend-5",
-     "quote": null
-    }
-   ],
+   "provisions": [],
    "qp_url": "https://www.supremecourt.gov/qp/23-01270qp.pdf",
    "question_presented": [
     "Petitioner Pierre Riley, ineligible for cancellation of removal or discretionary relief from removal, sought deferral in withholding-only proceedings, pursuant to the Convention Against Torture and Other Cruel, Inhuman or Degrading Treatment or Punishment. After the Board of Immigration Appeals issued a decision reversing an immigration judge's grant of relief, Riley promptly petitioned for review by the U.S. Court of Appeals for the Fourth Circuit. Although both parties urged the court to decide the merits of the case, the Fourth Circuit dismissed Riley's petition for lack of jurisdiction pursuant to 8 U.S.C. 1252(b)(1), which states \"[t]he petition for review must be filed not later than 30 days after the date of the final order of removal.\"",
@@ -1680,10 +1675,10 @@
    "name": "Oklahoma v. EPA",
    "summary": "Under the Clean Air Act, EPA’s disapprovals of the Oklahoma and Utah state implementation plans are locally or regionally applicable actions reviewable in a regional court of appeals. See 42 U. S. C. §7607(b)(1).",
    "author_code": "T",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us2r49_pok0.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1067_6j36.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "THOMAS, J., delivered the opinion of the Court, in which SOTOMAYOR, KAGAN, KAVANAUGH, BARRETT, and JACKSON, JJ., joined. GORSUCH, J., filed an opinion concurring in the judgment, in which ROBERTS, C. J., joined. ALITO, J., took no part in the consideration or decision of the case.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1773,10 +1768,10 @@
    "name": "United States v. Skrmetti",
    "summary": "Tennessee’s law prohibiting certain medical treatments for transgender minors is not subject to heightened scrutiny under the Equal Protection Clause of the Fourteenth Amendment and satisfies rational basis review.",
    "author_code": "R",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us2r48_m648.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-477_2cp3.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "ROBERTS, C. J., delivered the opinion of the Court, in which THOMAS, GORSUCH, KAVANAUGH, and BARRETT, JJ., joined, and in which ALITO, J., joined as to Parts I and II–B. THOMAS, J., filed a concurring opinion. BARRETT, J., filed a concurring opinion, in which THOMAS, J., joined. ALITO, J., filed an opinion concurring in part and concurring in the judgment. SOTOMAYOR, J., filed a dissenting opinion, in which JACKSON, J., joined in full, and in which KAGAN, J., joined as to Parts I–IV. KAGAN, J., filed a dissenting opinion.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1863,16 +1858,8 @@
    },
    "provisions": [
     {
-     "id": "amend-1",
-     "quote": null
-    },
-    {
      "id": "amend-14",
-     "quote": null
-    },
-    {
-     "id": "art-6-cl-2",
-     "quote": null
+     "quote": "In this case, we consider whether a Tennessee law banning certain medical care for transgender minors violates the Equal Protection Clause of the Fourteenth Amendment."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/23-00477qp.pdf",
@@ -1888,10 +1875,10 @@
    "name": "Perttu v. Richards",
    "summary": "Parties are entitled to a jury trial on the issue of exhaustion of remedies under The Prison Litigation Reform Act when that issue is intertwined with the merits of a claim that requires a jury trial under the Seventh Amendment.",
    "author_code": "R",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us2r47_bqm2.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1324_2c83.pdf",
    "parser": 4,
-   "exact_text": false,
-   "lineup_text": null,
+   "exact_text": true,
+   "lineup_text": "ROBERTS, C. J., delivered the opinion of the Court, in which SOTOMAYOR, KAGAN, GORSUCH, and JACKSON, JJ., joined. BARRETT, J., filed a dissenting opinion, in which THOMAS, ALITO, and KAVANAUGH, JJ., joined.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1967,15 +1954,11 @@
    "provisions": [
     {
      "id": "amend-1",
-     "quote": null
+     "quote": "Richards sued Perttu for violating his constitutional rights, including his First Amendment right to file grievances."
     },
     {
      "id": "amend-7",
-     "quote": null
-    },
-    {
-     "id": "amend-8",
-     "quote": null
+     "quote": "But the court held that “the Seventh Amendment requires a jury trial when the resolution of the exhaustion issue under the PLRA would also resolve a genuine dispute of material fact regarding the merits of the plaintiff ’s substantive case.” 96 F. 4th, at 923."
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/23-01324qp.pdf",
@@ -2272,10 +2255,10 @@
    "name": "Soto v. United States",
    "summary": "The CRSC—a statute providing “combat-related special compensation” to qualifying veterans who have suffered combat-related disabilities, see 10 U. S. C. §1413a—confers authority to settle CRSC claims and thus displaces the settlement procedures and limitations period under the Barring Act, 31 U. S. C. §3702.",
    "author_code": "T",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24-320_m648.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us2r42_k5fl.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "THOMAS, J., delivered the opinion for a unanimous Court.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2308,10 +2291,10 @@
    "name": "A. J. T. v. Osseo Area Schools, Independent School Dist. No. 279",
    "summary": "Schoolchildren bringing claims related to their education under either Title II of the Americans with Disabilities Act or Section 504 of the Rehabilitation Act are not required to make a heightened showing of “bad faith or gross misjudgment” but instead are subject to the same standards that apply in other disability discrimination contexts.",
    "author_code": "R",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24-249_a86c.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us2r41_bp7c.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ROBERTS, C. J., delivered the opinion for a unanimous Court. THOMAS, J., filed a concurring opinion, in which KAVANAUGH, J., joined. SOTOMAYOR, J., filed a concurring opinion, in which JACKSON, J., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2358,7 +2341,20 @@
      }
     ]
    },
-   "provisions": [],
+   "provisions": [
+    {
+     "id": "amend-14",
+     "quote": null
+    },
+    {
+     "id": "art-1-sec-8-cl-3",
+     "quote": null
+    },
+    {
+     "id": "art-1-sec-8-cl-1",
+     "quote": null
+    }
+   ],
    "qp_url": "https://www.supremecourt.gov/qp/24-00249qp.pdf",
    "question_presented": [
     "Title II of the Americans with Disabilities Act (ADA) and Section 504 of the Rehabilitation Act (Rehabilitation Act) require public entities and organizations that receive federal funding to provide reasonable accommodations for people with disabilities. In the decision below, the Eighth Circuit held that, for discrimination claims \"based on educational services\" brought by children with disabilities, these statutes are violated only if school officials acted with ''bad faith or gross misjudgment.\" App.3a.",
@@ -2375,10 +2371,10 @@
    "name": "Laboratory Corp. of America Holdings v. Davis",
    "summary": "Certiorari dismissed as improvidently granted.",
    "author_code": "PC",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/24-304_3e04.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us1r40_f1gk.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "PER CURIAM. The writ of certiorari is dismissed as improvidently granted. It is so ordered.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": [],
    "provisions": [],
    "qp_url": "https://www.supremecourt.gov/qp/24-00304qp.pdf",
@@ -2394,10 +2390,10 @@
    "name": "Ames v. Ohio Department of Youth Services",
    "summary": "The Sixth Circuit’s “background circumstances” rule—which requires members of a majority group to satisfy a heightened evidentiary standard to prevail on a Title VII discrimination claim—cannot be squared with either the text of Title VII or the Court’s precedents.",
    "author_code": "KJ",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1039_c0n2.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us1r39_kkg1.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "JACKSON, J., delivered the opinion for a unanimous Court. THOMAS, J., filed a concurring opinion, in which GORSUCH, J., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2428,7 +2424,12 @@
      }
     ]
    },
-   "provisions": [],
+   "provisions": [
+    {
+     "id": "art-3",
+     "quote": null
+    }
+   ],
    "qp_url": "https://www.supremecourt.gov/qp/23-01039qp.pdf",
    "question_presented": [
     "Whether, in addition to pleading the other elements of Title VII, a majority-group plaintiff must show \"background circumstances to support the suspicion that the defendant is that unusual employer who discriminates against the majority.\" App. 5a."
@@ -2442,10 +2443,10 @@
    "name": "Smith & Wesson Brands, Inc. v. Estados Unidos Mexicanos",
    "summary": "Because Mexico’s complaint does not plausibly allege that the defendant gun manufacturers aided and abetted gun dealers’ unlawful sales of firearms to Mexican traffickers, the Protection of Lawful Commerce in Arms Act, 15 U. S. C. §7901(a)(3), bars the lawsuit.",
    "author_code": "EK",
-   "pdf": "https://www.supremecourt.gov/opinions/24pdf/23-1141_lkgn.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/24pdf/605us1r38_j426.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "KAGAN, J., delivered the opinion for a unanimous Court. THOMAS, J., and JACKSON, J., filed concurring opinions.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2478,7 +2479,12 @@
      }
     ]
    },
-   "provisions": [],
+   "provisions": [
+    {
+     "id": "amend-2",
+     "quote": null
+    }
+   ],
    "qp_url": "https://www.supremecourt.gov/qp/23-01141qp.pdf",
    "question_presented": [
     "The Mexican Government has sued leading members of the American firearms industry, seeking to hold them liable for harms inflicted by Mexican drug cartels. According to Mexico, America's firearms companies have engaged in a series of business practices for decades-from selling semi-automatic rifles, to making magazines that hold over ten rounds, to failing to impose various sales restrictions-that have created a supply of firearms later smuggled across the border and ultimately used by the cartels to commit crimes. Mexico asks for billions of dollars in damages, plus extensive injunctive relief imposing new gun-control measures in the United States.",
@@ -4756,5 +4762,5 @@
    "qp_checked": true
   }
  ],
- "built_on": "2026-10-28"
+ "built_on": "2026-10-29"
 }
