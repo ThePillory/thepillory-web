@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=RI&candidate_status=C",
- "list_built_on": "2026-10-28",
+ "list_built_on": "2026-10-29",
  "built_on": "2026-10-29",
  "senate_up": true,
  "candidates": {
@@ -959,17 +959,17 @@
    "last_listed": "2026-10-29",
    "totals": {
     "cycle": 2026,
-    "receipts": 13065.34,
-    "disbursements": 13003.77,
-    "cash_on_hand": 61.57,
-    "individual_unitemized": 3240.86,
+    "receipts": 13117.74,
+    "disbursements": 13006.17,
+    "cash_on_hand": 111.57,
+    "individual_unitemized": 3293.26,
     "individual_itemized": 354.48,
     "pac": 0,
     "party": 0,
     "self_funding": 9470,
     "other": 0,
-    "coverage_end": "2026-09-30",
-    "last_report": "OCTOBER QUARTERLY 2026",
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
     "source_url": "https://www.fec.gov/data/candidate/H6RI01161/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -985,7 +985,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00951624/",
     "checked": "2026-10-17"
    },
-   "funding_checked": "2026-10-25",
+   "funding_checked": "2026-10-29",
    "cycle": 2026
   }
  }
