@@ -52,7 +52,7 @@ const UPSERT_LIST = `
 ON CONFLICT (bill_id) DO UPDATE SET ${LIST_COLS.map((c) => `${c} = excluded.${c}`).join(", ")}
 WHERE ${LIST_COLS.map((c) => `bill_list.${c} IS NOT excluded.${c}`).join(" OR ")}`;
 const DELETE_STALE = "DELETE FROM bill_list WHERE bill_id NOT IN (SELECT v.bill_id FROM votes v JOIN bills b ON b.id = v.bill_id WHERE v.bill_id IS NOT NULL)";
-const BILL_LIST = `
+export const BILL_LIST = `
 INSERT INTO bill_list (bill_id, level, chamber, bill_number, title, session, last_vote, vote_count,
   last_final, final_count, final_vote_id, final_result, final_chamber, yea, nay, present, not_voting,
   outcome, outcome_date, routine, st)
@@ -68,8 +68,10 @@ FROM (
   FROM votes WHERE bill_id IS NOT NULL GROUP BY bill_id
 ) agg
 JOIN bills b ON b.id = agg.bill_id
+-- "+v2.vote_type" keeps SQLite on votes_bill_type_date (by bill): with votes_type_date_id
+-- (migration 0046) it would walk every final-passage vote for each bill, past D1's CPU limit.
 LEFT JOIN votes lf ON lf.id = (
-  SELECT v2.id FROM votes v2 WHERE v2.bill_id = agg.bill_id AND v2.vote_type = 'final_passage'
+  SELECT v2.id FROM votes v2 WHERE v2.bill_id = agg.bill_id AND +v2.vote_type = 'final_passage'
   ORDER BY v2.vote_date DESC, v2.id DESC LIMIT 1)
 LEFT JOIN bill_outcomes o ON o.bill_id = b.id
 LEFT JOIN bill_relevance r ON r.bill_id = b.id

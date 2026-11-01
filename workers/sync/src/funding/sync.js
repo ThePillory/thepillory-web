@@ -563,7 +563,8 @@ export async function syncCommitteeBills(env, db, budget) {
 // Congress (so far); each report found is checked item by item against every
 // member (matchHonoree), so one search can fill in other members too. A year
 // already read is read again after LOBBY_CONTRIB_REFRESH_DAYS (45): LD-203s are
-// filed in July and January.
+// filed in July and January. A report read again writes nothing unless a value
+// changed (every row written is billed; INSERT OR REPLACE rewrote them all).
 export async function syncLobbyContributions(env, db, budget) {
   const o = ldaOptions(env);
   const pace = { intervalMs: o.pace.intervalMs, dailyLimit: parseInt(env.LDA_CONTRIB_DAILY || "400", 10) };
@@ -621,7 +622,9 @@ export async function syncLobbyContributions(env, db, budget) {
                 .prepare(
                   `INSERT INTO lobby_contrib_filings (filing_uuid, filer_type, registrant_id, registrant_name, lobbyist_id, filing_year, filing_period, filing_type, posted_at, source_url, updated_at)
                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
-                   ON CONFLICT(filing_uuid) DO UPDATE SET registrant_name = excluded.registrant_name, posted_at = excluded.posted_at, source_url = excluded.source_url, updated_at = excluded.updated_at`
+                   ON CONFLICT(filing_uuid) DO UPDATE SET registrant_name = excluded.registrant_name, posted_at = excluded.posted_at, source_url = excluded.source_url, updated_at = excluded.updated_at
+                   WHERE lobby_contrib_filings.registrant_name IS NOT excluded.registrant_name OR lobby_contrib_filings.posted_at IS NOT excluded.posted_at
+                     OR lobby_contrib_filings.source_url IS NOT excluded.source_url`
                 )
                 .bind(row.filing_uuid, row.filer_type, row.registrant_id, row.registrant_name, row.lobbyist_id, row.filing_year, row.filing_period, row.filing_type, row.posted_at, row.source_url)
             );
@@ -629,8 +632,10 @@ export async function syncLobbyContributions(env, db, budget) {
               stmts.push(
                 db
                   .prepare(
-                    `INSERT OR REPLACE INTO lobby_contributions (filing_uuid, n, official_id, contribution_type, contributor_name, payee_name, honoree_name, amount, date)
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+                    `INSERT INTO lobby_contributions (filing_uuid, n, official_id, contribution_type, contributor_name, payee_name, honoree_name, amount, date)
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     ON CONFLICT(filing_uuid, n) DO UPDATE SET official_id = excluded.official_id, contribution_type = excluded.contribution_type, contributor_name = excluded.contributor_name, payee_name = excluded.payee_name, honoree_name = excluded.honoree_name, amount = excluded.amount, date = excluded.date
+                     WHERE lobby_contributions.official_id IS NOT excluded.official_id OR lobby_contributions.contribution_type IS NOT excluded.contribution_type OR lobby_contributions.contributor_name IS NOT excluded.contributor_name OR lobby_contributions.payee_name IS NOT excluded.payee_name OR lobby_contributions.honoree_name IS NOT excluded.honoree_name OR lobby_contributions.amount IS NOT excluded.amount OR lobby_contributions.date IS NOT excluded.date`
                   )
                   .bind(row.filing_uuid, it.n, it.official_id, it.contribution_type, it.contributor_name, it.payee_name, it.honoree_name, it.amount, it.date)
               );

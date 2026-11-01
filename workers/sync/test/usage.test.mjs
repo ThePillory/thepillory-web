@@ -164,3 +164,21 @@ test("/admin/usage/: the month, the days, pages, steps, queries, and the AI cost
   assert.match(html, /AI cost, beside it: billed by Anthropic, not Cloudflare/);
   assert.match(html, /\$1\.25/);
 });
+
+test("the bill list finds each bill's latest final vote by bill, not by walking every final-passage vote", () => {
+  // With votes_type_date_id (migration 0046) SQLite chose that index for the per-bill
+  // subquery, which read every final-passage vote for each bill: past D1's CPU limit.
+  return import("../src/summaries.js").then(({ BILL_LIST }) => {
+    const sqlite = new DatabaseSync(":memory:");
+    for (const f of readdirSync(MIGRATIONS).filter((f) => f.endsWith(".sql")).sort()) {
+      try {
+        sqlite.exec(readFileSync(new URL(f, MIGRATIONS), "utf8"));
+      } catch {}
+    }
+    const select = BILL_LIST.slice(0, BILL_LIST.indexOf("WHERE true")).replace(/^\s*INSERT INTO bill_list \([^)]*\)/, "");
+    const plan = sqlite.prepare(`EXPLAIN QUERY PLAN ${select}`).all().map((r) => r.detail);
+    const v2 = plan.filter((d) => /\bv2\b/.test(d));
+    assert.ok(v2.length, plan.join("\n"));
+    assert.ok(v2.every((d) => /\(bill_id=\?/.test(d)), v2.join("\n"));
+  });
+});
