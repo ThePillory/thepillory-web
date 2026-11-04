@@ -1,0 +1,36 @@
+# Temporary read-only probe: which routes reach the Appropriations Committees' sites. Removed after.
+name: Probe earmark sources
+on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [.github/workflows/probe-ai.yml]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        working-directory: workers/sync
+        run: |
+          x() { echo "=== $1"; npx --yes wrangler@4 d1 execute pillory --remote --json --command "$1" | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>{const j=JSON.parse(d.slice(d.indexOf("[")));for(const r of j[0].results)console.log(Object.values(r).join(" | "))})'; }
+          x "SELECT status, COUNT(*), MAX(checked_at), substr(MIN(url),1,120) FROM source_links WHERE source = 'earmarks' GROUP BY status"
+          x "SELECT fy, stage, subcommittee, status, rows, read_at FROM earmark_tables ORDER BY fy DESC, read_at DESC LIMIT 40"
+          x "SELECT fy, COUNT(*), MAX(enacted_id IS NOT NULL) FROM earmark_requests GROUP BY fy"
+      - run: |
+          S=https://www.appropriations.senate.gov/fy-2026-congressionally-directed-spending
+          H=https://appropriations.house.gov/sites/evo-subsites/republicans-appropriations.house.gov/files/evo-media-document/fy26-house-cpf-consolidated.xlsx
+          CH='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
+          for u in $S $H https://www.appropriations.senate.gov/ https://www.govinfo.gov/ https://www.congress.gov/; do
+            echo "-- $u"
+            curl -s -o /dev/null -w "plain UA: %{http_code}\n" -A "$CH" "$u" || true
+            curl -s -o /tmp/b -w "full browser headers: %{http_code}\n" --compressed -A "$CH" -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' -H 'Accept-Language: en-US,en;q=0.9' -H 'Sec-Fetch-Dest: document' -H 'Sec-Fetch-Mode: navigate' -H 'Sec-Fetch-Site: none' -H 'Upgrade-Insecure-Requests: 1' "$u" || true
+            head -c 300 /tmp/b | tr '\n' ' '; echo
+            curl -sI "$u" -A "$CH" | grep -i -E "^(server|cf-ray|x-akamai|akamai|x-iinfo|set-cookie)" | head -4 || true
+          done
