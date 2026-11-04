@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=UT&candidate_status=C",
- "built_on": "2026-11-01",
+ "built_on": "2026-11-04",
  "senate_up": false,
  "senate": [],
  "house": {
@@ -74,6 +74,22 @@
    }
   ],
   "2": [
+   {
+    "id": "H6UT02259",
+    "name": "BOWEN, CARLTON E",
+    "party": "INDEPENDENT AMERICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6UT02259/",
+    "committee": "C00945329"
+   },
+   {
+    "id": "H6UT02549",
+    "name": "BOWEN, CARLTON E.",
+    "party": "INDEPENDENT AMERICAN PARTY",
+    "incumbent": false,
+    "url": "https://www.fec.gov/data/candidate/H6UT02549/",
+    "committee": "C00945329"
+   },
    {
     "id": "H6UT01160",
     "name": "CROSBY, PETER",
