@@ -47,7 +47,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00919803/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-30",
+   "funding_checked": "2026-11-03",
    "cycle": 2026
   },
   "S4AR00103": {
@@ -266,7 +266,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00499988/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-30",
+   "funding_checked": "2026-11-03",
    "cycle": 2026
   },
   "S6AR00173": {
@@ -309,7 +309,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00916502/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-30",
+   "funding_checked": "2026-11-03",
    "cycle": 2026
   },
   "S6AR00215": {
@@ -352,7 +352,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00926568/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-30",
+   "funding_checked": "2026-11-03",
    "cycle": 2026
   },
   "S6AR00199": {
@@ -445,7 +445,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00905471/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-30",
+   "funding_checked": "2026-11-03",
    "cycle": 2026
   },
   "S6AR00223": {
@@ -488,7 +488,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00940619/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-30",
+   "funding_checked": "2026-11-03",
    "cycle": 2026
   },
   "H0AR01083": {
@@ -707,7 +707,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00462374/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-31",
+   "funding_checked": "2026-11-03",
    "cycle": 2026
   },
   "H6AR01155": {
@@ -1312,6 +1312,13 @@
    "organizations": {
     "items": [
      {
+      "committee_id": "C00296640",
+      "name": "REPUBLICAN MAJORITY FUND",
+      "total": 10000,
+      "count": 2,
+      "industry": "leadership"
+     },
+     {
       "committee_id": "C00281212",
       "name": "BAE SYSTEMS USA PAC",
       "total": 10000,
@@ -1321,6 +1328,55 @@
      {
       "committee_id": "C00828830",
       "name": "APPLIED INTUITION, INC. PAC (APPLIED PAC)",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00284885",
+      "name": "THE HOME DEPOT INC. POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "retail"
+     },
+     {
+      "committee_id": "C00028787",
+      "name": "NATIONAL CATTLEMEN'S BEEF ASSOCIATION PAC (NCBA-PAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00030718",
+      "name": "NATIONAL ASSOCIATION OF REALTORS PAC (RPAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00227744",
+      "name": "ERNST & YOUNG POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00007880",
+      "name": "AMERICA'S CREDIT UNIONS PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00797670",
+      "name": "AMERICAN ISRAEL PUBLIC AFFAIRS COMMITTEE PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "legal"
+     },
+     {
+      "committee_id": "C00421230",
+      "name": "AIRBUS AMERICAS, INC. PAC",
       "total": 10000,
       "count": 2,
       "industry": "other"
@@ -1429,66 +1485,10 @@
       "total": 10000,
       "count": 3,
       "industry": "retail"
-     },
-     {
-      "committee_id": "C00142711",
-      "name": "THE BOEING COMPANY POLITICAL ACTION COMMITTEE",
-      "total": 10000,
-      "count": 4,
-      "industry": "defense"
-     },
-     {
-      "committee_id": "C00100321",
-      "name": "L3HARRIS TECHNOLOGIES, INC. PAC",
-      "total": 10000,
-      "count": 3,
-      "industry": "defense"
-     },
-     {
-      "committee_id": "C00169821",
-      "name": "TYSON FOODS INC. POLITICAL ACTION COMMITTEE (TYPAC)",
-      "total": 10000,
-      "count": 3,
-      "industry": "agriculture"
-     },
-     {
-      "committee_id": "C00096156",
-      "name": "HONEYWELL INTERNATIONAL POLITICAL ACTION COMMITTEE",
-      "total": 10000,
-      "count": 4,
-      "industry": "manufacturing"
-     },
-     {
-      "committee_id": "C00035451",
-      "name": "AIR LINE PILOTS ASSOCIATION PAC",
-      "total": 10000,
-      "count": 3,
-      "industry": "labor"
-     },
-     {
-      "committee_id": "C00147173",
-      "name": "WINE AND SPIRITS WHOLESALERS OF AMERICA, INC. PAC",
-      "total": 10000,
-      "count": 2,
-      "industry": "agriculture"
-     },
-     {
-      "committee_id": "C00346353",
-      "name": "CRH AMERICAS, INC. PAC",
-      "total": 10000,
-      "count": 4,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00088591",
-      "name": "EMPLOYEES OF NORTHROP GRUMMAN CORPORATION PAC",
-      "total": 10000,
-      "count": 4,
-      "industry": "defense"
      }
     ],
-    "count": 219,
-    "total": 877500,
+    "count": 252,
+    "total": 1054750,
     "complete": true,
     "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00477745&two_year_transaction_period=2026&line_number=F3-11C"
    },
@@ -1498,7 +1498,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00477745/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-31",
+   "funding_checked": "2026-11-03",
    "cycle": 2026
   },
   "H6AR04084": {
