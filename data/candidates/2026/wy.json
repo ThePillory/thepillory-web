@@ -3,8 +3,8 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=WY&candidate_status=C",
- "list_built_on": "2026-10-31",
- "built_on": "2026-11-01",
+ "list_built_on": "2026-11-01",
+ "built_on": "2026-11-04",
  "senate_up": true,
  "candidates": {
   "S6WY00217": {
@@ -18,7 +18,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6WY00217/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-01",
+   "last_listed": "2026-11-04",
    "totals": {
     "cycle": 2026,
     "receipts": 53560.38,
@@ -61,7 +61,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6WY00209/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-01",
+   "last_listed": "2026-11-04",
    "totals": {
     "cycle": 2026,
     "receipts": 2810753.95,
@@ -280,7 +280,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S0WY00137/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-01",
+   "last_listed": "2026-11-04",
    "totals": {
     "cycle": 2026,
     "receipts": 1493103.64,
@@ -485,7 +485,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00443580/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-30",
+   "funding_checked": "2026-11-03",
    "cycle": 2026
   },
   "S6WY00225": {
@@ -499,7 +499,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6WY00225/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-01",
+   "last_listed": "2026-11-04",
    "totals": {
     "cycle": 2026,
     "receipts": 299346.51,
@@ -542,11 +542,11 @@
    "fec_url": "https://www.fec.gov/data/candidate/S4WY00162/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-01",
+   "last_listed": "2026-11-04",
    "totals": null,
    "organizations": null,
    "website": null,
-   "funding_checked": "2026-10-30",
+   "funding_checked": "2026-11-03",
    "cycle": 2026
   },
   "S6WY00191": {
@@ -560,7 +560,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6WY00191/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-01",
+   "last_listed": "2026-11-04",
    "totals": {
     "cycle": 2026,
     "receipts": 11058.95,
@@ -603,7 +603,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WY00225/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-01",
+   "last_listed": "2026-11-04",
    "totals": {
     "cycle": 2026,
     "receipts": 184153.26,
@@ -632,7 +632,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00934950/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-30",
+   "funding_checked": "2026-11-03",
    "cycle": 2026
   },
   "H6WY00241": {
@@ -646,7 +646,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WY00241/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-01",
+   "last_listed": "2026-11-04",
    "totals": {
     "cycle": 2026,
     "receipts": 122427.09,
@@ -663,9 +663,17 @@
     "source_url": "https://www.fec.gov/data/candidate/H6WY00241/?cycle=2026&election_full=false"
    },
    "organizations": {
-    "items": [],
-    "count": 0,
-    "total": 0,
+    "items": [
+     {
+      "committee_id": "C00007880",
+      "name": "AMERICA'S CREDIT UNIONS PAC OF CREDIT UNION NATIONAL ASSOCIATION, INC",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     }
+    ],
+    "count": 1,
+    "total": 5000,
     "complete": true,
     "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00943258&two_year_transaction_period=2026&line_number=F3-11C"
    },
@@ -675,7 +683,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00943258/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-30",
+   "funding_checked": "2026-11-03",
    "cycle": 2026
   },
   "H6WY01157": {
@@ -689,7 +697,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WY01157/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-01",
+   "last_listed": "2026-11-04",
    "totals": {
     "cycle": 2026,
     "receipts": 1191244.65,
@@ -718,7 +726,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00945063/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-30",
+   "funding_checked": "2026-11-03",
    "cycle": 2026
   },
   "H6WY01140": {
@@ -732,7 +740,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WY01140/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-01",
+   "last_listed": "2026-11-04",
    "totals": {
     "cycle": 2026,
     "receipts": 43300.08,
@@ -761,7 +769,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00941427/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-30",
+   "funding_checked": "2026-11-03",
    "cycle": 2026
   },
   "H6WY01165": {
@@ -775,7 +783,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WY01165/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-01",
+   "last_listed": "2026-11-04",
    "totals": {
     "cycle": 2026,
     "receipts": 3582733.15,
@@ -812,7 +820,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00945980/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-30",
+   "funding_checked": "2026-11-03",
    "cycle": 2026
   },
   "H6WY00233": {
@@ -826,7 +834,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WY00233/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-01",
+   "last_listed": "2026-11-04",
    "totals": {
     "cycle": 2026,
     "receipts": 286501.28,
@@ -845,6 +853,13 @@
    "organizations": {
     "items": [
      {
+      "committee_id": "C00570226",
+      "name": "SEAL PAC SUPPORTING ELECTING AMERICAN LEADERS PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
       "committee_id": "C00767640",
       "name": "RANGER PAC",
       "total": 5000,
@@ -857,13 +872,6 @@
       "total": 5000,
       "count": 1,
       "industry": "finance"
-     },
-     {
-      "committee_id": "C00570226",
-      "name": "SEAL PAC SUPPORTING ELECTING AMERICAN LEADERS PAC",
-      "total": 5000,
-      "count": 1,
-      "industry": "other"
      },
      {
       "committee_id": "C00917187",
@@ -901,13 +909,6 @@
       "industry": "other"
      },
      {
-      "committee_id": "C00647420",
-      "name": "BOLD ACTIVE CONSERVATIVES OF NEBRASKA PAC",
-      "total": 2000,
-      "count": 1,
-      "industry": "leadership"
-     },
-     {
       "committee_id": "C00786368",
       "name": "31 DAYS PAC",
       "total": 2000,
@@ -915,11 +916,18 @@
       "industry": "leadership"
      },
      {
-      "committee_id": "C00823500",
-      "name": "SECURING THE REPUBLIC FOR OUR NEXT GENERATION",
+      "committee_id": "C00647420",
+      "name": "BOLD ACTIVE CONSERVATIVES OF NEBRASKA PAC",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00372979",
+      "name": "RADIANCE TECHNOLOGIES, INC. POLITICAL ACTION COMMITTEE",
       "total": 1000,
       "count": 1,
-      "industry": "other"
+      "industry": "tech"
      },
      {
       "committee_id": "C00698092",
@@ -943,11 +951,11 @@
       "industry": "other"
      },
      {
-      "committee_id": "C00372979",
-      "name": "RADIANCE TECHNOLOGIES, INC. POLITICAL ACTION COMMITTEE",
+      "committee_id": "C00823500",
+      "name": "SECURING THE REPUBLIC FOR OUR NEXT GENERATION",
       "total": 1000,
       "count": 1,
-      "industry": "tech"
+      "industry": "other"
      },
      {
       "committee_id": "C00652149",
@@ -968,7 +976,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00940320/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-30",
+   "funding_checked": "2026-11-03",
    "cycle": 2026
   },
   "H6WY00217": {
@@ -982,7 +990,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WY00217/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-01",
+   "last_listed": "2026-11-04",
    "totals": {
     "cycle": 2026,
     "receipts": 2011264,
@@ -1011,7 +1019,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00932244/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-30",
+   "funding_checked": "2026-11-03",
    "cycle": 2026
   },
   "H6WY01173": {
@@ -1025,7 +1033,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WY01173/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-01",
+   "last_listed": "2026-11-04",
    "totals": {
     "cycle": 2026,
     "receipts": 99131.16,
@@ -1054,7 +1062,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00944280/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-10-30",
+   "funding_checked": "2026-11-03",
    "cycle": 2026
   },
   "H6WY01116": {
@@ -1068,11 +1076,11 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WY01116/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-01",
+   "last_listed": "2026-11-04",
    "totals": null,
    "organizations": null,
    "website": null,
-   "funding_checked": "2026-10-30",
+   "funding_checked": "2026-11-03",
    "cycle": 2026
   }
  }

@@ -5,10 +5,10 @@
  "name": "City of Sunnyvale",
  "county": "06085",
  "since": "2025-01-01",
- "generated": "2026-10-28",
+ "generated": "2026-11-04",
  "source": "NetFile public campaign filings, City of Sunnyvale",
  "source_url": "https://public.netfile.com/pub2/?aid=COS",
- "transactions": 438,
+ "transactions": 439,
  "committees": {
   "COS-152214": {
    "local_id": "COS-152214",
@@ -195,7 +195,7 @@
   },
   "COS-152266": {
    "local_id": "COS-152266",
-   "fppc_id": "Pending",
+   "fppc_id": "1479457",
    "name": "Richard Mehlinger for City Council 2026",
    "contributions": 18556.1,
    "nonmonetary": 0.0,
@@ -443,13 +443,13 @@
   },
   "COS-152323": {
    "local_id": "COS-152323",
-   "fppc_id": "Pending",
+   "fppc_id": "1488293",
    "name": "Linda Sell for Sunnyvale City Council District 1 2026",
    "contributions": 11291.74,
    "nonmonetary": 34.96,
    "payments": 25233.0,
    "first": "2026-03-14",
-   "last": "2026-10-16",
+   "last": "2026-11-03",
    "individuals": {
     "total": 8714.75,
     "count": 43
@@ -480,11 +480,18 @@
    "employers": [],
    "filings": [
     {
+     "id": "217883212",
+     "url": "https://netfile.com/Connect2/api/public/image/217883212",
+     "filed": "2026-11-04",
+     "from": null,
+     "through": null
+    },
+    {
      "id": "217709473",
      "url": "https://netfile.com/Connect2/api/public/image/217709473",
-     "filed": "2026-10-22",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "217529409",
@@ -515,7 +522,7 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-22"
+   "as_of": "2026-11-04"
   },
   "COS-152463": {
    "local_id": "COS-152463",

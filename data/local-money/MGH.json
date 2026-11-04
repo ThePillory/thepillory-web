@@ -5,10 +5,10 @@
  "name": "City of Morgan Hill",
  "county": "06085",
  "since": "2025-01-01",
- "generated": "2026-10-28",
+ "generated": "2026-11-04",
  "source": "NetFile public campaign filings, City of Morgan Hill",
  "source_url": "https://public.netfile.com/pub2/?aid=MGH",
- "transactions": 510,
+ "transactions": 564,
  "committees": {
   "MGH-112632": {
    "local_id": "MGH-112632",
@@ -113,7 +113,7 @@
    "nonmonetary": 0.0,
    "payments": 21623.67,
    "first": "2025-02-01",
-   "last": "2026-10-27",
+   "last": "2026-11-02",
    "individuals": {
     "total": 41607.04,
     "count": 54
@@ -159,9 +159,16 @@
    "employers": [],
    "filings": [
     {
+     "id": "217872394",
+     "url": "https://netfile.com/Connect2/api/public/image/217872394",
+     "filed": "2026-11-02",
+     "from": null,
+     "through": null
+    },
+    {
      "id": "217836891",
      "url": "https://netfile.com/Connect2/api/public/image/217836891",
-     "filed": "2026-10-27",
+     "filed": null,
      "from": null,
      "through": null
     },
@@ -215,7 +222,7 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-27"
+   "as_of": "2026-11-02"
   },
   "MGH-112628": {
    "local_id": "MGH-112628",
@@ -225,7 +232,7 @@
    "nonmonetary": 0.0,
    "payments": 14262.06,
    "first": "2025-04-16",
-   "last": "2026-10-15",
+   "last": "2026-11-02",
    "individuals": {
     "total": 18135.0,
     "count": 70
@@ -246,11 +253,18 @@
    "employers": [],
    "filings": [
     {
+     "id": "217879025",
+     "url": "https://netfile.com/Connect2/api/public/image/217879025",
+     "filed": "2026-11-03",
+     "from": null,
+     "through": null
+    },
+    {
      "id": "217718011",
      "url": "https://netfile.com/Connect2/api/public/image/217718011",
-     "filed": "2026-10-22",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "217628680",
@@ -302,17 +316,17 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-22"
+   "as_of": "2026-11-03"
   },
   "MGH-112610": {
    "local_id": "MGH-112610",
    "fppc_id": "1450294",
    "name": "Marilyn Librers for City Council 2022",
-   "contributions": 6100.0,
+   "contributions": 14746.0,
    "nonmonetary": 0.0,
-   "payments": 4260.51,
+   "payments": 5269.08,
    "first": "2025-06-11",
-   "last": "2026-09-11",
+   "last": "2026-10-17",
    "individuals": {
     "total": 0.0,
     "count": 0
@@ -320,19 +334,26 @@
    "organizations": [
     {
      "name": "Marilyn Librers for City Council 2022",
-     "total": 6100.0,
-     "count": 5
+     "total": 14746.0,
+     "count": 38
     }
    ],
    "organizations_count": 1,
    "employers": [],
    "filings": [
     {
+     "id": "217864452",
+     "url": "https://netfile.com/Connect2/api/public/image/217864452",
+     "filed": "2026-10-31",
+     "from": "2026-09-20",
+     "through": "2026-10-17"
+    },
+    {
      "id": "217589243",
      "url": "https://netfile.com/Connect2/api/public/image/217589243",
-     "filed": "2026-10-06",
-     "from": "2026-07-01",
-     "through": "2026-09-19"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "215493731",
@@ -349,7 +370,7 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-06"
+   "as_of": "2026-10-31"
   },
   "MGH-112653": {
    "local_id": "MGH-112653",
@@ -561,7 +582,7 @@
    "nonmonetary": 1965.9,
    "payments": 685.94,
    "first": "2026-09-05",
-   "last": "2026-10-17",
+   "last": "2026-10-30",
    "individuals": {
     "total": 8715.9,
     "count": 33
@@ -571,11 +592,18 @@
    "employers": [],
    "filings": [
     {
+     "id": "217868094",
+     "url": "https://netfile.com/Connect2/api/public/image/217868094",
+     "filed": "2026-11-01",
+     "from": null,
+     "through": null
+    },
+    {
      "id": "217709244",
      "url": "https://netfile.com/Connect2/api/public/image/217709244",
-     "filed": "2026-10-22",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "217656930",
@@ -592,7 +620,7 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-22"
+   "as_of": "2026-11-01"
   },
   "MGH-112670": {
    "local_id": "MGH-112670",

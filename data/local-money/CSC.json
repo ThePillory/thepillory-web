@@ -5,10 +5,10 @@
  "name": "City of Santa Clara",
  "county": "06085",
  "since": "2025-01-01",
- "generated": "2026-10-28",
+ "generated": "2026-11-04",
  "source": "NetFile public campaign filings, City of Santa Clara",
  "source_url": "https://public.netfile.com/pub2/?aid=CSC",
- "transactions": 1130,
+ "transactions": 1160,
  "committees": {
   "CAMPAIGN_CSC-1114": {
    "local_id": "CAMPAIGN_CSC-1114",
@@ -34,29 +34,29 @@
    "employers": [],
    "filings": [
     {
-     "id": "217678658",
-     "url": "https://netfile.com/Connect2/api/public/image/217678658",
-     "filed": "2026-10-20",
+     "id": "217869134",
+     "url": "https://netfile.com/Connect2/api/public/image/217869134",
+     "filed": "2026-11-02",
      "from": null,
      "through": null
     },
     {
-     "id": "217678641",
-     "url": "https://netfile.com/Connect2/api/public/image/217678641",
+     "id": "217869123",
+     "url": "https://netfile.com/Connect2/api/public/image/217869123",
      "filed": null,
      "from": null,
      "through": null
     },
     {
-     "id": "217678627",
-     "url": "https://netfile.com/Connect2/api/public/image/217678627",
+     "id": "217869108",
+     "url": "https://netfile.com/Connect2/api/public/image/217869108",
      "filed": null,
      "from": null,
      "through": null
     },
     {
-     "id": "217678613",
-     "url": "https://netfile.com/Connect2/api/public/image/217678613",
+     "id": "217869089",
+     "url": "https://netfile.com/Connect2/api/public/image/217869089",
      "filed": null,
      "from": null,
      "through": null
@@ -83,7 +83,7 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-20"
+   "as_of": "2026-11-02"
   },
   "CSC-113290": {
    "local_id": "CSC-113290",
@@ -413,11 +413,11 @@
    "local_id": "CSC-113410",
    "fppc_id": "1493625",
    "name": "Williams for Santa Clara City Council, District 2 2026",
-   "contributions": 4020.0,
+   "contributions": 4400.0,
    "nonmonetary": 2359.36,
-   "payments": 4942.49,
+   "payments": 5242.49,
    "first": "2026-07-15",
-   "last": "2026-10-14",
+   "last": "2026-10-19",
    "individuals": {
     "total": 4859.36,
     "count": 13
@@ -432,17 +432,29 @@
      "name": "California Real Estate Political Action Committee (CREPAC) #890106",
      "total": 760.0,
      "count": 1
+    },
+    {
+     "name": "Santa Clara Firefighters Local 1171",
+     "total": 380.0,
+     "count": 1
     }
    ],
-   "organizations_count": 2,
+   "organizations_count": 3,
    "employers": [],
    "filings": [
     {
+     "id": "217854771",
+     "url": "https://netfile.com/Connect2/api/public/image/217854771",
+     "filed": "2026-10-29",
+     "from": "2026-10-18",
+     "through": "2026-10-23"
+    },
+    {
      "id": "217726760",
      "url": "https://netfile.com/Connect2/api/public/image/217726760",
-     "filed": "2026-10-23",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "217521997",
@@ -452,7 +464,7 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-23"
+   "as_of": "2026-10-29"
   },
   "CSC-113409": {
    "local_id": "CSC-113409",
@@ -472,11 +484,18 @@
    "employers": [],
    "filings": [
     {
+     "id": "217842770",
+     "url": "https://netfile.com/Connect2/api/public/image/217842770",
+     "filed": "2026-10-28",
+     "from": "2026-10-18",
+     "through": "2026-10-23"
+    },
+    {
      "id": "217719673",
      "url": "https://netfile.com/Connect2/api/public/image/217719673",
-     "filed": "2026-10-22",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "217493159",
@@ -493,7 +512,7 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-22"
+   "as_of": "2026-10-28"
   },
   "CSC-113397": {
    "local_id": "CSC-113397",
@@ -689,25 +708,32 @@
    "local_id": "CSC-113411",
    "fppc_id": "Pending",
    "name": "Kevin Park for Mayor, 2026",
-   "contributions": 11881.0,
+   "contributions": 13021.0,
    "nonmonetary": 400.59,
    "payments": 4114.78,
    "first": "2026-08-07",
-   "last": "2026-10-17",
+   "last": "2026-10-23",
    "individuals": {
-    "total": 12281.59,
-    "count": 36
+    "total": 13421.59,
+    "count": 38
    },
    "organizations": [],
    "organizations_count": 0,
    "employers": [],
    "filings": [
     {
+     "id": "217857980",
+     "url": "https://netfile.com/Connect2/api/public/image/217857980",
+     "filed": "2026-10-30",
+     "from": "2026-10-18",
+     "through": "2026-10-23"
+    },
+    {
      "id": "217701524",
      "url": "https://netfile.com/Connect2/api/public/image/217701524",
-     "filed": "2026-10-22",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "217562981",
@@ -717,20 +743,20 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-22"
+   "as_of": "2026-10-30"
   },
   "CSC-113408": {
    "local_id": "CSC-113408",
    "fppc_id": "1493699",
    "name": "Eric Crutchlow 4 Council District 3 2026",
-   "contributions": 2560.0,
+   "contributions": 3060.0,
    "nonmonetary": 0.0,
-   "payments": 3780.68,
+   "payments": 4780.68,
    "first": "2026-08-23",
-   "last": "2026-10-06",
+   "last": "2026-10-20",
    "individuals": {
-    "total": 1810.0,
-    "count": 6
+    "total": 2310.0,
+    "count": 7
    },
    "organizations": [
     {
@@ -743,11 +769,18 @@
    "employers": [],
    "filings": [
     {
+     "id": "217852278",
+     "url": "https://netfile.com/Connect2/api/public/image/217852278",
+     "filed": "2026-10-29",
+     "from": "2026-10-18",
+     "through": "2026-10-23"
+    },
+    {
      "id": "217726900",
      "url": "https://netfile.com/Connect2/api/public/image/217726900",
-     "filed": "2026-10-23",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "217494401",
@@ -757,7 +790,7 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-23"
+   "as_of": "2026-10-29"
   },
   "CSC-113405": {
    "local_id": "CSC-113405",
@@ -767,7 +800,7 @@
    "nonmonetary": 10411.84,
    "payments": 584764.77,
    "first": "2026-08-25",
-   "last": "2026-10-26",
+   "last": "2026-10-28",
    "individuals": {
     "total": 0.0,
     "count": 0
@@ -783,9 +816,30 @@
    "employers": [],
    "filings": [
     {
+     "id": "217852696",
+     "url": "https://netfile.com/Connect2/api/public/image/217852696",
+     "filed": "2026-10-29",
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217846104",
+     "url": "https://netfile.com/Connect2/api/public/image/217846104",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217846090",
+     "url": "https://netfile.com/Connect2/api/public/image/217846090",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
      "id": "217836061",
      "url": "https://netfile.com/Connect2/api/public/image/217836061",
-     "filed": "2026-10-27",
+     "filed": null,
      "from": null,
      "through": null
     },
@@ -1028,7 +1082,7 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-27"
+   "as_of": "2026-10-29"
   },
   "CSC-113406": {
    "local_id": "CSC-113406",
@@ -1036,7 +1090,7 @@
    "name": "Affordable Santa Clara Supporting Ferraris and Opposing Watanabe and Kertes for Mayor 2026, Sponsored by Forty Niners Football Company LLC",
    "contributions": 1862000.0,
    "nonmonetary": 10411.84,
-   "payments": 1006698.39,
+   "payments": 1020120.97,
    "first": "2026-08-27",
    "last": "2026-10-20",
    "individuals": {
@@ -1513,17 +1567,6 @@
    "url": "https://netfile.com/Connect2/api/public/image/217522145"
   },
   {
-   "spender": "Affordable Santa Clara Supporting Ferraris and Opposing Watanabe and Kertes for Mayor 2026, Sponsored by Forty Niners Football Company LLC",
-   "spender_id": "CSC-113406",
-   "target": "Gary Ferraris",
-   "contest": null,
-   "candidate": null,
-   "amount": 2602.96,
-   "date": "2026-09-11",
-   "filing": "217522516",
-   "url": "https://netfile.com/Connect2/api/public/image/217522516"
-  },
-  {
    "spender": "Affordable Santa Clara Supporting Williams and Opposing Inciarte for City Council 2026, Sponsored by Forty Niners Football Company LLC",
    "spender_id": "CSC-113405",
    "target": "Kimberley Williams",
@@ -1535,15 +1578,15 @@
    "url": "https://netfile.com/Connect2/api/public/image/217522305"
   },
   {
-   "spender": "Affordable Santa Clara Supporting Williams and Opposing Inciarte for City Council 2026, Sponsored by Forty Niners Football Company LLC",
-   "spender_id": "CSC-113405",
-   "target": "Kimberley Williams",
-   "contest": "06085-5232",
-   "candidate": "Kimberley Williams",
-   "amount": 4631.0,
-   "date": "2026-09-14",
-   "filing": "217522323",
-   "url": "https://netfile.com/Connect2/api/public/image/217522323"
+   "spender": "Affordable Santa Clara Supporting Ferraris and Opposing Watanabe and Kertes for Mayor 2026, Sponsored by Forty Niners Football Company LLC",
+   "spender_id": "CSC-113406",
+   "target": "Gary Ferraris",
+   "contest": null,
+   "candidate": null,
+   "amount": 2602.96,
+   "date": "2026-09-11",
+   "filing": "217522516",
+   "url": "https://netfile.com/Connect2/api/public/image/217522516"
   },
   {
    "spender": "Affordable Santa Clara Supporting Ferraris and Opposing Watanabe and Kertes for Mayor 2026, Sponsored by Forty Niners Football Company LLC",
@@ -1557,15 +1600,15 @@
    "url": "https://netfile.com/Connect2/api/public/image/217435847"
   },
   {
-   "spender": "Affordable Santa Clara Supporting Ferraris and Opposing Watanabe and Kertes for Mayor 2026, Sponsored by Forty Niners Football Company LLC",
-   "spender_id": "CSC-113406",
-   "target": "Gary Ferraris",
-   "contest": null,
-   "candidate": null,
-   "amount": 44782.0,
-   "date": "2026-09-15",
-   "filing": "217522615",
-   "url": "https://netfile.com/Connect2/api/public/image/217522615"
+   "spender": "Affordable Santa Clara Supporting Williams and Opposing Inciarte for City Council 2026, Sponsored by Forty Niners Football Company LLC",
+   "spender_id": "CSC-113405",
+   "target": "Kimberley Williams",
+   "contest": "06085-5232",
+   "candidate": "Kimberley Williams",
+   "amount": 4631.0,
+   "date": "2026-09-14",
+   "filing": "217522323",
+   "url": "https://netfile.com/Connect2/api/public/image/217522323"
   },
   {
    "spender": "Affordable Santa Clara Supporting Williams and Opposing Inciarte for City Council 2026, Sponsored by Forty Niners Football Company LLC",
@@ -1577,6 +1620,17 @@
    "date": "2026-09-15",
    "filing": "217522365",
    "url": "https://netfile.com/Connect2/api/public/image/217522365"
+  },
+  {
+   "spender": "Affordable Santa Clara Supporting Ferraris and Opposing Watanabe and Kertes for Mayor 2026, Sponsored by Forty Niners Football Company LLC",
+   "spender_id": "CSC-113406",
+   "target": "Gary Ferraris",
+   "contest": null,
+   "candidate": null,
+   "amount": 44782.0,
+   "date": "2026-09-15",
+   "filing": "217522615",
+   "url": "https://netfile.com/Connect2/api/public/image/217522615"
   },
   {
    "spender": "Affordable Santa Clara Supporting Williams and Opposing Inciarte for City Council 2026, Sponsored by Forty Niners Football Company LLC",
@@ -1634,17 +1688,6 @@
    "url": "https://netfile.com/Connect2/api/public/image/217522727"
   },
   {
-   "spender": "Affordable Santa Clara Supporting Ferraris and Opposing Watanabe and Kertes for Mayor 2026, Sponsored by Forty Niners Football Company LLC",
-   "spender_id": "CSC-113406",
-   "target": "Gary Ferraris",
-   "contest": null,
-   "candidate": null,
-   "amount": 10411.84,
-   "date": "2026-09-25",
-   "filing": "217532423",
-   "url": "https://netfile.com/Connect2/api/public/image/217532423"
-  },
-  {
    "spender": "Affordable Santa Clara Supporting Williams and Opposing Inciarte for City Council 2026, Sponsored by Forty Niners Football Company LLC",
    "spender_id": "CSC-113405",
    "target": "Kimberley Williams",
@@ -1654,6 +1697,17 @@
    "date": "2026-09-25",
    "filing": "217532396",
    "url": "https://netfile.com/Connect2/api/public/image/217532396"
+  },
+  {
+   "spender": "Affordable Santa Clara Supporting Ferraris and Opposing Watanabe and Kertes for Mayor 2026, Sponsored by Forty Niners Football Company LLC",
+   "spender_id": "CSC-113406",
+   "target": "Gary Ferraris",
+   "contest": null,
+   "candidate": null,
+   "amount": 10411.84,
+   "date": "2026-09-25",
+   "filing": "217532423",
+   "url": "https://netfile.com/Connect2/api/public/image/217532423"
   },
   {
    "spender": "Affordable Santa Clara Supporting Williams and Opposing Inciarte for City Council 2026, Sponsored by Forty Niners Football Company LLC",
@@ -1898,6 +1952,28 @@
    "url": "https://netfile.com/Connect2/api/public/image/217593202"
   },
   {
+   "spender": "Affordable Santa Clara Supporting Ferraris and Opposing Watanabe and Kertes for Mayor 2026, Sponsored by Forty Niners Football Company LLC",
+   "spender_id": "CSC-113406",
+   "target": "Gary Ferraris",
+   "contest": null,
+   "candidate": null,
+   "amount": 11875.0,
+   "date": "2026-10-06",
+   "filing": "217601103",
+   "url": "https://netfile.com/Connect2/api/public/image/217601103"
+  },
+  {
+   "spender": "Affordable Santa Clara Supporting Ferraris and Opposing Watanabe and Kertes for Mayor 2026, Sponsored by Forty Niners Football Company LLC",
+   "spender_id": "CSC-113406",
+   "target": "Gary Ferraris",
+   "contest": null,
+   "candidate": null,
+   "amount": 131965.0,
+   "date": "2026-10-06",
+   "filing": "217601103",
+   "url": "https://netfile.com/Connect2/api/public/image/217601103"
+  },
+  {
    "spender": "Affordable Santa Clara Supporting Williams and Opposing Inciarte for City Council 2026, Sponsored by Forty Niners Football Company LLC",
    "spender_id": "CSC-113405",
    "target": "Kimberley Williams",
@@ -1969,21 +2045,10 @@
    "target": "Gary Ferraris",
    "contest": null,
    "candidate": null,
-   "amount": 11875.0,
-   "date": "2026-10-06",
-   "filing": "217601103",
-   "url": "https://netfile.com/Connect2/api/public/image/217601103"
-  },
-  {
-   "spender": "Affordable Santa Clara Supporting Ferraris and Opposing Watanabe and Kertes for Mayor 2026, Sponsored by Forty Niners Football Company LLC",
-   "spender_id": "CSC-113406",
-   "target": "Gary Ferraris",
-   "contest": null,
-   "candidate": null,
-   "amount": 131965.0,
-   "date": "2026-10-06",
-   "filing": "217601103",
-   "url": "https://netfile.com/Connect2/api/public/image/217601103"
+   "amount": 17505.0,
+   "date": "2026-10-08",
+   "filing": "217615159",
+   "url": "https://netfile.com/Connect2/api/public/image/217615159"
   },
   {
    "spender": "Affordable Santa Clara Supporting Williams and Opposing Inciarte for City Council 2026, Sponsored by Forty Niners Football Company LLC",
@@ -2019,17 +2084,6 @@
    "url": "https://netfile.com/Connect2/api/public/image/217615429"
   },
   {
-   "spender": "Affordable Santa Clara Supporting Ferraris and Opposing Watanabe and Kertes for Mayor 2026, Sponsored by Forty Niners Football Company LLC",
-   "spender_id": "CSC-113406",
-   "target": "Gary Ferraris",
-   "contest": null,
-   "candidate": null,
-   "amount": 17505.0,
-   "date": "2026-10-08",
-   "filing": "217615159",
-   "url": "https://netfile.com/Connect2/api/public/image/217615159"
-  },
-  {
    "spender": "Affordable Santa Clara Supporting Williams and Opposing Inciarte for City Council 2026, Sponsored by Forty Niners Football Company LLC",
    "spender_id": "CSC-113405",
    "target": "Kimberley Williams",
@@ -2050,6 +2104,28 @@
    "date": "2026-10-12",
    "filing": "217631397",
    "url": "https://netfile.com/Connect2/api/public/image/217631397"
+  },
+  {
+   "spender": "Affordable Santa Clara Supporting Ferraris and Opposing Watanabe and Kertes for Mayor 2026, Sponsored by Forty Niners Football Company LLC",
+   "spender_id": "CSC-113406",
+   "target": "Kathy Watanabe",
+   "contest": "06085-5230",
+   "candidate": "Kathy Watanabe",
+   "amount": 1479.5,
+   "date": "2026-10-13",
+   "filing": "217640021",
+   "url": "https://netfile.com/Connect2/api/public/image/217640021"
+  },
+  {
+   "spender": "Affordable Santa Clara Supporting Ferraris and Opposing Watanabe and Kertes for Mayor 2026, Sponsored by Forty Niners Football Company LLC",
+   "spender_id": "CSC-113406",
+   "target": "Gary Ferraris",
+   "contest": null,
+   "candidate": null,
+   "amount": 1479.5,
+   "date": "2026-10-13",
+   "filing": "217640007",
+   "url": "https://netfile.com/Connect2/api/public/image/217640007"
   },
   {
    "spender": "Affordable Santa Clara Supporting Williams and Opposing Inciarte for City Council 2026, Sponsored by Forty Niners Football Company LLC",
@@ -2076,28 +2152,6 @@
   {
    "spender": "Affordable Santa Clara Supporting Ferraris and Opposing Watanabe and Kertes for Mayor 2026, Sponsored by Forty Niners Football Company LLC",
    "spender_id": "CSC-113406",
-   "target": "Kathy Watanabe",
-   "contest": "06085-5230",
-   "candidate": "Kathy Watanabe",
-   "amount": 1479.5,
-   "date": "2026-10-13",
-   "filing": "217640021",
-   "url": "https://netfile.com/Connect2/api/public/image/217640021"
-  },
-  {
-   "spender": "Affordable Santa Clara Supporting Ferraris and Opposing Watanabe and Kertes for Mayor 2026, Sponsored by Forty Niners Football Company LLC",
-   "spender_id": "CSC-113406",
-   "target": "Gary Ferraris",
-   "contest": null,
-   "candidate": null,
-   "amount": 1479.5,
-   "date": "2026-10-13",
-   "filing": "217640007",
-   "url": "https://netfile.com/Connect2/api/public/image/217640007"
-  },
-  {
-   "spender": "Affordable Santa Clara Supporting Ferraris and Opposing Watanabe and Kertes for Mayor 2026, Sponsored by Forty Niners Football Company LLC",
-   "spender_id": "CSC-113406",
    "target": "Gary Ferraris",
    "contest": null,
    "candidate": null,
@@ -2116,94 +2170,6 @@
    "date": "2026-10-15",
    "filing": "217654840",
    "url": "https://netfile.com/Connect2/api/public/image/217654840"
-  },
-  {
-   "spender": "Santa Clara Police Association Police Association Political Action Commitee",
-   "spender_id": "CAMPAIGN_CSC-1114",
-   "target": "Kathy Watanabe",
-   "contest": "06085-5230",
-   "candidate": "Kathy Watanabe",
-   "amount": 4250.0,
-   "date": "2026-10-19",
-   "filing": "217678641",
-   "url": "https://netfile.com/Connect2/api/public/image/217678641"
-  },
-  {
-   "spender": "Santa Clara Police Association Police Association Political Action Commitee",
-   "spender_id": "CAMPAIGN_CSC-1114",
-   "target": "Kathy Watanabe",
-   "contest": "06085-5230",
-   "candidate": "Kathy Watanabe",
-   "amount": 1332.0,
-   "date": "2026-10-19",
-   "filing": "217678641",
-   "url": "https://netfile.com/Connect2/api/public/image/217678641"
-  },
-  {
-   "spender": "Santa Clara Police Association Police Association Political Action Commitee",
-   "spender_id": "CAMPAIGN_CSC-1114",
-   "target": "Kyle Madej",
-   "contest": "06085-5233",
-   "candidate": "Kyle Madej",
-   "amount": 2664.0,
-   "date": "2026-10-19",
-   "filing": "217678627",
-   "url": "https://netfile.com/Connect2/api/public/image/217678627"
-  },
-  {
-   "spender": "Santa Clara Police Association Police Association Political Action Commitee",
-   "spender_id": "CAMPAIGN_CSC-1114",
-   "target": "Kyle Madej",
-   "contest": "06085-5233",
-   "candidate": "Kyle Madej",
-   "amount": 4250.0,
-   "date": "2026-10-19",
-   "filing": "217678627",
-   "url": "https://netfile.com/Connect2/api/public/image/217678627"
-  },
-  {
-   "spender": "Santa Clara Police Association Police Association Political Action Commitee",
-   "spender_id": "CAMPAIGN_CSC-1114",
-   "target": "Yvonne Inciarte",
-   "contest": "06085-5232",
-   "candidate": "Yvonne Inciarte",
-   "amount": 4250.0,
-   "date": "2026-10-19",
-   "filing": "217678613",
-   "url": "https://netfile.com/Connect2/api/public/image/217678613"
-  },
-  {
-   "spender": "Santa Clara Police Association Police Association Political Action Commitee",
-   "spender_id": "CAMPAIGN_CSC-1114",
-   "target": "Yvonne Inciarte",
-   "contest": "06085-5232",
-   "candidate": "Yvonne Inciarte",
-   "amount": 2672.0,
-   "date": "2026-10-19",
-   "filing": "217678613",
-   "url": "https://netfile.com/Connect2/api/public/image/217678613"
-  },
-  {
-   "spender": "Santa Clara Police Association Police Association Political Action Commitee",
-   "spender_id": "CAMPAIGN_CSC-1114",
-   "target": "David Kertes",
-   "contest": "06085-5230",
-   "candidate": "David Kertes",
-   "amount": 4250.0,
-   "date": "2026-10-19",
-   "filing": "217678658",
-   "url": "https://netfile.com/Connect2/api/public/image/217678658"
-  },
-  {
-   "spender": "Santa Clara Police Association Police Association Political Action Commitee",
-   "spender_id": "CAMPAIGN_CSC-1114",
-   "target": "David Kertes",
-   "contest": "06085-5230",
-   "candidate": "David Kertes",
-   "amount": 1332.0,
-   "date": "2026-10-19",
-   "filing": "217678658",
-   "url": "https://netfile.com/Connect2/api/public/image/217678658"
   },
   {
    "spender": "Affordable Santa Clara Supporting Williams and Opposing Inciarte for City Council 2026, Sponsored by Forty Niners Football Company LLC",
@@ -2237,6 +2203,138 @@
    "date": "2026-10-19",
    "filing": "217680876",
    "url": "https://netfile.com/Connect2/api/public/image/217680876"
+  },
+  {
+   "spender": "Santa Clara Police Association Police Association Political Action Commitee",
+   "spender_id": "CAMPAIGN_CSC-1114",
+   "target": "Yvonne Inciarte",
+   "contest": "06085-5232",
+   "candidate": "Yvonne Inciarte",
+   "amount": 1460.0,
+   "date": "2026-10-19",
+   "filing": "217869089",
+   "url": "https://netfile.com/Connect2/api/public/image/217869089"
+  },
+  {
+   "spender": "Santa Clara Police Association Police Association Political Action Commitee",
+   "spender_id": "CAMPAIGN_CSC-1114",
+   "target": "Yvonne Inciarte",
+   "contest": "06085-5232",
+   "candidate": "Yvonne Inciarte",
+   "amount": 2672.0,
+   "date": "2026-10-19",
+   "filing": "217869089",
+   "url": "https://netfile.com/Connect2/api/public/image/217869089"
+  },
+  {
+   "spender": "Santa Clara Police Association Police Association Political Action Commitee",
+   "spender_id": "CAMPAIGN_CSC-1114",
+   "target": "Yvonne Inciarte",
+   "contest": "06085-5232",
+   "candidate": "Yvonne Inciarte",
+   "amount": 4250.0,
+   "date": "2026-10-19",
+   "filing": "217869089",
+   "url": "https://netfile.com/Connect2/api/public/image/217869089"
+  },
+  {
+   "spender": "Santa Clara Police Association Police Association Political Action Commitee",
+   "spender_id": "CAMPAIGN_CSC-1114",
+   "target": "Kathy Watanabe",
+   "contest": "06085-5230",
+   "candidate": "Kathy Watanabe",
+   "amount": 4250.0,
+   "date": "2026-10-19",
+   "filing": "217869123",
+   "url": "https://netfile.com/Connect2/api/public/image/217869123"
+  },
+  {
+   "spender": "Santa Clara Police Association Police Association Political Action Commitee",
+   "spender_id": "CAMPAIGN_CSC-1114",
+   "target": "Kathy Watanabe",
+   "contest": "06085-5230",
+   "candidate": "Kathy Watanabe",
+   "amount": 1041.25,
+   "date": "2026-10-19",
+   "filing": "217869123",
+   "url": "https://netfile.com/Connect2/api/public/image/217869123"
+  },
+  {
+   "spender": "Santa Clara Police Association Police Association Political Action Commitee",
+   "spender_id": "CAMPAIGN_CSC-1114",
+   "target": "Kathy Watanabe",
+   "contest": "06085-5230",
+   "candidate": "Kathy Watanabe",
+   "amount": 1332.0,
+   "date": "2026-10-19",
+   "filing": "217869123",
+   "url": "https://netfile.com/Connect2/api/public/image/217869123"
+  },
+  {
+   "spender": "Santa Clara Police Association Police Association Political Action Commitee",
+   "spender_id": "CAMPAIGN_CSC-1114",
+   "target": "David Kertes",
+   "contest": "06085-5230",
+   "candidate": "David Kertes",
+   "amount": 1332.0,
+   "date": "2026-10-19",
+   "filing": "217869134",
+   "url": "https://netfile.com/Connect2/api/public/image/217869134"
+  },
+  {
+   "spender": "Santa Clara Police Association Police Association Political Action Commitee",
+   "spender_id": "CAMPAIGN_CSC-1114",
+   "target": "David Kertes",
+   "contest": "06085-5230",
+   "candidate": "David Kertes",
+   "amount": 1041.25,
+   "date": "2026-10-19",
+   "filing": "217869134",
+   "url": "https://netfile.com/Connect2/api/public/image/217869134"
+  },
+  {
+   "spender": "Santa Clara Police Association Police Association Political Action Commitee",
+   "spender_id": "CAMPAIGN_CSC-1114",
+   "target": "David Kertes",
+   "contest": "06085-5230",
+   "candidate": "David Kertes",
+   "amount": 4250.0,
+   "date": "2026-10-19",
+   "filing": "217869134",
+   "url": "https://netfile.com/Connect2/api/public/image/217869134"
+  },
+  {
+   "spender": "Santa Clara Police Association Police Association Political Action Commitee",
+   "spender_id": "CAMPAIGN_CSC-1114",
+   "target": "Kyle Madej",
+   "contest": "06085-5233",
+   "candidate": "Kyle Madej",
+   "amount": 4250.0,
+   "date": "2026-10-19",
+   "filing": "217869108",
+   "url": "https://netfile.com/Connect2/api/public/image/217869108"
+  },
+  {
+   "spender": "Santa Clara Police Association Police Association Political Action Commitee",
+   "spender_id": "CAMPAIGN_CSC-1114",
+   "target": "Kyle Madej",
+   "contest": "06085-5233",
+   "candidate": "Kyle Madej",
+   "amount": 1457.5,
+   "date": "2026-10-19",
+   "filing": "217869108",
+   "url": "https://netfile.com/Connect2/api/public/image/217869108"
+  },
+  {
+   "spender": "Santa Clara Police Association Police Association Political Action Commitee",
+   "spender_id": "CAMPAIGN_CSC-1114",
+   "target": "Kyle Madej",
+   "contest": "06085-5233",
+   "candidate": "Kyle Madej",
+   "amount": 2664.0,
+   "date": "2026-10-19",
+   "filing": "217869108",
+   "url": "https://netfile.com/Connect2/api/public/image/217869108"
   },
   {
    "spender": "Affordable Santa Clara Supporting Williams and Opposing Inciarte for City Council 2026, Sponsored by Forty Niners Football Company LLC",
@@ -2314,6 +2412,39 @@
    "date": "2026-10-26",
    "filing": "217836061",
    "url": "https://netfile.com/Connect2/api/public/image/217836061"
+  },
+  {
+   "spender": "Affordable Santa Clara Supporting Williams and Opposing Inciarte for City Council 2026, Sponsored by Forty Niners Football Company LLC",
+   "spender_id": "CSC-113405",
+   "target": "Kimberley Williams",
+   "contest": "06085-5232",
+   "candidate": "Kimberley Williams",
+   "amount": 27409.0,
+   "date": "2026-10-27",
+   "filing": "217846090",
+   "url": "https://netfile.com/Connect2/api/public/image/217846090"
+  },
+  {
+   "spender": "Affordable Santa Clara Supporting Williams and Opposing Inciarte for City Council 2026, Sponsored by Forty Niners Football Company LLC",
+   "spender_id": "CSC-113405",
+   "target": "Yvonne Inciarte",
+   "contest": "06085-5232",
+   "candidate": "Yvonne Inciarte",
+   "amount": 27409.0,
+   "date": "2026-10-27",
+   "filing": "217846104",
+   "url": "https://netfile.com/Connect2/api/public/image/217846104"
+  },
+  {
+   "spender": "Affordable Santa Clara Supporting Williams and Opposing Inciarte for City Council 2026, Sponsored by Forty Niners Football Company LLC",
+   "spender_id": "CSC-113405",
+   "target": "Kimberley Williams",
+   "contest": "06085-5232",
+   "candidate": "Kimberley Williams",
+   "amount": 4960.0,
+   "date": "2026-10-28",
+   "filing": "217852696",
+   "url": "https://netfile.com/Connect2/api/public/image/217852696"
   }
  ]
 }

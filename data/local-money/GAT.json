@@ -5,10 +5,10 @@
  "name": "Town of Los Gatos",
  "county": "06085",
  "since": "2025-01-01",
- "generated": "2026-10-28",
+ "generated": "2026-11-04",
  "source": "NetFile public campaign filings, Town of Los Gatos",
  "source_url": "https://public.netfile.com/pub2/?aid=GAT",
- "transactions": 581,
+ "transactions": 590,
  "committees": {
   "GAT-112683": {
    "local_id": "GAT-112683",
@@ -98,6 +98,82 @@
    ],
    "as_of": "2026-10-23"
   },
+  "GAT-112730": {
+   "local_id": "GAT-112730",
+   "fppc_id": "1492351",
+   "name": "Steve Raspe for Los Gatos Town Council 2026",
+   "contributions": 3600.0,
+   "nonmonetary": 0.0,
+   "payments": 54655.62,
+   "first": "2026-07-07",
+   "last": "2026-10-26",
+   "individuals": {
+    "total": 3600.0,
+    "count": 16
+   },
+   "organizations": [],
+   "organizations_count": 0,
+   "employers": [],
+   "filings": [
+    {
+     "id": "217823618",
+     "url": "https://netfile.com/Connect2/api/public/image/217823618",
+     "filed": "2026-10-26",
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217681739",
+     "url": "https://netfile.com/Connect2/api/public/image/217681739",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217650796",
+     "url": "https://netfile.com/Connect2/api/public/image/217650796",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217621256",
+     "url": "https://netfile.com/Connect2/api/public/image/217621256",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217595731",
+     "url": "https://netfile.com/Connect2/api/public/image/217595731",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217495510",
+     "url": "https://netfile.com/Connect2/api/public/image/217495510",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217334752",
+     "url": "https://netfile.com/Connect2/api/public/image/217334752",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217235762",
+     "url": "https://netfile.com/Connect2/api/public/image/217235762",
+     "filed": null,
+     "from": null,
+     "through": null
+    }
+   ],
+   "as_of": "2026-10-26"
+  },
   "GAT-112713": {
    "local_id": "GAT-112713",
    "fppc_id": null,
@@ -106,7 +182,7 @@
    "nonmonetary": 0.0,
    "payments": 16745.88,
    "first": "2026-07-07",
-   "last": "2026-10-21",
+   "last": "2026-11-01",
    "individuals": {
     "total": 29275.0,
     "count": 93
@@ -122,9 +198,16 @@
    "employers": [],
    "filings": [
     {
+     "id": "217867623",
+     "url": "https://netfile.com/Connect2/api/public/image/217867623",
+     "filed": "2026-11-01",
+     "from": null,
+     "through": null
+    },
+    {
      "id": "217690111",
      "url": "https://netfile.com/Connect2/api/public/image/217690111",
-     "filed": "2026-10-21",
+     "filed": null,
      "from": null,
      "through": null
     },
@@ -234,83 +317,83 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-21"
+   "as_of": "2026-11-01"
   },
-  "GAT-112730": {
-   "local_id": "GAT-112730",
-   "fppc_id": "1492351",
-   "name": "Steve Raspe for Los Gatos Town Council 2026",
-   "contributions": 3600.0,
-   "nonmonetary": 0.0,
-   "payments": 54655.62,
-   "first": "2026-07-07",
-   "last": "2026-10-26",
+  "GAT-112732": {
+   "local_id": "GAT-112732",
+   "fppc_id": "1494589",
+   "name": "Jeff Suzuki for Los Gatos Town Council 2026",
+   "contributions": 28650.0,
+   "nonmonetary": 442.94,
+   "payments": 24249.03,
+   "first": "2026-08-20",
+   "last": "2026-10-20",
    "individuals": {
-    "total": 3600.0,
-    "count": 16
+    "total": 29092.94,
+    "count": 61
    },
    "organizations": [],
    "organizations_count": 0,
    "employers": [],
    "filings": [
     {
-     "id": "217823618",
-     "url": "https://netfile.com/Connect2/api/public/image/217823618",
-     "filed": "2026-10-26",
-     "from": null,
-     "through": null
+     "id": "217717686",
+     "url": "https://netfile.com/Connect2/api/public/image/217717686",
+     "filed": "2026-10-22",
+     "from": "2026-09-20",
+     "through": "2026-10-17"
     },
     {
-     "id": "217681739",
-     "url": "https://netfile.com/Connect2/api/public/image/217681739",
+     "id": "217677812",
+     "url": "https://netfile.com/Connect2/api/public/image/217677812",
      "filed": null,
      "from": null,
      "through": null
     },
     {
-     "id": "217650796",
-     "url": "https://netfile.com/Connect2/api/public/image/217650796",
+     "id": "217531506",
+     "url": "https://netfile.com/Connect2/api/public/image/217531506",
      "filed": null,
      "from": null,
      "through": null
     },
     {
-     "id": "217621256",
-     "url": "https://netfile.com/Connect2/api/public/image/217621256",
+     "id": "217527757",
+     "url": "https://netfile.com/Connect2/api/public/image/217527757",
      "filed": null,
      "from": null,
      "through": null
     },
     {
-     "id": "217595731",
-     "url": "https://netfile.com/Connect2/api/public/image/217595731",
+     "id": "217516862",
+     "url": "https://netfile.com/Connect2/api/public/image/217516862",
      "filed": null,
      "from": null,
      "through": null
     },
     {
-     "id": "217495510",
-     "url": "https://netfile.com/Connect2/api/public/image/217495510",
+     "id": "217454445",
+     "url": "https://netfile.com/Connect2/api/public/image/217454445",
      "filed": null,
      "from": null,
      "through": null
     },
     {
-     "id": "217334752",
-     "url": "https://netfile.com/Connect2/api/public/image/217334752",
+     "id": "217394193",
+     "url": "https://netfile.com/Connect2/api/public/image/217394193",
      "filed": null,
      "from": null,
      "through": null
     },
     {
-     "id": "217235762",
-     "url": "https://netfile.com/Connect2/api/public/image/217235762",
+     "id": "217269667",
+     "url": "https://netfile.com/Connect2/api/public/image/217269667",
      "filed": null,
      "from": null,
      "through": null
     }
    ],
-   "as_of": "2026-10-26"
+   "as_of": "2026-10-22"
   },
   "GAT-112731": {
    "local_id": "GAT-112731",
@@ -320,7 +403,7 @@
    "nonmonetary": 1650.33,
    "payments": 22374.01,
    "first": "2026-08-20",
-   "last": "2026-10-18",
+   "last": "2026-10-31",
    "individuals": {
     "total": 43600.33,
     "count": 70
@@ -330,11 +413,25 @@
    "employers": [],
    "filings": [
     {
+     "id": "217865707",
+     "url": "https://netfile.com/Connect2/api/public/image/217865707",
+     "filed": "2026-10-31",
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217845824",
+     "url": "https://netfile.com/Connect2/api/public/image/217845824",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
      "id": "217660092",
      "url": "https://netfile.com/Connect2/api/public/image/217660092",
-     "filed": "2026-10-18",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "217659906",
@@ -435,83 +532,7 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-18"
-  },
-  "GAT-112732": {
-   "local_id": "GAT-112732",
-   "fppc_id": "1494589",
-   "name": "Jeff Suzuki for Los Gatos Town Council 2026",
-   "contributions": 28650.0,
-   "nonmonetary": 442.94,
-   "payments": 24249.03,
-   "first": "2026-08-20",
-   "last": "2026-10-20",
-   "individuals": {
-    "total": 29092.94,
-    "count": 61
-   },
-   "organizations": [],
-   "organizations_count": 0,
-   "employers": [],
-   "filings": [
-    {
-     "id": "217717686",
-     "url": "https://netfile.com/Connect2/api/public/image/217717686",
-     "filed": "2026-10-22",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
-    },
-    {
-     "id": "217677812",
-     "url": "https://netfile.com/Connect2/api/public/image/217677812",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "217531506",
-     "url": "https://netfile.com/Connect2/api/public/image/217531506",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "217527757",
-     "url": "https://netfile.com/Connect2/api/public/image/217527757",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "217516862",
-     "url": "https://netfile.com/Connect2/api/public/image/217516862",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "217454445",
-     "url": "https://netfile.com/Connect2/api/public/image/217454445",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "217394193",
-     "url": "https://netfile.com/Connect2/api/public/image/217394193",
-     "filed": null,
-     "from": null,
-     "through": null
-    },
-    {
-     "id": "217269667",
-     "url": "https://netfile.com/Connect2/api/public/image/217269667",
-     "filed": null,
-     "from": null,
-     "through": null
-    }
-   ],
-   "as_of": "2026-10-22"
+   "as_of": "2026-10-31"
   },
   "GAT-112733": {
    "local_id": "GAT-112733",
@@ -521,7 +542,7 @@
    "nonmonetary": 0.0,
    "payments": 19901.2,
    "first": "2026-09-03",
-   "last": "2026-10-17",
+   "last": "2026-10-30",
    "individuals": {
     "total": 22300.0,
     "count": 21
@@ -531,11 +552,25 @@
    "employers": [],
    "filings": [
     {
+     "id": "217865679",
+     "url": "https://netfile.com/Connect2/api/public/image/217865679",
+     "filed": "2026-10-31",
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217845771",
+     "url": "https://netfile.com/Connect2/api/public/image/217845771",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
      "id": "217669138",
      "url": "https://netfile.com/Connect2/api/public/image/217669138",
-     "filed": "2026-10-19",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "217616652",
@@ -587,7 +622,7 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-19"
+   "as_of": "2026-10-31"
   },
   "GAT-112738": {
    "local_id": "GAT-112738",
@@ -622,21 +657,21 @@
    "contest": "06085-5071",
    "candidate": "Heidi Owens"
   },
-  "GAT-112713": {
-   "contest": "06085-5071",
-   "candidate": "Rob Moore"
-  },
   "GAT-112730": {
    "contest": "06085-5071",
    "candidate": "Steve Raspe"
   },
-  "GAT-112731": {
+  "GAT-112713": {
    "contest": "06085-5071",
-   "candidate": "Rob Stump"
+   "candidate": "Rob Moore"
   },
   "GAT-112732": {
    "contest": "06085-5071",
    "candidate": "Jeff Suzuki"
+  },
+  "GAT-112731": {
+   "contest": "06085-5071",
+   "candidate": "Rob Stump"
   },
   "GAT-112733": {
    "contest": "06085-5071",
