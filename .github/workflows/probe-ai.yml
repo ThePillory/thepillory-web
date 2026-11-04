@@ -20,8 +20,7 @@ jobs:
           B=(-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' -H 'Accept-Language: en-US,en;q=0.9' -H 'Sec-Fetch-Dest: document' -H 'Sec-Fetch-Mode: navigate' -H 'Upgrade-Insecure-Requests: 1')
           curl -s -c /tmp/jar --compressed -A "$CH" "${B[@]}" "$S" -o /tmp/page.html -w "page: %{http_code}\n"
           grep -o 'href="[^"]*download/fy26[^"]*"' /tmp/page.html | head -3
-          L=$(grep -o 'href="[^"]*download/fy26-ag-cds-public-law[^"]*"' /tmp/page.html | head -1 | sed 's/href="//;s/"$//;s/&amp;/\&/g')
-          case "$L" in http*) U="$L";; *) U="https://www.appropriations.senate.gov$L";; esac
+          U=https://www.appropriations.senate.gov/download/fy26-cjs-cds-public-law
           echo "link: $U"
           curl -s -o /tmp/a -w "plain: %{http_code} %{content_type}\n" -A "$CH" "$U" || true
           curl -s -o /tmp/a -w "plain &download=1: %{http_code} %{content_type}\n" -A "$CH" "$U&download=1" || true
@@ -29,11 +28,3 @@ jobs:
           head -c 200 /tmp/a | tr -d '\0' | tr '\n' ' '; echo
           curl -sIL -b /tmp/jar -A "$CH" -e "$S" "$U" | grep -i -E "^(HTTP|location|server|content-type)" | head -8 || true
           curl -s -o /dev/null -w "python-urllib UA: %{http_code}\n" -A "Python-urllib/3.12" "$S" || true
-      - env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        working-directory: workers/sync
-        run: |
-          x() { echo "=== $1"; npx --yes wrangler@4 d1 execute pillory --remote --json --command "$1" | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>{const j=JSON.parse(d.slice(d.indexOf("[")));for(const r of j[0].results)console.log(Object.values(r).join(" | "))})'; }
-          x "SELECT status, checked_at, substr(url,1,160) FROM source_links WHERE source = 'earmarks' ORDER BY checked_at DESC LIMIT 12"
-          x "SELECT fy, subcommittee, source_url FROM earmark_tables WHERE stage = 'enacted' ORDER BY fy DESC LIMIT 4"
