@@ -5,10 +5,10 @@
  "name": "City of Gilroy",
  "county": "06085",
  "since": "2025-01-01",
- "generated": "2026-10-28",
+ "generated": "2026-11-04",
  "source": "NetFile public campaign filings, City of Gilroy",
  "source_url": "https://public.netfile.com/pub2/?aid=GIL",
- "transactions": 436,
+ "transactions": 438,
  "committees": {
   "GIL-112637": {
    "local_id": "GIL-112637",
@@ -372,14 +372,21 @@
    "employers": [],
    "filings": [
     {
+     "id": "217877589",
+     "url": "https://netfile.com/Connect2/api/public/image/217877589",
+     "filed": "2026-11-03",
+     "from": "2026-09-20",
+     "through": "2026-10-17"
+    },
+    {
      "id": "217468671",
      "url": "https://netfile.com/Connect2/api/public/image/217468671",
-     "filed": "2026-09-21",
-     "from": "2026-07-01",
-     "through": "2026-09-19"
+     "filed": null,
+     "from": null,
+     "through": null
     }
    ],
-   "as_of": "2026-09-21"
+   "as_of": "2026-11-03"
   },
   "GIL-112719": {
    "local_id": "GIL-112719",

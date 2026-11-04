@@ -5,10 +5,10 @@
  "name": "City of Mountain View",
  "county": "06085",
  "since": "2025-01-01",
- "generated": "2026-10-28",
+ "generated": "2026-11-04",
  "source": "NetFile public campaign filings, City of Mountain View",
  "source_url": "https://public.netfile.com/pub2/?aid=MTV",
- "transactions": 3607,
+ "transactions": 3669,
  "committees": {
   "MTV-112409": {
    "local_id": "MTV-112409",
@@ -258,14 +258,14 @@
    "local_id": "MTV-112804",
    "fppc_id": "1468996",
    "name": "Erik Poicon for City Council 2026",
-   "contributions": 22826.22,
+   "contributions": 23576.22,
    "nonmonetary": 179.91,
-   "payments": 8351.58,
+   "payments": 17447.7,
    "first": "2025-03-04",
-   "last": "2026-10-17",
+   "last": "2026-10-27",
    "individuals": {
-    "total": 15256.13,
-    "count": 77
+    "total": 15506.13,
+    "count": 80
    },
    "organizations": [
     {
@@ -314,12 +314,12 @@
      "count": 1
     },
     {
-     "name": "Cement Masons' Local 400 Political Action Committee",
-     "total": 250.0,
+     "name": "Silicon Valley Young Democrats",
+     "total": 500.0,
      "count": 1
     }
    ],
-   "organizations_count": 10,
+   "organizations_count": 11,
    "employers": [
     {
      "employer": "Santa Clara County",
@@ -329,11 +329,18 @@
    ],
    "filings": [
     {
+     "id": "217845865",
+     "url": "https://netfile.com/Connect2/api/public/image/217845865",
+     "filed": "2026-10-28",
+     "from": "2026-10-18",
+     "through": "2026-10-27"
+    },
+    {
      "id": "217694477",
      "url": "https://netfile.com/Connect2/api/public/image/217694477",
-     "filed": "2026-10-21",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "217660105",
@@ -399,20 +406,20 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-21"
+   "as_of": "2026-10-28"
   },
   "MTV-112880": {
    "local_id": "MTV-112880",
    "fppc_id": "1488605",
    "name": "Silja Paymer for MV City Council 2026",
-   "contributions": 14059.5,
+   "contributions": 14172.5,
    "nonmonetary": 107.11,
-   "payments": 7315.75,
+   "payments": 7418.18,
    "first": "2026-03-03",
-   "last": "2026-10-15",
+   "last": "2026-10-26",
    "individuals": {
-    "total": 11616.61,
-    "count": 48
+    "total": 11729.61,
+    "count": 50
    },
    "organizations": [
     {
@@ -440,11 +447,18 @@
    "employers": [],
    "filings": [
     {
+     "id": "217875315",
+     "url": "https://netfile.com/Connect2/api/public/image/217875315",
+     "filed": "2026-11-02",
+     "from": "2026-10-18",
+     "through": "2026-10-27"
+    },
+    {
      "id": "217815204",
      "url": "https://netfile.com/Connect2/api/public/image/217815204",
-     "filed": "2026-10-25",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "217655403",
@@ -503,85 +517,102 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-25"
+   "as_of": "2026-11-02"
   },
   "MTV-112881": {
    "local_id": "MTV-112881",
    "fppc_id": "1489155",
    "name": "Robert Cox for Council 2026",
-   "contributions": 27976.82,
+   "contributions": 25261.82,
    "nonmonetary": 0.0,
-   "payments": 30501.45,
+   "payments": 30594.72,
    "first": "2026-03-05",
-   "last": "2026-10-19",
+   "last": "2026-10-26",
    "individuals": {
-    "total": 26976.82,
-    "count": 89
+    "total": 22262.82,
+    "count": 90
    },
    "organizations": [
     {
      "name": "Mountain View Professional Firefighters Local 1965 (FPPC ID #1229347)",
      "total": 1000.0,
      "count": 1
+    },
+    {
+     "name": "Associated General Contractors Political Action Committee",
+     "total": 1000.0,
+     "count": 1
+    },
+    {
+     "name": "California Real Estate Political Action Committee",
+     "total": 999.0,
+     "count": 1
     }
    ],
-   "organizations_count": 1,
+   "organizations_count": 3,
    "employers": [],
    "filings": [
     {
-     "id": "217683473",
-     "url": "https://netfile.com/Connect2/api/public/image/217683473",
-     "filed": "2026-10-21",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
+     "id": "217848721",
+     "url": "https://netfile.com/Connect2/api/public/image/217848721",
+     "filed": "2026-10-29",
+     "from": null,
+     "through": null
     },
     {
-     "id": "217668875",
-     "url": "https://netfile.com/Connect2/api/public/image/217668875",
+     "id": "217848707",
+     "url": "https://netfile.com/Connect2/api/public/image/217848707",
      "filed": null,
      "from": null,
      "through": null
     },
     {
-     "id": "217668295",
-     "url": "https://netfile.com/Connect2/api/public/image/217668295",
+     "id": "217848694",
+     "url": "https://netfile.com/Connect2/api/public/image/217848694",
      "filed": null,
      "from": null,
      "through": null
     },
     {
-     "id": "217552960",
-     "url": "https://netfile.com/Connect2/api/public/image/217552960",
+     "id": "217848680",
+     "url": "https://netfile.com/Connect2/api/public/image/217848680",
      "filed": null,
      "from": null,
      "through": null
     },
     {
-     "id": "217482779",
-     "url": "https://netfile.com/Connect2/api/public/image/217482779",
+     "id": "217848666",
+     "url": "https://netfile.com/Connect2/api/public/image/217848666",
      "filed": null,
      "from": null,
      "through": null
     },
     {
-     "id": "217102341",
-     "url": "https://netfile.com/Connect2/api/public/image/217102341",
+     "id": "217848652",
+     "url": "https://netfile.com/Connect2/api/public/image/217848652",
+     "filed": null,
+     "from": null,
+     "through": null
+    },
+    {
+     "id": "217848638",
+     "url": "https://netfile.com/Connect2/api/public/image/217848638",
      "filed": null,
      "from": null,
      "through": null
     }
    ],
-   "as_of": "2026-10-21"
+   "as_of": "2026-10-29"
   },
   "MTV-112882": {
    "local_id": "MTV-112882",
    "fppc_id": "1489522",
    "name": "Paul Donahue for City Council 2026",
-   "contributions": 20821.0,
+   "contributions": 21820.0,
    "nonmonetary": 0.0,
-   "payments": 16914.4,
+   "payments": 21656.4,
    "first": "2026-04-02",
-   "last": "2026-10-17",
+   "last": "2026-10-27",
    "individuals": {
     "total": 17573.0,
     "count": 57
@@ -603,20 +634,32 @@
      "count": 1
     },
     {
+     "name": "California Real Estate Political Action Committee (CREPAC) - All Purpose Account / Small Contributor Committee",
+     "total": 999.0,
+     "count": 1
+    },
+    {
      "name": "Santa Clara County League of Conservation Voters",
      "total": 250.0,
      "count": 1
     }
    ],
-   "organizations_count": 4,
+   "organizations_count": 5,
    "employers": [],
    "filings": [
     {
+     "id": "217846413",
+     "url": "https://netfile.com/Connect2/api/public/image/217846413",
+     "filed": "2026-10-28",
+     "from": "2026-10-18",
+     "through": "2026-10-27"
+    },
+    {
      "id": "217719246",
      "url": "https://netfile.com/Connect2/api/public/image/217719246",
-     "filed": "2026-10-22",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "217657331",
@@ -647,31 +690,38 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-22"
+   "as_of": "2026-10-28"
   },
   "MTV-112888": {
    "local_id": "MTV-112888",
    "fppc_id": "1492104",
    "name": "Alex Amoroso for City Council 2026",
-   "contributions": 4900.0,
+   "contributions": 5000.0,
    "nonmonetary": 0.0,
-   "payments": 12868.52,
+   "payments": 16087.84,
    "first": "2026-04-30",
-   "last": "2026-10-07",
+   "last": "2026-10-27",
    "individuals": {
-    "total": 4900.0,
-    "count": 12
+    "total": 5000.0,
+    "count": 13
    },
    "organizations": [],
    "organizations_count": 0,
    "employers": [],
    "filings": [
     {
+     "id": "217854797",
+     "url": "https://netfile.com/Connect2/api/public/image/217854797",
+     "filed": "2026-10-29",
+     "from": "2026-10-18",
+     "through": "2026-10-27"
+    },
+    {
      "id": "217670303",
      "url": "https://netfile.com/Connect2/api/public/image/217670303",
-     "filed": "2026-10-19",
-     "from": "2026-01-01",
-     "through": "2026-10-17"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "217485069",
@@ -688,20 +738,20 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-19"
+   "as_of": "2026-10-29"
   },
   "MTV-112892": {
    "local_id": "MTV-112892",
    "fppc_id": "1491705",
    "name": "IdaRose Sylvester for Council 2026",
-   "contributions": 29948.0,
+   "contributions": 30448.0,
    "nonmonetary": 2762.61,
-   "payments": 14529.43,
+   "payments": 17091.9,
    "first": "2026-05-31",
-   "last": "2026-10-17",
+   "last": "2026-10-27",
    "individuals": {
-    "total": 28460.61,
-    "count": 116
+    "total": 28960.61,
+    "count": 121
    },
    "organizations": [
     {
@@ -740,11 +790,18 @@
    ],
    "filings": [
     {
+     "id": "217848510",
+     "url": "https://netfile.com/Connect2/api/public/image/217848510",
+     "filed": "2026-10-29",
+     "from": "2026-10-18",
+     "through": "2026-10-27"
+    },
+    {
      "id": "217709506",
      "url": "https://netfile.com/Connect2/api/public/image/217709506",
-     "filed": "2026-10-22",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "217655618",
@@ -796,20 +853,20 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-22"
+   "as_of": "2026-10-29"
   },
   "MTV-112895": {
    "local_id": "MTV-112895",
    "fppc_id": "1491997",
    "name": "James Kuszmaul for Mountain View City Council 2026",
    "contributions": 29710.8,
-   "nonmonetary": 811.89,
-   "payments": 29743.65,
+   "nonmonetary": 821.89,
+   "payments": 30743.65,
    "first": "2026-06-11",
-   "last": "2026-10-17",
+   "last": "2026-10-26",
    "individuals": {
-    "total": 28522.69,
-    "count": 87
+    "total": 28532.69,
+    "count": 88
    },
    "organizations": [
     {
@@ -832,17 +889,24 @@
     },
     {
      "employer": "Blue River Technology",
-     "total": 2462.5,
+     "total": 2472.5,
      "donors": 7
     }
    ],
    "filings": [
     {
+     "id": "217846214",
+     "url": "https://netfile.com/Connect2/api/public/image/217846214",
+     "filed": "2026-10-28",
+     "from": "2026-10-18",
+     "through": "2026-10-27"
+    },
+    {
      "id": "217694490",
      "url": "https://netfile.com/Connect2/api/public/image/217694490",
-     "filed": "2026-10-21",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "217657383",
@@ -915,7 +979,7 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-21"
+   "as_of": "2026-10-28"
   },
   "MTV-112405": {
    "local_id": "MTV-112405",
@@ -991,9 +1055,9 @@
    "name": "Samuel Ali for Mountain View City Council 2026",
    "contributions": 4483.29,
    "nonmonetary": 0.0,
-   "payments": 3678.76,
+   "payments": 3913.42,
    "first": "2026-09-14",
-   "last": "2026-10-14",
+   "last": "2026-10-23",
    "individuals": {
     "total": 4483.29,
     "count": 6
@@ -1003,11 +1067,18 @@
    "employers": [],
    "filings": [
     {
+     "id": "217863511",
+     "url": "https://netfile.com/Connect2/api/public/image/217863511",
+     "filed": "2026-10-31",
+     "from": "2026-10-18",
+     "through": "2026-10-27"
+    },
+    {
      "id": "217718362",
      "url": "https://netfile.com/Connect2/api/public/image/217718362",
-     "filed": "2026-10-22",
-     "from": "2026-09-20",
-     "through": "2026-10-17"
+     "filed": null,
+     "from": null,
+     "through": null
     },
     {
      "id": "217458893",
@@ -1024,7 +1095,7 @@
      "through": null
     }
    ],
-   "as_of": "2026-10-22"
+   "as_of": "2026-10-31"
   },
   "MTV-112919": {
    "local_id": "MTV-112919",
@@ -1044,21 +1115,21 @@
    "employers": [],
    "filings": [
     {
-     "id": "217834261",
-     "url": "https://netfile.com/Connect2/api/public/image/217834261",
-     "filed": "2026-10-27",
+     "id": "217842394",
+     "url": "https://netfile.com/Connect2/api/public/image/217842394",
+     "filed": "2026-10-28",
      "from": null,
      "through": null
     },
     {
-     "id": "217834127",
-     "url": "https://netfile.com/Connect2/api/public/image/217834127",
+     "id": "217842374",
+     "url": "https://netfile.com/Connect2/api/public/image/217842374",
      "filed": null,
      "from": null,
      "through": null
     }
    ],
-   "as_of": "2026-10-27"
+   "as_of": "2026-10-28"
   },
   "MTV-112673": {
    "local_id": "MTV-112673",
@@ -1673,8 +1744,8 @@
    "candidate": "Robert Cox",
    "amount": 5705.0,
    "date": "2026-10-21",
-   "filing": "217834127",
-   "url": "https://netfile.com/Connect2/api/public/image/217834127"
+   "filing": "217842374",
+   "url": "https://netfile.com/Connect2/api/public/image/217842374"
   },
   {
    "spender": "PENINSULA OPPORTUNITY PAC",
@@ -1684,8 +1755,8 @@
    "candidate": "Paul Donahue",
    "amount": 5705.0,
    "date": "2026-10-21",
-   "filing": "217834261",
-   "url": "https://netfile.com/Connect2/api/public/image/217834261"
+   "filing": "217842394",
+   "url": "https://netfile.com/Connect2/api/public/image/217842394"
   },
   {
    "spender": "CALIFORNIA ALLIANCE OF FAMILY OWNED BUSINESSES PAC",
