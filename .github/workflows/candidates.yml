@@ -12,7 +12,10 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
-concurrency: candidates
+# One at a time with every other workflow that commits data (tools/commit_data.sh).
+concurrency:
+  group: data-commit
+  cancel-in-progress: false
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -27,11 +30,4 @@ jobs:
           FEC_API_KEY: ${{ secrets.FEC_API_KEY }}
         run: node tools/build_candidates.mjs --year 2026 --max-requests 800
       - name: Commit the data
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/candidates
-          git diff --cached --quiet && exit 0
-          git commit -m "Refresh candidate data from the FEC"
-          git pull --rebase -q origin "${GITHUB_REF_NAME}"
-          git push
+        run: bash tools/commit_data.sh "Refresh candidate data from the FEC" data/candidates

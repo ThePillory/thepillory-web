@@ -179,7 +179,7 @@ UPDATE issue_bill_links SET status = 'approved', approved_by = 'Your name', appr
 
 The site's lookup (`/api/districts`, a Pages Function) doesn't touch D1 or the Worker. A street address goes to the U.S. Census Geocoder (vintage `ACS2025_Current`: 119th Congress districts and 2024 state legislative districts); a ZIP code is looked up in `data/zip/`. Neither is stored or logged; only district IDs go back to the visitor's browser.
 
-`data/zip/` and `data/counties.json` are built by `tools/build_zip_districts.py` from Census block files (ZIP code areas, 119th Congress districts, 2024 California legislative districts). It downloads about 1.4 GB, so it runs in GitHub Actions: Actions → **Refresh ZIP district data** → Run workflow; the workflow commits the result. When the 120th Congress starts (January 2027): point the script at the 120th Congress district files, rerun the workflow, and set the Pages variable `CENSUS_VINTAGE` to the geocoder vintage whose layer is "120th Congressional Districts".
+`data/zip/` and `data/counties.json` are built by `tools/build_zip_districts.py` from Census block files (ZIP code areas, 119th Congress districts, 2024 California legislative districts). It downloads about 1.4 GB, so it runs in GitHub Actions: Actions → **Refresh ZIP district data** → Run workflow; the workflow commits the result. Every workflow that commits data does it through `tools/commit_data.sh` (pull --rebase, then push, up to 3 tries with a short wait), and they share one concurrency group, `data-commit`, so two never commit at the same moment; a run queued behind another waits (GitHub keeps one waiting run per group, so a third arriving meanwhile replaces the waiting one). When the 120th Congress starts (January 2027): point the script at the 120th Congress district files, rerun the workflow, and set the Pages variable `CENSUS_VINTAGE` to the geocoder vintage whose layer is "120th Congressional Districts".
 
 ## The county waitlist
 
@@ -196,7 +196,7 @@ Government sites move, change format and disappear. The last three steps of ever
 - **`source-health`**, once a day. For every source:
   - **Did it run?** The last successful pull, from `sync_log` or the workflow's last runs on GitHub (`GITHUB_TOKEN` is needed only if the repository is private).
   - **Is it fresh?** The newest record's own date against `freshDays`. Congress's votes aren't flagged during a recess: August, the new year, and an election year's October.
-  - **Did the shape change?** Zero rows; under half the usual count (the median of the last week); a 403, 404 or 410 in a step's error; recent rows missing fields they always have.
+  - **Did the shape change?** Zero rows; under half the usual count (the median of the last week); a 403, 404 or 410 in a step's error, or a loading workflow's note that the source refused it (`source_refused_<id>` in `sync_state`, yellow; earmarks write one); recent rows missing fields they always have.
   - **Is it still accurate?** `HEALTH_SPOT_CHECKS` (5) random records are re-fetched from their `source_url` and checked to still contain what's stored, such as a vote's question or an order's title. A refusal or a document that isn't text doesn't count against a source.
   - **Links.** `LINK_CHECKS_DAILY` (100) random stored source links are checked: HEAD, then GET when HEAD isn't allowed. A link is called gone after two checks in a row (404, 410, no such host).
   - **Status.** Red, yellow, green, or unknown (not set up yet). Written to `source_health`.

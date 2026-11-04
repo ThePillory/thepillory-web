@@ -15,8 +15,8 @@ function d1() {
   sqlite.exec(readFileSync(new URL("../migrations/0031_gov_money.sql", import.meta.url), "utf8"));
   sqlite.exec(`
     INSERT INTO officials VALUES ('h1', 'ann-example', 'Ann Example', 'us-house'), ('s1', 'sam-example', 'Sam Example', 'us-senate');
-    INSERT INTO earmark_tables (source_url, fy, stage, subcommittee, status, rows) VALUES
-      ('https://example.gov/ag', 2026, 'enacted', 'agriculture', 'read', 2), ('https://example.gov/fsgg', 2026, 'enacted', 'fsgg', 'link', 0);
+    INSERT INTO earmark_tables (source_url, fy, stage, subcommittee, status, rows, read_at) VALUES
+      ('https://example.gov/ag', 2026, 'enacted', 'agriculture', 'read', 2, '2026-10-21 18:44:12'), ('https://example.gov/fsgg', 2026, 'enacted', 'fsgg', 'link', 0, '2026-11-04 21:00:00');
     INSERT INTO earmarks (id, fy, stage, subcommittee, state, recipient, project, amount, origination, source_url) VALUES
       ('e1', 2026, 'enacted', 'agriculture', 'CA', 'Example Water District', 'Pipes', 1000000, 'H', 'https://example.gov/ag'),
       ('e2', 2026, 'enacted', 'agriculture', 'NV', 'Example Clinic', 'Clinic Equipment', 250000, 'S', 'https://example.gov/ag');
@@ -89,6 +89,8 @@ test("a bill's earmarks: the tables' list for its fiscal year and subcommittee, 
   assert.match(html, /2 projects, \$1,250,000<\/strong>, in the enacted FY2026 appropriations \(Agriculture\)/);
   assert.match(html, /Requested by <a class="inline-link" href="\/reps\/ann-example\/">Example \(House\)<\/a>, <a class="inline-link" href="\/reps\/sam-example\/">Example \(CA\) \(Senate\)<\/a>/);
   assert.match(html, /may have listed different ones/);
+  // The date of the last good load: the newest table read (a table left as a link doesn't count).
+  assert.match(html, /As of Oct 21, 2026\./);
   const none = billEarmarksSection({ id: "x" }, appropriationsOf("Agriculture Appropriations Act, 2031"), await billEarmarks(db, { fy: 2031, subcommittees: ["agriculture"] }), {});
   assert.match(none, /No earmark tables for fiscal year 2031/);
   const nv = await billEarmarks(db, { fy: 2026, subcommittees: ["agriculture"], state: "NV" });

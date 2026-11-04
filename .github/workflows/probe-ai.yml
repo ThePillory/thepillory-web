@@ -1,4 +1,4 @@
-# Temporary read-only probe: which routes reach the Appropriations Committees' sites. Removed after.
+# Temporary: the earmarks loader in measure mode (reads, writes nothing). Removed after.
 name: Probe earmark sources
 on:
   push:
@@ -14,17 +14,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: |
-          CH='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
-          S=https://www.appropriations.senate.gov/fy-2026-congressionally-directed-spending
-          B=(-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' -H 'Accept-Language: en-US,en;q=0.9' -H 'Sec-Fetch-Dest: document' -H 'Sec-Fetch-Mode: navigate' -H 'Upgrade-Insecure-Requests: 1')
-          curl -s -c /tmp/jar --compressed -A "$CH" "${B[@]}" "$S" -o /tmp/page.html -w "page: %{http_code}\n"
-          grep -o 'href="[^"]*download/fy26[^"]*"' /tmp/page.html | head -3
-          U=https://www.appropriations.senate.gov/download/fy26-cjs-cds-public-law
-          echo "link: $U"
-          curl -s -o /tmp/a -w "plain: %{http_code} %{content_type}\n" -A "$CH" "$U" || true
-          curl -s -o /tmp/a -w "plain &download=1: %{http_code} %{content_type}\n" -A "$CH" "$U&download=1" || true
-          curl -s -b /tmp/jar -o /tmp/a -w "cookies+referer+browser: %{http_code} %{content_type}\n" --compressed -A "$CH" "${B[@]}" -e "$S" "$U&download=1" || true
-          head -c 200 /tmp/a | tr -d '\0' | tr '\n' ' '; echo
-          curl -sIL -b /tmp/jar -A "$CH" -e "$S" "$U" | grep -i -E "^(HTTP|location|server|content-type)" | head -8 || true
-          curl -s -o /dev/null -w "python-urllib UA: %{http_code}\n" -A "Python-urllib/3.12" "$S" || true
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null && python3 -m pip install -q openpyxl==3.1.5
+      - run: python3 tools/load_gov_money.py earmarks --mode measure
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

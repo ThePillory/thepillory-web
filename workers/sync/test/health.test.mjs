@@ -208,3 +208,34 @@ test("source links on a page: archived copy beside the source; a dead one leads 
   assert.match(out, /href="https:\/\/c\.example\.gov\/3" target="_blank" rel="noopener">Source ↗<\/a><\/p>$/);
   assert.equal(savedHref("sources/abc.pdf"), "/saved/abc.pdf");
 });
+
+test("earmark tables: the copy is the committee's PDF, asked for as a file; a page in its place isn't kept, and an earlier page copy is replaced", async () => {
+  const db = d1();
+  const senate = "https://www.appropriations.senate.gov/download/fy26-cjs-cds-public-law";
+  const other = "https://www.appropriations.senate.gov/download/fy26-ag-cds-public-law";
+  db.sqlite.exec(`INSERT INTO earmark_tables (source_url, fy, stage, subcommittee, status, rows, read_at) VALUES
+      ('${senate}', 2026, 'enacted', 'cjs', 'read', 1, '2026-10-21 18:44:12'),
+      ('${other}', 2026, 'enacted', 'agriculture', 'read', 1, '2026-10-21 18:44:12');
+    INSERT INTO source_links (url, source, copy_key, copy_type, copy_bytes, copied_at) VALUES
+      ('${senate}', 'earmarks', 'sources/old.html', 'text/html', 10, '2026-10-20');`);
+  const put = [];
+  const env = { SOURCE_COPIES_DAILY: "10", SOURCES: { put: async (k, body, opts) => put.push({ k, opts }) } };
+  const pdf = () => new Response(new Uint8Array([37, 80, 68, 70, 45]), { headers: { "content-type": "application/pdf" } });
+  const page = () => new Response("<html>download page</html>", { headers: { "content-type": "text/html" } });
+  const budget = budgetWith([[/cjs-cds-public-law&download=1$/, pdf], [/ag-cds-public-law/, page]]);
+  const r = await syncSourceCopies(env, db, budget);
+  assert.match(r.message, /1 saved/);
+  assert.ok(budget.calls.includes(`GET ${senate}&download=1`));
+  assert.equal(put.length, 1);
+  assert.match(put[0].k, /^sources\/[0-9a-f]{64}\.pdf$/);
+  assert.equal(put[0].opts.customMetadata.source_url, senate); // keyed and labeled by the committee's own link
+  assert.equal(db.sqlite.prepare("SELECT copy_type FROM source_links WHERE url = ?").get(senate).copy_type, "application/pdf");
+  assert.equal(db.sqlite.prepare("SELECT copy_key FROM source_links WHERE url = ?").get(other)?.copy_key ?? null, null);
+});
+
+test("a loading workflow's note that the source refused it shows yellow, with what and when", () => {
+  const r = evaluate(base("earmarks", { refused: { day: "2026-11-04", what: ["Senate FY2026 cjs", "Senate FY2026 thud"] }, latest: null }));
+  assert.equal(r.status, "yellow");
+  assert.ok(r.problems.some((p) => p.level === "yellow" && /refused automated requests \(403\) on 2026-11-04: Senate FY2026 cjs, Senate FY2026 thud\. Pages show the last good load\./.test(p.text)));
+  assert.equal(evaluate(base("earmarks", { latest: null })).status, "green");
+});

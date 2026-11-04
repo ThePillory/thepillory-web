@@ -20,7 +20,7 @@ import { currentAnalysis, parse, provisionsFor, baselineSection, isPublic, openF
 import { summaryHead, contentsBar, fold, clauseChips, statusChip, compactRow, shortLabel } from "../_lib/summary.js";
 import { billStatus, billSummary, yourRepsCard, billHistory, billFullText, billState, legislatureOf } from "../_lib/bill-page.js";
 import { STATE_NAME } from "../_lib/districts.js";
-import { appropriationsOf, billEarmarks, officialNames, billEarmarksSection, earmarkRows, SUBCOMMITTEE, HOW as GOV_MONEY_HOW } from "../_lib/gov-money.js";
+import { appropriationsOf, billEarmarks, officialNames, billEarmarksSection, earmarkRows, asOf, SUBCOMMITTEE, HOW as GOV_MONEY_HOW } from "../_lib/gov-money.js";
 import { rollCallFilters, rollCallRows, rollCallBreakdown, pickVote, votePicker, voteHeading, totalsSection, rollCallFilterForm, rollCallList } from "../_lib/rollcall.js";
 import { orderById, orderHref, orderIdFromSlug, orderLabel, orderStatus, orderSummary, authoritySection, courtsSection, orderHistory, orderFullText } from "../_lib/orders.js";
 import { turnstileReady, turnstileWidget, verifyTurnstile, visitorHash, actionsToday, recordAction } from "../_lib/turnstile.js";
@@ -526,7 +526,7 @@ async function earmarksPage(env, id, url) {
 ${chips}
 ${list}
 ${nav ? `<p>${nav}</p>` : ""}
-<p class="hint">As the Appropriations Committees' tables list them. The state is the table's own, where it gives one. <a class="tap" href="${GOV_MONEY_HOW}">How this works</a></p>`;
+<p class="hint">As the Appropriations Committees' tables list them. ${asOf(data && data.tables)} The state is the table's own, where it gives one. <a class="tap" href="${GOV_MONEY_HOW}">How this works</a></p>`;
   return page(`${b.bill_number}: earmarks`, main, { tab: "laws", back: [b.bill_number, `${billHref(id)}#earmarks`] });
 }
 

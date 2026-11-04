@@ -11,6 +11,10 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+# One at a time with every other workflow that commits data (tools/commit_data.sh).
+concurrency:
+  group: data-commit
+  cancel-in-progress: false
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,10 +27,4 @@ jobs:
       - name: Each state's election office (USA.gov's directory, for Open your ballot)
         run: python3 tools/build_election_offices.py
       - name: Commit the data
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/states/people data/states/election-offices.json
-          git diff --cached --quiet && exit 0
-          git commit -m "Refresh state officials from Open States"
-          git push
+        run: bash tools/commit_data.sh "Refresh state officials from Open States" data/states/people data/states/election-offices.json

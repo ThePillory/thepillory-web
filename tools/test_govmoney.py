@@ -175,5 +175,65 @@ class Quarters(unittest.TestCase):
         self.assertEqual(q, [(d.date(2025, 1, 1), d.date(2025, 3, 31)), (d.date(2025, 4, 1), d.date(2025, 5, 2))])
 
 
+class Refusals(unittest.TestCase):
+    """A 403 is a refusal: not retried, the host isn't asked again, and the run keeps what's loaded."""
+
+    def setUp(self):
+        L.REFUSED.clear()
+        self.calls = []
+        self.real_open, self.real_sleep = L._open, L.time.sleep
+        L.time.sleep = lambda s: self.calls.append(("sleep", s))
+
+    def tearDown(self):
+        L._open, L.time.sleep = self.real_open, self.real_sleep
+        L.REFUSED.clear()
+
+    def answer(self, codes):
+        import io
+        import urllib.error
+
+        def fake(req, timeout=None):
+            self.calls.append(("get", req.full_url))
+            code = codes(req.full_url)
+            if code != 200:
+                raise urllib.error.HTTPError(req.full_url, code, "refused", {}, io.BytesIO(b""))
+            return io.BytesIO(b"%PDF fake")
+
+        L._open = fake
+
+    def test_403_fails_fast_and_the_host_is_not_asked_again(self):
+        self.answer(lambda u: 403)
+        with self.assertRaises(L.Refused):
+            L.get("https://committee.example.gov/a", waits=(30, 90))
+        with self.assertRaises(L.Refused):
+            L.get("https://committee.example.gov/b", waits=(30, 90))
+        self.assertEqual([c for c in self.calls if c[0] == "get"], [("get", "https://committee.example.gov/a")])
+        self.assertFalse([c for c in self.calls if c[0] == "sleep"])
+
+    def test_server_errors_are_still_retried(self):
+        self.answer(lambda u: 503)
+        with self.assertRaises(Exception):
+            L.get("https://slow.example.gov/a", waits=(1, 2))
+        self.assertEqual(len([c for c in self.calls if c[0] == "get"]), 3)
+
+    def test_a_refusal_is_a_urlerror_for_callers_that_handle_one(self):
+        import urllib.error
+        self.assertTrue(issubclass(L.Refused, urllib.error.URLError))
+
+    def test_saved_copy_is_the_committees_file_by_its_url_hash(self):
+        import hashlib
+        self.answer(lambda u: 200 if u.startswith(L.SAVED) else 403)
+        url = "https://committee.example.gov/download/fy26-cjs-cds-public-law"
+        self.assertEqual(L.saved_copy(url), b"%PDF fake")
+        self.assertEqual(self.calls[-1], ("get", L.SAVED + hashlib.sha256(url.encode()).hexdigest() + ".pdf"))
+
+    def test_requests_still_tie_to_a_table_not_read_this_run(self):
+        # The stored row stands in for the refused table, in the shape who() gives.
+        stored = [{"id": "e1", "fy": 2026, "recipient": "Example Clinic", "project": "Equipment", "_who": [("house", "Member B", "b-1")]}]
+        reqs = [{"fy": 2026, "official_id": "b-1", "recipient": "Example Clinic"}]
+        self.assertEqual(L.tie_requests(reqs, stored), 1)
+        self.assertEqual(reqs[0]["enacted_id"], "e1")
+
+
 if __name__ == "__main__":
     unittest.main()
