@@ -14,23 +14,26 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - run: |
+          CH='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
+          S=https://www.appropriations.senate.gov/fy-2026-congressionally-directed-spending
+          B=(-H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' -H 'Accept-Language: en-US,en;q=0.9' -H 'Sec-Fetch-Dest: document' -H 'Sec-Fetch-Mode: navigate' -H 'Upgrade-Insecure-Requests: 1')
+          curl -s -c /tmp/jar --compressed -A "$CH" "${B[@]}" "$S" -o /tmp/page.html -w "page: %{http_code}\n"
+          grep -o 'href="[^"]*download/fy26[^"]*"' /tmp/page.html | head -3
+          L=$(grep -o 'href="[^"]*download/fy26-ag-cds-public-law[^"]*"' /tmp/page.html | head -1 | sed 's/href="//;s/"$//;s/&amp;/\&/g')
+          case "$L" in http*) U="$L";; *) U="https://www.appropriations.senate.gov$L";; esac
+          echo "link: $U"
+          curl -s -o /tmp/a -w "plain: %{http_code} %{content_type}\n" -A "$CH" "$U" || true
+          curl -s -o /tmp/a -w "plain &download=1: %{http_code} %{content_type}\n" -A "$CH" "$U&download=1" || true
+          curl -s -b /tmp/jar -o /tmp/a -w "cookies+referer+browser: %{http_code} %{content_type}\n" --compressed -A "$CH" "${B[@]}" -e "$S" "$U&download=1" || true
+          head -c 200 /tmp/a | tr -d '\0' | tr '\n' ' '; echo
+          curl -sIL -b /tmp/jar -A "$CH" -e "$S" "$U" | grep -i -E "^(HTTP|location|server|content-type)" | head -8 || true
+          curl -s -o /dev/null -w "python-urllib UA: %{http_code}\n" -A "Python-urllib/3.12" "$S" || true
       - env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         working-directory: workers/sync
         run: |
           x() { echo "=== $1"; npx --yes wrangler@4 d1 execute pillory --remote --json --command "$1" | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>{const j=JSON.parse(d.slice(d.indexOf("[")));for(const r of j[0].results)console.log(Object.values(r).join(" | "))})'; }
-          x "SELECT status, COUNT(*), MAX(checked_at), substr(MIN(url),1,120) FROM source_links WHERE source = 'earmarks' GROUP BY status"
-          x "SELECT fy, stage, subcommittee, status, rows, read_at FROM earmark_tables ORDER BY fy DESC, read_at DESC LIMIT 40"
-          x "SELECT fy, COUNT(*), MAX(enacted_id IS NOT NULL) FROM earmark_requests GROUP BY fy"
-      - run: |
-          S=https://www.appropriations.senate.gov/fy-2026-congressionally-directed-spending
-          H=https://appropriations.house.gov/sites/evo-subsites/republicans-appropriations.house.gov/files/evo-media-document/fy26-house-cpf-consolidated.xlsx
-          CH='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
-          for u in $S $H https://www.appropriations.senate.gov/ https://www.govinfo.gov/ https://www.congress.gov/; do
-            echo "-- $u"
-            curl -s -o /dev/null -w "plain UA: %{http_code}\n" -A "$CH" "$u" || true
-            curl -s -o /tmp/b -w "full browser headers: %{http_code}\n" --compressed -A "$CH" -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' -H 'Accept-Language: en-US,en;q=0.9' -H 'Sec-Fetch-Dest: document' -H 'Sec-Fetch-Mode: navigate' -H 'Sec-Fetch-Site: none' -H 'Upgrade-Insecure-Requests: 1' "$u" || true
-            head -c 300 /tmp/b | tr '\n' ' '; echo
-            curl -sI "$u" -A "$CH" | grep -i -E "^(server|cf-ray|x-akamai|akamai|x-iinfo|set-cookie)" | head -4 || true
-          done
+          x "SELECT status, checked_at, substr(url,1,160) FROM source_links WHERE source = 'earmarks' ORDER BY checked_at DESC LIMIT 12"
+          x "SELECT fy, subcommittee, source_url FROM earmark_tables WHERE stage = 'enacted' ORDER BY fy DESC LIMIT 4"
