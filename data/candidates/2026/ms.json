@@ -1025,6 +1025,48 @@
       "industry": "labor"
      },
      {
+      "committee_id": "C00023580",
+      "name": "COMMITTEE ON LETTER CARRIERS POLITICAL EDUCATION ACTION FUND",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00029504",
+      "name": "EPEC INTERNATIONAL UNION OF OPERATING ENGINEERS",
+      "total": 10000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00010322",
+      "name": "AMERICAN POSTAL WORKERS UNION COMMITTEE ON POLITICAL ACTION",
+      "total": 10000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00110338",
+      "name": "AMERICAN CRYSTAL SUGAR COMPANY PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
+      "committee_id": "C00002840",
+      "name": "UAW-V-CAP",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00030718",
+      "name": "NATIONAL ASSOCIATION OF REALTORS PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "real_estate"
+     },
+     {
       "committee_id": "C00158576",
       "name": "INTERNATIONAL LONGSHOREMEN'S ASSOCIATION COMMITTEE ON POLITICAL EDUCATION",
       "total": 10000,
@@ -1074,11 +1116,46 @@
       "industry": "other"
      },
      {
+      "committee_id": "C00004036",
+      "name": "SEIU COPE",
+      "total": 9605,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00081414",
+      "name": "AMERICAN SUGAR CANE LEAGUE PAC",
+      "total": 9000,
+      "count": 2,
+      "industry": "agriculture"
+     },
+     {
       "committee_id": "C00381954",
       "name": "ATMOS ENERGY CORPORATION PAC",
       "total": 8500,
       "count": 5,
       "industry": "energy"
+     },
+     {
+      "committee_id": "C00432252",
+      "name": "REGIONS FINANCIAL CORPORATION PAC",
+      "total": 8000,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00010470",
+      "name": "UNION PACIFIC CORPORATION FUND FOR EFFECTIVE GOVERNMENT",
+      "total": 8000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00227546",
+      "name": "MICROSOFT CORPORATION STAKEHOLDERS VOLUNTARY PAC",
+      "total": 7500,
+      "count": 2,
+      "industry": "tech"
      },
      {
       "committee_id": "C00023028",
@@ -1109,92 +1186,15 @@
       "industry": "tech"
      },
      {
-      "committee_id": "C00034157",
-      "name": "AFLAC  PAC",
+      "committee_id": "C00284885",
+      "name": "THE HOME DEPOT, INC PAC",
       "total": 7500,
       "count": 3,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00032979",
-      "name": "DRIVE COMMITTEE",
-      "total": 7500,
-      "count": 5,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00363879",
-      "name": "ENPAC",
-      "total": 7000,
-      "count": 5,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00193631",
-      "name": "FARM CREDIT COUNCIL PAC",
-      "total": 6500,
-      "count": 3,
-      "industry": "finance"
-     },
-     {
-      "committee_id": "C00002089",
-      "name": "CWA-COPE PCC",
-      "total": 6000,
-      "count": 2,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00010470",
-      "name": "UNION PACIFIC CORPORATION FUND FOR EFFECTIVE GOVERNMENT",
-      "total": 6000,
-      "count": 2,
-      "industry": "labor"
-     },
-     {
-      "committee_id": "C00426775",
-      "name": "CHARTER COMMUNICATIONS, INC. PAC",
-      "total": 6000,
-      "count": 4,
-      "industry": "tech"
-     },
-     {
-      "committee_id": "C00441949",
-      "name": "JSTREET PAC",
-      "total": 5540.62,
-      "count": 6,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00024521",
-      "name": "AAJ PAC",
-      "total": 5500,
-      "count": 3,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00039578",
-      "name": "THE COUNCIL OF INSURANCE AGENTS & BROKERS PAC",
-      "total": 5500,
-      "count": 4,
-      "industry": "finance"
-     },
-     {
-      "committee_id": "C00113241",
-      "name": "NATIONAL APARTMENT ASSOCIATION PAC",
-      "total": 5000,
-      "count": 1,
-      "industry": "real_estate"
-     },
-     {
-      "committee_id": "C00227546",
-      "name": "MICROSOFT CORPORATION STAKEHOLDERS VOLUNTARY PAC",
-      "total": 5000,
-      "count": 1,
-      "industry": "tech"
+      "industry": "retail"
      }
     ],
-    "count": 157,
-    "total": 559744.37,
+    "count": 183,
+    "total": 693791.33,
     "complete": true,
     "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00279851&two_year_transaction_period=2026&line_number=F3-11C"
    },
@@ -1204,7 +1204,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00279851/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6MS02220": {

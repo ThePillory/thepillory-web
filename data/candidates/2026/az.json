@@ -47,7 +47,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00945287/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6AZ01454": {
@@ -90,7 +90,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00930719/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6AZ01272": {
@@ -133,7 +133,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00896464/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6AZ05190": {
@@ -166,18 +166,11 @@
    "organizations": {
     "items": [
      {
-      "committee_id": "C00039578",
-      "name": "THE COUNCIL OF INSURANCE AGENTS & BROKERS POLITICAL ACTION COMMITTEE",
+      "committee_id": "C00693796",
+      "name": "BUCKEYE LIBERTY POLITICAL ACTION COMMITTEE",
       "total": 10000,
       "count": 2,
-      "industry": "finance"
-     },
-     {
-      "committee_id": "C00451153",
-      "name": "GRIDIRON-PAC",
-      "total": 10000,
-      "count": 2,
-      "industry": "other"
+      "industry": "leadership"
      },
      {
       "committee_id": "C00563726",
@@ -187,11 +180,18 @@
       "industry": "leadership"
      },
      {
-      "committee_id": "C00693796",
-      "name": "BUCKEYE LIBERTY POLITICAL ACTION COMMITTEE",
+      "committee_id": "C00467431",
+      "name": "THE EYE OF THE TIGER POLITICAL ACTION COMMITTEE",
       "total": 10000,
       "count": 2,
       "industry": "leadership"
+     },
+     {
+      "committee_id": "C00639229",
+      "name": "AMERICAN REVIVAL PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
      },
      {
       "committee_id": "C00404392",
@@ -215,15 +215,15 @@
       "industry": "finance"
      },
      {
-      "committee_id": "C00467431",
-      "name": "THE EYE OF THE TIGER POLITICAL ACTION COMMITTEE",
+      "committee_id": "C00039578",
+      "name": "THE COUNCIL OF INSURANCE AGENTS & BROKERS POLITICAL ACTION COMMITTEE",
       "total": 10000,
       "count": 2,
-      "industry": "leadership"
+      "industry": "finance"
      },
      {
-      "committee_id": "C00639229",
-      "name": "AMERICAN REVIVAL PAC",
+      "committee_id": "C00451153",
+      "name": "GRIDIRON-PAC",
       "total": 10000,
       "count": 2,
       "industry": "other"
@@ -250,8 +250,29 @@
       "industry": "finance"
      },
      {
-      "committee_id": "C00592089",
-      "name": "ELECTING MAJORITY MAKING EFFECTIVE REPUBLICANS",
+      "committee_id": "C00764886",
+      "name": "LASTING INVESTMENTS STRENGTHENING AMERICA",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00752790",
+      "name": "JOBS AND THE ECONOMY PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00783167",
+      "name": "WORKING FOR OHIO",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00874362",
+      "name": "AMERICAN DREAM DELIVERED",
       "total": 5000,
       "count": 1,
       "industry": "leadership"
@@ -292,29 +313,8 @@
       "industry": "leadership"
      },
      {
-      "committee_id": "C00764886",
-      "name": "LASTING INVESTMENTS STRENGTHENING AMERICA",
-      "total": 5000,
-      "count": 1,
-      "industry": "leadership"
-     },
-     {
-      "committee_id": "C00752790",
-      "name": "JOBS AND THE ECONOMY PAC",
-      "total": 5000,
-      "count": 1,
-      "industry": "leadership"
-     },
-     {
-      "committee_id": "C00783167",
-      "name": "WORKING FOR OHIO",
-      "total": 5000,
-      "count": 1,
-      "industry": "leadership"
-     },
-     {
-      "committee_id": "C00874362",
-      "name": "AMERICAN DREAM DELIVERED",
+      "committee_id": "C00592089",
+      "name": "ELECTING MAJORITY MAKING EFFECTIVE REPUBLICANS",
       "total": 5000,
       "count": 1,
       "industry": "leadership"
@@ -352,7 +352,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00903088/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H4AZ01228": {
@@ -636,7 +636,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00911404/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6AZ01306": {
@@ -687,7 +687,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00902411/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6AZ01389": {
@@ -730,7 +730,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00922559/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H4AZ01194": {
@@ -992,7 +992,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00922278/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6AZ01405": {
@@ -1050,7 +1050,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00923839/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6AZ01298": {
@@ -1136,7 +1136,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00901215/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6AZ01447": {
@@ -1179,7 +1179,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00927400/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H2AZ01354": {
@@ -1851,7 +1851,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00900027/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H4AZ04115": {
@@ -1953,7 +1953,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00942763/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H8AZ09040": {
@@ -2223,7 +2223,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00897603/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6AZ05208": {
@@ -2266,7 +2266,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00905430/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H2AZ06155": {
@@ -2374,7 +2374,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00910026/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6AZ05216": {
@@ -2425,7 +2425,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00910240/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6AZ05182": {
@@ -2483,7 +2483,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00898429/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6AZ05265": {
@@ -2667,7 +2667,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00924084/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6AZ05240": {
@@ -2718,7 +2718,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00915983/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H2AZ02360": {
@@ -2980,7 +2980,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00901421/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6AZ06107": {
@@ -3023,7 +3023,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00898841/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6AZ06123": {
@@ -3041,7 +3041,7 @@
    "totals": null,
    "organizations": null,
    "website": null,
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6AZ06099": {
@@ -3260,7 +3260,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00897090/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6AZ06214": {
@@ -3303,7 +3303,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00946525/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H4AZ07134": {
@@ -3580,7 +3580,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00901116/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H4AZ08082": {
@@ -3885,7 +3885,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00934299/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H0AZ01259": {
@@ -4105,7 +4105,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00904821/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6AZ01413": {
@@ -4148,7 +4148,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00918805/",
     "checked": "2026-10-18"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   }
  }

@@ -37,6 +37,20 @@
    "organizations": {
     "items": [
      {
+      "committee_id": "C00030718",
+      "name": "NATIONAL ASSOCIATION OF REALTORS POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 5,
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00029504",
+      "name": "ENGINEERS POLITICAL EDUCATION COMMITTEE (EPEC)/INTERNATIONAL UNION OF OPERATING ENGINEERS",
+      "total": 10000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
       "committee_id": "C00753947",
       "name": "LA BAMBA PAC",
       "total": 10000,
@@ -93,11 +107,32 @@
       "industry": "health"
      },
      {
+      "committee_id": "C00219642",
+      "name": "ENTERPRISE HOLDINGS, INC. / ENTERPRISE MOBILITY POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 5,
+      "industry": "issue"
+     },
+     {
       "committee_id": "C00142711",
       "name": "THE BOEING COMPANY POLITICAL ACTION COMMITTEE",
       "total": 10000,
       "count": 5,
       "industry": "defense"
+     },
+     {
+      "committee_id": "C00546234",
+      "name": "LEIDOS INC. POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 7,
+      "industry": "defense"
+     },
+     {
+      "committee_id": "C00197228",
+      "name": "ELEVANCE HEALTH, INC. POLITICAL ACTION COMMITTEE (ELEVANCE HEALTH PAC)",
+      "total": 10000,
+      "count": 6,
+      "industry": "health"
      },
      {
       "committee_id": "C00397851",
@@ -107,11 +142,18 @@
       "industry": "health"
      },
      {
-      "committee_id": "C00219642",
-      "name": "ENTERPRISE HOLDINGS, INC. / ENTERPRISE MOBILITY POLITICAL ACTION COMMITTEE",
-      "total": 8000,
+      "committee_id": "C00550491",
+      "name": "THOMPSON COBURN POLITICAL ACTION COMMITTEE",
+      "total": 9000,
       "count": 4,
       "industry": "issue"
+     },
+     {
+      "committee_id": "C00426775",
+      "name": "CHARTER COMMUNICATIONS INC. POLITICAL ACTION COMMITTEE",
+      "total": 8500,
+      "count": 4,
+      "industry": "tech"
      },
      {
       "committee_id": "C00078451",
@@ -121,11 +163,32 @@
       "industry": "defense"
      },
      {
-      "committee_id": "C00550491",
-      "name": "THOMPSON COBURN POLITICAL ACTION COMMITTEE",
+      "committee_id": "C00039578",
+      "name": "THE COUNCIL OF INSURANCE AGENTS & BROKERS POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 2,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00188177",
+      "name": "H&R BLOCK INC. POLITICAL ACTION COMMITTEE (BLOCKPAC)",
+      "total": 7500,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00139659",
+      "name": "JOINT ACTION COMMITTEE FOR POLITICAL AFFAIRS",
       "total": 7500,
       "count": 3,
       "industry": "issue"
+     },
+     {
+      "committee_id": "C00764233",
+      "name": "DEFEND THE VOTE PAC",
+      "total": 7500,
+      "count": 3,
+      "industry": "other"
      },
      {
       "committee_id": "C00011114",
@@ -142,78 +205,15 @@
       "industry": "issue"
      },
      {
-      "committee_id": "C00088591",
-      "name": "EMPLOYEES OF NORTHROP GRUMMAN CORPORATION PAC",
+      "committee_id": "C00721233",
+      "name": "BEAT THE ODDS PAC",
       "total": 7000,
-      "count": 4,
-      "industry": "defense"
-     },
-     {
-      "committee_id": "C00197228",
-      "name": "ELEVANCE HEALTH, INC. POLITICAL ACTION COMMITTEE (ELEVANCE HEALTH PAC)",
-      "total": 7000,
-      "count": 4,
-      "industry": "health"
-     },
-     {
-      "committee_id": "C00546234",
-      "name": "LEIDOS INC. POLITICAL ACTION COMMITTEE",
-      "total": 7000,
-      "count": 6,
-      "industry": "defense"
-     },
-     {
-      "committee_id": "C00832576",
-      "name": "PATRIOT PAC",
-      "total": 6000,
-      "count": 3,
+      "count": 2,
       "industry": "leadership"
-     },
-     {
-      "committee_id": "C00391979",
-      "name": "HERZOG PAC",
-      "total": 6000,
-      "count": 3,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00096156",
-      "name": "HONEYWELL INTERNATIONAL POLITICAL ACTION COMMITTEE",
-      "total": 6000,
-      "count": 4,
-      "industry": "manufacturing"
-     },
-     {
-      "committee_id": "C00281162",
-      "name": "BAYER US LLC EMPLOYEE POLITICAL ACTION COMMITTEE (BAYERPAC)",
-      "total": 6000,
-      "count": 5,
-      "industry": "issue"
-     },
-     {
-      "committee_id": "C00275123",
-      "name": "LEONARDO DRS PAC",
-      "total": 5500,
-      "count": 4,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00452052",
-      "name": "PAR HEALTH, INC. POLITICAL ACTION COMMITTEE (PAR HEALTH PAC)",
-      "total": 5000,
-      "count": 1,
-      "industry": "health"
-     },
-     {
-      "committee_id": "C00409730",
-      "name": "NEW DEMOCRAT COALITION ACTION FUND",
-      "total": 5000,
-      "count": 1,
-      "industry": "finance"
      }
     ],
-    "count": 173,
-    "total": 592295.66,
+    "count": 192,
+    "total": 691795.66,
     "complete": true,
     "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00842336&two_year_transaction_period=2026&line_number=F3-11C"
    },
@@ -223,7 +223,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00842336/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H8MO01143": {
@@ -431,7 +431,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00896233/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6MO02350": {
@@ -1480,7 +1480,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00870238/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H2MO04207": {
@@ -1742,7 +1742,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00856468/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6MO05247": {
@@ -2410,7 +2410,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00395848/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6MO05270": {
@@ -2539,7 +2539,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00939900/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6MO06252": {
@@ -3359,17 +3359,17 @@
    "last_listed": "2026-11-05",
    "totals": {
     "cycle": 2026,
-    "receipts": 65739.85,
-    "disbursements": 43641.69,
-    "cash_on_hand": 60779.19,
+    "receipts": 66639.85,
+    "disbursements": 60168.93,
+    "cash_on_hand": 45851.95,
     "individual_unitemized": 26365.49,
-    "individual_itemized": 23974.36,
+    "individual_itemized": 24874.36,
     "pac": 8250,
     "party": 7150,
     "self_funding": 0,
     "other": 0,
-    "coverage_end": "2026-09-30",
-    "last_report": "OCTOBER QUARTERLY 2026",
+    "coverage_end": "2026-10-14",
+    "last_report": "PRE-GENERAL 2026",
     "source_url": "https://www.fec.gov/data/candidate/H4MO07156/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -3400,7 +3400,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00859140/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6MO07318": {
@@ -3821,7 +3821,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00541862/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   }
  }
