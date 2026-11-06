@@ -1041,7 +1041,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00952572/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H2MN01223": {
@@ -1479,7 +1479,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00902684/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6MN02271": {
@@ -1512,6 +1512,13 @@
    "organizations": {
     "items": [
      {
+      "committee_id": "C00032995",
+      "name": "AMALGAMATED TRANSIT UNION - COPE",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
       "committee_id": "C00002089",
       "name": "COMMUNICATIONS WORKERS OF AMERICA - COPE POLITICAL CONTRIBUTIONS COMMITTEE",
       "total": 10000,
@@ -1524,6 +1531,13 @@
       "total": 7000,
       "count": 2,
       "industry": "leadership"
+     },
+     {
+      "committee_id": "C00032979",
+      "name": "D.R.I.V.E. - DEM, REP, IND VOTER ED (THE PAC OF THE INT'L BRHD OF TEAMSTERS)",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
      },
      {
       "committee_id": "C00002840",
@@ -1645,10 +1659,24 @@
       "industry": "leadership"
      },
      {
+      "committee_id": "C00280909",
+      "name": "TRANSPORTATION TRADES DEPARTMENT AFL-CIO POLITICAL ACTION COMMITTEE (TTD/PAC)",
+      "total": 3000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
       "committee_id": "C00840462",
       "name": "SILICORN VALLEY PAC",
       "total": 3000,
       "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00832576",
+      "name": "PATRIOT PAC",
+      "total": 2500,
+      "count": 1,
       "industry": "leadership"
      },
      {
@@ -1657,38 +1685,10 @@
       "total": 2500,
       "count": 1,
       "industry": "other"
-     },
-     {
-      "committee_id": "C00640086",
-      "name": "EVERYTOWN FOR GUN SAFETY ACTION FUND, INC. PAC (EVERYTOWN PAC)",
-      "total": 1500,
-      "count": 1,
-      "industry": "finance"
-     },
-     {
-      "committee_id": "C00573261",
-      "name": "END CITIZENS UNITED",
-      "total": 1000,
-      "count": 1,
-      "industry": "issue"
-     },
-     {
-      "committee_id": "C00280909",
-      "name": "TRANSPORTATION TRADES DEPARTMENT AFL-CIO POLITICAL ACTION COMMITTEE (TTD/PAC)",
-      "total": 1000,
-      "count": 1,
-      "industry": "labor"
-     },
-     {
-      "committee_id": "C00545137",
-      "name": "LEADERSHIP OPPORTUNITY INNOVATION SERVICE PAC",
-      "total": 1000,
-      "count": 1,
-      "industry": "leadership"
      }
     ],
-    "count": 25,
-    "total": 110066.81,
+    "count": 28,
+    "total": 129566.81,
     "complete": true,
     "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00921478&two_year_transaction_period=2026&line_number=F3-11C"
    },
@@ -1698,7 +1698,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00921478/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6MN02255": {
@@ -1791,7 +1791,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00905315/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6MN02248": {
@@ -1894,6 +1894,13 @@
       "industry": "health"
      },
      {
+      "committee_id": "C00255752",
+      "name": "AMERICAN SOCIETY OF ANESTHESIOLOGISTS POLITICAL ACTION COMMITTEE (ASA PAC)",
+      "total": 5000,
+      "count": 2,
+      "industry": "health"
+     },
+     {
       "committee_id": "C00418400",
       "name": "INTERNATIONAL UNION OF OPERATING ENGINEERS LOCAL 49 PAC",
       "total": 5000,
@@ -1912,13 +1919,6 @@
       "name": "AMERICAN PSYCHIATRIC ASSOCIATION POLITICAL ACTION COMMITTEE",
       "total": 5000,
       "count": 2,
-      "industry": "health"
-     },
-     {
-      "committee_id": "C00255752",
-      "name": "AMERICAN SOCIETY OF ANESTHESIOLOGISTS POLITICAL ACTION COMMITTEE (ASA PAC)",
-      "total": 2500,
-      "count": 1,
       "industry": "health"
      },
      {
@@ -2000,7 +2000,7 @@
      }
     ],
     "count": 26,
-    "total": 96250,
+    "total": 98750,
     "complete": true,
     "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00904292&two_year_transaction_period=2026&line_number=F3-11C"
    },
@@ -2010,7 +2010,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00904292/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6MN02230": {
@@ -2138,7 +2138,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00903807/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6MN02297": {
@@ -2181,7 +2181,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00933408/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6MN02263": {
@@ -2316,7 +2316,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00912824/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6MN03162": {
@@ -2374,7 +2374,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00930644/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H4MN03118": {
@@ -2644,7 +2644,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00948190/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H0MN04049": {
@@ -2906,7 +2906,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00939181/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6MN04301": {
@@ -2949,7 +2949,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00938290/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H0MN05251": {
@@ -3043,7 +3043,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00924639/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H8MN05239": {
@@ -3284,7 +3284,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00925511/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6MN06215": {
@@ -3356,7 +3356,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00909531/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H4MN06087": {
@@ -3618,7 +3618,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00928945/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H0MN07091": {
@@ -3880,7 +3880,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00945949/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6MN07338": {
@@ -3931,7 +3931,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00926576/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6MN07312": {
@@ -3982,7 +3982,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00899344/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6MN08120": {
@@ -4025,7 +4025,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00907352/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6MN08195": {
@@ -4083,7 +4083,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00947291/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6MN08161": {
@@ -4126,7 +4126,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00911305/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H8MN08043": {
@@ -4417,7 +4417,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00933382/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-02",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   }
  }
