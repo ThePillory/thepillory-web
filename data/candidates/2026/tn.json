@@ -3,8 +3,8 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=TN&candidate_status=C",
- "list_built_on": "2026-11-01",
- "built_on": "2026-11-04",
+ "list_built_on": "2026-11-06",
+ "built_on": "2026-11-07",
  "senate_up": true,
  "candidates": {
   "S6TN00380": {
@@ -18,7 +18,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6TN00380/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 9783.84,
@@ -47,7 +47,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00942128/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-31",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "S0TN00169": {
@@ -61,7 +61,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S0TN00169/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 8422210.63,
@@ -280,7 +280,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6TN00398/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 26349.47,
@@ -309,7 +309,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00943720/",
     "checked": "2026-10-15"
    },
-   "funding_checked": "2026-10-31",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6TN01537": {
@@ -323,7 +323,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN01537/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 222584.71,
@@ -360,7 +360,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00934778/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H0TN01118": {
@@ -374,7 +374,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0TN01118/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 1536325.23,
@@ -407,11 +407,46 @@
       "industry": "manufacturing"
      },
      {
+      "committee_id": "C00193854",
+      "name": "AMERICAN PHARMACISTS ASSOCIATION",
+      "total": 10000,
+      "count": 2,
+      "industry": "pharma"
+     },
+     {
       "committee_id": "C00612010",
       "name": "AMERICAN CAR RENTAL ASSOCIATION PAC",
       "total": 10000,
       "count": 2,
       "industry": "other"
+     },
+     {
+      "committee_id": "C00236489",
+      "name": "KOCH, INC. PAC (KOCHPAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00483487",
+      "name": "BRINGING REPUBLICAN EXCELLENCE TO TOWN PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00797670",
+      "name": "AMERICAN ISRAEL PUBLIC AFFAIRS PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "legal"
+     },
+     {
+      "committee_id": "C00030809",
+      "name": "NATIONAL COMMUNITY PHARMACISTS ASSOCIATION - PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "pharma"
      },
      {
       "committee_id": "C00365502",
@@ -484,11 +519,25 @@
       "industry": "other"
      },
      {
+      "committee_id": "C00113811",
+      "name": "NATIONAL ELECTRICAL CONTRACTORS ASSOCIATION POLITICAL ACTION COMMITTEE (NECAPAC)",
+      "total": 10000,
+      "count": 4,
+      "industry": "construction"
+     },
+     {
       "committee_id": "C00077321",
       "name": "AMERICAN INSTITUTE OF CERTIFIED PUBLIC ACCOUNTANTS PAC",
       "total": 10000,
       "count": 4,
       "industry": "finance"
+     },
+     {
+      "committee_id": "C00346353",
+      "name": "CRH AMERICAS, INC PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
      },
      {
       "committee_id": "C00024968",
@@ -498,13 +547,6 @@
       "industry": "health"
      },
      {
-      "committee_id": "C00030809",
-      "name": "NATIONAL COMMUNITY PHARMACISTS ASSOCIATION - PAC",
-      "total": 8500,
-      "count": 2,
-      "industry": "pharma"
-     },
-     {
       "committee_id": "C00882068",
       "name": "HIMS AND HERS HEALTH , INC. PAC",
       "total": 8000,
@@ -512,64 +554,22 @@
       "industry": "health"
      },
      {
+      "committee_id": "C00359539",
+      "name": "AMERICAN ACADEMY OF DERMATOLOGY ASSOCIATION PAC (SKINPAC)",
+      "total": 7500,
+      "count": 2,
+      "industry": "education"
+     },
+     {
       "committee_id": "C00009985",
       "name": "NATIONAL ASSOCIATION OF BROADCASTERS PAC (NABPAC)",
       "total": 7500,
       "count": 2,
       "industry": "media"
-     },
-     {
-      "committee_id": "C00400929",
-      "name": "CENCORA, INC. PAC",
-      "total": 7500,
-      "count": 2,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00389429",
-      "name": "CALPORTLAND COMPANY PAC (CALPORTLANDPAC)",
-      "total": 7500,
-      "count": 3,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00346353",
-      "name": "CRH AMERICAS, INC PAC",
-      "total": 7500,
-      "count": 3,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00444885",
-      "name": "ASTELLAS US LLC PAC (ASTELLAS PAC)",
-      "total": 7000,
-      "count": 3,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00010983",
-      "name": "JOHNSON & JOHNSON PAC",
-      "total": 6500,
-      "count": 3,
-      "industry": "pharma"
-     },
-     {
-      "committee_id": "C00375360",
-      "name": "AMERICAN COLLEGE OF CARDIOLOGY PAC (HEARTPAC)",
-      "total": 6000,
-      "count": 3,
-      "industry": "health"
-     },
-     {
-      "committee_id": "C00374066",
-      "name": "SMITH AND NEPHEW INC. PAC",
-      "total": 6000,
-      "count": 4,
-      "industry": "other"
      }
     ],
-    "count": 208,
-    "total": 680250,
+    "count": 231,
+    "total": 828250,
     "complete": true,
     "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00741090&two_year_transaction_period=2026&line_number=F3-11C"
    },
@@ -579,7 +579,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00741090/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6TN02170": {
@@ -593,7 +593,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN02170/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 717841.92,
@@ -622,7 +622,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00920520/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H8TN02119": {
@@ -636,7 +636,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8TN02119/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 3131314.7,
@@ -855,7 +855,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0TN03254/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 2728033.85,
@@ -1060,7 +1060,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00461822/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6TN03228": {
@@ -1074,7 +1074,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN03228/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 164743.76,
@@ -1103,7 +1103,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00936971/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN04242": {
@@ -1117,7 +1117,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN04242/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 2267.06,
@@ -1146,7 +1146,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00942276/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H4TN04270": {
@@ -1160,7 +1160,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4TN04270/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 94216.96,
@@ -1178,7 +1178,7 @@
    },
    "organizations": null,
    "website": null,
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H6TN05371": {
@@ -1192,7 +1192,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN05371/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 788548.76,
@@ -1236,7 +1236,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00911248/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H4TN04247": {
@@ -1250,7 +1250,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4TN04247/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 17964.94,
@@ -1279,7 +1279,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00854737/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-05",
    "cycle": 2026
   },
   "H0TN04195": {
@@ -1293,7 +1293,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0TN04195/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 667181.2,
@@ -1498,7 +1498,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00464073/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6TN04267": {
@@ -1512,7 +1512,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN04267/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 14088.99,
@@ -1541,7 +1541,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00950816/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN05363": {
@@ -1555,7 +1555,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN05363/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 8310,
@@ -1584,7 +1584,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00902429/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN05405": {
@@ -1598,7 +1598,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN05405/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 1803850.94,
@@ -1627,7 +1627,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00923383/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN05439": {
@@ -1641,7 +1641,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN05439/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 44140.77,
@@ -1670,7 +1670,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00951343/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN05397": {
@@ -1684,7 +1684,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN05397/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 3531777.7,
@@ -1889,7 +1889,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00918581/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H2TN05446": {
@@ -1903,7 +1903,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2TN05446/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 790546.48,
@@ -2122,7 +2122,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN06247/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 6210.22,
@@ -2151,7 +2151,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00922435/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN06239": {
@@ -2165,7 +2165,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN06239/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 5349.93,
@@ -2202,7 +2202,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00917682/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H2TN05347": {
@@ -2216,7 +2216,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2TN05347/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 50000,
@@ -2259,7 +2259,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN06171/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 117167.7,
@@ -2296,7 +2296,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00902239/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN06213": {
@@ -2310,7 +2310,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN06213/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 3000586.11,
@@ -2515,7 +2515,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00910935/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN06262": {
@@ -2529,7 +2529,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN06262/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": null,
    "organizations": null,
    "website": {
@@ -2538,7 +2538,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00905984/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN06205": {
@@ -2552,7 +2552,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN06205/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 1668657.17,
@@ -2729,7 +2729,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00909838/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN06270": {
@@ -2743,7 +2743,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN06270/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 94663.71,
@@ -2772,7 +2772,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00909143/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN07286": {
@@ -2786,7 +2786,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN07286/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 1257202.49,
@@ -2830,7 +2830,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00913301/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN07229": {
@@ -2844,7 +2844,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN07229/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 265989.76,
@@ -2909,7 +2909,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00911370/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN07344": {
@@ -2923,7 +2923,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN07344/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 91368.32,
@@ -2952,7 +2952,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00951731/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN06288": {
@@ -2966,7 +2966,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN06288/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 5100,
@@ -2995,7 +2995,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00942482/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN07161": {
@@ -3009,7 +3009,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN07161/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 2646914.76,
@@ -3214,7 +3214,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00908202/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN08359": {
@@ -3228,7 +3228,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN08359/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 226145,
@@ -3265,7 +3265,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00945840/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN08367": {
@@ -3279,7 +3279,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN08367/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 112308.98,
@@ -3308,7 +3308,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00951509/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H2TN07103": {
@@ -3322,7 +3322,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2TN07103/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 2585196.73,
@@ -3541,7 +3541,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0TN09061/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 71257.37,
@@ -3578,7 +3578,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00693143/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6TN09068": {
@@ -3592,7 +3592,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN09068/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 785039.35,
@@ -3797,7 +3797,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00422980/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN09498": {
@@ -3811,7 +3811,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN09498/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 96939.43,
@@ -3869,7 +3869,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00950873/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN09449": {
@@ -3883,7 +3883,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN09449/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 4009058.26,
@@ -3983,7 +3983,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00922633/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN09464": {
@@ -3997,7 +3997,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN09464/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 2832273.18,
@@ -4174,7 +4174,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00949867/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN09480": {
@@ -4188,7 +4188,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN09480/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 247563,
@@ -4225,7 +4225,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00950287/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN05355": {
@@ -4239,7 +4239,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN05355/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 128633.6,
@@ -4268,7 +4268,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00899450/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN09472": {
@@ -4282,7 +4282,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN09472/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 689616.95,
@@ -4311,7 +4311,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00950238/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6TN08342": {
@@ -4325,7 +4325,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN08342/",
    "listed": true,
    "first_listed": "2026-10-13",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 8119,
@@ -4354,7 +4354,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00948885/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "S6TN00364": {
@@ -4368,7 +4368,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6TN00364/",
    "listed": true,
    "first_listed": "2026-10-16",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 47.25,
@@ -4397,7 +4397,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00936500/",
     "checked": "2026-10-16"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6TN03251": {
@@ -4411,7 +4411,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN03251/",
    "listed": true,
    "first_listed": "2026-10-16",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 7810,
@@ -4440,7 +4440,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00955419/",
     "checked": "2026-10-16"
    },
-   "funding_checked": "2026-11-01",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "S6TN00372": {
@@ -4454,7 +4454,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/S6TN00372/",
    "listed": true,
    "first_listed": "2026-10-17",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 12300,
@@ -4497,7 +4497,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6TN05462/",
    "listed": true,
    "first_listed": "2026-10-21",
-   "last_listed": "2026-11-04",
+   "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
     "receipts": 0,
@@ -4526,7 +4526,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00959460/",
     "checked": "2026-10-21"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   }
  }
