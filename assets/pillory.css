@@ -1766,6 +1766,8 @@ article.fin-term { scroll-margin-top: var(--space-4); }
 .pair-bars-plot em { flex: 1; min-width: 0; display: flex; flex-direction: column; height: 100%; font-style: normal; }
 .pair-bars-plot em.pb-b i:not(.is-neg) { background: var(--chart-3); }
 .pair-legend { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); }
+/* Long XBRL element names (one word each) wrap instead of widening the page. */
+.xbrl-note { overflow-wrap: anywhere; }
 /* /admin/usage/: plain number tables. */
 .usage-table { width: 100%; border-collapse: collapse; font-size: var(--fs-small); font-variant-numeric: tabular-nums; }
 .usage-table td, .usage-table th { padding: var(--space-1) var(--space-2) var(--space-1) 0; border-top: 1px solid var(--border); text-align: right; white-space: nowrap; }

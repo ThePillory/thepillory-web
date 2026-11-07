@@ -83,7 +83,7 @@ test("the same organization's other records sit beside the taxes as facts, each 
   const html = companyMain(await loadCompany(db(), 1));
   assert.match(html, /In ThePillory's other records/);
   assert.match(html, /Example Retail, Inc\.: \$120,000, 2024–2025 \(3 records\)\. <span class="secondary">Matched by the same name\.<\/span>/);
-  assert.match(html, /Example Retail Political Action Committee: \$15,000, 2026 \(9 records\)\. <span class="secondary">Matched by linked to this company by a person\.<\/span>/);
+  assert.match(html, /Example Retail Political Action Committee: \$15,000, 2026 \(9 records\)\. <span class="secondary">Linked to this company by a person\.<\/span>/);
   assert.match(html, /No California lobbying reports under this exact name\./);
   assert.match(html, /href="\/awards\/\?name=Example%20Retail%20Inc"/);
   assert.match(html, /doesn't connect them to the taxes above/);

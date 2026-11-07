@@ -13,6 +13,8 @@ import { money, TAXES_METHOD } from "./taxes.js";
 export const loadTaxpayers = (env, request) => asset(env, request, "/data/taxes/taxpayers.json");
 
 const SHOWN = ["top-0.001", "top-0.01", "top-0.1", "top-1", "top-5", "top-10", "top-25", "top-50", "bottom-50"];
+// Long series: a year label every five years and on the last, so they don't run together.
+const tick = (y, last) => (Number(y) % 5 === 0 || String(y) === String(last) ? `'${String(y).slice(2)}` : "");
 const pct = (v, d = 1) => (v == null ? "Not published" : `${Number(v).toFixed(d)}%`);
 const count = (v) => (v == null ? "Not published" : Math.round(v).toLocaleString("en-US"));
 const dollars = (v) => (v == null ? "Not published" : `$${Math.round(v).toLocaleString("en-US")}`);
@@ -31,7 +33,7 @@ function irsSection(irs) {
   const years = Object.keys(g["top-1"].tax_share).sort();
   const series = (id) =>
     pairBars(
-      years.map((y) => ({ label: y, tick: `'${y.slice(2)}`, a: g[id].agi_share[y] ?? null, b: g[id].tax_share[y] ?? null })),
+      years.map((y) => ({ label: y, tick: tick(y, years[years.length - 1]), a: g[id].agi_share[y] ?? null, b: g[id].tax_share[y] ?? null })),
       { series: ["Share of adjusted gross income", "Share of total income tax"], format: (v) => pct(v, 2), head: "Tax year", ariaLabel: `${g[id].label}: shares of income and of income tax by year`, caption: `${esc(g[id].label)} of returns, ${years[0]}–${years[years.length - 1]}.` }
     );
   return `<section class="card stack-sm" id="irs">
@@ -47,7 +49,7 @@ function irsSection(irs) {
 function top400Section(t) {
   if (!t || !t.rows || !t.rows.length) return "";
   const last = t.rows[t.rows.length - 1];
-  const chart = miniBars(t.rows.map((r) => ({ label: String(r.year), tick: `'${String(r.year).slice(2)}`, value: r.agi_share })), {
+  const chart = miniBars(t.rows.map((r) => ({ label: String(r.year), tick: tick(r.year, last.year), value: r.agi_share })), {
     format: (v) => pct(v, 2), head: ["Tax year", "Top 400's share of all AGI"], caption: `The 400 returns with the largest AGI each year: their share of all AGI, ${t.rows[0].year}–${last.year}.`, ariaLabel: "The top 400 returns' share of all adjusted gross income by year",
   });
   return `<section class="card stack-sm" id="top-400">

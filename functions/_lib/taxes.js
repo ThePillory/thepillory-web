@@ -264,8 +264,8 @@ function orgFacts(c, orgs) {
         s = {};
       }
       const years = s.first && s.last ? (s.first === s.last ? s.first : `${s.first}–${s.last}`) : "";
-      const how = o.how === "confirmed" ? "linked to this company by a person" : "the same name";
-      return `<li class="small">${esc(o.org_name)}: ${esc(money(s.total))}${years ? `, ${esc(years)}` : ""}${s.count ? ` (${esc(String(s.count))} ${s.count === 1 ? "record" : "records"})` : ""}. <span class="secondary">Matched by ${esc(how)}.</span> ${s.source_url && safeUrl(s.source_url) ? sourceLink(s.source_url, "Latest filing") : ""}</li>`;
+      const how = o.how === "confirmed" ? "Linked to this company by a person." : "Matched by the same name.";
+      return `<li class="small">${esc(o.org_name)}: ${esc(money(s.total))}${years ? `, ${esc(years)}` : ""}${s.count ? ` (${esc(String(s.count))} ${s.count === 1 ? "record" : "records"})` : ""}. <span class="secondary">${esc(how)}</span> ${s.source_url && safeUrl(s.source_url) ? sourceLink(s.source_url, "Latest filing") : ""}</li>`;
     });
     return `<div class="signer-fact"><p class="label">${esc(title)}</p><p class="small secondary">${esc(what)}</p><ul class="plain-list stack-xs">${items.join("")}</ul></div>`;
   });
@@ -313,7 +313,7 @@ export function companyMain({ company: c, years, jurisdictions, orgs }) {
     "numbers",
     "Show the numbers",
     `<div class="table-scroll"><table class="usage-table"><thead><tr><th scope="col">Value</th>${years.map((y) => `<th scope="col">${esc(fyShort(y))}</th>`).join("")}</tr></thead><tbody>${TABLE_FIELDS.map((f) => `<tr><th scope="row">${esc(LABELS[f])}</th>${years.map((y) => `<td>${valueLink(c.cik, y, f)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>
-  <p class="xsmall secondary">XBRL elements: ${TABLE_FIELDS.map((f) => `${esc(LABELS[f])}: ${f === "pretax" ? "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest (or, where that isn't tagged, …MinorityInterestAndIncomeLossFromEquityMethodInvestments, which leaves out income from equity-method investments)" : f === "revenue" ? "Revenues or RevenueFromContractWithCustomer…" : esc(ELEMENTS[f])}`).join("; ")}.</p>
+  <p class="xsmall secondary xbrl-note">XBRL elements: ${TABLE_FIELDS.map((f) => `${esc(LABELS[f])}: ${f === "pretax" ? "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest (or, where that isn't tagged, …MinorityInterestAndIncomeLossFromEquityMethodInvestments, which leaves out income from equity-method investments)" : f === "revenue" ? "Revenues or RevenueFromContractWithCustomer…" : esc(ELEMENTS[f])}`).join("; ")}.</p>
   <p class="xsmall secondary">Fiscal years: ${years.map((y) => esc(fiscalYear(y))).join("; ")}.</p>`,
     { meta: `${years.length} ${years.length === 1 ? "year" : "years"}` }
   );
