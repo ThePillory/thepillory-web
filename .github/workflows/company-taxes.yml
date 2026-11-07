@@ -1,6 +1,8 @@
 # Company taxes from SEC EDGAR (XBRL company facts, and each 10-K's own XBRL for
-# taxes paid by jurisdiction) into D1, weekly and on demand (Actions -> Refresh
-# company taxes -> Run workflow). See tools/build_company_taxes.py and docs/taxes.md.
+# taxes paid by jurisdiction) into D1, and who pays taxes (IRS Statistics of Income,
+# California's Franchise Tax Board) into data/taxes/taxpayers.json, weekly and on
+# demand (Actions -> Refresh company taxes -> Run workflow). See
+# tools/build_company_taxes.py, tools/build_taxpayers.py and docs/taxes.md.
 #
 # Secrets: CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID (D1), SEC_USER_AGENT
 # (optional: "Name email@example.org"; EDGAR asks for a contact).
@@ -18,13 +20,35 @@ on:
         default: "6000"
 permissions:
   contents: read
-concurrency:
-  group: company-taxes
-  cancel-in-progress: false
 jobs:
+  taxpayers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    # One at a time with every other workflow that commits data (tools/commit_data.sh).
+    concurrency:
+      group: data-commit
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null && python3 -m pip install -q openpyxl==3.1.5 xlrd==2.0.1
+      - run: python3 tools/test_build_taxpayers.py
+      - name: Read the official tables
+        id: build
+        continue-on-error: true
+        run: python3 tools/build_taxpayers.py
+      - name: Commit the data
+        run: bash tools/commit_data.sh "Refresh who pays taxes from IRS and FTB tables" data/taxes/taxpayers.json
+      - name: Fail the run if a source didn't read (its last good data was kept)
+        if: steps.build.outcome == 'failure'
+        run: exit 1
   load:
     runs-on: ubuntu-latest
     timeout-minutes: 180
+    concurrency:
+      group: company-taxes
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

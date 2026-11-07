@@ -1,4 +1,4 @@
-# Temporary: where the official taxpayer tables are. Removed after.
+# Temporary: build data/taxes/taxpayers.json once, printed for review. Removed after.
 name: Probe SEC company facts
 on:
   push:
@@ -10,26 +10,7 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          UA='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36'
-          pip install -q openpyxl==3.1.5 xlrd==2.0.1
-          for f in 23in41ts.xlsx 23in42ts.xls 23in43ts.xls; do curl -sL -A "$UA" -o $f https://www.irs.gov/pub/irs-soi/$f; done
-          python3 - <<'PY'
-          import openpyxl, xlrd
-          wb=openpyxl.load_workbook("23in41ts.xlsx", read_only=True, data_only=True)
-          rows=list(wb.worksheets[0].iter_rows(values_only=True))
-          for i,r in enumerate(rows):
-              if r and isinstance(r[0],str) and not r[0].strip().isdigit(): print("41", i, repr(r[0][:120]), [x for x in r[1:4]])
-              elif r and str(r[0]).startswith("2023"): print("   ", i, [str(x)[:12] for x in r[:16]])
-          b=xlrd.open_workbook("23in42ts.xls"); sh=b.sheets()[0]
-          for i in range(sh.nrows):
-              r=sh.row_values(i)
-              if isinstance(r[0],str) and r[0].strip(): print("42", i, repr(r[0][:120]))
-              elif str(r[0]).startswith("2023"): print("   ", i, [str(x)[:12] for x in r[:8]])
-          PY
-          sudo apt-get install -y -qq poppler-utils >/dev/null 2>&1; curl -sL -A "$UA" -o t.pdf https://www.irs.gov/pub/irs-soi/14intop400.pdf
-          pdftotext -layout t.pdf - | grep -n -i -B3 -A34 "income tax after credits\|Total income tax" | head -150
-          echo "=== ftb years"; curl -sL -A "$UA" "https://data.ca.gov/api/3/action/package_show?id=b-4a-adjusted-gross-income-class-comparison-all-filing-statuses" | python3 -c "import json,sys;d=json.load(sys.stdin)['result'];print(d.get('metadata_modified'));[print(r['url']) for r in d['resources']]"
-          u=$(curl -sL -A "$UA" "https://data.ca.gov/api/3/action/package_show?id=b-4a-adjusted-gross-income-class-comparison-all-filing-statuses" | python3 -c "import json,sys;d=json.load(sys.stdin)['result'];print([r['url'] for r in d['resources'] if (r.get('format') or '').lower()=='csv'][-1])")
-          curl -sL -A "$UA" "$u" -o ftb.csv; python3 -c "
-          import csv; rows=list(csv.DictReader(open('ftb.csv',encoding='utf-8-sig'))); print(len(rows), sorted({r['Taxable Year'] for r in rows})); print(list(rows[0].keys())); [print(r['Taxable Year'], r['AGIC SortID'], r['AGIC'], r['All Returns'], r['California AGI'], r['Total Tax Liability']) for r in rows if int(r['AGIC SortID'])>35]"
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null && python3 -m pip install -q openpyxl==3.1.5 xlrd==2.0.1
+      - run: python3 tools/build_taxpayers.py || true
+      - run: echo "BEGIN64"; gzip -9c data/taxes/taxpayers.json | base64 -w0; echo; echo "END64"
