@@ -6,6 +6,7 @@
 // individual; every number with its period and source. See docs/funding.md.
 import { esc, safeUrl, fmtDate } from "./render.js";
 import { awardsLink } from "./gov-money.js";
+import { taxMarker } from "./taxes.js";
 import { SUBSECTIONS, irsRecord, fecCommitteePage } from "../../workers/sync/src/funding/darkmoney.js";
 
 // Paused (October 2026) while the labels are checked against their public
@@ -137,7 +138,7 @@ export function spenderDetails(x, dm, cycle) {
     const donorRow = (d) => {
       const href = d.kind === "committee" ? fecCommitteePage(d.donor_committee_id) : ["c4", "c6"].includes(d.kind) && d.ein ? irsRecord(d.ein) : d.source_url;
       const chip = KIND_LABEL[d.kind] ? ` <span class="chip chip--gray chip--sm">${KIND_LABEL[d.kind]}</span>` : "";
-      return row(`${link(href, esc(d.name))}${chip}${d.kind === "committee" ? "" : awardsLink(d.name)}`, money(d.total), `${plural(d.count, "contribution")}${d.first_date ? ` · ${dates(d.first_date, d.last_date)}` : ""}`);
+      return row(`${link(href, esc(d.name))}${chip}${d.kind === "committee" ? "" : awardsLink(d.name) + taxMarker(d.name)}`, money(d.total), `${plural(d.count, "contribution")}${d.first_date ? ` · ${dates(d.first_date, d.last_date)}` : ""}`);
     };
     const pct = s.read.receipts ? Math.round((100 * s.read.dark_total) / s.read.receipts) : null;
     const darkNonprofits = s.donors.filter((d) => ["c4", "c6"].includes(d.kind) && d.ein && dm.nonprofits[d.ein]);

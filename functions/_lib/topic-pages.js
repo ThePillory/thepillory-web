@@ -7,7 +7,7 @@
 //                                         officials' own words, and money from industries
 //                                         tied to the topic, side by side as facts
 // The county pages are routed from functions/place/[[path]].js.
-import { page, esc, notFound, loadSection, FAILED, anyFailed, sectionError } from "./render.js";
+import { page, esc, notFound, loadSection, FAILED, anyFailed, sectionError, linkRow } from "./render.js";
 import { summaryHead, contentsBar, fold } from "./summary.js";
 import { LIVE, officialsFor, breadcrumb, placeHref, loadDistrictNames } from "./geo.js";
 import { STATE_NAME } from "./districts.js";
@@ -91,6 +91,7 @@ ${section("fed", "Bills in Congress", federal, (v) => billRows(v, none, null), d
 ${section("state", "Bills in the California Legislature", state, (v) => billRows(v, none, null), db ? "No bills with a final-passage vote are tagged with this topic yet." : "Bills appear once the data sync has run.")}
 ${section("exec", "Executive actions", exec, executiveRows, "No executive orders or proclamations by the President or the Governor are tagged with this topic yet.")}
 ${section("words", "In their own words", words, platformRows, "No excerpt from an official's own Issues page is tagged with this topic yet.", "Excerpts are word for word from each official's own website, the same way for every official.")}
+${slug === "taxes-budget" ? `<section class="card stack-xs">${linkRow("/taxes/", "Taxes", "Who pays income taxes, and what companies report paying")}</section>` : ""}
 <section class="card stack-xs">
   <p class="small">To see how a place's representatives voted, its county meetings and the campaign money around its officials, open the topic for a county: <a class="inline-link" href="${topicHref(slug, { st: "CA", slug: "calaveras" })}">${esc(t.name)} in Calaveras County</a>, or pick a county on the <a class="inline-link" href="/explore/">map</a>.</p>
 </section>

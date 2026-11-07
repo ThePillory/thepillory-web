@@ -23,6 +23,7 @@ import { stateCandidateHref, nameSlug } from "./candidates.js";
 import { orgKey, nonprofitPage, SUBSECTIONS } from "../../workers/sync/src/funding/darkmoney.js";
 import { currentCycle } from "../../workers/sync/src/funding/fec.js";
 import { orgFromTitle, isGovernment, matchSigner } from "../../workers/sync/src/elections/signers.js";
+import { taxMarker } from "./taxes.js";
 
 export const BEHIND_NOTE = "Money and positions are listed side by side as facts, from the committees' own filings. ThePillory doesn't say why anyone took a side.";
 const dollars = (n) => `${Number(n) < 0 ? "−" : ""}$${Math.abs(Math.round(Number(n) || 0)).toLocaleString("en-US")}`;
@@ -201,6 +202,7 @@ async function orgPanel(db, name, money, state) {
     ${line("Type", type)}
     ${line("California lobbying", lobbying)}
     <div class="signer-fact"><p class="label">Spending on ballot measures</p>${/^<ul/.test(measures) ? measures.replace(/<li>/g, '<li class="small">') : `<p class="small">${esc(measures)}</p>`}</div>
+    ${taxMarker(name)}
     ${more && safeUrl(more) ? `<a class="inline-link" href="${esc(more)}" target="_blank" rel="noopener">More ›</a>` : ""}
   </div>
 </details>`;

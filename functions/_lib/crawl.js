@@ -22,7 +22,7 @@ const MAX_VALUE = 300;
 export const KNOWN = new Set([
   "name", "q", "offset", "toffset", "page", "state", "chamber", "sector", "filter", "show", "clause", "vote", "votes",
   "party", "position", "level", "year", "cycle", "status", "browse", "sort", "layer", "st", "lookup", "waitlist",
-  "now", "hub", "pick", "notice", "error", "sent",
+  "now", "hub", "pick", "notice", "error", "sent", "sic",
 ]);
 const TRACKING = /^(utm_[a-z]+|fbclid|gclid|dclid|msclkid|mc_cid|mc_eid|igshid|ref|ref_src|_ga)$/i;
 

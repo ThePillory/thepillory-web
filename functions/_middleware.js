@@ -14,6 +14,7 @@
 //      and kind of visitor (functions/_lib/usage.js; nothing about the visitor kept).
 // Everything else passes through untouched.
 import { linksIn, linkInfo, rewriteSourceLinks } from "./_lib/source-links.js";
+import { markersIn, taxInfo, fillTaxLines } from "./_lib/taxes.js";
 import { checkQuery, badRequest, forCrawlers } from "./_lib/crawl.js";
 import { startUsage, finishUsage, usageDb } from "./_lib/usage.js";
 
@@ -73,6 +74,14 @@ async function handle(context) {
     } catch (err) {
       // The page as it was: a copy link is never worth a failed page.
       console.error(`source links: ${err && err.message}`);
+    }
+    // "Taxes paid (FY…): … · pretax income … ›" on organization panels, for every name on the page in one query.
+    try {
+      const names = markersIn(out);
+      if (names.length) out = fillTaxLines(out, await taxInfo(usageDb(context), names));
+    } catch (err) {
+      console.error(`tax lines: ${err && err.message}`);
+      out = fillTaxLines(out, {});
     }
   }
   out = forCrawlers(out, { noindex: !!url.search });

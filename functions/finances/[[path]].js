@@ -17,6 +17,8 @@ export const onRequestGet = guard(async (context) => {
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
   const parts = (context.params.path || []).filter(Boolean).map((s) => s.toLowerCase());
   if (parts.length === 0) return edgeCached(context, CACHE_SECONDS, () => federalPage(context.env, context.request));
+  // The "Who pays taxes" page moved to the Taxes section.
+  if (parts.length === 1 && parts[0] === "who-pays") return Response.redirect(`${url.origin}/taxes/taxpayers/`, 301);
   if (parts.length === 1 && parts[0] === "california") return edgeCached(context, CACHE_SECONDS, () => californiaPage(context.env, context.request));
   return notFound("No page at this address.", "laws", ["Federal finances", "/finances/"]);
 }, { tab: "laws" });

@@ -8,6 +8,7 @@ import { INDUSTRIES } from "../../workers/sync/src/funding/industry.js";
 import { currentCycle } from "../../workers/sync/src/funding/fec.js";
 import { donorsDisclosed, isPersonName } from "../../workers/sync/src/funding/disclosure.js";
 import { awardsLink } from "./gov-money.js";
+import { taxMarker } from "./taxes.js";
 import { darkMoneyFor, electioneeringFor, spenderDetails, electioneeringSection } from "./dark-money.js";
 import { fold } from "./summary.js";
 
@@ -460,7 +461,7 @@ ${avg ? fold("funding-average", "Compared with the average", avg) : ""}
 
 const pacRow = (p) => row(esc(p.name), money(p.total), `${p.count} contribution${p.count === 1 ? "" : "s"} · ${esc(industryName(p.industry))}`);
 const industryRow = (i) => row(esc(industryName(i.industry)), money(i.pac + i.emp), [i.pac ? `PACs ${money(i.pac)}` : "", i.emp ? `donors' employers ${money(i.emp)}` : ""].filter(Boolean).join(" · "));
-const employerRow = (e) => row(`${esc(e.employer)}${awardsLink(e.employer)}`, money(e.total), `${e.count} donors · ${esc(industryName(e.industry))}`);
+const employerRow = (e) => row(`${esc(e.employer)}${awardsLink(e.employer)}${taxMarker(e.employer)}`, money(e.total), `${e.count} donors · ${esc(industryName(e.industry))}`);
 
 export const LIST_PER_PAGE = 25;
 
@@ -507,7 +508,7 @@ export function lobbyContribSection(official, l) {
   const searching = l.progress.done < l.progress.n;
   const orgRow = (o) =>
     row(
-      `<a class="inline-link" href="${esc(safeUrl(o.latest.source_url) || LD203_SEARCH)}" target="_blank" rel="noopener">${esc(o.name)}</a>${awardsLink(o.name)}`,
+      `<a class="inline-link" href="${esc(safeUrl(o.latest.source_url) || LD203_SEARCH)}" target="_blank" rel="noopener">${esc(o.name)}</a>${awardsLink(o.name)}${taxMarker(o.name)}`,
       money(o.total),
       [plural(o.count, "contribution"), dateSpan(o.dates), o.contributors.size ? `through ${[...o.contributors].slice(0, 2).map(esc).join(", ")}` : "", [...o.types].filter((t) => t && t !== "feca").map((t) => CONTRIB_TYPES[t] || t).join(", ")]
         .filter(Boolean)
@@ -541,7 +542,7 @@ export function giversSideBySide(bill, givers) {
     const memberLine = (m) =>
       `<li><a class="inline-link" href="/reps/${esc(m.slug)}/#funding">${esc(m.member)}</a>: ${money(m.total)} (${plural(m.count, "contribution")}${m.dates.length ? `; ${[...new Set(m.dates)].sort().slice(-3).map(fmtDate).join(", ")}${m.dates.length > 3 ? ", …" : ""}` : ""})</li>`;
     return `<div class="card-inset stack-xs">
-      <p class="small"><strong>${esc(g.name)}</strong>${awardsLink(g.name)}</p>
+      <p class="small"><strong>${esc(g.name)}</strong>${awardsLink(g.name)}${taxMarker(g.name)}</p>
       <p class="small"><span class="label">Lobbying</span> ${plural(lob.reports, "report")} that mention ${esc(bill.bill_number)}${clients.length ? `, for ${clients.slice(0, 3).map(esc).join(", ")}${clients.length > 3 ? ` and ${clients.length - 3} more` : ""}` : ""}; latest ${esc(lob.latest.filing_period || "")} ${esc(String(lob.latest.filing_year || ""))}, filed ${fmtDate(lob.latest.posted_at)}. <a class="tap" href="${esc(safeUrl(lob.latest.source_url) || "#")}" target="_blank" rel="noopener">Report ↗</a></p>
       <p class="small"><span class="label">Contributions</span> ${money(g.total)} honoring ${plural(members.length, "member")} of Congress, reported on Form LD-203. <a class="tap" href="${esc(safeUrl(g.latest.source_url) || LD203_SEARCH)}" target="_blank" rel="noopener">Latest report ↗</a></p>
       <ul class="plain-list small">${members.slice(0, 5).map(memberLine).join("")}</ul>
@@ -575,13 +576,13 @@ export function followTheMoney(bill, l, { reps = null, repMoney = [], cycle = nu
          .slice(0, 12)
          .map((o) =>
            row(
-             `<a class="inline-link" href="${esc(safeUrl(o.latest.source_url) || "#")}" target="_blank" rel="noopener">${esc(o.name)}</a>${awardsLink(o.name)}`,
+             `<a class="inline-link" href="${esc(safeUrl(o.latest.source_url) || "#")}" target="_blank" rel="noopener">${esc(o.name)}</a>${awardsLink(o.name)}${taxMarker(o.name)}`,
              o.amount ? money(o.amount) : '<span class="secondary">not stated</span>',
              `${o.reports} report${o.reports === 1 ? "" : "s"} · ${esc(industryName(o.industry))}`
            )
          )
          .join("")}</ul>
-       ${l.orgs.length > 12 ? `<details class="weigh-details"><summary>${l.orgs.length - 12} more organizations</summary><ul class="plain-list money-list">${l.orgs.slice(12).map((o) => row(`<a class="inline-link" href="${esc(safeUrl(o.latest.source_url) || "#")}" target="_blank" rel="noopener">${esc(o.name)}</a>${awardsLink(o.name)}`, o.amount ? money(o.amount) : '<span class="secondary">not stated</span>')).join("")}</ul></details>` : ""}
+       ${l.orgs.length > 12 ? `<details class="weigh-details"><summary>${l.orgs.length - 12} more organizations</summary><ul class="plain-list money-list">${l.orgs.slice(12).map((o) => row(`<a class="inline-link" href="${esc(safeUrl(o.latest.source_url) || "#")}" target="_blank" rel="noopener">${esc(o.name)}</a>${awardsLink(o.name)}${taxMarker(o.name)}`, o.amount ? money(o.amount) : '<span class="secondary">not stated</span>')).join("")}</ul></details>` : ""}
        <p class="hint">Reported lobbying income and expenses in these reports: <strong>${money(l.amount)}</strong>. Each amount covers everything a report lists, not only this bill, so it overstates spending on this bill. Reports are found by searching for the bill number and checking each mention; a report that writes the number differently can be missed. Each organization links to its latest report. <a class="tap" href="${METHOD}">How</a></p>`
     : `<p class="secondary small">${searching ? "Searching lobbying reports for this bill. None matched so far." : `No lobbying reports from ${span} mention ${esc(bill.bill_number)}.`}</p>`;
 
