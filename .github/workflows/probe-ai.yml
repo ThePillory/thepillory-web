@@ -21,17 +21,7 @@ jobs:
             x=$(curl -s -A "$A" "https://www.sec.gov/Archives/edgar/data/$1/$2/index.json" | python3 -c "import json,sys;d=json.load(sys.stdin);print(next((x['name'] for x in d['directory']['item'] if x['name'].endswith('_htm.xml')),''))")
             sleep 0.3
             curl -s -A "$A" "https://www.sec.gov/Archives/edgar/data/$1/$2/$x" -o inst.xml; ls -la inst.xml
-            python3 - <<'PY'
-          import re
-          s=open("inst.xml",encoding="utf-8",errors="replace").read()
-          ctx={}
-          for m in re.finditer(r'<(?:xbrli:)?context id="([^"]+)">(.*?)</(?:xbrli:)?context>', s, re.S):
-              dims=re.findall(r'dimension="([^"]+)">([^<]+)<', m.group(2))
-              per=re.findall(r'<(?:xbrli:)?(?:startDate|endDate|instant)>([^<]+)<', m.group(2))
-              ctx[m.group(1)]=(dims,per)
-          for m in re.finditer(r'<us-gaap:(IncomeTaxesPaid\w*)\s[^>]*contextRef="([^"]+)"[^>]*>([^<]*)<', s):
-              d,p=ctx.get(m.group(2),([],[]))
-              if p and p[-1].startswith("2025"): print(m.group(1), m.group(3), p, d)
-          PY
+            grep -o '<[a-z-]*:[A-Za-z]*Tax[A-Za-z]*Paid[A-Za-z]*\|<[a-z-]*:[A-Za-z]*Paid[A-Za-z]*Tax[A-Za-z]*\|<[a-z-]*:IncomeTax[A-Za-z]*Jurisdiction[A-Za-z]*' inst.xml | sort | uniq -c | head -20
+            grep -o 'dimension="[^"]*Tax[^"]*">[^<]*' inst.xml | sort | uniq -c | head -20
             sleep 0.3
           done
