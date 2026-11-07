@@ -1,4 +1,4 @@
-# Temporary: the company taxes reader in measure mode on real EDGAR data (writes nothing). Removed after.
+# Temporary: where the official taxpayer tables are. Removed after.
 name: Probe SEC company facts
 on:
   push:
@@ -9,13 +9,16 @@ permissions:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - run: python3 -m pip install -q pycountry==24.6.1 && python3 tools/test_company_taxes.py
-      - run: python3 tools/build_company_taxes.py --mode measure --max-instances 40 --limit 0
-        env:
-          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+      - run: |
+          UA='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36'
+          for u in \
+            https://www.irs.gov/statistics/soi-tax-stats-individual-statistical-tables-by-tax-rate-and-income-percentile \
+            https://www.irs.gov/statistics/soi-tax-stats-top-400-individual-income-tax-returns-with-the-largest-adjusted-gross-incomes \
+            https://www.cbo.gov/topics/income-distribution \
+            https://www.ftb.ca.gov/about-ftb/data-reports-plans/Annual-Reports/index.html ; do
+            echo "=== $u"
+            curl -sL -A "$UA" -o p.html -w "%{http_code}\n" "$u"
+            grep -o 'href="[^"]*\.\(xls\|xlsx\|csv\|pdf\)"' p.html | sort -u | head -25
+            grep -o 'href="[^"]*\(distribution-household-income\|annual-report\|Annual-Report\)[^"]*"' p.html | sort -u | head -12
+          done

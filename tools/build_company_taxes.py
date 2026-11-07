@@ -242,6 +242,7 @@ COMPANY_COLS = ["cik", "name", "name_key", "tickers", "sic", "sic_desc", "state"
 YEAR_COLS = ["cik", "period_end", "period_start", "fy", "taxes_paid", "paid_federal", "paid_state", "paid_foreign", "current_federal",
              "current_state", "deferred", "pretax", "pretax_tag", "pretax_us", "pretax_foreign", "revenue", "revenue_tag", "src"]
 JUR_COLS = ["cik", "period_end", "element", "jurisdiction", "name", "amount", "accn"]
+ORG_COLS = ["cik", "kind", "org_name", "how", "summary"]
 
 
 def company_row(cik, sub, years):
@@ -258,6 +259,69 @@ def company_row(cik, sub, years):
 
 def year_rows(cik, years):
     return [{**y, "cik": cik, "src": json.dumps(y["src"], sort_keys=True)} for y in years]
+
+
+ORG_QUERIES = {
+    # kind: SQL giving name, year, n (records), total, source_url. Grouped so a page never has to.
+    "pac": "SELECT name, cycle AS year, SUM(count) AS n, SUM(total) AS total, MIN(source_url) AS source_url FROM funding_pacs GROUP BY name, cycle",
+    "lobbying": "SELECT client_name AS name, filing_year AS year, COUNT(*) AS n, SUM(amount) AS total, MAX(source_url) AS source_url FROM lobbying_filings GROUP BY client_name, filing_year",
+    "ld203": "SELECT f.registrant_name AS name, f.filing_year AS year, COUNT(DISTINCT f.filing_uuid) AS n, SUM(c.amount) AS total, MAX(f.source_url) AS source_url "
+             "FROM lobby_contrib_filings f JOIN lobby_contributions c ON c.filing_uuid = f.filing_uuid WHERE f.filer_type = 'organization' GROUP BY f.registrant_name, f.filing_year",
+    "ca-lobbying": "SELECT employer_name AS name, substr(period_end, 1, 4) AS year, COUNT(*) AS n, SUM(amount) AS total, MAX(source_url) AS source_url FROM ca_lobby_reports GROUP BY employer_name, substr(period_end, 1, 4)",
+}
+
+
+def summarize(rows):
+    """One organization's rows (by year) as {total, count, first, last, source_url, by_year}."""
+    years = sorted({str(r["year"]) for r in rows if r.get("year") is not None})
+    by_year = {}
+    for r in rows:
+        y = str(r.get("year"))
+        by_year[y] = by_year.get(y, 0) + (r.get("total") or 0)
+    return {"total": sum(r.get("total") or 0 for r in rows), "count": sum(r.get("n") or 0 for r in rows),
+            "first": years[0] if years else None, "last": years[-1] if years else None,
+            "source_url": next((r["source_url"] for r in sorted(rows, key=lambda r: str(r.get("year")), reverse=True) if r.get("source_url")), None),
+            "by_year": by_year}
+
+
+def match_orgs(companies, found, confirmed):
+    """Organizations matched to one company: by exact name key when exactly one company has it, or by a
+    person's confirmed link (org key -> CIK). found: {kind: [rows with name]}. -> company_orgs rows."""
+    by_key = {}
+    for c in companies:
+        by_key.setdefault(c["name_key"], []).append(c["cik"])
+    out = []
+    for kind, rows in found.items():
+        groups = {}
+        for r in rows:
+            groups.setdefault(r["name"], []).append(r)
+        for name, rs in groups.items():
+            key = name_key(name)
+            if not key:
+                continue
+            if key in confirmed:
+                cik, how = confirmed[key], "confirmed"
+            elif len(by_key.get(key, [])) == 1:
+                cik, how = by_key[key][0], "name"
+            else:
+                continue
+            out.append({"cik": cik, "kind": kind, "org_name": name, "how": how, "summary": json.dumps(summarize(rs), sort_keys=True)})
+    return out
+
+
+def measure_money(path):
+    """California's 2026 ballot measure money by organization (data/elections/measure-money-*.json), as rows."""
+    try:
+        d = json.loads(Path(path).read_text())
+    except (OSError, ValueError):
+        return []
+    rows = []
+    for o in (d.get("orgs") or {}).values():
+        gave = sum(g.get("total") or 0 for g in o.get("gave") or [])
+        spent = sum(x.get("total") or 0 for x in o.get("spent") or [])
+        src = next((g.get("source_url") for g in (o.get("gave") or []) + (o.get("spent") or []) if g.get("source_url")), None)
+        rows.append({"name": o.get("name") or "", "year": 2026, "n": len(o.get("gave") or []) + len(o.get("spent") or []), "total": gave + spent, "source_url": src})
+    return rows
 
 
 # ---------------------------------------------------------------------------
@@ -335,7 +399,7 @@ def main():
     ap.add_argument("--mode", choices=("measure", "load"), default="measure")
     ap.add_argument("--database", default="pillory")
     ap.add_argument("--cache", default=os.environ.get("RUNNER_TEMP", "/tmp"))
-    ap.add_argument("--max-instances", type=int, default=1500, help="10-K XBRL instances read this run for jurisdictions")
+    ap.add_argument("--max-instances", type=int, default=6000, help="10-K XBRL instances read this run for jurisdictions")
     ap.add_argument("--limit", type=int, default=0, help="companies read (0: all); for trying the reader")
     args = ap.parse_args()
     cache = Path(args.cache)
@@ -360,8 +424,11 @@ def main():
         companies.append(company_row(cik, sub, ys))
         years += year_rows(cik, ys)
         # 10-Ks filing taxes paid by federal / state / foreign (ASU 2023-09) may also file them by jurisdiction.
-        if any(y.get(f) is not None for y in ys for f in ("paid_federal", "paid_state", "paid_foreign")):
-            filings[cik] = [a for a, filed, _ in tks if filed >= "2025-01-01"]
+        # The 10-Ks that file taxes paid as federal / state / foreign (ASU 2023-09) may also file them by
+        # jurisdiction: exactly those filings, each read once.
+        accns = sorted({y["src"][f] for y in ys for f in ("paid_federal", "paid_state", "paid_foreign") if y["src"].get(f)})
+        if accns:
+            filings[cik] = accns
         read += 1
         if args.limit and read >= args.limit:
             break
@@ -388,10 +455,36 @@ def main():
         done_accns.append({"accn": accn, "cik": cik, "found": len(rows)})
     say(f"{len(done_accns)} 10-Ks read; {len(jur)} jurisdiction amounts")
 
+    # What ThePillory already has for the same organizations (D1 and the measure money file).
+    orgs = []
+    if os.environ.get("CLOUDFLARE_API_TOKEN"):
+        found = {}
+        for kind, q in ORG_QUERIES.items():
+            try:
+                found[kind] = d1(args, command=q)
+            except SystemExit as e:
+                say(f"  {kind}: not read ({str(e)[:200]})")
+        found["ca-measures"] = measure_money(next(iter(sorted((Path(__file__).resolve().parent.parent / "data" / "elections").glob("measure-money-*.json"), reverse=True)), ""))
+        try:
+            confirmed = {r["org_key"]: r["cik"] for r in d1(args, command="SELECT org_key, cik FROM company_org_links")}
+        except SystemExit:
+            confirmed = {}
+        orgs = match_orgs(companies, found, confirmed)
+        for kind in found:
+            say(f"  {kind}: {sum(1 for o in orgs if o['kind'] == kind)} organizations matched to one company")
+
     sql = upsert("companies", COMPANY_COLS, ["cik"], companies)
     sql += upsert("company_tax_years", YEAR_COLS, ["cik", "period_end"], years)
     sql += upsert("company_tax_jurisdictions", JUR_COLS, ["cik", "period_end", "element", "jurisdiction"], jur)
     sql += upsert("company_tax_filings", ["accn", "cik", "found"], ["accn"], done_accns)
+    if orgs:
+        sql += upsert("company_orgs", ORG_COLS, ["cik", "kind", "org_name"], orgs)
+        if args.mode == "load":
+            # A match that no longer holds (a name changed, a second company took the same name) is removed.
+            now = {(o["cik"], o["kind"], o["org_name"]) for o in orgs}
+            for r in d1(args, command="SELECT cik, kind, org_name FROM company_orgs"):
+                if (r["cik"], r["kind"], r["org_name"]) not in now:
+                    sql.append(f"DELETE FROM company_orgs WHERE cik = {lit(r['cik'])} AND kind = {lit(r['kind'])} AND org_name = {lit(r['org_name'])};")
     say(f"{len(sql)} SQL statements")
     if args.mode == "load":
         run_sql(args, sql)
