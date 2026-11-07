@@ -12,20 +12,24 @@ jobs:
     steps:
       - run: |
           UA='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36'
-          curl -sL -A "$UA" -o irs.html https://www.irs.gov/statistics/soi-tax-stats-individual-income-tax-rates-and-tax-shares
+          pip install -q openpyxl==3.1.5 xlrd==2.0.1
+          for f in 23in41ts.xlsx 23in42ts.xls 23in43ts.xls; do curl -sL -A "$UA" -o $f https://www.irs.gov/pub/irs-soi/$f; done
           python3 - <<'PY'
-          import re,html
-          s=open("irs.html",encoding="utf-8",errors="replace").read()
-          for m in re.finditer(r'<a[^>]+href="([^"]*/pub/irs-soi/[^"]+)"[^>]*>(.*?)</a>', s, re.S):
-              t=re.sub(r"\s+"," ",html.unescape(re.sub("<[^>]+>","",m.group(2)))).strip()
-              if re.search(r"2[0-9]", m.group(1)): print(m.group(1), "|", t[:100])
-          for h in re.findall(r"<(?:h2|h3|strong|p)[^>]*>(.*?)</(?:h2|h3|strong|p)>", s, re.S)[:60]:
-              t=re.sub(r"\s+"," ",html.unescape(re.sub("<[^>]+>","",h))).strip()
-              if "Table" in t: print("  >", t[:200])
+          import openpyxl, xlrd
+          def dump(rows, n=60):
+              for i,r in enumerate(rows[:n]):
+                  cells=[str(c)[:28] for c in r if c not in (None,"")]
+                  if cells: print(i, " | ".join(cells)[:400])
+          wb=openpyxl.load_workbook("23in41ts.xlsx", read_only=True, data_only=True)
+          for ws in wb.worksheets[:2]:
+              print("### 41", ws.title); dump(list(ws.iter_rows(values_only=True)), 70)
+          for f in ("23in42ts.xls","23in43ts.xls"):
+              b=xlrd.open_workbook(f)
+              for sh in b.sheets()[:1]:
+                  print("###", f, sh.name, sh.nrows); dump([sh.row_values(i) for i in range(sh.nrows)], 45)
           PY
-          echo "=== top 400 pdf"; curl -sL -A "$UA" -o t.pdf -w "%{http_code} %{size_download}\n" https://www.irs.gov/pub/irs-soi/14intop400.pdf
-          sudo apt-get install -y -qq poppler-utils >/dev/null 2>&1; pdftotext -layout t.pdf - | head -120
-          echo "=== cbo"; curl -sL -A "$UA" -o c.html -w "%{http_code}\n" https://www.cbo.gov/publication/62300; grep -o 'href="[^"]*xlsx[^"]*"' c.html | head
-          curl -sL -A "$UA" -o /dev/null -w "pdf %{http_code}\n" https://www.cbo.gov/system/files/2026-01/61911-Household-Income-2022.pdf
-          echo "=== ftb"; curl -sL -A "$UA" "https://data.ftb.ca.gov/resource/hepm-s2cf.json?\$limit=3" | head -c 1500; echo
-          curl -sL -A "$UA" "https://data.ftb.ca.gov/api/views/hepm-s2cf.json" | python3 -c "import json,sys;d=json.load(sys.stdin);print(d.get('name'),d.get('description','')[:600]);print([ (c['fieldName'],c['name']) for c in d.get('columns',[])])"
+          echo "=== ftb"
+          curl -sL -A "$UA" "https://data.ca.gov/api/3/action/package_show?id=b-4a-adjusted-gross-income-class-comparison-all-filing-statuses" | python3 -c "
+          import json,sys;d=json.load(sys.stdin)['result'];print(d.get('title'));[print(r.get('name'),'|',r.get('format'),'|',r.get('url'),'|',r.get('last_modified')) for r in d['resources']]"
+          u=$(curl -sL -A "$UA" "https://data.ca.gov/api/3/action/package_show?id=b-4a-adjusted-gross-income-class-comparison-all-filing-statuses" | python3 -c "import json,sys;d=json.load(sys.stdin)['result'];print([r['url'] for r in d['resources'] if (r.get('format') or '').lower()=='csv'][-1])")
+          curl -sL -A "$UA" "$u" | head -30
