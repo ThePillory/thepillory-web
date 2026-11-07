@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=NV&candidate_status=C",
- "list_built_on": "2026-11-05",
+ "list_built_on": "2026-11-06",
  "built_on": "2026-11-06",
  "senate_up": false,
  "candidates": {
@@ -309,7 +309,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00914804/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NV01349": {
@@ -352,7 +352,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00916361/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NV01356": {
@@ -395,7 +395,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00916445/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NV01315": {
@@ -438,7 +438,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00906206/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NV01323": {
@@ -481,7 +481,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00907592/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H8NV03036": {
@@ -733,6 +733,55 @@
    "organizations": {
     "items": [
      {
+      "committee_id": "C00024422",
+      "name": "SUPPORTERS OF OPERATING ENGINEERS LOCAL UNION #3 ENDORSED CANDIDATES (SELEC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00007922",
+      "name": "LABORERS' INT'L UNION OF NORTH AMERICA PAC (LIUNA PAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00193433",
+      "name": "EMILYS LIST",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00365536",
+      "name": "CHC BOLD PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00028860",
+      "name": "AMERICAN FEDERATION OF TEACHERS, AFL-CIO COPE",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00011114",
+      "name": "AMERICAN FEDERATION OF STATE COUNTY & MUNICIPAL EMPLOYEES (PEOPLE)",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
+      "committee_id": "C00364158",
+      "name": "AMERICAN COLLEGE OF OB-GYNS PAC (OB-GYN PAC)",
+      "total": 5000,
+      "count": 1,
+      "industry": "education"
+     },
+     {
       "committee_id": "C00002840",
       "name": "UAW - V - CAP (UAW VOLUNTARY COMMUNITY ACTION PROGRAM) 'INT'L UNION UNITED AUTOMOBILE AEROSPACE & AGRICULTURAL IMPLEMENT WORKERS OF AMERICA UAW",
       "total": 5000,
@@ -754,6 +803,48 @@
       "industry": "leadership"
      },
      {
+      "committee_id": "C00079541",
+      "name": "REPRODUCTIVE FREEDOM FOR ALL PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00409730",
+      "name": "NEW DEMOCRAT COALITION ACTION FUND (NEWDEMS)",
+      "total": 2500,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00785816",
+      "name": "LIFTOFF PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00252940",
+      "name": "LEAGUE OF CONSERVATION VOTERS ACTION FUND",
+      "total": 2500,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00685297",
+      "name": "ELECT DEMOCRATIC WOMEN",
+      "total": 2500,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00589309",
+      "name": "BLUE MOMENTUM PAC",
+      "total": 2500,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
       "committee_id": "C00007542",
       "name": "INT'L ASSOC OF SHEET METAL AIR RAIL & TRANSPORTATION WORKERS PAL (SMART PAL)",
       "total": 2500,
@@ -768,15 +859,57 @@
       "industry": "leadership"
      },
      {
+      "committee_id": "C00495952",
+      "name": "SCHNEIDER FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00564799",
+      "name": "POPULATION CONNECTION ACTION FUND PAC  (PCAF PAC)",
+      "total": 2000,
+      "count": 1,
+      "industry": "finance"
+     },
+     {
+      "committee_id": "C00003251",
+      "name": "NEA FUND FOR CHILDREN AND PUBLIC EDUCATION",
+      "total": 2000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00092247",
+      "name": "NATIONAL ORGANIZATION FOR WOMEN, INC. PAC",
+      "total": 2000,
+      "count": 1,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00664318",
+      "name": "DEMOCRACY SUMMER LEADERSHIP PAC",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
       "committee_id": "C00423079",
       "name": "DEMOCRATS RESHAPING AMERICA (DREAMPAC)",
       "total": 2000,
       "count": 1,
       "industry": "leadership"
+     },
+     {
+      "committee_id": "C00840462",
+      "name": "SILICORN VALLEY PAC",
+      "total": 1000,
+      "count": 1,
+      "industry": "leadership"
      }
     ],
-    "count": 6,
-    "total": 22000,
+    "count": 33,
+    "total": 90769.59,
     "complete": true,
     "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00939488&two_year_transaction_period=2026&line_number=F3-11C"
    },
@@ -786,7 +919,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00939488/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NV02289": {
@@ -829,7 +962,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00913095/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H4NV04108": {
@@ -1064,7 +1197,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00928960/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NV02420": {
@@ -1096,7 +1229,7 @@
    },
    "organizations": null,
    "website": null,
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NV02347": {
@@ -1139,7 +1272,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00929497/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H4NV02185": {
@@ -1296,7 +1429,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00942441/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NV02446": {
@@ -1339,7 +1472,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00945345/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NV02305": {
@@ -1382,7 +1515,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00930792/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NV03220": {
@@ -1425,7 +1558,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00903294/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NV03196": {
@@ -1468,7 +1601,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00899013/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NV03253": {
@@ -1519,7 +1652,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00918417/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NV03287": {
@@ -1570,7 +1703,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00929976/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NV03238": {
@@ -1613,7 +1746,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00943597/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NV03246": {
@@ -1631,7 +1764,7 @@
    "totals": null,
    "organizations": null,
    "website": null,
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NV04020": {
@@ -1850,7 +1983,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00655613/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H4NV03175": {
@@ -1936,7 +2069,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00904219/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H4NV03225": {
@@ -2374,7 +2507,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00900910/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NV03295": {
@@ -2417,7 +2550,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00949172/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NV03261": {
@@ -2460,7 +2593,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00919993/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H2NV04011": {
@@ -2722,7 +2855,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00943597/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NV04111": {
@@ -2794,7 +2927,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00901827/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   }
  }

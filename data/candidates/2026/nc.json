@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=NC&candidate_status=C",
- "list_built_on": "2026-11-05",
+ "list_built_on": "2026-11-06",
  "built_on": "2026-11-06",
  "senate_up": true,
  "candidates": {
@@ -891,7 +891,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00928457/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H4NC01137": {
@@ -1387,7 +1387,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00918508/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H2NC02253": {
@@ -1495,7 +1495,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00926055/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC02213": {
@@ -1538,7 +1538,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00925792/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H0NC02125": {
@@ -1757,7 +1757,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00729277/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC03211": {
@@ -1906,7 +1906,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00931147/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H0NC03172": {
@@ -2125,7 +2125,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00697649/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC03187": {
@@ -2168,7 +2168,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00897348/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC03229": {
@@ -2215,6 +2215,13 @@
       "industry": "other"
      },
      {
+      "committee_id": "C00617803",
+      "name": "JOBS, EDUCATION, & FAMILIES FIRST JEFF PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
       "committee_id": "C00002469",
       "name": "MACHINIST'S NON-PARTISAN POLITICAL LEAGUE MULTI CANDIDATE COMMITTEE",
       "total": 5000,
@@ -2227,6 +2234,13 @@
       "total": 5000,
       "count": 1,
       "industry": "other"
+     },
+     {
+      "committee_id": "C00503052",
+      "name": "JEFFRIES FOR CONGRESS",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
      },
      {
       "committee_id": "C00574970",
@@ -2243,8 +2257,8 @@
       "industry": "leadership"
      }
     ],
-    "count": 6,
-    "total": 33000,
+    "count": 8,
+    "total": 40000,
     "complete": true,
     "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00930784&two_year_transaction_period=2026&line_number=F3-11C"
    },
@@ -2254,7 +2268,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00930784/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H2NC06098": {
@@ -2716,7 +2730,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00902882/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC05141": {
@@ -2759,7 +2773,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00916478/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H4NC05146": {
@@ -3064,7 +3078,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00908467/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H4NC08082": {
@@ -3150,7 +3164,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00916957/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC06164": {
@@ -3201,7 +3215,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00907576/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC06180": {
@@ -3244,7 +3258,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00918847/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H4NC06177": {
@@ -3506,7 +3520,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00922310/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC07196": {
@@ -3564,7 +3578,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00909804/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H2NC07096": {
@@ -4035,6 +4049,13 @@
    "organizations": {
     "items": [
      {
+      "committee_id": "C00797670",
+      "name": "AIPAC PAC",
+      "total": 10000,
+      "count": 2,
+      "industry": "other"
+     },
+     {
       "committee_id": "C00693796",
       "name": "BUCKEYE LIBERTY PAC",
       "total": 10000,
@@ -4042,11 +4063,25 @@
       "industry": "leadership"
      },
      {
+      "committee_id": "C00000901",
+      "name": "NATIONAL ASSOCIATION OF HOME BUILDERS PAC (BUILD-PAC)",
+      "total": 8500,
+      "count": 2,
+      "industry": "real_estate"
+     },
+     {
       "committee_id": "C00883413",
       "name": "AMERICA'S MOUNTAIN PAC",
       "total": 8500,
       "count": 2,
       "industry": "leadership"
+     },
+     {
+      "committee_id": "C00030718",
+      "name": "NATIONAL ASSOCIATION OF REALTORS PAC - RPAC",
+      "total": 8000,
+      "count": 2,
+      "industry": "real_estate"
      },
      {
       "committee_id": "C00193631",
@@ -4063,11 +4098,32 @@
       "industry": "agriculture"
      },
      {
+      "committee_id": "C00002972",
+      "name": "AMERICA'S ELECTRIC COOPERATIVES PAC",
+      "total": 6000,
+      "count": 4,
+      "industry": "energy"
+     },
+     {
       "committee_id": "C00503680",
       "name": "CROP INSURANCE PROFESSIONALS ASSOCIATION PAC (CIPA PAC)",
       "total": 5500,
       "count": 3,
       "industry": "finance"
+     },
+     {
+      "committee_id": "C00834507",
+      "name": "BUILDING UP DEMOCRACY'S DREAM",
+      "total": 5000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00639229",
+      "name": "AMERICAN REVIVAL PAC",
+      "total": 5000,
+      "count": 1,
+      "industry": "other"
      },
      {
       "committee_id": "C00682617",
@@ -4091,13 +4147,6 @@
       "industry": "agriculture"
      },
      {
-      "committee_id": "C00797670",
-      "name": "AIPAC PAC",
-      "total": 5000,
-      "count": 1,
-      "industry": "other"
-     },
-     {
       "committee_id": "C00110338",
       "name": "AMERICAN CRYSTAL SUGAR COMPANY PAC",
       "total": 5000,
@@ -4105,11 +4154,32 @@
       "industry": "agriculture"
      },
      {
+      "committee_id": "C00144766",
+      "name": "NATIONAL BEER WHOLESALERS ASSOCIATION PAC - NBWA PAC",
+      "total": 5000,
+      "count": 2,
+      "industry": "retail"
+     },
+     {
       "committee_id": "C00084491",
       "name": "INTERNATIONAL FRANCHISE ASSOCIATION FRANCHISING PAC INC",
       "total": 5000,
       "count": 4,
       "industry": "other"
+     },
+     {
+      "committee_id": "C00034272",
+      "name": "NATIONAL CHICKEN COUNCIL PAC",
+      "total": 4500,
+      "count": 3,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00010868",
+      "name": "AMERICAN COUNCIL OF ENGINEERING COMPANIES (ACEC/PAC)",
+      "total": 4500,
+      "count": 2,
+      "industry": "construction"
      },
      {
       "committee_id": "C00255752",
@@ -4133,18 +4203,11 @@
       "industry": "leadership"
      },
      {
-      "committee_id": "C00002972",
-      "name": "AMERICA'S ELECTRIC COOPERATIVES PAC",
-      "total": 4000,
-      "count": 3,
-      "industry": "energy"
-     },
-     {
-      "committee_id": "C00000901",
-      "name": "NATIONAL ASSOCIATION OF HOME BUILDERS PAC (BUILD-PAC)",
+      "committee_id": "C00384818",
+      "name": "CVS HEALTH PAC",
       "total": 3500,
-      "count": 1,
-      "industry": "real_estate"
+      "count": 2,
+      "industry": "health"
      },
      {
       "committee_id": "C00213066",
@@ -4154,64 +4217,15 @@
       "industry": "education"
      },
      {
-      "committee_id": "C00030718",
-      "name": "NATIONAL ASSOCIATION OF REALTORS PAC - RPAC",
-      "total": 3000,
-      "count": 1,
-      "industry": "real_estate"
-     },
-     {
       "committee_id": "C00081414",
       "name": "AMERICAN SUGAR CANE LEAGUE PAC",
       "total": 3000,
       "count": 1,
       "industry": "agriculture"
-     },
-     {
-      "committee_id": "C00308478",
-      "name": "USA RICE FEDERATION PAC",
-      "total": 3000,
-      "count": 2,
-      "industry": "agriculture"
-     },
-     {
-      "committee_id": "C00416297",
-      "name": "NCCPAC",
-      "total": 2500,
-      "count": 1,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00010421",
-      "name": "ASSOCIATED BUILDERS AND CONTRACTORS, INC PAC",
-      "total": 2500,
-      "count": 1,
-      "industry": "construction"
-     },
-     {
-      "committee_id": "C00144766",
-      "name": "NATIONAL BEER WHOLESALERS ASSOCIATION PAC - NBWA PAC",
-      "total": 2500,
-      "count": 1,
-      "industry": "retail"
-     },
-     {
-      "committee_id": "C00022343",
-      "name": "INSURPAC",
-      "total": 2500,
-      "count": 1,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00540146",
-      "name": "FIRST IN FREEDOM PAC",
-      "total": 2500,
-      "count": 1,
-      "industry": "leadership"
      }
     ],
-    "count": 89,
-    "total": 196500.01,
+    "count": 97,
+    "total": 242500.01,
     "complete": true,
     "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00850404&two_year_transaction_period=2026&line_number=F3-11C"
    },
@@ -4221,7 +4235,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00850404/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC08194": {
@@ -4264,7 +4278,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00910661/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC08202": {
@@ -4315,7 +4329,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00920652/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H4NC09171": {
@@ -4677,7 +4691,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00896357/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC10174": {
@@ -4728,7 +4742,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00901934/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC10182": {
@@ -4779,7 +4793,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00914036/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H4NC10146": {
@@ -5084,7 +5098,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00908137/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC10216": {
@@ -5127,7 +5141,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00936138/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC10224": {
@@ -5170,7 +5184,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00933812/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC11248": {
@@ -5389,7 +5403,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00914119/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC11214": {
@@ -5440,7 +5454,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00905679/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC11222": {
@@ -5491,7 +5505,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00906081/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H2NC14050": {
@@ -5753,7 +5767,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00903674/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC11255": {
@@ -5804,7 +5818,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00918904/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC11230": {
@@ -5847,7 +5861,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00912949/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC11271": {
@@ -5865,7 +5879,7 @@
    "totals": null,
    "organizations": null,
    "website": null,
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC11263": {
@@ -5916,7 +5930,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00920538/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H4NC12100": {
@@ -6178,7 +6192,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00928010/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC12113": {
@@ -6221,7 +6235,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00926840/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC12139": {
@@ -6264,7 +6278,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00928697/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC12121": {
@@ -6307,7 +6321,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00936179/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC13244": {
@@ -6350,7 +6364,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00932913/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC13228": {
@@ -6408,7 +6422,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00906057/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H4NC13116": {
@@ -6713,7 +6727,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00929430/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC14044": {
@@ -6756,7 +6770,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00925859/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC14036": {
@@ -6814,7 +6828,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00914549/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H4NC14015": {
@@ -7084,7 +7098,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00929034/",
     "checked": "2026-10-13"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6NC11321": {
@@ -7127,7 +7141,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00958785/",
     "checked": "2026-10-17"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   }
  }

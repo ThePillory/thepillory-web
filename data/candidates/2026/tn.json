@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=TN&candidate_status=C",
- "list_built_on": "2026-11-05",
+ "list_built_on": "2026-11-06",
  "built_on": "2026-11-06",
  "senate_up": true,
  "candidates": {
@@ -407,11 +407,46 @@
       "industry": "manufacturing"
      },
      {
+      "committee_id": "C00193854",
+      "name": "AMERICAN PHARMACISTS ASSOCIATION",
+      "total": 10000,
+      "count": 2,
+      "industry": "pharma"
+     },
+     {
       "committee_id": "C00612010",
       "name": "AMERICAN CAR RENTAL ASSOCIATION PAC",
       "total": 10000,
       "count": 2,
       "industry": "other"
+     },
+     {
+      "committee_id": "C00236489",
+      "name": "KOCH, INC. PAC (KOCHPAC)",
+      "total": 10000,
+      "count": 3,
+      "industry": "energy"
+     },
+     {
+      "committee_id": "C00483487",
+      "name": "BRINGING REPUBLICAN EXCELLENCE TO TOWN PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00797670",
+      "name": "AMERICAN ISRAEL PUBLIC AFFAIRS PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "legal"
+     },
+     {
+      "committee_id": "C00030809",
+      "name": "NATIONAL COMMUNITY PHARMACISTS ASSOCIATION - PAC",
+      "total": 10000,
+      "count": 3,
+      "industry": "pharma"
      },
      {
       "committee_id": "C00365502",
@@ -484,11 +519,25 @@
       "industry": "other"
      },
      {
+      "committee_id": "C00113811",
+      "name": "NATIONAL ELECTRICAL CONTRACTORS ASSOCIATION POLITICAL ACTION COMMITTEE (NECAPAC)",
+      "total": 10000,
+      "count": 4,
+      "industry": "construction"
+     },
+     {
       "committee_id": "C00077321",
       "name": "AMERICAN INSTITUTE OF CERTIFIED PUBLIC ACCOUNTANTS PAC",
       "total": 10000,
       "count": 4,
       "industry": "finance"
+     },
+     {
+      "committee_id": "C00346353",
+      "name": "CRH AMERICAS, INC PAC",
+      "total": 10000,
+      "count": 4,
+      "industry": "other"
      },
      {
       "committee_id": "C00024968",
@@ -498,13 +547,6 @@
       "industry": "health"
      },
      {
-      "committee_id": "C00030809",
-      "name": "NATIONAL COMMUNITY PHARMACISTS ASSOCIATION - PAC",
-      "total": 8500,
-      "count": 2,
-      "industry": "pharma"
-     },
-     {
       "committee_id": "C00882068",
       "name": "HIMS AND HERS HEALTH , INC. PAC",
       "total": 8000,
@@ -512,64 +554,22 @@
       "industry": "health"
      },
      {
+      "committee_id": "C00359539",
+      "name": "AMERICAN ACADEMY OF DERMATOLOGY ASSOCIATION PAC (SKINPAC)",
+      "total": 7500,
+      "count": 2,
+      "industry": "education"
+     },
+     {
       "committee_id": "C00009985",
       "name": "NATIONAL ASSOCIATION OF BROADCASTERS PAC (NABPAC)",
       "total": 7500,
       "count": 2,
       "industry": "media"
-     },
-     {
-      "committee_id": "C00400929",
-      "name": "CENCORA, INC. PAC",
-      "total": 7500,
-      "count": 2,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00389429",
-      "name": "CALPORTLAND COMPANY PAC (CALPORTLANDPAC)",
-      "total": 7500,
-      "count": 3,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00346353",
-      "name": "CRH AMERICAS, INC PAC",
-      "total": 7500,
-      "count": 3,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00444885",
-      "name": "ASTELLAS US LLC PAC (ASTELLAS PAC)",
-      "total": 7000,
-      "count": 3,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00010983",
-      "name": "JOHNSON & JOHNSON PAC",
-      "total": 6500,
-      "count": 3,
-      "industry": "pharma"
-     },
-     {
-      "committee_id": "C00375360",
-      "name": "AMERICAN COLLEGE OF CARDIOLOGY PAC (HEARTPAC)",
-      "total": 6000,
-      "count": 3,
-      "industry": "health"
-     },
-     {
-      "committee_id": "C00374066",
-      "name": "SMITH AND NEPHEW INC. PAC",
-      "total": 6000,
-      "count": 4,
-      "industry": "other"
      }
     ],
-    "count": 208,
-    "total": 680250,
+    "count": 231,
+    "total": 828250,
     "complete": true,
     "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00741090&two_year_transaction_period=2026&line_number=F3-11C"
    },
@@ -579,7 +579,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00741090/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6TN02170": {
@@ -1060,7 +1060,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00461822/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6TN03228": {
@@ -1498,7 +1498,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00464073/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6TN04267": {
@@ -3578,7 +3578,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00693143/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-06",
    "cycle": 2026
   },
   "H6TN09068": {
