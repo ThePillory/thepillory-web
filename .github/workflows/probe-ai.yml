@@ -1,4 +1,4 @@
-# Temporary read-only probe of SEC EDGAR company facts. Removed after.
+# Temporary: the company taxes reader in measure mode on real EDGAR data (writes nothing). Removed after.
 name: Probe SEC company facts
 on:
   push:
@@ -9,19 +9,13 @@ permissions:
 jobs:
   probe:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
-      - env:
-          UA: ${{ secrets.SEC_USER_AGENT }}
-        run: |
-          A="${UA:-ThePillory data probe contact@thepillory.co}"
-          for f in "34088 000003408826000045" "1018724 000101872426000004" "21344 000162828026010047"; do
-            set -- $f
-            echo "== $1 $2"
-            curl -s -A "$A" "https://www.sec.gov/Archives/edgar/data/$1/$2/index.json" | python3 -c "import json,sys;d=json.load(sys.stdin);print([x['name'] for x in d['directory']['item'] if x['name'].endswith(('.xml','.json','.xlsx'))])"
-            x=$(curl -s -A "$A" "https://www.sec.gov/Archives/edgar/data/$1/$2/index.json" | python3 -c "import json,sys;d=json.load(sys.stdin);print(next((x['name'] for x in d['directory']['item'] if x['name'].endswith('_htm.xml')),''))")
-            sleep 0.3
-            curl -s -A "$A" "https://www.sec.gov/Archives/edgar/data/$1/$2/$x" -o inst.xml; ls -la inst.xml
-            grep -o '<[a-z-]*:[A-Za-z]*Tax[A-Za-z]*Paid[A-Za-z]*\|<[a-z-]*:[A-Za-z]*Paid[A-Za-z]*Tax[A-Za-z]*\|<[a-z-]*:IncomeTax[A-Za-z]*Jurisdiction[A-Za-z]*' inst.xml | sort | uniq -c | head -20
-            grep -o 'dimension="[^"]*Tax[^"]*">[^<]*' inst.xml | sort | uniq -c | head -20
-            sleep 0.3
-          done
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: python3 -m pip install -q pycountry==24.6.1 && python3 tools/test_company_taxes.py
+      - run: python3 tools/build_company_taxes.py --mode measure --max-instances 40 --limit 0
+        env:
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
