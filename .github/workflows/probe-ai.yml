@@ -12,23 +12,20 @@ jobs:
     steps:
       - run: |
           UA='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36'
-          curl -sL -A "$UA" -o irs.html https://www.irs.gov/statistics/soi-tax-stats-individual-statistical-tables-by-tax-rate-and-income-percentile
+          curl -sL -A "$UA" -o irs.html https://www.irs.gov/statistics/soi-tax-stats-individual-income-tax-rates-and-tax-shares
           python3 - <<'PY'
           import re,html
           s=open("irs.html",encoding="utf-8",errors="replace").read()
-          for m in re.finditer(r'<a[^>]+href="(/pub/irs-soi/(2[0-9])in[^"]+)"[^>]*>(.*?)</a>', s, re.S):
-              print(m.group(1), "|", re.sub(r"\s+"," ",html.unescape(re.sub("<[^>]+>","",m.group(3)))).strip()[:150])
-          i=s.find("Table 1"); print(re.sub(r"\s+"," ",re.sub("<[^>]+>"," ",s[i:i+1500]))[:1200])
+          for m in re.finditer(r'<a[^>]+href="([^"]*/pub/irs-soi/[^"]+)"[^>]*>(.*?)</a>', s, re.S):
+              t=re.sub(r"\s+"," ",html.unescape(re.sub("<[^>]+>","",m.group(2)))).strip()
+              if re.search(r"2[0-9]", m.group(1)): print(m.group(1), "|", t[:100])
+          for h in re.findall(r"<(?:h2|h3|strong|p)[^>]*>(.*?)</(?:h2|h3|strong|p)>", s, re.S)[:60]:
+              t=re.sub(r"\s+"," ",html.unescape(re.sub("<[^>]+>","",h))).strip()
+              if "Table" in t: print("  >", t[:200])
           PY
-          for u in \
-            https://www.irs.gov/statistics/soi-tax-stats-the-400-individual-income-tax-returns-reporting-the-largest-adjusted-gross-incomes-each-year \
-            https://www.irs.gov/statistics/soi-tax-stats-top-400-individual-income-tax-returns \
-            https://www.cbo.gov/about/products/major-recurring-reports \
-            https://www.cbo.gov/data/budget-economic-data \
-            https://www.ftb.ca.gov/about-ftb/data-reports-plans/annual-reports/index.html \
-            https://www.ftb.ca.gov/about-ftb/data-reports-plans/annual-reports/2023/index.html ; do
-            echo "=== $u"
-            curl -sL -A "$UA" -o p.html -w "%{http_code} %{url_effective}\n" "$u"
-            grep -o 'href="[^"]*\(xls\|xlsx\|csv\)[^"]*"' p.html | sort -u | head -15
-            grep -io 'href="[^"]*\(distribution\|annual-report\|400\|personal-income-tax\|pit\)[^"]*"' p.html | sort -u | head -15
-          done
+          echo "=== top 400 pdf"; curl -sL -A "$UA" -o t.pdf -w "%{http_code} %{size_download}\n" https://www.irs.gov/pub/irs-soi/14intop400.pdf
+          sudo apt-get install -y -qq poppler-utils >/dev/null 2>&1; pdftotext -layout t.pdf - | head -120
+          echo "=== cbo"; curl -sL -A "$UA" -o c.html -w "%{http_code}\n" https://www.cbo.gov/publication/62300; grep -o 'href="[^"]*xlsx[^"]*"' c.html | head
+          curl -sL -A "$UA" -o /dev/null -w "pdf %{http_code}\n" https://www.cbo.gov/system/files/2026-01/61911-Household-Income-2022.pdf
+          echo "=== ftb"; curl -sL -A "$UA" "https://data.ftb.ca.gov/resource/hepm-s2cf.json?\$limit=3" | head -c 1500; echo
+          curl -sL -A "$UA" "https://data.ftb.ca.gov/api/views/hepm-s2cf.json" | python3 -c "import json,sys;d=json.load(sys.stdin);print(d.get('name'),d.get('description','')[:600]);print([ (c['fieldName'],c['name']) for c in d.get('columns',[])])"
