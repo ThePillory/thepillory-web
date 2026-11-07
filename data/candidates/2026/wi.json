@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=WI&candidate_status=C",
- "list_built_on": "2026-11-06",
+ "list_built_on": "2026-11-07",
  "built_on": "2026-11-07",
  "senate_up": false,
  "candidates": {
@@ -55,7 +55,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00917195/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6WI01283": {
@@ -72,11 +72,11 @@
    "last_listed": "2026-11-07",
    "totals": {
     "cycle": 2026,
-    "receipts": 1977099.04,
-    "disbursements": 1625541.26,
+    "receipts": 1977699.66,
+    "disbursements": 1626141.88,
     "cash_on_hand": 351557.78,
-    "individual_unitemized": 651605.02,
-    "individual_itemized": 1133584.92,
+    "individual_unitemized": 651490.48,
+    "individual_itemized": 1134300.08,
     "pac": 189500,
     "party": 0,
     "self_funding": 0,
@@ -141,7 +141,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00915637/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H8WI01123": {
@@ -184,7 +184,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00905711/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6WI01333": {
@@ -242,7 +242,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00948406/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6WI01267": {
@@ -285,7 +285,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00909259/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H4WI01163": {
@@ -547,7 +547,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00677286/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H2WI02124": {
@@ -809,7 +809,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00902627/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6WI03172": {
@@ -842,6 +842,20 @@
    "organizations": {
     "items": [
      {
+      "committee_id": "C00312017",
+      "name": "KIND FOR CONGRESS COMMITTEE",
+      "total": 2000,
+      "count": 1,
+      "industry": "leadership"
+     },
+     {
+      "committee_id": "C00849828",
+      "name": "TARA FOR WISCONSIN",
+      "total": 1000,
+      "count": 1,
+      "industry": "other"
+     },
+     {
       "committee_id": "C00548438",
       "name": "WISCONSIN MEDICAL SOCIETY POLITICAL ACTION COMMITTEE",
       "total": 50,
@@ -849,8 +863,8 @@
       "industry": "health"
      }
     ],
-    "count": 1,
-    "total": 50,
+    "count": 3,
+    "total": 3050,
     "complete": true,
     "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00902262&two_year_transaction_period=2026&line_number=F3-11C"
    },
@@ -860,7 +874,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00902262/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H4WI03169": {
@@ -1298,7 +1312,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00742007/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-11-04",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6WI04071": {
@@ -1341,7 +1355,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00944637/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H4WI04183": {
@@ -1603,7 +1617,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00872697/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H0WI05113": {
@@ -1822,7 +1836,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00720011/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-11-04",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H4WI05115": {
@@ -1908,7 +1922,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00922245/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6WI06225": {
@@ -1951,7 +1965,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00922245/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H4WI06048": {
@@ -2203,15 +2217,29 @@
    "organizations": {
     "items": [
      {
+      "committee_id": "C00027342",
+      "name": "INTERNATIONAL BROTHERHOOD OF ELECTRICAL WORKERS POLITICAL ACTION COMMITTEE",
+      "total": 5000,
+      "count": 1,
+      "industry": "labor"
+     },
+     {
       "committee_id": "C00003251",
       "name": "NEA FUND FOR CHILDREN AND PUBLIC EDUCATION",
       "total": 1000,
       "count": 1,
       "industry": "labor"
+     },
+     {
+      "committee_id": "C00032995",
+      "name": "AMALGAMATED TRANSIT UNION - COPE",
+      "total": 250,
+      "count": 1,
+      "industry": "labor"
      }
     ],
-    "count": 1,
-    "total": 1000,
+    "count": 3,
+    "total": 6250,
     "complete": true,
     "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00920231&two_year_transaction_period=2026&line_number=F3-11C"
    },
@@ -2221,7 +2249,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00920231/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6WI06233": {
@@ -2286,7 +2314,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00930610/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6WI06142": {
@@ -2351,7 +2379,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00902023/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6WI07223": {
@@ -2570,7 +2598,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00924902/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6WI07199": {
@@ -2621,7 +2649,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00901702/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6WI07207": {
@@ -2679,7 +2707,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00920868/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H0WI03159": {
@@ -2710,103 +2738,11 @@
     "source_url": "https://www.fec.gov/data/candidate/H0WI03159/?cycle=2026&election_full=false"
    },
    "organizations": {
-    "items": [
-     {
-      "committee_id": "C00327189",
-      "name": "VALUE IN ELECTING WOMEN POLITICAL ACTION COMMITTEE",
-      "total": 5000,
-      "count": 1,
-      "industry": "issue"
-     },
-     {
-      "committee_id": "C00432260",
-      "name": "CLUB FOR GROWTH PAC",
-      "total": 2972.95,
-      "count": 5,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00758813",
-      "name": "MNM PAC",
-      "total": 2500,
-      "count": 1,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00653220",
-      "name": "CAROL FOR CONGRESS",
-      "total": 2000,
-      "count": 1,
-      "industry": "leadership"
-     },
-     {
-      "committee_id": "C00816389",
-      "name": "ELECTING REPUBLICANS INDIANA PAC",
-      "total": 2000,
-      "count": 1,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00788414",
-      "name": "ERIC BURLISON FOR CONGRESS",
-      "total": 2000,
-      "count": 1,
-      "industry": "leadership"
-     },
-     {
-      "committee_id": "C00386748",
-      "name": "VIRGINIA FOXX FOR CONGRESS",
-      "total": 2000,
-      "count": 1,
-      "industry": "leadership"
-     },
-     {
-      "committee_id": "C00769695",
-      "name": "FREEDOM FORCE PAC",
-      "total": 1500,
-      "count": 1,
-      "industry": "leadership"
-     },
-     {
-      "committee_id": "C00694323",
-      "name": "WINRED",
-      "total": 1418.01,
-      "count": 1,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00635367",
-      "name": "TENACIOUS PAC",
-      "total": 1000,
-      "count": 1,
-      "industry": "leadership"
-     },
-     {
-      "committee_id": "C00765578",
-      "name": "TENNESSEE TOUGH PAC",
-      "total": 1000,
-      "count": 1,
-      "industry": "leadership"
-     },
-     {
-      "committee_id": "C00834507",
-      "name": "BUILDING UP DEMOCRACY'S DREAM",
-      "total": 1000,
-      "count": 1,
-      "industry": "leadership"
-     },
-     {
-      "committee_id": "C00860064",
-      "name": "MCDOWELL FOR CONGRESS",
-      "total": 1000,
-      "count": 1,
-      "industry": "leadership"
-     }
-    ],
-    "count": 13,
-    "total": 25390.96,
+    "items": [],
+    "count": 0,
+    "total": 0,
     "complete": true,
-    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00921734&two_year_transaction_period=2026&line_number=F3-11C"
+    "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00736108&two_year_transaction_period=2026&line_number=F3-11C"
    },
    "website": {
     "url": "https://ebbenforwisconsin.com/",
@@ -2814,7 +2750,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00921734/",
     "checked": "2026-10-10"
    },
-   "funding_checked": "2026-11-04",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6WI07249": {
@@ -2857,7 +2793,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00932335/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6WI07231": {
@@ -2900,7 +2836,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00928044/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6WI07256": {
@@ -2943,7 +2879,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00938019/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6WI07215": {
@@ -2986,7 +2922,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00924548/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6WI08205": {
@@ -3037,7 +2973,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00916064/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6WI08221": {
@@ -3055,7 +2991,7 @@
    "totals": null,
    "organizations": null,
    "website": null,
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H6WI08197": {
@@ -3098,7 +3034,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00914309/",
     "checked": "2026-10-14"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   },
   "H4WI08119": {
@@ -3360,7 +3296,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00946673/",
     "checked": "2026-10-17"
    },
-   "funding_checked": "2026-11-03",
+   "funding_checked": "2026-11-07",
    "cycle": 2026
   }
  }
