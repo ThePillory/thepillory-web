@@ -1,0 +1,34 @@
+# Temporary read-only probe of SEC EDGAR company facts. Removed after.
+name: Probe SEC company facts
+on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [.github/workflows/probe-ai.yml]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          UA: ${{ secrets.SEC_USER_AGENT }}
+        run: |
+          A="${UA:-ThePillory data probe contact@thepillory.co}"
+          for u in https://www.sec.gov/Archives/edgar/daily-index/xbrl/companyfacts.zip https://www.sec.gov/Archives/edgar/daily-index/bulkdata/submissions.zip; do curl -sI -A "$A" "$u" | grep -i -E "^(HTTP|content-length|last-modified)"; done
+          for c in 0000320193 0000789019 0000034088 0000021344 0001018724 0000040545; do
+            curl -s -A "$A" "https://data.sec.gov/api/xbrl/companyfacts/CIK$c.json" -o f.json
+            python3 - "$c" <<'PY'
+          import json,sys
+          d=json.load(open("f.json"))
+          print("==", sys.argv[1], d["entityName"], list(d["facts"].keys()))
+          g=d["facts"].get("us-gaap",{})
+          for k in sorted(g):
+              if any(s in k for s in ("IncomeTaxesPaid","CurrentFederal","CurrentStateAndLocal","DeferredIncomeTaxExpenseBenefit","BeforeIncomeTaxes","CurrentForeignTax")):
+                  u=g[k]["units"]; unit=list(u)[0]; fy=[x for x in u[unit] if x.get("form","").startswith("10-K") and x.get("fp")=="FY"]
+                  last=sorted(fy,key=lambda x:x["end"])[-1] if fy else {}
+                  print(" ",k,"|",g[k].get("label"),"|",len(fy),"|",last.get("start"),last.get("end"),last.get("val"),last.get("accn"),last.get("fy"),last.get("filed"),last.get("frame"))
+          PY
+            sleep 0.3
+          done
+          curl -s -A "$A" https://data.sec.gov/submissions/CIK0000320193.json | python3 -c "import json,sys;d=json.load(sys.stdin);print({k:d.get(k) for k in ['name','tickers','exchanges','sic','sicDescription','stateOfIncorporation','fiscalYearEnd','ein','entityType']}, d['addresses']['business'])"
+          curl -s -A "$A" https://www.sec.gov/files/company_tickers_exchange.json | head -c 300; echo
