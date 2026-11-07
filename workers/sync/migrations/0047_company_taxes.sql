@@ -26,6 +26,10 @@ CREATE TABLE IF NOT EXISTS companies (
 CREATE INDEX IF NOT EXISTS companies_name_key ON companies (name_key);
 CREATE INDEX IF NOT EXISTS companies_sic ON companies (sic);
 CREATE INDEX IF NOT EXISTS companies_state ON companies (state);
+-- The list's three sorts (name, revenue, pretax income), so a page reads only its rows.
+CREATE INDEX IF NOT EXISTS companies_name ON companies (name);
+CREATE INDEX IF NOT EXISTS companies_revenue ON companies (revenue);
+CREATE INDEX IF NOT EXISTS companies_pretax ON companies (pretax);
 
 -- One row per company and fiscal year (keyed by the year's last day). Each value's
 -- filing (accession number) is in src, as {"taxes_paid": "0000320193-26-000026", ...}.
@@ -79,4 +83,20 @@ CREATE TABLE IF NOT EXISTS company_org_links (
   cik          INTEGER NOT NULL,
   confirmed_by TEXT NOT NULL,
   confirmed_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- What ThePillory already has for the same organization, matched once a week by
+-- tools/build_company_taxes.py (exact name key, or company_org_links; one company
+-- per name only): kind 'pac' (contributions to members of Congress, FEC),
+-- 'lobbying' (LDA reports naming it as the client), 'ld203' (its LD-203
+-- contributions honoring members), 'ca-lobbying' (California Forms 635/645) and
+-- 'ca-measures' (2026 California ballot measure money). summary is JSON:
+-- {total, count, first, last, source_url, detail}. Pages read only these rows.
+CREATE TABLE IF NOT EXISTS company_orgs (
+  cik        INTEGER NOT NULL,
+  kind       TEXT NOT NULL,
+  org_name   TEXT NOT NULL,
+  how        TEXT NOT NULL CHECK (how IN ('name', 'confirmed')),
+  summary    TEXT NOT NULL,
+  PRIMARY KEY (cik, kind, org_name)
 );

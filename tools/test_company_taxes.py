@@ -103,6 +103,27 @@ class Writes(unittest.TestCase):
         self.assertIsNone(C.business_state({"addresses": {"business": {"stateOrCountry": "D8"}}}))  # outside the U.S.
 
 
+class Organizations(unittest.TestCase):
+    def test_exact_name_with_one_company_or_a_confirmed_link_only(self):
+        companies = [{"cik": 1, "name_key": "example holdings"}, {"cik": 2, "name_key": "twin"}, {"cik": 3, "name_key": "twin"}]
+        found = {
+            "lobbying": [{"name": "Example Holdings, Inc.", "year": 2024, "n": 2, "total": 100, "source_url": "https://lda.example/1"},
+                         {"name": "EXAMPLE HOLDINGS INC", "year": 2025, "n": 1, "total": 50, "source_url": "https://lda.example/2"},
+                         {"name": "Example Holdings Services LLC", "year": 2025, "n": 1, "total": 9, "source_url": "https://lda.example/3"},
+                         {"name": "Twin Inc", "year": 2025, "n": 1, "total": 9, "source_url": "https://lda.example/4"}],
+            "pac": [{"name": "Example Holdings Political Action Committee", "year": 2026, "n": 3, "total": 7000, "source_url": "https://fec.example/1"}],
+        }
+        rows = C.match_orgs(companies, found, {"example holdings political action committee": 1})
+        got = sorted((r["kind"], r["org_name"], r["cik"], r["how"]) for r in rows)
+        self.assertEqual(got, [
+            ("lobbying", "EXAMPLE HOLDINGS INC", 1, "name"),
+            ("lobbying", "Example Holdings, Inc.", 1, "name"),
+            ("pac", "Example Holdings Political Action Committee", 1, "confirmed"),
+        ])  # not the near name ("Services LLC"), not a name two companies share ("Twin")
+        s = json.loads(next(r for r in rows if r["org_name"] == "Example Holdings, Inc.")["summary"])
+        self.assertEqual((s["total"], s["count"], s["first"], s["last"], s["source_url"]), (100, 2, "2024", "2024", "https://lda.example/1"))
+
+
 class NameKey(unittest.TestCase):
     def test_the_same_key_as_the_site(self):
         names = ["AMAZON COM INC", "Amazon.com, Inc.", "The Coca-Cola Company", "AT&T INC.", "Procter & Gamble Co", "Exxon Mobil Corporation"]

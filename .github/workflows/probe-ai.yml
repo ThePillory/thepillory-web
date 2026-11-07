@@ -12,13 +12,23 @@ jobs:
     steps:
       - run: |
           UA='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36'
+          curl -sL -A "$UA" -o irs.html https://www.irs.gov/statistics/soi-tax-stats-individual-statistical-tables-by-tax-rate-and-income-percentile
+          python3 - <<'PY'
+          import re,html
+          s=open("irs.html",encoding="utf-8",errors="replace").read()
+          for m in re.finditer(r'<a[^>]+href="(/pub/irs-soi/(2[0-9])in[^"]+)"[^>]*>(.*?)</a>', s, re.S):
+              print(m.group(1), "|", re.sub(r"\s+"," ",html.unescape(re.sub("<[^>]+>","",m.group(3)))).strip()[:150])
+          i=s.find("Table 1"); print(re.sub(r"\s+"," ",re.sub("<[^>]+>"," ",s[i:i+1500]))[:1200])
+          PY
           for u in \
-            https://www.irs.gov/statistics/soi-tax-stats-individual-statistical-tables-by-tax-rate-and-income-percentile \
-            https://www.irs.gov/statistics/soi-tax-stats-top-400-individual-income-tax-returns-with-the-largest-adjusted-gross-incomes \
-            https://www.cbo.gov/topics/income-distribution \
-            https://www.ftb.ca.gov/about-ftb/data-reports-plans/Annual-Reports/index.html ; do
+            https://www.irs.gov/statistics/soi-tax-stats-the-400-individual-income-tax-returns-reporting-the-largest-adjusted-gross-incomes-each-year \
+            https://www.irs.gov/statistics/soi-tax-stats-top-400-individual-income-tax-returns \
+            https://www.cbo.gov/about/products/major-recurring-reports \
+            https://www.cbo.gov/data/budget-economic-data \
+            https://www.ftb.ca.gov/about-ftb/data-reports-plans/annual-reports/index.html \
+            https://www.ftb.ca.gov/about-ftb/data-reports-plans/annual-reports/2023/index.html ; do
             echo "=== $u"
-            curl -sL -A "$UA" -o p.html -w "%{http_code}\n" "$u"
-            grep -o 'href="[^"]*\.\(xls\|xlsx\|csv\|pdf\)"' p.html | sort -u | head -25
-            grep -o 'href="[^"]*\(distribution-household-income\|annual-report\|Annual-Report\)[^"]*"' p.html | sort -u | head -12
+            curl -sL -A "$UA" -o p.html -w "%{http_code} %{url_effective}\n" "$u"
+            grep -o 'href="[^"]*\(xls\|xlsx\|csv\)[^"]*"' p.html | sort -u | head -15
+            grep -io 'href="[^"]*\(distribution\|annual-report\|400\|personal-income-tax\|pit\)[^"]*"' p.html | sort -u | head -15
           done
