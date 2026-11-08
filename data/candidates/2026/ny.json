@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=NY&candidate_status=C",
- "list_built_on": "2026-11-07",
+ "list_built_on": "2026-11-08",
  "built_on": "2026-11-08",
  "senate_up": false,
  "candidates": {
@@ -802,7 +802,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00846550/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-05",
+   "funding_checked": "2026-11-08",
    "cycle": 2026
   },
   "H0NY02267": {
@@ -1724,7 +1724,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00840439/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-05",
+   "funding_checked": "2026-11-08",
    "cycle": 2026
   },
   "H6NY04179": {
@@ -2420,7 +2420,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00873315/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-05",
+   "funding_checked": "2026-11-08",
    "cycle": 2026
   },
   "H6NY07230": {
@@ -3285,9 +3285,23 @@
      {
       "committee_id": "C00039578",
       "name": "THE COUNCIL OF INSURANCE AGENTS & BROKERS POLITICAL ACTION COMMITTEE",
-      "total": 11000,
-      "count": 4,
+      "total": 13500,
+      "count": 5,
       "industry": "finance"
+     },
+     {
+      "committee_id": "C00003632",
+      "name": "INT'L UNION OF BRICKLAYERS AND ALLIED CRAFTWORKERS",
+      "total": 10000,
+      "count": 2,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00000729",
+      "name": "AMERICAN DENTAL ASSOCIATION POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 3,
+      "industry": "health"
      },
      {
       "committee_id": "C00186288",
@@ -3332,10 +3346,31 @@
       "industry": "health"
      },
      {
+      "committee_id": "C00004036",
+      "name": "SEIU COPE (SERVICE EMPLOYEES INTERNATIONAL UNION COMMITTEE ON POLITICAL EDUCATION)",
+      "total": 10000,
+      "count": 3,
+      "industry": "labor"
+     },
+     {
+      "committee_id": "C00077321",
+      "name": "AMERICAN INSTITUTE OF CERTIFIED PUBLIC ACCOUNTANTS POLITICAL ACTION COMMITTEE",
+      "total": 10000,
+      "count": 3,
+      "industry": "finance"
+     },
+     {
       "committee_id": "C00024521",
       "name": "AMERICAN ASSOCIATION FOR JUSTICE POLITICAL ACTION COMMITTEE (AAJ PAC)",
       "total": 10000,
       "count": 4,
+      "industry": "issue"
+     },
+     {
+      "committee_id": "C00034157",
+      "name": "AFLAC POLITICAL ACTION COMMITTEE (AFLAC PAC)",
+      "total": 10000,
+      "count": 5,
       "industry": "issue"
      },
      {
@@ -3353,18 +3388,32 @@
       "industry": "issue"
      },
      {
-      "committee_id": "C00034157",
-      "name": "AFLAC POLITICAL ACTION COMMITTEE (AFLAC PAC)",
-      "total": 8500,
-      "count": 4,
-      "industry": "issue"
-     },
-     {
-      "committee_id": "C00077321",
-      "name": "AMERICAN INSTITUTE OF CERTIFIED PUBLIC ACCOUNTANTS POLITICAL ACTION COMMITTEE",
+      "committee_id": "C00130773",
+      "name": "NATIONAL MULTIFAMILY HOUSING COUNCIL AND REAL ESTATE TECHNOLOGY AND TRANSFORMATION CENTER POLITICAL ACTION COMMITTEE (NMHC PAC)",
       "total": 7500,
       "count": 2,
-      "industry": "finance"
+      "industry": "real_estate"
+     },
+     {
+      "committee_id": "C00248716",
+      "name": "COMCAST CORPORATION & NBCUNIVERSAL POLITICAL ACTION COMMITTEE - FEDERAL",
+      "total": 7500,
+      "count": 2,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00426775",
+      "name": "CHARTER COMMUNICATIONS INC. POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 2,
+      "industry": "tech"
+     },
+     {
+      "committee_id": "C00199711",
+      "name": "HEALTH CARE SERVICE CORPORATION EMPLOYEES' POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 2,
+      "industry": "health"
      },
      {
       "committee_id": "C00002972",
@@ -3374,6 +3423,20 @@
       "industry": "energy"
      },
      {
+      "committee_id": "C00096156",
+      "name": "HONEYWELL INTERNATIONAL POLITICAL ACTION COMMITTEE",
+      "total": 7500,
+      "count": 4,
+      "industry": "manufacturing"
+     },
+     {
+      "committee_id": "C00363879",
+      "name": "ENTERGY CORPORATION POLITICAL ACTION COMMITTEE (ENPAC)",
+      "total": 7500,
+      "count": 4,
+      "industry": "issue"
+     },
+     {
       "committee_id": "C00401299",
       "name": "FRESENIUS MEDICAL CARE HOLDINGS, INC. POLITICAL ACTION COMMITTEE",
       "total": 7500,
@@ -3381,85 +3444,22 @@
       "industry": "health"
      },
      {
-      "committee_id": "C00227546",
-      "name": "MICROSOFT CORPORATION STAKEHOLDERS VOLUNTARY PAC - MSVPAC",
-      "total": 6500,
+      "committee_id": "C00251876",
+      "name": "AMGEN INC. POLITICAL ACTION COMMITTEE",
+      "total": 7000,
       "count": 2,
-      "industry": "tech"
+      "industry": "pharma"
      },
      {
-      "committee_id": "C00542365",
-      "name": "TOYOTA MOTOR NORTH AMERICA, INC POLITICAL ACTION COMMITTEE (TOYOTA/LEXUS PAC)",
-      "total": 6500,
-      "count": 3,
-      "industry": "transportation"
-     },
-     {
-      "committee_id": "C00073056",
-      "name": "MASTERS, MATES AND PILOTS POLITICAL CONTRIBUTION FUND",
-      "total": 5550.78,
-      "count": 3,
-      "industry": "finance"
-     },
-     {
-      "committee_id": "C00602805",
-      "name": "AMERICA'S ESSENTIAL HOSPITALS POLITICAL ACTION COMMITTEE, (ESSENTIAL HOSPITALS PAC)",
-      "total": 5500,
-      "count": 3,
-      "industry": "health"
-     },
-     {
-      "committee_id": "C00002469",
-      "name": "MACHINISTS NON PARTISAN POLITICAL LEAGUE OF THE INTERNATIONAL ASSOCIATION OF MACHINISTS &",
-      "total": 5000,
-      "count": 1,
-      "industry": "labor"
-     },
-     {
-      "committee_id": "C00088591",
-      "name": "EMPLOYEES OF NORTHROP GRUMMAN CORPORATION PAC",
-      "total": 5000,
-      "count": 1,
-      "industry": "defense"
-     },
-     {
-      "committee_id": "C00369751",
-      "name": "DELL TECHNOLOGIES POLITICAL ACTION COMMITTEE",
-      "total": 5000,
-      "count": 1,
-      "industry": "tech"
-     },
-     {
-      "committee_id": "C00477653",
-      "name": "COX ENTERPRISES PAC (COXPAC) INC",
-      "total": 5000,
-      "count": 1,
-      "industry": "other"
-     },
-     {
-      "committee_id": "C00012476",
-      "name": "UA UNION PLUMBERS & PIPEFITTERS VOTE! PAC (UNITED ASSOCIATION OF JOURNEYMEN AND APPRENTICES OF THE PLUMBING & PIPEFITTING INDUSTRY OF THE UNITED STATES AND CANADA)",
-      "total": 5000,
-      "count": 1,
-      "industry": "labor"
-     },
-     {
-      "committee_id": "C00572438",
-      "name": "MI14 PAC",
-      "total": 5000,
-      "count": 1,
-      "industry": "leadership"
-     },
-     {
-      "committee_id": "C00428623",
-      "name": "GOOGLE LLC NETPAC",
-      "total": 5000,
-      "count": 1,
+      "committee_id": "C00109017",
+      "name": "AT&T INC. EMPLOYEE FEDERAL POLITICAL ACTION COMMITTEE (AT&T EMPLOYEE FEDERAL PAC)",
+      "total": 7000,
+      "count": 2,
       "industry": "tech"
      }
     ],
-    "count": 195,
-    "total": 581950.78,
+    "count": 224,
+    "total": 738450.78,
     "complete": true,
     "source_url": "https://www.fec.gov/data/receipts/?committee_id=C00415331&two_year_transaction_period=2026&line_number=F3-11C"
    },
@@ -3469,7 +3469,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00415331/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-05",
+   "funding_checked": "2026-11-08",
    "cycle": 2026
   },
   "H6NY09160": {
@@ -5872,7 +5872,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00940445/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-05",
+   "funding_checked": "2026-11-08",
    "cycle": 2026
   },
   "H2NY14128": {
@@ -6566,7 +6566,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00867234/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-05",
+   "funding_checked": "2026-11-08",
    "cycle": 2026
   },
   "H4NY16087": {
@@ -6785,7 +6785,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00859041/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-05",
+   "funding_checked": "2026-11-08",
    "cycle": 2026
   },
   "H6NY17221": {
@@ -8606,7 +8606,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00869123/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-05",
+   "funding_checked": "2026-11-08",
    "cycle": 2026
   },
   "H6NY21157": {
@@ -9466,7 +9466,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00845461/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-05",
+   "funding_checked": "2026-11-08",
    "cycle": 2026
   },
   "H6NY22163": {
@@ -10349,7 +10349,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00632828/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-05",
+   "funding_checked": "2026-11-08",
    "cycle": 2026
   },
   "H6NY25208": {
@@ -10916,7 +10916,7 @@
     "source_url": "https://www.fec.gov/data/committee/C00856526/",
     "checked": "2026-10-11"
    },
-   "funding_checked": "2026-11-05",
+   "funding_checked": "2026-11-08",
    "cycle": 2026
   },
   "H6NY01225": {
