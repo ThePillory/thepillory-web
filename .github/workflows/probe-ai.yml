@@ -1,0 +1,21 @@
+# Temporary read-only probe: the Federal Reserve's Distributional Financial Accounts downloads. Removed after.
+name: Probe DFA downloads
+on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [.github/workflows/probe-ai.yml]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          UA="Mozilla/5.0 (compatible; ThePillory data build)"
+          for u in https://www.federalreserve.gov/releases/z1/dataviz/dfa/index.html \
+                   https://www.federalreserve.gov/releases/z1/dataviz/dfa/distribute/table/ \
+                   https://www.federalreserve.gov/releases/z1/dataviz/download/zips/dfa.zip; do
+            echo "=== $u"; curl -sS -A "$UA" -o /tmp/f -w "%{http_code} %{content_type} %{size_download}\n" -L "$u"; head -c 300 /tmp/f | tr -c '[:print:]\n' '.'; echo
+            grep -oE 'href="[^"]*(csv|zip)[^"]*"' /tmp/f | sort -u | head -30
+          done
+          mkdir -p /tmp/z && cd /tmp/z && (unzip -o -q /tmp/f 2>/dev/null && ls -la && for f in *.csv; do echo "--- $f"; head -3 "$f" | cut -c1-600; echo; cut -d, -f1-2 "$f" | sort -u | head -12; done) || true
