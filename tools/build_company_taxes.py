@@ -160,9 +160,13 @@ def company_years(facts):
     return [y for y in sorted(years.values(), key=lambda r: r["period_end"]) if any(y.get(f) is not None for f in FIELDS if f != "revenue")]
 
 
-def largest(companies, n):
-    """The n companies with the largest latest revenue; a company whose revenue isn't tagged isn't among them."""
-    return sorted((c for c in companies if c.get("revenue") is not None), key=lambda c: (-c["revenue"], c["cik"]))[:n]
+def largest(companies, n, today=None):
+    """The n companies with the largest latest revenue, among those still filing (a fiscal year that ended in
+    the last two years); a company whose revenue isn't tagged isn't among them."""
+    today = today or datetime.date.today()
+    cutoff = (today - datetime.timedelta(days=730)).isoformat()
+    live = (c for c in companies if c.get("revenue") is not None and (c.get("latest_end") or "") >= cutoff)
+    return sorted(live, key=lambda c: (-c["revenue"], c["cik"]))[:n]
 
 
 def latest(years):

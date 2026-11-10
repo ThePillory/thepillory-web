@@ -28,7 +28,7 @@ The old address `/finances/who-pays/` redirects here with a 301 (`functions/fina
 
 ### Data
 
-**The 100 largest companies by revenue** (`--top`, 100; 0 loads every company), by each company's revenue in its latest fiscal year with figures. That keeps the weekly run short and the data small. Companies are never chosen or ordered by taxes paid or any rate. A company whose revenue isn't tagged with one of the revenue elements below isn't among them. Banks' `RevenuesNetOfInterestExpense` is included, so large banks qualify. A company that drops out of the 100 is removed with its years, jurisdictions and matches. A person's links in `company_org_links` are kept. The "Taxes paid" line on organization panels shows only for these companies.
+**The 100 largest companies by revenue** (`--top`, 100; 0 loads every company), by each company's revenue in its latest fiscal year with figures. That keeps the weekly run short and the data small. Companies are never chosen or ordered by taxes paid or any rate. A company whose revenue isn't tagged with one of the revenue elements below isn't among them. Only companies still filing count: their latest fiscal year with figures ended in the last two years. Banks' `RevenuesNetOfInterestExpense` is included, so large banks qualify. A company that drops out of the 100 is removed with its years, jurisdictions and matches. A person's links in `company_org_links` are kept. The "Taxes paid" line on organization panels shows only for these companies.
 
 D1 (migration 0047), loaded by `tools/build_company_taxes.py` (tested in
 `tools/test_company_taxes.py`) in the weekly "Refresh company taxes" workflow

@@ -126,9 +126,12 @@ class Organizations(unittest.TestCase):
 
 class Largest(unittest.TestCase):
     def test_by_latest_revenue_only_and_untagged_revenue_left_out(self):
-        cs = [{"cik": 1, "revenue": 50, "taxes_paid": 999}, {"cik": 2, "revenue": 900, "taxes_paid": 0}, {"cik": 3, "revenue": None}, {"cik": 4, "revenue": 900}]
-        self.assertEqual([c["cik"] for c in C.largest(cs, 2)], [2, 4])
-        self.assertEqual([c["cik"] for c in C.largest(cs, 10)], [2, 4, 1])
+        today = __import__("datetime").date(2026, 11, 10)
+        cs = [{"cik": 1, "revenue": 50, "taxes_paid": 999, "latest_end": "2025-12-31"}, {"cik": 2, "revenue": 900, "taxes_paid": 0, "latest_end": "2026-06-30"},
+              {"cik": 3, "revenue": None, "latest_end": "2025-12-31"}, {"cik": 4, "revenue": 900, "latest_end": "2025-12-31"},
+              {"cik": 5, "revenue": 5000, "latest_end": "2022-12-31"}]  # stopped filing: not among them
+        self.assertEqual([c["cik"] for c in C.largest(cs, 2, today)], [2, 4])
+        self.assertEqual([c["cik"] for c in C.largest(cs, 10, today)], [2, 4, 1])
 
 
 class NameKey(unittest.TestCase):
