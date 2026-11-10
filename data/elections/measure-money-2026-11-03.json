@@ -2,7 +2,7 @@
  "_readme": "Committees formed for each of California's November 3, 2026 statewide propositions, their money, and independent spending on each, from the Cal-Access export. Built by tools/build_measure_money.py; never edit by hand.",
  "source": "https://campaignfinance.cdn.sos.ca.gov/dbwebexport.zip",
  "election": "2026-11-03",
- "generated": "2026-10-27",
+ "generated": "2026-11-09",
  "numbers_from": "2026-06-25",
  "measures": {
   "1": {
@@ -133,10 +133,10 @@
      "spender": "Faith Votes, Sponsored by PICO California Action Fund",
      "person": false,
      "people": null,
-     "total": 39720.83,
-     "filings": 5,
+     "total": 46220.83,
+     "filings": 6,
      "first": "2026-09-30",
-     "last": "2026-10-22",
+     "last": "2026-10-29",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1496786"
     },
     {
@@ -177,22 +177,11 @@
      "spender": "Million Voter Project Action Fund, Sponsored by Social Justice Organizations",
      "person": false,
      "people": null,
-     "total": 5299.08,
-     "filings": 1,
+     "total": 7299.08,
+     "filings": 2,
      "first": "2026-10-02",
-     "last": "2026-10-02",
+     "last": "2026-10-27",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
-    },
-    {
-     "side": "support",
-     "spender": "ACLU Foundation of San Diego & Imperial Counties",
-     "person": false,
-     "people": null,
-     "total": 5206.28,
-     "filings": 1,
-     "first": "2026-09-11",
-     "last": "2026-10-30",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
     },
     {
      "side": "support",
@@ -218,6 +207,17 @@
     },
     {
      "side": "support",
+     "spender": "Los Angeles County Democratic Party ? State Candidate Committee",
+     "person": false,
+     "people": null,
+     "total": 2750.88,
+     "filings": 1,
+     "first": "2026-10-13",
+     "last": "2026-10-19",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "side": "support",
      "spender": "THRIVE LOS ANGELES PAC",
      "person": false,
      "people": null,
@@ -226,6 +226,28 @@
      "first": "2026-10-23",
      "last": "2026-10-23",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1462294"
+    },
+    {
+     "side": "support",
+     "spender": "ACLU Foundation of San Diego & Imperial Counties",
+     "person": false,
+     "people": null,
+     "total": 1725.16,
+     "filings": 1,
+     "first": "2026-09-11",
+     "last": "2026-10-30",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
+    },
+    {
+     "side": "support",
+     "spender": "PICO California",
+     "person": false,
+     "people": null,
+     "total": 1270.88,
+     "filings": 1,
+     "first": "2026-10-16",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
     },
     {
      "side": "support",
@@ -240,6 +262,28 @@
     },
     {
      "side": "support",
+     "spender": "AAPI EQUITY ALLIANCE",
+     "person": false,
+     "people": null,
+     "total": 1136.21,
+     "filings": 4,
+     "first": "2026-08-03",
+     "last": "2026-10-30",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
+    },
+    {
+     "side": "support",
+     "spender": "RAMAN FOR MAYOR 2026; WORKING FAMILIES PARTY FOR",
+     "person": false,
+     "people": null,
+     "total": 1049.57,
+     "filings": 1,
+     "first": "2026-10-07",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
+    },
+    {
+     "side": "support",
      "spender": "Community Partners",
      "person": false,
      "people": null,
@@ -248,17 +292,6 @@
      "first": "2026-10-09",
      "last": "2026-10-09",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1476723"
-    },
-    {
-     "side": "support",
-     "spender": "AAPI EQUITY ALLIANCE",
-     "person": false,
-     "people": null,
-     "total": 851.93,
-     "filings": 3,
-     "first": "2026-08-03",
-     "last": "2026-10-23",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
     },
     {
      "side": "oppose",
@@ -319,10 +352,10 @@
      "spender": "Million Voter Project Action Fund, Sponsored by Social Justice Organizations",
      "person": false,
      "people": null,
-     "total": 5299.09,
-     "filings": 1,
+     "total": 7299.09,
+     "filings": 2,
      "first": "2026-10-02",
-     "last": "2026-10-02",
+     "last": "2026-10-27",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
     },
     {
@@ -335,6 +368,17 @@
      "first": "2026-10-01",
      "last": "2026-10-25",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1332307"
+    },
+    {
+     "side": "support",
+     "spender": "Los Angeles County Democratic Party ? State Candidate Committee",
+     "person": false,
+     "people": null,
+     "total": 2750.88,
+     "filings": 1,
+     "first": "2026-10-13",
+     "last": "2026-10-19",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
     },
     {
      "side": "support",
@@ -363,11 +407,33 @@
      "spender": "AAPI EQUITY ALLIANCE",
      "person": false,
      "people": null,
-     "total": 1133.18,
-     "filings": 3,
+     "total": 1417.46,
+     "filings": 4,
      "first": "2026-08-17",
-     "last": "2026-10-23",
+     "last": "2026-10-30",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
+    },
+    {
+     "side": "support",
+     "spender": "PICO California",
+     "person": false,
+     "people": null,
+     "total": 1270.88,
+     "filings": 1,
+     "first": "2026-10-16",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "side": "support",
+     "spender": "RAMAN FOR MAYOR 2026; WORKING FAMILIES PARTY FOR",
+     "person": false,
+     "people": null,
+     "total": 1049.57,
+     "filings": 1,
+     "first": "2026-10-07",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
     },
     {
      "side": "support",
@@ -396,10 +462,10 @@
      "spender": "REPUBLICAN PARTY OF SAN DIEGO COUNTY",
      "person": false,
      "people": null,
-     "total": 2705.53,
-     "filings": 1,
+     "total": 4212.06,
+     "filings": 2,
      "first": "2026-10-05",
-     "last": "2026-10-05",
+     "last": "2026-10-26",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
     }
    ]
@@ -416,14 +482,14 @@
        "side": "support"
       }
      ],
-     "raised": 72149792.35,
-     "spent": 61765737.3,
+     "raised": 72153837.74,
+     "spent": 61769782.69,
      "cash_end": 11084133.3,
      "statements": 6,
      "through": "2026-10-17",
-     "filed": "2026-10-21",
+     "filed": "2026-11-02",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1483562",
-     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0",
+     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1",
      "individuals": {
       "total": 0.0,
       "count": 0
@@ -434,14 +500,14 @@
        "kind": "committee",
        "total": 53275000.0,
        "count": 8,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
       },
       {
        "name": "National Education Association (MPO)",
        "kind": "committee",
        "total": 7500000.0,
        "count": 3,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
       },
       {
        "name": "California Federation of Teachers COPE Prop/Ballot Committee",
@@ -462,7 +528,7 @@
        "kind": "committee",
        "total": 1100000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
       },
       {
        "name": "California School Employees Association",
@@ -476,7 +542,7 @@
        "kind": "committee",
        "total": 1000000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
       },
       {
        "name": "PACE of California School Employees Association-Issues",
@@ -497,7 +563,7 @@
        "kind": "committee",
        "total": 500000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
       }
      ],
      "organizations_count": 22,
@@ -526,12 +592,12 @@
      ],
      "raised": 464579.28,
      "spent": 493209.12,
-     "cash_end": 167372.39,
+     "cash_end": 167812.39,
      "statements": 2,
      "through": "2026-10-17",
-     "filed": "2026-10-26",
+     "filed": "2026-11-01",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1495036",
-     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215747&amendid=1",
+     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215747&amendid=2",
      "individuals": {
       "total": 372079.78,
       "count": 125
@@ -549,7 +615,7 @@
        "kind": "committee",
        "total": 20000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215747&amendid=1"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215747&amendid=2"
       }
      ],
      "organizations_count": 2,
@@ -557,6 +623,17 @@
     }
    ],
    "spending": [
+    {
+     "side": "support",
+     "spender": "Million Voter Project Action Fund, Sponsored by Social Justice Organizations",
+     "person": false,
+     "people": null,
+     "total": 80654.08,
+     "filings": 4,
+     "first": "2026-10-02",
+     "last": "2026-10-30",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
+    },
     {
      "side": "support",
      "spender": "Committee to Save Our Neighborhoods, Sponsored by Alliance of Californians for Community Empowerment Action",
@@ -573,10 +650,10 @@
      "spender": "TEACHERS AND COMMUNITIES UNITED FOR ESTUARDO MAZARIEGOS FOR CITY COUNCIL AND MARISSA ROY FOR CITY ATTORNEY 2026, SPONSORED BY UNITED TEACHERS LOS ANGELES AND",
      "person": false,
      "people": null,
-     "total": 12106.36,
-     "filings": 2,
+     "total": 12274.7,
+     "filings": 3,
      "first": "2026-10-14",
-     "last": "2026-10-23",
+     "last": "2026-11-02",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1489139"
     },
     {
@@ -614,25 +691,14 @@
     },
     {
      "side": "support",
-     "spender": "Million Voter Project Action Fund, Sponsored by Social Justice Organizations",
+     "spender": "San Diego Labor Coalition, Sponsored by Laborers' International Union of North America Local 89",
      "person": false,
      "people": null,
-     "total": 6304.08,
+     "total": 5660.23,
      "filings": 2,
-     "first": "2026-10-02",
-     "last": "2026-10-09",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
-    },
-    {
-     "side": "support",
-     "spender": "ACLU Foundation of San Diego & Imperial Counties",
-     "person": false,
-     "people": null,
-     "total": 5206.28,
-     "filings": 1,
-     "first": "2026-09-11",
-     "last": "2026-10-30",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
+     "first": "2026-10-05",
+     "last": "2026-10-28",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1454100"
     },
     {
      "side": "support",
@@ -655,6 +721,17 @@
      "first": "2026-09-01",
      "last": "2026-09-18",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1433572"
+    },
+    {
+     "side": "support",
+     "spender": "Los Angeles County Democratic Party ? State Candidate Committee",
+     "person": false,
+     "people": null,
+     "total": 2750.88,
+     "filings": 1,
+     "first": "2026-10-13",
+     "last": "2026-10-19",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
     },
     {
      "side": "support",
@@ -691,14 +768,47 @@
     },
     {
      "side": "support",
-     "spender": "San Diego Labor Coalition, Sponsored by Laborers' International Union of North America Local 89",
+     "spender": "ACLU Foundation of San Diego & Imperial Counties",
      "person": false,
      "people": null,
-     "total": 1402.8,
+     "total": 1725.16,
      "filings": 1,
-     "first": "2026-10-05",
-     "last": "2026-10-19",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1454100"
+     "first": "2026-09-11",
+     "last": "2026-10-30",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
+    },
+    {
+     "side": "support",
+     "spender": "PICO California",
+     "person": false,
+     "people": null,
+     "total": 1270.88,
+     "filings": 1,
+     "first": "2026-10-16",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "side": "support",
+     "spender": "AAPI EQUITY ALLIANCE",
+     "person": false,
+     "people": null,
+     "total": 1136.21,
+     "filings": 4,
+     "first": "2026-08-03",
+     "last": "2026-10-30",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
+    },
+    {
+     "side": "support",
+     "spender": "RAMAN FOR MAYOR 2026; WORKING FAMILIES PARTY FOR",
+     "person": false,
+     "people": null,
+     "total": 1049.57,
+     "filings": 1,
+     "first": "2026-10-07",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
     },
     {
      "side": "support",
@@ -710,17 +820,6 @@
      "first": "2026-10-09",
      "last": "2026-10-09",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1476723"
-    },
-    {
-     "side": "support",
-     "spender": "AAPI EQUITY ALLIANCE",
-     "person": false,
-     "people": null,
-     "total": 851.93,
-     "filings": 3,
-     "first": "2026-08-03",
-     "last": "2026-10-23",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
     },
     {
      "side": "oppose",
@@ -735,6 +834,17 @@
     },
     {
      "side": "oppose",
+     "spender": "REPUBLICAN PARTY OF SAN DIEGO COUNTY",
+     "person": false,
+     "people": null,
+     "total": 3359.87,
+     "filings": 2,
+     "first": "2026-10-05",
+     "last": "2026-10-26",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
+    },
+    {
+     "side": "oppose",
      "spender": "THRIVE LOS ANGELES PAC",
      "person": false,
      "people": null,
@@ -743,17 +853,6 @@
      "first": "2026-10-23",
      "last": "2026-10-23",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1462294"
-    },
-    {
-     "side": "oppose",
-     "spender": "REPUBLICAN PARTY OF SAN DIEGO COUNTY",
-     "person": false,
-     "people": null,
-     "total": 2104.42,
-     "filings": 1,
-     "first": "2026-10-05",
-     "last": "2026-10-05",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
     }
    ]
   },
@@ -885,22 +984,11 @@
      "spender": "Million Voter Project Action Fund, Sponsored by Social Justice Organizations",
      "person": false,
      "people": null,
-     "total": 5299.09,
-     "filings": 1,
+     "total": 7299.09,
+     "filings": 2,
      "first": "2026-10-02",
-     "last": "2026-10-02",
+     "last": "2026-10-27",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
-    },
-    {
-     "side": "support",
-     "spender": "ACLU Foundation of San Diego & Imperial Counties",
-     "person": false,
-     "people": null,
-     "total": 5206.28,
-     "filings": 1,
-     "first": "2026-09-11",
-     "last": "2026-10-30",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
     },
     {
      "side": "support",
@@ -912,6 +1000,17 @@
      "first": "2026-10-01",
      "last": "2026-10-25",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1332307"
+    },
+    {
+     "side": "support",
+     "spender": "Los Angeles County Democratic Party ? State Candidate Committee",
+     "person": false,
+     "people": null,
+     "total": 2750.88,
+     "filings": 1,
+     "first": "2026-10-13",
+     "last": "2026-10-19",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
     },
     {
      "side": "support",
@@ -937,6 +1036,50 @@
     },
     {
      "side": "support",
+     "spender": "ACLU Foundation of San Diego & Imperial Counties",
+     "person": false,
+     "people": null,
+     "total": 1725.16,
+     "filings": 1,
+     "first": "2026-09-11",
+     "last": "2026-10-30",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
+    },
+    {
+     "side": "support",
+     "spender": "PICO California",
+     "person": false,
+     "people": null,
+     "total": 1270.88,
+     "filings": 1,
+     "first": "2026-10-16",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "side": "support",
+     "spender": "AAPI EQUITY ALLIANCE",
+     "person": false,
+     "people": null,
+     "total": 1102.56,
+     "filings": 4,
+     "first": "2026-08-03",
+     "last": "2026-10-30",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
+    },
+    {
+     "side": "support",
+     "spender": "RAMAN FOR MAYOR 2026; WORKING FAMILIES PARTY FOR",
+     "person": false,
+     "people": null,
+     "total": 1049.57,
+     "filings": 1,
+     "first": "2026-10-07",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
+    },
+    {
+     "side": "support",
      "spender": "Community Partners",
      "person": false,
      "people": null,
@@ -945,17 +1088,6 @@
      "first": "2026-10-09",
      "last": "2026-10-09",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1476723"
-    },
-    {
-     "side": "support",
-     "spender": "AAPI EQUITY ALLIANCE",
-     "person": false,
-     "people": null,
-     "total": 818.28,
-     "filings": 3,
-     "first": "2026-08-03",
-     "last": "2026-10-23",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
     },
     {
      "side": "oppose",
@@ -973,10 +1105,10 @@
      "spender": "REPUBLICAN PARTY OF SAN DIEGO COUNTY",
      "person": false,
      "people": null,
-     "total": 2704.86,
-     "filings": 1,
+     "total": 4211.4,
+     "filings": 2,
      "first": "2026-10-05",
-     "last": "2026-10-05",
+     "last": "2026-10-26",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
     }
    ]
@@ -990,10 +1122,10 @@
      "spender": "Million Voter Project Action Fund, Sponsored by Social Justice Organizations",
      "person": false,
      "people": null,
-     "total": 5299.08,
-     "filings": 1,
+     "total": 7299.08,
+     "filings": 2,
      "first": "2026-10-02",
-     "last": "2026-10-02",
+     "last": "2026-10-27",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
     },
     {
@@ -1009,6 +1141,50 @@
     },
     {
      "side": "support",
+     "spender": "Los Angeles County Democratic Party ? State Candidate Committee",
+     "person": false,
+     "people": null,
+     "total": 2750.88,
+     "filings": 1,
+     "first": "2026-10-13",
+     "last": "2026-10-19",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "side": "support",
+     "spender": "PICO California",
+     "person": false,
+     "people": null,
+     "total": 1270.88,
+     "filings": 1,
+     "first": "2026-10-16",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "side": "support",
+     "spender": "AAPI EQUITY ALLIANCE",
+     "person": false,
+     "people": null,
+     "total": 1102.56,
+     "filings": 4,
+     "first": "2026-08-03",
+     "last": "2026-10-30",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
+    },
+    {
+     "side": "support",
+     "spender": "RAMAN FOR MAYOR 2026; WORKING FAMILIES PARTY FOR",
+     "person": false,
+     "people": null,
+     "total": 1049.57,
+     "filings": 1,
+     "first": "2026-10-07",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
+    },
+    {
+     "side": "support",
      "spender": "Community Partners",
      "person": false,
      "people": null,
@@ -1017,17 +1193,6 @@
      "first": "2026-10-09",
      "last": "2026-10-09",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1476723"
-    },
-    {
-     "side": "support",
-     "spender": "AAPI EQUITY ALLIANCE",
-     "person": false,
-     "people": null,
-     "total": 818.28,
-     "filings": 3,
-     "first": "2026-08-03",
-     "last": "2026-10-23",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
     },
     {
      "side": "oppose",
@@ -1042,6 +1207,17 @@
     },
     {
      "side": "oppose",
+     "spender": "REPUBLICAN PARTY OF SAN DIEGO COUNTY",
+     "person": false,
+     "people": null,
+     "total": 3460.67,
+     "filings": 2,
+     "first": "2026-10-05",
+     "last": "2026-10-26",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
+    },
+    {
+     "side": "oppose",
      "spender": "THRIVE LOS ANGELES PAC",
      "person": false,
      "people": null,
@@ -1050,17 +1226,6 @@
      "first": "2026-10-23",
      "last": "2026-10-23",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1462294"
-    },
-    {
-     "side": "oppose",
-     "spender": "REPUBLICAN PARTY OF SAN DIEGO COUNTY",
-     "person": false,
-     "people": null,
-     "total": 2205.23,
-     "filings": 1,
-     "first": "2026-10-05",
-     "last": "2026-10-05",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
     }
    ]
   },
@@ -1167,6 +1332,17 @@
    "spending": [
     {
      "side": "support",
+     "spender": "Los Angeles County Democratic Party ? State Candidate Committee",
+     "person": false,
+     "people": null,
+     "total": 2750.88,
+     "filings": 1,
+     "first": "2026-10-13",
+     "last": "2026-10-19",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "side": "support",
      "spender": "THRIVE LOS ANGELES PAC",
      "person": false,
      "people": null,
@@ -1178,6 +1354,17 @@
     },
     {
      "side": "support",
+     "spender": "AAPI EQUITY ALLIANCE",
+     "person": false,
+     "people": null,
+     "total": 1237.18,
+     "filings": 4,
+     "first": "2026-08-03",
+     "last": "2026-10-30",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
+    },
+    {
+     "side": "support",
      "spender": "Community Partners",
      "person": false,
      "people": null,
@@ -1186,17 +1373,6 @@
      "first": "2026-10-09",
      "last": "2026-10-09",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1476723"
-    },
-    {
-     "side": "support",
-     "spender": "AAPI EQUITY ALLIANCE",
-     "person": false,
-     "people": null,
-     "total": 952.9,
-     "filings": 3,
-     "first": "2026-08-03",
-     "last": "2026-10-23",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
     },
     {
      "side": "oppose",
@@ -1224,13 +1400,13 @@
       }
      ],
      "raised": 71229216.06,
-     "spent": 70794148.48,
+     "spent": 70808744.63,
      "cash_end": 821559.92,
      "statements": 5,
      "through": "2026-10-17",
-     "filed": "2026-10-22",
+     "filed": "2026-11-02",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1485847",
-     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215591&amendid=0",
+     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215591&amendid=1",
      "individuals": {
       "total": 5000000.0,
       "count": 2
@@ -1276,6 +1452,17 @@
    "spending": [
     {
      "side": "support",
+     "spender": "Million Voter Project Action Fund, Sponsored by Social Justice Organizations",
+     "person": false,
+     "people": null,
+     "total": 7299.08,
+     "filings": 2,
+     "first": "2026-10-02",
+     "last": "2026-10-27",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
+    },
+    {
+     "side": "support",
      "spender": "Reform California with Carl DeMaio - Ballot Measure Committee",
      "person": false,
      "people": null,
@@ -1287,25 +1474,47 @@
     },
     {
      "side": "support",
-     "spender": "Million Voter Project Action Fund, Sponsored by Social Justice Organizations",
-     "person": false,
-     "people": null,
-     "total": 5299.08,
-     "filings": 1,
-     "first": "2026-10-02",
-     "last": "2026-10-02",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
-    },
-    {
-     "side": "support",
      "spender": "REPUBLICAN PARTY OF SAN DIEGO COUNTY",
      "person": false,
      "people": null,
-     "total": 2205.23,
-     "filings": 1,
+     "total": 3711.77,
+     "filings": 2,
      "first": "2026-10-05",
-     "last": "2026-10-05",
+     "last": "2026-10-26",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
+    },
+    {
+     "side": "support",
+     "spender": "Los Angeles County Democratic Party ? State Candidate Committee",
+     "person": false,
+     "people": null,
+     "total": 2750.88,
+     "filings": 1,
+     "first": "2026-10-13",
+     "last": "2026-10-19",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "side": "support",
+     "spender": "PICO California",
+     "person": false,
+     "people": null,
+     "total": 1270.88,
+     "filings": 1,
+     "first": "2026-10-16",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "side": "support",
+     "spender": "RAMAN FOR MAYOR 2026; WORKING FAMILIES PARTY FOR",
+     "person": false,
+     "people": null,
+     "total": 1049.57,
+     "filings": 1,
+     "first": "2026-10-07",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
     },
     {
      "side": "oppose",
@@ -1450,14 +1659,14 @@
        "side": "oppose"
       }
      ],
-     "raised": 19756756.13,
-     "spent": 17339221.85,
+     "raised": 19760621.89,
+     "spent": 17319032.11,
      "cash_end": 3378918.17,
      "statements": 2,
      "through": "2026-10-17",
-     "filed": "2026-10-21",
+     "filed": "2026-10-30",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1493991",
-     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0",
+     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1",
      "individuals": {
       "total": 1415000.0,
       "count": 6
@@ -1468,70 +1677,70 @@
        "kind": "political party",
        "total": 3200000.0,
        "count": 3,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
       },
       {
        "name": "The Tribal Council of the Federated Indians of Graton Rancheria",
        "kind": "organization",
        "total": 2000000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199775&amendid=1"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199775&amendid=2"
       },
       {
        "name": "SEIU California State Council for Working People",
        "kind": "committee",
        "total": 1030000.0,
        "count": 3,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
       },
       {
        "name": "Dignity CA Service Employees International Union SEIU Local 2015",
        "kind": "committee",
        "total": 1000000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199775&amendid=1"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199775&amendid=2"
       },
       {
        "name": "California Teachers Association/Issues PAC",
        "kind": "committee",
        "total": 1000000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
       },
       {
        "name": "American Federation of State, County and Municipal Employees, AFL-CIO (MPO) Small Contributor Committee",
        "kind": "small contributor committee",
        "total": 650000.0,
        "count": 2,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
       },
       {
        "name": "North Coast States Regional Council of Carpenters Issues PAC",
        "kind": "committee",
        "total": 650000.0,
        "count": 2,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
       },
       {
        "name": "Committee to Engage and Empower California Voters",
        "kind": "committee",
        "total": 600000.0,
        "count": 2,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
       },
       {
        "name": "California Primary Care Association Advocates Issues Committee",
        "kind": "committee",
        "total": 600000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
       },
       {
        "name": "California State Association of Electrical Workers Small Contributor Committee",
        "kind": "small contributor committee",
        "total": 500000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199775&amendid=1"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199775&amendid=2"
       }
      ],
      "organizations_count": 44,
@@ -1621,14 +1830,14 @@
        "side": "oppose"
       }
      ],
-     "raised": 4797782.28,
-     "spent": 3334343.1,
+     "raised": 4797586.31,
+     "spent": 3409009.56,
      "cash_end": 1676718.65,
      "statements": 4,
      "through": "2026-10-17",
-     "filed": "2026-10-22",
+     "filed": "2026-11-03",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1489007",
-     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215625&amendid=0",
+     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215625&amendid=2",
      "individuals": {
       "total": 3743250.0,
       "count": 23
@@ -1639,42 +1848,42 @@
        "kind": "committee",
        "total": 350000.0,
        "count": 3,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199471&amendid=1"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199471&amendid=2"
       },
       {
        "name": "California Donor Table Issues Committee",
        "kind": "committee",
        "total": 130000.0,
        "count": 2,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199471&amendid=1"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199471&amendid=2"
       },
       {
        "name": "ACLU of Northern California Election Issues Committee",
        "kind": "committee",
        "total": 100000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199471&amendid=1"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199471&amendid=2"
       },
       {
        "name": "California Community Foundation",
        "kind": "organization",
        "total": 100000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199471&amendid=1"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199471&amendid=2"
       },
       {
        "name": "Gail Pellerin for Assembly 2026",
        "kind": "committee",
        "total": 4900.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199471&amendid=1"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199471&amendid=2"
       },
       {
        "name": "Nancy Skinner for Board of Equalization 2030",
        "kind": "committee",
        "total": 2500.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199471&amendid=1"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199471&amendid=2"
       }
      ],
      "organizations_count": 6,
@@ -1745,10 +1954,10 @@
      "spender": "Reform California with Carl DeMaio - Ballot Measure Committee",
      "person": false,
      "people": null,
-     "total": 1611559.17,
-     "filings": 11,
+     "total": 1641559.17,
+     "filings": 12,
      "first": "2026-04-30",
-     "last": "2026-10-22",
+     "last": "2026-10-31",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1268914"
     },
     {
@@ -1756,10 +1965,10 @@
      "spender": "REPUBLICAN PARTY OF SAN DIEGO COUNTY",
      "person": false,
      "people": null,
-     "total": 105488.38,
-     "filings": 6,
+     "total": 155196.14,
+     "filings": 9,
      "first": "2026-10-05",
-     "last": "2026-10-23",
+     "last": "2026-10-30",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
     },
     {
@@ -1888,10 +2097,10 @@
      "spender": "Faith Votes, Sponsored by PICO California Action Fund",
      "person": false,
      "people": null,
-     "total": 88183.33,
-     "filings": 4,
+     "total": 89683.33,
+     "filings": 5,
      "first": "2026-09-30",
-     "last": "2026-10-20",
+     "last": "2026-11-03",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1496786"
     },
     {
@@ -1940,6 +2149,17 @@
     },
     {
      "side": "oppose",
+     "spender": "Million Voter Project Action Fund, Sponsored by Social Justice Organizations",
+     "person": false,
+     "people": null,
+     "total": 7649.08,
+     "filings": 3,
+     "first": "2026-10-02",
+     "last": "2026-10-30",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
+    },
+    {
+     "side": "oppose",
      "spender": "Youth Power PAC Sponsored by PowerCA Action",
      "person": false,
      "people": null,
@@ -1948,17 +2168,6 @@
      "first": "2026-10-01",
      "last": "2026-10-25",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1332307"
-    },
-    {
-     "side": "oppose",
-     "spender": "Million Voter Project Action Fund, Sponsored by Social Justice Organizations",
-     "person": false,
-     "people": null,
-     "total": 5299.08,
-     "filings": 1,
-     "first": "2026-10-02",
-     "last": "2026-10-02",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
     },
     {
      "side": "oppose",
@@ -1995,6 +2204,28 @@
     },
     {
      "side": "oppose",
+     "spender": "Los Angeles County Democratic Party ? State Candidate Committee",
+     "person": false,
+     "people": null,
+     "total": 2750.88,
+     "filings": 1,
+     "first": "2026-10-13",
+     "last": "2026-10-19",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "side": "oppose",
+     "spender": "PICO California",
+     "person": false,
+     "people": null,
+     "total": 1270.88,
+     "filings": 1,
+     "first": "2026-10-16",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "side": "oppose",
      "spender": "RAMAN FOR MAYOR 2026; WORKING FAMILIES PARTY FOR",
      "person": false,
      "people": null,
@@ -2003,6 +2234,17 @@
      "first": "2026-10-03",
      "last": "2026-10-23",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
+    },
+    {
+     "side": "oppose",
+     "spender": "AMERICAN CIVIL LIBERTIES UNION OF SOUTHERN CALIFORNIA",
+     "person": false,
+     "people": null,
+     "total": 1000.0,
+     "filings": 1,
+     "first": "2026-09-29",
+     "last": "2026-09-29",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1408242"
     }
    ]
   },
@@ -2032,12 +2274,12 @@
      ],
      "raised": 464579.28,
      "spent": 493209.12,
-     "cash_end": 167372.39,
+     "cash_end": 167812.39,
      "statements": 2,
      "through": "2026-10-17",
-     "filed": "2026-10-26",
+     "filed": "2026-11-01",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1495036",
-     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215747&amendid=1",
+     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215747&amendid=2",
      "individuals": {
       "total": 372079.78,
       "count": 125
@@ -2055,7 +2297,7 @@
        "kind": "committee",
        "total": 20000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215747&amendid=1"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215747&amendid=2"
       }
      ],
      "organizations_count": 2,
@@ -2070,14 +2312,14 @@
        "side": "oppose"
       }
      ],
-     "raised": 118761261.41,
-     "spent": 114498568.44,
+     "raised": 118761465.29,
+     "spent": 114500637.19,
      "cash_end": 4757338.29,
      "statements": 3,
      "through": "2026-10-17",
-     "filed": "2026-10-22",
+     "filed": "2026-11-02",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1492108",
-     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215979&amendid=0",
+     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215979&amendid=1",
      "individuals": {
       "total": 0.0,
       "count": 0
@@ -2088,7 +2330,7 @@
        "kind": "committee",
        "total": 118500000.0,
        "count": 10,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215979&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215979&amendid=1"
       },
       {
        "name": "CALIFORNIA MEDICAL ASSOCIATION",
@@ -2192,6 +2434,17 @@
    "spending": [
     {
      "side": "support",
+     "spender": "San Diego Labor Coalition, Sponsored by Laborers' International Union of North America Local 89",
+     "person": false,
+     "people": null,
+     "total": 7046.68,
+     "filings": 3,
+     "first": "2026-10-05",
+     "last": "2026-10-28",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1454100"
+    },
+    {
+     "side": "support",
      "spender": "Oakland Rising Ballot Committee sponsored by Center for Empowered Politics",
      "person": false,
      "people": null,
@@ -2214,25 +2467,36 @@
     },
     {
      "side": "support",
-     "spender": "San Diego Labor Coalition, Sponsored by Laborers' International Union of North America Local 89",
+     "spender": "Los Angeles County Democratic Party ? State Candidate Committee",
      "person": false,
      "people": null,
-     "total": 2787.53,
-     "filings": 2,
-     "first": "2026-10-05",
+     "total": 2750.88,
+     "filings": 1,
+     "first": "2026-10-13",
      "last": "2026-10-19",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1454100"
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
     },
     {
      "side": "support",
      "spender": "AAPI EQUITY ALLIANCE",
      "person": false,
      "people": null,
-     "total": 1341.12,
-     "filings": 3,
+     "total": 1625.4,
+     "filings": 4,
      "first": "2026-08-31",
-     "last": "2026-10-23",
+     "last": "2026-10-30",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
+    },
+    {
+     "side": "support",
+     "spender": "RAMAN FOR MAYOR 2026; WORKING FAMILIES PARTY FOR",
+     "person": false,
+     "people": null,
+     "total": 1049.57,
+     "filings": 1,
+     "first": "2026-10-07",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
     },
     {
      "side": "support",
@@ -2269,6 +2533,17 @@
     },
     {
      "side": "oppose",
+     "spender": "REPUBLICAN PARTY OF SAN DIEGO COUNTY",
+     "person": false,
+     "people": null,
+     "total": 5097.57,
+     "filings": 2,
+     "first": "2026-10-05",
+     "last": "2026-10-26",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
+    },
+    {
+     "side": "oppose",
      "spender": "Youth Power PAC",
      "person": false,
      "people": null,
@@ -2280,14 +2555,14 @@
     },
     {
      "side": "oppose",
-     "spender": "REPUBLICAN PARTY OF SAN DIEGO COUNTY",
+     "spender": "Bay Rising Ballot Action Committee Sponsored by Center for Empowered Politics",
      "person": false,
      "people": null,
-     "total": 3165.07,
+     "total": 3750.0,
      "filings": 1,
-     "first": "2026-10-05",
-     "last": "2026-10-05",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
+     "first": "2026-10-27",
+     "last": "2026-10-27",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1454577"
     },
     {
      "side": "oppose",
@@ -2315,13 +2590,13 @@
       }
      ],
      "raised": 58376445.92,
-     "spent": 60042831.97,
+     "spent": 60058581.97,
      "cash_end": 21783.91,
      "statements": 4,
      "through": "2026-10-17",
-     "filed": "2026-10-22",
+     "filed": "2026-11-02",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1488423",
-     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215980&amendid=0",
+     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215980&amendid=1",
      "individuals": {
       "total": 100.0,
       "count": 1
@@ -2332,7 +2607,7 @@
        "kind": "committee",
        "total": 58350000.0,
        "count": 11,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199918&amendid=1"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199918&amendid=2"
       }
      ],
      "organizations_count": 1,
@@ -2426,12 +2701,12 @@
      ],
      "raised": 464579.28,
      "spent": 493209.12,
-     "cash_end": 167372.39,
+     "cash_end": 167812.39,
      "statements": 2,
      "through": "2026-10-17",
-     "filed": "2026-10-26",
+     "filed": "2026-11-01",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1495036",
-     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215747&amendid=1",
+     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215747&amendid=2",
      "individuals": {
       "total": 372079.78,
       "count": 125
@@ -2449,7 +2724,7 @@
        "kind": "committee",
        "total": 20000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215747&amendid=1"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215747&amendid=2"
       }
      ],
      "organizations_count": 2,
@@ -2484,10 +2759,10 @@
      "spender": "REPUBLICAN PARTY OF SAN DIEGO COUNTY",
      "person": false,
      "people": null,
-     "total": 3504.96,
-     "filings": 2,
+     "total": 4738.48,
+     "filings": 3,
      "first": "2026-10-05",
-     "last": "2026-10-23",
+     "last": "2026-10-26",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
     },
     {
@@ -2517,22 +2792,11 @@
      "spender": "Million Voter Project Action Fund, Sponsored by Social Justice Organizations",
      "person": false,
      "people": null,
-     "total": 5299.08,
-     "filings": 1,
+     "total": 7299.08,
+     "filings": 2,
      "first": "2026-10-02",
-     "last": "2026-10-02",
+     "last": "2026-10-27",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
-    },
-    {
-     "side": "oppose",
-     "spender": "ACLU Foundation of San Diego & Imperial Counties",
-     "person": false,
-     "people": null,
-     "total": 5206.28,
-     "filings": 1,
-     "first": "2026-09-11",
-     "last": "2026-10-30",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
     },
     {
      "side": "oppose",
@@ -2547,6 +2811,72 @@
     },
     {
      "side": "oppose",
+     "spender": "Los Angeles County Democratic Party ? State Candidate Committee",
+     "person": false,
+     "people": null,
+     "total": 2750.88,
+     "filings": 1,
+     "first": "2026-10-13",
+     "last": "2026-10-19",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "side": "oppose",
+     "spender": "Bay Rising Ballot Action Committee Sponsored by Center for Empowered Politics",
+     "person": false,
+     "people": null,
+     "total": 1875.0,
+     "filings": 1,
+     "first": "2026-10-27",
+     "last": "2026-10-27",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1454577"
+    },
+    {
+     "side": "oppose",
+     "spender": "ACLU Foundation of San Diego & Imperial Counties",
+     "person": false,
+     "people": null,
+     "total": 1725.15,
+     "filings": 1,
+     "first": "2026-09-11",
+     "last": "2026-10-30",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
+    },
+    {
+     "side": "oppose",
+     "spender": "PICO California",
+     "person": false,
+     "people": null,
+     "total": 1270.88,
+     "filings": 1,
+     "first": "2026-10-16",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "side": "oppose",
+     "spender": "AAPI EQUITY ALLIANCE",
+     "person": false,
+     "people": null,
+     "total": 1136.21,
+     "filings": 4,
+     "first": "2026-08-03",
+     "last": "2026-10-30",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
+    },
+    {
+     "side": "oppose",
+     "spender": "RAMAN FOR MAYOR 2026; WORKING FAMILIES PARTY FOR",
+     "person": false,
+     "people": null,
+     "total": 1049.58,
+     "filings": 1,
+     "first": "2026-10-07",
+     "last": "2026-10-23",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
+    },
+    {
+     "side": "oppose",
      "spender": "Community Partners",
      "person": false,
      "people": null,
@@ -2555,17 +2885,6 @@
      "first": "2026-10-09",
      "last": "2026-10-09",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1476723"
-    },
-    {
-     "side": "oppose",
-     "spender": "AAPI EQUITY ALLIANCE",
-     "person": false,
-     "people": null,
-     "total": 851.93,
-     "filings": 3,
-     "first": "2026-08-03",
-     "last": "2026-10-23",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
     }
    ]
   },
@@ -2582,13 +2901,13 @@
       }
      ],
      "raised": 127977037.26,
-     "spent": 124009882.18,
+     "spent": 124010215.68,
      "cash_end": 5333532.36,
      "statements": 4,
      "through": "2026-10-17",
-     "filed": "2026-10-22",
+     "filed": "2026-11-02",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1488418",
-     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215981&amendid=0",
+     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215981&amendid=1",
      "individuals": {
       "total": 0.0,
       "count": 0
@@ -2599,14 +2918,14 @@
        "kind": "committee",
        "total": 127800000.0,
        "count": 16,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215981&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215981&amendid=1"
       },
       {
        "name": "PEACE OFFICERS RESEARCH ASSOCIATION OF CALIFORNIA POLITICAL ISSUES COMMITTEE (PORAC PIC)",
        "kind": "committee",
        "total": 150000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215981&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215981&amendid=1"
       }
      ],
      "organizations_count": 2,
@@ -2700,12 +3019,12 @@
      ],
      "raised": 464579.28,
      "spent": 493209.12,
-     "cash_end": 167372.39,
+     "cash_end": 167812.39,
      "statements": 2,
      "through": "2026-10-17",
-     "filed": "2026-10-26",
+     "filed": "2026-11-01",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1495036",
-     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215747&amendid=1",
+     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215747&amendid=2",
      "individuals": {
       "total": 372079.78,
       "count": 125
@@ -2723,7 +3042,7 @@
        "kind": "committee",
        "total": 20000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215747&amendid=1"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215747&amendid=2"
       }
      ],
      "organizations_count": 2,
@@ -2791,22 +3110,11 @@
      "spender": "Million Voter Project Action Fund, Sponsored by Social Justice Organizations",
      "person": false,
      "people": null,
-     "total": 5299.08,
-     "filings": 1,
+     "total": 7299.08,
+     "filings": 2,
      "first": "2026-10-02",
-     "last": "2026-10-02",
+     "last": "2026-10-27",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
-    },
-    {
-     "side": "oppose",
-     "spender": "ACLU Foundation of San Diego & Imperial Counties",
-     "person": false,
-     "people": null,
-     "total": 5206.22,
-     "filings": 1,
-     "first": "2026-09-11",
-     "last": "2026-10-30",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
     },
     {
      "side": "oppose",
@@ -2821,6 +3129,72 @@
     },
     {
      "side": "oppose",
+     "spender": "Los Angeles County Democratic Party ? State Candidate Committee",
+     "person": false,
+     "people": null,
+     "total": 2750.88,
+     "filings": 1,
+     "first": "2026-10-13",
+     "last": "2026-10-19",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "side": "oppose",
+     "spender": "Bay Rising Ballot Action Committee Sponsored by Center for Empowered Politics",
+     "person": false,
+     "people": null,
+     "total": 1875.0,
+     "filings": 1,
+     "first": "2026-10-27",
+     "last": "2026-10-27",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1454577"
+    },
+    {
+     "side": "oppose",
+     "spender": "ACLU Foundation of San Diego & Imperial Counties",
+     "person": false,
+     "people": null,
+     "total": 1725.12,
+     "filings": 1,
+     "first": "2026-09-11",
+     "last": "2026-10-30",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
+    },
+    {
+     "side": "oppose",
+     "spender": "PICO California",
+     "person": false,
+     "people": null,
+     "total": 1270.88,
+     "filings": 1,
+     "first": "2026-10-16",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "side": "oppose",
+     "spender": "AAPI EQUITY ALLIANCE",
+     "person": false,
+     "people": null,
+     "total": 1169.87,
+     "filings": 4,
+     "first": "2026-08-03",
+     "last": "2026-10-30",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
+    },
+    {
+     "side": "oppose",
+     "spender": "RAMAN FOR MAYOR 2026; WORKING FAMILIES PARTY FOR",
+     "person": false,
+     "people": null,
+     "total": 1049.58,
+     "filings": 1,
+     "first": "2026-10-07",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
+    },
+    {
+     "side": "oppose",
      "spender": "Community Partners",
      "person": false,
      "people": null,
@@ -2829,17 +3203,6 @@
      "first": "2026-10-09",
      "last": "2026-10-09",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1476723"
-    },
-    {
-     "side": "oppose",
-     "spender": "AAPI EQUITY ALLIANCE",
-     "person": false,
-     "people": null,
-     "total": 885.59,
-     "filings": 3,
-     "first": "2026-08-03",
-     "last": "2026-10-23",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
     }
    ]
   },
@@ -2855,14 +3218,14 @@
        "side": "oppose"
       }
      ],
-     "raised": 7742284.74,
-     "spent": 6622177.15,
+     "raised": 7742492.84,
+     "spent": 6622385.25,
      "cash_end": 1152357.59,
      "statements": 3,
      "through": "2026-10-17",
-     "filed": "2026-10-22",
+     "filed": "2026-11-02",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1492508",
-     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0",
+     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1",
      "individuals": {
       "total": 0.0,
       "count": 0
@@ -2874,13 +3237,6 @@
        "total": 1500000.0,
        "count": 2,
        "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199626&amendid=1"
-      },
-      {
-       "name": "Southern California Partnership For Jobs (Nonprofit 501 (C)(6))",
-       "kind": "committee",
-       "total": 500000.0,
-       "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
       },
       {
        "name": "Service Employees International Union Local 1021 Issues PAC",
@@ -2908,38 +3264,78 @@
        "kind": "committee",
        "total": 500000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
-      },
-      {
-       "name": "California Teachers Association/Issues PAC",
-       "kind": "committee",
-       "total": 500000.0,
-       "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
       },
       {
        "name": "North Coast States Regional Council of Carpenters Issues PAC",
        "kind": "committee",
        "total": 500000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
+      },
+      {
+       "name": "Southern California Partnership For Jobs (Nonprofit 501 (C)(6))",
+       "kind": "committee",
+       "total": 500000.0,
+       "count": 1,
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
+      },
+      {
+       "name": "California Teachers Association/Issues PAC",
+       "kind": "committee",
+       "total": 500000.0,
+       "count": 1,
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
       },
       {
        "name": "California Professional Firefighters Ballot Issues Committee",
        "kind": "committee",
        "total": 350000.0,
        "count": 2,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
       },
       {
        "name": "League of California Cities CITIPAC",
        "kind": "committee",
        "total": 250000.01,
        "count": 3,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
       }
      ],
      "organizations_count": 25,
+     "side": "oppose"
+    },
+    {
+     "filer_id": "1497906",
+     "name": "Long Beach Against Proposition 43, Sponsored by LAANE Action Fund",
+     "props": [
+      {
+       "number": "43",
+       "side": "oppose"
+      }
+     ],
+     "raised": 37500.0,
+     "spent": 3829.2,
+     "cash_end": 37500.0,
+     "statements": 1,
+     "through": "2026-10-17",
+     "filed": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1497906",
+     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3219971&amendid=0",
+     "individuals": {
+      "total": 0.0,
+      "count": 0
+     },
+     "organizations": [
+      {
+       "name": "Liberty Hill Foundation",
+       "kind": "organization",
+       "total": 37500.0,
+       "count": 1,
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3219971&amendid=0"
+      }
+     ],
+     "organizations_count": 1,
      "side": "oppose"
     }
    ],
@@ -2982,10 +3378,10 @@
      "spender": "REPUBLICAN PARTY OF SAN DIEGO COUNTY",
      "person": false,
      "people": null,
-     "total": 3948.05,
-     "filings": 2,
+     "total": 5428.27,
+     "filings": 3,
      "first": "2026-10-05",
-     "last": "2026-10-23",
+     "last": "2026-10-26",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
     },
     {
@@ -3015,10 +3411,10 @@
      "spender": "Faith Votes, Sponsored by PICO California Action Fund",
      "person": false,
      "people": null,
-     "total": 38720.83,
-     "filings": 4,
+     "total": 45220.83,
+     "filings": 5,
      "first": "2026-09-30",
-     "last": "2026-10-22",
+     "last": "2026-10-29",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1496786"
     },
     {
@@ -3034,6 +3430,17 @@
     },
     {
      "side": "oppose",
+     "spender": "Million Voter Project Action Fund, Sponsored by Social Justice Organizations",
+     "person": false,
+     "people": null,
+     "total": 7299.09,
+     "filings": 2,
+     "first": "2026-10-02",
+     "last": "2026-10-27",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
+    },
+    {
+     "side": "oppose",
      "spender": "Youth Power PAC Sponsored by PowerCA Action",
      "person": false,
      "people": null,
@@ -3042,28 +3449,6 @@
      "first": "2026-10-01",
      "last": "2026-10-25",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1332307"
-    },
-    {
-     "side": "oppose",
-     "spender": "Million Voter Project Action Fund, Sponsored by Social Justice Organizations",
-     "person": false,
-     "people": null,
-     "total": 5299.09,
-     "filings": 1,
-     "first": "2026-10-02",
-     "last": "2026-10-02",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
-    },
-    {
-     "side": "oppose",
-     "spender": "ACLU Foundation of San Diego & Imperial Counties",
-     "person": false,
-     "people": null,
-     "total": 5206.21,
-     "filings": 1,
-     "first": "2026-09-11",
-     "last": "2026-10-30",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
     },
     {
      "side": "oppose",
@@ -3100,14 +3485,58 @@
     },
     {
      "side": "oppose",
+     "spender": "Los Angeles County Democratic Party ? State Candidate Committee",
+     "person": false,
+     "people": null,
+     "total": 2750.88,
+     "filings": 1,
+     "first": "2026-10-13",
+     "last": "2026-10-19",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "side": "oppose",
+     "spender": "ACLU Foundation of San Diego & Imperial Counties",
+     "person": false,
+     "people": null,
+     "total": 1725.15,
+     "filings": 1,
+     "first": "2026-09-11",
+     "last": "2026-10-30",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
+    },
+    {
+     "side": "oppose",
+     "spender": "PICO California",
+     "person": false,
+     "people": null,
+     "total": 1270.88,
+     "filings": 1,
+     "first": "2026-10-16",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "side": "oppose",
      "spender": "AAPI EQUITY ALLIANCE",
      "person": false,
      "people": null,
-     "total": 986.55,
-     "filings": 3,
+     "total": 1270.83,
+     "filings": 4,
      "first": "2026-08-03",
-     "last": "2026-10-23",
+     "last": "2026-10-30",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
+    },
+    {
+     "side": "oppose",
+     "spender": "RAMAN FOR MAYOR 2026; WORKING FAMILIES PARTY FOR",
+     "person": false,
+     "people": null,
+     "total": 1049.58,
+     "filings": 1,
+     "first": "2026-10-07",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
     }
    ]
   },
@@ -3239,10 +3668,10 @@
      "spender": "Million Voter Project Action Fund, Sponsored by Social Justice Organizations",
      "person": false,
      "people": null,
-     "total": 5299.08,
-     "filings": 1,
+     "total": 7299.08,
+     "filings": 2,
      "first": "2026-10-02",
-     "last": "2026-10-02",
+     "last": "2026-10-27",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
     },
     {
@@ -3261,11 +3690,22 @@
      "spender": "REPUBLICAN PARTY OF SAN DIEGO COUNTY",
      "person": false,
      "people": null,
-     "total": 2531.67,
-     "filings": 1,
+     "total": 4011.89,
+     "filings": 2,
      "first": "2026-10-05",
-     "last": "2026-10-05",
+     "last": "2026-10-26",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
+    },
+    {
+     "side": "oppose",
+     "spender": "Los Angeles County Democratic Party ? State Candidate Committee",
+     "person": false,
+     "people": null,
+     "total": 2750.88,
+     "filings": 1,
+     "first": "2026-10-13",
+     "last": "2026-10-19",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
     },
     {
      "side": "oppose",
@@ -3280,6 +3720,39 @@
     },
     {
      "side": "oppose",
+     "spender": "PICO California",
+     "person": false,
+     "people": null,
+     "total": 1270.88,
+     "filings": 1,
+     "first": "2026-10-16",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "side": "oppose",
+     "spender": "AAPI EQUITY ALLIANCE",
+     "person": false,
+     "people": null,
+     "total": 1203.52,
+     "filings": 4,
+     "first": "2026-08-03",
+     "last": "2026-10-30",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
+    },
+    {
+     "side": "oppose",
+     "spender": "RAMAN FOR MAYOR 2026; WORKING FAMILIES PARTY FOR",
+     "person": false,
+     "people": null,
+     "total": 1049.57,
+     "filings": 1,
+     "first": "2026-10-07",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
+    },
+    {
+     "side": "oppose",
      "spender": "Community Partners",
      "person": false,
      "people": null,
@@ -3288,17 +3761,6 @@
      "first": "2026-10-09",
      "last": "2026-10-09",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1476723"
-    },
-    {
-     "side": "oppose",
-     "spender": "AAPI EQUITY ALLIANCE",
-     "person": false,
-     "people": null,
-     "total": 919.24,
-     "filings": 3,
-     "first": "2026-08-03",
-     "last": "2026-10-23",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
     }
    ]
   },
@@ -3319,9 +3781,9 @@
      "cash_end": 492513.64,
      "statements": 5,
      "through": "2026-10-17",
-     "filed": "2026-10-22",
+     "filed": "2026-11-02",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1484853",
-     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0",
+     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1",
      "individuals": {
       "total": 157681.0,
       "count": 14
@@ -3339,14 +3801,14 @@
        "kind": "committee",
        "total": 6195000.0,
        "count": 8,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
       },
       {
        "name": "CA BUSINESS PAC",
        "kind": "committee",
        "total": 3900000.0,
        "count": 7,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
       },
       {
        "name": "CALIFORNIA BUILDING INDUSTRY ASSOCIATION",
@@ -3360,7 +3822,7 @@
        "kind": "committee",
        "total": 1800000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
       },
       {
        "name": "CALIFORNIA ASSOCIATION OF REALTORS",
@@ -3381,21 +3843,21 @@
        "kind": "committee",
        "total": 500000.0,
        "count": 2,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
-      },
-      {
-       "name": "YUHAAVIATAM OF SAN MANUEL NATION (FKA SAN MANUEL BAND OF MISSION INDIANS)",
-       "kind": "organization",
-       "total": 500000.0,
-       "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
       },
       {
        "name": "CALIFORNIA WATER SERVICE COMPANY",
        "kind": "organization",
        "total": 500000.0,
        "count": 3,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+      },
+      {
+       "name": "BUILDING RESILIENT INFRASTRUCTURE FOR A DECARBONZED GREEN ECONOMY ISSUES PAC, FUNDED BY PG&E CORPORATION",
+       "kind": "committee",
+       "total": 500000.0,
+       "count": 1,
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3181107&amendid=2"
       }
      ],
      "organizations_count": 52,
@@ -3443,14 +3905,14 @@
        "side": "oppose"
       }
      ],
-     "raised": 19706541.1,
-     "spent": 15478672.35,
+     "raised": 19714927.09,
+     "spent": 15661734.89,
      "cash_end": 4391587.0,
      "statements": 3,
      "through": "2026-10-17",
-     "filed": "2026-10-21",
+     "filed": "2026-11-03",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1492264",
-     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215508&amendid=0",
+     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215508&amendid=2",
      "individuals": {
       "total": 10006770.19,
       "count": 31
@@ -3461,35 +3923,35 @@
        "kind": "committee",
        "total": 7000000.0,
        "count": 2,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199153&amendid=1"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199153&amendid=3"
       },
       {
        "name": "Members' Voice of the State Building and Construction Trades Council of California",
        "kind": "committee",
        "total": 1176000.0,
        "count": 3,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3179413&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3179413&amendid=1"
       },
       {
        "name": "State Building and Construction Trades Council of California Independent Expenditure PAC",
        "kind": "committee",
        "total": 823857.25,
        "count": 3,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3179413&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3179413&amendid=1"
       },
       {
        "name": "District Council of Iron Workers of the State of California and Vicinity PAC",
        "kind": "committee",
        "total": 500000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199153&amendid=1"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199153&amendid=3"
       },
       {
        "name": "Puente Hills Group Sierra Club",
        "kind": "organization",
        "total": 5000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215508&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215508&amendid=2"
       }
      ],
      "organizations_count": 5,
@@ -3600,14 +4062,14 @@
        "side": "oppose"
       }
      ],
-     "raised": 6595512.8,
-     "spent": 6172765.04,
+     "raised": 6590365.56,
+     "spent": 6221265.1,
      "cash_end": 430184.99,
      "statements": 3,
      "through": "2026-10-17",
-     "filed": "2026-10-21",
+     "filed": "2026-10-30",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1493079",
-     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=0",
+     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=1",
      "individuals": {
       "total": 423200.0,
       "count": 33
@@ -3618,63 +4080,63 @@
        "kind": "committee",
        "total": 5000000.0,
        "count": 2,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=1"
       },
       {
        "name": "Center for Biological Diversity, Inc.",
        "kind": "organization",
        "total": 600000.0,
        "count": 2,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=1"
       },
       {
        "name": "Earthjustice",
        "kind": "organization",
        "total": 400000.01,
        "count": 4,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=1"
       },
       {
        "name": "The Wildlands Conservancy",
        "kind": "organization",
        "total": 100000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=1"
       },
       {
-       "name": "Natural Resources Defense Council Action Fund",
+       "name": "Natural Resources Defense Council (NRDC) Action Fund, Inc.",
        "kind": "organization",
        "total": 25000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199144&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199144&amendid=1"
       },
       {
        "name": "Shute, Mihaly & Weinberger LLP",
        "kind": "organization",
        "total": 15000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199144&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199144&amendid=1"
       },
       {
        "name": "Carstens, Black & Minteer, LLP",
        "kind": "organization",
        "total": 5000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199144&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199144&amendid=1"
       },
       {
        "name": "Chatten-Brown Law Group, APC",
        "kind": "organization",
        "total": 5000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199144&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3199144&amendid=1"
       },
       {
        "name": "Fatima Iqbal-Zubair for Assembly 2026",
        "kind": "committee",
        "total": 594.7,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=0"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=1"
       }
      ],
      "organizations_count": 9,
@@ -3731,6 +4193,17 @@
     },
     {
      "side": "support",
+     "spender": "REPUBLICAN PARTY OF SAN DIEGO COUNTY",
+     "person": false,
+     "people": null,
+     "total": 3296.8,
+     "filings": 2,
+     "first": "2026-10-05",
+     "last": "2026-10-26",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
+    },
+    {
+     "side": "support",
      "spender": "THRIVE LOS ANGELES PAC",
      "person": false,
      "people": null,
@@ -3742,14 +4215,14 @@
     },
     {
      "side": "support",
-     "spender": "REPUBLICAN PARTY OF SAN DIEGO COUNTY",
+     "spender": "TEACHERS AND COMMUNITIES UNITED FOR ESTUARDO MAZARIEGOS FOR CITY COUNCIL AND MARISSA ROY FOR CITY ATTORNEY 2026, SPONSORED BY UNITED TEACHERS LOS ANGELES AND ACCE ACTION",
      "person": false,
      "people": null,
-     "total": 1898.83,
+     "total": 168.34,
      "filings": 1,
-     "first": "2026-10-05",
-     "last": "2026-10-05",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
+     "first": "2026-11-02",
+     "last": "2026-11-02",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1489139"
     },
     {
      "side": "oppose",
@@ -3778,22 +4251,11 @@
      "spender": "Million Voter Project Action Fund, Sponsored by Social Justice Organizations",
      "person": false,
      "people": null,
-     "total": 5299.09,
-     "filings": 1,
+     "total": 7299.09,
+     "filings": 2,
      "first": "2026-10-02",
-     "last": "2026-10-02",
+     "last": "2026-10-27",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
-    },
-    {
-     "side": "oppose",
-     "spender": "ACLU Foundation of San Diego & Imperial Counties",
-     "person": false,
-     "people": null,
-     "total": 5039.55,
-     "filings": 1,
-     "first": "2026-09-24",
-     "last": "2026-10-30",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
     },
     {
      "side": "oppose",
@@ -3808,6 +4270,17 @@
     },
     {
      "side": "oppose",
+     "spender": "Los Angeles County Democratic Party ? State Candidate Committee",
+     "person": false,
+     "people": null,
+     "total": 2750.88,
+     "filings": 1,
+     "first": "2026-10-13",
+     "last": "2026-10-19",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "side": "oppose",
      "spender": "Citizens for a Just California - No on 39, Sponsored by Higher Wages Lower Rent Alliance",
      "person": false,
      "people": null,
@@ -3819,6 +4292,50 @@
     },
     {
      "side": "oppose",
+     "spender": "ACLU Foundation of San Diego & Imperial Counties",
+     "person": false,
+     "people": null,
+     "total": 1683.36,
+     "filings": 1,
+     "first": "2026-09-24",
+     "last": "2026-10-30",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
+    },
+    {
+     "side": "oppose",
+     "spender": "PICO California",
+     "person": false,
+     "people": null,
+     "total": 1270.88,
+     "filings": 1,
+     "first": "2026-10-16",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "side": "oppose",
+     "spender": "AAPI EQUITY ALLIANCE",
+     "person": false,
+     "people": null,
+     "total": 1169.87,
+     "filings": 4,
+     "first": "2026-08-03",
+     "last": "2026-10-30",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
+    },
+    {
+     "side": "oppose",
+     "spender": "RAMAN FOR MAYOR 2026; WORKING FAMILIES PARTY FOR",
+     "person": false,
+     "people": null,
+     "total": 1049.58,
+     "filings": 1,
+     "first": "2026-10-07",
+     "last": "2026-10-22",
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
+    },
+    {
+     "side": "oppose",
      "spender": "Community Partners",
      "person": false,
      "people": null,
@@ -3827,17 +4344,6 @@
      "first": "2026-10-09",
      "last": "2026-10-09",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1476723"
-    },
-    {
-     "side": "oppose",
-     "spender": "AAPI EQUITY ALLIANCE",
-     "person": false,
-     "people": null,
-     "total": 885.59,
-     "filings": 3,
-     "first": "2026-08-03",
-     "last": "2026-10-23",
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
     }
    ]
   }
@@ -3856,7 +4362,7 @@
       }
      ],
      "total": 1500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     },
     {
      "committee": "Yes on Prop 3, sponsored by education and labor organizations",
@@ -3868,7 +4374,7 @@
       }
      ],
      "total": 1500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
     },
     {
      "committee": "No on 39 - Block Election Rigging sponsored by nurses, teachers, and nonprofit labor and community health clinic organizations",
@@ -3880,25 +4386,7 @@
       }
      ],
      "total": 1030000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
-    }
-   ],
-   "spent": []
-  },
-  "SOUTHERN CALIFORNIA PARTNERSHIP FOR JOBS NONPROFIT 501 C 6": {
-   "name": "Southern California Partnership For Jobs (Nonprofit 501 (C)(6))",
-   "gave": [
-    {
-     "committee": "No on Prop 43: Stop the Local Taxpayer Deception Act, sponsored by labor organizations",
-     "filer_id": "1492508",
-     "props": [
-      {
-       "number": "43",
-       "side": "oppose"
-      }
-     ],
-     "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -3916,7 +4404,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     },
     {
      "committee": "Yes on Prop 3, sponsored by education and labor organizations",
@@ -3928,7 +4416,7 @@
       }
      ],
      "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
     },
     {
      "committee": "No on 39 - Block Election Rigging sponsored by nurses, teachers, and nonprofit labor and community health clinic organizations",
@@ -3940,7 +4428,7 @@
       }
      ],
      "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -3958,7 +4446,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     }
    ],
    "spent": []
@@ -3976,7 +4464,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     },
     {
      "committee": "Yes on 37, California Homeownership",
@@ -4012,7 +4500,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -4030,49 +4518,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
-    }
-   ],
-   "spent": []
-  },
-  "CALIFORNIA TEACHERS ASSOCIATION ISSUES PAC": {
-   "name": "California Teachers Association/Issues PAC",
-   "gave": [
-    {
-     "committee": "No on Prop 43: Stop the Local Taxpayer Deception Act, sponsored by labor organizations",
-     "filer_id": "1492508",
-     "props": [
-      {
-       "number": "43",
-       "side": "oppose"
-      }
-     ],
-     "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
-    },
-    {
-     "committee": "Yes on Prop 3, sponsored by education and labor organizations",
-     "filer_id": "1483562",
-     "props": [
-      {
-       "number": "3",
-       "side": "support"
-      }
-     ],
-     "total": 53275000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
-    },
-    {
-     "committee": "No on 39 - Block Election Rigging sponsored by nurses, teachers, and nonprofit labor and community health clinic organizations",
-     "filer_id": "1493991",
-     "props": [
-      {
-       "number": "39",
-       "side": "oppose"
-      }
-     ],
-     "total": 1000000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     }
    ],
    "spent": []
@@ -4090,7 +4536,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     },
     {
      "committee": "Yes on 37, California Homeownership",
@@ -4126,7 +4572,67 @@
       }
      ],
      "total": 650000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
+    }
+   ],
+   "spent": []
+  },
+  "SOUTHERN CALIFORNIA PARTNERSHIP FOR JOBS NONPROFIT 501 C 6": {
+   "name": "Southern California Partnership For Jobs (Nonprofit 501 (C)(6))",
+   "gave": [
+    {
+     "committee": "No on Prop 43: Stop the Local Taxpayer Deception Act, sponsored by labor organizations",
+     "filer_id": "1492508",
+     "props": [
+      {
+       "number": "43",
+       "side": "oppose"
+      }
+     ],
+     "total": 500000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
+    }
+   ],
+   "spent": []
+  },
+  "CALIFORNIA TEACHERS ASSOCIATION ISSUES PAC": {
+   "name": "California Teachers Association/Issues PAC",
+   "gave": [
+    {
+     "committee": "No on Prop 43: Stop the Local Taxpayer Deception Act, sponsored by labor organizations",
+     "filer_id": "1492508",
+     "props": [
+      {
+       "number": "43",
+       "side": "oppose"
+      }
+     ],
+     "total": 500000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
+    },
+    {
+     "committee": "Yes on Prop 3, sponsored by education and labor organizations",
+     "filer_id": "1483562",
+     "props": [
+      {
+       "number": "3",
+       "side": "support"
+      }
+     ],
+     "total": 53275000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
+    },
+    {
+     "committee": "No on 39 - Block Election Rigging sponsored by nurses, teachers, and nonprofit labor and community health clinic organizations",
+     "filer_id": "1493991",
+     "props": [
+      {
+       "number": "39",
+       "side": "oppose"
+      }
+     ],
+     "total": 1000000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -4144,7 +4650,7 @@
       }
      ],
      "total": 350000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     }
    ],
    "spent": []
@@ -4162,7 +4668,7 @@
       }
      ],
      "total": 250000.01,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     },
     {
      "committee": "Yes On Prop 1 Californians for Homes, Jobs and Affordability 2026, Sponsored by Affordable Housing Organizations",
@@ -4192,7 +4698,7 @@
       }
      ],
      "total": 250000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     },
     {
      "committee": "Yes on Prop 3, sponsored by education and labor organizations",
@@ -4204,7 +4710,7 @@
       }
      ],
      "total": 1750000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
     },
     {
      "committee": "No on 39 - Block Election Rigging sponsored by nurses, teachers, and nonprofit labor and community health clinic organizations",
@@ -4216,7 +4722,7 @@
       }
      ],
      "total": 250000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     },
     {
      "committee": "Working Families say No to Propositions 41 and 42 sponsored by labor unions",
@@ -4250,7 +4756,7 @@
       }
      ],
      "total": 250000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     }
    ],
    "spent": []
@@ -4268,7 +4774,7 @@
       }
      ],
      "total": 200000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     },
     {
      "committee": "No on Prop 39 - Californians for Voting Rights, sponsored by California Donor Table & ACLU of Northern California",
@@ -4280,7 +4786,7 @@
       }
      ],
      "total": 100000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215625&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215625&amendid=2"
     },
     {
      "committee": "Yes On Prop 1 Californians for Homes, Jobs and Affordability 2026, Sponsored by Affordable Housing Organizations",
@@ -4304,7 +4810,7 @@
       }
      ],
      "total": 200000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -4322,7 +4828,7 @@
       }
      ],
      "total": 200000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     }
    ],
    "spent": []
@@ -4340,7 +4846,7 @@
       }
      ],
      "total": 150000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     },
     {
      "committee": "Yes on Prop 3, sponsored by education and labor organizations",
@@ -4352,7 +4858,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
     }
    ],
    "spent": []
@@ -4370,7 +4876,7 @@
       }
      ],
      "total": 100000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     },
     {
      "committee": "Yes on Prop 3, sponsored by education and labor organizations",
@@ -4382,7 +4888,7 @@
       }
      ],
      "total": 100000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
     },
     {
      "committee": "No on 39 - Block Election Rigging sponsored by nurses, teachers, and nonprofit labor and community health clinic organizations",
@@ -4394,7 +4900,7 @@
       }
      ],
      "total": 100000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -4412,7 +4918,7 @@
       }
      ],
      "total": 100000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     },
     {
      "committee": "Yes On Prop 1 Californians for Homes, Jobs and Affordability 2026, Sponsored by Affordable Housing Organizations",
@@ -4442,7 +4948,7 @@
       }
      ],
      "total": 75000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     }
    ],
    "spent": []
@@ -4460,7 +4966,7 @@
       }
      ],
      "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     },
     {
      "committee": "Yes on Prop 3, sponsored by education and labor organizations",
@@ -4472,7 +4978,7 @@
       }
      ],
      "total": 250000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
     },
     {
      "committee": "No on 39 - Block Election Rigging sponsored by nurses, teachers, and nonprofit labor and community health clinic organizations",
@@ -4484,7 +4990,7 @@
       }
      ],
      "total": 250000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -4502,7 +5008,7 @@
       }
      ],
      "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     }
    ],
    "spent": []
@@ -4520,7 +5026,7 @@
       }
      ],
      "total": 25000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     },
     {
      "committee": "Yes on Prop 3, sponsored by education and labor organizations",
@@ -4532,7 +5038,7 @@
       }
      ],
      "total": 10000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
     },
     {
      "committee": "No on 39 - Block Election Rigging sponsored by nurses, teachers, and nonprofit labor and community health clinic organizations",
@@ -4544,7 +5050,7 @@
       }
      ],
      "total": 20000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -4562,7 +5068,7 @@
       }
      ],
      "total": 10000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     },
     {
      "committee": "No on 39 - Block Election Rigging sponsored by nurses, teachers, and nonprofit labor and community health clinic organizations",
@@ -4574,7 +5080,7 @@
       }
      ],
      "total": 20000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -4592,7 +5098,7 @@
       }
      ],
      "total": 10000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     },
     {
      "committee": "Yes on Prop 3, sponsored by education and labor organizations",
@@ -4604,7 +5110,7 @@
       }
      ],
      "total": 5000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
     },
     {
      "committee": "No on 39 - Block Election Rigging sponsored by nurses, teachers, and nonprofit labor and community health clinic organizations",
@@ -4616,7 +5122,7 @@
       }
      ],
      "total": 5000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -4634,7 +5140,7 @@
       }
      ],
      "total": 2500.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     },
     {
      "committee": "No on 39 - Block Election Rigging sponsored by nurses, teachers, and nonprofit labor and community health clinic organizations",
@@ -4646,7 +5152,7 @@
       }
      ],
      "total": 2500.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -4664,7 +5170,7 @@
       }
      ],
      "total": 1000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215820&amendid=1"
     }
    ],
    "spent": []
@@ -4730,7 +5236,7 @@
       }
      ],
      "total": 10000000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     },
     {
      "committee": "YES ON 41 - CALIFORNIANS FOR TRANSPARENCY AND ACCOUNTABILITY, A COALITION OF SMALL BUSINESSES, TAXPAYERS, GOOD GOVERNMENT ADVOCATES, ACCOUNTANTS AND AUDITING EXPERTS",
@@ -4742,7 +5248,7 @@
       }
      ],
      "total": 58350000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215980&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215980&amendid=1"
     },
     {
      "committee": "YES ON 42 - PROTECT RETIREMENT & LIFE SAVINGS, A COALITION OF RETIREES, BLUE-COLLAR WORKERS, SENIORS, VETERANS, SMALL BUSINESSES & TAXPAYERS",
@@ -4754,7 +5260,7 @@
       }
      ],
      "total": 127800000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215981&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215981&amendid=1"
     },
     {
      "committee": "NO ON PROP 40 - DOCTORS, TEACHERS, SMALL BUSINESSES, WORKING FAMILIES AND PUBLIC SAFETY AGAINST THE RECKLESS WEALTH TAX EXPERIMENT",
@@ -4766,7 +5272,7 @@
       }
      ],
      "total": 118500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215979&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215979&amendid=1"
     },
     {
      "committee": "Yes On Prop 1 Californians for Homes, Jobs and Affordability 2026, Sponsored by Affordable Housing Organizations",
@@ -4886,7 +5392,7 @@
       }
      ],
      "total": 5000000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=1"
     }
    ],
    "spent": []
@@ -4904,7 +5410,7 @@
       }
      ],
      "total": 600000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=1"
     }
    ],
    "spent": []
@@ -4922,7 +5428,7 @@
       }
      ],
      "total": 400000.01,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=1"
     }
    ],
    "spent": []
@@ -4940,13 +5446,13 @@
       }
      ],
      "total": 100000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=1"
     }
    ],
    "spent": []
   },
-  "NATURAL RESOURCES DEFENSE COUNCIL ACTION FUND": {
-   "name": "Natural Resources Defense Council Action Fund",
+  "NATURAL RESOURCES DEFENSE COUNCIL NRDC ACTION FUND": {
+   "name": "Natural Resources Defense Council (NRDC) Action Fund, Inc.",
    "gave": [
     {
      "committee": "Campaign for People Over Polluters, No on Prop. 45, sponsored by environmental, environmental justice, and health organizations",
@@ -4958,7 +5464,7 @@
       }
      ],
      "total": 25000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=1"
     }
    ],
    "spent": []
@@ -4976,7 +5482,7 @@
       }
      ],
      "total": 15000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=1"
     }
    ],
    "spent": []
@@ -4994,7 +5500,7 @@
       }
      ],
      "total": 5000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=1"
     }
    ],
    "spent": []
@@ -5012,7 +5518,7 @@
       }
      ],
      "total": 5000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=1"
     }
    ],
    "spent": []
@@ -5030,7 +5536,7 @@
       }
      ],
      "total": 594.7,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215198&amendid=1"
     },
     {
      "committee": "Working Families say No to Propositions 41 and 42 sponsored by labor unions",
@@ -5274,7 +5780,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -5520,7 +6026,7 @@
       }
      ],
      "total": 600000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -7662,7 +8168,7 @@
       }
      ],
      "total": 6195000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     },
     {
      "committee": "Yes On Prop 1 Californians for Homes, Jobs and Affordability 2026, Sponsored by Affordable Housing Organizations",
@@ -7692,7 +8198,7 @@
       }
      ],
      "total": 3900000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -7710,7 +8216,7 @@
       }
      ],
      "total": 2250000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -7728,7 +8234,7 @@
       }
      ],
      "total": 1800000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -7746,7 +8252,7 @@
       }
      ],
      "total": 1500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -7764,7 +8270,7 @@
       }
      ],
      "total": 1005000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -7782,25 +8288,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
-    }
-   ],
-   "spent": []
-  },
-  "YUHAAVIATAM OF SAN MANUEL NATION FKA SAN MANUEL BAND OF MISSION INDIANS": {
-   "name": "YUHAAVIATAM OF SAN MANUEL NATION (FKA SAN MANUEL BAND OF MISSION INDIANS)",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -7818,7 +8306,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -7836,7 +8324,25 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+    }
+   ],
+   "spent": []
+  },
+  "YUHAAVIATAM OF SAN MANUEL NATION FKA SAN MANUEL BAND OF MISSION INDIANS": {
+   "name": "YUHAAVIATAM OF SAN MANUEL NATION (FKA SAN MANUEL BAND OF MISSION INDIANS)",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 500000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -7854,7 +8360,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -7872,7 +8378,7 @@
       }
      ],
      "total": 300000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -7890,7 +8396,7 @@
       }
      ],
      "total": 250000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -7908,7 +8414,7 @@
       }
      ],
      "total": 250000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -7926,7 +8432,7 @@
       }
      ],
      "total": 200000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -7944,7 +8450,7 @@
       }
      ],
      "total": 200000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -7962,7 +8468,7 @@
       }
      ],
      "total": 100000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -7980,7 +8486,7 @@
       }
      ],
      "total": 100000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -7998,7 +8504,7 @@
       }
      ],
      "total": 100000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8016,7 +8522,7 @@
       }
      ],
      "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8034,7 +8540,7 @@
       }
      ],
      "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8052,7 +8558,7 @@
       }
      ],
      "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8070,7 +8576,7 @@
       }
      ],
      "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8088,7 +8594,7 @@
       }
      ],
      "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8106,7 +8612,7 @@
       }
      ],
      "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8124,7 +8630,7 @@
       }
      ],
      "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8142,7 +8648,7 @@
       }
      ],
      "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8160,7 +8666,7 @@
       }
      ],
      "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8178,7 +8684,7 @@
       }
      ],
      "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8196,7 +8702,7 @@
       }
      ],
      "total": 40000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     },
     {
      "committee": "Yes On Prop 1 Californians for Homes, Jobs and Affordability 2026, Sponsored by Affordable Housing Organizations",
@@ -8226,61 +8732,7 @@
       }
      ],
      "total": 25000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
-    }
-   ],
-   "spent": []
-  },
-  "GRIFFITH COMPANY": {
-   "name": "GRIFFITH COMPANY",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 25000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
-    }
-   ],
-   "spent": []
-  },
-  "NAIOP SOCAL COMMERCIAL REAL ESTATE DEVELOPMENT ASSOCIATION ISSUES PAC NAIOP SOCAL ISSUES PAC": {
-   "name": "NAIOP SOCAL COMMERCIAL REAL ESTATE DEVELOPMENT ASSOCIATION ISSUES PAC - NAIOP SOCAL ISSUES PAC",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 25000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
-    }
-   ],
-   "spent": []
-  },
-  "ANVIL BUILDERS": {
-   "name": "ANVIL BUILDERS INC",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 25000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8298,7 +8750,61 @@
       }
      ],
      "total": 25000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+    }
+   ],
+   "spent": []
+  },
+  "GRIFFITH COMPANY": {
+   "name": "GRIFFITH COMPANY",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 25000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+    }
+   ],
+   "spent": []
+  },
+  "NAIOP SOCAL COMMERCIAL REAL ESTATE DEVELOPMENT ASSOCIATION ISSUES PAC NAIOP SOCAL ISSUES PAC": {
+   "name": "NAIOP SOCAL COMMERCIAL REAL ESTATE DEVELOPMENT ASSOCIATION ISSUES PAC - NAIOP SOCAL ISSUES PAC",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 25000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+    }
+   ],
+   "spent": []
+  },
+  "ANVIL BUILDERS": {
+   "name": "ANVIL BUILDERS INC",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 25000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8316,7 +8822,7 @@
       }
      ],
      "total": 25000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8334,7 +8840,7 @@
       }
      ],
      "total": 25000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8352,7 +8858,7 @@
       }
      ],
      "total": 20000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     },
     {
      "committee": "CALIFORNIANS AGAINST TAX INCREASES, SPONSORED BY THE CALIFORNIA BUSINESS ROUNDTABLE - NO ON 40",
@@ -8382,79 +8888,7 @@
       }
      ],
      "total": 20000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
-    }
-   ],
-   "spent": []
-  },
-  "ASSOCIATION OF CALIFORNIA LIFE AND HEALTH INSURANCE COMPANIES ISSUES COMMITTEE": {
-   "name": "ASSOCIATION OF CALIFORNIA LIFE & HEALTH INSURANCE COMPANIES ISSUES COMMITTEE",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 10000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
-    }
-   ],
-   "spent": []
-  },
-  "RIVERSIDE CONSTRUCTION COMPANY": {
-   "name": "RIVERSIDE CONSTRUCTION COMPANY, INC.",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 10000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
-    }
-   ],
-   "spent": []
-  },
-  "ANGELO K TSAKOPOULOS AND AFFILIATED ENTITIES": {
-   "name": "ANGELO K. TSAKOPOULOS AND AFFILIATED ENTITIES",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 10000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
-    }
-   ],
-   "spent": []
-  },
-  "NATIONAL ASSOCIATION OF WATER COMPANIES": {
-   "name": "NATIONAL ASSOCIATION OF WATER COMPANIES",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 10000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8472,7 +8906,79 @@
       }
      ],
      "total": 10000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+    }
+   ],
+   "spent": []
+  },
+  "ASSOCIATION OF CALIFORNIA LIFE AND HEALTH INSURANCE COMPANIES ISSUES COMMITTEE": {
+   "name": "ASSOCIATION OF CALIFORNIA LIFE & HEALTH INSURANCE COMPANIES ISSUES COMMITTEE",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 10000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+    }
+   ],
+   "spent": []
+  },
+  "RIVERSIDE CONSTRUCTION COMPANY": {
+   "name": "RIVERSIDE CONSTRUCTION COMPANY, INC.",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 10000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+    }
+   ],
+   "spent": []
+  },
+  "ANGELO K TSAKOPOULOS AND AFFILIATED ENTITIES": {
+   "name": "ANGELO K. TSAKOPOULOS AND AFFILIATED ENTITIES",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 10000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+    }
+   ],
+   "spent": []
+  },
+  "NATIONAL ASSOCIATION OF WATER COMPANIES": {
+   "name": "NATIONAL ASSOCIATION OF WATER COMPANIES",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 10000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8490,7 +8996,7 @@
       }
      ],
      "total": 10000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8508,7 +9014,7 @@
       }
      ],
      "total": 5000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8526,7 +9032,7 @@
       }
      ],
      "total": 5000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8544,7 +9050,7 @@
       }
      ],
      "total": 2500.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8562,7 +9068,7 @@
       }
      ],
      "total": 1000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8580,7 +9086,7 @@
       }
      ],
      "total": 250.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
     }
    ],
    "spent": []
@@ -8598,7 +9104,7 @@
       }
      ],
      "total": 350000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215625&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215625&amendid=2"
     }
    ],
    "spent": []
@@ -8616,7 +9122,7 @@
       }
      ],
      "total": 130000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215625&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215625&amendid=2"
     },
     {
      "committee": "Yes on 4, Californians for Fair Elections, sponsored by Government Reform Advocates",
@@ -8652,7 +9158,7 @@
       }
      ],
      "total": 20000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215747&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215747&amendid=2"
     }
    ],
    "spent": []
@@ -8670,7 +9176,7 @@
       }
      ],
      "total": 100000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215625&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215625&amendid=2"
     },
     {
      "committee": "Yes on 4, Californians for Fair Elections, sponsored by Government Reform Advocates",
@@ -8700,7 +9206,7 @@
       }
      ],
      "total": 4900.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215625&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215625&amendid=2"
     },
     {
      "committee": "No on 39 - Block Election Rigging sponsored by nurses, teachers, and nonprofit labor and community health clinic organizations",
@@ -8712,7 +9218,7 @@
       }
      ],
      "total": 4900.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -8730,7 +9236,7 @@
       }
      ],
      "total": 2500.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215625&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215625&amendid=2"
     }
    ],
    "spent": []
@@ -8748,7 +9254,7 @@
       }
      ],
      "total": 7500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
     }
    ],
    "spent": []
@@ -8766,7 +9272,7 @@
       }
      ],
      "total": 1100000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
     },
     {
      "committee": "Yes on Prop 3, sponsored by education and labor organizations",
@@ -8778,7 +9284,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
     },
     {
      "committee": "Working Families say No to Propositions 41 and 42 sponsored by labor unions",
@@ -8812,7 +9318,7 @@
       }
      ],
      "total": 1000000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
     }
    ],
    "spent": []
@@ -8830,7 +9336,7 @@
       }
      ],
      "total": 1000000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
     }
    ],
    "spent": []
@@ -8848,7 +9354,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
     },
     {
      "committee": "No on 39 - Block Election Rigging sponsored by nurses, teachers, and nonprofit labor and community health clinic organizations",
@@ -8860,7 +9366,7 @@
       }
      ],
      "total": 250000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     },
     {
      "committee": "Working Families say No to Propositions 41 and 42 sponsored by labor unions",
@@ -8881,8 +9387,8 @@
    ],
    "spent": []
   },
-  "AMERICAN FEDERATION OF TEACHERS AFL CIO COMMITTEE ON POLITICAL AEDUCATION FEC PAC ID C000028860": {
-   "name": "American Federation of Teachers, AFL-CIO Committee on Political Aeducation (FEC PAC ID# C000028860)",
+  "AMERICAN FEDERATION OF TEACHERS AFL CIO COMMITTEE ON POLITICAL EDUCATION FEC PAC ID C000028860": {
+   "name": "American Federation of Teachers, AFL-CIO Committee on Political Education (FEC PAC ID# C000028860)",
    "gave": [
     {
      "committee": "Yes on Prop 3, sponsored by education and labor organizations",
@@ -8894,7 +9400,7 @@
       }
      ],
      "total": 450000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
     }
    ],
    "spent": []
@@ -8912,7 +9418,7 @@
       }
      ],
      "total": 250000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
     },
     {
      "committee": "No on 39 - Block Election Rigging sponsored by nurses, teachers, and nonprofit labor and community health clinic organizations",
@@ -8924,7 +9430,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -8942,7 +9448,7 @@
       }
      ],
      "total": 250000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
     }
    ],
    "spent": []
@@ -8960,7 +9466,7 @@
       }
      ],
      "total": 100000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
     }
    ],
    "spent": []
@@ -8978,7 +9484,7 @@
       }
      ],
      "total": 100000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
     }
    ],
    "spent": []
@@ -8996,7 +9502,7 @@
       }
      ],
      "total": 10000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
     }
    ],
    "spent": []
@@ -9014,7 +9520,7 @@
       }
      ],
      "total": 2500.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215645&amendid=1"
     }
    ],
    "spent": []
@@ -9050,7 +9556,7 @@
       }
      ],
      "total": 150000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215981&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215981&amendid=1"
     }
    ],
    "spent": []
@@ -9068,7 +9574,7 @@
       }
      ],
      "total": 100000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215979&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215979&amendid=1"
     }
    ],
    "spent": []
@@ -9086,7 +9592,7 @@
       }
      ],
      "total": 100000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215979&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215979&amendid=1"
     }
    ],
    "spent": []
@@ -9104,7 +9610,7 @@
       }
      ],
      "total": 21279.44,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215979&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215979&amendid=1"
     }
    ],
    "spent": []
@@ -9368,7 +9874,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     },
     {
      "committee": "No on Prop 45 - Protect California Communities",
@@ -11360,7 +11866,7 @@
       }
      ],
      "total": 7000000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215508&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215508&amendid=2"
     }
    ],
    "spent": []
@@ -11378,7 +11884,7 @@
       }
      ],
      "total": 1176000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215508&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215508&amendid=2"
     },
     {
      "committee": "No on Prop 45 - Protect California Communities",
@@ -11408,7 +11914,7 @@
       }
      ],
      "total": 823857.25,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215508&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215508&amendid=2"
     }
    ],
    "spent": []
@@ -11426,7 +11932,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215508&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215508&amendid=2"
     }
    ],
    "spent": []
@@ -11444,7 +11950,7 @@
       }
      ],
      "total": 5000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215508&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215508&amendid=2"
     }
    ],
    "spent": []
@@ -11510,7 +12016,7 @@
       }
      ],
      "total": 3200000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": [
@@ -11631,7 +12137,7 @@
       }
      ],
      "total": 2000000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -11649,7 +12155,7 @@
       }
      ],
      "total": 1000000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -11667,7 +12173,7 @@
       }
      ],
      "total": 650000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -11685,7 +12191,7 @@
       }
      ],
      "total": 600000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -11703,7 +12209,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -11721,7 +12227,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -11739,7 +12245,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -11757,7 +12263,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -11775,7 +12281,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -11793,7 +12299,7 @@
       }
      ],
      "total": 250000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -11811,7 +12317,7 @@
       }
      ],
      "total": 250000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -11829,7 +12335,7 @@
       }
      ],
      "total": 250000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -11847,7 +12353,7 @@
       }
      ],
      "total": 150000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -11865,7 +12371,7 @@
       }
      ],
      "total": 105000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -11883,25 +12389,7 @@
       }
      ],
      "total": 100000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
-    }
-   ],
-   "spent": []
-  },
-  "UNION OF AMERICAN PHYSICIANS AND DENTISTS": {
-   "name": "Union of American Physicians and Dentists",
-   "gave": [
-    {
-     "committee": "No on 39 - Block Election Rigging sponsored by nurses, teachers, and nonprofit labor and community health clinic organizations",
-     "filer_id": "1493991",
-     "props": [
-      {
-       "number": "39",
-       "side": "oppose"
-      }
-     ],
-     "total": 100000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -11919,7 +12407,25 @@
       }
      ],
      "total": 100000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
+    }
+   ],
+   "spent": []
+  },
+  "UNION OF AMERICAN PHYSICIANS AND DENTISTS": {
+   "name": "Union of American Physicians and Dentists",
+   "gave": [
+    {
+     "committee": "No on 39 - Block Election Rigging sponsored by nurses, teachers, and nonprofit labor and community health clinic organizations",
+     "filer_id": "1493991",
+     "props": [
+      {
+       "number": "39",
+       "side": "oppose"
+      }
+     ],
+     "total": 100000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -11937,7 +12443,7 @@
       }
      ],
      "total": 75000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -11955,25 +12461,7 @@
       }
      ],
      "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
-    }
-   ],
-   "spent": []
-  },
-  "WELLSPACE NEXUS": {
-   "name": "WellSpace Nexus, LLC",
-   "gave": [
-    {
-     "committee": "No on 39 - Block Election Rigging sponsored by nurses, teachers, and nonprofit labor and community health clinic organizations",
-     "filer_id": "1493991",
-     "props": [
-      {
-       "number": "39",
-       "side": "oppose"
-      }
-     ],
-     "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -11991,7 +12479,25 @@
       }
      ],
      "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
+    }
+   ],
+   "spent": []
+  },
+  "WELLSPACE NEXUS": {
+   "name": "WellSpace Nexus, LLC",
+   "gave": [
+    {
+     "committee": "No on 39 - Block Election Rigging sponsored by nurses, teachers, and nonprofit labor and community health clinic organizations",
+     "filer_id": "1493991",
+     "props": [
+      {
+       "number": "39",
+       "side": "oppose"
+      }
+     ],
+     "total": 50000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -12009,7 +12515,7 @@
       }
      ],
      "total": 10000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -12027,7 +12533,7 @@
       }
      ],
      "total": 5000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -12045,7 +12551,7 @@
       }
      ],
      "total": 5000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
     }
    ],
    "spent": []
@@ -12063,7 +12569,25 @@
       }
      ],
      "total": 5000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215267&amendid=1"
+    }
+   ],
+   "spent": []
+  },
+  "LIBERTY HILL FOUNDATION": {
+   "name": "Liberty Hill Foundation",
+   "gave": [
+    {
+     "committee": "Long Beach Against Proposition 43, Sponsored by LAANE Action Fund",
+     "filer_id": "1497906",
+     "props": [
+      {
+       "number": "43",
+       "side": "oppose"
+      }
+     ],
+     "total": 37500.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3219971&amendid=0"
     }
    ],
    "spent": []
@@ -12901,7 +13425,7 @@
       }
      ],
      "total": 40000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215747&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215747&amendid=2"
     }
    ],
    "spent": []
@@ -12919,7 +13443,7 @@
       }
      ],
      "total": 6000000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215591&amendid=0"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215591&amendid=1"
     }
    ],
    "spent": []
@@ -13027,7 +13551,7 @@
     {
      "number": "39",
      "side": "support",
-     "total": 1611559.17,
+     "total": 1641559.17,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1268914"
     },
     {
@@ -13170,6 +13694,84 @@
     }
    ]
   },
+  "MILLION VOTER PROJECT ACTION FUND SPONSORED BY SOCIAL JUSTICE ORGANIZATIONS": {
+   "name": "Million Voter Project Action Fund, Sponsored by Social Justice Organizations",
+   "gave": [],
+   "spent": [
+    {
+     "number": "2",
+     "side": "support",
+     "total": 7299.09,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
+    },
+    {
+     "number": "3",
+     "side": "support",
+     "total": 80654.08,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
+    },
+    {
+     "number": "4",
+     "side": "support",
+     "total": 7299.09,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
+    },
+    {
+     "number": "39",
+     "side": "oppose",
+     "total": 7649.08,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
+    },
+    {
+     "number": "43",
+     "side": "oppose",
+     "total": 7299.09,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
+    },
+    {
+     "number": "44",
+     "side": "oppose",
+     "total": 7299.08,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
+    },
+    {
+     "number": "45",
+     "side": "oppose",
+     "total": 7299.09,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
+    },
+    {
+     "number": "5",
+     "side": "support",
+     "total": 7299.08,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
+    },
+    {
+     "number": "38",
+     "side": "support",
+     "total": 7299.08,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
+    },
+    {
+     "number": "41",
+     "side": "oppose",
+     "total": 7299.08,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
+    },
+    {
+     "number": "42",
+     "side": "oppose",
+     "total": 7299.08,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
+    },
+    {
+     "number": "1",
+     "side": "support",
+     "total": 7299.08,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
+    }
+   ]
+  },
   "MONIQUE LIMON BALLOT MEASURE COMMITTEE TO ADVANCE CALIFORNIA": {
    "name": "Monique Limon Ballot Measure Committee to Advance California",
    "gave": [],
@@ -13189,73 +13791,73 @@
     {
      "number": "5",
      "side": "support",
-     "total": 818.28,
+     "total": 1102.56,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
     },
     {
      "number": "1",
      "side": "support",
-     "total": 851.93,
+     "total": 1136.21,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
     },
     {
      "number": "4",
      "side": "support",
-     "total": 818.28,
+     "total": 1102.56,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
     },
     {
      "number": "42",
      "side": "oppose",
-     "total": 885.59,
+     "total": 1169.87,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
     },
     {
      "number": "45",
      "side": "oppose",
-     "total": 885.59,
+     "total": 1169.87,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
     },
     {
      "number": "41",
      "side": "oppose",
-     "total": 851.93,
+     "total": 1136.21,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
     },
     {
      "number": "3",
      "side": "support",
-     "total": 851.93,
+     "total": 1136.21,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
     },
     {
      "number": "43",
      "side": "oppose",
-     "total": 986.55,
+     "total": 1270.83,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
     },
     {
      "number": "44",
      "side": "oppose",
-     "total": 919.24,
+     "total": 1203.52,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
     },
     {
      "number": "2",
      "side": "support",
-     "total": 1133.18,
+     "total": 1417.46,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
     },
     {
      "number": "37",
      "side": "support",
-     "total": 952.9,
+     "total": 1237.18,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
     },
     {
      "number": "40",
      "side": "support",
-     "total": 1341.12,
+     "total": 1625.4,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1455495"
     }
    ]
@@ -13267,13 +13869,19 @@
     {
      "number": "2",
      "side": "oppose",
-     "total": 2705.53,
+     "total": 4212.06,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
+    },
+    {
+     "number": "38",
+     "side": "support",
+     "total": 3711.77,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
     },
     {
      "number": "39",
      "side": "support",
-     "total": 105488.38,
+     "total": 155196.14,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
     },
     {
@@ -13285,55 +13893,49 @@
     {
      "number": "5",
      "side": "oppose",
-     "total": 2205.23,
+     "total": 3460.67,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
     },
     {
      "number": "41",
      "side": "support",
-     "total": 3504.96,
+     "total": 4738.48,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
     },
     {
      "number": "3",
      "side": "oppose",
-     "total": 2104.42,
+     "total": 3359.87,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
     },
     {
      "number": "4",
      "side": "oppose",
-     "total": 2704.86,
+     "total": 4211.4,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
     },
     {
      "number": "40",
      "side": "oppose",
-     "total": 3165.07,
+     "total": 5097.57,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
     },
     {
      "number": "44",
      "side": "oppose",
-     "total": 2531.67,
+     "total": 4011.89,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
     },
     {
      "number": "45",
      "side": "support",
-     "total": 1898.83,
+     "total": 3296.8,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
     },
     {
      "number": "43",
      "side": "support",
-     "total": 3948.05,
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
-    },
-    {
-     "number": "38",
-     "side": "support",
-     "total": 2205.23,
+     "total": 5428.27,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=741949"
     }
    ]
@@ -13374,6 +13976,84 @@
     }
    ]
   },
+  "PICO CALIFORNIA": {
+   "name": "PICO California",
+   "gave": [],
+   "spent": [
+    {
+     "number": "43",
+     "side": "oppose",
+     "total": 1270.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "number": "45",
+     "side": "oppose",
+     "total": 1270.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "number": "38",
+     "side": "support",
+     "total": 1270.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "number": "44",
+     "side": "oppose",
+     "total": 1270.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "number": "5",
+     "side": "support",
+     "total": 1270.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "number": "4",
+     "side": "support",
+     "total": 1270.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "number": "41",
+     "side": "oppose",
+     "total": 1270.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "number": "42",
+     "side": "oppose",
+     "total": 1270.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "number": "3",
+     "side": "support",
+     "total": 1270.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "number": "2",
+     "side": "support",
+     "total": 1270.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "number": "39",
+     "side": "oppose",
+     "total": 1270.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    },
+    {
+     "number": "1",
+     "side": "support",
+     "total": 1270.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498461"
+    }
+   ]
+  },
   "FAITH VOTES SPONSORED BY PICO CALIFORNIA ACTION FUND": {
    "name": "Faith Votes, Sponsored by PICO California Action Fund",
    "gave": [],
@@ -13381,20 +14061,122 @@
     {
      "number": "43",
      "side": "oppose",
-     "total": 38720.83,
+     "total": 45220.83,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1496786"
     },
     {
      "number": "1",
      "side": "support",
-     "total": 39720.83,
+     "total": 46220.83,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1496786"
     },
     {
      "number": "39",
      "side": "oppose",
-     "total": 88183.33,
+     "total": 89683.33,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1496786"
+    }
+   ]
+  },
+  "LOS ANGELES COUNTY DEMOCRATIC PARTY STATE CANDIDATE COMMITTEE": {
+   "name": "Los Angeles County Democratic Party ? State Candidate Committee",
+   "gave": [],
+   "spent": [
+    {
+     "number": "38",
+     "side": "support",
+     "total": 2750.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "number": "5",
+     "side": "support",
+     "total": 2750.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "number": "37",
+     "side": "support",
+     "total": 2750.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "number": "1",
+     "side": "support",
+     "total": 2750.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "number": "2",
+     "side": "support",
+     "total": 2750.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "number": "40",
+     "side": "support",
+     "total": 2750.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "number": "41",
+     "side": "oppose",
+     "total": 2750.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "number": "3",
+     "side": "support",
+     "total": 2750.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "number": "4",
+     "side": "support",
+     "total": 2750.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "number": "45",
+     "side": "oppose",
+     "total": 2750.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "number": "42",
+     "side": "oppose",
+     "total": 2750.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "number": "39",
+     "side": "oppose",
+     "total": 2750.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "number": "43",
+     "side": "oppose",
+     "total": 2750.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    },
+    {
+     "number": "44",
+     "side": "oppose",
+     "total": 2750.88,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1237135"
+    }
+   ]
+  },
+  "AMERICAN CIVIL LIBERTIES UNION OF SOUTHERN CALIFORNIA": {
+   "name": "AMERICAN CIVIL LIBERTIES UNION OF SOUTHERN CALIFORNIA",
+   "gave": [],
+   "spent": [
+    {
+     "number": "39",
+     "side": "oppose",
+     "total": 1000.0,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1408242"
     }
    ]
   },
@@ -13555,7 +14337,7 @@
     {
      "number": "3",
      "side": "support",
-     "total": 12106.36,
+     "total": 12274.7,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1489139"
     }
    ]
@@ -13569,84 +14351,6 @@
      "side": "oppose",
      "total": 10000.0,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1418060"
-    }
-   ]
-  },
-  "MILLION VOTER PROJECT ACTION FUND SPONSORED BY SOCIAL JUSTICE ORGANIZATIONS": {
-   "name": "Million Voter Project Action Fund, Sponsored by Social Justice Organizations",
-   "gave": [],
-   "spent": [
-    {
-     "number": "2",
-     "side": "support",
-     "total": 5299.09,
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
-    },
-    {
-     "number": "5",
-     "side": "support",
-     "total": 5299.08,
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
-    },
-    {
-     "number": "38",
-     "side": "support",
-     "total": 5299.08,
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
-    },
-    {
-     "number": "41",
-     "side": "oppose",
-     "total": 5299.08,
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
-    },
-    {
-     "number": "43",
-     "side": "oppose",
-     "total": 5299.09,
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
-    },
-    {
-     "number": "44",
-     "side": "oppose",
-     "total": 5299.08,
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
-    },
-    {
-     "number": "45",
-     "side": "oppose",
-     "total": 5299.09,
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
-    },
-    {
-     "number": "42",
-     "side": "oppose",
-     "total": 5299.08,
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
-    },
-    {
-     "number": "1",
-     "side": "support",
-     "total": 5299.08,
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
-    },
-    {
-     "number": "3",
-     "side": "support",
-     "total": 6304.08,
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
-    },
-    {
-     "number": "4",
-     "side": "support",
-     "total": 5299.09,
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
-    },
-    {
-     "number": "39",
-     "side": "oppose",
-     "total": 5299.08,
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1384591"
     }
    ]
   },
@@ -13746,6 +14450,78 @@
    "spent": [
     {
      "number": "39",
+     "side": "oppose",
+     "total": 1049.58,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
+    },
+    {
+     "number": "41",
+     "side": "oppose",
+     "total": 1049.58,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
+    },
+    {
+     "number": "45",
+     "side": "oppose",
+     "total": 1049.58,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
+    },
+    {
+     "number": "38",
+     "side": "support",
+     "total": 1049.57,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
+    },
+    {
+     "number": "4",
+     "side": "support",
+     "total": 1049.57,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
+    },
+    {
+     "number": "40",
+     "side": "support",
+     "total": 1049.57,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
+    },
+    {
+     "number": "2",
+     "side": "support",
+     "total": 1049.57,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
+    },
+    {
+     "number": "3",
+     "side": "support",
+     "total": 1049.57,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
+    },
+    {
+     "number": "43",
+     "side": "oppose",
+     "total": 1049.58,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
+    },
+    {
+     "number": "44",
+     "side": "oppose",
+     "total": 1049.57,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
+    },
+    {
+     "number": "5",
+     "side": "support",
+     "total": 1049.57,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
+    },
+    {
+     "number": "1",
+     "side": "support",
+     "total": 1049.57,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
+    },
+    {
+     "number": "42",
      "side": "oppose",
      "total": 1049.58,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1498321"
@@ -13849,13 +14625,13 @@
     {
      "number": "3",
      "side": "support",
-     "total": 1402.8,
+     "total": 5660.23,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1454100"
     },
     {
      "number": "40",
      "side": "support",
-     "total": 2787.53,
+     "total": 7046.68,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1454100"
     }
    ]
@@ -13926,6 +14702,30 @@
     }
    ]
   },
+  "BAY RISING BALLOT ACTION COMMITTEE SPONSORED BY CENTER FOR EMPOWERED POLITICS": {
+   "name": "Bay Rising Ballot Action Committee Sponsored by Center for Empowered Politics",
+   "gave": [],
+   "spent": [
+    {
+     "number": "40",
+     "side": "oppose",
+     "total": 3750.0,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1454577"
+    },
+    {
+     "number": "41",
+     "side": "oppose",
+     "total": 1875.0,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1454577"
+    },
+    {
+     "number": "42",
+     "side": "oppose",
+     "total": 1875.0,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1454577"
+    }
+   ]
+  },
   "ACLU FOUNDATION OF SAN DIEGO AND IMPERIAL COUNTIES": {
    "name": "ACLU Foundation of San Diego & Imperial Counties",
    "gave": [],
@@ -13933,43 +14733,43 @@
     {
      "number": "3",
      "side": "support",
-     "total": 5206.28,
+     "total": 1725.16,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
     },
     {
      "number": "4",
      "side": "support",
-     "total": 5206.28,
+     "total": 1725.16,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
     },
     {
      "number": "41",
      "side": "oppose",
-     "total": 5206.28,
+     "total": 1725.15,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
     },
     {
      "number": "42",
      "side": "oppose",
-     "total": 5206.22,
+     "total": 1725.12,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
     },
     {
      "number": "43",
      "side": "oppose",
-     "total": 5206.21,
-     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
-    },
-    {
-     "number": "1",
-     "side": "support",
-     "total": 5206.28,
+     "total": 1725.15,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
     },
     {
      "number": "45",
      "side": "oppose",
-     "total": 5039.55,
+     "total": 1683.36,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
+    },
+    {
+     "number": "1",
+     "side": "support",
+     "total": 1725.16,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1344477"
     }
    ]
@@ -14121,6 +14921,18 @@
      "side": "support",
      "total": 75000.0,
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=497427"
+    }
+   ]
+  },
+  "TEACHERS AND COMMUNITIES UNITED FOR ESTUARDO MAZARIEGOS FOR CITY COUNCIL AND MARISSA ROY FOR CITY ATTORNEY 2026 SPONSORED BY UNITED TEACHERS LOS ANGELES AND ACCE ACTION": {
+   "name": "TEACHERS AND COMMUNITIES UNITED FOR ESTUARDO MAZARIEGOS FOR CITY COUNCIL AND MARISSA ROY FOR CITY ATTORNEY 2026, SPONSORED BY UNITED TEACHERS LOS ANGELES AND ACCE ACTION",
+   "gave": [],
+   "spent": [
+    {
+     "number": "45",
+     "side": "support",
+     "total": 168.34,
+     "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1489139"
     }
    ]
   }
