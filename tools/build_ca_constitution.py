@@ -130,6 +130,29 @@ def read_snapshot(zpath, probe=False):
     return rows, z
 
 
+def in_force(art, secs):
+    """One version of each section. After voters amend a section, the Legislature's database lists
+    both versions until the amendment takes effect: the one in force now, whose history says it is
+    "Superseded on ..." a later date, and the amendment, whose history says "Effective on ...". The
+    one in force is kept as the text; the amendment is kept beside it as `pending` ({text, history}),
+    and becomes the text once the database drops the old version. Two versions without those words
+    stop the build rather than guess."""
+    by_num = {}
+    for num, text, history in secs:
+        by_num.setdefault(num, []).append((text, history))
+    out = []
+    for num, versions in by_num.items():
+        if len(versions) == 1:
+            out.append((num, versions[0][0], versions[0][1], None))
+            continue
+        now = [v for v in versions if re.search(r"\bSuperseded on\b", v[1])]
+        later = [v for v in versions if re.search(r"\bEffective on\b", v[1]) and v not in now]
+        if len(versions) != 2 or len(now) != 1 or len(later) != 1:
+            sys.exit(f"Article {art}, Section {num}: {len(versions)} versions, and their histories don't say which is in force")
+        out.append((num, now[0][0], now[0][1], {"text": later[0][0], "history": later[0][1]}))
+    return out
+
+
 def build(zpath):
     rows, z = read_snapshot(zpath)
     names = {n.lower(): n for n in z.namelist()}
@@ -155,6 +178,8 @@ def build(zpath):
         by_art.setdefault(art, []).append((num, text, text_of(r["history"])))
     if bad:
         print(f"{len(bad)} rows not read: {bad[:10]}")
+    for art in by_art:
+        by_art[art] = in_force(art, by_art[art])
     order = lambda a: (roman(a.split()[0]), a)  # noqa: E731
     secnum = lambda n: [float(x) if x.replace(".", "").isdigit() else 0 for x in re.findall(r"[0-9]+(?:\.[0-9]+)?", n)]  # noqa: E731
     out = []
@@ -162,9 +187,12 @@ def build(zpath):
         aid = article_id(art)
         url = SITE + "codes_displayText.xhtml?lawCode=CONS&article=" + urllib.parse.quote(art)
         out.append({"id": aid, "parent": None, "kind": "article", "label": f"Article {art}", "text": "", "leaf": False, "source_url": url})
-        for num, text, history in sorted(by_art[art], key=lambda s: secnum(s[0])):
-            out.append({"id": section_id(art, num), "parent": aid, "kind": "section", "label": f"Article {art}, Section {num}",
-                        "text": text, "history": history, "leaf": True, "source_url": url})
+        for num, text, history, pending in sorted(by_art[art], key=lambda s: secnum(s[0])):
+            row = {"id": section_id(art, num), "parent": aid, "kind": "section", "label": f"Article {art}, Section {num}",
+                   "text": text, "history": history, "leaf": True, "source_url": url}
+            if pending:
+                row["pending"] = pending
+            out.append(row)
         print(f"  Article {art}: {len(by_art[art])} sections")
     return out, bad
 
