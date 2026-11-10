@@ -45,7 +45,7 @@ async function companies(env, url) {
   const empty = list && list !== FAILED && !list.rows.length;
   const rows = list === FAILED
     ? sectionError("")
-    : `<section class="card compact-list" id="company-list" data-more-list>${list && list.rows.length ? list.rows.map(companyRow).join("") : `<p class="secondary small cr-empty">${!list || (empty && !at) ? "Company figures load weekly from the SEC's EDGAR filings; none are loaded yet." : "No companies match these filters."}</p>`}</section>`;
+    : `<section class="card compact-list" id="company-list" data-more-list>${list && list.rows.length ? list.rows.map(companyRow).join("") : `<p class="secondary small cr-empty">${!list || (empty && !at) ? "Company figures load weekly from the SEC's EDGAR filings; none are loaded yet." : "No companies match these filters. Only the largest companies by revenue are loaded."}</p>`}</section>`;
   const more = list && list !== FAILED && list.more ? `<a class="btn btn--block load-more" href="${esc(listHref(f, f.offset + PER_PAGE))}" data-load-more="company-list">Load more</a>` : "";
   if (f.offset) {
     const main = `<header class="page-head"><h1>Corporations</h1><p class="subtitle">From number ${f.offset + 1}.</p></header>${rows}${more}`;
@@ -54,7 +54,7 @@ async function companies(env, url) {
   const main = `
 <header class="page-head">
   <h1>Taxes</h1>
-  <p class="subtitle">What companies report paying in income taxes, and their income before taxes, from their annual 10-K filings with the SEC.</p>
+  <p class="subtitle">What the largest companies report paying in income taxes, and their income before taxes, from their annual 10-K filings with the SEC.</p>
 </header>
 ${taxesSwitch("companies")}
 ${listForm(f, inds === FAILED ? [] : inds)}
@@ -62,7 +62,7 @@ ${rows}
 ${more}
 <section class="card stack-sm">
   <p class="label">About this list</p>
-  <p class="small">Every company that files a 10-K with the SEC and tags these values in its financial data, ordered by name, revenue or pretax income, as you choose. It isn't ordered or labeled by taxes paid or by any rate. Revenue and pretax income are for each company's latest fiscal year with figures.</p>
+  <p class="small">${at && at !== FAILED ? `The ${esc(String(at.n))} largest` : "The largest"} companies by revenue in their latest fiscal year that file a 10-K with the SEC and tag these values in their financial data, ordered by name, revenue or pretax income, as you choose. It isn't ordered or labeled by taxes paid or by any rate. Revenue and pretax income are for each company's latest fiscal year with figures.</p>
   <p class="small">State is the company's business address as EDGAR lists it. ${at && at !== FAILED ? `Loaded ${esc(String(at.at).slice(0, 10))}.` : ""} <a class="inline-link" href="${TAXES_METHOD}">How this works</a></p>
 </section>
 ${READING}`;

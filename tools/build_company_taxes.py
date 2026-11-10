@@ -2,8 +2,9 @@
 """Company taxes from SEC EDGAR, into D1 (migration 0047): the weekly "Refresh
 company taxes" workflow (.github/workflows/company-taxes.yml). See docs/taxes.md.
 
-For every company that filed a 10-K since 2019: the values its financial
-statements tag in XBRL, by fiscal year, each with the filing it comes from:
+For the 100 largest companies by revenue (--top; 0 for every company) that filed a
+10-K since 2019: the values their financial statements tag in XBRL, by fiscal year,
+each with the filing it comes from:
 
   taxes_paid       us-gaap:IncomeTaxesPaidNet                         Income Taxes Paid, Net
   paid_federal     IncomeTaxPaidFederalAfterRefundReceived            (ASU 2023-09, from fiscal 2025)
@@ -70,7 +71,8 @@ FIELDS = {
                "IncomeLossFromContinuingOperationsBeforeIncomeTaxesMinorityInterestAndIncomeLossFromEquityMethodInvestments"],
     "pretax_us": ["IncomeLossFromContinuingOperationsBeforeIncomeTaxesDomestic"],
     "pretax_foreign": ["IncomeLossFromContinuingOperationsBeforeIncomeTaxesForeign"],
-    "revenue": ["Revenues", "RevenueFromContractWithCustomerExcludingAssessedTax", "RevenueFromContractWithCustomerIncludingAssessedTax", "SalesRevenueNet"],
+    # RevenuesNetOfInterestExpense: banks' total revenue, the only one many of them tag.
+    "revenue": ["Revenues", "RevenueFromContractWithCustomerExcludingAssessedTax", "RevenueFromContractWithCustomerIncludingAssessedTax", "RevenuesNetOfInterestExpense", "SalesRevenueNet"],
 }
 TAGGED = {"pretax", "revenue"}  # fields whose element is stored beside the value (pretax_tag, revenue_tag)
 # Taxes paid by jurisdiction (a 10-K's own XBRL): the elements and the axis.
@@ -156,6 +158,15 @@ def company_years(facts):
                     row["fy"] = v["fy"]
     # A year with nothing but revenue isn't a tax year.
     return [y for y in sorted(years.values(), key=lambda r: r["period_end"]) if any(y.get(f) is not None for f in FIELDS if f != "revenue")]
+
+
+def largest(companies, n, today=None):
+    """The n companies with the largest latest revenue, among those still filing (a fiscal year that ended in
+    the last two years); a company whose revenue isn't tagged isn't among them."""
+    today = today or datetime.date.today()
+    cutoff = (today - datetime.timedelta(days=730)).isoformat()
+    live = (c for c in companies if c.get("revenue") is not None and (c.get("latest_end") or "") >= cutoff)
+    return sorted(live, key=lambda c: (-c["revenue"], c["cik"]))[:n]
 
 
 def latest(years):
@@ -401,6 +412,7 @@ def main():
     ap.add_argument("--cache", default=os.environ.get("RUNNER_TEMP", "/tmp"))
     ap.add_argument("--max-instances", type=int, default=6000, help="10-K XBRL instances read this run for jurisdictions")
     ap.add_argument("--limit", type=int, default=0, help="companies read (0: all); for trying the reader")
+    ap.add_argument("--top", type=int, default=100, help="keep the N largest companies by their latest revenue (0: every company)")
     args = ap.parse_args()
     cache = Path(args.cache)
     subs_zip = zipfile.ZipFile(download(SUBMISSIONS_ZIP, cache / "submissions.zip"))
@@ -433,6 +445,14 @@ def main():
         if args.limit and read >= args.limit:
             break
     say(f"{len(companies)} companies with a 10-K since 2019 and tax or pretax values; {len(years)} company-years")
+    if args.top:
+        # The N largest by revenue in their latest fiscal year with figures (never by taxes paid or any rate).
+        keep = {c["cik"] for c in largest(companies, args.top)}
+        companies = [c for c in companies if c["cik"] in keep]
+        years = [y for y in years if y["cik"] in keep]
+        filings = {cik: a for cik, a in filings.items() if cik in keep}
+        say(f"Kept the {len(companies)} largest by revenue; {len(years)} company-years")
+        say("  " + "; ".join(f"{c['name']} ({c['latest_fy']})" for c in largest(companies, len(companies))))
     for f in ("taxes_paid", "paid_federal", "paid_state", "paid_foreign", "current_federal", "current_state", "deferred", "pretax", "pretax_us", "pretax_foreign", "revenue"):
         say(f"  {f}: {sum(1 for y in years if y.get(f) is not None)} company-years tagged")
 
@@ -485,6 +505,11 @@ def main():
             for r in d1(args, command="SELECT cik, kind, org_name FROM company_orgs"):
                 if (r["cik"], r["kind"], r["org_name"]) not in now:
                     sql.append(f"DELETE FROM company_orgs WHERE cik = {lit(r['cik'])} AND kind = {lit(r['kind'])} AND org_name = {lit(r['org_name'])};")
+    if args.top and args.mode == "load" and companies:
+        # Companies that dropped out of the N are removed with their years, jurisdictions and matches.
+        keep = ", ".join(str(c["cik"]) for c in companies)
+        for t in ("company_tax_years", "company_tax_jurisdictions", "company_orgs", "companies"):
+            sql.append(f"DELETE FROM {t} WHERE cik NOT IN ({keep});")
     say(f"{len(sql)} SQL statements")
     if args.mode == "load":
         run_sql(args, sql)

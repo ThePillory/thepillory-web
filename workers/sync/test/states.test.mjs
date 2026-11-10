@@ -192,3 +192,28 @@ test("a state's daily read starts where its session files stop, and covers a ses
   // A session long over (its file months older than the newest) isn't re-read.
   assert.equal(firstSince([{ session: "2025", bills: 1022, generated_at: "2025-05-21" }, { session: "2026", bills: 1010, generated_at: "2026-10-09" }], today), "2026-10-09");
 });
+
+test("a state's daily votes are saved: the vote with its key, positions in state_positions, unchanged rows not rewritten", async () => {
+  const { saveStateVote } = await import("../src/db.js");
+  const sqlite = new DatabaseSync(":memory:");
+  const dir = new URL("../migrations/", import.meta.url);
+  for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) {
+    try {
+      sqlite.exec(readFileSync(new URL(f, dir), "utf8"));
+    } catch {}
+  }
+  let written = 0;
+  const stmt = (sql, b = []) => ({ bind: (...x) => stmt(sql, x), run: async () => { written += Number(sqlite.prepare(sql).run(...b).changes); return {}; } });
+  const db = { prepare: (sql) => stmt(sql), batch: async (list) => { for (const s of list) await s.run(); } };
+  const vote = { id: "tx-ocd-vote-1", bill_id: null, chamber: "tx-lower", vote_date: "2026-05-01", question: "Final passage", vote_type: "final_passage", result: "Passed", source_url: "https://capitol.texas.gov/x", totals: { yea: 2, nay: 1, present: 0, not_voting: 0 }, k: 991 };
+  const positions = [{ member_k: 11, position: 0, raw: null }, { member_k: 12, position: 1, raw: null }, { member_k: 13, position: undefined, raw: "Excused?" }];
+  await saveStateVote(db, vote, positions);
+  assert.equal(written, 3); // the vote and two positions; an unreadable position isn't stored
+  assert.deepEqual({ ...sqlite.prepare("SELECT level, k, yea, nay FROM votes WHERE id = ?").get(vote.id) }, { level: "state", k: 991, yea: 2, nay: 1 });
+  assert.deepEqual(sqlite.prepare("SELECT member_k, position FROM state_positions WHERE vote_k = 991 ORDER BY member_k").all().map((r) => [r.member_k, r.position]), [[11, 0], [12, 1]]);
+  written = 0;
+  await saveStateVote(db, vote, positions);
+  assert.equal(written, 0); // read again with nothing changed: nothing written
+  await saveStateVote(db, { ...vote, result: "Failed" }, [{ member_k: 12, position: 0, raw: null }]);
+  assert.equal(written, 2);
+});

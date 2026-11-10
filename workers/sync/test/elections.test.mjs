@@ -4,6 +4,7 @@
 // officeholders by name, results only after the polls close, and pages that show
 // every candidate the same way. Every name in the fixture is invented; one test
 // also checks the real data file's county contests against its alphabet.
+import "./before-election-day.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
