@@ -142,9 +142,13 @@ SPOT_CHECK_RATE = "0.1"
 # existed, or whose review failed). Flagged drafts go to the resolution step.
 REVIEW_BACKLOG_DAILY = "30"
 # The resolution step (src/analysis/resolve.js): flagged drafts and readers' reports
-# are fixed by RESOLVE_MODEL, trimmed, or cut to the summary, within this many dollars a day.
+# are fixed by RESOLVE_MODEL, trimmed, cut to the summary, or drafted again from the text,
+# within this many dollars a day. One withheld is tried again after RESOLVE_RETRY_DAYS,
+# up to RESOLVE_TRIES times in all.
 RESOLVE_DAILY_DOLLARS = "25"
 RESOLVE_MODEL = "claude-opus-5-5"
+RESOLVE_RETRY_DAYS = "7"
+RESOLVE_TRIES = "3"
 # County meetings (src/meetings/county.js). The county moved to Tyler Meeting
 # Manager in September 2026; "tylermm|iqm2" would also read the old IQM2 portal.
 COUNTY_MEETING_SOURCES = "tylermm"

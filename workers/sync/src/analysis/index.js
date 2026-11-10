@@ -335,7 +335,8 @@ async function reviewBacklog(env, db, budget, run) {
            LEFT JOIN bill_relevance r ON r.bill_id = a.bill_id
          -- Not reviewed yet. (A flagged draft goes to the resolution step, which
          -- reviews it again itself, so it isn't re-reviewed here.)
-         WHERE a.current = 1 AND a.status = 'ai_draft' AND (b.id IS NOT NULL OR x.id IS NOT NULL) AND a.ai_review IS NULL
+         WHERE a.current = 1 AND a.status = 'ai_draft' AND (b.id IS NOT NULL OR x.id IS NOT NULL OR a.bill_id LIKE '${MEASURE_PREFIX}%') AND a.ai_review IS NULL
+           AND COALESCE(x.signed_on, x.published_on, ${BILL_DATE("a.bill_id")}, substr(a.created_at, 1, 10)) >= '${analysisSince(env)}'
          ORDER BY a.created_at, a.id LIMIT 25`
       )
       .all()
@@ -357,9 +358,12 @@ async function reviewBacklog(env, db, budget, run) {
       await log(db, run, "analysis-backlog", "ok", 0, `${row.bill_id}: analysis ${row.id} rejected automatically: ${rel_category}: ${rel_reason}`, t0);
       continue;
     }
-    if (!row.is_order && !row.rel_verdict) continue; // relevance not checked yet; next round
+    const measure = String(row.bill_id).startsWith(MEASURE_PREFIX);
+    if (!row.is_order && !measure && !row.rel_verdict) continue; // relevance not checked yet; next round
     if (used >= limit || budget.timeLeft() < MIN_TIME_PER_BILL_MS) break;
-    const bill = row.is_order
+    const bill = measure
+      ? await subjectFor(db, row)
+      : row.is_order
       ? await orderSubject(db, row.bill_id)
       : { id: row.bill_id, bill_number: row.bill_number, title: row.title, level: row.level, session: row.session, chamber: row.chamber, official_url: row.official_url, summary: row.bill_summary || "", source_url: row.bill_source_url };
     if (!bill) continue;
@@ -452,6 +456,8 @@ export async function runResolutions(env, db, budget, run, { fakes = null } = {}
   const key = `resolve_cents_${day()}`;
   let spent = parseFloat((await getState(db, key)) || "0") || 0;
   const tally = { fixed: 0, trimmed: 0, summary_only: 0, withheld: 0, no_change: 0, errors: 0 };
+  const retryDays = Math.max(1, parseInt(env.RESOLVE_RETRY_DAYS || "7", 10) || 7);
+  const tries = Math.max(1, parseInt(env.RESOLVE_TRIES || "3", 10) || 3);
   let rows;
   try {
     const reader = (
@@ -468,7 +474,10 @@ export async function runResolutions(env, db, budget, run, { fakes = null } = {}
         .prepare(
           `${RESOLVE_SELECT} WHERE a.current = 1 AND a.status = 'ai_draft' AND a.ai_review = 'flag'
              AND NOT EXISTS (SELECT 1 FROM bill_analysis_revisions v WHERE v.analysis_id = a.id AND v.actor != 'pipeline')
-             AND NOT EXISTS (SELECT 1 FROM analysis_resolutions z WHERE z.analysis_id = a.id)
+             -- Once each; one withheld is tried again after RESOLVE_RETRY_DAYS, up to RESOLVE_TRIES in all.
+             AND NOT EXISTS (SELECT 1 FROM analysis_resolutions z WHERE z.analysis_id = a.id
+                               AND (z.outcome != 'withheld' OR z.created_at > datetime('now', '-${retryDays} days')))
+             AND (SELECT COUNT(*) FROM analysis_resolutions z WHERE z.bill_id = a.bill_id AND z.trigger = 'flag') < ${tries}
              AND COALESCE(x.signed_on, x.published_on, ${BILL_DATE("a.bill_id")}, substr(a.created_at, 1, 10)) >= '${analysisSince(env)}'
            ORDER BY COALESCE(x.signed_on, x.published_on, substr(a.created_at, 1, 10)) DESC, a.id DESC LIMIT 40`
         )
@@ -535,6 +544,10 @@ async function resolveRow(env, db, budget, row, fakes = null) {
       budget.take(`resolution ${bill.id}`);
       // The same env with the resolution model: Object.create keeps every binding and secret ({ ...env } can drop them).
       return draftAnalysis(Object.create(env, { ANALYSIS_MODEL: { value: resolveModel, enumerable: true } }), bill, source, depth, { draft: draftForReview(d, depth), reasons });
+    },
+    fresh: () => {
+      budget.take(`resolution (fresh draft) ${bill.id}`);
+      return draftAnalysis(Object.create(env, { ANALYSIS_MODEL: { value: resolveModel, enumerable: true } }), bill, source, depth);
     },
     check: async (d, trimmed) => {
       const quoteCheck = verifyQuotes(d, PROVISIONS);
