@@ -20,7 +20,5 @@ jobs:
         working-directory: workers/sync
         run: |
           x() { echo "=== $1"; npx --yes wrangler@4 d1 execute pillory --remote --json --command "$1" | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>{try{const j=JSON.parse(d.slice(d.indexOf("[")));for(const r of j[0].results)console.log(Object.values(r).join(" | "))}catch(e){console.log(d.slice(0,600))}})' || true; }
-          x "SELECT id, started_at, step, status, substr(message, 1, 160) FROM sync_log WHERE started_at >= '2026-11-10T11:10' AND step NOT IN ('analysis-resolve') ORDER BY id DESC LIMIT 14"
-          x "SELECT step, status, COUNT(*), MIN(started_at), MAX(started_at) FROM sync_log WHERE started_at >= '2026-11-10T11:00' GROUP BY 1, 2 ORDER BY 5 DESC LIMIT 20"
-          x "SELECT key, value FROM sync_state WHERE key LIKE 'run%' OR key LIKE '%round%' OR key LIKE 'resolve_cents_%' ORDER BY key DESC LIMIT 10"
-          x "SELECT COUNT(*) FROM bill_analyses a LEFT JOIN executive_actions x ON x.id = a.bill_id WHERE a.current = 1 AND a.status = 'ai_draft' AND a.ai_review = 'flag' AND NOT EXISTS (SELECT 1 FROM analysis_resolutions z WHERE z.analysis_id = a.id) AND COALESCE(x.signed_on, x.published_on, (SELECT MAX(v.vote_date) FROM votes v WHERE v.bill_id = a.bill_id AND v.vote_type = 'final_passage'), substr(a.created_at, 1, 10)) >= '2026-10-01'"
+          x "SELECT id, started_at, substr(message, 1, 60), length(message) FROM sync_log WHERE step = 'analysis-resolve' AND started_at >= '2026-11-10T11:00' ORDER BY id"
+          x "SELECT substr(message, instr(message, '; review'), 220) FROM sync_log WHERE step = 'analysis-resolve' AND started_at >= '2026-11-10T11:16' AND message LIKE '%withheld%' ORDER BY id DESC LIMIT 3"
