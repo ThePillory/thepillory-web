@@ -20,8 +20,4 @@ jobs:
         working-directory: workers/sync
         run: |
           x() { echo "=== $1"; npx --yes wrangler@4 d1 execute pillory --remote --json --command "$1" | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>{const j=JSON.parse(d.slice(d.indexOf("[")));for(const r of j[0].results)console.log(Object.values(r).join(" | "))})'; }
-          x "SELECT substr(id,1,instr(id,':')) AS src, COUNT(*) FROM executive_actions GROUP BY 1"
-          x "SELECT substr(a.bill_id,1,instr(a.bill_id,':')) AS src, a.status, a.ai_review, a.depth, COUNT(*) FROM bill_analyses a WHERE a.current = 1 AND a.bill_id IN (SELECT id FROM executive_actions) GROUP BY 1,2,3,4"
-          x "SELECT outcome, trigger, COUNT(*), MAX(created_at) FROM analysis_resolutions GROUP BY 1,2"
-          x "SELECT step, status, substr(message,1,260), started_at FROM sync_log WHERE step IN ('analysis-orders','analysis-resolve') AND started_at >= '2026-11-08' ORDER BY id DESC LIMIT 14"
-          x "SELECT a.bill_id, substr(a.ai_review_detail,1,500) FROM bill_analyses a WHERE a.current = 1 AND a.ai_review = 'flag' AND a.bill_id IN (SELECT id FROM executive_actions) ORDER BY a.id DESC LIMIT 5"
+          npx --yes wrangler@4 deployments list --name pillory-sync 2>&1 | tail -25
