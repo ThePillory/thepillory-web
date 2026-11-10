@@ -12,7 +12,7 @@ import { readFileSync } from "node:fs";
 import { onRequestGet as taxesRoute } from "../../../functions/taxes/[[path]].js";
 import { onRequestGet as financesRoute } from "../../../functions/finances/[[path]].js";
 import { loadCompany, companyMain, listCompanies, listFilters, listHref, SORTS, READING, taxMarker, markersIn, taxInfo, fillTaxLines, filingUrl, fiscalYear } from "../../../functions/_lib/taxes.js";
-import { taxpayersMain, shortCount, shortDollars, NOT_COUNTED, UNSOLD_GAINS } from "../../../functions/_lib/taxpayers.js";
+import { taxpayersMain, shortCount, shortDollars, NOT_COUNTED, UNSOLD_GAINS, irsSlices } from "../../../functions/_lib/taxpayers.js";
 import { checkQuery } from "../../../functions/_lib/crawl.js";
 
 function d1(sqlite) {
@@ -173,6 +173,34 @@ test("Taxpayers: what the numbers don't count comes first, and the unsold-gains 
   assert.equal(taxpayersMain(d, ""), html);
 });
 
+test("Taxpayers: the IRS's overlapping groups as separate slices that add up to 100%", () => {
+  const d = JSON.parse(readFileSync(new URL("../../../data/taxes/taxpayers.json", import.meta.url), "utf8"));
+  for (const year of Object.keys(d.irs.groups.find((g) => g.id === "top-1").tax_share)) {
+    const { rows, total } = irsSlices(d.irs, year);
+    assert.deepEqual(rows.map((r) => r.label), ["Top 0.1%", "Next 0.9% (rest of the top 1%)", "Top 1–10%", "Top 10–50%", "Bottom 50%"]);
+    const add = (k) => rows.reduce((t, r) => t + r[k], 0);
+    // The slices' shares sum to 100% (the IRS rounds each group's share).
+    assert.ok(Math.abs(add("agi_share") - 100) < 0.2, `${year}: income shares add to ${add("agi_share")}`);
+    assert.ok(Math.abs(add("tax_share") - 100) < 0.2, `${year}: tax shares add to ${add("tax_share")}`);
+    assert.equal(total.agi_share, add("agi_share"));
+    for (const r of rows) assert.ok(r.agi_share > 0 && r.tax_share >= 0 && r.returns > 0, `${year} ${r.label}`);
+  }
+  // Each slice is a group minus the one above it; the average rate is tax share / income share x the all-returns rate.
+  const irs = { groups: [
+    { id: "top-0.1", returns: { 2023: 150 }, agi_share: { 2023: 10 }, tax_share: { 2023: 20 } },
+    { id: "top-1", returns: { 2023: 1500 }, agi_share: { 2023: 20 }, tax_share: { 2023: 40 } },
+    { id: "top-10", returns: { 2023: 15000 }, agi_share: { 2023: 50 }, tax_share: { 2023: 70 } },
+    { id: "top-50", returns: { 2023: 75000 }, agi_share: { 2023: 88 }, tax_share: { 2023: 97 } },
+    { id: "bottom-50", returns: { 2023: 75000 }, agi_share: { 2023: 12 }, tax_share: { 2023: 3 } },
+  ], all_returns: { avg_rate: { 2023: 14 } } };
+  const { rows, total, allRate } = irsSlices(irs, 2023);
+  assert.deepEqual(rows.map((r) => [r.returns, r.agi_share, r.tax_share]), [[150, 10, 20], [1350, 10, 20], [13500, 30, 30], [60000, 38, 27], [75000, 12, 3]]);
+  assert.deepEqual(rows.map((r) => Math.round(r.avg_rate * 100) / 100), [28, 28, 14, 9.95, 3.5]);
+  assert.deepEqual([total.returns, total.agi_share, total.tax_share, total.avg_rate, allRate], [150000, 100, 100, 14, 14]);
+  // No all-returns rate loaded: no average rates, never a guess.
+  assert.ok(irsSlices({ groups: irs.groups }, 2023).rows.every((r) => r.avg_rate === null));
+});
+
 test("Taxpayers: large numbers written short", () => {
   assert.equal(shortCount(77_012_345), "77.0M");
   assert.equal(shortCount(1534), "1,534");
@@ -190,11 +218,15 @@ test("Taxpayers: the agencies' figures as published, CBO linked, California adde
   assert.match(html, /Federal income tax, by income group \(tax year \d{4}\)/);
   assert.match(html, /<th scope="row">Top 1 percent<\/th>/);
   assert.match(html, /<th scope="row">Bottom 50 percent<\/th>/);
-  assert.match(html, /Both as the IRS computes them/);
+  assert.match(html, /Each row is a separate group; the rows add up to all returns\./);
+  assert.match(html, /<th scope="col">Group<\/th><th scope="col">Returns<\/th><th scope="col">Share of income<\/th><th scope="col">Share of tax<\/th><th scope="col">Average tax rate<\/th>/);
+  // The IRS's own overlapping groups stay, folded, with a note that each includes the ones above it.
+  assert.match(html, /<details class="fold" id="irs-groups">[\s\S]*Show the IRS(?:'|&#x27;|&#39;)s groups[\s\S]*Each includes the ones above it[\s\S]*<\/details>/);
   // Phone-width tables: short headers, the notes say what each share is of, numbers written short.
   assert.match(html, /<th scope="col">Group<\/th><th scope="col">Returns<\/th><th scope="col">AGI at least<\/th><th scope="col">Share of income<\/th><th scope="col">Share of tax<\/th>/);
   assert.match(html, /<th scope="col">AGI<\/th><th scope="col">Returns<\/th><th scope="col">Share of returns<\/th><th scope="col">Tax<\/th><th scope="col">Share of tax<\/th>/);
   assert.match(html, /share of all AGI on every return; share of tax is its share of all federal income tax, after credits/);
+  assert.match(html, /Average tax rate is the row(?:'|&#x27;|&#39;)s share of tax divided by its share of income, times the IRS(?:'|&#x27;|&#39;)s average tax rate for all returns/);
   assert.match(html, /share of all California personal income tax liability/);
   assert.doesNotMatch(html.slice(html.indexOf('id="irs"'), html.indexOf('id="top-400"')), /\d{1,3},\d{3},\d{3}/, "no seven-digit figures written out in the IRS table");
   assert.match(html, /The 400 returns with the largest incomes/);
