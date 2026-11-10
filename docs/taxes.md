@@ -17,7 +17,7 @@ and the run fails so the failure is seen.
 
 | Section | Source | What's read |
 |---|---|---|
-| Federal income tax, by income group | IRS Statistics of Income, Tables 4.1 and 4.2 (the newest `<yy>in41ts` / `<yy>in42ts` linked on the IRS's percentile page) | For each group, top 0.001 percent to bottom 50 percent, by tax year: the number of returns, the AGI floor, the share of all AGI and the share of all income tax. These are the IRS's own shares, never recomputed; the average tax rate isn't shown |
+| Federal income tax, by income group | IRS Statistics of Income, Tables 4.1 and 4.2 (the newest `<yy>in41ts` / `<yy>in42ts` linked on the IRS's percentile page) | For each group, top 0.001 percent to bottom 50 percent, by tax year: the number of returns, the AGI floor, the share of all AGI and the share of all income tax, as the IRS computes them; and, from Table 4.1's Total column, all returns and the IRS's average tax rate for all returns (`all_returns`) |
 | The 400 returns with the largest incomes | IRS, *The 400 Individual Income Tax Returns Reporting the Largest AGIs Each Year, 1992–2014* (PDF; the series' last edition) | Table 1's first columns: the AGI cutoff, the total and average AGI, and the share of all AGI. A year that doesn't read in both blocks is left out. The page says the group changes every year and that the IRS has published the top 0.001 percent instead since 2014 |
 | All federal taxes, by household income | CBO, *The Distribution of Household Income, 2022* | Linked only. CBO's site refuses requests from GitHub's servers and from this build, so nothing is read |
 | California personal income tax | Franchise Tax Board, table B-4A (residents, all filing statuses), through data.ca.gov's API | The latest year's returns, California AGI and total tax liability. The FTB's AGI classes are added up into 7 bands, and each band's shares are computed from the table's own totals. The page says both |
@@ -31,6 +31,16 @@ Two fixed sections, the same for every visitor (`functions/_lib/taxpayers.js`):
   - taxes owed but not paid left out.
   It ends with "Different measures give different rates for the same group. Each table below says what it counts."
 - **Counting unsold gains: one estimate** (`UNSOLD_GAINS`), after the IRS tables. It states the 400 wealthiest families' average federal individual income tax rate, 8.2% of income including unsold gains, 2010–2018. The source is the 2021 analysis by the White House Council of Economic Advisers and the Office of Management and Budget, linked at its archived address. The section is labeled "An estimate, not official tax data" and gives one line on the method and one on the main criticism, of similar length (tested). It says these families aren't the IRS's 400 returns above. No person is named.
+
+**Separate groups** (`irsSlices()`): the IRS's groups overlap (each top group includes the ones above it), so their shares don't add to 100%. The main table shows five separate slices instead, each a cumulative IRS group minus the one above it:
+- Top 0.1%
+- Next 0.9% (the top 1% minus the top 0.1%)
+- Top 1–10%
+- Top 10–50%
+- Bottom 50%
+- a Total row
+
+For each: returns, share of income, share of tax, and average tax rate. The average tax rate is share of tax ÷ share of income × the IRS's average rate for all returns that year; with no all-returns rate loaded it says "Not published", never a guess. One line under the table: "Each row is a separate group; the rows add up to all returns." A test checks that the slices' shares add to 100% within rounding for every year. The IRS's own groups stay under "Show the IRS's groups", a fold below the card, with a note that each includes the ones above it.
 
 The old address `/finances/who-pays/` redirects here with a 301 (`functions/finances/[[path]].js`).
 

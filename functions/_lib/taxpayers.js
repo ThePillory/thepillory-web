@@ -92,10 +92,10 @@ function irsSection(irs) {
   ${table(["Group", "Returns", "Share of income", "Share of tax", "Average tax rate"], sliceRows)}
   <p class="small">Each row is a separate group; the rows add up to all returns.</p>
   <p class="xsmall secondary">ThePillory computed each row from the IRS's own figures for its groups: a group minus the one above it (the next 0.9% is the top 1% minus the top 0.1%). Share of income is the row's share of all AGI on every return; share of tax is its share of all federal income tax, after credits. Average tax rate is the row's share of tax divided by its share of income, times the IRS's average tax rate for all returns${allRate != null ? ` (${esc(pct(allRate))} in ${esc(year)})` : ", which isn't loaded yet"}: total income tax as a percent of AGI. Returns are rounded (M is millions); the exact figures are in the IRS's tables. Federal income tax only: payroll, excise, estate and state taxes aren't in these tables. Returns of dependents aren't counted. ${sourceLink(irs.source_url, "IRS Statistics of Income, Tables 4.1 and 4.2")}</p>
-  ${fold("irs-groups", "Show the IRS's groups", irsGroups)}
   ${series("top-1")}
   ${series("bottom-50")}
-</section>`;
+</section>
+${fold("irs-groups", "Show the IRS's groups", irsGroups)}`;
 }
 
 function top400Section(t) {
