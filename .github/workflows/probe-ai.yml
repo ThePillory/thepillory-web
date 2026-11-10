@@ -1,0 +1,26 @@
+# Temporary read-only probe: what happens to flagged drafts. Removed after.
+name: Probe order analyses
+on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [.github/workflows/probe-ai.yml]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        working-directory: workers/sync
+        run: |
+          x() { echo "=== $1"; npx --yes wrangler@4 d1 execute pillory --remote --json --command "$1" | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>{try{const j=JSON.parse(d.slice(d.indexOf("[")));for(const r of j[0].results)console.log(Object.values(r).join(" | "))}catch(e){console.log(d.slice(0,600))}})' || true; }
+          x "SELECT a.ai_review, instr(a.ai_review_detail, '\"revised\":true') > 0 AS revised, COUNT(*) FROM bill_analyses a WHERE a.current = 1 AND a.ai_review IS NOT NULL AND a.created_at >= '2026-10-01' GROUP BY 1, 2"
+          x "SELECT json_extract(c.value, '$.id') AS chk, json_extract(c.value, '$.severity') AS sev, COUNT(*) FROM bill_analyses a, json_each(json_extract(a.ai_review_detail, '$.checks')) c WHERE a.current = 1 AND a.ai_review = 'flag' AND json_extract(c.value, '$.ok') = 0 GROUP BY 1, 2 ORDER BY 3 DESC"
+          x "SELECT substr(message, instr(message, 'AI reviewer'), 300) FROM sync_log WHERE step IN ('analysis','analysis-orders') AND status = 'ok' AND started_at >= '2026-11-05' ORDER BY id DESC LIMIT 12"
+          x "SELECT a.bill_id, json_extract(c.value, '$.note') FROM bill_analyses a, json_each(json_extract(a.ai_review_detail, '$.checks')) c WHERE a.current = 1 AND a.ai_review = 'flag' AND json_extract(c.value, '$.severity') = 'major' ORDER BY a.id DESC LIMIT 8"
