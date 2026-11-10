@@ -30,7 +30,9 @@ class Irs(unittest.TestCase):
             (2023.0, 100.0, 3.3, 13.7),
         ]
         b = T.irs_blocks(rows, groups)
-        self.assertEqual(sorted(b), ["agi_share", "returns", "tax_share"])  # the average rate isn't kept
+        self.assertEqual(sorted(b), ["agi_share", "avg_rate", "returns", "tax_share"])
+        # The "Total" column: all returns, and the IRS's average tax rate for all returns.
+        self.assertEqual(T.irs_totals(rows), {"returns": {"2022": 100.0, "2023": 110.0}, "avg_rate": {"2023": 14.1}})
         g = T.irs_groups(b, groups, T.group_labels())
         self.assertEqual(g[0], {"id": "bottom-50", "label": "Bottom 50 percent", "returns": {"2022": 50.0, "2023": 55.0}, "floor": {}, "agi_share": {"2023": 12.3}, "tax_share": {"2023": 3.3}})
 

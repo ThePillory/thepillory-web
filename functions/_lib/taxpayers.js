@@ -9,6 +9,7 @@ import { esc, sourceLink } from "./render.js";
 import { asset } from "./geo.js";
 import { pairBars, miniBars } from "./charts.js";
 import { money, TAXES_METHOD } from "./taxes.js";
+import { fold } from "./summary.js";
 
 export const loadTaxpayers = (env, request) => asset(env, request, "/data/taxes/taxpayers.json");
 
@@ -33,11 +34,47 @@ const table = (head, rows) =>
   `<div class="table-scroll"><table class="usage-table"><thead><tr>${head.map((h) => `<th scope="col">${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table></div>`;
 const tr = (cells) => `<tr>${cells.map((c, i) => (i === 0 ? `<th scope="row">${c}</th>` : `<td>${c}</td>`)).join("")}</tr>`;
 
+// Separate groups, so the rows add up: each slice is a cumulative IRS group minus the one above it.
+const SLICES = [
+  { id: "top-0.1", label: "Top 0.1%", from: "top-0.1", minus: null },
+  { id: "next-0.9", label: "Next 0.9% (rest of the top 1%)", from: "top-1", minus: "top-0.1" },
+  { id: "top-1-10", label: "Top 1–10%", from: "top-10", minus: "top-1" },
+  { id: "top-10-50", label: "Top 10–50%", from: "top-50", minus: "top-10" },
+  { id: "bottom-50", label: "Bottom 50%", from: "bottom-50", minus: null },
+];
+
+/**
+ * The IRS's cumulative groups as separate slices for one year: returns, share of income, share
+ * of tax and average tax rate (share of tax / share of income x the IRS's average rate for all
+ * returns), plus a Total row. Null for anything a figure is missing for. Pure; tested.
+ */
+export function irsSlices(irs, year) {
+  const g = Object.fromEntries((irs.groups || []).map((x) => [x.id, x]));
+  const y = String(year);
+  const at = (id, k) => (g[id] && g[id][k] && g[id][k][y] != null ? g[id][k][y] : null);
+  const less = (a, b) => (a == null || b === undefined ? null : b === null ? a : a - b);
+  const allRate = irs.all_returns && irs.all_returns.avg_rate ? irs.all_returns.avg_rate[y] ?? null : null;
+  const rows = SLICES.map((s) => {
+    const part = (k) => less(at(s.from, k), s.minus ? at(s.minus, k) ?? undefined : null);
+    const row = { id: s.id, label: s.label, returns: part("returns"), agi_share: part("agi_share"), tax_share: part("tax_share") };
+    row.avg_rate = allRate != null && row.agi_share && row.tax_share != null ? (row.tax_share / row.agi_share) * allRate : null;
+    return row;
+  });
+  const sum = (k) => (rows.every((r) => r[k] != null) ? rows.reduce((t, r) => t + r[k], 0) : null);
+  const total = { id: "total", label: "Total", returns: sum("returns"), agi_share: sum("agi_share"), tax_share: sum("tax_share"), avg_rate: allRate };
+  return { rows, total, allRate };
+}
+
 function irsSection(irs) {
   if (!irs || !irs.groups) return `<section class="card stack-sm"><h2 class="h3">Federal income tax, by income group</h2><p class="small secondary">The IRS's tables aren't loaded yet.</p></section>`;
   const year = String(irs.years[1]);
   const g = Object.fromEntries(irs.groups.map((x) => [x.id, x]));
-  const rows = SHOWN.filter((id) => g[id]).map((id) => {
+  const { rows: slices, total, allRate } = irsSlices(irs, year);
+  const rate = (v) => (v == null ? "Not published" : pct(v));
+  const sliceRows = [...slices, total].map((r) =>
+    tr([esc(r.label), esc(shortCount(r.returns)), esc(pct(r.agi_share)), esc(pct(r.tax_share)), esc(rate(r.avg_rate))])
+  );
+  const irsRows = SHOWN.filter((id) => g[id]).map((id) => {
     const x = g[id];
     return tr([esc(x.label), esc(shortCount(x.returns[year])), esc(x.floor[year] == null ? "—" : shortDollars(x.floor[year])), esc(pct(x.agi_share[year])), esc(pct(x.tax_share[year]))]);
   });
@@ -47,11 +84,15 @@ function irsSection(irs) {
       years.map((y) => ({ label: y, tick: tick(y, years[years.length - 1]), a: g[id].agi_share[y] ?? null, b: g[id].tax_share[y] ?? null })),
       { series: ["Share of adjusted gross income", "Share of total income tax"], format: (v) => pct(v, 2), head: "Tax year", ariaLabel: `${g[id].label}: shares of income and of income tax by year`, caption: `${esc(g[id].label)} of returns, ${years[0]}–${years[years.length - 1]}.` }
     );
+  const irsGroups = `${table(["Group", "Returns", "AGI at least", "Share of income", "Share of tax"], irsRows)}
+  <p class="xsmall secondary">These are the IRS's own groups. Each includes the ones above it: the top 10 percent includes the top 1 percent, so these shares don't add up to 100%.</p>`;
   return `<section class="card stack-sm" id="irs">
   <h2 class="h3">Federal income tax, by income group (tax year ${esc(year)})</h2>
-  <p class="small">Individual income tax returns, grouped by adjusted gross income (AGI). Each top group includes the ones above it: the top 10 percent includes the top 1 percent.</p>
-  ${table(["Group", "Returns", "AGI at least", "Share of income", "Share of tax"], rows)}
-  <p class="xsmall secondary">Share of income is each group's share of all AGI on every return; share of tax is its share of all federal income tax, after credits. Both as the IRS computes them. Returns and dollar amounts are rounded (M is millions, K thousands); the exact figures are in the IRS's tables. Federal income tax only: payroll, excise, estate and state taxes aren't in these tables. Returns of dependents aren't counted. ${sourceLink(irs.source_url, "IRS Statistics of Income, Tables 4.1 and 4.2")}</p>
+  <p class="small">Individual income tax returns, grouped by adjusted gross income (AGI).</p>
+  ${table(["Group", "Returns", "Share of income", "Share of tax", "Average tax rate"], sliceRows)}
+  <p class="small">Each row is a separate group; the rows add up to all returns.</p>
+  <p class="xsmall secondary">ThePillory computed each row from the IRS's own figures for its groups: a group minus the one above it (the next 0.9% is the top 1% minus the top 0.1%). Share of income is the row's share of all AGI on every return; share of tax is its share of all federal income tax, after credits. Average tax rate is the row's share of tax divided by its share of income, times the IRS's average tax rate for all returns${allRate != null ? ` (${esc(pct(allRate))} in ${esc(year)})` : ", which isn't loaded yet"}: total income tax as a percent of AGI. Returns are rounded (M is millions); the exact figures are in the IRS's tables. Federal income tax only: payroll, excise, estate and state taxes aren't in these tables. Returns of dependents aren't counted. ${sourceLink(irs.source_url, "IRS Statistics of Income, Tables 4.1 and 4.2")}</p>
+  ${fold("irs-groups", "Show the IRS's groups", irsGroups)}
   ${series("top-1")}
   ${series("bottom-50")}
 </section>`;

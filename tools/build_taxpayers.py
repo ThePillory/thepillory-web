@@ -51,6 +51,7 @@ SECTIONS = [  # the label each block starts with -> our key
     ("total income tax share", "tax_share"),
     ("adjusted gross income (millions", "agi"),
     ("total income tax (millions", "tax"),
+    ("average tax rate", "avg_rate"),
 ]
 
 
@@ -102,6 +103,27 @@ def irs_blocks(rows, groups):
                     vals.append(None)
             if len(vals) == len(groups):
                 out.setdefault(key, {})[int(m.group(1))] = vals
+    return out
+
+
+def irs_totals(rows):
+    """A Table 4.1 sheet's "Total" column (all returns) -> {key: {year: value}}: the number of
+    returns and the IRS's average tax rate for all returns, by year."""
+    out, key = {}, None
+    for r in rows:
+        if not r:
+            continue
+        first = r[0]
+        if isinstance(first, str) and first.strip() and not re.fullmatch(r"\s*\d{4}(\.0)?\s*", first):
+            label = first.strip().lower()
+            key = next((k for lead, k in SECTIONS if label.startswith(lead)), None)
+            continue
+        m = re.fullmatch(r"(\d{4})(\.0)?", str(first).strip())
+        if key in ("returns", "avg_rate") and m and len(r) > 1:
+            try:
+                out.setdefault(key, {})[str(int(m.group(1)))] = float(r[1])
+            except (TypeError, ValueError):
+                pass
     return out
 
 
@@ -204,13 +226,19 @@ def main():
     labels = group_labels()
     try:
         links = newest_tables(get(IRS_PAGE).decode("utf-8", "replace"))
-        top = irs_blocks(sheet_rows(get(links["41"]), links["41"]), TOP_GROUPS)
+        rows41 = sheet_rows(get(links["41"]), links["41"])
+        top = irs_blocks(rows41, TOP_GROUPS)
+        totals = irs_totals(rows41)
         bottom = irs_blocks(sheet_rows(get(links["42"]), links["42"]), BOTTOM_GROUPS)
         if not top.get("tax_share") or not bottom.get("tax_share"):
             raise ValueError("the share blocks didn't read")
         out["irs"] = {"source_url": IRS_PAGE, "tables": [links["41"], links["42"]],
                       "years": [min(top["tax_share"]), max(top["tax_share"])],
-                      "groups": irs_groups(top, TOP_GROUPS, labels) + irs_groups(bottom, BOTTOM_GROUPS, labels)}
+                      "groups": irs_groups(top, TOP_GROUPS, labels) + irs_groups(bottom, BOTTOM_GROUPS, labels),
+                      # All returns: the IRS's own count and average tax rate (total income tax / AGI), by year.
+                      "all_returns": {"returns": totals.get("returns", {}), "avg_rate": totals.get("avg_rate", {})}}
+        if not totals.get("avg_rate"):
+            raise ValueError("the all-returns average tax rate didn't read")
         say(f"IRS: {len(out['irs']['groups'])} groups, {out['irs']['years'][0]}-{out['irs']['years'][1]}")
     except Exception as e:  # noqa: BLE001 - a failed source keeps its last good data
         failed.append(f"IRS tables: {e}")
