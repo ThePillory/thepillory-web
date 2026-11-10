@@ -4,6 +4,7 @@
 // ID and number here is invented. One rule for everyone: the same card and the
 // same page for every candidate, ballot order or alphabetical, no contact
 // details, no individual donors, no polls or predictions.
+import "./before-election-day.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {

@@ -9,7 +9,7 @@
 import { API, headers } from "./openstates-api.js";
 import { classifyState, normalizePosition } from "./classify.js";
 import { stateTotals, totals } from "./rollcall.js";
-import { upsertBill } from "./db.js";
+import { upsertBill, saveStateVote } from "./db.js";
 import { getState, setState, isHttp, slugify, BudgetExhausted } from "./util.js";
 import { chamberIds, stableKey, POSITION_CODE } from "./states.js";
 import { statePriority } from "./state-priority.js";

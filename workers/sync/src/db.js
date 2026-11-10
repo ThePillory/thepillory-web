@@ -292,6 +292,44 @@ export async function saveVote(db, v, positions) {
   await db.batch(stmts);
 }
 
+/**
+ * One vote of a state outside California (src/state-votes-api.js), stored like the bulk
+ * loader's (tools/load_state_votes.py): the vote with its stable integer key (v.k), and each
+ * member's position in the compact state_positions table ({member_k, position: 0-3, raw}).
+ * A row is written only when a value changed (D1 bills every row written).
+ */
+export async function saveStateVote(db, v, positions) {
+  requireSource("vote", v.id, v.source_url);
+  const stmts = [
+    db
+      .prepare(
+        `INSERT INTO votes (id, bill_id, level, chamber, vote_date, question, vote_type, result, source_url, yea, nay, present, not_voting, k, updated_at)
+         VALUES (?, ?, 'state', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+         ON CONFLICT(id) DO UPDATE SET bill_id = excluded.bill_id, vote_date = excluded.vote_date, question = excluded.question,
+           vote_type = excluded.vote_type, result = excluded.result, source_url = excluded.source_url, yea = excluded.yea,
+           nay = excluded.nay, present = excluded.present, not_voting = excluded.not_voting, k = excluded.k, updated_at = excluded.updated_at
+         WHERE votes.bill_id IS NOT excluded.bill_id OR votes.vote_date IS NOT excluded.vote_date OR votes.question IS NOT excluded.question
+           OR votes.vote_type IS NOT excluded.vote_type OR votes.result IS NOT excluded.result OR votes.source_url IS NOT excluded.source_url
+           OR votes.yea IS NOT excluded.yea OR votes.nay IS NOT excluded.nay OR votes.present IS NOT excluded.present
+           OR votes.not_voting IS NOT excluded.not_voting OR votes.k IS NOT excluded.k`
+      )
+      .bind(v.id, v.bill_id || null, v.chamber, v.vote_date, v.question, v.vote_type, v.result, v.source_url, ...totals(v.totals), v.k),
+  ];
+  for (const p of positions) {
+    if (p.position == null || p.member_k == null) continue; // a position that isn't Yes, No, Present or Not voting isn't stored
+    stmts.push(
+      db
+        .prepare(
+          `INSERT INTO state_positions (vote_k, member_k, position, raw) VALUES (?, ?, ?, ?)
+           ON CONFLICT(vote_k, member_k) DO UPDATE SET position = excluded.position, raw = excluded.raw
+           WHERE state_positions.position IS NOT excluded.position OR state_positions.raw IS NOT excluded.raw`
+        )
+        .bind(v.k, p.member_k, p.position, p.raw ?? null)
+    );
+  }
+  await db.batch(stmts);
+}
+
 // Vote IDs already saved with their totals. Votes saved before totals were
 // read (yea IS NULL) aren't included, so they are fetched once more: that
 // fills in the totals and every member's position.

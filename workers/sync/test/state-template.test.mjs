@@ -5,6 +5,7 @@
 // loaded yet, and Calaveras as a county link inside California. The counties
 // and districts are on /states/<name>/map/. Old /explore/<st>/ links redirect. Served from the
 // repo's real static files, with no database (every section's empty state).
+import "./before-election-day.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
