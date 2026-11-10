@@ -10,7 +10,8 @@ import { readFileSync, readdirSync } from "node:fs";
 import { resolveDraft, trimDraft, summaryOnly, useful, changeNote, centsFor, containsMarked, addMarked } from "../src/analysis/resolve.js";
 import { hardSpots } from "../src/analysis/lint.js";
 import { settleReview } from "../src/analysis/review.js";
-import { runResolutions, analysisSince } from "../src/analysis/index.js";
+import { runResolutions, analysisSince, MIN_TIME_PER_RESOLUTION_MS, FRESH_MIN_MS } from "../src/analysis/index.js";
+import { noteInterrupted } from "../src/run-state.js";
 import { Budget } from "../src/util.js";
 import { isPublic, parse, baselineSection, analysisChanges, constitutionBrief } from "../../../functions/_lib/analysis.js";
 
@@ -313,6 +314,31 @@ test("in the database: a withheld draft is tried again after RESOLVE_RETRY_DAYS,
   }
   assert.deepEqual(outcomes(), ["withheld", "withheld", "withheld"]);
   assert.equal(isPublic(sqlite.prepare("SELECT * FROM bill_analyses WHERE bill_id = 'fr:1' AND current = 1").get()), false, "nothing flagged is published");
+});
+
+test("in the database: a resolution isn't started without MIN_TIME_PER_RESOLUTION_MS left in the round", async () => {
+  const sqlite = seeded();
+  sqlite.exec("DELETE FROM analysis_flags");
+  const db = d1(sqlite);
+  const fakes = { revise: async () => assert.fail("not started this round"), review: async () => assert.fail("not started this round") };
+  const out = await runResolutions(env, db, new Budget(env, MIN_TIME_PER_RESOLUTION_MS - 1000), run, { fakes });
+  assert.equal(out.more, true, "left for the next round");
+  assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM analysis_resolutions").get().n, 0);
+  assert.ok(MIN_TIME_PER_RESOLUTION_MS >= 6 * 60 * 1000 && FRESH_MIN_MS >= 2 * 60 * 1000);
+});
+
+test("a round killed at the alarm limit is noticed when the safety alarm starts the next one", () => {
+  const state = { phase: "analysis", round_started_at: "2026-11-10T11:15:53Z" };
+  noteInterrupted(state);
+  assert.equal(state.round_open, true);
+  assert.equal(state.interrupted_rounds, undefined, "the first round: nothing interrupted");
+  // The round never cleared round_open (it was killed); the next one records it.
+  noteInterrupted(state);
+  assert.deepEqual(state.interrupted_rounds, [{ phase: "analysis", started_at: "2026-11-10T11:15:53Z" }]);
+  // A round that finished cleared it: nothing recorded.
+  state.round_open = false;
+  noteInterrupted(state);
+  assert.equal(state.interrupted_rounds.length, 1);
 });
 
 test("ANALYSIS_SINCE: a date, empty for no limit, anything else the default", () => {

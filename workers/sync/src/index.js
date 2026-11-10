@@ -13,6 +13,7 @@
 // while a round stops at the request/time budget, and never runs two syncs at once.
 // After the sync rounds, it drafts constitutional analyses for new bills, also
 // in rounds, capped per day (ANALYSIS_DAILY_LIMIT).
+import { noteInterrupted } from "./run-state.js";
 import { syncOtherStateVotes } from "./state-votes-api.js";
 import { syncAllStateOfficials } from "./states-officials.js";
 import { summarizeFlags } from "./analysis/flags.js";
@@ -128,6 +129,10 @@ const ROUND_MS = 12 * 60 * 1000; // stop starting new requests after this; the a
 const MAX_ROUNDS = 20; // safety cap on automatic continuation per run
 const MAX_ANALYSIS_ROUNDS = 10; // same, for the analysis step
 const STALE_MS = 20 * 60 * 1000; // a round that hasn't finished after this is treated as dead
+// Each round first sets an alarm this far ahead, past the 15-minute alarm limit: a round
+// that finishes replaces it, and a round that's killed (over the limit) is picked up by it,
+// so the rest of the run still happens (within MAX_ROUNDS / MAX_ANALYSIS_ROUNDS).
+const SAFETY_ALARM_MS = 16 * 60 * 1000;
 
 export async function runSync(rawEnv, { trigger, deadlineMs, runId }) {
   if (!rawEnv.DB) throw new Error("D1 binding DB is missing (see wrangler.toml)");
@@ -296,11 +301,14 @@ export class SyncRunner extends DurableObject {
     if (!state.running) return;
     if (state.phase === "analysis") return this.analysisRound(state);
     state.round += 1;
+    noteInterrupted(state);
     state.round_started_at = new Date().toISOString();
     await this.ctx.storage.put("state", state);
+    await this.ctx.storage.setAlarm(Date.now() + SAFETY_ALARM_MS);
     try {
       const result = await runSync(this.env, { trigger: state.trigger, deadlineMs: ROUND_MS, runId: state.run_id });
       if (await this.superseded(state)) return;
+      state.round_open = false;
       state.rounds = [...state.rounds, roundSummary(result, state.round, state.round_started_at)].slice(-10);
       if ((result.continue_now || result.retry_later.length) && state.round < MAX_ROUNDS) {
         // More to fetch and this round only stopped at its budget: keep going.
@@ -318,6 +326,7 @@ export class SyncRunner extends DurableObject {
         : "up to date";
     } catch (err) {
       if (await this.superseded(state)) return;
+      state.round_open = false;
       // Caught so the alarm isn't retried in a loop; the error is visible in /status.
       state.error = redact(`${err.name}: ${err.message}`);
       state.outcome = "error";
@@ -331,11 +340,14 @@ export class SyncRunner extends DurableObject {
 
   async analysisRound(state) {
     state.analysis_round = (state.analysis_round || 0) + 1;
+    noteInterrupted(state);
     state.round_started_at = new Date().toISOString();
     await this.ctx.storage.put("state", state);
+    await this.ctx.storage.setAlarm(Date.now() + SAFETY_ALARM_MS);
     try {
       const r = await runAnalysis(this.env, { deadlineMs: ROUND_MS, runId: state.run_id, trigger: state.trigger });
       if (await this.superseded(state)) return;
+      state.round_open = false;
       const prev = state.analysis || { drafted: 0 };
       state.analysis = {
         status: r.status,
@@ -351,6 +363,7 @@ export class SyncRunner extends DurableObject {
       }
     } catch (err) {
       if (await this.superseded(state)) return;
+      state.round_open = false;
       state.analysis = { ...(state.analysis || {}), status: "error", error: redact(`${err.name}: ${err.message}`) };
       console.error(`[${state.run_id}] analysis failed: ${state.analysis.error}`);
     }
@@ -364,8 +377,10 @@ export class SyncRunner extends DurableObject {
     state.running = false;
     state.finished_at = new Date().toISOString();
     await this.ctx.storage.put("state", state);
+    await this.ctx.storage.deleteAlarm();
   }
 }
+
 
 function runner(env) {
   if (!env.SYNC_RUNNER) throw new Error("Durable Object binding SYNC_RUNNER is missing (see wrangler.toml)");
