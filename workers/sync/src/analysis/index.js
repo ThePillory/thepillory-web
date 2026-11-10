@@ -51,6 +51,19 @@ const MIN_TIME_PER_BILL_MS = 4 * 60 * 1000; // don't start a bill without this m
 const MAX_RELEVANCE_BATCHES = 4; // per round
 const J = (x) => JSON.stringify(x);
 
+// ANALYSIS_SINCE (2026-10-01): only bills whose latest final-passage vote, and
+// orders signed (or published), on or after this date are drafted, redrafted or
+// fixed by the resolution step. Older ones are left as they are: published
+// analyses stay up, flagged ones stay off public pages. A person's request, an
+// issue's link and a reader's report on a published analysis still go through.
+export const DEFAULT_SINCE = "2026-10-01";
+export function analysisSince(env = {}) {
+  const v = String(env.ANALYSIS_SINCE ?? DEFAULT_SINCE).trim();
+  return /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : v === "" ? "0000-01-01" : DEFAULT_SINCE;
+}
+// The date a bill's analysis goes by: its latest final-passage vote.
+const BILL_DATE = (alias) => `(SELECT MAX(v.vote_date) FROM votes v WHERE v.bill_id = ${alias} AND v.vote_type = 'final_passage')`;
+
 function day() {
   return new Date().toISOString().slice(0, 10);
 }
@@ -88,7 +101,7 @@ async function uncheckedBills(db, limit, env = {}) {
          -- (and not un-skipped by a person): checked again with the current rules.
          WHERE NOT EXISTS (SELECT 1 FROM bill_relevance r WHERE r.bill_id = b.id
                              AND NOT (r.verdict = 'skip' AND r.override IS NULL AND r.prompt_version != ?))
-           AND (${FINAL_VOTE}
+           AND ((${FINAL_VOTE} AND ${BILL_DATE("b.id")} >= '${analysisSince(env)}')
                 OR EXISTS (SELECT 1 FROM bill_analyses a WHERE a.bill_id = b.id AND a.current = 1 AND a.status = 'ai_draft' AND a.ai_review IS NULL))
            AND ${scope.where}
          ORDER BY ${scope.rank}, (SELECT MAX(v.vote_date) FROM votes v WHERE v.bill_id = b.id) DESC, b.id LIMIT ?`
@@ -456,6 +469,7 @@ export async function runResolutions(env, db, budget, run, { fakes = null } = {}
           `${RESOLVE_SELECT} WHERE a.current = 1 AND a.status = 'ai_draft' AND a.ai_review = 'flag'
              AND NOT EXISTS (SELECT 1 FROM bill_analysis_revisions v WHERE v.analysis_id = a.id AND v.actor != 'pipeline')
              AND NOT EXISTS (SELECT 1 FROM analysis_resolutions z WHERE z.analysis_id = a.id)
+             AND COALESCE(x.signed_on, x.published_on, ${BILL_DATE("a.bill_id")}, substr(a.created_at, 1, 10)) >= '${analysisSince(env)}'
            ORDER BY COALESCE(x.signed_on, x.published_on, substr(a.created_at, 1, 10)) DESC, a.id DESC LIMIT 40`
         )
         .all()
@@ -598,6 +612,7 @@ const RANK = "CASE r.local WHEN 'high' THEN 3 WHEN 'medium' THEN 2 WHEN 'low' TH
 
 async function nextBills(db, limit, env = {}, redraftRoom = 0) {
   const scope = await billScope(db, env);
+  const since = analysisSince(env);
   // Requests first: yours from /admin/review, then readers', oldest first.
   const requested = (
     await db
@@ -633,7 +648,7 @@ async function nextBills(db, limit, env = {}, redraftRoom = 0) {
          WHERE a.status = 'ai_draft' AND a.ai_review = 'flag'
            AND COALESCE(a.prompt_version, '') != CASE WHEN a.depth = 'card' THEN ? ELSE ? END
            AND NOT EXISTS (SELECT 1 FROM bill_analysis_revisions v WHERE v.analysis_id = a.id AND v.actor != 'pipeline')
-           AND ${retry}
+           AND ${retry} AND ${BILL_DATE("b.id")} >= '${since}'
          ORDER BY a.id LIMIT ?`
       )
       .bind(CARD_PROMPT_VERSION, PROMPT_VERSION, Math.max(0, redraftRoom))
@@ -651,7 +666,7 @@ async function nextBills(db, limit, env = {}, redraftRoom = 0) {
                              AND NOT (a.status = 'rejected' AND EXISTS (SELECT 1 FROM bill_analysis_revisions v
                                        WHERE v.analysis_id = a.id AND v.action = 'rejected' AND v.actor = 'pipeline')))
            AND ${retry}
-           AND (${LINKED} OR (${FINAL_VOTE} AND (r.verdict = 'analyze' OR r.override = 'unskip') AND ${scope.where}))
+           AND (${LINKED} OR (${FINAL_VOTE} AND (r.verdict = 'analyze' OR r.override = 'unskip') AND ${scope.where} AND ${BILL_DATE("b.id")} >= '${since}'))
          ORDER BY linked DESC, local_rank DESC, ${scope.rank}, last_vote DESC, b.id LIMIT ?`
       )
       .bind(Math.max(0, limit - requested.length - upgrades.length))
@@ -728,8 +743,9 @@ async function subjectSource(env, db, budget, subject, depth) {
 }
 
 /** Orders to draft, up to `limit`: requests first, then redrafts after a prompt change (newest orders first), then the newest orders not yet analyzed. */
-async function nextOrders(db, limit) {
+async function nextOrders(db, limit, env = {}) {
   if (limit <= 0) return [];
+  const since = analysisSince(env);
   const retry = `NOT EXISTS (SELECT 1 FROM analysis_attempts t WHERE t.bill_id = x.id AND t.last_attempt > datetime('now', '-${RETRY_AFTER_DAYS} days'))`;
   const ids = [];
   const requested = (
@@ -751,7 +767,8 @@ async function nextOrders(db, limit) {
          WHERE a.status = 'ai_draft' AND a.ai_review = 'flag'
            AND COALESCE(a.prompt_version, '') != CASE WHEN a.depth = 'card' THEN ? ELSE ? END
            AND NOT EXISTS (SELECT 1 FROM bill_analysis_revisions v WHERE v.analysis_id = a.id AND v.actor != 'pipeline')
-           AND ${retry} ORDER BY COALESCE(x.signed_on, x.published_on) DESC, x.id DESC LIMIT ?`
+           AND ${retry} AND COALESCE(x.signed_on, x.published_on) >= '${since}'
+         ORDER BY COALESCE(x.signed_on, x.published_on) DESC, x.id DESC LIMIT ?`
       )
       .bind(CARD_PROMPT_VERSION, PROMPT_VERSION, Math.max(0, limit - ids.length))
       .all()
@@ -762,6 +779,7 @@ async function nextOrders(db, limit) {
       .prepare(
         `SELECT x.id FROM executive_actions x JOIN executive_action_texts t ON t.action_id = x.id AND t.status = 'ok'
          WHERE x.kind = 'executive_order' AND NOT EXISTS (SELECT 1 FROM bill_analyses a WHERE a.bill_id = x.id) AND ${retry}
+           AND COALESCE(x.signed_on, x.published_on) >= '${since}'
          ORDER BY COALESCE(x.signed_on, x.published_on) DESC, x.id DESC LIMIT ?`
       )
       .bind(Math.max(0, limit - ids.length))
@@ -976,7 +994,7 @@ export async function runAnalysis(rawEnv, { deadlineMs, runId, trigger }) {
   let ordersUsed = parseInt((await getState(db, orderKey)) || "0", 10);
   let ordersWaiting = false;
   try {
-    const orders = ordersUsed < orderLimit && !stoppedEarly ? await nextOrders(db, orderLimit - ordersUsed) : [];
+    const orders = ordersUsed < orderLimit && !stoppedEarly ? await nextOrders(db, orderLimit - ordersUsed, env) : [];
     for (const order of orders) {
       if (ordersUsed >= orderLimit) break;
       if (budget.timeLeft() < MIN_TIME_PER_BILL_MS) {
