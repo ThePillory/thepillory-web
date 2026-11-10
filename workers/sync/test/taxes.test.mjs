@@ -12,7 +12,7 @@ import { readFileSync } from "node:fs";
 import { onRequestGet as taxesRoute } from "../../../functions/taxes/[[path]].js";
 import { onRequestGet as financesRoute } from "../../../functions/finances/[[path]].js";
 import { loadCompany, companyMain, listCompanies, listFilters, listHref, SORTS, READING, taxMarker, markersIn, taxInfo, fillTaxLines, filingUrl, fiscalYear } from "../../../functions/_lib/taxes.js";
-import { taxpayersMain } from "../../../functions/_lib/taxpayers.js";
+import { taxpayersMain, shortCount, shortDollars } from "../../../functions/_lib/taxpayers.js";
 import { checkQuery } from "../../../functions/_lib/crawl.js";
 
 function d1(sqlite) {
@@ -148,13 +148,30 @@ test("organization panels: one line when exactly one company has the name (or a 
   assert.doesNotMatch(out, /data-tax-org/);
 });
 
+test("Taxpayers: large numbers written short", () => {
+  assert.equal(shortCount(77_012_345), "77.0M");
+  assert.equal(shortCount(1534), "1,534");
+  assert.equal(shortCount(153_076), "153,076");
+  assert.equal(shortDollars(663_164), "$663K");
+  assert.equal(shortDollars(10_041_000), "$10.0M");
+  assert.equal(shortDollars(97_600_000_000), "$97.6B");
+  assert.equal(shortDollars(4_250), "$4.3K");
+  assert.equal(shortDollars(null), "Not published");
+});
+
 test("Taxpayers: the agencies' figures as published, CBO linked, California added up and said so", () => {
   const d = JSON.parse(readFileSync(new URL("../../../data/taxes/taxpayers.json", import.meta.url), "utf8"));
   const html = taxpayersMain(d, "");
   assert.match(html, /Federal income tax, by income group \(tax year \d{4}\)/);
   assert.match(html, /<th scope="row">Top 1 percent<\/th>/);
   assert.match(html, /<th scope="row">Bottom 50 percent<\/th>/);
-  assert.match(html, /Shares as the IRS computes them/);
+  assert.match(html, /Both as the IRS computes them/);
+  // Phone-width tables: short headers, the notes say what each share is of, numbers written short.
+  assert.match(html, /<th scope="col">Group<\/th><th scope="col">Returns<\/th><th scope="col">AGI at least<\/th><th scope="col">Share of income<\/th><th scope="col">Share of tax<\/th>/);
+  assert.match(html, /<th scope="col">AGI<\/th><th scope="col">Returns<\/th><th scope="col">Share of returns<\/th><th scope="col">Tax<\/th><th scope="col">Share of tax<\/th>/);
+  assert.match(html, /share of all AGI on every return; share of tax is its share of all federal income tax, after credits/);
+  assert.match(html, /share of all California personal income tax liability/);
+  assert.doesNotMatch(html.slice(html.indexOf('id="irs"'), html.indexOf('id="top-400"')), /\d{1,3},\d{3},\d{3}/, "no seven-digit figures written out in the IRS table");
   assert.match(html, /The 400 returns with the largest incomes/);
   assert.match(html, /these are the 400 largest that year, not the same people/);
   assert.match(html, /CBO&#x27;s website refuses requests|CBO's website refuses requests/);
