@@ -1,0 +1,28 @@
+# Temporary read-only probe: did the resolution step fix flagged analyses today? Removed after.
+name: Probe resolutions
+on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [.github/workflows/probe-ai.yml]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        working-directory: workers/sync
+        run: |
+          x() { echo "=== $1"; npx --yes wrangler@4 d1 execute pillory --remote --json --command "$1" | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>{try{const j=JSON.parse(d.slice(d.indexOf("[")));for(const r of j[0].results)console.log(Object.values(r).join(" | "))}catch(e){console.log(d.slice(0,600))}})' || true; }
+          x "SELECT started_at, status, substr(message, 1, 260) FROM sync_log WHERE step = 'analysis-resolve' AND started_at >= '2026-11-10T11:00' AND (message LIKE '%fixed,%' OR status = 'error') ORDER BY id DESC LIMIT 8"
+          x "SELECT outcome, trigger, COUNT(*), SUM(cost_cents) FROM analysis_resolutions GROUP BY 1, 2"
+          x "SELECT CASE WHEN x.id IS NOT NULL THEN 'order' WHEN a.bill_id LIKE 'measure:%' THEN 'measure' ELSE 'bill' END, a.ai_review, COUNT(*) FROM bill_analyses a LEFT JOIN executive_actions x ON x.id = a.bill_id WHERE a.current = 1 AND a.status = 'ai_draft' GROUP BY 1, 2"
+          x "SELECT z.bill_id, z.outcome, substr(z.public_note, 1, 160) FROM analysis_resolutions z ORDER BY z.id DESC LIMIT 12"
+          x "SELECT substr(message, 1, 200) FROM sync_log WHERE step = 'analysis-resolve' AND status = 'error' AND started_at >= '2026-11-10T11:00' ORDER BY id DESC LIMIT 5"
+          x "SELECT started_at, status, substr(message, 1, 200) FROM sync_log WHERE step = 'analysis-orders' AND started_at >= '2026-11-10T11:00' ORDER BY id DESC LIMIT 6"
