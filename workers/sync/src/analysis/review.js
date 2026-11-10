@@ -16,7 +16,7 @@ import { CHECKS, CHECK_LABELS, SEVERITIES } from "./review-checks.js";
 export { CHECKS, CHECK_LABELS, SEVERITIES };
 
 export const REVIEW_MODEL = "claude-sonnet-5-5";
-export const REVIEW_PROMPT_VERSION = "2026-10-27.1";
+export const REVIEW_PROMPT_VERSION = "2026-11-10.1";
 
 // The fields of a draft a problem can be in (the "where" of a failed check).
 export const WHERE_FIELDS = ["plain_summary", "clauses", "aligns", "tension", "departure", "readings", "citations", "supporters", "critics", "uncertainty", "article_v"];
@@ -30,6 +30,10 @@ The site's rules for every draft:
 - "Uncertain" when the bill text and the Constitution don't settle something. No guessing.
 - A short card has a 2 to 3 sentence summary, 1 to 3 provisions and one sentence per panel; judge it as a card, not as a full analysis. A full analysis is longer.
 - A summary only (depth "summary") has the summary and the provisions it touches, nothing else, because the rest was removed; judge only what is there, and don't fault it for what it leaves out.
+
+How a draft is laid out (this is the site's format, not a problem to flag):
+- "aligns" is the panel "Where it aligns", "tension" is "Where it may be in tension", and "departure" is "Why this might still serve the public". Each point is a hedged view, beginning "One view is that". A hedged point saying the bill may align with, or draw on, a clause is the panel doing its job, not a verdict that the bill is constitutional; a hedged point in "departure" saying it might serve the public is that panel's purpose, not the site's opinion on the bill's merits. Fail a panel point only when it drops the hedge and states the conclusion as settled ("the bill is a valid use of", "this is authorized by", "courts will uphold"), or when its reasoning is wrong about the bill text.
+- "supporters" and "critics" are attributed: each states its side's argument as that side would. A claim inside them ("Supporters argue it makes district lines more stable") is the side's claim, not the site's, so it is not opinion stated as fact. Judge these two lines on balance and fairness: similar strength, length and care.
 
 Already checked by code, so don't re-check them: every quote of the Constitution matches the stored text, and every court case was found in CourtListener under the same name.
 

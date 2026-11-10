@@ -10,7 +10,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { resolveDraft, trimDraft, summaryOnly, useful, changeNote, centsFor, containsMarked, addMarked } from "../src/analysis/resolve.js";
 import { hardSpots } from "../src/analysis/lint.js";
 import { settleReview } from "../src/analysis/review.js";
-import { runResolutions } from "../src/analysis/index.js";
+import { runResolutions, analysisSince } from "../src/analysis/index.js";
 import { Budget } from "../src/util.js";
 import { isPublic, parse, baselineSection, analysisChanges, constitutionBrief } from "../../../functions/_lib/analysis.js";
 
@@ -242,6 +242,29 @@ test("in the database: a flagged draft is fixed and published; a reported one th
   const again = await runResolutions(env, db, new Budget(env, 10 * 60 * 1000), run, { fakes });
   assert.equal(again.more, false);
   assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM analysis_resolutions").get().n, 2);
+});
+
+test("in the database: a flagged draft from before ANALYSIS_SINCE is left as it is", async () => {
+  const sqlite = seeded();
+  sqlite.exec("UPDATE executive_actions SET signed_on = '2026-09-30' WHERE id = 'fr:1'");
+  sqlite.exec("DELETE FROM analysis_flags");
+  const db = d1(sqlite);
+  const fakes = { revise: async () => assert.fail("an order signed before October isn't fixed"), review: async () => assert.fail("nor reviewed again") };
+  await runResolutions(env, db, new Budget(env, 10 * 60 * 1000), run, { fakes });
+  assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM analysis_resolutions").get().n, 0);
+  // With the date moved back, it's picked up.
+  let revised = 0;
+  await runResolutions({ ...env, ANALYSIS_SINCE: "2026-09-01" }, db, new Budget(env, 10 * 60 * 1000), run, {
+    fakes: { revise: async () => (revised++, { draft: card(), trimmed: [], model: "claude-opus-5-5", usage: USAGE }), review: async () => review([]) },
+  });
+  assert.equal(revised, 1);
+});
+
+test("ANALYSIS_SINCE: a date, empty for no limit, anything else the default", () => {
+  assert.equal(analysisSince({}), "2026-10-01");
+  assert.equal(analysisSince({ ANALYSIS_SINCE: "2026-11-01" }), "2026-11-01");
+  assert.equal(analysisSince({ ANALYSIS_SINCE: "" }), "0000-01-01");
+  assert.equal(analysisSince({ ANALYSIS_SINCE: "x'; DROP TABLE bills; --" }), "2026-10-01");
 });
 
 test("in the database: the daily dollar cap stops the step before it starts", async () => {

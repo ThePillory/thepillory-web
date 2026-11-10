@@ -79,6 +79,10 @@ ANALYSIS_STATES = "10"
 # AI-drafted constitutional analysis (src/analysis/). At most this many drafts a
 # day; each costs one Claude API call. Set to "0" to pause drafting.
 ANALYSIS_DAILY_LIMIT = "5"
+# Only bills whose latest final-passage vote, and orders signed, on or after this
+# date are drafted, redrafted or fixed (requests, issue links and reader reports
+# excepted). "" for no limit.
+ANALYSIS_SINCE = "2026-10-01"
 ANALYSIS_MODEL = "claude-sonnet-5-5"
 ANALYSIS_EFFORT = "high"
 # Longer bill texts are cut to this many characters and the draft is marked "limited".
