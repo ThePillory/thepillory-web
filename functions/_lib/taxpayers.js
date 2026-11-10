@@ -100,6 +100,44 @@ function cboSection(c) {
 </section>`;
 }
 
+// What the tables leave out: fixed text, the same for every visitor (docs/taxes.md).
+export const NOT_COUNTED = [
+  "“Income” here is what’s reported on tax returns. It leaves out the growth of stocks and other assets that haven’t been sold, which is where most of the largest fortunes grow, and gains erased for tax purposes when assets pass to heirs at death. Borrowing against assets isn’t income either.",
+  "These tables are federal income tax only. They leave out payroll taxes (paid mostly on wages), corporate income tax (borne partly by shareholders), estate and gift taxes, and state and local sales, gas and property taxes.",
+  "They leave out government benefits received and tax-free employer health and retirement benefits.",
+  "Taxes owed but not paid aren’t in them.",
+];
+
+function notCountedSection() {
+  return `<section class="card stack-sm" id="not-counted">
+  <h2 class="h3">What these numbers don’t count</h2>
+  <ul class="simple-list">${NOT_COUNTED.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
+  <p class="small secondary">Different measures give different rates for the same group. Each table below says what it counts.</p>
+</section>`;
+}
+
+// One estimate that counts unsold gains as income: its figure, its source, its method and the
+// main criticism of that method, of similar length. Not official tax data, and labeled so.
+export const UNSOLD_GAINS = {
+  rate: "8.2%",
+  years: "2010–2018",
+  source_url: "https://bidenwhitehouse.archives.gov/cea/written-materials/2021/09/23/what-is-the-average-federal-individual-income-tax-rate-on-the-wealthiest-americans/",
+  source: "White House Council of Economic Advisers and Office of Management and Budget, 2021",
+  method: "Method: it counts each year’s growth in the value of unsold stocks and other assets as income, and divides federal individual income tax paid by that total.",
+  criticism: "Main criticism: unsold gains can fall, and are taxed when sold or passed on, so counting them as income overstates what goes untaxed.",
+};
+
+function unsoldGainsSection() {
+  const u = UNSOLD_GAINS;
+  return `<section class="card stack-sm" id="unsold-gains">
+  <h2 class="h3">Counting unsold gains: one estimate</h2>
+  <p><span class="chip chip--gray chip--sm">An estimate, not official tax data</span></p>
+  <p>The 400 wealthiest families’ average federal individual income tax rate was ${esc(u.rate)} of their income, counting unsold gains as income, over ${esc(u.years)}, according to a 2021 analysis by the White House Council of Economic Advisers and the Office of Management and Budget.</p>
+  <ul class="simple-list"><li>${esc(u.method)}</li><li>${esc(u.criticism)}</li></ul>
+  <p class="xsmall secondary">These are the families with the most wealth, not the 400 returns with the largest reported incomes above. ${sourceLink(u.source_url, u.source)}</p>
+</section>`;
+}
+
 /** The page's main content. */
 export function taxpayersMain(d, switcher) {
   const head = `<header class="page-head">
@@ -109,8 +147,10 @@ export function taxpayersMain(d, switcher) {
 ${switcher}`;
   if (!d) return `${head}<section class="card"><p class="small secondary">These tables load weekly from the IRS and the Franchise Tax Board. They aren't loaded yet.</p></section>`;
   return `${head}
+${notCountedSection()}
 ${irsSection(d.irs)}
 ${top400Section(d.top400)}
+${unsoldGainsSection()}
 ${cboSection(d.cbo)}
 ${ftbSection(d.ftb)}
 <section class="card stack-sm">

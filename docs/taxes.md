@@ -22,6 +22,16 @@ and the run fails so the failure is seen.
 | All federal taxes, by household income | CBO, *The Distribution of Household Income, 2022* | Linked only. CBO's site refuses requests from GitHub's servers and from this build, so nothing is read |
 | California personal income tax | Franchise Tax Board, table B-4A (residents, all filing statuses), through data.ca.gov's API | The latest year's returns, California AGI and total tax liability. The FTB's AGI classes are added up into 7 bands, and each band's shares are computed from the table's own totals. The page says both |
 
+Two fixed sections, the same for every visitor (`functions/_lib/taxpayers.js`):
+
+- **What these numbers don't count** (`NOT_COUNTED`), right under the intro and before the first table. It covers:
+  - income as reported on returns, which leaves out the growth of unsold assets, gains erased at death, and borrowing against assets;
+  - federal income tax only: no payroll, corporate, estate and gift, or state and local sales, gas and property taxes;
+  - government benefits and tax-free employer health and retirement benefits left out;
+  - taxes owed but not paid left out.
+  It ends with "Different measures give different rates for the same group. Each table below says what it counts."
+- **Counting unsold gains: one estimate** (`UNSOLD_GAINS`), after the IRS tables. It states the 400 wealthiest families' average federal individual income tax rate, 8.2% of income including unsold gains, 2010–2018. The source is the 2021 analysis by the White House Council of Economic Advisers and the Office of Management and Budget, linked at its archived address. The section is labeled "An estimate, not official tax data" and gives one line on the method and one on the main criticism, of similar length (tested). It says these families aren't the IRS's 400 returns above. No person is named.
+
 The old address `/finances/who-pays/` redirects here with a 301 (`functions/finances/[[path]].js`).
 
 ## Corporations (`/taxes/companies/`, `/taxes/companies/<cik>/`)
