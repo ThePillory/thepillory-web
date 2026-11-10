@@ -1,0 +1,22 @@
+# Temporary: rebuild data/taxes/taxpayers.json on this branch with the all-returns average tax rate. Removed after.
+name: Rebuild taxpayers data on branch
+on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [.github/workflows/probe-ai.yml]
+permissions:
+  contents: write
+concurrency:
+  group: data-commit
+  cancel-in-progress: false
+jobs:
+  taxpayers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null && python3 -m pip install -q openpyxl==3.1.5 xlrd==2.0.1
+      - run: python3 tools/test_build_taxpayers.py
+      - run: python3 tools/build_taxpayers.py
+      - run: python3 -c "import json; d=json.load(open('data/taxes/taxpayers.json'))['irs']['all_returns']; print('avg_rate', sorted(d['avg_rate'].items())[-3:]); print('returns', sorted(d['returns'].items())[-2:])"
+      - run: bash tools/commit_data.sh "Refresh who pays taxes from IRS and FTB tables" data/taxes/taxpayers.json
