@@ -456,7 +456,7 @@ export async function runResolutions(env, db, budget, run, { fakes = null } = {}
           `${RESOLVE_SELECT} WHERE a.current = 1 AND a.status = 'ai_draft' AND a.ai_review = 'flag'
              AND NOT EXISTS (SELECT 1 FROM bill_analysis_revisions v WHERE v.analysis_id = a.id AND v.actor != 'pipeline')
              AND NOT EXISTS (SELECT 1 FROM analysis_resolutions z WHERE z.analysis_id = a.id)
-           ORDER BY a.created_at, a.id LIMIT 40`
+           ORDER BY COALESCE(x.signed_on, x.published_on, substr(a.created_at, 1, 10)) DESC, a.id DESC LIMIT 40`
         )
         .all()
     ).results.map((r) => ({ ...r, trigger: "flag" }));
@@ -727,7 +727,7 @@ async function subjectSource(env, db, budget, subject, depth) {
   return depth === "card" ? await cardSource(env, budget, subject, fetched) : fetched;
 }
 
-/** Orders to draft, up to `limit`: requests first, then redrafts after a prompt change, then the newest orders not yet analyzed. */
+/** Orders to draft, up to `limit`: requests first, then redrafts after a prompt change (newest orders first), then the newest orders not yet analyzed. */
 async function nextOrders(db, limit) {
   if (limit <= 0) return [];
   const retry = `NOT EXISTS (SELECT 1 FROM analysis_attempts t WHERE t.bill_id = x.id AND t.last_attempt > datetime('now', '-${RETRY_AFTER_DAYS} days'))`;
@@ -751,7 +751,7 @@ async function nextOrders(db, limit) {
          WHERE a.status = 'ai_draft' AND a.ai_review = 'flag'
            AND COALESCE(a.prompt_version, '') != CASE WHEN a.depth = 'card' THEN ? ELSE ? END
            AND NOT EXISTS (SELECT 1 FROM bill_analysis_revisions v WHERE v.analysis_id = a.id AND v.actor != 'pipeline')
-           AND ${retry} ORDER BY a.id LIMIT ?`
+           AND ${retry} ORDER BY COALESCE(x.signed_on, x.published_on) DESC, x.id DESC LIMIT ?`
       )
       .bind(CARD_PROMPT_VERSION, PROMPT_VERSION, Math.max(0, limit - ids.length))
       .all()
