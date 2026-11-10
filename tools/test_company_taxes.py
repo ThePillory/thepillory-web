@@ -124,6 +124,13 @@ class Organizations(unittest.TestCase):
         self.assertEqual((s["total"], s["count"], s["first"], s["last"], s["source_url"]), (100, 2, "2024", "2024", "https://lda.example/1"))
 
 
+class Largest(unittest.TestCase):
+    def test_by_latest_revenue_only_and_untagged_revenue_left_out(self):
+        cs = [{"cik": 1, "revenue": 50, "taxes_paid": 999}, {"cik": 2, "revenue": 900, "taxes_paid": 0}, {"cik": 3, "revenue": None}, {"cik": 4, "revenue": 900}]
+        self.assertEqual([c["cik"] for c in C.largest(cs, 2)], [2, 4])
+        self.assertEqual([c["cik"] for c in C.largest(cs, 10)], [2, 4, 1])
+
+
 class NameKey(unittest.TestCase):
     def test_the_same_key_as_the_site(self):
         names = ["AMAZON COM INC", "Amazon.com, Inc.", "The Coca-Cola Company", "AT&T INC.", "Procter & Gamble Co", "Exxon Mobil Corporation"]

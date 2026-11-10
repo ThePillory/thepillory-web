@@ -28,6 +28,8 @@ The old address `/finances/who-pays/` redirects here with a 301 (`functions/fina
 
 ### Data
 
+**The 100 largest companies by revenue** (`--top`, 100; 0 loads every company), by each company's revenue in its latest fiscal year with figures. That keeps the weekly run short and the data small. Companies are never chosen or ordered by taxes paid or any rate. A company whose revenue isn't tagged with one of the revenue elements below isn't among them. Banks' `RevenuesNetOfInterestExpense` is included, so large banks qualify. A company that drops out of the 100 is removed with its years, jurisdictions and matches. A person's links in `company_org_links` are kept. The "Taxes paid" line on organization panels shows only for these companies.
+
 D1 (migration 0047), loaded by `tools/build_company_taxes.py` (tested in
 `tools/test_company_taxes.py`) in the weekly "Refresh company taxes" workflow
 (`company-taxes.yml`; `--mode measure` reads and writes nothing).
@@ -47,7 +49,7 @@ Sources:
 | `deferred` | `DeferredIncomeTaxExpenseBenefit` | Deferred income tax expense (benefit) |
 | `pretax` | `IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest`, else `…MinorityInterestAndIncomeLossFromEquityMethodInvestments` (`pretax_tag` records which) | Income (loss) before income taxes, or "…and equity-method investments" for the second element |
 | `pretax_us`, `pretax_foreign` | `…BeforeIncomeTaxesDomestic`, `…BeforeIncomeTaxesForeign` | Income (loss) before income taxes, U.S. / foreign |
-| `revenue` | `Revenues`, `RevenueFromContractWithCustomer…`, `SalesRevenueNet` | Revenue (for the list's order) |
+| `revenue` | `Revenues`, `RevenueFromContractWithCustomer…`, `RevenuesNetOfInterestExpense`, `SalesRevenueNet` | Revenue (chooses the 100, and the list's order) |
 
 How the values are chosen:
 - **Annual values only:** a 10-K's fact for a period of 330 to 400 days, ending in 2019 or later.

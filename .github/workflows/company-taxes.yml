@@ -15,6 +15,9 @@ on:
       mode:
         description: "measure (read, write nothing) or load"
         default: load
+      top:
+        description: "keep the N largest companies by revenue (0: every company)"
+        default: "100"
       max_instances:
         description: "10-K XBRL instances read this run for taxes paid by jurisdiction"
         default: "6000"
@@ -56,7 +59,7 @@ jobs:
           node-version: 22
       - run: python3 -m pip install -q pycountry==24.6.1
       - run: python3 tools/test_company_taxes.py
-      - run: python3 tools/build_company_taxes.py --mode "${{ github.event.inputs.mode || 'load' }}" --max-instances "${{ github.event.inputs.max_instances || '6000' }}"
+      - run: python3 tools/build_company_taxes.py --mode "${{ github.event.inputs.mode || 'load' }}" --max-instances "${{ github.event.inputs.max_instances || '6000' }}" --top "${{ github.event.inputs.top || '100' }}"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
