@@ -10,8 +10,9 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+# One at a time with every other workflow that commits data (tools/commit_data.sh).
 concurrency:
-  group: local-money
+  group: data-commit
   cancel-in-progress: false
 jobs:
   build:
@@ -25,13 +26,7 @@ jobs:
         continue-on-error: true
         run: python3 tools/build_netfile.py
       - name: Commit the data
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/local-money
-          git diff --cached --quiet && exit 0
-          git commit -m "Refresh local campaign money from NetFile"
-          git push
+        run: bash tools/commit_data.sh "Refresh local campaign money from NetFile" data/local-money
       - name: Fail the run if an agency didn't read
         if: steps.read.outcome == 'failure'
         run: exit 1

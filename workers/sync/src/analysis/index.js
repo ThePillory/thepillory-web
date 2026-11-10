@@ -519,7 +519,8 @@ async function resolveRow(env, db, budget, row, fakes = null) {
   const deps = {
     revise: (d, reasons) => {
       budget.take(`resolution ${bill.id}`);
-      return draftAnalysis({ ...env, ANALYSIS_MODEL: resolveModel }, bill, source, depth, { draft: draftForReview(d, depth), reasons });
+      // The same env with the resolution model: Object.create keeps every binding and secret ({ ...env } can drop them).
+      return draftAnalysis(Object.create(env, { ANALYSIS_MODEL: { value: resolveModel, enumerable: true } }), bill, source, depth, { draft: draftForReview(d, depth), reasons });
     },
     check: async (d, trimmed) => {
       const quoteCheck = verifyQuotes(d, PROVISIONS);

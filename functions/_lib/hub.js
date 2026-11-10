@@ -30,7 +30,7 @@ export async function happeningNow(db, level, { limit = 4, officialIds = [] } = 
     SELECT v.*, b.bill_number, b.title AS bill_title, b.summary AS bill_summary
     FROM votes v JOIN bills b ON b.id = v.bill_id
     WHERE v.vote_type = 'final_passage' AND ${voteScope(level).sql} ${withSkip ? skip : ""}
-      AND v.id = (SELECT v2.id FROM votes v2 WHERE v2.bill_id = v.bill_id AND v2.vote_type = 'final_passage'
+      AND v.id = (SELECT v2.id FROM votes v2 WHERE v2.bill_id = v.bill_id AND +v2.vote_type = 'final_passage'
                   ORDER BY v2.vote_date DESC, v2.id DESC LIMIT 1)
     ORDER BY v.vote_date DESC, v.id DESC LIMIT ?`;
   // From bill_list (built during the sync): each bill's latest final-passage

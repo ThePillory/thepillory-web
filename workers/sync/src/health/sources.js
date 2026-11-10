@@ -13,7 +13,8 @@
 //   sample                   records to re-fetch from their source_url: {table, where, url, expect}
 //                            (expect: text the page must still contain)
 //   links                    stored source links to check and archive: {table, url, where}
-//   copies                   documents ThePillory keeps its own copy of (R2): {table, url, where}
+//   copies                   documents ThePillory keeps its own copy of (R2): {table, url, where, pdf}
+//                            (pdf: only the PDF itself is kept, asked for with fileUrl())
 
 export const SOURCES = [
   {
@@ -232,7 +233,8 @@ export const SOURCES = [
     table: "earmark_tables",
     latest: "MAX(read_at)",
     links: { table: "earmark_tables", url: "source_url" },
-    copies: { table: "earmark_tables", url: "source_url" },
+    // pdf: the copy must be the committee's PDF (the loader reads it when the committee's site refuses GitHub).
+    copies: { table: "earmark_tables", url: "source_url", pdf: true },
   },
   {
     id: "gift-travel",

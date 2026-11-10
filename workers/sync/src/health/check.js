@@ -7,7 +7,8 @@
 //           most re-fetched records no longer match what's stored.
 //   yellow  no successful pull in the expected interval; the newest record is older
 //           than expected (Congress: not counted during a recess); rows fell by more
-//           than half against the usual count; refused requests (403); recent rows
+//           than half against the usual count; refused requests (403), a step's or a loading
+//           workflow's (its note in sync_state, source_refused_<id>); recent rows
 //           missing fields they always have; a record that no longer matches; dead links.
 //   unknown not set up yet (no rows and no runs), or nothing to measure.
 
@@ -73,7 +74,8 @@ export function linkGone(status) {
  * One source's status for today, from the facts gathered:
  *   {source, now, setUp, lastOk, everRan, workflow: {conclusion, at} | null,
  *    rows, history: [counts of the last 7 days], latest, nullRows,
- *    stepErrors: [messages], spot: {ok, mismatch, gone, unverifiable}, deadLinks}
+ *    stepErrors: [messages], spot: {ok, mismatch, gone, unverifiable}, deadLinks,
+ *    refused: {day, what: [...]} | null (a loading workflow's note that the source refused it)}
  * → {status, problems: [{level, check, text}]}
  */
 export function evaluate(f) {
@@ -90,6 +92,10 @@ export function evaluate(f) {
   else if (since > s.runDays) add("yellow", "run", `Last successful pull ${f.lastOk.slice(0, 10)}, later than the expected ${s.runDays} day${s.runDays === 1 ? "" : "s"}.`);
   if (f.workflow && f.workflow.conclusion && !["success", "skipped", "neutral"].includes(f.workflow.conclusion)) {
     add("red", "workflow", `The ${s.workflow} workflow's last run ended "${f.workflow.conclusion}" (${String(f.workflow.at || "").slice(0, 10)}).`);
+  }
+  if (f.refused) {
+    const what = (f.refused.what || []).join(", ");
+    add("yellow", "http", `The source refused automated requests (403) on ${f.refused.day}${what ? `: ${what}` : ""}. Pages show the last good load.`);
   }
   for (const m of f.stepErrors || []) {
     if (/\b(404|410)\b/.test(m)) add("red", "http", `A step reports the source is gone: ${m.slice(0, 200)}`);

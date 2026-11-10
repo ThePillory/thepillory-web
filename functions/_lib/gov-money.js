@@ -84,7 +84,7 @@ export async function memberGovMoney(db, officialId) {
                   WHERE r.official_id = ? ORDER BY e.fy DESC, e.amount DESC LIMIT 400`).bind(officialId).all(),
       db.prepare(`SELECT q.*, e.amount AS enacted_amount, e.stage AS enacted_stage FROM earmark_requests q LEFT JOIN earmarks e ON e.id = q.enacted_id
                   WHERE q.official_id = ? ORDER BY q.fy DESC, q.amount_requested DESC LIMIT 400`).bind(officialId).all(),
-      db.prepare("SELECT source_url, fy, stage, subcommittee, status, rows, note FROM earmark_tables ORDER BY fy DESC, subcommittee").all(),
+      db.prepare("SELECT source_url, fy, stage, subcommittee, status, rows, note, read_at FROM earmark_tables ORDER BY fy DESC, subcommittee").all(),
       db.prepare("SELECT * FROM gift_travel WHERE official_id = ? ORDER BY start_date DESC LIMIT 200").bind(officialId).all(),
       db.prepare(`SELECT c.*, g.name AS registrant FROM fara_contacts c LEFT JOIN fara_registrants g ON g.registration_number = c.registration_number
                   WHERE c.official_id = ? ORDER BY c.contact_date DESC LIMIT 200`).bind(officialId).all(),
@@ -99,7 +99,7 @@ export async function memberGovMoney(db, officialId) {
 /** The earmarks in one fiscal year's tables for these subcommittees, largest first, 50 at a time. */
 export async function billEarmarks(db, { fy, subcommittees, state = null, offset = 0, limit = 50 }) {
   try {
-    const tables = (await db.prepare("SELECT source_url, fy, stage, subcommittee, status, rows, note FROM earmark_tables WHERE fy = ? ORDER BY subcommittee").bind(fy).all()).results
+    const tables = (await db.prepare("SELECT source_url, fy, stage, subcommittee, status, rows, note, read_at FROM earmark_tables WHERE fy = ? ORDER BY subcommittee").bind(fy).all()).results
       .filter((t) => !subcommittees.length || subcommittees.includes(t.subcommittee) || (t.stage === "house_committee" && !t.subcommittee));
     if (!tables.length) return { tables, rows: [], total: null, more: false, states: [] };
     const where = [`fy = ?`];
@@ -138,6 +138,12 @@ export async function officialNames(db, ids) {
 // Member: earmarks
 
 const EARMARKS_NOTE = `Earmarks are Community Project Funding (House) and Congressionally Directed Spending (Senate): money in an appropriations bill for a named project, requested by a member of Congress.`;
+
+/** "As of [date]": the newest table read, so a table the committee's site later refuses keeps showing its last good load with that date. */
+export function asOf(tables) {
+  const at = (tables || []).filter((t) => t.status === "read" && t.read_at).map((t) => String(t.read_at)).sort().pop();
+  return at ? `As of ${fmtDate(at)}.` : "";
+}
 
 /** The tables a fiscal year's figures come from, as links. */
 function tableLinks(tables) {
@@ -214,7 +220,7 @@ export function earmarksSection(o, g, { top = 0, href = "" } = {}) {
   <p class="small">Fiscal year ${newest.fy} · ${newest.line}</p>
   <ul class="plain-list money-list">${newest.items.slice(0, top).join("")}</ul>
   ${count > top && href ? seeAllRow(href, count, "earmarks") : ""}
-  <p class="hint">${EARMARKS_NOTE} <a class="tap" href="${HOW}">How this works</a></p>
+  <p class="hint">${asOf(g.tables)} ${EARMARKS_NOTE} <a class="tap" href="${HOW}">How this works</a></p>
 </div>`;
   }
   const groups = years.map(({ fy, line, items, all }, i) => {
@@ -227,7 +233,7 @@ export function earmarksSection(o, g, { top = 0, href = "" } = {}) {
   });
   return `<div class="stack-sm">
   ${groups.join("")}
-  <p class="hint">${EARMARKS_NOTE} Amounts in the tables are as each table lists them: "Enacted" from the Senate Appropriations Committee's table for the enacted law, which lists both chambers' projects; "In the House committee's bill" from the House committee's table of its bills. ${house ? "Amounts requested are from the House Appropriations Committee's tables of members' requests; a request is tied to a table row only when the same member and the same recipient match exactly one row." : "Senators post their requests on their own websites, not in one table, so a senator's amounts here are the tables' amounts."} Where several members asked for the same project, the whole amount is shown for each of them. <a class="tap" href="${HOW}">How this works</a></p>
+  <p class="hint">${asOf(g.tables)} ${EARMARKS_NOTE} Amounts in the tables are as each table lists them: "Enacted" from the Senate Appropriations Committee's table for the enacted law, which lists both chambers' projects; "In the House committee's bill" from the House committee's table of its bills. ${house ? "Amounts requested are from the House Appropriations Committee's tables of members' requests; a request is tied to a table row only when the same member and the same recipient match exactly one row." : "Senators post their requests on their own websites, not in one table, so a senator's amounts here are the tables' amounts."} Where several members asked for the same project, the whole amount is shown for each of them. <a class="tap" href="${HOW}">How this works</a></p>
 </div>`;
 }
 
@@ -320,6 +326,6 @@ export function billEarmarksSection(b, ap, data, names) {
   ${scope}
   <ul class="plain-list money-list">${earmarkRows(data.rows.slice(0, 10), names)}</ul>
   ${n > 10 ? `<p><a class="tap" href="${links}">All ${plural(n, "project")}, by state</a></p>` : ""}
-  <p class="hint">Tables: ${tableLinks(data.tables)}. ${EARMARKS_NOTE} Largest first. <a class="tap" href="${HOW}">How this works</a></p>
+  <p class="hint">Tables: ${tableLinks(data.tables)}. ${asOf(data.tables)} ${EARMARKS_NOTE} Largest first. <a class="tap" href="${HOW}">How this works</a></p>
 </div>`;
 }

@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "70"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "71"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -130,6 +130,7 @@ FOOTER = """<footer class="app-footer" aria-label="About ThePillory">
   <a href="/about/methodology/">Methodology</a>
   <a href="/elections/">Elections</a>
   <a href="/topics/">Topics</a>
+  <a href="/taxes/">Taxes</a>
   <a href="/waitlist/">Bring ThePillory to your county</a>
   <p class="app-footer-domain">thepillory.co</p>
 </footer>"""
@@ -578,6 +579,19 @@ def build_methodology():
     <li><strong>Correctable.</strong> A person can correct any item's topics on the review page. The old tags stay in the item's history, the new ones show the person's name, and the AI doesn't tag that item again. A Platform excerpt is tagged again when its text changes.</li>
     <li><strong>Funding by topic</strong> uses a fixed table from the campaign-funding industries to topics: {industry_map}. Other industries (lawyers and lobbyists, issue groups, leadership PACs, government, media, tribal governments, and money not classified) aren't tied to a topic, and topics without a related industry show no money. Industries are approximate (keyword rules on names, see Campaign funding), and an industry tied to a topic says nothing about what a contribution was for. Members of Congress: contributions in the current two-year period from PACs and donors' employers (FEC). California officials: their latest two-year period's itemized contributions (Cal-Access).</li>
     <li><strong>For a place,</strong> a topic page lists the latest bills on the topic with a final-passage vote and how each of the county's representatives voted (every district that overlaps the county, so a county split between districts shows each), county meeting items for live communities, the President's and the Governor's executive actions, excerpts from the officials' own pages, and the money above.</li>
+  </ul>
+</section>
+
+<section class="card stack" id="company-taxes">
+  <h2>Taxes</h2>
+  <p>The <a href="/taxes/">Taxes</a> section shows who pays taxes and what companies report paying, <strong>as published</strong>, without conclusions about either.</p>
+  <ul class="plain-list small">
+    <li><strong>Taxpayers.</strong> The IRS's Statistics of Income tables of individual income tax returns by income percentile: the number of returns, the adjusted gross income (AGI) it takes to be in each group, and each group's share of all AGI and of all federal income tax, as the IRS computes them. The IRS's series on the 400 returns with the largest AGI ran from 1992 to 2014; since then it publishes the top 0.001 percent instead. California's figures are the Franchise Tax Board's table B-4A (residents, all filing statuses); ThePillory adds its income classes up into a few bands and computes each band's share from the table's own figures. The Congressional Budget Office's estimates of all federal taxes by household income are linked: CBO's site refuses requests from the servers that build ThePillory's data.</li>
+    <li><strong>Corporations.</strong> For every company that files a 10-K with the SEC and tags these values in the XBRL data of its financial statements (EDGAR company facts): income taxes paid, net of refunds; the federal, state and local, and foreign parts, and each jurisdiction of 5 percent or more, where the 10-K files them (required from fiscal 2025, ASU 2023-09); current federal and state income tax expense; deferred income tax expense; and income before income taxes (U.S. and foreign where reported), by fiscal year since 2019. Each amount links to the 10-K it comes from; a later 10-K's restated figure replaces the original. A value the filing doesn't tag is shown as not reported, never estimated, and companies' own (extension) elements aren't used.</li>
+    <li><strong>Reading the figures.</strong> Taxes paid is cash paid in the year, after refunds; tax expense is what the income statement records, and the two differ with timing, refunds and deferred taxes. Losses carried forward, credits and deductions set by law can lower the taxes paid in a year, and foreign taxes are paid to other countries.</li>
+    <li><strong>No rankings.</strong> The company list is ordered by name, revenue or pretax income only, never by taxes paid or by any rate, and no company is labeled or colored by them. Every company has the same layout.</li>
+    <li><strong>The same organization elsewhere.</strong> A company's page lists what ThePillory already has under its exact name (or an organization a person has linked to it, one company per name): its political action committee's contributions, lobbying reports, contributions reported by lobbying organizations, California lobbying and California ballot measure money, and a link to its federal awards. On donor, lobbying and ballot-measure organization lines, a matched company shows one line: its latest year's taxes paid and pretax income. They're side by side as facts; nothing connects them.</li>
+    <li><strong>Sources:</strong> the IRS's Statistics of Income Division, the California Franchise Tax Board (data.ca.gov), the Congressional Budget Office, and the SEC's EDGAR, read weekly.</li>
   </ul>
 </section>
 

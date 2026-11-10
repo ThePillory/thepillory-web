@@ -111,7 +111,7 @@ async function workflowRuns(env, budget, file) {
 // The daily check
 
 async function facts(env, db, budget, s, now) {
-  const f = { source: s, now, everRan: false, lastOk: null, workflow: null, rows: null, latest: null, history: [], nullRows: 0, stepErrors: [], spot: {}, deadLinks: 0, notes: [] };
+  const f = { source: s, now, everRan: false, lastOk: null, workflow: null, rows: null, latest: null, history: [], nullRows: 0, stepErrors: [], spot: {}, deadLinks: 0, notes: [], refused: null };
   if (s.steps && s.steps.length) {
     const r = await first(db, `SELECT MAX(CASE WHEN status IN ('ok', 'partial') THEN finished_at END) AS ok, COUNT(*) AS n FROM sync_log WHERE step IN (${ph(s.steps)})`, ...s.steps);
     f.everRan = !!(r && r.n);
@@ -143,6 +143,15 @@ async function facts(env, db, budget, s, now) {
     if (s.nulls && s.nulls.length && f.rows) {
       const n = await first(db, `SELECT COUNT(*) AS n FROM (SELECT ${s.nulls.join(", ")} FROM ${s.table}${s.where ? ` WHERE ${s.where}` : ""} ORDER BY rowid DESC LIMIT 50) WHERE ${s.nulls.map((c) => `${c} IS NULL OR ${c} = ''`).join(" OR ")}`);
       f.nullRows = n ? n.n : 0;
+    }
+  }
+  // A loading workflow's note that the source refused it (tools/load_gov_money.py), cleared by its next full read.
+  const refused = await first(db, "SELECT value FROM sync_state WHERE key = ?", `source_refused_${s.id}`);
+  if (refused) {
+    try {
+      f.refused = JSON.parse(refused.value);
+    } catch {
+      f.refused = { day: "", what: [] };
     }
   }
   f.history = (await all(db, "SELECT rows FROM source_health WHERE source = ? AND day < ? AND rows IS NOT NULL ORDER BY day DESC LIMIT 7", s.id, day())).map((r) => r.rows);
@@ -259,14 +268,15 @@ async function pending(db, kind, perSource) {
     const known = new Map();
     for (let i = 0; i < urls.length; i += 80) {
       const part = urls.slice(i, i + 80);
-      for (const r of await all(db, `SELECT url, archive_url, archive_tries, copy_key, copy_tries FROM source_links WHERE url IN (${ph(part)})`, ...part)) known.set(r.url, r);
+      for (const r of await all(db, `SELECT url, archive_url, archive_tries, copy_key, copy_type, copy_tries FROM source_links WHERE url IN (${ph(part)})`, ...part)) known.set(r.url, r);
     }
     const todo = urls.filter((u) => {
       const k = known.get(u);
-      if (kind === "copy") return !k || (!k.copy_key && (k.copy_tries || 0) < 3);
+      // A PDF-only source's earlier copy that isn't the PDF (a landing page) is fetched again.
+      if (kind === "copy") return !k || ((!k.copy_key || (spec(s).pdf && k.copy_type !== "application/pdf")) && (k.copy_tries || 0) < 3);
       return !k || (!k.archive_url && (k.archive_tries || 0) < 3);
     });
-    lists.push(todo.slice(0, perSource).map((u) => ({ url: u, source: s.id })));
+    lists.push(todo.slice(0, perSource).map((u) => ({ url: u, source: s.id, pdf: !!(kind === "copy" && spec(s).pdf) })));
   }
   const out = [];
   for (let i = 0; lists.some((l) => l[i]); i++) for (const l of lists) if (l[i]) out.push(l[i]);
@@ -321,6 +331,12 @@ async function sha256(s) {
   return [...b].map((x) => x.toString(16).padStart(2, "0")).join("");
 }
 
+/** The address that answers with the document itself: the Senate Appropriations Committee's /download/ links
+ * answer with a page unless asked for the file (the same "&download=1" tools/load_gov_money.py sends). Pure. */
+export function fileUrl(url) {
+  return /^https:\/\/www\.appropriations\.senate\.gov\/download\//.test(url) && !/download=1/.test(url) ? `${url}&download=1` : url;
+}
+
 const EXT = { "application/pdf": ".pdf", "text/html": ".html", "application/xml": ".xml", "text/xml": ".xml", "application/json": ".json", "text/plain": ".txt" };
 
 export async function syncSourceCopies(env, db, budget) {
@@ -335,7 +351,7 @@ export async function syncSourceCopies(env, db, budget) {
   let saved = 0;
   let skipped = 0;
   let bytes = 0;
-  for (const { url, source } of todo) {
+  for (const { url, source, pdf } of todo) {
     if (done >= cap) break;
     if (budget.remaining() < 10 || budget.timeLeft() < 60000) return { status: "partial", message: `stopped at the round's budget: ${saved} saved` };
     done += 1;
@@ -344,7 +360,7 @@ export async function syncSourceCopies(env, db, budget) {
     const prev = await first(db, "SELECT copy_tries FROM source_links WHERE url = ?", url);
     const fail = () => upsertLink(db, url, source, { copy_tries: ((prev && prev.copy_tries) || 0) + 1 });
     try {
-      const res = await (budget.fetchImpl || fetch)(url, { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(60000) });
+      const res = await (budget.fetchImpl || fetch)(pdf ? fileUrl(url) : url, { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(60000) });
       const size = parseInt(res.headers.get("content-length") || "0", 10);
       if (!res.ok || size > maxBytes) {
         if (res.body && res.body.cancel) await res.body.cancel().catch(() => {});
@@ -359,6 +375,12 @@ export async function syncSourceCopies(env, db, budget) {
         continue;
       }
       const type = (res.headers.get("content-type") || "application/octet-stream").split(";")[0].trim();
+      // The file or nothing: a page in its place isn't a copy of the document.
+      if (pdf && (type !== "application/pdf" || new TextDecoder().decode(new Uint8Array(body, 0, 4)) !== "%PDF")) {
+        skipped += 1;
+        await fail();
+        continue;
+      }
       const k = `sources/${await sha256(url)}${EXT[type] || ""}`;
       const at = new Date().toISOString();
       await env.SOURCES.put(k, body, { httpMetadata: { contentType: type }, customMetadata: { source_url: url, downloaded_at: at } });

@@ -28,6 +28,7 @@ pdftotext and openpyxl.
 """
 import argparse
 import datetime
+import hashlib
 import http.cookiejar
 import io
 import json
@@ -74,15 +75,29 @@ _jar = http.cookiejar.CookieJar()
 _open = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(_jar)).open
 
 
+class Refused(urllib.error.URLError):
+    """A site answered 403: it refuses automated requests (from here). Not retried, and its host isn't asked again this run.
+    A URLError, so a caller that already handles one keeps working."""
+
+
+REFUSED = set()  # hosts that answered 403 this run
+
+
 def get(url, data=None, headers=None, timeout=300, waits=(5, 20)):
-    """GET (or POST) with retries on server errors, 429 and 403 (some sites refuse a burst for a while)."""
+    """GET (or POST) with retries on server errors and 429. A 403 is a refusal, not a slow server: Refused at once."""
+    host = urllib.parse.urlsplit(url).hostname
+    if host in REFUSED:
+        raise Refused(f"{host} refused automated requests (403) earlier this run")
     h = {"User-Agent": UA, **(headers or {})}
     for wait in (*waits, None):
         try:
             with _open(urllib.request.Request(url, data=data, headers=h), timeout=timeout) as r:
                 return r.read()
         except (urllib.error.URLError, TimeoutError) as e:
-            if wait is None or (isinstance(e, urllib.error.HTTPError) and e.code < 500 and e.code not in (403, 429)):
+            if isinstance(e, urllib.error.HTTPError) and e.code == 403:
+                REFUSED.add(host)
+                raise Refused(f"{host} refused automated requests (403)") from e
+            if wait is None or (isinstance(e, urllib.error.HTTPError) and e.code < 500 and e.code != 429):
                 raise
             time.sleep(wait)
 
@@ -216,26 +231,73 @@ def tie_requests(requests, tables):
     return tied
 
 
+SAVED = "https://thepillory.co/saved/"
+
+
+def saved_copy(url):
+    """The committee's own file as ThePillory's sync Worker downloaded it (the source-copies step, R2), when the
+    committee's site refuses requests from here: the same bytes, served at /saved/<sha256 of the URL>.pdf."""
+    name = hashlib.sha256(url.encode()).hexdigest() + ".pdf"
+    try:
+        data = get(SAVED + name, waits=(10,))
+    except (urllib.error.URLError, Refused):
+        return None
+    return data if data[:4] == b"%PDF" else None
+
+
+def stored_rows(args, urls):
+    """Rows already in D1 for tables not read this run, in the shape who() gives, so requests still tie to them."""
+    if not urls:
+        return []
+    out = {}
+    q = ", ".join(lit(u) for u in urls)
+    for r in d1(args, command=f"SELECT e.id, e.fy, e.recipient, e.project, x.chamber, x.name, x.official_id FROM earmarks e "
+                              f"LEFT JOIN earmark_requesters x ON x.earmark_id = e.id WHERE e.source_url IN ({q})"):
+        row = out.setdefault(r["id"], {"id": r["id"], "fy": r["fy"], "recipient": r["recipient"], "project": r["project"] or "", "_who": []})
+        if r.get("chamber"):
+            row["_who"].append((r["chamber"], r["name"], r["official_id"]))
+    return list(out.values())
+
+
+def refused_note(args, what):
+    args.refused.append(what)
+    say(f"  {what}: refused (403); the rows already loaded stay as they are")
+
+
 def earmarks(args):
     m = members(args)
     sql, tables = [], []
+    kept = []  # tables not read this run: their stored rows still count for tying requests
     this_fy = datetime.date.today().year + (1 if datetime.date.today().month >= 10 else 0)
     for fy in range(2024, this_fy + 2):
         try:
             found = senate_tables(fy)
+        except Refused:
+            refused_note(args, f"Senate FY{fy} page")
+            continue
         except urllib.error.URLError as e:
             say(f"  FY{fy}: the Senate committee's page wasn't fetched ({getattr(e, 'code', e)})")
             args.failed.append(f"Senate FY{fy} page")
             continue
         for sub, url in sorted(found.items()):
-            time.sleep(3)
+            via = ""
             try:
                 data = get(url + "&download=1", waits=(30, 90))
+                time.sleep(3)
+            except Refused:
+                data = saved_copy(url)
+                if data is None:
+                    refused_note(args, f"Senate FY{fy} {sub}")
+                    kept.append(url)
+                    continue
+                via = " (from ThePillory's saved copy of the committee's file)"
             except urllib.error.URLError as e:
                 say(f"  FY{fy} {sub}: not fetched ({getattr(e, 'code', e)})")
                 args.failed.append(f"Senate FY{fy} {sub}")
+                kept.append(url)
                 continue
             if data[:4] != b"%PDF":
+                kept.append(url)
                 continue
             try:
                 rows = G.parse_table(pdf_text(data), fy, sub, url)
@@ -245,10 +307,15 @@ def earmarks(args):
                 continue
             unmatched = who(rows, m)
             tables += rows
-            say(f"  FY{fy} {sub} (enacted): {len(rows)} projects, ${sum(r['amount'] for r in rows):,.0f}; requesters not matched: {len(unmatched)} {sorted(unmatched)[:8]}")
+            say(f"  FY{fy} {sub} (enacted){via}: {len(rows)} projects, ${sum(r['amount'] for r in rows):,.0f}; requesters not matched: {len(unmatched)} {sorted(unmatched)[:8]}")
             sql += table_sql(url, fy, "enacted", sub, "read", rows)
     for fy, url in HOUSE_AWARDS.items():
-        rows = G.house_awards(xlsx_rows(get(url), "requestor"), fy, url)
+        try:
+            rows = G.house_awards(xlsx_rows(get(url), "requestor"), fy, url)
+        except Refused:
+            refused_note(args, f"House FY{fy} committee table")
+            kept.append(url)
+            continue
         unmatched = who(rows, m)
         tables += rows
         say(f"  FY{fy} House committee bills: {len(rows)} projects, ${sum(r['amount'] for r in rows):,.0f}; requesters not matched: {len(unmatched)} {sorted(unmatched)[:8]}")
@@ -257,6 +324,9 @@ def earmarks(args):
     for fy, url in HOUSE_REQUESTS.items():
         try:
             rows = G.house_requests(xlsx_rows(get(url), "last"), fy, url)
+        except Refused:
+            refused_note(args, f"House FY{fy} requests")
+            continue
         except urllib.error.HTTPError as e:
             say(f"  FY{fy} House requests: not fetched ({e.code})")
             continue
@@ -269,9 +339,19 @@ def earmarks(args):
         requests += rows
         say(f"  FY{fy} House requests: {len(rows)} requests, ${sum(q['amount_requested'] for q in rows):,.0f}; members not matched: {len(miss)} {sorted(miss)[:8]}")
         sql.append(f"DELETE FROM earmark_requests WHERE source_url = {lit(url)};")
-    tied = tie_requests(requests, tables)
+    # A request ties to a table row only with every table in view: the ones read now and, for any not read
+    # this run, the rows already stored from them (otherwise a refused table would undo the ties).
+    tied = tie_requests(requests, tables + stored_rows(args, kept))
     say(f"Requests tied to one table row: {tied} of {len(requests)}")
     sql += inserts("earmark_requests", REQUEST_COLS, requests)
+    if args.refused:
+        say("earmarks: source refused automated requests (403)")
+    if args.mode == "load":
+        # Read by source health (src/health/): earmarks show yellow on /admin/health/ and in the alert email
+        # while the committees refuse; cleared by the next run that reads everything.
+        note = json.dumps({"day": datetime.date.today().isoformat(), "what": args.refused}) if args.refused else None
+        sql.append("DELETE FROM sync_state WHERE key = 'source_refused_earmarks';" if note is None else
+                   f"INSERT OR REPLACE INTO sync_state (key, value) VALUES ('source_refused_earmarks', {lit(note)});")
     return sql
 
 
@@ -565,6 +645,7 @@ def main():
     ap.add_argument("--database", default="pillory")
     args = ap.parse_args()
     args.failed = []
+    args.refused = []
     if args.mode == "load":
         ensure_tables(args)
     sql = {"earmarks": earmarks, "travel": travel, "fara": fara, "awards": awards}[args.what](args)
@@ -573,7 +654,8 @@ def main():
         run_sql(args, sql)
         say("Written to D1")
     if args.failed:
-        # Everything else is written; the run shows red so a source that refused us isn't missed.
+        # Everything else is written; the run shows red so a source that failed isn't missed. A 403 (a site
+        # refusing automated requests) isn't a failure of the run: it's logged and source health shows it yellow.
         raise SystemExit(f"Not fetched: {', '.join(args.failed)}")
 
 

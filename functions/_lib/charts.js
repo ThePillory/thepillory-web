@@ -117,3 +117,39 @@ export function rangeBands(points, { format = (n) => String(n), scale = format, 
     .join("")}</tbody></table></details>
 </figure>`;
 }
+
+/**
+ * Two series side by side, one pair of bars per period, on one scale (for example
+ * taxes paid and pretax income by fiscal year). `series`: [labelA, labelB];
+ * `points`: [{label, tick, a, b, hrefA, hrefB}], a value null when not reported
+ * (no bar, "Not reported" in the table). Negative values hang under the line in
+ * gray, as in miniBars. With a legend and a "Show the numbers" table whose values
+ * link to their sources. Returns "" with fewer than two periods that have a value.
+ */
+export function pairBars(points, { series, format = (n) => String(n), caption = "", ariaLabel = "", head = "Period" } = {}) {
+  const pts = points.filter((p) => num(p.a) != null || num(p.b) != null);
+  if (pts.length < 2) return "";
+  const vals = pts.flatMap((p) => [num(p.a), num(p.b)]).filter((v) => v != null);
+  const maxPos = Math.max(0, ...vals);
+  const maxNeg = Math.max(0, ...vals.map((v) => -v));
+  const range = maxPos + maxNeg;
+  if (!(range > 0)) return "";
+  const up = (maxPos / range) * 100;
+  const bar = (v, cls) => {
+    const n = num(v);
+    return `<em class="${cls}"><b style="height:${up.toFixed(2)}%">${n > 0 ? `<i style="height:${width(n, maxPos)}"></i>` : ""}</b><b class="is-below" style="height:${(100 - up).toFixed(2)}%">${n < 0 ? `<i class="is-neg" style="height:${width(-n, maxNeg)}"></i>` : ""}</b></em>`;
+  };
+  const say = (v) => (num(v) == null ? "Not reported" : format(v));
+  const cell = (v, href) => (num(v) != null && href ? `<a class="inline-link" href="${esc(href)}" target="_blank" rel="noopener">${esc(say(v))}</a>` : esc(say(v)));
+  return `<figure class="mini-bars pair-bars">
+  <ul class="breakdown-legend pair-legend"><li><span class="dot c1" aria-hidden="true"></span><span class="bl-name">${esc(series[0])}</span></li><li><span class="dot c3" aria-hidden="true"></span><span class="bl-name">${esc(series[1])}</span></li></ul>
+  <div class="mini-bars-plot pair-bars-plot${maxNeg && maxPos ? " has-zero" : ""}" role="img" aria-label="${esc(ariaLabel || caption)}">${pts
+    .map((p) => `<span title="${esc(p.label)}: ${esc(series[0])} ${esc(say(p.a))}; ${esc(series[1])} ${esc(say(p.b))}">${bar(p.a, "pb-a")}${bar(p.b, "pb-b")}</span>`)
+    .join("")}</div>
+  <div class="mini-bars-axis" aria-hidden="true">${pts.map((p) => `<span>${esc(p.tick ?? "")}</span>`).join("")}</div>
+  ${caption ? `<figcaption class="xsmall secondary">${caption}</figcaption>` : ""}
+  <details class="mini-bars-table"><summary>Show the numbers</summary><table><thead><tr><th scope="col">${esc(head)}</th><th scope="col">${esc(series[0])}</th><th scope="col">${esc(series[1])}</th></tr></thead><tbody>${pts
+    .map((p) => `<tr><th scope="row">${esc(p.label)}</th><td>${cell(p.a, p.hrefA)}</td><td>${cell(p.b, p.hrefB)}</td></tr>`)
+    .join("")}</tbody></table></details>
+</figure>`;
+}

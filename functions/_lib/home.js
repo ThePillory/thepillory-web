@@ -14,7 +14,7 @@
 //      Governor; then the House member and state legislators once districts are
 //      known, or the address/ZIP box (functions/_lib/quick-home.js)
 //   5. This week: one feed with a Congress / [State] switch, five items, See all
-//   6. The nation: President & Cabinet, Congress, Supreme Court, one row each
+//   6. The nation: President & Cabinet, Congress, Supreme Court, Taxes, one row each
 //   7. Topics: one row of chips
 //   8. Elections: one line
 // then one line for whatever isn't loaded for the state yet ("Coming to [State]:
@@ -169,6 +169,7 @@ function nationSection(vs) {
     ${linkRow("/bodies/us-executive/", "President & Cabinet", "The President, the Vice President and the Cabinet")}
     ${linkRow(vs ? `/reps/?state=${vs.st}` : "/reps/?browse=federal", "Congress", vs ? `The Senate and the House, ${vs.name}'s members first` : "The Senate and the House, every member")}
     ${linkRow("/bodies/us-supreme-court/", "Supreme Court", "The justices, this term's cases and decisions")}
+    ${linkRow("/taxes/", "Taxes", "Who pays income taxes, and what companies report paying")}
   </div>
 </section>`;
 }
