@@ -1,0 +1,23 @@
+# Temporary: run the California Constitution builder on this branch, write nothing back. Removed after.
+name: Probe CA constitution build
+on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [.github/workflows/probe-ai.yml]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python3 tools/build_ca_constitution.py | grep -v "^  Article"
+          git diff --stat data/ca-constitution.json
+          python3 -c "
+          import json
+          d = json.load(open('data/ca-constitution.json'))['provisions']
+          print(len([r for r in d if r['kind']=='section']), 'sections')
+          for r in d:
+              if r.get('pending'): print('PENDING', r['id'], '|', r['pending']['history'][:90])
+          "
