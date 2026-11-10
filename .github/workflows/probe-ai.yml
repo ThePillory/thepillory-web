@@ -1,17 +1,26 @@
-# Temporary read-only probe: the Federal Reserve's Distributional Financial Accounts downloads. Removed after.
-name: Probe DFA downloads
+# Temporary: build data/taxes/wealth.json on this branch once. Removed after.
+name: Build wealth data on branch
 on:
   push:
     branches: [claude/pillory-mobile-screens-p5zekn]
     paths: [.github/workflows/probe-ai.yml]
 permissions:
-  contents: read
+  contents: write
+concurrency:
+  group: data-commit
+  cancel-in-progress: false
 jobs:
-  probe:
+  wealth:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          curl -sS -A "Mozilla/5.0 (compatible; ThePillory data build)" -o /tmp/f.zip https://www.federalreserve.gov/releases/z1/dataviz/download/zips/dfa.zip
-          mkdir -p /tmp/z && cd /tmp/z && unzip -o -q /tmp/f.zip
-          cat dfa-data-definitions.txt; echo; cat dfa-general-levels-detail-dictionary.txt | head -40; echo
-          for f in dfa-networth-levels.csv dfa-networth-shares.csv dfa-networth-levels-detail.csv; do echo "--- $f"; head -1 "$f"; cut -d, -f2 "$f" | sort | uniq -c; tail -6 "$f" | cut -c1-300; done
+      - uses: actions/checkout@v4
+      - run: python3 tools/test_build_wealth.py
+      - run: python3 tools/build_wealth.py
+      - run: python3 -c "import json; d=json.load(open('data/taxes/wealth.json')); print(d['latest']); [print(g) for g in d['groups']]"
+      - run: head -1 /dev/null; python3 - <<'PY'
+          import io, zipfile, urllib.request
+          z = zipfile.ZipFile(io.BytesIO(urllib.request.urlopen(urllib.request.Request("https://www.federalreserve.gov/releases/z1/dataviz/download/zips/dfa.zip", headers={"User-Agent": "Mozilla/5.0"})).read()))
+          n = [x for x in z.namelist() if x.endswith("dfa-networth-levels-detail.csv")][0]
+          print(z.read(n).decode().splitlines()[0])
+          PY
+      - run: bash tools/commit_data.sh "Build who holds household wealth from the Federal Reserve's accounts" data/taxes/wealth.json
