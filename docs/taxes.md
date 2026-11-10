@@ -1,9 +1,9 @@
 # Taxes
 
-`/taxes/`: who pays taxes, and what companies report paying. It has no tab of its
+`/taxes/`: who pays taxes, who holds household wealth, and what companies report paying. It has no tab of its
 own. It's linked from the nation section on Home and every state's page, the Laws
 tab, the Taxes and Budget topic page and the footer. `/taxes/` opens Taxpayers, and
-a Taxpayers | Corporations switch (like Laws') sits at the top of both.
+a Taxpayers | Wealth | Corporations switch (like Laws') sits at the top of each.
 
 Everything is shown as the agency or the company published it, without conclusions.
 
@@ -43,6 +43,29 @@ Two fixed sections, the same for every visitor (`functions/_lib/taxpayers.js`):
 For each: returns, share of income, share of tax, and average tax rate. The average tax rate is share of tax ÷ share of income × the IRS's average rate for all returns that year; with no all-returns rate loaded it says "Not published", never a guess. One line under the table: "Each row is a separate group; the rows add up to all returns." A test checks that the slices' shares add to 100% within rounding for every year. The IRS's own groups stay under "Show the IRS's groups", a fold below the card, with a note that each includes the ones above it.
 
 The old address `/finances/who-pays/` redirects here with a 301 (`functions/finances/[[path]].js`).
+
+## Wealth (`/taxes/wealth/`)
+
+`data/taxes/wealth.json`, built by `tools/build_wealth.py` (tested in `tools/test_build_wealth.py`) in the same weekly job as Taxpayers. It's read from the Federal Reserve's Distributional Financial Accounts download (`dfa.zip`):
+- `dfa-networth-shares.csv`: each group's share of all household net worth, as the Fed computes it, every quarter since 1989.
+- `dfa-networth-levels-detail.csv`: each group's net worth and household count.
+
+The five groups are the Fed's own, by net worth, and they don't overlap:
+- Top 0.1%
+- Next 0.9% (rest of the top 1%)
+- Top 1–10%
+- Top 10–50%
+- Bottom 50%
+
+A run that doesn't read cleanly keeps the last good file and fails the job. That covers: not five groups, the shares not adding to about 100, fewer than 100 quarters, or the household column missing.
+
+The page (`functions/_lib/wealth.js`, `wealthMain()`), the same for every visitor:
+1. **What this counts** (`COUNTS`). Net worth is what households own minus what they owe. Unsold gains are included; future Social Security benefits aren't. A line says the same household can be in a different group here than in the income tables.
+2. **The table** (`wealthRows()`). For the latest quarter: households, share of wealth (the Fed's) and average net worth (net worth ÷ households); each group's share of households is in its name, so it isn't a column, with a Total row and the line "Each row is a separate group; the rows add up to all households."
+3. **Share of wealth over time.** The top 1% (top 0.1% plus the next 0.9%) and the bottom 50%, the last quarter of each year, with "Show the numbers". These are the same two groups the income charts show.
+4. **Another measure.** The Fed's Survey of Consumer Finances, linked, which measures differently.
+
+Wording: no "gap", "inequality", "richest" or "poorest", and no rankings of people. These are tested with the other wording rules in `workers/sync/test/taxes.test.mjs`, which also check that each quarter's shares add to 100%.
 
 ## Corporations (`/taxes/companies/`, `/taxes/companies/<cik>/`)
 

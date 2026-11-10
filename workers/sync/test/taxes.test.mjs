@@ -11,7 +11,8 @@ import { DatabaseSync } from "node:sqlite";
 import { readFileSync } from "node:fs";
 import { onRequestGet as taxesRoute } from "../../../functions/taxes/[[path]].js";
 import { onRequestGet as financesRoute } from "../../../functions/finances/[[path]].js";
-import { loadCompany, companyMain, listCompanies, listFilters, listHref, SORTS, READING, taxMarker, markersIn, taxInfo, fillTaxLines, filingUrl, fiscalYear } from "../../../functions/_lib/taxes.js";
+import { loadCompany, companyMain, listCompanies, listFilters, listHref, SORTS, READING, taxMarker, markersIn, taxInfo, fillTaxLines, filingUrl, fiscalYear, taxesSwitch } from "../../../functions/_lib/taxes.js";
+import { wealthMain, wealthRows, COUNTS } from "../../../functions/_lib/wealth.js";
 import { taxpayersMain, shortCount, shortDollars, NOT_COUNTED, UNSOLD_GAINS, irsSlices } from "../../../functions/_lib/taxpayers.js";
 import { checkQuery } from "../../../functions/_lib/crawl.js";
 
@@ -121,7 +122,7 @@ test("the pages: /taxes/ opens Taxpayers, the switch, the list, a company, and t
   assert.equal(root.status, 302);
   assert.equal(root.headers.get("location"), "https://thepillory.test/taxes/taxpayers/");
   const list = await (await call(taxesRoute, "/taxes/companies/?sort=revenue", env)).text();
-  assert.match(list, /<nav class="segmented list-switch" aria-label="Show"><a class="toggle" href="\/taxes\/taxpayers\/">Taxpayers<\/a><a class="toggle" href="\/taxes\/companies\/" aria-current="true">Corporations<\/a><\/nav>/);
+  assert.match(list, /<nav class="segmented list-switch" aria-label="Show"><a class="toggle" href="\/taxes\/taxpayers\/">Taxpayers<\/a><a class="toggle" href="\/taxes\/wealth\/">Wealth<\/a><a class="toggle" href="\/taxes\/companies\/" aria-current="true">Corporations<\/a><\/nav>/);
   assert.match(list, /Example Retail Inc <span class="secondary">\(EXR\)<\/span>/);
   assert.match(list, /<option value="revenue" selected>Revenue<\/option>/);
   assert.doesNotMatch(list, /<option value="taxes_paid"/);
@@ -201,6 +202,34 @@ test("Taxpayers: the IRS's overlapping groups as separate slices that add up to 
   assert.ok(irsSlices({ groups: irs.groups }, 2023).rows.every((r) => r.avg_rate === null));
 });
 
+test("Wealth: the Fed's separate groups add up to all households and all wealth, with what's counted first", () => {
+  const d = JSON.parse(readFileSync(new URL("../../../data/taxes/wealth.json", import.meta.url), "utf8"));
+  const { rows, total } = wealthRows(d);
+  assert.deepEqual(rows.map((r) => r.label), ["Top 0.1%", "Next 0.9% (rest of the top 1%)", "Top 1–10%", "Top 10–50%", "Bottom 50%"]);
+  // The Fed's shares of wealth add to 100% (it rounds each), and so do the shares of households.
+  assert.ok(Math.abs(total.share - 100) <= 0.5, `wealth shares add to ${total.share}`);
+  assert.ok(Math.abs(total.household_share - 100) < 1e-9);
+  for (const r of rows) assert.ok(r.households > 0 && r.average > 0, r.label);
+  // Every quarter's shares add to 100% too.
+  for (const q of d.series) {
+    const sum = Object.values(q.shares).reduce((t, v) => t + v, 0);
+    assert.ok(Math.abs(sum - 100) <= 0.5, `${q.quarter}: ${sum}`);
+  }
+  const html = wealthMain(d, taxesSwitch("wealth"));
+  const at = (id) => html.indexOf(`id="${id}"`);
+  assert.ok(at("what-counts") > 0 && at("what-counts") < at("groups") && at("groups") < at("over-time") && at("over-time") < at("scf"));
+  const text = html.replace(/<[^>]+>/g, " ").replace(/&#x27;|&#39;/g, "'");
+  for (const t of COUNTS) assert.ok(text.includes(t), t.slice(0, 40));
+  assert.match(text, /Not counted: future Social Security benefits\./);
+  assert.match(text, /Each row is a separate group; the rows add up to all households\./);
+  assert.match(text, /Survey of Consumer Finances/);
+  assert.match(html, /<th scope="col">Group<\/th><th scope="col">Households<\/th><th scope="col">Share of wealth<\/th><th scope="col">Average net worth<\/th>/);
+  assert.match(html, /<a class="toggle" href="\/taxes\/wealth\/" aria-current="true">Wealth<\/a>/);
+  assert.match(wealthMain(null, ""), /aren't loaded yet/);
+  // Plain, neutral wording: no "gap", "inequality" or "richest" on the page.
+  assert.doesNotMatch(text, /\b(?:gap|inequalit\w*|richest|poorest)\b/i);
+});
+
 test("Taxpayers: large numbers written short", () => {
   assert.equal(shortCount(77_012_345), "77.0M");
   assert.equal(shortCount(1534), "1,534");
@@ -243,13 +272,14 @@ test("wording rules: no loaded words, no rankings by taxes or rate, on any of th
     companyMain(await loadCompany(db(), 2)),
     await (await call(taxesRoute, "/taxes/companies/", { DB: db() })).text(),
     taxpayersMain(JSON.parse(readFileSync(new URL("../../../data/taxes/taxpayers.json", import.meta.url), "utf8")), ""),
+    wealthMain(JSON.parse(readFileSync(new URL("../../../data/taxes/wealth.json", import.meta.url), "utf8")), ""),
     READING,
   ];
   for (const html of pages) {
     const hit = html.replace(/<[^>]+>/g, " ").match(new RegExp(`.{0,40}(?:${banned.source}).{0,40}`, "i"));
     assert.equal(hit, null, hit && hit[0]);
   }
-  for (const f of ["functions/_lib/taxes.js", "functions/_lib/taxpayers.js", "functions/taxes/[[path]].js"]) {
+  for (const f of ["functions/_lib/taxes.js", "functions/_lib/taxpayers.js", "functions/_lib/wealth.js", "functions/taxes/[[path]].js"]) {
     const src = readFileSync(new URL(`../../../${f}`, import.meta.url), "utf8").replace(/^\s*\/\/.*$/gm, "");
     assert.doesNotMatch(src, /fair share|loophole|dodged|paid nothing|pays less than|paid zero|top payers/i, f);
   }
