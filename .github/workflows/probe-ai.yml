@@ -20,7 +20,7 @@ jobs:
         working-directory: workers/sync
         run: |
           x() { echo "=== $1"; npx --yes wrangler@4 d1 execute pillory --remote --json --command "$1" | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>{try{const j=JSON.parse(d.slice(d.indexOf("[")));for(const r of j[0].results)console.log(Object.values(r).join(" | "))}catch(e){console.log(d.slice(0,600))}})' || true; }
-          x "SELECT a.ai_review, instr(a.ai_review_detail, '\"revised\":true') > 0 AS revised, COUNT(*) FROM bill_analyses a WHERE a.current = 1 AND a.ai_review IS NOT NULL AND a.created_at >= '2026-10-01' GROUP BY 1, 2"
-          x "SELECT json_extract(c.value, '$.id') AS chk, json_extract(c.value, '$.severity') AS sev, COUNT(*) FROM bill_analyses a, json_each(json_extract(a.ai_review_detail, '$.checks')) c WHERE a.current = 1 AND a.ai_review = 'flag' AND json_extract(c.value, '$.ok') = 0 GROUP BY 1, 2 ORDER BY 3 DESC"
-          x "SELECT substr(message, instr(message, 'AI reviewer'), 300) FROM sync_log WHERE step IN ('analysis','analysis-orders') AND status = 'ok' AND started_at >= '2026-11-05' ORDER BY id DESC LIMIT 12"
-          x "SELECT a.bill_id, json_extract(c.value, '$.note') FROM bill_analyses a, json_each(json_extract(a.ai_review_detail, '$.checks')) c WHERE a.current = 1 AND a.ai_review = 'flag' AND json_extract(c.value, '$.severity') = 'major' ORDER BY a.id DESC LIMIT 8"
+          x "SELECT started_at, status, substr(message, 1, 400) FROM sync_log WHERE step = 'analysis-resolve' ORDER BY id DESC LIMIT 15"
+          x "SELECT outcome, trigger, COUNT(*), SUM(cost_cents) FROM analysis_resolutions GROUP BY 1, 2"
+          x "SELECT key, value FROM sync_state WHERE key LIKE 'resolve_cents_%' ORDER BY key DESC LIMIT 5"
+          x "SELECT started_at, step, status, substr(message,1,200) FROM sync_log WHERE started_at >= '2026-11-10' AND step LIKE 'analysis%' ORDER BY id DESC LIMIT 10"
