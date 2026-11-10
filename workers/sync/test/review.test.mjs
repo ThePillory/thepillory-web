@@ -138,6 +138,10 @@ test("reviewer: uneven panels and hedged statements are minor; strawmen and verd
   assert.match(REVIEW_INSTRUCTIONS, /Panels of uneven length or detail are minor/);
   assert.match(REVIEW_INSTRUCTIONS, /A hedged statement is not opinion stated as fact/);
   assert.match(REVIEW_INSTRUCTIONS, /strawman/);
+  // The three panels and the attributed argument lines are the format, not opinion stated as fact.
+  assert.match(REVIEW_INSTRUCTIONS, /"departure" is "Why this might still serve the public"/);
+  assert.match(REVIEW_INSTRUCTIONS, /"supporters" and "critics" are attributed/);
+  assert.match(REVIEW_INSTRUCTIONS, /drops the hedge and states the conclusion as settled/);
   assert.match(REVIEW_INSTRUCTIONS, /any verdict on constitutionality/);
 });
 
