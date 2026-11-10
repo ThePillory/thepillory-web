@@ -93,6 +93,39 @@ test("withheld: a problem in the summary can't be cut, so nothing is published",
   assert.match(changeNote(out, { reader: true }), /^After a reader's report, an AI re-check found a possible error in the summary that couldn't be fixed/);
 });
 
+test("a fresh draft: when the revision's summary stays flagged, the model drafts again from the text alone and that is published", async () => {
+  const bad = card({ plain_summary: "BAD: the order nullifies the statute." });
+  const calls = [];
+  let shown = null;
+  const out = await resolveDraft(
+    { draft: bad, depth: "card", review: review([{ field: "plain_summary", index: 0 }], { check: "summary" }) },
+    deps(bad, calls, { fresh: async (...args) => ((shown = args), calls.push({ fresh: true }), { draft: card(), trimmed: [], model: "claude-opus-5-5", usage: USAGE }) })
+  );
+  assert.equal(out.outcome, "fixed");
+  assert.equal(has(out.draft, "BAD"), false);
+  assert.deepEqual(shown, [], "the fresh draft isn't given the flagged text");
+  assert.ok(calls.some((c) => c.fresh));
+  assert.ok(out.steps.some((x) => /drafted again from the text/.test(x)));
+});
+
+test("a fresh draft that repeats marked text, or fails review, isn't published whole", async () => {
+  const bad = card({ plain_summary: "BAD: the order nullifies the statute." });
+  // The fresh draft's tension point is flagged too: only its (clean) summary goes up.
+  const fresh = card({ tension: ["One view is that BAD it may be in tension, because of a strawman."] });
+  const out = await resolveDraft(
+    { draft: bad, depth: "card", review: review([{ field: "plain_summary", index: 0 }], { check: "summary" }) },
+    deps(bad, [], { fresh: async () => ({ draft: fresh, trimmed: [], model: "claude-opus-5-5", usage: USAGE }) })
+  );
+  assert.equal(out.outcome, "summary_only");
+  assert.equal(has(out.draft, "BAD"), false);
+  // And a fresh draft whose summary repeats the flagged one: withheld.
+  const again = await resolveDraft(
+    { draft: bad, depth: "card", review: review([{ field: "plain_summary", index: 0 }], { check: "summary" }) },
+    deps(bad, [], { fresh: async () => ({ draft: JSON.parse(JSON.stringify(bad)), trimmed: [], model: "claude-opus-5-5", usage: USAGE }) })
+  );
+  assert.equal(again.outcome, "withheld");
+});
+
 test("text a review marked is never published, even when a later review passes it", async () => {
   const marked = card({ aligns: ["One view is that the order is a careful and plainly sound use of power, because it says so."] });
   // The flagging review marked aligns[0]; the revision leaves it unchanged; this reviewer would pass it.
@@ -214,10 +247,12 @@ test("in the database: a flagged draft is fixed and published; a reported one th
     // The reader's report on fr:2 holds up: its summary has a factual error the revision doesn't fix.
     review: async (d, depth, opts = {}) => {
       reviews += 1;
-      return (opts.readerReports || []).length || reviews === 2 ? review([{ field: "plain_summary", index: 0 }], { check: "summary" }) : review([]);
+      return (opts.readerReports || []).length || reviews === 2 || String(d.plain_summary).includes("BAD") ? review([{ field: "plain_summary", index: 0 }], { check: "summary" }) : review([]);
     },
+    // The fresh draft's summary is wrong too, so fr:2 stays down.
+    fresh: async () => ({ draft: card({ plain_summary: "BAD: a fresh summary that is also wrong." }), trimmed: [], model: "claude-opus-5-5", usage: USAGE }),
   };
-  // Reader reports go first: fr:2 (reviews 1-2: its summary stays marked, so withheld), then the flagged fr:1 (review 3, fixed).
+  // Reader reports go first: fr:2 (its summary stays marked, and the fresh draft's is wrong too, so withheld), then the flagged fr:1 (fixed).
   await runResolutions(env, db, new Budget(env, 10 * 60 * 1000), run, { fakes });
 
   const fr1 = sqlite.prepare("SELECT * FROM bill_analyses WHERE bill_id = 'fr:1' AND current = 1").get();
@@ -258,6 +293,26 @@ test("in the database: a flagged draft from before ANALYSIS_SINCE is left as it 
     fakes: { revise: async () => (revised++, { draft: card(), trimmed: [], model: "claude-opus-5-5", usage: USAGE }), review: async () => review([]) },
   });
   assert.equal(revised, 1);
+});
+
+test("in the database: a withheld draft is tried again after RESOLVE_RETRY_DAYS, up to RESOLVE_TRIES", async () => {
+  const sqlite = seeded();
+  sqlite.exec("DELETE FROM analysis_flags");
+  const db = d1(sqlite);
+  const withhold = { revise: async () => ({ draft: card({ plain_summary: "BAD summary." }), trimmed: [], model: "claude-opus-5-5", usage: USAGE }), review: reviewer(), fresh: async () => ({ draft: card({ plain_summary: "BAD again." }), trimmed: [], model: "claude-opus-5-5", usage: USAGE }) };
+  const outcomes = () => sqlite.prepare("SELECT outcome FROM analysis_resolutions ORDER BY id").all().map((r) => r.outcome);
+  await runResolutions(env, db, new Budget(env, 10 * 60 * 1000), run, { fakes: withhold });
+  assert.deepEqual(outcomes(), ["withheld"]);
+  // Not again the same week.
+  await runResolutions(env, db, new Budget(env, 10 * 60 * 1000), run, { fakes: withhold });
+  assert.deepEqual(outcomes(), ["withheld"]);
+  // A week later: tried again, and again, then no more after three.
+  for (let i = 0; i < 4; i++) {
+    sqlite.exec("UPDATE analysis_resolutions SET created_at = datetime('now', '-8 days')");
+    await runResolutions(env, db, new Budget(env, 10 * 60 * 1000), run, { fakes: withhold });
+  }
+  assert.deepEqual(outcomes(), ["withheld", "withheld", "withheld"]);
+  assert.equal(isPublic(sqlite.prepare("SELECT * FROM bill_analyses WHERE bill_id = 'fr:1' AND current = 1").get()), false, "nothing flagged is published");
 });
 
 test("ANALYSIS_SINCE: a date, empty for no limit, anything else the default", () => {

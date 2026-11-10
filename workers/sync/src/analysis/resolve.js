@@ -13,7 +13,11 @@
 //      major problem and still a whole analysis: published, "trimmed".
 //   3. summary only: the summary and the provisions it touches, with "Full
 //      analysis not available yet". Reviewed again; published if it passes.
-//   4. otherwise nothing is published ("withheld").
+//   4. a fresh draft: the same model drafts again from the bill text alone,
+//      never shown the flagged text; checked and reviewed the same way, and
+//      published whole ("fixed") or as its summary only.
+//   5. otherwise nothing is published ("withheld"), and the draft is tried
+//      again after RESOLVE_RETRY_DAYS (7), up to RESOLVE_TRIES (3) times.
 //
 // The one line held throughout: text any review marked as a major problem is
 // never published, even if a later review passes it. Pure: the model calls
@@ -228,16 +232,43 @@ export async function resolveDraft(input, deps) {
   }
 
   // 3. The summary and provisions only.
-  if (!summaryBad) {
-    let s = summaryOnly(d);
+  const summaryOf = async (from, checksOf, model) => {
+    let s = summaryOnly(from);
     const clauseSpots = markedSpots(s, marked).filter((x) => x.field === "clauses");
     if (clauseSpots.length) s = trimDraft(s, clauseSpots).draft;
-    if (!containsMarked(s, marked) && String(s.plain_summary).trim()) {
-      const r3 = await review(s, "summary");
-      if (r3.verdict === "pass" && !containsMarked(s, marked)) {
-        removed.push(...itemsOf(d).filter((i) => !["plain_summary", "clauses"].includes(i.field)));
-        return done("summary_only", { draft: s, review: r3, reasons, checks, model: rev.model });
-      }
+    if (containsMarked(s, marked) || !String(s.plain_summary).trim()) return null;
+    const r3 = await review(s, "summary");
+    if (r3.verdict !== "pass" || containsMarked(s, marked)) return null;
+    removed.push(...itemsOf(from).filter((i) => !["plain_summary", "clauses"].includes(i.field)));
+    return done("summary_only", { draft: s, review: r3, reasons, checks: checksOf, model });
+  };
+  if (!summaryBad) {
+    const out = await summaryOf(d, checks, rev.model);
+    if (out) return out;
+  }
+
+  // 4. A fresh draft from the bill text alone (deps.fresh): the flagged text isn't
+  // shown to the model, so nothing marked is carried over. Every check and the
+  // reviewer again; published whole if it passes, else its summary only.
+  if (deps.fresh) {
+    const f = await deps.fresh();
+    spend(f.model, f.usage);
+    steps.push(`drafted again from the text by ${f.model}`);
+    let fd = f.draft;
+    const fchecks = await deps.check(fd, f.trimmed || []);
+    const fhard = deps.hard(fd);
+    const freshSummaryBad = fhard.some((x) => x.field === "plain_summary");
+    if (fhard.length) {
+      fd = trimDraft(fd, fhard).draft;
+      steps.push(`wording rules: ${fhard.length} passage(s) cut`);
+    }
+    const fr = await review(fd, depth);
+    if (!freshSummaryBad && fr.verdict === "pass" && !containsMarked(fd, marked) && useful(fd)) {
+      return done("fixed", { draft: fd, review: fr, reasons, checks: fchecks, model: f.model });
+    }
+    if (!freshSummaryBad) {
+      const out = await summaryOf(fd, fchecks, f.model);
+      if (out) return out;
     }
   }
   return done("withheld", { review: r, reasons, checks, model: rev.model });
