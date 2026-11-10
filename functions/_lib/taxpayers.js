@@ -16,8 +16,19 @@ const SHOWN = ["top-0.001", "top-0.01", "top-0.1", "top-1", "top-5", "top-10", "
 // Long series: a year label every five years and on the last, so they don't run together.
 const tick = (y, last) => (Number(y) % 5 === 0 || String(y) === String(last) ? `'${String(y).slice(2)}` : "");
 const pct = (v, d = 1) => (v == null ? "Not published" : `${Number(v).toFixed(d)}%`);
-const count = (v) => (v == null ? "Not published" : Math.round(v).toLocaleString("en-US"));
-const dollars = (v) => (v == null ? "Not published" : `$${Math.round(v).toLocaleString("en-US")}`);
+// Short forms for the two tables, so they fit a phone: 77.0M or 1,534 returns; $663K, $10.0M, $120.4B.
+// The exact figures are in the linked sources.
+export const shortCount = (v) => (v == null ? "Not published" : Math.abs(v) >= 1e6 ? `${(v / 1e6).toFixed(1)}M` : Math.round(v).toLocaleString("en-US"));
+export function shortDollars(v) {
+  if (v == null) return "Not published";
+  const a = Math.abs(v);
+  const sign = v < 0 ? "-" : "";
+  if (a >= 1e9) return `${sign}$${(a / 1e9).toFixed(1)}B`;
+  if (a >= 1e6) return `${sign}$${(a / 1e6).toFixed(1)}M`;
+  if (a >= 1e4) return `${sign}$${Math.round(a / 1e3)}K`;
+  if (a >= 1e3) return `${sign}$${(a / 1e3).toFixed(1)}K`;
+  return `${sign}$${Math.round(a).toLocaleString("en-US")}`;
+}
 const table = (head, rows) =>
   `<div class="table-scroll"><table class="usage-table"><thead><tr>${head.map((h) => `<th scope="col">${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table></div>`;
 const tr = (cells) => `<tr>${cells.map((c, i) => (i === 0 ? `<th scope="row">${c}</th>` : `<td>${c}</td>`)).join("")}</tr>`;
@@ -28,7 +39,7 @@ function irsSection(irs) {
   const g = Object.fromEntries(irs.groups.map((x) => [x.id, x]));
   const rows = SHOWN.filter((id) => g[id]).map((id) => {
     const x = g[id];
-    return tr([esc(x.label), esc(count(x.returns[year])), esc(x.floor[year] == null ? "—" : dollars(x.floor[year])), esc(pct(x.agi_share[year])), esc(pct(x.tax_share[year]))]);
+    return tr([esc(x.label), esc(shortCount(x.returns[year])), esc(x.floor[year] == null ? "—" : shortDollars(x.floor[year])), esc(pct(x.agi_share[year])), esc(pct(x.tax_share[year]))]);
   });
   const years = Object.keys(g["top-1"].tax_share).sort();
   const series = (id) =>
@@ -39,8 +50,8 @@ function irsSection(irs) {
   return `<section class="card stack-sm" id="irs">
   <h2 class="h3">Federal income tax, by income group (tax year ${esc(year)})</h2>
   <p class="small">Individual income tax returns, grouped by adjusted gross income (AGI). Each top group includes the ones above it: the top 10 percent includes the top 1 percent.</p>
-  ${table(["Group of returns", "Returns", "AGI of at least", "Share of all AGI", "Share of all income tax"], rows)}
-  <p class="xsmall secondary">Shares as the IRS computes them; total income tax is income tax after credits. Federal income tax only: payroll, excise, estate and state taxes aren't in these tables. Returns of dependents aren't counted. ${sourceLink(irs.source_url, "IRS Statistics of Income, Tables 4.1 and 4.2")}</p>
+  ${table(["Group", "Returns", "AGI at least", "Share of income", "Share of tax"], rows)}
+  <p class="xsmall secondary">Share of income is each group's share of all AGI on every return; share of tax is its share of all federal income tax, after credits. Both as the IRS computes them. Returns and dollar amounts are rounded (M is millions, K thousands); the exact figures are in the IRS's tables. Federal income tax only: payroll, excise, estate and state taxes aren't in these tables. Returns of dependents aren't counted. ${sourceLink(irs.source_url, "IRS Statistics of Income, Tables 4.1 and 4.2")}</p>
   ${series("top-1")}
   ${series("bottom-50")}
 </section>`;
@@ -68,14 +79,14 @@ function top400Section(t) {
 function ftbSection(f) {
   if (!f || !f.bands) return "";
   const rows = f.bands.map((b) =>
-    tr([esc(b.label), esc(count(b.returns)), esc(pct((100 * b.returns) / f.total.returns)), esc(money(b.tax)), esc(pct((100 * b.tax) / f.total.tax))])
+    tr([esc(b.label), esc(shortCount(b.returns)), esc(pct((100 * b.returns) / f.total.returns)), esc(shortDollars(b.tax)), esc(pct((100 * b.tax) / f.total.tax))])
   );
-  rows.push(tr(["All returns", esc(count(f.total.returns)), "100%", esc(money(f.total.tax)), "100%"]));
+  rows.push(tr(["All returns", esc(shortCount(f.total.returns)), "100%", esc(shortDollars(f.total.tax)), "100%"]));
   return `<section class="card stack-sm" id="california">
   <h2 class="h3">California personal income tax (tax year ${esc(String(f.year))})</h2>
   <p class="small">California residents' returns, all filing statuses, by California adjusted gross income.</p>
-  ${table(["AGI", "Returns", "Share of returns", "Total tax liability", "Share of tax"], rows)}
-  <p class="xsmall secondary">From the Franchise Tax Board's table B-4A. ThePillory added its ${esc(String(f.classes))} income classes up into these bands and computed the shares from its figures. ${sourceLink(f.source_url, "Franchise Tax Board, table B-4A (data.ca.gov)")}</p>
+  ${table(["AGI", "Returns", "Share of returns", "Tax", "Share of tax"], rows)}
+  <p class="xsmall secondary">Tax is total California tax liability. Share of returns is each band's share of all resident returns; share of tax is its share of all California personal income tax liability. Returns and dollar amounts are rounded (M is millions, K thousands, B billions); the exact figures are in the FTB's table. From the Franchise Tax Board's table B-4A. ThePillory added its ${esc(String(f.classes))} income classes up into these bands and computed the shares from its figures. ${sourceLink(f.source_url, "Franchise Tax Board, table B-4A (data.ca.gov)")}</p>
 </section>`;
 }
 
