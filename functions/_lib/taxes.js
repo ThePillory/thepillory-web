@@ -209,7 +209,7 @@ export const READING = `<section class="card stack-sm" id="reading">
   <p class="small">The figures are as each company reports them in its 10-K. They're shown as filed, without conclusions about them. <a class="inline-link" href="${TAXES_METHOD}">How this works</a></p>
 </section>`;
 
-const SWITCH = (on) => `<nav class="segmented list-switch" aria-label="Show">${[["taxpayers", "Taxpayers", "/taxes/taxpayers/"], ["companies", "Corporations", "/taxes/companies/"]]
+const SWITCH = (on) => `<nav class="segmented list-switch" aria-label="Show">${[["taxpayers", "Taxpayers", "/taxes/taxpayers/"], ["wealth", "Wealth", "/taxes/wealth/"], ["companies", "Corporations", "/taxes/companies/"]]
   .map(([k, label, href]) => `<a class="toggle" href="${href}"${k === on ? ' aria-current="true"' : ""}>${label}</a>`)
   .join("")}</nav>`;
 export const taxesSwitch = SWITCH;

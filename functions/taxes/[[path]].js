@@ -3,14 +3,17 @@
 //   /taxes/taxpayers/        Taxpayers: shares of income and income tax by income
 //                            group (IRS Statistics of Income, the Congressional Budget
 //                            Office, California's Franchise Tax Board)
+//   /taxes/wealth/           Wealth: who holds household wealth, by wealth group (the
+//                            Federal Reserve's Distributional Financial Accounts)
 //   /taxes/companies/        Corporations: every company filing a 10-K, by name, revenue
 //                            or pretax income (functions/_lib/taxes.js)
 //   /taxes/companies/<cik>/  one company
-// A Taxpayers | Corporations switch at the top of both lists, like Laws'. The same for
+// A Taxpayers | Wealth | Corporations switch at the top of each, like Laws'. The same for
 // every visitor, so kept at the edge for five minutes.
 import { page, notFound, notLoaded, esc, guard, edgeCached, loadSection, FAILED, sectionError } from "../_lib/render.js";
 import { loadCompany, listCompanies, listFilters, listHref, listForm, industries, loadedAt, companyRow, companyMain, taxesSwitch, READING, PER_PAGE, TAXES_METHOD } from "../_lib/taxes.js";
 import { loadTaxpayers, taxpayersMain } from "../_lib/taxpayers.js";
+import { loadWealth, wealthMain } from "../_lib/wealth.js";
 
 const CACHE_SECONDS = 300;
 
@@ -20,6 +23,7 @@ export const onRequestGet = guard(async (context) => {
   const parts = (context.params.path || []).filter(Boolean);
   if (!parts.length) return Response.redirect(`${url.origin}/taxes/taxpayers/`, 302);
   if (parts.length === 1 && parts[0] === "taxpayers") return edgeCached(context, CACHE_SECONDS, () => taxpayers(context.env, context.request));
+  if (parts.length === 1 && parts[0] === "wealth") return edgeCached(context, CACHE_SECONDS, () => wealth(context.env, context.request));
   if (parts.length === 1 && parts[0] === "companies") return edgeCached(context, CACHE_SECONDS, () => companies(context.env, url));
   if (parts.length === 2 && parts[0] === "companies" && /^\d{1,10}$/.test(parts[1])) {
     if (String(Number(parts[1])) !== parts[1]) return Response.redirect(`${url.origin}/taxes/companies/${Number(parts[1])}/`, 301);
@@ -32,6 +36,12 @@ async function taxpayers(env, request) {
   const data = await loadSection("taxpayers data", () => loadTaxpayers(env, request), null);
   const main = `${taxpayersMain(data === FAILED ? null : data, taxesSwitch("taxpayers"))}`;
   return page("Taxes: who pays", main, { tab: "laws", back: ["Laws", "/laws/"], partial: data === FAILED });
+}
+
+async function wealth(env, request) {
+  const data = await loadSection("wealth data", () => loadWealth(env, request), null);
+  const main = wealthMain(data === FAILED ? null : data, taxesSwitch("wealth"));
+  return page("Taxes: who holds wealth", main, { tab: "laws", back: ["Laws", "/laws/"], partial: data === FAILED });
 }
 
 async function companies(env, url) {
