@@ -12,7 +12,7 @@ import { readFileSync } from "node:fs";
 import { onRequestGet as taxesRoute } from "../../../functions/taxes/[[path]].js";
 import { onRequestGet as financesRoute } from "../../../functions/finances/[[path]].js";
 import { loadCompany, companyMain, listCompanies, listFilters, listHref, SORTS, READING, taxMarker, markersIn, taxInfo, fillTaxLines, filingUrl, fiscalYear } from "../../../functions/_lib/taxes.js";
-import { taxpayersMain, shortCount, shortDollars } from "../../../functions/_lib/taxpayers.js";
+import { taxpayersMain, shortCount, shortDollars, NOT_COUNTED, UNSOLD_GAINS } from "../../../functions/_lib/taxpayers.js";
 import { checkQuery } from "../../../functions/_lib/crawl.js";
 
 function d1(sqlite) {
@@ -146,6 +146,31 @@ test("organization panels: one line when exactly one company has the name (or a 
   assert.match(out, /<li>Nobody LLC<\/li>/);
   assert.match(out, /<li>PAC <a class="tax-line[^>]*href="\/taxes\/companies\/1\/"/); // a confirmed link
   assert.doesNotMatch(out, /data-tax-org/);
+});
+
+test("Taxpayers: what the numbers don't count comes first, and the unsold-gains estimate is labeled with its method and its criticism", () => {
+  const d = JSON.parse(readFileSync(new URL("../../../data/taxes/taxpayers.json", import.meta.url), "utf8"));
+  const html = taxpayersMain(d, "");
+  const at = (id) => html.indexOf(`id="${id}"`);
+  // The card sits under the intro, before the first table; the estimate after the IRS tables.
+  assert.ok(at("not-counted") > 0 && at("not-counted") < at("irs"));
+  assert.ok(at("unsold-gains") > at("top-400") && at("unsold-gains") < at("cbo"));
+  const text = html.replace(/<[^>]+>/g, " ").replace(/&#x27;|&#39;/g, "'");
+  assert.match(text, /What these numbers don’t count/);
+  for (const t of NOT_COUNTED) assert.ok(text.includes(t.replace(/&/g, "&amp;")), t.slice(0, 40));
+  assert.match(text, /Different measures give different rates for the same group\. Each table below says what it counts\./);
+  assert.match(text, /Counting unsold gains: one estimate/);
+  assert.match(text, /An estimate, not official tax data/);
+  assert.match(text, /average federal individual income tax rate was 8\.2% of their income, counting unsold gains as income, over 2010–2018/);
+  assert.match(html, /href="https:\/\/bidenwhitehouse\.archives\.gov\/cea\/written-materials\/2021\/09\/23\/[^"]+"/);
+  assert.match(text, /White House Council of Economic Advisers and Office of Management and Budget, 2021/);
+  // Method and criticism, both shown, of similar length.
+  assert.ok(text.includes(UNSOLD_GAINS.method) && text.includes(UNSOLD_GAINS.criticism));
+  const words = (s) => s.split(/\s+/).length;
+  const [m, c] = [words(UNSOLD_GAINS.method), words(UNSOLD_GAINS.criticism)];
+  assert.ok(Math.max(m, c) / Math.min(m, c) <= 1.3, `method ${m} words, criticism ${c}`);
+  // The same for every visitor: fixed text, no person named.
+  assert.equal(taxpayersMain(d, ""), html);
 });
 
 test("Taxpayers: large numbers written short", () => {
