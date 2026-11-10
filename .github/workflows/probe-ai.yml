@@ -1,0 +1,26 @@
+# Temporary read-only probe: which orders get analyzed. Removed after.
+name: Probe order analyses
+on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [.github/workflows/probe-ai.yml]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        working-directory: workers/sync
+        run: |
+          x() { echo "=== $1"; npx --yes wrangler@4 d1 execute pillory --remote --json --command "$1" | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>{const j=JSON.parse(d.slice(d.indexOf("[")));for(const r of j[0].results)console.log(Object.values(r).join(" | "))})'; }
+          x "SELECT substr(COALESCE(x.signed_on, x.published_on),1,4) AS y, x.kind, COUNT(*) AS orders, SUM(t.status = 'ok') AS with_text, SUM(a.id IS NOT NULL) AS analyzed, SUM(a.ai_review = 'pass') AS public FROM executive_actions x LEFT JOIN executive_action_texts t ON t.action_id = x.id LEFT JOIN bill_analyses a ON a.bill_id = x.id AND a.current = 1 GROUP BY 1, 2 ORDER BY 1 DESC, 2 LIMIT 30"
+          x "SELECT t.status, COUNT(*) FROM executive_action_texts t GROUP BY 1"
+          x "SELECT step, status, substr(message,1,200), started_at FROM sync_log WHERE step IN ('order-texts','analysis-orders') AND status != 'skipped' ORDER BY id DESC LIMIT 12"
+          x "SELECT substr(a.created_at,1,10) AS d, COUNT(*), MIN(COALESCE(x.signed_on,x.published_on)), MAX(COALESCE(x.signed_on,x.published_on)) FROM bill_analyses a JOIN executive_actions x ON x.id = a.bill_id GROUP BY 1 ORDER BY 1 DESC LIMIT 12"
