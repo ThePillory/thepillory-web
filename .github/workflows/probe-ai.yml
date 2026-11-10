@@ -1,0 +1,27 @@
+# Temporary read-only probe: dates of analyzed bills. Removed after.
+name: Probe analysis dates
+on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [.github/workflows/probe-ai.yml]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        working-directory: workers/sync
+        run: |
+          x() { echo "=== $1"; npx --yes wrangler@4 d1 execute pillory --remote --json --command "$1" | node -e 'let d="";process.stdin.on("data",c=>d+=c).on("end",()=>{try{const j=JSON.parse(d.slice(d.indexOf("[")));for(const r of j[0].results)console.log(Object.values(r).join(" | "))}catch(e){console.log(d.slice(0,600))}})' || true; }
+          W="(SELECT MAX(v.vote_date) FROM votes v WHERE v.bill_id = a.bill_id AND v.vote_type = 'final_passage')"
+          x "SELECT CASE WHEN a.bill_id LIKE 'fr:%' OR a.bill_id LIKE 'ca-gov:%' THEN 'order' WHEN a.bill_id LIKE 'measure:%' THEN 'measure' ELSE 'bill' END k, a.ai_review, COUNT(*), MIN(COALESCE($W, x.signed_on, x.published_on)), MAX(COALESCE($W, x.signed_on, x.published_on)) FROM bill_analyses a LEFT JOIN executive_actions x ON x.id = a.bill_id WHERE a.current = 1 GROUP BY 1, 2"
+          x "SELECT substr($W, 1, 4) y, b.level, COUNT(*) FROM bill_analyses a JOIN bills b ON b.id = a.bill_id WHERE a.current = 1 AND a.ai_review = 'flag' GROUP BY 1, 2 ORDER BY 1"
+          x "SELECT b.session, b.level, COUNT(*) FROM bill_analyses a JOIN bills b ON b.id = a.bill_id WHERE a.current = 1 GROUP BY 1, 2 ORDER BY 3 DESC LIMIT 12"
+          x "SELECT substr(COALESCE(x.signed_on, x.published_on), 1, 4) y, COUNT(*) FROM bill_analyses a JOIN executive_actions x ON x.id = a.bill_id WHERE a.current = 1 AND a.ai_review = 'flag' GROUP BY 1 ORDER BY 1"
