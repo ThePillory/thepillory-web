@@ -381,7 +381,8 @@ def statements(rows, existing_votes=frozenset()):
     for i in range(0, len(bills), 50):
         vals = ",".join(f"({lit(b['id'])},'state',{lit(b['chamber'])},{lit(b['bill_number'])},{lit(b['session'])},{lit(b['title'][:1000])},{lit(b['official_url'])},{lit(b['source_url'])},datetime('now'))" for b in bills[i:i + 50])
         out.append("INSERT INTO bills (id, level, chamber, bill_number, session, title, official_url, source_url, updated_at) VALUES "
-                   f"{vals} ON CONFLICT(id) DO UPDATE SET title = excluded.title, official_url = excluded.official_url, source_url = excluded.source_url, updated_at = excluded.updated_at;")
+                   f"{vals} ON CONFLICT(id) DO UPDATE SET title = excluded.title, official_url = excluded.official_url, source_url = excluded.source_url, updated_at = excluded.updated_at "
+                   "WHERE bills.title IS NOT excluded.title OR bills.official_url IS NOT excluded.official_url OR bills.source_url IS NOT excluded.source_url;")
     new = [v for v in rows["votes"] if v["id"] not in existing_votes]
     keep = {v["k"] for v in new}
     for i in range(0, len(new), 40):
@@ -391,11 +392,15 @@ def statements(rows, existing_votes=frozenset()):
         out.append("INSERT INTO votes (id, bill_id, level, chamber, vote_date, question, vote_type, result, source_url, yea, nay, present, not_voting, k, updated_at) VALUES "
                    f"{vals} ON CONFLICT(id) DO UPDATE SET bill_id = excluded.bill_id, chamber = excluded.chamber, vote_date = excluded.vote_date, question = excluded.question, "
                    "vote_type = excluded.vote_type, result = excluded.result, source_url = excluded.source_url, yea = excluded.yea, nay = excluded.nay, present = excluded.present, "
-                   "not_voting = excluded.not_voting, k = excluded.k, updated_at = excluded.updated_at;")
+                   "not_voting = excluded.not_voting, k = excluded.k, updated_at = excluded.updated_at "
+                   "WHERE votes.bill_id IS NOT excluded.bill_id OR votes.chamber IS NOT excluded.chamber OR votes.vote_date IS NOT excluded.vote_date OR votes.question IS NOT excluded.question "
+                   "OR votes.vote_type IS NOT excluded.vote_type OR votes.result IS NOT excluded.result OR votes.source_url IS NOT excluded.source_url OR votes.yea IS NOT excluded.yea "
+                   "OR votes.nay IS NOT excluded.nay OR votes.present IS NOT excluded.present OR votes.not_voting IS NOT excluded.not_voting OR votes.k IS NOT excluded.k;")
     pos = [x for x in rows["positions"] if x[0] in keep]
     for i in range(0, len(pos), 400):
         vals = ",".join(f"({a},{b},{c},{lit(r)})" for a, b, c, r in pos[i:i + 400])
-        out.append(f"INSERT INTO state_positions (vote_k, member_k, position, raw) VALUES {vals} ON CONFLICT(vote_k, member_k) DO UPDATE SET position = excluded.position, raw = excluded.raw;")
+        out.append(f"INSERT INTO state_positions (vote_k, member_k, position, raw) VALUES {vals} ON CONFLICT(vote_k, member_k) DO UPDATE SET position = excluded.position, raw = excluded.raw "
+                   "WHERE state_positions.position IS NOT excluded.position OR state_positions.raw IS NOT excluded.raw;")
     assert all(len(s.encode()) < 95000 for s in out), "a statement is over D1's size limit"
     return out, len(new), len(pos)
 

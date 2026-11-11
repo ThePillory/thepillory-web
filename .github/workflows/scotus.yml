@@ -2,7 +2,8 @@
 # senate.gov), each term's decisions with their lineups and the constitutional
 # provisions they name (supremecourt.gov opinions), this term's cases and
 # questions presented, and the justices' financial disclosures (CourtListener bulk data).
-# Writes data/scotus/ with tools/build_scotus.py and commits it when it changes.
+# Writes data/scotus/ with tools/build_scotus.py and commits it when it changes. Daily
+# October – June (the Court's term), weekly (Mondays) July – September: the gate job.
 name: Refresh Supreme Court data
 on:
   schedule:
@@ -19,8 +20,27 @@ concurrency:
   group: data-commit
   cancel-in-progress: false
 jobs:
+  # Is today a run day? (tools/schedule_gate.mjs, the rules in workers/sync/src/cadence.js;
+  # docs/data-sync.md, "How often each source updates"). A run started by hand always runs.
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      run: ${{ steps.gate.outputs.run }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            tools/schedule_gate.mjs
+            workers/sync/src/cadence.js
+            data/elections/dates.json
+          sparse-checkout-cone-mode: false
+      - id: gate
+        run: node tools/schedule_gate.mjs scotus "${{ github.event_name }}"
   build:
     runs-on: ubuntu-latest
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4

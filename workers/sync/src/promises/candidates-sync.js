@@ -38,7 +38,8 @@ export async function upsertCandidates(db, list, year) {
           `INSERT INTO candidate_platforms (candidate_id, name, state, year, site_url) VALUES (?, ?, ?, ?, ?)
            ON CONFLICT (candidate_id) DO UPDATE SET name = excluded.name, state = excluded.state,
              checked_at = CASE WHEN candidate_platforms.site_url IS excluded.site_url THEN candidate_platforms.checked_at ELSE NULL END,
-             site_url = excluded.site_url`
+             site_url = excluded.site_url
+           WHERE candidate_platforms.name IS NOT excluded.name OR candidate_platforms.state IS NOT excluded.state OR candidate_platforms.site_url IS NOT excluded.site_url`
         )
         .bind(c.id, c.name, c.st, year, c.url)
     );
@@ -109,7 +110,7 @@ export async function syncCandidatePlatforms(env, db, budget, { pick = pickExcer
   const recheckDays = parseInt(env.CANDIDATE_PLATFORMS_RECHECK_DAYS || "30", 10);
   const dayKey = `candidate_platforms_${today()}`;
   let searched = parseInt((await getState(db, dayKey)) || "0", 10);
-  if (searched >= limit) return { status: "skipped", message: `${searched} candidates' sites searched today (CANDIDATE_PLATFORMS_DAILY ${limit})` };
+  if (searched >= limit) return { status: "skipped", more: true, message: `${searched} candidates' sites searched today (CANDIDATE_PLATFORMS_DAILY ${limit})` };
 
   let list;
   try {
@@ -144,7 +145,7 @@ export async function syncCandidatePlatforms(env, db, budget, { pick = pickExcer
     if (!(err instanceof BudgetExhausted)) throw err;
     return { status: "partial", message: `${summary(tally)}; ${err.message}` };
   }
-  return { status: "ok", message: summary(tally) };
+  return { status: "ok", more: todo.length >= limit - (searched - todo.length), message: summary(tally) };
 }
 
 const summary = (t) =>

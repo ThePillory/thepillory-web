@@ -37,6 +37,7 @@ import { API as LDA_API, congressYears, billQueries, mentionsIn, filingRow, memb
 import { api as congressApi } from "../congress-api.js";
 import { federalBill } from "../congress.js";
 import { upsertBill } from "../db.js";
+import { syncScope, differs } from "../upsert.js";
 
 const CROSSWALK = "https://unitedstates.github.io/congress-legislators/legislators-current.json";
 const MAX_PAC_PAGES = 40;
@@ -191,40 +192,17 @@ async function readOne(db, fec, m, cycle, current) {
     : [];
 
   const id = m.official_id;
-  const stmts = ["funding_totals", "funding_pacs", "funding_outside", "funding_employers"].map((t) => db.prepare(`DELETE FROM ${t} WHERE official_id = ? AND cycle = ?`).bind(id, cycle));
-  if (totals) {
-    stmts.push(
-      db
-        .prepare(
-          `INSERT INTO funding_totals (official_id, cycle, candidate_id, receipts, disbursements, cash_on_hand, individual_unitemized, individual_itemized,
-             pac, party, self_funding, other, coverage_end, last_report, source_url, updated_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`
-        )
-        .bind(id, cycle, totals.candidate_id, totals.receipts, totals.disbursements, totals.cash_on_hand, totals.individual_unitemized, totals.individual_itemized,
-          totals.pac, totals.party, totals.self_funding, totals.other, totals.coverage_end, totals.last_report, totals.source_url)
-    );
-  }
-  for (const p of pacs) {
-    stmts.push(
-      db
-        .prepare("INSERT OR REPLACE INTO funding_pacs (official_id, cycle, committee_id, name, committee_type, total, count, industry, source_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
-        .bind(id, cycle, p.committee_id, p.name, p.committee_type, p.total, p.count, p.industry, p.source_url)
-    );
-  }
-  for (const e of employers) {
-    stmts.push(
-      db
-        .prepare("INSERT OR REPLACE INTO funding_employers (official_id, cycle, employer, total, count, industry, source_url) VALUES (?, ?, ?, ?, ?, ?, ?)")
-        .bind(id, cycle, e.employer, e.total, e.count, e.industry, e.source_url)
-    );
-  }
-  for (const x of outside) {
-    stmts.push(
-      db
-        .prepare("INSERT OR REPLACE INTO funding_outside (official_id, cycle, committee_id, name, support_oppose, total, count, source_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
-        .bind(id, cycle, x.committee_id, x.name, x.support_oppose, x.total, x.count, x.source_url)
-    );
-  }
+  // Only what changed is written (src/db.js syncScope): a member's cycle read again unchanged writes nothing.
+  const scope = { official_id: id, cycle };
+  const parts = [
+    { table: "funding_totals", key: [], stamp: "updated_at", rows: totals ? [totals] : [],
+      cols: ["candidate_id", "receipts", "disbursements", "cash_on_hand", "individual_unitemized", "individual_itemized", "pac", "party", "self_funding", "other", "coverage_end", "last_report", "source_url"] },
+    { table: "funding_pacs", key: ["committee_id"], rows: pacs, cols: ["committee_id", "name", "committee_type", "total", "count", "industry", "source_url"] },
+    { table: "funding_employers", key: ["employer"], rows: employers, cols: ["employer", "total", "count", "industry", "source_url"] },
+    { table: "funding_outside", key: ["committee_id", "support_oppose"], rows: outside, cols: ["committee_id", "name", "support_oppose", "total", "count", "source_url"] },
+  ];
+  const stmts = [];
+  for (const p of parts) stmts.push(...(await syncScope(db, { ...p, scope })).stmts);
   const note = !totals ? `No FEC totals for ${cycle - 1}–${cycle}.` : pacNote;
   stmts.push(
     db
@@ -388,7 +366,8 @@ async function saveMatches(db, bill, filing, mentions) {
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
          ON CONFLICT(filing_uuid) DO UPDATE SET client_name = excluded.client_name, client_description = excluded.client_description,
            registrant_name = excluded.registrant_name, amount = excluded.amount, amount_kind = excluded.amount_kind,
-           industry = excluded.industry, source_url = excluded.source_url, updated_at = excluded.updated_at`
+           industry = excluded.industry, source_url = excluded.source_url, updated_at = excluded.updated_at
+         WHERE ${differs("lobbying_filings", ["client_name", "client_description", "registrant_name", "amount", "amount_kind", "industry", "source_url"])}`
       )
       .bind(f.filing_uuid, f.client_name, f.client_description, f.registrant_name, f.filing_year, f.filing_period, f.filing_type, f.posted_at,
         f.registrant_id, f.client_id, f.amount, f.amount_kind, f.industry, f.source_url),
@@ -396,7 +375,11 @@ async function saveMatches(db, bill, filing, mentions) {
   const first = mentions[0];
   stmts.push(
     db
-      .prepare("INSERT OR REPLACE INTO bill_lobbying (bill_id, filing_uuid, issue_code, excerpt) VALUES (?, ?, ?, ?)")
+      .prepare(
+        `INSERT INTO bill_lobbying (bill_id, filing_uuid, issue_code, excerpt) VALUES (?, ?, ?, ?)
+         ON CONFLICT(bill_id, filing_uuid) DO UPDATE SET issue_code = excluded.issue_code, excerpt = excluded.excerpt
+         WHERE ${differs("bill_lobbying", ["issue_code", "excerpt"])}`
+      )
       .bind(bill.id, f.filing_uuid, first.issue_code, first.excerpt)
   );
   await db.batch(stmts);
@@ -534,7 +517,8 @@ export async function syncCommitteeBills(env, db, budget) {
           await db
             .prepare(
               `INSERT INTO bill_committee_actions (bill_id, committee_code, committee_name, relationship, action_date, source_url) VALUES (?, ?, ?, ?, ?, ?)
-               ON CONFLICT(bill_id, committee_code, relationship) DO UPDATE SET committee_name = excluded.committee_name, action_date = excluded.action_date`
+               ON CONFLICT(bill_id, committee_code, relationship) DO UPDATE SET committee_name = excluded.committee_name, action_date = excluded.action_date
+               WHERE ${differs("bill_committee_actions", ["committee_name", "action_date"])}`
             )
             .bind(row.id, c.code, c.name, b.relationshipType, b.actionDate ? String(b.actionDate).slice(0, 10) : null, `${row.official_url}/committees`)
             .run();

@@ -34,6 +34,7 @@ import zipfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import d1sql as D  # noqa: E402  (writes only what changed)
 import ca_lobbying as C  # noqa: E402
 from load_trades import d1, lit, MIGRATIONS  # noqa: E402
 
@@ -93,43 +94,31 @@ def ensure_tables(args):
     say("Applied migration 0029_lobbying_more.sql")
 
 
-def inserts(table, cols, values):
-    """Multi-row INSERTs: up to ROWS_PER_INSERT rows, and under D1's 100 KB statement limit."""
-    head = f"INSERT OR REPLACE INTO {table} ({', '.join(cols)}) VALUES "
-    out, part, size = [], [], 0
-    for row in values:
-        v = "(" + ", ".join(lit(x) for x in row) + ")"
-        if part and (len(part) >= ROWS_PER_INSERT or size + len(v) > MAX_STATEMENT):
-            out.append(head + ", ".join(part) + ";")
-            part, size = [], 0
-        part.append(v)
-        size += len(v) + 2
-    if part:
-        out.append(head + ", ".join(part) + ";")
-    return out
-
-
 def sql_for(changed, loaded):
-    """Statements that replace each changed filing's rows."""
+    """Statements that bring each changed filing's rows in line: only rows that are new, changed
+    or gone are written (tools/d1sql.py; an amended filing usually keeps most of its rows)."""
     out = []
-    old = [fid for fid in changed if fid in loaded]
-    for i in range(0, len(old), 300):
-        ids = ", ".join(lit(x) for x in old[i:i + 300])
-        for table in ("ca_bill_lobbying", "ca_lobby_contributions", "ca_lobby_reports"):
-            out.append(f"DELETE FROM {table} WHERE filing_id IN ({ids});")
     reports, bills, contribs, done = [], [], [], []
     for fid, f in changed.items():
         r = f["report"]
+        fbills, fcontribs = [], []
         if r and r["period_end"] and r["employer_name"]:
             reports.append([r[k] for k in ("filing_id", "amend_id", "form", "employer_id", "employer_name", "period_start", "period_end", "filed_on", "amount", "activity", "source_url")])
-            bills += [[b, fid] for b in r["bills"]]
+            fbills = [[b, fid] for b in r["bills"]]
+        elif fid in loaded:
+            out += D.prune("ca_lobby_reports", {"filing_id": fid}, ["filing_id"], [])
         for c in f["contributions"]:
-            contribs.append([c[k] for k in ("filing_id", "n", "form", "filer_kind", "filer_id", "filer_name", "recipient_id", "recipient_name", "date", "amount", "source_url")])
+            fcontribs.append([c[k] for k in ("filing_id", "n", "form", "filer_kind", "filer_id", "filer_name", "recipient_id", "recipient_name", "date", "amount", "source_url")])
+        if fid in loaded:
+            out += D.prune("ca_bill_lobbying", {"filing_id": fid}, ["bill_id"], [b[0] for b in fbills])
+            out += D.prune("ca_lobby_contributions", {"filing_id": fid}, ["n"], [c[1] for c in fcontribs])
+        bills += fbills
+        contribs += fcontribs
         done.append([fid, f["amend_id"], f["form"]])
-    out += inserts("ca_lobby_reports", ["filing_id", "amend_id", "form", "employer_id", "employer_name", "period_start", "period_end", "filed_on", "amount", "activity", "source_url"], reports)
-    out += inserts("ca_bill_lobbying", ["bill_id", "filing_id"], bills)
-    out += inserts("ca_lobby_contributions", ["filing_id", "n", "form", "filer_kind", "filer_id", "filer_name", "recipient_id", "recipient_name", "date", "amount", "source_url"], contribs)
-    out += inserts("ca_lobby_loaded", ["filing_id", "amend_id", "form"], done)
+    out += D.upserts("ca_lobby_reports", ["filing_id", "amend_id", "form", "employer_id", "employer_name", "period_start", "period_end", "filed_on", "amount", "activity", "source_url"], reports, ["filing_id"])
+    out += D.upserts("ca_bill_lobbying", ["bill_id", "filing_id"], bills, ["bill_id", "filing_id"])
+    out += D.upserts("ca_lobby_contributions", ["filing_id", "n", "form", "filer_kind", "filer_id", "filer_name", "recipient_id", "recipient_name", "date", "amount", "source_url"], contribs, ["filing_id", "n"])
+    out += D.upserts("ca_lobby_loaded", ["filing_id", "amend_id", "form"], done, ["filing_id"])
     return out, len(reports), len(bills), len(contribs)
 
 

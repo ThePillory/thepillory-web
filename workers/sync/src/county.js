@@ -7,7 +7,10 @@ const REQUIRED = ["name", "source_url", "last_verified"];
 
 export async function syncCounty(env, db, budget) {
   const url = `${(env.SITE_URL || "").replace(/\/$/, "")}/data/county-officials.json`;
-  const data = await budget.json(url, {}, "county-officials.json");
+  // Checked with its ETag first: the file changes only when a person edits it.
+  const got = await budget.ifChanged(db, "county_officials", url, {}, "county-officials.json");
+  if (got.unchanged) return { status: "skipped", message: "unchanged: data/county-officials.json is the same as at the last load" };
+  const data = await got.res.json();
   const entries = Array.isArray(data.officials) ? data.officials : [];
   const loaded = [];
   const skipped = [];
@@ -59,5 +62,6 @@ export async function syncCounty(env, db, budget) {
   await deactivateOthers(db, "county-board", loaded);
   const parts = [`loaded ${loaded.length} of ${entries.length}`];
   if (skipped.length) parts.push(`skipped: ${skipped.join("; ")}`);
+  if (loaded.length === entries.length) await got.save();
   return { status: loaded.length === entries.length ? "ok" : "partial", message: parts.join(". ") };
 }

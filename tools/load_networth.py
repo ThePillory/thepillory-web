@@ -43,6 +43,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import load_trades as T  # noqa: E402  (fetching, D1, matching)
 import networth as N  # noqa: E402
+import d1sql as D  # noqa: E402  (writes only what changed)
 
 ROOT = Path(__file__).resolve().parent.parent
 HOUSE_KINDS = {"O": ("annual", 0), "A": ("annual", 1), "C": ("candidate", 0), "H": ("new", 0)}
@@ -198,8 +199,8 @@ def row_sql(f, status, reason, method, s, before_office):
         "residence_mortgages": s.get("residence_mortgages", 0), "report_url": f.get("url") or f.get("request_url"),
         "parser": N.PARSER_VERSION if status in ("read", "unreadable") else None,
     }
-    return (f"INSERT OR REPLACE INTO networth_reports ({', '.join(cols)}, checked_at) VALUES ("
-            + ", ".join(lit(v) for v in cols.values()) + ", datetime('now'));")
+    # Written only when a value changed (a report checked again unchanged writes nothing; tools/d1sql.py).
+    return D.upserts("networth_reports", list(cols), [list(cols.values())], ["id"], stamp="checked_at")[0]
 
 
 def before_office(f, starts, officials_by_id):

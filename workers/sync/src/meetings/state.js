@@ -8,7 +8,9 @@
 // are never starved by the vote backfill.
 import { API, headers, openStatesReserve } from "../openstates-api.js";
 import { getState, setState, isHttp, slugify, BudgetExhausted } from "../util.js";
+import { syncScope } from "../upsert.js";
 import { pacificNow, toPacific } from "./time.js";
+import { differs } from "../upsert.js";
 
 const COMMITTEE_PAGES = 12;
 const EVENT_PAGES = 3;
@@ -42,15 +44,16 @@ async function refreshCommittees(env, db, budget, legislators) {
     const max = data.pagination && data.pagination.max_page;
     if (!max || page >= max) break;
   }
-  const stmts = [db.prepare("DELETE FROM state_committees")];
-  for (const [id, name, members, source] of found) {
-    stmts.push(
-      db
-        .prepare("INSERT INTO state_committees (id, name, member_ids, source_url, updated_at) VALUES (?, ?, ?, ?, datetime('now'))")
-        .bind(id, name, JSON.stringify(members), source)
-    );
-  }
-  await db.batch(stmts);
+  // Only committees that are new, changed or gone are written (src/db.js syncScope).
+  const { stmts } = await syncScope(db, {
+    table: "state_committees",
+    scope: {},
+    key: ["id"],
+    cols: ["id", "name", "member_ids", "source_url"],
+    stamp: "updated_at",
+    rows: found.map(([id, name, members, source]) => ({ id, name, member_ids: JSON.stringify(members), source_url: source })),
+  });
+  if (stmts.length) await db.batch(stmts);
   await setState(db, "state_committees_checked", new Date().toISOString());
   return found.length;
 }
@@ -109,7 +112,8 @@ export async function syncStateHearings(env, db, budget) {
              VALUES (?, 'state', 'openstates', ?, 'Hearing', ?, ?, ?, ?, ?, ?, datetime('now'))
              ON CONFLICT(id) DO UPDATE SET body = excluded.body, starts_at = excluded.starts_at, status = excluded.status,
                location = excluded.location, online_url = excluded.online_url, participants = excluded.participants,
-               source_url = excluded.source_url, updated_at = excluded.updated_at`
+               source_url = excluded.source_url, updated_at = excluded.updated_at
+             WHERE ${differs("meetings", ["body", "starts_at", "status", "location", "online_url", "participants", "source_url"])}`
           )
           .bind(
             `os-${slugify(ev.id)}`,

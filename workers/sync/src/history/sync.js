@@ -23,6 +23,7 @@ import { getState, setState, slugify, today, currentCongress, isHttp, xmlTag, xm
 import { frOrder } from "../executive/parse.js";
 import { saveAction, loadNominations, presidentLookup } from "../executive/sync.js";
 import { parseHouseRoll, houseLegis, congressOfYear, fecCycles } from "./parse.js";
+import { differs } from "../upsert.js";
 
 const FIRST_VOTE_YEAR = 2001;
 const FIRST_ORDER_YEAR = 1994;
@@ -196,7 +197,8 @@ export async function syncHistoryFunding(env, db, budget) {
           .prepare(
             `INSERT INTO funding_cycles (official_id, fec_id, cycle, receipts, disbursements, cash_on_hand, coverage_end, source_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
              ON CONFLICT (fec_id, cycle) DO UPDATE SET official_id = excluded.official_id, receipts = excluded.receipts, disbursements = excluded.disbursements,
-               cash_on_hand = excluded.cash_on_hand, coverage_end = excluded.coverage_end`
+               cash_on_hand = excluded.cash_on_hand, coverage_end = excluded.coverage_end
+             WHERE ${differs("funding_cycles", ["official_id", "receipts", "disbursements", "cash_on_hand", "coverage_end"])}`
           )
           .bind(official, fec, c.cycle, c.receipts, c.disbursements, c.cash_on_hand, c.coverage_end, source)
       );

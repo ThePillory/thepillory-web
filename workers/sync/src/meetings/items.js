@@ -1,18 +1,20 @@
+import { syncScope } from "../upsert.js";
 // Saving a meeting's agenda items (both county sources).
 
 export async function saveItems(db, meetingId, fileId, parsed) {
-  // A page with no items (agenda not posted yet) never erases items already saved.
-  const stmts = parsed.items.length ? [db.prepare("DELETE FROM meeting_items WHERE meeting_id = ?").bind(meetingId)] : [];
-  for (const it of parsed.items) {
-    stmts.push(
-      db
-        .prepare(
-          `INSERT OR REPLACE INTO meeting_items (meeting_id, item_key, number, title, section, section_kind, item_url, staff_report_url, attachments, sort)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-        )
-        .bind(meetingId, it.item_key, it.number, it.title, it.section, it.section_kind, it.item_url, it.staff_report_url, JSON.stringify(it.attachments), it.sort)
-    );
-  }
+  // A page with no items (agenda not posted yet) never erases items already saved. Only items
+  // that are new, changed or gone are written (src/db.js syncScope).
+  const stmts = parsed.items.length
+    ? (
+        await syncScope(db, {
+          table: "meeting_items",
+          scope: { meeting_id: meetingId },
+          key: ["item_key"],
+          cols: ["item_key", "number", "title", "section", "section_kind", "item_url", "staff_report_url", "attachments", "sort"],
+          rows: parsed.items.map((it) => ({ ...it, attachments: JSON.stringify(it.attachments) })),
+        })
+      ).stmts
+    : [];
   stmts.push(
     db
       .prepare(

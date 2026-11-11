@@ -45,6 +45,7 @@ import zipfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import d1sql as D  # noqa: E402  (writes only what changed)
 import govmoney as G  # noqa: E402
 import usaspending as U  # noqa: E402
 from load_trades import d1, lit, run_sql, MIGRATIONS  # noqa: E402
@@ -155,13 +156,25 @@ def members(args):
     return G.Members(d1(args, command="SELECT id, name, last_name, state, district_code, chamber, active FROM officials WHERE chamber IN ('us-house', 'us-senate')"))
 
 
+# Each table's key: loads upsert by it and write only rows that are new or changed (tools/d1sql.py).
+KEYS = {"earmarks": ["id"], "earmark_requesters": ["earmark_id", "name"], "earmark_requests": ["id"], "gift_travel": ["id"],
+        "fara_registrants": ["registration_number"], "fara_principals": ["registration_number", "principal"], "fara_contacts": ["doc_url", "n"]}
+
+
 def inserts(table, cols, rows, per=40):
-    """Multi-row INSERT OR REPLACE statements."""
-    out = []
-    for i in range(0, len(rows), per):
-        vals = ",\n".join("(" + ", ".join(lit(r.get(c)) for c in cols) + ")" for r in rows[i:i + per])
-        out.append(f"INSERT OR REPLACE INTO {table} ({', '.join(cols)}) VALUES\n{vals};")
-    return out
+    """Multi-row upserts that write only new or changed rows (identical rows aren't written)."""
+    return D.upserts(table, cols, [[r.get(c) for c in cols] for r in rows], KEYS[table], rows_per=per)
+
+
+def stored_keys(args, sql):
+    """Keys already in D1 (a read: a thousandth of a write's cost), so a load deletes only rows gone
+    from its source. Without Cloudflare access (measure mode), nothing is stored."""
+    if not os.environ.get("CLOUDFLARE_API_TOKEN"):
+        return []
+    try:
+        return [tuple(r.values()) for r in d1(args, command=sql)]
+    except SystemExit:
+        return []
 
 
 # ---------------------------------------------------------------------------
@@ -172,11 +185,14 @@ EARMARK_COLS = ["id", "fy", "stage", "subcommittee", "agency", "account", "state
 REQUEST_COLS = ["id", "fy", "official_id", "member_name", "district", "subcommittee", "recipient", "project", "address", "amount_requested", "member_url", "enacted_id", "source_url"]
 
 
-def table_sql(url, fy, stage, sub, status, rows, note=None):
-    out = [f"DELETE FROM earmark_requesters WHERE earmark_id IN (SELECT id FROM earmarks WHERE source_url = {lit(url)});",
-           f"DELETE FROM earmarks WHERE source_url = {lit(url)};"]
-    out += inserts("earmarks", EARMARK_COLS, rows)
+def table_sql(url, fy, stage, sub, status, rows, note=None, args=None):
+    """One table's rows: only rows new, changed or gone from it are written."""
     reqs = [{"earmark_id": r["id"], "name": n, "chamber": ch, "official_id": oid} for r in rows for ch, n, oid in r["_who"]]
+    have_reqs = stored_keys(args, f"SELECT x.earmark_id, x.name FROM earmark_requesters x JOIN earmarks e ON e.id = x.earmark_id WHERE e.source_url = {lit(url)}") if args else []
+    have = stored_keys(args, f"SELECT id FROM earmarks WHERE source_url = {lit(url)}") if args else []
+    out = D.prune("earmark_requesters", {}, ["earmark_id", "name"], [(q["earmark_id"], q["name"]) for q in reqs], existing=have_reqs)
+    out += D.prune("earmarks", {"source_url": url}, ["id"], [r["id"] for r in rows], existing=have)
+    out += inserts("earmarks", EARMARK_COLS, rows)
     out += inserts("earmark_requesters", ["earmark_id", "name", "chamber", "official_id"], reqs, per=80)
     out.append(f"INSERT OR REPLACE INTO earmark_tables (source_url, fy, stage, subcommittee, status, rows, note, read_at) VALUES "
                f"({lit(url)}, {fy}, {lit(stage)}, {lit(sub)}, {lit(status)}, {len(rows)}, {lit(note)}, datetime('now'));")
@@ -303,12 +319,12 @@ def earmarks(args):
                 rows = G.parse_table(pdf_text(data), fy, sub, url)
             except G.Unreadable as e:
                 say(f"  FY{fy} {sub} (enacted): left as a link: {e}")
-                sql += table_sql(url, fy, "enacted", sub, "link", [], str(e))
+                sql += table_sql(url, fy, "enacted", sub, "link", [], str(e), args=args)
                 continue
             unmatched = who(rows, m)
             tables += rows
             say(f"  FY{fy} {sub} (enacted){via}: {len(rows)} projects, ${sum(r['amount'] for r in rows):,.0f}; requesters not matched: {len(unmatched)} {sorted(unmatched)[:8]}")
-            sql += table_sql(url, fy, "enacted", sub, "read", rows)
+            sql += table_sql(url, fy, "enacted", sub, "read", rows, args=args)
     for fy, url in HOUSE_AWARDS.items():
         try:
             rows = G.house_awards(xlsx_rows(get(url), "requestor"), fy, url)
@@ -319,7 +335,7 @@ def earmarks(args):
         unmatched = who(rows, m)
         tables += rows
         say(f"  FY{fy} House committee bills: {len(rows)} projects, ${sum(r['amount'] for r in rows):,.0f}; requesters not matched: {len(unmatched)} {sorted(unmatched)[:8]}")
-        sql += table_sql(url, fy, "house_committee", None, "read", rows)
+        sql += table_sql(url, fy, "house_committee", None, "read", rows, args=args)
     requests = []
     for fy, url in HOUSE_REQUESTS.items():
         try:
@@ -338,7 +354,7 @@ def earmarks(args):
                 miss.add(q["member_name"])
         requests += rows
         say(f"  FY{fy} House requests: {len(rows)} requests, ${sum(q['amount_requested'] for q in rows):,.0f}; members not matched: {len(miss)} {sorted(miss)[:8]}")
-        sql.append(f"DELETE FROM earmark_requests WHERE source_url = {lit(url)};")
+        sql += D.prune("earmark_requests", {"source_url": url}, ["id"], [q["id"] for q in rows], existing=stored_keys(args, f"SELECT id FROM earmark_requests WHERE source_url = {lit(url)}"))
     # A request ties to a table row only with every table in view: the ones read now and, for any not read
     # this run, the rows already stored from them (otherwise a refused table would undo the ties).
     tied = tie_requests(requests, tables + stored_rows(args, kept))
@@ -436,7 +452,8 @@ def travel(args):
     out = list({r["id"]: r for r in out}.values())
     say(f"Trips matched to one member: {len(out)} (members {sum(r['traveler'] == 'member' for r in out)}, staff {sum(r['traveler'] == 'staff' for r in out)}); "
         f"not matched: {sum(miss.values())}, most common: {sorted(miss.items(), key=lambda x: -x[1])[:12]}")
-    sql = ["DELETE FROM gift_travel;"] if out else []
+    # Only trips new, changed or gone from the disclosures are written.
+    sql = D.prune("gift_travel", {}, ["id"], [r["id"] for r in out], existing=stored_keys(args, "SELECT id FROM gift_travel")) if out else []
     return sql + inserts("gift_travel", ["id", "official_id", "chamber", "traveler", "sponsor", "destination", "start_date", "end_date", "source_url"], out)
 
 
@@ -524,7 +541,7 @@ def fara(args):
                 keep_rows.append({"doc_url": d["url"], "n": i, "registration_number": d["reg"], "official_id": hit[0], "contact_kind": hit[1],
                                   "principal": c["principal"] or None, "contact_date": c["date"], "method": c["method"], "filed_on": d["filed"]})
         matched += len(keep_rows)
-        sql.append(f"DELETE FROM fara_contacts WHERE doc_url = {lit(d['url'])};")
+        sql += D.prune("fara_contacts", {"doc_url": d["url"]}, ["n"], [r["n"] for r in keep_rows])
         sql += inserts("fara_contacts", ["doc_url", "n", "registration_number", "official_id", "contact_kind", "principal", "contact_date", "method", "filed_on"], keep_rows)
         sql.append(f"INSERT OR REPLACE INTO fara_docs (doc_url, registration_number, filed_on, status, contacts) VALUES ({lit(d['url'])}, {d['reg']}, {lit(d['filed'])}, 'read', {len(keep_rows)});")
         if keep_rows:

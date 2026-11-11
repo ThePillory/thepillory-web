@@ -18,6 +18,7 @@
 // (docs/data-sync.md, "What Cloudflare costs").
 
 import { getState, setState } from "./util.js";
+import { syncScope } from "./upsert.js";
 
 const missing = (err) => /no such table|no such column/i.test(String(err && err.message));
 
@@ -121,15 +122,16 @@ export async function buildStateCoverage(db) {
   const { results: bills } = await db.prepare("SELECT st, COUNT(*) AS n, group_concat(DISTINCT session) AS sessions FROM bill_list WHERE level = 'state' AND st IS NOT NULL GROUP BY st").all();
   for (const r of bills) Object.assign(at(r.st), { bills: r.n, sessions: r.sessions });
   const list = [...rows.values()].filter((r) => /^[A-Z]{2}$/.test(r.st));
-  const stmts = [db.prepare("DELETE FROM state_coverage")];
-  for (const r of list) {
-    stmts.push(
-      db
-        .prepare("INSERT INTO state_coverage (st, legislators, executives, bills, votes, first_vote, last_vote, sessions, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))")
-        .bind(r.st, r.legislators, r.executives, r.bills, r.votes, r.first_vote, r.last_vote, r.sessions)
-    );
-  }
-  await db.batch(stmts);
+  // Only states whose numbers changed are written (src/db.js syncScope).
+  const { stmts } = await syncScope(db, {
+    table: "state_coverage",
+    scope: {},
+    key: ["st"],
+    cols: ["st", "legislators", "executives", "bills", "votes", "first_vote", "last_vote", "sessions"],
+    stamp: "updated_at",
+    rows: list,
+  });
+  if (stmts.length) await db.batch(stmts);
   return list.length;
 }
 

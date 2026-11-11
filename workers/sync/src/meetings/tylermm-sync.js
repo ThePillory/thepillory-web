@@ -23,6 +23,7 @@ import { commentInfo } from "./comment.js";
 import { saveItems } from "./items.js";
 import { getState, setState, BudgetExhausted } from "../util.js";
 import { pacificNow, addDays } from "./time.js";
+import { differs } from "../upsert.js";
 
 const LOOK_AHEAD_DAYS = 45;
 const BODY_SLUGS = { "Board of Supervisors": "board-of-supervisors" };
@@ -85,7 +86,14 @@ async function saveMeeting(db, m) {
          posted_at = COALESCE(excluded.posted_at, meetings.posted_at),
          first_seen_at = COALESCE(meetings.first_seen_at, excluded.first_seen_at),
          video_url = COALESCE(excluded.video_url, meetings.video_url),
-         source_url = excluded.source_url, updated_at = excluded.updated_at`
+         source_url = excluded.source_url, updated_at = excluded.updated_at
+       WHERE ${differs("meetings", ["body", "body_slug", "meeting_type", "starts_at", "status", "location", "source_url"])}
+         OR excluded.agenda_url IS NOT NULL AND meetings.agenda_url IS NOT excluded.agenda_url
+         OR excluded.packet_url IS NOT NULL AND meetings.packet_url IS NOT excluded.packet_url
+         OR excluded.agenda_file_id IS NOT NULL AND meetings.agenda_file_id IS NOT excluded.agenda_file_id
+         OR excluded.posted_at IS NOT NULL AND meetings.posted_at IS NOT excluded.posted_at
+         OR meetings.first_seen_at IS NULL AND excluded.first_seen_at IS NOT NULL
+         OR excluded.video_url IS NOT NULL AND meetings.video_url IS NOT excluded.video_url`
     )
     .bind(
       m.id,

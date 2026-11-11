@@ -60,6 +60,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import d1sql as D  # noqa: E402  (writes only what changed)
 from load_state_votes import lit  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -514,7 +515,7 @@ def scan_queue_sql(args, limit=10):
             print(f"  {r['id']}: not queued for transcription ({type(e).__name__})", file=sys.stderr)
             continue
         out.append(f"INSERT OR IGNORE INTO trade_scans (report_id, text_rows) VALUES ({lit(r['id'])}, {len(lines)});")
-        out += [f"INSERT OR REPLACE INTO trade_scan_lines (report_id, n, line) VALUES ({lit(r['id'])}, {n}, {lit(line)});" for n, line in sorted(lines.items())]
+        out += D.upserts("trade_scan_lines", ["report_id", "n", "line"], [(r["id"], n, line) for n, line in sorted(lines.items())], ["report_id", "n"], rows_per=1)
         queued.append((r["id"], len(lines)))
     return out, queued
 
@@ -765,16 +766,18 @@ def report_sql(rep, trades):
         "INSERT OR REPLACE INTO trade_reports (id, chamber, official_id, filer_name, state, district, filed_on, report_url, paper, parsed, trade_count, unmatched, source_url, request_url, position, agency, checked_at) VALUES ("
         + ", ".join(lit(rep.get(k)) for k in ("id", "chamber", "official_id", "filer_name", "state", "district", "filed_on", "report_url", "paper", "parsed", "trade_count", "unmatched", "source_url", "request_url", "position", "agency"))
         + ", datetime('now'));",
-        f"DELETE FROM trades WHERE report_id = {lit(rep['id'])};",
     ]
-    for n, t in enumerate(trades or [], 1):
-        out.append(
-            "INSERT INTO trades (report_id, n, official_id, chamber, state, transaction_date, filed_on, days_to_file, owner, asset_name, ticker, asset_type, type, amount, amount_min, amount_max, sic, sector) VALUES ("
-            + ", ".join(lit(v) for v in (rep["id"], n, rep["official_id"], rep["chamber"], rep["state"], t["transaction_date"], rep["filed_on"],
-                                          days_between(t["transaction_date"], rep["filed_on"]) if rep.get("dated", True) else None, t["owner"], clean_asset(t["asset_name"]), t["ticker"], t["asset_type"],
-                                          t["type"], t["amount"], t["amount_min"], t["amount_max"], t.get("sic"), t.get("sector")))
-            + ");")
+    # A report read again (one matched to a member later) writes only rows that changed (tools/d1sql.py).
+    rows = [(rep["id"], n, rep["official_id"], rep["chamber"], rep["state"], t["transaction_date"], rep["filed_on"],
+             days_between(t["transaction_date"], rep["filed_on"]) if rep.get("dated", True) else None, t["owner"], clean_asset(t["asset_name"]), t["ticker"], t["asset_type"],
+             t["type"], t["amount"], t["amount_min"], t["amount_max"], t.get("sic"), t.get("sector")) for n, t in enumerate(trades or [], 1)]
+    out += D.prune("trades", {"report_id": rep["id"]}, ["n"], [r[1] for r in rows])
+    out += D.upserts("trades", TRADE_COLS, rows, ["report_id", "n"], rows_per=1)
     return out
+
+
+TRADE_COLS = ["report_id", "n", "official_id", "chamber", "state", "transaction_date", "filed_on", "days_to_file", "owner", "asset_name", "ticker", "asset_type",
+              "type", "amount", "amount_min", "amount_max", "sic", "sector"]
 
 
 def summary_sql(official_ids):
@@ -782,7 +785,11 @@ def summary_sql(official_ids):
     if not ids:
         return []
     return [
-        f"DELETE FROM trade_summary WHERE official_id IN ({ids});",
+        # Only rows that changed are written (D1 bills every row written): years no longer present
+        # are deleted, the rest upserted, skipping identical rows. The same SQL as src/trades/summary.js.
+        f"""DELETE FROM trade_summary WHERE official_id IN ({ids}) AND year NOT IN (
+  SELECT CAST(substr(transaction_date, 1, 4) AS INTEGER) FROM trades WHERE official_id = trade_summary.official_id AND transaction_date IS NOT NULL
+  UNION SELECT CAST(substr(filed_on, 1, 4) AS INTEGER) FROM trade_reports WHERE official_id = trade_summary.official_id AND paper = 1);""",
         f"""INSERT INTO trade_summary (official_id, year, trades, total_min, total_max, open_ended, paper)
 SELECT y.official_id, y.year, COALESCE(t.n, 0), COALESCE(t.lo, 0), CASE WHEN COALESCE(t.open, 0) > 0 THEN NULL ELSE COALESCE(t.hi, 0) END, COALESCE(t.open, 0), COALESCE(p.n, 0)
 FROM (SELECT official_id, CAST(substr(transaction_date, 1, 4) AS INTEGER) AS year FROM trades WHERE official_id IN ({ids}) AND transaction_date IS NOT NULL
@@ -791,7 +798,12 @@ LEFT JOIN (SELECT official_id, CAST(substr(transaction_date, 1, 4) AS INTEGER) A
            SUM(CASE WHEN amount_max IS NULL THEN 1 ELSE 0 END) AS open
            FROM trades WHERE official_id IN ({ids}) AND transaction_date IS NOT NULL GROUP BY 1, 2) t ON t.official_id = y.official_id AND t.year = y.year
 LEFT JOIN (SELECT official_id, CAST(substr(filed_on, 1, 4) AS INTEGER) AS year, COUNT(*) AS n FROM trade_reports WHERE official_id IN ({ids}) AND paper = 1 GROUP BY 1, 2) p
-  ON p.official_id = y.official_id AND p.year = y.year;""",
+  ON p.official_id = y.official_id AND p.year = y.year
+WHERE true
+ON CONFLICT (official_id, year) DO UPDATE SET trades = excluded.trades, total_min = excluded.total_min, total_max = excluded.total_max,
+  open_ended = excluded.open_ended, paper = excluded.paper
+WHERE trade_summary.trades IS NOT excluded.trades OR trade_summary.total_min IS NOT excluded.total_min OR trade_summary.total_max IS NOT excluded.total_max
+  OR trade_summary.open_ended IS NOT excluded.open_ended OR trade_summary.paper IS NOT excluded.paper;""",
     ]
 
 
@@ -951,9 +963,11 @@ def main():
             by_bio = {o["bioguide_id"]: o["id"] for o in officials if o.get("bioguide_id") and o.get("active")}
             rows = [(by_bio[b], cid, name, parent, title) for b, cid, name, parent, title in committees() if b in by_bio]
             if rows:
-                stmts.append("DELETE FROM congress_committees;")
+                # Only assignments new, changed or gone are written (it was every row, every day).
                 src = f"{LEGISLATORS}/committee-membership-current.json"
-                stmts += [f"INSERT OR REPLACE INTO congress_committees (official_id, committee_id, name, parent, title, source_url) VALUES ({lit(a)}, {lit(b)}, {lit(c)}, {lit(d)}, {lit(e)}, {lit(src)});" for a, b, c, d, e in rows]
+                have = [(r["official_id"], r["committee_id"]) for r in d1(args, command="SELECT official_id, committee_id FROM congress_committees")]
+                stmts += D.prune("congress_committees", {}, ["official_id", "committee_id"], [(a, b) for a, b, *_ in rows], existing=have)
+                stmts += D.upserts("congress_committees", ["official_id", "committee_id", "name", "parent", "title", "source_url"], [(a, b, c, d, e, src) for a, b, c, d, e in rows], ["official_id", "committee_id"])
                 say(f"Committees: {len(rows)} assignments")
         except Exception as e:
             say(f"Committees: not read ({type(e).__name__}: {e})")

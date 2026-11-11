@@ -6,7 +6,8 @@
 #   By hand (Actions -> Load net worth reports -> Run workflow): "measure" reads
 #   reports and writes what it found to the run summary, writing nothing to D1
 #   ("names" limits it to some last names); "load" writes them.
-#   Daily at 16:41 UTC (after the sync Worker's run and the stock trades load,
+#   Scheduled at 16:41 UTC, daily May 1 – August 31 and weekly (Mondays) otherwise
+#   (the gate job; docs/data-sync.md, "How often each source updates"), after the sync Worker's run and the stock trades load,
 #   so they don't write to D1 at once): up to 800 reports not read yet, the
 #   executive branch and the justices first, then newest first.
 #
@@ -38,8 +39,27 @@ concurrency:
   group: networth
   cancel-in-progress: false
 jobs:
+  # Is today a run day? (tools/schedule_gate.mjs, the rules in workers/sync/src/cadence.js;
+  # docs/data-sync.md, "How often each source updates"). A run started by hand always runs.
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      run: ${{ steps.gate.outputs.run }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            tools/schedule_gate.mjs
+            workers/sync/src/cadence.js
+            data/elections/dates.json
+          sparse-checkout-cone-mode: false
+      - id: gate
+        run: node tools/schedule_gate.mjs networth "${{ github.event_name }}"
   load:
     runs-on: ubuntu-latest
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
     timeout-minutes: 150
     steps:
       - uses: actions/checkout@v4

@@ -3,7 +3,8 @@
 # individual donors) and the campaign website from each candidate's Form 1.
 # Candidates come from data/elections/federal-<year>/ (the "Refresh election
 # data" workflow). Each run reads the candidates read longest ago, within the
-# FEC's hourly limit; see tools/build_candidates.mjs and docs/candidates.md.
+# FEC's hourly limit; see tools/build_candidates.mjs and docs/candidates.md. Weekly
+# (Mondays), and twice a day in the 7 days after each FEC filing deadline (the gate job).
 name: Refresh candidate data
 on:
   schedule:
@@ -17,8 +18,27 @@ concurrency:
   group: data-commit
   cancel-in-progress: false
 jobs:
+  # Is today a run day? (tools/schedule_gate.mjs, the rules in workers/sync/src/cadence.js;
+  # docs/data-sync.md, "How often each source updates"). A run started by hand always runs.
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      run: ${{ steps.gate.outputs.run }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            tools/schedule_gate.mjs
+            workers/sync/src/cadence.js
+            data/elections/dates.json
+          sparse-checkout-cone-mode: false
+      - id: gate
+        run: node tools/schedule_gate.mjs candidates "${{ github.event_name }}" ${{ github.event.schedule == '17 19 * * *' && '--daily-only' || '' }}
   build:
     runs-on: ubuntu-latest
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
