@@ -6,7 +6,7 @@
 //   /taxes/wealth/           Wealth: who holds household wealth, by wealth group (the
 //                            Federal Reserve's Distributional Financial Accounts)
 //   /taxes/companies/        Corporations: every company filing a 10-K, by name, revenue
-//                            or pretax income (functions/_lib/taxes.js)
+//                            or profit before taxes (functions/_lib/taxes.js)
 //   /taxes/companies/<cik>/  one company
 // A Taxpayers | Wealth | Corporations switch at the top of each, like Laws'. The same for
 // every visitor, so kept at the edge for five minutes.
@@ -72,7 +72,7 @@ ${rows}
 ${more}
 <section class="card stack-sm">
   <p class="label">About this list</p>
-  <p class="small">${at && at !== FAILED ? `The ${esc(String(at.n))} largest` : "The largest"} companies by revenue in their latest fiscal year that file a 10-K with the SEC and tag these values in their financial data, ordered by name, revenue or pretax income, as you choose. It isn't ordered or labeled by taxes paid or by any rate. Revenue and pretax income are for each company's latest fiscal year with figures.</p>
+  <p class="small">${at && at !== FAILED ? `The ${esc(String(at.n))} largest` : "The largest"} companies by revenue in their latest fiscal year that file a 10-K with the SEC and tag these values in their financial data, ordered by name, revenue or profit before taxes, as you choose. It isn't ordered or labeled by taxes paid or by any rate. Revenue and profit before taxes are for each company's latest fiscal year with figures.</p>
   <p class="small">State is the company's business address as EDGAR lists it. ${at && at !== FAILED ? `Loaded ${esc(String(at.at).slice(0, 10))}.` : ""} <a class="inline-link" href="${TAXES_METHOD}">How this works</a></p>
 </section>
 ${READING}`;

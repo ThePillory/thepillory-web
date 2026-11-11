@@ -11,7 +11,7 @@ import { DatabaseSync } from "node:sqlite";
 import { readFileSync } from "node:fs";
 import { onRequestGet as taxesRoute } from "../../../functions/taxes/[[path]].js";
 import { onRequestGet as financesRoute } from "../../../functions/finances/[[path]].js";
-import { loadCompany, companyMain, listCompanies, listFilters, listHref, SORTS, READING, taxMarker, markersIn, taxInfo, fillTaxLines, filingUrl, fiscalYear, taxesSwitch } from "../../../functions/_lib/taxes.js";
+import { loadCompany, companyMain, listCompanies, listFilters, listHref, SORTS, READING, taxMarker, markersIn, taxInfo, fillTaxLines, filingUrl, fiscalYear, taxesSwitch, LABELS, FILING_TERMS, NOTES, RATE_NOTE, shareOfProfit, shareText, multiYear, leadSentence, yearsWords, companyRow, taxLine } from "../../../functions/_lib/taxes.js";
 import { wealthMain, wealthRows, COUNTS } from "../../../functions/_lib/wealth.js";
 import { taxpayersMain, shortCount, shortDollars, NOT_COUNTED, UNSOLD_GAINS, irsSlices } from "../../../functions/_lib/taxpayers.js";
 import { checkQuery } from "../../../functions/_lib/crawl.js";
@@ -63,19 +63,36 @@ const call = async (route, path, env) => {
 test("the company page: the latest year labeled exactly, with its months, every amount linked to its filing", async () => {
   const html = companyMain(await loadCompany(db(), 1));
   assert.match(html, /<h2 class="h3">Fiscal year 2025 \(Feb 2025 – Jan 2026\)<\/h2>/);
-  assert.match(html, /<dt>Income taxes paid, net of refunds<\/dt><dd><a class="inline-link" href="https:\/\/www\.sec\.gov\/Archives\/edgar\/data\/1\/000000000126000010\/0000000001-26-000010-index\.htm"[^>]*>\$9,000,000<\/a>/);
-  assert.match(html, /<dt>Income \(loss\) before income taxes<\/dt><dd><a [^>]*>\$40,000,000<\/a>/);
+  // Plain labels, each with its explanation and the filing's own term in small text under it.
+  assert.match(html, /<dt>Income taxes actually paid<span class="list-meta">Cash sent to tax authorities this year, minus refunds received<\/span><span class="list-meta">In the 10-K: Income taxes paid, net of refunds<\/span><\/dt><dd><a class="inline-link" href="https:\/\/www\.sec\.gov\/Archives\/edgar\/data\/1\/000000000126000010\/0000000001-26-000010-index\.htm"[^>]*>\$9,000,000<\/a>/);
+  assert.match(html, /<dt>Profit before taxes<span class="list-meta">A minus sign means a loss<\/span><span class="list-meta">In the 10-K: Income \(loss\) before income taxes<\/span><\/dt><dd><a [^>]*>\$40,000,000<\/a>/);
+  assert.match(html, /Income taxes paid as a share of profit<span class="list-meta">[^<]*<\/span><\/dt><dd>23%<\/dd>/);
   // The split and the jurisdictions, when filed.
-  assert.match(html, /Taxes paid, as the 10-K splits them/);
-  assert.match(html, /<dt>Federal<\/dt><dd><a [^>]*>\$6,000,000<\/a>/);
-  assert.match(html, /<dt>Ireland <span class="secondary">\(foreign\)<\/span><\/dt>/);
-  assert.match(html, /<dt>California <span class="secondary">\(state and local\)<\/span><\/dt>/);
+  assert.match(html, /Where the taxes went, as the 10-K splits them/);
+  assert.match(html, /<dt>Paid to the U\.S\. government<span class="list-meta">In the 10-K: Federal income taxes paid, net of refunds<\/span><\/dt><dd><a [^>]*>\$6,000,000<\/a>/);
+  assert.match(html, /<dt>Paid to states and cities<span/);
+  assert.match(html, /<dt>Paid to other countries<span/);
+  assert.match(html, /<dt>Ireland <span class="secondary">\(another country\)<\/span><\/dt>/);
+  assert.match(html, /<dt>California <span class="secondary">\(state or city\)<\/span><\/dt>/);
   // A value the filing doesn't tag is "Not reported", never filled in.
-  assert.match(html, /Current federal income tax expense \(benefit\)<\/th><td><a [^>]*>\$5,000,000<\/a><\/td><td>Not reported<\/td>/);
+  assert.match(html, /Federal tax owed on this year(?:'|&#x27;)s profit<span class="list-meta">In the 10-K: Current federal income tax expense \(benefit\)<\/span><\/th><td><a [^>]*>\$5,000,000<\/a><\/td><td>Not reported<\/td>/);
+  // The share of profit, a row in Show the numbers: 7.0 / 35.0 = 20%, 9.0 / 40.0 = 23%.
+  assert.match(html, /Income taxes paid as a share of profit<span class="list-meta">[^<]*<\/span><\/th><td>20%<\/td><td>23%<\/td>/);
   // The chart of both, with its numbers.
   assert.match(html, /class="mini-bars pair-bars"/);
   assert.match(html, /Show the numbers/);
   assert.ok(html.includes(READING));
+  // The lead, first: the latest year in one sentence, the years together, the fixed rate line.
+  assert.match(html, /<p class="lead-sentence">In fiscal 2025, Example Retail Inc reported \$40\.0 million in profit before taxes and paid \$9\.0 million in income taxes: 23% of its profit\.<\/p>/);
+  assert.match(html, /Over fiscal 2024–2025: 21% of profit <span class="secondary">\(\$16\.0 million in income taxes paid on \$75\.0 million in profit before taxes\)<\/span>/);
+  assert.ok(html.indexOf('id="summary"') < html.indexOf('id="latest"'));
+  assert.ok(html.includes(RATE_NOTE));
+  // The XBRL elements sit in a closed "Technical details" fold at the bottom.
+  assert.match(html, /<details class="fold" id="technical">\s*<summary><span class="fold-title">Technical details<\/span>/);
+  assert.ok(html.indexOf("xbrl-note") > html.indexOf('id="records"'));
+  assert.equal((html.match(/IncomeTaxesPaidNet/g) || []).length, 1);
+  // The chart's legend uses the plain labels.
+  assert.match(html, /Income taxes actually paid[\s\S]*Profit before taxes/);
   assert.equal(fiscalYear({ fy: null, period_end: "2025-06-30", period_start: null }), "Fiscal year ended Jun 30, 2025");
   assert.equal(filingUrl(1, "not-an-accession"), null);
 });
@@ -95,8 +112,9 @@ test("every company gets the same layout", async () => {
   const a = companyMain(await loadCompany(db(), 1));
   const b = companyMain(await loadCompany(db(), 2));
   assert.equal(shape(a), shape(b));
-  assert.match(b, /Income \(loss\) before income taxes and equity-method investments/); // the element it is, said so
-  assert.match(b, /<dt>Income taxes paid, net of refunds<\/dt><dd><a [^>]*>\$0<\/a>/); // a zero is shown as filed, with no label or color
+  assert.match(b, /In the 10-K: Income \(loss\) before income taxes and equity-method investments/); // the element it is, said so
+  assert.match(b, /<dt>Income taxes actually paid<span[^>]*>[^<]*<\/span><span[^>]*>[^<]*<\/span><\/dt><dd><a [^>]*>\$0<\/a>/); // a zero is shown as filed, with no label or color
+  assert.match(b, /paid \$0 in income taxes: 0% of its profit\./);
 });
 
 test("the list: search by name or ticker, filter by industry and state, sorted by name, revenue or pretax income only", async () => {
@@ -142,7 +160,7 @@ test("organization panels: one line when exactly one company has the name (or a 
   const names = markersIn(html);
   assert.deepEqual(names, ["Example Retail, Inc.", "Twin Inc", "Nobody LLC", "Example Retail Political Action Committee"]);
   const out = fillTaxLines(html, await taxInfo(db(), names));
-  assert.match(out, /<li>Example Retail, Inc\. <a class="tax-line tap small" href="\/taxes\/companies\/1\/">Taxes paid \(FY2025\): \$9\.0 million · pretax income \$40\.0 million ›<\/a><\/li>/);
+  assert.match(out, /<li>Example Retail, Inc\. <a class="tax-line tap small" href="\/taxes\/companies\/1\/">Taxes paid \(FY2025\): \$9\.0 million · profit before taxes \$40\.0 million ›<\/a><\/li>/);
   assert.match(out, /<li>Twin Inc<\/li>/); // two companies share the name: no line
   assert.match(out, /<li>Nobody LLC<\/li>/);
   assert.match(out, /<li>PAC <a class="tax-line[^>]*href="\/taxes\/companies\/1\/"/); // a confirmed link
@@ -265,6 +283,61 @@ test("Taxpayers: the agencies' figures as published, CBO linked, California adde
   assert.match(taxpayersMain(null, ""), /aren't loaded yet/);
 });
 
+test("share of profit: whole percent of profit before taxes, never of revenue, and never estimated", () => {
+  assert.deepEqual(shareOfProfit(9e6, 40e6), { pct: 23 });
+  assert.deepEqual(shareOfProfit(0, 70e6), { pct: 0 });
+  assert.deepEqual(shareOfProfit(5e6, -2e6), { why: "loss" });
+  assert.deepEqual(shareOfProfit(5e6, 0), { why: "loss" });
+  assert.deepEqual(shareOfProfit(null, 40e6), { why: "missing" });
+  assert.deepEqual(shareOfProfit(9e6, null), { why: "missing" });
+  assert.deepEqual(shareOfProfit(-1e6, 40e6), { why: "refund" });
+  assert.equal(shareText({ why: "loss" }), "Not meaningful: loss year");
+  assert.equal(shareText({ why: "missing" }), "Not reported");
+  assert.equal(shareText({ pct: 21 }), "21%");
+});
+
+test("the years together: sums over the most recent five years with both values, the years named", () => {
+  const y = (fy, taxes_paid, pretax) => ({ fy, period_end: `${fy}-12-31`, taxes_paid, pretax });
+  const years = [y(2019, 1, 10), y(2020, 2, 10), y(2021, null, 10), y(2022, 3, 10), y(2023, 4, null), y(2024, 5, 10), y(2025, 6, 10)];
+  const m = multiYear(years);
+  assert.deepEqual(m.years.map((x) => x.fy), [2019, 2020, 2022, 2024, 2025]); // 2021 and 2023 lack a value
+  assert.equal(m.paid, 17);
+  assert.equal(m.pretax, 50);
+  assert.deepEqual(m.share, { pct: 34 });
+  assert.equal(yearsWords(m.years), "fiscal 2019, 2020, 2022, 2024 and 2025");
+  assert.equal(yearsWords([y(2021, 1, 1), y(2022, 1, 1), y(2023, 1, 1)]), "fiscal 2021–2023");
+  // Fewer than five: as many as there are; one year alone isn't a "years together" line.
+  assert.equal(multiYear([y(2024, 5, 10), y(2025, 6, 10)]).years.length, 2);
+  assert.equal(multiYear([y(2025, 6, 10)]), null);
+  // A loss over the years: no percentage.
+  assert.deepEqual(multiYear([y(2024, 5, 10), y(2025, 6, -30)]).share, { why: "losses" });
+});
+
+test("the lead sentence: every variant, parts not reported left out", () => {
+  const y = (taxes_paid, pretax, fy = 2025) => ({ fy, period_end: "2025-12-31", taxes_paid, pretax });
+  assert.equal(leadSentence("Example Co", y(9e6, 40e6)), "In fiscal 2025, Example Co reported $40.0 million in profit before taxes and paid $9.0 million in income taxes: 23% of its profit.");
+  assert.equal(leadSentence("Example Co", y(3e6, -12e6)), "In fiscal 2025, Example Co reported a loss of $12.0 million before taxes and paid $3.0 million in income taxes.");
+  assert.equal(leadSentence("Example Co", y(null, 40e6)), "In fiscal 2025, Example Co reported $40.0 million in profit before taxes.");
+  assert.equal(leadSentence("Example Co", y(9e6, null)), "In fiscal 2025, Example Co paid $9.0 million in income taxes.");
+  assert.equal(leadSentence("Example Co", y(-2e6, 40e6)), "In fiscal 2025, Example Co reported $40.0 million in profit before taxes and received $2.0 million more in income tax refunds than it paid.");
+  assert.equal(leadSentence("Example Co", y(null, null)), "");
+  assert.equal(leadSentence("Example Co", { fy: null, period_end: "2025-06-30", taxes_paid: 1e6, pretax: 2e6 }), "In the fiscal year ended Jun 30, 2025, Example Co reported $2.0 million in profit before taxes and paid $1.0 million in income taxes: 50% of its profit.");
+});
+
+test("plain labels everywhere; the list and the organization line show dollars only, no rates", async () => {
+  for (const k of ["taxes_paid", "paid_federal", "paid_state", "paid_foreign", "pretax", "pretax_us", "pretax_foreign", "current_federal", "current_state", "deferred"]) {
+    assert.ok(LABELS[k] && FILING_TERMS[k] && LABELS[k] !== FILING_TERMS[k], k);
+    assert.doesNotMatch(LABELS[k], /expense|benefit|net of|\(loss\)|pretax/i, k);
+  }
+  assert.equal(LABELS.taxes_paid, "Income taxes actually paid");
+  assert.equal(NOTES.deferred, "Recorded now; paid in a later year, or sometimes not at all");
+  assert.equal(SORTS.pretax, "Profit before taxes");
+  const row = companyRow({ cik: 1, name: "Example Retail Inc", latest_fy: 2025, revenue: 9e8, pretax: 4e7, taxes_paid: 9e6, sic_desc: "Retail", state: "TX" });
+  assert.match(row, /profit before taxes \$40\.0 million/);
+  const line = taxLine({ cik: 1, latest_fy: 2025, taxes_paid: 9e6, pretax: 4e7 });
+  for (const html of [row, line, await (await call(taxesRoute, "/taxes/companies/", { DB: db() })).text()]) assert.doesNotMatch(html.replace(/<[^>]+>/g, " "), /\d\s*%|share of profit/i);
+});
+
 test("wording rules: no loaded words, no rankings by taxes or rate, on any of these pages or in their code", async () => {
   const banned = /\b(?:fair share|loophole|dodg\w*|paid nothing|pays less than|paid zero|zero tax|top (?:tax)?payers|ranked|ranking|biggest|worst|best|evad\w*|avoid\w*)\b/i;
   const pages = [
@@ -283,6 +356,18 @@ test("wording rules: no loaded words, no rankings by taxes or rate, on any of th
     const src = readFileSync(new URL(`../../../${f}`, import.meta.url), "utf8").replace(/^\s*\/\/.*$/gm, "");
     assert.doesNotMatch(src, /fair share|loophole|dodged|paid nothing|pays less than|paid zero|top payers/i, f);
   }
+  // The plain text added for readers: no "only", "just", "nearly" or the like anywhere on a company's page.
+  const minimizers = /\b(?:only|just|nearly|merely|barely|mere|almost|a mere|as little as|as much as|whopping|staggering)\b/i;
+  const company = (await Promise.all([1, 2].map(async (k) => companyMain(await loadCompany(db(), k))))).join(" ");
+  const pieces = [...Object.values(LABELS), ...Object.values(FILING_TERMS), ...Object.values(NOTES), RATE_NOTE, READING, company,
+    leadSentence("Example Co", { fy: 2025, taxes_paid: 3e6, pretax: -12e6 }), leadSentence("Example Co", { fy: 2025, taxes_paid: -2e6, pretax: 4e7 })];
+  for (const t of pieces) {
+    const text = t.replace(/<[^>]+>/g, " ");
+    const hit = text.match(new RegExp(`.{0,40}(?:${minimizers.source}|${banned.source}).{0,40}`, "i"));
+    assert.equal(hit, null, hit && hit[0]);
+  }
+  // No comparisons between companies in words.
+  assert.doesNotMatch(company.replace(/<[^>]+>/g, " "), /\b(?:than (?:other|most|average)|compared (?:to|with)|average company|peers?|industry average|above average|below average)\b/i);
   // No person's name: only companies, organizations and income groups (returns are counted).
   assert.doesNotMatch(READING, /\b(Mr|Ms|Mrs)\.? [A-Z]/);
 });

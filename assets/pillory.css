@@ -1775,6 +1775,13 @@ article.fin-term { scroll-margin-top: var(--space-4); }
 .pair-legend { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); }
 /* Long XBRL element names (one word each) wrap instead of widening the page. */
 .xbrl-note { overflow-wrap: anywhere; }
+/* Company taxes: the lead sentence, and plain labels with the filing's term under them. */
+.lead-sentence { margin: 0; font-size: var(--fs-body); font-weight: 600; line-height: 1.45; }
+.tax-table th .list-meta, .kv-row dt .list-meta { font-weight: 400; }
+.tax-table th[scope="row"] { min-width: 9.5rem; }
+.kv--labeled .kv-row { align-items: flex-start; gap: var(--space-3); }
+.kv--labeled .kv-row dt { flex: 1 1 auto; min-width: 0; color: var(--text); font-weight: 600; }
+.kv--labeled .kv-row dd { flex: 0 0 auto; white-space: nowrap; }
 /* /admin/usage/: plain number tables. */
 .usage-table { width: 100%; border-collapse: collapse; font-size: var(--fs-small); font-variant-numeric: tabular-nums; }
 .usage-table td, .usage-table th { padding: var(--space-1) var(--space-2) var(--space-1) 0; border-top: 1px solid var(--border); text-align: right; white-space: nowrap; }
