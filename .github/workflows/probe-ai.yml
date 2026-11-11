@@ -21,7 +21,5 @@ jobs:
           keep = [l for l in lines if re.search(sys.argv[1], l, re.I)]
           print("\n".join(l[:400] for l in keep[:40]) or "(nothing matched; first lines:)\n" + "\n".join(lines[:15]))
           ' "$2"; }
-          curl -sSL -A "Mozilla/5.0" https://developers.cloudflare.com/email-service/platform/limits/index.md | sed -n '/[Cc]ompliance/,/Need a higher/p' | head -40
-          echo "########"; curl -sSL -A "Mozilla/5.0" https://developers.cloudflare.com/email-service/llms.txt | grep -iE "marketing|bulk|newsletter|transactional|unsubscribe|policy|acceptable" | head -20
-          echo "########"; curl -sSL -A "Mozilla/5.0" https://developers.cloudflare.com/email-service/platform/limits/index.md | grep -iE "per second|per day|daily|new accounts|marketing|bulk|unsubscribe|list-unsubscribe" | head -20
-          get https://resend.com/pricing "marketing|broadcast|contacts|\\$[0-9]+|emails ?/ ?mo|50,000|100,000"
+          curl -sSL -A "Mozilla/5.0" https://developers.cloudflare.com/email-service/api/send-emails/workers-api/index.md | sed -n '/^# /,$p' | grep -v "^\s*$" | head -150
+          echo "########"; curl -sSL -A "Mozilla/5.0" https://developers.cloudflare.com/email-service/get-started/send-emails/index.md | sed -n '/^# /,$p' | grep -v "^\s*$" | head -80
