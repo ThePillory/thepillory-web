@@ -1,0 +1,31 @@
+# Temporary read-only probe: email sending options' docs and pricing. Removed after.
+name: Probe email providers
+on:
+  push:
+    branches: [claude/pillory-mobile-screens-p5zekn]
+    paths: [.github/workflows/probe-ai.yml]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          get() { echo; echo "######## $1"; curl -sSL -A "Mozilla/5.0" --max-time 30 "$1" | python3 -c '
+          import sys, re, html
+          t = sys.stdin.read()
+          t = re.sub(r"(?is)<(script|style|nav|header|footer)[^>]*>.*?</\1>", " ", t)
+          t = html.unescape(re.sub(r"<[^>]+>", " ", t))
+          t = re.sub(r"[ \t]+", " ", t)
+          lines = [l.strip() for l in t.splitlines() if l.strip()]
+          keep = [l for l in lines if re.search(sys.argv[1], l, re.I)]
+          print("\n".join(l[:400] for l in keep[:40]) or "(nothing matched; first lines:)\n" + "\n".join(lines[:15]))
+          ' "$2"; }
+          get https://developers.cloudflare.com/email-routing/email-workers/send-email-workers/index.md "verified|destination|limit|any recipient"
+          get https://developers.cloudflare.com/email-service/index.md "beta|available|transactional|marketing|newsletter|bulk|recipient|price|limit"
+          get https://developers.cloudflare.com/email-service/platform/pricing/index.md "price|\\$|free|included|per|beta"
+          get https://developers.cloudflare.com/email-service/platform/limits/index.md "limit|per day|per second|recipient|beta"
+          get https://developers.cloudflare.com/email-service/get-started/index.md "binding|send_email|domain|recipient|verified|beta"
+          get https://aws.amazon.com/ses/pricing/ "per 1,000|\\$0\\.|outbound|free tier"
+          get https://postmarkapp.com/pricing "\\$|broadcast|emails/mo|10,000|50,000|125,000"
+          get https://resend.com/pricing "\\$|emails|marketing|broadcast|contacts|month"
