@@ -24,6 +24,7 @@ import { frOrder } from "../executive/parse.js";
 import { saveAction, loadNominations, presidentLookup } from "../executive/sync.js";
 import { parseHouseRoll, houseLegis, congressOfYear, fecCycles } from "./parse.js";
 import { differs } from "../upsert.js";
+import { api } from "../congress-api.js";
 
 const FIRST_VOTE_YEAR = 2001;
 const FIRST_ORDER_YEAR = 1994;
@@ -399,4 +400,91 @@ export async function syncHistoryVotes(env, db, budget) {
     throw err;
   }
   return { status: "ok", message: `${msg()}; caught up to ${FIRST_VOTE_YEAR}` };
+}
+
+// ---------------------------------------------------------------------------
+// The votes on listed laws (data/taxes/corporate-tax-laws.json): every recorded vote Congress.gov's
+// actions list for each law's bill, loaded through the same House and Senate readers as the history
+// above, ahead of the history's newest-first order, so each law's page shows how members voted. Each
+// law is read once (sync_state law_votes_<bill id>); afterwards the step reads one small file a day.
+
+/** Recorded votes in a bill's actions, one per roll call: [{chamber, congress, session, roll, url, year}]. Pure; tested. */
+export function recordedVotes(actions) {
+  const out = new Map();
+  for (const a of actions || []) {
+    for (const v of a.recordedVotes || []) {
+      const chamber = /senate/i.test(v.chamber || "") ? "senate" : /house/i.test(v.chamber || "") ? "house" : null;
+      const roll = parseInt(v.rollNumber, 10);
+      const session = parseInt(v.sessionNumber, 10);
+      const congress = parseInt(v.congress, 10);
+      if (!chamber || !roll || !session || !congress) continue;
+      out.set(`${chamber}-${congress}-${session}-${roll}`, { chamber, congress, session, roll, url: isHttp(v.url) ? v.url : null, year: String(v.date || a.actionDate || "").slice(0, 4) });
+    }
+  }
+  return [...out.values()];
+}
+
+export async function syncLawVotes(env, db, budget) {
+  if (!env.CONGRESS_API_KEY) return { status: "skipped", message: "CONGRESS_API_KEY is not set" };
+  let file;
+  try {
+    file = await siteJson(env, budget, "/data/taxes/corporate-tax-laws.json");
+  } catch (err) {
+    if (err instanceof UpstreamError && err.status === 404) return { status: "skipped", message: "data/taxes/corporate-tax-laws.json isn't published yet" };
+    throw err;
+  }
+  const laws = ((file && file.laws) || []).filter((l) => l.congress && l.bill_type && l.bill_number);
+  let members = null;
+  let saved = 0;
+  let done = 0;
+  const msg = () => `${saved} recorded vote(s) saved; ${done} of ${laws.length} law(s) fully loaded`;
+  try {
+    for (const l of laws) {
+      const bill = federalBill(l.congress, l.bill_type, l.bill_number);
+      if (!bill) continue;
+      const key = `law_votes_${bill.id}`;
+      if ((await getState(db, key)) === "1") {
+        done += 1;
+        continue;
+      }
+      const path = `/bill/${l.congress}/${normalizeBillType(l.bill_type).toLowerCase()}/${l.bill_number}`;
+      if (!(await db.prepare("SELECT 1 AS x FROM bills WHERE id = ?").bind(bill.id).first())) {
+        const b = await budget.json(api(env, path), {}, `bill ${bill.bill_number} (${l.congress}th Congress)`);
+        await upsertBill(db, federalBill(l.congress, l.bill_type, l.bill_number, (b.bill && b.bill.title) || l.official_title || null));
+      }
+      const actions = [];
+      for (let offset = 0; ; offset += 250) {
+        const d = await budget.json(api(env, `${path}/actions`, { limit: "250", offset: String(offset) }), {}, `${bill.bill_number} actions`);
+        const list = d.actions || [];
+        actions.push(...list);
+        if (list.length < 250) break;
+      }
+      members ||= await memberIndex(db);
+      for (const v of recordedVotes(actions)) {
+        const id = `us-${v.chamber}-${v.congress}-${v.session}-${v.roll}`;
+        if (await db.prepare("SELECT 1 AS x FROM votes WHERE id = ? AND yea IS NOT NULL").bind(id).first()) continue;
+        if (v.chamber === "house") {
+          const year = v.year || String(1789 + (v.congress - 1) * 2 + (v.session - 1));
+          const xml = await budget.text(v.url || `${env.CLERK_BASE || CLERK}/${year}/roll${String(v.roll).padStart(3, "0")}.xml`, {}, `House ${year} roll ${v.roll}`);
+          const parsed = parseHouseRoll(xml);
+          if (parsed && parsed.roll) await saveHouseRoll(db, parsed, year, members);
+        } else {
+          const xml = await budget.text(
+            v.url || `${env.SENATE_BASE || SENATE}/roll_call_votes/vote${v.congress}${v.session}/vote_${v.congress}_${v.session}_${String(v.roll).padStart(5, "0")}.xml`,
+            {},
+            `Senate ${v.congress}-${v.session} vote ${v.roll}`
+          );
+          await saveSenateVote(db, xml, v.congress, v.session, v.roll, members);
+        }
+        saved += 1;
+      }
+      await setState(db, key, "1");
+      done += 1;
+    }
+  } catch (err) {
+    if (err instanceof BudgetExhausted) return { status: "partial", message: `${msg()}. ${err.message}` };
+    if (missing(err)) return { status: "skipped", message: "tables not created yet" };
+    throw err;
+  }
+  return { status: "ok", message: msg() };
 }

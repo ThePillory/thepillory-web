@@ -11,7 +11,7 @@ import { DatabaseSync } from "node:sqlite";
 import { readFileSync } from "node:fs";
 import { onRequestGet as taxesRoute } from "../../../functions/taxes/[[path]].js";
 import { onRequestGet as financesRoute } from "../../../functions/finances/[[path]].js";
-import { loadCompany, companyMain, listCompanies, listFilters, listHref, SORTS, READING, taxMarker, markersIn, taxInfo, fillTaxLines, filingUrl, fiscalYear, taxesSwitch, LABELS, FILING_TERMS, NOTES, RATE_NOTE, shareOfProfit, shareText, multiYear, leadSentence, yearsWords, companyRow, taxLine } from "../../../functions/_lib/taxes.js";
+import { loadCompany, companyMain, listCompanies, listFilters, listHref, SORTS, READING, taxMarker, markersIn, taxInfo, fillTaxLines, filingUrl, fiscalYear, taxesSwitch, LABELS, FILING_TERMS, shareOfProfit, shareText, multiYear, yearsWords, companyRow, taxLine, usLine, placeRows, shortMoney, fyLabel, lawsSection, LAWS_LINE } from "../../../functions/_lib/taxes.js";
 import { wealthMain, wealthRows, COUNTS } from "../../../functions/_lib/wealth.js";
 import { taxpayersMain, shortCount, shortDollars, NOT_COUNTED, UNSOLD_GAINS, irsSlices } from "../../../functions/_lib/taxpayers.js";
 import { checkQuery } from "../../../functions/_lib/crawl.js";
@@ -60,41 +60,104 @@ const call = async (route, path, env) => {
 
 // ---------------------------------------------------------------------------
 
-test("the company page: the latest year labeled exactly, with its months, every amount linked to its filing", async () => {
-  const html = companyMain(await loadCompany(db(), 1));
-  assert.match(html, /<h2 class="h3">Fiscal year 2025 \(Feb 2025 – Jan 2026\)<\/h2>/);
-  // Plain labels, each with its explanation and the filing's own term in small text under it.
-  assert.match(html, /<dt>Income taxes actually paid<span class="list-meta">Cash sent to tax authorities this year, minus refunds received<\/span><span class="list-meta">In the 10-K: Income taxes paid, net of refunds<\/span><\/dt><dd><a class="inline-link" href="https:\/\/www\.sec\.gov\/Archives\/edgar\/data\/1\/000000000126000010\/0000000001-26-000010-index\.htm"[^>]*>\$9,000,000<\/a>/);
-  assert.match(html, /<dt>Profit before taxes<span class="list-meta">A minus sign means a loss<\/span><span class="list-meta">In the 10-K: Income \(loss\) before income taxes<\/span><\/dt><dd><a [^>]*>\$40,000,000<\/a>/);
-  assert.match(html, /Income taxes paid as a share of profit<span class="list-meta">[^<]*<\/span><\/dt><dd>23%<\/dd>/);
-  // The split and the jurisdictions, when filed.
-  assert.match(html, /Where the taxes went, as the 10-K splits them/);
-  assert.match(html, /<dt>Paid to the U\.S\. government<span class="list-meta">In the 10-K: Federal income taxes paid, net of refunds<\/span><\/dt><dd><a [^>]*>\$6,000,000<\/a>/);
-  assert.match(html, /<dt>Paid to states and cities<span/);
-  assert.match(html, /<dt>Paid to other countries<span/);
-  assert.match(html, /<dt>Ireland <span class="secondary">\(another country\)<\/span><\/dt>/);
-  assert.match(html, /<dt>California <span class="secondary">\(state or city\)<\/span><\/dt>/);
-  // A value the filing doesn't tag is "Not reported", never filled in.
-  assert.match(html, /Federal tax owed on this year(?:'|&#x27;)s profit<span class="list-meta">In the 10-K: Current federal income tax expense \(benefit\)<\/span><\/th><td><a [^>]*>\$5,000,000<\/a><\/td><td>Not reported<\/td>/);
-  // The share of profit, a row in Show the numbers: 7.0 / 35.0 = 20%, 9.0 / 40.0 = 23%.
-  assert.match(html, /Income taxes paid as a share of profit<span class="list-meta">[^<]*<\/span><\/th><td>20%<\/td><td>23%<\/td>/);
-  // The chart of both, with its numbers.
+const LAWS = JSON.parse(readFileSync(new URL("../../../data/taxes/corporate-tax-laws.json", import.meta.url), "utf8"));
+
+test("the company page: a short top card, the U.S. line, where the profit was made and where the taxes went", async () => {
+  const html = companyMain({ ...(await loadCompany(db(), 1)), laws: LAWS });
+  const text = html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+  // The top card: the year, what was paid, profit before taxes and the share, the years together.
+  assert.match(html, /<p class="label">FY2025 \(Feb 2025–Jan 2026\)<\/p>/);
+  assert.match(html, /<p class="tax-big">Paid <a class="inline-link" href="https:\/\/www\.sec\.gov\/Archives\/edgar\/data\/1\/000000000126000010\/0000000001-26-000010-index\.htm" target="_blank" rel="noopener" title="\$9,000,000">\$9 million<\/a> in income taxes<\/p>/);
+  assert.match(text, /Profit before taxes: \$40 million · Taxes were 23% of profit/);
+  assert.match(text, /2024–2025: 21% of profit/); // (7 + 9) ÷ (35 + 40)
+  // The U.S. line: federal taxes paid on U.S. profit before taxes.
+  assert.match(text, /U\.S\. taxes: \$6 million on \$30 million of U\.S\. profit \(20%\)/);
+  assert.match(text, /Where the profit was made U\.S\. \$30 million · Outside the U\.S\. \$10 million/);
+  // Where the taxes went: one row each, only rows with a value: the U.S. government, each state, each country.
+  assert.match(html, /<dt>U\.S\. government<\/dt><dd><a [^>]*title="\$6,000,000">\$6 million<\/a><\/dd>[\s\S]*<dt>California<\/dt><dd><a [^>]*>\$500,000<\/a><\/dd>[\s\S]*<dt>Ireland<\/dt><dd><a [^>]*>\$600,000<\/a><\/dd>/);
+  assert.match(text, /Places getting 5% or more, as listed in the 10-K\./);
+  assert.doesNotMatch(html.slice(html.indexOf('id="places"'), html.indexOf('id="years"')), /Not reported|In the 10-K/);
+  // Rows are label and amount only: the 10-K's terms are in Technical details, nowhere above it.
+  assert.doesNotMatch(html.slice(0, html.indexOf('id="technical"')), /In the 10-K:|Income taxes paid, net of refunds/);
+  // Show the numbers: exact figures, plain labels, the share as a row; a value not tagged is "Not reported".
+  assert.match(html, /<th scope="row">Federal tax owed on this year(?:'|&#x27;)s profit<\/th><td><a [^>]*>\$5,000,000<\/a><\/td><td>Not reported<\/td>/);
+  assert.match(html, /<th scope="row">Taxes as a share of profit<\/th><td>20%<\/td><td>23%<\/td>/);
+  // The chart, the laws after it, then the rest; Technical details last, with each 10-K term and element.
   assert.match(html, /class="mini-bars pair-bars"/);
-  assert.match(html, /Show the numbers/);
-  assert.ok(html.includes(READING));
-  // The lead, first: the latest year in one sentence, the years together, the fixed rate line.
-  assert.match(html, /<p class="lead-sentence">In fiscal 2025, Example Retail Inc reported \$40\.0 million in profit before taxes and paid \$9\.0 million in income taxes: 23% of its profit\.<\/p>/);
-  assert.match(html, /Over fiscal 2024–2025: 21% of profit <span class="secondary">\(\$16\.0 million in income taxes paid on \$75\.0 million in profit before taxes\)<\/span>/);
-  assert.ok(html.indexOf('id="summary"') < html.indexOf('id="latest"'));
-  assert.ok(html.includes(RATE_NOTE));
-  // The XBRL elements sit in a closed "Technical details" fold at the bottom.
+  const at = (id) => html.indexOf(`id="${id}"`);
+  assert.ok(at("latest") < at("places") && at("places") < at("years") && at("years") < at("laws") && at("laws") < at("numbers") && at("records") < at("technical"));
   assert.match(html, /<details class="fold" id="technical">\s*<summary><span class="fold-title">Technical details<\/span>/);
-  assert.ok(html.indexOf("xbrl-note") > html.indexOf('id="records"'));
-  assert.equal((html.match(/IncomeTaxesPaidNet/g) || []).length, 1);
-  // The chart's legend uses the plain labels.
-  assert.match(html, /Income taxes actually paid[\s\S]*Profit before taxes/);
+  assert.match(html, /<th scope="row">Income taxes actually paid<\/th><td>Income taxes paid, net of refunds<\/td><td class="xbrl-note">IncomeTaxesPaidNet<\/td>/);
+  assert.ok(html.includes(READING));
   assert.equal(fiscalYear({ fy: null, period_end: "2025-06-30", period_start: null }), "Fiscal year ended Jun 30, 2025");
   assert.equal(filingUrl(1, "not-an-accession"), null);
+});
+
+test("short amounts and the year label", () => {
+  assert.equal(shortMoney(1234567890), "$1.23 billion");
+  assert.equal(shortMoney(28e6), "$28 million");
+  assert.equal(shortMoney(5.28e9), "$5.28 billion");
+  assert.equal(shortMoney(-7.4e6), "−$7.4 million");
+  assert.equal(shortMoney(850000), "$850,000");
+  assert.equal(shortMoney(null), "Not reported");
+  assert.equal(fyLabel({ fy: 2025, period_start: "2025-01-01", period_end: "2025-12-31" }), "FY2025 (Jan–Dec 2025)");
+  assert.equal(fyLabel({ fy: 2025, period_start: "2025-02-02", period_end: "2026-01-31" }), "FY2025 (Feb 2025–Jan 2026)");
+});
+
+test("the U.S. line: both tagged, one, neither, a loss and a refund", () => {
+  assert.equal(usLine({ paid_federal: 28e6, pretax_us: 400e6 }), "U.S. taxes: $28 million on $400 million of U.S. profit (7%)");
+  assert.equal(usLine({ paid_federal: 28e6, pretax_us: null }), "U.S. taxes: $28 million");
+  assert.equal(usLine({ paid_federal: null, pretax_us: 400e6 }), "U.S. profit before taxes: $400 million");
+  assert.equal(usLine({ paid_federal: null, pretax_us: -5e6 }), "U.S. loss before taxes: $5 million");
+  assert.equal(usLine({ paid_federal: null, pretax_us: null }), "");
+  assert.equal(usLine({ paid_federal: 28e6, pretax_us: -5e6 }), "U.S. taxes: $28 million, with a U.S. loss before taxes of $5 million");
+  assert.equal(usLine({ paid_federal: 28e6, pretax_us: 0 }), "U.S. taxes: $28 million on $0 of U.S. profit");
+  assert.equal(usLine({ paid_federal: -3e6, pretax_us: 400e6 }), "U.S. taxes: received $3 million more in refunds than it paid on $400 million of U.S. profit");
+  assert.doesNotMatch(usLine({ paid_federal: 28e6, pretax_us: -5e6 }), /%/);
+});
+
+test("where the taxes went: only rows with a value, places from the 10-K, totals only when no places are listed", () => {
+  const y = { period_end: "2025-12-31", paid_federal: 6e6, paid_state: 2e6, paid_foreign: null };
+  const j = [
+    { period_end: "2025-12-31", element: "IncomeTaxPaidStateAndLocalAfterRefundReceived", jurisdiction: "stpr:CA", name: "California", amount: 5e5 },
+    { period_end: "2025-12-31", element: "IncomeTaxesPaidNet", jurisdiction: "stpr:CA", name: "California", amount: 4e5 },
+    { period_end: "2025-12-31", element: "IncomeTaxPaidForeignAfterRefundReceived", jurisdiction: "country:IE", name: "Ireland", amount: 6e5 },
+    { period_end: "2024-12-31", element: "IncomeTaxPaidForeignAfterRefundReceived", jurisdiction: "country:GB", name: "United Kingdom", amount: 9e5 },
+  ];
+  const r = placeRows(y, j);
+  assert.deepEqual(r.rows.map((x) => [x.label, x.amount]), [["U.S. government", 6e6], ["California", 5e5], ["Ireland", 6e5]]);
+  assert.equal(r.places, true);
+  const t = placeRows(y, []);
+  assert.deepEqual(t.rows.map((x) => x.label), ["U.S. government", "States and cities"]); // no "Other countries": not reported
+  assert.equal(t.places, false);
+  assert.deepEqual(placeRows({ period_end: "2025-12-31" }, []).rows, []);
+});
+
+test("the laws that set these taxes: the same section on every company page and the list, each law sourced and linked", async () => {
+  assert.ok(LAWS.laws.length >= 3);
+  for (const l of LAWS.laws) {
+    for (const k of ["name", "official_title", "public_law", "year", "congress", "bill_type", "bill_number", "bill_id", "description", "description_source"]) assert.ok(l[k], `${l.name}: ${k}`);
+    assert.match(l.source_url, /^https:\/\/www\.congress\.gov\/bill\//);
+    assert.match(l.public_law, /^\d{3}-\d+$/);
+    assert.equal(l.bill_id, `us-${l.congress}-${l.bill_type}-${l.bill_number}`);
+    assert.match(l.description_source, /^Congress\.gov summary, Public Law /);
+  }
+  assert.deepEqual(LAWS.laws.map((l) => l.public_law), ["115-97", "117-169", "119-21"]);
+  const section = lawsSection(LAWS);
+  for (const l of LAWS.laws) {
+    assert.ok(section.includes(`href="/laws/bills/${l.bill_id}/"`), l.bill_id);
+    assert.ok(section.includes(`Official title: ${l.official_title}`), l.name);
+  }
+  assert.ok(section.includes(LAWS_LINE));
+  assert.equal(LAWS_LINE, "Congress sets the rates, deductions and credits that decide how much income tax companies owe. See how your representatives voted on each law.");
+  // The same on every company page and on the list.
+  const a = companyMain({ ...(await loadCompany(db(), 1)), laws: LAWS });
+  const b = companyMain({ ...(await loadCompany(db(), 2)), laws: LAWS });
+  assert.ok(a.includes(section) && b.includes(section));
+  // Never which law lowered a company's taxes.
+  assert.doesNotMatch(section.replace(/<[^>]+>/g, " "), /lowered (?:its|this company|the company)|because of|thanks to|benefit(?:ed|ted) from/i);
+  // Not loaded: one line, never an empty list.
+  assert.match(lawsSection(null), /isn't loaded right now/);
 });
 
 test("the same organization's other records sit beside the taxes as facts, each with how it matched", async () => {
@@ -107,14 +170,15 @@ test("the same organization's other records sit beside the taxes as facts, each 
   assert.match(html, /doesn't connect them to the taxes above/);
 });
 
-test("every company gets the same layout", async () => {
-  const shape = (html) => [...html.matchAll(/<(?:section|details)[^>]*id="([^"]+)"/g)].map((m) => m[1]).join(",");
-  const a = companyMain(await loadCompany(db(), 1));
-  const b = companyMain(await loadCompany(db(), 2));
+test("every company gets the same layout (the U.S. and places card only where the 10-K tags them)", async () => {
+  const shape = (html) => [...html.matchAll(/<(?:section|details)[^>]*id="([^"]+)"/g)].map((m) => m[1]).filter((id) => id !== "places").join(",");
+  const a = companyMain({ ...(await loadCompany(db(), 1)), laws: LAWS });
+  const b = companyMain({ ...(await loadCompany(db(), 2)), laws: LAWS });
   assert.equal(shape(a), shape(b));
-  assert.match(b, /In the 10-K: Income \(loss\) before income taxes and equity-method investments/); // the element it is, said so
-  assert.match(b, /<dt>Income taxes actually paid<span[^>]*>[^<]*<\/span><span[^>]*>[^<]*<\/span><\/dt><dd><a [^>]*>\$0<\/a>/); // a zero is shown as filed, with no label or color
-  assert.match(b, /paid \$0 in income taxes: 0% of its profit\./);
+  assert.doesNotMatch(b, /id="places"/); // company 2 tags none of them
+  assert.match(b, /<td>Income \(loss\) before income taxes and equity-method investments<\/td>/); // the element it is, said so
+  assert.match(b, /<p class="tax-big">Paid <a [^>]*>\$0<\/a> in income taxes<\/p>/); // a zero is shown as filed, with no label or color
+  assert.match(b.replace(/<[^>]+>/g, " "), /Taxes were 0% of profit/);
 });
 
 test("the list: search by name or ticker, filter by industry and state, sorted by name, revenue or pretax income only", async () => {
@@ -313,24 +377,12 @@ test("the years together: sums over the most recent five years with both values,
   assert.deepEqual(multiYear([y(2024, 5, 10), y(2025, 6, -30)]).share, { why: "losses" });
 });
 
-test("the lead sentence: every variant, parts not reported left out", () => {
-  const y = (taxes_paid, pretax, fy = 2025) => ({ fy, period_end: "2025-12-31", taxes_paid, pretax });
-  assert.equal(leadSentence("Example Co", y(9e6, 40e6)), "In fiscal 2025, Example Co reported $40.0 million in profit before taxes and paid $9.0 million in income taxes: 23% of its profit.");
-  assert.equal(leadSentence("Example Co", y(3e6, -12e6)), "In fiscal 2025, Example Co reported a loss of $12.0 million before taxes and paid $3.0 million in income taxes.");
-  assert.equal(leadSentence("Example Co", y(null, 40e6)), "In fiscal 2025, Example Co reported $40.0 million in profit before taxes.");
-  assert.equal(leadSentence("Example Co", y(9e6, null)), "In fiscal 2025, Example Co paid $9.0 million in income taxes.");
-  assert.equal(leadSentence("Example Co", y(-2e6, 40e6)), "In fiscal 2025, Example Co reported $40.0 million in profit before taxes and received $2.0 million more in income tax refunds than it paid.");
-  assert.equal(leadSentence("Example Co", y(null, null)), "");
-  assert.equal(leadSentence("Example Co", { fy: null, period_end: "2025-06-30", taxes_paid: 1e6, pretax: 2e6 }), "In the fiscal year ended Jun 30, 2025, Example Co reported $2.0 million in profit before taxes and paid $1.0 million in income taxes: 50% of its profit.");
-});
-
 test("plain labels everywhere; the list and the organization line show dollars only, no rates", async () => {
   for (const k of ["taxes_paid", "paid_federal", "paid_state", "paid_foreign", "pretax", "pretax_us", "pretax_foreign", "current_federal", "current_state", "deferred"]) {
     assert.ok(LABELS[k] && FILING_TERMS[k] && LABELS[k] !== FILING_TERMS[k], k);
     assert.doesNotMatch(LABELS[k], /expense|benefit|net of|\(loss\)|pretax/i, k);
   }
   assert.equal(LABELS.taxes_paid, "Income taxes actually paid");
-  assert.equal(NOTES.deferred, "Recorded now; paid in a later year, or sometimes not at all");
   assert.equal(SORTS.pretax, "Profit before taxes");
   const row = companyRow({ cik: 1, name: "Example Retail Inc", latest_fy: 2025, revenue: 9e8, pretax: 4e7, taxes_paid: 9e6, sic_desc: "Retail", state: "TX" });
   assert.match(row, /profit before taxes \$40\.0 million/);
@@ -339,7 +391,7 @@ test("plain labels everywhere; the list and the organization line show dollars o
 });
 
 test("wording rules: no loaded words, no rankings by taxes or rate, on any of these pages or in their code", async () => {
-  const banned = /\b(?:fair share|loophole|dodg\w*|paid nothing|pays less than|paid zero|zero tax|top (?:tax)?payers|ranked|ranking|biggest|worst|best|evad\w*|avoid\w*)\b/i;
+  const banned = /\b(?:fair share|loopholes?|dodg\w*|paid nothing|pays less than|paid zero|zero tax|top (?:tax)?payers|ranked|ranking|biggest|worst|best|evad\w*|avoid\w*)\b/i;
   const pages = [
     companyMain(await loadCompany(db(), 1)),
     companyMain(await loadCompany(db(), 2)),
@@ -358,9 +410,9 @@ test("wording rules: no loaded words, no rankings by taxes or rate, on any of th
   }
   // The plain text added for readers: no "only", "just", "nearly" or the like anywhere on a company's page.
   const minimizers = /\b(?:only|just|nearly|merely|barely|mere|almost|a mere|as little as|as much as|whopping|staggering)\b/i;
-  const company = (await Promise.all([1, 2].map(async (k) => companyMain(await loadCompany(db(), k))))).join(" ");
-  const pieces = [...Object.values(LABELS), ...Object.values(FILING_TERMS), ...Object.values(NOTES), RATE_NOTE, READING, company,
-    leadSentence("Example Co", { fy: 2025, taxes_paid: 3e6, pretax: -12e6 }), leadSentence("Example Co", { fy: 2025, taxes_paid: -2e6, pretax: 4e7 })];
+  const company = (await Promise.all([1, 2].map(async (k) => companyMain({ ...(await loadCompany(db(), k)), laws: LAWS })))).join(" ");
+  const pieces = [...Object.values(LABELS), ...Object.values(FILING_TERMS), READING, LAWS_LINE, lawsSection(LAWS), company,
+    usLine({ paid_federal: 28e6, pretax_us: -5e6 }), usLine({ paid_federal: -3e6, pretax_us: 4e8 }), usLine({ paid_federal: 28e6, pretax_us: 4e8 })];
   for (const t of pieces) {
     const text = t.replace(/<[^>]+>/g, " ");
     const hit = text.match(new RegExp(`.{0,40}(?:${minimizers.source}|${banned.source}).{0,40}`, "i"));

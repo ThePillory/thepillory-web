@@ -1,0 +1,64 @@
+{
+  "about": "Laws that set federal corporate income taxes, shown under \"The laws that set these taxes\" on /taxes/companies/ and every company's page (functions/_lib/taxes.js). Hand-kept: each entry's titles, public law, date and description are copied word for word from Congress.gov (checked 2026-11-11 through Congress.gov's API: the accuracy audit's section 8, tools/accuracy_audit.py). The sync's law-votes step loads every recorded vote on each bill (workers/sync/src/history/sync.js). Add a law only from official sources.",
+  "note": "Names are Congress.gov's popular titles; official titles, public law numbers and summaries from Congress.gov.",
+  "checked": "2026-11-11",
+  "laws": [
+    {
+      "name": "Tax Cuts and Jobs Act",
+      "name_kind": "Popular title on Congress.gov",
+      "official_title": "An act to provide for reconciliation pursuant to titles II and V of the concurrent resolution on the budget for fiscal year 2018.",
+      "public_law": "115-97",
+      "enacted": "2017-12-22",
+      "year": 2017,
+      "congress": 115,
+      "bill_type": "hr",
+      "bill_number": 1,
+      "bill_id": "us-115-hr-1",
+      "bill_label": "H.R. 1",
+      "description": "This bill amends the Internal Revenue Code (IRC) to reduce tax rates and modify policies, credits, and deductions for individuals and businesses.",
+      "description_source": "Congress.gov summary, Public Law 115-97 (12/22/2017)",
+      "source_url": "https://www.congress.gov/bill/115th-congress/house-bill/1",
+      "final_votes": [
+        { "chamber": "house", "date": "2017-12-20", "roll": 699, "action": "On motion that the House agree to the Senate amendment Agreed to by the Yeas and Nays: 224 - 201 (Roll no. 699)." },
+        { "chamber": "senate", "date": "2017-12-20", "roll": 323, "action": "Senate receded from its amendment and concurred with an amendment (SA 1863) by Yea-Nay Vote. 51 - 48. Record Vote Number: 323." }
+      ]
+    },
+    {
+      "name": "Inflation Reduction Act of 2022",
+      "name_kind": "Popular title on Congress.gov",
+      "official_title": "An act to provide for reconciliation pursuant to title II of S. Con. Res. 14.",
+      "public_law": "117-169",
+      "enacted": "2022-08-16",
+      "year": 2022,
+      "congress": 117,
+      "bill_type": "hr",
+      "bill_number": 5376,
+      "bill_id": "us-117-hr-5376",
+      "bill_label": "H.R. 5376",
+      "description": "This act imposes an alternative minimum tax of 15% of the average annual adjusted financial statement income of domestic corporations (excluding Subchapter S corporations, regulated investment companies, and real estate investment trusts) that exceeds $1 billion over a specified 3-year period.",
+      "description_source": "Congress.gov summary, Public Law 117-169 (8/16/2022), Sec. 10101",
+      "source_url": "https://www.congress.gov/bill/117th-congress/house-bill/5376",
+      "final_votes": [
+        { "chamber": "senate", "date": "2022-08-07", "roll": 325, "action": "Passed Senate with an amendment by Yea-Nay Vote. 51 - 50. Record Vote Number: 325." },
+        { "chamber": "house", "date": "2022-08-12", "roll": 420, "action": "On motion that the House agree to the Senate amendment Agreed to by the Yeas and Nays: 220 - 207 (Roll no. 420)." }
+      ]
+    },
+    {
+      "name": "One Big Beautiful Bill Act",
+      "name_kind": "Popular title on Congress.gov",
+      "official_title": "An act to provide for reconciliation pursuant to title II of H. Con. Res. 14.",
+      "public_law": "119-21",
+      "enacted": "2025-07-04",
+      "year": 2025,
+      "congress": 119,
+      "bill_type": "hr",
+      "bill_number": 1,
+      "bill_id": "us-119-hr-1",
+      "bill_label": "H.R. 1",
+      "description": "This act reduces taxes, reduces or increases spending for various federal programs, increases the statutory debt limit, and otherwise addresses agencies and programs throughout the federal government.",
+      "description_source": "Congress.gov summary, Public Law 119-21 (7/4/2025)",
+      "source_url": "https://www.congress.gov/bill/119th-congress/house-bill/1",
+      "final_votes": []
+    }
+  ]
+}
