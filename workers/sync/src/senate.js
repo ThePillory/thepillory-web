@@ -106,7 +106,7 @@ export async function syncSenateVotes(env, db, budget) {
       }
       await got.save(); // every vote on this list is saved
     }
-    if (unchanged === congressSessions(congress).length) return { status: "skipped", message: `unchanged: the Senate's vote lists for Congress ${congress} are the same as when every vote on them was saved` };
+    if (unchanged === congressSessions(congress).length) return { status: "ok", message: `unchanged: the Senate's vote lists for Congress ${congress} are the same as when every vote on them was saved` };
     return { status: "ok", message: `Congress ${congress}: ${saved} Senate vote(s) saved (new, or re-read for totals and all members); caught up` };
   } catch (err) {
     if (err instanceof BudgetExhausted) {

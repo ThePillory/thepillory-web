@@ -271,7 +271,7 @@ export async function syncExecutiveOrders(env, db, budget) {
     if (missing(err)) return { status: "skipped", message: "tables not created yet" };
     throw err;
   }
-  if (fedUnchanged && govUnchanged) return { status: "skipped", message: `unchanged: ${summary()}` };
+  if (fedUnchanged && govUnchanged) return { status: "ok", message: `unchanged: ${summary()}` };
   return { status: "ok", message: summary() };
 }
 

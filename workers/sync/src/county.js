@@ -9,7 +9,7 @@ export async function syncCounty(env, db, budget) {
   const url = `${(env.SITE_URL || "").replace(/\/$/, "")}/data/county-officials.json`;
   // Checked with its ETag first: the file changes only when a person edits it.
   const got = await budget.ifChanged(db, "county_officials", url, {}, "county-officials.json");
-  if (got.unchanged) return { status: "skipped", message: "unchanged: data/county-officials.json is the same as at the last load" };
+  if (got.unchanged) return { status: "ok", message: "unchanged: data/county-officials.json is the same as at the last load" };
   const data = await got.res.json();
   const entries = Array.isArray(data.officials) ? data.officials : [];
   const loaded = [];

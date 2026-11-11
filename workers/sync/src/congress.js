@@ -294,7 +294,7 @@ export async function syncHouseVotes(env, db, budget) {
       }
       if (count) await setState(db, countKey, count); // every vote on this list is saved
     }
-    if (unchanged === congressSessions(congress).length) return { status: "skipped", message: `unchanged: Congress.gov lists the same number of House votes for Congress ${congress} as when every one was saved` };
+    if (unchanged === congressSessions(congress).length) return { status: "ok", message: `unchanged: Congress.gov lists the same number of House votes for Congress ${congress} as when every one was saved` };
     return { status: "ok", message: `Congress ${congress}: ${saved} House vote(s) saved (new, or re-read for totals and all members); caught up` };
   } catch (err) {
     if (err instanceof BudgetExhausted) {
