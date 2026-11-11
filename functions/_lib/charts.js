@@ -120,7 +120,7 @@ export function rangeBands(points, { format = (n) => String(n), scale = format, 
 
 /**
  * Two series side by side, one pair of bars per period, on one scale (for example
- * taxes paid and pretax income by fiscal year). `series`: [labelA, labelB];
+ * taxes paid and profit before taxes by fiscal year). `series`: [labelA, labelB];
  * `points`: [{label, tick, a, b, hrefA, hrefB}], a value null when not reported
  * (no bar, "Not reported" in the table). Negative values hang under the line in
  * gray, as in miniBars. With a legend and a "Show the numbers" table whose values

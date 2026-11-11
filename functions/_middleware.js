@@ -75,7 +75,7 @@ async function handle(context) {
       // The page as it was: a copy link is never worth a failed page.
       console.error(`source links: ${err && err.message}`);
     }
-    // "Taxes paid (FY…): … · pretax income … ›" on organization panels, for every name on the page in one query.
+    // "Taxes paid (FY…): … · profit before taxes … ›" on organization panels, for every name on the page in one query.
     try {
       const names = markersIn(out);
       if (names.length) out = fillTaxLines(out, await taxInfo(usageDb(context), names));

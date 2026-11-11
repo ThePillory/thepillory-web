@@ -90,8 +90,8 @@ Sources:
 | jurisdictions | those elements on `IncomeTaxAuthorityAxis`, a `country:XX` or `stpr:XX` member | By jurisdiction, as filed (each one 5% or more of taxes paid). Country names come from pycountry; an unknown code is left out |
 | `current_federal`, `current_state` | `CurrentFederalTaxExpenseBenefit`, `CurrentStateAndLocalTaxExpenseBenefit` | Current federal / state and local income tax expense (benefit) |
 | `deferred` | `DeferredIncomeTaxExpenseBenefit` | Deferred income tax expense (benefit) |
-| `pretax` | `IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest`, else `…MinorityInterestAndIncomeLossFromEquityMethodInvestments` (`pretax_tag` records which) | Income (loss) before income taxes, or "…and equity-method investments" for the second element |
-| `pretax_us`, `pretax_foreign` | `…BeforeIncomeTaxesDomestic`, `…BeforeIncomeTaxesForeign` | Income (loss) before income taxes, U.S. / foreign |
+| `pretax` | `IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest`, else `…MinorityInterestAndIncomeLossFromEquityMethodInvestments` (`pretax_tag` records which) | Profit before taxes (in the 10-K: Income (loss) before income taxes, or "…and equity-method investments" for the second element) |
+| `pretax_us`, `pretax_foreign` | `…BeforeIncomeTaxesDomestic`, `…BeforeIncomeTaxesForeign` | Profit before taxes, in the U.S. / outside the U.S. |
 | `revenue` | `Revenues`, `RevenueFromContractWithCustomer…`, `RevenuesNetOfInterestExpense`, `SalesRevenueNet` | Revenue (chooses the 100, and the list's order) |
 
 How the values are chosen:
@@ -120,18 +120,22 @@ A match that no longer holds is removed. A PAC's name rarely equals its company'
 
 ### Pages
 
+**Plain words** (November 2026), for readers with no accounting background: every value has a plain label (`LABELS`), the filing's own term under it in small gray text ("In the 10-K: …", `FILING_TERMS`), and a one-line explanation where it helps (`NOTES`): "Income taxes actually paid" (cash sent to tax authorities this year, minus refunds received), "Paid to the U.S. government / to states and cities / to other countries", "Profit before taxes" (a minus sign means a loss) and its U.S. and outside-the-U.S. parts, "Federal" and "State and local tax owed on this year's profit" (recorded as due for this year; can differ from what was paid this year), "Tax put off until later years" (recorded now; paid later, or sometimes not at all). The same labels on the page, the chart, Show the numbers, the list and the organization line.
+
 - **The list.**
-  - Search by name or ticker (`?q=`), Industry (SIC, `?sic=`), State (business address, `?state=`), Order (`?sort=name|revenue|pretax`), 25 a page with Load more.
-  - **Never sorted, ranked, labeled or colored by taxes paid or by any rate.** There's no "top payers" or "paid zero" list. The list shows industry, state, and the latest year's revenue and pretax income.
-  - Indexes on name, revenue and pretax income keep a page to its own rows.
+  - Search by name or ticker (`?q=`), Industry (SIC, `?sic=`), State (business address, `?state=`), Order (`?sort=name|revenue|pretax`: Name, Revenue, Profit before taxes), 25 a page with Load more.
+  - **Never sorted, ranked, filtered, labeled or colored by taxes paid or by any rate.** There's no "top payers" or "paid zero" list. The list shows industry, state, and the latest year's revenue and profit before taxes: dollars only, no rates.
+  - Indexes on name, revenue and profit before taxes keep a page to its own rows.
 - **A company.**
-  - **The latest year:** taxes paid and pretax income, each labeled exactly and linked to its 10-K, with the split and jurisdictions when filed.
-  - **Over the years:** taxes paid and pretax income side by side (`pairBars()` in `functions/_lib/charts.js`). With fewer than two years, a line says so, so every company keeps the same sections.
-  - **Show the numbers:** every value by year, each linked, with the XBRL element.
-  - **Reading these numbers:** a fixed panel (`READING`). Taxes paid differ from tax expense (timing, refunds, deferrals); losses carried forward, credits and deductions set by law can lower the taxes paid in a year; foreign taxes are paid to other countries.
+  - **The lead** (`leadSentence()`, `multiYear()`): one sentence from the latest fiscal year, "In fiscal [year], [Company] reported $[profit] in profit before taxes and paid $[taxes] in income taxes: [X]% of its profit." X is taxes paid ÷ profit before taxes (never of revenue), a whole percent. A loss reads "a loss of $X before taxes"; taxes paid below zero reads "received $X more in income tax refunds than it paid"; a part that isn't reported is left out; there's no percentage without both values, a profit and taxes paid. No words like only, just or nearly (tested). Under it, "Over fiscal [first]–[last]: [X]% of profit", from the sums over the most recent five fiscal years with both values (fewer if fewer exist, two at least; the years named when one is missing between them), with both sums in dollars. Then one fixed line: "The federal corporate income tax rate is 21%. States add their own, and companies also pay taxes to other countries."
+  - **The latest year:** taxes paid and profit before taxes, each linked to its 10-K, and "Income taxes paid as a share of profit": the percent, or "Not meaningful: loss year", "Not meaningful: net refund" or "Not reported" (`shareOfProfit()`); the split ("Where the taxes went") and places when filed.
+  - **Over the years:** taxes paid and profit before taxes side by side (`pairBars()` in `functions/_lib/charts.js`). With fewer than two years, a line says so, so every company keeps the same sections.
+  - **Show the numbers:** every value by year, each linked, with the share of profit as its last row.
+  - **Reading these numbers** (`READING`): "Taxes paid is cash out the door this year. It doesn't line up exactly with this year's profit: some tax is paid a year early or late, refunds from past years count when they arrive, and some tax is put off to later years. Losses from past years, tax credits and deductions set by law can also lower what's paid in a given year."
   - **In ThePillory's other records:** each kind with how it matched, side by side, "ThePillory doesn't connect them to the taxes above", plus a Federal awards link.
-  - The same layout for every company.
-- **On organization lines** (members' Funding tab: donors' employers, LD-203 organizations, outside donors and lobbying organizations; California lobbying; dark money donors; measure signers' organization panels), `taxMarker(name)` leaves a placeholder. `functions/_middleware.js` fills every placeholder on a page with one query (`taxInfo()`, `fillTaxLines()`): "Taxes paid (FY2025): $X · pretax income $Y ›" to the company, when exactly one company has the name (or a person linked it), otherwise nothing.
+  - **Technical details** (collapsed, last): the XBRL element behind each value.
+  - The same layout for every company. A company's share of profit appears on its own page only; nothing compares companies in words.
+- **On organization lines** (members' Funding tab: donors' employers, LD-203 organizations, outside donors and lobbying organizations; California lobbying; dark money donors; measure signers' organization panels), `taxMarker(name)` leaves a placeholder. `functions/_middleware.js` fills every placeholder on a page with one query (`taxInfo()`, `fillTaxLines()`): "Taxes paid (FY2025): $X · profit before taxes $Y ›" (dollars only) to the company, when exactly one company has the name (or a person linked it), otherwise nothing.
 
 ### Wording rules (tested in `workers/sync/test/taxes.test.mjs`)
 
