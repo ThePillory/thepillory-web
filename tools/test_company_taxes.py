@@ -34,6 +34,24 @@ class Years(unittest.TestCase):
         ]
         self.assertEqual(C.by_year(fs)["2025-02-01"], {"val": 90, "accn": "restated", "start": "2024-02-04", "fy": 2024})
 
+    def test_each_year_is_named_by_its_own_10k_not_a_later_one(self):
+        # Shaped like Tesla's: 2019 and 2020 reach the facts only through later 10-Ks (fiscal 2021's), which
+        # once named all three years "2021". Each year takes its own 10-K's name, or the company's rule.
+        fs = [
+            fact("2019-01-01", "2019-12-31", 1, "k21", "2022-02-07", 2021),
+            fact("2020-01-01", "2020-12-31", 2, "k21", "2022-02-07", 2021),
+            fact("2021-01-01", "2021-12-31", 3, "k21", "2022-02-07", 2021),
+            fact("2021-01-01", "2021-12-31", 3, "k23", "2024-01-29", 2023),
+            fact("2023-01-01", "2023-12-31", 5, "k23", "2024-01-29", 2023),
+        ]
+        by = C.by_year(fs)
+        self.assertEqual({e: v["fy"] for e, v in by.items()}, {"2019-12-31": None, "2020-12-31": None, "2021-12-31": 2021, "2023-12-31": 2023})
+        ys = C.company_years({"IncomeTaxesPaidNet": {"units": {"USD": fs}}})
+        self.assertEqual([y["fy"] for y in ys], [2019, 2020, 2021, 2023])
+        # A retailer's year ending in January is named for the year it starts.
+        r = C.name_years([{"period_end": "2025-02-01", "fy": 2024}, {"period_end": "2024-02-03", "fy": None}])
+        self.assertEqual([y["fy"] for y in r], [2024, 2023])
+
     def test_untagged_values_stay_empty_and_the_first_listed_element_wins(self):
         usd = lambda *fs: {"units": {"USD": list(fs)}}
         facts = {
@@ -76,16 +94,90 @@ INSTANCE = """<xbrl>
 </xbrl>"""
 
 
+def ctx(cid, member, start="2025-01-01", end="2025-12-31"):
+    seg = f'<xbrli:segment><xbrldi:explicitMember dimension="us-gaap:IncomeTaxAuthorityAxis">{member}</xbrldi:explicitMember></xbrli:segment>' if member else ""
+    return (f'<xbrli:context id="{cid}"><xbrli:entity><xbrli:identifier scheme="x">1</xbrli:identifier>{seg}</xbrli:entity>'
+            f'<xbrli:period><xbrli:startDate>{start}</xbrli:startDate><xbrli:endDate>{end}</xbrli:endDate></xbrli:period></xbrli:context>')
+
+
+def fact_xml(el, cid, val):
+    return f'<us-gaap:{el} contextRef="{cid}" unitRef="usd" decimals="-6">{val}</us-gaap:{el}>'
+
+
+# Shaped like Tesla's FY2025 10-K (CIK 1318605, 0001628280-26-003952), as the accuracy audit's section 9 printed it:
+# federal and the total undimensioned; states as California plus a company-defined "Other states" member;
+# foreign as China plus us-gaap's "Other countries" member; no state or foreign total.
+TESLA = "<xbrl>" + "".join([
+    ctx("d", None), ctx("ca", "stpr:CA"), ctx("os", "tsla:OtherStatesMember"), ctx("cn", "country:CN"), ctx("of", "us-gaap:ForeignTaxJurisdictionOtherMember"),
+    fact_xml("IncomeTaxPaidFederalAfterRefundReceived", "d", 28000000),
+    fact_xml("IncomeTaxPaidStateAndLocalAfterRefundReceived", "ca", 86000000),
+    fact_xml("IncomeTaxPaidStateAndLocalAfterRefundReceived", "os", 65000000),
+    fact_xml("IncomeTaxPaidForeignAfterRefundReceived", "cn", 751000000),
+    fact_xml("IncomeTaxPaidForeignAfterRefundReceived", "of", 302000000),
+    fact_xml("IncomeTaxesPaidNet", "d", 1232000000),
+]) + "</xbrl>"
+
+TESLA_LAB = """<link:linkbase>
+<link:labelLink>
+<link:loc xlink:type="locator" xlink:href="tsla-20251231.xsd#tsla_OtherStatesMember" xlink:label="loc_os"/>
+<link:labelArc xlink:type="arc" xlink:from="loc_os" xlink:to="lab_os"/>
+<link:label xlink:type="resource" xlink:label="lab_os" xlink:role="http://www.xbrl.org/2003/role/label" xml:lang="en-US">Other States [Member]</link:label>
+<link:label xlink:type="resource" xlink:label="lab_os" xlink:role="http://www.xbrl.org/2003/role/terseLabel" xml:lang="en-US">Other states</link:label>
+<link:loc xlink:type="locator" xlink:href="tsla-20251231.xsd#tsla_Revenue" xlink:label="loc_r"/>
+</link:labelLink>
+</link:linkbase>"""
+
+
 class Jurisdictions(unittest.TestCase):
-    def test_only_named_countries_and_states_on_the_one_axis(self):
+    def test_every_member_on_the_axis_is_read(self):
         rows = C.jurisdictions(INSTANCE, {"IE": "Ireland", "MX": "Mexico"}.get)
         self.assertEqual(rows, [
             {"period_end": "2025-12-31", "element": "IncomeTaxPaidStateAndLocalAfterRefundReceived", "jurisdiction": "stpr:CA", "name": "California", "amount": 40000000.0},
             {"period_end": "2025-12-31", "element": "IncomeTaxPaidForeignAfterRefundReceived", "jurisdiction": "country:IE", "name": "Ireland", "amount": 300000000.0},
-        ])
+            {"period_end": "2025-12-31", "element": "IncomeTaxPaidForeignAfterRefundReceived", "jurisdiction": "us-gaap:ForeignTaxJurisdictionOtherMember", "name": "Other countries", "amount": 600000000.0},
+        ])  # the fact with a second dimension (c-two) stays out: it isn't one place's whole year
 
-    def test_an_unknown_country_code_is_left_out_rather_than_guessed(self):
-        self.assertEqual([r["jurisdiction"] for r in C.jurisdictions(INSTANCE, lambda code: None)], ["stpr:CA"])
+    def test_an_unknown_country_code_keeps_its_code_rather_than_a_guessed_name(self):
+        rows = C.jurisdictions(INSTANCE, lambda code: None)
+        self.assertEqual([r["name"] for r in rows], ["California", "IE", "Other countries"])
+
+    def test_tesla_fy2025_every_place_and_the_company_label(self):
+        self.assertEqual(C.custom_members(TESLA), {"tsla:OtherStatesMember"})
+        labels = C.member_labels(TESLA_LAB)
+        self.assertEqual(labels, {"tsla:OtherStatesMember": "Other states"})
+        rows = C.jurisdictions(TESLA, {"CN": "China"}.get, labels)
+        self.assertEqual([(r["jurisdiction"], r["name"], r["amount"]) for r in rows], [
+            ("stpr:CA", "California", 86000000.0), ("tsla:OtherStatesMember", "Other states", 65000000.0),
+            ("country:CN", "China", 751000000.0), ("us-gaap:ForeignTaxJurisdictionOtherMember", "Other countries", 302000000.0),
+        ])
+        # Without the label linkbase, the member's own name.
+        self.assertEqual(C.jurisdictions(TESLA, {"CN": "China"}.get)[1]["name"], "Other states")
+        year = {"period_end": "2025-12-31", "taxes_paid": 1232000000, "paid_federal": 28000000, "paid_state": None, "paid_foreign": None}
+        b = C.breakdown(year, rows)
+        self.assertEqual(b["parts"], {"federal": 28000000, "state": 151000000.0, "foreign": 1053000000.0})
+        self.assertEqual(b["gap"], 0)
+
+    def test_a_gap_is_reported_never_filled(self):
+        rows = C.jurisdictions(TESLA, {"CN": "China"}.get)[:3]  # "Other countries" missing
+        b = C.breakdown({"period_end": "2025-12-31", "taxes_paid": 1232000000, "paid_federal": 28000000}, rows)
+        self.assertEqual(b["parts"]["foreign"], 751000000.0)
+        self.assertEqual(b["gap"], 302000000)
+        # A tagged state total that its places don't reach: reported too.
+        b = C.breakdown({"period_end": "2025-12-31", "taxes_paid": 1232000000, "paid_federal": 28000000, "paid_state": 160000000}, C.jurisdictions(TESLA, {"CN": "China"}.get))
+        self.assertEqual(b["inner"], {"state": 9000000})
+
+    def test_totals_filed_as_members(self):
+        xml = "<xbrl>" + "".join([
+            ctx("t", None), ctx("dom", "us-gaap:DomesticCountryMember"), ctx("st", "us-gaap:StateAndLocalJurisdictionMember"), ctx("fo", "us-gaap:ForeignCountryMember"),
+            fact_xml("IncomeTaxesPaidNet", "t", 100), fact_xml("IncomeTaxesPaidNet", "dom", 50), fact_xml("IncomeTaxesPaidNet", "st", 10), fact_xml("IncomeTaxesPaidNet", "fo", 40),
+        ]) + "</xbrl>"
+        rows = C.jurisdictions(xml, lambda c: None)
+        self.assertEqual(C.breakdown({"period_end": "2025-12-31", "taxes_paid": 100}, rows), {"total": 100, "parts": {"federal": 50.0, "state": 10.0, "foreign": 40.0}, "gap": 0, "inner": {}})
+
+    def test_breakdown_filings_are_original_10ks_since_december_2024(self):
+        sub = {"filings": {"recent": {"form": ["10-K/A", "10-K", "10-K", "10-Q"], "accessionNumber": ["a", "b", "c", "d"],
+                                       "reportDate": ["2025-12-31", "2025-12-31", "2023-12-31", "2026-03-31"], "filingDate": ["", "", "", ""]}}}
+        self.assertEqual(C.breakdown_filings(sub), {"b"})
 
 
 class Writes(unittest.TestCase):

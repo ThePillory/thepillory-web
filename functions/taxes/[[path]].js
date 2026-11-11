@@ -12,6 +12,7 @@
 // every visitor, so kept at the edge for five minutes.
 import { page, notFound, notLoaded, esc, guard, edgeCached, loadSection, FAILED, sectionError } from "../_lib/render.js";
 import { loadCompany, listCompanies, listFilters, listHref, listForm, industries, loadedAt, companyRow, companyMain, taxesSwitch, READING, PER_PAGE, TAXES_METHOD, loadLaws, lawsSection } from "../_lib/taxes.js";
+import { fold } from "../_lib/summary.js";
 import { loadTaxpayers, taxpayersMain } from "../_lib/taxpayers.js";
 import { loadWealth, wealthMain } from "../_lib/wealth.js";
 
@@ -59,25 +60,28 @@ async function companies(env, url, request) {
     : `<section class="card compact-list" id="company-list" data-more-list>${list && list.rows.length ? list.rows.map(companyRow).join("") : `<p class="secondary small cr-empty">${!list || (empty && !at) ? "Company figures load weekly from the SEC's EDGAR filings; none are loaded yet." : "No companies match these filters. Only the largest companies by revenue are loaded."}</p>`}</section>`;
   const more = list && list !== FAILED && list.more ? `<a class="btn btn--block load-more" href="${esc(listHref(f, f.offset + PER_PAGE))}" data-load-more="company-list">Load more</a>` : "";
   if (f.offset) {
-    const main = `<header class="page-head"><h1>Corporations</h1><p class="subtitle">From number ${f.offset + 1}.</p></header>${rows}${more}`;
+    const main = `<div class="tax-page"><header class="page-head"><h1>Corporations</h1><p class="subtitle">From number ${f.offset + 1}.</p></header>${rows}${more}</div>`;
     return page("Taxes: corporations", main, { tab: "laws", back: ["Corporations", listHref(f)], partial: list === FAILED });
   }
-  const main = `
+  const about = fold(
+    "about",
+    "About this list",
+    `<p class="small">${at && at !== FAILED ? `The ${esc(String(at.n))} largest` : "The largest"} companies by revenue in their latest fiscal year that file a 10-K with the SEC and tag these values in their financial data, ordered by name, revenue or profit before taxes, as you choose. It isn't ordered or labeled by taxes paid or by any rate. Revenue and profit before taxes are for each company's latest fiscal year with figures.</p>
+  ${READING}
+  <p class="small">State is the company's business address as EDGAR lists it. ${at && at !== FAILED ? `Loaded ${esc(String(at.at).slice(0, 10))}.` : ""} <a class="inline-link" href="${TAXES_METHOD}">How this works ›</a></p>`
+  );
+  const main = `<div class="tax-page">
 <header class="page-head">
   <h1>Taxes</h1>
-  <p class="subtitle">What the largest companies report paying in income taxes, and their income before taxes, from their annual 10-K filings with the SEC.</p>
+  <p class="subtitle">What the largest companies report paying in income taxes, and their profit before taxes, from their 10-K filings with the SEC.</p>
 </header>
 ${taxesSwitch("companies")}
 ${listForm(f, inds === FAILED ? [] : inds)}
 ${rows}
 ${more}
-<section class="card stack-sm">
-  <p class="label">About this list</p>
-  <p class="small">${at && at !== FAILED ? `The ${esc(String(at.n))} largest` : "The largest"} companies by revenue in their latest fiscal year that file a 10-K with the SEC and tag these values in their financial data, ordered by name, revenue or profit before taxes, as you choose. It isn't ordered or labeled by taxes paid or by any rate. Revenue and profit before taxes are for each company's latest fiscal year with figures.</p>
-  <p class="small">State is the company's business address as EDGAR lists it. ${at && at !== FAILED ? `Loaded ${esc(String(at.at).slice(0, 10))}.` : ""} <a class="inline-link" href="${TAXES_METHOD}">How this works</a></p>
-</section>
 ${lawsSection(laws)}
-${READING}`;
+${about}
+</div>`;
   return page("Taxes: corporations", main, { tab: "laws", back: ["Laws", "/laws/"], partial: list === FAILED });
 }
 

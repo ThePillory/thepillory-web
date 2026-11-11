@@ -1772,24 +1772,36 @@ article.fin-term { scroll-margin-top: var(--space-4); }
 .pair-bars-plot > span { flex-direction: row; gap: 2px; }
 .pair-bars-plot em { flex: 1; min-width: 0; display: flex; flex-direction: column; height: 100%; font-style: normal; }
 .pair-bars-plot em.pb-b i:not(.is-neg) { background: var(--chart-3); }
-.pair-legend { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); }
+.pair-legend { display: flex; flex-direction: row; flex-wrap: wrap; gap: var(--space-1) var(--space-4); }
+.pair-legend li { flex: none; gap: var(--space-2); padding: 0; border-top: 0; font-size: var(--fs-small); }
+.pair-legend .bl-name { flex: none; }
 /* Long XBRL element names (one word each) wrap instead of widening the page. */
 .xbrl-note { overflow-wrap: anywhere; }
-/* Company taxes: the lead sentence, and plain labels with the filing's term under them. */
-.lead-sentence { margin: 0; font-size: var(--fs-body); font-weight: 600; line-height: 1.45; }
-.tax-table th .list-meta, .kv-row dt .list-meta { font-weight: 400; }
-.tax-table th[scope="row"] { min-width: 9.5rem; }
-.tax-big { margin: 0; font-size: var(--fs-h2); font-weight: 800; line-height: 1.2; letter-spacing: -0.01em; }
-.tax-sub, .tax-us { margin: 0; font-size: var(--fs-body); line-height: 1.4; }
-.tax-us { font-weight: 600; }
-.kv--amounts .kv-row { align-items: baseline; }
-.kv--amounts .kv-row dd { white-space: nowrap; }
-.tax-terms td { white-space: normal; text-align: left; min-width: 9rem; }
-.law-item .list-row { padding-top: 0; padding-bottom: 0; border-top: 0; }
-.law-item + .law-item { border-top: 1px solid var(--border); padding-top: var(--space-3); }
-.kv--labeled .kv-row { align-items: flex-start; gap: var(--space-3); }
-.kv--labeled .kv-row dt { flex: 1 1 auto; min-width: 0; color: var(--text); font-weight: 600; }
-.kv--labeled .kv-row dd { flex: 0 0 auto; white-space: nowrap; }
+/* /taxes/ (every view inside .tax-page, which adds no box of its own): the official's page and Home's
+   cards and rows, three text sizes (h1, body, small), bold only for card titles and the big figures,
+   sentence case throughout, every amount in the text color. */
+.tax-page { display: contents; }
+.tax-title { margin: 0; font-size: var(--fs-body); font-weight: 700; letter-spacing: 0; line-height: 1.35; }
+.tax-page .label, .tax-page .tax-field { font-size: var(--fs-small); font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--text-2); }
+.tax-page .chip, .tax-page .toggle, .tax-page .mini-bars-axis, .tax-page .mini-bars-table summary { font-size: var(--fs-small); text-transform: none; letter-spacing: 0; }
+.tax-page .usage-table th[scope], .tax-page .mini-bars-table th[scope] { font-weight: 400; }
+.tax-page .usage-table thead th { color: var(--text-2); }
+.tax-page .breakdown-legend .bl-name { font-size: var(--fs-small); }
+.tax-fig { display: flex; flex-direction: column; gap: var(--space-1); }
+.tax-fig > p { margin: 0; }
+.tax-fig + .tax-fig { padding-top: var(--space-3); border-top: 1px solid var(--border); }
+.tax-fig .hero-num { line-height: 1.1; }
+.tax-rows .list-title { font-weight: 400; }
+.tax-rows .list-status { font-size: var(--fs-body); font-weight: 400; color: var(--text); font-variant-numeric: tabular-nums; }
+.tax-rows a.list-row { text-decoration: none; }
+.tax-rows > li:first-child > .list-row { border-top: 0; padding-top: 0; }
+.tax-rows > li:last-child > .list-row { padding-bottom: 0; }
+.tax-rows .chev { color: var(--text-2); }
+.tax-rows .tax-sub-row { min-height: 0; padding-left: var(--space-4); }
+.tax-rows .tax-sub-row .list-title, .tax-rows .tax-sub-row .list-status { color: var(--text-2); }
+.tax-year + .tax-year { padding-top: var(--space-3); border-top: 1px solid var(--border); }
+.tax-terms .list-row { min-height: 0; }
+.xbrl-note { overflow-wrap: anywhere; }
 /* /admin/usage/: plain number tables. */
 .usage-table { width: 100%; border-collapse: collapse; font-size: var(--fs-small); font-variant-numeric: tabular-nums; }
 .usage-table td, .usage-table th { padding: var(--space-1) var(--space-2) var(--space-1) 0; border-top: 1px solid var(--border); text-align: right; white-space: nowrap; }

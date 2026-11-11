@@ -26,6 +26,9 @@ D1 and the sources; it changes nothing.
   8. Tax laws: each law in data/taxes/corporate-tax-laws.json as Congress.gov's API gives
      it (official and short titles, the CRS summary's first sentence, the public law, every
      recorded vote), to check the hand-kept file against.
+  9. One company's taxes (TAX_CIK, default Tesla, 1318605): its rows in D1 as JSON, and
+     every income-taxes-paid fact in its latest 10-K's XBRL with every dimension, to check
+     how the 10-K breaks taxes paid down (federal, state, foreign, places, "other").
 
   python3 tools/accuracy_audit.py > audit.md   (or Actions -> Accuracy audit)
 """
@@ -767,17 +770,82 @@ def tax_laws(args):
         say()
 
 
+def company_xbrl(args):
+    cik = int(os.environ.get("TAX_CIK") or 1318605)
+    say(f"## 9. One company's taxes (CIK {cik})")
+    say()
+    for t in ("companies", "company_tax_years", "company_tax_jurisdictions", "company_orgs"):
+        rows = q(args, f"SELECT * FROM {t} WHERE cik = {cik}")
+        say(f"### D1 {t}")
+        say()
+        say("```json")
+        say(json.dumps(rows, ensure_ascii=False))
+        say("```")
+        say()
+    sys.path.insert(0, str(ROOT / "tools"))
+    import build_company_taxes as B
+    try:
+        sub = json.loads(B.get(f"https://data.sec.gov/submissions/CIK{cik:010d}.json"))
+        tks = B.ten_ks(sub)
+        say(f"10-Ks since 2019: {tks[:6]}")
+        accn = next((a for a, _, _ in tks if a in os.environ.get("TAX_ACCN", a)), tks[0][0])
+        # An amendment (10-K/A) often carries no financial statements: the original's facts are wanted.
+        forms = dict(zip((sub.get("filings") or {}).get("recent", {}).get("accessionNumber", []), (sub.get("filings") or {}).get("recent", {}).get("form", [])))
+        accn = next((a for a, _, _ in tks if forms.get(a) == "10-K"), accn)
+        url = B.instance_url(cik, accn)
+        say(f"Latest original 10-K {accn}: {url}")
+        xml = B.get(url).decode("utf-8", "replace")
+    except Exception as e:  # noqa: BLE001 (reported, not hidden)
+        say(f"> Not read: {type(e).__name__}: {str(e)[:300]}")
+        return
+    ctx = {}
+    for cid, body in B.CONTEXT.findall(xml):
+        d = dict(B.DATES.findall(body))
+        ctx[cid] = (B.MEMBER.findall(body), d.get("startDate"), d.get("endDate"))
+    typed = re.findall(r"<xbrldi:typedMember\b[^>]*dimension=\"([^\"]+)\"", xml)
+    if typed:
+        say(f"Typed dimensions in the file: {sorted(set(typed))}")
+    say()
+    say("| Element | Value | Period | Dimensions |")
+    say("|---|---|---|---|")
+    n = 0
+    for m in re.finditer(r"<([A-Za-z0-9_-]+):([A-Za-z0-9_]*IncomeTax[A-Za-z0-9_]*Paid[A-Za-z0-9_]*)\b([^>]*)>\s*([-0-9.]+)\s*<", xml):
+        ref = re.search(r'contextRef="([^"]+)"', m.group(3))
+        c = ctx.get(ref.group(1)) if ref else None
+        if not c:
+            continue
+        mem, start, end = c
+        if not end or end < "2023-01-01":
+            continue
+        say(f"| {m.group(1)}:{m.group(2)} | {m.group(4)} | {start}..{end} | {'; '.join(f'{a}={b}' for a, b in mem) or '(none)'} |")
+        n += 1
+    say()
+    say(f"{n} facts.")
+    # Members' labels, from the filing's label linkbase, for company-defined members.
+    try:
+        base = url.rsplit("/", 1)[0] + "/"
+        items = json.loads(B.get(base + "index.json"))["directory"]["item"]
+        lab = next((i["name"] for i in items if i["name"].endswith("_lab.xml")), None)
+        if lab:
+            text = B.get(base + lab).decode("utf-8", "replace")
+            for m in re.finditer(r'<link:label\b[^>]*xlink:label="([^"]*(?:Member|member)[^"]*)"[^>]*>([^<]{1,120})</link:label>', text):
+                if re.search(r"state|countr|foreign|federal|other|china|domestic|jurisdiction", m.group(2), re.I):
+                    say(f"- label {m.group(1)}: {m.group(2)!r}")
+    except Exception as e:  # noqa: BLE001
+        say(f"> Labels not read: {type(e).__name__}: {str(e)[:200]}")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--database", default="pillory")
-    ap.add_argument("--only", default="1,2,3,4,5,6,7,8")
+    ap.add_argument("--only", default="1,2,3,4,5,6,7,8,9")
     args = ap.parse_args()
     only = set(args.only.split(","))
     say("# Accuracy audit")
     say()
     say(f"Run {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}. Reads D1 and the sources; changes nothing.")
     say()
-    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage), ("7", sync_cost), ("8", tax_laws)):
+    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage), ("7", sync_cost), ("8", tax_laws), ("9", company_xbrl)):
         if k in only:
             try:
                 fn(args)
