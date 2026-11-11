@@ -23,6 +23,8 @@ export const KNOWN = new Set([
   "name", "q", "offset", "toffset", "page", "state", "chamber", "sector", "filter", "show", "clause", "vote", "votes",
   "party", "position", "level", "year", "cycle", "status", "browse", "sort", "layer", "st", "lookup", "waitlist",
   "now", "hub", "pick", "notice", "error", "sent", "sic",
+  // The weekly email: a subscriber's link token, and /admin/email/'s preview of a place.
+  "t", "zip", "cd", "su", "sl", "co", "done",
 ]);
 const TRACKING = /^(utm_[a-z]+|fbclid|gclid|dclid|msclkid|mc_cid|mc_eid|igshid|ref|ref_src|_ga)$/i;
 

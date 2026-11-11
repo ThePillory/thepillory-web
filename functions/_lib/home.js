@@ -42,6 +42,7 @@ import { stateLeadData, governorOf, liveCounties, comingTo } from "./state-lead.
 import { statePath } from "./state-paths.js";
 import { stateMapLite, stateMapFigure } from "./state-map.js";
 import { votesLoaded } from "./coverage.js";
+import { emailLine } from "./email-link.js";
 
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 
@@ -270,6 +271,7 @@ ${statePage ? (lite === FAILED ? sectionError(`${vs.name} map`) : stateMapTop(vs
 ${hero ? ballotHero(vs, win) : ""}
 ${notFound ? '<p class="banner banner--error" role="alert">We couldn\'t find districts for that. Check the address, or try your ZIP code.</p>' : ""}
 ${repsHtml}
+${emailLine()}
 ${liveCommunities(vs)}
 <aside class="intro-banner" data-intro hidden aria-label="Welcome">
   <p><strong>New here?</strong> ThePillory keeps a public, sourced record of what your officials do: every recorded vote, the bills they vote on mapped to the Constitution, local meeting agendas, and the money around them. Facts and sources, no party labels.</p>
