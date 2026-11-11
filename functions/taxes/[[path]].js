@@ -11,7 +11,7 @@
 // A Taxpayers | Wealth | Corporations switch at the top of each, like Laws'. The same for
 // every visitor, so kept at the edge for five minutes.
 import { page, notFound, notLoaded, esc, guard, edgeCached, loadSection, FAILED, sectionError } from "../_lib/render.js";
-import { loadCompany, listCompanies, listFilters, listHref, listForm, industries, loadedAt, companyRow, companyMain, taxesSwitch, READING, PER_PAGE, TAXES_METHOD } from "../_lib/taxes.js";
+import { loadCompany, listCompanies, listFilters, listHref, listForm, industries, loadedAt, companyRow, companyMain, taxesSwitch, READING, PER_PAGE, TAXES_METHOD, loadLaws, lawsSection } from "../_lib/taxes.js";
 import { loadTaxpayers, taxpayersMain } from "../_lib/taxpayers.js";
 import { loadWealth, wealthMain } from "../_lib/wealth.js";
 
@@ -24,10 +24,10 @@ export const onRequestGet = guard(async (context) => {
   if (!parts.length) return Response.redirect(`${url.origin}/taxes/taxpayers/`, 302);
   if (parts.length === 1 && parts[0] === "taxpayers") return edgeCached(context, CACHE_SECONDS, () => taxpayers(context.env, context.request));
   if (parts.length === 1 && parts[0] === "wealth") return edgeCached(context, CACHE_SECONDS, () => wealth(context.env, context.request));
-  if (parts.length === 1 && parts[0] === "companies") return edgeCached(context, CACHE_SECONDS, () => companies(context.env, url));
+  if (parts.length === 1 && parts[0] === "companies") return edgeCached(context, CACHE_SECONDS, () => companies(context.env, url, context.request));
   if (parts.length === 2 && parts[0] === "companies" && /^\d{1,10}$/.test(parts[1])) {
     if (String(Number(parts[1])) !== parts[1]) return Response.redirect(`${url.origin}/taxes/companies/${Number(parts[1])}/`, 301);
-    return edgeCached(context, CACHE_SECONDS, () => company(context.env, Number(parts[1])));
+    return edgeCached(context, CACHE_SECONDS, () => company(context.env, Number(parts[1]), context.request));
   }
   return notFound("No page at this address.", "laws", ["Taxes", "/taxes/"]);
 }, { tab: "laws" });
@@ -44,7 +44,7 @@ async function wealth(env, request) {
   return page("Taxes: who holds wealth", main, { tab: "laws", back: ["Laws", "/laws/"], partial: data === FAILED });
 }
 
-async function companies(env, url) {
+async function companies(env, url, request) {
   if (!env.DB) return notLoaded("Taxes: corporations", "laws", false, ["Laws", "/laws/"]);
   const f = listFilters(url.searchParams);
   const [list, inds, at] = await Promise.all([
@@ -52,6 +52,7 @@ async function companies(env, url) {
     loadSection("companies industries", () => industries(env.DB), []),
     loadSection("companies loaded", () => loadedAt(env.DB), null),
   ]);
+  const laws = await loadLaws(env, request);
   const empty = list && list !== FAILED && !list.rows.length;
   const rows = list === FAILED
     ? sectionError("")
@@ -75,13 +76,15 @@ ${more}
   <p class="small">${at && at !== FAILED ? `The ${esc(String(at.n))} largest` : "The largest"} companies by revenue in their latest fiscal year that file a 10-K with the SEC and tag these values in their financial data, ordered by name, revenue or profit before taxes, as you choose. It isn't ordered or labeled by taxes paid or by any rate. Revenue and profit before taxes are for each company's latest fiscal year with figures.</p>
   <p class="small">State is the company's business address as EDGAR lists it. ${at && at !== FAILED ? `Loaded ${esc(String(at.at).slice(0, 10))}.` : ""} <a class="inline-link" href="${TAXES_METHOD}">How this works</a></p>
 </section>
+${lawsSection(laws)}
 ${READING}`;
   return page("Taxes: corporations", main, { tab: "laws", back: ["Laws", "/laws/"], partial: list === FAILED });
 }
 
-async function company(env, cik) {
+async function company(env, cik, request) {
   if (!env.DB) return notLoaded("Company taxes", "laws", false, ["Corporations", "/taxes/companies/"]);
   const data = await loadCompany(env.DB, cik);
   if (!data) return notFound("No company with this number is loaded. Company figures load weekly from EDGAR.", "laws", ["Corporations", "/taxes/companies/"]);
-  return page(`${data.company.name}: taxes`, companyMain(data), { tab: "laws", back: ["Corporations", "/taxes/companies/"] });
+  const laws = await loadLaws(env, request);
+  return page(`${data.company.name}: taxes`, companyMain({ ...data, laws }), { tab: "laws", back: ["Corporations", "/taxes/companies/"] });
 }

@@ -718,6 +718,7 @@ def sync_cost(args):
 
 
 TAX_LAWS = [(115, "hr", 1), (117, "hr", 5376), (119, "hr", 1)]
+TAX_LAW_ORDER = os.environ.get("TAX_LAWS_ONLY", "")  # e.g. "119-hr-1,117-hr-5376": only these
 
 
 def congress_api(path):
@@ -738,7 +739,11 @@ def tax_laws(args):
         listed = [(l["congress"], l["bill_type"], l["bill_number"]) for l in laws]
     except (OSError, ValueError, KeyError):
         listed = []
-    for c, t, n in list(dict.fromkeys(listed + TAX_LAWS)):
+    todo = list(dict.fromkeys(listed + TAX_LAWS))
+    if TAX_LAW_ORDER:
+        want = TAX_LAW_ORDER.split(",")
+        todo = [x for x in todo if f"{x[0]}-{x[1]}-{x[2]}" in want]
+    for c, t, n in todo:
         say(f"### {t.upper()} {n}, {c}th Congress")
         say()
         try:
@@ -747,8 +752,7 @@ def tax_laws(args):
             say(f"- Laws: {b.get('laws')!r}")
             say(f"- Became law (latest action): {b.get('latestAction')!r}")
             for x in congress_api(f"/bill/{c}/{t}/{n}/titles?limit=250").get("titles", []):
-                if re.search(r"enacted|official title as introduced|short title", x.get("titleType", ""), re.I):
-                    say(f"- {x.get('titleType')}: {x.get('title')!r}")
+                say(f"- {x.get('titleType')}: {x.get('title')!r}")
             sums = congress_api(f"/bill/{c}/{t}/{n}/summaries?limit=250").get("summaries", [])
             for x in sums[-2:]:
                 text = re.sub(r"<[^>]+>", " ", x.get("text", ""))

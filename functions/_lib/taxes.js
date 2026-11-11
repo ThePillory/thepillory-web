@@ -59,16 +59,6 @@ export const FILING_TERMS = {
   pretax_foreign: "Income (loss) before income taxes, foreign",
   revenue: "Revenues",
 };
-// One line explaining a value, where it helps.
-const OWED = "What the company recorded as due for this year; it can differ from what it paid this year";
-export const NOTES = {
-  taxes_paid: "Cash sent to tax authorities this year, minus refunds received",
-  pretax: "A minus sign means a loss",
-  current_federal: OWED,
-  current_state: OWED,
-  deferred: "Recorded now; paid in a later year, or sometimes not at all",
-};
-export const RATE_NOTE = "The federal corporate income tax rate is 21%. States add their own, and companies also pay taxes to other countries.";
 export const ELEMENTS = {
   taxes_paid: "IncomeTaxesPaidNet",
   paid_federal: "IncomeTaxPaidFederalAfterRefundReceived",
@@ -83,10 +73,6 @@ export const ELEMENTS = {
 // The second element some companies use excludes income from equity-method investments: said so.
 const PRETAX_EQUITY = "IncomeLossFromContinuingOperationsBeforeIncomeTaxesMinorityInterestAndIncomeLossFromEquityMethodInvestments";
 const filingTerm = (field, y) => (field === "pretax" && y && y.pretax_tag === PRETAX_EQUITY ? "Income (loss) before income taxes and equity-method investments" : FILING_TERMS[field]);
-/** A value's label: the plain words, then (small, gray) the explanation where there is one and the filing's own term. */
-export function labelHtml(field, { y = null, note = true } = {}) {
-  return `${esc(LABELS[field])}${note && NOTES[field] ? `<span class="list-meta">${esc(NOTES[field])}</span>` : ""}<span class="list-meta">In the 10-K: ${esc(filingTerm(field, y))}</span>`;
-}
 const TABLE_FIELDS = ["taxes_paid", "paid_federal", "paid_state", "paid_foreign", "current_federal", "current_state", "deferred", "pretax", "pretax_us", "pretax_foreign", "revenue"];
 const NOT_REPORTED = "Not reported";
 
@@ -154,21 +140,63 @@ export function multiYear(years, n = 5) {
   return { years: pick, paid, pretax, share: share.why === "loss" ? { why: "losses" } : share };
 }
 
+/** "$1.23 billion", "$28 million", "−$7.4 million", "$850,000": three significant figures. */
+export function shortMoney(n) {
+  const v = num(n);
+  if (v == null) return NOT_REPORTED;
+  const sign = v < 0 ? "−" : "";
+  let a = Math.abs(v);
+  const units = [[1e12, "trillion"], [1e9, "billion"], [1e6, "million"]];
+  for (let i = 0; i < units.length; i++) {
+    const [size, word] = units[i];
+    if (a < size) continue;
+    const x = Number((a / size).toPrecision(3));
+    if (x >= 1000 && i > 0) return `${sign}$${Number((a / units[i - 1][0]).toPrecision(3))} ${units[i - 1][1]}`;
+    return `${sign}$${x} ${word}`;
+  }
+  return `${sign}$${Math.round(a).toLocaleString("en-US")}`;
+}
+
 /**
- * "In fiscal 2025, Example Retail Inc reported $40.0 million in profit before taxes and paid $9.0 million
- * in income taxes: 23% of its profit." Parts not reported are left out; a loss is "a loss of $X"; no
- * percentage without both values, a profit and taxes paid. Pure; tested.
+ * The U.S. line: federal income taxes paid on U.S. profit before taxes, with the percent only when
+ * both are tagged, the profit is above zero and the taxes aren't a net refund. "" when neither is tagged.
+ * Pure; tested.
  */
-export function leadSentence(name, y) {
-  if (!y) return "";
-  const p = num(y.taxes_paid);
-  const b = num(y.pretax);
-  if (p == null && b == null) return "";
-  const when = y.fy ? `In fiscal ${y.fy}` : `In the fiscal year ended ${fmtDate(y.period_end)}`;
-  const profit = b == null ? "" : b < 0 ? `reported a loss of ${money(-b)} before taxes` : `reported ${money(b)} in profit before taxes`;
-  const taxes = p == null ? "" : p < 0 ? `received ${money(-p)} more in income tax refunds than it paid` : `paid ${money(p)} in income taxes`;
-  const share = shareOfProfit(p, b);
-  return `${when}, ${name} ${[profit, taxes].filter(Boolean).join(" and ")}${share.pct != null ? `: ${share.pct}% of its profit` : ""}.`;
+export function usLine(y) {
+  const pf = num(y && y.paid_federal);
+  const pu = num(y && y.pretax_us);
+  if (pf == null && pu == null) return "";
+  const taxes = pf == null ? "" : pf < 0 ? `received ${shortMoney(-pf)} more in refunds than it paid` : shortMoney(pf);
+  if (pu == null) return `U.S. taxes: ${taxes}`;
+  if (pf == null) return pu < 0 ? `U.S. loss before taxes: ${shortMoney(-pu)}` : `U.S. profit before taxes: ${shortMoney(pu)}`;
+  if (pu < 0) return `U.S. taxes: ${taxes}, with a U.S. loss before taxes of ${shortMoney(-pu)}`;
+  const share = shareOfProfit(pf, pu);
+  return `U.S. taxes: ${taxes} on ${shortMoney(pu)} of U.S. profit${share.pct != null ? ` (${share.pct}%)` : ""}`;
+}
+
+/**
+ * Where the taxes went, one row each, only rows with a value: the U.S. government, then each state, then
+ * each country (the places of 5% or more the 10-K lists). Where the 10-K lists no places for states or
+ * other countries but tags the total, that total is one row. Pure; tested.
+ */
+export function placeRows(y, jurisdictions) {
+  const best = new Map();
+  const rank = { IncomeTaxPaidFederalAfterRefundReceived: 0, IncomeTaxPaidStateAndLocalAfterRefundReceived: 0, IncomeTaxPaidForeignAfterRefundReceived: 0, IncomeTaxesPaidNet: 1 };
+  for (const j of jurisdictions || []) {
+    if (j.period_end !== y.period_end || num(j.amount) == null) continue;
+    const prev = best.get(j.jurisdiction);
+    if (!prev || (rank[j.element] ?? 2) < (rank[prev.element] ?? 2)) best.set(j.jurisdiction, j);
+  }
+  const all = [...best.values()];
+  const states = all.filter((j) => j.jurisdiction.startsWith("stpr:")).sort((a, b) => b.amount - a.amount);
+  const countries = all.filter((j) => j.jurisdiction.startsWith("country:") && j.jurisdiction !== "country:US").sort((a, b) => b.amount - a.amount);
+  const rows = [];
+  if (num(y.paid_federal) != null) rows.push({ label: "U.S. government", field: "paid_federal", amount: y.paid_federal });
+  if (states.length) rows.push(...states.map((j) => ({ label: j.name, amount: j.amount, accn: j.accn })));
+  else if (num(y.paid_state) != null) rows.push({ label: "States and cities", field: "paid_state", amount: y.paid_state });
+  if (countries.length) rows.push(...countries.map((j) => ({ label: j.name, amount: j.amount, accn: j.accn })));
+  else if (num(y.paid_foreign) != null) rows.push({ label: "Other countries", field: "paid_foreign", amount: y.paid_foreign });
+  return { rows, places: states.length + countries.length > 0 };
 }
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -179,6 +207,15 @@ export function fiscalYear(y) {
   return y.period_start ? `${name} (${month(y.period_start)} – ${month(y.period_end)})` : name;
 }
 export const fyShort = (y) => (y.fy ? `FY${y.fy}` : `FY ending ${month(y.period_end)}`);
+/** "FY2025 (Jan–Dec 2025)", "FY2025 (Feb 2025–Jan 2026)". */
+export function fyLabel(y) {
+  if (!y.period_start) return fyShort(y);
+  const [s, e] = [y.period_start, y.period_end];
+  const m = (iso) => MONTHS[parseInt(iso.slice(5, 7), 10) - 1];
+  return `${fyShort(y)} (${s.slice(0, 4) === e.slice(0, 4) ? `${m(s)}–${m(e)} ${e.slice(0, 4)}` : `${m(s)} ${s.slice(0, 4)}–${m(e)} ${e.slice(0, 4)}`})`;
+}
+/** "2021–2025", or the years named when one is missing between them. */
+const yearsShort = (ys) => yearsWords(ys).replace(/^fiscal /, "");
 
 /** The filing a value comes from: its index page on EDGAR. */
 export function filingUrl(cik, accn) {
@@ -192,10 +229,16 @@ const srcOf = (y) => {
     return {};
   }
 };
-const valueLink = (cik, y, field) => {
+const valueLink = (cik, y, field, { short = false } = {}) => {
   const v = num(y[field]);
   const href = v == null ? null : filingUrl(cik, srcOf(y)[field]);
-  return href ? `<a class="inline-link" href="${esc(href)}" target="_blank" rel="noopener">${esc(exact(v))}</a>` : esc(v == null ? NOT_REPORTED : exact(v));
+  const text = v == null ? NOT_REPORTED : short ? shortMoney(v) : exact(v);
+  return href ? `<a class="inline-link" href="${esc(href)}" target="_blank" rel="noopener"${short ? ` title="${esc(exact(v))}"` : ""}>${esc(text)}</a>` : esc(text);
+};
+/** An amount on its own (a place's taxes): short, the exact figure in the link's title. */
+const amountLink = (cik, accn, amount) => {
+  const href = filingUrl(cik, accn);
+  return href ? `<a class="inline-link" href="${esc(href)}" target="_blank" rel="noopener" title="${esc(exact(amount))}">${esc(shortMoney(amount))}</a>` : esc(shortMoney(amount));
 };
 
 export const companyHref = (cik) => `/taxes/companies/${Number(cik)}/`;
@@ -293,14 +336,46 @@ export async function loadedAt(db) {
   }
 }
 
+/** The hand-kept list of laws (data/taxes/corporate-tax-laws.json), read from the site's own files; null if it can't be. */
+export async function loadLaws(env, request) {
+  if (!env || !env.ASSETS) return null;
+  try {
+    const res = await env.ASSETS.fetch(new URL("/data/taxes/corporate-tax-laws.json", request.url));
+    return res.ok ? await res.json() : null;
+  } catch {
+    return null;
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Pages
 
 export const READING = `<section class="card stack-sm" id="reading">
   <h2 class="h3">Reading these numbers</h2>
-  <p class="small">Taxes paid is cash out the door this year. It doesn't line up exactly with this year's profit: some tax is paid a year early or late, refunds from past years count when they arrive, and some tax is put off to later years. Losses from past years, tax credits and deductions set by law can also lower what's paid in a given year.</p>
-  <p class="small">The figures are as each company reports them in its 10-K, shown without conclusions about them. <a class="inline-link" href="${TAXES_METHOD}">How this works</a></p>
+  <p class="small">Taxes paid is cash paid this year, after refunds. It won't match this year's profit exactly: some tax is paid a year early or late. Deductions, credits and past losses set by law lower what's paid.</p>
+  <p class="small"><a class="inline-link" href="${TAXES_METHOD}">How this works ›</a></p>
 </section>`;
+
+export const LAWS_LINE = "Congress sets the rates, deductions and credits that decide how much income tax companies owe. See how your representatives voted on each law.";
+
+/** The laws that set these taxes (data/taxes/corporate-tax-laws.json), the same on every company page and the list. */
+export function lawsSection(file) {
+  const laws = (file && file.laws) || [];
+  const items = laws
+    .filter((l) => l.bill_id && safeUrl(l.source_url))
+    .map(
+      (l) => `<li class="law-item stack-xs">
+    <a class="list-row" href="/laws/bills/${esc(l.bill_id)}/"><span class="list-main"><span class="list-title">${esc(l.name)}</span><span class="list-meta">Public Law ${esc(l.public_law)} · ${esc(String(l.year))} · ${esc(l.bill_number)}, ${esc(String(l.congress))}th Congress</span></span><span class="list-status">Votes ›</span></a>
+    ${l.description ? `<p class="small">“${esc(l.description)}” <span class="secondary">${esc(l.description_source || "Congress.gov summary")}.</span> ${sourceLink(l.source_url, "Congress.gov")}</p>` : ""}
+  </li>`
+    );
+  return `<section class="card stack-sm" id="laws">
+  <h2 class="h3">The laws that set these taxes</h2>
+  <p class="small">${esc(LAWS_LINE)}</p>
+  ${items.length ? `<ul class="plain-list stack-sm">${items.join("")}</ul>` : `<p class="small secondary">The list of laws isn't loaded right now.</p>`}
+  <p class="xsmall secondary">${esc((file && file.note) || "Official titles and summaries from Congress.gov.")}</p>
+</section>`;
+}
 
 const SWITCH = (on) => `<nav class="segmented list-switch" aria-label="Show">${[["taxpayers", "Taxpayers", "/taxes/taxpayers/"], ["wealth", "Wealth", "/taxes/wealth/"], ["companies", "Corporations", "/taxes/companies/"]]
   .map(([k, label, href]) => `<a class="toggle" href="${href}"${k === on ? ' aria-current="true"' : ""}>${label}</a>`)
@@ -370,19 +445,42 @@ function orgFacts(c, orgs) {
 </section>`;
 }
 
-/** The lead: the latest year in one sentence, the last five years' share, and the statutory rate. */
-function leadCard(c, years, latest) {
-  const sentence = leadSentence(c.name, latest);
+/** The top card: the latest year, short and big. */
+function topCard(c, years, latest) {
+  const p = num(latest.taxes_paid);
+  const b = num(latest.pretax);
+  const paid = p == null ? `Income taxes paid: ${NOT_REPORTED}` : p < 0 ? `Received ${valueLink(c.cik, { ...latest, taxes_paid: -p }, "taxes_paid", { short: true })} more in income tax refunds than it paid` : `Paid ${valueLink(c.cik, latest, "taxes_paid", { short: true })} in income taxes`;
+  const share = shareOfProfit(p, b);
+  const profit = b == null ? `Profit before taxes: ${NOT_REPORTED}` : b < 0 ? `Loss before taxes: ${valueLink(c.cik, { ...latest, pretax: -b }, "pretax", { short: true })}` : `Profit before taxes: ${valueLink(c.cik, latest, "pretax", { short: true })}`;
   const multi = multiYear(years);
-  return `<section class="card stack-sm" id="summary">
-  <p class="lead-sentence">${sentence ? esc(sentence) : "This company's 10-K filings don't tag its profit before taxes or the income taxes it paid for its latest fiscal year."}</p>
-  ${multi ? `<p class="small">Over ${esc(yearsWords(multi.years))}: ${multi.share.pct != null ? `${multi.share.pct}% of profit` : esc(SHARE_WORDS[multi.share.why])} <span class="secondary">(${esc(money(multi.paid))} in income taxes paid on ${esc(money(multi.pretax))} in profit before taxes)</span></p>` : ""}
-  <p class="xsmall secondary">${esc(RATE_NOTE)}</p>
+  return `<section class="card stack-sm tax-top" id="latest">
+  <p class="label">${esc(fyLabel(latest))}</p>
+  <p class="tax-big">${paid}</p>
+  <p class="tax-sub">${profit}${share.pct != null ? ` · Taxes were ${share.pct}% of profit` : ""}</p>
+  ${multi && multi.share.pct != null ? `<p class="small secondary">${esc(yearsShort(multi.years))}: ${multi.share.pct}% of profit</p>` : ""}
+</section>`;
+}
+
+/** The U.S. line, where the profit was made and where the taxes went: only what the 10-K tags. */
+function placesCard(c, latest, jurisdictions) {
+  const us = usLine(latest);
+  const pu = num(latest.pretax_us);
+  const pf = num(latest.pretax_foreign);
+  const where = [pu != null ? `U.S. ${valueLink(c.cik, latest, "pretax_us", { short: true })}` : "", pf != null ? `Outside the U.S. ${valueLink(c.cik, latest, "pretax_foreign", { short: true })}` : ""].filter(Boolean).join(" · ");
+  const { rows, places } = placeRows(latest, jurisdictions);
+  if (!us && !where && !rows.length) return "";
+  const row = (r) => `<div class="kv-row"><dt>${esc(r.label)}</dt><dd>${r.field ? valueLink(c.cik, latest, r.field, { short: true }) : amountLink(c.cik, r.accn, r.amount)}</dd></div>`;
+  return `<section class="card stack-sm" id="places">
+  ${us ? `<p class="tax-us">${esc(us)}</p>` : ""}
+  ${where ? `<p class="label">Where the profit was made</p><p class="small">${where}</p>` : ""}
+  ${rows.length ? `<p class="label">Where the taxes went</p>
+  <dl class="kv kv--tight kv--amounts">${rows.map(row).join("")}</dl>
+  ${places ? `<p class="xsmall secondary">Places getting 5% or more, as listed in the 10-K.</p>` : ""}` : ""}
 </section>`;
 }
 
 /** The company page's main content. */
-export function companyMain({ company: c, years, jurisdictions, orgs }) {
+export function companyMain({ company: c, years, jurisdictions, orgs, laws = null }) {
   const latest = [...years].reverse().find((y) => num(y.taxes_paid) != null || num(y.pretax) != null) || years[years.length - 1] || null;
   const head = `<header class="page-head">
   <p class="label">Corporation · SEC filer</p>
@@ -390,27 +488,8 @@ export function companyMain({ company: c, years, jurisdictions, orgs }) {
   <p class="subtitle">${[c.tickers ? esc(c.tickers.split(",").join(", ")) : "", meta(c)].filter(Boolean).join(" · ")}</p>
 </header>`;
   if (!latest) {
-    return `${head}<section class="card"><p class="small secondary">No fiscal year with these values is tagged in this company's 10-K filings yet.</p></section>${READING}`;
+    return `${head}<section class="card"><p class="small secondary">No fiscal year with these values is tagged in this company's 10-K filings yet.</p></section>${lawsSection(laws)}${READING}`;
   }
-  const line = (field, y = latest, opts = {}) => `<div class="kv-row"><dt>${labelHtml(field, { y, ...opts })}</dt><dd>${valueLink(c.cik, y, field)}</dd></div>`;
-  const split = ["paid_federal", "paid_state", "paid_foreign"].some((f) => num(latest[f]) != null);
-  const jurs = jurisdictions.filter((j) => j.period_end === latest.period_end);
-  const elementName = { IncomeTaxPaidFederalAfterRefundReceived: "U.S. government", IncomeTaxPaidStateAndLocalAfterRefundReceived: "state or city", IncomeTaxPaidForeignAfterRefundReceived: "another country", IncomeTaxesPaidNet: "total" };
-  const share = shareOfProfit(latest.taxes_paid, latest.pretax);
-  const card = `<section class="card stack-sm" id="latest">
-  <h2 class="h3">${esc(fiscalYear(latest))}</h2>
-  <dl class="kv kv--tight kv--labeled">
-    ${line("taxes_paid")}
-    ${line("pretax")}
-    <div class="kv-row"><dt>Income taxes paid as a share of profit<span class="list-meta">Income taxes actually paid ÷ profit before taxes</span></dt><dd>${esc(shareText(share))}</dd></div>
-  </dl>
-  ${split ? `<p class="label">Where the taxes went, as the 10-K splits them</p>
-  <dl class="kv kv--tight kv--labeled">${line("paid_federal")}${line("paid_state")}${line("paid_foreign")}</dl>` : ""}
-  ${jurs.length ? `<p class="label">By place, as filed</p>
-  <dl class="kv kv--tight kv--labeled">${jurs.map((j) => `<div class="kv-row"><dt>${esc(j.name)} <span class="secondary">(${esc(elementName[j.element] || "")})</span></dt><dd>${filingUrl(c.cik, j.accn) ? `<a class="inline-link" href="${esc(filingUrl(c.cik, j.accn))}" target="_blank" rel="noopener">${esc(exact(j.amount))}</a>` : esc(exact(j.amount))}</dd></div>`).join("")}</dl>
-  <p class="xsmall secondary">Companies list each place that gets 5% or more of their income taxes paid (ASU 2023-09).</p>` : ""}
-  <p class="xsmall secondary">Each amount links to the 10-K it's from. "Not reported" means the filing doesn't tag that value; nothing is estimated.</p>
-</section>`;
   const chart = pairBars(
     years.map((y) => ({ label: fiscalYear(y), tick: y.fy ? `'${String(y.fy).slice(2)}` : y.period_end.slice(2, 4), a: num(y.taxes_paid), b: num(y.pretax), hrefA: filingUrl(c.cik, srcOf(y).taxes_paid), hrefB: filingUrl(c.cik, srcOf(y).pretax) })),
     { series: [LABELS.taxes_paid, LABELS.pretax], format: exact, head: "Fiscal year", caption: "By fiscal year, as each 10-K reports them. A bar below the line is a loss. A missing bar is a value the filing doesn't tag.", ariaLabel: `${c.name}: income taxes actually paid and profit before taxes by fiscal year` }
@@ -418,20 +497,22 @@ export function companyMain({ company: c, years, jurisdictions, orgs }) {
   const all = fold(
     "numbers",
     "Show the numbers",
-    `<div class="table-scroll"><table class="usage-table tax-table"><thead><tr><th scope="col">Value</th>${years.map((y) => `<th scope="col">${esc(fyShort(y))}</th>`).join("")}</tr></thead><tbody>${TABLE_FIELDS.map((f) => `<tr><th scope="row">${labelHtml(f, { y: latest, note: false })}</th>${years.map((y) => `<td>${valueLink(c.cik, y, f)}</td>`).join("")}</tr>`).join("")}<tr><th scope="row">Income taxes paid as a share of profit<span class="list-meta">Income taxes actually paid ÷ profit before taxes</span></th>${years.map((y) => `<td>${esc(shareText(shareOfProfit(y.taxes_paid, y.pretax)))}</td>`).join("")}</tr></tbody></table></div>
-  <p class="xsmall secondary">Fiscal years: ${years.map((y) => esc(fiscalYear(y))).join("; ")}.</p>`,
+    `<div class="table-scroll"><table class="usage-table tax-table"><thead><tr><th scope="col">Value</th>${years.map((y) => `<th scope="col">${esc(fyShort(y))}</th>`).join("")}</tr></thead><tbody>${TABLE_FIELDS.map((f) => `<tr><th scope="row">${esc(LABELS[f])}</th>${years.map((y) => `<td>${valueLink(c.cik, y, f)}</td>`).join("")}</tr>`).join("")}<tr><th scope="row">Taxes as a share of profit</th>${years.map((y) => `<td>${esc(shareText(shareOfProfit(y.taxes_paid, y.pretax)))}</td>`).join("")}</tr></tbody></table></div>
+  <p class="xsmall secondary">Taxes as a share of profit is income taxes actually paid ÷ profit before taxes. Fiscal years: ${years.map((y) => esc(fiscalYear(y))).join("; ")}.</p>`,
     { meta: `${years.length} ${years.length === 1 ? "year" : "years"}` }
   );
   const technical = fold(
     "technical",
     "Technical details",
-    `<p class="xsmall secondary xbrl-note">The XBRL elements each value is read from (us-gaap): ${TABLE_FIELDS.map((f) => `${esc(LABELS[f])}: ${f === "pretax" ? "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest (or, where that isn't tagged, …MinorityInterestAndIncomeLossFromEquityMethodInvestments, which leaves out income from equity-method investments)" : f === "revenue" ? "Revenues or RevenueFromContractWithCustomer…" : esc(ELEMENTS[f])}`).join("; ")}. Companies' own (extension) elements aren't used.</p>`
+    `<div class="table-scroll"><table class="usage-table tax-terms"><thead><tr><th scope="col">On this page</th><th scope="col">In the 10-K</th><th scope="col">XBRL element (us-gaap)</th></tr></thead><tbody>${TABLE_FIELDS.map((f) => `<tr><th scope="row">${esc(LABELS[f])}</th><td>${esc(filingTerm(f, latest))}</td><td class="xbrl-note">${f === "pretax" ? "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest, or where that isn't tagged …MinorityInterestAndIncomeLossFromEquityMethodInvestments (it leaves out income from equity-method investments)" : f === "revenue" ? "Revenues or RevenueFromContractWithCustomer…" : esc(ELEMENTS[f])}</td></tr>`).join("")}</tbody></table></div>
+  <p class="xsmall secondary">U.S. taxes on this page are federal income taxes paid; U.S. profit is income before income taxes, domestic. Companies' own (extension) elements aren't used.</p>`
   );
-  const source = `<p class="hint">From ${esc(c.name)}'s 10-K filings with the SEC (XBRL financial data), loaded weekly; a restated year shows the latest filing's value. ${sourceLink(c.source_url, "The company's 10-K filings")}</p>`;
+  const source = `<p class="hint">From ${esc(c.name)}'s 10-K filings with the SEC (XBRL financial data), loaded weekly; a restated year shows the latest filing's value. Each amount links to the 10-K it's from; "Not reported" means the filing doesn't tag that value, and nothing is estimated. ${sourceLink(c.source_url, "The company's 10-K filings")}</p>`;
   return `${head}
-${leadCard(c, years, latest)}
-${card}
+${topCard(c, years, latest)}
+${placesCard(c, latest, jurisdictions)}
 <section class="card stack-sm" id="years"><h2 class="h3">Over the years</h2>${chart || `<p class="small secondary">The chart starts once the 10-K filings tag these values for two fiscal years; ${years.length === 1 ? "one is" : "none are"} tagged so far.</p>`}</section>
+${lawsSection(laws)}
 ${all}
 ${READING}
 ${orgFacts(c, orgs)}

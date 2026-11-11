@@ -1779,6 +1779,13 @@ article.fin-term { scroll-margin-top: var(--space-4); }
 .lead-sentence { margin: 0; font-size: var(--fs-body); font-weight: 600; line-height: 1.45; }
 .tax-table th .list-meta, .kv-row dt .list-meta { font-weight: 400; }
 .tax-table th[scope="row"] { min-width: 9.5rem; }
+.tax-big { margin: 0; font-size: var(--fs-h2); font-weight: 800; line-height: 1.2; letter-spacing: -0.01em; }
+.tax-sub, .tax-us { margin: 0; font-size: var(--fs-body); line-height: 1.4; }
+.tax-us { font-weight: 600; }
+.kv--amounts .kv-row { align-items: baseline; }
+.kv--amounts .kv-row dd { white-space: nowrap; }
+.tax-terms td { white-space: normal; text-align: left; min-width: 9rem; }
+.law-item .list-row { padding-top: 0; }
 .kv--labeled .kv-row { align-items: flex-start; gap: var(--space-3); }
 .kv--labeled .kv-row dt { flex: 1 1 auto; min-width: 0; color: var(--text); font-weight: 600; }
 .kv--labeled .kv-row dd { flex: 0 0 auto; white-space: nowrap; }
