@@ -788,9 +788,12 @@ def company_xbrl(args):
         sub = json.loads(B.get(f"https://data.sec.gov/submissions/CIK{cik:010d}.json"))
         tks = B.ten_ks(sub)
         say(f"10-Ks since 2019: {tks[:6]}")
-        accn = tks[0][0]
+        accn = next((a for a, _, _ in tks if a in os.environ.get("TAX_ACCN", a)), tks[0][0])
+        # An amendment (10-K/A) often carries no financial statements: the original's facts are wanted.
+        forms = dict(zip((sub.get("filings") or {}).get("recent", {}).get("accessionNumber", []), (sub.get("filings") or {}).get("recent", {}).get("form", [])))
+        accn = next((a for a, _, _ in tks if forms.get(a) == "10-K"), accn)
         url = B.instance_url(cik, accn)
-        say(f"Latest 10-K {accn}: {url}")
+        say(f"Latest original 10-K {accn}: {url}")
         xml = B.get(url).decode("utf-8", "replace")
     except Exception as e:  # noqa: BLE001 (reported, not hidden)
         say(f"> Not read: {type(e).__name__}: {str(e)[:300]}")
