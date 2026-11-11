@@ -365,8 +365,9 @@ export function lawsSection(file) {
     .filter((l) => l.bill_id && safeUrl(l.source_url))
     .map(
       (l) => `<li class="law-item stack-xs">
-    <a class="list-row" href="/laws/bills/${esc(l.bill_id)}/"><span class="list-main"><span class="list-title">${esc(l.name)}</span><span class="list-meta">Public Law ${esc(l.public_law)} · ${esc(String(l.year))} · ${esc(l.bill_number)}, ${esc(String(l.congress))}th Congress</span></span><span class="list-status">Votes ›</span></a>
-    ${l.description ? `<p class="small">“${esc(l.description)}” <span class="secondary">${esc(l.description_source || "Congress.gov summary")}.</span> ${sourceLink(l.source_url, "Congress.gov")}</p>` : ""}
+    <a class="list-row" href="/laws/bills/${esc(l.bill_id)}/"><div><div class="list-title">${esc(l.name)}</div><div class="list-meta">Public Law ${esc(l.public_law)} · ${esc(String(l.year))} · ${esc(l.bill_label)}, ${esc(String(l.congress))}th Congress</div></div><span class="list-status">Votes ›</span></a>
+    <p class="xsmall secondary">Official title: ${esc(l.official_title)}</p>
+    ${l.description ? `<p class="small">“${esc(l.description)}” <span class="secondary">${esc(l.description_source)}.</span> ${sourceLink(l.source_url, "Congress.gov")}</p>` : ""}
   </li>`
     );
   return `<section class="card stack-sm" id="laws">

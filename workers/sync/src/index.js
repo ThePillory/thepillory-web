@@ -46,7 +46,7 @@ import { syncOrderTexts, syncOrderCourts } from "./executive/orders-sync.js";
 import { syncSourceHealth, syncArchiveSources, syncSourceCopies } from "./health/sync.js";
 import { newTally, meteredEnv } from "./usage/meter.js";
 import { recordStepUsage, syncUsageCheck } from "./usage/sync.js";
-import { syncHistoryOfficials, syncHistoryOrders, syncHistoryFunding, syncHistoryNominations, syncHistoryVotes } from "./history/sync.js";
+import { syncHistoryOfficials, syncHistoryOrders, syncHistoryFunding, syncHistoryNominations, syncHistoryVotes, syncLawVotes } from "./history/sync.js";
 
 // Order matters: officials before votes; state officials first because the
 // Open States lookup also detects the U.S. House district. State hearings come
@@ -113,6 +113,9 @@ const STEPS = [
   ["history-funding", syncHistoryFunding],
   ["history-nominations", syncHistoryNominations],
   ["history-votes", syncHistoryVotes],
+  // Every recorded vote on the laws listed in data/taxes/corporate-tax-laws.json (the company tax
+  // pages' "The laws that set these taxes"), read once each, ahead of the history above.
+  ["law-votes", syncLawVotes],
   // What the pages show, precomputed from everything above (src/summaries.js).
   // Rebuilt only when the votes, bills, outcomes or relevance checks changed.
   ["page-summaries", syncSummaries],

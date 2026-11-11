@@ -167,3 +167,18 @@ test("the trade summary rebuilt unchanged writes nothing, and drops a year no lo
   assert.equal(await writes(t, rebuild), 1);
   assert.deepEqual(t.sqlite.prepare("SELECT year FROM trade_summary").all().map((r) => r.year), [2026]);
 });
+
+test("law-votes: each roll call in a bill's actions once, House and Senate", async () => {
+  const { recordedVotes } = await import("../src/history/sync.js");
+  const actions = [
+    { actionDate: "2017-12-20", recordedVotes: [{ chamber: "House", congress: 115, date: "2017-12-20T17:56:09Z", rollNumber: 699, sessionNumber: 1, url: "https://clerk.house.gov/evs/2017/roll699.xml" }] },
+    { actionDate: "2017-12-20", recordedVotes: [{ chamber: "House", congress: 115, date: "2017-12-20T17:56:09Z", rollNumber: 699, sessionNumber: 1, url: "https://clerk.house.gov/evs/2017/roll699.xml" }] },
+    { actionDate: "2017-12-20", recordedVotes: [{ chamber: "Senate", congress: 115, date: "2017-12-20T05:33:45Z", rollNumber: 323, sessionNumber: 1, url: "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1151/vote_115_1_00323.xml" }] },
+    { actionDate: "2017-12-22", text: "Became Public Law No: 115-97." },
+    { recordedVotes: [{ chamber: "Senate", congress: 115, rollNumber: "x", sessionNumber: 1 }] },
+  ];
+  assert.deepEqual(recordedVotes(actions), [
+    { chamber: "house", congress: 115, session: 1, roll: 699, url: "https://clerk.house.gov/evs/2017/roll699.xml", year: "2017" },
+    { chamber: "senate", congress: 115, session: 1, roll: 323, url: "https://www.senate.gov/legislative/LIS/roll_call_votes/vote1151/vote_115_1_00323.xml", year: "2017" },
+  ]);
+});

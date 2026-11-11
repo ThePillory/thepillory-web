@@ -1785,7 +1785,8 @@ article.fin-term { scroll-margin-top: var(--space-4); }
 .kv--amounts .kv-row { align-items: baseline; }
 .kv--amounts .kv-row dd { white-space: nowrap; }
 .tax-terms td { white-space: normal; text-align: left; min-width: 9rem; }
-.law-item .list-row { padding-top: 0; }
+.law-item .list-row { padding-top: 0; padding-bottom: 0; border-top: 0; }
+.law-item + .law-item { border-top: 1px solid var(--border); padding-top: var(--space-3); }
 .kv--labeled .kv-row { align-items: flex-start; gap: var(--space-3); }
 .kv--labeled .kv-row dt { flex: 1 1 auto; min-width: 0; color: var(--text); font-weight: 600; }
 .kv--labeled .kv-row dd { flex: 0 0 auto; white-space: nowrap; }
