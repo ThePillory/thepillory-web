@@ -34,6 +34,24 @@ class Years(unittest.TestCase):
         ]
         self.assertEqual(C.by_year(fs)["2025-02-01"], {"val": 90, "accn": "restated", "start": "2024-02-04", "fy": 2024})
 
+    def test_each_year_is_named_by_its_own_10k_not_a_later_one(self):
+        # Shaped like Tesla's: 2019 and 2020 reach the facts only through later 10-Ks (fiscal 2021's), which
+        # once named all three years "2021". Each year takes its own 10-K's name, or the company's rule.
+        fs = [
+            fact("2019-01-01", "2019-12-31", 1, "k21", "2022-02-07", 2021),
+            fact("2020-01-01", "2020-12-31", 2, "k21", "2022-02-07", 2021),
+            fact("2021-01-01", "2021-12-31", 3, "k21", "2022-02-07", 2021),
+            fact("2021-01-01", "2021-12-31", 3, "k23", "2024-01-29", 2023),
+            fact("2023-01-01", "2023-12-31", 5, "k23", "2024-01-29", 2023),
+        ]
+        by = C.by_year(fs)
+        self.assertEqual({e: v["fy"] for e, v in by.items()}, {"2019-12-31": None, "2020-12-31": None, "2021-12-31": 2021, "2023-12-31": 2023})
+        ys = C.company_years({"IncomeTaxesPaidNet": {"units": {"USD": fs}}})
+        self.assertEqual([y["fy"] for y in ys], [2019, 2020, 2021, 2023])
+        # A retailer's year ending in January is named for the year it starts.
+        r = C.name_years([{"period_end": "2025-02-01", "fy": 2024}, {"period_end": "2024-02-03", "fy": None}])
+        self.assertEqual([y["fy"] for y in r], [2024, 2023])
+
     def test_untagged_values_stay_empty_and_the_first_listed_element_wins(self):
         usd = lambda *fs: {"units": {"USD": list(fs)}}
         facts = {

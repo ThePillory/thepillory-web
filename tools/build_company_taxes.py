@@ -126,17 +126,33 @@ def annual(facts):
 
 
 def by_year(facts):
-    """{period end: chosen fact}: the latest-filed 10-K's value (a restatement replaces the original),
-    with the fiscal year as the year's own (earliest-filed) 10-K names it, and that year's start."""
+    """{period end: chosen fact}: the latest-filed 10-K's value (a restatement replaces the original), with that
+    year's start and its fiscal year as named by the 10-K filed for that year (the filing whose own year it is:
+    the latest period among its facts). "fy" is None when that filing isn't among the facts: company_years()
+    names it from the company's other years."""
     groups = {}
+    own_end = {}
     for f in annual(facts):
         groups.setdefault(f["end"], []).append(f)
+        own_end[f["accn"]] = max(own_end.get(f["accn"], ""), f["end"])
     out = {}
     for end, fs in groups.items():
         latest = max(fs, key=lambda f: (f.get("filed", ""), f.get("accn", "")))
-        first = min(fs, key=lambda f: (f.get("filed", ""), f.get("accn", "")))
-        out[end] = {"val": latest["val"], "accn": latest["accn"], "start": latest["start"], "fy": first.get("fy")}
+        own = [f for f in fs if own_end[f["accn"]] == end and f.get("fy")]
+        fy = min(own, key=lambda f: (f.get("filed", ""), f.get("accn", "")))["fy"] if own else None
+        out[end] = {"val": latest["val"], "accn": latest["accn"], "start": latest["start"], "fy": fy}
     return out
+
+
+def name_years(years):
+    """Years whose own 10-K isn't among the facts get their fiscal year from the company's naming rule, read off
+    the years that have one (fiscal year minus the year the period ends: 0, or -1 for a year ending in January)."""
+    offs = [y["fy"] - int(y["period_end"][:4]) for y in years if y.get("fy")]
+    off = max(set(offs), key=offs.count) if offs else 0
+    for y in years:
+        if not y.get("fy"):
+            y["fy"] = int(y["period_end"][:4]) + off
+    return years
 
 
 def company_years(facts):
@@ -158,7 +174,7 @@ def company_years(facts):
                 if row.get("fy") is None and v["fy"]:
                     row["fy"] = v["fy"]
     # A year with nothing but revenue isn't a tax year.
-    return [y for y in sorted(years.values(), key=lambda r: r["period_end"]) if any(y.get(f) is not None for f in FIELDS if f != "revenue")]
+    return name_years([y for y in sorted(years.values(), key=lambda r: r["period_end"]) if any(y.get(f) is not None for f in FIELDS if f != "revenue")])
 
 
 def largest(companies, n, today=None):
