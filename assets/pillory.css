@@ -1799,8 +1799,8 @@ article.fin-term { scroll-margin-top: var(--space-4); }
 .tax-rows .chev { color: var(--text-2); }
 .tax-rows .tax-sub-row { min-height: 0; padding-left: var(--space-4); }
 .tax-rows .tax-sub-row .list-title, .tax-rows .tax-sub-row .list-status { color: var(--text-2); }
-.tax-table th[scope="row"] { min-width: 9.5rem; }
-.tax-terms td { white-space: normal; text-align: left; min-width: 9rem; }
+.tax-year + .tax-year { padding-top: var(--space-3); border-top: 1px solid var(--border); }
+.tax-terms .list-row { min-height: 0; }
 .xbrl-note { overflow-wrap: anywhere; }
 /* /admin/usage/: plain number tables. */
 .usage-table { width: 100%; border-collapse: collapse; font-size: var(--fs-small); font-variant-numeric: tabular-nums; }

@@ -110,7 +110,12 @@ test("Tesla FY2025: the U.S. figure, the total worldwide, and where the taxes we
   assert.doesNotMatch(places, /Not broken out/);
   // Show the numbers, once on the page: current federal tax of $0 as filed.
   assert.equal((html.match(/Show the numbers/g) || []).length, 1);
-  assert.match(html, /<th scope="row">Federal tax owed on this year(?:'|&#x27;)s profit<\/th><td>\$48,000,000<\/td><td>\$0<\/td><td>\$0<\/td>/);
+  // Rows, one block per year, newest first: nothing to pan sideways on a phone.
+  assert.doesNotMatch(html, /<table|table-scroll/);
+  const fy = (end) => html.slice(html.indexOf(`id="fy-${end}"`), html.indexOf("</ul>", html.indexOf(`id="fy-${end}"`)));
+  assert.ok(html.indexOf('id="fy-2025-12-31"') < html.indexOf('id="fy-2023-12-31"'));
+  assert.match(fy("2025-12-31"), /Federal tax owed on this year(?:'|&#x27;)s profit<\/span><\/div><span class="list-status">\$0<\/span>/);
+  assert.match(fy("2023-12-31"), /Federal tax owed on this year(?:'|&#x27;)s profit<\/span><\/div><span class="list-status">\$48,000,000<\/span>/);
   // One "From the 10-K" link per card, never a link on each amount above the table.
   assert.equal((html.slice(0, html.indexOf('id="years"')).match(/From the 10-K ›/g) || []).length, 2);
   assert.doesNotMatch(html.slice(0, html.indexOf('id="years"')), /<a [^>]*>\$[\d.,]+/);
@@ -120,7 +125,7 @@ test("Tesla FY2025: the U.S. figure, the total worldwide, and where the taxes we
   assert.match(html, /<details class="fold" id="about">\s*<summary><span class="fold-title">About these numbers<\/span>/);
   const about = plain(html.slice(at("about")));
   assert.ok(about.includes(READING_TEXT));
-  assert.match(about, /Income taxes actually paid Income taxes paid, net of refunds IncomeTaxesPaidNet/);
+  assert.match(about, /Income taxes actually paid In the 10-K: Income taxes paid, net of refunds · XBRL: IncomeTaxesPaidNet/);
   // Other records: only those that exist, each with its amount.
   assert.match(plain(html.slice(at("records"), at("about"))), /Federal lobbying TESLA INC · 2025 · 4 reports · same name \$1\.57 million/);
   assert.doesNotMatch(html, /Political action committee/);
@@ -247,7 +252,7 @@ test("every company gets the same layout (the places card only where the 10-K br
   assert.equal(shape(a), shape(b));
   assert.match(a, /id="places"/);
   assert.doesNotMatch(b, /id="places"/);
-  assert.match(b, /<td>Income \(loss\) before income taxes and equity-method investments<\/td>/); // the element it is, said so
+  assert.match(b, /In the 10-K: Income \(loss\) before income taxes and equity-method investments</); // the element it is, said so
   assert.match(plain(b), /Total taxes paid worldwide \$0 on \$70 million of total profit · 0%/); // a zero as filed, with no label or color
 });
 test("the list: search by name or ticker, filter by industry and state, sorted by name, revenue or pretax income only", async () => {

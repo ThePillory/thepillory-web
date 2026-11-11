@@ -572,20 +572,35 @@ function placesCard(c, latest, jurisdictions, tree) {
 </section>`;
 }
 
-/** Every value by year, exact; each year's column heading links to its 10-K (a value from another filing links to that one). */
-function numbersTable(c, years) {
-  const heads = years.map((y) => {
-    const href = filingUrl(c.cik, yearAccn(y));
-    return `<th scope="col">${href ? `<a class="inline-link" href="${esc(href)}" target="_blank" rel="noopener">${esc(fyShort(y))}</a>` : esc(fyShort(y))}</th>`;
-  });
+/** Every value by year, exact, newest year first: one block of rows per year (label left, amount right), each year
+ * linked to its 10-K (a value from another filing links to that one). Rows, not a wide table: nothing to pan. */
+function numbersList(c, years) {
+  const row = (label, value) => `<li class="list-row"><div><span class="list-title">${esc(label)}</span></div><span class="list-status">${value}</span></li>`;
   const cell = (y, f) => {
     const v = num(y[f]);
     const accn = srcOf(y)[f];
     if (v == null) return esc(NOT_REPORTED);
     return accn && accn !== yearAccn(y) && filingUrl(c.cik, accn) ? `<a class="inline-link" href="${esc(filingUrl(c.cik, accn))}" target="_blank" rel="noopener">${esc(exact(v))}</a>` : esc(exact(v));
   };
-  return `<div class="table-scroll"><table class="usage-table tax-table"><thead><tr><th scope="col">Value</th>${heads.join("")}</tr></thead><tbody>${TABLE_FIELDS.map((f) => `<tr><th scope="row">${esc(LABELS[f])}</th>${years.map((y) => `<td>${cell(y, f)}</td>`).join("")}</tr>`).join("")}<tr><th scope="row">Taxes as a share of profit</th>${years.map((y) => `<td>${esc(shareText(shareOfProfit(y.taxes_paid, y.pretax)))}</td>`).join("")}</tr></tbody></table></div>
-  <p class="small secondary">Taxes as a share of profit is income taxes actually paid ÷ profit before taxes. Fiscal years: ${years.map((y) => esc(fiscalYear(y))).join("; ")}. Each year links to its 10-K.</p>`;
+  const share = (y) => {
+    const r = shareOfProfit(y.taxes_paid, y.pretax);
+    return r.why === "missing" ? "" : row("Taxes as a share of profit", esc(shareText(r)));
+  };
+  const blocks = [...years].reverse().map((y) => {
+    const href = filingUrl(c.cik, yearAccn(y));
+    return `<div class="tax-year stack-xs" id="fy-${esc(y.period_end)}">
+    <p class="small">${href ? `<a class="inline-link" href="${esc(href)}" target="_blank" rel="noopener">${esc(fiscalYear(y))} ›</a>` : esc(fiscalYear(y))}</p>
+    <ul class="plain-list tax-rows">${TABLE_FIELDS.filter((f) => num(y[f]) != null).map((f) => row(LABELS[f], cell(y, f))).join("")}${share(y)}</ul>
+  </div>`;
+  });
+  return `<div class="stack">${blocks.join("")}</div>
+  <p class="small secondary">Each year shows the values its 10-K tags; one it doesn't tag is left out, never estimated. Taxes as a share of profit is income taxes actually paid ÷ profit before taxes. Each year links to its 10-K.</p>`;
+}
+
+/** Each value's term in the 10-K and its XBRL element, one row each. */
+function termsList(latest) {
+  const element = (f) => (f === "pretax" ? "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest, or where that isn't tagged …MinorityInterestAndIncomeLossFromEquityMethodInvestments (it leaves out income from equity-method investments)" : f === "revenue" ? "Revenues or RevenueFromContractWithCustomer…" : ELEMENTS[f]);
+  return `<ul class="plain-list tax-rows tax-terms">${TABLE_FIELDS.map((f) => `<li class="list-row"><div><span class="list-title">${esc(LABELS[f])}</span><span class="list-meta xbrl-note">In the 10-K: ${esc(filingTerm(f, latest))} · XBRL: ${esc(element(f))}</span></div></li>`).join("")}</ul>`;
 }
 
 /** The company page's main content. */
@@ -600,14 +615,14 @@ export function companyMain({ company: c, years, jurisdictions, orgs, awards = n
     "About these numbers",
     `${READING}
   <p class="small">From ${esc(c.name)}'s 10-K filings with the SEC (XBRL financial data), loaded weekly. A restated year shows the latest filing's value. "Not reported" means the filing doesn't tag that value; nothing is estimated. U.S. taxes are federal plus state and local income taxes paid; U.S. profit is income before income taxes, domestic. ${sourceLink(c.source_url, "The company's 10-K filings")}</p>
-  <div class="table-scroll"><table class="usage-table tax-terms"><thead><tr><th scope="col">On this page</th><th scope="col">In the 10-K</th><th scope="col">XBRL element (us-gaap)</th></tr></thead><tbody>${TABLE_FIELDS.map((f) => `<tr><th scope="row">${esc(LABELS[f])}</th><td>${esc(filingTerm(f, latest))}</td><td class="xbrl-note">${f === "pretax" ? "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest, or where that isn't tagged …MinorityInterestAndIncomeLossFromEquityMethodInvestments (it leaves out income from equity-method investments)" : f === "revenue" ? "Revenues or RevenueFromContractWithCustomer…" : esc(ELEMENTS[f])}</td></tr>`).join("")}</tbody></table></div>
+  ${termsList(latest)}
   <p class="small secondary">Where the taxes went is the 10-K's own breakdown of taxes paid (IncomeTaxAuthorityAxis): every place it lists, including its "other" groups. A group whose total isn't tagged shows the ${SUM_NOTE}. Companies' own (extension) elements aren't used for amounts. <a class="inline-link" href="${TAXES_METHOD}">How this works ›</a></p>`
   );
   if (!latest) {
     return `<div class="tax-page">${head}<section class="card"><p class="small secondary">No fiscal year with these values is tagged in this company's 10-K filings yet.</p></section>${lawsSection(laws)}${about}</div>`;
   }
   const tree = taxesTree(latest, jurisdictions);
-  const table = numbersTable(c, years);
+  const table = numbersList(c, years);
   const chart = pairBars(
     years.map((y) => ({ label: fiscalYear(y), tick: y.fy ? `'${String(y.fy).slice(2)}` : y.period_end.slice(2, 4), a: num(y.taxes_paid), b: num(y.pretax) })),
     { series: ["Taxes paid", LABELS.pretax], format: exact, caption: "A bar below the line is a loss.", table, ariaLabel: `${c.name}: income taxes actually paid and profit before taxes by fiscal year` }
