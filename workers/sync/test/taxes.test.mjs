@@ -252,7 +252,7 @@ test("every company gets the same layout (the places card only where the 10-K br
   assert.equal(shape(a), shape(b));
   assert.match(a, /id="places"/);
   assert.doesNotMatch(b, /id="places"/);
-  assert.match(b, /In the 10-K: Income \(loss\) before income taxes and equity-method investments</); // the element it is, said so
+  assert.match(b, /In the 10-K: Income \(loss\) before income taxes and equity-method investments · XBRL/); // the element it is, said so
   assert.match(plain(b), /Total taxes paid worldwide \$0 on \$70 million of total profit · 0%/); // a zero as filed, with no label or color
 });
 test("the list: search by name or ticker, filter by industry and state, sorted by name, revenue or pretax income only", async () => {
