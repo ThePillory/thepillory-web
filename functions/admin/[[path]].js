@@ -26,6 +26,8 @@
 // /admin/waitlist/        "Bring ThePillory to your county": sign-ups by county (counts only)
 // /admin/corrections/     readers' error reports ("Report an error"): record fixed, not an error, or duplicate
 // /admin/health/          every data source green, yellow or red, with 30 days of history (functions/_lib/health-pages.js)
+// /admin/email/           the weekly email: subscriber counts, a preview of any edition, "Send test
+//                         to ALERT_TO", the waitlist invitation (functions/_lib/email-admin.js)
 // /admin/usage/           what Cloudflare usage costs, by day, page, sync step and query; the AI cost beside it
 //                         (functions/_lib/usage-pages.js)
 //
@@ -35,6 +37,7 @@ import { page, esc, fmtDate, safeUrl, guard } from "../_lib/render.js";
 import { checkAccess } from "../_lib/access.js";
 import { healthData, adminHealthMain, deadLinks } from "../_lib/health-pages.js";
 import { usageData, adminUsageMain } from "../_lib/usage-pages.js";
+import { adminEmailMain, adminEmailPost, ADMIN_EMAIL } from "../_lib/email-admin.js";
 import { networthScanList, networthScanItem, networthScanChange, networthReviewHref } from "../_lib/networth-review.js";
 import { correctionsList, correctionChange } from "../_lib/corrections-review.js";
 import { measureReviewList, measureReviewItem, measureReviewChange, measureReviewHref } from "../_lib/measure-review.js";
@@ -1576,13 +1579,29 @@ async function handle(context) {
   if (!who.ok) return locked(who.reason);
   const parts = (context.params.path || []).filter(Boolean);
   if (parts.length === 0) return Response.redirect(`${url.origin}/admin/review/`, 302);
-  if (!["review", "waitlist", "health", "corrections", "usage"].includes(parts[0])) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+  if (!["review", "waitlist", "health", "corrections", "usage", "email"].includes(parts[0])) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
   if (!url.pathname.endsWith("/")) return Response.redirect(`${url.origin}${url.pathname}/${url.search}`, 301);
   if (!env.DB) return missingTables();
   if (parts[0] === "health") {
     if (parts.length !== 1 || request.method !== "GET") return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
     const [data, dead] = await Promise.all([healthData(env.DB), deadLinks(env.DB)]);
     return adminPage("Data sources", adminHealthMain(data, dead));
+  }
+  if (parts[0] === "email") {
+    if (parts.length !== 1) return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);
+    try {
+      if (request.method === "POST") {
+        const origin = request.headers.get("Origin");
+        if (origin && origin !== url.origin) return adminPage("Refused", '<header class="page-head"><h1>Refused</h1></header>', 403);
+        const r = await adminEmailPost(env, await request.formData(), who.email);
+        if (r.error) return adminPage(...Object.values(await adminEmailMain(env, request, { error: r.error })));
+        return Response.redirect(`${url.origin}${ADMIN_EMAIL}?done=${encodeURIComponent(r.done)}`, 303);
+      }
+      return adminPage(...Object.values(await adminEmailMain(env, request, { done: url.searchParams.get("done") || "" })));
+    } catch (err) {
+      if (/no such table|no such column/i.test(String(err && err.message))) return missingTables();
+      throw err;
+    }
   }
   if (parts[0] === "usage") {
     if (parts.length !== 1 || request.method !== "GET") return adminPage("Not found", '<header class="page-head"><h1>Not found</h1></header>', 404);

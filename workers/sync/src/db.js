@@ -46,6 +46,7 @@ import init0044 from "../migrations/0044_analysis_resolutions.sql";
 import init0045 from "../migrations/0045_ai_usage.sql";
 import init0046 from "../migrations/0046_usage.sql";
 import init0047 from "../migrations/0047_company_taxes.sql";
+import init0048 from "../migrations/0048_email.sql";
 import { isHttp, today } from "./util.js";
 import { totals } from "./rollcall.js";
 
@@ -97,6 +98,7 @@ const MIGRATIONS = [
   ["0045_ai_usage.sql", init0045],
   ["0046_usage.sql", init0046],
   ["0047_company_taxes.sql", init0047],
+  ["0048_email.sql", init0048],
 ];
 
 // Migrations tools/load_trades.py can also apply (the "Load stock trades"
@@ -113,6 +115,8 @@ const ALREADY_APPLIED = {
   "0035_trade_scan_rows.sql": (db) => hasColumn(db, "trade_scans", "rows_total"),
   // Applied by hand (`wrangler d1 migrations apply`) before the Worker runs: only record it.
   "0043_senate_class.sql": (db) => hasColumn(db, "officials", "senate_class"),
+  // Its ALTER can't run twice; the column there means the whole migration was applied.
+  "0048_email.sql": (db) => hasColumn(db, "waitlist", "email_invited_at"),
 };
 
 function statements(sql) {

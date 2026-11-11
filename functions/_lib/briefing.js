@@ -19,6 +19,7 @@ import { repsWhere, describe, isCalaveras } from "./districts.js";
 import { happeningNow, happeningSection, lookupForm, notYourCounty } from "./hub.js";
 import { linkRow } from "./render.js";
 import { loadPlace, placeHref } from "./geo.js";
+import { emailLine } from "./email-link.js";
 
 const LEVELS = ["county", "state", "federal"];
 
@@ -147,6 +148,7 @@ ${filterNav()}
 <section class="brief-section" aria-labelledby="h-votes">
   ${sectionHead("h-votes", "Your reps' latest votes", withLevel("/votes/", level === "county" ? null : level), "See all votes")}
   ${votesHtml}
+  ${emailLine()}
 </section>
 ${caughtUp}
 </div>`;
@@ -161,7 +163,8 @@ export function findYourPlace() {
   const main = `
 ${briefHead("Your briefing", "Your representatives, their latest votes and your ballot, once ThePillory knows where you are.", { hubLink: false })}
 ${lookupForm(null, { id: "find", heading: "Find your place", next: "/briefing/" })}
-<p class="small secondary">Enter a street address or a ZIP code. Only your district numbers are kept, in your browser; the address or ZIP never is.</p>`;
+<p class="small secondary">Enter a street address or a ZIP code. Only your district numbers are kept, in your browser; the address or ZIP never is.</p>
+${emailLine()}`;
   return page("Your briefing", main, { tab: "home", back: ["Home", "/"], personal: true });
 }
 
@@ -220,6 +223,7 @@ ${simple}
 <section class="brief-section" aria-labelledby="h-reps">
   ${sectionHead("h-reps", "Your representatives", "/reps/", "All reps")}
   <div class="card">${repRows}</div>
+  ${emailLine()}
 </section>
 
 <section class="brief-section" aria-labelledby="h-place">

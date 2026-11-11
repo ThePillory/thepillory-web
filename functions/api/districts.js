@@ -70,7 +70,12 @@ export function districtsFromMatch(match, congress = congressNow()) {
   return { districts: cleanDistricts(raw), county: county ? county.NAME : null, cdChecked: !!cdMatches };
 }
 
-async function lookupAddress(env, address) {
+/**
+ * An address's districts from the Census Geocoder. With { withZip: true } (the weekly email's
+ * signup) also the ZIP the Census matched, which the email stores in place of the address; the
+ * /api/districts answer never includes it. The address itself is used for this one request only.
+ */
+export async function lookupAddress(env, address, { withZip = false } = {}) {
   const q = new URLSearchParams({
     address,
     benchmark: "Public_AR_Current",
@@ -92,7 +97,17 @@ async function lookupAddress(env, address) {
   if (!matches.length) return { found: false, error: "The Census Bureau couldn't find that address. Check the street, city and state, or use your ZIP code." };
   const out = districtsFromMatch(matches[0]);
   if (!out || !out.districts) return { found: false, error: "That address isn't in a state or territory the lookup covers." };
-  return { found: true, districts: out.districts, county: out.county };
+  const result = { found: true, districts: out.districts, county: out.county };
+  if (withZip) result.zip = matchedZip(matches[0]);
+  return result;
+}
+
+/** The 5-digit ZIP of a geocoder match: its address components, else the end of the matched address. Pure; tested. */
+export function matchedZip(match) {
+  const z = String((match && match.addressComponents && match.addressComponents.zip) || "").trim();
+  if (/^\d{5}$/.test(z)) return z;
+  const m = /(\d{5})(?:-\d{4})?\s*$/.exec(String((match && match.matchedAddress) || ""));
+  return m ? m[1] : null;
 }
 
 async function asset(env, request, path) {

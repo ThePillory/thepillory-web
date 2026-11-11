@@ -3,6 +3,7 @@
 // empty state.
 import { listScope, voteScope } from "./data.js";
 import { esc, fmtDate } from "./render.js";
+import { EMAIL_HREF } from "./email-link.js";
 import { CHAMBER_NAME } from "./data.js";
 import { billHref } from "./votes.js";
 import { voteBar } from "./charts.js";
@@ -186,7 +187,7 @@ export function notYourCounty() {
   return `
 <section class="card stack-xs not-your-county simple-keep" aria-label="Not your county?">
   ${lookupForm(null, { id: "not-yours", heading: "Not your county? Enter your ZIP or address", bare: true, next: "/briefing/" })}
-  <p class="hint">Takes you to your own representatives, county and ballot. Or <a class="inline-link" href="/ballot/">preview your state's ballot</a>.</p>
+  <p class="hint">Takes you to your own representatives, county and ballot. Or <a class="inline-link" href="/ballot/">preview your state's ballot</a>, or <a class="inline-link" href="${EMAIL_HREF}">get your representatives' week by email</a>.</p>
 </section>`;
 }
 

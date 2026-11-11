@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parent.parent
 # Worker and the analysis pipeline. See tools/check_constitution.py.
 CONSTITUTION = json.loads((ROOT / "data" / "constitution.json").read_text(encoding="utf-8"))["provisions"]
 PROVISION = {p["id"]: p for p in CONSTITUTION}
-ASSET_VERSION = "72"  # bump when assets/pillory.css or assets/app.js change
+ASSET_VERSION = "73"  # bump when assets/pillory.css or assets/app.js change
 
 # Folders this script owns. Everything else (/, /reps/, /bodies/, /laws/ and
 # /laws/bills/, /meetings/, /votes/, /admin/) is rendered from D1 by Pages Functions.
@@ -131,6 +131,7 @@ FOOTER = """<footer class="app-footer" aria-label="About ThePillory">
   <a href="/elections/">Elections</a>
   <a href="/topics/">Topics</a>
   <a href="/taxes/">Taxes</a>
+  <a href="/email/">Weekly email</a>
   <a href="/waitlist/">Bring ThePillory to your county</a>
   <p class="app-footer-domain">thepillory.co</p>
 </footer>"""
@@ -806,6 +807,7 @@ def build_you():
     take_part = "".join([
         link_row("/meetings/?level=county", "County meetings and comment deadlines", "Calaveras County for now: when to send written comments, and each meeting's agenda"),
         link_row("/reps/", "Contact your representatives", "Each rep's page links to their official website and office"),
+        link_row("/email/", "Weekly email", "This week from your representatives: every Sunday afternoon, facts only"),
         link_row("/waitlist/", "Bring ThePillory to your county", "Communities open one county at a time: join the list for yours"),
         link_row("/calaveras/", "Live community: Calaveras County, CA", "One county ThePillory follows in depth so far: meetings, agenda watch and local officials"),
     ])

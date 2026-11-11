@@ -20,7 +20,7 @@ Everything shown carries a source URL. The database refuses rows without one.
    - Root directory: `workers/sync`
    - Deploy command: leave the default (`npx wrangler deploy`)
 
-   It deploys as `pillory-sync`, with the daily Cron Trigger from `wrangler.toml` (11:00 UTC) and its background-run Durable Object. The Worker creates the database tables itself on its first run.
+   It deploys as `pillory-sync`, with the daily Cron Trigger from `wrangler.toml` (11:00 UTC) and its background-run Durable Object. The other crons in `wrangler.toml` belong to the weekly email ([email.md](email.md)): a once-a-minute job for confirmation emails and admin requests, and two Monday 00:00/01:00 UTC crons, of which only the one at Sunday 5 p.m. Pacific starts the send. The Worker creates the database tables itself on its first run.
 4. **Add the Worker's secrets.** In `pillory-sync` → Settings → **Variables and Secrets**, add each of these as type *Secret*:
 
    | Name | Value |

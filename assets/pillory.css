@@ -1401,6 +1401,13 @@ a.review-badge--auto:hover { border-color: var(--navy); }
 .choice { display: flex; align-items: center; gap: var(--space-3); min-height: var(--tap); font-size: var(--fs-body); }
 .choice input { width: 20px; height: 20px; flex: none; }
 .form-error { color: var(--tension); }
+.form-ok { color: var(--live); }
+/* The weekly email's sign-up choices (/email/): a two-line label beside each radio. */
+.email-levels .choice { align-items: flex-start; }
+.email-levels .choice input { margin-top: 2px; }
+.email-levels .field { padding-left: calc(20px + var(--space-3)); }
+/* /admin/email/: the email as sent, in a sandboxed frame. */
+.email-preview { width: 100%; height: 720px; border: 0; border-radius: var(--radius-sm); background: var(--page); }
 .linkish {
   display: inline-flex; align-items: center; min-height: var(--tap);
   padding: 0; border: 0; background: none; font: inherit; font-weight: 500;

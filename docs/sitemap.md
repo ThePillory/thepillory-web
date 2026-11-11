@@ -105,13 +105,14 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 
 ### Tab 5: You (`/you/`)
 - Elections: Your ballot, Elections
+- Weekly email (`/email/`, also from Home under Your representatives, county pages, `/briefing/` and the footer): "This week from your representatives", the sign-up (email, then National, ZIP or street address; docs/email.md); each edition's web version at `/email/<week>/<edition key>/` (noindex)
 - Accounts aren't open yet
 - About (`/about/`): How it works (`/about/how-it-works/`, with the site's one labeled example), Principles (`/about/principles/`), Methodology (`/about/methodology/`), How a bill becomes law (`/about/how-a-bill-becomes-law/`), How to read a vote (`/about/how-to-read-a-vote/`)
 
 ### Every page
 - One header: ThePillory wordmark and search (`/search/`: reps, governing bodies, bills, meetings, the Constitution)
 - One nav: Home, Reps, Report (round blue button), Laws, You, each with an icon (bottom on phones, top from 768px)
-- Footer: the beta line ("ThePillory is in beta. Every fact links to its source. Found an error? Report it" > Report an error, `/corrections/`, under About), then About · How it works · Principles · Methodology
+- Footer: the beta line ("ThePillory is in beta. Every fact links to its source. Found an error? Report it" > Report an error, `/corrections/`, under About), then About · How it works · Principles · Methodology · … · Weekly email
 
 ### Chips
 - Topic chips on bill pages, each meeting agenda item (and "Topics on this agenda"), executive orders and Platform excerpts on officials' pages
@@ -119,6 +120,8 @@ sample pages. See docs/site-audit.md for the page-by-page audit.
 ### Private
 - Ballot measures' Constitution sections (`/admin/review/measures/`, each at `/admin/review/measures/<election>/<measure>/`), behind Cloudflare Access
 - Review queue (`/admin/review/`), readers' error reports (`/admin/corrections/`) and county waitlist counts (`/admin/waitlist/`), behind Cloudflare Access
+- The weekly email's admin (`/admin/email/`, behind Access): subscriber counts by level, state and county (never a list of emails), a preview of any edition for the coming Sunday, Send test to ALERT_TO, weeks sent, the waitlist invitation (docs/email.md)
+- A subscriber's own links (no-store, noindex): Confirm (`/email/confirm/?t=`), Change my place (`/email/manage/?t=`), Unsubscribe (`/email/unsubscribe/?t=`)
 
 ## Opens when accounts launch
 - First, an invite-only reporting pilot in Calaveras County: [reporting-pilot.md](reporting-pilot.md) (plan only; nothing built yet)

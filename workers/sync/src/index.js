@@ -14,6 +14,9 @@
 // After the sync rounds, it drafts constitutional analyses for new bills, also
 // in rounds, capped per day (ANALYSIS_DAILY_LIMIT).
 import { noteInterrupted } from "./run-state.js";
+import { EmailRunner } from "./email/runner.js";
+import { everyMinute } from "./email/send.js";
+import { CRONS as EMAIL_CRONS, isSendTime, comingSunday, pacific } from "./email/schedule.js";
 import { syncOtherStateVotes } from "./state-votes-api.js";
 import { syncAllStateOfficials } from "./states-officials.js";
 import { summarizeFlags } from "./analysis/flags.js";
@@ -407,19 +410,55 @@ function json(data, status = 200) {
   });
 }
 
+// The weekly email (docs/email.md) runs in its own Durable Object.
+export { EmailRunner };
+const MINUTE_CRON = "* * * * *";
+function emailRunner(env) {
+  if (!env.EMAIL_RUNNER) throw new Error("Durable Object binding EMAIL_RUNNER is missing (see wrangler.toml)");
+  return env.EMAIL_RUNNER.get(env.EMAIL_RUNNER.idFromName("weekly"));
+}
+
 export default {
-  async scheduled(event, env) {
-    const res = await runner(env).fetch("https://sync-runner/start?trigger=cron");
+  async scheduled(event, rawEnv) {
+    // Once a minute: the weekly email's confirmation emails and the website's requests.
+    if (event.cron === MINUTE_CRON) {
+      const env = withD1Retry(rawEnv);
+      try {
+        const r = await everyMinute(env, env.DB);
+        if (r.confirmations || r.tests || r.invited || r.errors.length) console.log(`email minute: ${JSON.stringify(r)}`);
+      } catch (err) {
+        // Before migration 0048 (the daily sync applies it) there's nothing to send.
+        if (!/no such table/i.test(String(err && err.message))) console.error(`email minute: ${redact(`${err.name}: ${err.message}`)}`);
+      }
+      return;
+    }
+    // Monday 00:00 and 01:00 UTC: the one that's Sunday 5 p.m. Pacific starts the weekly email.
+    if (EMAIL_CRONS.includes(event.cron)) {
+      const at = new Date(event.scheduledTime || Date.now());
+      if (!isSendTime(at)) return;
+      const res = await emailRunner(rawEnv).fetch(`https://email-runner/start?trigger=cron&week=${pacific(at).date}`);
+      console.log(`weekly email: ${JSON.stringify(await res.json())}`);
+      return;
+    }
+    const res = await runner(rawEnv).fetch("https://sync-runner/start?trigger=cron");
     console.log(`cron: ${JSON.stringify(await res.json())}`);
   },
 
   async fetch(request, rawEnv) {
     const env = withD1Retry(rawEnv);
     const url = new URL(request.url);
-    if (!["/run", "/stop", "/analyze", "/status", "/summaries"].includes(url.pathname)) {
-      return json({ ok: true, routes: ["/run?token=…", "/run?restart=1&token=…", "/stop?token=…", "/analyze?token=…", "/summaries?token=…", "/status?token=…"] });
+    if (!["/run", "/stop", "/analyze", "/status", "/summaries", "/email/status", "/email/run"].includes(url.pathname)) {
+      return json({ ok: true, routes: ["/run?token=…", "/run?restart=1&token=…", "/stop?token=…", "/analyze?token=…", "/summaries?token=…", "/status?token=…", "/email/status?token=…", "/email/run?week=YYYY-MM-DD&token=…"] });
     }
     if (!(await authorized(request, env))) return json({ error: "unauthorized: pass ?token= or Authorization: Bearer" }, 401);
+
+    // The weekly email: its run's state, or a run started by hand (for a week whose Sunday
+    // send failed; who receives it still follows EMAIL_SENDING).
+    if (url.pathname === "/email/status") return json(await (await emailRunner(env).fetch("https://email-runner/state")).json());
+    if (url.pathname === "/email/run") {
+      const week = /^\d{4}-\d{2}-\d{2}$/.test(url.searchParams.get("week") || "") ? url.searchParams.get("week") : comingSunday();
+      return json(await (await emailRunner(env).fetch(`https://email-runner/start?trigger=manual&week=${week}`)).json());
+    }
 
     try {
       if (url.pathname === "/run") {

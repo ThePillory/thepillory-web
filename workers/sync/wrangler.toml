@@ -17,8 +17,11 @@ keep_vars = true
 rules = [{ type = "Text", globs = ["**/*.sql"], fallthrough = true }]
 
 [triggers]
-# Daily at 11:00 UTC (4 a.m. Pacific daylight time).
-crons = ["0 11 * * *"]
+# Daily at 11:00 UTC (4 a.m. Pacific daylight time): the sync.
+# Every minute: the weekly email's confirmation emails and the website's requests (one small read).
+# Monday 00:00 and 01:00 UTC: Sunday 5 p.m. Pacific in daylight and standard time; only the one
+# that is 5 p.m. in Los Angeles sends the weekly email (src/email/schedule.js; docs/email.md).
+crons = ["0 11 * * *", "* * * * *", "0 0 * * 1", "0 1 * * 1"]
 
 # Runs happen in the background inside this Durable Object (see src/index.js),
 # so /run can answer immediately. Created automatically on deploy.
@@ -29,6 +32,15 @@ class_name = "SyncRunner"
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["SyncRunner"]
+
+# The weekly email's run (src/email/runner.js), separate from the sync.
+[[durable_objects.bindings]]
+name = "EMAIL_RUNNER"
+class_name = "EmailRunner"
+
+[[migrations]]
+tag = "v2"
+new_sqlite_classes = ["EmailRunner"]
 
 # Workers Paid: allow up to 5 minutes of CPU per invocation (a run mostly waits
 # on the network, so this is headroom, not an expectation).
@@ -212,6 +224,12 @@ SOURCE_COPIES_DAILY = "50"
 SOURCE_COPY_MAX_MB = "30"
 ALERT_TO = "bendimmitt@hotmail.com"
 ALERT_FROM = "data-health@thepillory.co"
+# The weekly email (docs/email.md), sent from EMAIL_FROM. Set in the dashboard, never here (a
+# value here would replace the dashboard's on every deploy): EMAIL_SENDING ("off" when unset:
+# only ALERT_TO; "pilot": ALERT_TO and the addresses in EMAIL_PILOT, comma-separated; "on":
+# everyone who confirmed), EMAIL_PILOT, and MAILING_ADDRESS (the postal address every email
+# carries). Set the same EMAIL_SENDING on the Pages project, for the signup page.
+EMAIL_FROM = "weekly@thepillory.co"
 GITHUB_REPO = "ThePillory/thepillory-web"
 
 # Secrets (set with `npx wrangler secret put NAME` or in the dashboard):
@@ -228,6 +246,11 @@ GITHUB_REPO = "ThePillory/thepillory-web"
 [[send_email]]
 name = "ALERT_EMAIL"
 destination_address = "bendimmitt@hotmail.com"
+
+# The weekly email (docs/email.md), sent through Cloudflare Email Service: thepillory.co must be
+# onboarded as a sending domain first (Compute → Email Service → Email Sending). No key needed.
+[[send_email]]
+name = "EMAIL"
 
 # ThePillory's own copies of key source documents (create the bucket first:
 # Cloudflare → R2 → Create bucket → "pillory-sources"; docs/data-sync.md).
