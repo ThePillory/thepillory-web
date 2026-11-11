@@ -48,6 +48,11 @@ import { nextMeasures, measureSource, finishMeasure, measureSubject, MEASURE_PRE
 
 const RETRY_AFTER_DAYS = 7; // a bill that couldn't be drafted waits this long before another try
 const MIN_TIME_PER_BILL_MS = 4 * 60 * 1000; // don't start a bill without this much time left in the round
+// A resolution can take two drafts by RESOLVE_MODEL and four or five reviews (about 3 minutes,
+// longer when the API is slow), so one starts only with this much of the round left, and its
+// fresh draft only with FRESH_MIN_MS left; otherwise it waits for the next round.
+export const MIN_TIME_PER_RESOLUTION_MS = 7 * 60 * 1000;
+export const FRESH_MIN_MS = 3 * 60 * 1000;
 const MAX_RELEVANCE_BATCHES = 4; // per round
 const J = (x) => JSON.stringify(x);
 
@@ -496,7 +501,7 @@ export async function runResolutions(env, db, budget, run, { fakes = null } = {}
       capped = true;
       break;
     }
-    if (budget.timeLeft() < MIN_TIME_PER_BILL_MS) {
+    if (budget.timeLeft() < MIN_TIME_PER_RESOLUTION_MS) {
       more = true;
       break;
     }
@@ -546,6 +551,8 @@ async function resolveRow(env, db, budget, row, fakes = null) {
       return draftAnalysis(Object.create(env, { ANALYSIS_MODEL: { value: resolveModel, enumerable: true } }), bill, source, depth, { draft: draftForReview(d, depth), reasons });
     },
     fresh: () => {
+      // Not enough of the round left: this one waits for the next round, unrecorded.
+      if (budget.timeLeft() < FRESH_MIN_MS) throw new BudgetExhausted(`not enough time left in the round for a fresh draft of ${bill.id}`);
       budget.take(`resolution (fresh draft) ${bill.id}`);
       return draftAnalysis(Object.create(env, { ANALYSIS_MODEL: { value: resolveModel, enumerable: true } }), bill, source, depth);
     },

@@ -58,7 +58,7 @@ Everything shown carries a source URL. The database refuses rows without one.
 
   Under `run`, `status` reads `running` or `finished`. `round` counts the rounds so far, and `outcome` ends as `up to date` when everything is loaded. `counts` shows how many officials, bills, votes and positions are loaded, and `recent_log` lists each step's latest result.
 
-How background runs work: a run happens inside a Durable Object (`SyncRunner`, created automatically on deploy) in rounds of up to about 12 minutes each. When a round stops only because it reached its request or time budget, the next round starts on its own, up to 20 rounds per run. Anything held back by a daily limit (Open States) continues with the next daily sync. The daily Cron Trigger starts runs the same way.
+How background runs work: a run happens inside a Durable Object (`SyncRunner`, created automatically on deploy) in rounds of up to about 12 minutes each. When a round stops only because it reached its request or time budget, the next round starts on its own, up to 20 rounds per run. Each round first sets a safety alarm 16 minutes ahead, past the 15-minute alarm limit: a round that finishes replaces it, and a round killed at the limit is picked up by it, so the rest of the run still happens. `/status` lists such rounds under `interrupted_rounds` (`noteInterrupted()` in `src/run-state.js`). Anything held back by a daily limit (Open States) continues with the next daily sync. The daily Cron Trigger starts runs the same way.
 
 After the sync, the same run drafts constitutional analyses of new bills (step `analysis`; see [analysis.md](analysis.md)). `/analyze?token=<SYNC_TOKEN>` runs only that step.
 
