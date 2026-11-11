@@ -705,6 +705,11 @@ def sync_cost(args):
       ORDER BY 4 DESC""")
     table(rows, ["step", "days", "rounds", "rr", "rw", "calls", "usd", "ok", "part", "skip", "err"],
           ["Step", "Days", "Rounds", "Rows read", "Rows written", "AI calls", "AI ($)", "ok", "partial", "skipped", "error"])
+    say("The 40 costliest query shapes (usage_queries; literals replaced by ?), the last 30 days:")
+    say()
+    rows = q(args, """SELECT source, substr(sql, 1, 200) AS sql, SUM(calls) AS calls, SUM(rows_read) AS rr, SUM(rows_written) AS rw FROM usage_queries
+      WHERE day >= date('now', '-30 days') GROUP BY source, sql_key ORDER BY SUM(rows_written) * 1000 + SUM(rows_read) DESC LIMIT 40""")
+    table(rows, ["source", "sql", "calls", "rr", "rw"], ["Step or route", "SQL", "Calls", "Rows read", "Rows written"])
     rows = q(args, """SELECT step, substr(message, 1, 160) AS message FROM sync_log WHERE id IN (SELECT MAX(id) FROM sync_log GROUP BY step) ORDER BY step""")
     table(rows, ["step", "message"], ["Step", "Last message"])
 
