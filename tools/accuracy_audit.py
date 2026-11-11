@@ -23,6 +23,9 @@ D1 and the sources; it changes nothing.
   7. Sync cost by step: each sync step's D1 rows read and written (usage_steps)
      and AI calls (ai_usage), the last 30 days, with how many days it did work,
      found nothing, or skipped (sync_log).
+  8. Tax laws: each law in data/taxes/corporate-tax-laws.json as Congress.gov's API gives
+     it (official and short titles, the CRS summary's first sentence, the public law, every
+     recorded vote), to check the hand-kept file against.
 
   python3 tools/accuracy_audit.py > audit.md   (or Actions -> Accuracy audit)
 """
@@ -714,17 +717,63 @@ def sync_cost(args):
     table(rows, ["step", "message"], ["Step", "Last message"])
 
 
+TAX_LAWS = [(115, "hr", 1), (117, "hr", 5376), (119, "hr", 1)]
+
+
+def congress_api(path):
+    key = os.environ.get("CONGRESS_API_KEY") or "DEMO_KEY"
+    sep = "&" if "?" in path else "?"
+    req = urllib.request.Request(f"https://api.congress.gov/v3{path}{sep}format=json&api_key={key}", headers={"User-Agent": UA})
+    with urllib.request.urlopen(req, timeout=60) as r:
+        return json.loads(r.read().decode("utf-8"))
+
+
+def tax_laws(args):
+    say("## 8. Tax laws on Congress.gov")
+    say()
+    say("Each law as Congress.gov's API gives it, word for word, to check data/taxes/corporate-tax-laws.json against.")
+    say()
+    try:
+        laws = json.loads((ROOT / "data/taxes/corporate-tax-laws.json").read_text())["laws"]
+        listed = [(l["congress"], l["bill_type"], l["bill_number"]) for l in laws]
+    except (OSError, ValueError, KeyError):
+        listed = []
+    for c, t, n in list(dict.fromkeys(listed + TAX_LAWS)):
+        say(f"### {t.upper()} {n}, {c}th Congress")
+        say()
+        try:
+            b = congress_api(f"/bill/{c}/{t}/{n}")["bill"]
+            say(f"- Title: {b.get('title')!r}")
+            say(f"- Laws: {b.get('laws')!r}")
+            say(f"- Became law (latest action): {b.get('latestAction')!r}")
+            for x in congress_api(f"/bill/{c}/{t}/{n}/titles?limit=250").get("titles", []):
+                if re.search(r"enacted|official title as introduced|short title", x.get("titleType", ""), re.I):
+                    say(f"- {x.get('titleType')}: {x.get('title')!r}")
+            sums = congress_api(f"/bill/{c}/{t}/{n}/summaries?limit=250").get("summaries", [])
+            for x in sums[-2:]:
+                text = re.sub(r"<[^>]+>", " ", x.get("text", ""))
+                text = re.sub(r"\s+", " ", htmlmod.unescape(text)).strip()
+                say(f"- Summary {x.get('actionDesc')!r} ({x.get('actionDate')}), version {x.get('versionCode')}: {text[:700]!r}")
+            acts = congress_api(f"/bill/{c}/{t}/{n}/actions?limit=250").get("actions", [])
+            for a in acts:
+                for v in a.get("recordedVotes", []) or []:
+                    say(f"- Recorded vote: {v.get('chamber')} roll {v.get('rollNumber')} session {v.get('sessionNumber')} {v.get('date')} {v.get('url')} | {a.get('actionDate')}: {a.get('text', '')[:200]!r}")
+        except Exception as e:  # noqa: BLE001 (reported, not hidden)
+            say(f"> Not read: {type(e).__name__}: {str(e)[:300]}")
+        say()
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--database", default="pillory")
-    ap.add_argument("--only", default="1,2,3,4,5,6,7")
+    ap.add_argument("--only", default="1,2,3,4,5,6,7,8")
     args = ap.parse_args()
     only = set(args.only.split(","))
     say("# Accuracy audit")
     say()
     say(f"Run {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}. Reads D1 and the sources; changes nothing.")
     say()
-    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage), ("7", sync_cost)):
+    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage), ("7", sync_cost), ("8", tax_laws)):
         if k in only:
             try:
                 fn(args)
