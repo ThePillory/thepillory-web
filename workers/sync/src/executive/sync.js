@@ -16,6 +16,7 @@
 // only from the action that states it.
 import { getState, setState, BudgetExhausted, UpstreamError, isHttp, isTemporary, redact, slugify, today } from "../util.js";
 import { upsertOfficial, deactivateOthers, upsertBill } from "../db.js";
+import { differs } from "../upsert.js";
 import {
   namesOnPage, executiveOn, personName, parseCabinet, frOrder, federalOutcome, federalWorthChecking, presentableFederal,
   parseLeginfoHistory, californiaOutcome, leginfoBillId, presentableCalifornia, leginfoHistoryUrl,
@@ -176,7 +177,11 @@ export async function saveAction(db, official_id, a) {
        ON CONFLICT(id) DO UPDATE SET kind = excluded.kind, number = COALESCE(excluded.number, executive_actions.number), title = excluded.title,
          signed_on = excluded.signed_on, published_on = excluded.published_on, citation = excluded.citation,
          document_url = COALESCE(excluded.document_url, executive_actions.document_url), source_url = excluded.source_url,
-         notes = COALESCE(excluded.notes, executive_actions.notes), updated_at = excluded.updated_at`
+         notes = COALESCE(excluded.notes, executive_actions.notes), updated_at = excluded.updated_at
+       WHERE ${differs("executive_actions", ["kind", "title", "signed_on", "published_on", "citation", "source_url"])}
+         OR excluded.number IS NOT NULL AND executive_actions.number IS NOT excluded.number
+         OR excluded.document_url IS NOT NULL AND executive_actions.document_url IS NOT excluded.document_url
+         OR excluded.notes IS NOT NULL AND executive_actions.notes IS NOT excluded.notes`
     )
     .bind(a.id, official_id, a.kind, a.number, a.title, a.signed_on, a.published_on, a.citation || null, a.document_url, a.source_url, a.notes || null)
     .run();
@@ -186,7 +191,9 @@ export async function syncExecutiveOrders(env, db, budget) {
   let fed = 0;
   let ca = 0;
   let posts = 0;
-  const summary = () => `${fed} federal executive order(s) saved; ${ca} Governor's order(s) and proclamation(s) saved, ${posts} post(s) read`;
+  let fedUnchanged = false;
+  let govUnchanged = false;
+  const summary = () => `${fedUnchanged ? "federal executive orders unchanged since the last read" : `${fed} federal executive order(s) saved`}; ${ca} Governor's order(s) and proclamation(s) saved, ${posts} post(s) read`;
   try {
     // The President's, from the start of the current term, newest first.
     const pres = await db.prepare("SELECT id, name, term_start FROM officials WHERE chamber = 'us-executive' AND rank = 1 AND active = 1").first();
@@ -196,7 +203,13 @@ export async function syncExecutiveOrders(env, db, budget) {
       const who = slugify(t ? t.name.replace(/ [A-Z]\. /, " ") : pres.name);
       const fields = ["executive_order_number", "title", "signing_date", "publication_date", "document_number", "html_url", "pdf_url", "citation", "executive_order_notes"].map((f) => `fields[]=${f}`).join("&");
       let url = `${(env.FR_API_BASE || FR_API).replace(/\/$/, "")}/documents.json?per_page=1000&order=newest&conditions[type][]=PRESDOCU&conditions[presidential_document_type][]=executive_order&conditions[president][]=${encodeURIComponent(who)}&conditions[signing_date][gte]=${pres.term_start}&${fields}`;
-      for (let page = 0; url && page < 10; page++) {
+      // First one order (the newest) and the count: the same as at the last full read means no
+      // order was added, changed or published, so none is read again (no D1 writes either).
+      const probe = await budget.json(url.replace("per_page=1000", "per_page=1"), {}, "Federal Register executive orders (newest and count)");
+      const newest = (probe.results || [])[0] || {};
+      const sig = `${probe.count}|${newest.document_number}|${newest.publication_date}|${newest.executive_order_number}`;
+      if ((await getState(db, "fr_orders_signature")) === sig) fedUnchanged = true;
+      for (let page = 0; url && page < 10 && !fedUnchanged; page++) {
         const d = await budget.json(url, {}, `Federal Register executive orders page ${page + 1}`);
         for (const doc of d.results || []) {
           if (!doc.document_number || !isHttp(doc.html_url)) continue;
@@ -205,6 +218,7 @@ export async function syncExecutiveOrders(env, db, budget) {
         }
         url = d.next_page_url || null;
       }
+      if (!fedUnchanged && !url) await setState(db, "fr_orders_signature", sig);
     }
 
     // The Governor's, from gov.ca.gov's feed; each new post read once for the signed order.
@@ -213,11 +227,21 @@ export async function syncExecutiveOrders(env, db, budget) {
       const feed = env.GOV_FEED_URL || GOV_FEED;
       const pace = { intervalMs: parseInt(env.GOVCA_MIN_INTERVAL_MS || "2000", 10), dailyLimit: parseInt(env.GOVCA_DAILY_LIMIT || "300", 10) };
       const backfilled = (await getState(db, "gov_feed_backfilled")) === "1";
+      // Once backfilled, only the feed's first page, asked with its ETag / Last-Modified: a 304
+      // (nothing posted since) reads nothing more.
+      const prev = backfilled ? JSON.parse((await getState(db, "http_govca_feed")) || "null") || {} : {};
+      let validators = null;
       for (let page = 1; page <= (backfilled ? 1 : 40); page++) {
         let res;
         try {
-          res = await budget.paced(db, "govca", pace, page === 1 ? feed : `${feed}?paged=${page}`, {}, `Governor's executive orders feed page ${page}`);
+          const headers = page === 1 ? { ...(prev.etag ? { "If-None-Match": prev.etag } : {}), ...(prev.modified ? { "If-Modified-Since": prev.modified } : {}) } : {};
+          res = await budget.paced(db, "govca", pace, page === 1 ? feed : `${feed}?paged=${page}`, { headers }, `Governor's executive orders feed page ${page}`);
+          if (page === 1 && res.headers && res.headers.get) validators = { etag: res.headers.get("ETag"), modified: res.headers.get("Last-Modified") };
         } catch (err) {
+          if (page === 1 && err instanceof UpstreamError && err.status === 304) {
+            govUnchanged = true;
+            break;
+          }
           // WordPress answers 404 for a page past the last one: the feed is done.
           if (page > 1 && err instanceof UpstreamError && err.status === 404) break;
           throw err;
@@ -240,12 +264,14 @@ export async function syncExecutiveOrders(env, db, budget) {
         }
       }
       if (!backfilled) await setState(db, "gov_feed_backfilled", "1");
+      if (validators && (validators.etag || validators.modified)) await setState(db, "http_govca_feed", JSON.stringify(validators));
     }
   } catch (err) {
     if (err instanceof BudgetExhausted) return partialMsg(summary(), err);
     if (missing(err)) return { status: "skipped", message: "tables not created yet" };
     throw err;
   }
+  if (fedUnchanged && govUnchanged) return { status: "ok", message: `unchanged: ${summary()}` };
   return { status: "ok", message: summary() };
 }
 
@@ -261,7 +287,8 @@ async function saveOutcome(db, billId, o, actor, sourceUrl) {
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
          ON CONFLICT(bill_id) DO UPDATE SET outcome = excluded.outcome, action_date = excluded.action_date, presented_on = excluded.presented_on,
            law_number = excluded.law_number, action_text = excluded.action_text, actor_id = excluded.actor_id, actor_name = excluded.actor_name,
-           source_url = excluded.source_url, checked_at = excluded.checked_at`
+           source_url = excluded.source_url, checked_at = excluded.checked_at
+         WHERE ${differs("bill_outcomes", ["outcome", "action_date", "presented_on", "law_number", "action_text", "actor_id", "actor_name", "source_url"])}`
       )
       .bind(billId, o.outcome, o.action_date, o.presented_on, o.law_number, o.action_text, actor.id, actor.name, sourceUrl),
     db
@@ -431,7 +458,8 @@ export async function loadNominations(env, db, budget, congress, presidentOn, be
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
              ON CONFLICT(id) DO UPDATE SET official_id = excluded.official_id, description = excluded.description, organization = excluded.organization,
                received_on = excluded.received_on, latest_action = excluded.latest_action, latest_on = excluded.latest_on, status = excluded.status,
-               source_url = excluded.source_url, updated_at = excluded.updated_at`
+               source_url = excluded.source_url, updated_at = excluded.updated_at
+             WHERE ${differs("nominations", ["official_id", "description", "organization", "received_on", "latest_action", "latest_on", "status", "source_url"])}`
           )
           .bind(r.id, r.congress, who.id, r.description, r.organization, r.received_on, r.latest_action, r.latest_on, r.status, r.source_url)
       );

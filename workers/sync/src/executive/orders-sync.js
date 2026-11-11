@@ -10,6 +10,7 @@
 //                 COURTLISTENER_API_TOKEN. Each order is searched again every
 //                 ORDER_COURTS_RECHECK_DAYS (14); ORDER_COURTS_DAILY (40) orders a day.
 import { getState, setState, today, redact, BudgetExhausted, UpstreamError, isHttp } from "../util.js";
+import { syncScope } from "../upsert.js";
 import { openPdf, streamPages } from "../meetings/pdftext.js";
 import { cleanFrText, cleanPdfText, authorityClause, courtQuery, parseDockets, parseOpinions } from "./orders.js";
 
@@ -141,12 +142,16 @@ export async function syncOrderCourts(env, db, budget) {
       const [ops, docs] = [await search("o"), await search("r")];
       const rows = [...parseOpinions(ops), ...parseDockets(docs)];
       await db.batch([
-        db.prepare("DELETE FROM executive_action_cases WHERE action_id = ?").bind(a.id),
-        ...rows.map((r) =>
-          db
-            .prepare("INSERT OR REPLACE INTO executive_action_cases (action_id, kind, cl_id, case_name, court, date_filed, docket_number, url, entries) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
-            .bind(a.id, r.kind, r.cl_id, r.case_name.slice(0, 300), r.court, r.date_filed, r.docket_number, r.url, JSON.stringify(r.entries))
-        ),
+        // Only what changed is written (src/db.js syncScope).
+        ...(
+          await syncScope(db, {
+            table: "executive_action_cases",
+            scope: { action_id: a.id },
+            key: ["kind", "cl_id"],
+            cols: ["kind", "cl_id", "case_name", "court", "date_filed", "docket_number", "url", "entries"],
+            rows: rows.map((r) => ({ ...r, case_name: r.case_name.slice(0, 300), entries: JSON.stringify(r.entries) })),
+          })
+        ).stmts,
         db
           .prepare(
             `INSERT INTO executive_action_court_checks (action_id, query, opinions, dockets, checked_at) VALUES (?, ?, ?, ?, datetime('now'))

@@ -57,6 +57,7 @@ export const SOURCES = [
     where: "level = 'federal'",
     latest: "MAX(updated_at)",
     freshDays: 7,
+    season: "congress", // a bill row changes only when its title or links do (src/upsert.js), so a recess is quiet
     nulls: ["title"],
     links: { table: "nominations", url: "source_url" },
   },
@@ -107,9 +108,9 @@ export const SOURCES = [
     provides: "Campaign money for members of Congress, the President and candidates: totals, PACs, donors' employers, outside spending.",
     steps: ["federal-funding", "dark-money"],
     workflow: "candidates.yml",
-    runDays: 3,
-    table: "funding_totals",
-    latest: "MAX(updated_at)",
+    runDays: 9, // weekly, daily after filing deadlines (src/cadence.js)
+    table: "funding_progress",
+    latest: "MAX(done_at)", // each read; funding_totals changes only when a report is filed
     freshDays: 10,
     links: { table: "fec_candidates", url: "source_url" },
   },
@@ -118,7 +119,7 @@ export const SOURCES = [
     name: "Office of Government Ethics",
     provides: "Financial disclosure reports, stock trade reports and ethics agreements of the President, Vice President and Cabinet.",
     steps: ["executive-funding"],
-    runDays: 3,
+    runDays: 9, // weekly, daily after filing deadlines (src/cadence.js)
     table: "disclosures",
     where: "source = 'oge'",
     latest: "MAX(filed_on)",
@@ -130,7 +131,7 @@ export const SOURCES = [
     name: "Lobbying Disclosure (lda.gov)",
     provides: "Federal lobbying reports and contributions from lobbyists and lobbying organizations (LD-203).",
     steps: ["federal-lobbying", "lobbying-contributions"],
-    runDays: 3,
+    runDays: 9, // weekly, daily after filing deadlines (src/cadence.js)
     table: "lobbying_filings",
     latest: "MAX(posted_at)",
     freshDays: 60,

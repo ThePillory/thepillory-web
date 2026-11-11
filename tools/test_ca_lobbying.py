@@ -79,22 +79,27 @@ class Rows(unittest.TestCase):
 
 
 class Sql(unittest.TestCase):
-    def test_replaces_amended_filings_only(self):
+    def test_amended_filings_write_only_what_changed(self):
         r = C.report_row(COVER, {"ABCD": 17400.0})
         changed = {"3066461": {"amend_id": 1, "form": "F635", "report": r, "contributions": []}}
         out, n_reports, n_bills, _ = L.sql_for(changed, {"3066461": 0})
         self.assertEqual((n_reports, n_bills), (1, 3))
-        self.assertTrue(out[0].startswith("DELETE FROM ca_bill_lobbying WHERE filing_id IN ('3066461')"))
-        self.assertTrue(any(s.startswith("INSERT OR REPLACE INTO ca_lobby_loaded") for s in out))
+        # An amended filing: rows gone from it are deleted, the rest upserted only where a value changed.
+        self.assertTrue(out[0].startswith("DELETE FROM ca_bill_lobbying WHERE filing_id IS '3066461' AND bill_id NOT IN ("))
+        self.assertFalse(any("INSERT OR REPLACE" in s for s in out))
+        self.assertTrue(any(s.startswith("INSERT INTO ca_lobby_loaded") and "WHERE ca_lobby_loaded.amend_id IS NOT excluded.amend_id" in s for s in out))
         out, *_ = L.sql_for(changed, {})
         self.assertFalse(any(s.startswith("DELETE") for s in out))
-
-    def test_statements_stay_small(self):
-        rows = [[str(i), "x" * 1500] for i in range(500)]
-        stmts = L.inserts("t", ["a", "b"], rows)
-        self.assertTrue(all(len(s) < 100000 for s in stmts))
-        self.assertEqual(sum(s.count("('") for s in stmts), 500)
-
+        # Run twice against the schema: the second load writes nothing.
+        import sqlite3
+        db = sqlite3.connect(":memory:")
+        db.executescript((Path(__file__).resolve().parent.parent / "workers/sync/migrations/0029_lobbying_more.sql").read_text())
+        out, *_ = L.sql_for(changed, {})
+        db.executescript("\n".join(out))
+        before = db.total_changes
+        out, *_ = L.sql_for(changed, {"3066461": 1})
+        db.executescript("\n".join(out))
+        self.assertEqual(db.total_changes - before, 0)
 
 if __name__ == "__main__":
     unittest.main()

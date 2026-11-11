@@ -124,6 +124,32 @@ export class Budget {
     return res.json();
   }
 
+  /**
+   * A conditional request (docs/data-sync.md, "How often each source updates"): sends the
+   * ETag / Last-Modified the server gave last time (kept in sync_state as http_<key>), so an
+   * unchanged source answers 304 with no body and the step does nothing. Returns
+   * { unchanged: true } on a 304; otherwise { unchanged: false, res, save }, where save()
+   * keeps the new validators: call it only once the response was loaded in full, so a
+   * failed load is read again next time.
+   */
+  async ifChanged(db, key, url, init = {}, label = key) {
+    const prev = JSON.parse((await getState(db, `http_${key}`)) || "null") || {};
+    const headers = { ...(init.headers || {}) };
+    if (prev.etag) headers["If-None-Match"] = prev.etag;
+    if (prev.modified) headers["If-Modified-Since"] = prev.modified;
+    try {
+      const res = await this.fetch(url, { ...init, headers }, label);
+      const got = res.headers && res.headers.get ? { etag: res.headers.get("ETag"), modified: res.headers.get("Last-Modified") } : {};
+      const save = async () => {
+        if (got.etag || got.modified) await setState(db, `http_${key}`, JSON.stringify(got));
+      };
+      return { unchanged: false, res, save };
+    } catch (err) {
+      if (err instanceof UpstreamError && err.status === 304) return { unchanged: true, save: async () => {} };
+      throw err;
+    }
+  }
+
   async text(url, init, label) {
     const res = await this.fetch(url, init, label);
     return res.text();
@@ -184,7 +210,7 @@ export async function setState(db, key, value) {
   await db
     .prepare(
       "INSERT INTO sync_state (key, value, updated_at) VALUES (?, ?, datetime('now')) " +
-        "ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at"
+        "ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at WHERE sync_state.value IS NOT excluded.value"
     )
     .bind(key, value)
     .run();

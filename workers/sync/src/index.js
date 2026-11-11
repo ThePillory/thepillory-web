@@ -14,6 +14,7 @@
 // After the sync rounds, it drafts constitutional analyses for new bills, also
 // in rounds, capped per day (ANALYSIS_DAILY_LIMIT).
 import { noteInterrupted } from "./run-state.js";
+import { stepDue, stepRecord, STEP_CADENCE } from "./cadence.js";
 import { EmailRunner } from "./email/runner.js";
 import { everyMinute } from "./email/send.js";
 import { CRONS as EMAIL_CRONS, isSendTime, comingSunday, pacific } from "./email/schedule.js";
@@ -137,7 +138,13 @@ const STALE_MS = 20 * 60 * 1000; // a round that hasn't finished after this is t
 // so the rest of the run still happens (within MAX_ROUNDS / MAX_ANALYSIS_ROUNDS).
 const SAFETY_ALARM_MS = 16 * 60 * 1000;
 
-export async function runSync(rawEnv, { trigger, deadlineMs, runId }) {
+// A step that finished earlier in this run (ok, skipped or failed) isn't run again in the run's
+// later rounds: those rounds exist only for the steps that stopped at a budget, and running every
+// step's "anything new?" check again each round (up to 20 a day) was most of the sync's D1 reads.
+// The page summaries are the exception: they're built from everything above, at most hourly.
+const EVERY_ROUND = new Set(["page-summaries"]);
+
+export async function runSync(rawEnv, { trigger, deadlineMs, runId, doneSteps = [] }) {
   if (!rawEnv.DB) throw new Error("D1 binding DB is missing (see wrangler.toml)");
   const env = withD1Retry(rawEnv); // temporary D1 errors are retried (src/d1retry.js)
   await ensureSchema(env.DB);
@@ -156,17 +163,25 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId }) {
   const budget = new Budget(env, deadlineMs);
   const summary = [];
   const day = new Date().toISOString().slice(0, 10);
+  const done = new Set(doneSteps);
   for (const [step, fn] of STEPS) {
+    if (done.has(step) && !EVERY_ROUND.has(step)) continue; // finished earlier in this run: nothing logged, nothing read
     const started = new Date().toISOString();
     const before = budget.used;
     let result;
     let tally = null;
+    // How often the step runs (src/cadence.js): weekly steps, filing windows, history loaded in full.
+    const scheduled = step in STEP_CADENCE;
+    const cadenceState = scheduled ? JSON.parse((await getState(env.DB, `cadence_${step}`)) || "null") || {} : null;
+    const due = scheduled ? stepDue(step, day, cadenceState) : { run: true };
     // A step that failed waits for the next day's run instead of failing again
     // every round. A manual run (/run) retries a step that failed in an
     // earlier run today, e.g. after a fix is deployed.
     const failed = JSON.parse((await getState(env.DB, `step_failed_${step}`)) || "null");
     if (failed && failed.day === day && (failed.run === run.id || trigger === "cron")) {
       result = { status: "skipped", message: `failed earlier today (${failed.message}); tried again in tomorrow's run or a manual run` };
+    } else if (!due.run) {
+      result = { status: "skipped", message: due.message };
     } else {
       try {
         setStep(step);
@@ -192,6 +207,13 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId }) {
     await log(env.DB, run, step, result.status, budget.used - before, result.message, started);
     if (tally) await recordStepUsage(env.DB, day, step, tally);
     tally = null;
+    if (scheduled && due.run) {
+      const next = stepRecord(step, day, result, cadenceState);
+      if (JSON.stringify(next) !== JSON.stringify(cadenceState)) await setState(env.DB, `cadence_${step}`, JSON.stringify(next));
+    }
+    // Only a step stopped by this round's budget or a temporary error has more to do today; one
+    // at a daily limit continues tomorrow.
+    if (result.status !== "partial" || !/request budget used up|run time limit reached|temporary error/.test(result.message || "")) done.add(step);
     summary.push({ step, ...result, requests: budget.used - before });
   }
   const temporary = summary.filter((s) => s.status === "partial" && /^temporary error/.test(s.message || ""));
@@ -209,6 +231,7 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId }) {
     // round after a pause, rather than waiting for tomorrow.
     retry_later: temporary.map((s) => s.step),
     retries: budget.retries || 0,
+    done_steps: [...done],
   };
 }
 
@@ -309,9 +332,10 @@ export class SyncRunner extends DurableObject {
     await this.ctx.storage.put("state", state);
     await this.ctx.storage.setAlarm(Date.now() + SAFETY_ALARM_MS);
     try {
-      const result = await runSync(this.env, { trigger: state.trigger, deadlineMs: ROUND_MS, runId: state.run_id });
+      const result = await runSync(this.env, { trigger: state.trigger, deadlineMs: ROUND_MS, runId: state.run_id, doneSteps: state.done_steps || [] });
       if (await this.superseded(state)) return;
       state.round_open = false;
+      state.done_steps = result.done_steps;
       state.rounds = [...state.rounds, roundSummary(result, state.round, state.round_started_at)].slice(-10);
       if ((result.continue_now || result.retry_later.length) && state.round < MAX_ROUNDS) {
         // More to fetch and this round only stopped at its budget: keep going.

@@ -198,14 +198,13 @@ function pick(obj, ...keys) {
   return null;
 }
 
-async function listHouseVotes(env, budget, congress, session) {
+async function listHouseVotes(env, budget, congress, session, first = null) {
   const out = [];
   for (let offset = 0; ; offset += 250) {
-    const data = await budget.json(
-      api(env, `/house-vote/${congress}/${session}`, { limit: "250", offset: String(offset) }),
-      {},
-      `house votes ${congress}-${session} list`
-    );
+    const data =
+      offset === 0 && first
+        ? first
+        : await budget.json(api(env, `/house-vote/${congress}/${session}`, { limit: "250", offset: String(offset) }), {}, `house votes ${congress}-${session} list`);
     const items = data.houseRollCallVotes || data.houseVotes || [];
     out.push(...items);
     if (items.length < 250) return out;
@@ -218,10 +217,20 @@ export async function syncHouseVotes(env, db, budget) {
   const congress = currentCongress();
   let saved = 0;
   let pending = 0;
+  let unchanged = 0;
   try {
     for (const session of congressSessions(congress)) {
+      // The list's first page gives the session's vote count (Congress.gov has no ETag): the same
+      // count as when every vote on it was saved means nothing to do (no D1 reads either).
+      const first = await budget.json(api(env, `/house-vote/${congress}/${session}`, { limit: "250", offset: "0" }), {}, `house votes ${congress}-${session} list`);
+      const count = first && first.pagination && first.pagination.count != null ? String(first.pagination.count) : null;
+      const countKey = `house_votes_count_${congress}_${session}`;
+      if (count && (await getState(db, countKey)) === count) {
+        unchanged += 1;
+        continue;
+      }
       const have = await existingVoteIds(db, `us-house-${congress}-${session}-`);
-      const list = await listHouseVotes(env, budget, congress, session);
+      const list = await listHouseVotes(env, budget, congress, session, first);
       const todo = list
         .map((v) => ({ v, roll: parseInt(pick(v, "rollCallNumber", "rollNumber"), 10) }))
         .filter(({ roll }) => roll && !have.has(`us-house-${congress}-${session}-${roll}`))
@@ -283,7 +292,9 @@ export async function syncHouseVotes(env, db, budget) {
         saved += 1;
         pending -= 1;
       }
+      if (count) await setState(db, countKey, count); // every vote on this list is saved
     }
+    if (unchanged === congressSessions(congress).length) return { status: "ok", message: `unchanged: Congress.gov lists the same number of House votes for Congress ${congress} as when every one was saved` };
     return { status: "ok", message: `Congress ${congress}: ${saved} House vote(s) saved (new, or re-read for totals and all members); caught up` };
   } catch (err) {
     if (err instanceof BudgetExhausted) {

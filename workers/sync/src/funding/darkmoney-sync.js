@@ -18,6 +18,7 @@
 // DARK_MONEY_FEC_DAILY (400) a day; ProPublica requests are paced
 // (PROPUBLICA_MIN_INTERVAL_MS, 1 s) and capped (PROPUBLICA_DAILY_LIMIT, 300).
 import { getState, setState, BudgetExhausted, UpstreamError, isHttp } from "../util.js";
+import { syncScope, differs } from "../upsert.js";
 import { fecOptions } from "./sync.js";
 import { currentCycle } from "./fec.js";
 import { signerOrgs } from "../elections/signers.js";
@@ -87,8 +88,12 @@ async function electioneering(db, fec, counts) {
         rows.map((r) =>
           db
             .prepare(
-              `INSERT OR REPLACE INTO electioneering (sub_id, cycle, committee_id, committee_name, candidate_id, amount, disbursement_date, distribution_date, file_number, source_url)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+              `INSERT INTO electioneering (sub_id, cycle, committee_id, committee_name, candidate_id, amount, disbursement_date, distribution_date, file_number, source_url)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+               ON CONFLICT DO UPDATE SET cycle = excluded.cycle, committee_id = excluded.committee_id, committee_name = excluded.committee_name,
+                 candidate_id = excluded.candidate_id, amount = excluded.amount, disbursement_date = excluded.disbursement_date,
+                 distribution_date = excluded.distribution_date, file_number = excluded.file_number, source_url = excluded.source_url
+               WHERE ${differs("electioneering", ["cycle", "committee_id", "committee_name", "candidate_id", "amount", "disbursement_date", "distribution_date", "file_number", "source_url"])}`
             )
             .bind(r.sub_id, r.cycle, r.committee_id, r.committee_name, r.candidate_id, r.amount, r.disbursement_date, r.distribution_date, r.file_number, r.source_url)
         )
@@ -208,16 +213,17 @@ async function spenderDonors(env, db, fec, propublica, counts) {
     // Only the largest are looked up in IRS records: past them, or past the pages
     // read, a 501(c)(4) or (c)(6) could be missed, so the share is "at least".
     if (donors.length > TOP_DONORS) truncated = true;
+    // Only what changed is written (src/db.js syncScope).
     const stmts = [
-      db.prepare("DELETE FROM outside_donors WHERE committee_id = ? AND cycle = ?").bind(s.committee_id, s.cycle),
-      ...keep.map((d) =>
-        db
-          .prepare(
-            `INSERT OR REPLACE INTO outside_donors (committee_id, cycle, name, kind, donor_committee_id, ein, state, total, count, first_date, last_date, source_url)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-          )
-          .bind(s.committee_id, s.cycle, d.name, d.kind, d.donor_committee_id, d.ein || null, d.state, d.total, d.count, d.first_date, d.last_date, d.source_url)
-      ),
+      ...(
+        await syncScope(db, {
+          table: "outside_donors",
+          scope: { committee_id: s.committee_id, cycle: s.cycle },
+          key: ["name"],
+          cols: ["name", "kind", "donor_committee_id", "ein", "state", "total", "count", "first_date", "last_date", "source_url"],
+          rows: keep.map((d) => ({ ...d, ein: d.ein || null })),
+        })
+      ).stmts,
       db
         .prepare(
           `INSERT OR REPLACE INTO outside_donor_reads (committee_id, cycle, receipts, rows_read, truncated, dark_total, source_url, read_at)

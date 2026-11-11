@@ -601,8 +601,11 @@ def queue_analysis(args, items, texts):
         text = texts.get(it["key"])
         stmts.append("INSERT INTO measure_analysis_queue (measure_key, election_id, measure_id, state, label, title, text_url, text, not_before) VALUES "
                      f"({lit(it['key'])}, {lit(it['election_id'])}, {lit(m['id'])}, {lit(it['state'])}, {lit(it['label'])}, {lit(title)}, {lit(url)}, {lit(text[:MAX_ANALYSIS_TEXT] if text else None)}, {lit(ANALYSIS_NOT_BEFORE)}) "
-                     "ON CONFLICT (measure_key) DO UPDATE SET text = COALESCE(excluded.text, measure_analysis_queue.text), title = excluded.title, text_url = excluded.text_url;")
-    stmts.append(f"INSERT OR REPLACE INTO sync_state (key, value) VALUES ('measure_constitution_total', {lit(str(len(items)))});")
+                     "ON CONFLICT (measure_key) DO UPDATE SET text = COALESCE(excluded.text, measure_analysis_queue.text), title = excluded.title, text_url = excluded.text_url "
+                     "WHERE (excluded.text IS NOT NULL AND measure_analysis_queue.text IS NOT excluded.text) OR measure_analysis_queue.title IS NOT excluded.title "
+                     "OR measure_analysis_queue.text_url IS NOT excluded.text_url;")
+    stmts.append(f"INSERT INTO sync_state (key, value) VALUES ('measure_constitution_total', {lit(str(len(items)))}) "
+                 "ON CONFLICT (key) DO UPDATE SET value = excluded.value WHERE sync_state.value IS NOT excluded.value;")
     import load_trades as T  # noqa: E402
     T.run_sql(args, stmts)
 

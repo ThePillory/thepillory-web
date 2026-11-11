@@ -49,6 +49,8 @@ import init0047 from "../migrations/0047_company_taxes.sql";
 import init0048 from "../migrations/0048_email.sql";
 import { isHttp, today } from "./util.js";
 import { totals } from "./rollcall.js";
+import { differs } from "./upsert.js";
+export { differs, syncScope } from "./upsert.js";
 
 const MIGRATIONS = [
   ["0001_init.sql", init0001],
@@ -204,7 +206,10 @@ export async function upsertOfficial(db, o) {
          last_verified = excluded.last_verified, bioguide_id = excluded.bioguide_id,
          openstates_id = excluded.openstates_id, state = excluded.state, district_code = excluded.district_code,
          detail_checked = COALESCE(excluded.detail_checked, officials.detail_checked),
-         rank = excluded.rank, active = 1, updated_at = excluded.updated_at`
+         rank = excluded.rank, active = 1, updated_at = excluded.updated_at
+       WHERE officials.active IS NOT 1 OR officials.last_verified IS NOT excluded.last_verified
+         OR excluded.detail_checked IS NOT NULL AND officials.detail_checked IS NOT excluded.detail_checked
+         OR ${differs("officials", ["name", "last_name", "office", "level", "chamber", "body", "district", "party", "term_start", "term_end", "website", "photo_url", "photo_credit", "source_url", "bioguide_id", "openstates_id", "state", "district_code", "rank"])}`
     )
     .bind(
       o.id, slug, o.name, o.last_name || null, o.office, o.level, o.chamber, o.body,
@@ -253,7 +258,8 @@ export async function upsertBill(db, b) {
       `INSERT INTO bills (id, level, chamber, bill_number, session, title, official_url, source_url, updated_at)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
        ON CONFLICT(id) DO UPDATE SET title = excluded.title, official_url = excluded.official_url,
-         source_url = excluded.source_url, updated_at = excluded.updated_at`
+         source_url = excluded.source_url, updated_at = excluded.updated_at
+       WHERE ${differs("bills", ["title", "official_url", "source_url"])}`
     )
     .bind(b.id, b.level, b.chamber, b.bill_number, b.session, b.title, b.official_url || null, b.source_url)
     .run();
@@ -276,7 +282,8 @@ export async function saveVote(db, v, positions) {
            vote_date = excluded.vote_date, question = excluded.question, vote_type = excluded.vote_type,
            result = excluded.result, source_url = excluded.source_url,
            yea = excluded.yea, nay = excluded.nay, present = excluded.present, not_voting = excluded.not_voting,
-           updated_at = excluded.updated_at`
+           updated_at = excluded.updated_at
+         WHERE ${differs("votes", ["bill_id", "subject", "vote_date", "question", "vote_type", "result", "source_url", "yea", "nay", "present", "not_voting"])}`
       )
       .bind(
         v.id, v.bill_id || null, v.subject || null, v.level, v.chamber, v.vote_date, v.question, v.vote_type, v.result, v.source_url,
@@ -288,7 +295,8 @@ export async function saveVote(db, v, positions) {
       db
         .prepare(
           `INSERT INTO vote_positions (vote_id, official_id, position, raw_position) VALUES (?, ?, ?, ?)
-           ON CONFLICT(vote_id, official_id) DO UPDATE SET position = excluded.position, raw_position = excluded.raw_position`
+           ON CONFLICT(vote_id, official_id) DO UPDATE SET position = excluded.position, raw_position = excluded.raw_position
+           WHERE ${differs("vote_positions", ["position", "raw_position"])}`
         )
         .bind(v.id, p.official_id, p.position, p.raw_position)
     );
@@ -338,7 +346,9 @@ export async function saveStateVote(db, v, positions) {
 // read (yea IS NULL) aren't included, so they are fetched once more: that
 // fills in the totals and every member's position.
 export async function existingVoteIds(db, prefix) {
-  const { results } = await db.prepare("SELECT id FROM votes WHERE id LIKE ? AND yea IS NOT NULL").bind(`${prefix}%`).all();
+  // A key range, not LIKE: SQLite's LIKE ignores case, so it can't use the primary key and read
+  // every row of votes (every state's) on each call; the range reads only this session's votes.
+  const { results } = await db.prepare("SELECT id FROM votes WHERE id >= ? AND id < ? AND yea IS NOT NULL").bind(prefix, `${prefix}\uffff`).all();
   return new Set(results.map((r) => r.id));
 }
 

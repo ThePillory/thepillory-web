@@ -3,7 +3,7 @@
 #   draft: suggests each measure's section (claude-opus-5-5), checks it in code,
 #          searches court records, and holds every one on /admin/review/measures/
 #          until a person approves it. Nothing goes live here.
-#   cases: searches court records again (daily); a record found after a measure
+#   cases: searches court records again (weekly, Mondays: the gate job); a record found after a measure
 #          was approved waits on the review page too.
 #   list:  what's drafted, by status.
 # Actions -> Draft measure Constitution sections -> Run workflow.
@@ -37,8 +37,27 @@ concurrency:
   group: measure-constitution
   cancel-in-progress: false
 jobs:
+  # Is today a run day? (tools/schedule_gate.mjs, the rules in workers/sync/src/cadence.js;
+  # docs/data-sync.md, "How often each source updates"). A run started by hand always runs.
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      run: ${{ steps.gate.outputs.run }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            tools/schedule_gate.mjs
+            workers/sync/src/cadence.js
+            data/elections/dates.json
+          sparse-checkout-cone-mode: false
+      - id: gate
+        run: node tools/schedule_gate.mjs measure-constitution "${{ github.event_name }}"
   run:
     runs-on: ubuntu-latest
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4

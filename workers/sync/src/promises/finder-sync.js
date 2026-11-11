@@ -111,7 +111,8 @@ export async function syncIssuesPages(env, db, budget) {
   const recheckDays = parseInt(env.ISSUES_PAGES_RECHECK_DAYS || "90", 10);
   const dayKey = `issues_pages_${today()}`;
   let searched = parseInt((await getState(db, dayKey)) || "0", 10);
-  if (searched >= limit) return { status: "skipped", message: `${searched} officials' sites searched today (ISSUES_PAGES_DAILY ${limit})` };
+  // more: true keeps the weekly pass going the next day (src/cadence.js) until every site is searched.
+  if (searched >= limit) return { status: "skipped", more: true, message: `${searched} officials' sites searched today (ISSUES_PAGES_DAILY ${limit})` };
   let todo;
   try {
     todo = await nextOfficials(db, { limit: limit - searched, recheckDays, home: await homeDistricts(db) });
@@ -174,7 +175,7 @@ export async function syncIssuesPages(env, db, budget) {
     if (!(err instanceof BudgetExhausted)) throw err;
     return { status: "partial", message: `${summary(tally)}; ${err.message}` };
   }
-  return { status: "ok", message: `${summary(tally)}${found.length ? `; found for ${found.slice(0, 8).join(", ")}${found.length > 8 ? ` and ${found.length - 8} more` : ""}` : ""}` };
+  return { status: "ok", more: todo.length >= limit - searched, message: `${summary(tally)}${found.length ? `; found for ${found.slice(0, 8).join(", ")}${found.length > 8 ? ` and ${found.length - 8} more` : ""}` : ""}` };
 }
 
 const summary = (t) =>

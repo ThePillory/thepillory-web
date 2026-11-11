@@ -20,6 +20,7 @@
 // on their own.
 import { getState, setState, BudgetExhausted, UpstreamError, isHttp, slugify } from "../util.js";
 import { fecOptions } from "./sync.js";
+import { syncScope } from "../upsert.js";
 import { seatOf, matchSeat, moneyRows, candidateKey, contestSeat, matchCandidate } from "./state.js";
 import {
   committeeTypes, pickInauguralCommittee, latestReports, parseForm13, form13Consistent, fecCommitteePage,
@@ -103,17 +104,19 @@ async function inaugural(env, db, budget, fec) {
     .run();
   const f = await fec(`/filings/?committee_id=${c.committee_id}&form_type=F13&per_page=100&sort=-receipt_date`, `inaugural reports ${c.committee_id}`);
   const reports = latestReports(f.results);
-  await inBatches(db, [
-    db.prepare("DELETE FROM inaugural_reports WHERE committee_id = ?").bind(c.committee_id),
-    ...reports.map((r) =>
-      db
-        .prepare(
-          `INSERT INTO inaugural_reports (committee_id, report, coverage_start, coverage_end, receipt_date, total_receipts, amended, file_number, pdf_url, source_url)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-        )
-        .bind(c.committee_id, r.report, r.coverage_start || "", r.coverage_end, r.receipt_date, r.total_receipts, r.amended, r.file_number, r.pdf_url, r.pdf_url || src)
-    ),
-  ]);
+  // Only what changed is written (src/db.js syncScope).
+  await inBatches(
+    db,
+    (
+      await syncScope(db, {
+        table: "inaugural_reports",
+        scope: { committee_id: c.committee_id },
+        key: ["report", "coverage_start"],
+        cols: ["report", "coverage_start", "coverage_end", "receipt_date", "total_receipts", "amended", "file_number", "pdf_url", "source_url"],
+        rows: reports.map((r) => ({ ...r, coverage_start: r.coverage_start || "", source_url: r.pdf_url || src })),
+      })
+    ).stmts
+  );
 
   // The itemized donations in the main report (the one that starts first), read
   // again only when a new version of it is filed.
@@ -181,18 +184,18 @@ async function ogeDisclosures(env, db, budget) {
       if (start + 100 >= (d.recordsFiltered || 0)) break;
     }
     const mine = rows.filter((r) => ogeNameMatches(r.name, p.name)).map(ogeRow).filter(Boolean);
-    const stmts = [db.prepare("DELETE FROM disclosures WHERE official_id = ? AND source = 'oge'").bind(p.id)];
-    for (const x of mine) {
-      stmts.push(
-        db
-          .prepare(
-            `INSERT OR REPLACE INTO disclosures (id, official_id, source, kind, doc_type, filer_name, position, agency, filed_on, amended_on, document_url, request_url, source_url, updated_at)
-             VALUES (?, ?, 'oge', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`
-          )
-          .bind(`oge:${ogeKey(x)}`, p.id, x.kind, x.doc_type, x.name, x.title, x.agency, x.added_on, x.amended_on,
-            isHttp(x.document_url) ? x.document_url : null, isHttp(x.request_url) ? x.request_url : null, OGE_SEARCH_PAGE)
-      );
-    }
+    // Only what changed is written (src/db.js syncScope).
+    const { stmts } = await syncScope(db, {
+      table: "disclosures",
+      scope: { official_id: p.id, source: "oge" },
+      key: ["id"],
+      cols: ["id", "kind", "doc_type", "filer_name", "position", "agency", "filed_on", "amended_on", "document_url", "request_url", "source_url"],
+      stamp: "updated_at",
+      rows: mine.map((x) => ({
+        id: `oge:${ogeKey(x)}`, kind: x.kind, doc_type: x.doc_type, filer_name: x.name, position: x.title, agency: x.agency, filed_on: x.added_on, amended_on: x.amended_on,
+        document_url: isHttp(x.document_url) ? x.document_url : null, request_url: isHttp(x.request_url) ? x.request_url : null, source_url: OGE_SEARCH_PAGE,
+      })),
+    });
     stmts.push(
       db
         .prepare(
@@ -241,19 +244,19 @@ async function fppcStatements(env, db, budget) {
     }, `FPPC Form 700s ${p.name}`);
     const docs = fppcParse(await res.text()).documents || [];
     const mine = fppcRows(docs, p, { county: env.FORM700_COUNTY || "Calaveras" });
-    const stmts = [db.prepare("DELETE FROM disclosures WHERE official_id = ? AND source = 'fppc'").bind(p.id)];
-    for (const x of mine) {
-      stmts.push(
-        db
-          .prepare(
-            `INSERT OR REPLACE INTO disclosures (id, official_id, source, kind, doc_type, filer_name, position, agency, filed_on, period, amended_on, detail, source_url, updated_at)
-             VALUES (?, ?, 'fppc', 'financial', ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))`
-          )
-          // A candidate's rows carry their key, so an incumbent's own rows (the same statement) stay theirs.
-          .bind(p.candidate ? `fppc:${x.index_id}@${p.id}` : `fppc:${x.index_id}`, p.id, x.doc_type, p.name, x.position, x.agency, x.filed_on, x.period, x.amended ? x.filed_on : null,
-            JSON.stringify({ index_id: x.index_id, pdf: x.pdf, no_interests: x.no_interests }), `${FPPC_SEARCH}/`)
-      );
-    }
+    // Only what changed is written (src/db.js syncScope).
+    const { stmts } = await syncScope(db, {
+      table: "disclosures",
+      scope: { official_id: p.id, source: "fppc" },
+      key: ["id"],
+      cols: ["id", "kind", "doc_type", "filer_name", "position", "agency", "filed_on", "period", "amended_on", "detail", "source_url"],
+      stamp: "updated_at",
+      // A candidate's rows carry their key, so an incumbent's own rows (the same statement) stay theirs.
+      rows: mine.map((x) => ({
+        id: p.candidate ? `fppc:${x.index_id}@${p.id}` : `fppc:${x.index_id}`, kind: "financial", doc_type: x.doc_type, filer_name: p.name, position: x.position, agency: x.agency,
+        filed_on: x.filed_on, period: x.period, amended_on: x.amended ? x.filed_on : null, detail: JSON.stringify({ index_id: x.index_id, pdf: x.pdf, no_interests: x.no_interests }), source_url: `${FPPC_SEARCH}/`,
+      })),
+    });
     stmts.push(
       db
         .prepare(
@@ -302,42 +305,47 @@ async function fppcCandidates(env, db, budget, days, limit) {
   return all.filter((p) => !fresh.has(p.id)).slice(0, limit);
 }
 
-/** The statements that replace one official's California campaign rows with an entry from data/ca-campaign.json. */
-export function stateCampaignStatements(db, id, entry, note) {
-  const stmts = [
-    db.prepare("DELETE FROM state_campaign_totals WHERE filer_id IN (SELECT filer_id FROM state_campaign_committees WHERE official_id = ?)").bind(id),
-    db.prepare("DELETE FROM state_campaign_committees WHERE official_id = ?").bind(id),
-    ...["state_money_cycles", "state_money_industries", "state_money_employers", "state_money_orgs", "state_money_ie"].map((t) => db.prepare(`DELETE FROM ${t} WHERE official_id = ?`).bind(id)),
-  ];
+/**
+ * The statements that bring one official's California campaign rows in line with an entry from
+ * data/ca-campaign.json: only rows that are new, changed or gone (src/db.js syncScope).
+ */
+export async function stateCampaignStatements(db, id, entry, note) {
+  const stmts = [];
   let committees = 0;
   let reports = 0;
+  const comms = [];
+  const totals = new Map(); // filer_id -> report rows
   for (const c of (entry && entry.committees) || []) {
     if (!c.filer_id || !isHttp(c.source_url)) continue;
-    stmts.push(db.prepare("INSERT OR REPLACE INTO state_campaign_committees (official_id, filer_id, name, source_url, checked_at) VALUES (?, ?, ?, ?, datetime('now'))").bind(id, String(c.filer_id), c.name || null, c.source_url));
+    comms.push({ filer_id: String(c.filer_id), name: c.name || null, source_url: c.source_url });
     committees += 1;
+    const rows = totals.get(String(c.filer_id)) || [];
     for (const r of c.reports || []) {
       if (!r.from || !r.thru || !isHttp(r.source_url)) continue;
-      stmts.push(
-        db
-          .prepare("INSERT OR REPLACE INTO state_campaign_totals (filer_id, period_start, period_end, contributions, expenditures, cash_end, source_url) VALUES (?, ?, ?, ?, ?, ?, ?)")
-          .bind(String(c.filer_id), r.from, r.thru, r.contributions ?? null, r.expenditures ?? null, r.cash_end ?? null, r.source_url)
-      );
+      rows.push({ period_start: r.from, period_end: r.thru, contributions: r.contributions ?? null, expenditures: r.expenditures ?? null, cash_end: r.cash_end ?? null, source_url: r.source_url });
       reports += 1;
     }
+    totals.set(String(c.filer_id), rows);
   }
-  if (entry) {
-    const m = moneyRows(id, entry);
-    const insert = (table, rows) => {
-      for (const row of rows) {
-        const cols = Object.keys(row);
-        stmts.push(db.prepare(`INSERT OR REPLACE INTO ${table} (${cols.join(", ")}) VALUES (${cols.map(() => "?").join(", ")})`).bind(...cols.map((k) => row[k])));
-      }
-    };
-    insert("state_money_cycles", m.cycles);
-    insert("state_money_industries", m.industries);
-    insert("state_money_employers", m.employers);
-    insert("state_money_orgs", m.orgs);
-    insert("state_money_ie", m.ie);
+  // Committees no longer the official's lose their reports too.
+  const { results: before } = await db.prepare("SELECT filer_id FROM state_campaign_committees WHERE official_id = ?").bind(id).all();
+  for (const b of before) if (!totals.has(String(b.filer_id))) totals.set(String(b.filer_id), []);
+  stmts.push(...(await syncScope(db, { table: "state_campaign_committees", scope: { official_id: id }, key: ["filer_id"], cols: ["filer_id", "name", "source_url"], stamp: "checked_at", rows: comms })).stmts);
+  for (const [filer, rows] of totals) {
+    stmts.push(...(await syncScope(db, { table: "state_campaign_totals", scope: { filer_id: filer }, key: ["period_start", "period_end"], cols: ["period_start", "period_end", "contributions", "expenditures", "cash_end", "source_url"], rows })).stmts);
+  }
+  const m = entry ? moneyRows(id, entry) : { cycles: [], industries: [], employers: [], orgs: [], ie: [] };
+  const tables = [
+    ["state_money_cycles", m.cycles, ["cycle"]],
+    ["state_money_industries", m.industries, ["cycle", "industry"]],
+    ["state_money_employers", m.employers, ["cycle", "employer"]],
+    ["state_money_orgs", m.orgs, ["cycle", "name"]],
+    ["state_money_ie", m.ie, ["cycle", "filer_id", "support_oppose", "race"]],
+  ];
+  for (const [table, rows, key] of tables) {
+    const cols = [...new Set(rows.flatMap((r) => Object.keys(r)))].filter((c) => c !== "official_id");
+    const all = cols.length ? cols : key;
+    stmts.push(...(await syncScope(db, { table, scope: { official_id: id }, key, cols: all, rows: rows.map((r) => Object.fromEntries(all.map((c) => [c, r[c] ?? null]))) })).stmts);
   }
   stmts.push(
     db
@@ -376,8 +384,8 @@ async function caCampaign(env, db, budget) {
   let reports = 0;
   let people = 0;
   let unmatched = 0;
-  const add = (id, entry, note) => {
-    const r = stateCampaignStatements(db, id, entry, note);
+  const add = async (id, entry, note) => {
+    const r = await stateCampaignStatements(db, id, entry, note);
     stmts.push(...r.stmts);
     committees += r.committees;
     reports += r.reports;
@@ -387,7 +395,7 @@ async function caCampaign(env, db, budget) {
   for (const [key, entry] of Object.entries(file.officials || {})) {
     const id = `ca-exec:${slugify(key)}:${slugify(entry.name || "")}`;
     if (!officials.some((o) => o.id === id)) continue;
-    add(id, entry, (entry.committees || []).length ? exported : "No campaign statements (Form 460) naming this official as the candidate since 2023 in the Cal-Access export.");
+    await add(id, entry, (entry.committees || []).length ? exported : "No campaign statements (Form 460) naming this official as the candidate since 2023 in the Cal-Access export.");
   }
   // Legislators, by seat and name; the seats file lists only candidates with a statement since 2025.
   if (file.seats) {
@@ -395,7 +403,7 @@ async function caCampaign(env, db, budget) {
       const seat = seatOf(o);
       const entry = seat ? matchSeat(file.seats[seat], o) : null;
       if (!entry) unmatched += 1;
-      add(o.id, entry, entry ? exported : `No campaign statement (Form 460) since 2025 naming this legislator as the candidate for this seat in the ${exported}.`);
+      await add(o.id, entry, entry ? exported : `No campaign statement (Form 460) since 2025 naming this legislator as the candidate for this seat in the ${exported}.`);
     }
   }
   // Every candidate on the certified list, under their own key (candidateKey): statewide ones from
@@ -418,7 +426,7 @@ async function caCampaign(env, db, budget) {
       const entry = picks[i] && picks.filter((x) => x === picks[i]).length === 1 ? picks[i] : null;
       if (entry) candidatesMatched += 1;
       candidates += 1;
-      add(
+      await add(
         candidateKey(contest.id, cand.name),
         entry,
         entry

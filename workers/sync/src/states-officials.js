@@ -9,6 +9,7 @@ import { getState, setState, slugify, isHttp, BudgetExhausted } from "./util.js"
 import { deactivateOthers } from "./db.js";
 import { ALL_JURISDICTIONS, chamberIds, memberTitle, districtLabel, districtKey, executiveOffice, stableKey } from "./states.js";
 import { statePriority } from "./state-priority.js";
+import { differs } from "./upsert.js";
 
 const REFRESH_DAYS = 7;
 const daysSince = (iso) => (iso ? (Date.now() - Date.parse(iso)) / 86400000 : Infinity);
@@ -61,7 +62,8 @@ const UPSERT = `INSERT INTO officials (id, slug, name, last_name, office, level,
     photo_url = excluded.photo_url, photo_credit = excluded.photo_credit, source_url = excluded.source_url,
     last_verified = excluded.last_verified, openstates_id = excluded.openstates_id, state = excluded.state,
     district_code = excluded.district_code, rank = excluded.rank, k = excluded.k, active = 1,
-    updated_at = excluded.updated_at`;
+    updated_at = excluded.updated_at
+  WHERE officials.active IS NOT 1 OR ${differs("officials", ["name", "last_name", "office", "level", "chamber", "body", "district", "party", "term_start", "term_end", "website", "photo_url", "photo_credit", "source_url", "last_verified", "openstates_id", "state", "district_code", "rank", "k"])}`;
 
 /**
  * Upsert a state's officials in batches. Slugs stay as they are for officials

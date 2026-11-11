@@ -20,6 +20,9 @@ D1 and the sources; it changes nothing.
      and public, waiting for a person, held, waiting to be read, link only),
      the President's reports one by one, and what people decided on the
      reports already reviewed.
+  7. Sync cost by step: each sync step's D1 rows read and written (usage_steps)
+     and AI calls (ai_usage), the last 30 days, with how many days it did work,
+     found nothing, or skipped (sync_log).
 
   python3 tools/accuracy_audit.py > audit.md   (or Actions -> Accuracy audit)
 """
@@ -685,17 +688,43 @@ def coverage(args):
     say()
 
 
+def sync_cost(args):
+    say("## 7. Sync cost by step")
+    say()
+    say("Each step's D1 rows (usage_steps, migration 0046) and AI calls (ai_usage), summed over the last 30 days, and what its runs reported in sync_log.")
+    say()
+    rows = q(args, """WITH u AS (SELECT step, COUNT(DISTINCT day) AS days, SUM(rounds) AS rounds, SUM(rows_read) AS rr, SUM(rows_written) AS rw
+        FROM usage_steps WHERE day >= date('now', '-30 days') GROUP BY step),
+      a AS (SELECT step, SUM(calls) AS calls, ROUND(SUM(cost_usd), 2) AS usd FROM ai_usage WHERE day >= date('now', '-30 days') GROUP BY step),
+      l AS (SELECT step, SUM(status = 'ok') AS ok, SUM(status = 'partial') AS part, SUM(status = 'skipped') AS skip, SUM(status = 'error') AS err
+        FROM sync_log WHERE started_at >= date('now', '-30 days') GROUP BY step)
+      SELECT u.step, u.days, u.rounds, u.rr, u.rw, COALESCE(a.calls, 0) AS calls, COALESCE(a.usd, 0) AS usd,
+        COALESCE(l.ok, 0) AS ok, COALESCE(l.part, 0) AS part, COALESCE(l.skip, 0) AS skip, COALESCE(l.err, 0) AS err
+      FROM u LEFT JOIN a ON a.step = u.step LEFT JOIN l ON l.step = u.step
+      UNION ALL SELECT a.step, 0, 0, 0, 0, a.calls, a.usd, 0, 0, 0, 0 FROM a WHERE a.step NOT IN (SELECT step FROM u)
+      ORDER BY 4 DESC""")
+    table(rows, ["step", "days", "rounds", "rr", "rw", "calls", "usd", "ok", "part", "skip", "err"],
+          ["Step", "Days", "Rounds", "Rows read", "Rows written", "AI calls", "AI ($)", "ok", "partial", "skipped", "error"])
+    say("The 40 costliest query shapes (usage_queries; literals replaced by ?), the last 30 days:")
+    say()
+    rows = q(args, """SELECT source, substr(sql, 1, 200) AS sql, SUM(calls) AS calls, SUM(rows_read) AS rr, SUM(rows_written) AS rw FROM usage_queries
+      WHERE day >= date('now', '-30 days') GROUP BY source, sql_key ORDER BY SUM(rows_written) * 1000 + SUM(rows_read) DESC LIMIT 40""")
+    table(rows, ["source", "sql", "calls", "rr", "rw"], ["Step or route", "SQL", "Calls", "Rows read", "Rows written"])
+    rows = q(args, """SELECT step, substr(message, 1, 160) AS message FROM sync_log WHERE id IN (SELECT MAX(id) FROM sync_log GROUP BY step) ORDER BY step""")
+    table(rows, ["step", "message"], ["Step", "Last message"])
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--database", default="pillory")
-    ap.add_argument("--only", default="1,2,3,4,5,6")
+    ap.add_argument("--only", default="1,2,3,4,5,6,7")
     args = ap.parse_args()
     only = set(args.only.split(","))
     say("# Accuracy audit")
     say()
     say(f"Run {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}. Reads D1 and the sources; changes nothing.")
     say()
-    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage)):
+    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage), ("7", sync_cost)):
         if k in only:
             try:
                 fn(args)

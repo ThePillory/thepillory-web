@@ -37,6 +37,7 @@ import { saveItems } from "./items.js";
 import { syncTylerMeetings } from "./tylermm-sync.js";
 import { getState, setState, isHttp, BudgetExhausted } from "../util.js";
 import { pacificNow, addDays } from "./time.js";
+import { differs } from "../upsert.js";
 
 const DEFAULT_BODIES = "Board of Supervisors|Planning Commission";
 const BODY_SLUGS = { "Board of Supervisors": "board-of-supervisors" };
@@ -73,7 +74,16 @@ async function saveMeeting(db, m, postedAt) {
          minutes_url = COALESCE(excluded.minutes_url, meetings.minutes_url),
          summary_url = COALESCE(excluded.summary_url, meetings.summary_url),
          video_url = COALESCE(excluded.video_url, meetings.video_url),
-         source_url = excluded.source_url, updated_at = excluded.updated_at`
+         source_url = excluded.source_url, updated_at = excluded.updated_at
+       WHERE ${differs("meetings", ["body", "body_slug", "meeting_type", "starts_at", "status", "location", "source_url"])}
+         OR excluded.agenda_url IS NOT NULL AND meetings.agenda_url IS NOT excluded.agenda_url
+         OR excluded.packet_url IS NOT NULL AND meetings.packet_url IS NOT excluded.packet_url
+         OR excluded.agenda_file_id IS NOT NULL AND meetings.agenda_file_id IS NOT excluded.agenda_file_id
+         OR excluded.posted_at IS NOT NULL AND meetings.posted_at IS NOT excluded.posted_at
+         OR meetings.first_seen_at IS NULL AND excluded.first_seen_at IS NOT NULL
+         OR excluded.minutes_url IS NOT NULL AND meetings.minutes_url IS NOT excluded.minutes_url
+         OR excluded.summary_url IS NOT NULL AND meetings.summary_url IS NOT excluded.summary_url
+         OR excluded.video_url IS NOT NULL AND meetings.video_url IS NOT excluded.video_url`
     )
     .bind(
       `iqm2-${m.portal_id}`,

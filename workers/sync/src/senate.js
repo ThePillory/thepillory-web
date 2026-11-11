@@ -54,10 +54,18 @@ export async function syncSenateVotes(env, db, budget) {
   const base = env.SENATE_BASE || BASE;
   let saved = 0;
   let pending = 0;
+  let unchanged = 0;
   try {
     for (const session of congressSessions(congress)) {
+      // The session's vote list, asked with its ETag / Last-Modified: unchanged since every vote
+      // on it was saved means nothing to do (no D1 reads either).
+      const got = await budget.ifChanged(db, `senate_menu_${congress}_${session}`, `${base}/roll_call_lists/vote_menu_${congress}_${session}.xml`, {}, `senate menu ${session}`);
+      if (got.unchanged) {
+        unchanged += 1;
+        continue;
+      }
+      const menu = await got.res.text();
       const have = await existingVoteIds(db, `us-senate-${congress}-${session}-`);
-      const menu = await budget.text(`${base}/roll_call_lists/vote_menu_${congress}_${session}.xml`, {}, `senate menu ${session}`);
       const numbers = xmlBlocks(menu, "vote")
         .map((b) => parseInt(xmlTag(b, "vote_number"), 10))
         .filter((n) => n && !have.has(`us-senate-${congress}-${session}-${n}`))
@@ -96,7 +104,9 @@ export async function syncSenateVotes(env, db, budget) {
         saved += 1;
         pending -= 1;
       }
+      await got.save(); // every vote on this list is saved
     }
+    if (unchanged === congressSessions(congress).length) return { status: "ok", message: `unchanged: the Senate's vote lists for Congress ${congress} are the same as when every vote on them was saved` };
     return { status: "ok", message: `Congress ${congress}: ${saved} Senate vote(s) saved (new, or re-read for totals and all members); caught up` };
   } catch (err) {
     if (err instanceof BudgetExhausted) {
