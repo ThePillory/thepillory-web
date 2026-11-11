@@ -6,6 +6,7 @@
 import { esc, sourceLink } from "./render.js";
 import { asset } from "./geo.js";
 import { miniBars } from "./charts.js";
+import { fold } from "./summary.js";
 import { TAXES_METHOD } from "./taxes.js";
 import { shortCount, shortDollars } from "./taxpayers.js";
 
@@ -51,7 +52,7 @@ function yearly(series) {
 
 function countsSection() {
   return `<section class="card stack-sm" id="what-counts">
-  <h2 class="h3">What this counts</h2>
+  <h2 class="tax-title">What this counts</h2>
   <ul class="simple-list">${COUNTS.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
   <p class="small secondary">Wealth includes gains on assets that haven't been sold; taxable income doesn't. The same household can be in a different group here than in the income tables on Taxpayers.</p>
 </section>`;
@@ -62,11 +63,11 @@ function groupsSection(d) {
   // Each group's share of households is in its name (the top 0.1% is 0.1% of households), so it isn't a column.
   const body = [...rows, total].map((r) => tr([esc(r.label), esc(shortCount(r.households)), esc(pct(r.share)), esc(shortDollars(r.average))]));
   return `<section class="card stack-sm" id="groups">
-  <h2 class="h3">Household wealth, by wealth group (${esc(quarterName(d.latest))})</h2>
+  <h2 class="tax-title">Household wealth, by wealth group (${esc(quarterName(d.latest))})</h2>
   <p class="small">U.S. households, grouped by net worth.</p>
   ${table(["Group", "Households", "Share of wealth", "Average net worth"], body)}
   <p class="small">Each row is a separate group; the rows add up to all households.</p>
-  <p class="xsmall secondary">Share of wealth is the group's share of all household net worth, as the Federal Reserve computes it. Each group's name is its share of households (the top 0.1% is 0.1% of all households). Average net worth is the group's net worth divided by its households, computed by ThePillory from the Fed's figures. Households and dollar amounts are rounded (M is millions, K thousands); the exact figures are in the Fed's tables. ${sourceLink(d.source_url, "Federal Reserve, Distributional Financial Accounts")}</p>
+  <p class="small secondary">Share of wealth is the group's share of all household net worth, as the Federal Reserve computes it. Each group's name is its share of households (the top 0.1% is 0.1% of all households). Average net worth is the group's net worth divided by its households, computed by ThePillory from the Fed's figures. Households and dollar amounts are rounded (M is millions, K thousands); the exact figures are in the Fed's tables. ${sourceLink(d.source_url, "Federal Reserve, Distributional Financial Accounts")}</p>
 </section>`;
 }
 
@@ -84,16 +85,16 @@ function trendSection(d) {
       ariaLabel: `${label} of households: share of all household net worth by year`,
     });
   return `<section class="card stack-sm" id="over-time">
-  <h2 class="h3">Share of wealth over time</h2>
+  <h2 class="tax-title">Share of wealth over time</h2>
   ${chart("Top 1%", (s) => (s["top-0.1"] ?? 0) + (s["next-0.9"] ?? 0))}
   ${chart("Bottom 50%", (s) => s["bottom-50"])}
-  <p class="xsmall secondary">The top 1% is the top 0.1% and the next 0.9% added together. ${sourceLink(d.source_url, "Federal Reserve, Distributional Financial Accounts")}</p>
+  <p class="small secondary">The top 1% is the top 0.1% and the next 0.9% added together. ${sourceLink(d.source_url, "Federal Reserve, Distributional Financial Accounts")}</p>
 </section>`;
 }
 
 function scfSection(d) {
   return `<section class="card stack-sm" id="scf">
-  <h2 class="h3">Another measure</h2>
+  <h2 class="tax-title">Another measure</h2>
   <p class="small">The Federal Reserve's Survey of Consumer Finances asks a sample of households about their wealth every three years. It measures some things differently, so its figures for the same groups differ somewhat from these.</p>
   <p>${sourceLink(d.scf_url, "Federal Reserve, Survey of Consumer Finances")}</p>
 </section>`;
@@ -101,19 +102,17 @@ function scfSection(d) {
 
 /** The page's main content. */
 export function wealthMain(d, switcher) {
-  const head = `<header class="page-head">
+  const head = `<div class="tax-page"><header class="page-head">
   <h1>Taxes</h1>
   <p class="subtitle">Who holds household wealth, by wealth group, from the Federal Reserve's own accounts.</p>
 </header>
 ${switcher}`;
-  if (!d || !d.groups) return `${head}<section class="card"><p class="small secondary">These figures load weekly from the Federal Reserve. They aren't loaded yet.</p></section>`;
+  if (!d || !d.groups) return `${head}<section class="card"><p class="small secondary">These figures load weekly from the Federal Reserve. They aren't loaded yet.</p></section></div>`;
   return `${head}
 ${countsSection()}
 ${groupsSection(d)}
 ${trendSection(d)}
 ${scfSection(d)}
-<section class="card stack-sm">
-  <p class="label">About these figures</p>
-  <p class="small">The figures are as the Federal Reserve publishes them, updated each quarter. They describe who held what; they don't say what anyone should hold. Households are counted, never named. <a class="inline-link" href="${TAXES_METHOD}">How this works</a></p>
-</section>`;
+${fold("about", "About these figures", `<p class="small">The figures are as the Federal Reserve publishes them, updated each quarter. They describe who held what; they don't say what anyone should hold. Households are counted, never named. <a class="inline-link" href="${TAXES_METHOD}">How this works ›</a></p>`)}
+</div>`;
 }

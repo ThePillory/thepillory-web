@@ -71,7 +71,7 @@ export function miniBars(points, { format = (n) => String(n), caption = "", aria
   return `<figure class="mini-bars">
   <div class="mini-bars-plot${maxNeg && maxPos ? " has-zero" : ""}" role="img" aria-label="${esc(ariaLabel || caption)}">${bars}</div>
   <div class="mini-bars-axis" aria-hidden="true">${axis}</div>
-  ${caption ? `<figcaption class="xsmall secondary">${caption}</figcaption>` : ""}
+  ${caption ? `<figcaption class="small secondary">${caption}</figcaption>` : ""}
   <details class="mini-bars-table"><summary>Show the numbers</summary><table><thead><tr><th scope="col">${esc(head[0])}</th><th scope="col">${esc(head[1])}</th></tr></thead><tbody>${pts
     .map((p) => `<tr><th scope="row">${esc(p.label)}</th><td>${esc(format(p.value))}</td></tr>`)
     .join("")}</tbody></table></details>
@@ -111,7 +111,7 @@ export function rangeBands(points, { format = (n) => String(n), scale = format, 
   <div class="range-bands-plot" role="img" aria-label="${esc(ariaLabel || caption)}">${zero}${cols}</div>
   <div class="mini-bars-axis" aria-hidden="true">${axis}</div>
   <p class="xsmall secondary">Scale: ${esc(scale(min))} at the bottom, ${esc(scale(max))} at the top${min < 0 ? `; the line is ${esc(scale(0))}` : ""}.</p>
-  ${caption ? `<figcaption class="xsmall secondary">${caption}</figcaption>` : ""}
+  ${caption ? `<figcaption class="small secondary">${caption}</figcaption>` : ""}
   <details class="mini-bars-table"><summary>Show the numbers</summary><table><thead><tr>${head.map((h) => `<th scope="col">${esc(h)}</th>`).join("")}</tr></thead><tbody>${pts
     .map((p) => `<tr><th scope="row">${p.href ? `<a class="inline-link" href="${esc(p.href)}" target="_blank" rel="noopener">${esc(p.label)}</a>` : esc(p.label)}</th><td>${cell(p.low, p.lowOpen, "or less")}</td><td>${cell(p.high, p.highOpen, "or more")}</td></tr>`)
     .join("")}</tbody></table></details>
@@ -126,7 +126,7 @@ export function rangeBands(points, { format = (n) => String(n), scale = format, 
  * gray, as in miniBars. With a legend and a "Show the numbers" table whose values
  * link to their sources. Returns "" with fewer than two periods that have a value.
  */
-export function pairBars(points, { series, format = (n) => String(n), caption = "", ariaLabel = "", head = "Period" } = {}) {
+export function pairBars(points, { series, format = (n) => String(n), caption = "", ariaLabel = "", head = "Period", table = "" } = {}) {
   const pts = points.filter((p) => num(p.a) != null || num(p.b) != null);
   if (pts.length < 2) return "";
   const vals = pts.flatMap((p) => [num(p.a), num(p.b)]).filter((v) => v != null);
@@ -147,9 +147,9 @@ export function pairBars(points, { series, format = (n) => String(n), caption = 
     .map((p) => `<span title="${esc(p.label)}: ${esc(series[0])} ${esc(say(p.a))}; ${esc(series[1])} ${esc(say(p.b))}">${bar(p.a, "pb-a")}${bar(p.b, "pb-b")}</span>`)
     .join("")}</div>
   <div class="mini-bars-axis" aria-hidden="true">${pts.map((p) => `<span>${esc(p.tick ?? "")}</span>`).join("")}</div>
-  ${caption ? `<figcaption class="xsmall secondary">${caption}</figcaption>` : ""}
-  <details class="mini-bars-table"><summary>Show the numbers</summary><table><thead><tr><th scope="col">${esc(head)}</th><th scope="col">${esc(series[0])}</th><th scope="col">${esc(series[1])}</th></tr></thead><tbody>${pts
+  ${caption ? `<figcaption class="small secondary">${caption}</figcaption>` : ""}
+  <details class="mini-bars-table"><summary>Show the numbers</summary>${table || `<table><thead><tr><th scope="col">${esc(head)}</th><th scope="col">${esc(series[0])}</th><th scope="col">${esc(series[1])}</th></tr></thead><tbody>${pts
     .map((p) => `<tr><th scope="row">${esc(p.label)}</th><td>${cell(p.a, p.hrefA)}</td><td>${cell(p.b, p.hrefB)}</td></tr>`)
-    .join("")}</tbody></table></details>
+    .join("")}</tbody></table>`}</details>
 </figure>`;
 }

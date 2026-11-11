@@ -157,46 +157,104 @@ export function shortMoney(n) {
   return `${sign}$${Math.round(a).toLocaleString("en-US")}`;
 }
 
+// ---------------------------------------------------------------------------
+// Where the taxes went: the 10-K's own breakdown of taxes paid (ASU 2023-09), every place it lists.
+
+const GROUPS = ["federal", "state", "foreign"];
+const GROUP_FIELD = { federal: "paid_federal", state: "paid_state", foreign: "paid_foreign" };
+const GROUP_ELEMENT = { IncomeTaxPaidFederalAfterRefundReceived: "federal", IncomeTaxPaidStateAndLocalAfterRefundReceived: "state", IncomeTaxPaidForeignAfterRefundReceived: "foreign" };
+export const GROUP_LABEL = { federal: "U.S. government", state: "States", foreign: "Other countries" };
+// The standard members of the 10-K's breakdown: the group each belongs to; the first four are a group's total.
+const TOTAL_MEMBERS = { "us-gaap:DomesticCountryMember": "federal", "us-gaap:FederalMember": "federal", "country:US": "federal", "us-gaap:StateAndLocalJurisdictionMember": "state", "us-gaap:ForeignCountryMember": "foreign" };
+const OTHER_MEMBERS = { "us-gaap:ForeignTaxJurisdictionOtherMember": "foreign" };
+const OTHER_LABEL = { state: "Other states", foreign: "Other countries" };
+export const SUM_NOTE = "sum of the places listed";
+export const GAP_LABEL = "Not broken out in the 10-K";
+// When the 10-K's parts add up to more than its own total (its rounding, or a total and parts filed on different bases).
+export const OVER_LABEL = "Parts listed in the 10-K exceed its total by";
+/** The row for a difference: what the 10-K doesn't break out, or how far its parts go past its total. */
+export const gapRow = (amount) => (amount >= 0 ? { label: GAP_LABEL, amount, gap: true } : { label: OVER_LABEL, amount: -amount, gap: true, over: true });
+
+function groupOf(j) {
+  const m = String(j.jurisdiction || "");
+  if (TOTAL_MEMBERS[m]) return TOTAL_MEMBERS[m];
+  if (OTHER_MEMBERS[m]) return OTHER_MEMBERS[m];
+  if (m.startsWith("stpr:")) return "state";
+  if (m.startsWith("country:")) return "foreign";
+  return GROUP_ELEMENT[j.element] || null; // a company's own member: the element says which group
+}
+const same = (a, b) => Math.abs(a - b) < 1; // whole dollars
+
 /**
- * The U.S. line: federal income taxes paid on U.S. profit before taxes, with the percent only when
- * both are tagged, the profit is above zero and the taxes aren't a net refund. "" when neither is tagged.
- * Pure; tested.
+ * Taxes paid for one year, by group and place, exactly as the 10-K files them. Each group (U.S. government,
+ * states, other countries) is its tagged total, or, when only its places are tagged, their sum (how: "sum").
+ * Where a tagged total and its places differ, or the groups and the total taxes paid differ, the difference is
+ * a "Not broken out in the 10-K" row: never a silent gap, never an estimate. Pure; tested.
+ * -> { groups: {federal, state, foreign: {amount, how, places: [{label, amount, gap?}]} | null}, total, gap, any }
  */
-export function usLine(y) {
-  const pf = num(y && y.paid_federal);
-  const pu = num(y && y.pretax_us);
-  if (pf == null && pu == null) return "";
-  const taxes = pf == null ? "" : pf < 0 ? `received ${shortMoney(-pf)} more in refunds than it paid` : shortMoney(pf);
-  if (pu == null) return `U.S. taxes: ${taxes}`;
-  if (pf == null) return pu < 0 ? `U.S. loss before taxes: ${shortMoney(-pu)}` : `U.S. profit before taxes: ${shortMoney(pu)}`;
-  if (pu < 0) return `U.S. taxes: ${taxes}, with a U.S. loss before taxes of ${shortMoney(-pu)}`;
-  const share = shareOfProfit(pf, pu);
-  return `U.S. taxes: ${taxes} on ${shortMoney(pu)} of U.S. profit${share.pct != null ? ` (${share.pct}%)` : ""}`;
+export function taxesTree(y, jurisdictions) {
+  const rows = (jurisdictions || []).filter((j) => j.period_end === y.period_end && num(j.amount) != null);
+  const groups = {};
+  for (const g of GROUPS) {
+    const mine = rows.filter((j) => groupOf(j) === g);
+    // One amount per place: the group's own element over the total's (IncomeTaxesPaidNet by place).
+    const pick = (list) => {
+      const best = new Map();
+      for (const j of list) if (!best.has(j.jurisdiction) || j.element !== "IncomeTaxesPaidNet") best.set(j.jurisdiction, j);
+      return [...best.values()];
+    };
+    const totals = pick(mine.filter((j) => TOTAL_MEMBERS[j.jurisdiction]));
+    const places = pick(mine.filter((j) => !TOTAL_MEMBERS[j.jurisdiction]));
+    const listed = places.filter((j) => /^(stpr|country):/.test(j.jurisdiction)).sort((a, b) => b.amount - a.amount);
+    const others = places.filter((j) => !/^(stpr|country):/.test(j.jurisdiction));
+    const out = [
+      ...listed.map((j) => ({ label: j.name, amount: j.amount })),
+      ...others.map((j) => ({ label: others.length === 1 && OTHER_LABEL[g] ? OTHER_LABEL[g] : j.name, amount: j.amount })),
+    ];
+    const sum = out.reduce((t, p) => t + p.amount, 0);
+    let amount = num(y[GROUP_FIELD[g]]);
+    let how = "tagged";
+    if (amount == null && totals.length) amount = totals[0].amount;
+    if (amount == null && out.length) {
+      amount = sum;
+      how = "sum";
+    }
+    if (amount == null) {
+      groups[g] = null;
+      continue;
+    }
+    if (how === "tagged" && out.length && !same(sum, amount)) out.push(gapRow(amount - sum));
+    groups[g] = { amount, how, places: out };
+  }
+  const total = num(y.taxes_paid);
+  const known = GROUPS.map((g) => groups[g]).filter(Boolean);
+  const parts = known.reduce((t, x) => t + x.amount, 0);
+  const gap = total != null && known.length && !same(total, parts) ? total - parts : null;
+  return { groups, total, gap, any: known.length > 0 };
 }
 
 /**
- * Where the taxes went, one row each, only rows with a value: the U.S. government, then each state, then
- * each country (the places of 5% or more the 10-K lists). Where the 10-K lists no places for states or
- * other countries but tags the total, that total is one row. Pure; tested.
+ * The U.S. figure for the top card: federal plus state and local taxes paid when both are known ("Taxes paid in
+ * the U.S."), federal alone when only it is ("Paid to the U.S. government"), otherwise null. Pure; tested.
  */
-export function placeRows(y, jurisdictions) {
-  const best = new Map();
-  const rank = { IncomeTaxPaidFederalAfterRefundReceived: 0, IncomeTaxPaidStateAndLocalAfterRefundReceived: 0, IncomeTaxPaidForeignAfterRefundReceived: 0, IncomeTaxesPaidNet: 1 };
-  for (const j of jurisdictions || []) {
-    if (j.period_end !== y.period_end || num(j.amount) == null) continue;
-    const prev = best.get(j.jurisdiction);
-    if (!prev || (rank[j.element] ?? 2) < (rank[prev.element] ?? 2)) best.set(j.jurisdiction, j);
-  }
-  const all = [...best.values()];
-  const states = all.filter((j) => j.jurisdiction.startsWith("stpr:")).sort((a, b) => b.amount - a.amount);
-  const countries = all.filter((j) => j.jurisdiction.startsWith("country:") && j.jurisdiction !== "country:US").sort((a, b) => b.amount - a.amount);
-  const rows = [];
-  if (num(y.paid_federal) != null) rows.push({ label: "U.S. government", field: "paid_federal", amount: y.paid_federal });
-  if (states.length) rows.push(...states.map((j) => ({ label: j.name, amount: j.amount, accn: j.accn })));
-  else if (num(y.paid_state) != null) rows.push({ label: "States and cities", field: "paid_state", amount: y.paid_state });
-  if (countries.length) rows.push(...countries.map((j) => ({ label: j.name, amount: j.amount, accn: j.accn })));
-  else if (num(y.paid_foreign) != null) rows.push({ label: "Other countries", field: "paid_foreign", amount: y.paid_foreign });
-  return { rows, places: states.length + countries.length > 0 };
+export function usTaxes(tree) {
+  const f = tree.groups.federal;
+  const s = tree.groups.state;
+  if (f && s) return { label: "Taxes paid in the U.S.", amount: f.amount + s.amount, split: [f, s], sum: s.how === "sum" };
+  if (f) return { label: "Paid to the U.S. government", amount: f.amount, split: null };
+  return null;
+}
+
+/** "on $4.77 billion of U.S. profit · 4%", or the loss; no percent on a loss, a net refund or a missing value. Pure; tested. */
+export function profitLine(paid, pretax, where) {
+  const b = num(pretax);
+  const p = num(paid);
+  const refund = p != null && p < 0 ? "More refunded than paid · " : "";
+  if (b == null) return refund.replace(/ · $/, "");
+  const of = where === "us" ? "U.S." : "total";
+  if (b < 0) return `${refund}with a ${where === "us" ? "U.S. " : ""}loss before taxes of ${shortMoney(-b)}`;
+  const share = shareOfProfit(p, b);
+  return `${refund}on ${shortMoney(b)} of ${of} profit${share.pct != null ? ` · ${share.pct}%` : ""}`;
 }
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -256,7 +314,15 @@ export async function loadCompany(db, cik) {
       db.prepare("SELECT * FROM company_tax_jurisdictions WHERE cik = ? ORDER BY period_end DESC, element, amount DESC").bind(cik).all(),
       db.prepare("SELECT kind, org_name, how, summary FROM company_orgs WHERE cik = ? ORDER BY kind, org_name").bind(cik).all(),
     ]);
-    return { company: c, years: years.results, jurisdictions: jur.results, orgs: orgs.results };
+    // Federal awards already looked up for this exact name (read only: a company page never queues a lookup).
+    let awards = null;
+    try {
+      const row = await db.prepare("SELECT result FROM federal_awards_cache WHERE name_key = ?").bind(nameKey(c.name)).first();
+      awards = row ? JSON.parse(row.result) : null;
+    } catch (err) {
+      if (!missing(err) && !(err instanceof SyntaxError)) throw err;
+    }
+    return { company: c, years: years.results, jurisdictions: jur.results, orgs: orgs.results, awards };
   } catch (err) {
     if (missing(err)) return null;
     throw err;
@@ -350,31 +416,29 @@ export async function loadLaws(env, request) {
 // ---------------------------------------------------------------------------
 // Pages
 
-export const READING = `<section class="card stack-sm" id="reading">
-  <h2 class="h3">Reading these numbers</h2>
-  <p class="small">Taxes paid is cash paid this year, after refunds. It won't match this year's profit exactly: some tax is paid a year early or late. Deductions, credits and past losses set by law lower what's paid.</p>
-  <p class="small"><a class="inline-link" href="${TAXES_METHOD}">How this works ›</a></p>
-</section>`;
+// Plain text, the same on every company page and the list.
+export const READING_TEXT = "Taxes paid is cash paid this year, after refunds. It won't match this year's profit exactly: some tax is paid a year early or late. Deductions, credits and past losses set by law lower what's paid.";
+export const READING = `<p class="small">${esc(READING_TEXT)}</p>`;
+export const RATE_LINE = "The federal corporate income tax rate is 21%. States add their own.";
+export const LAWS_LINE = "Congress sets the rates, deductions and credits companies pay under. See how your representatives voted on each.";
+export const NO_RECORDS = "No PAC, lobbying or ballot measure records under this name.";
 
-export const LAWS_LINE = "Congress sets the rates, deductions and credits that decide how much income tax companies owe. See how your representatives voted on each law.";
+/** A card's title: bold, sentence case, body size. */
+const title = (t) => `<h2 class="tax-title">${esc(t)}</h2>`;
+/** The one source link a card carries. */
+const from10k = (href, text = "From the 10-K ›") => (href ? `<p class="small"><a class="inline-link" href="${esc(href)}" target="_blank" rel="noopener">${esc(text)}</a></p>` : "");
+/** A row: label left, amount right, at most one gray line under the label. */
+const amountRow = (label, amount, { meta = "", sub = false } = {}) =>
+  `<li class="list-row${sub ? " tax-sub-row" : ""}"><div><span class="list-title">${esc(label)}</span>${meta ? `<span class="list-meta">${esc(meta)}</span>` : ""}</div><span class="list-status" title="${esc(exact(amount))}">${esc(shortMoney(amount))}</span></li>`;
 
-/** The laws that set these taxes (data/taxes/corporate-tax-laws.json), the same on every company page and the list. */
+/** The laws that set these taxes: one line each, linked to the bill's page. Empty when the file isn't loaded. */
 export function lawsSection(file) {
-  const laws = (file && file.laws) || [];
-  const items = laws
-    .filter((l) => l.bill_id && safeUrl(l.source_url))
-    .map(
-      (l) => `<li class="law-item stack-xs">
-    <a class="list-row" href="/laws/bills/${esc(l.bill_id)}/"><div><div class="list-title">${esc(l.name)}</div><div class="list-meta">Public Law ${esc(l.public_law)} · ${esc(String(l.year))} · ${esc(l.bill_label)}, ${esc(String(l.congress))}th Congress</div></div><span class="list-status">Votes ›</span></a>
-    <p class="xsmall secondary">Official title: ${esc(l.official_title)}</p>
-    ${l.description ? `<p class="small">“${esc(l.description)}” <span class="secondary">${esc(l.description_source)}.</span> ${sourceLink(l.source_url, "Congress.gov")}</p>` : ""}
-  </li>`
-    );
+  const laws = ((file && file.laws) || []).filter((l) => l.bill_id && safeUrl(l.source_url));
+  if (!laws.length) return "";
   return `<section class="card stack-sm" id="laws">
-  <h2 class="h3">The laws that set these taxes</h2>
-  <p class="small">${esc(LAWS_LINE)}</p>
-  ${items.length ? `<ul class="plain-list stack-sm">${items.join("")}</ul>` : `<p class="small secondary">The list of laws isn't loaded right now.</p>`}
-  <p class="xsmall secondary">${esc((file && file.note) || "Official titles and summaries from Congress.gov.")}</p>
+  ${title("Laws that set these taxes")}
+  <ul class="plain-list tax-rows">${laws.map((l) => `<li><a class="list-row" href="/laws/bills/${esc(l.bill_id)}/"><div><span class="list-title">${esc(l.name)} · ${esc(String(l.year))}</span></div><span class="list-status"><span class="chev" aria-hidden="true">›</span></span></a></li>`).join("")}</ul>
+  <p class="small secondary">${esc(LAWS_LINE)}</p>
 </section>`;
 }
 
@@ -385,10 +449,10 @@ export const taxesSwitch = SWITCH;
 
 const meta = (c) => [c.sic_desc ? esc(c.sic_desc) : "", c.state ? esc(STATE_NAME[c.state] || c.state) : ""].filter(Boolean).join(" · ");
 
-/** One company in the list: name and tickers; industry, state, the latest year's revenue and profit before taxes (dollars only, no rates). */
+/** One company in the list: name and tickers; one gray line with industry, state, the latest year's revenue and profit before taxes (dollars only, no rates). */
 export function companyRow(c) {
   const fy = c.latest_fy ? `FY${c.latest_fy}` : "";
-  const facts = [meta(c), num(c.revenue) != null ? `${esc(fy)} revenue ${esc(money(c.revenue))}` : "", num(c.pretax) != null ? `profit before taxes ${esc(money(c.pretax))}` : ""].filter(Boolean).join(" · ");
+  const facts = [meta(c), num(c.revenue) != null ? `${esc(fy)} revenue ${esc(shortMoney(c.revenue))}` : "", num(c.pretax) != null ? `profit before taxes ${esc(shortMoney(c.pretax))}` : ""].filter(Boolean).join(" · ");
   return `<a class="compact-row" href="${companyHref(c.cik)}">
   <span class="cr-main"><span class="cr-title">${esc(c.name)}${c.tickers ? ` <span class="secondary">(${esc(c.tickers.split(",").join(", "))})</span>` : ""}</span><span class="cr-meta">${facts}</span></span>
   <span class="cr-side"><span class="chev" aria-hidden="true">›</span></span>
@@ -399,33 +463,42 @@ export function listForm(f, inds) {
   const opt = (v, label, cur) => `<option value="${esc(v)}"${v === cur ? " selected" : ""}>${esc(label)}</option>`;
   const states = Object.entries(STATE_NAME).sort((a, b) => a[1].localeCompare(b[1]));
   return `<form class="card stack-sm trade-filters" method="get" action="/taxes/companies/">
-  <label class="label" for="co-q">Name or ticker</label>
+  <label class="tax-field" for="co-q">Name or ticker</label>
   <div class="lookup-row">
     <input class="input" id="co-q" name="q" type="search" value="${esc(f.q)}" placeholder="A company's name or ticker" autocomplete="off" />
     <button class="btn btn--primary" type="submit">Show</button>
   </div>
-  <label class="label" for="co-sic">Industry</label>
+  <label class="tax-field" for="co-sic">Industry</label>
   <select class="input" id="co-sic" name="sic" data-autosubmit>${opt("", "Every industry", f.sic)}${inds.map((i) => opt(i.sic, i.sic_desc, f.sic)).join("")}</select>
-  <label class="label" for="co-state">State (business address)</label>
+  <label class="tax-field" for="co-state">State (business address)</label>
   <select class="input" id="co-state" name="state" data-autosubmit>${opt("", "Every state", f.state)}${states.map(([c, n]) => opt(c, n, f.state)).join("")}</select>
-  <label class="label" for="co-sort">Order</label>
+  <label class="tax-field" for="co-sort">Order</label>
   <select class="input" id="co-sort" name="sort" data-autosubmit>${Object.entries(SORTS).map(([k, label]) => opt(k, label, f.sort)).join("")}</select>
 </form>`;
 }
 
 const KINDS = [
-  ["pac", "Political action committee", "Contributions to members of Congress, as the FEC lists them, by election cycle.", "No political action committee under this exact name, or linked to this company by a person."],
-  ["lobbying", "Federal lobbying", "Lobbying reports (lda.gov) naming it as the client: the income its lobbying firms reported, or its own lobbying expenses, every issue.", "No federal lobbying reports under this exact name."],
-  ["ld203", "Contributions reported by lobbying organizations (LD-203)", "Contributions honoring members of Congress that it reported as a registered lobbying organization.", "No LD-203 reports under this exact name."],
-  ["ca-lobbying", "California lobbying", "Payments for lobbying reported on California Forms 635 and 645.", "No California lobbying reports under this exact name."],
-  ["ca-measures", "California ballot measures, 2026", "Money it gave to committees formed for 2026 statewide measures, or spent on its own.", "None reported under this exact name on 2026 statewide measures."],
+  ["pac", "Political action committee", "contributions"],
+  ["lobbying", "Federal lobbying", "reports"],
+  ["ld203", "Lobbyist contributions (LD-203)", "reports"],
+  ["ca-lobbying", "California lobbying", "reports"],
+  ["ca-measures", "California ballot measures, 2026", "records"],
 ];
 
-function orgFacts(c, orgs) {
-  const rows = KINDS.map(([kind, title, what, none]) => {
-    const mine = orgs.filter((o) => o.kind === kind);
-    if (!mine.length) return `<div class="signer-fact"><p class="label">${esc(title)}</p><p class="small secondary">${esc(none)}</p></div>`;
-    const items = mine.map((o) => {
+/** Federal awards already looked up for this exact name (never queued from here): {total, years} or null. */
+function awardsFacts(awards) {
+  const rec = (awards && awards.recipients) || [];
+  const years = rec.flatMap((r) => (r.years || []).filter((y) => num(y.total) != null && y.total !== 0));
+  if (!years.length) return null;
+  const fys = years.map((y) => y.fy).sort();
+  return { total: years.reduce((t, y) => t + y.total, 0), first: fys[0], last: fys[fys.length - 1] };
+}
+
+/** Only the records that exist, one row each, linked to the latest filing; one line when there are none. */
+function recordsSection(c, orgs, awards) {
+  const rows = [];
+  for (const [kind, label, unit] of KINDS) {
+    for (const o of orgs.filter((x) => x.kind === kind)) {
       let s = {};
       try {
         s = JSON.parse(o.summary || "{}");
@@ -433,92 +506,119 @@ function orgFacts(c, orgs) {
         s = {};
       }
       const years = s.first && s.last ? (s.first === s.last ? s.first : `${s.first}–${s.last}`) : "";
-      const how = o.how === "confirmed" ? "Linked to this company by a person." : "Matched by the same name.";
-      return `<li class="small">${esc(o.org_name)}: ${esc(money(s.total))}${years ? `, ${esc(years)}` : ""}${s.count ? ` (${esc(String(s.count))} ${s.count === 1 ? "record" : "records"})` : ""}. <span class="secondary">${esc(how)}</span> ${s.source_url && safeUrl(s.source_url) ? sourceLink(s.source_url, "Latest filing") : ""}</li>`;
-    });
-    return `<div class="signer-fact"><p class="label">${esc(title)}</p><p class="small secondary">${esc(what)}</p><ul class="plain-list stack-xs">${items.join("")}</ul></div>`;
-  });
-  rows.push(`<div class="signer-fact"><p class="label">Federal awards</p><p class="small"><a class="inline-link" href="/awards/?name=${encodeURIComponent(c.name)}">Contracts and grants under this exact name (USAspending.gov) ›</a></p></div>`);
+      const metaLine = [o.org_name, years, s.count ? `${s.count} ${s.count === 1 ? unit.replace(/s$/, "") : unit}` : "", o.how === "confirmed" ? "linked by a person" : "same name"].filter(Boolean).join(" · ");
+      const inner = `<div><span class="list-title">${esc(label)}</span><span class="list-meta">${esc(metaLine)}</span></div><span class="list-status" title="${esc(exact(s.total))}">${esc(shortMoney(s.total))}</span>`;
+      rows.push(s.source_url && safeUrl(s.source_url) ? `<li><a class="list-row" href="${esc(s.source_url)}" target="_blank" rel="noopener">${inner}</a></li>` : `<li class="list-row">${inner}</li>`);
+    }
+  }
+  const aw = awardsFacts(awards);
+  if (aw) rows.push(`<li><a class="list-row" href="/awards/?name=${encodeURIComponent(c.name)}"><div><span class="list-title">Federal awards</span><span class="list-meta">${esc(`Contracts and grants · fiscal ${aw.first === aw.last ? aw.first : `${aw.first}–${aw.last}`} · USAspending.gov`)}</span></div><span class="list-status" title="${esc(exact(aw.total))}">${esc(shortMoney(aw.total))}</span></a></li>`);
   return `<section class="card stack-sm" id="records">
-  <h2 class="h3">In ThePillory's other records</h2>
-  <p class="small secondary">Under this company's exact name, or an organization a person has linked to it; one company per name. Shown side by side as facts. ThePillory doesn't connect them to the taxes above.</p>
-  ${rows.join("")}
+  ${title("Other records under this name")}
+  ${rows.length ? `<ul class="plain-list tax-rows">${rows.join("")}</ul>
+  <p class="small secondary">Shown side by side as facts. ThePillory doesn't connect them to the taxes above.</p>` : `<p class="small secondary">${esc(NO_RECORDS)}</p>`}
 </section>`;
 }
 
-/** The top card: the latest year, short and big. */
-function topCard(c, years, latest) {
-  const p = num(latest.taxes_paid);
-  const b = num(latest.pretax);
-  const paid = p == null ? `Income taxes paid: ${NOT_REPORTED}` : p < 0 ? `Received ${valueLink(c.cik, { ...latest, taxes_paid: -p }, "taxes_paid", { short: true })} more in income tax refunds than it paid` : `Paid ${valueLink(c.cik, latest, "taxes_paid", { short: true })} in income taxes`;
-  const share = shareOfProfit(p, b);
-  const profit = b == null ? `Profit before taxes: ${NOT_REPORTED}` : b < 0 ? `Loss before taxes: ${valueLink(c.cik, { ...latest, pretax: -b }, "pretax", { short: true })}` : `Profit before taxes: ${valueLink(c.cik, latest, "pretax", { short: true })}`;
+/** The filing a year's figures come from (its taxes paid, else profit before taxes, else any value). */
+const yearAccn = (y) => {
+  const src = srcOf(y);
+  return src.taxes_paid || src.pretax || Object.values(src)[0] || null;
+};
+
+/** The top card: the fiscal year, the U.S. figure first, then the total worldwide, then the years together. */
+function topCard(c, years, latest, tree) {
+  const fig = (label, amount, line, split = "") => `<div class="tax-fig">
+    <p>${esc(label)}</p>
+    <p class="hero-num"${num(amount) != null ? ` title="${esc(exact(amount))}"` : ""}>${esc(shortMoney(amount))}</p>
+    ${line ? `<p>${esc(line)}</p>` : ""}
+    ${split ? `<p class="small secondary">${esc(split)}</p>` : ""}
+  </div>`;
+  const us = usTaxes(tree);
+  const usFig = us
+    ? fig(us.label, us.amount, profitLine(us.amount, latest.pretax_us, "us"), us.split ? `U.S. government ${shortMoney(us.split[0].amount)} · States ${shortMoney(us.split[1].amount)}${us.sum ? ` (${SUM_NOTE})` : ""}` : "")
+    : "";
   const multi = multiYear(years);
   return `<section class="card stack-sm tax-top" id="latest">
-  <p class="label">${esc(fyLabel(latest))}</p>
-  <p class="tax-big">${paid}</p>
-  <p class="tax-sub">${profit}${share.pct != null ? ` · Taxes were ${share.pct}% of profit` : ""}</p>
-  ${multi && multi.share.pct != null ? `<p class="small secondary">${esc(yearsShort(multi.years))}: ${multi.share.pct}% of profit</p>` : ""}
+  ${title(fyLabel(latest))}
+  ${usFig}
+  ${fig("Total taxes paid worldwide", latest.taxes_paid, profitLine(latest.taxes_paid, latest.pretax, "total"))}
+  ${multi && multi.share.pct != null ? `<p class="small secondary">${esc(yearsShort(multi.years))}: ${multi.share.pct}% of total profit</p>` : ""}
+  <p class="small secondary">${esc(RATE_LINE)}</p>
+  ${from10k(filingUrl(c.cik, yearAccn(latest)))}
 </section>`;
 }
 
-/** The U.S. line, where the profit was made and where the taxes went: only what the 10-K tags. */
-function placesCard(c, latest, jurisdictions) {
-  const us = usLine(latest);
-  const pu = num(latest.pretax_us);
-  const pf = num(latest.pretax_foreign);
-  const where = [pu != null ? `U.S. ${valueLink(c.cik, latest, "pretax_us", { short: true })}` : "", pf != null ? `Outside the U.S. ${valueLink(c.cik, latest, "pretax_foreign", { short: true })}` : ""].filter(Boolean).join(" · ");
-  const { rows, places } = placeRows(latest, jurisdictions);
-  if (!us && !where && !rows.length) return "";
-  const row = (r) => `<div class="kv-row"><dt>${esc(r.label)}</dt><dd>${r.field ? valueLink(c.cik, latest, r.field, { short: true }) : amountLink(c.cik, r.accn, r.amount)}</dd></div>`;
+/** Where the taxes went: every place the 10-K lists, under its group, adding up to the total. Hidden without a breakdown. */
+function placesCard(c, latest, jurisdictions, tree) {
+  if (!tree.any) return "";
+  const rows = [];
+  for (const g of GROUPS) {
+    const x = tree.groups[g];
+    if (!x) continue;
+    rows.push(amountRow(GROUP_LABEL[g], x.amount, { meta: x.how === "sum" ? SUM_NOTE[0].toUpperCase() + SUM_NOTE.slice(1) : "" }));
+    for (const p of x.places) rows.push(amountRow(p.label, p.amount, { sub: true }));
+  }
+  if (tree.gap != null) {
+    const g = gapRow(tree.gap);
+    rows.push(amountRow(g.label, g.amount));
+  }
+  if (tree.total != null) rows.push(amountRow("Total", tree.total));
+  const accn = (jurisdictions || []).find((j) => j.period_end === latest.period_end && j.accn)?.accn || srcOf(latest).paid_federal || srcOf(latest).paid_state || srcOf(latest).paid_foreign || yearAccn(latest);
   return `<section class="card stack-sm" id="places">
-  ${us ? `<p class="tax-us">${esc(us)}</p>` : ""}
-  ${where ? `<p class="label">Where the profit was made</p><p class="small">${where}</p>` : ""}
-  ${rows.length ? `<p class="label">Where the taxes went</p>
-  <dl class="kv kv--tight kv--amounts">${rows.map(row).join("")}</dl>
-  ${places ? `<p class="xsmall secondary">Places getting 5% or more, as listed in the 10-K.</p>` : ""}` : ""}
+  ${title("Where the taxes went")}
+  <ul class="plain-list tax-rows">${rows.join("")}</ul>
+  ${from10k(filingUrl(c.cik, accn))}
 </section>`;
+}
+
+/** Every value by year, exact; each year's column heading links to its 10-K (a value from another filing links to that one). */
+function numbersTable(c, years) {
+  const heads = years.map((y) => {
+    const href = filingUrl(c.cik, yearAccn(y));
+    return `<th scope="col">${href ? `<a class="inline-link" href="${esc(href)}" target="_blank" rel="noopener">${esc(fyShort(y))}</a>` : esc(fyShort(y))}</th>`;
+  });
+  const cell = (y, f) => {
+    const v = num(y[f]);
+    const accn = srcOf(y)[f];
+    if (v == null) return esc(NOT_REPORTED);
+    return accn && accn !== yearAccn(y) && filingUrl(c.cik, accn) ? `<a class="inline-link" href="${esc(filingUrl(c.cik, accn))}" target="_blank" rel="noopener">${esc(exact(v))}</a>` : esc(exact(v));
+  };
+  return `<div class="table-scroll"><table class="usage-table tax-table"><thead><tr><th scope="col">Value</th>${heads.join("")}</tr></thead><tbody>${TABLE_FIELDS.map((f) => `<tr><th scope="row">${esc(LABELS[f])}</th>${years.map((y) => `<td>${cell(y, f)}</td>`).join("")}</tr>`).join("")}<tr><th scope="row">Taxes as a share of profit</th>${years.map((y) => `<td>${esc(shareText(shareOfProfit(y.taxes_paid, y.pretax)))}</td>`).join("")}</tr></tbody></table></div>
+  <p class="small secondary">Taxes as a share of profit is income taxes actually paid ÷ profit before taxes. Fiscal years: ${years.map((y) => esc(fiscalYear(y))).join("; ")}. Each year links to its 10-K.</p>`;
 }
 
 /** The company page's main content. */
-export function companyMain({ company: c, years, jurisdictions, orgs, laws = null }) {
+export function companyMain({ company: c, years, jurisdictions, orgs, awards = null, laws = null }) {
   const latest = [...years].reverse().find((y) => num(y.taxes_paid) != null || num(y.pretax) != null) || years[years.length - 1] || null;
   const head = `<header class="page-head">
-  <p class="label">Corporation · SEC filer</p>
   <h1>${esc(c.name)}</h1>
-  <p class="subtitle">${[c.tickers ? esc(c.tickers.split(",").join(", ")) : "", meta(c)].filter(Boolean).join(" · ")}</p>
+  <p class="subtitle small">${[c.tickers ? esc(c.tickers.split(",").join(", ")) : "", meta(c)].filter(Boolean).join(" · ")}</p>
 </header>`;
+  const about = fold(
+    "about",
+    "About these numbers",
+    `${READING}
+  <p class="small">From ${esc(c.name)}'s 10-K filings with the SEC (XBRL financial data), loaded weekly. A restated year shows the latest filing's value. "Not reported" means the filing doesn't tag that value; nothing is estimated. U.S. taxes are federal plus state and local income taxes paid; U.S. profit is income before income taxes, domestic. ${sourceLink(c.source_url, "The company's 10-K filings")}</p>
+  <div class="table-scroll"><table class="usage-table tax-terms"><thead><tr><th scope="col">On this page</th><th scope="col">In the 10-K</th><th scope="col">XBRL element (us-gaap)</th></tr></thead><tbody>${TABLE_FIELDS.map((f) => `<tr><th scope="row">${esc(LABELS[f])}</th><td>${esc(filingTerm(f, latest))}</td><td class="xbrl-note">${f === "pretax" ? "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest, or where that isn't tagged …MinorityInterestAndIncomeLossFromEquityMethodInvestments (it leaves out income from equity-method investments)" : f === "revenue" ? "Revenues or RevenueFromContractWithCustomer…" : esc(ELEMENTS[f])}</td></tr>`).join("")}</tbody></table></div>
+  <p class="small secondary">Where the taxes went is the 10-K's own breakdown of taxes paid (IncomeTaxAuthorityAxis): every place it lists, including its "other" groups. A group whose total isn't tagged shows the ${SUM_NOTE}. Companies' own (extension) elements aren't used for amounts. <a class="inline-link" href="${TAXES_METHOD}">How this works ›</a></p>`
+  );
   if (!latest) {
-    return `${head}<section class="card"><p class="small secondary">No fiscal year with these values is tagged in this company's 10-K filings yet.</p></section>${lawsSection(laws)}${READING}`;
+    return `<div class="tax-page">${head}<section class="card"><p class="small secondary">No fiscal year with these values is tagged in this company's 10-K filings yet.</p></section>${lawsSection(laws)}${about}</div>`;
   }
+  const tree = taxesTree(latest, jurisdictions);
+  const table = numbersTable(c, years);
   const chart = pairBars(
-    years.map((y) => ({ label: fiscalYear(y), tick: y.fy ? `'${String(y.fy).slice(2)}` : y.period_end.slice(2, 4), a: num(y.taxes_paid), b: num(y.pretax), hrefA: filingUrl(c.cik, srcOf(y).taxes_paid), hrefB: filingUrl(c.cik, srcOf(y).pretax) })),
-    { series: [LABELS.taxes_paid, LABELS.pretax], format: exact, head: "Fiscal year", caption: "By fiscal year, as each 10-K reports them. A bar below the line is a loss. A missing bar is a value the filing doesn't tag.", ariaLabel: `${c.name}: income taxes actually paid and profit before taxes by fiscal year` }
+    years.map((y) => ({ label: fiscalYear(y), tick: y.fy ? `'${String(y.fy).slice(2)}` : y.period_end.slice(2, 4), a: num(y.taxes_paid), b: num(y.pretax) })),
+    { series: ["Taxes paid", LABELS.pretax], format: exact, caption: "A bar below the line is a loss.", table, ariaLabel: `${c.name}: income taxes actually paid and profit before taxes by fiscal year` }
   );
-  const all = fold(
-    "numbers",
-    "Show the numbers",
-    `<div class="table-scroll"><table class="usage-table tax-table"><thead><tr><th scope="col">Value</th>${years.map((y) => `<th scope="col">${esc(fyShort(y))}</th>`).join("")}</tr></thead><tbody>${TABLE_FIELDS.map((f) => `<tr><th scope="row">${esc(LABELS[f])}</th>${years.map((y) => `<td>${valueLink(c.cik, y, f)}</td>`).join("")}</tr>`).join("")}<tr><th scope="row">Taxes as a share of profit</th>${years.map((y) => `<td>${esc(shareText(shareOfProfit(y.taxes_paid, y.pretax)))}</td>`).join("")}</tr></tbody></table></div>
-  <p class="xsmall secondary">Taxes as a share of profit is income taxes actually paid ÷ profit before taxes. Fiscal years: ${years.map((y) => esc(fiscalYear(y))).join("; ")}.</p>`,
-    { meta: `${years.length} ${years.length === 1 ? "year" : "years"}` }
-  );
-  const technical = fold(
-    "technical",
-    "Technical details",
-    `<div class="table-scroll"><table class="usage-table tax-terms"><thead><tr><th scope="col">On this page</th><th scope="col">In the 10-K</th><th scope="col">XBRL element (us-gaap)</th></tr></thead><tbody>${TABLE_FIELDS.map((f) => `<tr><th scope="row">${esc(LABELS[f])}</th><td>${esc(filingTerm(f, latest))}</td><td class="xbrl-note">${f === "pretax" ? "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest, or where that isn't tagged …MinorityInterestAndIncomeLossFromEquityMethodInvestments (it leaves out income from equity-method investments)" : f === "revenue" ? "Revenues or RevenueFromContractWithCustomer…" : esc(ELEMENTS[f])}</td></tr>`).join("")}</tbody></table></div>
-  <p class="xsmall secondary">U.S. taxes on this page are federal income taxes paid; U.S. profit is income before income taxes, domestic. Companies' own (extension) elements aren't used.</p>`
-  );
-  const source = `<p class="hint">From ${esc(c.name)}'s 10-K filings with the SEC (XBRL financial data), loaded weekly; a restated year shows the latest filing's value. Each amount links to the 10-K it's from; "Not reported" means the filing doesn't tag that value, and nothing is estimated. ${sourceLink(c.source_url, "The company's 10-K filings")}</p>`;
-  return `${head}
-${topCard(c, years, latest)}
-${placesCard(c, latest, jurisdictions)}
-<section class="card stack-sm" id="years"><h2 class="h3">Over the years</h2>${chart || `<p class="small secondary">The chart starts once the 10-K filings tag these values for two fiscal years; ${years.length === 1 ? "one is" : "none are"} tagged so far.</p>`}</section>
+  return `<div class="tax-page">${head}
+${topCard(c, years, latest, tree)}
+${placesCard(c, latest, jurisdictions, tree)}
+<section class="card stack-sm" id="years">${title("Over the years")}${chart || `<details class="mini-bars-table"><summary>Show the numbers</summary>${table}</details>`}</section>
 ${lawsSection(laws)}
-${all}
-${READING}
-${orgFacts(c, orgs)}
-${source}
-${technical}`;
+${recordsSection(c, orgs, awards)}
+${about}</div>`;
 }
 
 // ---------------------------------------------------------------------------

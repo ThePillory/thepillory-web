@@ -162,6 +162,9 @@ class Jurisdictions(unittest.TestCase):
         b = C.breakdown({"period_end": "2025-12-31", "taxes_paid": 1232000000, "paid_federal": 28000000}, rows)
         self.assertEqual(b["parts"]["foreign"], 751000000.0)
         self.assertEqual(b["gap"], 302000000)
+        # A tagged state total that its places don't reach: reported too.
+        b = C.breakdown({"period_end": "2025-12-31", "taxes_paid": 1232000000, "paid_federal": 28000000, "paid_state": 160000000}, C.jurisdictions(TESLA, {"CN": "China"}.get))
+        self.assertEqual(b["inner"], {"state": 9000000})
 
     def test_totals_filed_as_members(self):
         xml = "<xbrl>" + "".join([
@@ -169,7 +172,7 @@ class Jurisdictions(unittest.TestCase):
             fact_xml("IncomeTaxesPaidNet", "t", 100), fact_xml("IncomeTaxesPaidNet", "dom", 50), fact_xml("IncomeTaxesPaidNet", "st", 10), fact_xml("IncomeTaxesPaidNet", "fo", 40),
         ]) + "</xbrl>"
         rows = C.jurisdictions(xml, lambda c: None)
-        self.assertEqual(C.breakdown({"period_end": "2025-12-31", "taxes_paid": 100}, rows), {"total": 100, "parts": {"federal": 50.0, "state": 10.0, "foreign": 40.0}, "gap": 0})
+        self.assertEqual(C.breakdown({"period_end": "2025-12-31", "taxes_paid": 100}, rows), {"total": 100, "parts": {"federal": 50.0, "state": 10.0, "foreign": 40.0}, "gap": 0, "inner": {}})
 
     def test_breakdown_filings_are_original_10ks_since_december_2024(self):
         sub = {"filings": {"recent": {"form": ["10-K/A", "10-K", "10-K", "10-Q"], "accessionNumber": ["a", "b", "c", "d"],

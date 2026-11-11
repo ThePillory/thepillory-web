@@ -66,7 +66,7 @@ export function irsSlices(irs, year) {
 }
 
 function irsSection(irs) {
-  if (!irs || !irs.groups) return `<section class="card stack-sm"><h2 class="h3">Federal income tax, by income group</h2><p class="small secondary">The IRS's tables aren't loaded yet.</p></section>`;
+  if (!irs || !irs.groups) return `<section class="card stack-sm"><h2 class="tax-title">Federal income tax, by income group</h2><p class="small secondary">The IRS's tables aren't loaded yet.</p></section>`;
   const year = String(irs.years[1]);
   const g = Object.fromEntries(irs.groups.map((x) => [x.id, x]));
   const { rows: slices, total, allRate } = irsSlices(irs, year);
@@ -85,13 +85,13 @@ function irsSection(irs) {
       { series: ["Share of adjusted gross income", "Share of total income tax"], format: (v) => pct(v, 2), head: "Tax year", ariaLabel: `${g[id].label}: shares of income and of income tax by year`, caption: `${esc(g[id].label)} of returns, ${years[0]}–${years[years.length - 1]}.` }
     );
   const irsGroups = `${table(["Group", "Returns", "AGI at least", "Share of income", "Share of tax"], irsRows)}
-  <p class="xsmall secondary">These are the IRS's own groups. Each includes the ones above it: the top 10 percent includes the top 1 percent, so these shares don't add up to 100%.</p>`;
+  <p class="small secondary">These are the IRS's own groups. Each includes the ones above it: the top 10 percent includes the top 1 percent, so these shares don't add up to 100%.</p>`;
   return `<section class="card stack-sm" id="irs">
-  <h2 class="h3">Federal income tax, by income group (tax year ${esc(year)})</h2>
+  <h2 class="tax-title">Federal income tax, by income group (tax year ${esc(year)})</h2>
   <p class="small">Individual income tax returns, grouped by adjusted gross income (AGI).</p>
   ${table(["Group", "Returns", "Share of income", "Share of tax", "Average tax rate"], sliceRows)}
   <p class="small">Each row is a separate group; the rows add up to all returns.</p>
-  <p class="xsmall secondary">ThePillory computed each row from the IRS's own figures for its groups: a group minus the one above it (the next 0.9% is the top 1% minus the top 0.1%). Share of income is the row's share of all AGI on every return; share of tax is its share of all federal income tax, after credits. Average tax rate is the row's share of tax divided by its share of income, times the IRS's average tax rate for all returns${allRate != null ? ` (${esc(pct(allRate))} in ${esc(year)})` : ", which isn't loaded yet"}: total income tax as a percent of AGI. Returns are rounded (M is millions); the exact figures are in the IRS's tables. Federal income tax only: payroll, excise, estate and state taxes aren't in these tables. Returns of dependents aren't counted. ${sourceLink(irs.source_url, "IRS Statistics of Income, Tables 4.1 and 4.2")}</p>
+  <p class="small secondary">ThePillory computed each row from the IRS's own figures for its groups: a group minus the one above it (the next 0.9% is the top 1% minus the top 0.1%). Share of income is the row's share of all AGI on every return; share of tax is its share of all federal income tax, after credits. Average tax rate is the row's share of tax divided by its share of income, times the IRS's average tax rate for all returns${allRate != null ? ` (${esc(pct(allRate))} in ${esc(year)})` : ", which isn't loaded yet"}: total income tax as a percent of AGI. Returns are rounded (M is millions); the exact figures are in the IRS's tables. Federal income tax only: payroll, excise, estate and state taxes aren't in these tables. Returns of dependents aren't counted. ${sourceLink(irs.source_url, "IRS Statistics of Income, Tables 4.1 and 4.2")}</p>
   ${series("top-1")}
   ${series("bottom-50")}
 </section>
@@ -105,7 +105,7 @@ function top400Section(t) {
     format: (v) => pct(v, 2), head: ["Tax year", "Top 400's share of all AGI"], caption: `The 400 returns with the largest AGI each year: their share of all AGI, ${t.rows[0].year}–${last.year}.`, ariaLabel: "The top 400 returns' share of all adjusted gross income by year",
   });
   return `<section class="card stack-sm" id="top-400">
-  <h2 class="h3">The 400 returns with the largest incomes</h2>
+  <h2 class="tax-title">The 400 returns with the largest incomes</h2>
   <dl class="kv kv--tight">
     <div class="kv-row"><dt>Tax year</dt><dd>${esc(String(last.year))} (the IRS's latest edition of this series)</dd></div>
     <div class="kv-row"><dt>AGI to be among them, at least</dt><dd>${esc(money(last.cutoff))}</dd></div>
@@ -113,7 +113,7 @@ function top400Section(t) {
     <div class="kv-row"><dt>Their share of all AGI</dt><dd>${esc(pct(last.agi_share, 2))}</dd></div>
   </dl>
   ${chart}
-  <p class="xsmall secondary">The group changes from year to year: these are the 400 largest that year, not the same people. Since 2014 the IRS has published the top 0.001 percent of returns (about 1,500) in its percentile tables instead, shown above. The report also lists the group's income tax, deductions and credits. ${sourceLink(t.source_url, "IRS, the 400 returns with the largest AGI, 1992–2014")}</p>
+  <p class="small secondary">The group changes from year to year: these are the 400 largest that year, not the same people. Since 2014 the IRS has published the top 0.001 percent of returns (about 1,500) in its percentile tables instead, shown above. The report also lists the group's income tax, deductions and credits. ${sourceLink(t.source_url, "IRS, the 400 returns with the largest AGI, 1992–2014")}</p>
 </section>`;
 }
 
@@ -124,17 +124,17 @@ function ftbSection(f) {
   );
   rows.push(tr(["All returns", esc(shortCount(f.total.returns)), "100%", esc(shortDollars(f.total.tax)), "100%"]));
   return `<section class="card stack-sm" id="california">
-  <h2 class="h3">California personal income tax (tax year ${esc(String(f.year))})</h2>
+  <h2 class="tax-title">California personal income tax (tax year ${esc(String(f.year))})</h2>
   <p class="small">California residents' returns, all filing statuses, by California adjusted gross income.</p>
   ${table(["AGI", "Returns", "Share of returns", "Tax", "Share of tax"], rows)}
-  <p class="xsmall secondary">Tax is total California tax liability. Share of returns is each band's share of all resident returns; share of tax is its share of all California personal income tax liability. Returns and dollar amounts are rounded (M is millions, K thousands, B billions); the exact figures are in the FTB's table. From the Franchise Tax Board's table B-4A. ThePillory added its ${esc(String(f.classes))} income classes up into these bands and computed the shares from its figures. ${sourceLink(f.source_url, "Franchise Tax Board, table B-4A (data.ca.gov)")}</p>
+  <p class="small secondary">Tax is total California tax liability. Share of returns is each band's share of all resident returns; share of tax is its share of all California personal income tax liability. Returns and dollar amounts are rounded (M is millions, K thousands, B billions); the exact figures are in the FTB's table. From the Franchise Tax Board's table B-4A. ThePillory added its ${esc(String(f.classes))} income classes up into these bands and computed the shares from its figures. ${sourceLink(f.source_url, "Franchise Tax Board, table B-4A (data.ca.gov)")}</p>
 </section>`;
 }
 
 function cboSection(c) {
   if (!c) return "";
   return `<section class="card stack-sm" id="cbo">
-  <h2 class="h3">All federal taxes, by household income</h2>
+  <h2 class="tax-title">All federal taxes, by household income</h2>
   <p class="small">The Congressional Budget Office estimates every federal tax a household pays, income, payroll, corporate and excise taxes, by income group: ${esc(c.title)}.</p>
   <p class="small secondary">${esc(c.note)}</p>
   <p>${sourceLink(c.source_url, `CBO, ${c.title}`)}</p>
@@ -151,7 +151,7 @@ export const NOT_COUNTED = [
 
 function notCountedSection() {
   return `<section class="card stack-sm" id="not-counted">
-  <h2 class="h3">What these numbers don’t count</h2>
+  <h2 class="tax-title">What these numbers don’t count</h2>
   <ul class="simple-list">${NOT_COUNTED.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
   <p class="small secondary">Different measures give different rates for the same group. Each table below says what it counts.</p>
 </section>`;
@@ -171,22 +171,22 @@ export const UNSOLD_GAINS = {
 function unsoldGainsSection() {
   const u = UNSOLD_GAINS;
   return `<section class="card stack-sm" id="unsold-gains">
-  <h2 class="h3">Counting unsold gains: one estimate</h2>
+  <h2 class="tax-title">Counting unsold gains: one estimate</h2>
   <p><span class="chip chip--gray chip--sm">An estimate, not official tax data</span></p>
   <p>The 400 wealthiest families’ average federal individual income tax rate was ${esc(u.rate)} of their income, counting unsold gains as income, over ${esc(u.years)}, according to a 2021 analysis by the White House Council of Economic Advisers and the Office of Management and Budget.</p>
   <ul class="simple-list"><li>${esc(u.method)}</li><li>${esc(u.criticism)}</li></ul>
-  <p class="xsmall secondary">These are the families with the most wealth, not the 400 returns with the largest reported incomes above. ${sourceLink(u.source_url, u.source)}</p>
+  <p class="small secondary">These are the families with the most wealth, not the 400 returns with the largest reported incomes above. ${sourceLink(u.source_url, u.source)}</p>
 </section>`;
 }
 
 /** The page's main content. */
 export function taxpayersMain(d, switcher) {
-  const head = `<header class="page-head">
+  const head = `<div class="tax-page"><header class="page-head">
   <h1>Taxes</h1>
   <p class="subtitle">Who pays federal and California income taxes, by income, from the IRS's and the Franchise Tax Board's own tables.</p>
 </header>
 ${switcher}`;
-  if (!d) return `${head}<section class="card"><p class="small secondary">These tables load weekly from the IRS and the Franchise Tax Board. They aren't loaded yet.</p></section>`;
+  if (!d) return `${head}<section class="card"><p class="small secondary">These tables load weekly from the IRS and the Franchise Tax Board. They aren't loaded yet.</p></section></div>`;
   return `${head}
 ${notCountedSection()}
 ${irsSection(d.irs)}
@@ -194,8 +194,6 @@ ${top400Section(d.top400)}
 ${unsoldGainsSection()}
 ${cboSection(d.cbo)}
 ${ftbSection(d.ftb)}
-<section class="card stack-sm">
-  <p class="label">About these tables</p>
-  <p class="small">The figures are as each agency publishes them. They describe who paid what in a year; they don't say what anyone should pay. Returns are counted, never people's names. <a class="inline-link" href="${TAXES_METHOD}">How this works</a></p>
-</section>`;
+${fold("about", "About these tables", `<p class="small">The figures are as each agency publishes them. They describe who paid what in a year; they don't say what anyone should pay. Returns are counted, never people's names. <a class="inline-link" href="${TAXES_METHOD}">How this works ›</a></p>`)}
+</div>`;
 }

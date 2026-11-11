@@ -341,7 +341,7 @@ def breakdown(year, rows):
     parts don't add up to its total. -> {total, parts: {federal, state, foreign}, gap} (None when unknown)."""
     rows = [r for r in rows if r["period_end"] == year["period_end"]]
     field = {"federal": "paid_federal", "state": "paid_state", "foreign": "paid_foreign"}
-    parts = {}
+    parts, inner = {}, {}
     for g in ("federal", "state", "foreign"):
         tagged = year.get(field[g])
         if tagged is None:
@@ -353,10 +353,12 @@ def breakdown(year, rows):
                 if r["jurisdiction"] not in places or r["element"] != "IncomeTaxesPaidNet":
                     places[r["jurisdiction"]] = r["amount"]
         parts[g] = tagged if tagged is not None else (sum(places.values()) if places else None)
+        if tagged is not None and places and abs(sum(places.values()) - tagged) >= 1:
+            inner[g] = round(tagged - sum(places.values()), 2)
     total = year.get("taxes_paid")
     known = [v for v in parts.values() if v is not None]
     gap = None if total is None or not known else round(total - sum(known), 2)
-    return {"total": total, "parts": parts, "gap": gap}
+    return {"total": total, "parts": parts, "gap": gap, "inner": inner}
 
 
 def upsert(table, cols, keys, rows, per=50):
@@ -542,11 +544,11 @@ def report_breakdowns(args, companies, years, jur):
             none += 1
             continue
         b = breakdown(y, mine)
-        (ok if b["gap"] == 0 else off).append((c["cik"], names[c["cik"]], y["period_end"], b))
+        (ok if b["gap"] == 0 and not b["inner"] else off).append((c["cik"], names[c["cik"]], y["period_end"], b))
     say(f"Taxes paid by place: {len(ok)} companies add up, {len(off)} don't, {none} file no breakdown")
     for cik, name, end, b in off:
         p = b["parts"]
-        say(f"  doesn't add up: {name} (CIK {cik}) {end}: total {b['total']}, federal {p['federal']}, state {p['state']}, foreign {p['foreign']}, gap {b['gap']}")
+        say(f"  doesn't add up: {name} (CIK {cik}) {end}: total {b['total']}, federal {p['federal']}, state {p['state']}, foreign {p['foreign']}, gap {b['gap']}, inside groups {b['inner'] or 'none'}")
 
 
 def ensure_tables(args):
