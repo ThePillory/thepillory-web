@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=GA&candidate_status=C",
- "built_on": "2026-11-10",
+ "built_on": "2026-11-12",
  "senate_up": true,
  "senate": [
   {
@@ -605,7 +605,7 @@
     "id": "H6GA13062",
     "name": "BLAIR, EVERTON",
     "party": "DEMOCRATIC PARTY",
-    "incumbent": false,
+    "incumbent": true,
     "url": "https://www.fec.gov/data/candidate/H6GA13062/",
     "committee": null
    },

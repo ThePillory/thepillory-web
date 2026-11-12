@@ -3,7 +3,7 @@
  "year": 2026,
  "source": "Federal Election Commission, candidate filings (statutory candidates active in 2026)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=CA&candidate_status=C",
- "built_on": "2026-11-10",
+ "built_on": "2026-11-12",
  "senate_up": false,
  "senate": [],
  "house": {
@@ -36,7 +36,7 @@
     "id": "H6CA01269",
     "name": "MCGUIRE, MIKE",
     "party": "DEMOCRATIC PARTY",
-    "incumbent": false,
+    "incumbent": true,
     "url": "https://www.fec.gov/data/candidate/H6CA01269/",
     "committee": "C00926519"
    },
@@ -622,7 +622,7 @@
     "id": "H0CA15213",
     "name": "WAHAB, AISHA",
     "party": "DEMOCRATIC PARTY",
-    "incumbent": false,
+    "incumbent": true,
     "url": "https://www.fec.gov/data/candidate/H0CA15213/",
     "committee": "C00933036"
    }
