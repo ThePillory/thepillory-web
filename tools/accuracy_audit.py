@@ -954,17 +954,40 @@ def voice_votes(args):
     say()
 
 
+def clerk_petitions(args):
+    """Read-only: the House Clerk's discharge petition data, as its own page loads it."""
+    say("## 11. House Clerk discharge petitions")
+    say()
+    js = fetch("https://clerk.house.gov/scripts/main.min.js")
+    for mm in list(re.finditer(r".{0,400}DischargePetition.{0,600}", js))[:6]:
+        say(f"- main.min.js: {mm.group(0)!r}")
+    page = fetch("https://clerk.house.gov/DischargePetition")
+    for mm in list(re.finditer(r".{0,300}DischargePetitions.{0,900}", page))[:4]:
+        say(f"- page: {mm.group(0)!r}")
+    for mm in list(re.finditer(r"<script(?![^>]*src)[^>]*>(.{0,3000}?)</script>", page, re.S))[:12]:
+        body = re.sub(r"\s+", " ", mm.group(1)).strip()
+        if body and ("etition" in body or "ajax" in body.lower() or "fetch" in body.lower()):
+            say(f"- inline script: {body[:2500]!r}")
+    for url in ["https://clerk.house.gov/DischargePetition/DischargePetitions", "https://clerk.house.gov/DischargePetition/DischargePetitions?congress=119",
+                "https://clerk.house.gov/DischargePetition?Congress=119"]:
+        r = re.sub(r"\s+", " ", fetch(url))
+        say(f"- {url}: {len(r)} characters: {r[:1500]!r}")
+    for mm in list(re.finditer(r'href="(/DischargePetition/[^"]+)"', page))[:10]:
+        say(f"- petition link: {mm.group(1)}")
+    say()
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--database", default="pillory")
-    ap.add_argument("--only", default="1,2,3,4,5,6,7,8,9,10")
+    ap.add_argument("--only", default="1,2,3,4,5,6,7,8,9,10,11")
     args = ap.parse_args()
     only = set(args.only.split(","))
     say("# Accuracy audit")
     say()
     say(f"Run {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}. Reads D1 and the sources; changes nothing.")
     say()
-    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage), ("7", sync_cost), ("8", tax_laws), ("9", company_xbrl), ("10", voice_votes)):
+    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage), ("7", sync_cost), ("8", tax_laws), ("9", company_xbrl), ("10", voice_votes), ("11", clerk_petitions)):
         if k in only:
             try:
                 fn(args)
