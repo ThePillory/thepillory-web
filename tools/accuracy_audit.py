@@ -835,7 +835,7 @@ def company_xbrl(args):
         say(f"> Labels not read: {type(e).__name__}: {str(e)[:200]}")
 
 
-VV_BILLS = [b for b in (os.environ.get("VV_BILLS") or "119-hr-9237,119-hr-2102").split(",") if b]
+VV_BILLS = [b for b in (os.environ.get("VV_BILLS") or "119-hr-9237,119-hr-2102,119-hr-8595").split(",") if b]
 
 
 def voice_votes(args):
@@ -860,7 +860,7 @@ def voice_votes(args):
             say()
             rel = congress_api(f"/bill/{c}/{t}/{n}/relatedbills?limit=250").get("relatedBills", [])
             say(f"Related bills ({len(rel)}):")
-            for r in (rel if os.environ.get("VV_ALL_RELATED") else rel[:40]):
+            for r in rel:
                 say(f"- {r.get('type')} {r.get('number')} ({r.get('congress')}): {r.get('title')!r} | {r.get('relationshipDetails')!r}")
             say()
             co = congress_api(f"/bill/{c}/{t}/{n}/cosponsors?limit=5")
