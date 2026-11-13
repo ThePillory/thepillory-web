@@ -9,6 +9,7 @@ import { OUTCOME_LABEL } from "./executive.js";
 import { orderShort, orderHref } from "./orders.js";
 import { billHref } from "./votes.js";
 import { fmtDate } from "./render.js";
+import { METHOD_SHORT, NOT_RECORDED } from "../../workers/sync/src/passages/parse.js";
 
 export const PER_PAGE = 25;
 const PUBLIC = "(a.status = 'reviewed' OR (a.status = 'ai_draft' AND a.ai_review = 'pass'))";
@@ -34,6 +35,8 @@ const SHORT_CHAMBER = { "us-house": "House", "us-senate": "Senate", "ca-assembly
 export function listBillStatus(b) {
   if (b.outcome && b.outcome !== "presented") return OUTCOME_LABEL[b.outcome] || b.outcome;
   if (b.outcome === "presented") return b.level === "federal" ? "Presented to the President" : "Presented to the Governor";
+  // Passed without a recorded vote (bill_list.passage_*, set when it's the latest final action).
+  if (b.passage_method) return `Passed · ${SHORT_CHAMBER[b.passage_chamber] || ""} · ${(METHOD_SHORT[b.passage_method] || "").toLowerCase()}`;
   if (b.final_result) return `${b.final_result}${SHORT_CHAMBER[b.final_chamber] ? ` · ${SHORT_CHAMBER[b.final_chamber]}` : ""}`;
   return "Recorded votes";
 }
@@ -84,7 +87,9 @@ export async function billRows(db, { filter = "all", offset = 0 }) {
         type: b.bill_number,
         title: b.title,
         status: listBillStatus(b),
-        meta: b.outcome && b.outcome !== "presented" ? fmtDate(b.outcome_date) : fmtDate(any ? b.last_vote : b.last_final),
+        meta: b.outcome && b.outcome !== "presented" ? fmtDate(b.outcome_date)
+          : b.passage_method && !b.outcome ? `${fmtDate(b.passage_date)} · ${NOT_RECORDED}`
+          : fmtDate(any ? b.last_vote : b.last_final),
         clause: clauses.get(b.bill_id) || null,
       })),
     };
@@ -150,7 +155,7 @@ export async function constitutionRows(db, { clause = null, offset = 0 }) {
   try {
     const { results } = await db
       .prepare(
-        `SELECT a.bill_id AS id, a.clauses, b.bill_number, b.title AS bill_title, l.outcome, l.final_result, l.final_chamber, l.level AS list_level,
+        `SELECT a.bill_id AS id, a.clauses, b.bill_number, b.title AS bill_title, l.outcome, l.final_result, l.final_chamber, l.level AS list_level, l.passage_method, l.passage_chamber,
                 x.number, x.kind, x.title AS order_title, x.signed_on, x.published_on, x.notes
          FROM bill_analyses a LEFT JOIN bills b ON b.id = a.bill_id LEFT JOIN bill_list l ON l.bill_id = a.bill_id
            LEFT JOIN executive_actions x ON x.id = a.bill_id
@@ -186,7 +191,7 @@ export async function constitutionRows(db, { clause = null, offset = 0 }) {
           href: isOrder ? orderHref(r.id) : billHref(r.id),
           type: isOrder ? orderShort(r) : r.bill_number,
           title: isOrder ? r.order_title : r.bill_title,
-          status: isOrder ? (/Revoked by/i.test(r.notes || "") ? "Revoked" : "Executive order") : listBillStatus({ outcome: r.outcome, final_result: r.final_result, final_chamber: r.final_chamber, level: r.list_level }),
+          status: isOrder ? (/Revoked by/i.test(r.notes || "") ? "Revoked" : "Executive order") : listBillStatus({ outcome: r.outcome, final_result: r.final_result, final_chamber: r.final_chamber, level: r.list_level, passage_method: r.passage_method, passage_chamber: r.passage_chamber }),
           meta: isOrder ? fmtDate(r.signed_on || r.published_on) : "",
           clause: p && labels.has(p) ? { id: p, label: labels.get(p) } : null,
         };

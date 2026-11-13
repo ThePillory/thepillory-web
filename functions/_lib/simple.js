@@ -12,6 +12,7 @@
 //   repVotesPlain  how the visitor's reps voted on a bill's final passage
 //
 // Pure except plainFor (one D1 read). See docs/quick-mode.md.
+import { METHOD_WORDS, NOT_RECORDED } from "../../workers/sync/src/passages/parse.js";
 import { esc, fmtDate, safeUrl } from "./render.js";
 import { firstSentences } from "./summary.js";
 
@@ -84,7 +85,7 @@ const failed = (result) => /fail|reject|not (passed|agreed)/i.test(result || "")
  * Where a bill stands, in plain words. `chambers`: the legislature's two chambers
  * (lower first) or one; `outcome`: the recorded final action; `votes`: its votes, newest first.
  */
-export function billStands({ federal, chambers, outcome, votes }) {
+export function billStands({ federal, chambers, outcome, votes, passages = [] }) {
   const who = federal ? "the President" : "the Governor";
   const o = outcome && outcome.outcome;
   if (o) {
@@ -97,17 +98,25 @@ export function billStands({ federal, chambers, outcome, votes }) {
   const finals = (votes || []).filter((v) => v.vote_type === "final_passage");
   const latest = {};
   for (const v of finals) if (!latest[v.chamber]) latest[v.chamber] = v;
+  // A passage without a recorded vote (voice vote, unanimous consent) counts when it's the chamber's latest.
+  for (const p of passages || []) {
+    if (!latest[p.chamber] || String(p.action_date) >= String(latest[p.chamber].vote_date)) {
+      latest[p.chamber] = { chamber: p.chamber, result: "Passed", vote_date: p.action_date, method: p.method };
+    }
+  }
   const lost = chambers.find((c) => latest[c] && failed(latest[c].result));
   if (lost) return `Failed in ${plainChamber(lost)} on ${fmtDate(latest[lost].vote_date)}.`;
   const done = chambers.filter((c) => latest[c] && passed(latest[c].result));
   const waiting = chambers.filter((c) => !done.includes(c));
-  if (done.length && !waiting.length) return `Passed ${done.map(plainChamber).join(" and ")}. No signing or veto is recorded yet.`;
-  if (done.length) return `Passed ${plainChamber(done[0])} on ${fmtDate(latest[done[0]].vote_date)}. Waiting on ${waiting.map(plainChamber).join(" and ")}.`;
+  const how = (c) => (latest[c].method ? ` ${METHOD_WORDS[latest[c].method]}` : "");
+  const noRecord = done.some((c) => latest[c].method) ? ` ${NOT_RECORDED}` : "";
+  if (done.length && !waiting.length) return `Passed ${done.map((c) => `${plainChamber(c)}${how(c)}`).join(" and ")}. No signing or veto is recorded yet.${noRecord}`;
+  if (done.length) return `Passed ${plainChamber(done[0])}${how(done[0])} on ${fmtDate(latest[done[0]].vote_date)}. Waiting on ${waiting.map(plainChamber).join(" and ")}.${noRecord}`;
   return "No final vote yet.";
 }
 
 /** How the visitor's reps voted on final passage, as list items; or how to find them. */
-export function repVotesPlain({ districts, reps, chambers, votes }) {
+export function repVotesPlain({ districts, reps, chambers, votes, passages = [] }) {
   if (!districts) return `<a class="inline-link" href="/#find">Find your representatives</a> to see how yours voted.`;
   const finals = (votes || []).filter((v) => v.vote_type === "final_passage");
   const mine = (reps || []).filter((o) => chambers.includes(o.chamber));
@@ -116,7 +125,9 @@ export function repVotesPlain({ districts, reps, chambers, votes }) {
     .map((o) => {
       const v = finals.find((x) => x.positions.some((p) => p.slug === o.slug));
       const p = v && v.positions.find((x) => x.slug === o.slug);
-      const said = !p ? "has no final vote recorded" : p.position === "Not voting" ? "did not vote" : p.position === "Present" ? "voted present" : `voted ${p.position}`;
+      const quiet = (passages || []).find((x) => x.chamber === o.chamber && (!v || String(x.action_date) >= String(v.vote_date)));
+      const said = quiet ? `has no recorded vote on passage (it passed ${METHOD_WORDS[quiet.method]})`
+        : !p ? "has no final vote recorded" : p.position === "Not voting" ? "did not vote" : p.position === "Present" ? "voted present" : `voted ${p.position}`;
       return `<li><a class="inline-link" href="/reps/${esc(o.slug)}/">${esc(o.name)}</a> ${said}.</li>`;
     })
     .join("")}</ul>`;

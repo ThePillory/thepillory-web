@@ -15,6 +15,7 @@ import { STATE_NAME } from "../../../../functions/_lib/districts.js";
 import { ballotWindow, previewLabel } from "../../../../functions/_lib/election-window.js";
 import { placeOf, zipCombos, zipFile, cdWords, legWords, editionKey } from "./places.js";
 import { dayWords, weekWords, addDays } from "./schedule.js";
+import { METHOD_SHORT, NOT_RECORDED } from "../passages/parse.js";
 
 export const SITE = "https://thepillory.co";
 export const MAX_LINES = 15; // item lines in the email; everything is on the web version
@@ -116,6 +117,20 @@ async function officialFacts(run, officials, governors) {
     add(await all(run.db, `SELECT official_id, id, filed_on, report_url FROM trade_reports WHERE official_id IN (${ph(c.length)}) AND filed_on BETWEEN ? AND ?`, [...c, start, end]), "trades");
     add(await all(run.db, `SELECT official_id, id, year, filed_on FROM networth_reports WHERE official_id IN (${ph(c.length)}) AND filed_on BETWEEN ? AND ?`, [...c, start, end]), "disclosures");
   }
+  // Bills the House or Senate passed this week without a recorded vote: under each of that chamber's members,
+  // with the method in place of a position (no member's vote was recorded; none is shown).
+  const quiet = await all(
+    run.db,
+    `SELECT p.bill_id, p.chamber, p.method, p.action_date AS vote_date, b.bill_number, b.title AS bill_title
+     FROM bill_passages p LEFT JOIN bills b ON b.id = p.bill_id WHERE p.action_date BETWEEN ? AND ?`,
+    [start, end]
+  );
+  if (quiet.length) {
+    for (const o of officials) {
+      if (!out.has(o.id)) continue;
+      for (const p of quiet.filter((x) => x.chamber === o.chamber)) out.get(o.id).votes.push({ ...p, passage: true, official_id: o.id });
+    }
+  }
   for (const f of out.values()) f.votes.sort((a, b) => b.vote_date.localeCompare(a.vote_date) || String(a.bill_number || "").localeCompare(String(b.bill_number || "")));
   const govActions = new Map();
   const govIds = governors.map((g) => g.id);
@@ -196,7 +211,9 @@ const OUTCOME = { signed: "Signed", vetoed: "Vetoed", pocket_vetoed: "Pocket vet
 function repGroup(o, facts, { office } = {}) {
   const f = facts.byOfficial.get(o.id) || { votes: [], trades: [], disclosures: [] };
   const items = [
-    ...f.votes.map((v) => ({ text: billName(v), href: v.bill_id ? billHref(v.bill_id) : repHref(o), status: POSITION[v.position] || v.position, meta: `${v.result} · ${dayWords(v.vote_date)} · ${v.question}`, kind: "vote" })),
+    ...f.votes.map((v) => v.passage
+      ? { text: billName(v), href: billHref(v.bill_id), status: METHOD_SHORT[v.method], meta: `Passed · ${dayWords(v.vote_date)} · ${NOT_RECORDED}`, kind: "vote" }
+      : { text: billName(v), href: v.bill_id ? billHref(v.bill_id) : repHref(o), status: POSITION[v.position] || v.position, meta: `${v.result} · ${dayWords(v.vote_date)} · ${v.question}`, kind: "vote" }),
     ...f.trades.map((t) => ({ text: "Stock trade report filed", href: `${repHref(o)}#more`, meta: `Filed ${dayWords(t.filed_on)}`, kind: "report" })),
     ...f.disclosures.map((d) => ({ text: `Financial disclosure report filed (${d.year})`, href: `${repHref(o)}#more`, meta: d.filed_on ? `Filed ${dayWords(d.filed_on)}` : "", kind: "report" })),
   ];

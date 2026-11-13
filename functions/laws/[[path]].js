@@ -19,6 +19,7 @@ import { outcomeFor, outcomeSection } from "../_lib/executive.js";
 import { currentAnalysis, parse, provisionsFor, baselineSection, isPublic, openFlagCount, analysisClauses, constitutionBrief, analysisChanges } from "../_lib/analysis.js";
 import { summaryHead, contentsBar, fold, clauseChips, statusChip, compactRow, shortLabel } from "../_lib/summary.js";
 import { billStatus, billSummary, yourRepsCard, billHistory, billFullText, billState, legislatureOf } from "../_lib/bill-page.js";
+import { onRecordFor, passageLines, recordedVotesSection, committeeSection, cosponsorsSection, petitionSection, relatedSection } from "../_lib/passages.js";
 import { STATE_NAME } from "../_lib/districts.js";
 import { appropriationsOf, billEarmarks, officialNames, billEarmarksSection, earmarkRows, asOf, SUBCOMMITTEE, HOW as GOV_MONEY_HOW } from "../_lib/gov-money.js";
 import { rollCallFilters, rollCallRows, rollCallBreakdown, pickVote, votePicker, voteHeading, totalsSection, rollCallFilterForm, rollCallList } from "../_lib/rollcall.js";
@@ -275,13 +276,17 @@ ${analysis.failed ? sectionError("Constitutional baseline") : baselineSection(an
   // the rest of the page still shows.
   const reps = districts ? await loadSection("bill reps", () => officialsWhere(db, repsWhere(districts)), []) : [];
   const repIds = reps === FAILED ? [] : reps.map((o) => o.id);
-  const [votes, lobbying, outcome, topics, plain] = await Promise.all([
+  const [votes, lobbying, outcome, topics, plain, recordLoaded] = await Promise.all([
     loadSection("bill votes", () => votesOnBill(db, id, repIds), []),
     b.level === "federal" ? loadSection("bill lobbying", () => lobbyingFor(db, id), null) : null,
     loadSection("bill outcome", () => outcomeFor(db, id), { outcome: null, checked: null }),
     loadSection("bill topics", () => tagsFor(db, "bill", [id]), new Map()),
     loadSection("bill plain", () => plainFor(db, "bill", id), null),
+    // Passage without a recorded vote, and what is on record about the bill (functions/_lib/passages.js).
+    b.level === "federal" ? loadSection("bill record", () => onRecordFor(db, id, repIds), null) : null,
   ]);
+  const record = recordLoaded === FAILED ? null : recordLoaded;
+  const passages = (record && record.passages) || [];
   // Organizations that lobbied on it and also reported contributions to members (LD-203).
   const givers = lobbying && lobbying !== FAILED && b.level === "federal" ? await loadSection("bill lobbying givers", () => lobbyGiversFor(db, lobbying, b.session), null) : null;
   const caLobbying = String(b.id).startsWith("ca-") ? await loadSection("bill California lobbying", () => caLobbyingFor(db, id), null) : null;
@@ -313,7 +318,7 @@ ${analysis.failed ? sectionError("Constitutional baseline") : baselineSection(an
 
   const a = analysis.a;
   const clauses = analysisClauses(a, analysis.provisions);
-  const status = outcome === FAILED ? "" : billStatus(b, outcome, voteList);
+  const status = outcome === FAILED ? "" : billStatus(b, outcome, voteList, passages);
   const st = billState(b);
   const session = b.level === "federal" ? `${ordinal(parseInt(b.session, 10))} Congress`
     : st === "CA" ? `California, ${esc(b.session.slice(0, 4))}–${esc(b.session.slice(4))} session`
@@ -325,8 +330,8 @@ ${analysis.failed ? sectionError("Constitutional baseline") : baselineSection(an
   const simple = simpleCard({
     lines: [
       ["What it does", lead.html || "No summary yet."],
-      ["Where it stands", esc(billStands({ federal: b.level === "federal", chambers, outcome: outcome === FAILED ? null : outcome, votes: voteList }))],
-      ["How your reps voted", reps === FAILED || votes === FAILED ? "" : repVotesPlain({ districts, reps, chambers, votes: voteList })],
+      ["Where it stands", esc(billStands({ federal: b.level === "federal", chambers, outcome: outcome === FAILED ? null : outcome, votes: voteList, passages }))],
+      ["How your reps voted", reps === FAILED || votes === FAILED ? "" : repVotesPlain({ districts, reps, chambers, votes: voteList, passages })],
       ...lead.extra,
     ],
     source: [lead.source, sourceNote(b.official_url, "Official page")].filter(Boolean).join(" "),
@@ -370,18 +375,45 @@ ${analysis.failed ? sectionError("Constitutional baseline") : baselineSection(an
   const main = `<div class="simple-scope">
 ${contentsBar([["summary", "Summary"], ["your-reps", "Your reps"], ["constitution", "Constitution"], ["votes", "All votes"], ["money", "Money"], ...(approps ? [["earmarks", "Earmarks"]] : []), ["history", "History"], ["full-text", "Full text"]])}
 ${head}
+${passageLines(record)}
 ${simple}
 ${banners}
-${yourRepsCard(b, { districts, reps: reps === FAILED ? [] : reps, votes: voteList, failed: reps === FAILED || votes === FAILED })}
+${yourRepsCard(b, { districts, reps: reps === FAILED ? [] : reps, votes: voteList, failed: reps === FAILED || votes === FAILED, record })}
 ${fold("constitution", "Constitution", constitution, { meta: clauses.length ? `${clauses.length} ${clauses.length === 1 ? "provision" : "provisions"}` : "", cls: "fold--parch", open: Boolean(sent || error) })}
 ${fold("votes", "All votes", votesInner, { meta: votes === FAILED ? "" : `${voteList.length} recorded`, open: Boolean(url.searchParams.get("vote")) })}
 ${fold("money", "Money", lobbying === FAILED ? '<p class="small secondary">Couldn\'t load this section right now.</p>' : followTheMoney(b, lobbying, { reps: districts && reps !== FAILED ? reps : null, repMoney, cycle, bare: true, givers: givers === FAILED ? null : givers, california: caLobbying === FAILED ? '<p class="small secondary">Couldn\'t load California lobbying right now.</p>' : caFollowTheMoney(b, caLobbying) }))}
 ${approps ? fold("earmarks", "Earmarks", earmarks === FAILED ? '<p class="small secondary">Couldn\'t load this section right now.</p>' : billEarmarksSection(b, approps, earmarks && earmarks.data, earmarks ? earmarks.names : {}), { meta: `FY${approps.fy}` }) : ""}
-${fold("history", "History", `${billHistory(b, outcome === FAILED ? null : outcome, voteList)}${outcome === FAILED ? sectionError("Final action") : outcomeSection(b, outcome)}`, { meta: lastDate })}
+${recordFolds(b, id, voteList, record, recordLoaded === FAILED)}
+${fold("history", "History", `${billHistory(b, outcome === FAILED ? null : outcome, voteList, passages)}${outcome === FAILED ? sectionError("Final action") : outcomeSection(b, outcome)}`, { meta: lastDate })}
 ${fold("full-text", "Full text", billFullText(b, analysis.row && isPublic(analysis.row) ? analysis.row : null))}
 ${billTopics.length ? `<section class="stack-sm">${topicChips(billTopics)}<p class="hint">${esc(tagNote(billTopics[0]))} <a class="inline-link" href="/about/methodology/#topics">How topics work</a></p></section>` : ""}
 </div>`;
   return page(`${b.bill_number}: ${b.title}`, main, { tab: "laws", back: ["Laws", "/laws/"], personal: true, partial: anyFailed(reps, votes, analysisLoaded, lobbying, outcome) });
+}
+
+/**
+ * What is on record for a bill beyond its final-passage votes, each in its own labeled, collapsed section:
+ * shown when the bill passed a chamber without a recorded vote (and petitions and related bills whenever
+ * loaded). Never combined into a position.
+ */
+function recordFolds(b, id, votes, record, failed) {
+  if (failed) return sectionError("What is on record");
+  if (!record) return "";
+  const quiet = record.passages.length > 0;
+  // Procedural votes and the rule's votes: for a bill passed without a recorded vote, or brought up by a discharge petition.
+  const recorded = quiet || record.petitions.length ? recordedVotesSection(id, votes, record) : "";
+  const committee = quiet ? committeeSection(record) : "";
+  const cos = quiet ? cosponsorsSection(record, b.official_url) : "";
+  const petitions = petitionSection(record);
+  const related = relatedSection(record);
+  const n = (x) => `${x} recorded`;
+  return [
+    recorded ? fold("recorded-votes", "Recorded votes on this bill", recorded, { meta: n(votes.filter((v) => v.vote_type !== "final_passage").length + record.ruleVotes.length) }) : "",
+    committee ? fold("committee-votes", "Committee votes", committee, { meta: `${record.committee.length}` }) : "",
+    cos ? fold("cosponsors", "Cosponsors (signed on to the bill; not a vote)", cos, { meta: `${record.cosponsors.filter((c) => !c.withdrawn_on).length}` }) : "",
+    petitions ? fold("discharge-petition", "Discharge petition", petitions, { meta: `${record.petitions.length}` }) : "",
+    related ? fold("related-bills", "Related bills", related, { meta: `${record.related.length}` }) : "",
+  ].join("\n");
 }
 
 // ---------------------------------------------------------------------------

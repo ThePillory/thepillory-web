@@ -108,6 +108,8 @@ Nothing runs more often than its source changes (November 2026). A run that find
 | County meetings (`county-meetings`) | agendas posted a few days ahead | daily | each agenda PDF read once per posting (file ID) |
 | Executive orders (`executive-orders`) | any day | daily | the Federal Register's count and newest order; the Governor's feed with its ETag |
 | Bill outcomes (`bill-outcomes`) | any day | daily | Congress.gov `updateDate`; California bills awaiting action every 3 days |
+| Passage without a recorded vote (`bill-passages`) | any day | daily | Congress.gov `fromDateTime` on the bill list; a bill's cosponsors, related bills and committee report read again only when its `updateDate` changes |
+| Discharge petitions (`discharge-petitions`) | when members sign | daily; a petition filed over a year ago every 30 days | the Clerk's list read each run; each petition's page only when due |
 | Stock trades ("Load stock trades") | reports filed within 45 days of a trade | daily | only reports not in D1 |
 | Source health, page summaries, usage check | — | daily (summaries at most hourly, only when their fingerprint changed) | — |
 | County officials | when a person edits the file | daily | ETag on `data/county-officials.json` → 304 skips |
@@ -159,6 +161,16 @@ To measure one page's queries against production without changing anything: the 
 Every Anthropic API call the Worker makes (the analyses and their reviews and fixes, agenda summaries, topics, plain summaries, promises and excerpts, scanned trade reports) goes through `structuredCall()` in `src/analysis/claude.js` (agenda summaries through their own call in `src/analysis/agenda.js`), and each answered call is added to `ai_usage` (migration 0045, `src/ai-usage.js`): one row per day, step and model with calls, input, output and cache tokens, and dollars at the list price. The step is the sync step running (`setStep()` in `src/index.js`), and the analysis round's parts by name (`analysis-relevance`, `analysis-review-backlog`, `analysis-resolve`, `analysis-bills`, `analysis-orders`, `analysis-measures`, `agenda-watch`, `topics`). The accuracy audit's section 6 lists the last 14 days by day and step, each step's 14-day total, and the scanned net worth reports read in GitHub Actions (`networth_scans.cost_cents`). A call that fails before answering (a credit balance at zero, a rate limit) costs nothing and isn't counted.
 
 The daily limits (`*_DAILY`) are ceilings: a step that finds nothing new makes no AI call. Two recurring costs are trimmed: officials' "In their own words" excerpts are picked again only when the quote is no longer on the page (none found: after 90 days), and candidates' campaign sites aren't searched after `CANDIDATE_PLATFORMS_UNTIL` (Election Day).
+
+## Passage without a recorded vote
+
+Some bills pass by voice vote or unanimous consent, so no member's position is recorded. The `bill-passages` step (`src/passages/`, migration 0050) reads each changed bill's Congress.gov actions (types H.R., S., H.J.Res., S.J.Res.; bills still only introduced or referred are skipped) and keeps a chamber's passage in `bill_passages` only when its latest passage action (Library of Congress code 8000 for the House, 17000 for the Senate) says "by voice vote", "by unanimous consent" or "without objection" and names no roll call, record vote or yeas and nays (a vitiated passage is skipped). Nothing is ever inferred: no member gets a position. For those bills it also keeps what is on record: the rules the actions name (`bill_rules`, so the rule's recorded votes show), cosponsors with their dates (`bill_cosponsors`), Congress.gov's related bills in its own words (`bill_related`, "Procedurally related" alone left out), and the committee report's sentences stating a committee vote with a date, quoted (`committee_votes`). It scans the current Congress's bill list oldest change first and saves where it stopped (`sync_state` `passages_federal_<congress>`), so the first runs backfill the whole Congress a little each day. Each passage on or after `ANALYSIS_SINCE` gets one analysis request (requested by "sync: passed without a recorded vote"), the same pipeline as every bill.
+
+`bill_list` counts the passage date as the bill's latest action (`passage_method`, `passage_chamber`, `passage_date`), so these bills appear on Laws, This week and the weekly email with "Members' individual votes were not recorded."
+
+**Discharge petitions** (`discharge-petitions`, `src/passages/petitions.js`): the House Clerk's list (`clerk.house.gov/DischargePetition/DischargePetitions?CongressNum=`) for the current Congress, each petition's bill and the rule it would discharge, and each petition's signers with their dates (`discharge_signatures`; a signer is linked to an official only by bioguide ID). The bill page lists them under "Discharge petition": "Signed the discharge petition to force a vote".
+
+Check what was loaded with the accuracy audit's sections 10 and 11.
 
 ## How the pages stay fast
 

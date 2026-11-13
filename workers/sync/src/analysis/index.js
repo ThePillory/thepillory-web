@@ -66,17 +66,20 @@ export function analysisSince(env = {}) {
   const v = String(env.ANALYSIS_SINCE ?? DEFAULT_SINCE).trim();
   return /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : v === "" ? "0000-01-01" : DEFAULT_SINCE;
 }
-// The date a bill's analysis goes by: its latest final-passage vote.
-const BILL_DATE = (alias) => `(SELECT MAX(v.vote_date) FROM votes v WHERE v.bill_id = ${alias} AND v.vote_type = 'final_passage')`;
+// The date a bill's analysis goes by: its latest final-passage vote, or its latest passage without a
+// recorded vote (voice vote, unanimous consent; bill_passages), whichever is later.
+const BILL_DATE = (alias) => `(SELECT MAX(d) FROM (SELECT MAX(v.vote_date) AS d FROM votes v WHERE v.bill_id = ${alias} AND v.vote_type = 'final_passage'
+                                UNION ALL SELECT MAX(p.action_date) FROM bill_passages p WHERE p.bill_id = ${alias}))`;
 
 function day() {
   return new Date().toISOString().slice(0, 10);
 }
 
-// A final-passage vote on the bill by one of our officials.
-const FINAL_VOTE = `EXISTS (SELECT 1 FROM votes v WHERE v.bill_id = b.id AND v.vote_type = 'final_passage'
+// A final-passage vote on the bill by one of our officials, or a passage without a recorded vote.
+const FINAL_VOTE = `(EXISTS (SELECT 1 FROM votes v WHERE v.bill_id = b.id AND v.vote_type = 'final_passage'
                    AND (EXISTS (SELECT 1 FROM vote_positions p JOIN officials o ON o.id = p.official_id WHERE p.vote_id = v.id)
-                     OR EXISTS (SELECT 1 FROM state_positions sp WHERE sp.vote_k = v.k)))`;
+                     OR EXISTS (SELECT 1 FROM state_positions sp WHERE sp.vote_k = v.k)))
+                   OR EXISTS (SELECT 1 FROM bill_passages bp WHERE bp.bill_id = b.id))`;
 // An issue on the site links to the bill (approved links only).
 const LINKED = "EXISTS (SELECT 1 FROM issue_bill_links l WHERE l.bill_id = b.id AND l.status = 'approved')";
 // TODO: once residents can follow bills, a bill with followers is eligible too
@@ -678,7 +681,7 @@ async function nextBills(db, limit, env = {}, redraftRoom = 0) {
     await db
       .prepare(
         `SELECT b.*, ${LINKED} AS linked, ${RANK} AS local_rank,
-                (SELECT MAX(v.vote_date) FROM votes v WHERE v.bill_id = b.id AND v.vote_type = 'final_passage') AS last_vote
+                ${BILL_DATE("b.id")} AS last_vote
          FROM bills b LEFT JOIN bill_relevance r ON r.bill_id = b.id
          -- No draft yet, or only drafts the relevance check rejected automatically
          -- (a bill it now finds substantive gets drafted; a person's rejection stands).
