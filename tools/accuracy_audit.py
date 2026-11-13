@@ -860,7 +860,7 @@ def voice_votes(args):
             say()
             rel = congress_api(f"/bill/{c}/{t}/{n}/relatedbills?limit=250").get("relatedBills", [])
             say(f"Related bills ({len(rel)}):")
-            for r in rel[:40]:
+            for r in (rel if os.environ.get("VV_ALL_RELATED") else rel[:40]):
                 say(f"- {r.get('type')} {r.get('number')} ({r.get('congress')}): {r.get('title')!r} | {r.get('relationshipDetails')!r}")
             say()
             co = congress_api(f"/bill/{c}/{t}/{n}/cosponsors?limit=5")
@@ -920,6 +920,17 @@ def voice_votes(args):
         say(f"> D1 not read: {str(e)[:200]}")
     say()
     # The House Clerk's discharge petitions.
+    # The latest House roll calls Congress.gov lists (do Nov 12's exist yet?).
+    try:
+        first = congress_api("/house-vote/119/2?limit=1")
+        count = (first.get("pagination") or {}).get("count") or 0
+        last = congress_api(f"/house-vote/119/2?limit=8&offset={max(0, count - 8)}")
+        say(f"### Latest House roll calls on Congress.gov (119th, session 2; {count} listed)")
+        for v in last.get("houseRollCallVotes", []):
+            say(f"- roll {v.get('rollCallNumber')} {v.get('startDate')} {v.get('legislationType')} {v.get('legislationNumber')} {v.get('voteType')} {v.get('result')}")
+        say()
+    except Exception as e:  # noqa: BLE001
+        say(f"> House votes not read: {type(e).__name__}: {str(e)[:200]}")
     say("### House Clerk discharge petitions")
     for url in ["https://clerk.house.gov/DischargePetition", os.environ.get("VV_PETITION") or ""]:
         if not url:
@@ -928,6 +939,12 @@ def voice_votes(args):
             page = fetch(url)
             say(f"- {url}: {len(page)} characters{'' if not page.startswith('__FETCH_FAILED__') else ': ' + page}")
             links = sorted(set(re.findall(r'href="([^"]*DischargePetition[^"]*)"', page)))
+            scripts = sorted(set(re.findall(r"<script[^>]*src=.([^'\" >]+)", page)))[:20]
+            say(f"  scripts: {scripts!r}")
+            apis = sorted(set(re.findall(r"(/[A-Za-z]+/[A-Za-z/]*(?:[Pp]etition|api|Api|json)[^'\" ]*)", page)))[:40]
+            say(f"  api-like urls: {apis!r}")
+            for mm in list(re.finditer(r".{0,200}(?:[Pp]etition No|H\. ?Res\.|signatures|Signatures|data-).{0,300}", re.sub(r"\s+", " ", page)))[:8]:
+                say(f"  > {mm.group(0)!r}")
             say(f"  links: {links[:40]!r}")
             body = re.sub(r"\s+", " ", page)
             i = body.find("<table")
