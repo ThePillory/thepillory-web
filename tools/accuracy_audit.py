@@ -835,17 +835,119 @@ def company_xbrl(args):
         say(f"> Labels not read: {type(e).__name__}: {str(e)[:200]}")
 
 
+VV_BILLS = [b for b in (os.environ.get("VV_BILLS") or "119-hr-9237,119-hr-2102").split(",") if b]
+
+
+def voice_votes(args):
+    """Read-only: what Congress.gov, the House Clerk and D1 hold for bills passed without a roll call
+    (the shapes the voice-vote readers are built against)."""
+    say("## 10. Bills passed without a recorded vote")
+    say()
+    for b in VV_BILLS:
+        c, t, n = b.split("-")
+        say(f"### {t.upper()} {n}, {c}th Congress")
+        say()
+        try:
+            bill = congress_api(f"/bill/{c}/{t}/{n}")["bill"]
+            say(f"- Title: {bill.get('title')!r}; latest action: {bill.get('latestAction')!r}")
+            say(f"- Sponsors: {[(s.get('bioguideId'), s.get('fullName')) for s in bill.get('sponsors', [])]}")
+            say(f"- Counts: cosponsors {bill.get('cosponsors')!r}, committeeReports {bill.get('committeeReports')!r}, relatedBills {bill.get('relatedBills')!r}")
+            say()
+            say("Actions (date | code | type | source | text | recorded votes):")
+            for a in congress_api(f"/bill/{c}/{t}/{n}/actions?limit=250").get("actions", []):
+                rv = [(v.get("chamber"), v.get("rollNumber"), v.get("sessionNumber"), v.get("url")) for v in a.get("recordedVotes", []) or []]
+                say(f"- {a.get('actionDate')} {a.get('actionTime') or ''} | {a.get('actionCode')} | {a.get('type')} | {(a.get('sourceSystem') or {}).get('name')} | {a.get('text', '')!r} | {rv or ''}")
+            say()
+            rel = congress_api(f"/bill/{c}/{t}/{n}/relatedbills?limit=250").get("relatedBills", [])
+            say(f"Related bills ({len(rel)}):")
+            for r in rel[:40]:
+                say(f"- {r.get('type')} {r.get('number')} ({r.get('congress')}): {r.get('title')!r} | {r.get('relationshipDetails')!r}")
+            say()
+            co = congress_api(f"/bill/{c}/{t}/{n}/cosponsors?limit=5")
+            say(f"Cosponsors: pagination {co.get('pagination')!r}; first: {co.get('cosponsors', [])[:2]!r}")
+            reps = congress_api(f"/bill/{c}/{t}/{n}/committees?limit=20").get("committees", [])
+            for cm in reps:
+                say(f"- Committee {cm.get('name')!r} {cm.get('systemCode')}: {cm.get('activities')!r}")
+            for r in (bill.get("committeeReports") or [])[:3]:
+                say(f"- Report: {r!r}")
+                m = re.search(r"(\d+)/(hrpt|srpt)/(\d+)", r.get("url", ""))
+                if m:
+                    txt = congress_api(f"/committee-report/{m.group(1)}/{m.group(2)}/{m.group(3)}/text").get("text", [])
+                    say(f"  text versions: {[(x.get('type'), x.get('url')) for x in txt][:4]!r}")
+                    url = next((x.get("url") for x in txt if x.get("type") == "Formatted Text"), None) or next((x.get("url") for x in txt), None)
+                    if url:
+                        page = fetch(url)
+                        plain = re.sub(r"\s+", " ", htmlmod.unescape(re.sub(r"<[^>]+>", " ", page)))
+                        for mm in re.finditer(r".{0,300}(?:COMMITTEE VOTES|Committee Votes|ordered .{0,80}reported|roll ?call|voice vote).{0,500}", plain):
+                            say(f"  > {mm.group(0)!r}")
+                            break
+                        i = plain.find("COMMITTEE VOTE")
+                        if i >= 0:
+                            say(f"  section: {plain[i:i + 2500]!r}")
+        except Exception as e:  # noqa: BLE001 (reported, not hidden)
+            say(f"> Not read: {type(e).__name__}: {str(e)[:300]}")
+        say()
+        bid = f"us-{c}-{t}-{n}"
+        try:
+            say("D1 votes on this bill:")
+            for r in q(args, f"SELECT id, vote_date, question, vote_type, result, yea, nay FROM votes WHERE bill_id = '{bid}' ORDER BY vote_date"):
+                say(f"- {r}")
+            for r in q(args, f"SELECT v.id, COUNT(p.official_id) AS positions FROM votes v LEFT JOIN vote_positions p ON p.vote_id = v.id WHERE v.bill_id = '{bid}' GROUP BY v.id"):
+                say(f"- positions {r}")
+            row = q(args, f"SELECT id, title, chamber FROM bills WHERE id = '{bid}'")
+            say(f"- bills row: {row}")
+            out = q(args, f"SELECT * FROM bill_outcomes WHERE bill_id = '{bid}'")
+            say(f"- outcome: {out}")
+        except SystemExit as e:
+            say(f"> D1 not read: {str(e)[:200]}")
+        say()
+    # Rules: H.Res. that provide for consideration of a bill, and their votes.
+    try:
+        say("### H.Res. rules in D1 naming these bills")
+        for b in VV_BILLS:
+            c, t, n = b.split("-")
+            lab = {"hr": "H.R.", "s": "S."}.get(t, t.upper()) + " " + n
+            for r in q(args, f"SELECT b.id, substr(b.title, 1, 200) AS title FROM bills b WHERE b.id >= 'us-{c}-hres-' AND b.id < 'us-{c}-hres-~' AND instr(b.title, '({lab})') > 0"):
+                say(f"- {lab}: {r}")
+                for v in q(args, f"SELECT id, vote_date, question, result FROM votes WHERE bill_id = '{r['id']}'"):
+                    say(f"  - vote {v}")
+        say(f"- votes table columns: {[r['name'] for r in q(args, 'PRAGMA table_info(votes)')]}")
+        say(f"- bills table columns: {[r['name'] for r in q(args, 'PRAGMA table_info(bills)')]}")
+        say(f"- bill_list columns: {[r['name'] for r in q(args, 'PRAGMA table_info(bill_list)')]}")
+        n_fed = q(args, "SELECT COUNT(*) AS n FROM bills WHERE id >= 'us-' AND id < 'us-~'")
+        say(f"- federal bills in D1: {n_fed}")
+    except SystemExit as e:
+        say(f"> D1 not read: {str(e)[:200]}")
+    say()
+    # The House Clerk's discharge petitions.
+    say("### House Clerk discharge petitions")
+    for url in ["https://clerk.house.gov/DischargePetition", os.environ.get("VV_PETITION") or ""]:
+        if not url:
+            continue
+        try:
+            page = fetch(url)
+            say(f"- {url}: {len(page)} characters{'' if not page.startswith('__FETCH_FAILED__') else ': ' + page}")
+            links = sorted(set(re.findall(r'href="([^"]*DischargePetition[^"]*)"', page)))
+            say(f"  links: {links[:40]!r}")
+            body = re.sub(r"\s+", " ", page)
+            i = body.find("<table")
+            say(f"  first table: {body[i:i + 3000]!r}" if i >= 0 else f"  start of body: {body[body.find('<main'):][:3000]!r}")
+        except Exception as e:  # noqa: BLE001
+            say(f"> Not read: {type(e).__name__}: {str(e)[:300]}")
+    say()
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--database", default="pillory")
-    ap.add_argument("--only", default="1,2,3,4,5,6,7,8,9")
+    ap.add_argument("--only", default="1,2,3,4,5,6,7,8,9,10")
     args = ap.parse_args()
     only = set(args.only.split(","))
     say("# Accuracy audit")
     say()
     say(f"Run {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}. Reads D1 and the sources; changes nothing.")
     say()
-    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage), ("7", sync_cost), ("8", tax_laws), ("9", company_xbrl)):
+    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage), ("7", sync_cost), ("8", tax_laws), ("9", company_xbrl), ("10", voice_votes)):
         if k in only:
             try:
                 fn(args)
