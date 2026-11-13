@@ -958,22 +958,27 @@ def clerk_petitions(args):
     """Read-only: the House Clerk's discharge petition data, as its own page loads it."""
     say("## 11. House Clerk discharge petitions")
     say()
-    js = fetch("https://clerk.house.gov/scripts/main.min.js")
-    for mm in list(re.finditer(r".{0,400}DischargePetition.{0,600}", js))[:6]:
-        say(f"- main.min.js: {mm.group(0)!r}")
-    page = fetch("https://clerk.house.gov/DischargePetition")
-    for mm in list(re.finditer(r".{0,300}DischargePetitions.{0,900}", page))[:4]:
-        say(f"- page: {mm.group(0)!r}")
-    for mm in list(re.finditer(r"<script(?![^>]*src)[^>]*>(.{0,3000}?)</script>", page, re.S))[:12]:
-        body = re.sub(r"\s+", " ", mm.group(1)).strip()
-        if body and ("etition" in body or "ajax" in body.lower() or "fetch" in body.lower()):
-            say(f"- inline script: {body[:2500]!r}")
-    for url in ["https://clerk.house.gov/DischargePetition/DischargePetitions", "https://clerk.house.gov/DischargePetition/DischargePetitions?congress=119",
-                "https://clerk.house.gov/DischargePetition?Congress=119"]:
-        r = re.sub(r"\s+", " ", fetch(url))
-        say(f"- {url}: {len(r)} characters: {r[:1500]!r}")
-    for mm in list(re.finditer(r'href="(/DischargePetition/[^"]+)"', page))[:10]:
-        say(f"- petition link: {mm.group(1)}")
+    base = "https://clerk.house.gov"
+    links = []
+    for page_no in (1, 2, 3, 4):
+        frag = re.sub(r"\s+", " ", fetch(f"{base}/DischargePetition/DischargePetitions?Page={page_no}&CongressNum=119"))
+        if page_no == 1:
+            i = frag.find('discharge-petition-result')
+            say(f"- page 1, first entry: {frag[i - 60:i + 3500]!r}")
+        for blk in frag.split('discharge-petition-result')[1:]:
+            num = re.search(r"Discharge Petition No\. ?(\d+)", blk)
+            href = re.search(r'href="(/DischargePetition/\d+)"', blk)
+            desc = re.search(r"Description:</label>(.*?)</p>", blk)
+            plain = re.sub(r"<[^>]+>", " ", blk)
+            sig = re.search(r"(Signatures?[^0-9]{0,40}\d+|\d+\s+Signatures?)", plain)
+            say(f"- No. {num.group(1) if num else '?'} {href.group(1) if href else ''} | {re.sub(r'<[^>]+>', ' ', desc.group(1)).strip()[:220] if desc else ''} | {sig.group(0) if sig else ''}")
+            if href:
+                links.append(href.group(1))
+    for want in (links[:1] + [l for l in links if l][-1:]):
+        d = re.sub(r"\s+", " ", fetch(base + want))
+        i = d.find("Discharge Petition No")
+        say(f"- detail {want}: {len(d)} characters")
+        say(f"  {d[i:i + 6000]!r}")
     say()
 
 
