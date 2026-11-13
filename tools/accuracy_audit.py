@@ -974,11 +974,19 @@ def clerk_petitions(args):
             say(f"- No. {num.group(1) if num else '?'} {href.group(1) if href else ''} | {re.sub(r'<[^>]+>', ' ', desc.group(1)).strip()[:220] if desc else ''} | {sig.group(0) if sig else ''}")
             if href:
                 links.append(href.group(1))
+        if page_no == 3:
+            i = frag.find("No. 22")
+            say(f"- No. 22's entry: {frag[i - 200:i + 2600]!r}")
+            links += re.findall(r"href=.?(/DischargePetition/\d+)", frag[i:i + 2600])
     for want in (links[:1] + [l for l in links if l][-1:]):
         d = re.sub(r"\s+", " ", fetch(base + want))
-        i = d.find("Discharge Petition No")
         say(f"- detail {want}: {len(d)} characters")
-        say(f"  {d[i:i + 6000]!r}")
+        body = d[d.find("<body"):]
+        for key in ("to wit", "Signature", "signature", "<table", "Date Signed", "Withdraw"):
+            i = body.find(key)
+            if i >= 0:
+                say(f"  [{key}] {body[i:i + 4000]!r}")
+                break
     say()
 
 
