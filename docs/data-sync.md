@@ -172,6 +172,12 @@ Some bills pass by voice vote or unanimous consent, so no member's position is r
 
 Check what was loaded with the accuracy audit's sections 10 and 11.
 
+## /status and a busy database
+
+The sync Worker's `/status` never counts the big tables: counting `votes`, `vote_positions`, `state_positions`, `bills` and `bill_list` on every load overloaded D1 while a run was going ("D1 DB is overloaded. Requests queued for too long.", Nov 14, 2026). The sync records those counts once per round in `status_counts` (name, value, as_of; migration 0051, `recordStatusCounts()` in `src/status.js`), and `/status` reads only that table (`counts_as_of`), the current analyses by the `bill_analyses_current_review` index and the last 30 `sync_log` rows by its key, without retries. If D1 is still busy, `/status` answers with what it read and `note`: "The database is busy with the sync; try again in a minute." `test/status.test.mjs` checks that `/status` never counts or reads those tables and that its queries use the index (EXPLAIN QUERY PLAN).
+
+"D1 DB is overloaded. Too many resources consumed within a 10 second window." is different: one query costs too much, and it fails the same way however long the sync waits, so it isn't retried (`TOO_HEAVY` in `src/d1retry.js`); the query has to change. The sync's own D1 calls retry a busy-queue "overloaded" error ("Requests queued for too long") with a longer backoff than other temporary errors (`OVERLOAD_RETRY` in `src/d1retry.js`: 8 tries, 2 to 30 seconds apart, about 2 minutes). Still overloaded after that, the step is logged "partial: temporary error" and tried again in a later round (`isTemporary()` in `src/util.js`), not failed for the day; an overload outside a step (logging, the run's own state) pauses the run for `TEMPORARY_RETRY_MS` and tries the round again instead of ending it.
+
 ## How the pages stay fast
 
 The pages never compute from the full `votes` and `vote_positions` tables on a visit (millions of rows: every member's position on every vote). That's what crashed the Laws page in October 2026 (Cloudflare error 1101): each visit grouped every bill against every position, twice. Instead:

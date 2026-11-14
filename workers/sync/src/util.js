@@ -25,7 +25,9 @@ export function isTemporary(err) {
   if (!err) return false;
   if (err instanceof UpstreamError || err.name === "UpstreamError") return TEMPORARY_STATUS.has(err.status);
   return err.name === "TypeError" && /fetch|network|connection|socket|timed? ?out/i.test(String(err.message || ""))
-    || /network connection lost|ECONNRESET|ETIMEDOUT|socket hang up/i.test(String(err.message || ""));
+    || /network connection lost|ECONNRESET|ETIMEDOUT|socket hang up/i.test(String(err.message || ""))
+    // D1 still overloaded after src/d1retry.js's retries: the step is tried again in a later round, not failed for the day.
+    || (/D1 DB is overloaded|queued for too long|too many requests queued/i.test(String(err.message || "")) && !/too many resources consumed/i.test(String(err.message || "")));
 }
 
 /** Retry-After in milliseconds (seconds or an HTTP date), or null. */

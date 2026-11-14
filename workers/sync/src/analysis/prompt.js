@@ -3,9 +3,12 @@
 // someone asks for it). Bump PROMPT_VERSION (full) or CARD_PROMPT_VERSION
 // (card) whenever the instructions or the shape change; it's saved with each draft.
 import { PROVISIONS } from "../constitution.js";
+import { isCaliforniaBill, caSelection, caBlock } from "../ca-constitution.js";
 
-export const PROMPT_VERSION = "2026-10-08.1";
-export const CARD_PROMPT_VERSION = "2026-10-08.1";
+// 2026-11-14.1: California bills get the California Constitution (src/ca-constitution.js) beside the
+// U.S. Constitution, and no Tenth Amendment or Supremacy Clause point unless the bill touches federal law.
+export const PROMPT_VERSION = "2026-11-14.1";
+export const CARD_PROMPT_VERSION = "2026-11-14.1";
 
 // The same instructions for bills, executive orders (the President's and the
 // Governor's) and statewide ballot measures (after the election: functions in
@@ -110,8 +113,17 @@ export function constitutionBlock() {
 const str = { type: "string" };
 const list = { type: "array", items: str };
 
-export function schema() {
-  const ids = PROVISIONS.map((p) => p.id);
+/** The California provisions a California bill's prompt carries (cached on the source), or []. */
+export function caProvisionsFor(bill, source) {
+  if (!isCaliforniaBill(bill)) return [];
+  if (source && source.ca) return source.ca;
+  const picked = caSelection(bill, source);
+  if (source && typeof source === "object") source.ca = picked;
+  return picked;
+}
+
+export function schema(extraIds = []) {
+  const ids = [...PROVISIONS.map((p) => p.id), ...extraIds];
   return {
     type: "object",
     additionalProperties: false,
@@ -156,16 +168,16 @@ export function schema() {
   };
 }
 
-const clauseItem = {
+const clauseItem = (extraIds = []) => ({
   type: "object",
   additionalProperties: false,
   required: ["id", "quote", "why"],
-  properties: { id: { type: "string", enum: PROVISIONS.map((p) => p.id) }, quote: str, why: str },
-};
+  properties: { id: { type: "string", enum: [...PROVISIONS.map((p) => p.id), ...extraIds] }, quote: str, why: str },
+});
 
 /** The short card's shape. Stored in the same columns as the full analysis (see cardToDraft). */
-export function cardSchema() {
-  const full = schema().properties;
+export function cardSchema(extraIds = []) {
+  const full = schema(extraIds).properties;
   return {
     type: "object",
     additionalProperties: false,
@@ -174,7 +186,7 @@ export function cardSchema() {
       plain_summary: str,
       supporters: str,
       critics: str,
-      clauses: { type: "array", items: clauseItem },
+      clauses: { type: "array", items: clauseItem(extraIds) },
       aligns: str,
       tension: str,
       departure: str,
@@ -272,5 +284,12 @@ export function billContext(bill, source) {
       : source.basis === "partial_text"
         ? `Below is the first part of the bill text only (${source.note}); the draft must say what that limits.`
         : "Below is the full bill text.";
-  return `${head.join("\n")}\n\n${basis}\n\n<bill_text>\n${source.text}\n</bill_text>`;
+  const ca = caProvisionsFor(bill, source);
+  return `${head.join("\n")}\n\n${basis}\n\n<bill_text>\n${source.text}\n</bill_text>${ca.length ? `\n\n${STATE_BILL_RULES}\n\n<california_constitution>\n${caBlock(ca)}\n</california_constitution>` : ""}`;
 }
+
+// For a California bill, beside the rules in the instructions (the same for every bill, so cached).
+export const STATE_BILL_RULES = `This is a California bill. Map it to the California Constitution as well as the U.S. Constitution:
+- The California provisions below may be quoted and listed in "clauses" like the U.S. ones, word for word, with their IDs exactly as given (they begin "ca-"). Quote no California provision that isn't below.
+- Raise a Tenth Amendment or Supremacy Clause (Article VI) point only if the bill text touches federal law or federal power: it names a federal statute, agency, program, regulation or federal funds, or it regulates something federal law governs. A state acting on its own powers doesn't by itself raise either one.
+- The same rules as every bill: no verdicts, the same hedged form for each panel, "uncertain" where the texts don't settle a question.`;
