@@ -1018,17 +1018,37 @@ def clerk_petitions(args):
     say()
 
 
+def recent_runs(args):
+    say("## 12. The last three days' sync runs")
+    say()
+    say("Each run (sync_log grouped by run), then the AI steps' and every failing step's messages, newest first, and the AI calls logged per day (ai_usage). Read-only.")
+    say()
+    rows = q(args, """SELECT run_id, trigger, MIN(started_at) AS first, MAX(started_at) AS last, COUNT(*) AS lines,
+        SUM(CASE WHEN status = 'error' THEN 1 ELSE 0 END) AS errors,
+        SUM(CASE WHEN step LIKE 'analysis%' OR step IN ('topics', 'relevance', 'promises', 'plain-summaries') THEN 1 ELSE 0 END) AS ai_lines
+      FROM sync_log WHERE started_at >= date('now', '-3 days') GROUP BY run_id, trigger ORDER BY first DESC LIMIT 40""")
+    table(rows, ["run_id", "trigger", "first", "last", "lines", "errors", "ai_lines"], ["Run", "Trigger", "First line", "Last line", "Lines", "Errors", "AI step lines"])
+    rows = q(args, """SELECT started_at, step, status, substr(COALESCE(message, ''), 1, 220) AS message FROM sync_log
+      WHERE started_at >= date('now', '-3 days')
+        AND (step LIKE 'analysis%' OR step IN ('topics', 'relevance', 'promises', 'plain-summaries', 'page-summaries') OR status = 'error')
+      ORDER BY id DESC LIMIT 80""")
+    table(rows, ["started_at", "step", "status", "message"], ["Started", "Step", "Status", "Message"])
+    rows = q(args, """SELECT day, step, SUM(calls) AS calls, ROUND(SUM(cost_usd), 2) AS dollars FROM ai_usage
+      WHERE day >= date('now', '-3 days') GROUP BY day, step ORDER BY day DESC, step""")
+    table(rows, ["day", "step", "calls", "dollars"], ["Day", "Step", "Calls", "Cost ($)"])
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--database", default="pillory")
-    ap.add_argument("--only", default="1,2,3,4,5,6,7,8,9,10,11")
+    ap.add_argument("--only", default="1,2,3,4,5,6,7,8,9,10,11,12")
     args = ap.parse_args()
     only = set(args.only.split(","))
     say("# Accuracy audit")
     say()
     say(f"Run {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}. Reads D1 and the sources; changes nothing.")
     say()
-    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage), ("7", sync_cost), ("8", tax_laws), ("9", company_xbrl), ("10", voice_votes), ("11", clerk_petitions)):
+    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage), ("7", sync_cost), ("8", tax_laws), ("9", company_xbrl), ("10", voice_votes), ("11", clerk_petitions), ("12", recent_runs)):
         if k in only:
             try:
                 fn(args)
