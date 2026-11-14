@@ -38,6 +38,7 @@ export async function fingerprint(db) {
     one("SELECT COUNT(*) AS n, MAX(checked_at) AS t FROM bill_outcomes"),
     one("SELECT COUNT(*) AS n, MAX(checked_at) AS t, MAX(override_at) AS o FROM bill_relevance"),
     one("SELECT COUNT(*) AS n, SUM(active) AS a FROM officials"),
+    one("SELECT COUNT(*) AS n, MAX(updated_at) AS t FROM bill_passages"),
   ]);
   return JSON.stringify(parts);
 }
@@ -48,25 +49,36 @@ export async function fingerprint(db) {
 // changed (bills no longer listed are removed by DELETE_STALE), so the page
 // never sees an empty table and an unchanged bill costs no write.
 const LIST_COLS = ["level", "chamber", "bill_number", "title", "session", "last_vote", "vote_count", "last_final", "final_count", "final_vote_id",
-  "final_result", "final_chamber", "yea", "nay", "present", "not_voting", "outcome", "outcome_date", "routine", "st"];
+  "final_result", "final_chamber", "yea", "nay", "present", "not_voting", "outcome", "outcome_date", "routine", "st",
+  "passage_method", "passage_chamber", "passage_date"];
 const UPSERT_LIST = `
 ON CONFLICT (bill_id) DO UPDATE SET ${LIST_COLS.map((c) => `${c} = excluded.${c}`).join(", ")}
 WHERE ${LIST_COLS.map((c) => `bill_list.${c} IS NOT excluded.${c}`).join(" OR ")}`;
-const DELETE_STALE = "DELETE FROM bill_list WHERE bill_id NOT IN (SELECT v.bill_id FROM votes v JOIN bills b ON b.id = v.bill_id WHERE v.bill_id IS NOT NULL)";
+const DELETE_STALE = `DELETE FROM bill_list WHERE bill_id NOT IN (SELECT v.bill_id FROM votes v JOIN bills b ON b.id = v.bill_id WHERE v.bill_id IS NOT NULL)
+  AND bill_id NOT IN (SELECT p.bill_id FROM bill_passages p JOIN bills b ON b.id = p.bill_id)`;
+// A bill passed by voice vote or unanimous consent (bill_passages) is listed like a bill with a
+// final-passage vote: its passage date counts as a final action (last_final), and passage_* say how,
+// so every list shows "Passed the House by voice vote" instead of leaving the bill out.
 export const BILL_LIST = `
 INSERT INTO bill_list (bill_id, level, chamber, bill_number, title, session, last_vote, vote_count,
   last_final, final_count, final_vote_id, final_result, final_chamber, yea, nay, present, not_voting,
-  outcome, outcome_date, routine, st)
+  outcome, outcome_date, routine, st, passage_method, passage_chamber, passage_date)
 SELECT b.id, b.level, b.chamber, b.bill_number, b.title, b.session, agg.last_vote, agg.vote_count,
   agg.last_final, agg.final_count, lf.id, lf.result, lf.chamber, lf.yea, lf.nay, lf.present, lf.not_voting,
   o.outcome, o.action_date,
   CASE WHEN r.verdict = 'skip' AND r.override IS NULL THEN 1 ELSE 0 END,
-  CASE WHEN b.level = 'state' THEN upper(substr(b.id, 1, 2)) END
+  CASE WHEN b.level = 'state' THEN upper(substr(b.id, 1, 2)) END,
+  ps.method, ps.chamber, ps.action_date
 FROM (
-  SELECT bill_id, MAX(vote_date) AS last_vote, COUNT(*) AS vote_count,
-    MAX(CASE WHEN vote_type = 'final_passage' THEN vote_date END) AS last_final,
-    SUM(CASE WHEN vote_type = 'final_passage' THEN 1 ELSE 0 END) AS final_count
-  FROM votes WHERE bill_id IS NOT NULL GROUP BY bill_id
+  SELECT bill_id, MAX(last_vote) AS last_vote, SUM(vote_count) AS vote_count, MAX(last_final) AS last_final, SUM(final_count) AS final_count
+  FROM (
+    SELECT bill_id, MAX(vote_date) AS last_vote, COUNT(*) AS vote_count,
+      MAX(CASE WHEN vote_type = 'final_passage' THEN vote_date END) AS last_final,
+      SUM(CASE WHEN vote_type = 'final_passage' THEN 1 ELSE 0 END) AS final_count
+    FROM votes WHERE bill_id IS NOT NULL GROUP BY bill_id
+    UNION ALL
+    SELECT bill_id, MAX(action_date), 0, MAX(action_date), 0 FROM bill_passages GROUP BY bill_id
+  ) GROUP BY bill_id
 ) agg
 JOIN bills b ON b.id = agg.bill_id
 -- "+v2.vote_type" keeps SQLite on votes_bill_type_date (by bill): with votes_type_date_id
@@ -74,6 +86,10 @@ JOIN bills b ON b.id = agg.bill_id
 LEFT JOIN votes lf ON lf.id = (
   SELECT v2.id FROM votes v2 WHERE v2.bill_id = agg.bill_id AND +v2.vote_type = 'final_passage'
   ORDER BY v2.vote_date DESC, v2.id DESC LIMIT 1)
+-- The latest passage without a recorded vote, when it is the bill's latest final action.
+LEFT JOIN bill_passages ps ON ps.bill_id = b.id AND ps.chamber = (
+  SELECT p2.chamber FROM bill_passages p2 WHERE p2.bill_id = b.id ORDER BY p2.action_date DESC, p2.chamber LIMIT 1)
+  AND ps.action_date >= COALESCE(lf.vote_date, '')
 LEFT JOIN bill_outcomes o ON o.bill_id = b.id
 LEFT JOIN bill_relevance r ON r.bill_id = b.id
 WHERE true${UPSERT_LIST}`;

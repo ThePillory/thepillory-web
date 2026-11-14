@@ -29,7 +29,9 @@ import { syncCounty } from "./county.js";
 import { syncStateOfficials, syncStateVotes } from "./openstates.js";
 import { syncFederalOfficials, syncSenateClasses, syncHouseVotes } from "./congress.js";
 import { syncSenateVotes } from "./senate.js";
-import { runAnalysis } from "./analysis/index.js";
+import { runAnalysis, analysisSince } from "./analysis/index.js";
+import { syncBillPassages } from "./passages/sync.js";
+import { syncDischargePetitions } from "./passages/petitions.js";
 import { syncCountyMeetings } from "./meetings/county.js";
 import { syncStateHearings } from "./meetings/state.js";
 import { withD1Retry } from "./d1retry.js";
@@ -72,6 +74,9 @@ const STEPS = [
   ["county-meetings", syncCountyMeetings],
   // After the votes: California outcomes are looked up for bills that passed both houses.
   ["bill-outcomes", syncBillOutcomes],
+  // Passage by voice vote or unanimous consent, and what is on record about those bills (src/passages/).
+  ["bill-passages", (env, db, budget) => syncBillPassages(env, db, budget, { since: analysisSince(env) })],
+  ["discharge-petitions", syncDischargePetitions],
   ["executive-orders", syncExecutiveOrders],
   ["nominations", syncNominations],
   // Each executive order's text and the authority it claims (read once), and
@@ -220,7 +225,7 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId, doneSteps = 
     summary.push({ step, ...result, requests: budget.used - before });
   }
   const temporary = summary.filter((s) => s.status === "partial" && /^temporary error/.test(s.message || ""));
-  const partialVotes = summary.filter((s) => (s.step.endsWith("-votes") || ["county-meetings", "bill-outcomes", "executive-orders", "nominations", "order-texts", "order-courts", "executive-funding", "dark-money", "federal-funding", "committee-bills", "lobbying-contributions", "federal-lobbying", "scanned-trades"].includes(s.step)) && s.status === "partial");
+  const partialVotes = summary.filter((s) => (s.step.endsWith("-votes") || ["county-meetings", "bill-outcomes", "bill-passages", "discharge-petitions", "executive-orders", "nominations", "order-texts", "order-courts", "executive-funding", "dark-money", "federal-funding", "committee-bills", "lobbying-contributions", "federal-lobbying", "scanned-trades"].includes(s.step)) && s.status === "partial");
   return {
     run_id: run.id,
     trigger,

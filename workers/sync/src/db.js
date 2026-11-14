@@ -48,6 +48,7 @@ import init0046 from "../migrations/0046_usage.sql";
 import init0047 from "../migrations/0047_company_taxes.sql";
 import init0048 from "../migrations/0048_email.sql";
 import init0049 from "../migrations/0049_company_tax_reader.sql";
+import init0050 from "../migrations/0050_passages.sql";
 import { isHttp, today } from "./util.js";
 import { totals } from "./rollcall.js";
 import { differs } from "./upsert.js";
@@ -103,6 +104,7 @@ const MIGRATIONS = [
   ["0047_company_taxes.sql", init0047],
   ["0048_email.sql", init0048],
   ["0049_company_tax_reader.sql", init0049],
+  ["0050_passages.sql", init0050],
 ];
 
 // Migrations tools/load_trades.py can also apply (the "Load stock trades"
@@ -123,6 +125,8 @@ const ALREADY_APPLIED = {
   "0048_email.sql": (db) => hasColumn(db, "waitlist", "email_invited_at"),
   // tools/build_company_taxes.py may apply it first (the "Refresh company taxes" workflow).
   "0049_company_tax_reader.sql": (db) => hasColumn(db, "company_tax_filings", "reader"),
+  // Its ALTERs can't run twice; the last column there means the whole migration was applied.
+  "0050_passages.sql": (db) => hasColumn(db, "bill_list", "passage_date"),
 };
 
 function statements(sql) {

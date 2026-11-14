@@ -18,6 +18,7 @@ import { officialsWhere } from "./data.js";
 import { repsWhere } from "./districts.js";
 import { loadIndex, loadTerm, caseHref } from "./scotus.js";
 import { plainChamber } from "./simple.js";
+import { METHOD_WORDS, NOT_RECORDED } from "../../workers/sync/src/passages/parse.js";
 
 export const THIS_WEEK_DAYS = 30; // how far back "this week" looks when the past week is quiet
 export const THIS_WEEK_MAX = 5;
@@ -54,7 +55,7 @@ export function senatorsLine(positions, stateName) {
  * (plain_summaries) follows its number when there is one; otherwise its official
  * title, word for word. Pure.
  */
-export function thisWeek({ stateName, votes = [], outcomes = [], decisions = [], orders = [], plain = {}, election = null, max = THIS_WEEK_MAX }) {
+export function thisWeek({ stateName, votes = [], outcomes = [], decisions = [], orders = [], passages = [], plain = {}, election = null, max = THIS_WEEK_MAX }) {
   const items = [];
   const named = (id, number, title) => (plain[id] ? `${number}. ${plain[id].trim().replace(/([^.!?])$/, "$1.")}` : `${number}${title ? `, “${shortTitle(title)}”` : ""}.`);
   for (const o of outcomes) {
@@ -73,6 +74,12 @@ export function thisWeek({ stateName, votes = [], outcomes = [], decisions = [],
     const where = plainChamber(v.chamber);
     const head = v.level === "state" ? `${stateName}'s ${where.replace(/^the /, "")}` : `${where[0].toUpperCase()}${where.slice(1)}`;
     items.push({ rank: 1, date: v.vote_date, href: `${billHref(v.bill_id)}#votes`, text: `${head} ${did} ${named(v.bill_id, v.bill_number, v.bill_title)}${v.level === "federal" ? senatorsLine(v.positions, stateName) : ""}` });
+  }
+  // Passed without a recorded vote: the same sentence as any passage, with the method and the fact that no
+  // member's vote was recorded (never a position).
+  for (const p of passages) {
+    const where = plainChamber(p.chamber);
+    items.push({ rank: 1, date: p.action_date, href: billHref(p.bill_id), text: `${where[0].toUpperCase()}${where.slice(1)} passed ${named(p.bill_id, p.bill_number, p.bill_title).replace(/\.$/, "")} ${METHOD_WORDS[p.method]}. ${NOT_RECORDED}` });
   }
   for (const c of decisions) items.push({ rank: 1, date: c.date, href: c.href, text: `The Supreme Court decided ${c.name}.` });
   for (const o of orders) items.push({ rank: 1, date: o.signed_on, href: orderHref(o.id), text: `${o.federal ? "The President" : `${stateName}'s Governor`} signed an executive order, “${shortTitle(o.title)}”.` });
@@ -104,7 +111,7 @@ export function thisWeek({ stateName, votes = [], outcomes = [], decisions = [],
  */
 export async function quickHomeData(env, request, { st, since, districts, senatorIds = [] }) {
   const db = env.DB;
-  const empty = { outcomes: [], congressVotes: [], stateVotes: [], decisions: [], orders: [], mine: [], plain: {} };
+  const empty = { outcomes: [], congressVotes: [], stateVotes: [], passages: [], decisions: [], orders: [], mine: [], plain: {} };
   if (!db) return empty;
   const finalVotes = (level, stCode) => soft(async () => (await db
     .prepare(
@@ -115,7 +122,7 @@ export async function quickHomeData(env, request, { st, since, districts, senato
     )
     .bind(level, stCode, stCode, since, THIS_WEEK_MAX)
     .all()).results, []);
-  const [outcomes, congressVotes, stateVotes, orders, mine, decisions] = await Promise.all([
+  const [outcomes, congressVotes, stateVotes, orders, mine, decisions, passages] = await Promise.all([
     soft(async () => (await db
       .prepare(
         `SELECT o.bill_id, o.outcome, o.action_date, b.bill_number, b.title, b.level FROM bill_outcomes o JOIN bills b ON b.id = o.bill_id
@@ -144,6 +151,15 @@ export async function quickHomeData(env, request, { st, since, districts, senato
         ? (term.cases || []).filter((c) => c.date >= since && c.docket).slice(0, 2).map((c) => ({ name: c.name, date: c.date, href: caseHref(term.term, c.docket) }))
         : [];
     })().catch(() => []),
+    // Congress's passages without a recorded vote (bill_passages, by date), set aside like the votes when routine.
+    soft(async () => (await db
+      .prepare(
+        `SELECT p.bill_id, p.chamber, p.method, p.action_date, b.bill_number, b.title AS bill_title FROM bill_passages p JOIN bills b ON b.id = p.bill_id
+         WHERE p.action_date >= ? AND NOT EXISTS (SELECT 1 FROM bill_relevance r WHERE r.bill_id = p.bill_id AND r.verdict = 'skip' AND r.override IS NULL)
+         ORDER BY p.action_date DESC LIMIT ?`
+      )
+      .bind(since, THIS_WEEK_MAX)
+      .all()).results, []),
   ]);
   // The senators' positions on Congress's votes.
   if (congressVotes.length && senatorIds.length) {
@@ -156,8 +172,8 @@ export async function quickHomeData(env, request, { st, since, districts, senato
       .all()).results, []);
     for (const v of congressVotes) v.positions = pos.filter((p) => p.vote_id === v.id);
   }
-  const ids = [...new Set([...outcomes, ...congressVotes, ...stateVotes].map((r) => r.bill_id).filter(Boolean))];
-  return { outcomes, congressVotes, stateVotes, orders, mine, decisions, plain: await plainWhat(db, ids) };
+  const ids = [...new Set([...outcomes, ...congressVotes, ...stateVotes, ...passages].map((r) => r.bill_id).filter(Boolean))];
+  return { outcomes, congressVotes, stateVotes, passages, orders, mine, decisions, plain: await plainWhat(db, ids) };
 }
 
 /** Checked plain lines for these bills (plain_summaries), by bill id. */

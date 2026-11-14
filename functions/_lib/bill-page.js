@@ -9,6 +9,8 @@ import { voteBar } from "./charts.js";
 import { OUTCOME_LABEL } from "./executive.js";
 import { firstSentences, statusChip, outLink } from "./summary.js";
 import { METHOD_URL } from "./analysis.js";
+import { repRecordLine } from "./passages.js";
+import { METHOD_SHORT, METHOD_WORDS } from "../../workers/sync/src/passages/parse.js";
 
 const LEGISLATURE = { federal: ["us-house", "us-senate"], state: ["ca-assembly", "ca-senate"] };
 // A state bill's state, from its id ('ca-20252026-ab-1', 'tx-89-hb-1').
@@ -20,11 +22,16 @@ export const legislatureOf = (b) => {
 };
 
 /** The bill's status in a few words: its final action when recorded, else its latest final-passage vote. */
-export function billStatus(b, outcome, votes) {
+export function billStatus(b, outcome, votes, passages = []) {
   const o = outcome && outcome.outcome;
   if (o && o.outcome === "presented") return `Presented to ${b.level === "federal" ? "the President" : "the Governor"} · ${fmtDate(o.action_date)}`;
   if (o) return `${OUTCOME_LABEL[o.outcome] || o.outcome} · ${fmtDate(o.action_date)}`;
   const finals = (votes || []).filter((v) => v.vote_type === "final_passage");
+  // A passage without a recorded vote, when it's the latest final action.
+  const quiet = [...(passages || [])].sort((x, y) => String(y.action_date).localeCompare(String(x.action_date)))[0];
+  if (quiet && (!finals[0] || String(quiet.action_date) >= String(finals[0].vote_date))) {
+    return `Passed · ${CHAMBER_NAME[quiet.chamber] || ""} · ${METHOD_SHORT[quiet.method].toLowerCase()} · ${fmtDate(quiet.action_date)}`;
+  }
   if (finals[0]) return `${finals[0].result} · ${CHAMBER_NAME[finals[0].chamber] || "Final"} vote · ${fmtDate(finals[0].vote_date)}`;
   if ((votes || [])[0]) return `Last recorded vote · ${fmtDate(votes[0].vote_date)}`;
   return "";
@@ -68,14 +75,16 @@ export function billSummary(b, a) {
  * "Your reps": the visitor's legislators' final-passage votes on the bill, and
  * one vote bar for the latest final vote. Without districts, how to find them.
  */
-export function yourRepsCard(b, { districts, reps, votes, failed = false }) {
+export function yourRepsCard(b, { districts, reps, votes, failed = false, record = null }) {
   const finals = (votes || []).filter((v) => v.vote_type === "final_passage");
   const latest = finals[0];
   const bar = latest
     ? `<p class="small">Latest final vote: <strong>${esc(latest.result)}</strong> · ${esc(CHAMBER_NAME[latest.chamber] || "")} · ${fmtDate(latest.vote_date)}</p>
   ${voteBar(latest)}
   ${sourceLink(latest.source_url, "Official record")}`
-    : '<p class="small secondary">No final-passage vote is recorded on this bill.</p>';
+    : record && record.passages && record.passages.length
+      ? '<p class="small secondary">No recorded vote on passage: members\' individual votes were not recorded.</p>'
+      : '<p class="small secondary">No final-passage vote is recorded on this bill.</p>';
   let rows;
   if (failed) rows = '<p class="small secondary">Couldn\'t load your reps right now.</p>';
   else if (!districts) rows = '<p class="small"><a class="inline-link" href="/#find">Find your representatives</a> to see how yours voted.</p>';
@@ -86,8 +95,12 @@ export function yourRepsCard(b, { districts, reps, votes, failed = false }) {
           .map((o) => {
             const v = finals.find((x) => x.positions.some((p) => p.slug === o.slug));
             const p = v && v.positions.find((x) => x.slug === o.slug);
-            return `<div class="rep-vote"><span><a href="/reps/${esc(o.slug)}/">${esc(o.name)}</a><br><span class="xsmall secondary">${esc(o.office)}${o.district ? ` · ${esc(o.district)}` : ""}</span></span>${
-              p ? `<span class="position" title="Recorded as: ${esc(p.raw_position)}${v ? ` on ${esc(v.question)}, ${fmtDate(v.vote_date)}` : ""}">${esc(p.position)}</span>` : '<span class="xsmall secondary">No final vote recorded</span>'
+            // Passed in this rep's chamber without a recorded vote (after any recorded final vote): what is on record instead.
+            const quiet = record && record.passages && record.passages.find((x) => x.chamber === o.chamber && (!v || String(x.action_date) >= String(v.vote_date)));
+            const onRecord = quiet ? repRecordLine(o, record, votes) : "";
+            return `<div class="rep-vote"><span><a href="/reps/${esc(o.slug)}/">${esc(o.name)}</a><br><span class="xsmall secondary">${esc(o.office)}${o.district ? ` · ${esc(o.district)}` : ""}</span>${onRecord ? `<br>${onRecord}` : ""}</span>${
+              quiet ? '<span class="xsmall secondary">No recorded vote</span>'
+                : p ? `<span class="position" title="Recorded as: ${esc(p.raw_position)}${v ? ` on ${esc(v.question)}, ${fmtDate(v.vote_date)}` : ""}">${esc(p.position)}</span>` : '<span class="xsmall secondary">No final vote recorded</span>'
             }</div>`;
           })
           .join("")}</div>`
@@ -101,8 +114,9 @@ export function yourRepsCard(b, { districts, reps, votes, failed = false }) {
 }
 
 /** The history: every recorded vote and the final action, oldest first. */
-export function billHistory(b, outcome, votes) {
+export function billHistory(b, outcome, votes, passages = []) {
   const items = (votes || []).map((v) => ({ date: v.vote_date, text: `${CHAMBER_NAME[v.chamber] || ""}: ${v.question} · ${v.result}`, url: v.source_url }));
+  for (const p of passages || []) items.push({ date: p.action_date, text: `${CHAMBER_NAME[p.chamber] || ""}: passed ${METHOD_WORDS[p.method]}; members' individual votes were not recorded`, url: p.source_url });
   const o = outcome && outcome.outcome;
   if (o && o.presented_on && o.outcome !== "presented") items.push({ date: o.presented_on, text: `Presented to ${b.level === "federal" ? "the President" : "the Governor"}`, url: o.source_url });
   if (o) items.push({ date: o.action_date, text: o.outcome === "presented" ? `Presented to ${b.level === "federal" ? "the President" : "the Governor"}` : `${OUTCOME_LABEL[o.outcome] || o.outcome}${o.law_number ? ` · ${o.law_number}` : ""}`, url: o.source_url });
@@ -111,7 +125,7 @@ export function billHistory(b, outcome, votes) {
   return `<ol class="timeline">${items
     .map((i) => `<li><span class="tl-date">${fmtDate(i.date)}</span><span>${esc(i.text)}${safeUrl(i.url) ? ` <a class="inline-link" href="${esc(i.url)}" target="_blank" rel="noopener" aria-label="Source">↗</a>` : ""}</span></li>`)
     .join("")}</ol>
-  <p class="hint">Recorded votes on this bill and the final action, as their sources record them. Committee and other steps without a recorded vote aren't listed; the official page has every action.</p>`;
+  <p class="hint">Recorded votes on this bill, passage without a recorded vote, and the final action, as their sources record them. Committee and other steps without a recorded vote aren't listed; the official page has every action.</p>`;
 }
 
 /** The bill's full text at its official source, and the official summary in full. */

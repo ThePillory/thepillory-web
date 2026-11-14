@@ -251,6 +251,7 @@ export async function hub(env, request, url, d, vs) {
     outcomes: q.outcomes.filter((o) => (o.level === "federal") === federal),
     decisions: federal ? q.decisions : [],
     orders: q.orders.filter((o) => !!o.federal === federal),
+    passages: federal ? q.passages || [] : [],
     plain: q.plain,
   });
   const feed = quick === FAILED ? sectionError("This week") : weekFeed({
