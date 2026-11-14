@@ -639,6 +639,34 @@ def coverage(args):
         COUNT(*) AS n FROM bill_analyses a LEFT JOIN executive_actions x ON x.id = a.bill_id
       WHERE a.current = 1 AND a.status = 'ai_draft' AND a.ai_review = 'flag' GROUP BY 1""")
     say("Flagged drafts hidden now: " + (", ".join(f"{r['kind']} {r['n']}" for r in rows) or "none") + ".")
+    # Drafts flagged under an older reviewer version are reviewed again under the current rules first
+    # (reviewBacklog, REVIEW_BACKLOG_DAILY); only the ones still flagged go to the resolution step.
+    m = re.search(r'REVIEW_PROMPT_VERSION = "([^"]+)"', (ROOT / "workers/sync/src/analysis/review.js").read_text())
+    version = m.group(1) if m else ""
+    rows = q(args, f"""SELECT
+        SUM(CASE WHEN a.ai_review = 'flag' AND COALESCE(json_extract(a.ai_review_detail, '$.version'), '') < '{version}' THEN 1 ELSE 0 END) AS waiting,
+        SUM(CASE WHEN json_extract(a.ai_review_detail, '$.previous') IS NOT NULL AND a.ai_review = 'pass' THEN 1 ELSE 0 END) AS now_pass,
+        SUM(CASE WHEN json_extract(a.ai_review_detail, '$.previous') IS NOT NULL AND a.ai_review = 'flag' THEN 1 ELSE 0 END) AS still_flagged
+      FROM bill_analyses a WHERE a.current = 1 AND a.status = 'ai_draft'""")
+    if rows:
+        r = rows[0]
+        say(f"Re-reviewed under the reviewer's current rules ({version}): {r['now_pass'] or 0} now pass, {r['still_flagged'] or 0} still flagged; "
+            f"{r['waiting'] or 0} flagged under older rules still waiting to be reviewed again.")
+        say()
+    rows = q(args, """SELECT json_extract(c.value, '$.id') AS check_id,
+        SUM(CASE WHEN w.which = 'before' THEN 1 ELSE 0 END) AS before,
+        SUM(CASE WHEN w.which = 'after' THEN 1 ELSE 0 END) AS after
+      FROM (SELECT 'before' AS which, json_extract(ai_review_detail, '$.previous.checks') AS checks FROM bill_analyses
+              WHERE current = 1 AND status = 'ai_draft' AND json_extract(ai_review_detail, '$.previous') IS NOT NULL
+            UNION ALL SELECT 'after', json_extract(ai_review_detail, '$.checks') FROM bill_analyses
+              WHERE current = 1 AND status = 'ai_draft' AND ai_review = 'flag' AND json_extract(ai_review_detail, '$.previous') IS NOT NULL) w,
+        json_each(w.checks) c
+      WHERE json_extract(c.value, '$.ok') = 0
+      GROUP BY 1 ORDER BY before DESC""")
+    if rows:
+        say("Failed checks on the re-reviewed drafts, before (the earlier review) and after (the ones still flagged now):")
+        say()
+        table(rows, ["check_id", "before", "after"], ["Check", "Before", "After"])
     rows = q(args, "SELECT COUNT(DISTINCT analysis_id) AS n FROM analysis_flags WHERE status = 'open'")
     say(f"Published analyses with open reader reports: {rows[0]['n'] if rows else '—'}.")
     say()
