@@ -99,6 +99,13 @@ test("D1 overloaded: retried with a longer backoff, then a temporary error for t
   // An overload that clears is retried through.
   let n = 0;
   assert.equal(await withRetry(async () => (++n < 4 ? Promise.reject(err) : "ok"), { sleep: async () => {} }), "ok");
+  // One query costing too much isn't a busy queue: not retried, and the step fails as before.
+  const heavy = new Error("D1_ERROR: D1 DB is overloaded. Too many resources consumed within a 10 second window.");
+  assert.ok(!isOverloaded(heavy));
+  assert.ok(!isTemporary(heavy));
+  let h = 0;
+  await assert.rejects(() => withRetry(async () => { h++; throw heavy; }, { sleep: async () => {} }));
+  assert.equal(h, 1);
   // Other errors still fail at once.
   let m = 0;
   await assert.rejects(() => withRetry(async () => { m++; throw new Error("UNIQUE constraint failed"); }, { sleep: async () => {} }));

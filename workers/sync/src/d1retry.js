@@ -20,16 +20,22 @@ const TRANSIENT = [
 
 // D1 saying it's overloaded ("D1 DB is overloaded. Requests queued for too long.") needs longer
 // than a dropped connection: the queue drains in tens of seconds, so these wait longer between tries.
-const OVERLOADED = [/D1 DB is overloaded/i, /queued for too long/i, /too many requests queued/i];
+const OVERLOADED = [/queued for too long/i, /too many requests queued/i];
 export const OVERLOAD_RETRY = { attempts: 8, baseMs: 2000, maxMs: 30000 }; // about 2 minutes in all
 
 export function isOverloaded(err) {
   const msg = String((err && (err.message || err)) || "");
-  return OVERLOADED.some((re) => re.test(msg));
+  return !TOO_HEAVY.test(msg) && (OVERLOADED.some((re) => re.test(msg)) || /D1 DB is overloaded/i.test(msg));
 }
+
+// "D1 DB is overloaded. Too many resources consumed within a 10 second window." is one query
+// costing too much, not a busy queue: the same query fails the same way however long we wait, so
+// it isn't retried (page-summaries hit it every day from Nov 12, 2026). The query has to change.
+export const TOO_HEAVY = /too many resources consumed/i;
 
 export function isTransient(err) {
   const msg = String((err && (err.message || err)) || "");
+  if (TOO_HEAVY.test(msg)) return false;
   return TRANSIENT.some((re) => re.test(msg));
 }
 
