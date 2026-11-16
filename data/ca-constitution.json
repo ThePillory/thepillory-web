@@ -1,7 +1,7 @@
 {
  "about": "The California Constitution, word for word from the Legislature's own database (California Legislative Information, downloads.leginfo.legislature.ca.gov, law code CONS). One row per section; IDs are stable and never reused. Built by tools/build_ca_constitution.py.",
  "source_url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=CONS&tocTitle=+California+Constitution+-+CONS",
- "read": "2026-11-10",
+ "read": "2026-11-16",
  "provisions": [
   {
    "id": "ca-art-1",
@@ -527,9 +527,13 @@
    "kind": "section",
    "label": "Article II, Section 15",
    "text": "(a) An election to determine whether to recall an officer and, if appropriate, to elect a successor shall be called by the Governor and held not less than 60 days nor more than 80 days from the date of certification of sufficient signatures.\n\n(b) A recall election may be conducted within 180 days from the date of certification of sufficient signatures in order that the election may be consolidated with the next regularly scheduled election occurring wholly or partially within the same jurisdiction in which the recall\nelection is held, if the number of voters eligible to vote at that next regularly scheduled election equal at least 50 percent of all the voters eligible to vote at the recall election.\n\n(c) If the majority vote on the question is to recall, the officer is removed and, if there is a candidate, the candidate who receives a plurality is the successor. The officer may not be a candidate, nor shall there be any candidacy for an office filled pursuant to subdivision (d) of Section 16 of Article VI.",
-   "history": "Sec. 15 amended Nov. 8, 1994, by Prop. 183. Res.Ch. 59, 1994.",
+   "history": "Sec. 15 amended Nov. 8, 1994, by Prop. 183. Res.Ch. 59, 1994. Superseded on fifth day after Secretary of State files the final Statement of Vote; see amendment by Prop. 5 of 2026.",
    "leaf": true,
-   "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CONS&article=II"
+   "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CONS&article=II",
+   "pending": {
+    "text": "(a) An election to determine whether to recall an officer shall be called by the Governor and held not less than 60 days nor more than 80 days from the date of certification of sufficient signatures.\n\n(b) A recall election may be conducted within 180 days from the date of certification of sufficient signatures in order that the election may be consolidated with the next regularly scheduled election occurring wholly or partially within the same jurisdiction in which the recall election is held, if the number of voters eligible to vote at that next regularly scheduled election equal at least 50\n percent of all the voters eligible to vote at the recall election.\n\n(c) If the majority vote on the question is to recall, the officer is removed and the office shall be vacant. The vacancy shall be filled in accordance with this Constitution and statute, provided that the officer who was the subject of the recall election shall not be appointed to fill the vacancy in that office.",
+    "history": "Sec. 15 amended Nov. 3, 2026, by Prop. 5. Res.Ch. 204, 2024. Effective on the fifth day after the Secretary of State files the final Statement of Vote. [Note: amended by Prop. 183, Nov. 8, 1994.]"
+   }
   },
   {
    "id": "ca-art-2-sec-16",
@@ -547,9 +551,13 @@
    "kind": "section",
    "label": "Article II, Section 17",
    "text": "If recall of the Governor or Secretary of State is initiated, the recall duties of that office shall be performed by the Lieutenant Governor or Controller, respectively.",
-   "history": "Sec. 17 added June 8, 1976, by Prop. 14. Res.Ch. 5, 1976.",
+   "history": "Sec. 17 added June 8, 1976, by Prop. 14. Res.Ch. 5, 1976. Superseded on fifth day after Secretary of State files the final Statement of Vote; see amendment by Prop. 5 of 2026.",
    "leaf": true,
-   "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CONS&article=II"
+   "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CONS&article=II",
+   "pending": {
+    "text": "If recall of the Governor or Secretary of State is initiated, the recall duties of that office shall be performed by the Secretary of State or Controller, respectively. If recalls of the Governor and Secretary of State are initiated at the same time, the recall duties of both offices shall be performed by the Controller.",
+    "history": "Sec. 15 amended Nov. 3, 2026, by Prop. 5. Res.Ch. 204, 2024. Effective on the fifth day after the Secretary of State files the final Statement of Vote. [Note: added by Prop. 14, June 8, 1976.]"
+   }
   },
   {
    "id": "ca-art-2-sec-18",
@@ -1084,9 +1092,13 @@
    "kind": "section",
    "label": "Article V, Section 10",
    "text": "The Lieutenant Governor shall become Governor when a vacancy occurs in the office of Governor.\n\nThe Lieutenant Governor shall act as Governor during the impeachment, absence from the State, or other temporary disability of the Governor or of a Governor-elect who fails to take office.\n\nThe Legislature shall provide an order of precedence after the Lieutenant Governor for succession to the office of Governor and for the temporary exercise of the Governor’s functions.\n\nThe Supreme\nCourt has exclusive jurisdiction to determine all questions arising under this section.\n\nStanding to raise questions of vacancy or temporary disability is vested exclusively in a body provided by statute.",
-   "history": "Sec. 10 amended Nov. 5, 1974, by Prop. 11. Res.Ch. 96, 1974.",
+   "history": "Sec. 10 amended Nov. 5, 1974, by Prop. 11. Res.Ch. 96, 1974. Superseded on fifth day after Secretary of State files the final Statement of Vote; see amendment by Prop. 5 of 2026.",
    "leaf": true,
-   "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CONS&article=V"
+   "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CONS&article=V",
+   "pending": {
+    "text": "(a) The Lieutenant Governor shall become Governor when a vacancy occurs in the office of Governor.\n\n(b) Notwithstanding subdivision (c) of Section 15 of Article II, if the Governor is removed from office by recall, the Lieutenant Governor shall become Governor for the remainder of the unexpired term. If the Governor is removed from office by recall before the close of the nomination period for the next statewide election during the first two years of the Governor’s term, a special election shall be called to replace the Governor and shall be consolidated with the statewide primary election and, if necessary, the subsequent statewide general\n election. If a candidate receives a majority of the votes in the special election that is consolidated with the statewide primary election, that candidate shall become Governor for the remainder of the unexpired term. If no candidate receives a majority of the votes, the top two vote-getters shall compete in a special election consolidated with the subsequent statewide general election, and the winner of that election shall become Governor for the remainder of the unexpired term.\n\n(c) The Lieutenant Governor shall act as Governor during the impeachment, absence from the State, or other temporary disability of the Governor or of a Governor-elect who fails to take office.\n\n(d) The Legislature shall provide an order of precedence after the Lieutenant Governor for succession to the\n office of Governor and for the temporary exercise of the Governor’s functions.\n\n(e) The Supreme Court has exclusive jurisdiction to determine all questions arising under this section.\n\n(f) Standing to raise questions of vacancy or temporary disability is vested exclusively in a body provided by statute.",
+    "history": "Sec. 15 amended Nov. 3, 2026, by Prop. 5. Res.Ch. 204, 2024. Effective on the fifth day after the Secretary of State files the final Statement of Vote. [Note: amended by Prop. 11, Nov. 5, 1974.]"
+   }
   },
   {
    "id": "ca-art-5-sec-11",
