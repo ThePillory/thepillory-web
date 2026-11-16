@@ -2,7 +2,7 @@
  "_readme": "Committees formed for each of California's November 3, 2026 statewide propositions, their money, and independent spending on each, from the Cal-Access export. Built by tools/build_measure_money.py; never edit by hand.",
  "source": "https://campaignfinance.cdn.sos.ca.gov/dbwebexport.zip",
  "election": "2026-11-03",
- "generated": "2026-11-09",
+ "generated": "2026-11-16",
  "numbers_from": "2026-06-25",
  "measures": {
   "1": {
@@ -3777,13 +3777,13 @@
       }
      ],
      "raised": 34437873.89,
-     "spent": 34427533.6,
-     "cash_end": 492513.64,
+     "spent": 34427632.35,
+     "cash_end": 492414.89,
      "statements": 5,
      "through": "2026-10-17",
-     "filed": "2026-11-02",
+     "filed": "2026-11-11",
      "source_url": "https://cal-access.sos.ca.gov/Campaign/Committees/Detail.aspx?id=1484853",
-     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1",
+     "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2",
      "individuals": {
       "total": 157681.0,
       "count": 14
@@ -3801,14 +3801,14 @@
        "kind": "committee",
        "total": 6195000.0,
        "count": 8,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
       },
       {
        "name": "CA BUSINESS PAC",
        "kind": "committee",
        "total": 3900000.0,
        "count": 7,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
       },
       {
        "name": "CALIFORNIA BUILDING INDUSTRY ASSOCIATION",
@@ -3822,7 +3822,7 @@
        "kind": "committee",
        "total": 1800000.0,
        "count": 1,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
       },
       {
        "name": "CALIFORNIA ASSOCIATION OF REALTORS",
@@ -3843,14 +3843,14 @@
        "kind": "committee",
        "total": 500000.0,
        "count": 2,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
       },
       {
        "name": "CALIFORNIA WATER SERVICE COMPANY",
        "kind": "organization",
        "total": 500000.0,
        "count": 3,
-       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+       "statement_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
       },
       {
        "name": "BUILDING RESILIENT INFRASTRUCTURE FOR A DECARBONZED GREEN ECONOMY ISSUES PAC, FUNDED BY PG&E CORPORATION",
@@ -5236,7 +5236,7 @@
       }
      ],
      "total": 10000000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     },
     {
      "committee": "YES ON 41 - CALIFORNIANS FOR TRANSPARENCY AND ACCOUNTABILITY, A COALITION OF SMALL BUSINESSES, TAXPAYERS, GOOD GOVERNMENT ADVOCATES, ACCOUNTANTS AND AUDITING EXPERTS",
@@ -5780,7 +5780,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8168,7 +8168,7 @@
       }
      ],
      "total": 6195000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     },
     {
      "committee": "Yes On Prop 1 Californians for Homes, Jobs and Affordability 2026, Sponsored by Affordable Housing Organizations",
@@ -8198,7 +8198,7 @@
       }
      ],
      "total": 3900000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8216,7 +8216,7 @@
       }
      ],
      "total": 2250000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8234,7 +8234,7 @@
       }
      ],
      "total": 1800000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8252,7 +8252,7 @@
       }
      ],
      "total": 1500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8270,7 +8270,7 @@
       }
      ],
      "total": 1005000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8288,7 +8288,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8306,7 +8306,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8324,25 +8324,7 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
-    }
-   ],
-   "spent": []
-  },
-  "YUHAAVIATAM OF SAN MANUEL NATION FKA SAN MANUEL BAND OF MISSION INDIANS": {
-   "name": "YUHAAVIATAM OF SAN MANUEL NATION (FKA SAN MANUEL BAND OF MISSION INDIANS)",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8360,7 +8342,25 @@
       }
      ],
      "total": 500000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
+    }
+   ],
+   "spent": []
+  },
+  "YUHAAVIATAM OF SAN MANUEL NATION FKA SAN MANUEL BAND OF MISSION INDIANS": {
+   "name": "YUHAAVIATAM OF SAN MANUEL NATION (FKA SAN MANUEL BAND OF MISSION INDIANS)",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 500000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8378,7 +8378,7 @@
       }
      ],
      "total": 300000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8396,7 +8396,7 @@
       }
      ],
      "total": 250000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8414,7 +8414,7 @@
       }
      ],
      "total": 250000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8432,7 +8432,7 @@
       }
      ],
      "total": 200000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8450,7 +8450,7 @@
       }
      ],
      "total": 200000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8468,25 +8468,7 @@
       }
      ],
      "total": 100000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
-    }
-   ],
-   "spent": []
-  },
-  "WEST VALLEY CONSTRUCTION COMPANY": {
-   "name": "WEST VALLEY CONSTRUCTION COMPANY, INC.",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 100000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8504,7 +8486,25 @@
       }
      ],
      "total": 100000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
+    }
+   ],
+   "spent": []
+  },
+  "WEST VALLEY CONSTRUCTION COMPANY": {
+   "name": "WEST VALLEY CONSTRUCTION COMPANY, INC.",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 100000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8522,115 +8522,7 @@
       }
      ],
      "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
-    }
-   ],
-   "spent": []
-  },
-  "CALIFORNIA WATER ASSOCIATION": {
-   "name": "CALIFORNIA WATER ASSOCIATION",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
-    }
-   ],
-   "spent": []
-  },
-  "PETERSON HOLDING COMPANY": {
-   "name": "PETERSON HOLDING COMPANY",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
-    }
-   ],
-   "spent": []
-  },
-  "GRANITE CONSTRUCTION COMPANY": {
-   "name": "GRANITE CONSTRUCTION COMPANY",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
-    }
-   ],
-   "spent": []
-  },
-  "HOLT OF CALIFORNA": {
-   "name": "HOLT OF CALIFORNA",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
-    }
-   ],
-   "spent": []
-  },
-  "IPX POWER USA RESPONSIBLE OFFICER CINDY HOWELL": {
-   "name": "IPX POWER USA, LLC(RESPONSIBLE OFFICER: CINDY HOWELL)",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
-    }
-   ],
-   "spent": []
-  },
-  "QUINN GROUP": {
-   "name": "QUINN GROUP, INC.",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8648,7 +8540,25 @@
       }
      ],
      "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
+    }
+   ],
+   "spent": []
+  },
+  "HOLT OF CALIFORNA": {
+   "name": "HOLT OF CALIFORNA",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 50000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8666,7 +8576,7 @@
       }
      ],
      "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8684,7 +8594,97 @@
       }
      ],
      "total": 50000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
+    }
+   ],
+   "spent": []
+  },
+  "QUINN GROUP": {
+   "name": "QUINN GROUP, INC.",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 50000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
+    }
+   ],
+   "spent": []
+  },
+  "CALIFORNIA WATER ASSOCIATION": {
+   "name": "CALIFORNIA WATER ASSOCIATION",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 50000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
+    }
+   ],
+   "spent": []
+  },
+  "PETERSON HOLDING COMPANY": {
+   "name": "PETERSON HOLDING COMPANY",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 50000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
+    }
+   ],
+   "spent": []
+  },
+  "GRANITE CONSTRUCTION COMPANY": {
+   "name": "GRANITE CONSTRUCTION COMPANY",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 50000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
+    }
+   ],
+   "spent": []
+  },
+  "IPX POWER USA RESPONSIBLE OFFICER CINDY HOWELL": {
+   "name": "IPX POWER USA, LLC(RESPONSIBLE OFFICER: CINDY HOWELL)",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 50000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8702,7 +8702,7 @@
       }
      ],
      "total": 40000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     },
     {
      "committee": "Yes On Prop 1 Californians for Homes, Jobs and Affordability 2026, Sponsored by Affordable Housing Organizations",
@@ -8732,7 +8732,7 @@
       }
      ],
      "total": 25000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8750,61 +8750,7 @@
       }
      ],
      "total": 25000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
-    }
-   ],
-   "spent": []
-  },
-  "GRIFFITH COMPANY": {
-   "name": "GRIFFITH COMPANY",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 25000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
-    }
-   ],
-   "spent": []
-  },
-  "NAIOP SOCAL COMMERCIAL REAL ESTATE DEVELOPMENT ASSOCIATION ISSUES PAC NAIOP SOCAL ISSUES PAC": {
-   "name": "NAIOP SOCAL COMMERCIAL REAL ESTATE DEVELOPMENT ASSOCIATION ISSUES PAC - NAIOP SOCAL ISSUES PAC",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 25000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
-    }
-   ],
-   "spent": []
-  },
-  "ANVIL BUILDERS": {
-   "name": "ANVIL BUILDERS INC",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 25000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8822,7 +8768,7 @@
       }
      ],
      "total": 25000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8840,7 +8786,61 @@
       }
      ],
      "total": 25000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
+    }
+   ],
+   "spent": []
+  },
+  "GRIFFITH COMPANY": {
+   "name": "GRIFFITH COMPANY",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 25000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
+    }
+   ],
+   "spent": []
+  },
+  "NAIOP SOCAL COMMERCIAL REAL ESTATE DEVELOPMENT ASSOCIATION ISSUES PAC NAIOP SOCAL ISSUES PAC": {
+   "name": "NAIOP SOCAL COMMERCIAL REAL ESTATE DEVELOPMENT ASSOCIATION ISSUES PAC - NAIOP SOCAL ISSUES PAC",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 25000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
+    }
+   ],
+   "spent": []
+  },
+  "ANVIL BUILDERS": {
+   "name": "ANVIL BUILDERS INC",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 25000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8858,7 +8858,7 @@
       }
      ],
      "total": 20000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     },
     {
      "committee": "CALIFORNIANS AGAINST TAX INCREASES, SPONSORED BY THE CALIFORNIA BUSINESS ROUNDTABLE - NO ON 40",
@@ -8888,7 +8888,7 @@
       }
      ],
      "total": 20000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8906,79 +8906,7 @@
       }
      ],
      "total": 10000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
-    }
-   ],
-   "spent": []
-  },
-  "ASSOCIATION OF CALIFORNIA LIFE AND HEALTH INSURANCE COMPANIES ISSUES COMMITTEE": {
-   "name": "ASSOCIATION OF CALIFORNIA LIFE & HEALTH INSURANCE COMPANIES ISSUES COMMITTEE",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 10000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
-    }
-   ],
-   "spent": []
-  },
-  "RIVERSIDE CONSTRUCTION COMPANY": {
-   "name": "RIVERSIDE CONSTRUCTION COMPANY, INC.",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 10000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
-    }
-   ],
-   "spent": []
-  },
-  "ANGELO K TSAKOPOULOS AND AFFILIATED ENTITIES": {
-   "name": "ANGELO K. TSAKOPOULOS AND AFFILIATED ENTITIES",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 10000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
-    }
-   ],
-   "spent": []
-  },
-  "NATIONAL ASSOCIATION OF WATER COMPANIES": {
-   "name": "NATIONAL ASSOCIATION OF WATER COMPANIES",
-   "gave": [
-    {
-     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
-     "filer_id": "1484853",
-     "props": [
-      {
-       "number": "45",
-       "side": "support"
-      }
-     ],
-     "total": 10000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -8996,7 +8924,79 @@
       }
      ],
      "total": 10000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
+    }
+   ],
+   "spent": []
+  },
+  "ASSOCIATION OF CALIFORNIA LIFE AND HEALTH INSURANCE COMPANIES ISSUES COMMITTEE": {
+   "name": "ASSOCIATION OF CALIFORNIA LIFE & HEALTH INSURANCE COMPANIES ISSUES COMMITTEE",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 10000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
+    }
+   ],
+   "spent": []
+  },
+  "RIVERSIDE CONSTRUCTION COMPANY": {
+   "name": "RIVERSIDE CONSTRUCTION COMPANY, INC.",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 10000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
+    }
+   ],
+   "spent": []
+  },
+  "ANGELO K TSAKOPOULOS AND AFFILIATED ENTITIES": {
+   "name": "ANGELO K. TSAKOPOULOS AND AFFILIATED ENTITIES",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 10000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
+    }
+   ],
+   "spent": []
+  },
+  "NATIONAL ASSOCIATION OF WATER COMPANIES": {
+   "name": "NATIONAL ASSOCIATION OF WATER COMPANIES",
+   "gave": [
+    {
+     "committee": "YES ON 45 - BUILDING A MORE AFFORDABLE CALIFORNIA, A COALITION OF WATER, AFFORDABLE HOUSING, CLEAN ENERGY, SMALL BUSINESS, HEALTHCARE & COMMUNITY LEADERS",
+     "filer_id": "1484853",
+     "props": [
+      {
+       "number": "45",
+       "side": "support"
+      }
+     ],
+     "total": 10000.0,
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -9014,7 +9014,7 @@
       }
      ],
      "total": 5000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -9032,7 +9032,7 @@
       }
      ],
      "total": 5000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -9050,7 +9050,7 @@
       }
      ],
      "total": 2500.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -9068,7 +9068,7 @@
       }
      ],
      "total": 1000.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
@@ -9086,7 +9086,7 @@
       }
      ],
      "total": 250.0,
-     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=1"
+     "source_url": "https://cal-access.sos.ca.gov/PDFGen/pdfgen.prg?filingid=3215922&amendid=2"
     }
    ],
    "spent": []
