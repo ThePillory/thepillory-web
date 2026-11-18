@@ -9,86 +9,19 @@
    "name": "303 Creative LLC v. Elenis",
    "summary": "The First Amendment prohibits Colorado from forcing a website designer to create expressive designs speaking messages with which the designer disagrees.",
    "author_code": "NG",
-   "pdf": "https://www.supremecourt.gov/opinions/22pdf/21-476_c185.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/22pdf/600us1r58_7khn.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "GORSUCH, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, KAVANAUGH, and BARRETT, JJ., joined. SOTOMAYOR, J., filed a dissenting opinion, in which KAGAN and JACKSON, JJ., joined.",
-   "lineup": {
-    "unanimous": false,
-    "justices": [
-     {
-      "justice": "Gorsuch",
-      "roles": [
-       "majority"
-      ],
-      "wrote": [
-       "majority"
-      ]
-     },
-     {
-      "justice": "Roberts",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Thomas",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Alito",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Kavanaugh",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Barrett",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Sotomayor",
-      "roles": [
-       "dissent"
-      ],
-      "wrote": [
-       "dissent"
-      ]
-     },
-     {
-      "justice": "Kagan",
-      "roles": [
-       "dissent"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Jackson",
-      "roles": [
-       "dissent"
-      ],
-      "wrote": []
-     }
-    ]
-   },
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": [],
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "The question we face is whether that course violates the Free Speech Clause of the First Amendment."
+     "quote": null
+    },
+    {
+     "id": "amend-5",
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/21-00476qp.pdf",
@@ -106,10 +39,10 @@
    "name": "Department of Education v. Brown",
    "summary": "Respondents lack Article III standing to assert a procedural challenge to the student-loan debt-forgiveness plan adopted by the Secretary of Education pursuant to Higher Education Relief Opportunities for Students Act of 2003 (HEROES Act).",
    "author_code": "A",
-   "pdf": "https://www.supremecourt.gov/opinions/22pdf/22-535_i3kn.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/22pdf/600us1r57_o7kq.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ALITO, J., delivered the opinion for a unanimous Court.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -127,7 +60,7 @@
    "provisions": [
     {
      "id": "art-3",
-     "quote": "“We have ‘an obligation to assure ourselves’ of litigants’ standing under Article III” before proceeding to the merits of a case."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/22-00535qp.pdf",
@@ -144,10 +77,10 @@
    "name": "Biden v. Nebraska",
    "summary": "The Secretary of Education does not have authority under the Higher Education Relief Opportunities for Students Act of 2003 (HEROES Act) to establish a student loan forgiveness program that will cancel roughly $430 billion in debt principal and affect nearly all borrowers.",
    "author_code": "R",
-   "pdf": "https://www.supremecourt.gov/opinions/22pdf/22-506_nmip.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/22pdf/600us1r56_1o13.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ROBERTS, C. J., delivered the opinion of the Court, in which THOMAS, ALITO, GORSUCH, KAVANAUGH, and BARRETT, JJ., joined. BARRETT, J., filed a concurring opinion. KAGAN, J., filed a dissenting opinion, in which SOTOMAYOR and JACKSON, JJ., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -226,11 +159,11 @@
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "Amtrak argued that it was not subject to the First Amendment because it was a corporation separate from the Federal Government."
+     "quote": null
     },
     {
      "id": "art-3",
-     "quote": "Under Article III of the Constitution, a plaintiff needs a “personal stake” in the case."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/22-00506qp.pdf",
@@ -247,10 +180,10 @@
    "name": "Groff v. DeJoy",
    "summary": "Title VII requires an employer that denies a religious accommodation to show that the burden of granting an accommodation would result in substantial increased costs in relation to the conduct of its particular business.",
    "author_code": "A",
-   "pdf": "https://www.supremecourt.gov/opinions/22pdf/22-174_k536.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/22pdf/600us1r55_3dq4.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ALITO, J., delivered the opinion for a unanimous Court. SOTOMAYOR, J., filed a concurring opinion, in which JACKSON, J., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -284,7 +217,7 @@
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "“to accede to or accommodate” religious practice because that “would raise grave” Establishment Clause questions."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/22-00174qp.pdf",
@@ -305,10 +238,10 @@
    "name": "Abitron Austria GmbH v. Hetronic Int’l, Inc.",
    "summary": "Applying the presumption against extraterritoriality, two provisions of the Lanham Act that prohibit trademark infringement—15 U. S. C. §1114(1)(a) and §1125(a)(1)—are not extraterritorial and extend only to claims where the infringing “use in commerce” is domestic.",
    "author_code": "A",
-   "pdf": "https://www.supremecourt.gov/opinions/22pdf/21-1043_7648.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/22pdf/600us1r54_g3bi.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ALITO, J., delivered the opinion of the Court, in which THOMAS, GORSUCH, KAVANAUGH, and JACKSON, JJ., joined. JACKSON, J., filed a concurring opinion. SOTOMAYOR, J., filed an opinion concurring in the judgment, in which ROBERTS, C. J., and KAGAN and BARRETT, JJ., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -387,7 +320,7 @@
    "provisions": [
     {
      "id": "art-1-sec-8-cl-3",
-     "quote": "First, it argues that the language naturally leads to this result because Congress can lawfully regulate foreign conduct under the Foreign Commerce Clause."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/21-01043qp.pdf",
@@ -1860,10 +1793,10 @@
    "name": "Haaland v. Brackeen",
    "summary": "In child custody proceedings governed by the Indian Child Welfare Act, the Court affirms the Fifth Circuit’s conclusion that ICWA is consistent with Congress’s Article I authority, rejects petitioners’ anticommandeering challenges under the Tenth Amendment, and finds the parties lack standing to litigate their other challenges to ICWA’s placement preferences.",
    "author_code": "AB",
-   "pdf": "https://www.supremecourt.gov/opinions/22pdf/21-376_7l48.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r38_khmp.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "BARRETT, J., delivered the opinion of the Court, in which ROBERTS, C. J., and SOTOMAYOR, KAGAN, GORSUCH, KAVANAUGH, and JACKSON, JJ., joined. GORSUCH, J., filed a concurring opinion, in which SOTOMAYOR and JACKSON, JJ., joined as to Parts I and III. KAVANAUGH, J., filed a concurring opinion. THOMAS, J., and ALITO, J., filed dissenting opinions.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -1925,6 +1858,171 @@
        "majority"
       ],
       "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Alito",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-5",
+     "quote": null
+    },
+    {
+     "id": "amend-10",
+     "quote": null
+    },
+    {
+     "id": "amend-11",
+     "quote": null
+    },
+    {
+     "id": "amend-14",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/21-00376qp.pdf",
+   "question_presented": [
+    "Congress enacted the Indian Child Welfare Act of 1978 (ICWA), 25 U.S.C. 1901 et seq., \"to protect the best interests of Indian children and to promote the stability and security of Indian tribes and families.\" 25 U.S.C. 1902. The provisions of 25 U.S.C. 1912 establish minimum federal standards for the removal of Indian children from their families, while 25 U.S.C. 1915(a) and (b) establish default preferences for the placement of such children in adoptive or foster homes. The statute also contains several recordkeeping provisions. See 25 U.S.C. 1915(e), 1951(a).",
+    "Three States and seven individuals brought suit, asserting that these and other ICWA provisions are facially unconstitutional. The district court agreed and granted declaratory relief. The en banc court of appeals rejected most of the plaintiffs' challenges, but affirmed, in some respects by an equally divided vote, the judgment declaring the foregoing provisions invalid. The questions presented are:",
+    "1. Whether various provisions of ICWA-namely, the minimum standards of Section 1912(a), (d), (e), and (f); the placement-preference provisions of Section 1915 (a) and (b); and the recordkeeping provisions of Sections 1915(e) and 1951(a)-violate the anticommandeering doctrine of the Tenth Amendment.",
+    "2. Whether the individual plaintiffs have Article III standing to challenge ICWA’s placement preferences for \"other Indian families,\" 25 U.S.C. 1915(a)(3), and for \"Indian foster home[s],\" 25 U.S.C. 1915(b)(iii).",
+    "3. Whether Section 1915(a)(3) and (b)(iii) are rationally related to legitimate governmental interests and therefore consistent with equal protection."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "37",
+   "date": "2023-06-15",
+   "docket": "21-1576",
+   "name": "Smith v. United States",
+   "summary": "The Constitution permits the retrial of a defendant following a trial in an improper venue conducted before a jury drawn from the wrong district.",
+   "author_code": "A",
+   "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r37_8m59.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": true,
+    "justices": [
+     {
+      "justice": "Alito",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     }
+    ]
+   },
+   "provisions": [
+    {
+     "id": "amend-5",
+     "quote": null
+    },
+    {
+     "id": "amend-6",
+     "quote": null
+    },
+    {
+     "id": "amend-14",
+     "quote": null
+    }
+   ],
+   "qp_url": "https://www.supremecourt.gov/qp/21-01576qp.pdf",
+   "question_presented": [
+    "Whether the proper remedy for the government's failure to prove venue is an acquittal barring re-prosecution of the offense, as the Fifth and Eighth Circuits have held, or whether instead the government may re-try the defendant for the same offense in a different venue, as the Sixth, Ninth, Tenth, and Eleventh Circuits have held."
+   ],
+   "qp_checked": true
+  },
+  {
+   "r": "36",
+   "date": "2023-06-08",
+   "docket": "21-806",
+   "name": "Health and Hospital Corporation of Marion Cty. v. Talevski",
+   "summary": "The provisions of the Federal Nursing Home Reform Act at issue unambiguously create rights enforceable under 42 U. S. C. §1983, and private enforcement under §1983 is compatible with the FNHRA’s remedial scheme.",
+   "author_code": "KJ",
+   "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r36_feah.pdf",
+   "parser": 4,
+   "exact_text": false,
+   "lineup_text": null,
+   "lineup": {
+    "unanimous": false,
+    "justices": [
+     {
+      "justice": "Jackson",
+      "roles": [
+       "majority"
+      ],
+      "wrote": [
+       "majority"
+      ]
+     },
+     {
+      "justice": "Roberts",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Kagan",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Kavanaugh",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Barrett",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
      },
      {
       "justice": "Thomas",
@@ -1949,176 +2047,19 @@
    "provisions": [
     {
      "id": "amend-10",
-     "quote": "They asserted that Congress lacks authority to enact ICWA and that several of ICWA’s requirements violate the anticommandeering principle of the Tenth Amendment."
+     "quote": null
+    },
+    {
+     "id": "amend-11",
+     "quote": null
     },
     {
      "id": "amend-14",
-     "quote": "346, 362 (1970) (the Equal Protection Clause secures the right of individuals “to be considered” for government positions and benefits “without the burden of invidiously discriminatory disqualifications”)."
+     "quote": null
     },
     {
      "id": "art-1-sec-8-cl-3",
-     "quote": "The Indian Commerce Clause authorizes Congress “[t]o regulate Commerce . . . with the Indian Tribes.” Art."
-    },
-    {
-     "id": "art-1-sec-8-cl-1",
-     "quote": "But ICWA is not a Spending Clause statute—Texas bases this argument on a vague reference to a different Spending Clause statute that it does not challenge."
-    }
-   ],
-   "qp_url": "https://www.supremecourt.gov/qp/21-00376qp.pdf",
-   "question_presented": [
-    "Congress enacted the Indian Child Welfare Act of 1978 (ICWA), 25 U.S.C. 1901 et seq., \"to protect the best interests of Indian children and to promote the stability and security of Indian tribes and families.\" 25 U.S.C. 1902. The provisions of 25 U.S.C. 1912 establish minimum federal standards for the removal of Indian children from their families, while 25 U.S.C. 1915(a) and (b) establish default preferences for the placement of such children in adoptive or foster homes. The statute also contains several recordkeeping provisions. See 25 U.S.C. 1915(e), 1951(a).",
-    "Three States and seven individuals brought suit, asserting that these and other ICWA provisions are facially unconstitutional. The district court agreed and granted declaratory relief. The en banc court of appeals rejected most of the plaintiffs' challenges, but affirmed, in some respects by an equally divided vote, the judgment declaring the foregoing provisions invalid. The questions presented are:",
-    "1. Whether various provisions of ICWA-namely, the minimum standards of Section 1912(a), (d), (e), and (f); the placement-preference provisions of Section 1915 (a) and (b); and the recordkeeping provisions of Sections 1915(e) and 1951(a)-violate the anticommandeering doctrine of the Tenth Amendment.",
-    "2. Whether the individual plaintiffs have Article III standing to challenge ICWA’s placement preferences for \"other Indian families,\" 25 U.S.C. 1915(a)(3), and for \"Indian foster home[s],\" 25 U.S.C. 1915(b)(iii).",
-    "3. Whether Section 1915(a)(3) and (b)(iii) are rationally related to legitimate governmental interests and therefore consistent with equal protection."
-   ],
-   "qp_checked": true
-  },
-  {
-   "r": "37",
-   "date": "2023-06-15",
-   "docket": "21-1576",
-   "name": "Smith v. United States",
-   "summary": "The Constitution permits the retrial of a defendant following a trial in an improper venue conducted before a jury drawn from the wrong district.",
-   "author_code": "A",
-   "pdf": "https://www.supremecourt.gov/opinions/22pdf/21-1576_e29g.pdf",
-   "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ALITO, J., delivered the opinion for a unanimous Court.",
-   "lineup": {
-    "unanimous": true,
-    "justices": [
-     {
-      "justice": "Alito",
-      "roles": [
-       "majority"
-      ],
-      "wrote": [
-       "majority"
-      ]
-     }
-    ]
-   },
-   "provisions": [
-    {
-     "id": "amend-5",
-     "quote": "___ (2022).1 II A Except as prohibited by the Double Jeopardy Clause, it “has long been the rule that when a defendant obtains a reversal of a prior, unsatisfied conviction, he may be retried in the normal course of events.” United States v."
-    },
-    {
-     "id": "amend-6",
-     "quote": "In all other circumstances, we have found that retrial is the strongest appropriate remedy, and we have applied this rule to every other Clause of the Sixth Amendment except for the Vicinage Clause (which we now address along with the Venue Clause).3 B Against this backdrop, we are asked to consider whether violations of the Venue and Vicinage Clauses are exceptions to the retrial rule."
-    },
-    {
-     "id": "amend-14",
-     "quote": "400, 406 (1942) (holding that a State may file a new indictment following the postconviction dismissal of an indictment under the Equal Protection Clause); United States v."
-    }
-   ],
-   "qp_url": "https://www.supremecourt.gov/qp/21-01576qp.pdf",
-   "question_presented": [
-    "Whether the proper remedy for the government's failure to prove venue is an acquittal barring re-prosecution of the offense, as the Fifth and Eighth Circuits have held, or whether instead the government may re-try the defendant for the same offense in a different venue, as the Sixth, Ninth, Tenth, and Eleventh Circuits have held."
-   ],
-   "qp_checked": true
-  },
-  {
-   "r": "36",
-   "date": "2023-06-08",
-   "docket": "21-806",
-   "name": "Health and Hospital Corporation of Marion Cty. v. Talevski",
-   "summary": "The provisions of the Federal Nursing Home Reform Act at issue unambiguously create rights enforceable under 42 U. S. C. §1983, and private enforcement under §1983 is compatible with the FNHRA’s remedial scheme.",
-   "author_code": "KJ",
-   "pdf": "https://www.supremecourt.gov/opinions/22pdf/21-806_2dp3.pdf",
-   "parser": 4,
-   "exact_text": true,
-   "lineup_text": "JACKSON, J., delivered the opinion of the Court, in which ROBERTS, C. J., and SOTOMAYOR, KAGAN, GORSUCH, KAVANAUGH, and BARRETT, JJ., joined. GORSUCH, J., filed a concurring opinion. BARRETT, J., filed a concurring opinion, in which ROBERTS, C. J., joined. THOMAS, J., filed a dissenting opinion. ALITO, J., filed a dissenting opinion, in which THOMAS, J., joined.",
-   "lineup": {
-    "unanimous": false,
-    "justices": [
-     {
-      "justice": "Jackson",
-      "roles": [
-       "majority"
-      ],
-      "wrote": [
-       "majority"
-      ]
-     },
-     {
-      "justice": "Roberts",
-      "roles": [
-       "concurrence",
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Sotomayor",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Kagan",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Gorsuch",
-      "roles": [
-       "concurrence",
-       "majority"
-      ],
-      "wrote": [
-       "concurrence"
-      ]
-     },
-     {
-      "justice": "Kavanaugh",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Barrett",
-      "roles": [
-       "concurrence",
-       "majority"
-      ],
-      "wrote": [
-       "concurrence"
-      ]
-     },
-     {
-      "justice": "Thomas",
-      "roles": [
-       "dissent"
-      ],
-      "wrote": [
-       "dissent"
-      ]
-     },
-     {
-      "justice": "Alito",
-      "roles": [
-       "dissent"
-      ],
-      "wrote": [
-       "dissent"
-      ]
-     }
-    ]
-   },
-   "provisions": [
-    {
-     "id": "amend-14",
-     "quote": "Thus, they satisfy Gonzaga’s stringent standard, and the rights —————— 12 The Fourteenth Amendment hardly fails to secure §1983-enforceable rights because it directs state actors not to deny equal protection. they recognize are presumptively enforceable under §1983."
-    },
-    {
-     "id": "art-1-sec-8-cl-1",
-     "quote": "As background for our evaluation of the particulars of HHC’s Spending Clause-based argument regarding §1983’s meaning, see Part II–B–2, infra, a fuller picture of the relevant historical context is warranted."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/21-00806qp.pdf",
@@ -2138,10 +2079,10 @@
    "name": "Jack Daniel’s Properties, Inc. v. VIP Products LLC",
    "summary": "When a defendant in a trademark suit uses the mark as a designation of source for its own goods or services—i.e., as a trademark—the threshold Rogers test for trademark infringement claims challenging so-called expressive works, see Rogers v. Grimaldi, 875 F. 2d 994, does not apply, and the Lanham Act’s exclusion from liability for “[a]ny noncommerical use of a mark,” §1125(c)(3)(C), does not shield parody, criticism, or commentary from a claim of trademark dilution.",
    "author_code": "EK",
-   "pdf": "https://www.supremecourt.gov/opinions/22pdf/22-148_3e04.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r35_3f14.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "KAGAN, J., delivered the opinion for a unanimous Court. SOTOMAYOR, J., filed a concurring opinion, in which ALITO, J., joined. GORSUCH, J., filed a concurring opinion, in which THOMAS and BARRETT, JJ., joined.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": true,
     "justices": [
@@ -2198,7 +2139,7 @@
    "provisions": [
     {
      "id": "amend-1",
-     "quote": "On the court’s view, the First Amendment compels a stringent threshold test when an infringement suit challenges a socalled expressive work—here (so said the court), the Bad Spaniels toy."
+     "quote": null
     }
    ],
    "qp_url": "https://www.supremecourt.gov/qp/22-00148qp.pdf",
@@ -2216,10 +2157,10 @@
    "name": "Dubin v. United States",
    "summary": "Under 18 U. S. C. §1028A(a)(1)’s crime of “aggravated identity theft,” a defendant “uses” another person’s means of identification “in relation to” a predicate offense when the use is at the crux of what makes the conduct criminal.",
    "author_code": "SS",
-   "pdf": "https://www.supremecourt.gov/opinions/22pdf/22-10_ifjn.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/22pdf/599us1r34_p86b.pdf",
    "parser": 4,
-   "exact_text": true,
-   "lineup_text": "SOTOMAYOR, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, KAGAN, KAVANAUGH, BARRETT, and JACKSON, JJ., joined. GORSUCH, J., filed an opinion concurring in the judgment.",
+   "exact_text": false,
+   "lineup_text": null,
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -4352,5 +4293,5 @@
    "qp_checked": true
   }
  ],
- "built_on": "2026-11-17"
+ "built_on": "2026-11-18"
 }
