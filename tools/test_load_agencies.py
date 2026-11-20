@@ -137,6 +137,21 @@ class Rules(unittest.TestCase):
         self.assertEqual([x["document_number"] for x in r], ["2026-21001"])
 
 
+class Workforce(unittest.TestCase):
+    def test_count_column_summed_by_department_and_agency(self):
+        try:
+            import pyarrow as pa
+        except ImportError:
+            self.skipTest("pyarrow isn't installed")
+        t = pa.table({"department": ["Department of Agriculture"] * 3 + ["Environmental Protection Agency"],
+                      "agency": ["Forest Service", "Forest Service", "Office of Something", "Environmental Protection Agency"],
+                      "count": [1, 2, 1, 5]})
+        idx = L.name_index(L.parse_fr_agencies(jfx("fr_agencies.json")))
+        out, un, cols = L.workforce_counts(t, idx)
+        self.assertEqual(out, {"agriculture-department": 4, "forest-service": 3, "environmental-protection-agency": 5})
+        self.assertEqual(un, ["Office of Something"])
+
+
 class Laws(unittest.TestCase):
     def test_by_subcommittee_title(self):
         mapping = json.loads(L.APPROPRIATIONS.read_text())

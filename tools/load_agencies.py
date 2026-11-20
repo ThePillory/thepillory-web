@@ -90,7 +90,7 @@ def fetch(url, *, method="GET", body=None, accept="application/json", timeout=18
     if body is not None:
         data = json.dumps(body).encode()
         headers["Content-Type"] = "application/json"
-    for wait in (5, 20, 60, None):
+    for wait in (5, 20, 60, 120, None):
         try:
             req = urllib.request.Request(url, data=data, headers=headers, method=method)
             with urllib.request.urlopen(req, timeout=timeout) as r:
@@ -483,28 +483,28 @@ def bill_rows(bills, mapping):
 
 
 def workforce_counts(table, agency_idx):
-    """{agency id: employees} from one OPM employment file: counted by the agency name column, each
-    record one employee (the file is one row per person). Returns (counts, unmatched names, column)."""
+    """{agency id: employees} from one OPM employment file: OPM's "count" column summed (1 per record
+    when there's none), by department (a department's total) and by agency (a sub-agency's or an
+    independent agency's total). An agency matched by both columns keeps the department column's
+    total. Returns (counts, unmatched names, columns used)."""
     cols = table.column_names
-    col = next((c for c in cols if re.fullmatch(r"agency(_name)?", c, re.I)), None) or next((c for c in cols if re.search(r"^agency", c, re.I) and "code" not in c.lower()), None)
-    if not col:
+    used = [c for c in ("department", "agency") if c in cols]
+    if not used:
         return {}, [], None
-    tallies = _counts(table, col)
-    out, unmatched = {}, []
-    for name, n in tallies.items():
-        a = unique_match(agency_idx, name)
-        if a:
-            out[a] = out.get(a, 0) + n
-        else:
-            unmatched.append(name)
-    return out, unmatched, col
-
-
-def _counts(table, col):
-    tallies = {}
-    for v in table.column(col).to_pylist():
-        tallies[v] = tallies.get(v, 0) + 1
-    return tallies
+    counts = table.column("count").to_pylist() if "count" in cols else None
+    out, unmatched = {}, set()
+    for c in used:
+        tallies = {}
+        for i, v in enumerate(table.column(c).to_pylist()):
+            if v:
+                tallies[v] = tallies.get(v, 0) + (int(counts[i] or 0) if counts else 1)
+        for name, n in tallies.items():
+            a = unique_match(agency_idx, name)
+            if not a:
+                unmatched.add(name)
+            elif a not in out:
+                out[a] = n
+    return out, sorted(unmatched), ",".join(used)
 
 
 # ---------------------------------------------------------------------------
@@ -816,7 +816,7 @@ def main():
     ap.add_argument("--parts", default=",".join(PARTS))
     ap.add_argument("--database", default="pillory")
     ap.add_argument("--force", action="store_true", help="read sources even when their checks say unchanged")
-    ap.add_argument("--workers", type=int, default=4, help="USAspending requests at a time")
+    ap.add_argument("--workers", type=int, default=2, help="USAspending requests at a time")
     ap.add_argument("--all-years", action="store_true", help="read every fiscal year since 2017, not only open ones")
     args = ap.parse_args()
     parts = [p for p in args.parts.split(",") if p]
