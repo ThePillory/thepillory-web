@@ -131,6 +131,7 @@ FOOTER = """<footer class="app-footer" aria-label="About ThePillory">
   <a href="/elections/">Elections</a>
   <a href="/topics/">Topics</a>
   <a href="/taxes/">Taxes</a>
+  <a href="/agencies/">Agencies</a>
   <a href="/email/">Weekly email</a>
   <a href="/waitlist/">Bring ThePillory to your county</a>
   <p class="app-footer-domain">thepillory.co</p>
@@ -594,6 +595,21 @@ def build_methodology():
     <li><strong>No rankings.</strong> The company list is ordered by name, revenue or profit before taxes only, shows dollars only, never by taxes paid or by any rate, and no company is labeled or colored by them. Every company has the same layout.</li>
     <li><strong>The same organization elsewhere.</strong> A company's page lists what ThePillory already has under its exact name (or an organization a person has linked to it, one company per name): its political action committee's contributions, lobbying reports, contributions reported by lobbying organizations, California lobbying and California ballot measure money, and a link to its federal awards. On donor, lobbying and ballot-measure organization lines, a matched company shows one line: its latest year's taxes paid and profit before taxes, in dollars. They're side by side as facts; nothing connects them.</li>
     <li><strong>Sources:</strong> the IRS's Statistics of Income Division, the California Franchise Tax Board (data.ca.gov), the Congressional Budget Office, the Federal Reserve's Distributional Financial Accounts, and the SEC's EDGAR, read weekly.</li>
+  </ul>
+</section>
+
+<section class="card stack" id="agencies">
+  <h2>Agencies</h2>
+  <p>The <a href="/agencies/">Agencies</a> pages show federal departments and agencies from official sources only, each number with its fiscal year, what it counts and its source.</p>
+  <ul class="plain-list small">
+    <li><strong>Which agencies.</strong> The Federal Register's list of agencies: each one's name, its parent (an agency listed under a department is shown as part of it), and its description in its own words, unedited. A top-level agency named as a department is one of the executive departments; every other top-level agency is listed under "Independent agencies and other offices".</li>
+    <li><strong>Leadership.</strong> Senate-confirmed positions and who holds them, from OPM's data published under the PLUM Act, "Vacant" as listed. Someone serving in a Senate-confirmed position without confirmation is shown only with the placement OPM lists (for example "PTDO"). Each holder is tied to the Congress.gov nomination naming them for that position, only when exactly one matches: the confirmation date, and the Senate roll call when one is recorded, otherwise the nomination's own latest action as stated (for example "Confirmed by the Senate by Voice Vote"). A holder already on ThePillory, like a Cabinet secretary, links to their page.</li>
+    <li><strong>Money.</strong> USAspending.gov, for each agency and fiscal year since 2017: total budgetary resources (what the agency could spend: new funding plus balances carried over), obligations (what it committed to spend) and outlays (what it paid out); obligations by object class and by budget function; and the 10 largest recipients of its contracts and of its grants, organizations only (people who receive awards are never listed). Federal fiscal years run October through September. The big number is the latest complete fiscal year's outlays.</li>
+    <li><strong>Workforce.</strong> OPM's Federal Workforce Data: employees on board each September, counted from OPM's records by agency.</li>
+    <li><strong>Oversight reports.</strong> GAO reports whose title or GAO's summary names the agency by its full name: title, date, number and link, newest first, never summarized or labeled. Inspector general reports on Oversight.gov aren't loaded: that site refuses requests from the servers that build ThePillory's data.</li>
+    <li><strong>Rules.</strong> The Federal Register's documents of type Rule for the agency: the count each year and the latest 10, linked.</li>
+    <li><strong>Funding laws.</strong> Appropriations bills already on ThePillory, tied to an agency by the subcommittee named in the bill's own title (a hand-kept table of the 12 subcommittees), linked to the bill page, where every member's vote is listed. Bills that fund the whole government at once aren't tied to single agencies.</li>
+    <li><strong>No grades or rankings.</strong> Agencies are listed by name, with the same layout for every agency. Nothing is scored, ranked across agencies or colored good or bad.</li>
   </ul>
 </section>
 

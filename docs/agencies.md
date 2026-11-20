@@ -39,11 +39,11 @@ Notes:
 | `agency_bills` | `(agency_id, bill_id)` | ~200 |
 | `agency_load_state` | `part` | 7 (the checks above) |
 
-Every table is read by its key or the agency's index; no page reads a whole table.
+Every table is read by its key or the agency's index; no page reads a whole table. The index page reads the `agencies` table (473 rows) and one `agency_money` row per agency by key.
 
 ## How often each part loads
 
-The workflow runs weekly (Mondays, after the sync Worker's run) and on demand. GAO's feed is read daily, since it carries only the 25 newest reports.
+The workflow (`.github/workflows/agencies.yml`) runs daily and on demand: every part on Mondays, only GAO's feed on other days (it carries only the 25 newest reports). Scheduled runs only measure until the repository variable `AGENCIES_MODE` is set to `load`; a run by hand takes `mode`, `parts` and `force`. The accuracy audit's section 14 runs the same measure (`agency_parts` picks parts).
 
 | Part | Runs | Writes after the first load |
 |---|---|---|

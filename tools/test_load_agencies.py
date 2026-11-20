@@ -24,6 +24,17 @@ class Names(unittest.TestCase):
         self.assertEqual(L.normal_case("Already Mixed"), "Already Mixed")
 
 
+class Matching(unittest.TestCase):
+    def test_reordered_and_abbreviated_names(self):
+        idx = L.name_index([{"id": "personnel-management-office", "name": "Personnel Management Office"},
+                            {"id": "engineers-corps", "name": "Engineers Corps"},
+                            {"id": "administrative-conference-of-the-united-states", "name": "Administrative Conference of the United States"}])
+        self.assertEqual(L.unique_match(idx, "Office of Personnel Management"), "personnel-management-office")
+        self.assertEqual(L.unique_match(idx, "Corps of Engineers - Civil Works"), "engineers-corps")
+        self.assertEqual(L.unique_match(idx, "Administrative Conference of the U.S."), "administrative-conference-of-the-united-states")
+        self.assertIsNone(L.unique_match(idx, "Office of Management"))
+
+
 class Agencies(unittest.TestCase):
     rows = L.parse_fr_agencies(jfx("fr_agencies.json"))
     by = {r["id"]: r for r in rows}

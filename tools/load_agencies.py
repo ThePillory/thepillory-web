@@ -28,6 +28,7 @@ tools/test_load_agencies.py with saved copies of each source.
 import argparse
 import concurrent.futures
 import csv
+import http.client
 import datetime
 import io
 import json
@@ -102,7 +103,7 @@ def fetch(url, *, method="GET", body=None, accept="application/json", timeout=18
                 raise Refused(f"{urllib.parse.urlsplit(url).hostname} refused the request (HTTP {e.code})") from e
             if wait is None or (e.code < 500 and e.code != 429):
                 raise
-        except (urllib.error.URLError, TimeoutError):
+        except (urllib.error.URLError, TimeoutError, ConnectionError, http.client.HTTPException, OSError):
             if wait is None:
                 raise
         time.sleep(wait)
@@ -134,7 +135,8 @@ def norm_name(s):
     m = re.match(r"^(.*) department$", t)
     if m:
         t = f"department of {m.group(1)}"
-    t = re.sub(r"^u ?s ", "united states ", t)
+    t = re.sub(r"\bu s\b", "united states", t)
+    t = re.sub(r" civil works$", "", t)  # USAspending's "Corps of Engineers - Civil Works"
     words = [w for w in t.split() if w not in ARTICLES]
     return " ".join(words)
 
@@ -181,17 +183,34 @@ def parse_fr_agencies(data):
     return rows
 
 
+# Names an official source uses for an agency the Federal Register lists under another name.
+ALIASES = {"access board": "architectural transportation barriers compliance board"}
+
+
+def word_key(n):
+    return "|" + " ".join(sorted(n.split()))
+
+
 def name_index(agencies):
-    """{normalized name: [agency ids]} over names and short names. Pure."""
+    """{normalized name: [agency ids]}, plus the same words in any order ("Personnel Management
+    Office" = "Office of Personnel Management"). Pure."""
     idx = {}
     for a in agencies:
-        idx.setdefault(norm_name(a["name"]), []).append(a["id"])
+        n = norm_name(a["name"])
+        idx.setdefault(n, []).append(a["id"])
+        idx.setdefault(word_key(n), []).append(a["id"])
     return idx
 
 
 def unique_match(idx, name):
-    ids = idx.get(norm_name(name), [])
-    return ids[0] if len(ids) == 1 else None
+    """The one agency with this name (or the same words in another order); None unless exactly one. Pure."""
+    n = norm_name(name)
+    n = ALIASES.get(n, n)
+    for key in (n, word_key(n)):
+        ids = idx.get(key, [])
+        if ids:
+            return ids[0] if len(set(ids)) == 1 else None
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -665,6 +684,16 @@ def part_money(args, ctx, plan):
     closed = {r["fy"] for r in existing(args, "agency_money").values()} if not args.force else set()
     years = [fy for fy in range(SINCE_FY, latest + 1) if args.all_years or fy >= latest - 1 or fy not in closed]
     def one(item):
+        try:
+            return read_one(item)
+        except Exception as e:  # noqa: BLE001  (one agency failing leaves its rows as they are)
+            say(f"  {names[item[0]]}: not read ({type(e).__name__}: {str(e)[:120]}); its rows are left as they are")
+            failed.append(item[1])
+            return [], [], []
+
+    failed = []
+
+    def read_one(item):
         code, aid = item
         m = money_rows(aid, code, fetch_json(f"{USAS}/agency/{code}/budgetary_resources/"))
         p, r = [], []
@@ -685,11 +714,14 @@ def part_money(args, ctx, plan):
             if n % 10 == 0:
                 say(f"  read {n} of {len(codes)} agencies")
     where = f"fy IN ({', '.join(map(str, years))})" if years else "0"
+    if failed:
+        where += f" AND agency_id NOT IN ({', '.join(D.lit(a) for a in failed)})"
+        say(f"money: {len(failed)} agencies not read this time; tried again next run")
     plan.add(args, "agency_money", money)
     plan.add(args, "agency_money_parts", parts, where=where, prune_scope="years")
     plan.add(args, "agency_recipients", recips, where=where, prune_scope="years")
     say(f"money: fiscal years read: {years[0] if years else '-'}–{years[-1] if years else '-'}")
-    return period
+    return None if failed else period
 
 
 def part_workforce(args, ctx, plan):

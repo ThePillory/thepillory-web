@@ -28,7 +28,7 @@ async function rows(db, sql, binds = []) {
 export async function usageData(db) {
   const since = iso(Date.now() - DAYS * 86400000);
   const week = iso(Date.now() - 7 * 86400000);
-  const [daily, own, routes, visitors, steps, queries, ai] = await Promise.all([
+  const [daily, own, routes, visitors, steps, queries, ai, agencies] = await Promise.all([
     rows(db, "SELECT * FROM usage_daily WHERE day >= ? ORDER BY day", [since]),
     rows(db, `SELECT day, SUM(r) AS rows_read, SUM(w) AS rows_written, SUM(q) AS requests FROM (
                 SELECT day, rows_read AS r, rows_written AS w, 0 AS q FROM usage_steps WHERE day >= ?
@@ -41,8 +41,10 @@ export async function usageData(db) {
     rows(db, "SELECT step, SUM(rounds) AS rounds, SUM(rows_read) AS rows_read, SUM(rows_written) AS rows_written FROM usage_steps WHERE day >= ? GROUP BY step ORDER BY rows_written * 1000 + rows_read DESC LIMIT 25", [week]),
     rows(db, "SELECT source, sql, SUM(calls) AS calls, SUM(rows_read) AS rows_read, SUM(rows_written) AS rows_written FROM usage_queries WHERE day >= ? GROUP BY source, sql_key ORDER BY rows_written * 1000 + rows_read DESC LIMIT 20", [week]),
     rows(db, "SELECT day, SUM(calls) AS calls, SUM(cost_usd) AS cost FROM ai_usage WHERE day >= ? GROUP BY day ORDER BY day", [since]),
+    // Agency loads (tools/load_agencies.py, GitHub Actions): "agencies-<part>" by key range, not LIKE.
+    rows(db, "SELECT day, step, rows_read, rows_written FROM usage_steps WHERE step >= 'agencies-' AND step < 'agencies.' AND day >= ? ORDER BY day DESC, step", [since]),
   ]);
-  return { daily, own, routes, visitors, steps, queries, ai, since, week };
+  return { daily, own, routes, visitors, steps, queries, ai, agencies, since, week };
 }
 
 const num = (v, d = 0) => (v == null ? "—" : Number(v).toLocaleString("en-US", { maximumFractionDigits: d }));
@@ -110,6 +112,12 @@ export function adminUsageMain(data) {
   ${(data.queries || []).length ? `<ol class="plain-list stack-xs small">${data.queries.map((q) => `<li><p class="small"><strong>${esc(q.source)}</strong> · ${num(q.calls)} calls · ${num(q.rows_read)} rows read · ${num(q.rows_written)} written</p><p class="small secondary">${esc(q.sql)}</p></li>`).join("")}</ol>` : '<p class="small secondary">Nothing recorded yet.</p>'}
   <p class="hint">The SQL's shape only: values are never recorded.</p>
 </section>`;
+  const agencyRows = data.agencies || [];
+  const agencyLoads = `<section class="card stack-sm" id="agency-loads">
+  <h2 class="h3">Agency loads</h2>
+  ${agencyRows.length ? table(["Day", "Part", "Rows read", "Rows written"], agencyRows.map((r) => tr([esc(r.day), esc(String(r.step).replace(/^agencies-/, "")), num(r.rows_read), num(r.rows_written)]))) : '<p class="small secondary">No agency loads recorded yet.</p>'}
+  <p class="hint">tools/load_agencies.py in GitHub Actions (the "Load agencies" workflow): each part's D1 rows, written only when a source changed (docs/agencies.md).</p>
+</section>`;
   const aiRows = data.ai || [];
   const ai = `<section class="card stack-sm" id="ai">
   <h2 class="h3">AI cost, beside it: billed by Anthropic, not Cloudflare</h2>
@@ -117,5 +125,5 @@ export function adminUsageMain(data) {
   <p class="hint">From ai_usage, at list price: every AI call the sync makes. Not part of the Cloudflare estimate above.</p>
 </section>`;
   return `${head}<p class="subtitle">${esc(o.month)}: about ${usd(o.projected.total)} projected</p></header>
-${summary}${byDay}${who}${routes}${steps}${queries}${ai}`;
+${summary}${byDay}${who}${routes}${steps}${agencyLoads}${queries}${ai}`;
 }

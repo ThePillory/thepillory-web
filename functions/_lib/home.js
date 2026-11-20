@@ -171,6 +171,7 @@ function nationSection(vs) {
     ${linkRow(vs ? `/reps/?state=${vs.st}` : "/reps/?browse=federal", "Congress", vs ? `The Senate and the House, ${vs.name}'s members first` : "The Senate and the House, every member")}
     ${linkRow("/bodies/us-supreme-court/", "Supreme Court", "The justices, this term's cases and decisions")}
     ${linkRow("/taxes/", "Taxes", "Who pays income taxes, and what companies report paying")}
+    ${linkRow("/agencies/", "Agencies", "Federal departments: leaders, money, workforce and reports")}
   </div>
 </section>`;
 }
