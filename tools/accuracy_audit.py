@@ -1052,89 +1052,87 @@ def agency_sources(args):
         say("```")
         say()
 
-    def post(url, body, timeout=60):
+    def get(url, accept="application/json", timeout=60, method="GET", body=None, n=3_000_000):
         try:
-            req = urllib.request.Request(url, data=json.dumps(body).encode(), headers={"User-Agent": UA, "Content-Type": "application/json"})
+            h = {"User-Agent": UA, "Accept": accept}
+            if body is not None:
+                h["Content-Type"] = "application/json"
+            req = urllib.request.Request(url, data=json.dumps(body).encode() if body is not None else None, headers=h, method=method)
             with urllib.request.urlopen(req, timeout=timeout) as r:
-                return r.read(2_000_000).decode("utf-8", "replace")
+                if method == "HEAD":
+                    return {k: v for k, v in r.headers.items() if k.lower() in ("etag", "last-modified", "content-length", "content-type")}
+                return r.read(n).decode("utf-8", "replace")
         except Exception as e:  # noqa: BLE001
             return f"__FETCH_FAILED__ {type(e).__name__}: {str(e)[:200]}"
 
-    def head(url):
-        try:
-            req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": UA})
-            with urllib.request.urlopen(req, timeout=30) as r:
-                return {k: v for k, v in r.headers.items() if k.lower() in ("etag", "last-modified", "content-length", "content-type")}
-        except Exception as e:  # noqa: BLE001
-            return f"__FETCH_FAILED__ {type(e).__name__}: {str(e)[:200]}"
+    def links(page, pat, k=60):
+        return "\n".join([l for l in sorted(set(re.findall(r'href="([^"]+)"', page))) if re.search(pat, l, re.I)][:k])
 
     # Federal Register agencies
-    fr = fetch("https://www.federalregister.gov/api/v1/agencies.json", timeout=60)
-    show("Federal Register agencies.json headers", head("https://www.federalregister.gov/api/v1/agencies.json"))
+    FR = "https://www.federalregister.gov/api/v1/agencies.json"
+    show("FR agencies.json headers", get(FR, method="HEAD"))
+    fr = get(FR)
     try:
         data = json.loads(fr)
         say(f"Agencies listed: {len(data)}; keys: {sorted(data[0].keys())}")
         say()
         for slug in ("agriculture-department", "forest-service", "environmental-protection-agency"):
-            show(f"FR agency {slug}", json.dumps([a for a in data if a.get("slug") == slug], indent=1), 2500)
+            a = [x for x in data if x.get("slug") == slug]
+            show(f"FR agency {slug}", json.dumps(a, indent=0)[:1800], 1800)
         tops = [a for a in data if not a.get("parent_id")]
         say(f"Top-level (no parent): {len(tops)}; with a parent: {len(data) - len(tops)}")
         say()
+        say("Departments: " + "; ".join(sorted(a["name"] for a in tops if re.search(r"Department", a["name"]))))
+        say()
     except Exception as e:  # noqa: BLE001
         show("FR agencies failed", f"{type(e).__name__}: {e}: {fr[:500]}")
-    show("FR rules for EPA, newest", fetch("https://www.federalregister.gov/api/v1/documents.json?per_page=2&order=newest&conditions%5Btype%5D%5B%5D=RULE&conditions%5Bagencies%5D%5B%5D=environmental-protection-agency&fields%5B%5D=title&fields%5B%5D=publication_date&fields%5B%5D=document_number&fields%5B%5D=html_url&fields%5B%5D=type", timeout=60), 2000)
-    show("FR yearly facet for EPA rules", fetch("https://www.federalregister.gov/api/v1/documents/facets/yearly?conditions%5Btype%5D%5B%5D=RULE&conditions%5Bagencies%5D%5B%5D=environmental-protection-agency", timeout=60), 2000)
+    show("FR yearly facet for EPA rules", get("https://www.federalregister.gov/api/v1/documents/facets/yearly?conditions%5Btype%5D%5B%5D=RULE&conditions%5Bagencies%5D%5B%5D=environmental-protection-agency"), 1500)
+    show("FR latest EPA rules", get("https://www.federalregister.gov/api/v1/documents.json?per_page=2&order=newest&conditions%5Btype%5D%5B%5D=RULE&conditions%5Bagencies%5D%5B%5D=environmental-protection-agency&fields%5B%5D=title&fields%5B%5D=publication_date&fields%5B%5D=document_number&fields%5B%5D=html_url"), 1500)
 
-    # USAspending
+    # USAspending (JSON)
     U = "https://api.usaspending.gov/api/v2"
-    tt = fetch(f"{U}/references/toptier_agencies/", timeout=60)
+    tt = get(f"{U}/references/toptier_agencies/")
     try:
-        d = json.loads(tt)
-        res = d.get("results", [])
+        res = json.loads(tt).get("results", [])
         say(f"USAspending toptier agencies: {len(res)}; keys: {sorted(res[0].keys()) if res else []}")
         say()
-        show("USAspending toptier first two", json.dumps(res[:2], indent=1), 2000)
+        show("USAspending toptier first two", json.dumps(res[:2]), 1500)
     except Exception as e:  # noqa: BLE001
-        show("USAspending toptier failed", f"{e}: {tt[:500]}")
-    show("USAspending agency 068 (EPA)", fetch(f"{U}/agency/068/", timeout=60), 2000)
-    show("USAspending budgetary_resources 068", fetch(f"{U}/agency/068/budgetary_resources/", timeout=60), 3000)
-    show("USAspending object_class 068 FY2025", fetch(f"{U}/agency/068/object_class/?fiscal_year=2025&limit=5", timeout=60), 2500)
-    show("USAspending budget_function 068 FY2025", fetch(f"{U}/agency/068/budget_function/?fiscal_year=2025&limit=5", timeout=60), 2500)
-    show("USAspending sub_agency 012 (USDA) FY2025", fetch(f"{U}/agency/012/sub_agency/?fiscal_year=2025&limit=5", timeout=60), 2500)
-    body = {"filters": {"time_period": [{"start_date": "2024-10-01", "end_date": "2025-09-30"}],
-                        "agencies": [{"type": "awarding", "tier": "toptier", "name": "Environmental Protection Agency"}],
-                        "award_type_codes": ["A", "B", "C", "D"]}, "category": "recipient", "limit": 5, "page": 1}
-    show("USAspending top contract recipients EPA FY2025", post(f"{U}/search/spending_by_category/recipient/", body), 2500)
-    body["filters"]["award_type_codes"] = ["02", "03", "04", "05"]
-    show("USAspending top grant recipients EPA FY2025", post(f"{U}/search/spending_by_category/recipient/", body), 2500)
-    body["filters"]["recipient_type_names"] = ["individuals"]
-    show("USAspending grant recipients that are individuals (filter test)", post(f"{U}/search/spending_by_category/recipient/", body), 1200)
+        show("USAspending toptier failed", f"{e}: {tt[:300]}")
+    show("USAspending agency 068", get(f"{U}/agency/068/"), 1500)
+    show("USAspending budgetary_resources 068", get(f"{U}/agency/068/budgetary_resources/"), 2500)
+    show("USAspending object_class 068 FY2025", get(f"{U}/agency/068/object_class/?fiscal_year=2025&limit=3"), 1500)
+    show("USAspending budget_function 068 FY2025", get(f"{U}/agency/068/budget_function/?fiscal_year=2025&limit=3"), 1500)
+    show("USAspending sub_agency 012 FY2025", get(f"{U}/agency/012/sub_agency/?fiscal_year=2025&limit=3"), 1500)
+    show("USAspending federal_account 068 FY2025", get(f"{U}/agency/068/federal_account/?fiscal_year=2025&limit=2"), 1200)
 
-    # OPM: workforce data and PLUM
-    for u in ("https://data.opm.gov/", "https://www.opm.gov/data/datasets/", "https://www.fedscope.opm.gov/",
-              "https://www.opm.gov/about-us/open-government/plum-reporting/", "https://www.opm.gov/about-us/open-government/plum-reporting/plum-data/"):
-        page = fetch(u, timeout=60)
-        links = sorted(set(re.findall(r'href="([^"]+)"', page)))
-        keep = [l for l in links if re.search(r"(api|csv|xlsx|json|zip|download|plum|workforce|employ|dataset|fedscope)", l, re.I)][:60]
-        show(f"OPM page {u}", (page[:300] if page.startswith("__FETCH_FAILED__") else "") + "\n".join(keep), 4000)
+    # OPM workforce (data.opm.gov) and PLUM
+    for u in ("https://data.opm.gov/get-data/api-access", "https://data.opm.gov/get-data/data-downloads",
+              "https://www.opm.gov/about-us/open-government/plum-reporting/data-information/",
+              "https://www.opm.gov/about-us/open-government/plum-reporting/plum-data/"):
+        page = get(u, accept="text/html")
+        text = re.sub(r"<script.*?</script>|<style.*?</style>", " ", page, flags=re.S)
+        text = re.sub(r"<[^>]+>", " ", text)
+        text = re.sub(r"\s+", " ", text)
+        show(f"Page {u}", (page[:200] if page.startswith("__FETCH") else text[:1800]) + "\n---links---\n" + links(page, r"(api|csv|xlsx|json|zip|download|\.txt|swagger|docs|plum)"), 3500)
+        apis = sorted(set(re.findall(r'https?://[^"\'\s<>]*(?:api|download)[^"\'\s<>]*', page)))[:30]
+        if apis:
+            show(f"URLs in {u}", "\n".join(apis), 2500)
 
-    # Oversight.gov and GAO
-    for u in ("https://www.oversight.gov/reports", "https://www.oversight.gov/api/reports", "https://www.oversight.gov/rss.xml",
-              "https://www.gao.gov/rss-feeds", "https://www.gao.gov/rss/reports.xml", "https://www.gao.gov/reports-testimonies?f%5B0%5D=agency%3AEnvironmental%20Protection%20Agency"):
-        page = fetch(u, timeout=60)
-        links = sorted(set(re.findall(r'href="([^"]+)"', page)))
-        keep = [l for l in links if re.search(r"(api|csv|rss|xml|json|feed|report|agency|export|search)", l, re.I)][:50]
-        show(f"Page {u}", page[:800] + "\n---links---\n" + "\n".join(keep), 4000)
+    # Oversight.gov (asks for a browser Accept header)
+    for u in ("https://www.oversight.gov/reports", "https://www.oversight.gov/reports?field_address_agency_target_id=All", "https://www.oversight.gov/rss.xml"):
+        page = get(u, accept="text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+        show(f"Page {u}", page[:600] + "\n---links---\n" + links(page, r"(api|csv|rss|xml|json|feed|export|agency|report)", 50), 3500)
 
-    # What D1 already holds for leadership and funding laws
-    rows = q(args, "SELECT id, description, organization, status, latest_on FROM nominations WHERE status = 'confirmed' ORDER BY latest_on DESC LIMIT 5")
-    table(rows, ["id", "description", "organization", "status", "latest_on"], ["Nomination", "Description", "Organization", "Status", "Latest"])
-    rows = q(args, "SELECT id, subject, question, result, vote_date FROM votes WHERE vote_type = 'nomination' ORDER BY vote_date DESC LIMIT 5")
-    table(rows, ["id", "subject", "question", "result", "vote_date"], ["Vote", "Subject", "Question", "Result", "Date"])
-    rows = q(args, "SELECT organization, COUNT(*) AS n FROM nominations WHERE status = 'confirmed' GROUP BY organization ORDER BY n DESC LIMIT 40")
-    table(rows, ["organization", "n"], ["Organization", "Confirmed"])
-    rows = q(args, "SELECT id, bill_number, title FROM bills WHERE level = 'federal' AND title LIKE '%Appropriations Act%' ORDER BY id DESC LIMIT 25")
-    table(rows, ["id", "bill_number", "title"], ["Bill", "Number", "Title"])
+    # GAO RSS: one item in full
+    rss = get("https://www.gao.gov/rss/reports.xml", accept="application/rss+xml")
+    items = re.findall(r"<item>.*?</item>", rss, re.S)
+    say(f"GAO RSS items: {len(items)}")
+    say()
+    if items:
+        show("GAO RSS first item", items[0], 2500)
+    for u in ("https://www.gao.gov/rss/topics.xml", "https://www.gao.gov/about/what-gao-does/rss", "https://www.gao.gov/rss-feeds-gao"):
+        show(f"GAO {u}", get(u, accept="text/html,application/xml")[:800], 800)
 
 
 def main():
