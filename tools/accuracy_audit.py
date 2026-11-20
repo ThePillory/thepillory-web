@@ -1076,16 +1076,17 @@ def agency_sources(args):
         except Exception as e:  # noqa: BLE001
             return f"__FETCH_FAILED__ {type(e).__name__}: {str(e)[:200]}"
 
-    show("OPM data API files", get2("https://data.opm.gov/api/v1/files", accept="application/json"), 6000)
-    show("PLUM API", get2("https://escs.opm.gov/escs-net/api/pbpub", accept="application/json"), 3000)
+    api = get2("https://data.opm.gov/get-data/api-access", accept="text/html", n=2_000_000)
+    txt = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", re.sub(r"<script.*?</script>|<style.*?</style>", " ", api, flags=re.S)))
+    i = txt.find("Getting started")
+    show("OPM API access page from 'Getting started'", txt[i:i + 5000], 5000)
+    B = "https://escs.opm.gov/escs-net/api/pbpub"
+    show("PLUM get-current-agencies", get2(f"{B}/get-current-agencies", accept="application/json"), 1500)
+    show("PLUM download-data", get2(f"{B}/download-data", accept="*/*", n=3000), 3000)
     page = get2("https://www.opm.gov/about-us/open-government/plum-reporting/plum-data/", accept="text/html", n=2_000_000)
-    scripts = re.findall(r"<script[^>]*>(.*?)</script>", page, re.S)
-    show("PLUM page scripts mentioning the API", "\n----\n".join(x[:1500] for x in scripts if "pbpub" in x or "escs" in x)[:5000], 5000)
-    rss = get2("https://www.gao.gov/rss/reports.xml", accept="application/rss+xml", n=2_000_000)
-    item = re.findall(r"<item>.*?</item>", rss, re.S)
-    if item:
-        tags = sorted(set(re.findall(r"<([a-zA-Z:]+)[ >]", item[0])))
-        show("GAO item tags", ", ".join(tags) + "\n" + "\n".join(re.findall(r"<(?:category|dc:subject|pubDate|guid)[^>]*>.*?</(?:category|dc:subject|pubDate|guid)>", item[0], re.S)[:20]), 2000)
+    for name in ("escsReportingUrl", "downloadDataUrl", "agenciesUrl"):
+        for m in re.finditer(name, page):
+            show(f"PLUM script near {name}", page[max(0, m.start() - 200): m.start() + 1200], 1400)
 
 
 def main():
