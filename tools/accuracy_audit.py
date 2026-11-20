@@ -1095,7 +1095,7 @@ def agency_measure(args):
     the rows and row writes a load would make, and the storage it adds. AGENCY_PARTS picks parts."""
     say("## 14. Agencies: measure (writes nothing)")
     say()
-    subprocess.run([sys.executable, "-m", "pip", "install", "-q", "pyarrow==17.0.0"], check=False)
+    subprocess.run([sys.executable, "-m", "pip", "install", "-q", "pyarrow==22.0.0"], check=False)
     parts = os.environ.get("AGENCY_PARTS") or "agencies,leaders,money,workforce,oversight,rules,laws"
     p = subprocess.Popen([sys.executable, str(Path(__file__).resolve().parent / "load_agencies.py"), "--mode", "measure", "--parts", parts, "--database", args.database],
                          stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
