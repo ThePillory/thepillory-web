@@ -144,7 +144,7 @@ export const SOURCES = [
     name: "House Clerk and Senate stock trade reports",
     provides: "Periodic Transaction Reports of members' stock trades (STOCK Act).",
     workflow: "trades.yml",
-    runDays: 3,
+    runDays: 8, // weekly, Mondays
     table: "trade_reports",
     where: "chamber IN ('us-house', 'us-senate')",
     latest: "MAX(filed_on)",

@@ -110,7 +110,8 @@ Nothing runs more often than its source changes (November 2026). A run that find
 | Bill outcomes (`bill-outcomes`) | any day | daily | Congress.gov `updateDate`; California bills awaiting action every 3 days |
 | Passage without a recorded vote (`bill-passages`) | any day | daily | Congress.gov `fromDateTime` on the bill list; a bill's cosponsors, related bills and committee report read again only when its `updateDate` changes |
 | Discharge petitions (`discharge-petitions`) | when members sign | daily; a petition filed over a year ago every 30 days | the Clerk's list read each run; each petition's page only when due |
-| Stock trades ("Load stock trades") | reports filed within 45 days of a trade | daily | only reports not in D1 |
+| Stock trades ("Load stock trades") | reports filed within 45 days of a trade | weekly (Mondays) | only reports not in D1 |
+| Scanned 278-T reports read by AI (`scanned-trades`) | when the executive branch files a scanned report | weekly, up to `SCANNED_TRADES_DAILY` reports | only reports not read yet |
 | Source health, page summaries, usage check | — | daily (summaries at most hourly, only when their fingerprint changed) | — |
 | County officials | when a person edits the file | daily | ETag on `data/county-officials.json` → 304 skips |
 | Campaign money and lobbying (`executive-funding`, `dark-money`, `federal-funding`, `committee-bills`, `federal-lobbying`, `lobbying-contributions`) | on filing deadlines | weekly; daily for 7 days after each LDA and FEC deadline | each record's own refresh interval; `ca-campaign.json`'s build stamp |

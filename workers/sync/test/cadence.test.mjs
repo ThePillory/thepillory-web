@@ -41,6 +41,7 @@ test("money and lobbying steps: weekly, daily in a filing window", () => {
     assert.equal(stepCadence(step, "2026-12-04").freq, "daily"); // after the Dec 3 FEC post-general
   }
   assert.equal(stepCadence("issues-pages", "2026-10-21").freq, "weekly");
+  assert.equal(stepCadence("scanned-trades", "2026-11-20").freq, "weekly");
   assert.equal(stepCadence("candidate-platforms", "2026-10-21").freq, "weekly");
 });
 
