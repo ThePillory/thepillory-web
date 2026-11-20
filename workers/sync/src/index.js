@@ -20,7 +20,7 @@ import { everyMinute } from "./email/send.js";
 import { CRONS as EMAIL_CRONS, isSendTime, comingSunday, pacific } from "./email/schedule.js";
 import { syncOtherStateVotes } from "./state-votes-api.js";
 import { syncAllStateOfficials } from "./states-officials.js";
-import { summarizeFlags } from "./analysis/flags.js";
+import { statusReport, recordStatusCounts, BUSY } from "./status.js";
 import { syncExecutiveOfficials, syncExecutiveOrders, syncBillOutcomes, syncNominations } from "./executive/sync.js";
 import { DurableObject } from "cloudflare:workers";
 import { ensureSchema, log } from "./db.js";
@@ -34,7 +34,7 @@ import { syncBillPassages } from "./passages/sync.js";
 import { syncDischargePetitions } from "./passages/petitions.js";
 import { syncCountyMeetings } from "./meetings/county.js";
 import { syncStateHearings } from "./meetings/state.js";
-import { withD1Retry } from "./d1retry.js";
+import { withD1Retry, isTransient } from "./d1retry.js";
 import { syncFederalFunding, syncFederalLobbying, syncCommitteeBills, syncLobbyContributions } from "./funding/sync.js";
 import { syncExecutiveFunding } from "./funding/executive.js";
 import { syncDarkMoney, syncSignerOrgs } from "./funding/darkmoney-sync.js";
@@ -224,6 +224,12 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId, doneSteps = 
     if (result.status !== "partial" || !/request budget used up|run time limit reached|temporary error/.test(result.message || "")) done.add(step);
     summary.push({ step, ...result, requests: budget.used - before });
   }
+  // The big tables' counts for /status, once per round (src/status.js): /status never counts them itself.
+  try {
+    await recordStatusCounts(env.DB);
+  } catch (err) {
+    console.warn(`[${run.id}] status counts: ${redact(`${err.name}: ${err.message}`)}`);
+  }
   const temporary = summary.filter((s) => s.status === "partial" && /^temporary error/.test(s.message || ""));
   const partialVotes = summary.filter((s) => (s.step.endsWith("-votes") || ["county-meetings", "bill-outcomes", "bill-passages", "discharge-petitions", "executive-orders", "nominations", "order-texts", "order-courts", "executive-funding", "dark-money", "federal-funding", "committee-bills", "lobbying-contributions", "federal-lobbying", "scanned-trades"].includes(s.step)) && s.status === "partial");
   return {
@@ -362,6 +368,14 @@ export class SyncRunner extends DurableObject {
     } catch (err) {
       if (await this.superseded(state)) return;
       state.round_open = false;
+      // D1 overloaded (or another temporary D1 error) outside a step, still failing after
+      // src/d1retry.js's retries: the run pauses and tries the round again, instead of ending.
+      if (isTransient(err) && state.round < MAX_ROUNDS) {
+        state.rounds = [...state.rounds, { round: state.round, started_at: state.round_started_at, finished_at: new Date().toISOString(), error: redact(`temporary, round tried again: ${err.name}: ${err.message}`) }].slice(-10);
+        await this.ctx.storage.put("state", state);
+        await this.ctx.storage.setAlarm(Date.now() + parseInt(this.env.TEMPORARY_RETRY_MS || "300000", 10));
+        return;
+      }
       // Caught so the alarm isn't retried in a loop; the error is visible in /status.
       state.error = redact(`${err.name}: ${err.message}`);
       state.outcome = "error";
@@ -533,41 +547,18 @@ export default {
         });
       }
 
-      // /status
+      // /status: light reads only (src/status.js). The big tables' counts come from status_counts,
+      // recorded once per sync round. Read without retries, so a busy database answers at once.
       const run = await (await runner(env).fetch("https://sync-runner/state")).json();
-      let counts = null;
-      let recent = [];
-      let flags = null;
-      if (env.DB) {
-        await ensureSchema(env.DB);
-        counts = await env.DB.prepare(
-          "SELECT (SELECT COUNT(*) FROM officials WHERE active = 1) AS officials, (SELECT COUNT(*) FROM bills) AS bills, " +
-            "(SELECT COUNT(*) FROM votes) AS votes, (SELECT COUNT(*) FROM vote_positions) + (SELECT COUNT(*) FROM state_positions) AS positions, " +
-            "(SELECT COUNT(*) FROM bill_analyses WHERE current = 1 AND status = 'ai_draft' AND ai_review = 'pass') AS analyses_auto_checked, " +
-            "(SELECT COUNT(*) FROM bill_analyses WHERE current = 1 AND status = 'ai_draft' AND ai_review = 'flag') AS analyses_flagged_by_ai, " +
-            "(SELECT COUNT(*) FROM bill_analyses WHERE current = 1 AND status = 'ai_draft' AND ai_review IS NULL) AS analyses_awaiting_ai_review, " +
-            "(SELECT COUNT(*) FROM bill_analyses WHERE current = 1 AND status = 'reviewed') AS analyses_reviewed, " +
-            "(SELECT COUNT(*) FROM bill_relevance WHERE verdict = 'skip' AND override IS NULL) AS bills_skipped_as_ceremonial, " +
-            "(SELECT COUNT(*) FROM bill_list) AS laws_page_bills"
-        ).first();
-        recent = (await env.DB.prepare("SELECT * FROM sync_log ORDER BY id DESC LIMIT 30").all()).results;
-        // Why drafts are flagged: the current flags, and the earlier reviews of
-        // drafts re-reviewed under the reviewer's newer rules (with the new outcome).
-        const rows = (
-          await env.DB.prepare(
-            `SELECT bill_id, ai_review, ai_review_detail FROM bill_analyses
-             WHERE current = 1 AND status = 'ai_draft' AND (ai_review = 'flag' OR json_extract(ai_review_detail, '$.previous') IS NOT NULL)`
-          ).all()
-        ).results.map((r) => ({ bill_id: r.bill_id, verdict: r.ai_review, detail: JSON.parse(r.ai_review_detail || "{}") }));
-        const rereviewed = rows.filter((r) => r.detail.previous);
-        flags = {
-          flagged_now: summarizeFlags(rows.filter((r) => r.verdict === "flag")),
-          rereviewed_under_new_rules: {
-            ...summarizeFlags(rereviewed, { which: "previous" }),
-            now_published: rereviewed.filter((r) => r.verdict === "pass").length,
-            still_flagged: rereviewed.filter((r) => r.verdict === "flag").length,
-          },
-        };
+      let report = { counts: null, counts_as_of: null, recent_log: [], ai_review_flags: null };
+      if (rawEnv.DB) {
+        try {
+          await ensureSchema(rawEnv.DB);
+          report = await statusReport(rawEnv.DB);
+        } catch (err) {
+          if (!isTransient(err)) throw err;
+          report.note = BUSY;
+        }
       }
       return json({
         run: {
@@ -583,10 +574,13 @@ export default {
           error: run.error || null,
           rounds: run.rounds || [],
         },
-        counts,
+        ...(report.note ? { note: report.note } : {}),
+        counts: report.counts,
+        counts_as_of: report.counts_as_of,
+        ...(report.counts_note ? { counts_note: report.counts_note } : {}),
         keys: keyReport(env),
-        ai_review_flags: flags,
-        recent_log: recent,
+        ai_review_flags: report.ai_review_flags,
+        recent_log: report.recent_log,
       });
     } catch (err) {
       return json({ error: redact(`${err.name}: ${err.message}`) }, 500);

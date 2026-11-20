@@ -28,14 +28,14 @@
 // Every earlier version is kept. Tokens are logged per call.
 import { log } from "../db.js";
 import { Budget, BudgetExhausted, getState, setState, redact } from "../util.js";
-import { loadConstitution, PROVISIONS } from "../constitution.js";
+import { loadConstitution, PROVISIONS, quoteProvisions } from "../constitution.js";
 import { fetchBillText, cardSource, officialSummary } from "./billtext.js";
 import { draftAnalysis, DraftRefused } from "./claude.js";
 import { verifyQuotes, verifyCitations, sameCase } from "./verify.js";
 import { makeLookup } from "./courtlistener.js";
 import { PROMPT_VERSION, CARD_PROMPT_VERSION } from "./prompt.js";
 import { checkRelevance, BATCH, RELEVANCE_PROMPT_VERSION } from "./relevance.js";
-import { reviewDraft, draftForReview } from "./review.js";
+import { reviewDraft, draftForReview, REVIEW_PROMPT_VERSION } from "./review.js";
 import { lintDraft, hardSpots } from "./lint.js";
 import { resolveDraft, changeNote, centsFor, RESOLVE_MODEL } from "./resolve.js";
 import { setStep } from "../ai-usage.js";
@@ -329,6 +329,14 @@ function reviewNote(review, spot) {
 // ---------------------------------------------------------------------------
 // 2. Backlog: drafts the AI reviewer hasn't seen
 
+/**
+ * A current draft flagged by an older version of the reviewer's rules, that no person has decided on:
+ * reviewed again (reviewBacklog) before the resolution step takes it. SQL; `a` is bill_analyses.
+ */
+export const OLD_FLAG = (a) =>
+  `${a}.ai_review = 'flag' AND COALESCE(json_extract(${a}.ai_review_detail, '$.version'), '') < '${REVIEW_PROMPT_VERSION}'
+   AND NOT EXISTS (SELECT 1 FROM bill_analysis_revisions v WHERE v.analysis_id = ${a}.id AND v.actor != 'pipeline')`;
+
 async function reviewBacklog(env, db, budget, run) {
   const limit = parseInt(env.REVIEW_BACKLOG_DAILY || "10", 10);
   const key = `review_backlog_${day()}`;
@@ -341,16 +349,19 @@ async function reviewBacklog(env, db, budget, run) {
                 x.id IS NOT NULL AS is_order
          FROM bill_analyses a LEFT JOIN bills b ON b.id = a.bill_id LEFT JOIN executive_actions x ON x.id = a.bill_id
            LEFT JOIN bill_relevance r ON r.bill_id = a.bill_id
-         -- Not reviewed yet. (A flagged draft goes to the resolution step, which
-         -- reviews it again itself, so it isn't re-reviewed here.)
-         WHERE a.current = 1 AND a.status = 'ai_draft' AND (b.id IS NOT NULL OR x.id IS NOT NULL OR a.bill_id LIKE '${MEASURE_PREFIX}%') AND a.ai_review IS NULL
+         -- Not reviewed yet, then drafts flagged under an older reviewer version (REVIEW_PROMPT_VERSION):
+         -- those are reviewed again under the current rules first, and only the ones still flagged go on
+         -- to the resolution step (which reviews again itself). One a person decided on is left alone.
+         WHERE a.current = 1 AND a.status = 'ai_draft' AND (b.id IS NOT NULL OR x.id IS NOT NULL OR a.bill_id LIKE '${MEASURE_PREFIX}%')
+           AND (a.ai_review IS NULL OR (${OLD_FLAG("a")}))
            AND COALESCE(x.signed_on, x.published_on, ${BILL_DATE("a.bill_id")}, substr(a.created_at, 1, 10)) >= '${analysisSince(env)}'
-         ORDER BY a.created_at, a.id LIMIT 25`
+         ORDER BY a.ai_review IS NULL DESC, a.created_at, a.id LIMIT 25`
       )
       .all()
   ).results;
   let rejected = 0;
   let reviewed = 0;
+  const rereview = { reviewed: 0, now_pass: 0, still_flagged: 0 };
   for (const row of rows) {
     const t0 = new Date().toISOString();
     // Ceremonial or routine: rejected without a review call.
@@ -406,13 +417,19 @@ async function reviewBacklog(env, db, budget, run) {
       used += 1;
       await setState(db, key, String(used));
       reviewed += 1;
+      if (row.ai_review) {
+        rereview.reviewed += 1;
+        rereview[review.verdict === "pass" ? "now_pass" : "still_flagged"] += 1;
+      }
       await log(db, run, "analysis-backlog", "ok", budget.used - before, `${row.bill_id}: analysis ${row.id}: ${reviewNote(review, spot)}; model ${review.model}; tokens in ${review.usage.input_tokens}, out ${review.usage.output_tokens}`, t0);
     } catch (err) {
       if (err instanceof BudgetExhausted) break;
       await log(db, run, "analysis-backlog", "error", budget.used - before, `${row.bill_id}: ${redact(`${err.name}: ${err.message}`)}`, t0);
     }
   }
-  return { rejected, reviewed };
+  if (rereview.reviewed)
+    await log(db, run, "analysis-backlog", "ok", 0, `re-reviewed under the current rules (${REVIEW_PROMPT_VERSION}): ${rereview.reviewed} flagged draft(s); ${rereview.now_pass} now pass, ${rereview.still_flagged} still flagged (those go to the resolution step)`, new Date().toISOString());
+  return { rejected, reviewed, rereview };
 }
 
 // ---------------------------------------------------------------------------
@@ -482,6 +499,8 @@ export async function runResolutions(env, db, budget, run, { fakes = null } = {}
         .prepare(
           `${RESOLVE_SELECT} WHERE a.current = 1 AND a.status = 'ai_draft' AND a.ai_review = 'flag'
              AND NOT EXISTS (SELECT 1 FROM bill_analysis_revisions v WHERE v.analysis_id = a.id AND v.actor != 'pipeline')
+             -- Flagged under the reviewer's current rules only: an older flag is reviewed again first (reviewBacklog).
+             AND COALESCE(json_extract(a.ai_review_detail, '$.version'), '') >= '${REVIEW_PROMPT_VERSION}'
              -- Once each; one withheld is tried again after RESOLVE_RETRY_DAYS, up to RESOLVE_TRIES in all.
              AND NOT EXISTS (SELECT 1 FROM analysis_resolutions z WHERE z.analysis_id = a.id
                                AND (z.outcome != 'withheld' OR z.created_at > datetime('now', '-${retryDays} days')))
@@ -560,7 +579,7 @@ async function resolveRow(env, db, budget, row, fakes = null) {
       return draftAnalysis(Object.create(env, { ANALYSIS_MODEL: { value: resolveModel, enumerable: true } }), bill, source, depth);
     },
     check: async (d, trimmed) => {
-      const quoteCheck = verifyQuotes(d, PROVISIONS);
+      const quoteCheck = verifyQuotes(d, quoteProvisions(bill));
       for (const id of trimmed) quoteCheck.dropped.push({ id, reason: "a card keeps only the 3 most relevant provisions" });
       return { quoteCheck, citationCheck: await verifyCitations(d, makeLookup(env, budget, sameCase)) };
     },
@@ -670,6 +689,8 @@ async function nextBills(db, limit, env = {}, redraftRoom = 0) {
         `SELECT b.*, a.depth AS redraft_depth FROM bills b JOIN bill_analyses a ON a.bill_id = b.id AND a.current = 1
          WHERE a.status = 'ai_draft' AND a.ai_review = 'flag'
            AND COALESCE(a.prompt_version, '') != CASE WHEN a.depth = 'card' THEN ? ELSE ? END
+           -- Still flagged under the reviewer's current rules: an older flag is reviewed again first (reviewBacklog).
+           AND COALESCE(json_extract(a.ai_review_detail, '$.version'), '') >= '${REVIEW_PROMPT_VERSION}'
            AND NOT EXISTS (SELECT 1 FROM bill_analysis_revisions v WHERE v.analysis_id = a.id AND v.actor != 'pipeline')
            AND ${retry} AND ${BILL_DATE("b.id")} >= '${since}'
          ORDER BY a.id LIMIT ?`
@@ -789,6 +810,8 @@ async function nextOrders(db, limit, env = {}) {
         `SELECT x.id, a.depth FROM executive_actions x JOIN bill_analyses a ON a.bill_id = x.id AND a.current = 1
          WHERE a.status = 'ai_draft' AND a.ai_review = 'flag'
            AND COALESCE(a.prompt_version, '') != CASE WHEN a.depth = 'card' THEN ? ELSE ? END
+           -- Still flagged under the reviewer's current rules: an older flag is reviewed again first (reviewBacklog).
+           AND COALESCE(json_extract(a.ai_review_detail, '$.version'), '') >= '${REVIEW_PROMPT_VERSION}'
            AND NOT EXISTS (SELECT 1 FROM bill_analysis_revisions v WHERE v.analysis_id = a.id AND v.actor != 'pipeline')
            AND ${retry} AND COALESCE(x.signed_on, x.published_on) >= '${since}'
          ORDER BY COALESCE(x.signed_on, x.published_on) DESC, x.id DESC LIMIT ?`
@@ -843,7 +866,7 @@ export async function analyzeBill(env, db, budget, bill) {
   }
   let { draft, model, usage, trimmed } = result;
   const checks = async (d, t) => {
-    const quoteCheck = verifyQuotes(d, PROVISIONS);
+    const quoteCheck = verifyQuotes(d, quoteProvisions(bill));
     for (const id of t) quoteCheck.dropped.push({ id, reason: "a card keeps only the 3 most relevant provisions" });
     return { quoteCheck, citationCheck: await verifyCitations(d, makeLookup(env, budget, sameCase)) };
   };

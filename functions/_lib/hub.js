@@ -1,6 +1,7 @@
 // Pieces of the hub (/) and the briefings: Happening now, the district lookup
 // form, and the waitlist counts. Everything shown is from D1 or an honest
 // empty state.
+import { provisionHref } from "./provision-link.js";
 import { listScope, voteScope } from "./data.js";
 import { esc, fmtDate } from "./render.js";
 import { EMAIL_HREF } from "./email-link.js";
@@ -107,7 +108,7 @@ export async function happeningNow(db, level, { limit = 4, officialIds = [] } = 
 export function nowCard(v, { personal = false } = {}) {
   const a = v.analysis;
   const chip = v.provision
-    ? `<a class="chip chip--parch" href="/laws/constitution/#${esc(v.provision.id)}">${esc(v.provision.label)}</a>`
+    ? `<a class="chip chip--parch" href="${esc(provisionHref(v.provision.id))}">${esc(v.provision.label)}</a>`
     : '<span class="chip chip--quiet">Not yet mapped to the Constitution</span>';
   const summary = a
     ? `<p class="small">${esc(a.plain_summary)}</p>`

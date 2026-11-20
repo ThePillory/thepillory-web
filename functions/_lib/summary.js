@@ -7,6 +7,7 @@
 //                 opens it, see openTarget() in assets/app.js)
 //   compactRow    one line in a list: type, title, status, and the clause it touches
 // Styles: assets/pillory.css, "Summary first". Pure: no D1, no network.
+import { provisionHref } from "./provision-link.js";
 import { esc, safeUrl } from "./render.js";
 
 const ROMAN = { I: 1, II: 2, III: 3, IV: 4, V: 5, VI: 6, VII: 7, VIII: 8, IX: 9, X: 10, XI: 11, XII: 12, XIII: 13, XIV: 14, XV: 15, XVI: 16, XVII: 17, XVIII: 18, XIX: 19, XX: 20, XXI: 21, XXII: 22, XXIII: 23, XXIV: 24, XXV: 25, XXVI: 26, XXVII: 27 };
@@ -23,10 +24,16 @@ export function shortLabel(label) {
   const s = String(label || "");
   const am = /^Amendment ([IVXL]+)(?:, Section (\d+))?(?:, Clause (\d+))?$/.exec(s);
   if (am) return `${ROMAN[am[1]] ? ord(ROMAN[am[1]]) : am[1]} Amendment${am[2] ? `, §${am[2]}` : ""}${am[3] ? `, cl. ${am[3]}` : ""}`;
-  return s.replace(/^Article /, "Art. ").replace(/, Section (\d+)/, ", §$1").replace(/, Clause (\d+)/, ", cl. $1");
+  // "California Constitution, Article I, Section 7" -> "Cal. Const. Art. I, §7".
+  return s
+    .replace(/^California Constitution, /, "Cal. Const. ")
+    .replace(/(^|Const\. )Article /, "$1Art. ")
+    .replace(/, Section ([\d.]+)/, ", §$1")
+    .replace(/, Clause (\d+)/, ", cl. $1");
 }
 
-export const clauseHref = (id) => `/laws/constitution/#${encodeURIComponent(id)}`;
+// A California Constitution provision links to the Legislature's page (functions/_lib/provision-link.js).
+export const clauseHref = (id) => provisionHref(id);
 
 /**
  * "Touches the Constitution": a parchment chip per provision, each linking to

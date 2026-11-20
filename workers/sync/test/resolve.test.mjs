@@ -10,7 +10,9 @@ import { readFileSync, readdirSync } from "node:fs";
 import { resolveDraft, trimDraft, summaryOnly, useful, changeNote, centsFor, containsMarked, addMarked } from "../src/analysis/resolve.js";
 import { hardSpots } from "../src/analysis/lint.js";
 import { settleReview } from "../src/analysis/review.js";
-import { runResolutions, analysisSince, MIN_TIME_PER_RESOLUTION_MS, FRESH_MIN_MS } from "../src/analysis/index.js";
+import { runResolutions, analysisSince, MIN_TIME_PER_RESOLUTION_MS, FRESH_MIN_MS, OLD_FLAG } from "../src/analysis/index.js";
+import { REVIEW_PROMPT_VERSION } from "../src/analysis/review.js";
+import { flagReport } from "../src/status.js";
 import { noteInterrupted } from "../src/run-state.js";
 import { Budget } from "../src/util.js";
 import { isPublic, parse, baselineSection, analysisChanges, constitutionBrief } from "../../../functions/_lib/analysis.js";
@@ -231,7 +233,7 @@ function seeded() {
     VALUES (?, 1, 'ai_draft', 'card', 'full_text', 'https://example.org/t', ?, ?, ?, ?, ?, '', '[]', '[]', '', 'claude-sonnet-5-5', 'x', 1, 1, ?, ?, ?, ?)`);
   const put = (id, d, verdict, detail) =>
     row.run(id, d.plain_summary, JSON.stringify(d.clauses), JSON.stringify(d.aligns), JSON.stringify(d.tension), JSON.stringify(d.departure), verdict, JSON.stringify(detail), d.supporters, d.critics);
-  put("fr:1", card({ tension: ["One view is that BAD it is in tension, because of a strawman."] }), "flag", { verdict: "flag", checks: FLAG.checks, reasons: FLAG.reasons, notes: [] });
+  put("fr:1", card({ tension: ["One view is that BAD it is in tension, because of a strawman."] }), "flag", { verdict: "flag", checks: FLAG.checks, reasons: FLAG.reasons, notes: [], version: REVIEW_PROMPT_VERSION });
   put("fr:2", card(), "pass", { verdict: "pass", checks: [], reasons: [], notes: [] });
   sqlite.exec(`INSERT INTO analysis_flags (analysis_id, bill_id, reason, note) VALUES (2, 'fr:2', 'inaccurate', 'The summary is wrong.')`);
   return sqlite;
@@ -367,4 +369,47 @@ test("a summary-only analysis shows the summary and provisions, and says the ful
   assert.doesNotMatch(html, /Where it aligns/);
   assert.match(html, /To regulate Commerce/);
   assert.doesNotMatch(constitutionBrief(a, provisions, { fullHref: "/x/" }), /Read the full analysis/);
+});
+
+test("a draft flagged under an older reviewer version is reviewed again first, not sent to the resolution step", async () => {
+  const sqlite = seeded();
+  sqlite.exec("DELETE FROM analysis_flags");
+  sqlite.exec(`UPDATE bill_analyses SET ai_review_detail = json_set(ai_review_detail, '$.version', '2026-10-20.1') WHERE id = 1`);
+  const db = d1(sqlite);
+  const fakes = { revise: async () => assert.fail("an old flag isn't resolved before it's reviewed again"), review: async () => assert.fail("nor reviewed by the resolution step") };
+  await runResolutions(env, db, new Budget(env, 10 * 60 * 1000), run, { fakes });
+  assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM analysis_resolutions").get().n, 0);
+  const old = () => sqlite.prepare(`SELECT a.id FROM bill_analyses a WHERE a.current = 1 AND ${OLD_FLAG("a")}`).all().map((r) => r.id);
+  assert.deepEqual(old(), [1]);
+  // A flag with no version at all counts as old; one a person decided on is left alone.
+  sqlite.exec(`UPDATE bill_analyses SET ai_review_detail = json_remove(ai_review_detail, '$.version') WHERE id = 1`);
+  assert.deepEqual(old(), [1]);
+  sqlite.exec(`INSERT INTO bill_analysis_revisions (analysis_id, bill_id, action, actor, note, snapshot) VALUES (1, 'fr:1', 'edited', 'A person', '', '{}')`);
+  assert.deepEqual(old(), []);
+  // Re-reviewed under the current rules and still flagged: the resolution step takes it.
+  sqlite.exec("DELETE FROM bill_analysis_revisions");
+  sqlite.exec(`UPDATE bill_analyses SET ai_review_detail = json_set(ai_review_detail, '$.version', '${REVIEW_PROMPT_VERSION}') WHERE id = 1`);
+  assert.deepEqual(old(), []);
+  let revised = 0;
+  await runResolutions(env, db, new Budget(env, 10 * 60 * 1000), run, { fakes: { revise: async () => (revised++, { draft: card(), trimmed: [], model: "claude-opus-5-5", usage: USAGE }), review: async () => review([]) } });
+  assert.equal(revised, 1);
+});
+
+test("before and after a re-review: how many now pass, how many are still flagged, by check", () => {
+  const check = (id, ok, severity = "major") => ({ id, ok, severity, note: id, where: [] });
+  const prev = (ids) => ({ verdict: "flag", checks: ids.map((id) => check(id, false)), reasons: ids, version: "2026-10-20.1" });
+  const rows = [
+    { bill_id: "a", verdict: "pass", detail: { verdict: "pass", checks: [], version: REVIEW_PROMPT_VERSION, previous: prev(["language"]) } },
+    { bill_id: "b", verdict: "flag", detail: { verdict: "flag", checks: [check("summary", false)], version: REVIEW_PROMPT_VERSION, previous: prev(["language", "summary"]) } },
+    { bill_id: "c", verdict: "flag", detail: { verdict: "flag", checks: [check("language", false)], version: "2026-10-20.1" } },
+  ];
+  const r = flagReport(rows);
+  assert.equal(r.rereviewed_under_new_rules.now_published, 1);
+  assert.equal(r.rereviewed_under_new_rules.still_flagged, 1);
+  assert.equal(r.waiting_for_rereview.drafts, 1);
+  assert.equal(r.rereviewed_under_new_rules.before.by_check.language, 2);
+  assert.equal(r.rereviewed_under_new_rules.before.by_check.summary, 1);
+  assert.equal(r.rereviewed_under_new_rules.after_still_flagged.by_check.summary, 1);
+  assert.equal(r.rereviewed_under_new_rules.after_still_flagged.by_check.language, 0);
+  assert.equal(r.waiting_for_rereview.by_check.language, 1);
 });

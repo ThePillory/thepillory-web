@@ -100,6 +100,9 @@ export const STEP_CADENCE = {
   // Officials' and candidates' websites change rarely.
   "issues-pages": weekly,
   "candidate-platforms": weekly,
+  // Scanned 278-T reports read by AI (the most expensive AI step per run): once a week, up to
+  // SCANNED_TRADES_DAILY reports in that run.
+  "scanned-trades": weekly,
   // The Time Machine: past years don't change.
   "history-officials": complete,
   "history-orders": complete,

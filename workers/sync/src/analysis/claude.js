@@ -7,7 +7,7 @@
 //   (relevance.js) the cheap relevance check (claude-haiku-4-5)
 import Anthropic from "@anthropic-ai/sdk";
 import { recordUsage } from "../ai-usage.js";
-import { instructions, cardInstructions, constitutionBlock, schema, cardSchema, billMessage, revisionMessage, cardToDraft } from "./prompt.js";
+import { instructions, cardInstructions, constitutionBlock, schema, cardSchema, billMessage, revisionMessage, cardToDraft, caProvisionsFor } from "./prompt.js";
 
 export const DEFAULT_MODEL = "claude-sonnet-5-5";
 
@@ -88,6 +88,8 @@ export async function structuredCall(env, { model, system, message, jsonSchema, 
  */
 export async function draftAnalysis(env, bill, source, depth = "card", revision = null) {
   const card = depth === "card";
+  // A California bill may also cite the California provisions its message carries (src/ca-constitution.js).
+  const caIds = caProvisionsFor(bill, source).map((p) => p.id);
   const { data, model, usage } = await structuredCall(env, {
     model: env.ANALYSIS_MODEL || DEFAULT_MODEL,
     // The instructions and the Constitution are identical for every bill (or
@@ -96,7 +98,7 @@ export async function draftAnalysis(env, bill, source, depth = "card", revision 
     message: revision
       ? revisionMessage(bill, source, depth, revision.draft, revision.reasons)
       : billMessage(bill, source, depth),
-    jsonSchema: card ? cardSchema() : schema(),
+    jsonSchema: card ? cardSchema(caIds) : schema(caIds),
     maxTokens: card ? 16000 : 32000,
     thinking: true,
     effort: env.ANALYSIS_EFFORT || "high",

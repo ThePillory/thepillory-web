@@ -14,6 +14,7 @@
 // step shortened says so; one cut to its summary shows only the summary and
 // the provisions, with "Full analysis not available yet". What it changed
 // after a reader's report is listed under "Changes to this analysis".
+import { provisionHref } from "./provision-link.js";
 import { esc, safeUrl, fmtDate } from "./render.js";
 
 export const METHOD_URL = "/about/methodology/#analysis";
@@ -183,7 +184,7 @@ export function baselineSection(a, provisions, { underReview = false, empty = ""
       const q = c.quote && storedQuote(c.quote, p.text);
       return `
 <div class="provision-cite">
-  <a class="label" href="/laws/constitution/#${esc(p.id)}">${esc(p.label)}</a>
+  <a class="label" href="${esc(provisionHref(p.id))}">${esc(p.label)}</a>
   <blockquote class="quote">“${esc(q || p.text)}”</blockquote>
   ${c.why ? `<p class="small">${esc(c.why)}</p>` : ""}
 </div>`;
@@ -291,7 +292,7 @@ export function constitutionBrief(a, provisions, { fullHref, underReview = false
     .map((p) => {
       const q = p.quote && storedQuote(p.quote, p.text);
       return `<div class="provision-cite">
-  <a class="label" href="/laws/constitution/#${esc(p.id)}">${esc(p.label)}</a>
+  <a class="label" href="${esc(provisionHref(p.id))}">${esc(p.label)}</a>
   <blockquote class="quote">“${esc(q || p.text)}”</blockquote>
 </div>`;
     })
