@@ -1038,17 +1038,116 @@ def recent_runs(args):
     table(rows, ["day", "step", "calls", "dollars"], ["Day", "Step", "Calls", "Cost ($)"])
 
 
+def agency_sources(args):
+    say("## 13. Government agency sources (read-only probe)")
+    say()
+    say("What each official source returns, to build the agency loaders on (docs/agencies.md). Reads only.")
+    say()
+
+    def show(label, text, n=1500):
+        say(f"### {label}")
+        say()
+        say("```")
+        say(str(text)[:n])
+        say("```")
+        say()
+
+    def post(url, body, timeout=60):
+        try:
+            req = urllib.request.Request(url, data=json.dumps(body).encode(), headers={"User-Agent": UA, "Content-Type": "application/json"})
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                return r.read(2_000_000).decode("utf-8", "replace")
+        except Exception as e:  # noqa: BLE001
+            return f"__FETCH_FAILED__ {type(e).__name__}: {str(e)[:200]}"
+
+    def head(url):
+        try:
+            req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": UA})
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return {k: v for k, v in r.headers.items() if k.lower() in ("etag", "last-modified", "content-length", "content-type")}
+        except Exception as e:  # noqa: BLE001
+            return f"__FETCH_FAILED__ {type(e).__name__}: {str(e)[:200]}"
+
+    # Federal Register agencies
+    fr = fetch("https://www.federalregister.gov/api/v1/agencies.json", timeout=60)
+    show("Federal Register agencies.json headers", head("https://www.federalregister.gov/api/v1/agencies.json"))
+    try:
+        data = json.loads(fr)
+        say(f"Agencies listed: {len(data)}; keys: {sorted(data[0].keys())}")
+        say()
+        for slug in ("agriculture-department", "forest-service", "environmental-protection-agency"):
+            show(f"FR agency {slug}", json.dumps([a for a in data if a.get("slug") == slug], indent=1), 2500)
+        tops = [a for a in data if not a.get("parent_id")]
+        say(f"Top-level (no parent): {len(tops)}; with a parent: {len(data) - len(tops)}")
+        say()
+    except Exception as e:  # noqa: BLE001
+        show("FR agencies failed", f"{type(e).__name__}: {e}: {fr[:500]}")
+    show("FR rules for EPA, newest", fetch("https://www.federalregister.gov/api/v1/documents.json?per_page=2&order=newest&conditions%5Btype%5D%5B%5D=RULE&conditions%5Bagencies%5D%5B%5D=environmental-protection-agency&fields%5B%5D=title&fields%5B%5D=publication_date&fields%5B%5D=document_number&fields%5B%5D=html_url&fields%5B%5D=type", timeout=60), 2000)
+    show("FR yearly facet for EPA rules", fetch("https://www.federalregister.gov/api/v1/documents/facets/yearly?conditions%5Btype%5D%5B%5D=RULE&conditions%5Bagencies%5D%5B%5D=environmental-protection-agency", timeout=60), 2000)
+
+    # USAspending
+    U = "https://api.usaspending.gov/api/v2"
+    tt = fetch(f"{U}/references/toptier_agencies/", timeout=60)
+    try:
+        d = json.loads(tt)
+        res = d.get("results", [])
+        say(f"USAspending toptier agencies: {len(res)}; keys: {sorted(res[0].keys()) if res else []}")
+        say()
+        show("USAspending toptier first two", json.dumps(res[:2], indent=1), 2000)
+    except Exception as e:  # noqa: BLE001
+        show("USAspending toptier failed", f"{e}: {tt[:500]}")
+    show("USAspending agency 068 (EPA)", fetch(f"{U}/agency/068/", timeout=60), 2000)
+    show("USAspending budgetary_resources 068", fetch(f"{U}/agency/068/budgetary_resources/", timeout=60), 3000)
+    show("USAspending object_class 068 FY2025", fetch(f"{U}/agency/068/object_class/?fiscal_year=2025&limit=5", timeout=60), 2500)
+    show("USAspending budget_function 068 FY2025", fetch(f"{U}/agency/068/budget_function/?fiscal_year=2025&limit=5", timeout=60), 2500)
+    show("USAspending sub_agency 012 (USDA) FY2025", fetch(f"{U}/agency/012/sub_agency/?fiscal_year=2025&limit=5", timeout=60), 2500)
+    body = {"filters": {"time_period": [{"start_date": "2024-10-01", "end_date": "2025-09-30"}],
+                        "agencies": [{"type": "awarding", "tier": "toptier", "name": "Environmental Protection Agency"}],
+                        "award_type_codes": ["A", "B", "C", "D"]}, "category": "recipient", "limit": 5, "page": 1}
+    show("USAspending top contract recipients EPA FY2025", post(f"{U}/search/spending_by_category/recipient/", body), 2500)
+    body["filters"]["award_type_codes"] = ["02", "03", "04", "05"]
+    show("USAspending top grant recipients EPA FY2025", post(f"{U}/search/spending_by_category/recipient/", body), 2500)
+    body["filters"]["recipient_type_names"] = ["individuals"]
+    show("USAspending grant recipients that are individuals (filter test)", post(f"{U}/search/spending_by_category/recipient/", body), 1200)
+
+    # OPM: workforce data and PLUM
+    for u in ("https://data.opm.gov/", "https://www.opm.gov/data/datasets/", "https://www.fedscope.opm.gov/",
+              "https://www.opm.gov/about-us/open-government/plum-reporting/", "https://www.opm.gov/about-us/open-government/plum-reporting/plum-data/"):
+        page = fetch(u, timeout=60)
+        links = sorted(set(re.findall(r'href="([^"]+)"', page)))
+        keep = [l for l in links if re.search(r"(api|csv|xlsx|json|zip|download|plum|workforce|employ|dataset|fedscope)", l, re.I)][:60]
+        show(f"OPM page {u}", (page[:300] if page.startswith("__FETCH_FAILED__") else "") + "\n".join(keep), 4000)
+
+    # Oversight.gov and GAO
+    for u in ("https://www.oversight.gov/reports", "https://www.oversight.gov/api/reports", "https://www.oversight.gov/rss.xml",
+              "https://www.gao.gov/rss-feeds", "https://www.gao.gov/rss/reports.xml", "https://www.gao.gov/reports-testimonies?f%5B0%5D=agency%3AEnvironmental%20Protection%20Agency"):
+        page = fetch(u, timeout=60)
+        links = sorted(set(re.findall(r'href="([^"]+)"', page)))
+        keep = [l for l in links if re.search(r"(api|csv|rss|xml|json|feed|report|agency|export|search)", l, re.I)][:50]
+        show(f"Page {u}", page[:800] + "\n---links---\n" + "\n".join(keep), 4000)
+
+    # What D1 already holds for leadership and funding laws
+    rows = q(args, "SELECT id, description, organization, status, latest_on FROM nominations WHERE status = 'confirmed' ORDER BY latest_on DESC LIMIT 5")
+    table(rows, ["id", "description", "organization", "status", "latest_on"], ["Nomination", "Description", "Organization", "Status", "Latest"])
+    rows = q(args, "SELECT id, subject, question, result, vote_date FROM votes WHERE vote_type = 'nomination' ORDER BY vote_date DESC LIMIT 5")
+    table(rows, ["id", "subject", "question", "result", "vote_date"], ["Vote", "Subject", "Question", "Result", "Date"])
+    rows = q(args, "SELECT organization, COUNT(*) AS n FROM nominations WHERE status = 'confirmed' GROUP BY organization ORDER BY n DESC LIMIT 40")
+    table(rows, ["organization", "n"], ["Organization", "Confirmed"])
+    rows = q(args, "SELECT id, bill_number, title FROM bills WHERE level = 'federal' AND title LIKE '%Appropriations Act%' ORDER BY id DESC LIMIT 25")
+    table(rows, ["id", "bill_number", "title"], ["Bill", "Number", "Title"])
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--database", default="pillory")
-    ap.add_argument("--only", default="1,2,3,4,5,6,7,8,9,10,11,12")
+    ap.add_argument("--only", default="1,2,3,4,5,6,7,8,9,10,11,12,13")
     args = ap.parse_args()
     only = set(args.only.split(","))
     say("# Accuracy audit")
     say()
     say(f"Run {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}. Reads D1 and the sources; changes nothing.")
     say()
-    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage), ("7", sync_cost), ("8", tax_laws), ("9", company_xbrl), ("10", voice_votes), ("11", clerk_petitions), ("12", recent_runs)):
+    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage), ("7", sync_cost), ("8", tax_laws), ("9", company_xbrl), ("10", voice_votes), ("11", clerk_petitions), ("12", recent_runs), ("13", agency_sources)):
         if k in only:
             try:
                 fn(args)
