@@ -1068,71 +1068,24 @@ def agency_sources(args):
     def links(page, pat, k=60):
         return "\n".join([l for l in sorted(set(re.findall(r'href="([^"]+)"', page))) if re.search(pat, l, re.I)][:k])
 
-    # Federal Register agencies
-    FR = "https://www.federalregister.gov/api/v1/agencies.json"
-    show("FR agencies.json headers", get(FR, method="HEAD"))
-    fr = get(FR)
-    try:
-        data = json.loads(fr)
-        say(f"Agencies listed: {len(data)}; keys: {sorted(data[0].keys())}")
-        say()
-        for slug in ("agriculture-department", "forest-service", "environmental-protection-agency"):
-            a = [x for x in data if x.get("slug") == slug]
-            show(f"FR agency {slug}", json.dumps(a, indent=0)[:1800], 1800)
-        tops = [a for a in data if not a.get("parent_id")]
-        say(f"Top-level (no parent): {len(tops)}; with a parent: {len(data) - len(tops)}")
-        say()
-        say("Departments: " + "; ".join(sorted(a["name"] for a in tops if re.search(r"Department", a["name"]))))
-        say()
-    except Exception as e:  # noqa: BLE001
-        show("FR agencies failed", f"{type(e).__name__}: {e}: {fr[:500]}")
-    show("FR yearly facet for EPA rules", get("https://www.federalregister.gov/api/v1/documents/facets/yearly?conditions%5Btype%5D%5B%5D=RULE&conditions%5Bagencies%5D%5B%5D=environmental-protection-agency"), 1500)
-    show("FR latest EPA rules", get("https://www.federalregister.gov/api/v1/documents.json?per_page=2&order=newest&conditions%5Btype%5D%5B%5D=RULE&conditions%5Bagencies%5D%5B%5D=environmental-protection-agency&fields%5B%5D=title&fields%5B%5D=publication_date&fields%5B%5D=document_number&fields%5B%5D=html_url"), 1500)
+    def get2(url, accept="*/*", n=400_000):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": accept})
+            with urllib.request.urlopen(req, timeout=90) as r:
+                return f"[{r.status} {r.headers.get('Content-Type')} len={r.headers.get('Content-Length')} etag={r.headers.get('ETag')} lm={r.headers.get('Last-Modified')}]\n" + r.read(n).decode("utf-8", "replace")
+        except Exception as e:  # noqa: BLE001
+            return f"__FETCH_FAILED__ {type(e).__name__}: {str(e)[:200]}"
 
-    # USAspending (JSON)
-    U = "https://api.usaspending.gov/api/v2"
-    tt = get(f"{U}/references/toptier_agencies/")
-    try:
-        res = json.loads(tt).get("results", [])
-        say(f"USAspending toptier agencies: {len(res)}; keys: {sorted(res[0].keys()) if res else []}")
-        say()
-        show("USAspending toptier first two", json.dumps(res[:2]), 1500)
-    except Exception as e:  # noqa: BLE001
-        show("USAspending toptier failed", f"{e}: {tt[:300]}")
-    show("USAspending agency 068", get(f"{U}/agency/068/"), 1500)
-    show("USAspending budgetary_resources 068", get(f"{U}/agency/068/budgetary_resources/"), 2500)
-    show("USAspending object_class 068 FY2025", get(f"{U}/agency/068/object_class/?fiscal_year=2025&limit=3"), 1500)
-    show("USAspending budget_function 068 FY2025", get(f"{U}/agency/068/budget_function/?fiscal_year=2025&limit=3"), 1500)
-    show("USAspending sub_agency 012 FY2025", get(f"{U}/agency/012/sub_agency/?fiscal_year=2025&limit=3"), 1500)
-    show("USAspending federal_account 068 FY2025", get(f"{U}/agency/068/federal_account/?fiscal_year=2025&limit=2"), 1200)
-
-    # OPM workforce (data.opm.gov) and PLUM
-    for u in ("https://data.opm.gov/get-data/api-access", "https://data.opm.gov/get-data/data-downloads",
-              "https://www.opm.gov/about-us/open-government/plum-reporting/data-information/",
-              "https://www.opm.gov/about-us/open-government/plum-reporting/plum-data/"):
-        page = get(u, accept="text/html")
-        text = re.sub(r"<script.*?</script>|<style.*?</style>", " ", page, flags=re.S)
-        text = re.sub(r"<[^>]+>", " ", text)
-        text = re.sub(r"\s+", " ", text)
-        show(f"Page {u}", (page[:200] if page.startswith("__FETCH") else text[:1800]) + "\n---links---\n" + links(page, r"(api|csv|xlsx|json|zip|download|\.txt|swagger|docs|plum)"), 3500)
-        apis = sorted(set(re.findall(r'https?://[^"\'\s<>]*(?:api|download)[^"\'\s<>]*', page)))[:30]
-        if apis:
-            show(f"URLs in {u}", "\n".join(apis), 2500)
-
-    # Oversight.gov (asks for a browser Accept header)
-    for u in ("https://www.oversight.gov/reports", "https://www.oversight.gov/reports?field_address_agency_target_id=All", "https://www.oversight.gov/rss.xml"):
-        page = get(u, accept="text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
-        show(f"Page {u}", page[:600] + "\n---links---\n" + links(page, r"(api|csv|rss|xml|json|feed|export|agency|report)", 50), 3500)
-
-    # GAO RSS: one item in full
-    rss = get("https://www.gao.gov/rss/reports.xml", accept="application/rss+xml")
-    items = re.findall(r"<item>.*?</item>", rss, re.S)
-    say(f"GAO RSS items: {len(items)}")
-    say()
-    if items:
-        show("GAO RSS first item", items[0], 2500)
-    for u in ("https://www.gao.gov/rss/topics.xml", "https://www.gao.gov/about/what-gao-does/rss", "https://www.gao.gov/rss-feeds-gao"):
-        show(f"GAO {u}", get(u, accept="text/html,application/xml")[:800], 800)
+    show("OPM data API files", get2("https://data.opm.gov/api/v1/files", accept="application/json"), 6000)
+    show("PLUM API", get2("https://escs.opm.gov/escs-net/api/pbpub", accept="application/json"), 3000)
+    page = get2("https://www.opm.gov/about-us/open-government/plum-reporting/plum-data/", accept="text/html", n=2_000_000)
+    scripts = re.findall(r"<script[^>]*>(.*?)</script>", page, re.S)
+    show("PLUM page scripts mentioning the API", "\n----\n".join(x[:1500] for x in scripts if "pbpub" in x or "escs" in x)[:5000], 5000)
+    rss = get2("https://www.gao.gov/rss/reports.xml", accept="application/rss+xml", n=2_000_000)
+    item = re.findall(r"<item>.*?</item>", rss, re.S)
+    if item:
+        tags = sorted(set(re.findall(r"<([a-zA-Z:]+)[ >]", item[0])))
+        show("GAO item tags", ", ".join(tags) + "\n" + "\n".join(re.findall(r"<(?:category|dc:subject|pubDate|guid)[^>]*>.*?</(?:category|dc:subject|pubDate|guid)>", item[0], re.S)[:20]), 2000)
 
 
 def main():
