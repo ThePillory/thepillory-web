@@ -164,11 +164,11 @@ export function moneySection(money, parts, recipients, agency, fy = lastComplete
   const latest = done[done.length - 1] || years[years.length - 1];
   const open = latest && latest.fy > fy;
   const big = latest && num(latest.outlays) != null
-    ? `<div class="tax-big"><p class="big-number" title="${esc(exact(latest.outlays))}">${esc(shortMoney(latest.outlays))}</p><p class="small secondary">Outlays in fiscal year ${latest.fy}${open ? " so far" : ""} (October ${latest.fy - 1} to September ${latest.fy}), from ${ext(latest.source_url, "USAspending.gov")}.</p></div>`
+    ? `<div class="tax-fig"><p class="hero-num" title="${esc(exact(latest.outlays))}">${esc(shortMoney(latest.outlays))}</p><p class="small secondary">Outlays in fiscal year ${latest.fy}${open ? " so far" : ""} (October ${latest.fy - 1} to September ${latest.fy}), from ${ext(latest.source_url, "USAspending.gov")}.</p></div>`
     : "";
-  const table = `<table><thead><tr><th scope="col">Fiscal year</th><th scope="col">Total budgetary resources</th><th scope="col">Obligations</th><th scope="col">Outlays</th></tr></thead><tbody>${years
+  const table = `<div class="table-scroll"><table><thead><tr><th scope="col">Fiscal year</th><th scope="col">Total budgetary resources</th><th scope="col">Obligations</th><th scope="col">Outlays</th></tr></thead><tbody>${years
     .map((m) => `<tr><th scope="row">${ext(m.source_url, `FY${m.fy}`)}</th><td>${esc(exact(m.resources))}</td><td>${esc(exact(m.obligations))}</td><td>${esc(exact(m.outlays))}</td></tr>`)
-    .join("")}</tbody></table>`;
+    .join("")}</tbody></table></div>`;
   const chart = pairBars(
     years.map((m) => ({ label: `FY${m.fy}`, tick: `’${String(m.fy).slice(2)}`, a: m.resources, b: m.outlays })),
     { series: ["Total budgetary resources", "Outlays"], format: shortMoney, ariaLabel: `${agency.name}: total budgetary resources and outlays by fiscal year`, caption: `By fiscal year since ${years[0] ? years[0].fy : 2017}, from USAspending.gov.`, table }
@@ -193,7 +193,7 @@ export function moneySection(money, parts, recipients, agency, fy = lastComplete
 export function workforceSection(rows) {
   if (!rows.length) return "";
   const latest = rows[0];
-  const big = `<div class="tax-big"><p class="big-number">${esc(Number(latest.employees).toLocaleString("en-US"))}</p><p class="small secondary">Employees in September ${latest.year}, from OPM's Federal Workforce Data.</p></div>`;
+  const big = `<div class="tax-fig"><p class="hero-num">${esc(Number(latest.employees).toLocaleString("en-US"))}</p><p class="small secondary">Employees in September ${latest.year}, from OPM's Federal Workforce Data.</p></div>`;
   const more = rows.length > 1 ? `<details class="mini-bars-table"><summary>Show the numbers</summary><table><thead><tr><th scope="col">September</th><th scope="col">Employees</th></tr></thead><tbody>${rows.map((r) => `<tr><th scope="row">${r.year}</th><td>${esc(Number(r.employees).toLocaleString("en-US"))}</td></tr>`).join("")}</tbody></table></details>` : "";
   return card("workforce", "Workforce", `${big}${more}`, `Civilian employees on board, counted from OPM's monthly records. ${ext(latest.source_url, "OPM data")}`);
 }
