@@ -9,12 +9,15 @@ on:
       only:
         description: "Sections to run, e.g. 1,2,3,4,5,6 (blank: all)"
         default: ""
+      agency_parts:
+        description: "Section 14 only: agency loader parts to measure (blank: all)"
+        default: ""
 permissions:
   contents: read
 jobs:
   audit:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 180
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -25,6 +28,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CONGRESS_API_KEY: ${{ secrets.CONGRESS_API_KEY }}
           ONLY: ${{ github.event.inputs.only }}
+          AGENCY_PARTS: ${{ github.event.inputs.agency_parts }}
         run: |
           python3 tools/accuracy_audit.py ${ONLY:+--only "$ONLY"} > audit.md
           cat audit.md >> "$GITHUB_STEP_SUMMARY"

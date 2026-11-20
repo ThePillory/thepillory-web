@@ -1,0 +1,7 @@
+{"category": "recipient", "limit": 20, "page_metadata": {"page": 1, "next": 2, "previous": null, "hasNext": true}, "results": [
+ {"amount": 900000000.0, "recipient_id": "aaa-C", "name": "STATE OF CALIFORNIA", "code": "ABC123", "uei": "ABC123"},
+ {"amount": 500000000.0, "recipient_id": "bbb-R", "name": "MULTIPLE RECIPIENTS", "code": null, "uei": null},
+ {"amount": 400000000.0, "recipient_id": "ccc-R", "name": "JOHN Q PERSON", "code": null, "uei": null},
+ {"amount": 300000000.0, "recipient_id": "ddd-C", "name": "EXAMPLE TRAINING CORPORATION", "code": "DEF456", "uei": "DEF456"},
+ {"amount": 100000000.0, "recipient_id": "eee-P", "name": "REDACTED DUE TO PII", "code": null, "uei": null}
+], "messages": []}

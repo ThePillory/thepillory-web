@@ -1,0 +1,56 @@
+# Federal agencies into D1 (docs/agencies.md): the Federal Register's agencies list, OPM's PLUM
+# data (Senate-confirmed positions), USAspending.gov (money; Cloudflare can't reach it), OPM's
+# workforce files, GAO's reports feed and the Federal Register's rules. Every part checks its
+# source before downloading and writes only changed rows (tools/load_agencies.py).
+#
+# Schedule: daily, reading only GAO's feed (it lists the 25 newest reports); Mondays, every part.
+# Scheduled runs only measure (write nothing) until the repository variable AGENCIES_MODE is
+# "load", set after the measured costs are approved. By hand: Actions -> Load agencies -> Run workflow.
+#
+# Secrets: CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID (D1).
+name: Load agencies
+on:
+  schedule:
+    - cron: "37 15 * * *"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "measure (read, write nothing) or load"
+        default: measure
+      parts:
+        description: "parts, comma-separated (agencies,leaders,money,workforce,oversight,rules,laws)"
+        default: "agencies,leaders,money,workforce,oversight,rules,laws"
+      force:
+        description: "read sources even when their checks say unchanged (true/false)"
+        default: "false"
+permissions:
+  contents: read
+jobs:
+  load:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    concurrency:
+      group: agencies
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: python3 -m pip install -q pyarrow==17.0.0
+      - run: python3 tools/test_load_agencies.py
+      - name: Load
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          MODE: ${{ github.event.inputs.mode || vars.AGENCIES_MODE || 'measure' }}
+          PARTS: ${{ github.event.inputs.parts }}
+          FORCE: ${{ github.event.inputs.force }}
+        run: |
+          if [ -z "$PARTS" ]; then
+            # Scheduled: GAO's feed daily; every part on Mondays.
+            if [ "$(date -u +%u)" = "1" ]; then PARTS="agencies,leaders,money,workforce,oversight,rules,laws"; else PARTS="oversight"; fi
+          fi
+          extra=""
+          [ "$FORCE" = "true" ] && extra="--force"
+          python3 tools/load_agencies.py --mode "$MODE" --parts "$PARTS" $extra

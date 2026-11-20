@@ -38,6 +38,7 @@ import json
 import os
 import random
 import re
+import subprocess
 import sys
 import time
 import unicodedata
@@ -1089,6 +1090,24 @@ def agency_sources(args):
             show(f"PLUM script near {name}", page[max(0, m.start() - 200): m.start() + 1200], 1400)
 
 
+def agency_measure(args):
+    """Section 14: tools/load_agencies.py in measure mode (reads the sources and D1, writes nothing):
+    the rows and row writes a load would make, and the storage it adds. AGENCY_PARTS picks parts."""
+    say("## 14. Agencies: measure (writes nothing)")
+    say()
+    subprocess.run([sys.executable, "-m", "pip", "install", "-q", "pyarrow==17.0.0"], check=False)
+    parts = os.environ.get("AGENCY_PARTS") or "agencies,leaders,money,workforce,oversight,rules,laws"
+    p = subprocess.Popen([sys.executable, str(Path(__file__).resolve().parent / "load_agencies.py"), "--mode", "measure", "--parts", parts, "--database", args.database],
+                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    say("```")
+    for line in p.stdout:  # echoed to the job log as it runs, too
+        sys.stderr.write(line)
+        say(line.rstrip())
+    say(f"(exit {p.wait()})")
+    say("```")
+    say()
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--database", default="pillory")
@@ -1099,7 +1118,7 @@ def main():
     say()
     say(f"Run {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}. Reads D1 and the sources; changes nothing.")
     say()
-    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage), ("7", sync_cost), ("8", tax_laws), ("9", company_xbrl), ("10", voice_votes), ("11", clerk_petitions), ("12", recent_runs), ("13", agency_sources)):
+    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage), ("7", sync_cost), ("8", tax_laws), ("9", company_xbrl), ("10", voice_votes), ("11", clerk_petitions), ("12", recent_runs), ("13", agency_sources), ("14", agency_measure)):
         if k in only:
             try:
                 fn(args)
