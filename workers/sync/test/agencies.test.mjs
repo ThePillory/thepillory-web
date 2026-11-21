@@ -72,7 +72,7 @@ test("the index lists departments with their sub-agencies, then independent agen
   assert.match(html, /Example Department/);
   assert.match(html, /1 sub-agency/);
   assert.match(html, /href="\/agencies\/sample-service\/"/);
-  assert.match(html, new RegExp(`FY${FY} outlays \\$20.3 billion`));
+  assert.match(html, new RegExp(`FY${FY} paid out \\$20.3 billion`));
   assert.doesNotMatch(html, BANNED);
 });
 
@@ -97,8 +97,10 @@ test("an agency page: every section, in order, with years and sources", async ()
   assert.match(html, />Vacant</);
   assert.match(html, /PTDO, as OPM lists it/);
   // Money: the latest complete fiscal year's outlays, short; exact under Show the numbers.
-  assert.match(html, new RegExp(`\\$20.3 billion</p><p class="small secondary">Outlays in fiscal year ${FY} \\(`));
-  assert.match(html, /\$20,345,678,901/);
+  assert.match(html, new RegExp(`\\$20.3 billion</p><p class="small secondary">Paid out in fiscal year ${FY} \\(`));
+  assert.match(html, /title="\$20,345,678,901">\$20.3 billion<\/td>/);
+  assert.match(html, /<th scope="col">Year<\/th><th scope="col">Available<\/th><th scope="col">Committed<\/th><th scope="col">Paid out<\/th>/);
+  assert.doesNotMatch(html, /class="fold[" ]/); // no cards inside the Money card
   assert.match(html, /Show the numbers/);
   assert.match(html, /people who receive awards aren(?:'|&#x27;)t listed/);
   assert.match(html, /15,123/);

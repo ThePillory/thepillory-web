@@ -1108,6 +1108,33 @@ def agency_measure(args):
     say()
 
 
+def agency_rows(args):
+    """Section 15: one agency page's D1 rows as JSON (read-only), to render the page with real data
+    for screenshots. AGENCY_IDS picks the agencies (comma-separated slugs)."""
+    ids = [i for i in (os.environ.get("AGENCY_IDS") or "forest-service,agriculture-department").split(",") if re.fullmatch(r"[a-z0-9-]+", i)]
+    inn = ", ".join(f"'{i}'" for i in ids)
+    say("## 15. Agency page rows (JSON)")
+    say()
+    queries = {
+        "agencies": f"SELECT * FROM agencies WHERE id IN ({inn}) OR parent_id IN ({inn}) OR id IN (SELECT parent_id FROM agencies WHERE id IN ({inn}))",
+        "agency_leaders": f"SELECT * FROM agency_leaders WHERE agency_id IN ({inn})",
+        "officials": f"SELECT id, slug, name FROM officials WHERE id IN (SELECT official_id FROM agency_leaders WHERE agency_id IN ({inn}))",
+        "votes": f"SELECT id, source_url, vote_date FROM votes WHERE id IN (SELECT vote_id FROM agency_leaders WHERE agency_id IN ({inn}))",
+        "agency_money": f"SELECT * FROM agency_money WHERE agency_id IN ({inn})",
+        "agency_money_parts": f"SELECT * FROM agency_money_parts WHERE agency_id IN ({inn})",
+        "agency_recipients": f"SELECT * FROM agency_recipients WHERE agency_id IN ({inn})",
+        "agency_workforce": f"SELECT * FROM agency_workforce WHERE agency_id IN ({inn})",
+        "agency_reports": f"SELECT * FROM agency_reports WHERE agency_id IN ({inn})",
+        "agency_rule_counts": f"SELECT * FROM agency_rule_counts WHERE agency_id IN ({inn})",
+        "agency_rules": f"SELECT * FROM agency_rules WHERE agency_id IN ({inn})",
+        "agency_bills": f"SELECT * FROM agency_bills WHERE agency_id IN ({inn})",
+        "bill_list": f"SELECT bill_id, bill_number, title, final_result, final_chamber, last_final, last_vote, yea, nay FROM bill_list WHERE bill_id IN (SELECT bill_id FROM agency_bills WHERE agency_id IN ({inn}))",
+    }
+    for table, sql in queries.items():
+        say(f"AGENCYROWS {table} " + json.dumps(q(args, sql)))
+    say()
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--database", default="pillory")
@@ -1118,7 +1145,7 @@ def main():
     say()
     say(f"Run {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}. Reads D1 and the sources; changes nothing.")
     say()
-    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage), ("7", sync_cost), ("8", tax_laws), ("9", company_xbrl), ("10", voice_votes), ("11", clerk_petitions), ("12", recent_runs), ("13", agency_sources), ("14", agency_measure)):
+    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage), ("7", sync_cost), ("8", tax_laws), ("9", company_xbrl), ("10", voice_votes), ("11", clerk_petitions), ("12", recent_runs), ("13", agency_sources), ("14", agency_measure), ("15", agency_rows)):
         if k in only:
             try:
                 fn(args)
