@@ -5,7 +5,6 @@
 import { esc, safeUrl } from "./render.js";
 import { shortMoney, exact } from "./taxes.js";
 import { pairBars } from "./charts.js";
-import { fold } from "./summary.js";
 
 export const PER_PAGE = 25;
 export const METHOD = "/about/methodology/#agencies";
@@ -13,10 +12,12 @@ export const USAS_HOME = "https://www.usaspending.gov/agency";
 export const NOT_LOADED = "Agencies load weekly from the Federal Register, OPM, USAspending.gov and GAO; none are loaded yet.";
 export const KIND_HEAD = { department: "Executive departments", independent: "Independent agencies and other offices" };
 export const INDEPENDENT_NOTE = "Every agency the Federal Register lists that isn't part of an executive department.";
+// The money columns, in plain words, each defined on the page by USAspending.gov's own term.
+export const COLUMNS = { resources: "Available", obligations: "Committed", outlays: "Paid out" };
 export const TERMS = {
-  resources: "Total budgetary resources: what the agency could spend in the year (new funding plus balances carried over), as USAspending.gov reports it.",
-  obligations: "Obligations: what the agency committed to spend (contracts signed, grants awarded, salaries owed).",
-  outlays: "Outlays: what the agency paid out during the year.",
+  resources: "Available: total budgetary resources, what the agency could spend in the year (new funding plus balances carried over).",
+  obligations: "Committed: obligations, what it committed to spend (contracts signed, grants awarded, salaries owed).",
+  outlays: "Paid out: outlays, what it paid during the year.",
 };
 export const RECIPIENT_NOTE = "Organizations only: people who receive awards aren't listed. Names as USAspending.gov lists them.";
 export const REPORTS_NOTE = "Listed in their own titles, newest first. GAO reports naming the agency by its full name.";
@@ -29,12 +30,15 @@ const date = (iso) => {
 };
 export const agencyHref = (id) => `/agencies/${encodeURIComponent(id)}/`;
 const ext = (url, text, cls = "inline-link") => (safeUrl(url) ? `<a class="${cls}" href="${esc(url)}" target="_blank" rel="noopener">${text}</a>` : text);
-const card = (id, title, inner, foot = "") => `<section class="card stack-sm agency-card" id="${esc(id)}"><h2 class="tax-title">${esc(title)}</h2>${inner}${foot ? `<p class="small secondary">${foot}</p>` : ""}</section>`;
+const card = (id, title, inner, foot = "") => `<section class="card stack agency-card" id="${esc(id)}"><h2 class="tax-title">${esc(title)}</h2>${inner}${foot ? `<p class="small secondary">${foot}</p>` : ""}</section>`;
 const row = (label, meta, status, href, external = false) => {
   const inner = `<div><span class="list-title">${label}</span>${meta ? `<span class="list-meta">${meta}</span>` : ""}</div>${status ? `<span class="list-status">${status}</span>` : ""}`;
   if (!href) return `<li class="list-row">${inner}</li>`;
   return `<li><a class="list-row" href="${esc(href)}"${external ? ' target="_blank" rel="noopener"' : ""}>${inner}</a></li>`;
 };
+/** A collapsible row inside a card (a divider and a chevron), never a card inside a card. */
+const subFold = (id, title, meta, inner) =>
+  `<details class="agency-sub" id="${esc(id)}"><summary><span class="fold-title">${esc(title)}</span>${meta ? `<span class="fold-meta">${esc(meta)}</span>` : ""}</summary><div class="agency-sub-body stack">${inner}</div></details>`;
 const list = (rows) => `<ul class="plain-list tax-rows">${rows.join("")}</ul>`;
 const amount = (n) => `<span title="${esc(exact(n))}">${esc(shortMoney(n))}</span>`;
 
@@ -57,12 +61,11 @@ export async function loadIndex(db, { q = "", offset = 0 } = {}, fy = lastComple
       .all();
     return { fy, q, offset, search: r.results.slice(0, PER_PAGE), more: r.results.length > PER_PAGE };
   }
-  const [deps, subs, ind] = await Promise.all([
-    db.prepare(`SELECT ${cols} FROM agencies a WHERE a.kind = 'department' ORDER BY a.name`).bind(fy).all(),
-    offset ? { results: [] } : db.prepare(`SELECT ${cols} FROM agencies a WHERE a.parent_id IN (SELECT id FROM agencies WHERE kind = 'department') ORDER BY a.parent_id, a.name`).bind(fy).all(),
+  const [deps, ind] = await Promise.all([
+    offset ? { results: [] } : db.prepare(`SELECT ${cols}, (SELECT COUNT(*) FROM agencies s WHERE s.parent_id = a.id) AS subs FROM agencies a WHERE a.kind = 'department' ORDER BY a.name`).bind(fy).all(),
     db.prepare(`SELECT ${cols} FROM agencies a WHERE a.kind = 'independent' ORDER BY a.name LIMIT ? OFFSET ?`).bind(fy, PER_PAGE + 1, offset).all(),
   ]);
-  return { fy, q, offset, departments: deps.results, subs: subs.results, independent: ind.results.slice(0, PER_PAGE), more: ind.results.length > PER_PAGE };
+  return { fy, q, offset, departments: deps.results, independent: ind.results.slice(0, PER_PAGE), more: ind.results.length > PER_PAGE };
 }
 
 export async function loadAgency(db, id) {
@@ -90,9 +93,10 @@ export async function loadAgency(db, id) {
 // ---------------------------------------------------------------------------
 // The index
 
-export function agencyRow(a, fy) {
-  const meta = [a.short_name, a.parent_name ? `Part of the ${a.parent_name}` : "", num(a.outlays) != null ? `FY${fy} outlays ${shortMoney(a.outlays)}` : ""].filter(Boolean).map(esc).join(" · ");
-  return `<a class="compact-row" href="${agencyHref(a.id)}"><span class="cr-main"><span class="cr-title">${esc(a.name)}</span>${meta ? `<span class="cr-meta">${meta}</span>` : ""}</span><span class="cr-side"><span class="chev" aria-hidden="true">›</span></span></a>`;
+/** An agency as a row inside a card (the row pattern): name, then short name and the latest paid out. */
+export function agencyListRow(a, fy) {
+  const meta = [a.short_name, a.parent_name ? `Part of the ${a.parent_name}` : "", a.subs ? `${a.subs} agenc${a.subs === 1 ? "y" : "ies"}` : "", num(a.outlays) != null ? `FY${fy} paid out ${shortMoney(a.outlays)}` : ""].filter(Boolean).map(esc).join(" · ");
+  return row(esc(a.name), meta, `<span class="chev" aria-hidden="true">›</span>`, agencyHref(a.id));
 }
 
 export function searchForm(q = "") {
@@ -110,21 +114,18 @@ export function indexMain(data) {
   }
   const head = `<header class="page-head"><h1>Agencies</h1><p class="subtitle">Federal departments and agencies: who leads them, what they're given and spend, the people who work there, and the reports and rules that name them.</p></header>`;
   if (data.q) {
-    const rows = data.search.length ? data.search.map((a) => agencyRow(a, data.fy)).join("") : `<p class="secondary small cr-empty">No agency's name matches "${esc(data.q)}".</p>`;
+    const rows = data.search.length ? `<ul class="plain-list tax-rows" id="agency-results" data-more-list>${data.search.map((a) => agencyListRow(a, data.fy)).join("")}</ul>` : `<p class="secondary">No agency's name matches "${esc(data.q)}".</p>`;
     const more = data.more ? moreLink(`/agencies/?q=${encodeURIComponent(data.q)}&offset=${data.offset + PER_PAGE}`, "agency-results") : "";
-    return `${head}${searchForm(data.q)}<section class="card compact-list" id="agency-results" data-more-list>${rows}</section>${more}`;
+    return `${head}${searchForm(data.q)}<section class="card agency-card">${rows}</section>${more}`;
   }
-  const ind = `<section class="card compact-list" id="agency-independent" data-more-list>${data.independent.map((a) => agencyRow(a, data.fy)).join("")}</section>${data.more ? moreLink(`/agencies/?offset=${data.offset + PER_PAGE}`, "agency-independent") : ""}`;
+  const ind = `<section class="card agency-card"><ul class="plain-list tax-rows" id="agency-independent" data-more-list>${data.independent.map((a) => agencyListRow(a, data.fy)).join("")}</ul></section>${data.more ? moreLink(`/agencies/?offset=${data.offset + PER_PAGE}`, "agency-independent") : ""}`;
   if (data.offset) return `<header class="page-head"><h1>${esc(KIND_HEAD.independent)}</h1><p class="subtitle">From number ${data.offset + 1}.</p></header>${ind}`;
-  const deps = data.departments
-    .map((d) => {
-      const subs = data.subs.filter((s) => s.parent_id === d.id);
-      return `<section class="card compact-list agency-dept">${agencyRow(d, data.fy)}${subs.length ? `<details class="agency-subs"><summary class="small">${subs.length} sub-agenc${subs.length === 1 ? "y" : "ies"}</summary>${subs.map((s) => agencyRow(s, data.fy)).join("")}</details>` : ""}</section>`;
-    })
-    .join("");
+  // The departments in one card; each department's page lists its agencies.
+  const deps = `<section class="card agency-card">${list(data.departments.map((d) => agencyListRow(d, data.fy)))}</section>`;
+  // Each section is its heading and cards, 12px apart (section.stack); sections 24px apart.
   return `${head}${searchForm()}
-<div class="section-head"><h2>${esc(KIND_HEAD.department)}</h2></div>${deps}
-<div class="section-head"><h2>${esc(KIND_HEAD.independent)}</h2></div><p class="small secondary">${esc(INDEPENDENT_NOTE)}</p>${ind}
+${data.departments.length ? `<section class="stack"><div class="section-head"><h2>${esc(KIND_HEAD.department)}</h2></div>${deps}</section>` : ""}
+${data.independent.length ? `<section class="stack"><div class="section-head"><h2>${esc(KIND_HEAD.independent)}</h2></div><p class="small secondary">${esc(INDEPENDENT_NOTE)}</p>${ind}</section>` : ""}
 <p class="small secondary">From the Federal Register's list of agencies. <a class="inline-link" href="${METHOD}">How this works ›</a></p>`;
 }
 
@@ -164,37 +165,39 @@ export function moneySection(money, parts, recipients, agency, fy = lastComplete
   const latest = done[done.length - 1] || years[years.length - 1];
   const open = latest && latest.fy > fy;
   const big = latest && num(latest.outlays) != null
-    ? `<div class="tax-fig"><p class="hero-num" title="${esc(exact(latest.outlays))}">${esc(shortMoney(latest.outlays))}</p><p class="small secondary">Outlays in fiscal year ${latest.fy}${open ? " so far" : ""} (October ${latest.fy - 1} to September ${latest.fy}), from ${ext(latest.source_url, "USAspending.gov")}.</p></div>`
+    ? `<div class="tax-fig"><p class="hero-num" title="${esc(exact(latest.outlays))}">${esc(shortMoney(latest.outlays))}</p><p class="small secondary">Paid out in fiscal year ${latest.fy}${open ? " so far" : ""} (October ${latest.fy - 1} to September ${latest.fy}), from ${ext(latest.source_url, "USAspending.gov")}.</p></div>`
     : "";
-  const table = `<div class="table-scroll"><table><thead><tr><th scope="col">Fiscal year</th><th scope="col">Total budgetary resources</th><th scope="col">Obligations</th><th scope="col">Outlays</th></tr></thead><tbody>${years
-    .map((m) => `<tr><th scope="row">${ext(m.source_url, `FY${m.fy}`)}</th><td>${esc(exact(m.resources))}</td><td>${esc(exact(m.obligations))}</td><td>${esc(exact(m.outlays))}</td></tr>`)
-    .join("")}</tbody></table></div>`;
+  const cell = (n) => `<td${num(n) != null ? ` title="${esc(exact(n))}"` : ""}>${esc(shortMoney(n))}</td>`;
+  const table = `<table class="agency-table"><thead><tr><th scope="col">Year</th><th scope="col">${COLUMNS.resources}</th><th scope="col">${COLUMNS.obligations}</th><th scope="col">${COLUMNS.outlays}</th></tr></thead><tbody>${years
+    .map((m) => `<tr><th scope="row">${ext(m.source_url, String(m.fy))}</th>${cell(m.resources)}${cell(m.obligations)}${cell(m.outlays)}</tr>`)
+    .join("")}</tbody></table>`;
   const chart = pairBars(
     years.map((m) => ({ label: `FY${m.fy}`, tick: `’${String(m.fy).slice(2)}`, a: m.resources, b: m.outlays })),
-    { series: ["Total budgetary resources", "Outlays"], format: shortMoney, ariaLabel: `${agency.name}: total budgetary resources and outlays by fiscal year`, caption: `By fiscal year since ${years[0] ? years[0].fy : 2017}, from USAspending.gov.`, table }
+    { series: [COLUMNS.resources, COLUMNS.outlays], format: shortMoney, ariaLabel: `${agency.name}: available and paid out by fiscal year`, caption: `By fiscal year (October to September) since ${years[0] ? years[0].fy : 2017}, from USAspending.gov.`, table }
   );
   const pfy = parts[0] && parts[0].fy;
   const byObligation = (a, b) => (num(b.obligations) || 0) - (num(a.obligations) || 0);
   const oc = parts.filter((p) => p.kind === "object_class").sort(byObligation);
   const fn = parts.filter((p) => p.kind === "function").sort(byObligation);
   const partRows = (rows) => list(rows.map((p) => row(esc(p.name), p.parent ? esc(p.parent) : "", amount(p.obligations))));
-  const what = oc.length ? fold("money-what", "What it went to", `${partRows(oc)}<p class="small secondary">Obligations in fiscal year ${pfy}, by object class (what was bought: pay, contracts, grants…), from USAspending.gov.</p>`, { meta: `FY${pfy}` }) : "";
-  const forWhat = fn.length ? fold("money-function", "What it was for", `${partRows(fn)}<p class="small secondary">Obligations in fiscal year ${pfy}, by budget function and subfunction, from USAspending.gov.</p>`, { meta: `FY${pfy}` }) : "";
+  const what = oc.length ? subFold("money-what", "What it went to", `FY${pfy}`, `${partRows(oc)}<p class="small secondary">Committed in fiscal year ${pfy}, by object class (what was bought: pay, contracts, grants…), from USAspending.gov.</p>`) : "";
+  const forWhat = fn.length ? subFold("money-function", "What it was for", `FY${pfy}`, `${partRows(fn)}<p class="small secondary">Committed in fiscal year ${pfy}, by budget function and subfunction, from USAspending.gov.</p>`) : "";
   const rfy = recipients[0] && recipients[0].fy;
   const rec = (award, title) => {
     const r = recipients.filter((x) => x.award === award);
-    return r.length ? `<h3 class="small"><b>${title}</b></h3>${list(r.map((x) => row(esc(x.name), "", amount(x.amount))))}` : "";
+    return r.length ? `<h3 class="agency-label">${title}</h3>${list(r.map((x) => row(esc(x.name), "", amount(x.amount))))}` : "";
   };
-  const who = recipients.length ? fold("money-recipients", "Largest recipients", `${rec("contracts", "Contracts")}${rec("grants", "Grants")}<p class="small secondary">The 10 largest recipients of the agency's contracts and of its grants in fiscal year ${rfy}, by amount awarded, from USAspending.gov. ${esc(RECIPIENT_NOTE)}</p>`, { meta: `FY${rfy}` }) : "";
+  const who = recipients.length ? subFold("money-recipients", "Largest recipients", `FY${rfy}`, `${rec("contracts", "Contracts")}${rec("grants", "Grants")}<p class="small secondary">The 10 largest recipients of the agency's contracts and of its grants in fiscal year ${rfy}, by amount awarded, from USAspending.gov. ${esc(RECIPIENT_NOTE)}</p>`) : "";
   const terms = `<p class="small secondary">${esc(TERMS.resources)} ${esc(TERMS.obligations)} ${esc(TERMS.outlays)}</p>`;
-  return card("money", "Money", `${big}${chart}${terms}${what}${forWhat}${who}`, agency.usas_code ? ext(`${USAS_HOME}/${agency.usas_code}`, "This agency on USAspending.gov") : "");
+  const subs = what || forWhat || who ? `<div class="agency-subs">${what}${forWhat}${who}</div>` : "";
+  return card("money", "Money", `${big}${chart}${terms}${subs}`, agency.usas_code ? ext(`${USAS_HOME}/${agency.usas_code}`, "This agency on USAspending.gov") : "");
 }
 
 export function workforceSection(rows) {
   if (!rows.length) return "";
   const latest = rows[0];
   const big = `<div class="tax-fig"><p class="hero-num">${esc(Number(latest.employees).toLocaleString("en-US"))}</p><p class="small secondary">Employees in September ${latest.year}, from OPM's Federal Workforce Data.</p></div>`;
-  const more = rows.length > 1 ? `<details class="mini-bars-table"><summary>Show the numbers</summary><table><thead><tr><th scope="col">September</th><th scope="col">Employees</th></tr></thead><tbody>${rows.map((r) => `<tr><th scope="row">${r.year}</th><td>${esc(Number(r.employees).toLocaleString("en-US"))}</td></tr>`).join("")}</tbody></table></details>` : "";
+  const more = rows.length > 1 ? `<details class="mini-bars-table"><summary>Show the numbers</summary><table class="agency-table"><thead><tr><th scope="col">September</th><th scope="col">Employees</th></tr></thead><tbody>${rows.map((r) => `<tr><th scope="row">${r.year}</th><td>${esc(Number(r.employees).toLocaleString("en-US"))}</td></tr>`).join("")}</tbody></table></details>` : "";
   return card("workforce", "Workforce", `${big}${more}`, `Civilian employees on board, counted from OPM's monthly records. ${ext(latest.source_url, "OPM data")}`);
 }
 
@@ -206,7 +209,7 @@ export function reportsSection(reports) {
 export function rulesSection(counts, rules, agency) {
   if (!counts.length && !rules.length) return "";
   const total = counts[0] ? `<p class="small">${counts.slice(0, 3).map((c) => `${c.rules.toLocaleString("en-US")} rule${c.rules === 1 ? "" : "s"} in ${c.year}`).join(" · ")}</p>` : "";
-  const table = counts.length > 3 ? `<details class="mini-bars-table"><summary>Show the numbers</summary><table><thead><tr><th scope="col">Year</th><th scope="col">Rules published</th></tr></thead><tbody>${counts.map((c) => `<tr><th scope="row">${c.year}</th><td>${c.rules.toLocaleString("en-US")}</td></tr>`).join("")}</tbody></table></details>` : "";
+  const table = counts.length > 3 ? `<details class="mini-bars-table"><summary>Show the numbers</summary><table class="agency-table"><thead><tr><th scope="col">Year</th><th scope="col">Rules published</th></tr></thead><tbody>${counts.map((c) => `<tr><th scope="row">${c.year}</th><td>${c.rules.toLocaleString("en-US")}</td></tr>`).join("")}</tbody></table></details>` : "";
   const latest = rules.length ? list(rules.map((r) => row(esc(r.title), esc(date(r.published_on)), "", r.url, true))) : "";
   return card("rules", "Rules", `${total}${latest}${table}`, `Documents of type Rule the Federal Register publishes for the agency. ${ext(`https://www.federalregister.gov/agencies/${encodeURIComponent(agency.id)}`, "Federal Register")}`);
 }
@@ -223,7 +226,7 @@ export function lawsSection(bills) {
 
 export function childrenSection(children) {
   if (!children.length) return "";
-  return `<section class="card compact-list agency-card" id="parts"><h2 class="tax-title">Agencies in this department</h2>${children.map((c) => agencyRow(c)).join("")}</section>`;
+  return card("parts", "Agencies in this department", list(children.map((c) => agencyListRow(c))));
 }
 
 export function agencyMain(d) {

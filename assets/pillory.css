@@ -1796,6 +1796,34 @@ article.fin-term { scroll-margin-top: var(--space-4); }
 .tax-rows a.list-row { text-decoration: none; }
 .tax-rows > li:first-child > .list-row { border-top: 0; padding-top: 0; }
 .tax-rows > li:last-child > .list-row { padding-bottom: 0; }
+
+/* Agencies (functions/_lib/agencies.js): one rhythm in every card, 12px between items (.stack), the
+   row pattern for rows, collapsible rows inside a card instead of cards inside cards. */
+/* The first and last rows in a card start and end at the card's padding: no 44px floor there (the
+   card's padding keeps the tap area), so a one-line row doesn't leave a gap under it. */
+.agency-card .tax-rows > li:is(:first-child, :last-child) > .list-row, .agency-card .tax-rows > li.list-row:is(:first-child, :last-child) { min-height: 0; }
+.agency-desc { margin: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+.agency-label { margin: 0; font-size: var(--fs-body); font-weight: 700; }
+/* "Show the numbers" takes one line of space; its 44px tap area reaches past the line instead. */
+.agency-card .mini-bars-table summary { position: relative; min-height: 0; line-height: var(--row-line); }
+.agency-card .mini-bars-table summary::before { content: ""; position: absolute; inset: var(--tap-bleed) 0; }
+.agency-card .mini-bars-table[open] summary { margin-bottom: var(--space-2); }
+.agency-subs { display: flex; flex-direction: column; }
+.agency-sub { border-top: 1px solid var(--border); }
+.agency-subs > .agency-sub:last-child[open] { padding-bottom: 0; }
+.agency-sub > summary { display: flex; align-items: center; gap: var(--space-3); min-height: var(--tap); padding: var(--row-pad) 0; cursor: pointer; list-style: none; }
+.agency-subs > .agency-sub:last-child:not([open]) > summary { padding-bottom: 0; }
+.agency-sub > summary::-webkit-details-marker { display: none; }
+.agency-sub > summary .fold-title { flex: 1; }
+.agency-sub > summary::after { content: "›"; color: var(--navy); font-size: var(--fs-h2); line-height: 1; transition: transform 0.15s ease; }
+.agency-sub[open] > summary::after { transform: rotate(90deg); }
+.agency-sub-body { padding-bottom: var(--row-pad); }
+.agency-subs > .agency-sub:last-child > .agency-sub-body { padding-bottom: 0; }
+.agency-table { width: 100%; border-collapse: collapse; font-size: var(--fs-small); font-variant-numeric: tabular-nums; }
+.agency-table th, .agency-table td { padding: var(--space-1) var(--space-3) var(--space-1) 0; border-top: 1px solid var(--border); text-align: right; vertical-align: top; }
+.agency-table thead th { color: var(--text-2); font-weight: 400; vertical-align: bottom; }
+.agency-table th[scope="row"], .agency-table thead th:first-child { text-align: left; font-weight: 400; }
+.agency-table tr > :last-child { padding-right: 0; }
 .tax-rows .chev { color: var(--text-2); }
 .tax-rows .tax-sub-row { min-height: 0; padding-left: var(--space-4); }
 .tax-rows .tax-sub-row .list-title, .tax-rows .tax-sub-row .list-status { color: var(--text-2); }

@@ -63,7 +63,7 @@ Before measuring, the estimate was about 60,000 rows and 120,000 row writes for 
 
 ## Pages
 
-**`/agencies/`** (linked from Home's nation section, the Laws tab and the footer): a search field, then "Executive departments" (each department, with its sub-agencies under it), then "Independent agencies". One line each, the site's row pattern: the name, then its short name and the latest outlays when known.
+**`/agencies/`** (linked from Home's nation section, the Laws tab and the footer): a search field, then "Executive departments" (one card, one row per department with its number of agencies; the department's page lists them), then "Independent agencies". One line each, the site's row pattern: the name, then its short name and the latest outlays when known.
 
 **`/agencies/<slug>/`**, in the site's card style, the same sections in the same order for every agency, each hidden when empty:
 1. **What it is**: the Federal Register's description, word for word, with the agency's website.
