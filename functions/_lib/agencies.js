@@ -40,6 +40,8 @@ const row = (label, meta, status, href, external = false) => {
 const subFold = (id, title, meta, inner) =>
   `<details class="agency-sub" id="${esc(id)}"><summary><span class="fold-title">${esc(title)}</span>${meta ? `<span class="fold-meta">${esc(meta)}</span>` : ""}</summary><div class="agency-sub-body stack">${inner}</div></details>`;
 const list = (rows) => `<ul class="plain-list tax-rows">${rows.join("")}</ul>`;
+// Lists of agencies: names bold, so each agency stands out from its details line.
+const names = (rows, attrs = "") => `<ul class="plain-list tax-rows agency-names"${attrs}>${rows.join("")}</ul>`;
 const amount = (n) => `<span title="${esc(exact(n))}">${esc(shortMoney(n))}</span>`;
 
 /** The fiscal year that ended most recently (the federal year ends September 30). Pure. */
@@ -114,14 +116,14 @@ export function indexMain(data) {
   }
   const head = `<header class="page-head"><h1>Agencies</h1><p class="subtitle">Federal departments and agencies: who leads them, what they're given and spend, the people who work there, and the reports and rules that name them.</p></header>`;
   if (data.q) {
-    const rows = data.search.length ? `<ul class="plain-list tax-rows" id="agency-results" data-more-list>${data.search.map((a) => agencyListRow(a, data.fy)).join("")}</ul>` : `<p class="secondary">No agency's name matches "${esc(data.q)}".</p>`;
+    const rows = data.search.length ? names(data.search.map((a) => agencyListRow(a, data.fy)), ' id="agency-results" data-more-list') : `<p class="secondary">No agency's name matches "${esc(data.q)}".</p>`;
     const more = data.more ? moreLink(`/agencies/?q=${encodeURIComponent(data.q)}&offset=${data.offset + PER_PAGE}`, "agency-results") : "";
     return `${head}${searchForm(data.q)}<section class="card agency-card">${rows}</section>${more}`;
   }
-  const ind = `<section class="card agency-card"><ul class="plain-list tax-rows" id="agency-independent" data-more-list>${data.independent.map((a) => agencyListRow(a, data.fy)).join("")}</ul></section>${data.more ? moreLink(`/agencies/?offset=${data.offset + PER_PAGE}`, "agency-independent") : ""}`;
+  const ind = `<section class="card agency-card">${names(data.independent.map((a) => agencyListRow(a, data.fy)), ' id="agency-independent" data-more-list')}</section>${data.more ? moreLink(`/agencies/?offset=${data.offset + PER_PAGE}`, "agency-independent") : ""}`;
   if (data.offset) return `<header class="page-head"><h1>${esc(KIND_HEAD.independent)}</h1><p class="subtitle">From number ${data.offset + 1}.</p></header>${ind}`;
   // The departments in one card; each department's page lists its agencies.
-  const deps = `<section class="card agency-card">${list(data.departments.map((d) => agencyListRow(d, data.fy)))}</section>`;
+  const deps = `<section class="card agency-card">${names(data.departments.map((d) => agencyListRow(d, data.fy)))}</section>`;
   // Each section is its heading and cards, 12px apart (section.stack); sections 24px apart.
   return `${head}${searchForm()}
 ${data.departments.length ? `<section class="stack"><div class="section-head"><h2>${esc(KIND_HEAD.department)}</h2></div>${deps}</section>` : ""}
@@ -226,7 +228,7 @@ export function lawsSection(bills) {
 
 export function childrenSection(children) {
   if (!children.length) return "";
-  return card("parts", "Agencies in this department", list(children.map((c) => agencyListRow(c))));
+  return card("parts", "Agencies in this department", names(children.map((c) => agencyListRow(c))));
 }
 
 export function agencyMain(d) {
