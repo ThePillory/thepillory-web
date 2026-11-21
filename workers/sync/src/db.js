@@ -50,6 +50,7 @@ import init0048 from "../migrations/0048_email.sql";
 import init0049 from "../migrations/0049_company_tax_reader.sql";
 import init0050 from "../migrations/0050_passages.sql";
 import init0051 from "../migrations/0051_status_counts.sql";
+import init0052 from "../migrations/0052_agencies.sql";
 import { isHttp, today } from "./util.js";
 import { totals } from "./rollcall.js";
 import { differs } from "./upsert.js";
@@ -107,6 +108,7 @@ const MIGRATIONS = [
   ["0049_company_tax_reader.sql", init0049],
   ["0050_passages.sql", init0050],
   ["0051_status_counts.sql", init0051],
+  ["0052_agencies.sql", init0052],
 ];
 
 // Migrations tools/load_trades.py can also apply (the "Load stock trades"

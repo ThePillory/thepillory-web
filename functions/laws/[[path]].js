@@ -134,6 +134,7 @@ ${more}`;
     linkRow("/topics/", "Laws by subject", "Bills, votes, meeting items and orders by topic"),
     linkRow("/finances/", "Public finances by term", "The Time Machine"),
     linkRow("/taxes/", "Taxes", "Who pays income taxes, and what companies report paying"),
+    linkRow("/agencies/", "Agencies", "Federal departments: leaders, money, workforce and reports"),
     linkRow("/trades/", "Stock trades by members of Congress", "As reported under the STOCK Act, newest first"),
   ].join("");
   const main = `

@@ -38,6 +38,7 @@ import json
 import os
 import random
 import re
+import subprocess
 import sys
 import time
 import unicodedata
@@ -1038,17 +1039,86 @@ def recent_runs(args):
     table(rows, ["day", "step", "calls", "dollars"], ["Day", "Step", "Calls", "Cost ($)"])
 
 
+def agency_sources(args):
+    say("## 13. Government agency sources (read-only probe)")
+    say()
+    say("What each official source returns, to build the agency loaders on (docs/agencies.md). Reads only.")
+    say()
+
+    def show(label, text, n=1500):
+        say(f"### {label}")
+        say()
+        say("```")
+        say(str(text)[:n])
+        say("```")
+        say()
+
+    def get(url, accept="application/json", timeout=60, method="GET", body=None, n=3_000_000):
+        try:
+            h = {"User-Agent": UA, "Accept": accept}
+            if body is not None:
+                h["Content-Type"] = "application/json"
+            req = urllib.request.Request(url, data=json.dumps(body).encode() if body is not None else None, headers=h, method=method)
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                if method == "HEAD":
+                    return {k: v for k, v in r.headers.items() if k.lower() in ("etag", "last-modified", "content-length", "content-type")}
+                return r.read(n).decode("utf-8", "replace")
+        except Exception as e:  # noqa: BLE001
+            return f"__FETCH_FAILED__ {type(e).__name__}: {str(e)[:200]}"
+
+    def links(page, pat, k=60):
+        return "\n".join([l for l in sorted(set(re.findall(r'href="([^"]+)"', page))) if re.search(pat, l, re.I)][:k])
+
+    def get2(url, accept="*/*", n=400_000):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": accept})
+            with urllib.request.urlopen(req, timeout=90) as r:
+                return f"[{r.status} {r.headers.get('Content-Type')} len={r.headers.get('Content-Length')} etag={r.headers.get('ETag')} lm={r.headers.get('Last-Modified')}]\n" + r.read(n).decode("utf-8", "replace")
+        except Exception as e:  # noqa: BLE001
+            return f"__FETCH_FAILED__ {type(e).__name__}: {str(e)[:200]}"
+
+    api = get2("https://data.opm.gov/get-data/api-access", accept="text/html", n=2_000_000)
+    txt = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", re.sub(r"<script.*?</script>|<style.*?</style>", " ", api, flags=re.S)))
+    i = txt.find("Getting started")
+    show("OPM API access page from 'Getting started'", txt[i:i + 5000], 5000)
+    B = "https://escs.opm.gov/escs-net/api/pbpub"
+    show("PLUM get-current-agencies", get2(f"{B}/get-current-agencies", accept="application/json"), 1500)
+    show("PLUM download-data", get2(f"{B}/download-data", accept="*/*", n=3000), 3000)
+    page = get2("https://www.opm.gov/about-us/open-government/plum-reporting/plum-data/", accept="text/html", n=2_000_000)
+    for name in ("escsReportingUrl", "downloadDataUrl", "agenciesUrl"):
+        for m in re.finditer(name, page):
+            show(f"PLUM script near {name}", page[max(0, m.start() - 200): m.start() + 1200], 1400)
+
+
+def agency_measure(args):
+    """Section 14: tools/load_agencies.py in measure mode (reads the sources and D1, writes nothing):
+    the rows and row writes a load would make, and the storage it adds. AGENCY_PARTS picks parts."""
+    say("## 14. Agencies: measure (writes nothing)")
+    say()
+    subprocess.run([sys.executable, "-m", "pip", "install", "-q", "pyarrow==22.0.0"], check=False)
+    parts = os.environ.get("AGENCY_PARTS") or "agencies,leaders,money,workforce,oversight,rules,laws"
+    p = subprocess.Popen([sys.executable, str(Path(__file__).resolve().parent / "load_agencies.py"), "--mode", "measure", "--parts", parts, "--database", args.database],
+                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    say("```")
+    for line in p.stdout:  # echoed to the job log as it runs, too
+        sys.stderr.write(line)
+        say(line.rstrip())
+    say(f"(exit {p.wait()})")
+    say("```")
+    say()
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--database", default="pillory")
-    ap.add_argument("--only", default="1,2,3,4,5,6,7,8,9,10,11,12")
+    ap.add_argument("--only", default="1,2,3,4,5,6,7,8,9,10,11,12,13")
     args = ap.parse_args()
     only = set(args.only.split(","))
     say("# Accuracy audit")
     say()
     say(f"Run {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}. Reads D1 and the sources; changes nothing.")
     say()
-    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage), ("7", sync_cost), ("8", tax_laws), ("9", company_xbrl), ("10", voice_votes), ("11", clerk_petitions), ("12", recent_runs)):
+    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage), ("7", sync_cost), ("8", tax_laws), ("9", company_xbrl), ("10", voice_votes), ("11", clerk_petitions), ("12", recent_runs), ("13", agency_sources), ("14", agency_measure)):
         if k in only:
             try:
                 fn(args)
