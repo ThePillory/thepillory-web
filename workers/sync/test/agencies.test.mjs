@@ -70,8 +70,8 @@ test("the index lists departments with their sub-agencies, then independent agen
   assert.equal(status, 200);
   assert.ok(html.indexOf("Executive departments") < html.indexOf("Independent agencies"));
   assert.match(html, /Example Department/);
-  assert.match(html, /1 sub-agency/);
-  assert.match(html, /href="\/agencies\/sample-service\/"/);
+  assert.match(html, /EXD · 1 agency · FY/);
+  assert.match(html, /href="\/agencies\/example-department\/"/);
   assert.match(html, new RegExp(`FY${FY} paid out \\$20.3 billion`));
   assert.doesNotMatch(html, BANNED);
 });

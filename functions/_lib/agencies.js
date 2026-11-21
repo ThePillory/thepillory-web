@@ -61,12 +61,11 @@ export async function loadIndex(db, { q = "", offset = 0 } = {}, fy = lastComple
       .all();
     return { fy, q, offset, search: r.results.slice(0, PER_PAGE), more: r.results.length > PER_PAGE };
   }
-  const [deps, subs, ind] = await Promise.all([
-    db.prepare(`SELECT ${cols} FROM agencies a WHERE a.kind = 'department' ORDER BY a.name`).bind(fy).all(),
-    offset ? { results: [] } : db.prepare(`SELECT ${cols} FROM agencies a WHERE a.parent_id IN (SELECT id FROM agencies WHERE kind = 'department') ORDER BY a.parent_id, a.name`).bind(fy).all(),
+  const [deps, ind] = await Promise.all([
+    offset ? { results: [] } : db.prepare(`SELECT ${cols}, (SELECT COUNT(*) FROM agencies s WHERE s.parent_id = a.id) AS subs FROM agencies a WHERE a.kind = 'department' ORDER BY a.name`).bind(fy).all(),
     db.prepare(`SELECT ${cols} FROM agencies a WHERE a.kind = 'independent' ORDER BY a.name LIMIT ? OFFSET ?`).bind(fy, PER_PAGE + 1, offset).all(),
   ]);
-  return { fy, q, offset, departments: deps.results, subs: subs.results, independent: ind.results.slice(0, PER_PAGE), more: ind.results.length > PER_PAGE };
+  return { fy, q, offset, departments: deps.results, independent: ind.results.slice(0, PER_PAGE), more: ind.results.length > PER_PAGE };
 }
 
 export async function loadAgency(db, id) {
@@ -96,7 +95,7 @@ export async function loadAgency(db, id) {
 
 /** An agency as a row inside a card (the row pattern): name, then short name and the latest paid out. */
 export function agencyListRow(a, fy) {
-  const meta = [a.short_name, a.parent_name ? `Part of the ${a.parent_name}` : "", num(a.outlays) != null ? `FY${fy} paid out ${shortMoney(a.outlays)}` : ""].filter(Boolean).map(esc).join(" · ");
+  const meta = [a.short_name, a.parent_name ? `Part of the ${a.parent_name}` : "", a.subs ? `${a.subs} agenc${a.subs === 1 ? "y" : "ies"}` : "", num(a.outlays) != null ? `FY${fy} paid out ${shortMoney(a.outlays)}` : ""].filter(Boolean).map(esc).join(" · ");
   return row(esc(a.name), meta, `<span class="chev" aria-hidden="true">›</span>`, agencyHref(a.id));
 }
 
@@ -121,13 +120,8 @@ export function indexMain(data) {
   }
   const ind = `<section class="card agency-card"><ul class="plain-list tax-rows" id="agency-independent" data-more-list>${data.independent.map((a) => agencyListRow(a, data.fy)).join("")}</ul></section>${data.more ? moreLink(`/agencies/?offset=${data.offset + PER_PAGE}`, "agency-independent") : ""}`;
   if (data.offset) return `<header class="page-head"><h1>${esc(KIND_HEAD.independent)}</h1><p class="subtitle">From number ${data.offset + 1}.</p></header>${ind}`;
-  const deps = data.departments
-    .map((d) => {
-      const subs = data.subs.filter((s) => s.parent_id === d.id);
-      const n = `${subs.length} sub-agenc${subs.length === 1 ? "y" : "ies"}`;
-      return `<section class="card stack agency-card agency-dept">${list([agencyListRow(d, data.fy)])}${subs.length ? `<div class="agency-subs">${subFold(`subs-${d.id}`, n, "", list(subs.map((x) => agencyListRow(x, data.fy))))}</div>` : ""}</section>`;
-    })
-    .join("");
+  // The departments in one card; each department's page lists its agencies.
+  const deps = `<section class="card agency-card">${list(data.departments.map((d) => agencyListRow(d, data.fy)))}</section>`;
   // Each section is its heading and cards, 12px apart (section.stack); sections 24px apart.
   return `${head}${searchForm()}
 ${data.departments.length ? `<section class="stack"><div class="section-head"><h2>${esc(KIND_HEAD.department)}</h2></div>${deps}</section>` : ""}
