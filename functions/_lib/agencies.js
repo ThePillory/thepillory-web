@@ -94,9 +94,10 @@ export async function loadAgency(db, id) {
 // ---------------------------------------------------------------------------
 // The index
 
-export function agencyRow(a, fy) {
+/** An agency as a row inside a card (the row pattern): name, then short name and the latest paid out. */
+export function agencyListRow(a, fy) {
   const meta = [a.short_name, a.parent_name ? `Part of the ${a.parent_name}` : "", num(a.outlays) != null ? `FY${fy} paid out ${shortMoney(a.outlays)}` : ""].filter(Boolean).map(esc).join(" · ");
-  return `<a class="compact-row" href="${agencyHref(a.id)}"><span class="cr-main"><span class="cr-title">${esc(a.name)}</span>${meta ? `<span class="cr-meta">${meta}</span>` : ""}</span><span class="cr-side"><span class="chev" aria-hidden="true">›</span></span></a>`;
+  return row(esc(a.name), meta, `<span class="chev" aria-hidden="true">›</span>`, agencyHref(a.id));
 }
 
 export function searchForm(q = "") {
@@ -114,21 +115,23 @@ export function indexMain(data) {
   }
   const head = `<header class="page-head"><h1>Agencies</h1><p class="subtitle">Federal departments and agencies: who leads them, what they're given and spend, the people who work there, and the reports and rules that name them.</p></header>`;
   if (data.q) {
-    const rows = data.search.length ? data.search.map((a) => agencyRow(a, data.fy)).join("") : `<p class="secondary small cr-empty">No agency's name matches "${esc(data.q)}".</p>`;
+    const rows = data.search.length ? `<ul class="plain-list tax-rows" id="agency-results" data-more-list>${data.search.map((a) => agencyListRow(a, data.fy)).join("")}</ul>` : `<p class="secondary">No agency's name matches "${esc(data.q)}".</p>`;
     const more = data.more ? moreLink(`/agencies/?q=${encodeURIComponent(data.q)}&offset=${data.offset + PER_PAGE}`, "agency-results") : "";
-    return `${head}${searchForm(data.q)}<section class="card compact-list" id="agency-results" data-more-list>${rows}</section>${more}`;
+    return `${head}${searchForm(data.q)}<section class="card agency-card">${rows}</section>${more}`;
   }
-  const ind = `<section class="card compact-list" id="agency-independent" data-more-list>${data.independent.map((a) => agencyRow(a, data.fy)).join("")}</section>${data.more ? moreLink(`/agencies/?offset=${data.offset + PER_PAGE}`, "agency-independent") : ""}`;
+  const ind = `<section class="card agency-card"><ul class="plain-list tax-rows" id="agency-independent" data-more-list>${data.independent.map((a) => agencyListRow(a, data.fy)).join("")}</ul></section>${data.more ? moreLink(`/agencies/?offset=${data.offset + PER_PAGE}`, "agency-independent") : ""}`;
   if (data.offset) return `<header class="page-head"><h1>${esc(KIND_HEAD.independent)}</h1><p class="subtitle">From number ${data.offset + 1}.</p></header>${ind}`;
   const deps = data.departments
     .map((d) => {
       const subs = data.subs.filter((s) => s.parent_id === d.id);
-      return `<section class="card compact-list agency-dept">${agencyRow(d, data.fy)}${subs.length ? `<details class="agency-subs"><summary class="small">${subs.length} sub-agenc${subs.length === 1 ? "y" : "ies"}</summary>${subs.map((s) => agencyRow(s, data.fy)).join("")}</details>` : ""}</section>`;
+      const n = `${subs.length} sub-agenc${subs.length === 1 ? "y" : "ies"}`;
+      return `<section class="card stack agency-card agency-dept">${list([agencyListRow(d, data.fy)])}${subs.length ? `<div class="agency-subs">${subFold(`subs-${d.id}`, n, "", list(subs.map((x) => agencyListRow(x, data.fy))))}</div>` : ""}</section>`;
     })
     .join("");
+  // Each section is its heading and cards, 12px apart (section.stack); sections 24px apart.
   return `${head}${searchForm()}
-<div class="section-head"><h2>${esc(KIND_HEAD.department)}</h2></div>${deps}
-<div class="section-head"><h2>${esc(KIND_HEAD.independent)}</h2></div><p class="small secondary">${esc(INDEPENDENT_NOTE)}</p>${ind}
+${data.departments.length ? `<section class="stack"><div class="section-head"><h2>${esc(KIND_HEAD.department)}</h2></div>${deps}</section>` : ""}
+${data.independent.length ? `<section class="stack"><div class="section-head"><h2>${esc(KIND_HEAD.independent)}</h2></div><p class="small secondary">${esc(INDEPENDENT_NOTE)}</p>${ind}</section>` : ""}
 <p class="small secondary">From the Federal Register's list of agencies. <a class="inline-link" href="${METHOD}">How this works ›</a></p>`;
 }
 
@@ -229,7 +232,7 @@ export function lawsSection(bills) {
 
 export function childrenSection(children) {
   if (!children.length) return "";
-  return `<section class="card compact-list agency-card" id="parts"><h2 class="tax-title">Agencies in this department</h2>${children.map((c) => agencyRow(c)).join("")}</section>`;
+  return card("parts", "Agencies in this department", list(children.map((c) => agencyListRow(c))));
 }
 
 export function agencyMain(d) {

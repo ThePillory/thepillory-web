@@ -1799,11 +1799,14 @@ article.fin-term { scroll-margin-top: var(--space-4); }
 
 /* Agencies (functions/_lib/agencies.js): one rhythm in every card, 12px between items (.stack), the
    row pattern for rows, collapsible rows inside a card instead of cards inside cards. */
-.agency-card .tax-rows > li:last-child > .list-row, .agency-card .tax-rows > li.list-row:last-child { min-height: 0; }
+/* The first and last rows in a card start and end at the card's padding: no 44px floor there (the
+   card's padding keeps the tap area), so a one-line row doesn't leave a gap under it. */
+.agency-card .tax-rows > li:is(:first-child, :last-child) > .list-row, .agency-card .tax-rows > li.list-row:is(:first-child, :last-child) { min-height: 0; }
 .agency-desc { margin: 0; display: flex; flex-direction: column; gap: var(--space-3); }
 .agency-label { margin: 0; font-size: var(--fs-body); font-weight: 700; }
-.agency-card .tax-fig + .mini-bars { margin-top: var(--space-1); }
-.agency-card .mini-bars-table summary { min-height: var(--tap); margin-block: var(--tap-bleed); }
+/* "Show the numbers" takes one line of space; its 44px tap area reaches past the line instead. */
+.agency-card .mini-bars-table summary { position: relative; min-height: 0; line-height: var(--row-line); }
+.agency-card .mini-bars-table summary::before { content: ""; position: absolute; inset: var(--tap-bleed) 0; }
 .agency-card .mini-bars-table[open] summary { margin-bottom: var(--space-2); }
 .agency-subs { display: flex; flex-direction: column; }
 .agency-sub { border-top: 1px solid var(--border); }
@@ -1811,6 +1814,7 @@ article.fin-term { scroll-margin-top: var(--space-4); }
 .agency-sub > summary { display: flex; align-items: center; gap: var(--space-3); min-height: var(--tap); padding: var(--row-pad) 0; cursor: pointer; list-style: none; }
 .agency-subs > .agency-sub:last-child:not([open]) > summary { padding-bottom: 0; }
 .agency-sub > summary::-webkit-details-marker { display: none; }
+.agency-sub > summary .fold-title { flex: 1; }
 .agency-sub > summary::after { content: "›"; color: var(--navy); font-size: var(--fs-h2); line-height: 1; transition: transform 0.15s ease; }
 .agency-sub[open] > summary::after { transform: rotate(90deg); }
 .agency-sub-body { padding-bottom: var(--row-pad); }
