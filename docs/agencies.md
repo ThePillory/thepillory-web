@@ -12,6 +12,7 @@ Pages: `/agencies/` (search, then the 15 executive departments with their sub-ag
 | `leaders` | OPM's PLUM data under the PLUM Act, `escs.opm.gov/escs-net/api/pbpub/download-data` (one CSV, every listed position) | positions whose appointment type is PAS (presidential appointment with Senate confirmation): position, organization, holder (or "Vacant" as listed), begin date; a non-PAS holder of a PAS position only with the placement OPM lists (for example "PTDO") | `Content-Length` |
 | | Congress.gov nominations already in D1 (`nominations`, from the sync) | the nomination naming the holder: confirmation date, and the Senate roll call when one is recorded (`votes`, nomination votes); otherwise the nomination's own latest action ("Confirmed by the Senate by Voice Vote", as stated) | — (D1) |
 | `money` | USAspending.gov API (`/api/v2/agency/<code>/budgetary_resources/`, `object_class/`, `budget_function/`, `search/spending_by_category/recipient/`) | per agency (the 111 USAspending top-tier agencies, matched to the Federal Register list by name) and fiscal year since 2017: total budgetary resources, obligations and outlays; obligations and outlays by object class and by budget function; the 10 largest recipients of contracts and of grants that aren't individuals | the top-tier list's latest reporting period (`active_fy`, `active_fq`): nothing is read again until it changes; closed years aren't read again |
+| `money-sub` | USAspending.gov API (`/api/v2/agency/<toptier_code>/sub_agency/?fiscal_year=&agency_type=awarding`, `search/spending_by_category/recipient/` with an `awarding` `subtier` agency filter) | per sub-agency and fiscal year since 2017: obligations on the awards it made (`total_obligations`, the only money USAspending reports below the top tier: no budgetary resources or outlays, never estimated); the latest complete fiscal year's 10 largest recipients of contracts and of grants that aren't individuals. Each USAspending sub-tier agency is tied to a Federal Register sub-agency under the same parent by exact normalized name (`norm_name()`, one match only); the rest are listed in the run log. A sub-tier name used under more than one top-tier agency (an "Office of Inspector General") gets no recipients, since the recipient endpoint can't scope it to one parent. Recipients come from `spending_by_category/recipient/` (totals by recipient), not `spending_by_award/` (one row per award). | the same reporting period as `money` (its own state, `money-sub`); closed years aren't read again |
 | `workforce` | OPM's Federal Workforce Data API, `data.opm.gov/api/v1/files/employment` (monthly record-level files, parquet) | employees by agency, from each September file (fiscal year end) | the file list's version and publication date |
 | `oversight` | GAO's reports feed, `gao.gov/rss/reports.xml` (the 25 newest) | title, date, report number (GAO-YY-NNNNN), link, kept when the title or GAO's summary names the agency by its full name | `ETag` / `Last-Modified` of the feed |
 | | Oversight.gov (inspectors general) | **not loaded**: the site refuses requests from GitHub's servers (HTTP 406). Pages say nothing about it until a way to read it officially exists | — |
@@ -29,9 +30,9 @@ Notes:
 |---|---|---|
 | `agencies` | `id` (the Federal Register slug, never renamed) | 473 |
 | `agency_leaders` | `(agency_id, organization, position, name)` | ~1,600 (PAS positions, filled and vacant) |
-| `agency_money` | `(agency_id, fy)` | ~1,100 (111 agencies × FY2017–2026) |
+| `agency_money` | `(agency_id, fy)` | ~1,100 (111 agencies × FY2017–2026), plus 661 sub-agency rows (obligations only; measured) |
 | `agency_money_parts` | `(agency_id, fy, kind, name)` | ~25,000 (object classes and budget functions) |
-| `agency_recipients` | `(agency_id, fy, award, rank)` | ~22,000 (10 contracts + 10 grants per agency-year) |
+| `agency_recipients` | `(agency_id, fy, award, rank)` | ~22,000 (10 contracts + 10 grants per agency-year), plus 860 for sub-agencies (latest complete fiscal year only; measured) |
 | `agency_workforce` | `(agency_id, year)` | ~1,000 |
 | `agency_reports` | `(source, number, agency_id)` | grows ~25 a week, a few naming each agency |
 | `agency_rule_counts` | `(agency_id, year)` | ~4,000 |
@@ -50,6 +51,7 @@ The workflow (`.github/workflows/agencies.yml`) runs daily and on demand: every 
 | agencies | weekly | only an agency whose name, description or parent changed |
 | leaders | weekly | positions whose holder, status or date changed |
 | money | weekly, read only when USAspending's reporting period moves (about monthly) | the open fiscal years' rows that changed |
+| money-sub | the same | the open fiscal years' rows that changed, and the latest complete year's recipients when they change |
 | workforce | weekly, read only when OPM publishes a new September file (yearly) | one row per agency, once a year |
 | oversight (GAO) | daily | new reports only |
 | rules | weekly | the current year's count; the latest 10 when they change |
@@ -61,6 +63,10 @@ Every part runs `--mode measure` first: it reads the sources and what D1 already
 
 Before measuring, the estimate was about 60,000 rows and 120,000 row writes for the first load (about $0.12 at $1.00 per million writes), and 15 MB of storage. Weekly runs after that write about the open fiscal years' changes (a few thousand rows). The measured numbers replace these before the first load.
 
+### Sub-agencies' money (`money-sub`), measured
+
+`--mode measure --parts money-sub`, November 22, 2026 (writes nothing): 91 top-tier agencies read; 69 USAspending sub-tier agencies matched a Federal Register sub-agency under the same parent, 112 didn't (listed in the log: mostly offices the Federal Register doesn't list, and names written differently, such as "U.S. Fish and Wildlife Service" for "Fish and Wildlife Service" or "Bureau of Land Management" for "Land Management Bureau"; never guessed). First load: `agency_money` 661 rows, `agency_recipients` 860 rows: 1,521 row writes (under $0.01), about 0.3 MB. After that, the open fiscal years' changed rows when the reporting period moves.
+
 ## Pages
 
 **`/agencies/`** (linked from Home's nation section, the Laws tab and the footer): a search field, then "Executive departments" (one card, one row per department with its number of agencies; the department's page lists them), then "Independent agencies". One line each, the site's row pattern: the name, then its short name and the latest outlays when known.
@@ -68,7 +74,7 @@ Before measuring, the estimate was about 60,000 rows and 120,000 row writes for 
 **`/agencies/<slug>/`**, in the site's card style, the same sections in the same order for every agency, each hidden when empty:
 1. **What it is**: the Federal Register's description, word for word, with the agency's website.
 2. **Leadership**: each Senate-confirmed position: the holder (linked to their page when they're already an official on the site, as the Cabinet is), title, since date, and how they were confirmed (the roll call, linked, or "Confirmed by voice vote" as Congress.gov states it). Vacant positions as "Vacant", as listed.
-3. **Money**: the big number is the latest complete fiscal year's outlays; a chart of total budgetary resources and outlays by year; what the obligations went to (object class) and for what (budget function); the top recipients of contracts and grants; Show the numbers with exact figures.
+3. **Money**: for a sub-agency, obligations only ("Obligations (money committed)": the hero number with its fiscal year, the chart, Show the numbers, Largest recipients) and one line saying money available and paid out is reported only for the whole department, linked to it. For a department or independent agency: the big number is the latest complete fiscal year's outlays; a chart of total budgetary resources and outlays by year; what the obligations went to (object class) and for what (budget function); the top recipients of contracts and grants; Show the numbers with exact figures.
 4. **Workforce**: employees by year (September of each year).
 5. **Oversight reports**: GAO reports naming the agency, newest first, in their own titles, linked.
 6. **Rules**: rules published per year and the latest 10, linked.
