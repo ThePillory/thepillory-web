@@ -55,7 +55,7 @@ OPM_FILES = "https://data.opm.gov/api/v1/files"
 GAO_RSS = "https://www.gao.gov/rss/reports.xml"
 APPROPRIATIONS = ROOT / "data" / "agencies" / "appropriations.json"
 MIGRATION = ROOT / "workers" / "sync" / "migrations" / "0052_agencies.sql"
-PARTS = ("agencies", "leaders", "money", "workforce", "oversight", "rules", "laws")
+PARTS = ("agencies", "leaders", "money", "money-sub", "workforce", "oversight", "rules", "laws")
 
 # The tables, their keys and how many indexes each has (D1 writes one entry per index per row).
 TABLES = {
@@ -383,12 +383,47 @@ def recipient_rows(agency, fy, award, top, individuals, n=10):
     return out
 
 
+def sub_agency_results(pages):
+    """USAspending's /agency/<code>/sub_agency/ pages: {sub-tier name: total_obligations}. Pure."""
+    out = {}
+    for pg in pages:
+        for x in pg.get("results") or []:
+            if x.get("name") and x.get("total_obligations") is not None:
+                out[x["name"]] = x["total_obligations"]
+    return out
+
+
+def sub_match(parent_id, names, agencies):
+    """USAspending sub-tier names under one top-tier agency -> Federal Register sub-agencies under the
+    same parent, by exact normalized name (norm_name(), no reordering), one match only. Returns
+    ({sub-tier name: agency id}, [unmatched names]). Pure."""
+    idx = {}
+    for a in agencies:
+        if a["kind"] == "sub-agency" and a.get("parent_id") == parent_id:
+            idx.setdefault(norm_name(a["name"]), []).append(a["id"])
+    out, unmatched = {}, []
+    for n in sorted(names):
+        ids = idx.get(norm_name(n), [])
+        if len(ids) == 1:
+            out[n] = ids[0]
+        else:
+            unmatched.append(n)
+    return out, unmatched
+
+
+def sub_money_rows(agency, code, fy, obligations):
+    """One sub-agency's fiscal year: obligations on the awards it made, as USAspending reports them.
+    USAspending has no budgetary resources or outlays below the top tier: those stay empty. Pure."""
+    return {"agency_id": agency, "fy": fy, "resources": None, "obligations": obligations, "outlays": None,
+            "source_url": f"https://www.usaspending.gov/agency/{code}?fy={fy}"}
+
+
 AWARDS = {"contracts": ["A", "B", "C", "D"], "grants": ["02", "03", "04", "05"]}
 
 
-def recipient_body(name, fy, award, individuals=False, limit=20):
+def recipient_body(name, fy, award, individuals=False, limit=20, tier="toptier"):
     f = {"time_period": [{"start_date": f"{fy - 1}-10-01", "end_date": f"{fy}-09-30"}],
-         "agencies": [{"type": "awarding", "tier": "toptier", "name": name}], "award_type_codes": AWARDS[award]}
+         "agencies": [{"type": "awarding", "tier": tier, "name": name}], "award_type_codes": AWARDS[award]}
     if individuals:
         f["recipient_type_names"] = ["individuals"]
     return {"filters": f, "category": "recipient", "limit": limit, "page": 1}
@@ -724,6 +759,101 @@ def part_money(args, ctx, plan):
     return None if failed else period
 
 
+def part_money_sub(args, ctx, plan):
+    """Sub-agencies' obligations by fiscal year (USAspending's sub_agency endpoint, awarding) and the
+    latest complete fiscal year's 10 largest contract and grant recipients that aren't individuals."""
+    toptier = fetch_json(f"{USAS}/references/toptier_agencies/").get("results", [])
+    period = max((f"{t.get('active_fy')}Q{t.get('active_fq')}" for t in toptier), default="")
+    if period and period == state_get(args, "money-sub") and not args.force:
+        say(f"money-sub: USAspending's reporting period is still {period}; not read")
+        return period
+    tops = [a for a in ctx["agencies"] if a.get("usas_code") and a["kind"] != "sub-agency"]
+    latest = int(period[:4]) if period[:4].isdigit() else datetime.date.today().year
+    complete = latest - 1 if not period.endswith("Q4") else latest  # the latest fiscal year USAspending has closed
+    subs_ids = {a["id"] for a in ctx["agencies"] if a["kind"] == "sub-agency"}
+    sub_list = ", ".join(D.lit(i) for i in sorted(subs_ids))
+    have = existing(args, "agency_money", f"agency_id IN ({sub_list})") if subs_ids and not args.force else {}
+    closed = {k[1] for k in have}
+    years = [fy for fy in range(SINCE_FY, latest + 1) if args.all_years or fy >= latest - 1 or fy not in closed]
+    failed, unmatched_all = [], []
+
+    def one(a):
+        code = a["usas_code"]
+        try:
+            per_year = {}
+            for fy in years:
+                pages, page = [], 1
+                while True:
+                    pg = fetch_json(f"{USAS}/agency/{code}/sub_agency/?fiscal_year={fy}&agency_type=awarding&limit=100&page={page}")
+                    pages.append(pg)
+                    if not (pg.get("page_metadata") or {}).get("hasNext") or page >= 20:
+                        break
+                    page += 1
+                per_year[fy] = sub_agency_results(pages)
+            return a, per_year
+        except Exception as e:  # noqa: BLE001  (one agency failing leaves its rows as they are)
+            say(f"  {a['name']}: sub-agencies not read ({type(e).__name__}: {str(e)[:120]}); their rows are left as they are")
+            failed.append(a["id"])
+            return a, None
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as pool:
+        results = list(pool.map(one, tops))
+    # A sub-tier name used under more than one top-tier agency ("Office of Inspector General"): its
+    # recipients can't be scoped to one parent on the recipient endpoint, so they aren't read.
+    name_tops = {}
+    for a, per_year in results:
+        for names in (per_year or {}).values():
+            for n in names:
+                name_tops.setdefault(n, set()).add(a["id"])
+    money, matched = [], {}
+    for a, per_year in results:
+        if per_year is None:
+            continue
+        all_names = {n for names in per_year.values() for n in names}
+        m, un = sub_match(a["id"], all_names, ctx["agencies"])
+        unmatched_all += [f"{n} ({a['name']})" for n in un if norm_name(n) != norm_name(a["name"])]
+        for n, sid in m.items():
+            matched[sid] = (n, a)
+        for fy, names in per_year.items():
+            for n, ob in names.items():
+                if n in m:
+                    money.append(sub_money_rows(m[n], a["usas_code"], fy, ob))
+    say(f"money-sub: {len(tops)} top-tier agencies read; {len(matched)} sub-tier agencies matched to a Federal Register sub-agency under the same parent")
+    if unmatched_all:
+        say(f"  not matched (not shown): {len(unmatched_all)}: " + "; ".join(unmatched_all))
+
+    def recips(item):
+        sid, (n, a) = item
+        if len(name_tops.get(n, ())) > 1:
+            return sid, [], f"{n} ({a['name']}): the same sub-tier name is used under another agency; recipients not read"
+        try:
+            out = []
+            for award in AWARDS:
+                top = fetch_json(f"{USAS}/search/spending_by_category/recipient/", method="POST", body=recipient_body(n, complete, award, tier="subtier"))
+                ind = fetch_json(f"{USAS}/search/spending_by_category/recipient/", method="POST", body=recipient_body(n, complete, award, individuals=True, tier="subtier"))
+                out += recipient_rows(sid, complete, award, top, ind)
+            return sid, out, None
+        except Exception as e:  # noqa: BLE001
+            failed.append(sid)
+            return sid, None, f"{n}: recipients not read ({type(e).__name__})"
+
+    rec, read_ids = [], []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as pool:
+        for sid, rows, note in pool.map(recips, sorted(matched.items())):
+            if note:
+                say(f"  {note}")
+            if rows is not None:
+                rec += rows
+                read_ids.append(sid)
+    ids = sorted({r["agency_id"] for r in money})
+    if ids:
+        plan.add(args, "agency_money", money, where=f"agency_id IN ({', '.join(D.lit(i) for i in ids)}) AND fy IN ({', '.join(map(str, years))})", prune_scope="years")
+    if read_ids:
+        plan.add(args, "agency_recipients", rec, where=f"agency_id IN ({', '.join(D.lit(i) for i in read_ids)})", prune_scope="read")
+    say(f"money-sub: fiscal years read: {years[0] if years else '-'}–{years[-1] if years else '-'}; recipients for fiscal year {complete}")
+    return None if failed else period
+
+
 def part_workforce(args, ctx, plan):
     try:
         import pyarrow.parquet as pq
@@ -807,7 +937,7 @@ def part_laws(args, ctx, plan):
     return None
 
 
-RUNNERS = {"agencies": part_agencies, "leaders": part_leaders, "money": part_money, "workforce": part_workforce, "oversight": part_oversight, "rules": part_rules, "laws": part_laws}
+RUNNERS = {"agencies": part_agencies, "leaders": part_leaders, "money": part_money, "money-sub": part_money_sub, "workforce": part_workforce, "oversight": part_oversight, "rules": part_rules, "laws": part_laws}
 
 
 def main():

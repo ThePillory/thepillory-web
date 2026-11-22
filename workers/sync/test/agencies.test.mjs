@@ -46,6 +46,10 @@ function db({ empty = false } = {}) {
     INSERT INTO agency_money_parts VALUES ('example-department', ${FY}, 'object_class', 'Grants and fixed charges', NULL, 9000000000, 8000000000),
       ('example-department', ${FY}, 'function', 'Training and Employment', 'Education, Training, Employment, and Social Services', 5000000000, 4900000000);
     INSERT INTO agency_recipients VALUES ('example-department', ${FY}, 'grants', 1, 'STATE OF EXAMPLE', 'r1', 900000000);
+    INSERT INTO agency_money (agency_id, fy, resources, obligations, outlays, source_url) VALUES
+      ('sample-service', ${FY - 1}, NULL, 700000000, NULL, 'https://www.usaspending.gov/agency/9999?fy=${FY - 1}'),
+      ('sample-service', ${FY}, NULL, 812345678, NULL, 'https://www.usaspending.gov/agency/9999?fy=${FY}');
+    INSERT INTO agency_recipients VALUES ('sample-service', ${FY}, 'contracts', 1, 'EXAMPLE SUPPLY CO', 'r9', 40000000);
     INSERT INTO agency_workforce VALUES ('example-department', ${FY}, 15123, 'https://data.opm.gov/'), ('example-department', ${FY - 1}, 15000, 'https://data.opm.gov/');
     INSERT INTO agency_reports VALUES ('gao', 'GAO-27-100001', 'example-department', 'Example Programs: Example Department Should Improve Grant Data', '2026-11-17', 'https://www.gao.gov/products/gao-27-100001');
     INSERT INTO agency_rule_counts VALUES ('example-department', 2026, 18), ('example-department', 2025, 22);
@@ -109,6 +113,18 @@ test("an agency page: every section, in order, with years and sources", async ()
   assert.match(html, /S\. 1 · Example Appropriations Act, 2026/);
   assert.doesNotMatch(html, BANNED);
   assert.doesNotMatch(html, /style="[^"]*color/);
+});
+
+test("a sub-agency's money: obligations only, never outlays, with the department linked", async () => {
+  const { html } = await call("/agencies/sample-service/", { DB: db() });
+  assert.match(html, />Money<\/h2>/);
+  assert.match(html, new RegExp(`\\$812 million</p><p class="small secondary">Obligations \\(money committed\\) in fiscal year ${FY} \\(`));
+  assert.match(html, /Money available and paid out is reported only for the whole department: <a class="inline-link" href="\/agencies\/example-department\/">Example Department ›<\/a>/);
+  assert.match(html, /<th scope="col">Obligations \(money committed\)<\/th>/);
+  assert.match(html, /title="\$812,345,678">\$812 million<\/td>/);
+  assert.match(html, /EXAMPLE SUPPLY CO/);
+  assert.doesNotMatch(html, /Paid out in fiscal year|<th scope="col">(Paid out|Available)<\/th>|pair-bars/); // no outlays or resources, never estimated
+  assert.doesNotMatch(html, BANNED);
 });
 
 test("empty sections are hidden; an agency with only its name says so", async () => {

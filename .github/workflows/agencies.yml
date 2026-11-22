@@ -18,8 +18,8 @@ on:
         description: "measure (read, write nothing) or load"
         default: measure
       parts:
-        description: "parts, comma-separated (agencies,leaders,money,workforce,oversight,rules,laws)"
-        default: "agencies,leaders,money,workforce,oversight,rules,laws"
+        description: "parts, comma-separated (agencies,leaders,money,money-sub,workforce,oversight,rules,laws)"
+        default: "agencies,leaders,money,money-sub,workforce,oversight,rules,laws"
       force:
         description: "read sources even when their checks say unchanged (true/false)"
         default: "false"
@@ -49,7 +49,7 @@ jobs:
         run: |
           if [ -z "$PARTS" ]; then
             # Scheduled: GAO's feed daily; every part on Mondays.
-            if [ "$(date -u +%u)" = "1" ]; then PARTS="agencies,leaders,money,workforce,oversight,rules,laws"; else PARTS="oversight"; fi
+            if [ "$(date -u +%u)" = "1" ]; then PARTS="agencies,leaders,money,money-sub,workforce,oversight,rules,laws"; else PARTS="oversight"; fi
           fi
           extra=""
           [ "$FORCE" = "true" ] && extra="--force"

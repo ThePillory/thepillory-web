@@ -152,6 +152,35 @@ class Workforce(unittest.TestCase):
         self.assertEqual(un, ["Office of Something"])
 
 
+class SubAgencies(unittest.TestCase):
+    agencies = L.parse_fr_agencies(jfx("fr_agencies.json"))
+
+    def test_sub_agency_pages(self):
+        pages = [jfx("usas_sub_agency.json")]
+        self.assertEqual(L.sub_agency_results(pages), {"Forest Service": 7712345678.9, "Office of the Chief Economist": 12000000.0, "Food and Nutrition Service": 190000000000.0})
+
+    def test_exact_name_under_the_same_parent_only(self):
+        m, un = L.sub_match("agriculture-department", ["Forest Service", "Food and Nutrition Service", "FOREST SERVICE"], self.agencies)
+        self.assertEqual(m, {"Forest Service": "forest-service", "FOREST SERVICE": "forest-service"})
+        self.assertEqual(un, ["Food and Nutrition Service"])
+        # Not under another parent, and no word-order matching.
+        self.assertEqual(L.sub_match("labor-department", ["Forest Service"], self.agencies)[0], {})
+        self.assertEqual(L.sub_match("agriculture-department", ["Service Forest"], self.agencies)[0], {})
+
+    def test_obligations_only_never_outlays(self):
+        r = L.sub_money_rows("forest-service", "012", 2025, 7.7e9)
+        self.assertEqual((r["resources"], r["outlays"], r["obligations"]), (None, None, 7.7e9))
+        self.assertEqual(r["source_url"], "https://www.usaspending.gov/agency/012?fy=2025")
+
+    def test_recipients_by_subtier(self):
+        b = L.recipient_body("Forest Service", 2025, "grants", tier="subtier")
+        self.assertEqual(b["filters"]["agencies"], [{"type": "awarding", "tier": "subtier", "name": "Forest Service"}])
+
+    def test_part_is_in_the_default_list(self):
+        self.assertIn("money-sub", L.PARTS)
+        self.assertIn("money-sub", L.RUNNERS)
+
+
 class Laws(unittest.TestCase):
     def test_by_subcommittee_title(self):
         mapping = json.loads(L.APPROPRIATIONS.read_text())

@@ -4,7 +4,7 @@
 // agency, each hidden when empty. No grades, rankings across agencies, or good/bad colors.
 import { esc, safeUrl } from "./render.js";
 import { shortMoney, exact } from "./taxes.js";
-import { pairBars } from "./charts.js";
+import { pairBars, miniBars } from "./charts.js";
 
 export const PER_PAGE = 25;
 export const METHOD = "/about/methodology/#agencies";
@@ -160,6 +160,44 @@ export function leadership(leaders, agency) {
   return card("leadership", "Leadership", list(rows), `Senate-confirmed positions and who holds them, as OPM's PLUM data lists them; "Vacant" as listed. ${ext("https://www.opm.gov/about-us/open-government/plum-reporting/plum-data/", "OPM PLUM data")}`);
 }
 
+export const SUB_LABEL = "Obligations (money committed)";
+export const SUB_NOTE = "Obligations on the contracts, grants, loans and other awards this agency made, as USAspending.gov reports them. Money available and paid out is reported only for the whole department";
+
+/** The largest recipients, as a collapsible row (the same for departments and sub-agencies). */
+function recipientsFold(recipients) {
+  if (!recipients.length) return "";
+  const rfy = recipients[0].fy;
+  const rec = (award, title) => {
+    const r = recipients.filter((x) => x.award === award);
+    return r.length ? `<h3 class="agency-label">${title}</h3>${list(r.map((x) => row(esc(x.name), "", amount(x.amount))))}` : "";
+  };
+  return subFold("money-recipients", "Largest recipients", `FY${rfy}`, `${rec("contracts", "Contracts")}${rec("grants", "Grants")}<p class="small secondary">The 10 largest recipients of the agency's contracts and of its grants in fiscal year ${rfy}, by amount awarded, from USAspending.gov. ${esc(RECIPIENT_NOTE)}</p>`);
+}
+
+/**
+ * A sub-agency's money: obligations only, since USAspending reports no budgetary resources or outlays
+ * below the top tier (never estimated); the parent's page has those. Same layout as a department's.
+ */
+export function subMoneySection(money, recipients, agency, fy = lastCompleteFy()) {
+  const years = money.filter((m) => num(m.obligations) != null);
+  if (!years.length && !recipients.length) return "";
+  const done = years.filter((m) => m.fy <= fy);
+  const latest = done[done.length - 1] || years[years.length - 1];
+  const open = latest && latest.fy > fy;
+  const big = latest
+    ? `<div class="tax-fig"><p class="hero-num" title="${esc(exact(latest.obligations))}">${esc(shortMoney(latest.obligations))}</p><p class="small secondary">${esc(SUB_LABEL)} in fiscal year ${latest.fy}${open ? " so far" : ""} (October ${latest.fy - 1} to September ${latest.fy}), from ${ext(latest.source_url, "USAspending.gov")}.</p></div>`
+    : "";
+  const chart = miniBars(
+    years.map((m) => ({ label: `FY${m.fy}`, tick: `’${String(m.fy).slice(2)}`, value: m.obligations })),
+    { format: shortMoney, table: `<table class="agency-table"><thead><tr><th scope="col">Year</th><th scope="col">${esc(SUB_LABEL)}</th></tr></thead><tbody>${years
+      .map((m) => `<tr><th scope="row">${ext(m.source_url, String(m.fy))}</th><td title="${esc(exact(m.obligations))}">${esc(shortMoney(m.obligations))}</td></tr>`)
+      .join("")}</tbody></table>`, ariaLabel: `${agency.name}: obligations by fiscal year`, caption: `By fiscal year (October to September) since ${years[0] ? years[0].fy : 2017}, from USAspending.gov.` }
+  );
+  const note = `<p class="small secondary">${esc(SUB_NOTE)}${agency.parent_id ? `: <a class="inline-link" href="${agencyHref(agency.parent_id)}">${esc(agency.parent_name || "the department")} ›</a>` : "."}</p>`;
+  const who = recipientsFold(recipients);
+  return card("money", "Money", `${big}${chart}${note}${who ? `<div class="agency-subs">${who}</div>` : ""}`);
+}
+
 export function moneySection(money, parts, recipients, agency, fy = lastCompleteFy()) {
   const years = money.filter((m) => num(m.outlays) != null || num(m.resources) != null);
   if (!years.length && !parts.length && !recipients.length) return "";
@@ -184,12 +222,7 @@ export function moneySection(money, parts, recipients, agency, fy = lastComplete
   const partRows = (rows) => list(rows.map((p) => row(esc(p.name), p.parent ? esc(p.parent) : "", amount(p.obligations))));
   const what = oc.length ? subFold("money-what", "What it went to", `FY${pfy}`, `${partRows(oc)}<p class="small secondary">Committed in fiscal year ${pfy}, by object class (what was bought: pay, contracts, grants…), from USAspending.gov.</p>`) : "";
   const forWhat = fn.length ? subFold("money-function", "What it was for", `FY${pfy}`, `${partRows(fn)}<p class="small secondary">Committed in fiscal year ${pfy}, by budget function and subfunction, from USAspending.gov.</p>`) : "";
-  const rfy = recipients[0] && recipients[0].fy;
-  const rec = (award, title) => {
-    const r = recipients.filter((x) => x.award === award);
-    return r.length ? `<h3 class="agency-label">${title}</h3>${list(r.map((x) => row(esc(x.name), "", amount(x.amount))))}` : "";
-  };
-  const who = recipients.length ? subFold("money-recipients", "Largest recipients", `FY${rfy}`, `${rec("contracts", "Contracts")}${rec("grants", "Grants")}<p class="small secondary">The 10 largest recipients of the agency's contracts and of its grants in fiscal year ${rfy}, by amount awarded, from USAspending.gov. ${esc(RECIPIENT_NOTE)}</p>`) : "";
+  const who = recipientsFold(recipients);
   const terms = `<p class="small secondary">${esc(TERMS.resources)} ${esc(TERMS.obligations)} ${esc(TERMS.outlays)}</p>`;
   const subs = what || forWhat || who ? `<div class="agency-subs">${what}${forWhat}${who}</div>` : "";
   return card("money", "Money", `${big}${chart}${terms}${subs}`, agency.usas_code ? ext(`${USAS_HOME}/${agency.usas_code}`, "This agency on USAspending.gov") : "");
@@ -234,7 +267,7 @@ export function childrenSection(children) {
 export function agencyMain(d) {
   const a = d.agency;
   const sub = [a.short_name, a.parent_name ? `Part of the ${a.parent_name}` : a.kind === "department" ? "Executive department" : ""].filter(Boolean).map(esc).join(" · ");
-  const sections = [whatItIs(a), leadership(d.leaders, a), moneySection(d.money, d.parts, d.recipients, a), workforceSection(d.workforce), reportsSection(d.reports), rulesSection(d.ruleCounts, d.rules, a), lawsSection(d.bills), childrenSection(d.children)].filter(Boolean);
+  const sections = [whatItIs(a), leadership(d.leaders, a), (a.kind === "sub-agency" ? subMoneySection(d.money, d.recipients, a) : moneySection(d.money, d.parts, d.recipients, a)), workforceSection(d.workforce), reportsSection(d.reports), rulesSection(d.ruleCounts, d.rules, a), lawsSection(d.bills), childrenSection(d.children)].filter(Boolean);
   const parent = a.parent_id ? `<p class="small"><a class="inline-link" href="${agencyHref(a.parent_id)}">${esc(a.parent_name)} ›</a></p>` : "";
   return `<div class="tax-page agency-page">
 <header class="page-head"><h1>${esc(a.name)}</h1>${sub ? `<p class="subtitle">${sub}</p>` : ""}${parent}</header>

@@ -6,3 +6,4 @@ Copies of each agency source, cut to a few records, in each source's own format 
 - usas_*.json: api.usaspending.gov/api/v2 (budgetary_resources, object_class, budget_function, spending_by_category/recipient)
 - gao_reports.xml: gao.gov/rss/reports.xml
 - fr_yearly.json, fr_rules.json: federalregister.gov/api/v1/documents (facets/yearly, documents.json)
+- usas_sub_agency.json: api.usaspending.gov/api/v2/agency/<code>/sub_agency/ (fields as its API contract documents them)
