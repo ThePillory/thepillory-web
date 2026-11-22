@@ -1,0 +1,6 @@
+{"toptier_code": "012", "fiscal_year": 2025, "page_metadata": {"page": 1, "total": 3, "limit": 100, "next": null, "previous": null, "hasNext": false, "hasPrevious": false},
+ "results": [
+  {"name": "Food and Nutrition Service", "abbreviation": "FNS", "total_obligations": 190000000000.0, "transaction_count": 12000, "new_award_count": 3000, "children": [{"name": "FNS HQ", "code": "123456", "total_obligations": 190000000000.0, "transaction_count": 12000, "new_award_count": 3000}]},
+  {"name": "Forest Service", "abbreviation": "FS", "total_obligations": 7712345678.9, "transaction_count": 45000, "new_award_count": 9000, "children": []},
+  {"name": "Office of the Chief Economist", "abbreviation": null, "total_obligations": 12000000.0, "transaction_count": 40, "new_award_count": 10, "children": []}
+ ], "messages": []}

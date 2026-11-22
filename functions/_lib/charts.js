@@ -53,7 +53,7 @@ export function breakdownBar(parts, { total = null, format = (n) => String(n), l
  * with a table of the values under a "Show the numbers" toggle. Negative
  * values are drawn gray, from the same baseline, with their size.
  */
-export function miniBars(points, { format = (n) => String(n), caption = "", ariaLabel = "", head = ["Period", "Value"] } = {}) {
+export function miniBars(points, { format = (n) => String(n), caption = "", ariaLabel = "", head = ["Period", "Value"], table = "" } = {}) {
   const pts = points.filter((p) => num(p.value) != null);
   if (pts.length < 2) return "";
   const maxPos = Math.max(0, ...pts.map((p) => p.value));
@@ -72,9 +72,9 @@ export function miniBars(points, { format = (n) => String(n), caption = "", aria
   <div class="mini-bars-plot${maxNeg && maxPos ? " has-zero" : ""}" role="img" aria-label="${esc(ariaLabel || caption)}">${bars}</div>
   <div class="mini-bars-axis" aria-hidden="true">${axis}</div>
   ${caption ? `<figcaption class="small secondary">${caption}</figcaption>` : ""}
-  <details class="mini-bars-table"><summary>Show the numbers</summary><table><thead><tr><th scope="col">${esc(head[0])}</th><th scope="col">${esc(head[1])}</th></tr></thead><tbody>${pts
+  <details class="mini-bars-table"><summary>Show the numbers</summary>${table || `<table><thead><tr><th scope="col">${esc(head[0])}</th><th scope="col">${esc(head[1])}</th></tr></thead><tbody>${pts
     .map((p) => `<tr><th scope="row">${esc(p.label)}</th><td>${esc(format(p.value))}</td></tr>`)
-    .join("")}</tbody></table></details>
+    .join("")}</tbody></table>`}</details>
 </figure>`;
 }
 
