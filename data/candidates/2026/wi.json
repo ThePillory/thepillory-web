@@ -3,8 +3,8 @@
  "year": 2026,
  "source": "Federal Election Commission: candidate filings, financial summaries, Schedule A receipts from committees, and Form 1 (campaign website)",
  "source_url": "https://www.fec.gov/data/candidates/?election_year=2026&state=WI&candidate_status=C",
- "list_built_on": "2026-11-15",
- "built_on": "2026-11-16",
+ "list_built_on": "2026-11-22",
+ "built_on": "2026-11-23",
  "senate_up": false,
  "candidates": {
   "H6WI01291": {
@@ -18,20 +18,20 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI01291/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
-    "receipts": 9799.62,
-    "disbursements": 3502.04,
-    "cash_on_hand": 12577.58,
-    "individual_unitemized": 6163,
-    "individual_itemized": 3620,
+    "receipts": 10190.62,
+    "disbursements": 14626.23,
+    "cash_on_hand": 1844.39,
+    "individual_unitemized": 6504,
+    "individual_itemized": 3670,
     "pac": 16.62,
     "party": 0,
     "self_funding": 0,
     "other": 0,
-    "coverage_end": "2026-07-22",
-    "last_report": "PRE-PRIMARY 2026",
+    "coverage_end": "2026-11-05",
+    "last_report": "TERMINATION REPORT 2026",
     "source_url": "https://www.fec.gov/data/candidate/H6WI01291/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -53,9 +53,9 @@
     "url": "https://arandaforwisconsin.com/",
     "as_filed": "HTTPS://ARANDAFORWISCONSIN.COM/",
     "source_url": "https://www.fec.gov/data/committee/C00917195/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H6WI01283": {
@@ -69,7 +69,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI01283/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 1977699.66,
@@ -139,9 +139,9 @@
     "url": "https://www.bermanforcongress.com/",
     "as_filed": "WWW.BERMANFORCONGRESS.COM",
     "source_url": "https://www.fec.gov/data/committee/C00915637/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H8WI01123": {
@@ -155,7 +155,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8WI01123/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 47524.3,
@@ -198,7 +198,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI01333/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 57321.59,
@@ -240,9 +240,9 @@
     "url": "https://www.peterforwi.com/",
     "as_filed": "HTTPS://WWW.PETERFORWI.COM/",
     "source_url": "https://www.fec.gov/data/committee/C00948406/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H6WI01267": {
@@ -256,7 +256,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI01267/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 5200.74,
@@ -283,9 +283,9 @@
     "url": "https://adamforwi.com/",
     "as_filed": "ADAMFORWI.COM",
     "source_url": "https://www.fec.gov/data/committee/C00909259/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H4WI01163": {
@@ -299,7 +299,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4WI01163/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 17333,
@@ -342,7 +342,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H8WI01156/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 6393553.46,
@@ -561,7 +561,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H2WI02124/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 1025262.83,
@@ -780,7 +780,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI03180/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 32065.67,
@@ -807,9 +807,9 @@
     "url": "https://laurabenjaminforcongress.com/",
     "as_filed": "LAURABENJAMINFORCONGRESS.COM",
     "source_url": "https://www.fec.gov/data/committee/C00902627/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H6WI03172": {
@@ -823,7 +823,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI03172/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 793270.21,
@@ -872,9 +872,9 @@
     "url": "https://www.bergeforcongress.com/",
     "as_filed": "WWW.BERGEFORCONGRESS.COM",
     "source_url": "https://www.fec.gov/data/committee/C00902262/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H4WI03169": {
@@ -888,7 +888,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4WI03169/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 12675996.72,
@@ -1107,7 +1107,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0WI03175/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 9101596.33,
@@ -1326,20 +1326,20 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI04071/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
-    "receipts": 18410.34,
-    "disbursements": 16763.96,
-    "cash_on_hand": 1646.38,
-    "individual_unitemized": 4004.66,
-    "individual_itemized": 10805.68,
+    "receipts": 19895.71,
+    "disbursements": 16837.67,
+    "cash_on_hand": 3058.04,
+    "individual_unitemized": 4865.98,
+    "individual_itemized": 11429.73,
     "pac": 0,
     "party": 0,
     "self_funding": 3600,
     "other": 0,
-    "coverage_end": "2026-07-22",
-    "last_report": "PRE-PRIMARY 2026",
+    "coverage_end": "2026-09-30",
+    "last_report": "OCTOBER QUARTERLY 2026",
     "source_url": "https://www.fec.gov/data/candidate/H6WI04071/?cycle=2026&election_full=false"
    },
    "organizations": {
@@ -1353,9 +1353,9 @@
     "url": "https://amydonahueforcongress.com/",
     "as_filed": "HTTPS://AMYDONAHUEFORCONGRESS.COM/",
     "source_url": "https://www.fec.gov/data/committee/C00944637/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H4WI04183": {
@@ -1369,7 +1369,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4WI04183/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 1319135.1,
@@ -1588,7 +1588,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI05136/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 14612.26,
@@ -1615,9 +1615,9 @@
     "url": null,
     "as_filed": null,
     "source_url": "https://www.fec.gov/data/committee/C00872697/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H0WI05113": {
@@ -1631,7 +1631,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0WI05113/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 1729316.51,
@@ -1850,7 +1850,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4WI05115/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 8885.45,
@@ -1893,7 +1893,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI06217/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 50920.68,
@@ -1920,9 +1920,9 @@
     "url": "https://amandabellforcongress.org/",
     "as_filed": "HTTPS://AMANDABELLFORCONGRESS.ORG/",
     "source_url": "https://www.fec.gov/data/committee/C00922245/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H6WI06225": {
@@ -1936,7 +1936,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI06225/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 50920.68,
@@ -1963,9 +1963,9 @@
     "url": "https://amandabellforcongress.org/",
     "as_filed": "HTTPS://AMANDABELLFORCONGRESS.ORG/",
     "source_url": "https://www.fec.gov/data/committee/C00922245/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H4WI06048": {
@@ -1979,7 +1979,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4WI06048/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 1209007.03,
@@ -2198,7 +2198,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI06191/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 322260.9,
@@ -2247,9 +2247,9 @@
     "url": "https://bradsmithforcongress.com/",
     "as_filed": "BRADSMITHFORCONGRESS.COM",
     "source_url": "https://www.fec.gov/data/committee/C00920231/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H6WI06233": {
@@ -2263,7 +2263,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI06233/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 195140.17,
@@ -2312,9 +2312,9 @@
     "url": "https://thurowforcongress.com/",
     "as_filed": "THUROWFORCONGRESS.COM",
     "source_url": "https://www.fec.gov/data/committee/C00930610/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H6WI06142": {
@@ -2328,7 +2328,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI06142/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 44015.37,
@@ -2377,9 +2377,9 @@
     "url": "https://www.wojoforcongress.com/",
     "as_filed": "WWW.WOJOFORCONGRESS.COM",
     "source_url": "https://www.fec.gov/data/committee/C00902023/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H6WI07223": {
@@ -2393,7 +2393,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI07223/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 1770041.24,
@@ -2596,9 +2596,9 @@
     "url": "https://www.alfonsoforwisconsin.com/",
     "as_filed": "WWW.ALFONSOFORWISCONSIN.COM",
     "source_url": "https://www.fec.gov/data/committee/C00924902/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H6WI07199": {
@@ -2612,7 +2612,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI07199/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 38552.07,
@@ -2647,9 +2647,9 @@
     "url": "https://www.armstrongforwisconsin.com/",
     "as_filed": "HTTPS://WWW.ARMSTRONGFORWISCONSIN.COM/",
     "source_url": "https://www.fec.gov/data/committee/C00901702/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H6WI07207": {
@@ -2663,7 +2663,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI07207/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 863780.13,
@@ -2705,9 +2705,9 @@
     "url": "https://www.clarkforwi.com/",
     "as_filed": "WWW.CLARKFORWI.COM",
     "source_url": "https://www.fec.gov/data/committee/C00920868/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H0WI03159": {
@@ -2721,7 +2721,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H0WI03159/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 555645.43,
@@ -2856,7 +2856,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI07249/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 1591952.4,
@@ -2883,9 +2883,9 @@
     "url": null,
     "as_filed": null,
     "source_url": "https://www.fec.gov/data/committee/C00932335/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H6WI07231": {
@@ -2899,7 +2899,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI07231/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 159920.57,
@@ -2926,9 +2926,9 @@
     "url": "https://gingerforuscongress.com/",
     "as_filed": "GINGERFORUSCONGRESS.COM",
     "source_url": "https://www.fec.gov/data/committee/C00928044/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H6WI07256": {
@@ -2942,7 +2942,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI07256/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 25273.82,
@@ -2969,9 +2969,9 @@
     "url": "https://baumforwisconsin.com/",
     "as_filed": "BAUMFORWISCONSIN.COM",
     "source_url": "https://www.fec.gov/data/committee/C00938019/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H6WI07215": {
@@ -2985,7 +2985,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI07215/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 3403945.86,
@@ -3012,9 +3012,9 @@
     "url": "http://www.paulwassgren.com/",
     "as_filed": "HTTP://WWW.PAULWASSGREN.COM/",
     "source_url": "https://www.fec.gov/data/committee/C00924548/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H6WI08205": {
@@ -3028,7 +3028,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI08205/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 168411.93,
@@ -3063,9 +3063,9 @@
     "url": "https://www.rickcrosson.com/",
     "as_filed": "WWW.RICKCROSSON.COM",
     "source_url": "https://www.fec.gov/data/committee/C00916064/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H6WI08221": {
@@ -3079,11 +3079,11 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI08221/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": null,
    "organizations": null,
    "website": null,
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H6WI08197": {
@@ -3097,7 +3097,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI08197/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 139670,
@@ -3124,9 +3124,9 @@
     "url": "https://www.mark4wi.info/",
     "as_filed": "WWW.MARK4WI.INFO",
     "source_url": "https://www.fec.gov/data/committee/C00914309/",
-    "checked": "2026-10-14"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   },
   "H4WI08119": {
@@ -3140,7 +3140,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H4WI08119/",
    "listed": true,
    "first_listed": "2026-10-10",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 1354324.32,
@@ -3359,7 +3359,7 @@
    "fec_url": "https://www.fec.gov/data/candidate/H6WI06241/",
    "listed": true,
    "first_listed": "2026-10-17",
-   "last_listed": "2026-11-16",
+   "last_listed": "2026-11-23",
    "totals": {
     "cycle": 2026,
     "receipts": 21161.09,
@@ -3386,9 +3386,9 @@
     "url": "https://elizabethfitzgibbonforglenngrothmansseatincongress.org/",
     "as_filed": "ELIZABETHFITZGIBBONFORGLENNGROTHMANSSEATINCONGRESS.ORG",
     "source_url": "https://www.fec.gov/data/committee/C00946673/",
-    "checked": "2026-10-17"
+    "checked": "2026-11-23"
    },
-   "funding_checked": "2026-11-07",
+   "funding_checked": "2026-11-23",
    "cycle": 2026
   }
  }
