@@ -5,7 +5,7 @@
  "name": "City of Milpitas",
  "county": "06085",
  "since": "2025-01-01",
- "generated": "2026-11-18",
+ "generated": "2026-11-25",
  "source": "NetFile public campaign filings, City of Milpitas",
  "source_url": "https://public.netfile.com/pub2/?aid=MIL",
  "transactions": 370,
@@ -507,6 +507,17 @@
   {
    "spender": "Milpitas Firefighters PAC, Sponsored by Milpitas Firefighters Local 1699",
    "spender_id": "MIL-112564",
+   "target": "Hon Lien",
+   "contest": "06085-5080",
+   "candidate": "Hon Lien",
+   "amount": 3349.35,
+   "date": "2026-10-08",
+   "filing": "217646107",
+   "url": "https://netfile.com/Connect2/api/public/image/217646107"
+  },
+  {
+   "spender": "Milpitas Firefighters PAC, Sponsored by Milpitas Firefighters Local 1699",
+   "spender_id": "MIL-112564",
    "target": "Seema Kanani",
    "contest": "06085-5081",
    "candidate": "Seema Kanani",
@@ -532,8 +543,8 @@
    "target": "Hon Lien",
    "contest": "06085-5080",
    "candidate": "Hon Lien",
-   "amount": 3349.35,
-   "date": "2026-10-08",
+   "amount": 346.47,
+   "date": "2026-10-09",
    "filing": "217646107",
    "url": "https://netfile.com/Connect2/api/public/image/217646107"
   },
@@ -558,17 +569,6 @@
    "date": "2026-10-09",
    "filing": "217646121",
    "url": "https://netfile.com/Connect2/api/public/image/217646121"
-  },
-  {
-   "spender": "Milpitas Firefighters PAC, Sponsored by Milpitas Firefighters Local 1699",
-   "spender_id": "MIL-112564",
-   "target": "Hon Lien",
-   "contest": "06085-5080",
-   "candidate": "Hon Lien",
-   "amount": 346.47,
-   "date": "2026-10-09",
-   "filing": "217646107",
-   "url": "https://netfile.com/Connect2/api/public/image/217646107"
   },
   {
    "spender": "Milpitas Firefighters PAC, Sponsored by Milpitas Firefighters Local 1699",
