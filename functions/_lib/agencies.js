@@ -53,19 +53,21 @@ export function lastCompleteFy(now = new Date()) {
 // Loading
 
 export async function loadIndex(db, { q = "", offset = 0 } = {}, fy = lastCompleteFy()) {
-  const outlay = "(SELECT outlays FROM agency_money m WHERE m.agency_id = a.id AND m.fy = ?)";
-  const cols = `a.id, a.name, a.short_name, a.parent_id, a.kind, ${outlay} AS outlays`;
+  // The latest complete fiscal year's row, read by key (agency_id, fy): paid out, or for a
+  // sub-agency (obligations only) committed. Shown beside each name; never sorted by.
+  const money = "(SELECT %s FROM agency_money m WHERE m.agency_id = a.id AND m.fy = ?)";
+  const cols = `a.id, a.name, a.short_name, a.parent_id, a.kind, ${money.replace("%s", "outlays")} AS outlays, ${money.replace("%s", "obligations")} AS obligations`;
   if (q) {
     const like = `%${q.replace(/[%_\\]/g, (c) => `\\${c}`)}%`;
     const r = await db
       .prepare(`SELECT ${cols}, p.name AS parent_name FROM agencies a LEFT JOIN agencies p ON p.id = a.parent_id WHERE a.name LIKE ? ESCAPE '\\' OR a.short_name LIKE ? ESCAPE '\\' ORDER BY a.name LIMIT ? OFFSET ?`)
-      .bind(fy, like, like, PER_PAGE + 1, offset)
+      .bind(fy, fy, like, like, PER_PAGE + 1, offset)
       .all();
     return { fy, q, offset, search: r.results.slice(0, PER_PAGE), more: r.results.length > PER_PAGE };
   }
   const [deps, ind] = await Promise.all([
-    offset ? { results: [] } : db.prepare(`SELECT ${cols}, (SELECT COUNT(*) FROM agencies s WHERE s.parent_id = a.id) AS subs FROM agencies a WHERE a.kind = 'department' ORDER BY a.name`).bind(fy).all(),
-    db.prepare(`SELECT ${cols} FROM agencies a WHERE a.kind = 'independent' ORDER BY a.name LIMIT ? OFFSET ?`).bind(fy, PER_PAGE + 1, offset).all(),
+    offset ? { results: [] } : db.prepare(`SELECT ${cols}, (SELECT COUNT(*) FROM agencies s WHERE s.parent_id = a.id) AS subs FROM agencies a WHERE a.kind = 'department' ORDER BY a.name`).bind(fy, fy).all(),
+    db.prepare(`SELECT ${cols} FROM agencies a WHERE a.kind = 'independent' ORDER BY a.name LIMIT ? OFFSET ?`).bind(fy, fy, PER_PAGE + 1, offset).all(),
   ]);
   return { fy, q, offset, departments: deps.results, independent: ind.results.slice(0, PER_PAGE), more: ind.results.length > PER_PAGE };
 }
@@ -96,9 +98,21 @@ export async function loadAgency(db, id) {
 // The index
 
 /** An agency as a row inside a card (the row pattern): name, then short name and the latest paid out. */
+/** The amount beside an agency's name: the latest complete fiscal year's paid out (outlays); a
+ * sub-agency with obligations only, "Committed $X"; nothing when there's no amount (never "$0"). */
+export function rowAmount(a) {
+  if (num(a.outlays) != null) return `<span title="${esc(exact(a.outlays))}">${esc(shortMoney(a.outlays))}</span>`;
+  if (a.kind === "sub-agency" && num(a.obligations) != null) return `<span title="${esc(exact(a.obligations))}">Committed ${esc(shortMoney(a.obligations))}</span>`;
+  return "";
+}
+
+/** The line above each list of agencies, saying what the amounts are. */
+export const amountLabel = (fy) => `<p class="small secondary">Paid out in fiscal year ${fy} (Oct–Sep), from <a class="inline-link" href="${USAS_HOME}" target="_blank" rel="noopener">USAspending.gov</a>.</p>`;
+
 export function agencyListRow(a, fy) {
-  const meta = [a.short_name, a.parent_name ? `Part of the ${a.parent_name}` : "", a.subs ? `${a.subs} agenc${a.subs === 1 ? "y" : "ies"}` : "", num(a.outlays) != null ? `FY${fy} paid out ${shortMoney(a.outlays)}` : ""].filter(Boolean).map(esc).join(" · ");
-  return row(esc(a.name), meta, `<span class="chev" aria-hidden="true">›</span>`, agencyHref(a.id));
+  const meta = [a.short_name, a.parent_name ? `Part of the ${a.parent_name}` : "", a.subs ? `${a.subs} agenc${a.subs === 1 ? "y" : "ies"}` : ""].filter(Boolean).map(esc).join(" · ");
+  const amount = rowAmount(a);
+  return row(esc(a.name), meta, `${amount}${amount ? " " : ""}<span class="chev" aria-hidden="true">›</span>`, agencyHref(a.id));
 }
 
 export function searchForm(q = "") {
@@ -118,16 +132,16 @@ export function indexMain(data) {
   if (data.q) {
     const rows = data.search.length ? names(data.search.map((a) => agencyListRow(a, data.fy)), ' id="agency-results" data-more-list') : `<p class="secondary">No agency's name matches "${esc(data.q)}".</p>`;
     const more = data.more ? moreLink(`/agencies/?q=${encodeURIComponent(data.q)}&offset=${data.offset + PER_PAGE}`, "agency-results") : "";
-    return `${head}${searchForm(data.q)}<section class="card agency-card">${rows}</section>${more}`;
+    return `${head}${searchForm(data.q)}<section class="stack">${data.search.length ? amountLabel(data.fy) : ""}<section class="card agency-card">${rows}</section></section>${more}`;
   }
   const ind = `<section class="card agency-card">${names(data.independent.map((a) => agencyListRow(a, data.fy)), ' id="agency-independent" data-more-list')}</section>${data.more ? moreLink(`/agencies/?offset=${data.offset + PER_PAGE}`, "agency-independent") : ""}`;
-  if (data.offset) return `<header class="page-head"><h1>${esc(KIND_HEAD.independent)}</h1><p class="subtitle">From number ${data.offset + 1}.</p></header>${ind}`;
+  if (data.offset) return `<header class="page-head"><h1>${esc(KIND_HEAD.independent)}</h1><p class="subtitle">From number ${data.offset + 1}.</p></header><section class="stack">${amountLabel(data.fy)}${ind}</section>`;
   // The departments in one card; each department's page lists its agencies.
   const deps = `<section class="card agency-card">${names(data.departments.map((d) => agencyListRow(d, data.fy)))}</section>`;
   // Each section is its heading and cards, 12px apart (section.stack); sections 24px apart.
   return `${head}${searchForm()}
-${data.departments.length ? `<section class="stack"><div class="section-head"><h2>${esc(KIND_HEAD.department)}</h2></div>${deps}</section>` : ""}
-${data.independent.length ? `<section class="stack"><div class="section-head"><h2>${esc(KIND_HEAD.independent)}</h2></div><p class="small secondary">${esc(INDEPENDENT_NOTE)}</p>${ind}</section>` : ""}
+${data.departments.length ? `<section class="stack"><div class="section-head"><h2>${esc(KIND_HEAD.department)}</h2></div>${amountLabel(data.fy)}${deps}</section>` : ""}
+${data.independent.length ? `<section class="stack"><div class="section-head"><h2>${esc(KIND_HEAD.independent)}</h2></div><p class="small secondary">${esc(INDEPENDENT_NOTE)} ${amountLabel(data.fy).replace(/^<p class="small secondary">|<\/p>$/g, "")}</p>${ind}</section>` : ""}
 <p class="small secondary">From the Federal Register's list of agencies. <a class="inline-link" href="${METHOD}">How this works ›</a></p>`;
 }
 

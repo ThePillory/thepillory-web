@@ -69,7 +69,7 @@ Before measuring, the estimate was about 60,000 rows and 120,000 row writes for 
 
 ## Pages
 
-**`/agencies/`** (linked from Home's nation section, the Laws tab and the footer): a search field, then "Executive departments" (one card, one row per department with its number of agencies; the department's page lists them), then "Independent agencies". One line each, the site's row pattern: the name, then its short name and the latest outlays when known.
+**`/agencies/`** (linked from Home's nation section, the Laws tab and the footer): a search field, then "Executive departments" (one card, one row per department with its number of agencies; the department's page lists them), then "Independent agencies". One line each, the site's row pattern, ordered by name only: the name, its short name, parent and number of agencies in gray, and on the right the latest complete fiscal year's paid out (outlays, `shortMoney()`, the exact amount in its title; a sub-agency with obligations only shows "Committed $X"; an agency with no amount shows nothing, never "$0"). One line above each list says what the amounts are: "Paid out in fiscal year [FY] (Oct–Sep), from USAspending.gov". The same on search results. Never sorted, ranked, colored or filtered by amount.
 
 **`/agencies/<slug>/`**, in the site's card style, the same sections in the same order for every agency, each hidden when empty:
 1. **What it is**: the Federal Register's description, word for word, with the agency's website.
