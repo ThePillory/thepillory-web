@@ -799,21 +799,21 @@
    "qp_checked": true
   },
   {
-   "r": "50",
-   "date": "2020-06-29",
-   "docket": "18-1323",
-   "name": "June Medical Services L. L. C. v. Russo",
-   "summary": "The Fifth Circuit’s judgment, upholding a Louisiana law that requires abortion providers to hold admitting privileges at local hospitals, is reversed.",
-   "author_code": "B",
-   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-1323_c07d.pdf",
+   "r": "53",
+   "date": "2020-06-30",
+   "docket": "19-46",
+   "name": "Patent and Trademark Office v. Booking.com B. V.",
+   "summary": "A term styled “generic.com” is a generic name for a class of goods or services—and thus ineligible for federal trademark protection—only if the term has that meaning to consumers.",
+   "author_code": "G",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/19-46_8n59.pdf",
    "parser": 4,
    "exact_text": true,
-   "lineup_text": "BREYER, J., announced the judgment of the Court and delivered an opinion, in which GINSBURG, SOTOMAYOR, and KAGAN, JJ., joined. ROBERTS, C. J., filed an opinion concurring in the judgment. THOMAS, J., filed a dissenting opinion. ALITO, J., filed a dissenting opinion, in which GORSUCH, J., joined, in which THOMAS, J., joined except as to Parts III–C and IV–F, and in which KAVANAUGH, J., joined as to Parts I, II, and III. GORSUCH, J., and KAVANAUGH, J., filed dissenting opinions.",
+   "lineup_text": "GINSBURG, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, ALITO, SOTOMAYOR, KAGAN, GORSUCH, and KAVANAUGH, JJ., joined. SOTOMAYOR, J., filed a concurring opinion. BREYER, J., filed a dissenting opinion.",
    "lineup": {
     "unanimous": false,
     "justices": [
      {
-      "justice": "Breyer",
+      "justice": "Ginsburg",
       "roles": [
        "majority"
       ],
@@ -822,7 +822,21 @@
       ]
      },
      {
-      "justice": "Ginsburg",
+      "justice": "Roberts",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Thomas",
+      "roles": [
+       "majority"
+      ],
+      "wrote": []
+     },
+     {
+      "justice": "Alito",
       "roles": [
        "majority"
       ],
@@ -831,9 +845,12 @@
      {
       "justice": "Sotomayor",
       "roles": [
+       "concurrence",
        "majority"
       ],
-      "wrote": []
+      "wrote": [
+       "concurrence"
+      ]
      },
      {
       "justice": "Kagan",
@@ -843,43 +860,21 @@
       "wrote": []
      },
      {
-      "justice": "Roberts",
+      "justice": "Gorsuch",
       "roles": [
-       "concurrence in the judgment"
-      ],
-      "wrote": [
-       "concurrence in the judgment"
-      ]
-     },
-     {
-      "justice": "Thomas",
-      "roles": [
-       "dissent",
-       "majority in part"
-      ],
-      "wrote": [
-       "dissent"
-      ]
-     },
-     {
-      "justice": "Alito",
-      "roles": [
-       "majority in part"
+       "majority"
       ],
       "wrote": []
      },
      {
-      "justice": "Gorsuch",
+      "justice": "Kavanaugh",
       "roles": [
-       "dissent",
-       "majority in part"
+       "majority"
       ],
-      "wrote": [
-       "dissent"
-      ]
+      "wrote": []
      },
      {
-      "justice": "Kavanaugh",
+      "justice": "Breyer",
       "roles": [
        "dissent"
       ],
@@ -890,24 +885,25 @@
     ]
    },
    "provisions": [],
-   "qp_url": "https://www.supremecourt.gov/qp/18-01323qp.pdf",
+   "qp_url": "https://www.supremecourt.gov/qp/19-00046qp.pdf",
    "question_presented": [
-    "In Whole Woman's Health v. Hellerstedt, 136 S. Ct. 2292 (2016), this Court held that a state law requiring physicians who perform abortions to have admitting privileges at a local hospital was unconstitutional because it imposed an undue burden on women seeking abortions. The U.S. Court of Appeals for the Fifth Circuit upheld an admitting privileges law in Louisiana that is identical to the one this Court struck down. This presents the following issue:",
-    "Whether the Fifth Circuit's decision upholding Louisiana's law requiring physicians who perform abortions to have admitting privileges at a local hospital conflicts with this Court's binding precedent in Whole Woman's Health."
+    "Under the Lanham Act, 15 U.S.C. 1051 et seq., generic terms may not be registered as trademarks. The question presented is as follows:",
+    "Whether the addition by an online business of a generic top-level domain (\".com\") to an otherwise generic term can create a protectable trademark.",
+    "PRESS RELEASE OF MARCH 16, 2020 IN KEEPING WITH PUBLIC HEALTH PRECAUTIONS RECOMMENDED IN RESPONSE TO COVID-19, THE SUPREME COURT IS POSTPONING THE ORAL ARGUMENTS CURRENTLY SCHEDULED FOR THE MARCH SESSION. PRESS RELEASE OF APRIL 13, 2020 RESCHEDULED FOR ORAL ARGUMENTS BY TELEPHONE CONFERENCE. THE JUSTICES AND COUNSEL WILL ALL PARTICIPATE REMOTELY."
    ],
    "qp_checked": true
   },
   {
-   "r": "49",
-   "date": "2020-06-29",
-   "docket": "19-7",
-   "name": "Seila Law LLC v. Consumer Financial Protection Bureau",
-   "summary": "The Consumer Financial Protection Bureau’s leadership by a single Director removable only for inefficiency, neglect, or malfeasance violates the separation of powers.",
+   "r": "52",
+   "date": "2020-06-30",
+   "docket": "18-1195",
+   "name": "Espinoza v. Montana Dept. of Revenue",
+   "summary": "The application of the Montana Constitution’s “no-aid” provision to a state program providing tuition assistance to parents who send their children to private schools discriminated against religious schools and the families whose children attend or hope to attend them in violation of the Federal Constitution’s Free Exercise Clause.",
    "author_code": "R",
-   "pdf": "https://www.supremecourt.gov/opinions/19pdf/19-7_new_bq7d.pdf",
+   "pdf": "https://www.supremecourt.gov/opinions/19pdf/18-1195_g314.pdf",
    "parser": 4,
    "exact_text": true,
-   "lineup_text": "ROBERTS, C. J., delivered the opinion of the Court with respect to Parts I, II, and III, in which THOMAS, ALITO, GORSUCH, and KAVANAUGH, JJ., joined, and an opinion with respect to Part IV, in which ALITO and KAVANAUGH, JJ., joined. THOMAS, J., filed an opinion concurring in part and dissenting in part, in which GORSUCH, J., joined. KAGAN, J., filed an opinion concurring in the judgment with respect to severability and dissenting in part, in which GINSBURG, BREYER, and SOTOMAYOR, JJ., joined.",
+   "lineup_text": "ROBERTS, C. J., delivered the opinion of the Court, in which THOMAS, ALITO, GORSUCH, and KAVANAUGH, JJ., joined. THOMAS, J., filed a concurring opinion, in which GORSUCH, J., joined. ALITO, J., and GORSUCH, J., filed concurring opinions. GINSBURG, J., filed a dissenting opinion, in which KAGAN, J., joined. BREYER, J., filed a dissenting opinion, in which KAGAN, J., joined as to Part I. SOTOMAYOR, J., filed a dissenting opinion.",
    "lineup": {
     "unanimous": false,
     "justices": [
@@ -919,126 +915,6 @@
       "wrote": [
        "majority"
       ]
-     },
-     {
-      "justice": "Thomas",
-      "roles": [
-       "concurring in part and dissenting in part",
-       "majority"
-      ],
-      "wrote": [
-       "concurring in part and dissenting in part"
-      ]
-     },
-     {
-      "justice": "Alito",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Gorsuch",
-      "roles": [
-       "concurring in part and dissenting in part",
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Kavanaugh",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Kagan",
-      "roles": [
-       "concurrence in the judgment"
-      ],
-      "wrote": [
-       "concurrence in the judgment"
-      ]
-     },
-     {
-      "justice": "Ginsburg",
-      "roles": [
-       "concurrence in the judgment"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Breyer",
-      "roles": [
-       "concurrence in the judgment"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Sotomayor",
-      "roles": [
-       "concurrence in the judgment"
-      ],
-      "wrote": []
-     }
-    ]
-   },
-   "provisions": [
-    {
-     "id": "art-1-sec-8-cl-18",
-     "quote": "Instead, Article I’s Necessary and Proper Clause puts those decisions in the legislature’s hands."
-    },
-    {
-     "id": "art-2-sec-2-cl-2",
-     "quote": null
-    },
-    {
-     "id": "art-2-sec-3",
-     "quote": "PROTECTION BUREAU “general rule.” Nor can the Take Care Clause come to the majority’s rescue."
-    },
-    {
-     "id": "art-3",
-     "quote": "Amicus’ traceability argument appears to challenge petitioner’s Article III standing."
-    }
-   ],
-   "qp_url": "https://www.supremecourt.gov/qp/19-00007qp.pdf",
-   "question_presented": [
-    "Whether the vesting of substantial executive authority in the Consumer Financial Protection Bureau, an independent agency led by a single director, violates the separation of powers.",
-    "IN ADDITION TO THE QUESTION PRESENTED BY THE PETITION, THE PARTIES ARE DIRECTED TO BRIEF AND ARGUE THE FOLLOWING QUESTION: IF THE CONSUMER FINANCIAL PROTECTION BUREAU IS FOUND UNCONSTITUTIONAL ON THE BASIS OF THE SEPARATION OF POWERS, CAN 12 U.S.C. §5491(c)(3) BE SEVERED FROM THE DODD-FRANK ACT?",
-    "PAUL D. CLEMENT, ESQUIRE, OF WASHINGTON, D. C., IS INVITED TO BRIEF AND ARGUE THIS CASE, AS AMICUS CURIAE, IN SUPPORT OF THE JUDGMENT BELOW ON THE QUESTION PRESENTED BY THE PETITION."
-   ],
-   "qp_checked": true
-  },
-  {
-   "r": "48",
-   "date": "2020-06-25",
-   "docket": "19-161",
-   "name": "Department of Homeland Security v. Thuraissigiam",
-   "summary": "As applied here, 8 U. S. C. §1252(e)(2)—which limits the habeas review obtainable by an alien detained for expedited removal—does not violate the Suspension or Due Process Clauses.",
-   "author_code": "A",
-   "pdf": "https://www.supremecourt.gov/opinions/19pdf/19-161_g314.pdf",
-   "parser": 4,
-   "exact_text": true,
-   "lineup_text": "ALITO, J., delivered the opinion of the Court, in which ROBERTS, C. J., and THOMAS, GORSUCH, and KAVANAUGH, JJ., joined. THOMAS, J., filed a concurring opinion. BREYER, J., filed an opinion concurring in the judgment, in which GINSBURG, J., joined. SOTOMAYOR, J., filed a dissenting opinion, in which KAGAN, J., joined.",
-   "lineup": {
-    "unanimous": false,
-    "justices": [
-     {
-      "justice": "Alito",
-      "roles": [
-       "majority"
-      ],
-      "wrote": [
-       "majority"
-      ]
-     },
-     {
-      "justice": "Roberts",
-      "roles": [
-       "majority"
-      ],
-      "wrote": []
      },
      {
       "justice": "Thomas",
@@ -1051,11 +927,24 @@
       ]
      },
      {
-      "justice": "Gorsuch",
+      "justice": "Alito",
       "roles": [
+       "concurrence",
        "majority"
       ],
-      "wrote": []
+      "wrote": [
+       "concurrence"
+      ]
+     },
+     {
+      "justice": "Gorsuch",
+      "roles": [
+       "concurrence",
+       "majority"
+      ],
+      "wrote": [
+       "concurrence"
+      ]
      },
      {
       "justice": "Kavanaugh",
@@ -1065,23 +954,7 @@
       "wrote": []
      },
      {
-      "justice": "Breyer",
-      "roles": [
-       "concurrence in the judgment"
-      ],
-      "wrote": [
-       "concurrence in the judgment"
-      ]
-     },
-     {
       "justice": "Ginsburg",
-      "roles": [
-       "concurrence in the judgment"
-      ],
-      "wrote": []
-     },
-     {
-      "justice": "Sotomayor",
       "roles": [
        "dissent"
       ],
@@ -1092,22 +965,44 @@
      {
       "justice": "Kagan",
       "roles": [
-       "dissent"
+       "dissent",
+       "dissent (in part)"
       ],
       "wrote": []
+     },
+     {
+      "justice": "Breyer",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
+     },
+     {
+      "justice": "Sotomayor",
+      "roles": [
+       "dissent"
+      ],
+      "wrote": [
+       "dissent"
+      ]
      }
     ]
    },
    "provisions": [
     {
-     "id": "amend-5",
-     "quote": "In short, under our precedents, neither the Suspension Clause nor the Due Process Clause of the Fifth Amendment requires any further review of respondent’s claims, and IIRIRA’s limitations on habeas review are constitutional as applied."
+     "id": "amend-1",
+     "quote": "The Court relied on the “no-aid” provision of the State Constitution, which prohibits any aid to a school controlled by a “church, sect, or denomination.” The question presented is whether the Free Exercise Clause of the United States Constitution barred that application of the no-aid provision."
+    },
+    {
+     "id": "amend-14",
+     "quote": null
     }
    ],
-   "qp_url": "https://www.supremecourt.gov/qp/19-00161qp.pdf",
+   "qp_url": "https://www.supremecourt.gov/qp/18-01195qp.pdf",
    "question_presented": [
-    "Respondent is an inadmissible alien who was apprehended almost immediately after illegally crossing the U.S. border and was placed into expedited removal proceedings. See 8 U.S.C. 1225(b)(l). An asylum officer conducted a credible-fear interview and found that respondent lacked a credible fear of persecution on a protected ground or a credible fear of torture. Upon de novo review, an immigration judge reached the same conclusions and respondent's expedited-removal order became final. Respondent then filed a petition for writ of habeas corpus, which the district court dismissed for lack of jurisdiction because it did not raise the kinds of habeas challenges to expedited-removal orders that are permitted under 8 U.S.C. 1252(e)(2). The court of appeals reversed, concluding that Section 1252(e)(2) violated the Suspension Clause, U.S. Const. Art. I, § 9, Cl. 2, as applied to respondent.",
-    "The question presented is whether, as applied to respondent, Section 1252(e)(2) is unconstitutional under the Suspension Clause."
+    "Does it violate the Religion Clauses or Equal Protection Clause of the United States Constitution to invalidate a generally available and religiously neutral student- aid program simply because the program affords students the choice of attending religious schools?"
    ],
    "qp_checked": true
   },
@@ -4581,5 +4476,5 @@
    "qp_checked": true
   }
  ],
- "built_on": "2026-11-25"
+ "built_on": "2026-11-27"
 }
