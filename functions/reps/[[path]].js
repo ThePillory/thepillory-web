@@ -15,7 +15,8 @@
 //                   More. Everyone else: More holds committees. Residents' issues
 //                   are one line under Platform until accounts launch.
 // POST /reps/<slug>/promises/<id>/flag   "Something wrong?" on a published promise
-import { simpleCard, jobSentence, voteLinePlain, moneyLinePlain, sourceNote, SIMPLE_METHOD } from "../_lib/simple.js";
+import { simpleCard, jobSentence, voteLinePlain, sourceNote, SIMPLE_METHOD } from "../_lib/simple.js";
+import { moneyLine } from "../_lib/money-line.js";
 import { BODIES, LEVEL_NAME } from "../_lib/generated.js";
 import { page, notFound, notLoaded, esc, safeUrl, kv, card, section, linkRow, sourceLink, fmtDate, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { officialBySlug, officialsWhere, withVoteCounts, voteCounts, votesFor, CHAMBER_NAME } from "../_lib/data.js";
@@ -347,9 +348,8 @@ async function profile(env, slug, url, request) {
 
   const body = BODY[o.body];
   const photo = safeUrl(o.photo_url);
-  // The money in one line (members of Congress, from the FEC).
-  const fundingOk = funding && funding !== FAILED && funding.totals ? funding : null;
-  const moneyLine = o.level === "federal" && !exec && fundingOk ? moneyLinePlain(fundingOk.totals, `${fundingOk.cycle - 1}–${fundingOk.cycle}`) : null;
+  // The money in one line, for every official with money data (functions/_lib/money-line.js).
+  const glance = funding && funding !== FAILED ? moneyLine(o, funding) : null;
   // Summary first: the record in one line, as counts and the latest recorded fact.
   const latest = votes !== FAILED ? votes.rows[0] : null;
   const glanceLine = exec
@@ -369,7 +369,7 @@ async function profile(env, slug, url, request) {
     <h1>${esc(o.name)}</h1>
     <p class="secondary">${esc(who(o))}</p>
     ${glanceLine ? `<p class="small summary-line"><a class="inline-link" href="#votes">${esc(glanceLine)}</a></p>` : ""}
-    ${moneyLine ? `<p class="small summary-line"><a class="inline-link" href="#funding">${esc(moneyLine)}</a></p>` : ""}
+    ${glance ? `<p class="summary-line money-glance"><a href="#funding">${esc(glance.text)} ›</a></p>` : ""}
     ${networth && networth !== FAILED ? networthLine(networth) : ""}
   </div>
 </header>`;
@@ -466,9 +466,9 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
       ["Latest votes", recent.length ? `<ul class="simple-list">${recent.map((v) => `<li>${voteLinePlain(v)}</li>`).join("")}</ul>` : ""],
       ["In their own words", excerpt ? `<div class="stack-xs"><p class="promise-quote">“${esc(excerpt.excerpt)}”</p><p class="small">${sourceNote(excerpt.url, excerpt.title || "Their issues page")}</p></div>` : ""],
       ["Stock trades", trades && trades !== FAILED ? quickTradesLine(trades.summary) : ""],
-      ["Money", moneyLine ? `${esc(moneyLine)} <a class="inline-link" href="#funding" data-mode-set="detailed">The full Funding tab</a>` : ""],
+      ["Money", glance ? `<a class="money-glance" href="#funding" data-mode-set="detailed">${esc(glance.text)} ›</a>` : ""],
     ],
-    source: `Votes from the official record of each vote${moneyLine ? "; money from reports filed with the Federal Election Commission" : ""}. <a class="inline-link" href="${SIMPLE_METHOD}">How Quick mode works</a>`,
+    source: `Votes from the official record of each vote${glance ? `; money from ${glance.source}` : ""}. <a class="inline-link" href="${SIMPLE_METHOD}">How Quick mode works</a>`,
     jump: "about",
   });
   const tab = (k, label) => `<a role="tab" id="tab-${k}" href="#${k}" aria-controls="${k}">${label}</a>`;

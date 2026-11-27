@@ -173,24 +173,6 @@ export function voteLinePlain(v) {
   return `${said} on ${what}.${result} <span class="secondary">${esc(fmtDate(v.vote_date))}</span>`;
 }
 
-const MONEY_PARTS = [
-  ["individual_unitemized", "small donors ($200 or less)"],
-  ["individual_itemized", "individual donors giving more than $200"],
-  ["pac", "PACs and other political committees"],
-  ["party", "political party committees"],
-  ["self_funding", "the candidate's own money"],
-  ["other", "transfers and other sources"],
-];
-const dollars = (n) => `$${Math.round(Number(n) || 0).toLocaleString("en-US")}`;
-
-/** "Raised $X in 2025–2026, mostly from small donors." From FEC totals; null without them. */
-export function moneyLinePlain(t, period) {
-  if (!t || !(t.receipts > 0)) return null;
-  const [key, name] = [...MONEY_PARTS].sort((a, b) => (t[b[0]] || 0) - (t[a[0]] || 0))[0];
-  const share = (t[key] || 0) / t.receipts;
-  return `Raised ${dollars(t.receipts)} in ${period}, ${share >= 0.5 ? "mostly" : "the largest share"} from ${name}.`;
-}
-
 /** Recorded positions in plain words, one per line: "[Name] voted Yes on H.R. 1 (title). It passed." `rows`: recentFinalVotes() rows. */
 export function positionLinesPlain(rows, max = 3) {
   const lines = [];

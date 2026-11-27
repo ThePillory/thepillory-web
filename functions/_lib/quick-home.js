@@ -19,6 +19,7 @@ import { repsWhere } from "./districts.js";
 import { loadIndex, loadTerm, caseHref } from "./scotus.js";
 import { plainChamber } from "./simple.js";
 import { METHOD_WORDS, NOT_RECORDED } from "../../workers/sync/src/passages/parse.js";
+import { filingEvents, filingsSql } from "../../workers/sync/src/funding/filings.js";
 
 export const THIS_WEEK_DAYS = 30; // how far back "this week" looks when the past week is quiet
 export const THIS_WEEK_MAX = 5;
@@ -55,7 +56,7 @@ export function senatorsLine(positions, stateName) {
  * (plain_summaries) follows its number when there is one; otherwise its official
  * title, word for word. Pure.
  */
-export function thisWeek({ stateName, votes = [], outcomes = [], decisions = [], orders = [], passages = [], plain = {}, election = null, max = THIS_WEEK_MAX }) {
+export function thisWeek({ stateName, votes = [], outcomes = [], decisions = [], orders = [], passages = [], filings = [], plain = {}, election = null, max = THIS_WEEK_MAX }) {
   const items = [];
   const named = (id, number, title) => (plain[id] ? `${number}. ${plain[id].trim().replace(/([^.!?])$/, "$1.")}` : `${number}${title ? `, “${shortTitle(title)}”` : ""}.`);
   for (const o of outcomes) {
@@ -83,6 +84,8 @@ export function thisWeek({ stateName, votes = [], outcomes = [], decisions = [],
   }
   for (const c of decisions) items.push({ rank: 1, date: c.date, href: c.href, text: `The Supreme Court decided ${c.name}.` });
   for (const o of orders) items.push({ rank: 1, date: o.signed_on, href: orderHref(o.id), text: `${o.federal ? "The President" : `${stateName}'s Governor`} signed an executive order, “${shortTitle(o.title)}”.` });
+  // A campaign finance report filed (money_filings, filingEvents()): totals only, linked to the report.
+  for (const f of filings) items.push({ rank: 1, date: f.date, href: f.href, text: f.text });
   // One line per page (a bill's vote and its final action): the final action wins.
   const seen = new Set();
   const unique = items
@@ -109,9 +112,9 @@ export function thisWeek({ stateName, votes = [], outcomes = [], decisions = [],
  * districts are in this state), and the checked plain lines for those bills.
  * `senatorIds`: the state's U.S. Senators, for their positions.
  */
-export async function quickHomeData(env, request, { st, since, districts, senatorIds = [] }) {
+export async function quickHomeData(env, request, { st, since, districts, senatorIds = [], moneyIds = [] }) {
   const db = env.DB;
-  const empty = { outcomes: [], congressVotes: [], stateVotes: [], passages: [], decisions: [], orders: [], mine: [], plain: {} };
+  const empty = { outcomes: [], congressVotes: [], stateVotes: [], passages: [], decisions: [], orders: [], mine: [], filings: [], plain: {} };
   if (!db) return empty;
   const finalVotes = (level, stCode) => soft(async () => (await db
     .prepare(
@@ -172,8 +175,14 @@ export async function quickHomeData(env, request, { st, since, districts, senato
       .all()).results, []);
     for (const v of congressVotes) v.positions = pos.filter((p) => p.vote_id === v.id);
   }
+  // Campaign finance reports filed by these officials (the state's senators and statewide officers,
+  // the visitor's own House member and legislators): one indexed read of a month of filings.
+  const whose = [...new Set([...senatorIds, ...moneyIds, ...mine.map((o) => o.id)])];
+  const filings = whose.length
+    ? await soft(async () => filingEvents((await db.prepare(filingsSql(whose.length)).bind(since, "9999-12-31", ...whose).all()).results), [])
+    : [];
   const ids = [...new Set([...outcomes, ...congressVotes, ...stateVotes, ...passages].map((r) => r.bill_id).filter(Boolean))];
-  return { outcomes, congressVotes, stateVotes, passages, orders, mine, decisions, plain: await plainWhat(db, ids) };
+  return { outcomes, congressVotes, stateVotes, passages, orders, mine, decisions, filings, plain: await plainWhat(db, ids) };
 }
 
 /** Checked plain lines for these bills (plain_summaries), by bill id. */
@@ -236,7 +245,7 @@ export function weekFeed({ items, tabs = [], seeAll, id = "this-week" }) {
   <div class="section-head"><h2 class="label" id="h-${id}">This week</h2><a class="section-link" href="${esc(seeAll)}">See all</a></div>
   ${tabs.length > 1 ? `<nav class="segmented" aria-label="${esc(tabs.map((t) => t.label).join(" or "))}">${tabs.map((t) => `<a class="toggle" href="${esc(t.href)}#${id}"${t.current ? ' aria-current="true"' : ""}>${esc(t.label)}</a>`).join("")}</nav>` : ""}
   ${list}
-  <p class="hint">The latest recorded facts, by one rule for every state: up to two laws signed or vetoed first, then the newest votes, decisions and orders.</p>
+  <p class="hint">The latest recorded facts, by one rule for every state: up to two laws signed or vetoed first, then the newest votes, decisions, orders and campaign finance reports.</p>
 </section>`;
 }
 

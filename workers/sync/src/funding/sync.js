@@ -38,6 +38,7 @@ import { api as congressApi } from "../congress-api.js";
 import { federalBill } from "../congress.js";
 import { upsertBill } from "../db.js";
 import { syncScope, differs } from "../upsert.js";
+import { fecFilingRows } from "./filings.js";
 
 const CROSSWALK = "https://unitedstates.github.io/congress-legislators/legislators-current.json";
 const MAX_PAC_PAGES = 40;
@@ -187,6 +188,18 @@ async function readOne(db, fec, m, cycle, current) {
       cycle
     );
   }
+  // The campaign's regular reports as events (migration 0053): the current period only, one call.
+  let filings = null;
+  if (committee && cycle === current) {
+    const form = m.chamber === "us-executive" ? "F3P" : "F3";
+    // A reports call that fails leaves the rows as they were; the totals still load.
+    try {
+      const f = await fec(`/filings/?committee_id=${committee}&form_type=${form}&per_page=100&sort=-receipt_date`, `reports ${committee}`);
+      filings = fecFilingRows(f.results, m.official_id, committee);
+    } catch (err) {
+      if (!(err instanceof UpstreamError)) throw err;
+    }
+  }
   const outside = totals
     ? parseOutside(await pagesOf(fec, `/schedules/schedule_e/by_candidate/?candidate_id=${m.candidate_id}&cycle=${cycle}&sort=-total&per_page=100`, MAX_OUTSIDE_PAGES, `outside spending ${m.candidate_id} ${cycle}`), m.candidate_id, cycle)
     : [];
@@ -203,6 +216,9 @@ async function readOne(db, fec, m, cycle, current) {
   ];
   const stmts = [];
   for (const p of parts) stmts.push(...(await syncScope(db, { ...p, scope })).stmts);
+  if (filings) {
+    stmts.push(...(await syncScope(db, { table: "money_filings", scope: { official_id: id, agency: "FEC", committee_id: committee }, key: ["period_start", "period_end"], cols: ["period_start", "period_end", "report", "raised", "spent", "filed", "source_url"], rows: filings })).stmts);
+  }
   const note = !totals ? `No FEC totals for ${cycle - 1}–${cycle}.` : pacNote;
   stmts.push(
     db
@@ -315,7 +331,7 @@ export async function syncFederalFunding(env, db, budget) {
         ].filter(([, done, days]) => !done || Date.parse(`${done.replace(" ", "T")}Z`) < Date.now() + parseInt(days, 10) * DAY);
         for (const [cycle] of due) {
           if (ownTimeLeft() < MIN_MEMBER_MS) throw new BudgetExhausted(reserveMs ? SHARE_USED : "run time limit reached");
-          const r = await readOne(db, fec, { official_id: m.id, candidate_id: fecRow.candidate_id, committee_id: fecRow.committee_id }, cycle, current);
+          const r = await readOne(db, fec, { official_id: m.id, chamber: m.chamber, candidate_id: fecRow.candidate_id, committee_id: fecRow.committee_id }, cycle, current);
           read += 1;
           counts.pacs += r.pacs;
           counts.outside += r.outside;

@@ -21,6 +21,7 @@
 import { getState, setState, BudgetExhausted, UpstreamError, isHttp, slugify } from "../util.js";
 import { fecOptions } from "./sync.js";
 import { syncScope } from "../upsert.js";
+import { calAccessFilingRows } from "./filings.js";
 import { seatOf, matchSeat, moneyRows, candidateKey, contestSeat, matchCandidate } from "./state.js";
 import {
   committeeTypes, pickInauguralCommittee, latestReports, parseForm13, form13Consistent, fecCommitteePage,
@@ -334,6 +335,8 @@ export async function stateCampaignStatements(db, id, entry, note) {
   for (const [filer, rows] of totals) {
     stmts.push(...(await syncScope(db, { table: "state_campaign_totals", scope: { filer_id: filer }, key: ["period_start", "period_end"], cols: ["period_start", "period_end", "contributions", "expenditures", "cash_end", "source_url"], rows })).stmts);
   }
+  // Each statement as an event (migration 0053): This week and the weekly email.
+  stmts.push(...(await syncScope(db, { table: "money_filings", scope: { official_id: id, agency: "Cal-Access" }, key: ["committee_id", "period_start", "period_end"], cols: ["committee_id", "period_start", "period_end", "report", "raised", "spent", "filed", "source_url"], rows: calAccessFilingRows(id, entry) })).stmts);
   const m = entry ? moneyRows(id, entry) : { cycles: [], industries: [], employers: [], orgs: [], ie: [] };
   const tables = [
     ["state_money_cycles", m.cycles, ["cycle"]],

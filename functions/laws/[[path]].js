@@ -15,6 +15,7 @@ import { districtsFromCookie, repsWhere, describe } from "../_lib/districts.js";
 import { billHref } from "../_lib/votes.js";
 import { lobbyingFor, lobbyGiversFor, industryMoney, followTheMoney, cycleOf } from "../_lib/funding.js";
 import { caLobbyingFor, caFollowTheMoney } from "../_lib/ca-lobbying.js";
+import { giversLine } from "../_lib/money-line.js";
 import { outcomeFor, outcomeSection } from "../_lib/executive.js";
 import { currentAnalysis, parse, provisionsFor, baselineSection, isPublic, openFlagCount, analysisClauses, constitutionBrief, analysisChanges } from "../_lib/analysis.js";
 import { summaryHead, contentsBar, fold, clauseChips, statusChip, compactRow, shortLabel } from "../_lib/summary.js";
@@ -344,6 +345,7 @@ ${analysis.failed ? sectionError("Constitutional baseline") : baselineSection(an
     summary,
     none: "No summary yet. The official page has the bill's text and status.",
     chips: clauseChips(clauses),
+    extra: giversLine(b.level === "federal" ? (givers && givers !== FAILED ? givers.length : 0) : caLobbying && caLobbying !== FAILED && caLobbying.givers ? caLobbying.givers.length : 0, { california: b.level !== "federal" }),
   });
   const constitution = analysis.failed
     ? '<p class="small secondary">Couldn\'t load the analysis right now.</p>'

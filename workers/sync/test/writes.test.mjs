@@ -128,7 +128,7 @@ test("California campaign rows for an official, loaded again unchanged, write no
   const t = fresh();
   const entry = {
     name: "Ada Example",
-    committees: [{ filer_id: 123, name: "Ada for Assembly", source_url: "https://example.gov/c/123", reports: [{ from: "2026-01-01", thru: "2026-06-30", contributions: 1000, expenditures: 500, cash_end: 500, source_url: "https://example.gov/r/1" }] }],
+    committees: [{ filer_id: 123, name: "Ada for Assembly", source_url: "https://example.gov/c/123", reports: [{ from: "2026-01-01", thru: "2026-06-30", filed: "2026-07-31", contributions: 1000, expenditures: 500, cash_end: 500, source_url: "https://example.gov/r/1" }] }],
     cycles: { 2026: { raised: 1000, spent: 500, statements: 1, industries: [{ industry: "Health", total: 400 }], employers: [], organizations: [{ name: "Example Org", kind: "committee", industry: "Health", total: 400, count: 1 }], ie: [] } },
   };
   const apply = async (e) => t.db.batch((await stateCampaignStatements(t.db, "os:ada", e, null)).stmts);
