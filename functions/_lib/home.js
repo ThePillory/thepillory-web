@@ -216,7 +216,7 @@ export async function hub(env, request, url, d, vs) {
     loadSection("hub topic place", () => topicPlace(env, request, mine), null),
     loadSection("hub election dates", () => asset(env, request, "/data/elections/dates.json"), null),
     elsewhere ? loadSection("hub your place", () => placeName(env, request, elsewhere), null) : null,
-    loadSection("hub this week", () => quickHomeData(env, request, { st: feedSt, since, districts: mine, senatorIds: senators.map((o) => o.id) }), null),
+    loadSection("hub this week", () => quickHomeData(env, request, { st: feedSt, since, districts: mine, senatorIds: senators.map((o) => o.id), moneyIds: lead && Array.isArray(lead.executive) ? lead.executive.map((o) => o.id) : [] }), null),
     statePage ? loadSection("hub state map", () => stateMapLite(env, request, vs.st, url.searchParams.get("layer")), null) : null,
   ]);
   // Links within the page (This week's switch) stay on this page: the state's own address, or /.
@@ -253,6 +253,7 @@ export async function hub(env, request, url, d, vs) {
     decisions: federal ? q.decisions : [],
     orders: q.orders.filter((o) => !!o.federal === federal),
     passages: federal ? q.passages || [] : [],
+    filings: (q.filings || []).filter((f) => (f.agency === "FEC") === federal),
     plain: q.plain,
   });
   const feed = quick === FAILED ? sectionError("This week") : weekFeed({

@@ -962,6 +962,9 @@ a.chip:hover { text-decoration: none; filter: brightness(0.97); }
   .rep-tabs > [role="tabpanel"] { scroll-margin-top: calc(var(--tabbar-h) + 72px); }
 }
 .summary-line { margin: 0; }
+/* The money in one line (functions/_lib/money-line.js): body size, bold, one link, no color of its own. */
+.money-glance, .money-glance a { font-size: var(--fs-body); font-weight: 700; color: var(--text); text-decoration: none; }
+.money-glance a:hover, a.money-glance:hover { text-decoration: underline; }
 .see-all .list-title { color: var(--navy); }
 @media (max-width: 374px) {
   .tabs--five [role="tab"] { font-size: var(--fs-label); }
@@ -1777,26 +1780,6 @@ article.fin-term { scroll-margin-top: var(--space-4); }
 .pair-legend .bl-name { flex: none; }
 /* Long XBRL element names (one word each) wrap instead of widening the page. */
 .xbrl-note { overflow-wrap: anywhere; }
-/* /taxes/ (every view inside .tax-page, which adds no box of its own): the official's page and Home's
-   cards and rows, three text sizes (h1, body, small), bold only for card titles and the big figures,
-   sentence case throughout, every amount in the text color. */
-.tax-page { display: contents; }
-.tax-title { margin: 0; font-size: var(--fs-body); font-weight: 700; letter-spacing: 0; line-height: 1.35; }
-.tax-page .label, .tax-page .tax-field { font-size: var(--fs-small); font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--text-2); }
-.tax-page .chip, .tax-page .toggle, .tax-page .mini-bars-axis, .tax-page .mini-bars-table summary { font-size: var(--fs-small); text-transform: none; letter-spacing: 0; }
-.tax-page .usage-table th[scope], .tax-page .mini-bars-table th[scope] { font-weight: 400; }
-.tax-page .usage-table thead th { color: var(--text-2); }
-.tax-page .breakdown-legend .bl-name { font-size: var(--fs-small); }
-.tax-fig { display: flex; flex-direction: column; gap: var(--space-1); }
-.tax-fig > p { margin: 0; }
-.tax-fig + .tax-fig { padding-top: var(--space-3); border-top: 1px solid var(--border); }
-.tax-fig .hero-num { line-height: 1.1; }
-.tax-rows .list-title { font-weight: 400; }
-.tax-rows .list-status { font-size: var(--fs-body); font-weight: 400; color: var(--text); font-variant-numeric: tabular-nums; }
-.tax-rows a.list-row { text-decoration: none; }
-.tax-rows > li:first-child > .list-row { border-top: 0; padding-top: 0; }
-.tax-rows > li:last-child > .list-row { padding-bottom: 0; }
-
 /* Agencies (functions/_lib/agencies.js): one rhythm in every card, 12px between items (.stack), the
    row pattern for rows, collapsible rows inside a card instead of cards inside cards. */
 /* The first and last rows in a card start and end at the card's padding: no 44px floor there (the
@@ -1825,6 +1808,27 @@ article.fin-term { scroll-margin-top: var(--space-4); }
 .agency-table thead th { color: var(--text-2); font-weight: 400; vertical-align: bottom; }
 .agency-table th[scope="row"], .agency-table thead th:first-child { text-align: left; font-weight: 400; }
 .agency-table tr > :last-child { padding-right: 0; }
+
+/* /taxes/ (every view inside .tax-page, which adds no box of its own): the official's page and Home's
+   cards and rows, three text sizes (h1, body, small), bold only for card titles and the big figures,
+   sentence case throughout, every amount in the text color. */
+.tax-page { display: contents; }
+.tax-title { margin: 0; font-size: var(--fs-body); font-weight: 700; letter-spacing: 0; line-height: 1.35; }
+.tax-page .label, .tax-page .tax-field { font-size: var(--fs-small); font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--text-2); }
+.tax-page .chip, .tax-page .toggle, .tax-page .mini-bars-axis, .tax-page .mini-bars-table summary { font-size: var(--fs-small); text-transform: none; letter-spacing: 0; }
+.tax-page .usage-table th[scope], .tax-page .mini-bars-table th[scope] { font-weight: 400; }
+.tax-page .usage-table thead th { color: var(--text-2); }
+.tax-page .breakdown-legend .bl-name { font-size: var(--fs-small); }
+.tax-fig { display: flex; flex-direction: column; gap: var(--space-1); }
+.tax-fig > p { margin: 0; }
+.tax-fig + .tax-fig { padding-top: var(--space-3); border-top: 1px solid var(--border); }
+.tax-fig .hero-num { line-height: 1.1; }
+.tax-rows .list-title { font-weight: 400; }
+.tax-rows .list-status { font-size: var(--fs-body); font-weight: 400; color: var(--text); font-variant-numeric: tabular-nums; }
+.tax-rows a.list-row { text-decoration: none; }
+.tax-rows > li:first-child > .list-row { border-top: 0; padding-top: 0; }
+.tax-rows > li:last-child > .list-row { padding-bottom: 0; }
+
 .tax-rows .chev { color: var(--text-2); }
 .tax-rows .tax-sub-row { min-height: 0; padding-left: var(--space-4); }
 .tax-rows .tax-sub-row .list-title, .tax-rows .tax-sub-row .list-status { color: var(--text-2); }

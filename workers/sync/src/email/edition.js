@@ -16,6 +16,7 @@ import { ballotWindow, previewLabel } from "../../../../functions/_lib/election-
 import { placeOf, zipCombos, zipFile, cdWords, legWords, editionKey } from "./places.js";
 import { dayWords, weekWords, addDays } from "./schedule.js";
 import { METHOD_SHORT, NOT_RECORDED } from "../passages/parse.js";
+import { filingEvents, filingsSql } from "../funding/filings.js";
 
 export const SITE = "https://thepillory.co";
 export const MAX_LINES = 15; // item lines in the email; everything is on the web version
@@ -86,7 +87,7 @@ async function officialsOf(run, place) {
 /** For every official the run needs: {votes, trades, disclosures} by official id, and the Governors' final actions. */
 async function officialFacts(run, officials, governors) {
   const { start, end } = run.week;
-  const out = new Map(officials.map((o) => [o.id, { votes: [], trades: [], disclosures: [] }]));
+  const out = new Map(officials.map((o) => [o.id, { votes: [], trades: [], disclosures: [], filings: [] }]));
   const ids = [...out.keys()];
   const add = (rows, field) => rows.forEach((r) => out.get(r.official_id) && out.get(r.official_id)[field].push(r));
   for (const c of chunks(ids)) {
@@ -131,6 +132,15 @@ async function officialFacts(run, officials, governors) {
       for (const p of quiet.filter((x) => x.chamber === o.chamber)) out.get(o.id).votes.push({ ...p, passage: true, official_id: o.id });
     }
   }
+  // Campaign finance reports filed this week (money_filings): the visitor's own reps and Governor only.
+  const govFilings = new Map();
+  const filers = [...new Set([...ids, ...governors.map((g) => g.id)])];
+  for (const c of chunks(filers)) {
+    for (const e of filingEvents(await all(run.db, filingsSql(c.length), [start, end, ...c]))) {
+      if (out.has(e.official_id)) out.get(e.official_id).filings.push(e);
+      else govFilings.set(e.official_id, [...(govFilings.get(e.official_id) || []), e]);
+    }
+  }
   for (const f of out.values()) f.votes.sort((a, b) => b.vote_date.localeCompare(a.vote_date) || String(a.bill_number || "").localeCompare(String(b.bill_number || "")));
   const govActions = new Map();
   const govIds = governors.map((g) => g.id);
@@ -145,7 +155,7 @@ async function officialFacts(run, officials, governors) {
     );
     for (const r of rows) govActions.set(r.actor_id, [...(govActions.get(r.actor_id) || []), r]);
   }
-  return { byOfficial: out, govActions };
+  return { byOfficial: out, govActions, govFilings };
 }
 
 /** The National section's facts: executive orders signed, bills that became law, Supreme Court opinions. */
@@ -208,14 +218,18 @@ async function countyMeetings(run) {
 const POSITION = { Yes: "Yes", No: "No", Present: "Present", "Not voting": "Not voting" };
 const OUTCOME = { signed: "Signed", vetoed: "Vetoed", pocket_vetoed: "Pocket vetoed", without_signature: "Became law without a signature", over_veto: "Became law over a veto", became_law: "Became law" };
 
+/** A campaign finance report as an email line: the one sentence, linked to the report. */
+const filingItem = (e) => ({ text: e.text, href: e.href, meta: `Filed ${dayWords(e.date)}`, kind: "report" });
+
 function repGroup(o, facts, { office } = {}) {
-  const f = facts.byOfficial.get(o.id) || { votes: [], trades: [], disclosures: [] };
+  const f = facts.byOfficial.get(o.id) || { votes: [], trades: [], disclosures: [], filings: [] };
   const items = [
     ...f.votes.map((v) => v.passage
       ? { text: billName(v), href: billHref(v.bill_id), status: METHOD_SHORT[v.method], meta: `Passed · ${dayWords(v.vote_date)} · ${NOT_RECORDED}`, kind: "vote" }
       : { text: billName(v), href: v.bill_id ? billHref(v.bill_id) : repHref(o), status: POSITION[v.position] || v.position, meta: `${v.result} · ${dayWords(v.vote_date)} · ${v.question}`, kind: "vote" }),
     ...f.trades.map((t) => ({ text: "Stock trade report filed", href: `${repHref(o)}#more`, meta: `Filed ${dayWords(t.filed_on)}`, kind: "report" })),
     ...f.disclosures.map((d) => ({ text: `Financial disclosure report filed (${d.year})`, href: `${repHref(o)}#more`, meta: d.filed_on ? `Filed ${dayWords(d.filed_on)}` : "", kind: "report" })),
+    ...(f.filings || []).map(filingItem),
   ];
   return {
     name: o.name,
@@ -252,11 +266,12 @@ function assemble(run, key, place, reps, facts, national, extra) {
     if (s2) sections.push(s2);
     if (reps.governor) {
       const acts = facts.govActions.get(reps.governor.id) || [];
-      if (acts.length) {
+      const govFiled = (facts.govFilings && facts.govFilings.get(reps.governor.id)) || (facts.byOfficial.get(reps.governor.id) || {}).filings || [];
+      if (acts.length || govFiled.length) {
         sections.push({
           id: "governor",
           title: `Your Governor`,
-          groups: [{ name: reps.governor.name, office: reps.governor.office || "Governor", href: repHref(reps.governor), items: acts.map((a) => ({ text: billName(a), href: billHref(a.bill_id), status: OUTCOME[a.outcome] || a.outcome, meta: [a.law_number, dayWords(a.action_date)].filter(Boolean).join(" · "), kind: "governor" })), empty: null }],
+          groups: [{ name: reps.governor.name, office: reps.governor.office || "Governor", href: repHref(reps.governor), items: [...acts.map((a) => ({ text: billName(a), href: billHref(a.bill_id), status: OUTCOME[a.outcome] || a.outcome, meta: [a.law_number, dayWords(a.action_date)].filter(Boolean).join(" · "), kind: "governor" })), ...govFiled.map(filingItem)], empty: null }],
         });
       }
     }

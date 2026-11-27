@@ -11,7 +11,7 @@ import { DatabaseSync } from "node:sqlite";
 import { plainProblems, readingGrade, numbersIn, namesIn } from "../src/plain/check.js";
 import { billSource, measureSource, rewrite, syncPlainSummaries } from "../src/plain/sync.js";
 import { Budget } from "../src/util.js";
-import { billStands, repVotesPlain, jobSentence, voteLinePlain, moneyLinePlain, plainLead, simpleCard } from "../../../functions/_lib/simple.js";
+import { billStands, repVotesPlain, jobSentence, voteLinePlain, plainLead, simpleCard } from "../../../functions/_lib/simple.js";
 
 const SOURCE = "This bill requires the Department of Example to publish a yearly report on bridge repairs and provides $2,000,000 for inspections in fiscal year 2027.";
 
@@ -98,8 +98,6 @@ test("plain pieces of the pages", () => {
   assert.match(jobSentence({ chamber: "us-senate" }), /One of 100 U\.S\. senators/);
   assert.match(jobSentence({ chamber: "tx-lower", office: "State Representative" }, "Texas"), /Texas's state House/);
   assert.match(voteLinePlain({ position: "No", bill_id: "us-1", bill_number: "H.R. 1", bill_title: "Example Act", result: "Passed", vote_date: "2026-01-02" }), /^Voted No on <a[^>]+>H\.R\. 1<\/a> \(Example Act\)\. It passed\./);
-  assert.equal(moneyLinePlain({ receipts: 100, individual_unitemized: 60, pac: 40 }, "2025–2026"), "Raised $100 in 2025–2026, mostly from small donors ($200 or less).");
-  assert.equal(moneyLinePlain({ receipts: 0 }, "x"), null);
   const lead = plainLead({ what: "It does X.", supporters: "A.", critics: "B.", source_label: "the CRS summary" }, null);
   assert.match(lead.source, /Simplified by AI from the CRS summary/);
   assert.equal(lead.extra.length, 2);
