@@ -74,9 +74,14 @@ test("the index lists departments with their sub-agencies, then independent agen
   assert.equal(status, 200);
   assert.ok(html.indexOf("Executive departments") < html.indexOf("Independent agencies"));
   assert.match(html, /Example Department/);
-  assert.match(html, /EXD · 1 agency · FY/);
   assert.match(html, /href="\/agencies\/example-department\/"/);
-  assert.match(html, new RegExp(`FY${FY} paid out \\$20.3 billion`));
+  // The latest complete fiscal year's paid out on the right (the row's status), exact in its title;
+  // not in the gray details line; one label above each list; nothing for an agency with no amount.
+  assert.match(html, /<span class="list-meta">EXD · 1 agency<\/span><\/div><span class="list-status"><span title="\$20,345,678,901">\$20.3 billion<\/span> <span class="chev"/);
+  assert.doesNotMatch(html, /paid out \$/);
+  assert.equal((html.match(new RegExp(`Paid out in fiscal year ${FY} \\(Oct–Sep\\), from <a class="inline-link" href="https://www.usaspending.gov/agency"`, "g")) || []).length, 2);
+  assert.match(html, /Quiet Board<\/span><\/div><span class="list-status"><span class="chev"/);
+  assert.doesNotMatch(html, /\$0\b/);
   assert.doesNotMatch(html, BANNED);
 });
 
@@ -84,6 +89,9 @@ test("search finds an agency by name", async () => {
   const { html } = await call("/agencies/?q=sample", { DB: db() });
   assert.match(html, /Sample Service/);
   assert.match(html, /Part of the Example Department/);
+  // A sub-agency with obligations only: "Committed $X", never a paid-out amount.
+  assert.match(html, /<span class="list-status"><span title="\$812,345,678">Committed \$812 million<\/span>/);
+  assert.match(html, new RegExp(`Paid out in fiscal year ${FY} \\(Oct–Sep\\)`));
   assert.doesNotMatch(html, /Quiet Board/);
   assert.equal(checkQuery(new URL("https://x/agencies/?q=a&offset=25")).bad, undefined);
 });
