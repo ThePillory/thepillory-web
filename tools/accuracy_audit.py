@@ -42,6 +42,7 @@ import subprocess
 import sys
 import time
 import unicodedata
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -1108,6 +1109,94 @@ def agency_measure(args):
     say()
 
 
+def fec_get(path):
+    """One FEC API call (FEC_API_KEY, else the FEC's shared DEMO_KEY). Read-only."""
+    key = os.environ.get("FEC_API_KEY") or "DEMO_KEY"
+    sep = "&" if "?" in path else "?"
+    req = urllib.request.Request(f"https://api.open.fec.gov/v1{path}{sep}api_key={key}", headers={"User-Agent": UA})
+    for attempt in range(4):
+        try:
+            with urllib.request.urlopen(req, timeout=60) as r:
+                return json.loads(r.read().decode())
+        except urllib.error.HTTPError as e:
+            if e.code == 429 and attempt < 3:
+                time.sleep(20)
+                continue
+            return {"error": f"HTTP {e.code}"}
+        except Exception as e:  # noqa: BLE001
+            return {"error": str(e)[:200]}
+    return {"error": "gave up"}
+
+
+def fec_committees(args):
+    """Section 16: what D1 holds for one official's campaign money (every cycle), and every committee the
+    FEC ties to them, with what each raised in the current two-year period. FEC_OFFICIAL picks the official
+    (default: the President). Read-only: nothing is written anywhere."""
+    say("## 16. FEC committees for one official")
+    say()
+    oid = (os.environ.get("FEC_OFFICIAL") or "").strip()
+    if oid and not re.fullmatch(r"[A-Za-z0-9:_-]+", oid):
+        say("FEC_OFFICIAL isn't an official id.")
+        return
+    off = q(args, f"SELECT id, name, office, chamber, rank, term_start FROM officials WHERE id = '{oid}'" if oid else
+            "SELECT id, name, office, chamber, rank, term_start FROM officials WHERE chamber = 'us-executive' AND rank = 1 AND active = 1")
+    if not off:
+        say("No such official in D1.")
+        return
+    o = off[0]
+    say(f"Official: {o['name']} ({o['office']}, `{o['id']}`, term start {o.get('term_start')})")
+    say()
+    for title, sql in (
+        ("fec_candidates", f"SELECT * FROM fec_candidates WHERE official_id = '{o['id']}'"),
+        ("funding_totals (every cycle)", f"SELECT cycle, candidate_id, receipts, disbursements, cash_on_hand, pac, coverage_end, last_report, updated_at FROM funding_totals WHERE official_id = '{o['id']}' ORDER BY cycle DESC"),
+        ("funding_progress (every cycle)", f"SELECT * FROM funding_progress WHERE official_id = '{o['id']}' ORDER BY cycle DESC"),
+        ("money_filings (latest 10)", f"SELECT committee_id, period_start, period_end, report, raised, spent, filed FROM money_filings WHERE official_id = '{o['id']}' ORDER BY filed DESC LIMIT 10"),
+    ):
+        rows = q(args, sql)
+        say(f"**{title}:** " + (json.dumps(rows) if rows else "none"))
+        say()
+    state = q(args, "SELECT value FROM sync_state WHERE key = 'executive_fec'")
+    exec_ids = json.loads(state[0]["value"]).get(o["id"]) if state and state[0].get("value") else None
+    say(f"**sync_state executive_fec for this official:** {json.dumps(exec_ids)}")
+    say()
+    fc = q(args, f"SELECT candidate_id FROM fec_candidates WHERE official_id = '{o['id']}'")
+    cand_ids = [c for c in dict.fromkeys(([fc[0]["candidate_id"]] if fc and fc[0].get("candidate_id") else []) + list(exec_ids or [])) if c]
+    if not cand_ids:
+        say("No FEC candidate ID on record, so nothing to look up at the FEC.")
+        return
+    year = time.gmtime().tm_year
+    cycle = year + (year % 2)
+    say(f"Current two-year period: {cycle - 1}–{cycle}. FEC key: {'FEC_API_KEY' if os.environ.get('FEC_API_KEY') else 'DEMO_KEY (shared, slow)'}.")
+    say()
+    committees = {}
+    for cid in cand_ids:
+        c = fec_get(f"/candidate/{cid}/")
+        r = (c.get("results") or [{}])[0]
+        say(f"**Candidate {cid}:** {r.get('name')} · office {r.get('office_full')} · election years {r.get('election_years')} · cycles {r.get('cycles')}" + (f" · {c['error']}" if c.get("error") else ""))
+        t = fec_get(f"/candidate/{cid}/totals/?cycle={cycle}&election_full=false")
+        say(f"- /candidate/{cid}/totals/ for {cycle}: " + (json.dumps([{k: x.get(k) for k in ('cycle', 'receipts', 'disbursements', 'coverage_end_date', 'last_report_type_full')} for x in t.get('results') or []]) if t.get('results') else "none") + (f" {t['error']}" if t.get("error") else ""))
+        for label, path in (("authorized (all cycles)", f"/candidate/{cid}/committees/?per_page=100&sort=-last_file_date"),
+                            ("linked to the candidate", f"/committees/?candidate_id={cid}&per_page=100&sort=-last_file_date"),
+                            ("sponsored (leadership PACs)", f"/committees/?sponsor_candidate_id={cid}&per_page=100&sort=-last_file_date")):
+            d = fec_get(path)
+            rows = d.get("results") or []
+            say(f"- {label}: {len(rows)}" + (f" ({d['error']})" if d.get("error") else ""))
+            for x in rows:
+                committees.setdefault(x["committee_id"], {**{k: x.get(k) for k in ("committee_id", "name", "designation_full", "committee_type_full", "last_file_date", "cycles")}, "found_as": []})["found_as"].append(label)
+        say()
+    say(f"**Each committee, with what it reported raising in {cycle - 1}–{cycle}** (committee totals, this period):")
+    say()
+    say("| Committee | Designation | Type | Found as | Receipts this period | Coverage through |")
+    say("|---|---|---|---|---|---|")
+    for cm in committees.values():
+        t = fec_get(f"/committee/{cm['committee_id']}/totals/?cycle={cycle}&per_page=5")
+        r = (t.get("results") or [{}])[0]
+        receipts = r.get("receipts")
+        say(f"| {cm['name']} ({cm['committee_id']}) | {cm.get('designation_full')} | {cm.get('committee_type_full')} | {'; '.join(dict.fromkeys(cm['found_as']))} | "
+            f"{'$' + format(round(receipts), ',') if isinstance(receipts, (int, float)) else (t.get('error') or 'none')} | {r.get('coverage_end_date') or ''} |")
+    say()
+
+
 def agency_rows(args):
     """Section 15: one agency page's D1 rows as JSON (read-only), to render the page with real data
     for screenshots. AGENCY_IDS picks the agencies (comma-separated slugs)."""
@@ -1145,7 +1234,7 @@ def main():
     say()
     say(f"Run {time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime())}. Reads D1 and the sources; changes nothing.")
     say()
-    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage), ("7", sync_cost), ("8", tax_laws), ("9", company_xbrl), ("10", voice_votes), ("11", clerk_petitions), ("12", recent_runs), ("13", agency_sources), ("14", agency_measure), ("15", agency_rows)):
+    for k, fn in (("1", hand_entered), ("2", matching), ("3", summaries), ("4", ai_content), ("5", freshness), ("6", coverage), ("7", sync_cost), ("8", tax_laws), ("9", company_xbrl), ("10", voice_votes), ("11", clerk_petitions), ("12", recent_runs), ("13", agency_sources), ("14", agency_measure), ("15", agency_rows), ("16", fec_committees)):
         if k in only:
             try:
                 fn(args)
