@@ -16,7 +16,7 @@
 //                   are one line under Platform until accounts launch.
 // POST /reps/<slug>/promises/<id>/flag   "Something wrong?" on a published promise
 import { simpleCard, jobSentence, voteLinePlain, sourceNote, SIMPLE_METHOD } from "../_lib/simple.js";
-import { moneyLine, moneyGlances } from "../_lib/money-line.js";
+import { moneyLine, moneyGlances, moneyHint, MONEY_NOTE, MONEY_HOW } from "../_lib/money-line.js";
 import { BODIES, LEVEL_NAME } from "../_lib/generated.js";
 import { page, notFound, notLoaded, esc, safeUrl, kv, card, section, linkRow, sourceLink, fmtDate, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { officialBySlug, officialsWhere, withVoteCounts, voteCounts, votesFor, CHAMBER_NAME } from "../_lib/data.js";
@@ -95,7 +95,7 @@ function searchSection(q, found) {
 }
 
 function yoursSection({ d, vs, people = [], failed = false, money = {} }) {
-  const rows = failed ? sectionError("") : people.length ? `<div class="card">${people.map((o) => yourRow(o, money)).join("")}</div>` : '<p class="secondary small">Not loaded yet.</p>';
+  const rows = (failed ? sectionError("") : people.length ? `<div class="card">${people.map((o) => yourRow(o, money)).join("")}</div>` : '<p class="secondary small">Not loaded yet.</p>') + moneyHint(money);
   if (d) {
     return `
 <section class="stack-sm simple-keep" id="yours" aria-labelledby="h-yours">
@@ -376,7 +376,7 @@ async function profile(env, slug, url, request) {
     <h1>${esc(o.name)}</h1>
     <p class="secondary">${esc(who(o))}</p>
     ${glanceLine ? `<p class="small summary-line"><a class="inline-link" href="#votes">${esc(glanceLine)}</a></p>` : ""}
-    ${glance ? `<p class="summary-line money-glance"><a href="#funding">${esc(glance.text)} ›</a></p>` : ""}
+    ${glance ? `<p class="summary-line money-glance"><a href="#funding">${esc(glance.text)} ›</a></p><p class="small secondary summary-line">${esc(MONEY_NOTE)} <a class="inline-link" href="${MONEY_HOW}">What it counts</a></p>` : ""}
     ${networth && networth !== FAILED ? networthLine(networth) : ""}
   </div>
 </header>`;

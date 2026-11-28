@@ -59,6 +59,16 @@ export function localMoneyLine(docs, name) {
   return `Raised ${dollars(total)} in itemized contributions${when}`;
 }
 
+/** The one sentence shown with the line, and where it's explained in full (Methodology, "The money line"). */
+export const MONEY_NOTE = "Campaign money as the campaign reported it for the two-year period; it doesn't explain any vote or action in office.";
+export const MONEY_HOW = "/about/methodology/#money-line";
+
+/** Under a list with money lines (Your representatives): what the lines are, once. "" when none shows. */
+export const moneyHint = (money) =>
+  money && Object.keys(money).length
+    ? `<p class="hint">Money lines: what each person's campaign reported raising in the two-year period, from the FEC, Cal-Access or the county's filings. Facts about money; they don't explain any vote. <a class="inline-link" href="${MONEY_HOW}">What they count</a></p>`
+    : "";
+
 /** Which agency the line comes from, for Quick mode's source note. */
 export const MONEY_SOURCE = { federal: "reports filed with the Federal Election Commission", state: "statements filed with the California Secretary of State (Cal-Access)", county: "filings on the county's NetFile site" };
 

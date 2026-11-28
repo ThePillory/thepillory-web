@@ -8,7 +8,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { DatabaseSync } from "node:sqlite";
 import { readFileSync, readdirSync } from "node:fs";
-import { federalMoneyLine, stateMoneyLine, localMoneyLine, moneyLine, giversLine, moneyGlances } from "../../../functions/_lib/money-line.js";
+import { federalMoneyLine, stateMoneyLine, localMoneyLine, moneyLine, giversLine, moneyGlances, moneyHint, MONEY_NOTE, MONEY_HOW } from "../../../functions/_lib/money-line.js";
 import { yourReps } from "../../../functions/_lib/quick-home.js";
 import { yourRow } from "../../../functions/_lib/reps-index.js";
 import { fecFilingRows, calAccessFilingRows, filingEvents, filingSentence, periodWords, FEC_REPORT_TYPES } from "../src/funding/filings.js";
@@ -123,6 +123,23 @@ test("Your representatives: the same line under each person, from a few indexed 
   assert.match(home, /\[Senator\]<\/div><div class="list-meta">[^<]+<\/div><div class="list-meta">Raised \$2,000,000 in 2025–2026/);
   assert.doesNotMatch(home, /\[Representative\]<\/div><div class="list-meta">[^<]+<\/div><div class="list-meta">/);
   assert.match(yourRow(all.find((o) => o.id === "v"), m), /<div class="list-meta">The President&#x27;s ticket&#x27;s campaign committee raised/);
+});
+
+test("the money line is explained wherever it appears: a note under it, a hint in Your representatives, and Methodology", () => {
+  clean(MONEY_NOTE);
+  assert.match(MONEY_NOTE, /doesn't explain any vote or action in office/);
+  const src = readFileSync(new URL("../../../functions/reps/[[path]].js", import.meta.url), "utf8");
+  assert.match(src, /\$\{esc\(MONEY_NOTE\)\} <a class="inline-link" href="\$\{MONEY_HOW\}">What it counts<\/a>/);
+  assert.equal(moneyHint({}), "");
+  const hint = moneyHint({ x: "Raised $1 in 2025–2026" });
+  assert.match(hint, /what each person's campaign reported raising/);
+  assert.match(hint, new RegExp(`href="${MONEY_HOW}"`));
+  clean(hint.replace(/<[^>]+>/g, ""));
+  assert.match(yourReps({ senators: [{ id: "s", slug: "s", name: "S" }], money: { s: "Raised $1 in 2025–2026" } }), /class="hint">Money lines:/);
+  assert.doesNotMatch(yourReps({ senators: [{ id: "s", slug: "s", name: "S" }], money: {} }), /Money lines:/);
+  const method = readFileSync(new URL("../../../about/methodology/index.html", import.meta.url), "utf8");
+  assert.match(method, /<li id="money-line"><strong>The money line:<\/strong>/);
+  clean(method.slice(method.indexOf('id="money-line"'), method.indexOf("</li>", method.indexOf('id="money-line"'))).replace(/<[^>]+>/g, ""));
 });
 
 // ---------------------------------------------------------------------------
