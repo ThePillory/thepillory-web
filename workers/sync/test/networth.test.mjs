@@ -107,7 +107,10 @@ const fold = (html, id) => {
   return html.slice(at, next < 0 ? undefined : next);
 };
 const head = (html) => html.slice(html.indexOf('<header class="page-head'), html.indexOf("</header>", html.indexOf('<header class="page-head')));
-const line = (html) => (head(html).match(/<p class="small networth-line">.*?<\/p>/) || [""])[0];
+// The full line: under a justice's title, or, on an official's page, at the top of More's net worth section
+// (the header there shows a small "Net worth" tile with the latest range instead).
+const line = (html) => (head(html).match(/<p class="small networth-line">.*?<\/p>/) || html.match(/<p class="networth-full">.*?<\/p>/) || [""])[0];
+const tile = (html) => (head(html).match(/<a class="stat head-stat" href="#more-networth"[^>]*>.*?<\/a>/) || [""])[0];
 
 test("a scanned report that passed every check is shown at once, labeled as read by AI; a person's check adds their name", async () => {
   const db = seeded();
@@ -170,7 +173,8 @@ test("a member who files electronically: earliest report online to the latest, t
   const { res, html } = await get(reps, "/reps/erin-electronic/");
   assert.equal(res.status, 200);
   assert.match(line(html), /Net worth, as reported: \$900K–\$2\.4M \(2022, earliest report online\) → \$3\.2M–\$15M or more \(2024\)/);
-  assert.match(line(html), /href="#more-networth" data-mode-set="detailed"/);
+  assert.match(tile(html), /href="#more-networth" data-mode-set="detailed"/);
+  assert.match(tile(html), /\$3\.2M–\$15M or more/);
   const sec = fold(html, "more-networth");
   assert.match(sec, /Estimated net worth: \$3,193,041–\$15,155,998 or more \(2024\), as reported in ranges\./);
   // One band per year, each linked to its report; the 2023 band is the amendment's.
@@ -192,6 +196,7 @@ test("a member who files electronically: earliest report online to the latest, t
 test("a member who files on paper: no line, the reports linked", async () => {
   const { html } = await get(reps, "/reps/pat-paper/");
   assert.equal(line(html), "");
+  assert.equal(tile(html), "", "no tile without a report read");
   assert.doesNotMatch(html, /Net worth, as reported:/);
   const sec = fold(html, "more-networth");
   assert.match(sec, /No financial disclosure report for Pat Paper has been read yet\./);
@@ -211,6 +216,8 @@ test("a member first elected recently: before taking office", async () => {
 test("a long-serving member: the earliest report online, a negative low end", async () => {
   const { html } = await get(reps, "/reps/lou-long/");
   assert.match(line(html), /Net worth, as reported: −\$316K–\$3\.5M \(2012, earliest report online\) → \$331K–\$2\.2M \(2024\)/);
+  // The header's tile: the latest range, linked to the section.
+  assert.match(tile(html), /<span class="stat-num">\$331K–\$2\.2M<\/span><span class="stat-label">Net worth<\/span>/);
   assert.match(fold(html, "more-networth"), /range-bands-zero/);
 });
 

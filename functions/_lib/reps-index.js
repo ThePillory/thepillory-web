@@ -8,6 +8,7 @@
 // Quick mode keeps "Your representatives" and Search; Browse is one tap away.
 // Lists are paged in SQL: no request reads every official.
 import { esc, linkRow } from "./render.js";
+import { amountStatus } from "./money-line.js";
 import { STATE_NAME } from "./districts.js";
 import { chamberIds, chamberName } from "../../workers/sync/src/states.js";
 
@@ -38,14 +39,9 @@ export function personRow(o, { office = false } = {}) {
   return linkRow(`/reps/${o.slug}/`, o.name, meta);
 }
 
-/** A row in "Your representatives": name, office, district, then the money line when there is one (moneyGlances()). */
+/** A row in "Your representatives": name, then office and district; the amount raised, short, on the right (moneyGlances()). */
 export function yourRow(o, money = {}) {
-  const meta = [o.office, o.district].filter(Boolean).join(" · ");
-  return `
-<a class="list-row link-row" href="/reps/${esc(o.slug)}/">
-  <div><div class="list-title">${esc(o.name)}</div>${meta ? `<div class="list-meta">${esc(meta)}</div>` : ""}${money[o.id] ? `<div class="list-meta">${esc(money[o.id])}</div>` : ""}</div>
-  <span class="row-end"><span class="chev" aria-hidden="true">›</span></span>
-</a>`;
+  return linkRow(`/reps/${o.slug}/`, o.name, [o.office, o.district].filter(Boolean).join(" · "), amountStatus(money, o.id));
 }
 
 export const isGovernor = (o) => /^governor$/i.test(String(o.office || "")) || o.rank === 1;

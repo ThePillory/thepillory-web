@@ -154,6 +154,13 @@ export function fec(path, q) {
     const rows = cand === "H0CA77001" || cand === "S0CA00001" || cand === "P00000001" ? OUTSIDE : [];
     return { status: 200, body: { results: rows.map(([committee_id, committee_name, support_oppose_indicator, total, count]) => ({ candidate_id: cand, committee_id, committee_name, support_oppose_indicator, total, count, cycle: +q.get("cycle") })), pagination: { count: rows.length, page: 1, pages: 1 } } };
   }
+  // A leadership PAC one member sponsors, with its own totals (migration 0054).
+  m = /^\/committee\/(\w+)\/totals\/$/.exec(path);
+  if (m) return m[1] === "C00000777" ? { status: 200, body: { results: [{ cycle: +q.get("cycle"), receipts: 250000, coverage_end_date: `${CURRENT}-09-30T00:00:00` }], pagination: { count: 1, pages: 1 } } } : null;
+  if (path === "/committees/" && q.get("sponsor_candidate_id")) {
+    const rows = q.get("sponsor_candidate_id") === "H0CA77001" ? [{ committee_id: "C00000777", name: "[TEST] LEADERSHIP PAC", designation: "D", committee_type: "Q", cycles: [CURRENT] }] : [];
+    return { status: 200, body: { results: rows, pagination: { count: rows.length, pages: 1 } } };
+  }
   if (path === "/committees/") {
     if (q.get("q") === "inaugural") return { status: 200, body: { results: [INAUGURAL, { committee_id: "C00000998", name: "OLD INAUGURAL COMMITTEE", committee_type: "X", first_file_date: "2000-12-01" }], pagination: { count: 2, pages: 1 } } };
     const ids = q.getAll("committee_id");

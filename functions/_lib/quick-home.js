@@ -20,6 +20,7 @@ import { loadIndex, loadTerm, caseHref } from "./scotus.js";
 import { plainChamber } from "./simple.js";
 import { METHOD_WORDS, NOT_RECORDED } from "../../workers/sync/src/passages/parse.js";
 import { filingEvents, filingsSql } from "../../workers/sync/src/funding/filings.js";
+import { amountStatus, moneyListKey } from "./money-line.js";
 
 export const THIS_WEEK_DAYS = 30; // how far back "this week" looks when the past week is quiet
 export const THIS_WEEK_MAX = 5;
@@ -205,9 +206,9 @@ export const JOB = {
   legislator: "Writes state laws for your district",
 };
 
-// A second small line with the money, when there is any (functions/_lib/money-line.js moneyGlances()).
+// The amount raised, short, as the row's status on the right (functions/_lib/money-line.js moneyGlances()).
 const personRow = (o, job, money = {}) =>
-  `<a class="list-row link-row" href="/reps/${esc(o.slug)}/"><div><div class="list-title">${esc(o.name)}</div><div class="list-meta">${esc(job)}</div>${money[o.id] ? `<div class="list-meta">${esc(money[o.id])}</div>` : ""}</div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>`;
+  `<a class="list-row link-row" href="/reps/${esc(o.slug)}/"><div><div class="list-title">${esc(o.name)}</div><div class="list-meta">${esc(job)}</div></div><span class="row-end">${amountStatus(money, o.id)}<span class="chev" aria-hidden="true">›</span></span></a>`;
 
 /**
  * "Your representatives": one card, each person once. The President, the
@@ -216,7 +217,7 @@ const personRow = (o, job, money = {}) =>
  * address/ZIP box (`lookup`, the form's HTML) until then. `allHref`: every
  * level, county included, on the Reps tab. `stateName`: the state shown, in the heading.
  */
-export function yourReps({ president, senators = [], governor, mine = [], lookup = "", known = "", allHref = "/reps/", stateName = null, money = {} }) {
+export function yourReps({ president, senators = [], governor, mine = [], lookup = "", known = "", allHref = "/reps/", stateName = null, money = {}, cycle = null }) {
   const rows = [
     president ? personRow(president, JOB.president, money) : "",
     ...senators.map((o) => personRow(o, JOB.senator, money)),
@@ -226,7 +227,7 @@ export function yourReps({ president, senators = [], governor, mine = [], lookup
   return `
 <section class="card stack-sm simple-keep" id="your-reps" aria-labelledby="h-your-reps">
   <div class="section-head"><h2 class="label" id="h-your-reps">Your representatives${stateName ? ` in ${esc(stateName)}` : ""}</h2><a class="section-link" href="${esc(allHref)}">All</a></div>
-  ${rows ? `<div>${rows}</div>` : '<p class="small secondary">Appears after the data sync runs.</p>'}
+  ${rows ? `${moneyListKey(money, cycle)}<div>${rows}</div>` : '<p class="small secondary">Appears after the data sync runs.</p>'}
   ${known}
   ${lookup}
 </section>`;

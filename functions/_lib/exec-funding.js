@@ -10,7 +10,7 @@
 //                     reports and ethics agreements.
 //   California        Cal-Access campaign committees and FPPC Form 700s.
 import { esc, safeUrl, fmtDate, donorNote } from "./render.js";
-import { fundingFor, fundingTab, money } from "./funding.js";
+import { fundingFor, fundingTab, money, raisedOf } from "./funding.js";
 import { stateMoneyFor, stateFundingTab } from "./state-funding.js";
 
 const missing = (err) => /no such table|no such column/i.test(String(err && err.message));
@@ -91,12 +91,14 @@ export async function executiveMoney(db, o, cycle) {
   const elected = o.rank === 1 || o.rank === 2;
   // The Vice President ran on the President's ticket when their terms began together.
   const ticket = o.rank === 2 && president && president.term_start && president.term_start === o.term_start;
-  const [campaign, inaugural, oge] = await Promise.all([
+  const [campaign, inaugural, oge, own] = await Promise.all([
     elected && president && (o.rank === 1 || ticket) ? fundingFor(db, president, cycle) : null,
     elected && president && (o.rank === 1 || ticket) ? inauguralFor(db, president.id) : null,
     disclosuresFor(db, o.id, "oge"),
+    // The Vice President's own committees (their earlier campaigns, leadership PACs): the same rule as everyone.
+    o.rank === 2 ? fundingFor(db, o, cycle) : null,
   ]);
-  return { kind: o.rank === 1 ? "president" : o.rank === 2 ? "vice-president" : "cabinet", president, ticket, campaign, inaugural, oge };
+  return { kind: o.rank === 1 ? "president" : o.rank === 2 ? "vice-president" : "cabinet", president, ticket, campaign, inaugural, oge, own };
 }
 
 // ---------------------------------------------------------------------------
@@ -253,9 +255,13 @@ export function executiveFundingParts(o, m, base) {
     parts.push(fundingTab(o, m.campaign, base));
     if (m.inaugural) parts.push(inauguralSection(m.inaugural));
   } else if (m.kind === "vice-president") {
+    const own = m.own && (raisedOf(m.own).total > 0 || (m.own.committees || []).length);
+    if (own) parts.push(fundingTab(o, m.own, base));
     if (m.ticket && m.president) {
-      parts.push(`<p class="small">The President and Vice President ran on one ticket. The Federal Election Commission records the ticket's money under the presidential campaign committee, so these are the same figures as on <a class="inline-link" href="/reps/${esc(m.president.slug)}/#funding">${esc(m.president.name)}'s</a> Funding tab.</p>`);
-      parts.push(fundingTab(m.president, m.campaign, base));
+      parts.push(`<p class="small">The President and Vice President ran on one ticket. The Federal Election Commission records the ticket's money under the presidential campaign committees, so these are the same figures as the campaign committees on <a class="inline-link" href="/reps/${esc(m.president.slug)}/#funding">${esc(m.president.name)}'s</a> Funding tab. The President's leadership PACs are theirs alone and aren't shown here.</p>`);
+      // The ticket's campaign committees only: the President's leadership PACs aren't the ticket's.
+      const ticketOnly = m.campaign && { ...m.campaign, committees: (m.campaign.committees || []).filter((c) => c.role !== "leadership") };
+      parts.push(fundingTab(m.president, ticketOnly, base));
     } else {
       parts.push('<p class="secondary small">The Vice President took office separately from the President\'s ticket, so the presidential campaign\'s money isn\'t theirs.</p>');
     }

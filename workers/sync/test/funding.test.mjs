@@ -22,6 +22,8 @@ test("cycles and candidate IDs for the current office", () => {
   assert.deepEqual(candidateIdsFor(["H8CA04152", "H6CA21135"], "us-house", "CA"), ["H8CA04152", "H6CA21135"]);
   assert.deepEqual(candidateIdsFor(["H8CA04152"], "us-house", "NV"), [], "another state's ID isn't used");
   assert.deepEqual(candidateIdsFor([], "us-senate", "OK"), []);
+  // The executive branch: presidential IDs first, then a Vice President's earlier Senate or House IDs.
+  assert.deepEqual(candidateIdsFor(["S2OH00001", "P80000001"], "us-executive", null), ["P80000001", "S2OH00001"]);
 });
 
 test("order and key: live communities' members first; funding's own FEC key", () => {

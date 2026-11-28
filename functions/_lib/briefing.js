@@ -8,7 +8,10 @@
 //                       and Happening now.
 // Both link back to the hub (/).
 import { coverageFor, votesLoaded } from "./coverage.js";
-import { STATE_NAME } from "./districts.js";
+import { STATE_NAME, CALAVERAS_FIPS } from "./districts.js";
+import { moneyGlances, amountStatus, moneyListKey } from "./money-line.js";
+import { loadLocalMoney } from "./local-money.js";
+import { currentCycle } from "../../workers/sync/src/funding/fec.js";
 import { EMPTY_REPORTS } from "./generated.js";
 import { page, esc, fmtDate, loadSection, FAILED, anyFailed, sectionError } from "./render.js";
 import { recentFinalVotes, officialsWhere, homeDistricts } from "./data.js";
@@ -185,10 +188,19 @@ export async function personalBriefing(env, url, d, request = null) {
   const repsLoaded = db ? await loadSection("briefing reps", () => officialsWhere(db, repsWhere(d)), []) : [];
   const reps = repsLoaded === FAILED ? [] : repsLoaded;
   const ids = reps.map((o) => o.id);
-  const [votes, now] = await Promise.all([
+  const cycle = currentCycle();
+  const [votes, now, moneyLoaded] = await Promise.all([
     db && ids.length ? loadSection("briefing votes", () => recentFinalVotes(db, { limit: 5, officialIds: ids }), { rows: [] }) : { rows: [] },
     db ? loadSection("briefing happening now", () => happeningNow(db, which, { limit: 4, officialIds: ids }), []) : [],
+    // The amount raised, short, on the right of each row, by the same rules as each page (money-line.js).
+    db && reps.length
+      ? loadSection("briefing money", async () => moneyGlances(db, reps, {
+          cycle,
+          local: request && reps.some((o) => o.chamber === "county-board") ? await loadLocalMoney(env, request, CALAVERAS_FIPS).catch(() => []) : null,
+        }), {})
+      : {},
   ]);
+  const money = moneyLoaded === FAILED ? {} : moneyLoaded;
   const inCA = d.st === "CA";
   const repRows = repsLoaded === FAILED ? sectionError("") : reps.length
     ? reps
@@ -196,7 +208,7 @@ export async function personalBriefing(env, url, d, request = null) {
           (o) => `
 <a class="list-row link-row" href="/reps/${esc(o.slug)}/">
   <div><div class="list-title">${esc(o.name)}</div><div class="list-meta">${esc([o.office, o.district].filter(Boolean).join(" · "))}</div></div>
-  <span class="row-end"><span class="chev" aria-hidden="true">›</span></span>
+  <span class="row-end">${amountStatus(money, o.id)}<span class="chev" aria-hidden="true">›</span></span>
 </a>`
         )
         .join("")
@@ -222,7 +234,7 @@ ${simple}
 
 <section class="brief-section" aria-labelledby="h-reps">
   ${sectionHead("h-reps", "Your representatives", "/reps/", "All reps")}
-  <div class="card">${repRows}</div>
+  <div class="card">${moneyListKey(money, cycle)}${repRows}</div>
   ${emailLine()}
 </section>
 

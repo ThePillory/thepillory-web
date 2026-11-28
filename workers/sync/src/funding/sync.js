@@ -39,6 +39,7 @@ import { federalBill } from "../congress.js";
 import { upsertBill } from "../db.js";
 import { syncScope, differs } from "../upsert.js";
 import { fecFilingRows } from "./filings.js";
+import { committeesToRead, committeeTotals, committeePage } from "./committees.js";
 
 const CROSSWALK = "https://unitedstates.github.io/congress-legislators/legislators-current.json";
 const MAX_PAC_PAGES = 40;
@@ -191,11 +192,21 @@ async function readOne(db, fec, m, cycle, current) {
   // The campaign's regular reports as events (migration 0053): the current period only, one call.
   let filings = null;
   if (committee && cycle === current) {
-    const form = m.chamber === "us-executive" ? "F3P" : "F3";
+    const form = /^P/.test(m.candidate_id) ? "F3P" : "F3";
     // A reports call that fails leaves the rows as they were; the totals still load.
     try {
       const f = await fec(`/filings/?committee_id=${committee}&form_type=${form}&per_page=100&sort=-receipt_date`, `reports ${committee}`);
       filings = fecFilingRows(f.results, m.official_id, committee);
+    } catch (err) {
+      if (!(err instanceof UpstreamError)) throw err;
+    }
+  }
+  // Every committee the FEC ties to the official, with its own receipts (migration 0054): the current period only.
+  // A lookup that fails leaves the rows as they were.
+  let committees = null;
+  if (cycle === current) {
+    try {
+      committees = await readCommittees(fec, m.fec_ids && m.fec_ids.length ? m.fec_ids : [m.candidate_id], cycle);
     } catch (err) {
       if (!(err instanceof UpstreamError)) throw err;
     }
@@ -216,6 +227,10 @@ async function readOne(db, fec, m, cycle, current) {
   ];
   const stmts = [];
   for (const p of parts) stmts.push(...(await syncScope(db, { ...p, scope })).stmts);
+  if (committees) {
+    stmts.push(...(await syncScope(db, { table: "official_committees", scope, key: ["committee_id"], stamp: "updated_at", rows: committees,
+      cols: ["committee_id", "name", "role", "designation", "committee_type", "receipts", "coverage_end", "source_url"] })).stmts);
+  }
   if (filings) {
     stmts.push(...(await syncScope(db, { table: "money_filings", scope: { official_id: id, agency: "FEC", committee_id: committee }, key: ["period_start", "period_end"], cols: ["period_start", "period_end", "report", "raised", "spent", "filed", "source_url"], rows: filings })).stmts);
   }
@@ -229,7 +244,33 @@ async function readOne(db, fec, m, cycle, current) {
       .bind(id, cycle, note)
   );
   await inBatches(db, stmts);
-  return { pacs: pacs.length, outside: outside.length, employers: employers.length, totals: !!totals };
+  return { pacs: pacs.length, outside: outside.length, employers: employers.length, totals: !!totals, committees: committees ? committees.length : 0 };
+}
+
+/**
+ * The committees the FEC ties to a candidate (src/funding/committees.js): authorized committees of every
+ * cycle and joint fundraising committees (/candidate/{id}/committees/), and the leadership PACs they
+ * sponsor (/committees/?sponsor_candidate_id=), each with its own receipts for the period. Rows with
+ * receipts in the period only.
+ */
+async function readCommittees(fec, ids, cycle) {
+  const lists = [];
+  for (const id of ids.filter(Boolean)) {
+    lists.push(await pagesOf(fec, `/candidate/${id}/committees/?per_page=100&sort=-last_file_date`, 2, `committees ${id} (every cycle)`));
+    lists.push(await pagesOf(fec, `/committees/?sponsor_candidate_id=${id}&per_page=100&sort=-last_file_date`, 2, `sponsored committees ${id}`));
+  }
+  const rows = [];
+  for (const c of committeesToRead(lists, cycle)) {
+    let t = null;
+    try {
+      t = committeeTotals((await fec(`/committee/${c.committee_id}/totals/?cycle=${cycle}&per_page=5`, `totals ${c.committee_id} ${cycle}`)).results, cycle);
+    } catch (err) {
+      // No reports for the period: the FEC answers 404.
+      if (!(err instanceof UpstreamError && err.status === 404)) throw err;
+    }
+    if (t && t.receipts > 0) rows.push({ ...c, receipts: t.receipts, coverage_end: t.coverage_end, source_url: committeePage(c.committee_id, cycle) });
+  }
+  return rows;
 }
 
 // Bills whose lobbying search is due (see syncFederalLobbying).
@@ -249,9 +290,9 @@ async function lobbyingWaiting(env, db) {
   return r ? r.n : 0;
 }
 
-// Who has campaign funding to load: members of Congress and the President (the
-// Vice President runs on the President's ticket; the Cabinet is appointed).
-const FUNDED = "(o.chamber IN ('us-house', 'us-senate') OR (o.chamber = 'us-executive' AND o.rank = 1))";
+// Who has campaign funding to load: members of Congress, the President and the Vice President (their own
+// committees; the ticket's money is the President's committee). The Cabinet is appointed.
+const FUNDED = "(o.chamber IN ('us-house', 'us-senate') OR (o.chamber = 'us-executive' AND o.rank IN (1, 2)))";
 
 // Leave a member-period unstarted when less than this much of funding's time is left.
 const MIN_MEMBER_MS = 90000;
@@ -281,10 +322,10 @@ export async function syncFederalFunding(env, db, budget) {
   let crosswalk = null;
   let resolved = 0;
   let read = 0;
-  const counts = { pacs: 0, outside: 0, employers: 0, noTotals: 0 };
+  const counts = { pacs: 0, outside: 0, employers: 0, noTotals: 0, committees: 0 };
   const firstDone = [];
   const summary = (extra = "") => {
-    return `${read} member-period(s) read (${counts.pacs} PAC, ${counts.outside} outside-spending and ${counts.employers} employer rows)` +
+    return `${read} member-period(s) read (${counts.pacs} PAC, ${counts.outside} outside-spending and ${counts.employers} employer rows; ${counts.committees} committee(s) with receipts)` +
       `${counts.noTotals ? `, ${counts.noTotals} with no FEC totals for that period` : ""}${resolved ? `; ${resolved} member(s) matched to FEC IDs` : ""}` +
       `${firstDone.length ? `; live communities' members done: ${firstDone.join(", ")}` : ""}; ${o.own ? "FEC key" : "sharing the Congress.gov key (set FEC_API_KEY)"}${extra}`;
   };
@@ -311,6 +352,13 @@ export async function syncFederalFunding(env, db, budget) {
         .bind(...prio.binds, current, prev, `-${o.refreshDays} days`)
         .all()
     ).results;
+  // Every FEC ID to look committees up under: the executive branch's from executive.json, a member's matched one.
+  let execFec = null;
+  const fecIdsOf = async (m) => {
+    if (m.chamber !== "us-executive") return null;
+    execFec ||= JSON.parse((await getState(db, "executive_fec")) || "{}");
+    return execFec[m.id] || null;
+  };
   const seen = new Set();
   try {
     for (;;) {
@@ -331,12 +379,13 @@ export async function syncFederalFunding(env, db, budget) {
         ].filter(([, done, days]) => !done || Date.parse(`${done.replace(" ", "T")}Z`) < Date.now() + parseInt(days, 10) * DAY);
         for (const [cycle] of due) {
           if (ownTimeLeft() < MIN_MEMBER_MS) throw new BudgetExhausted(reserveMs ? SHARE_USED : "run time limit reached");
-          const r = await readOne(db, fec, { official_id: m.id, chamber: m.chamber, candidate_id: fecRow.candidate_id, committee_id: fecRow.committee_id }, cycle, current);
+          const r = await readOne(db, fec, { official_id: m.id, chamber: m.chamber, candidate_id: fecRow.candidate_id, committee_id: fecRow.committee_id, fec_ids: await fecIdsOf(m) }, cycle, current);
           read += 1;
           counts.pacs += r.pacs;
           counts.outside += r.outside;
           counts.employers += r.employers;
           if (!r.totals) counts.noTotals += 1;
+          counts.committees += r.committees;
         }
         if (m.priority === 0 && due.length) firstDone.push(m.id.replace(/^bioguide:/, ""));
       }
