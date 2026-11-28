@@ -379,3 +379,10 @@ test("the wording rules hold in every new source file", () => {
     assert.doesNotMatch(text, /voted with|\bbought\b|paid for|\bscore\b/i, f);
   }
 });
+
+test("every migration file is applied by the Worker (src/db.js lists it), so a new table or column reaches D1", () => {
+  const db = readFileSync(new URL("../src/db.js", import.meta.url), "utf8");
+  const files = readdirSync(MIG).filter((f) => f.endsWith(".sql")).sort();
+  const missing = files.filter((f) => !db.includes(`["${f}",`) || !db.includes(`../migrations/${f}"`));
+  assert.deepEqual(missing, [], "add each migration to MIGRATIONS in src/db.js");
+});
