@@ -11,6 +11,7 @@ import { awardsLink } from "./gov-money.js";
 import { taxMarker } from "./taxes.js";
 import { darkMoneyFor, electioneeringFor, spenderDetails, electioneeringSection } from "./dark-money.js";
 import { fold } from "./summary.js";
+import { ROLE_LABELS, raisedParts } from "../../workers/sync/src/funding/committees.js";
 
 export const METHOD = "/about/methodology/#funding";
 export const NOT_A_CAUSE =
@@ -78,17 +79,52 @@ export async function fundingFor(db, official, cycle) {
         .bind(cycle)
         .first();
     }
-    const lobby = await lobbyContributionsFor(db, official.id, c);
+    const [lobby, committees] = await Promise.all([lobbyContributionsFor(db, official.id, c), committeesFor(db, official.id, c)]);
     // Who funds the outside spenders, and electioneering communications naming the member.
     const [dark, electioneering] = await Promise.all([
       darkMoneyFor(db, [...new Set(outside.results.map((x) => x.committee_id))], c),
       electioneeringFor(db, [fecRow && fecRow.candidate_id], c),
     ]);
-    return { fec: fecRow, cycles, cycle: c, totals, progress, loadedCount, pacs: pacs.results, outside: outside.results, employers: employers.results, industries: industries.results, avg, lobby, dark, electioneering };
+    return { fec: fecRow, cycles, cycle: c, totals, progress, loadedCount, pacs: pacs.results, outside: outside.results, employers: employers.results, industries: industries.results, avg, lobby, dark, electioneering, committees };
   } catch (err) {
     if (missing(err)) return null;
     throw err;
   }
+}
+
+/** Every committee the FEC ties to the official, with its own receipts for the period (migration 0054). */
+async function committeesFor(db, officialId, cycle) {
+  try {
+    return (await db.prepare("SELECT * FROM official_committees WHERE official_id = ? AND cycle = ? ORDER BY receipts DESC").bind(officialId, cycle).all()).results;
+  } catch (err) {
+    if (missing(err)) return [];
+    throw err;
+  }
+}
+
+/** "Raised" for the period: campaign committees plus leadership PACs (src/funding/committees.js). */
+export const raisedOf = (f) => raisedParts(f && f.totals ? f.totals.receipts : null, f && f.committees);
+
+const ROLE_ORDER = { campaign: 0, leadership: 1, joint: 2 };
+
+/** The Funding tab's list of committees, each with its own total and FEC link; "" when none is loaded. */
+export function committeesCard(f) {
+  const cs = [...((f && f.committees) || [])].sort((a, b) => ROLE_ORDER[a.role] - ROLE_ORDER[b.role] || b.receipts - a.receipts);
+  if (!cs.length) return "";
+  const line = (c) =>
+    `<li class="list-row"><div><div class="list-title">${safeUrl(c.source_url) ? `<a class="inline-link" href="${esc(c.source_url)}" target="_blank" rel="noopener">${esc(c.name)} ↗</a>` : esc(c.name)}</div>` +
+    `<div class="list-meta">${esc(ROLE_LABELS[c.role])}${c.coverage_end ? ` · through ${fmtDate(c.coverage_end)}` : ""}</div></div>` +
+    `<span class="list-status row-amount">${money(c.receipts)}</span></li>`;
+  const counted = cs.filter((c) => c.role !== "joint");
+  const joint = cs.filter((c) => c.role === "joint");
+  return `<section class="card stack-sm" id="funding-committees">
+  <h3>Committees</h3>
+  ${counted.length ? `<ul class="plain-list">${counted.map(line).join("")}</ul>` : ""}
+  ${joint.length ? `<p class="small secondary">Not added in:</p><ul class="plain-list">${joint.map(line).join("")}</ul>` : ""}
+  <p class="hint">What each committee the Federal Election Commission ties to ${esc(f.fecName || "this official")} reported raising in ${period(f.cycle)}, from its own reports. Raised adds the campaign committees and leadership PACs.${
+    joint.length ? " A joint fundraising committee passes what it raises on to the committees it raises for, so it's listed on its own and not added in." : ""
+  } Super PACs and other groups that spend independently are under outside spending. <a class="tap" href="/about/methodology/#money-line">Which committees count</a></p>
+</section>`;
 }
 
 /** Outside spending rows, with each spender's FEC committee type when it's been looked up (executive-funding). */
@@ -356,16 +392,27 @@ export function fundingTab(official, f, base) {
   const span = period(f.cycle);
   const fecLink = safeUrl((t && t.source_url) || f.fec.source_url);
   const asOf = t && t.coverage_end ? `through ${fmtDate(t.coverage_end)}${t.last_report ? ` (latest report: ${esc(t.last_report.toLowerCase())})` : ""}` : "";
-  const intro = `<p class="small">Money raised by ${esc(official.name)}'s campaign committees in ${span}${asOf ? `, ${asOf}` : ""}, as reported to the Federal Election Commission. ${
+  const withPacs = (f.committees || []).some((c) => c.role === "leadership");
+  const intro = `<p class="small">Money raised by ${esc(official.name)}'s campaign committees${withPacs ? " and leadership PACs" : ""} in ${span}${asOf ? `, ${asOf}` : ""}, as reported to the Federal Election Commission. ${
     official.chamber === "us-executive" ? "These are facts about money; they don't explain any action in office." : "These are facts about money, shown beside the voting record; they don't explain any vote."
   }</p>`;
-  if (!t) return `${cycleNav(base, f)}${intro}<p class="secondary small">${esc((f.progress && f.progress.note) || `No FEC totals for ${span}.`)}</p>${lobbyContribSection(official, f.lobby)}`;
+  const raised = raisedOf(f);
+  const committees = committeesCard({ ...f, fecName: official.name });
+  if (!t) {
+    const hero = raised.total > 0
+      ? `<section class="card hero-stat"><p class="label">Raised · ${span}</p><p class="hero-num">${money(raised.total)}</p>${splitLine(raised)}</section>`
+      : "";
+    const note = raised.total > 0
+      ? `The FEC has no candidate totals for ${span} (no principal campaign committee registered for the period); the amounts above are from each committee's own reports.`
+      : (f.progress && f.progress.note) || `No FEC totals for ${span}.`;
+    return `${cycleNav(base, f)}${hero}${committees}${intro}<p class="secondary small">${esc(note)}</p>${lobbyContribSection(official, f.lobby)}`;
+  }
 
   // 1. PAC and special-interest money
   const pacs = f.pacs.length
     ? `<ul class="plain-list money-list">${f.pacs.slice(0, TOP).map(pacRow).join("")}</ul>
        ${f.pacs.length > TOP ? seeAll(fundingListHref(base, "pacs", f.cycle), "See all PACs") : ""}
-       <p class="hint">The ${Math.min(TOP, f.pacs.length)} largest of ${money(t.pac)} from PACs and other political committees (${pct(t.pac, t.receipts)} of all money raised). ${
+       <p class="hint">The ${Math.min(TOP, f.pacs.length)} largest of ${money(t.pac)} from PACs and other political committees (${pct(t.pac, t.receipts)} of what the campaign committees raised). ${
          f.progress.note ? esc(f.progress.note) + ". " : ""
        }<a class="tap" href="${esc(f.pacs[0].source_url)}" target="_blank" rel="noopener">Every PAC contribution at the FEC ↗</a></p>`
     : `<p class="secondary small">No contributions from PACs reported in ${span}.</p>`;
@@ -432,11 +479,13 @@ export function fundingTab(official, f, base) {
 ${cycleNav(base, f)}
 <section class="card hero-stat">
   <p class="label">Raised · ${span}</p>
-  <p class="hero-num">${money(t.receipts)}</p>
-  <p class="small secondary">Spent ${money(t.disbursements)} · Cash on hand ${money(t.cash_on_hand)}${t.coverage_end ? ` as of ${fmtDate(t.coverage_end)}` : ""}</p>
+  <p class="hero-num">${money(raised.total)}</p>
+  ${splitLine(raised)}
+  <p class="small secondary">${raised.leadership > 0 ? "Campaign committees: s" : "S"}pent ${money(t.disbursements)} · Cash on hand ${money(t.cash_on_hand)}${t.coverage_end ? ` as of ${fmtDate(t.coverage_end)}` : ""}</p>
 </section>
+${committees}
 <section class="card stack">
-  <h3>Where it came from</h3>
+  <h3>${raised.leadership > 0 ? "Where the campaign committees' money came from" : "Where it came from"}</h3>
   ${breakdown}
   ${intro}
 </section>
@@ -458,6 +507,9 @@ ${lobby ? fold("funding-lobbyists", "From lobbyists and lobbying organizations",
 ${avg ? fold("funding-average", "Compared with the average", avg) : ""}
 <p class="hint">Source: Federal Election Commission${fecLink ? ` (<a class="tap" href="${esc(fecLink)}" target="_blank" rel="noopener">${esc(official.name)} at the FEC ↗</a>)` : ""}, ${span}. Read ${fmtDate(f.progress.done_at)}. Federal law bars using contributor information from FEC reports to ask for contributions or for commercial purposes; ThePillory shows totals only and has no donor export. <a class="tap" href="${METHOD}">Methodology</a></p>`;
 }
+
+/** Under the big number, only when both campaign committees and leadership PACs raised money: the two parts. */
+const splitLine = (r) => (r.leadership > 0 && r.campaign > 0 ? `<p class="small secondary">Campaign committees ${money(r.campaign)} · Leadership PACs ${money(r.leadership)}</p>` : "");
 
 const pacRow = (p) => row(esc(p.name), money(p.total), `${p.count} contribution${p.count === 1 ? "" : "s"} · ${esc(industryName(p.industry))}`);
 const industryRow = (i) => row(esc(industryName(i.industry)), money(i.pac + i.emp), [i.pac ? `PACs ${money(i.pac)}` : "", i.emp ? `donors' employers ${money(i.emp)}` : ""].filter(Boolean).join(" · "));

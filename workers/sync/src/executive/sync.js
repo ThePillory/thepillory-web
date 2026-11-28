@@ -82,7 +82,8 @@ export async function syncExecutiveOfficials(env, db, budget) {
       website: "https://www.whitehouse.gov/", source_url: namesOnPage(cabinetHtml, name) ? cabinetUrl : EXECUTIVE_SOURCE, last_verified: today(),
       bioguide_id: p.id.bioguide || null, state: null, rank,
     });
-    fec[id] = (p.id.fec || []).filter((x) => /^P\d/.test(x));
+    // Every FEC ID (presidential first): the funding step looks committees up under each.
+    fec[id] = [...(p.id.fec || [])].sort((a, b) => (/^P/.test(b) ? 1 : 0) - (/^P/.test(a) ? 1 : 0));
     kept.push(id);
   }
   await setState(db, "executive_fec", JSON.stringify(fec));
