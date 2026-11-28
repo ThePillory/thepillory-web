@@ -27,6 +27,7 @@
 // gets their state marked "You're here" on the map. Outside the US, or when the
 // region is unknown: the national hub. Kept at the edge once per state;
 // browsers don't keep it. The old ?hub=1 flag and /home/ redirect here.
+import { termRecords } from "./term-limits.js";
 import { page, esc, linkRow, loadSection, FAILED, anyFailed, sectionError } from "./render.js";
 import { pacificNow, addDays } from "./meetings.js";
 import { describe, STATE_NAME, CALAVERAS_FIPS } from "./districts.js";
@@ -243,6 +244,7 @@ export async function hub(env, request, url, d, vs) {
   const money = await loadSection("hub money lines", async () => moneyGlances(db, [president, ...senators, governor, ...mineList], {
     cycle: currentCycle(),
     local: mineList.some((o) => o.chamber === "county-board") ? await loadLocalMoney(env, request, CALAVERAS_FIPS).catch(() => []) : null,
+    history: termRecords(env, request),
   }), {});
   const repsHtml = yourReps({
     stateName: vs ? vs.name : null,

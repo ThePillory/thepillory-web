@@ -30,11 +30,43 @@ Every committee the FEC ties to an official, by one rule for members of Congress
 | **Joint fundraising committees** | Designation J, linked to the candidate in the same lookups | No: listed on the Money tab on their own line. They pass what they raise on to the committees they raise for, so adding them in would count that money twice. |
 | Super PACs and other independent-expenditure-only committees (types O and I) | | Never: they stay in outside spending, for and against. |
 
+In Your representatives each amount reads "$4.2M raised" (the short amount and "raised"), under the one label "Campaign money raised, [period]", in Quick mode too.
+
 An unauthorized committee (designation U) isn't the candidate's and isn't counted, even when it once was authorized. A committee is read only when the FEC lists it as active in the period; each one's receipts come from its own reports (`/committee/{id}/totals/?cycle=`), so a President who isn't running again still shows what their committees raise now. Committees with no receipts in the period aren't listed.
 
 "Raised $X in [period]" = campaign committees + leadership PACs. For the campaign committees, the FEC's candidate totals for the period come first (they combine the candidate's authorized committees, so transfers between them aren't counted twice); when the FEC has none (no principal committee registered for the period), the authorized committees' own reports are added up. The Money tab lists each committee by name, with its role, its own total, the date its latest report runs through and a link to it at the FEC. The breakdown ("Where the campaign committees' money came from"), PAC share, spending and cash on hand are the campaign committees'.
 
 Stored in `official_committees` (official, period, committee, name, role, designation, type, receipts, coverage end, FEC link) for the current two-year period, read in `federal-funding` with each official's current period (two lookups per FEC ID plus one per active committee), written through `syncScope()`: only changed rows. A lookup that fails leaves the rows as they were. The executive branch's FEC IDs (every one in `executive.json`, presidential first) come from the `executive_fec` state the `executive-officials` step saves.
+
+### California: every committee the official controls
+
+The same rule in Cal-Access (`tools/build_ca_campaign.py`, the weekly "Refresh California campaign data" workflow; migration 0055). An official's committees start from the Form 460 cover pages, filed by a candidate or candidate-controlled committee, that name them as the candidate (legislators: also naming their seat). Then Cal-Access's own record of control decides the rest: `FILER_LINKS_CD` link type 12011 ties a candidate/officeholder filer to each committee it controls. The candidate filer linked to those committees, and every committee it controls, count:
+
+- **campaign committees** for any office (a legislator's committee for another seat, a statewide officer's for a future race);
+- **officeholder accounts**;
+- **ballot measure committees** they control.
+
+Never a committee they don't control: committees that support or oppose them name them on their reports but aren't linked, and their spending stays under independent expenditures (Form 496). Each committee carries its type (from its own name and cover pages: "Officeholder account", "Ballot measure committee", otherwise "Campaign committee" and the office its statements name) and its own receipts for the period (Summary Page line 5 of its own statements). "Raised" adds them, less transfers between their own committees (Schedule A receipts from another committee they control), so money moved between them is counted once (`transfers_between_own` in `data/ca-campaign.json`). The Money tab lists each committee by name with its type, its own total and its Cal-Access record (`stateCommitteesCard()`).
+
+Checked first for Gavin Newsom (the Cal-Access export of November 28, 2026, `tools/ca_committee_probe.py`): his candidate filer (1308192) controls, among older ones, Governor Newsom's Ballot Measure Committee ("Yes on 50", 1380675: $122,043,598.78 received in 2025–2026), the Newsom Ballot Measure Committee (1486137: $17,444,266.79), his officeholder account (1460135: $0) and Newsom for California Governor 2022 (1414018: $0). Committees naming him that he doesn't control (recall committees for and against, labor and party committees) aren't linked and aren't counted.
+
+### Federal committees never loaded
+
+An official whose current period was read before committees were (`funding_progress.committees_at`, migration 0055) has their committees read in the next sync, whatever the step's weekly cadence (`CATCH_UP` in `src/index.js`, `committeesPending()`), once: only the committee lookups (`readCommitteesOnly()`), never the rest of the period again. After that, the normal weekly and deadline cadence.
+
+## When there's no amount
+
+With no amount for the period, Your representatives (the gray status on the right) and the official's header (the money tile's text) say why in a few words, from the records only, never guessed (`moneyGlances()` in `functions/_lib/money-line.js`). The first that applies:
+
+| Reason | Shown | From |
+|---|---|---|
+| Appointed office | "Appointed: no campaign" | The Cabinet (the office) |
+| Money not loaded for their state or office | "Campaign money for [State] isn't on ThePillory yet" | State officials outside California |
+| Filings for the period report $0 raised | "Reported raising $0 in [period]", linked to the latest report | A filed $0: `funding_totals.receipts` 0 (FEC), or Cal-Access statements for the period with $0 received; never a missing value |
+| No committee filed for the period | "No active campaign committee in [period]" | FEC: the period was read, the candidate has an FEC ID, no principal committee is registered for the period and no committee reports receipts; Cal-Access: read, and no statement from a committee they control for the period |
+| Term limit | "Can't run again for this office (term limit)", linked to its source | Only when both the office's term limit (the President: Amendment XXII, from `data/constitution.json`; California's Governor and statewide officers: the California Constitution, Article V, Sections 2 and 11, Article IX, Section 2) and the terms served in ThePillory's own records (`data/history/`: the same person's terms as President by GovTrack ID; California's general-election winners, the same office and exact name) show they can't run again (`functions/_lib/term-limits.js`). Otherwise term limits are never mentioned |
+
+Nothing at all when none applies (a member with no FEC ID on record, an official not read yet). Neutral wording only; tested in `test/money-visibility.test.mjs`.
 
 ## Sources and sync
 

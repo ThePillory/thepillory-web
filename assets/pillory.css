@@ -974,6 +974,11 @@ a.chip:hover { text-decoration: none; filter: brightness(0.97); }
 .head-stat:hover .stat-num { text-decoration: underline; }
 /* Your representatives: the amount raised as the row's status, in the text color (never a color of its own). */
 .row-amount { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+/* No amount: why, in a few words from the records (moneyGlances()), small and gray, never a color of its own. */
+.row-reason { color: var(--text-2); font-size: var(--fs-small); font-weight: 400; text-align: right; white-space: normal; flex: 0 1 auto; min-width: 0; display: block; }
+/* A reason wraps within at most 45% of the row, so the name keeps its room. */
+.row-end:has(> .row-reason) { flex: 0 1 45%; white-space: normal; }
+.head-stat--note .stat-label { color: var(--text-2); font-size: var(--fs-small); }
 .money-key { margin: 0 0 var(--space-2); }
 .money-full { margin: 0; }
 .networth-full { margin: 0; font-weight: 700; }

@@ -139,7 +139,9 @@ class Build(unittest.TestCase):
         ada = next(p for p in seats["ASM-8"] if p["name"] == "Ada Testassembly")
         self.assertEqual(sorted(c["filer_id"] for c in ada["committees"]), ["800", "801"])
         c = ada["cycles"]["2025-2026"]
-        self.assertEqual((c["raised"], c["spent"], c["statements"]), (51000.0, 20000.0, 2))
+        # Line 5 of both her committees (50,000 + 1,000), less the 7,000 her officeholder committee moved to her campaign: counted once.
+        self.assertEqual((c["raised"], c["spent"], c["statements"]), (44000.0, 20000.0, 2))
+        self.assertEqual(c["transfers_between_own"], 7000.0)
         # Individuals: totals and employers only, the memo entry, Schedule C and self-transfer left out.
         self.assertEqual(c["individuals"], {"total": 500 + 1500 + 2500 + 100 + 250 - 200.0, "count": 5})
         self.assertNotIn("REFUNDED SHOP", [e["employer"] for e in c["employers"]], "a refund alone isn't an employer")
@@ -161,6 +163,43 @@ class Build(unittest.TestCase):
         ltg = b.build(self.zip, self.officials)["officials"]["lieutenant-governor"]
         ie = ltg["cycles"]["2025-2026"]["ie"]
         self.assertEqual([(x["spender"], x["total"], x["race"]) for x in ie], [("Example Statewide Fund", 50000.0, "Lieutenant Governor")], "the city race namesake is left out")
+
+    def test_controlled_committees(self):
+        """Every committee Cal-Access links to the official's candidate filer (link type 12011): any office, officeholder
+        accounts, ballot measure committees; each with its type and own receipts; never one they don't control."""
+        links = [
+            {"FILER_ID_A": "8000", "FILER_ID_B": "900", "LINK_TYPE": "12011"},  # the governor's campaign committee (seed)
+            {"FILER_ID_A": "8000", "FILER_ID_B": "950", "LINK_TYPE": "12011"},  # a ballot measure committee she controls
+            {"FILER_ID_A": "8000", "FILER_ID_B": "951", "LINK_TYPE": "12011"},  # her officeholder account
+            {"FILER_ID_A": "950", "FILER_ID_B": "960", "LINK_TYPE": "12014"},   # a committee-to-measure link: not control
+        ]
+        covers = [
+            cover("40", "0", "950", "RCP", "Governor Testgovernor's Ballot Measure Committee", "1/1/2025", "6/30/2025", "", ""),
+            cover("41", "0", "951", "RCP", "Testgovernor for Governor 2022 Officeholder Account", "1/1/2025", "6/30/2025", "", ""),
+            # Not linked to her: an independent committee that names her (cover 5, "Friends of Testgovernor") and committee 960.
+            cover("42", "0", "960", "RCP", "Yes on Prop 99", "1/1/2025", "6/30/2025", "", ""),
+        ]
+        with zipfile.ZipFile(self.zip, "a") as z:
+            z.writestr("CalAccess/DATA/FILER_LINKS_CD.TSV", tsv(["FILER_ID_A", "FILER_ID_B", "LINK_TYPE"], links))
+        # Rebuild the export with the extra covers, summaries and a transfer from her officeholder account to her ballot measure committee.
+        import zipfile as zf_mod
+        with zf_mod.ZipFile(self.zip) as z:
+            files = {n: z.read(n).decode("latin-1") for n in z.namelist()}
+        files["CalAccess/DATA/CVR_CAMPAIGN_DISCLOSURE_CD.TSV"] += "".join("\t".join(str(r.get(c, "")) for c in CVR_COLS) + "\r\n" for r in covers)
+        files["CalAccess/DATA/SMRY_CD.TSV"] += "".join("\t".join(str(r.get(c, "")) for c in SMRY_COLS) + "\r\n" for r in [smry("40", "0", "5", "5000000"), smry("41", "0", "5", "20000"), smry("42", "0", "5", "777")])
+        files["CalAccess/DATA/RCPT_CD.TSV"] += "".join("\t".join(str(r.get(c, "")) for c in RCPT_COLS) + "\r\n" for r in [rcpt("40", "COM", "Testgovernor Officeholder Account", "", "", "", "3/1/2025", "10000", cmte="951")])
+        with zf_mod.ZipFile(self.zip, "w") as z:
+            for n, t in files.items():
+                z.writestr(n, t)
+        gov = b.build(self.zip, self.officials)["officials"]["governor"]
+        by = {c["filer_id"]: c for c in gov["committees"]}
+        self.assertEqual(sorted(by), ["900", "950", "951"], "the independent committee and the measure's own committee aren't hers")
+        self.assertEqual(gov["candidate_filers"], ["8000"])
+        self.assertEqual((by["950"]["kind"], by["951"]["kind"], by["900"]["kind"]), ("ballot-measure", "officeholder", "candidate"))
+        self.assertEqual(by["950"]["cycles"]["2025-2026"], {"receipts": 5000000.0, "transfers_in": 10000.0, "statements": 1})
+        cur = gov["cycles"]["2025-2026"]
+        # 120,500 + 0 (900) + 5,000,000 (950) + 20,000 (951), less the 10,000 moved from 951 to 950.
+        self.assertEqual((cur["raised"], cur["transfers_between_own"]), (5130500.0, 10000.0))
 
     def test_finish_industries(self):
         import json, subprocess

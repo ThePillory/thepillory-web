@@ -21,7 +21,7 @@ import { wordingProblems } from "../src/promises/check.js";
 const MIG = new URL("../migrations/", import.meta.url);
 
 // Words that would tie money to a vote, rank people or judge them.
-const BANNED = /voted with|\bbought\b|paid for|\bscore\b|\brank|\btop donor|\bowned\b|in the pocket|beholden|influence|\bswayed?\b|special interests?|dark money|\$0\b/i;
+const BANNED = /voted with|\bbought\b|paid for|\bscore\b|\brank|\btop donor|\bowned\b|in the pocket|beholden|influence|\bswayed?\b|special interests?|dark money|(?<!Reported raising )\$0\b/i; // "$0" only as a filed figure: "Reported raising $0 in [period]"
 const clean = (s) => {
   assert.doesNotMatch(s, BANNED, s);
   assert.deepEqual(wordingProblems(s), [], s);
@@ -137,7 +137,7 @@ test("money line: the header's small tile, the full sentence first on the Fundin
   assert.match(rule[1], /color: var\(--text\)/); // no color of its own: never green or red
 });
 
-test("Your representatives: the short amount on the right of each row and one label, from a few indexed reads; none for the Cabinet or without money", async () => {
+test("Your representatives: \"$X raised\" on the right of each row and one label, from a few indexed reads; with no amount, why, from the records", async () => {
   const sqlite = new DatabaseSync(":memory:");
   for (const f of readdirSync(MIG).filter((f) => f.endsWith(".sql")).sort()) sqlite.exec(readFileSync(new URL(f, MIG), "utf8"));
   const off = sqlite.prepare("INSERT INTO officials (id, slug, name, office, level, chamber, body, state, rank, term_start, source_url, last_verified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'https://example.org', '2026-11-01')");
@@ -163,23 +163,84 @@ test("Your representatives: the short amount on the right of each row and one la
   const all = sqlite.prepare("SELECT * FROM officials").all();
   const m = await moneyGlances(db, all, { cycle: 2026 });
   assert.deepEqual(m, {
-    p: { amount: 6_000_000, text: "$6M" },
-    v: { amount: 5_000_000, text: "$5M" }, // the President's ticket's campaign committees, never the President's leadership PAC
-    s: { amount: 2_500_000, text: "$2.5M" },
-    g: { amount: 300_000, text: "$300K" },
+    p: { amount: 6_000_000, text: "$6M raised" },
+    v: { amount: 5_000_000, text: "$5M raised" }, // the President's ticket's campaign committees, never the President's leadership PAC
+    s: { amount: 2_500_000, text: "$2.5M raised" },
+    g: { amount: 300_000, text: "$300K raised" },
+    // No amount: why, from the records. The Cabinet is appointed; the representative's filings report $0 (linked).
+    c: { reason: "Appointed: no campaign", text: "Appointed: no campaign" },
+    h: { reason: "Reported raising $0 in 2025–2026", text: "Reported raising $0 in 2025–2026", href: "https://www.fec.gov/" },
+    // The Assemblymember: Cal-Access not read for them yet, so nothing (never a guess).
   });
   // The row's status on the right; line 2 stays the role; one label above the list; no PAC share or industry here.
   const home = yourReps({ president: all.find((o) => o.id === "p"), senators: [all.find((o) => o.id === "s")], governor: all.find((o) => o.id === "g"), mine: [all.find((o) => o.id === "h")], money: m, cycle: 2026 });
   assert.match(home, /<p class="small secondary money-key">Campaign money raised, 2025–2026<\/p>/);
-  assert.match(home, /\[Senator\]<\/div><div class="list-meta">[^<]+<\/div><\/div><span class="row-end"><span class="list-status row-amount">\$2\.5M<\/span>/);
-  assert.doesNotMatch(home, /\[Representative\]<\/div><div class="list-meta">[^<]+<\/div><\/div><span class="row-end"><span class="list-status/, "nothing on the right without money");
-  assert.doesNotMatch(home, /from PACs|industry|\$0\b/);
+  assert.match(home, /\[Senator\]<\/div><div class="list-meta">[^<]+<\/div><\/div><span class="row-end"><span class="list-status row-amount">\$2\.5M raised<\/span>/);
+  // Without an amount, the reason, small and gray, in the same place; never an amount of "$0".
+  assert.match(home, /\[Representative\]<\/div><div class="list-meta">[^<]+<\/div><\/div><span class="row-end"><span class="list-status row-reason">Reported raising \$0 in 2025–2026<\/span>/);
+  assert.doesNotMatch(home, /from PACs|industry|row-amount">\$0/);
   // People stay in office order: the money never reorders them.
   assert.ok(home.indexOf("[President]") < home.indexOf("[Senator]") && home.indexOf("[Senator]") < home.indexOf("[Governor]") && home.indexOf("[Governor]") < home.indexOf("[Representative]"));
-  assert.match(yourRow(all.find((o) => o.id === "v"), m), /<span class="list-status row-amount">\$5M<\/span>/);
+  assert.match(yourRow(all.find((o) => o.id === "v"), m), /<span class="list-status row-amount">\$5M raised<\/span>/);
   assert.equal(yourReps({ senators: [all.find((o) => o.id === "s")], money: {}, cycle: 2026 }).includes("money-key"), false, "no label without amounts");
   // The amount in the text color, never a color of its own.
   assert.match(cssText(), /\.row-amount \{ color: var\(--text\)/);
+  assert.match(cssText(), /\.row-reason \{ color: var\(--text-2\); font-size: var\(--fs-small\)/);
+  for (const e of Object.values(m)) clean(e.text);
+});
+
+test("no amount: each reason from the records only, the first that applies", async () => {
+  const sqlite = new DatabaseSync(":memory:");
+  for (const f of readdirSync(MIG).filter((f) => f.endsWith(".sql")).sort()) sqlite.exec(readFileSync(new URL(f, MIG), "utf8"));
+  const off = sqlite.prepare("INSERT INTO officials (id, slug, name, office, level, chamber, body, state, rank, term_start, source_url, last_verified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'https://example.org', '2026-11-01')");
+  off.run("tx", "tx-gov", "[Governor of Texas]", "Governor", "state", "tx-executive", "tx-executive", "TX", 1, null);
+  off.run("n1", "no-cmte", "[Senator A]", "U.S. Senator", "federal", "us-senate", "us-senate", "CA", null, null);
+  off.run("n2", "unknown", "[Senator B]", "U.S. Senator", "federal", "us-senate", "us-senate", "CA", null, null);
+  off.run("ca0", "asm-zero", "[Assemblymember Zero]", "Assemblymember", "state", "ca-assembly", "state-legislature", "CA", null, null);
+  off.run("ca1", "asm-none", "[Assemblymember None]", "Assemblymember", "state", "ca-assembly", "state-legislature", "CA", null, null);
+  off.run("exec:govtrack:1", "pres", "[President]", "President", "federal", "us-executive", "us-executive", null, 1, "2025-01-20");
+  off.run("ca-exec:governor:x", "gov", "[Governor]", "Governor", "state", "ca-executive", "ca-executive", "CA", 1, null);
+  // Senator A: read this period, an FEC ID, no principal committee and no committee with receipts.
+  sqlite.prepare("INSERT INTO fec_candidates (official_id, candidate_id, committee_id, note, source_url) VALUES ('n1', 'S1', NULL, 'No principal campaign committee registered for 2025–2026.', 'https://www.fec.gov/')").run();
+  sqlite.prepare("INSERT INTO funding_progress (official_id, cycle, done_at, note, committees_at) VALUES ('n1', 2026, '2026-11-01', 'No FEC totals for 2025–2026.', '2026-11-01')").run();
+  // Senator B: never read: nothing said.
+  sqlite.prepare("INSERT INTO state_money_cycles (official_id, cycle, raised, spent, statements, source_url) VALUES ('ca0', '2025-2026', 0, 10, 2, 'https://cal-access.sos.ca.gov/x')").run();
+  sqlite.prepare("INSERT INTO disclosure_checks (official_id, source, checked_at, note) VALUES ('ca0', 'cal-access', '2026-11-01', 'x'), ('ca1', 'cal-access', '2026-11-01', 'x'), ('ca-exec:governor:x', 'cal-access', '2026-11-01', 'x')").run();
+  sqlite.prepare("INSERT INTO state_money_cycles (official_id, cycle, raised, spent, statements, source_url) VALUES ('ca-exec:governor:x', '2025-2026', 0, 0, 0, 'https://cal-access.sos.ca.gov/y')").run();
+  const db = d1(sqlite);
+  const all = sqlite.prepare("SELECT * FROM officials").all();
+  // The term-limit records: the President elected twice (two terms, Amendment XXII); the Governor won twice (Article V, Section 2).
+  const history = async () => ({
+    federalExecutive: { terms: [{ office: "President", govtrack: 1, start: "2017-01-20" }, { office: "President", govtrack: 1, start: "2025-01-20" }] },
+    california: { elections: [2018, 2022].map((year) => ({ year, winners: [{ office: "governor", district: null, name: "[Governor]" }] })) },
+  });
+  const m = await moneyGlances(db, all, { cycle: 2026, history });
+  assert.equal(m.tx.text, "Campaign money for Texas isn't on ThePillory yet");
+  assert.equal(m.n1.text, "No active campaign committee in 2025–2026");
+  assert.equal(m.n2, undefined, "not read: nothing, never a guess");
+  assert.deepEqual(m.ca0, { reason: "Reported raising $0 in 2025–2026", text: "Reported raising $0 in 2025–2026", href: "https://cal-access.sos.ca.gov/x" });
+  assert.equal(m.ca1.text, "No active campaign committee in 2025–2026");
+  // The term limit comes last, and only from both records: the office's limit and the terms served.
+  assert.deepEqual(m["exec:govtrack:1"], { reason: "Can't run again for this office (term limit)", text: "Can't run again for this office (term limit)", href: "/laws/constitution/#amend-22" });
+  assert.equal(m["ca-exec:governor:x"].text, "No active campaign committee in 2025–2026", "no committee comes before the term limit");
+  // One term served: no term-limit line.
+  const once = await moneyGlances(db, all.filter((o) => o.id.startsWith("exec:")), { cycle: 2026, history: async () => ({ federalExecutive: { terms: [{ office: "President", govtrack: 1, start: "2025-01-20" }] } }) });
+  assert.equal(once["exec:govtrack:1"], undefined);
+  for (const e of Object.values(m)) clean(e.text);
+});
+
+test("committees never loaded: federal-funding runs whatever its cadence, once", async () => {
+  const { committeesPending } = await import("../src/funding/sync.js");
+  const sqlite = new DatabaseSync(":memory:");
+  for (const f of readdirSync(MIG).filter((f) => f.endsWith(".sql")).sort()) sqlite.exec(readFileSync(new URL(f, MIG), "utf8"));
+  sqlite.prepare("INSERT INTO officials (id, slug, name, office, level, chamber, body, active, rank, source_url, last_verified) VALUES ('p', 'p', '[President]', 'President', 'federal', 'us-executive', 'us-executive', 1, 1, 'https://example.org', '2026-11-01')").run();
+  sqlite.prepare("INSERT INTO fec_candidates (official_id, candidate_id, source_url) VALUES ('p', 'P1', 'https://www.fec.gov/')").run();
+  const cycle = ((y) => (y % 2 ? y + 1 : y))(new Date().getUTCFullYear());
+  sqlite.prepare("INSERT INTO funding_progress (official_id, cycle, done_at) VALUES ('p', ?, '2026-11-05')").run(cycle);
+  const db = d1(sqlite);
+  assert.equal(await committeesPending(db), true, "the period was read before committees were");
+  sqlite.prepare("UPDATE funding_progress SET committees_at = '2026-11-28' WHERE official_id = 'p'").run();
+  assert.equal(await committeesPending(db), false, "once loaded: the normal cadence");
 });
 
 test("Methodology describes the money line (#money-line), in neutral words", () => {

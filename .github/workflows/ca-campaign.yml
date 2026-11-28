@@ -13,6 +13,14 @@ on:
   schedule:
     - cron: "17 14 * * 1"  # Mondays; Cal-Access's export is rebuilt nightly
   workflow_dispatch:
+    inputs:
+      probe:
+        description: "Only print which committees the export ties to one official (tools/ca_committee_probe.py); writes nothing"
+        type: boolean
+        default: false
+      probe_name:
+        description: "Probe: LASTNAME FIRSTNAME"
+        default: "NEWSOM GAVIN"
 permissions:
   contents: write
 # One at a time with every other workflow that commits data (tools/commit_data.sh).
@@ -30,17 +38,31 @@ jobs:
           node-version: 22
       # Reads the 1.6 GB export once (about 3 minutes); individuals leave this
       # step only as totals and by employer, never by name.
-      - run: python3 tools/build_ca_campaign.py /tmp/cabuild
+      # A read-only probe instead of a build (by hand only).
+      - name: Probe controlled committees
+        if: ${{ github.event.inputs.probe == 'true' }}
+        env:
+          PROBE_NAME: ${{ github.event.inputs.probe_name }}
+        run: |
+          mkdir -p /tmp/cabuild && curl -sSfL -o /tmp/cabuild/dbwebexport.zip https://campaignfinance.cdn.sos.ca.gov/dbwebexport.zip
+          # shellcheck disable=SC2086
+          python3 tools/ca_committee_probe.py /tmp/cabuild/dbwebexport.zip $PROBE_NAME | tee -a "$GITHUB_STEP_SUMMARY"
+      - if: ${{ github.event.inputs.probe != 'true' }}
+        run: python3 tools/build_ca_campaign.py /tmp/cabuild
       # Industries by the same keyword rules as federal funding, and lists cut to what pages show.
-      - run: node tools/ca_campaign_finish.mjs /tmp/cabuild/ca-campaign-raw.json data/ca-campaign.json
+      - if: ${{ github.event.inputs.probe != 'true' }}
+        run: node tools/ca_campaign_finish.mjs /tmp/cabuild/ca-campaign-raw.json data/ca-campaign.json
       # The committees formed for each statewide proposition, their money, and independent
       # spending on each (tools/build_measure_money.py), from the same export.
-      - run: python3 tools/build_measure_money.py /tmp/cabuild
+      - if: ${{ github.event.inputs.probe != 'true' }}
+        run: python3 tools/build_measure_money.py /tmp/cabuild
       - name: Commit the data
+        if: ${{ github.event.inputs.probe != 'true' }}
         run: bash tools/commit_data.sh "Refresh California campaign data from the Cal-Access export" data/ca-campaign.json data/elections/measure-money-*.json
       # Lobbying (Forms 635, 645, 625 and 615) from the same export, straight into D1:
       # only filings new or amended since the last run (tools/load_ca_lobbying.py).
       - name: Load California lobbying into D1
+        if: ${{ github.event.inputs.probe != 'true' }}
         run: python3 tools/load_ca_lobbying.py /tmp/cabuild/dbwebexport.zip --mode load
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

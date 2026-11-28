@@ -23,12 +23,24 @@ Who:
     first name (or the nickname the list gives in parentheses). A name two
     candidates in the same contest could both match is left out.
 
-For each, the campaign committees they control (a Form 460 cover page filed
-by a candidate or candidate-controlled committee, entity CAO or CTL, naming
-them as the candidate; for legislators, also naming their seat) and, by
-two-year period (2023-2024, 2025-2026):
+For each, every committee they control (docs/funding.md, "Which committees
+count"): first the committees whose Form 460 cover pages, filed by a
+candidate or candidate-controlled committee (entity CAO or CTL), name them as
+the candidate (for legislators, also naming their seat); then Cal-Access's
+own record of control, FILER_LINKS_CD link type 12011 (a candidate/officeholder
+filer to a committee it controls): the candidate filer linked to those
+committees, and every committee it controls, for any office, its officeholder
+accounts and the ballot measure committees it controls. Never a committee
+the official doesn't control (independent committees supporting or opposing
+them name them on their reports, but aren't linked). Each committee carries
+its type (CONTROLLED_KINDS: a campaign committee for an office, an
+officeholder account, or a ballot measure committee, from its own name and
+cover pages) and, by two-year period (2023-2024, 2025-2026):
   - raised and spent: the sum of each statement's Summary Page lines 5 (total
-    contributions received) and 11 (total expenditures made), column A;
+    contributions received) and 11 (total expenditures made), column A, less
+    transfers between the official's own committees (Schedule A receipts from
+    another committee they control), so money moved between them is counted
+    once; each committee's own receipts (line 5) are kept too;
   - contributions itemized on Schedule A (monetary contributions), latest
     amendment of each statement, memo entries left out, transfers between the
     official's own committees left out:
@@ -74,6 +86,20 @@ RACES = {"GOV": "Governor", "LTG": "Lieutenant Governor", "SOS": "Secretary of S
 ORG_ENTITIES = {"COM": "committee", "SCC": "small contributor committee", "PTY": "political party", "OTH": "organization"}
 LINES = {"5": "contributions", "11": "expenditures", "16": "cash_end"}
 MAX_REPORTS = 12  # per committee, newest first
+CONTROLLED_LINK = "12011"  # FILER_LINKS_CD: a candidate/officeholder filer (type 8) to a committee it controls (type 16)
+OFFICE_NAMES = {"GOV": "Governor", "LTG": "Lieutenant Governor", "SOS": "Secretary of State", "CON": "Controller", "TRE": "Treasurer",
+                "ATT": "Attorney General", "INS": "Insurance Commissioner", "SPI": "Superintendent of Public Instruction",
+                "ASM": "State Assembly", "SEN": "State Senate", "BOE": "Board of Equalization"}
+
+
+def committee_kind(name, entities, offices):
+    """A controlled committee's type, from its own name and cover pages: "officeholder", "ballot-measure" or "candidate"."""
+    n = (name or "").upper()
+    if "OFFICEHOLDER" in n:
+        return "officeholder"
+    if "BMC" in entities or "BALLOT MEASURE" in n or re.search(r"\b(YES|NO) ON (PROP|PROPOSITION|\d)", n):
+        return "ballot-measure"
+    return "candidate"
 
 csv.field_size_limit(10**9)
 
@@ -110,7 +136,9 @@ def iso(d):
 
 
 def rows(zf, table):
-    member = next(n for n in zf.namelist() if n.upper().endswith(f"/{table}.TSV"))
+    member = next((n for n in zf.namelist() if n.upper().endswith(f"/{table}.TSV")), None)
+    if member is None:
+        return  # a table the export doesn't carry reads as empty
     with zf.open(member) as raw:
         reader = csv.reader(io.TextIOWrapper(raw, encoding="latin-1", newline=""), delimiter="\t", quoting=csv.QUOTE_NONE)
         header = next(reader)
@@ -160,7 +188,9 @@ NICKNAMES = {
 }
 
 # Cal-Access office codes (OFFICE_CD on cover pages) for the statewide offices on the certified list.
-STATEWIDE_CODES = {
+# (Its own name: it once reused STATEWIDE_CODES, which replaced the set above, so no statewide
+# independent expenditure was ever matched.)
+CERTIFIED_CODES = {
     "Governor": "GOV", "Lieutenant Governor": "LTG", "Secretary of State": "SOS", "Controller": "CON",
     "Treasurer": "TRE", "Attorney General": "ATT", "Insurance Commissioner": "INS",
     "Superintendent of Public Instruction": "SPI",
@@ -175,7 +205,7 @@ def certified_statewide():
         return {}
     out = {}
     for c in json.loads(ELECTION.read_text()).get("contests", []):
-        code = STATEWIDE_CODES.get(c.get("office"))
+        code = CERTIFIED_CODES.get(c.get("office"))
         if c.get("scope") != "statewide" or not code:
             continue
         people = []
@@ -232,20 +262,25 @@ def build(zip_path, officials):
                 "cand": fold(f'{r["CAND_NAMF"] or ""} {r["CAND_NAML"] or ""}'),
             }
             continue
-        if form != "F460" or r["ENTITY_CD"] not in ("CAO", "CTL"):
+        if form != "F460":
             continue
         thru = iso(r["THRU_DATE"])
         if not thru or thru < SINCE:
             continue
-        first, last = fold((r["CAND_NAMF"] or "").split(" ")[0]), fold(r["CAND_NAML"])
         fid, amend = r["FILING_ID"], int(r["AMEND_ID"] or 0)
         cover = {
             "filing_id": fid, "amend_id": amend, "filer_id": r["FILER_ID"], "committee": (r["FILER_NAML"] or "").strip(),
             "from": iso(r["FROM_DATE"]), "thru": thru, "filed": iso(r["RPT_DATE"]),
+            "entity": r["ENTITY_CD"], "office": (r["OFFICE_CD"] or "").strip().upper(),
         }
+        # Every committee's statements (a controlled committee can file as a recipient or ballot measure committee).
         prev = filer_covers.setdefault(r["FILER_ID"], {}).get(fid)
         if not prev or prev["amend_id"] < amend:
             filer_covers[r["FILER_ID"]][fid] = cover
+        # Whose committee it is: only a cover filed by a candidate or candidate-controlled committee names its candidate.
+        if r["ENTITY_CD"] not in ("CAO", "CTL"):
+            continue
+        first, last = fold((r["CAND_NAMF"] or "").split(" ")[0]), fold(r["CAND_NAML"])
         # Who this committee belongs to.
         for p in by_last.get(last, []):
             if first_matches(first, p["first"]):
@@ -265,6 +300,19 @@ def build(zip_path, officials):
             who["filers"].add(r["FILER_ID"])
 
     everyone = list(statewide.values()) + [p for people in seats.values() for p in people] + [p for _, people in contests.values() for p in people]
+
+    # Cal-Access's own record of control: each candidate filer and the committees it controls (link type 12011).
+    controls, controller = {}, {}
+    for r in rows(zf, "FILER_LINKS_CD"):
+        if (r.get("LINK_TYPE") or "").strip() != CONTROLLED_LINK:
+            continue
+        a, b = r["FILER_ID_A"].strip(), r["FILER_ID_B"].strip()
+        controls.setdefault(a, set()).add(b)
+        controller.setdefault(b, set()).add(a)
+    for p in everyone:
+        cands = {a for f in p["filers"] for a in controller.get(f, ())}
+        p["candidate_filers"] = sorted(cands)
+        p["filers"] |= {b for a in cands for b in controls.get(a, ())}
     for p in everyone:
         for f in p["filers"]:
             for c in filer_covers.get(f, {}).values():
@@ -306,7 +354,10 @@ def build(zip_path, officials):
             continue
         for p in people:
             if (r["CMTE_ID"] or "").strip() in p["filers"]:
-                continue  # a transfer between the official's own committees
+                # A transfer between the official's own committees: counted once, where it was first raised.
+                key = (r["FILING_ID"], r["AMEND_ID"])
+                p.setdefault("transfers_in", {})[key] = p.setdefault("transfers_in", {}).get(key, 0.0) + amount
+                continue
             b = bucket(p, cyc)
             if r["ENTITY_CD"] == "IND":
                 # A refund is a negative row: it nets against the totals, but it isn't a contribution.
@@ -375,9 +426,19 @@ def build(zip_path, officials):
     # 5. Out: committees with their statements, and money by period.
     def out(p):
         committees = {}
+        transfers = p.get("transfers_in", {})
         for c in p["covers"].values():
-            k = committees.setdefault(c["filer_id"], {"filer_id": c["filer_id"], "name": c["committee"], "source_url": COMMITTEE_PAGE.format(c["filer_id"]), "reports": []})
+            k = committees.setdefault(c["filer_id"], {"filer_id": c["filer_id"], "name": c["committee"], "source_url": COMMITTEE_PAGE.format(c["filer_id"]), "reports": [], "entities": set(), "offices": set(), "cycles": {}})
             k["name"] = k["name"] or c["committee"]
+            k["entities"].add(c.get("entity") or "")
+            if c.get("office"):
+                k["offices"].add(c["office"])
+            cyc = cycle_of(c["thru"])
+            if cyc:
+                kc = k["cycles"].setdefault(cyc, {"receipts": 0.0, "transfers_in": 0.0, "statements": 0})
+                kc["receipts"] += c.get("contributions") or 0
+                kc["transfers_in"] += transfers.get((c["filing_id"], str(c["amend_id"])), 0.0)
+                kc["statements"] += 1
             k["reports"].append({
                 "filing_id": c["filing_id"], "amend_id": c["amend_id"], "from": c["from"], "thru": c["thru"], "filed": c["filed"],
                 "contributions": c.get("contributions"), "expenditures": c.get("expenditures"), "cash_end": c.get("cash_end"),
@@ -389,8 +450,11 @@ def build(zip_path, officials):
             m = p["money"].get(name, {"individuals": {"total": 0.0, "count": 0}, "employers": {}, "organizations": {}, "ie": {}})
             if not reps and not m["ie"]:
                 continue
+            moved = sum(transfers.get((c["filing_id"], str(c["amend_id"])), 0.0) for c in reps)
             cycles[name] = {
-                "raised": round(sum(c.get("contributions") or 0 for c in reps), 2),
+                # Line 5 of every controlled committee's statements, less transfers between them (counted once).
+                "raised": round(max(0.0, sum(c.get("contributions") or 0 for c in reps) - moved), 2),
+                "transfers_between_own": round(moved, 2),
                 "spent": round(sum(c.get("expenditures") or 0 for c in reps), 2),
                 "statements": len(reps),
                 # Net of refunds; never below zero (a refund of money given in an earlier period).
@@ -404,8 +468,13 @@ def build(zip_path, officials):
             }
         for k in committees.values():
             k["reports"] = sorted(k["reports"], key=lambda x: (x["thru"], x["from"] or ""), reverse=True)[:MAX_REPORTS]
+            k["kind"] = committee_kind(k["name"], k.pop("entities"), k["offices"])
+            offices = sorted(k.pop("offices") - {"OTH"})
+            k["office"] = OFFICE_NAMES.get(offices[0]) if k["kind"] == "candidate" and len(offices) == 1 else None
+            k["cycles"] = {cyc: {"receipts": round(v["receipts"], 2), "transfers_in": round(v["transfers_in"], 2), "statements": v["statements"]} for cyc, v in sorted(k["cycles"].items())}
         return {
             "name": p["name"],
+            "candidate_filers": p.get("candidate_filers", []),
             "committees": sorted(committees.values(), key=lambda k: k["reports"][0]["thru"] if k["reports"] else "", reverse=True),
             "cycles": cycles,
         }
@@ -443,6 +512,11 @@ def main():
     (work / "ca-campaign-raw.json").write_text(json.dumps(doc))
     for k, v in data["officials"].items():
         print(f"{k}: {len(v['committees'])} committee(s), {sum(len(c['reports']) for c in v['committees'])} statement(s), periods {sorted(v['cycles'])}")
+        cur = v["cycles"].get("2025-2026") or {}
+        print(f"  2025-2026 raised {cur.get('raised')} (transfers between own committees {cur.get('transfers_between_own')}), candidate filer(s) {v['candidate_filers']}")
+        for c in v["committees"]:
+            r = (c["cycles"].get("2025-2026") or {})
+            print(f"    {c['filer_id']} {c['name']} [{c['kind']}{', ' + c['office'] if c.get('office') else ''}]: 2025-2026 receipts {r.get('receipts')} (from own committees {r.get('transfers_in')})")
     for k, people in data["candidates"].items():
         for v in people:
             print(f"candidate {k}: {v['name']}: {len(v['committees'])} committee(s) {[c['name'] for c in v['committees']]}")

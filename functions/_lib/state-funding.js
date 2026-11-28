@@ -89,6 +89,42 @@ function statementsSection(o, m) {
 </details>`;
 }
 
+export const CA_KINDS = { candidate: "Campaign committee", officeholder: "Officeholder account", "ballot-measure": "Ballot measure committee" };
+
+/**
+ * Every committee Cal-Access links to the official as one they control (docs/funding.md, "Which committees
+ * count"), each by name with its type, its own receipts in the period (Summary Page line 5 of its own
+ * statements) and its Cal-Access record. "" when none had statements in the period.
+ */
+export function stateCommitteesCard(o, m) {
+  const start = `${m.cycle - 1}-01-01`;
+  const end = `${m.cycle}-12-31`;
+  const list = (m.committees || [])
+    .map((k) => {
+      const t = (m.totals || []).filter((x) => x.filer_id === k.filer_id && x.period_end >= start && x.period_end <= end);
+      return { ...k, receipts: t.reduce((s, x) => s + (Number(x.contributions) || 0), 0), statements: t.length };
+    })
+    .filter((k) => k.statements)
+    .sort((a, b) => b.receipts - a.receipts);
+  if (!list.length) return "";
+  const kind = (k) => [CA_KINDS[k.kind] || "Controlled committee", k.kind === "candidate" && k.office ? k.office : ""].filter(Boolean).join(", ");
+  const sum = list.reduce((s, k) => s + k.receipts, 0);
+  const moved = m.row && m.row.raised != null && sum > m.row.raised ? sum - m.row.raised : 0;
+  return `<section class="card stack-sm" id="funding-committees">
+  <h3>Committees</h3>
+  <ul class="plain-list">${list
+    .map(
+      (k) =>
+        `<li class="list-row"><div><div class="list-title">${safeUrl(k.source_url) ? `<a class="inline-link" href="${esc(k.source_url)}" target="_blank" rel="noopener">${esc(k.name || `Committee ${k.filer_id}`)} ↗</a>` : esc(k.name || `Committee ${k.filer_id}`)}</div>` +
+        `<div class="list-meta">${esc(kind(k))} · ${k.statements} statement${k.statements === 1 ? "" : "s"}</div></div><span class="list-status row-amount">${money(k.receipts)}</span></li>`
+    )
+    .join("")}</ul>
+  <p class="hint">Each committee Cal-Access records ${esc(o.name)} as controlling, with the contributions its own statements report received in ${period(m.cycle)} (Summary Page line 5). Raised adds them${
+    moved ? `, counting the ${money(moved)} moved between these committees once` : ""
+  }. Committees that support or oppose ${esc(o.name)} without being controlled by them aren't included; their spending is under independent expenditures. <a class="tap" href="/about/methodology/#money-line">Which committees count</a></p>
+</section>`;
+}
+
 /** The Funding tab for a California official. `m` is stateMoneyFor's result. */
 export function stateFundingTab(o, m, base) {
   if (!m || !m.check) return loading();
@@ -176,6 +212,7 @@ export function stateFundingTab(o, m, base) {
 ${cycleNav(base, m)}
 ${intro}
 ${totals}
+${stateCommitteesCard(o, m)}
 ${industries}
 ${employers}
 ${orgs}
