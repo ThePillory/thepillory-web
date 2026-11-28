@@ -20,11 +20,14 @@ function largestIndustry(rows, amount) {
 
 const industryPart = (name) => (name ? `Largest industry (approximate): ${name}` : "");
 
-/** A member of Congress (fundingFor's result): FEC totals for the period shown. */
-export function federalMoneyLine(f) {
+/**
+ * FEC totals for the period shown (fundingFor's result): a member of Congress ("Raised $X in …"), or the
+ * President's campaign committee, named as such (`lead`). Never the inaugural committee: it isn't a campaign.
+ */
+export function federalMoneyLine(f, lead = "Raised") {
   const t = f && f.totals;
   if (!t || !(t.receipts > 0)) return null;
-  const parts = [`Raised ${dollars(t.receipts)} in ${span(f.cycle)}`];
+  const parts = [`${lead} ${dollars(t.receipts)} in ${span(f.cycle)}`];
   if (t.pac != null) parts.push(`${Math.round((100 * t.pac) / t.receipts)}% from PACs`);
   const ind = industryPart(largestIndustry(f.industries, (r) => (r.pac || 0) + (r.emp || 0)));
   if (ind) parts.push(ind);
@@ -72,6 +75,13 @@ export function moneyLine(o, funding) {
   if (funding.kind === "county") {
     const text = localMoneyLine(funding.local, o.name);
     return text ? { text, source: MONEY_SOURCE.county } : null;
+  }
+  // The President: their own campaign committee. The Vice President: only when they ran on the President's
+  // ticket, named as the ticket's committee. The Cabinet is appointed and has no line.
+  if (funding.kind === "president" || (funding.kind === "vice-president" && funding.ticket)) {
+    const lead = funding.kind === "president" ? "Campaign committee raised" : "The President's ticket's campaign committee raised";
+    const text = federalMoneyLine(funding.campaign, lead);
+    return text ? { text, source: MONEY_SOURCE.federal } : null;
   }
   if (o.chamber === "us-house" || o.chamber === "us-senate") {
     const text = federalMoneyLine(funding);

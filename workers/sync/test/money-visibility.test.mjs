@@ -62,6 +62,21 @@ test("money line: a California official, from Cal-Access, and a county superviso
   for (const s of [ca.text, sup.text]) clean(s);
 });
 
+test("money line: the President's campaign committee, the Vice President only on the President's ticket, never the inaugural committee, no Cabinet line", () => {
+  const campaign = { cycle: 2026, totals: { receipts: 5_000_000, pac: 500_000 }, industries: [] };
+  const inaugural = { committee: { name: "Inaugural Committee" }, reports: [{ total_receipts: 200_000_000 }] };
+  const pres = moneyLine({ chamber: "us-executive", name: "[President]" }, { kind: "president", campaign, inaugural });
+  assert.deepEqual(pres, { text: "Campaign committee raised $5,000,000 in 2025–2026 · 10% from PACs", source: "reports filed with the Federal Election Commission" });
+  const vp = moneyLine({ chamber: "us-executive", name: "[Vice President]" }, { kind: "vice-president", ticket: true, campaign, inaugural });
+  assert.equal(vp.text, "The President's ticket's campaign committee raised $5,000,000 in 2025–2026 · 10% from PACs");
+  // Not on the ticket (a Vice President who took office later): no line.
+  assert.equal(moneyLine({ chamber: "us-executive", name: "[Vice President]" }, { kind: "vice-president", ticket: false, campaign: null, inaugural }), null);
+  // The inaugural committee alone is never a money line.
+  assert.equal(moneyLine({ chamber: "us-executive", name: "[President]" }, { kind: "president", campaign: { cycle: 2026, totals: null }, inaugural }), null);
+  assert.equal(moneyLine({ chamber: "us-executive", name: "[Secretary]" }, { kind: "cabinet", campaign: null, inaugural: null }), null);
+  for (const t of [pres.text, vp.text]) clean(t);
+});
+
 test("money line: the official page shows it bold, body size, linked to the Funding tab, in Quick mode's card too", () => {
   const src = readFileSync(new URL("../../../functions/reps/[[path]].js", import.meta.url), "utf8");
   assert.match(src, /<p class="summary-line money-glance"><a href="#funding">\$\{esc\(glance\.text\)\} ›<\/a><\/p>/);
