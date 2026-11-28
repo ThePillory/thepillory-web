@@ -52,6 +52,8 @@ import init0050 from "../migrations/0050_passages.sql";
 import init0051 from "../migrations/0051_status_counts.sql";
 import init0052 from "../migrations/0052_agencies.sql";
 import init0053 from "../migrations/0053_money_filings.sql";
+import init0054 from "../migrations/0054_official_committees.sql";
+import init0055 from "../migrations/0055_committee_catchup.sql";
 import { isHttp, today } from "./util.js";
 import { totals } from "./rollcall.js";
 import { differs } from "./upsert.js";
@@ -111,6 +113,8 @@ const MIGRATIONS = [
   ["0051_status_counts.sql", init0051],
   ["0052_agencies.sql", init0052],
   ["0053_money_filings.sql", init0053],
+  ["0054_official_committees.sql", init0054],
+  ["0055_committee_catchup.sql", init0055],
 ];
 
 // Migrations tools/load_trades.py can also apply (the "Load stock trades"
@@ -133,6 +137,8 @@ const ALREADY_APPLIED = {
   "0049_company_tax_reader.sql": (db) => hasColumn(db, "company_tax_filings", "reader"),
   // Its ALTERs can't run twice; the last column there means the whole migration was applied.
   "0050_passages.sql": (db) => hasColumn(db, "bill_list", "passage_date"),
+  // Its ALTERs can't run twice; the last column there means the whole migration was applied.
+  "0055_committee_catchup.sql": (db) => hasColumn(db, "state_campaign_committees", "office"),
 };
 
 function statements(sql) {
