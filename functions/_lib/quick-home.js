@@ -20,7 +20,6 @@ import { loadIndex, loadTerm, caseHref } from "./scotus.js";
 import { plainChamber } from "./simple.js";
 import { METHOD_WORDS, NOT_RECORDED } from "../../workers/sync/src/passages/parse.js";
 import { filingEvents, filingsSql } from "../../workers/sync/src/funding/filings.js";
-import { moneyHint } from "./money-line.js";
 
 export const THIS_WEEK_DAYS = 30; // how far back "this week" looks when the past week is quiet
 export const THIS_WEEK_MAX = 5;
@@ -228,7 +227,6 @@ export function yourReps({ president, senators = [], governor, mine = [], lookup
 <section class="card stack-sm simple-keep" id="your-reps" aria-labelledby="h-your-reps">
   <div class="section-head"><h2 class="label" id="h-your-reps">Your representatives${stateName ? ` in ${esc(stateName)}` : ""}</h2><a class="section-link" href="${esc(allHref)}">All</a></div>
   ${rows ? `<div>${rows}</div>` : '<p class="small secondary">Appears after the data sync runs.</p>'}
-  ${moneyHint(money)}
   ${known}
   ${lookup}
 </section>`;
