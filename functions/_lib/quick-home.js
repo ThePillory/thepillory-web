@@ -205,8 +205,9 @@ export const JOB = {
   legislator: "Writes state laws for your district",
 };
 
-const personRow = (o, job) =>
-  `<a class="list-row link-row" href="/reps/${esc(o.slug)}/"><div><div class="list-title">${esc(o.name)}</div><div class="list-meta">${esc(job)}</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>`;
+// A second small line with the money, when there is any (functions/_lib/money-line.js moneyGlances()).
+const personRow = (o, job, money = {}) =>
+  `<a class="list-row link-row" href="/reps/${esc(o.slug)}/"><div><div class="list-title">${esc(o.name)}</div><div class="list-meta">${esc(job)}</div>${money[o.id] ? `<div class="list-meta">${esc(money[o.id])}</div>` : ""}</div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>`;
 
 /**
  * "Your representatives": one card, each person once. The President, the
@@ -215,12 +216,12 @@ const personRow = (o, job) =>
  * address/ZIP box (`lookup`, the form's HTML) until then. `allHref`: every
  * level, county included, on the Reps tab. `stateName`: the state shown, in the heading.
  */
-export function yourReps({ president, senators = [], governor, mine = [], lookup = "", known = "", allHref = "/reps/", stateName = null }) {
+export function yourReps({ president, senators = [], governor, mine = [], lookup = "", known = "", allHref = "/reps/", stateName = null, money = {} }) {
   const rows = [
-    president ? personRow(president, JOB.president) : "",
-    ...senators.map((o) => personRow(o, JOB.senator)),
-    governor ? personRow(governor, JOB.governor) : "",
-    ...mine.map((o) => personRow(o, o.chamber === "us-house" ? JOB.house : `${JOB.legislator}${o.office ? ` · ${o.office}` : ""}`)),
+    president ? personRow(president, JOB.president, money) : "",
+    ...senators.map((o) => personRow(o, JOB.senator, money)),
+    governor ? personRow(governor, JOB.governor, money) : "",
+    ...mine.map((o) => personRow(o, o.chamber === "us-house" ? JOB.house : `${JOB.legislator}${o.office ? ` · ${o.office}` : ""}`, money)),
   ].join("");
   return `
 <section class="card stack-sm simple-keep" id="your-reps" aria-labelledby="h-your-reps">

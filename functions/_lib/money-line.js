@@ -102,3 +102,67 @@ export function giversLine(n, { california = false } = {}) {
   const text = `${n} ${n === 1 ? "organization that lobbied on this bill also gave" : "organizations that lobbied on this bill also gave"} to ${who} ›`;
   return `<p class="summary-line money-glance"><a href="#money">${text}</a></p>`;
 }
+
+// ---------------------------------------------------------------------------
+// Your representatives: the same line for each person listed, read in a few indexed queries.
+
+const ph = (n) => Array(n).fill("?").join(",");
+const FEDERAL = new Set(["us-house", "us-senate"]);
+const CA = new Set(["ca-assembly", "ca-senate", "ca-executive"]);
+
+/**
+ * { [official id]: text } for the people in Your representatives, by the same rules as each page's header:
+ * members of Congress and the President (FEC totals), the Vice President only on the President's ticket
+ * (the President's numbers, named as the ticket's committee), California's officials (Cal-Access), county
+ * supervisors (NetFile, `local` docs), nobody else. People without money get no entry. `cycle`: the
+ * two-year period, as the pages default to it.
+ */
+export async function moneyGlances(db, people, { cycle, local = null } = {}) {
+  const list = (people || []).filter(Boolean);
+  const out = {};
+  if (!db || !list.length) return out;
+  const president = list.find((o) => o.chamber === "us-executive" && o.rank === 1) || null;
+  const vp = list.find((o) => o.chamber === "us-executive" && o.rank === 2) || null;
+  const ticket = !!(president && vp && president.term_start && president.term_start === vp.term_start);
+  const fed = list.filter((o) => FEDERAL.has(o.chamber) || o === president);
+  const ca = list.filter((o) => CA.has(o.chamber));
+  const fedIds = fed.map((o) => o.id);
+  const caIds = ca.map((o) => o.id);
+  const key = `${cycle - 1}-${cycle}`;
+  const [totals, fedInd, caRows, caInd] = await Promise.all([
+    fedIds.length ? db.prepare(`SELECT official_id, receipts, pac FROM funding_totals WHERE cycle = ? AND official_id IN (${ph(fedIds.length)})`).bind(cycle, ...fedIds).all() : { results: [] },
+    fedIds.length
+      ? db.prepare(
+          `SELECT official_id, industry, SUM(total) AS pac FROM (
+             SELECT official_id, industry, total FROM funding_pacs WHERE cycle = ? AND official_id IN (${ph(fedIds.length)}) AND industry != 'other'
+             UNION ALL SELECT official_id, industry, total FROM funding_employers WHERE cycle = ? AND official_id IN (${ph(fedIds.length)}) AND industry != 'other')
+           GROUP BY official_id, industry`
+        ).bind(cycle, ...fedIds, cycle, ...fedIds).all()
+      : { results: [] },
+    caIds.length ? db.prepare(`SELECT official_id, raised FROM state_money_cycles WHERE cycle = ? AND official_id IN (${ph(caIds.length)})`).bind(key, ...caIds).all() : { results: [] },
+    caIds.length ? db.prepare(`SELECT official_id, industry, total FROM state_money_industries WHERE cycle = ? AND official_id IN (${ph(caIds.length)})`).bind(key, ...caIds).all() : { results: [] },
+  ]);
+  const by = (rows) => rows.reduce((m, r) => ((m[r.official_id] ||= []).push(r), m), {});
+  const tot = Object.fromEntries(totals.results.map((r) => [r.official_id, r]));
+  const ind = by(fedInd.results.map((r) => ({ ...r, emp: 0 })));
+  for (const o of fed) {
+    const lead = o === president ? "Campaign committee raised" : "Raised";
+    const text = federalMoneyLine({ cycle, totals: tot[o.id] || null, industries: ind[o.id] || [] }, lead);
+    if (text) out[o.id] = text;
+  }
+  if (ticket && tot[president.id]) {
+    const text = federalMoneyLine({ cycle, totals: tot[president.id], industries: ind[president.id] || [] }, "The President's ticket's campaign committee raised");
+    if (text) out[vp.id] = text;
+  }
+  const caRow = Object.fromEntries(caRows.results.map((r) => [r.official_id, r]));
+  const caI = by(caInd.results);
+  for (const o of ca) {
+    const text = stateMoneyLine({ cycle, row: caRow[o.id] || null, industries: caI[o.id] || [] });
+    if (text) out[o.id] = text;
+  }
+  for (const o of list.filter((x) => x.chamber === "county-board")) {
+    const text = localMoneyLine(local, o.name);
+    if (text) out[o.id] = text;
+  }
+  return out;
+}

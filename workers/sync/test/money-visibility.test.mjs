@@ -8,7 +8,9 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { DatabaseSync } from "node:sqlite";
 import { readFileSync, readdirSync } from "node:fs";
-import { federalMoneyLine, stateMoneyLine, localMoneyLine, moneyLine, giversLine } from "../../../functions/_lib/money-line.js";
+import { federalMoneyLine, stateMoneyLine, localMoneyLine, moneyLine, giversLine, moneyGlances } from "../../../functions/_lib/money-line.js";
+import { yourReps } from "../../../functions/_lib/quick-home.js";
+import { yourRow } from "../../../functions/_lib/reps-index.js";
 import { fecFilingRows, calAccessFilingRows, filingEvents, filingSentence, periodWords, FEC_REPORT_TYPES } from "../src/funding/filings.js";
 import { thisWeek } from "../../../functions/_lib/quick-home.js";
 import { buildEditions } from "../src/email/edition.js";
@@ -87,6 +89,40 @@ test("money line: the official page shows it bold, body size, linked to the Fund
   assert.match(rule[1], /font-size: var\(--fs-body\)/);
   assert.match(rule[1], /font-weight: 700/);
   assert.match(rule[1], /color: var\(--text\)/); // no color of its own: never green or red
+});
+
+test("Your representatives: the same line under each person, from a few indexed reads; none for the Cabinet or without money", async () => {
+  const sqlite = new DatabaseSync(":memory:");
+  for (const f of readdirSync(MIG).filter((f) => f.endsWith(".sql")).sort()) sqlite.exec(readFileSync(new URL(f, MIG), "utf8"));
+  const off = sqlite.prepare("INSERT INTO officials (id, slug, name, office, level, chamber, body, state, rank, term_start, source_url, last_verified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'https://example.org', '2026-11-01')");
+  off.run("p", "pres", "[President]", "President", "federal", "us-executive", "us-executive", null, 1, "2025-01-20");
+  off.run("v", "vp", "[Vice President]", "Vice President", "federal", "us-executive", "us-executive", null, 2, "2025-01-20");
+  off.run("c", "sec", "[Secretary]", "Secretary", "federal", "us-executive", "us-executive", null, 3, "2025-01-21");
+  off.run("s", "sen", "[Senator]", "U.S. Senator", "federal", "us-senate", "us-senate", "CA", null, null);
+  off.run("h", "rep", "[Representative]", "U.S. Representative", "federal", "us-house", "us-house", "CA", null, null);
+  off.run("g", "gov", "[Governor]", "Governor", "state", "ca-executive", "ca-executive", "CA", 1, null);
+  off.run("a", "asm", "[Assemblymember]", "Assemblymember", "state", "ca-assembly", "state-legislature", "CA", null, null);
+  const tot = sqlite.prepare("INSERT INTO funding_totals (official_id, cycle, candidate_id, receipts, pac, source_url) VALUES (?, 2026, ?, ?, ?, 'https://www.fec.gov/')");
+  tot.run("p", "P1", 5_000_000, 500_000);
+  tot.run("s", "S1", 2_000_000, 1_000_000);
+  tot.run("h", "H1", 0, 0); // nothing raised: no line
+  sqlite.prepare("INSERT INTO funding_pacs (official_id, cycle, committee_id, name, total, count, industry, source_url) VALUES ('s', 2026, 'C1', 'Example PAC', 90000, 1, 'health', 'https://www.fec.gov/')").run();
+  sqlite.prepare("INSERT INTO state_money_cycles (official_id, cycle, raised, spent, statements, source_url) VALUES ('g', '2025-2026', 300000, 100000, 2, 'https://cal-access.sos.ca.gov/')").run();
+  const db = d1(sqlite);
+  const all = sqlite.prepare("SELECT * FROM officials").all();
+  const m = await moneyGlances(db, all, { cycle: 2026 });
+  assert.deepEqual(m, {
+    p: "Campaign committee raised $5,000,000 in 2025–2026 · 10% from PACs",
+    v: "The President's ticket's campaign committee raised $5,000,000 in 2025–2026 · 10% from PACs",
+    s: "Raised $2,000,000 in 2025–2026 · 50% from PACs · Largest industry (approximate): Health care",
+    g: "Raised $300,000 in 2025–2026",
+  });
+  for (const t of Object.values(m)) clean(t);
+  // Shown as a second small line under the person's job, in Home's Your representatives and the Reps tab's.
+  const home = yourReps({ president: all.find((o) => o.id === "p"), senators: [all.find((o) => o.id === "s")], governor: all.find((o) => o.id === "g"), mine: [all.find((o) => o.id === "h")], money: m });
+  assert.match(home, /\[Senator\]<\/div><div class="list-meta">[^<]+<\/div><div class="list-meta">Raised \$2,000,000 in 2025–2026/);
+  assert.doesNotMatch(home, /\[Representative\]<\/div><div class="list-meta">[^<]+<\/div><div class="list-meta">/);
+  assert.match(yourRow(all.find((o) => o.id === "v"), m), /<div class="list-meta">The President&#x27;s ticket&#x27;s campaign committee raised/);
 });
 
 // ---------------------------------------------------------------------------
