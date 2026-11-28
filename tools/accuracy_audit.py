@@ -1151,6 +1151,7 @@ def fec_committees(args):
         ("funding_totals (every cycle)", f"SELECT cycle, candidate_id, receipts, disbursements, cash_on_hand, pac, coverage_end, last_report, updated_at FROM funding_totals WHERE official_id = '{o['id']}' ORDER BY cycle DESC"),
         ("funding_progress (every cycle)", f"SELECT * FROM funding_progress WHERE official_id = '{o['id']}' ORDER BY cycle DESC"),
         ("money_filings (latest 10)", f"SELECT committee_id, period_start, period_end, report, raised, spent, filed FROM money_filings WHERE official_id = '{o['id']}' ORDER BY filed DESC LIMIT 10"),
+        ("official_committees (every cycle; migration 0054)", f"SELECT cycle, committee_id, name, role, designation, committee_type, receipts, coverage_end, updated_at FROM official_committees WHERE official_id = '{o['id']}' ORDER BY cycle DESC, receipts DESC"),
     ):
         rows = q(args, sql)
         say(f"**{title}:** " + (json.dumps(rows) if rows else "none"))
