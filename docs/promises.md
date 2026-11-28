@@ -77,7 +77,7 @@ Commitments tracked lists published promises, newest first: the source kind and 
 
 ## The Platform tab (`platformTab` in `functions/_lib/promises.js`)
 
-Promises appear on each official's **Platform** tab (About · Platform · Votes · Funding · More; old `#promises` links open it), in two parts:
+Promises appear on each official's **Platform** tab (About · Votes · Money · Platform; old `#promises` links open it), in two parts:
 
 1. **In their own words**, at the top:
    - **An excerpt from each listed Issues or Priorities page**: one to three sentences, word for word (`src/promises/excerpt.js`). When the sync reads a page (weekly), it asks the AI for the passage that sums up the page in the official's own words, with the same instructions for everyone (the page's own opening summary when there is one; never the passage most likely to make them look good or bad), then checks in code that it's on the page word for word and at most 450 characters. It stays while it's on the page and is picked again only once it isn't, so the AI is asked only when the page changes; a page where none was found is asked again after `EXCERPT_REFRESH_DAYS` (90). Shown with the page's link, "as of" the date it was taken, and who chose it. On `/admin/review/promise/pages/` a person can paste a different excerpt (checked word for word against the page's last-read text; it stays while it's on the page), hide it, or let the AI pick again.

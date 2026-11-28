@@ -1,5 +1,5 @@
 // California lobbying (Cal-Access; tools/load_ca_lobbying.py) for California
-// bill pages and each legislator's More tab. The same rules as federal
+// bill pages and each legislator's Money tab. The same rules as federal
 // lobbying: facts side by side, never cause; organizations by name, lobbyists
 // and other people only as counts and totals; every number with its period and
 // source; a report "lists" a bill, it never says for or against.
@@ -211,7 +211,7 @@ export function caFollowTheMoney(bill, l) {
   return `${employers}${givers}`;
 }
 
-/** The Lobbying section on a California legislator's More tab. */
+/** The Lobbying section on a California legislator's Money tab. */
 export function caLegislatorLobbying(official, l) {
   if (!l || !l.loaded) return `<p class="secondary small">California lobbying reports (Cal-Access) haven't been loaded yet. They're loaded each week from the Secretary of State's export.</p>`;
   if (!l.committees) return `<p class="secondary small">No campaign committee is on record for ${esc(official.name)} in the Cal-Access export, so contributions from lobbying organizations can't be matched.</p>`;

@@ -7,7 +7,7 @@
 //   networthFor      one person's reports (D1; [] before the table exists)
 //   networthPoints   the reports shown: the one filed before taking office, then one per year
 //   networthLine     the summary line under the office line (and in Quick mode)
-//   networthSection  the More tab: the chart, the numbers, the limits, reports not read
+//   networthSection  the Money tab: the chart, the numbers, the limits, reports not read
 //
 // Facts only: no rankings, no comparisons, no change in percent, nothing
 // colored up or down. These records may not be used for commercial purposes
@@ -138,7 +138,7 @@ const UNREAD = {
 
 export const LIMITS = `Reports give values in ranges, not exact amounts. A personal home that doesn't earn income isn't reported, and neither are some government retirement accounts, so mortgages on a personal home are left out here too. An asset held only by a spouse and worth over $1,000,000 is reported only as "Over $1,000,000", and is counted here at that amount. So this is an estimate from the reports, not an exact figure.`;
 
-/** The More tab's section. Pure. */
+/** The Money tab's section. Pure. */
 export function networthSection(name, points) {
   const { shown, latest, first, unread } = points;
   const end = latest || first;

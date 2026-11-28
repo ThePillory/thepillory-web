@@ -6,7 +6,7 @@
 // Government Act forbids commercial use of these records: they stay free,
 // with no export or API.
 //
-//   tradeSummary / memberTrades / memberReports   one member (the More tab, /reps/<slug>/trades/)
+//   tradeSummary / memberTrades / memberReports   one member (the Money tab, /reps/<slug>/trades/)
 //   latestTrades                                  /trades/, newest first, filtered
 //   tradeRow, summaryLine, tradesSection          the shared markup
 import { esc, fmtDate, linkRow, sourceLink } from "./render.js";
@@ -200,7 +200,7 @@ export const latestTrades = (db, f) =>
   }, { rows: [], more: false, missing: true });
 
 // ---------------------------------------------------------------------------
-// The member's "Stock trades" section (More tab)
+// The member's "Stock trades" section (Money tab)
 
 const NOTE = `Periodic Transaction Reports members file under the STOCK Act, read from the House Clerk and the Senate's eFD site. Amounts are the ranges the law requires, exactly as filed. Owner is as filed (self, spouse, joint, dependent child). These records may not be used for commercial purposes. <a class="inline-link" href="${TRADES_METHOD}">How trades are recorded</a>`;
 const OGE_NOTE = `Periodic Transaction Reports (OGE Form 278-T) filed with the Office of Government Ethics, under the same 45-day rule and amount ranges as Congress. Amounts are shown exactly as filed; owner only where the report states it. Some reports are released by OGE only on request. A report posted as a scan is read by AI, and each row is published only when the report's own text shows the same date, amount and description and a second AI reading agrees with it exactly; every other row stays linked to the scan. These lines say "Read by AI from the scanned report, auto-checked" and open the original report; a person checks a share of them at random, and any found wrong are taken down. These records may not be used for commercial purposes. <a class="inline-link" href="${TRADES_METHOD}">How trades are recorded</a>`;

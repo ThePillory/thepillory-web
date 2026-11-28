@@ -227,8 +227,8 @@ function repGroup(o, facts, { office } = {}) {
     ...f.votes.map((v) => v.passage
       ? { text: billName(v), href: billHref(v.bill_id), status: METHOD_SHORT[v.method], meta: `Passed · ${dayWords(v.vote_date)} · ${NOT_RECORDED}`, kind: "vote" }
       : { text: billName(v), href: v.bill_id ? billHref(v.bill_id) : repHref(o), status: POSITION[v.position] || v.position, meta: `${v.result} · ${dayWords(v.vote_date)} · ${v.question}`, kind: "vote" }),
-    ...f.trades.map((t) => ({ text: "Stock trade report filed", href: `${repHref(o)}#more`, meta: `Filed ${dayWords(t.filed_on)}`, kind: "report" })),
-    ...f.disclosures.map((d) => ({ text: `Financial disclosure report filed (${d.year})`, href: `${repHref(o)}#more`, meta: d.filed_on ? `Filed ${dayWords(d.filed_on)}` : "", kind: "report" })),
+    ...f.trades.map((t) => ({ text: "Stock trade report filed", href: `${repHref(o)}#more-trades`, meta: `Filed ${dayWords(t.filed_on)}`, kind: "report" })),
+    ...f.disclosures.map((d) => ({ text: `Financial disclosure report filed (${d.year})`, href: `${repHref(o)}#more-disclosures`, meta: d.filed_on ? `Filed ${dayWords(d.filed_on)}` : "", kind: "report" })),
     ...(f.filings || []).map(filingItem),
   ];
   return {

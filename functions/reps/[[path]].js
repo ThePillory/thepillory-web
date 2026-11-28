@@ -1,18 +1,20 @@
 // /reps/            find your reps (address or ZIP), your reps once known, the
 //                   governing bodies, and members of Congress by state (?state=CA)
-// /reps/<slug>/     one official: the photo, office, name and one line each for
-//                   votes, money and net worth, then five tabs for everyone (a
-//                   sticky tab bar): About · Platform · Votes · Funding · More.
+// /reps/<slug>/     one official: the photo, office, name and up to three stat
+//                   tiles (votes, raised, net worth), then four tabs for everyone
+//                   (a sticky tab bar): About · Votes · Money · Platform.
 //                   Votes: the latest ten (every vote at /reps/<slug>/votes/).
-//                   Funding: the totals, the breakdown and the top five of each
-//                   list (each list at /reps/<slug>/funding/<list>/). More: one
-//                   row per topic; earmarks, travel and foreign agents' contacts
-//                   five each (all at /reps/<slug>/earmarks/, travel/,
-//                   foreign-agents/). The President and Governor: Votes is bills
-//                   signed and vetoed; More holds executive orders (and the
-//                   President's nominations) and disclosures. The Cabinet: Votes
-//                   and Funding say they don't apply, linking to Disclosures in
-//                   More. Everyone else: More holds committees. Residents' issues
+//                   Money, in three groups of collapsed lines: Campaign money
+//                   (#funding: the totals, the breakdown and the top five of each
+//                   list, each list at /reps/<slug>/funding/<list>/; California
+//                   lobbying), Their own finances (net worth, stock trades,
+//                   disclosures) and Other reports (earmarks, travel and foreign
+//                   agents' contacts, five each, all at /reps/<slug>/earmarks/,
+//                   travel/, foreign-agents/). The President and Governor: Votes
+//                   is bills signed and vetoed, then executive orders (and the
+//                   President's nominations). The Cabinet: Votes and Campaign
+//                   money say they don't apply, linking to Disclosures. State
+//                   legislators: About ends with committees. Residents' issues
 //                   are one line under Platform until accounts launch.
 // POST /reps/<slug>/promises/<id>/flag   "Something wrong?" on a published promise
 import { simpleCard, jobSentence, voteLinePlain, sourceNote, SIMPLE_METHOD } from "../_lib/simple.js";
@@ -50,7 +52,7 @@ import { statePath } from "../_lib/state-paths.js";
 
 const BODY = Object.fromEntries(BODIES.map((b) => [b.slug, b]));
 const VOTES_SHOWN = 10; // the Votes tab: the latest ten final-passage votes, then "See all"
-const MORE_TOP = 5; // earmarks, travel and foreign agents' contacts on the More tab
+const MORE_TOP = 5; // earmarks, travel and foreign agents' contacts on the Money tab
 const VOTES_PER_PAGE = 25;
 
 /** "Test Representative Gamma" -> "TG": the first and last name's initials. */
@@ -276,7 +278,7 @@ async function committeesFor(db, officialId) {
   return results;
 }
 
-// Which kind of office: decides what the Votes, Funding and More tabs hold.
+// Which kind of office: decides what the Votes and Money tabs hold.
 function roleOf(o) {
   if (isPresident(o)) return "president";
   if (isGovernor(o)) return "governor";
@@ -408,14 +410,14 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
     ? `<p class="small secondary">The ${votes.rows.length === 1 ? "latest final-passage vote" : `${votes.rows.length} latest final-passage votes`}.</p><ul class="plain-list vote-list card">${votes.rows.map(voteRow).join("")}</ul>${seeAllVotes}`
     : `<p class="secondary small">${o.level === "county" ? "County votes aren't loaded yet." : "No final-passage votes recorded yet."}</p>${seeAllVotes}`;
 
-  // Five tabs for every official: About · Promises · Votes · Funding · More.
-  // What Votes, Funding and More hold depends on the office (roleOf).
+  // Four tabs for every official: About · Votes · Money · Platform.
+  // What Votes and Money hold depends on the office (roleOf).
   const role = roleOf(o);
   const money = exec && !otherState && funding !== FAILED ? executiveFundingParts(o, funding, base) : null;
-  // More: one line per topic, each collapsed until tapped (a link to its id opens it).
+  // Money: one line per topic, each collapsed until tapped (a link to its id opens it).
   const sub = (id, label, html, meta = "") => fold(id, label, html, { meta });
   const appointedNote = (what) =>
-    `<section class="card stack-sm"><p class="small">${what}</p><p class="small"><a class="inline-link" href="#disclosures">See financial disclosures and ethics agreements under More</a></p></section>`;
+    `<section class="card stack-sm"><p class="small">${what}</p><p class="small"><a class="inline-link" href="#more-disclosures">See financial disclosures and ethics agreements under Money</a></p></section>`;
 
   let votesHtml;
   if (role === "president" || role === "governor") {
@@ -441,26 +443,31 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
   // The full money sentence (period, PAC share, largest industry) leads the Funding tab.
   if (glance && funding !== FAILED) fundingHtml = `<p class="money-glance money-full">${esc(glance.text)}</p>${fundingHtml}`;
 
-  // More: everything else, in sections.
-  const moreParts = [];
+  // Money, in three groups, each topic one collapsed line: campaign money (the Funding content, opened by
+  // #funding), their own finances, and other reports. Never a sentence tying one group to another.
+  const campaignParts = [fold("funding", "Campaign committees", fundingHtml, { meta: glance && glance.amount > 0 ? `${shortRaised(glance.amount)} raised${glance.itemized ? " (itemized)" : ""}` : "" })];
+  const ownParts = [];
+  const otherParts = [];
+  const recordParts = [];
+  const aboutParts = [];
   const tradeCount = trades && trades !== FAILED ? (trades.summary || []).reduce((n, y) => n + (y.trades || 0), 0) : 0;
-  if (trades) moreParts.push(sub("more-trades", "Stock trades", trades === FAILED ? sectionError("") : tradesSection(o, trades), trades === FAILED ? "" : tradeCount ? `${tradeCount.toLocaleString("en-US")} reported` : "None reported"));
+  if (trades) ownParts.push(sub("more-trades", "Stock trades", trades === FAILED ? sectionError("") : tradesSection(o, trades), trades === FAILED ? "" : tradeCount ? `${tradeCount.toLocaleString("en-US")} reported` : "None reported"));
   const nwEnd = networth && networth !== FAILED ? networth.latest || networth.first : null;
-  if (networth) moreParts.push(sub("more-networth", "Net worth, as reported", networth === FAILED ? sectionError("") : `${networthText(networth) ? `<p class="networth-full">${esc(networthText(networth))}</p>` : ""}${networthSection(o.name, networth)}`, nwEnd ? `${rangeText(nwEnd)} (${nwEnd.year})` : "No report read yet"));
+  if (networth) ownParts.unshift(sub("more-networth", "Net worth, as reported", networth === FAILED ? sectionError("") : `${networthText(networth) ? `<p class="networth-full">${esc(networthText(networth))}</p>` : ""}${networthSection(o.name, networth)}`, nwEnd ? `${rangeText(nwEnd)} (${nwEnd.year})` : "No report read yet"));
   if (congress) {
     const gm = govMoney === FAILED ? null : govMoney;
     const meta = govMoneyMeta(gm);
-    moreParts.push(sub("more-earmarks", "Earmarks", govMoney === FAILED ? sectionError("") : earmarksSection(o, gm, { top: MORE_TOP, href: `${base}earmarks/` }), meta.earmarks));
-    moreParts.push(sub("more-travel", "Privately paid travel", govMoney === FAILED ? sectionError("") : travelSection(o, gm, { top: MORE_TOP, href: `${base}travel/` }), meta.travel));
-    moreParts.push(sub("more-foreign-agents", "Contacts reported by foreign agents", govMoney === FAILED ? sectionError("") : faraSection(o, gm, { top: MORE_TOP, href: `${base}foreign-agents/` }), meta.fara));
+    otherParts.push(sub("more-earmarks", "Earmarks", govMoney === FAILED ? sectionError("") : earmarksSection(o, gm, { top: MORE_TOP, href: `${base}earmarks/` }), meta.earmarks));
+    otherParts.push(sub("more-travel", "Privately paid travel", govMoney === FAILED ? sectionError("") : travelSection(o, gm, { top: MORE_TOP, href: `${base}travel/` }), meta.travel));
+    otherParts.push(sub("more-foreign-agents", "Contacts reported by foreign agents", govMoney === FAILED ? sectionError("") : faraSection(o, gm, { top: MORE_TOP, href: `${base}foreign-agents/` }), meta.fara));
   }
-  if (orders) moreParts.push(sub("orders", "Executive orders", orders === FAILED ? sectionError("") : ordersTab(o, orders, base, offset), orders === FAILED ? "" : `${(orders.counts.executive_order || 0).toLocaleString("en-US")} on record`));
-  if (nominations) moreParts.push(sub("nominations", "Nominations", nominations === FAILED ? sectionError("") : nominationsTab(o, nominations, base, status, offset), nominations === FAILED ? "" : `${Object.values(nominations.counts).reduce((n, c) => n + c, 0).toLocaleString("en-US")} on record`));
-  if (exec && !otherState) moreParts.push(sub("more-disclosures", "Disclosures", funding === FAILED ? sectionError("") : money.disclosures));
-  if (stateLegislator) moreParts.push(sub("more-lobbying", "Lobbying", caLobbying === FAILED ? sectionError("") : caLegislatorLobbying(o, caLobbying)));
-  if (stateLegislator || supervisor) moreParts.push(sub("more-disclosures", "Disclosures", funding === FAILED ? sectionError("") : funding ? stateForm700(funding) : ""));
+  if (orders) recordParts.push(sub("orders", "Executive orders", orders === FAILED ? sectionError("") : ordersTab(o, orders, base, offset), orders === FAILED ? "" : `${(orders.counts.executive_order || 0).toLocaleString("en-US")} on record`));
+  if (nominations) recordParts.push(sub("nominations", "Nominations", nominations === FAILED ? sectionError("") : nominationsTab(o, nominations, base, status, offset), nominations === FAILED ? "" : `${Object.values(nominations.counts).reduce((n, c) => n + c, 0).toLocaleString("en-US")} on record`));
+  if (exec && !otherState) ownParts.push(sub("more-disclosures", "Disclosures", funding === FAILED ? sectionError("") : money.disclosures));
+  if (stateLegislator) campaignParts.push(sub("more-lobbying", "Lobbying", caLobbying === FAILED ? sectionError("") : caLegislatorLobbying(o, caLobbying)));
+  if (stateLegislator || supervisor) ownParts.push(sub("more-disclosures", "Disclosures", funding === FAILED ? sectionError("") : funding ? stateForm700(funding) : ""));
   if (o.level === "state" && !exec) {
-    moreParts.push(sub("committees", "Committees", committees === FAILED ? sectionError("") : committees.length
+    aboutParts.push(sub("committees", "Committees", committees === FAILED ? sectionError("") : committees.length
       ? `<div class="card"><ul class="plain-list">${committees.map((c) => `<li class="list-row"><span class="list-title">${esc(c.name)}</span><span class="row-end">${sourceLink(c.source_url)}</span></li>`).join("")}</ul></div><p class="hint">From Open States, refreshed weekly.</p>`
       : '<p class="secondary small">No committee assignments loaded for this legislator.</p>'));
   }
@@ -480,17 +487,18 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
     jump: "about",
   });
   const tab = (k, label) => `<a role="tab" id="tab-${k}" href="#${k}" aria-controls="${k}">${label}</a>`;
+  const group = (id, title, parts) => (parts.length ? `<section class="stack-sm" aria-labelledby="h-${id}"><h2 class="label" id="h-${id}">${title}</h2>${parts.join("")}</section>` : "");
+  const moneyHtml = [group("money-campaign", "Campaign money", campaignParts), group("money-own", "Their own finances", ownParts), group("money-other", "Other reports", otherParts)].join("");
   const main = `<div class="simple-scope">${head}
 ${simple}
 <div class="rep-tabs stack" data-tabs>
-  <nav class="tabs tabs--five" role="tablist" aria-label="Sections">
-    ${tab("about", "About")}${tab("platform", "Platform")}${tab("votes", "Votes")}${tab("funding", "Funding")}${tab("more", "More")}
+  <nav class="tabs tabs--rep" role="tablist" aria-label="Sections">
+    ${tab("about", "About")}${tab("votes", "Votes")}${tab("money", "Money")}${tab("platform", "Platform")}
   </nav>
-  <div class="stack" role="tabpanel" id="about" aria-labelledby="tab-about">${overview}</div>
+  <div class="stack" role="tabpanel" id="about" aria-labelledby="tab-about">${overview}${aboutParts.join("")}</div>
+  <div class="stack" role="tabpanel" id="votes" aria-labelledby="tab-votes">${votesHtml}${recordParts.join("")}</div>
+  <div class="stack" role="tabpanel" id="money" aria-labelledby="tab-money">${moneyHtml}</div>
   <div class="stack" role="tabpanel" id="platform" aria-labelledby="tab-platform">${promises === FAILED || ownWords === FAILED ? sectionError("") : platformTab(o, promises, ownWords, { env, url })}</div>
-  <div class="stack" role="tabpanel" id="votes" aria-labelledby="tab-votes">${votesHtml}</div>
-  <div class="stack" role="tabpanel" id="funding" aria-labelledby="tab-funding">${fundingHtml}</div>
-  <div class="stack" role="tabpanel" id="more" aria-labelledby="tab-more">${moreParts.join("")}</div>
 </div>
 </div>`;
   return page(o.name, main, { tab: "reps", back: ["Reps", "/reps/"], partial });
