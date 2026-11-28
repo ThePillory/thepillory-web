@@ -1,0 +1,61 @@
+# Test Clairic: a read-only check of Cloudflare's Clairic extraction model
+# (@cf/cloudflare/clairic, Workers AI) on documents ThePillory has already read
+# and published (tools/test_clairic.py). It only reads D1 and writes nothing
+# there or on the site; the report is the run's summary and the test-clairic
+# artifact. By hand only (Actions -> Test Clairic -> Run workflow).
+#
+# Clairic charges for input tokens only: $0.10 a million until December 1,
+# 2026, $0.24 after. A run of 50 trade reports costs cents.
+#
+# Uses the existing repository secrets CLOUDFLARE_API_TOKEN and
+# CLOUDFLARE_ACCOUNT_ID. The token needs D1 access (it has it) and the
+# "Workers AI: Read" permission; without it the run stops with one line
+# saying to add it. The token is never printed.
+#
+# These records may not be used for commercial purposes (Ethics in Government
+# Act): never sell, export or put them behind a paid plan.
+name: Test Clairic
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "What to read"
+        type: choice
+        options: [trades, networth, agendas]
+        default: trades
+      sample:
+        description: "How many documents (blank: 50 trades, 20 networth, 20 agendas)"
+        default: "50"
+      seed:
+        description: "Which random sample (the same seed picks the same documents)"
+        default: "1"
+permissions:
+  contents: read
+concurrency:
+  group: test-clairic
+  cancel-in-progress: false
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils >/dev/null
+      - run: python3 tools/test_clairic_checks.py
+      - name: Run the test
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          TASK: ${{ github.event.inputs.task }}
+          SAMPLE: ${{ github.event.inputs.sample }}
+          SEED: ${{ github.event.inputs.seed }}
+        run: python3 tools/test_clairic.py --task "$TASK" --sample "${SAMPLE:-0}" --seed "$SEED"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-clairic-${{ github.event.inputs.task }}
+          path: test-clairic.json
+          if-no-files-found: ignore
