@@ -8,6 +8,8 @@
 import { INDUSTRIES } from "../../workers/sync/src/funding/industry.js";
 import { compactMoney } from "./networth.js";
 import { raisedParts } from "../../workers/sync/src/funding/committees.js";
+import { STATE_NAME } from "./districts.js";
+import { termLimit, limitedOffice as termLimitOffice } from "./term-limits.js";
 
 const dollars = (n) => `$${Math.round(Number(n)).toLocaleString("en-US")}`;
 const span = (cycle) => `${cycle - 1}–${cycle}`;
@@ -144,17 +146,26 @@ export function localRaised(docs, name, cycle) {
 }
 
 /**
- * { [official id]: { amount, text } } for the people in Your representatives, by the same rules as each
- * page's header: members of Congress, the President and the Vice President (FEC: their campaign committees
- * plus the leadership PACs they sponsor; a Vice President with none of their own, on the President's ticket,
- * the ticket's campaign committees), California's officials (Cal-Access), county supervisors (NetFile's
- * itemized contributions, "itemized"), nobody else. No entry without money (never "$0"). Order, colors and
- * totals are never changed by it.
+ * { [official id]: entry } for the people in Your representatives and an official's header, by the same rules
+ * as each page's money line: members of Congress, the President and the Vice President (FEC: their campaign
+ * committees plus the leadership PACs they sponsor; a Vice President with none of their own, on the President's
+ * ticket, the ticket's campaign committees), California's officials (Cal-Access: every committee they control),
+ * county supervisors (NetFile's itemized contributions). An entry is { amount, text: "$4.2M raised" }, or, with
+ * no amount, why, from the records only (docs/funding.md, "When there's no amount"): { reason, text, href? },
+ * the first that applies of
+ *   appointed office                           "Appointed: no campaign"
+ *   money not loaded for their state or office "Campaign money for [State] isn't on ThePillory yet"
+ *   filings for the period report $0 raised    "Reported raising $0 in [period]" (href: the latest report)
+ *   no committee filed for the period          "No active campaign committee in [period]"
+ *   the records show a term limit reached      "Can't run again for this office (term limit)" (href: the source)
+ * and nothing when none does (never "$0", never a guess). Order, colors and totals are never changed by it.
+ * `history` (optional, async): loads { federalExecutive, california } for the term-limit check, only when needed.
  */
-export async function moneyGlances(db, people, { cycle, local = null } = {}) {
+export async function moneyGlances(db, people, { cycle, local = null, history = null } = {}) {
   const list = (people || []).filter(Boolean);
   const out = {};
   if (!db || !list.length) return out;
+  const span_ = span(cycle);
   const president = list.find((o) => o.chamber === "us-executive" && o.rank === 1) || null;
   const vp = list.find((o) => o.chamber === "us-executive" && o.rank === 2) || null;
   const ticket = !!(president && vp && president.term_start && president.term_start === vp.term_start);
@@ -162,41 +173,138 @@ export async function moneyGlances(db, people, { cycle, local = null } = {}) {
   const ca = list.filter((o) => CA.has(o.chamber));
   const fedIds = fed.map((o) => o.id);
   const caIds = ca.map((o) => o.id);
-  const [fedRows, caRows] = await Promise.all([
-    fedIds.length ? raisedFederal(db, fedIds, cycle) : {},
-    caIds.length ? db.prepare(`SELECT official_id, raised FROM state_money_cycles WHERE cycle = ? AND official_id IN (${ph(caIds.length)})`).bind(`${cycle - 1}-${cycle}`, ...caIds).all() : { results: [] },
-  ]);
+  const [fedRows, caRows] = await Promise.all([fedIds.length ? raisedFederal(db, fedIds, cycle) : {}, caIds.length ? raisedCalifornia(db, caIds, cycle) : {}]);
   const put = (id, amount, suffix = "") => {
-    if (amount > 0) out[id] = { amount, text: `${shortRaised(amount)}${suffix}` };
+    if (amount > 0) out[id] = { amount, text: `${shortRaised(amount)} raised${suffix}` };
+  };
+  const why = (id, reason, href = null) => {
+    if (!out[id]) out[id] = { reason, text: reason, ...(href ? { href } : {}) };
   };
   for (const o of fed) put(o.id, fedRows[o.id] && fedRows[o.id].total);
   if (ticket && !out[vp.id]) put(vp.id, fedRows[president.id] && fedRows[president.id].campaign);
-  for (const r of caRows.results || []) put(r.official_id, r.raised);
-  for (const o of list.filter((x) => x.chamber === "county-board")) put(o.id, localRaised(local, o.name, cycle), " itemized");
+  for (const o of ca) put(o.id, caRows[o.id] && caRows[o.id].raised);
+  for (const o of list.filter((x) => x.chamber === "county-board")) put(o.id, localRaised(local, o.name, cycle), " (itemized)");
+
+  const limits = [];
+  for (const o of list) {
+    if (out[o.id]) continue;
+    // 1. Appointed (the Cabinet).
+    if (o.chamber === "us-executive" && o.rank > 2) {
+      why(o.id, "Appointed: no campaign");
+      continue;
+    }
+    // 2. Not loaded for their state or office: state officials outside California.
+    if (o.level === "state" && !CA.has(o.chamber)) {
+      why(o.id, `Campaign money for ${STATE_NAME[o.state] || o.state || "this state"} isn't on ThePillory yet`);
+      continue;
+    }
+    const f = fedRows[o.id];
+    const c = caRows[o.id];
+    // 3. Filings for the period that report $0 raised (a filed $0, not a missing value).
+    if (f && f.filed && f.receipts === 0) {
+      why(o.id, `Reported raising $0 in ${span_}`, f.report);
+      continue;
+    }
+    if (c && c.statements > 0 && c.raised === 0) {
+      why(o.id, `Reported raising $0 in ${span_}`, c.report);
+      continue;
+    }
+    // 4. No committee filed for the period: the FEC lists none for the candidate this period (read this period), or
+    //    Cal-Access has no statement from a committee they control for it (read this period).
+    if ((f && f.noCommittee) || (c && c.checked && !c.statements)) {
+      why(o.id, `No active campaign committee in ${span_}`);
+      continue;
+    }
+    limits.push(o);
+  }
+  // 5. A term limit the records show (the records are loaded only when someone is left to check).
+  if (history && limits.some((o) => termLimitOffice(o))) {
+    const records = await history();
+    for (const o of limits) {
+      const t = termLimit(o, records);
+      if (t) why(o.id, t.text, t.href);
+    }
+  }
   return out;
 }
 
-/** What each federal official raised in the period: { [id]: raisedParts } from funding_totals and official_committees. */
+/**
+ * What each federal official raised in the period, { [id]: { ...raisedParts, receipts, filed, report, noCommittee } }:
+ * funding_totals and official_committees, plus what tells "reported $0" from "no committee" (fec_candidates,
+ * funding_progress, the latest report in money_filings). A few indexed reads.
+ */
 async function raisedFederal(db, ids, cycle) {
-  const [totals, committees] = await Promise.all([
-    db.prepare(`SELECT official_id, receipts FROM funding_totals WHERE cycle = ? AND official_id IN (${ph(ids.length)})`).bind(cycle, ...ids).all(),
+  const q = (sql) =>
     db
-      .prepare(`SELECT official_id, role, receipts FROM official_committees WHERE cycle = ? AND official_id IN (${ph(ids.length)})`)
+      .prepare(sql)
       .bind(cycle, ...ids)
       .all()
       .catch((err) => {
-        if (/no such table/i.test(String(err && err.message))) return { results: [] };
+        if (/no such table|no such column/i.test(String(err && err.message))) return { results: [] };
         throw err;
-      }),
+      });
+  const inIds = `IN (${ph(ids.length)})`;
+  const [totals, committees, progress, fec, reports] = await Promise.all([
+    q(`SELECT official_id, receipts, source_url FROM funding_totals WHERE cycle = ? AND official_id ${inIds}`),
+    q(`SELECT official_id, role, receipts FROM official_committees WHERE cycle = ? AND official_id ${inIds}`),
+    q(`SELECT official_id, done_at, committees_at FROM funding_progress WHERE cycle = ? AND official_id ${inIds}`),
+    db.prepare(`SELECT official_id, candidate_id, committee_id, note FROM fec_candidates WHERE official_id ${inIds}`).bind(...ids).all().catch(() => ({ results: [] })),
+    q(`SELECT official_id, MAX(filed) AS filed, source_url FROM money_filings WHERE agency = 'FEC' AND period_end >= (? - 1) || '-01-01' AND official_id ${inIds} GROUP BY official_id`),
   ]);
-  const by = (rows) => rows.reduce((m, r) => ((m[r.official_id] ||= []).push(r), m), {});
-  const t = Object.fromEntries(totals.results.map((r) => [r.official_id, r.receipts]));
-  const c = by(committees.results || []);
-  return Object.fromEntries(ids.map((id) => [id, raisedParts(t[id], c[id])]));
+  const one = (rows) => Object.fromEntries(rows.results.map((r) => [r.official_id, r]));
+  const t = one(totals);
+  const p = one(progress);
+  const fc = one(fec);
+  const rep = one(reports);
+  const c = committees.results.reduce((m, r) => ((m[r.official_id] ||= []).push(r), m), {});
+  return Object.fromEntries(
+    ids.map((id) => {
+      const parts = raisedParts(t[id] && t[id].receipts, c[id]);
+      const read = p[id] && p[id].done_at;
+      return [
+        id,
+        {
+          ...parts,
+          receipts: t[id] ? Number(t[id].receipts) : null,
+          filed: !!t[id],
+          report: (rep[id] && rep[id].source_url) || (t[id] && t[id].source_url) || null,
+          // Read this period, an FEC candidate ID on record, no principal committee this period and no committee with receipts.
+          noCommittee: !!(read && fc[id] && fc[id].candidate_id && !fc[id].committee_id && !t[id] && !(c[id] || []).length && p[id].committees_at),
+        },
+      ];
+    })
+  );
 }
 
-/** A row's status on the right: the short amount, or nothing ("" without money). */
-export const amountStatus = (money, id) => (money && money[id] ? `<span class="list-status row-amount">${money[id].text.replace(/[&<>"]/g, "")}</span>` : "");
+/** California officials: { [id]: { raised, statements, checked, report } } from state_money_cycles, disclosure_checks and money_filings. */
+async function raisedCalifornia(db, ids, cycle) {
+  const inIds = `IN (${ph(ids.length)})`;
+  const safe = (p) => p.catch((err) => {
+    if (/no such table|no such column/i.test(String(err && err.message))) return { results: [] };
+    throw err;
+  });
+  const [cycles, checks, reports] = await Promise.all([
+    safe(db.prepare(`SELECT official_id, raised, statements, source_url FROM state_money_cycles WHERE cycle = ? AND official_id ${inIds}`).bind(`${cycle - 1}-${cycle}`, ...ids).all()),
+    safe(db.prepare(`SELECT official_id FROM disclosure_checks WHERE source = 'cal-access' AND official_id ${inIds}`).bind(...ids).all()),
+    safe(db.prepare(`SELECT official_id, MAX(filed) AS filed, source_url FROM money_filings WHERE agency = 'Cal-Access' AND period_end >= ? AND official_id ${inIds} GROUP BY official_id`).bind(`${cycle - 1}-01-01`, ...ids).all()),
+  ]);
+  const one = (rows) => Object.fromEntries(rows.results.map((r) => [r.official_id, r]));
+  const y = one(cycles);
+  const ch = one(checks);
+  const rep = one(reports);
+  return Object.fromEntries(
+    ids.map((id) => [id, { raised: y[id] ? Number(y[id].raised) : null, statements: y[id] ? y[id].statements || 0 : 0, checked: !!ch[id], report: (rep[id] && rep[id].source_url) || (y[id] && y[id].source_url) || null }])
+  );
+}
+
+const clean = (t) => String(t).replace(/[&<>"]/g, "");
+
+/** A row's status on the right: "$4.2M raised", or why there's no amount (small, gray), or nothing. */
+export const amountStatus = (money, id) => {
+  const e = money && money[id];
+  if (!e) return "";
+  return e.amount > 0 ? `<span class="list-status row-amount">${clean(e.text)}</span>` : `<span class="list-status row-reason">${clean(e.text)}</span>`;
+};
 
 /** The one small label above a list that shows amounts; "" when none does. */
-export const moneyListKey = (money, cycle) => (money && Object.keys(money).length ? `<p class="small secondary money-key">${moneyListLabel(cycle)}</p>` : "");
+export const moneyListKey = (money, cycle) => (money && Object.values(money).some((e) => e.amount > 0) ? `<p class="small secondary money-key">${moneyListLabel(cycle)}</p>` : "");

@@ -35,7 +35,7 @@ import { syncDischargePetitions } from "./passages/petitions.js";
 import { syncCountyMeetings } from "./meetings/county.js";
 import { syncStateHearings } from "./meetings/state.js";
 import { withD1Retry, isTransient } from "./d1retry.js";
-import { syncFederalFunding, syncFederalLobbying, syncCommitteeBills, syncLobbyContributions } from "./funding/sync.js";
+import { syncFederalFunding, syncFederalLobbying, syncCommitteeBills, syncLobbyContributions, committeesPending } from "./funding/sync.js";
 import { syncExecutiveFunding } from "./funding/executive.js";
 import { syncDarkMoney, syncSignerOrgs } from "./funding/darkmoney-sync.js";
 import { setStep } from "./ai-usage.js";
@@ -54,6 +54,11 @@ import { syncHistoryOfficials, syncHistoryOrders, syncHistoryFunding, syncHistor
 // Open States lookup also detects the U.S. House district. State hearings come
 // before state votes, which can use up the Open States daily cap. County
 // meetings come next: the county portal asks for a minute between requests.
+// Steps that run whatever their cadence while something they load has never been loaded (once; then
+// the cadence again): federal-funding while any funded official's committees for the current period
+// haven't been read (official_committees, migrations 0054 and 0055).
+const CATCH_UP = { "federal-funding": committeesPending };
+
 const STEPS = [
   ["county-officials", syncCounty],
   ["state-officials", syncStateOfficials],
@@ -181,7 +186,9 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId, doneSteps = 
     // How often the step runs (src/cadence.js): weekly steps, filing windows, history loaded in full.
     const scheduled = step in STEP_CADENCE;
     const cadenceState = scheduled ? JSON.parse((await getState(env.DB, `cadence_${step}`)) || "null") || {} : null;
-    const due = scheduled ? stepDue(step, day, cadenceState) : { run: true };
+    let due = scheduled ? stepDue(step, day, cadenceState) : { run: true };
+    // Something never loaded runs whatever the cadence, once (CATCH_UP): e.g. new federal committees (migration 0055).
+    if (!due.run && CATCH_UP[step] && (await CATCH_UP[step](env.DB))) due = { run: true, catchUp: true };
     // A step that failed waits for the next day's run instead of failing again
     // every round. A manual run (/run) retries a step that failed in an
     // earlier run today, e.g. after a fix is deployed.
@@ -197,6 +204,7 @@ export async function runSync(rawEnv, { trigger, deadlineMs, runId, doneSteps = 
         tally = newTally();
         const stepEnv = meteredEnv(env, tally);
         result = await fn(stepEnv, stepEnv.DB, budget);
+        if (due.catchUp && result) result = { ...result, message: `catch-up outside the cadence (never loaded): ${result.message || ""}` };
       } catch (err) {
         if (isTemporary(err)) {
           // A rate limit or an unavailable server, still failing after the

@@ -318,7 +318,8 @@ export async function stateCampaignStatements(db, id, entry, note) {
   const totals = new Map(); // filer_id -> report rows
   for (const c of (entry && entry.committees) || []) {
     if (!c.filer_id || !isHttp(c.source_url)) continue;
-    comms.push({ filer_id: String(c.filer_id), name: c.name || null, source_url: c.source_url });
+    // Every committee Cal-Access links to the official as controlled (tools/build_ca_campaign.py), with its type.
+    comms.push({ filer_id: String(c.filer_id), name: c.name || null, kind: ["candidate", "officeholder", "ballot-measure"].includes(c.kind) ? c.kind : null, office: c.office || null, source_url: c.source_url });
     committees += 1;
     const rows = totals.get(String(c.filer_id)) || [];
     for (const r of c.reports || []) {
@@ -331,7 +332,7 @@ export async function stateCampaignStatements(db, id, entry, note) {
   // Committees no longer the official's lose their reports too.
   const { results: before } = await db.prepare("SELECT filer_id FROM state_campaign_committees WHERE official_id = ?").bind(id).all();
   for (const b of before) if (!totals.has(String(b.filer_id))) totals.set(String(b.filer_id), []);
-  stmts.push(...(await syncScope(db, { table: "state_campaign_committees", scope: { official_id: id }, key: ["filer_id"], cols: ["filer_id", "name", "source_url"], stamp: "checked_at", rows: comms })).stmts);
+  stmts.push(...(await syncScope(db, { table: "state_campaign_committees", scope: { official_id: id }, key: ["filer_id"], cols: ["filer_id", "name", "kind", "office", "source_url"], stamp: "checked_at", rows: comms })).stmts);
   for (const [filer, rows] of totals) {
     stmts.push(...(await syncScope(db, { table: "state_campaign_totals", scope: { filer_id: filer }, key: ["period_start", "period_end"], cols: ["period_start", "period_end", "contributions", "expenditures", "cash_end", "source_url"], rows })).stmts);
   }

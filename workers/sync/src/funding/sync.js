@@ -238,13 +238,51 @@ async function readOne(db, fec, m, cycle, current) {
   stmts.push(
     db
       .prepare(
-        `INSERT INTO funding_progress (official_id, cycle, done_at, note) VALUES (?, ?, datetime('now'), ?)
-         ON CONFLICT(official_id, cycle) DO UPDATE SET done_at = excluded.done_at, note = excluded.note`
+        `INSERT INTO funding_progress (official_id, cycle, done_at, note, committees_at) VALUES (?, ?, datetime('now'), ?, CASE WHEN ? THEN datetime('now') END)
+         ON CONFLICT(official_id, cycle) DO UPDATE SET done_at = excluded.done_at, note = excluded.note,
+           committees_at = COALESCE(excluded.committees_at, funding_progress.committees_at)`
       )
-      .bind(id, cycle, note)
+      .bind(id, cycle, note, committees ? 1 : 0)
   );
   await inBatches(db, stmts);
   return { pacs: pacs.length, outside: outside.length, employers: employers.length, totals: !!totals, committees: committees ? committees.length : 0 };
+}
+
+/**
+ * An official's committees alone (migration 0055: their current period was read before committees were,
+ * so the next sync reads them whatever the cadence, once). The rest of the period isn't read again.
+ */
+async function readCommitteesOnly(db, fec, m, cycle) {
+  const rows = await readCommittees(fec, m.fec_ids && m.fec_ids.length ? m.fec_ids : [m.candidate_id], cycle);
+  const stmts = (await syncScope(db, { table: "official_committees", scope: { official_id: m.official_id, cycle }, key: ["committee_id"], stamp: "updated_at", rows,
+    cols: ["committee_id", "name", "role", "designation", "committee_type", "receipts", "coverage_end", "source_url"] })).stmts;
+  stmts.push(db.prepare("UPDATE funding_progress SET committees_at = datetime('now') WHERE official_id = ? AND cycle = ?").bind(m.official_id, cycle));
+  await inBatches(db, stmts);
+  return rows.length;
+}
+
+/**
+ * Whether any official's committees for the current period have never been read (src/index.js runs
+ * federal-funding then, whatever its cadence). One indexed query over the few hundred funded officials.
+ */
+export async function committeesPending(db) {
+  try {
+    const r = await db
+      .prepare(
+        `SELECT 1 AS n FROM officials o
+         LEFT JOIN fec_candidates f ON f.official_id = o.id
+         LEFT JOIN funding_progress p ON p.official_id = o.id AND p.cycle = ?
+         WHERE o.level = 'federal' AND o.active = 1 AND ${FUNDED}
+           AND (f.official_id IS NULL OR (f.candidate_id IS NOT NULL AND p.committees_at IS NULL))
+         LIMIT 1`
+      )
+      .bind(currentCycle())
+      .first();
+    return !!r;
+  } catch (err) {
+    if (/no such column|no such table/i.test(String(err && err.message))) return false;
+    throw err;
+  }
 }
 
 /**
@@ -322,10 +360,10 @@ export async function syncFederalFunding(env, db, budget) {
   let crosswalk = null;
   let resolved = 0;
   let read = 0;
-  const counts = { pacs: 0, outside: 0, employers: 0, noTotals: 0, committees: 0 };
+  const counts = { pacs: 0, outside: 0, employers: 0, noTotals: 0, committees: 0, committeesOnly: 0 };
   const firstDone = [];
   const summary = (extra = "") => {
-    return `${read} member-period(s) read (${counts.pacs} PAC, ${counts.outside} outside-spending and ${counts.employers} employer rows; ${counts.committees} committee(s) with receipts)` +
+    return `${read} member-period(s) read (${counts.pacs} PAC, ${counts.outside} outside-spending and ${counts.employers} employer rows; ${counts.committees} committee(s) with receipts${counts.committeesOnly ? `, ${counts.committeesOnly} official(s) read for committees only` : ""})` +
       `${counts.noTotals ? `, ${counts.noTotals} with no FEC totals for that period` : ""}${resolved ? `; ${resolved} member(s) matched to FEC IDs` : ""}` +
       `${firstDone.length ? `; live communities' members done: ${firstDone.join(", ")}` : ""}; ${o.own ? "FEC key" : "sharing the Congress.gov key (set FEC_API_KEY)"}${extra}`;
   };
@@ -337,15 +375,16 @@ export async function syncFederalFunding(env, db, budget) {
         .prepare(
           `SELECT o.id, o.bioguide_id, o.chamber, o.state, f.official_id AS matched, f.candidate_id, f.committee_id,
              f.official_id IS NULL OR f.checked_at < datetime('now', '-30 days') AS needs_match,
-             p1.done_at AS cur_done, p2.done_at AS prev_done, ${prio.sql} AS priority
+             p1.done_at AS cur_done, p2.done_at AS prev_done, p1.committees_at AS committees_at, ${prio.sql} AS priority
            FROM officials o
            LEFT JOIN fec_candidates f ON f.official_id = o.id
            LEFT JOIN funding_progress p1 ON p1.official_id = o.id AND p1.cycle = ?
            LEFT JOIN funding_progress p2 ON p2.official_id = o.id AND p2.cycle = ?
            WHERE o.level = 'federal' AND o.active = 1 AND ${FUNDED}
              AND (f.official_id IS NULL OR f.checked_at < datetime('now', '-30 days')
-                  OR (f.candidate_id IS NOT NULL AND (p1.done_at IS NULL OR p1.done_at < datetime('now', ?) OR p2.done_at IS NULL OR p2.done_at < datetime('now', '-90 days'))))
-           ORDER BY (f.candidate_id IS NOT NULL AND p1.done_at IS NOT NULL AND p2.done_at IS NOT NULL) OR (f.official_id IS NOT NULL AND f.candidate_id IS NULL),
+                  OR (f.candidate_id IS NOT NULL AND (p1.done_at IS NULL OR p1.done_at < datetime('now', ?) OR p2.done_at IS NULL OR p2.done_at < datetime('now', '-90 days')
+                      OR p1.committees_at IS NULL)))
+           ORDER BY (f.candidate_id IS NOT NULL AND p1.done_at IS NOT NULL AND p2.done_at IS NOT NULL AND p1.committees_at IS NOT NULL) OR (f.official_id IS NOT NULL AND f.candidate_id IS NULL),
              priority, p1.done_at IS NOT NULL, MIN(COALESCE(p1.done_at, ''), COALESCE(p2.done_at, '')), o.id
            LIMIT 10`
         )
@@ -387,6 +426,12 @@ export async function syncFederalFunding(env, db, budget) {
           if (!r.totals) counts.noTotals += 1;
           counts.committees += r.committees;
         }
+        // Committees never read for the current period, and nothing else due: read them alone (once).
+        if (!due.some(([c]) => c === current) && !m.committees_at && m.cur_done) {
+          if (ownTimeLeft() < MIN_MEMBER_MS) throw new BudgetExhausted(reserveMs ? SHARE_USED : "run time limit reached");
+          counts.committees += await readCommitteesOnly(db, fec, { official_id: m.id, candidate_id: fecRow.candidate_id, fec_ids: await fecIdsOf(m) }, current);
+          counts.committeesOnly += 1;
+        }
         if (m.priority === 0 && due.length) firstDone.push(m.id.replace(/^bioguide:/, ""));
       }
     }
@@ -404,7 +449,7 @@ export async function syncFederalFunding(env, db, budget) {
     ).n;
     return { status: "partial", message: `${summary()}; ${waiting} member(s) not loaded yet; ${err.message}` };
   }
-  if (!read && !resolved) return { status: "skipped", message: "every member's funding is up to date" };
+  if (!read && !resolved && !counts.committeesOnly) return { status: "skipped", message: "every member's funding is up to date" };
   return { status: "ok", message: summary() };
 }
 

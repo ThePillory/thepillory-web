@@ -17,6 +17,7 @@
 //                   legislators: About ends with committees. Residents' issues
 //                   are one line under Platform until accounts launch.
 // POST /reps/<slug>/promises/<id>/flag   "Something wrong?" on a published promise
+import { termRecords } from "../_lib/term-limits.js";
 import { simpleCard, jobSentence, voteLinePlain, sourceNote, SIMPLE_METHOD } from "../_lib/simple.js";
 import { moneyLine, moneyGlances, moneyListKey, shortRaised } from "../_lib/money-line.js";
 import { BODIES, LEVEL_NAME } from "../_lib/generated.js";
@@ -227,6 +228,7 @@ ${pg === FAILED ? sectionError("") : pagedList({ id: `list-${chamber}`, page: pg
     ? await loadSection("reps money lines", async () => moneyGlances(db, people, {
         cycle: currentCycle(),
         local: people.some((o) => o.chamber === "county-board") ? await loadLocalMoney(env, request, CALAVERAS_FIPS).catch(() => []) : null,
+        history: termRecords(env, request),
       }), {})
     : {};
   const main = `<div class="simple-scope">
@@ -364,9 +366,22 @@ async function profile(env, slug, url, request) {
   const orderCount = exec && (isPresident(o) || isGovernor(o)) && ok(orders) ? ok(orders).counts.executive_order || 0 : 0;
   const voteTotal = !exec && counts ? counts.total || 0 : 0;
   const tile = (href, num, label, mode = "") => `<a class="stat head-stat" href="${href}"${mode}><span class="stat-num">${esc(num)}</span><span class="stat-label">${esc(label)}</span></a>`;
+  // No amount: why, from the records only (moneyGlances(), the same rule as Your representatives), as the tile's text.
+  const noAmount = !(glance && glance.amount > 0) && funding !== FAILED
+    ? await loadSection("money reason", async () => (await moneyGlances(db, [o, o.rank === 2 && funding && funding.president ? funding.president : null], {
+        cycle: currentCycle(),
+        local: funding && funding.kind === "county" ? funding.local : null,
+        history: termRecords(env, request),
+      }))[o.id] || null, null)
+    : null;
+  const reason = noAmount && noAmount !== FAILED && !(noAmount.amount > 0) ? noAmount : null;
+  const reasonTile = (r) => {
+    const out = /^https?:/.test(r.href || "");
+    return `<a class="stat head-stat head-stat--note" href="${esc(r.href || "#funding")}"${out ? ' target="_blank" rel="noopener"' : ""}><span class="stat-label">${esc(r.text)}${out ? " ↗" : ""}</span></a>`;
+  };
   const tiles = [
     voteTotal ? tile("#votes", voteTotal.toLocaleString("en-US"), voteTotal === 1 ? "vote" : "votes") : orderCount ? tile("#votes", orderCount.toLocaleString("en-US"), orderCount === 1 ? "executive order" : "executive orders") : "",
-    glance && glance.amount > 0 ? tile("#funding", shortRaised(glance.amount), glance.itemized ? "raised (itemized)" : "raised") : "",
+    glance && glance.amount > 0 ? tile("#funding", shortRaised(glance.amount), glance.itemized ? "raised (itemized)" : "raised") : reason ? reasonTile(reason) : "",
     nwLatest ? tile("#more-networth", rangeText(nwLatest), "Net worth", ' data-mode-set="detailed"') : "",
   ].filter(Boolean);
   const head = `
@@ -445,7 +460,7 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
 
   // Money, in three groups, each topic one collapsed line: campaign money (the Funding content, opened by
   // #funding), their own finances, and other reports. Never a sentence tying one group to another.
-  const campaignParts = [fold("funding", "Campaign committees", fundingHtml, { meta: glance && glance.amount > 0 ? `${shortRaised(glance.amount)} raised${glance.itemized ? " (itemized)" : ""}` : "" })];
+  const campaignParts = [fold("funding", "Campaign committees", fundingHtml, { meta: glance && glance.amount > 0 ? `${shortRaised(glance.amount)} raised${glance.itemized ? " (itemized)" : ""}` : reason ? reason.text : "" })];
   const ownParts = [];
   const otherParts = [];
   const recordParts = [];

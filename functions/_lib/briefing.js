@@ -7,6 +7,7 @@
 //                       California, state) reps, those reps' latest votes,
 //                       and Happening now.
 // Both link back to the hub (/).
+import { termRecords } from "./term-limits.js";
 import { coverageFor, votesLoaded } from "./coverage.js";
 import { STATE_NAME, CALAVERAS_FIPS } from "./districts.js";
 import { moneyGlances, amountStatus, moneyListKey } from "./money-line.js";
@@ -197,6 +198,7 @@ export async function personalBriefing(env, url, d, request = null) {
       ? loadSection("briefing money", async () => moneyGlances(db, reps, {
           cycle,
           local: request && reps.some((o) => o.chamber === "county-board") ? await loadLocalMoney(env, request, CALAVERAS_FIPS).catch(() => []) : null,
+          history: termRecords(env, request),
         }), {})
       : {},
   ]);
