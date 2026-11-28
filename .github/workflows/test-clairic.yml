@@ -21,10 +21,10 @@ on:
       task:
         description: "What to read"
         type: choice
-        options: [trades, networth, agendas]
+        options: [trades, networth, agendas, scanned]
         default: trades
       sample:
-        description: "How many documents (blank: 50 trades, 20 networth, 20 agendas)"
+        description: "How many documents (blank: 50 trades, 20 networth, 20 agendas, 20 scanned)"
         default: "50"
       seed:
         description: "Which random sample (the same seed picks the same documents)"

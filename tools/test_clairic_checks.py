@@ -125,6 +125,40 @@ class Fixes(unittest.TestCase):
         self.assertEqual(r["skipped_pages"], 1)
 
 
+class Scanned(unittest.TestCase):
+    """Clairic as the second reading of a scanned 278-T: rows paired by printed number, the four cells."""
+
+    def test_compare_with_published_rows_and_the_first_reading(self):
+        got = C.rows_from("scanned", {
+            "r01.n": a("1"), "r01.asset": a("Example Fund See Endnote"), "r01.type": a("Purchase"), "r01.date": a("7/22/2026"), "r01.amount": a("$1,001 - $15,000"),
+            "r02.n": a("2"), "r02.asset": a("Sample Corp"), "r02.type": a("Sale"), "r02.date": a("7/23/2026"), "r02.amount": a("$15,001 - $50,000"),
+            "r03.n": a("9"), "r03.asset": a("Not On The Form"), "r03.type": a("Sale"), "r03.date": a("7/24/2026"), "r03.amount": a("$1,001 - $15,000"),
+        }, 3, None)
+        published = [{"n": 1, "asset": "Example Fund", "type": "Purchase", "date": "2026-07-22", "amount": "$1,001 - $15,000"}]
+        first = [{"n": 1, "description": "Example Fund", "type": "Purchase", "date": "7/22/2026", "amount": "$1,001 - $15,000"},
+                 {"n": 2, "description": "Sample Corp", "type": "Sale", "date": "7/24/2026", "amount": "$15,001 - $50,000"}]
+        first = [{**r, "asset": r["description"]} for r in first]
+        c = C.compare_scanned(got, published, first)
+        self.assertEqual((c["truth"], c["found"], c["missed"], c["invented"]), (1, 1, 0, 1))
+        self.assertEqual([f["result"] for f in c["fields"]], ["exact"] * 4)  # the endnote marker isn't part of the asset
+        self.assertEqual((c["first_rows"], c["agree_first"], c["published_in_first"], c["agree_published"]), (2, 1, 1, 1))  # row 2: dates differ
+
+    def test_first_model(self):
+        self.assertEqual(C.first_model('["model-a", "model-b"]'), "model-a")
+        self.assertEqual(C.first_model("model-a, model-b"), "model-a")
+        self.assertIsNone(C.first_model(None))
+
+    def test_the_sites_own_comment_reader(self):
+        import json
+        import shutil
+        import subprocess
+        if not shutil.which("node"):
+            self.skipTest("node isn't installed")
+        page = "AGENDA\nPublic comment: You may submit written comments by e-mail to the Clerk no later than 4:00 pm on the day before the meeting.\nCall to order."
+        r = subprocess.run(["node", str(Path(C.__file__).resolve().parent / "comment_reference.mjs")], input=json.dumps([page]), capture_output=True, text=True, check=True)
+        self.assertIn("no later than 4:00 pm", json.loads(r.stdout))
+
+
 class Report(unittest.TestCase):
     def test_prices_around_december_1(self):
         self.assertEqual(C.price_per_m(datetime.date(2026, 11, 30)), 0.10)

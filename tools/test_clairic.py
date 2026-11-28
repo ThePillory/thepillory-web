@@ -14,9 +14,17 @@ report goes to the job summary and test-clairic.json.
             layer (House and OGE): each asset and liability line with its value
             range, compared with the lines tools/networth.py reads from that text,
             the parser behind the published figures.
-  agendas   Calaveras County agenda PDFs: the public comment instructions, which
-            must come back as a span of the agenda's text, compared with what the
-            sync stored from the same PDF (meetings.comment_text).
+  agendas   Calaveras County agenda PDFs from the former county portal (IQM2; the
+            current system's PDFs don't download from GitHub's servers): the public
+            comment instructions, which must come back as a span of the agenda's
+            text, compared with what the site's own reader (workers/sync/src/meetings/
+            comment.js, through tools/comment_reference.mjs) finds in the same PDF.
+  scanned   scanned OGE Form 278-T reports whose rows the two-reading step published
+            (src/trades/scan-sync.js): Clairic as the second reading. Its rows are
+            paired with the published ones by their printed number (asset, type,
+            date, amount), and held against the first model's reading of every row by
+            the same agreement rule, so the report says how often a row would have
+            published with Clairic in place of the second model.
 
 Each PDF is sent as its pages (as images, up to 4 a call, Clairic's limit; net
 worth pages one a call, since they're dense) with those pages' text layer as the
@@ -65,7 +73,7 @@ PRICE_BEFORE, PRICE_AFTER = 0.10, 0.24  # dollars per million input tokens; no o
 IMAGES_PER_CALL = 4
 MAX_PAGES = 24
 NO_PERMISSION = 'The Cloudflare token can\'t use Workers AI: add "Workers AI: Read" to CLOUDFLARE_API_TOKEN (Cloudflare dashboard → My Profile → API Tokens).'
-DEFAULT_SAMPLE = {"trades": 50, "networth": 20, "agendas": 20}
+DEFAULT_SAMPLE = {"trades": 50, "networth": 20, "agendas": 20, "scanned": 20}
 
 TRADE_FIELDS = {
     "asset": ("text", "the asset's description exactly as written"),
@@ -81,9 +89,18 @@ LINE_FIELDS = {
     "value": ("text", "its value or amount range exactly as written (for example $1,001 - $15,000, None (or less than $1,001), Over $50,000,000)"),
 }
 COMMENT_FIELD = {"comment": {"type": "text", "instructions": "The agenda's instructions to the public on how to comment or submit public comment, copied exactly as written (a passage of the text)."}}
-FIELDS = {"trades": TRADE_FIELDS, "networth": LINE_FIELDS}
-TABLE = {"trades": "transactions", "networth": "assets or liabilities"}
-KEY = {"trades": "asset", "networth": "name"}
+# Scanned OGE Form 278-T reports: the cells the two-reading method reads (src/trades/scan-prompt.js).
+SCAN_FIELDS = {
+    "n": ("number", "the row's number as printed in the table's first column"),
+    "asset": ("text", "the description exactly as printed"),
+    "type": ("text", "the transaction type exactly as printed"),
+    "date": ("text", "the date exactly as printed (for example 7/22/2026)"),
+    "amount": ("text", "the amount exactly as printed (for example $1,001 - $15,000)"),
+}
+FIELDS = {"trades": TRADE_FIELDS, "networth": LINE_FIELDS, "scanned": SCAN_FIELDS}
+TABLE = {"trades": "transactions", "networth": "assets or liabilities", "scanned": "Transactions table"}
+KEY = {"trades": "asset", "networth": "name", "scanned": "asset"}
+SCAN_SLOTS_PER_PAGE = 12  # a scan's text layer can't count its rows, so a fixed number a page
 
 
 def price_per_m(day=None):
@@ -195,6 +212,54 @@ def compare_rows(task, got, want):
             "invented_rows": [{k: v["value"] for k, v in got[i].items()} for i in invented][:5]}
 
 
+ENDNOTE = re.compile(r"\s+(?:See\s+)?Endnotes?\b.*$", re.I)
+
+
+def scan_keys(row):
+    """One 278-T row's four cells as the agreement rule compares them (src/trades/scan-check.js
+    checkReadings): the date as a date, the type's label, the amount's bounds, the description's letters."""
+    v = lambda k: row[k]["value"] if isinstance(row.get(k), dict) else row.get(k)  # noqa: E731
+    date = v("date")
+    return {"date": T.iso(date) or (str(date)[:10] if re.match(r"^\d{4}-\d{2}-\d{2}", str(date or "")) else None),
+            "type": T.type_label(v("type")),
+            "amount": T.amount_bounds(v("amount")) if v("amount") else None,
+            "asset": T.norm(ENDNOTE.sub("", re.sub(r"\s+", " ", str(v("asset") or "")))) or None}
+
+
+def row_number(row):
+    try:
+        return int(float(str(row["n"]["value"] if isinstance(row.get("n"), dict) else row.get("n")).strip().rstrip(".")))
+    except (TypeError, ValueError):
+        return None
+
+
+def compare_scanned(got, want, first):
+    """A scanned report, rows paired by their printed number. Against the published rows (both current
+    readings agreed): field by field. Against the first reading (all its rows): would Clairic, as the
+    second reading, agree on all four cells, the rule a row needs to publish."""
+    g = {}
+    for r in got:
+        n = row_number(r)
+        if n and n not in g:
+            g[n] = r
+    w = {int(x["n"]): x for x in want}
+    fields = []
+    for n, x in w.items():
+        if n not in g:
+            continue
+        gk, wk = scan_keys(g[n]), scan_keys(x)
+        for name in ("asset", "type", "date", "amount"):
+            a = g[n][name]
+            result = "null" if a["value"] in (None, "") else ("exact" if gk[name] is not None and gk[name] == wk[name] else "wrong")
+            fields.append({"field": name, "result": result, "confidence": a["confidence"], "grounded": a["grounded"], "got": a["value"], "want": x.get(name)})
+    f = {int(r["n"]): r for r in first if str(r.get("n", "")).strip().isdigit()}
+    agree = lambda n: n in g and scan_keys(g[n]) == scan_keys(f[n]) and all(scan_keys(f[n]).values())  # noqa: E731
+    return {"truth": len(w), "found": sum(n in g for n in w), "missed": sum(n not in g for n in w),
+            "invented": sum(n not in f and n not in w for n in g), "fields": fields,
+            "first_rows": len(f), "agree_first": sum(agree(n) for n in f), "agree_published": sum(agree(n) for n in w if n in f),
+            "published_in_first": sum(n in f for n in w)}
+
+
 def squash(s):
     return re.sub(r"\s+", " ", str(s or "")).strip()
 
@@ -234,6 +299,9 @@ def summarize(results):
             continue
         for k in ("truth", "found", "missed", "invented"):
             s[k] += c[k]
+        for k in ("first_rows", "agree_first", "agree_published", "published_in_first"):
+            if k in c:
+                s[k] = s.get(k, 0) + c[k]
         for f in c["fields"]:
             acc = s["fields"].setdefault(f["field"], {})
             acc[f["result"]] = acc.get(f["result"], 0) + 1
@@ -265,6 +333,9 @@ def report(task, s, claude, day=None):
         not_exact = n - acc.get("exact", 0) - acc.get("null", 0)
         detail = ", ".join(f"{k} {v}" for k, v in acc.items() if k not in ("exact", "null", "wrong"))
         lines.append(f"| {f} | {acc.get('exact', 0)} | {not_exact}{f' ({detail})' if detail else ''} | {acc.get('null', 0)} | {100 * acc.get('exact', 0) / n:.1f}% |")
+    if "first_rows" in s:
+        lines += ["", f"As the second reading: Clairic agrees with the first reading on all four cells of **{s['agree_published']} of the {s['published_in_first']} rows the current two readings published**, "
+                  f"and on {s['agree_first']} of all {s['first_rows']} rows the first reading found (a row publishes only when both readings agree and the report's text backs it)."]
     lines += ["", f"Confidence of right answers: {conf_line(s['conf']['right'])}.", f"Confidence of wrong answers: {conf_line(s['conf']['wrong'])}."]
     if s["spans"][0]:
         lines.append(f"Spans: {s['spans'][1]} of {s['spans'][0]} answers point at exactly that text.")
@@ -298,9 +369,44 @@ def documents(args, rng):
     if args.task == "networth":
         rows = q(args, "SELECT id, source, report_url FROM networth_reports WHERE status = 'read' AND method = 'text' AND source IN ('house', 'oge') AND assets + COALESCE(liabilities, 0) BETWEEN 1 AND 40")
         return [{"id": r["id"], "url": r["report_url"], "source": r["source"], "want": None} for r in P.pick(rows, args.sample, rng)]
-    # Only agendas whose comment instructions the sync stored, so there's something to compare with.
-    rows = q(args, "SELECT id, agenda_url, comment_text FROM meetings WHERE level = 'county' AND agenda_url LIKE 'http%' AND comment_text IS NOT NULL AND comment_text != ''")
-    return [{"id": r["id"], "url": r["agenda_url"], "want": r["comment_text"]} for r in P.pick(rows, args.sample, rng)]
+    if args.task == "scanned":
+        # Scanned 278-T reports whose rows the two-reading step published, with the first model's reading of every row.
+        rows = q(args, "SELECT s.report_id AS id, r.report_url, s.models FROM trade_scans s JOIN trade_reports r ON r.id = s.report_id WHERE s.status IN ('agreed', 'approved') AND EXISTS (SELECT 1 FROM trades t WHERE t.report_id = s.report_id)")
+        chosen = P.pick(rows, args.sample, rng)
+        if not chosen:
+            return []
+        ids = ", ".join("'" + r["id"].replace("'", "''") + "'" for r in chosen)
+        want, first = {}, {}
+        for t in q(args, f"SELECT report_id, n, asset_name AS asset, type, transaction_date AS date, amount FROM trades WHERE report_id IN ({ids}) ORDER BY report_id, n"):
+            want.setdefault(t.pop("report_id"), []).append(t)
+        firsts = {r["id"]: first_model(r.get("models")) for r in chosen}
+        for c in q(args, f"SELECT report_id, model, reading FROM trade_scan_chunks WHERE report_id IN ({ids}) ORDER BY report_id, first_n"):
+            if c["model"] == firsts.get(c["report_id"]):
+                first.setdefault(c["report_id"], []).extend(json.loads(c["reading"]).get("rows") or [])
+        return [{"id": r["id"], "url": r["report_url"], "want": want.get(r["id"], []), "first": first.get(r["id"], []), "first_model": firsts[r["id"]]} for r in chosen]
+    # The former county portal's agendas (they download from GitHub's servers; the current system's don't),
+    # compared with what the site's own reader finds in the same PDF (tools/comment_reference.mjs).
+    rows = q(args, "SELECT id, agenda_url FROM meetings WHERE level = 'county' AND source = 'iqm2' AND agenda_url LIKE 'http%'")
+    return [{"id": r["id"], "url": r["agenda_url"], "want": None} for r in P.pick(rows, args.sample, rng)]
+
+
+def first_model(models):
+    """The first of the two models that read a scan (trade_scans.models: a JSON list or "a, b")."""
+    try:
+        m = json.loads(models)
+        if isinstance(m, list) and m:
+            return str(m[0])
+    except (TypeError, ValueError):
+        pass
+    return str(models or "").split(",")[0].strip() or None
+
+
+def comment_reference(pdf):
+    """The site's own reading of the comment instructions (workers/sync/src/meetings/comment.js) from the
+    first two pages' text, as the sync reads them; None when it finds none."""
+    texts = [subprocess.run(["pdftotext", "-f", str(n), "-l", str(n), str(pdf), "-"], capture_output=True, text=True).stdout for n in (1, 2)]
+    r = subprocess.run(["node", str(Path(__file__).resolve().parent / "comment_reference.mjs")], input=json.dumps(texts), capture_output=True, text=True, check=True)
+    return json.loads(r.stdout or "null")
 
 
 def claude_cost(args):
@@ -311,6 +417,7 @@ def claude_cost(args):
         return (f"scanned reports read by the two-model method in GitHub Actions (networth_scans, not ai_usage), last 30 days: {r.get('n') or 0} reports, ${r.get('usd') or 0}"
                 + (f", ${(r.get('usd') or 0) / r['n']:.2f} a report." if r.get("n") else "."))
     step, what = {"trades": ("scanned-trades", "scanned trade reports read by two models"),
+                  "scanned": ("scanned-trades", "scanned trade reports read by two models"),
                   "agendas": ("agenda-watch", "agenda item summaries; the comment instructions themselves are read by code, with no AI")}[args.task]
     r = q(args, f"SELECT SUM(calls) AS calls, SUM(input_tokens) AS input_tokens, ROUND(SUM(cost_usd), 2) AS usd FROM ai_usage WHERE step = '{step}' AND day >= date('now', '-30 days')")
     r = r[0] if r else {}
@@ -357,7 +464,7 @@ def read_doc(args, account, token, d, pgs):
     out["skipped_pages"] = 0
     for chunk in chunks:
         text = "\n\f".join(t for _, t in chunk)
-        slots = 0 if args.task == "agendas" else slots_for(args.task, text)
+        slots = 0 if args.task == "agendas" else min(MAX_SLOTS, SCAN_SLOTS_PER_PAGE * len(chunk)) if args.task == "scanned" else slots_for(args.task, text)
         if args.task != "agendas" and not slots:
             out["skipped_pages"] += len(chunk)  # no rows on these pages (a cover page, a certification)
             continue
@@ -380,6 +487,8 @@ def read_doc(args, account, token, d, pgs):
             got += rows_from(args.task, answers, slots, state_text)
     if args.task == "agendas":
         out["compare"] = compare_comment(comment or {"value": None, "confidence": None, "span": None, "grounded": None}, d["want"])
+    elif args.task == "scanned":
+        out["compare"] = compare_scanned(got, d["want"], d["first"])
     else:
         out["compare"] = compare_rows(args.task, got, d["want"])
     return out
@@ -387,8 +496,8 @@ def read_doc(args, account, token, d, pgs):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--task", required=True, choices=["trades", "networth", "agendas"])
-    ap.add_argument("--sample", type=int, default=0, help="documents (default: 50 trades, 20 networth, 20 agendas)")
+    ap.add_argument("--task", required=True, choices=["trades", "networth", "agendas", "scanned"])
+    ap.add_argument("--sample", type=int, default=0, help="documents (default: 50 trades, 20 networth, 20 agendas, 20 scanned)")
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--out", default="test-clairic.json")
     ap.add_argument("--database", default="pillory")
@@ -407,6 +516,8 @@ def main():
                 pdf.write_bytes(T.get(d["url"]))
                 pgs = pdf_pages(pdf, tmp)
                 text = T.pdf_text(pdf.read_bytes())
+                if args.task == "agendas":
+                    d["want"] = comment_reference(pdf)
             except Exception as e:  # noqa: BLE001
                 print(f"- {d['id']}: not read ({str(e)[:200]})", flush=True)
                 continue
