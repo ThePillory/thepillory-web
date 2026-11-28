@@ -90,6 +90,41 @@ class Compare(unittest.TestCase):
         self.assertEqual(C.notification_dates(text), ["2026-03-10", "2026-03-10"])
 
 
+class Fixes(unittest.TestCase):
+    """What the first runs showed (Nov 28): a type code counted as a wrong asset, slots sized for the page."""
+
+    def test_asset_without_its_type_code_is_the_same_asset(self):
+        self.assertEqual(C.same("trades", "asset", "ConocoPhillips (COP) [ST]", "ConocoPhillips (COP)"), "exact")
+        self.assertEqual(C.same("trades", "asset", "Example Labs, Inc. Class A\n(EXL) [ST]", "Example Labs, Inc. Class A (EXL)"), "exact")
+        self.assertEqual(C.same("trades", "asset", "Other Corp (OTH) [ST]", "Example Corp (EXC)"), "wrong")
+        got = C.rows_from("trades", {"r01.asset": a("Example Corp Common Stock (EXC) [ST]")}, 1, None)
+        self.assertEqual(C.compare_rows("trades", got, WANT[:1])["found"], 1)
+
+    def test_slots_from_the_pages_own_text(self):
+        trades = "SP Example Corp (EXC) [ST] P 03/02/2026 03/10/2026 $1,001 - $15,000\nSample Bond S 03/04/2026 03/10/2026 $15,001 - $50,000\n"
+        self.assertEqual(C.slots_for("trades", trades), 5)
+        self.assertEqual(C.slots_for("trades", "I CERTIFY that the statements are true."), 0)
+        page = "Example Fund   $1,001 - $15,000\nSample Account   None (or less than $1,001)\nAnother   Over $50,000,000\nHeading only\n"
+        self.assertEqual(C.slots_for("networth", page), 6)
+        self.assertEqual(C.slots_for("networth", "\n".join(["X $1,001 - $15,000"] * 80)), C.MAX_SLOTS)
+
+    def test_networth_one_page_a_call_and_pages_without_rows_skipped(self):
+        import types
+        calls = []
+
+        def fake(account, token, payload):
+            calls.append(len(payload["images"]))
+            return {"answers": {}, "usage": {"input_tokens": 10}}, 0.1
+        real, C.call = C.call, fake
+        try:
+            args = types.SimpleNamespace(task="networth")
+            r = C.read_doc(args, "a", "t", {"id": "x", "want": []}, [(b"p", "Cover page"), (b"p", "Fund $1,001 - $15,000"), (b"p", "Loan $15,001 - $50,000")])
+        finally:
+            C.call = real
+        self.assertEqual(calls, [1, 1])
+        self.assertEqual(r["skipped_pages"], 1)
+
+
 class Report(unittest.TestCase):
     def test_prices_around_december_1(self):
         self.assertEqual(C.price_per_m(datetime.date(2026, 11, 30)), 0.10)

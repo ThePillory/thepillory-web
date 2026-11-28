@@ -18,10 +18,15 @@ report goes to the job summary and test-clairic.json.
             must come back as a span of the agenda's text, compared with what the
             sync stored from the same PDF (meetings.comment_text).
 
-Each PDF is sent as its pages (as images, up to 4 a call, Clairic's limit) with
-those pages' text layer as the state, so every text answer's span can be
-checked against the text. This is the request shape the Clairic pilot
-(tools/clairic_pilot.py) used against the live API.
+Each PDF is sent as its pages (as images, up to 4 a call, Clairic's limit; net
+worth pages one a call, since they're dense) with those pages' text layer as the
+state, so every text answer's span can be checked against the text. This is the
+request shape the Clairic pilot (tools/clairic_pilot.py) used against the live
+API. Each call asks for as many row slots as the pages' own text shows rows
+(plus 3, at most 40), since Clairic's input tokens grow with the fields asked;
+pages whose text shows no rows aren't sent. Trades compare assets without the
+type code the site leaves off (" [ST]"); only reports with published rows, and
+only agendas with stored comment instructions, are picked.
 
 Reported: exact-match rate per field, rows missed and invented, nulls, the
 confidence of right and wrong answers, spans, tokens and dollars (input only:
@@ -88,6 +93,19 @@ def price_per_m(day=None):
 # ---------------------------------------------------------------------------
 # The request (pure)
 
+VALUE_LINE = re.compile(r"\$[\d,]+ ?(?:-|to) ?\$[\d,]+|\$[\d,]+ or less|(?:Over|More than) \$[\d,]+|\bNone\b|Undetermined|not readily ascertainable|Unascertainable", re.I)
+MAX_SLOTS = 40
+
+
+def slots_for(task, text):
+    """How many row slots to ask for on these pages, from their own text layer: the transaction lines (the
+    pattern tools/load_trades.py reads) or the lines with a value, plus a margin; 0 when there are none.
+    Asking for fewer fields is what keeps the cost down: Clairic's input tokens grow with the fields asked."""
+    lines = str(text or "").splitlines()
+    n = sum(bool(T.ROW.match(ln.rstrip())) for ln in lines) if task == "trades" else sum(bool(VALUE_LINE.search(ln)) for ln in lines)
+    return 0 if n == 0 else min(MAX_SLOTS, n + 3)
+
+
 def row_fields(task, slots):
     """A row count, then each row's typed fields, numbered: r01.asset, r01.ticker, ..."""
     out = {"rows": {"type": "number", "integer": True, "instructions": f"How many {TABLE[task]} rows these pages list (0 if none)"}}
@@ -124,6 +142,14 @@ def rows_from(task, answers, slots, state_text):
 # ---------------------------------------------------------------------------
 # Comparing (pure)
 
+TYPE_CODE = re.compile(r"\s*\[[A-Z]{2,4}\]\s*$")
+
+
+def asset_key(s):
+    """An asset's name as the site stores it: one line, without the trailing type code (" [ST]"), then normalized."""
+    return T.norm(TYPE_CODE.sub("", re.sub(r"\s+", " ", str(s or "")).strip()))
+
+
 def same(task, name, got, want):
     """'exact' or 'wrong' ('null' when Clairic gave nothing for a value the record states)."""
     if name == "owner":
@@ -137,14 +163,17 @@ def same(task, name, got, want):
     mapped = {"date": "date", "type": "type", "amount": "amount", "value": "value"}.get(name)
     if mapped:
         return "exact" if P.same_field("house" if task == "trades" else "annual", mapped, got, want) == "exact" else "wrong"
+    if name == "asset":
+        return "exact" if asset_key(got) == asset_key(want) else "wrong"
     return "exact" if T.norm(got) == T.norm(want) else "wrong"
 
 
 def align(task, got, want):
-    kind = "house" if task == "trades" else "annual"
-    g = [{("asset" if task == "trades" else "name"): r[KEY[task]]} for r in got]
-    w = [{("asset" if task == "trades" else "name"): x[KEY[task]]} for x in want]
-    return P.align(kind, g, w)
+    """Pairs rows by name in page order (the pilot's rule); trade assets compared without the type code."""
+    kind, k = ("house", "asset") if task == "trades" else ("annual", "name")
+    val = lambda v: v.get("value") if isinstance(v, dict) else v  # noqa: E731
+    key = (lambda v: TYPE_CODE.sub("", re.sub(r"\s+", " ", str(val(v) or "")))) if task == "trades" else val
+    return P.align(kind, [{k: key(r[KEY[task]])} for r in got], [{k: key(x[KEY[task]])} for x in want])
 
 
 def compare_rows(task, got, want):
@@ -193,11 +222,11 @@ def notification_dates(text):
 
 
 def summarize(results):
-    s = {"docs": 0, "pages": 0, "calls": 0, "failed": 0, "truth": 0, "found": 0, "missed": 0, "invented": 0, "tokens": 0, "seconds": 0.0,
+    s = {"docs": 0, "pages": 0, "skipped_pages": 0, "calls": 0, "failed": 0, "truth": 0, "found": 0, "missed": 0, "invented": 0, "tokens": 0, "seconds": 0.0,
          "fields": {}, "conf": {"right": [], "wrong": []}, "spans": [0, 0], "examples": []}
     for r in results:
         s["docs"] += 1
-        for k in ("pages", "calls", "failed", "tokens"):
+        for k in ("pages", "skipped_pages", "calls", "failed", "tokens"):
             s[k] += r.get(k, 0)
         s["seconds"] += r.get("seconds", 0.0)
         c = r.get("compare")
@@ -228,7 +257,7 @@ def report(task, s, claude, day=None):
     p = price_per_m(day)
     dollars_now = s["tokens"] * p / 1e6
     lines = [f"## Test Clairic · {task}", "",
-             f"{s['docs']} documents, {s['pages']} pages, {s['calls']} calls" + (f" ({s['failed']} failed)" if s["failed"] else "") + f", {s['seconds']:.0f} s.",
+             f"{s['docs']} documents, {s['pages']} pages" + (f" ({s['skipped_pages']} with no rows in their text layer, not sent)" if s.get("skipped_pages") else "") + f", {s['calls']} calls" + (f" ({s['failed']} failed)" if s["failed"] else "") + f", {s['seconds']:.0f} s.",
              f"Rows: {s['truth']} on record, {s['found']} found, **{s['missed']} missed**, **{s['invented']} invented** (not on record).", "",
              "| Field | Exact | Not exact | Null | Exact % |", "|---|---|---|---|---|"]
     for f, acc in s["fields"].items():
@@ -258,16 +287,19 @@ def q(args, sql):
 
 def documents(args, rng):
     if args.task == "trades":
-        rows = q(args, "SELECT id, report_url FROM trade_reports WHERE chamber = 'us-house' AND parsed = 1 AND paper = 0 AND trade_count BETWEEN 1 AND 20")
-        out = []
-        for r in P.pick(rows, args.sample, rng):
-            want = q(args, f"SELECT n, asset_name AS asset, ticker, type, transaction_date AS date, amount, owner FROM trades WHERE report_id = '{r['id']}' ORDER BY n")
-            out.append({"id": r["id"], "url": r["report_url"], "want": want})
-        return out
+        # Only reports whose rows are published (a report not attached to a member keeps its count but no rows).
+        rows = q(args, "SELECT r.id, r.report_url FROM trade_reports r WHERE r.chamber = 'us-house' AND r.parsed = 1 AND r.paper = 0 AND r.trade_count BETWEEN 1 AND 20 AND EXISTS (SELECT 1 FROM trades t WHERE t.report_id = r.id)")
+        chosen = P.pick(rows, args.sample, rng)
+        ids = ", ".join("'" + r["id"].replace("'", "''") + "'" for r in chosen)
+        by = {}
+        for t in q(args, f"SELECT report_id, n, asset_name AS asset, ticker, type, transaction_date AS date, amount, owner FROM trades WHERE report_id IN ({ids}) ORDER BY report_id, n") if chosen else []:
+            by.setdefault(t.pop("report_id"), []).append(t)
+        return [{"id": r["id"], "url": r["report_url"], "want": by.get(r["id"], [])} for r in chosen]
     if args.task == "networth":
         rows = q(args, "SELECT id, source, report_url FROM networth_reports WHERE status = 'read' AND method = 'text' AND source IN ('house', 'oge') AND assets + COALESCE(liabilities, 0) BETWEEN 1 AND 40")
         return [{"id": r["id"], "url": r["report_url"], "source": r["source"], "want": None} for r in P.pick(rows, args.sample, rng)]
-    rows = q(args, "SELECT id, agenda_url, comment_text FROM meetings WHERE level = 'county' AND agenda_url LIKE 'http%'")
+    # Only agendas whose comment instructions the sync stored, so there's something to compare with.
+    rows = q(args, "SELECT id, agenda_url, comment_text FROM meetings WHERE level = 'county' AND agenda_url LIKE 'http%' AND comment_text IS NOT NULL AND comment_text != ''")
     return [{"id": r["id"], "url": r["agenda_url"], "want": r["comment_text"]} for r in P.pick(rows, args.sample, rng)]
 
 
@@ -317,12 +349,19 @@ def read_doc(args, account, token, d, pgs):
     """Send the document's pages, IMAGES_PER_CALL at a time; returns rows (or the comment answer) and the counts."""
     out = {"pages": len(pgs), "calls": 0, "failed": 0, "tokens": 0, "seconds": 0.0}
     got, comment = [], None
-    chunks = [pgs[i:i + IMAGES_PER_CALL] for i in range(0, len(pgs), IMAGES_PER_CALL)]
+    # Net worth pages are dense: one page a call, so the slots match the page. Trades: up to 4 pages a call.
+    per = 1 if args.task == "networth" else IMAGES_PER_CALL
+    chunks = [pgs[i:i + per] for i in range(0, len(pgs), per)]
     if args.task == "agendas":
         chunks = chunks[:2]  # the instructions are near the front of an agenda: its first 8 pages
+    out["skipped_pages"] = 0
     for chunk in chunks:
         text = "\n\f".join(t for _, t in chunk)
-        fields = COMMENT_FIELD if args.task == "agendas" else row_fields(args.task, args.slots)
+        slots = 0 if args.task == "agendas" else slots_for(args.task, text)
+        if args.task != "agendas" and not slots:
+            out["skipped_pages"] += len(chunk)  # no rows on these pages (a cover page, a certification)
+            continue
+        fields = COMMENT_FIELD if args.task == "agendas" else row_fields(args.task, slots)
         try:
             res, secs = call(account, token, body(fields, [p for p, _ in chunk], text))
         except RuntimeError as e:
@@ -338,7 +377,7 @@ def read_doc(args, account, token, d, pgs):
             if a["value"] not in (None, "") and (comment is None or comment["value"] in (None, "")):
                 comment = a
         else:
-            got += rows_from(args.task, answers, args.slots, state_text)
+            got += rows_from(args.task, answers, slots, state_text)
     if args.task == "agendas":
         out["compare"] = compare_comment(comment or {"value": None, "confidence": None, "span": None, "grounded": None}, d["want"])
     else:
@@ -355,7 +394,6 @@ def main():
     ap.add_argument("--database", default="pillory")
     args = ap.parse_args()
     args.sample = args.sample or DEFAULT_SAMPLE[args.task]
-    args.slots = {"trades": 20, "networth": 25, "agendas": 0}[args.task]
     account = os.environ["CLOUDFLARE_ACCOUNT_ID"]
     token = os.environ["CLOUDFLARE_API_TOKEN"]
     rng = random.Random(args.seed)
