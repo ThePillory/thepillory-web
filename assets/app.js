@@ -1,6 +1,6 @@
 // ThePillory: shared behavior for the app screens.
 // - Global search (dropdown on every tab, full results on /search/)
-// - Tabs on rep profiles (#about, #platform, #votes, #funding, #more)
+// - Tabs on rep profiles (#about, #votes, #money, #platform)
 // - The first-visit intro on Home (dismissed once, remembered in this browser)
 // - Links to an agenda item open its collapsed section on meeting pages
 // Search: assets/search-index.js (governing bodies, the Constitution and topics,
@@ -278,11 +278,13 @@
     });
 
     // A tab's own id opens it; the id of something inside a panel (#disclosures,
-    // #orders) opens that panel and scrolls to it. Old links: #overview is About,
-    // #promises is Platform.
-    var ALIASES = { overview: "about", promises: "platform" };
+    // #orders, #funding) opens that panel and scrolls to it. Old links: #overview is
+    // About, #promises is Platform, #more is Money (Funding and More became one tab).
+    var ALIASES = { overview: "about", promises: "platform", more: "money" };
     function fromHash() {
-      var id = ALIASES[location.hash.slice(1)] || location.hash.slice(1);
+      var id = location.hash.slice(1);
+      // An old name only where its new tab exists (a justice's page keeps its own More tab).
+      if (ids.indexOf(id) === -1 && ALIASES[id] && ids.indexOf(ALIASES[id]) !== -1) id = ALIASES[id];
       if (ids.indexOf(id) !== -1) return show(id);
       var target = id && document.getElementById(id);
       var panel = target && target.closest ? target.closest('[role="tabpanel"]') : null;

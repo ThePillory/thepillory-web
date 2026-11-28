@@ -177,7 +177,7 @@ Other states' bills aren't analyzed until they're in the top 10. Every analysis 
 | State page (`/states/<name>/`, its "[State] map" section) | Legislators by chamber and statewide officers, then "bills and roll call votes are coming soon" | The latest bills with final votes, and how much is loaded: bills, votes, the date range and the source (`functions/_lib/coverage.js`) |
 | County and district pages | Each district's legislators | The same |
 | Home and briefing | The visitor's state legislators and executive; Happening now on Home shows Congress and California | Your briefing's Happening now toggle shows the visitor's state |
-| Official page | About, Platform, and the Votes tab saying votes are coming soon | Every recorded vote. The Funding tab: money data for other states isn't loaded; it says so. |
+| Official page | About, Platform, and the Votes tab saying votes are coming soon | Every recorded vote. The Money tab: money data for other states isn't loaded; it says so. |
 | Votes list (`/votes/`) | Congress, California | Plus a chip for the visitor's state (`?level=state:XX`) |
 | Bill page | n/a | The same layout as California; the full text links to the state's site (from the source) |
 

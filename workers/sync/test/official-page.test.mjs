@@ -68,10 +68,11 @@ async function get(path) {
 const panel = (html, id) => {
   const at = html.indexOf(`role="tabpanel" id="${id}"`);
   const next = html.indexOf('role="tabpanel"', at + 10);
-  return html.slice(at, next < 0 ? html.indexOf("</main>") : next);
+  // The last panel ends where the tabs do.
+  return html.slice(at, next < 0 ? html.indexOf("</div>\n</div>\n</div>", at) : next);
 };
 
-test("the header: office, name, and one row of small tiles (votes, raised); the full money sentence leads Funding; no repeats in the tabs", async () => {
+test("the header: office, name, and one row of small tiles (votes, raised); Money's campaign section leads with the full money sentence; four tabs; no repeats in the tabs", async () => {
   const { res, html } = await get("/reps/example-member/");
   assert.equal(res.status, 200);
   const head = html.slice(html.indexOf('class="page-head rep-head"'), html.indexOf("</header>", html.indexOf('class="page-head rep-head"')));
@@ -81,11 +82,17 @@ test("the header: office, name, and one row of small tiles (votes, raised); the 
   assert.match(head, /<a class="stat head-stat" href="#funding"><span class="stat-num">\$1M<\/span><span class="stat-label">raised<\/span><\/a>/);
   assert.doesNotMatch(head, /more-networth/, "no net worth tile without a report read");
   assert.doesNotMatch(head, /final-passage votes on record|Raised \$1,000,000/, "the sentences moved out of the header");
-  assert.match(panel(html, "funding"), /^role="tabpanel" id="funding"[^>]*><p class="money-glance money-full">Raised \$1,000,000 in /);
+  // Money: Campaign money first, its fold (#funding) led by the full money sentence, its one-line summary the short amount.
+  const money = panel(html, "money");
+  assert.match(money, /^role="tabpanel" id="money"[^>]*><section class="stack-sm" aria-labelledby="h-money-campaign"><h2 class="label" id="h-money-campaign">Campaign money<\/h2><details class="fold" id="funding">/);
+  assert.match(money, /<span class="fold-title">Campaign committees<\/span><span class="fold-meta">\$1M raised<\/span>/);
+  assert.match(money, /<div class="fold-body stack"><p class="money-glance money-full">Raised \$1,000,000 in /);
   assert.doesNotMatch(head, /class="chips"/, "no chips repeating the body or the website");
   assert.doesNotMatch(html, /Record at a glance/, "the counts are in the header, not again on About");
   assert.doesNotMatch(html, /id="issues"/, "no separate Issues section");
-  assert.match(html, /class="tabs tabs--five"/);
+  // Four tabs, the same for everyone: About · Votes · Money · Platform.
+  assert.match(html, /class="tabs tabs--rep"/);
+  assert.deepEqual([...html.matchAll(/role="tab" id="tab-(\w+)"/g)].map((m) => m[1]), ["about", "votes", "money", "platform"]);
 });
 
 test("Votes: the latest ten, then See all on its own paged page", async () => {
@@ -104,9 +111,15 @@ test("Votes: the latest ten, then See all on its own paged page", async () => {
   assert.equal(old.res.headers.get("Location"), "https://thepillory.test/reps/example-member/votes/?votes=all&page=2");
 });
 
-test("Funding: totals and the bar, the top five PACs, then See all", async () => {
+// The "Campaign committees" fold (#funding) inside Money.
+const fundingFold = (html) => {
+  const at = html.indexOf('<details class="fold" id="funding">');
+  return at < 0 ? "" : html.slice(at, html.indexOf('aria-labelledby="h-money-own"', at) > 0 ? html.indexOf('aria-labelledby="h-money-own"', at) : undefined);
+};
+
+test("Money, Campaign money: totals and the bar, the top five PACs, then See all", async () => {
   const { html } = await get("/reps/example-member/");
-  const funding = panel(html, "funding");
+  const funding = fundingFold(html);
   assert.ok(funding.indexOf("hero-num") < funding.indexOf("Where it came from") && funding.indexOf("Where it came from") < funding.indexOf("Top PACs"));
   assert.equal((funding.match(/Example PAC \d/g) || []).length, 5);
   assert.match(funding, new RegExp(`href="/reps/example-member/funding/pacs/\\?cycle=${CYCLE}"[\\s\\S]*?See all PACs`));
@@ -116,9 +129,11 @@ test("Funding: totals and the bar, the top five PACs, then See all", async () =>
   assert.equal((await get("/reps/example-member/funding/donors/")).res.status, 404);
 });
 
-test("More: one row per topic with a one-line summary; travel five, then See all", async () => {
+test("Money, in groups: one row per topic with a one-line summary; travel five under Other reports, then See all", async () => {
   const { html } = await get("/reps/example-member/");
-  const more = panel(html, "more");
+  const more = panel(html, "money");
+  assert.ok(more.indexOf('id="h-money-campaign"') < more.indexOf('id="h-money-own"') && more.indexOf('id="h-money-own"') < more.indexOf('id="h-money-other"'), "campaign money, their own finances, other reports");
+  assert.ok(more.indexOf('id="more-trades"') < more.indexOf('id="h-money-other"') && more.indexOf('id="more-travel"') > more.indexOf('id="h-money-other"'));
   const row = (id) => (more.match(new RegExp(`<details class="fold" id="${id}">\\s*<summary>([\\s\\S]*?)</summary>`)) || [])[1] || "";
   assert.match(row("more-travel"), /Privately paid travel<\/span><span class="fold-meta">7 trips since 2023/);
   assert.match(row("more-trades"), /fold-meta">None reported/);

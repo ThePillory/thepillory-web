@@ -44,7 +44,7 @@ Every page and section before this change, and after. The earlier cleanup (the p
 | `/votes/` | Your reps' votes, or all final-passage votes with totals | Real |
 | `/about/how-a-bill-becomes-law/`, `/about/how-to-read-a-vote/` | Explainers | Real, neutral, sources linked |
 | `/admin/waitlist/` | Counts by county | Real (behind Cloudflare Access) |
-| `/issues/`, `/report/`, rep Issues (under More) | | Empty state |
+| `/issues/`, `/report/`, rep Issues (under Money) | | Empty state |
 | `/about/how-it-works/` | One example issue | Sample, labeled "Example", hypothetical |
 
 Not built yet (said plainly where relevant): reporting and accounts, promises, supervisors' votes from minutes, state and local coverage outside California and Calaveras, and federal agency comment periods (Regulations.gov; a TODO in `functions/index.js`).

@@ -84,7 +84,7 @@ Six sync steps (`workers/sync/src/executive/`); parsers are pure functions in
 
 ## Funding
 
-Every executive office has a Funding tab, the same rules for every office (see
+Every executive office has a Money tab, the same rules for every office (see
 `docs/funding.md`, "The executive branch"): the President's FEC campaign money,
 inaugural committee and OGE financial disclosures; the Vice President's ticket
 money (when they ran with the President), the inaugural committee and OGE
@@ -95,10 +95,10 @@ campaign committees (Cal-Access) and Form 700 statements (FPPC).
 ## Pages
 
 - `/reps/<slug>/`: the same five tabs as every official (About · Promises ·
-  Votes · Funding · More). For the President and the Governor, Votes is the
+  Votes · Money · Platform). For the President and the Governor, Votes is the
   bills signed and vetoed, and More holds executive orders (and the President's
   nominations) and disclosures. For the Cabinet, Votes and Funding say they
-  don't apply to appointed officials and link to Disclosures under More.
+  don't apply to appointed officials and link to Disclosures under Money.
 - `/laws/bills/<id>/`: **Final action** (under History), with the outcome, date,
   law or chapter number, who acted, the recorded action word for word, and the
   source; the status at the top of the page is the final action when recorded.
@@ -107,7 +107,7 @@ campaign committees (Cal-Access) and Form 700 statements (FPPC).
   status, title, two-sentence summary (from its checked constitutional analysis,
   labeled), "Touches the Constitution" chips; **Authority it claims**; **In the
   courts**; then collapsed Constitution, History and Full text. The orders lists
-  (`/laws/?show=orders`, the President's and Governor's More tab, topic pages)
+  (`/laws/?show=orders`, the President's and Governor's Money tab, topic pages)
   link here, and each still links its source.
 - "Who represents you" on the hub (`/`), state pages (`/states/<name>/`) and
   place pages (`/place/…`); `/bodies/us-executive/` and `/bodies/ca-executive/`

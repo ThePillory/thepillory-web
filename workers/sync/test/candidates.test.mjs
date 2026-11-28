@@ -170,7 +170,7 @@ test("a candidate's page: the official layout, labeled, with money and no contac
   assert.match(html, /<h1>Anna Zulu<\/h1>/);
   assert.match(html, /Texas chose its nominees in the primary on March 3, 2026\. Whether this filer is on the November ballot: see the state&#x27;s official candidate list\./);
   assert.doesNotMatch(html, /Candidate · Not yet in office/);
-  for (const t of ["About", "Platform", "Votes", "Funding", "More"]) assert.match(html, new RegExp(`role="tab"[^>]*>${t}<`));
+  assert.deepEqual([...html.matchAll(/role="tab"[^>]*>(\w+)</g)].map((m) => m[1]), ["About", "Votes", "Money", "Platform"]);
   assert.match(html, /href="\/races\/2026\/tx\/senate\/"/);
   assert.match(html, /\$1,000/);
   assert.match(html, /EXAMPLE WORKERS PAC/);

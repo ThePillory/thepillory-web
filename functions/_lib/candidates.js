@@ -445,18 +445,23 @@ export function candidatePlatform(name, website, row, { state = false } = {}) {
 
 const included = (text = INCLUDED) => `<p class="hint">${esc(text)} <a class="inline-link" href="${METHOD}">How candidates are included</a></p>`;
 
-function tabs(about, platform, record, funding, more) {
+/**
+ * The same four tabs as an official's page: About · Votes · Money · Platform. Money: the campaign money
+ * (collapsed, opened by #funding), then their own finances (Form 700s) when there are any.
+ */
+function tabs(about, platform, record, funding, { own = "", aboutMore = "" } = {}) {
   const tab = (k, label) => `<a role="tab" id="tab-${k}" href="#${k}" aria-controls="${k}">${label}</a>`;
+  const group = (id, title, html) => (html.trim() ? `<section class="stack-sm" aria-labelledby="h-${id}"><h2 class="label" id="h-${id}">${title}</h2>${html}</section>` : "");
+  const money = group("money-campaign", "Campaign money", fold("funding", "Campaign committees", funding)) + group("money-own", "Their own finances", own);
   return `
 <div class="rep-tabs stack" data-tabs>
-  <nav class="tabs tabs--five" role="tablist" aria-label="Sections">
-    ${tab("about", "About")}${tab("platform", "Platform")}${tab("votes", "Votes")}${tab("funding", "Funding")}${tab("more", "More")}
+  <nav class="tabs tabs--rep" role="tablist" aria-label="Sections">
+    ${tab("about", "About")}${tab("votes", "Votes")}${tab("money", "Money")}${tab("platform", "Platform")}
   </nav>
-  <div class="stack" role="tabpanel" id="about" aria-labelledby="tab-about">${about}</div>
-  <div class="stack" role="tabpanel" id="platform" aria-labelledby="tab-platform">${platform}</div>
+  <div class="stack" role="tabpanel" id="about" aria-labelledby="tab-about">${about}${aboutMore}</div>
   <div class="stack" role="tabpanel" id="votes" aria-labelledby="tab-votes">${record}</div>
-  <div class="stack" role="tabpanel" id="funding" aria-labelledby="tab-funding">${funding}</div>
-  <div class="stack" role="tabpanel" id="more" aria-labelledby="tab-more">${more}</div>
+  <div class="stack" role="tabpanel" id="money" aria-labelledby="tab-money">${money}</div>
+  <div class="stack" role="tabpanel" id="platform" aria-labelledby="tab-platform">${platform}</div>
 </div>`;
 }
 
@@ -538,7 +543,7 @@ ${onCert && contest ? `<p class="small"><a class="inline-link" href="${contestHr
 ${fold("how", "How candidates are included", `<p class="small">${esc(INCLUDED)}</p><p class="small">${esc(NEUTRAL)}</p><a class="inline-link" href="${METHOD}">Methodology</a>`)}`;
 
   const main = `${head({ label: s.label, name: display, line: s.line, chips })}
-${tabs(about, candidatePlatform(display, website, platform), recordTab(display, held), candidateFunding(c, display, { electioneering }), more)}`;
+${tabs(about, candidatePlatform(display, website, platform), recordTab(display, held), candidateFunding(c, display, { electioneering }), { aboutMore: more })}`;
   return { title: display, main };
 }
 
@@ -577,16 +582,16 @@ ${fold("filing", "As certified", kv([
 ${fold("source", "Sources", `<p class="small">${sourceLink(contest.source_url, "Certified List of Candidates")}</p>`)}
 ${included(INCLUDED_CERTIFIED)}`;
   // Campaign money: the same tab and rules as officials', from the committees Cal-Access lists with this
-  // candidate's name for this office (a unique match only). Their Form 700s go under More, like officials'.
+  // candidate's name for this office (a unique match only). Their Form 700s go under Money, like officials'.
   const funding = m && m.money
     ? stateFundingTab({ name: cand.name }, m.money, base)
     : `<section class="card stack-sm"><p class="small">Not loaded yet. Campaign money for ${esc(stateName)} candidates comes from the Secretary of State's Cal-Access export, loaded in the data sync.</p>${outLink("https://cal-access.sos.ca.gov/Campaign/Candidates/", "Cal-Access candidate search")}</section>`;
+  const own = stateForm700(m || {}).replace("California officials file a Statement of Economic Interests (Form 700) each year", "Candidates for state office file a Statement of Economic Interests (Form 700) when they run, and officials each year");
   const more = `
-${stateForm700(m || {}).replace("California officials file a Statement of Economic Interests (Form 700) each year", "Candidates for state office file a Statement of Economic Interests (Form 700) when they run, and officials each year")}
 <p class="small"><a class="inline-link" href="${contestHref(election.election.id, contest.id)}">Every candidate's statement in this contest</a></p>
 ${fold("how", "How candidates are included", `<p class="small">Every candidate on the Secretary of State's Certified List of Candidates, in ballot order. ${esc(NEUTRAL)}</p><a class="inline-link" href="${METHOD}">Methodology</a>`)}`;
   const main = `${head({ label, name: cand.name, line: s.line, chips })}
-${tabs(about, candidatePlatform(cand.name, null, null, { state: true }), recordTab(cand.name, held), funding, more)}`;
+${tabs(about, candidatePlatform(cand.name, null, null, { state: true }), recordTab(cand.name, held), funding, { own, aboutMore: more })}`;
   return { title: cand.name, main };
 }
 

@@ -131,7 +131,7 @@ async function officialPanel(db, o) {
     ${line("Party", esc(o.party || "None listed"))}
     ${line("Votes", `${esc(votes)} <a class="inline-link" href="${esc(href)}#votes">Full record ›</a>`)}
     ${line("Money raised", `${esc(money)} <a class="inline-link" href="${esc(href)}#funding">Full record ›</a>`)}
-    ${line("Net worth, as reported", `${esc(worth)} <a class="inline-link" href="${esc(href)}#more">Full record ›</a>`)}
+    ${line("Net worth, as reported", `${esc(worth)} <a class="inline-link" href="${esc(href)}#more-networth">Full record ›</a>`)}
   </div>
 </details>`;
 }

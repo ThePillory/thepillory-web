@@ -1,8 +1,8 @@
 // Money from government to organizations, and outside contacts and travel,
 // shown beside funding and lobbying as facts, never as cause or payoff (see
 // docs/funding.md). Loaded weekly by tools/load_gov_money.py (migration 0031):
-// earmarks on members' More tab and appropriations bill pages, privately paid
-// travel and foreign agents' reported contacts on the More tab. Nothing here
+// earmarks on members' Money tab and appropriations bill pages, privately paid
+// travel and foreign agents' reported contacts on the Money tab. Nothing here
 // connects one fact to another in words: no "in return", "after", "because".
 import { esc, safeUrl, fmtDate } from "./render.js";
 
@@ -155,7 +155,7 @@ function tableLinks(tables) {
 const seeAllRow = (href, n, what) =>
   `<a class="list-row link-row see-all" href="${esc(href)}"><div><div class="list-title">See all ${n.toLocaleString("en-US")} ${esc(what)}</div></div><span class="row-end"><span class="chev" aria-hidden="true">›</span></span></a>`;
 
-/** One-line summaries for the More tab's rows. */
+/** One-line summaries for the Money tab's rows. */
 export function govMoneyMeta(g) {
   if (!g) return { earmarks: "", travel: "", fara: "" };
   const projects = g.rows.length + g.requests.filter((q) => !q.enacted_id).length;
@@ -213,7 +213,7 @@ export function earmarksSection(o, g, { top = 0, href = "" } = {}) {
     return { fy, line, items, all: rows.length + loose.length };
   });
   const count = years.reduce((n, y) => n + y.all, 0);
-  // The More tab: the newest year's first few, then "See all" (the member's earmarks page).
+  // The Money tab: the newest year's first few, then "See all" (the member's earmarks page).
   if (top) {
     const newest = years[0];
     return `<div class="stack-sm">

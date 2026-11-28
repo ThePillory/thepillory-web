@@ -1,6 +1,6 @@
 // /candidates/<FEC id>/ and /candidates/ca/<contest>/<name>/: one candidate not
-// yet in office, with the same layout as an official's page (About · Platform ·
-// Votes · Funding · More; functions/_lib/candidates.js). The same for everyone:
+// yet in office, with the same layout as an official's page (About · Votes ·
+// Money · Platform; functions/_lib/candidates.js). The same for everyone:
 // kept at the edge for a few minutes. /candidates/ goes to the ballot preview (/ballot/).
 import { page, notFound, guard, edgeCached, loadSection, FAILED } from "../_lib/render.js";
 import { electioneeringFor } from "../_lib/dark-money.js";
