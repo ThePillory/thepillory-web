@@ -55,12 +55,12 @@ test("money line: no line without money (never $0)", () => {
 
 test("money line: a California official, from Cal-Access, and a county supervisor, from NetFile (itemized only)", () => {
   const ca = moneyLine({ chamber: "ca-assembly", name: "A" }, { kind: "state", money: { cycle: 2026, row: { raised: 845_000 }, industries: [{ industry: "labor", total: 90_000 }, { industry: "other", total: 400_000 }] } });
-  assert.deepEqual(ca, { text: "Raised $845,000 in 2025–2026 · Largest industry (approximate): Labor unions", source: "statements filed with the California Secretary of State (Cal-Access)" });
+  assert.deepEqual(ca, { text: "Raised $845,000 in 2025–2026 · Largest industry (approximate): Labor unions", source: "statements filed with the California Secretary of State (Cal-Access)", amount: 845_000 });
   // The Governor and statewide officers are the same "state" money.
   assert.equal(moneyLine({ chamber: "ca-executive", name: "G" }, { kind: "state", money: { cycle: 2026, row: { raised: 10 }, industries: [] } }).text, "Raised $10 in 2025–2026");
   const docs = [{ officials: { "[Supervisor, District 2]": ["CLVS-1"] }, committees: { "CLVS-1": { contributions: 194, first: "2025-01-25", last: "2025-06-07" } } }];
   const sup = moneyLine({ chamber: "county-board", name: "[Supervisor, District 2]" }, { kind: "county", local: docs });
-  assert.deepEqual(sup, { text: "Raised $194 in itemized contributions, Jan. 2025 to June 2025", source: "filings on the county's NetFile site" });
+  assert.deepEqual(sup, { text: "Raised $194 in itemized contributions, Jan. 2025 to June 2025", source: "filings on the county's NetFile site", amount: 194, itemized: true });
   for (const s of [ca.text, sup.text]) clean(s);
 });
 
@@ -68,7 +68,7 @@ test("money line: the President's campaign committee, the Vice President only on
   const campaign = { cycle: 2026, totals: { receipts: 5_000_000, pac: 500_000 }, industries: [] };
   const inaugural = { committee: { name: "Inaugural Committee" }, reports: [{ total_receipts: 200_000_000 }] };
   const pres = moneyLine({ chamber: "us-executive", name: "[President]" }, { kind: "president", campaign, inaugural });
-  assert.deepEqual(pres, { text: "Campaign committee raised $5,000,000 in 2025–2026 · 10% from PACs", source: "reports filed with the Federal Election Commission" });
+  assert.deepEqual(pres, { text: "Campaign committee raised $5,000,000 in 2025–2026 · 10% from PACs", source: "reports filed with the Federal Election Commission", amount: 5_000_000 });
   const vp = moneyLine({ chamber: "us-executive", name: "[Vice President]" }, { kind: "vice-president", ticket: true, campaign, inaugural });
   assert.equal(vp.text, "The President's ticket's campaign committee raised $5,000,000 in 2025–2026 · 10% from PACs");
   // Not on the ticket (a Vice President who took office later): no line.
@@ -79,9 +79,18 @@ test("money line: the President's campaign committee, the Vice President only on
   for (const t of [pres.text, vp.text]) clean(t);
 });
 
-test("money line: the official page shows it bold, body size, linked to the Funding tab, in Quick mode's card too", () => {
+function cssText() {
+  return readFileSync(new URL("../../../assets/pillory.css", import.meta.url), "utf8");
+}
+
+test("money line: the header's small tile, the full sentence first on the Funding tab (bold, body size), and Quick mode's card", () => {
   const src = readFileSync(new URL("../../../functions/reps/[[path]].js", import.meta.url), "utf8");
-  assert.match(src, /<p class="summary-line money-glance"><a href="#funding">\$\{esc\(glance\.text\)\} ›<\/a><\/p>/);
+  assert.match(src, /tile\("#funding", shortRaised\(glance\.amount\), glance\.itemized \? "raised \(itemized\)" : "raised"\)/);
+  assert.match(src, /fundingHtml = `<p class="money-glance money-full">\$\{esc\(glance\.text\)\}<\/p>\$\{fundingHtml\}`/);
+  const tiles = cssText().match(/\.head-stat \.stat-num \{([^}]*)\}/);
+  assert.match(tiles[1], /font-size: var\(--fs-body\)/);
+  assert.match(cssText(), /\.head-stat \{[^}]*min-height: var\(--tap\)/, "each tile a 44px tap target");
+  assert.match(cssText(), /\.head-stats \{[^}]*flex-wrap: wrap/, "the row wraps on narrow phones");
   assert.match(src, /\["Money", glance \? `<a class="money-glance" href="#funding"/);
   const css = readFileSync(new URL("../../../assets/pillory.css", import.meta.url), "utf8");
   const rule = css.match(/\.money-glance, \.money-glance a \{([^}]*)\}/);
@@ -91,7 +100,7 @@ test("money line: the official page shows it bold, body size, linked to the Fund
   assert.match(rule[1], /color: var\(--text\)/); // no color of its own: never green or red
 });
 
-test("Your representatives: the same line under each person, from a few indexed reads; none for the Cabinet or without money", async () => {
+test("Your representatives: the short amount on the right of each row and one label, from a few indexed reads; none for the Cabinet or without money", async () => {
   const sqlite = new DatabaseSync(":memory:");
   for (const f of readdirSync(MIG).filter((f) => f.endsWith(".sql")).sort()) sqlite.exec(readFileSync(new URL(f, MIG), "utf8"));
   const off = sqlite.prepare("INSERT INTO officials (id, slug, name, office, level, chamber, body, state, rank, term_start, source_url, last_verified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'https://example.org', '2026-11-01')");
@@ -112,17 +121,23 @@ test("Your representatives: the same line under each person, from a few indexed 
   const all = sqlite.prepare("SELECT * FROM officials").all();
   const m = await moneyGlances(db, all, { cycle: 2026 });
   assert.deepEqual(m, {
-    p: "Campaign committee raised $5,000,000 in 2025–2026 · 10% from PACs",
-    v: "The President's ticket's campaign committee raised $5,000,000 in 2025–2026 · 10% from PACs",
-    s: "Raised $2,000,000 in 2025–2026 · 50% from PACs · Largest industry (approximate): Health care",
-    g: "Raised $300,000 in 2025–2026",
+    p: { amount: 5_000_000, text: "$5M" },
+    v: { amount: 5_000_000, text: "$5M" }, // the President's ticket's committee
+    s: { amount: 2_000_000, text: "$2M" },
+    g: { amount: 300_000, text: "$300K" },
   });
-  for (const t of Object.values(m)) clean(t);
-  // Shown as a second small line under the person's job, in Home's Your representatives and the Reps tab's.
-  const home = yourReps({ president: all.find((o) => o.id === "p"), senators: [all.find((o) => o.id === "s")], governor: all.find((o) => o.id === "g"), mine: [all.find((o) => o.id === "h")], money: m });
-  assert.match(home, /\[Senator\]<\/div><div class="list-meta">[^<]+<\/div><div class="list-meta">Raised \$2,000,000 in 2025–2026/);
-  assert.doesNotMatch(home, /\[Representative\]<\/div><div class="list-meta">[^<]+<\/div><div class="list-meta">/);
-  assert.match(yourRow(all.find((o) => o.id === "v"), m), /<div class="list-meta">The President&#x27;s ticket&#x27;s campaign committee raised/);
+  // The row's status on the right; line 2 stays the role; one label above the list; no PAC share or industry here.
+  const home = yourReps({ president: all.find((o) => o.id === "p"), senators: [all.find((o) => o.id === "s")], governor: all.find((o) => o.id === "g"), mine: [all.find((o) => o.id === "h")], money: m, cycle: 2026 });
+  assert.match(home, /<p class="small secondary money-key">Campaign money raised, 2025–2026<\/p>/);
+  assert.match(home, /\[Senator\]<\/div><div class="list-meta">[^<]+<\/div><\/div><span class="row-end"><span class="list-status row-amount">\$2M<\/span>/);
+  assert.doesNotMatch(home, /\[Representative\]<\/div><div class="list-meta">[^<]+<\/div><\/div><span class="row-end"><span class="list-status/, "nothing on the right without money");
+  assert.doesNotMatch(home, /from PACs|industry|\$0\b/);
+  // People stay in office order: the money never reorders them.
+  assert.ok(home.indexOf("[President]") < home.indexOf("[Senator]") && home.indexOf("[Senator]") < home.indexOf("[Governor]") && home.indexOf("[Governor]") < home.indexOf("[Representative]"));
+  assert.match(yourRow(all.find((o) => o.id === "v"), m), /<span class="list-status row-amount">\$5M<\/span>/);
+  assert.equal(yourReps({ senators: [all.find((o) => o.id === "s")], money: {}, cycle: 2026 }).includes("money-key"), false, "no label without amounts");
+  // The amount in the text color, never a color of its own.
+  assert.match(cssText(), /\.row-amount \{ color: var\(--text\)/);
 });
 
 test("Methodology describes the money line (#money-line), in neutral words", () => {

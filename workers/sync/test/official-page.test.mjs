@@ -71,13 +71,17 @@ const panel = (html, id) => {
   return html.slice(at, next < 0 ? html.indexOf("</main>") : next);
 };
 
-test("the header: office, name, and one line each for votes and money; no repeats in the tabs", async () => {
+test("the header: office, name, and one row of small tiles (votes, raised); the full money sentence leads Funding; no repeats in the tabs", async () => {
   const { res, html } = await get("/reps/example-member/");
   assert.equal(res.status, 200);
   const head = html.slice(html.indexOf('class="page-head rep-head"'), html.indexOf("</header>", html.indexOf('class="page-head rep-head"')));
   assert.match(head, /<h1>Example Member<\/h1>/);
-  assert.match(head, /href="#votes">20 final-passage votes on record; the latest/);
-  assert.match(head, /href="#funding">Raised \$1,000,000 in /);
+  assert.match(head, /<nav class="head-stats" aria-label="At a glance">/);
+  assert.match(head, /<a class="stat head-stat" href="#votes"><span class="stat-num">30<\/span><span class="stat-label">votes<\/span><\/a>/);
+  assert.match(head, /<a class="stat head-stat" href="#funding"><span class="stat-num">\$1M<\/span><span class="stat-label">raised<\/span><\/a>/);
+  assert.doesNotMatch(head, /more-networth/, "no net worth tile without a report read");
+  assert.doesNotMatch(head, /final-passage votes on record|Raised \$1,000,000/, "the sentences moved out of the header");
+  assert.match(panel(html, "funding"), /^role="tabpanel" id="funding"[^>]*><p class="money-glance money-full">Raised \$1,000,000 in /);
   assert.doesNotMatch(head, /class="chips"/, "no chips repeating the body or the website");
   assert.doesNotMatch(html, /Record at a glance/, "the counts are in the header, not again on About");
   assert.doesNotMatch(html, /id="issues"/, "no separate Issues section");

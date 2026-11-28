@@ -16,7 +16,7 @@
 //                   are one line under Platform until accounts launch.
 // POST /reps/<slug>/promises/<id>/flag   "Something wrong?" on a published promise
 import { simpleCard, jobSentence, voteLinePlain, sourceNote, SIMPLE_METHOD } from "../_lib/simple.js";
-import { moneyLine, moneyGlances } from "../_lib/money-line.js";
+import { moneyLine, moneyGlances, moneyListKey, shortRaised } from "../_lib/money-line.js";
 import { BODIES, LEVEL_NAME } from "../_lib/generated.js";
 import { page, notFound, notLoaded, esc, safeUrl, kv, card, section, linkRow, sourceLink, fmtDate, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { officialBySlug, officialsWhere, withVoteCounts, voteCounts, votesFor, CHAMBER_NAME } from "../_lib/data.js";
@@ -24,7 +24,7 @@ import { districtsFromCookie, repsWhere, describe, STATE_NAME, CALAVERAS_FIPS } 
 import { lookupForm } from "../_lib/hub.js";
 import { BROWSE, PER_PAGE, chamberPage, personRow, yourRow, yourList, statewideList, repsHref, stateChambers, statePicker, sortSwitch, pagedList } from "../_lib/reps-index.js";
 import { searchPeople } from "../_lib/people-search.js";
-import { networthFor, networthPoints, networthLine, networthSection, rangeText } from "../_lib/networth.js";
+import { networthFor, networthPoints, networthText, networthSection, rangeText } from "../_lib/networth.js";
 import { tradeSummary, memberTrades, memberReports, memberCommittees, executivePost, tradesSection, quickTradesLine, tradeRow, committeesList, TRADES_PER_PAGE, TRADES_METHOD } from "../_lib/trades.js";
 import { loadJustices } from "../_lib/scotus.js";
 import { chamberIds } from "../../workers/sync/src/states.js";
@@ -95,7 +95,7 @@ function searchSection(q, found) {
 }
 
 function yoursSection({ d, vs, people = [], failed = false, money = {} }) {
-  const rows = (failed ? sectionError("") : people.length ? `<div class="card">${people.map((o) => yourRow(o, money)).join("")}</div>` : '<p class="secondary small">Not loaded yet.</p>');
+  const rows = failed ? sectionError("") : people.length ? `<div class="card">${moneyListKey(money, currentCycle())}${people.map((o) => yourRow(o, money)).join("")}</div>` : '<p class="secondary small">Not loaded yet.</p>';
   if (d) {
     return `
 <section class="stack-sm simple-keep" id="yours" aria-labelledby="h-yours">
@@ -357,15 +357,16 @@ async function profile(env, slug, url, request) {
   const photo = safeUrl(o.photo_url);
   // The money in one line, for every official with money data (functions/_lib/money-line.js).
   const glance = funding && funding !== FAILED ? moneyLine(o, funding) : null;
-  // Summary first: the record in one line, as counts and the latest recorded fact.
-  const latest = votes !== FAILED ? votes.rows[0] : null;
-  const glanceLine = exec
-    ? (isPresident(o) || isGovernor(o)) && ok(orders) && ok(bills)
-      ? `${ok(orders).counts.executive_order || 0} executive orders and ${ok(bills).counts.signed || 0} bills signed are on record${ok(bills).counts.vetoed ? `; ${ok(bills).counts.vetoed} vetoed` : ""}.`
-      : ""
-    : counts && counts.final
-      ? `${counts.final} final-passage ${counts.final === 1 ? "vote" : "votes"} on record${latest ? `; the latest, ${fmtDate(latest.vote_date)}: ${latest.position} on ${latest.bill_number || latest.question}` : ""}.`
-      : "";
+  // Summary first: up to three small tiles, each a tap to its section; a tile with nothing to show is left out.
+  const nwLatest = networth && networth !== FAILED ? networth.latest || networth.first : null;
+  const orderCount = exec && (isPresident(o) || isGovernor(o)) && ok(orders) ? ok(orders).counts.executive_order || 0 : 0;
+  const voteTotal = !exec && counts ? counts.total || 0 : 0;
+  const tile = (href, num, label, mode = "") => `<a class="stat head-stat" href="${href}"${mode}><span class="stat-num">${esc(num)}</span><span class="stat-label">${esc(label)}</span></a>`;
+  const tiles = [
+    voteTotal ? tile("#votes", voteTotal.toLocaleString("en-US"), voteTotal === 1 ? "vote" : "votes") : orderCount ? tile("#votes", orderCount.toLocaleString("en-US"), orderCount === 1 ? "executive order" : "executive orders") : "",
+    glance && glance.amount > 0 ? tile("#funding", shortRaised(glance.amount), glance.itemized ? "raised (itemized)" : "raised") : "",
+    nwLatest ? tile("#more-networth", rangeText(nwLatest), "Net worth", ' data-mode-set="detailed"') : "",
+  ].filter(Boolean);
   const head = `
 <header class="page-head rep-head">
   ${photo
@@ -375,9 +376,7 @@ async function profile(env, slug, url, request) {
     <p class="label">${LEVEL_NAME[o.level]} · ${CHAMBER_NAME[o.chamber]}</p>
     <h1>${esc(o.name)}</h1>
     <p class="secondary">${esc(who(o))}</p>
-    ${glanceLine ? `<p class="small summary-line"><a class="inline-link" href="#votes">${esc(glanceLine)}</a></p>` : ""}
-    ${glance ? `<p class="summary-line money-glance"><a href="#funding">${esc(glance.text)} ›</a></p>` : ""}
-    ${networth && networth !== FAILED ? networthLine(networth) : ""}
+    ${tiles.length ? `<nav class="head-stats" aria-label="At a glance">${tiles.join("")}</nav>` : ""}
   </div>
 </header>`;
 
@@ -439,13 +438,15 @@ ${yearBar(url, null, { label: `See ${o.name} in an earlier year` })}`;
   // County supervisors: their committees' local filings (NetFile), matched in the builder; otherwise the general note.
   else if (supervisor && funding && officialMoney(funding.local, o.name)) fundingHtml = `<section class="stack-sm"><h3 class="label">Campaign committees, from the county's filings</h3>${officialMoney(funding.local, o.name)}</section>`;
   else fundingHtml = fundingTab(o, supervisor ? null : funding, base);
+  // The full money sentence (period, PAC share, largest industry) leads the Funding tab.
+  if (glance && funding !== FAILED) fundingHtml = `<p class="money-glance money-full">${esc(glance.text)}</p>${fundingHtml}`;
 
   // More: everything else, in sections.
   const moreParts = [];
   const tradeCount = trades && trades !== FAILED ? (trades.summary || []).reduce((n, y) => n + (y.trades || 0), 0) : 0;
   if (trades) moreParts.push(sub("more-trades", "Stock trades", trades === FAILED ? sectionError("") : tradesSection(o, trades), trades === FAILED ? "" : tradeCount ? `${tradeCount.toLocaleString("en-US")} reported` : "None reported"));
   const nwEnd = networth && networth !== FAILED ? networth.latest || networth.first : null;
-  if (networth) moreParts.push(sub("more-networth", "Net worth, as reported", networth === FAILED ? sectionError("") : networthSection(o.name, networth), nwEnd ? `${rangeText(nwEnd)} (${nwEnd.year})` : "No report read yet"));
+  if (networth) moreParts.push(sub("more-networth", "Net worth, as reported", networth === FAILED ? sectionError("") : `${networthText(networth) ? `<p class="networth-full">${esc(networthText(networth))}</p>` : ""}${networthSection(o.name, networth)}`, nwEnd ? `${rangeText(nwEnd)} (${nwEnd.year})` : "No report read yet"));
   if (congress) {
     const gm = govMoney === FAILED ? null : govMoney;
     const meta = govMoneyMeta(gm);

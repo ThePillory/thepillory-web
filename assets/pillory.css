@@ -965,6 +965,18 @@ a.chip:hover { text-decoration: none; filter: brightness(0.97); }
 /* The money in one line (functions/_lib/money-line.js): body size, bold, one link, no color of its own. */
 .money-glance, .money-glance a { font-size: var(--fs-body); font-weight: 700; color: var(--text); text-decoration: none; }
 .money-glance a:hover, a.money-glance:hover { text-decoration: underline; }
+/* The official's header: up to three small tiles (votes, raised, net worth), each a tap to its section.
+   They wrap on narrow phones; a tile with nothing to show isn't drawn. */
+.head-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2); margin: 0; }
+.head-stat { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 0; min-height: var(--tap); padding: var(--space-2) var(--space-3); color: var(--text); text-decoration: none; text-align: center; }
+.head-stat .stat-num { font-size: var(--fs-body); line-height: 1.25; }
+.head-stat .stat-label { font-size: var(--fs-small); font-weight: 400; }
+.head-stat:hover .stat-num { text-decoration: underline; }
+/* Your representatives: the amount raised as the row's status, in the text color (never a color of its own). */
+.row-amount { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+.money-key { margin: 0 0 var(--space-2); }
+.money-full { margin: 0; }
+.networth-full { margin: 0; font-weight: 700; }
 .see-all .list-title { color: var(--navy); }
 @media (max-width: 374px) {
   .tabs--five [role="tab"] { font-size: var(--fs-label); }

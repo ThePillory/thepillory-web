@@ -251,6 +251,7 @@ export async function hub(env, request, url, d, vs) {
     governor,
     mine: mineList,
     money: money === FAILED ? {} : money,
+    cycle: currentCycle(),
     known,
     lookup: mine ? "" : lookupForm(null, { heading: vs ? "Add your ZIP or address for your House member and state legislators" : "Add your ZIP or address for your senators, House member and state legislators", bare: true }),
     allHref: vs ? `/reps/?state=${vs.st}` : "/reps/",

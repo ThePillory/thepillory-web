@@ -6,6 +6,7 @@
 // tab says). No line without data (never "$0"), no colors, no comparisons, no ranking.
 
 import { INDUSTRIES } from "../../workers/sync/src/funding/industry.js";
+import { compactMoney } from "./networth.js";
 
 const dollars = (n) => `$${Math.round(Number(n)).toLocaleString("en-US")}`;
 const span = (cycle) => `${cycle - 1}–${cycle}`;
@@ -70,24 +71,31 @@ export function moneyLine(o, funding) {
   if (!funding) return null;
   if (funding.kind === "state") {
     const text = stateMoneyLine(funding.money);
-    return text ? { text, source: MONEY_SOURCE.state } : null;
+    return text ? { text, source: MONEY_SOURCE.state, amount: funding.money.row.raised } : null;
   }
   if (funding.kind === "county") {
     const text = localMoneyLine(funding.local, o.name);
-    return text ? { text, source: MONEY_SOURCE.county } : null;
+    return text ? { text, source: MONEY_SOURCE.county, amount: localTotal(funding.local, o.name), itemized: true } : null;
   }
   // The President: their own campaign committee. The Vice President: only when they ran on the President's
   // ticket, named as the ticket's committee. The Cabinet is appointed and has no line.
   if (funding.kind === "president" || (funding.kind === "vice-president" && funding.ticket)) {
     const lead = funding.kind === "president" ? "Campaign committee raised" : "The President's ticket's campaign committee raised";
     const text = federalMoneyLine(funding.campaign, lead);
-    return text ? { text, source: MONEY_SOURCE.federal } : null;
+    return text ? { text, source: MONEY_SOURCE.federal, amount: funding.campaign.totals.receipts } : null;
   }
   if (o.chamber === "us-house" || o.chamber === "us-senate") {
     const text = federalMoneyLine(funding);
-    return text ? { text, source: MONEY_SOURCE.federal } : null;
+    return text ? { text, source: MONEY_SOURCE.federal, amount: funding.totals.receipts } : null;
   }
   return null;
+}
+
+/** A county official's NetFile committees: their itemized contributions, added up. */
+function localTotal(docs, name) {
+  let total = 0;
+  for (const doc of docs || []) for (const lid of (doc.officials || {})[name] || []) if (doc.committees && doc.committees[lid]) total += Number(doc.committees[lid].contributions) || 0;
+  return total;
 }
 
 /**
@@ -104,18 +112,33 @@ export function giversLine(n, { california = false } = {}) {
 }
 
 // ---------------------------------------------------------------------------
-// Your representatives: the same line for each person listed, read in a few indexed queries.
+// Your representatives: the amount raised, short, on the right of each row; read in a few indexed queries.
 
 const ph = (n) => Array(n).fill("?").join(",");
 const FEDERAL = new Set(["us-house", "us-senate"]);
 const CA = new Set(["ca-assembly", "ca-senate", "ca-executive"]);
 
+/** "$4.2M", "$850K": the short amount for a row or a tile (functions/_lib/networth.js compactMoney). */
+export const shortRaised = (n) => compactMoney(n);
+
+/** The list's one label: "Campaign money raised, 2025–2026". */
+export const moneyListLabel = (cycle) => `Campaign money raised, ${span(cycle)}`;
+
+/** A county official's NetFile committees: itemized contributions, only when every committee's records fall in the period. */
+export function localRaised(docs, name, cycle) {
+  const cs = [];
+  for (const doc of docs || []) for (const lid of (doc.officials || {})[name] || []) if (doc.committees && doc.committees[lid]) cs.push(doc.committees[lid]);
+  if (!cs.length || cs.some((c) => !c.first || c.first < `${cycle - 1}-01-01`)) return null;
+  const total = cs.reduce((s, c) => s + (Number(c.contributions) || 0), 0);
+  return total > 0 ? total : null;
+}
+
 /**
- * { [official id]: text } for the people in Your representatives, by the same rules as each page's header:
- * members of Congress and the President (FEC totals), the Vice President only on the President's ticket
- * (the President's numbers, named as the ticket's committee), California's officials (Cal-Access), county
- * supervisors (NetFile, `local` docs), nobody else. People without money get no entry. `cycle`: the
- * two-year period, as the pages default to it.
+ * { [official id]: { amount, text } } for the people in Your representatives, by the same rules as each
+ * page's header: members of Congress and the President (FEC), the Vice President only on the President's
+ * ticket (the ticket's committee), California's officials (Cal-Access), county supervisors (NetFile's
+ * itemized contributions, "itemized"), nobody else. No entry without money (never "$0"). Order, colors and
+ * totals are never changed by it.
  */
 export async function moneyGlances(db, people, { cycle, local = null } = {}) {
   const list = (people || []).filter(Boolean);
@@ -128,41 +151,28 @@ export async function moneyGlances(db, people, { cycle, local = null } = {}) {
   const ca = list.filter((o) => CA.has(o.chamber));
   const fedIds = fed.map((o) => o.id);
   const caIds = ca.map((o) => o.id);
-  const key = `${cycle - 1}-${cycle}`;
-  const [totals, fedInd, caRows, caInd] = await Promise.all([
-    fedIds.length ? db.prepare(`SELECT official_id, receipts, pac FROM funding_totals WHERE cycle = ? AND official_id IN (${ph(fedIds.length)})`).bind(cycle, ...fedIds).all() : { results: [] },
-    fedIds.length
-      ? db.prepare(
-          `SELECT official_id, industry, SUM(total) AS pac FROM (
-             SELECT official_id, industry, total FROM funding_pacs WHERE cycle = ? AND official_id IN (${ph(fedIds.length)}) AND industry != 'other'
-             UNION ALL SELECT official_id, industry, total FROM funding_employers WHERE cycle = ? AND official_id IN (${ph(fedIds.length)}) AND industry != 'other')
-           GROUP BY official_id, industry`
-        ).bind(cycle, ...fedIds, cycle, ...fedIds).all()
-      : { results: [] },
-    caIds.length ? db.prepare(`SELECT official_id, raised FROM state_money_cycles WHERE cycle = ? AND official_id IN (${ph(caIds.length)})`).bind(key, ...caIds).all() : { results: [] },
-    caIds.length ? db.prepare(`SELECT official_id, industry, total FROM state_money_industries WHERE cycle = ? AND official_id IN (${ph(caIds.length)})`).bind(key, ...caIds).all() : { results: [] },
+  const [fedRows, caRows] = await Promise.all([
+    fedIds.length ? raisedFederal(db, fedIds, cycle) : {},
+    caIds.length ? db.prepare(`SELECT official_id, raised FROM state_money_cycles WHERE cycle = ? AND official_id IN (${ph(caIds.length)})`).bind(`${cycle - 1}-${cycle}`, ...caIds).all() : { results: [] },
   ]);
-  const by = (rows) => rows.reduce((m, r) => ((m[r.official_id] ||= []).push(r), m), {});
-  const tot = Object.fromEntries(totals.results.map((r) => [r.official_id, r]));
-  const ind = by(fedInd.results.map((r) => ({ ...r, emp: 0 })));
-  for (const o of fed) {
-    const lead = o === president ? "Campaign committee raised" : "Raised";
-    const text = federalMoneyLine({ cycle, totals: tot[o.id] || null, industries: ind[o.id] || [] }, lead);
-    if (text) out[o.id] = text;
-  }
-  if (ticket && tot[president.id]) {
-    const text = federalMoneyLine({ cycle, totals: tot[president.id], industries: ind[president.id] || [] }, "The President's ticket's campaign committee raised");
-    if (text) out[vp.id] = text;
-  }
-  const caRow = Object.fromEntries(caRows.results.map((r) => [r.official_id, r]));
-  const caI = by(caInd.results);
-  for (const o of ca) {
-    const text = stateMoneyLine({ cycle, row: caRow[o.id] || null, industries: caI[o.id] || [] });
-    if (text) out[o.id] = text;
-  }
-  for (const o of list.filter((x) => x.chamber === "county-board")) {
-    const text = localMoneyLine(local, o.name);
-    if (text) out[o.id] = text;
-  }
+  const put = (id, amount, suffix = "") => {
+    if (amount > 0) out[id] = { amount, text: `${shortRaised(amount)}${suffix}` };
+  };
+  for (const o of fed) put(o.id, fedRows[o.id]);
+  if (ticket) put(vp.id, fedRows[president.id]);
+  for (const r of caRows.results || []) put(r.official_id, r.raised);
+  for (const o of list.filter((x) => x.chamber === "county-board")) put(o.id, localRaised(local, o.name, cycle), " itemized");
   return out;
 }
+
+/** What each federal official's campaign raised in the period (funding_totals). */
+async function raisedFederal(db, ids, cycle) {
+  const { results } = await db.prepare(`SELECT official_id, receipts FROM funding_totals WHERE cycle = ? AND official_id IN (${ph(ids.length)})`).bind(cycle, ...ids).all();
+  return Object.fromEntries(results.map((r) => [r.official_id, r.receipts]));
+}
+
+/** A row's status on the right: the short amount, or nothing ("" without money). */
+export const amountStatus = (money, id) => (money && money[id] ? `<span class="list-status row-amount">${money[id].text.replace(/[&<>"]/g, "")}</span>` : "");
+
+/** The one small label above a list that shows amounts; "" when none does. */
+export const moneyListKey = (money, cycle) => (money && Object.keys(money).length ? `<p class="small secondary money-key">${moneyListLabel(cycle)}</p>` : "");

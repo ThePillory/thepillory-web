@@ -115,6 +115,12 @@ const yearLabel = (r) => (r.before_office && r.kind !== "annual" ? `${r.year}, b
  * [label]) → $[low]–$[high] ([latest year])", linking to the chart. "" when no
  * report has been read. Pure.
  */
+/** The full net worth line as text: "Net worth, as reported: $… (first year, …) → $… (latest year)"; "" with none. */
+export function networthText(points) {
+  const { first, label, latest } = points || {};
+  return first ? `Net worth, as reported: ${rangeText(first)} (${first.year}, ${label})${latest ? ` → ${rangeText(latest)} (${latest.year})` : ""}` : "";
+}
+
 export function networthLine(points) {
   const { first, label, latest } = points;
   if (!first) return "";
