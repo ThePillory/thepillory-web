@@ -23,7 +23,7 @@ const ORDER = {
 export async function chamberPage(db, { chamber, state = null, sort = "name", offset = 0 }) {
   const { results } = await db
     .prepare(
-      `SELECT o.slug, o.name, o.office, o.district, o.party, o.state, o.chamber FROM officials o
+      `SELECT o.id, o.slug, o.name, o.office, o.district, o.party, o.state, o.chamber, o.rank, o.term_start FROM officials o
        WHERE o.active = 1 AND o.chamber = ? AND (? IS NULL OR o.state = ?)
        ORDER BY ${ORDER[sort] || ORDER.name} LIMIT ? OFFSET ?`
     )
@@ -38,8 +38,15 @@ export function personRow(o, { office = false } = {}) {
   return linkRow(`/reps/${o.slug}/`, o.name, meta);
 }
 
-/** A row in "Your representatives": name, office, district. */
-export const yourRow = (o) => linkRow(`/reps/${o.slug}/`, o.name, [o.office, o.district].filter(Boolean).join(" · "));
+/** A row in "Your representatives": name, office, district, then the money line when there is one (moneyGlances()). */
+export function yourRow(o, money = {}) {
+  const meta = [o.office, o.district].filter(Boolean).join(" · ");
+  return `
+<a class="list-row link-row" href="/reps/${esc(o.slug)}/">
+  <div><div class="list-title">${esc(o.name)}</div>${meta ? `<div class="list-meta">${esc(meta)}</div>` : ""}${money[o.id] ? `<div class="list-meta">${esc(money[o.id])}</div>` : ""}</div>
+  <span class="row-end"><span class="chev" aria-hidden="true">›</span></span>
+</a>`;
+}
 
 export const isGovernor = (o) => /^governor$/i.test(String(o.office || "")) || o.rank === 1;
 

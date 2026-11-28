@@ -29,11 +29,14 @@
 // browsers don't keep it. The old ?hub=1 flag and /home/ redirect here.
 import { page, esc, linkRow, loadSection, FAILED, anyFailed, sectionError } from "./render.js";
 import { pacificNow, addDays } from "./meetings.js";
-import { describe, STATE_NAME } from "./districts.js";
+import { describe, STATE_NAME, CALAVERAS_FIPS } from "./districts.js";
 import { lookupForm } from "./hub.js";
 import { TOPICS, topicHref, placeTopicsHref } from "./topics.js";
 import { ballotWindow, todayIn, onlyIfNeeded, previewLabel } from "./election-window.js";
 import { quickHomeData, thisWeek, yourReps, weekFeed, quickLinks, THIS_WEEK_DAYS } from "./quick-home.js";
+import { moneyGlances } from "./money-line.js";
+import { loadLocalMoney } from "./local-money.js";
+import { currentCycle } from "../../workers/sync/src/funding/fec.js";
 import { loadElection, ballotFor, ballotHref, electionHref, whenLine, electionIdFor, measuresOnly, ELECTION_BY_STATE } from "./elections.js";
 import { LIVE, asset, loadIndex, loadPlace, waitlistBy, usMapLinks, smallStateButtons, mapFigure } from "./geo.js";
 import { ASSET_VERSION } from "./generated.js";
@@ -233,12 +236,21 @@ export async function hub(env, request, url, d, vs) {
   <div>${linkRow("/briefing/", "Your briefing", "Your reps' latest votes, and what's happening where you live")}</div>
   <details class="lookup-change" id="find"><summary class="inline-link">Use a different address</summary>${lookupForm(null, { id: "find-change", heading: "Street address or ZIP code", bare: true })}</details>`
     : "";
+  const president = (federalExec === FAILED ? [] : federalExec).find((o) => o.rank === 1) || null;
+  const governor = lead ? governorOf(lead.executive) : null;
+  const mineList = q ? q.mine : [];
+  // The money in one line under each person, by the same rules as their page (functions/_lib/money-line.js).
+  const money = await loadSection("hub money lines", async () => moneyGlances(db, [president, ...senators, governor, ...mineList], {
+    cycle: currentCycle(),
+    local: mineList.some((o) => o.chamber === "county-board") ? await loadLocalMoney(env, request, CALAVERAS_FIPS).catch(() => []) : null,
+  }), {});
   const repsHtml = yourReps({
     stateName: vs ? vs.name : null,
-    president: (federalExec === FAILED ? [] : federalExec).find((o) => o.rank === 1) || null,
+    president,
     senators,
-    governor: lead ? governorOf(lead.executive) : null,
-    mine: q ? q.mine : [],
+    governor,
+    mine: mineList,
+    money: money === FAILED ? {} : money,
     known,
     lookup: mine ? "" : lookupForm(null, { heading: vs ? "Add your ZIP or address for your House member and state legislators" : "Add your ZIP or address for your senators, House member and state legislators", bare: true }),
     allHref: vs ? `/reps/?state=${vs.st}` : "/reps/",

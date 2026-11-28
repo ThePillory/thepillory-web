@@ -16,7 +16,7 @@
 //                   are one line under Platform until accounts launch.
 // POST /reps/<slug>/promises/<id>/flag   "Something wrong?" on a published promise
 import { simpleCard, jobSentence, voteLinePlain, sourceNote, SIMPLE_METHOD } from "../_lib/simple.js";
-import { moneyLine } from "../_lib/money-line.js";
+import { moneyLine, moneyGlances } from "../_lib/money-line.js";
 import { BODIES, LEVEL_NAME } from "../_lib/generated.js";
 import { page, notFound, notLoaded, esc, safeUrl, kv, card, section, linkRow, sourceLink, fmtDate, loadSection, FAILED, anyFailed, sectionError, guard, edgeCached } from "../_lib/render.js";
 import { officialBySlug, officialsWhere, withVoteCounts, voteCounts, votesFor, CHAMBER_NAME } from "../_lib/data.js";
@@ -94,8 +94,8 @@ function searchSection(q, found) {
 </section>`;
 }
 
-function yoursSection({ d, vs, people = [], failed = false }) {
-  const rows = failed ? sectionError("") : people.length ? `<div class="card">${people.map(yourRow).join("")}</div>` : '<p class="secondary small">Not loaded yet.</p>';
+function yoursSection({ d, vs, people = [], failed = false, money = {} }) {
+  const rows = (failed ? sectionError("") : people.length ? `<div class="card">${people.map((o) => yourRow(o, money)).join("")}</div>` : '<p class="secondary small">Not loaded yet.</p>');
   if (d) {
     return `
 <section class="stack-sm simple-keep" id="yours" aria-labelledby="h-yours">
@@ -220,12 +220,19 @@ ${pg === FAILED ? sectionError("") : pagedList({ id: `list-${chamber}`, page: pg
   const people = d
     ? yourList({ federalExec: ok(federalExec), reps: ok(reps), stateExec: ok(stateExec) })
     : vs ? statewideList({ federalExec: ok(federalExec), senators: ok(senators), stateExec: ok(stateExec) }) : [];
+  // The money in one line under each person, by the same rules as their page (functions/_lib/money-line.js).
+  const money = people.length
+    ? await loadSection("reps money lines", async () => moneyGlances(db, people, {
+        cycle: currentCycle(),
+        local: people.some((o) => o.chamber === "county-board") ? await loadLocalMoney(env, request, CALAVERAS_FIPS).catch(() => []) : null,
+      }), {})
+    : {};
   const main = `<div class="simple-scope">
 <header class="page-head">
   <h1>Reps</h1>
   <p class="subtitle">Everyone who represents you, from the President to your county, with the record they keep. The same layout for every state.</p>
 </header>
-${(d || vs) ? yoursSection({ d, vs, people, failed: reps === FAILED || senators === FAILED }) : yoursSection({})}
+${(d || vs) ? yoursSection({ d, vs, people, failed: reps === FAILED || senators === FAILED, money: money === FAILED ? {} : money }) : yoursSection({})}
 ${searchSection(url.searchParams.get("q"), found)}
 <div class="simple-only simple-keep"><button class="btn" type="button" data-mode-set="detailed" data-mode-jump="browse">Browse all</button></div>
 ${await browseSection(db, env, request, { browse, st, sort, federalExec })}
